@@ -1,0 +1,563 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		5EB2E4DD2DC75C8D00644BAD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5EB2E4C72DC75C8A00644BAD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5EB2E4CE2DC75C8A00644BAD;
+			remoteInfo = "Cosmic Fit";
+		};
+		5EB2E4E72DC75C8D00644BAD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5EB2E4C72DC75C8A00644BAD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5EB2E4CE2DC75C8A00644BAD;
+			remoteInfo = "Cosmic Fit";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		5EB2E4CF2DC75C8A00644BAD /* Cosmic Fit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cosmic Fit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5EB2E4DC2DC75C8D00644BAD /* Cosmic FitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Cosmic FitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5EB2E4E62DC75C8D00644BAD /* Cosmic FitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Cosmic FitUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		5EB2E4D12DC75C8A00644BAD /* Cosmic Fit */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Cosmic Fit";
+			sourceTree = "<group>";
+		};
+		5EB2E4DF2DC75C8D00644BAD /* Cosmic FitTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Cosmic FitTests";
+			sourceTree = "<group>";
+		};
+		5EB2E4E92DC75C8D00644BAD /* Cosmic FitUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Cosmic FitUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5EB2E4CC2DC75C8A00644BAD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5EB2E4D92DC75C8D00644BAD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5EB2E4E32DC75C8D00644BAD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5EB2E4C62DC75C8A00644BAD = {
+			isa = PBXGroup;
+			children = (
+				5EB2E4D12DC75C8A00644BAD /* Cosmic Fit */,
+				5EB2E4DF2DC75C8D00644BAD /* Cosmic FitTests */,
+				5EB2E4E92DC75C8D00644BAD /* Cosmic FitUITests */,
+				5EB2E4D02DC75C8A00644BAD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5EB2E4D02DC75C8A00644BAD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5EB2E4CF2DC75C8A00644BAD /* Cosmic Fit.app */,
+				5EB2E4DC2DC75C8D00644BAD /* Cosmic FitTests.xctest */,
+				5EB2E4E62DC75C8D00644BAD /* Cosmic FitUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5EB2E4CE2DC75C8A00644BAD /* Cosmic Fit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5EB2E4F02DC75C8D00644BAD /* Build configuration list for PBXNativeTarget "Cosmic Fit" */;
+			buildPhases = (
+				5EB2E4CB2DC75C8A00644BAD /* Sources */,
+				5EB2E4CC2DC75C8A00644BAD /* Frameworks */,
+				5EB2E4CD2DC75C8A00644BAD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				5EB2E4D12DC75C8A00644BAD /* Cosmic Fit */,
+			);
+			name = "Cosmic Fit";
+			packageProductDependencies = (
+			);
+			productName = "Cosmic Fit";
+			productReference = 5EB2E4CF2DC75C8A00644BAD /* Cosmic Fit.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5EB2E4DB2DC75C8D00644BAD /* Cosmic FitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5EB2E4F32DC75C8D00644BAD /* Build configuration list for PBXNativeTarget "Cosmic FitTests" */;
+			buildPhases = (
+				5EB2E4D82DC75C8D00644BAD /* Sources */,
+				5EB2E4D92DC75C8D00644BAD /* Frameworks */,
+				5EB2E4DA2DC75C8D00644BAD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5EB2E4DE2DC75C8D00644BAD /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				5EB2E4DF2DC75C8D00644BAD /* Cosmic FitTests */,
+			);
+			name = "Cosmic FitTests";
+			packageProductDependencies = (
+			);
+			productName = "Cosmic FitTests";
+			productReference = 5EB2E4DC2DC75C8D00644BAD /* Cosmic FitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		5EB2E4E52DC75C8D00644BAD /* Cosmic FitUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5EB2E4F62DC75C8D00644BAD /* Build configuration list for PBXNativeTarget "Cosmic FitUITests" */;
+			buildPhases = (
+				5EB2E4E22DC75C8D00644BAD /* Sources */,
+				5EB2E4E32DC75C8D00644BAD /* Frameworks */,
+				5EB2E4E42DC75C8D00644BAD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5EB2E4E82DC75C8D00644BAD /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				5EB2E4E92DC75C8D00644BAD /* Cosmic FitUITests */,
+			);
+			name = "Cosmic FitUITests";
+			packageProductDependencies = (
+			);
+			productName = "Cosmic FitUITests";
+			productReference = 5EB2E4E62DC75C8D00644BAD /* Cosmic FitUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5EB2E4C72DC75C8A00644BAD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1630;
+				LastUpgradeCheck = 1630;
+				TargetAttributes = {
+					5EB2E4CE2DC75C8A00644BAD = {
+						CreatedOnToolsVersion = 16.3;
+					};
+					5EB2E4DB2DC75C8D00644BAD = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 5EB2E4CE2DC75C8A00644BAD;
+					};
+					5EB2E4E52DC75C8D00644BAD = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 5EB2E4CE2DC75C8A00644BAD;
+					};
+				};
+			};
+			buildConfigurationList = 5EB2E4CA2DC75C8A00644BAD /* Build configuration list for PBXProject "Cosmic Fit" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5EB2E4C62DC75C8A00644BAD;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 5EB2E4D02DC75C8A00644BAD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5EB2E4CE2DC75C8A00644BAD /* Cosmic Fit */,
+				5EB2E4DB2DC75C8D00644BAD /* Cosmic FitTests */,
+				5EB2E4E52DC75C8D00644BAD /* Cosmic FitUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5EB2E4CD2DC75C8A00644BAD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5EB2E4DA2DC75C8D00644BAD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5EB2E4E42DC75C8D00644BAD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5EB2E4CB2DC75C8A00644BAD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5EB2E4D82DC75C8D00644BAD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5EB2E4E22DC75C8D00644BAD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5EB2E4DE2DC75C8D00644BAD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5EB2E4CE2DC75C8A00644BAD /* Cosmic Fit */;
+			targetProxy = 5EB2E4DD2DC75C8D00644BAD /* PBXContainerItemProxy */;
+		};
+		5EB2E4E82DC75C8D00644BAD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5EB2E4CE2DC75C8A00644BAD /* Cosmic Fit */;
+			targetProxy = 5EB2E4E72DC75C8D00644BAD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		5EB2E4EE2DC75C8D00644BAD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = J5V4NZ3334;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		5EB2E4EF2DC75C8D00644BAD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = J5V4NZ3334;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5EB2E4F12DC75C8D00644BAD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J5V4NZ3334;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.thisisbullish.cosmicfit.Cosmic-Fit";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5EB2E4F22DC75C8D00644BAD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J5V4NZ3334;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.thisisbullish.cosmicfit.Cosmic-Fit";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		5EB2E4F42DC75C8D00644BAD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J5V4NZ3334;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.thisisbullish.cosmicfit.Cosmic-FitTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cosmic Fit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Cosmic Fit";
+			};
+			name = Debug;
+		};
+		5EB2E4F52DC75C8D00644BAD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J5V4NZ3334;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.thisisbullish.cosmicfit.Cosmic-FitTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cosmic Fit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Cosmic Fit";
+			};
+			name = Release;
+		};
+		5EB2E4F72DC75C8D00644BAD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J5V4NZ3334;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.thisisbullish.cosmicfit.Cosmic-FitUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Cosmic Fit";
+			};
+			name = Debug;
+		};
+		5EB2E4F82DC75C8D00644BAD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J5V4NZ3334;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.thisisbullish.cosmicfit.Cosmic-FitUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Cosmic Fit";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5EB2E4CA2DC75C8A00644BAD /* Build configuration list for PBXProject "Cosmic Fit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5EB2E4EE2DC75C8D00644BAD /* Debug */,
+				5EB2E4EF2DC75C8D00644BAD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5EB2E4F02DC75C8D00644BAD /* Build configuration list for PBXNativeTarget "Cosmic Fit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5EB2E4F12DC75C8D00644BAD /* Debug */,
+				5EB2E4F22DC75C8D00644BAD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5EB2E4F32DC75C8D00644BAD /* Build configuration list for PBXNativeTarget "Cosmic FitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5EB2E4F42DC75C8D00644BAD /* Debug */,
+				5EB2E4F52DC75C8D00644BAD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5EB2E4F62DC75C8D00644BAD /* Build configuration list for PBXNativeTarget "Cosmic FitUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5EB2E4F72DC75C8D00644BAD /* Debug */,
+				5EB2E4F82DC75C8D00644BAD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5EB2E4C72DC75C8A00644BAD /* Project object */;
+}
