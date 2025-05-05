@@ -758,16 +758,17 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
     }
     
     private func validateInputs() -> (birthDate: Date, location: CLLocation)? {
-        // Verify that we have a location selected
+        // Validate location with better debugging
         guard let location = selectedLocation else {
-            print("ERROR in validateInputs: selectedLocation is nil")
-            print("locationTextField.text = \(locationTextField.text ?? "nil")")
-            print("selectedLocationName = \(selectedLocationName ?? "nil")")
-            showAlert(message: "Please enter and select a valid birth location")
+            print("VALIDATION FAILED: selectedLocation is nil")
+            if let locationName = selectedLocationName {
+                print("selectedLocationName exists but coordinates are missing: \(locationName)")
+            }
+            showAlert(message: "Please enter a valid birth location")
             return nil
         }
         
-        print("Validated location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+        print("VALIDATION PASSED: Location coordinates found - Lat: \(location.coordinate.latitude), Long: \(location.coordinate.longitude)")
         
         // Create date components
         var dateComponents = DateComponents()
@@ -1073,16 +1074,8 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
     
     // MARK: - UITextFieldDelegate
     
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        if textField == locationTextField, let searchText = textField.text {
-            search(for: searchText)
-            // The location table visibility is handled in the search completion handler
-        }
-    }
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        updateSearchTableVisibility(isVisible: false)
         return true
     }
     
@@ -1092,6 +1085,12 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
             if let searchText = textField.text, !searchText.isEmpty {
                 search(for: searchText)
             }
+        }
+    }
+
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        if textField == locationTextField, let searchText = textField.text {
+            search(for: searchText)
         }
     }
     
@@ -1130,13 +1129,20 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         
         let selectedResult = searchResults[indexPath.row]
         
+        // IMPORTANT: Immediately and directly set the text field value
+        // This ensures the UI is updated regardless of other operations
+        self.locationTextField.text = "\(selectedResult.title), \(selectedResult.subtitle)"
+        
+        // Force UI update
+        self.locationTextField.setNeedsDisplay()
+        
         // Show loading indicator
         let loadingIndicator = UIActivityIndicatorView(style: .medium)
         loadingIndicator.center = self.view.center
         loadingIndicator.startAnimating()
         self.view.addSubview(loadingIndicator)
         
-        // Use LocationService to get coordinates first
+        // Use LocationService to get coordinates
         locationService.getCoordinates(for: selectedResult) { [weak self] location in
             guard let self = self else { return }
             
@@ -1150,19 +1156,29 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
                     self.selectedLocation = location
                     self.selectedLocationName = "\(selectedResult.title), \(selectedResult.subtitle)"
                     
-                    // Update text field text
-                    self.locationTextField.text = self.selectedLocationName
+                    // IMPORTANT: Ensure text field is still updated even if this callback is delayed
+                    if self.locationTextField.text != self.selectedLocationName {
+                        self.locationTextField.text = self.selectedLocationName
+                    }
                     
-                    // Add debug logging
-                    print("Location set: \(self.selectedLocationName ?? "nil") at \(location.coordinate.latitude), \(location.coordinate.longitude)")
+                    // Debug logging
+                    print("Location set successfully: \(self.selectedLocationName ?? "nil") at \(location.coordinate.latitude), \(location.coordinate.longitude)")
                 } else {
                     // Show error if location couldn't be found
                     self.showAlert(message: "Could not find coordinates for the selected location. Please try another location.")
+                    // Reset the text field if coordinates couldn't be found
+                    self.locationTextField.text = ""
                 }
                 
-                // Hide the location search table
+                // Hide the location search table now that selection is complete
                 self.updateSearchTableVisibility(isVisible: false)
             }
+        }
+        
+        // IMPORTANT: Add a delay before hiding the table to give visual feedback
+        // This ensures the user sees their selection before the table disappears
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.updateSearchTableVisibility(isVisible: false)
         }
     }
 }
