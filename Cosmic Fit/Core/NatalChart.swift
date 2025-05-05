@@ -177,12 +177,11 @@ class NatalChart {
         var report = "NATAL CHART REPORT\n"
         report += "=================\n\n"
         
-        // Birth information
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .medium
-        report += "Birth Date and Time: \(dateFormatter.string(from: birthDate))\n"
-        report += "Birth Location: Latitude \(birthLocation.coordinate.latitude), Longitude \(birthLocation.coordinate.longitude)\n\n"
+        // Birth information using DateUtility for consistent formatting
+        report += "Birth Information:\n"
+        report += "----------------\n"
+        report += DateUtility.shared.formatForReport(birthDate) + "\n"
+        report += "Location: \(birthLocation.coordinate.latitude), \(birthLocation.coordinate.longitude)\n\n"
         
         // Ascendant and Midheaven
         report += "ANGLES\n"
@@ -194,7 +193,7 @@ class NatalChart {
         report += "HOUSES\n"
         report += "------\n"
         for house in houses.sorted(by: { $0.number < $1.number }) {
-            report += "House \(house.number): \(formatZodiacPosition(house.cusp))\n"
+            report += "House \(house.number): \(formatZodiacPosition(house.cusp)) - \(house.meaning)\n"
         }
         report += "\n"
         
@@ -202,7 +201,9 @@ class NatalChart {
         report += "PLANETS\n"
         report += "-------\n"
         for planet in planets {
-            report += "\(planet.type.rawValue): \(formatZodiacPosition(planet.longitude)) in House \(planet.inHouse)\n"
+            let status = planet.isInRulership() ? " (in rulership)" :
+                        planet.isInDetriment() ? " (in detriment)" : ""
+            report += "\(planet.type.symbol) \(planet.type.rawValue): \(formatZodiacPosition(planet.longitude)) in House \(planet.inHouse)\(status)\n"
         }
         report += "\n"
         
@@ -210,7 +211,7 @@ class NatalChart {
         report += "ASPECTS\n"
         report += "-------\n"
         for aspect in aspects {
-            report += "\(aspect.planet1.rawValue) \(aspect.type.symbol) \(aspect.planet2.rawValue) (orb: \(String(format: "%.2f°", aspect.orb)))\n"
+            report += "\(aspect.planet1.symbol) \(aspect.planet1.rawValue) \(aspect.type.symbol) \(aspect.planet2.symbol) \(aspect.planet2.rawValue) (\(aspect.exactness), orb: \(String(format: "%.2f°", aspect.orb)))\n"
         }
         
         return report

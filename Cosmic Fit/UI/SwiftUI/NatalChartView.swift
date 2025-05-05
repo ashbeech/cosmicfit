@@ -16,7 +16,7 @@ struct NatalChartView: UIViewControllerRepresentable {
            let latitude = UserDefaults.standard.object(forKey: "latitude") as? Double,
            let longitude = UserDefaults.standard.object(forKey: "longitude") as? Double {
             
-            controller.preloadValues(date: date, latitude: latitude, longitude: longitude)
+            //controller.preloadValues(date: date, latitude: latitude, longitude: longitude)
         }
         
         return controller

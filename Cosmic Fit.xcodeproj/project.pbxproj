@@ -414,6 +414,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Cosmic-Fit-Info.plist";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is used to set the birth location for the natal chart calculation.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -438,6 +439,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Cosmic-Fit-Info.plist";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is used to set the birth location for the natal chart calculation.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
