@@ -22,70 +22,73 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 20) {
-                Text("Natal Chart Generator")
-                    .font(.largeTitle)
-                    .padding(.top)
-                
-                // Birth date picker
-                VStack(alignment: .leading) {
-                    Text("Birth Date and Time")
-                        .font(.headline)
-                    DatePicker("", selection: $birthDate)
-                        .datePickerStyle(GraphicalDatePickerStyle())
-                        .frame(maxHeight: 400)
-                }
-                .padding(.horizontal)
-                
-                // Location fields
-                VStack(alignment: .leading) {
-                    Text("Birth Location")
-                        .font(.headline)
+            ScrollView {
+                VStack(spacing: 20) {
+                    Text("Natal Chart Generator")
+                        .font(.largeTitle)
+                        .padding(.top)
                     
-                    HStack {
-                        VStack {
-                            TextField("Latitude", text: $latitude)
-                                .keyboardType(.decimalPad)
-                                .padding()
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(8)
+                    // Birth date picker
+                    VStack(alignment: .leading) {
+                        Text("Birth Date and Time")
+                            .font(.headline)
+                        DatePicker("", selection: $birthDate)
+                            .datePickerStyle(GraphicalDatePickerStyle())
+                            .frame(maxHeight: 400)
+                    }
+                    .padding(.horizontal)
+                    
+                    // Location fields
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Birth Location")
+                            .font(.headline)
+                        
+                        HStack {
+                            VStack {
+                                TextField("Latitude", text: $latitude)
+                                    .keyboardType(.decimalPad)
+                                    .padding()
+                                    .background(Color.gray.opacity(0.1))
+                                    .cornerRadius(8)
+                            }
+                            
+                            VStack {
+                                TextField("Longitude", text: $longitude)
+                                    .keyboardType(.decimalPad)
+                                    .padding()
+                                    .background(Color.gray.opacity(0.1))
+                                    .cornerRadius(8)
+                            }
                         }
                         
-                        VStack {
-                            TextField("Longitude", text: $longitude)
-                                .keyboardType(.decimalPad)
-                                .padding()
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(8)
+                        Button(action: {
+                            locationViewModel.requestLocation()
+                        }) {
+                            Text("Use Current Location")
+                                .padding(.vertical, 8)
+                                .frame(maxWidth: .infinity)
                         }
+                        .buttonStyle(.bordered)
                     }
+                    .padding(.horizontal)
                     
+                    // Generate button
                     Button(action: {
-                        locationViewModel.requestLocation()
+                        generateChart()
                     }) {
-                        Text("Use Current Location")
-                            .padding(.vertical, 8)
+                        Text("Generate Natal Chart")
+                            .padding()
                             .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
                     }
-                    .buttonStyle(.bordered)
+                    .padding(.horizontal)
+                    .disabled(latitude.isEmpty || longitude.isEmpty)
+                    
+                    Spacer(minLength: 30)
                 }
-                .padding(.horizontal)
-                
-                // Generate button
-                Button(action: {
-                    generateChart()
-                }) {
-                    Text("Generate Natal Chart")
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                }
-                .padding(.horizontal)
-                .disabled(latitude.isEmpty || longitude.isEmpty)
-                
-                Spacer()
+                .frame(minHeight: UIScreen.main.bounds.height - 100) // Ensure content takes up at least full screen height
             }
             .navigationTitle("Cosmic Fit")
             .onChange(of: locationViewModel.currentLocation) { _, newLocation in
@@ -101,6 +104,7 @@ struct ContentView: View {
                 hideKeyboard()
             }
         }
+        .edgesIgnoringSafeArea(.bottom) // Extend to bottom edge
     }
     
     // Generate the natal chart

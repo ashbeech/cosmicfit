@@ -190,7 +190,7 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor), // Extend to bottom of view
             
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
@@ -198,6 +198,11 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
+        
+        // Add this line to ensure content is at least as tall as the screen
+        let contentHeightConstraint = contentView.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor)
+        contentHeightConstraint.priority = .defaultLow
+        contentHeightConstraint.isActive = true
     }
     
     @objc private func keyboardWillShow(notification: NSNotification) {
@@ -215,11 +220,15 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         // Calculate the position of the location field in the scroll view coordinates
         let locationFieldRect = locationTextField.convert(locationTextField.bounds, to: scrollView)
         
-        // Create a rect that ensures the location field is visible with enough space for the dropdown
-        var visibleRect = locationFieldRect
-        visibleRect.size.height += 300 // Add extra space for dropdown
+        // Create a rect that includes the location label at the top
+        var visibleRect = CGRect(
+            x: locationFieldRect.minX,
+            y: locationLabel.convert(locationLabel.bounds, to: scrollView).minY,
+            width: locationFieldRect.width,
+            height: locationFieldRect.height + 300 // Add extra space for dropdown
+        )
         
-        // Scroll to make this rect visible
+        // Scroll to the top of the location section
         scrollView.scrollRectToVisible(visibleRect, animated: true)
     }
 
@@ -615,7 +624,7 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
             chartWheelView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             chartWheelView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             chartWheelView.heightAnchor.constraint(equalToConstant: 300),
-            chartWheelView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+            chartWheelView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40)
         ])
     }
     
@@ -1030,25 +1039,38 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         
         let selectedResult = searchResults[indexPath.row]
         
+        // Show loading indicator
+        let loadingIndicator = UIActivityIndicatorView(style: .medium)
+        loadingIndicator.center = self.view.center
+        loadingIndicator.startAnimating()
+        self.view.addSubview(loadingIndicator)
+        
         // Use LocationService to get coordinates first
         locationService.getCoordinates(for: selectedResult) { [weak self] location in
-            guard let self = self, let location = location else {
-                return
-            }
-            
-            self.selectedLocation = location
-            self.selectedLocationName = "\(selectedResult.title), \(selectedResult.subtitle)"
+            guard let self = self else { return }
             
             // Make sure UI updates are on the main thread
             DispatchQueue.main.async {
-                // Update text field text
-                self.locationTextField.text = self.selectedLocationName
+                // Remove loading indicator
+                loadingIndicator.removeFromSuperview()
+                
+                if let location = location {
+                    // Set location explicitly
+                    self.selectedLocation = location
+                    self.selectedLocationName = "\(selectedResult.title), \(selectedResult.subtitle)"
+                    
+                    // Update text field text
+                    self.locationTextField.text = self.selectedLocationName
+                    
+                    // Add debug logging
+                    print("Location set: \(self.selectedLocationName ?? "nil") at \(location.coordinate.latitude), \(location.coordinate.longitude)")
+                } else {
+                    // Show error if location couldn't be found
+                    self.showAlert(message: "Could not find coordinates for the selected location. Please try another location.")
+                }
                 
                 // Hide the location search table
                 self.locationSearchTable.isHidden = true
-                
-                // Debug log to confirm location was set properly
-                print("Location set successfully: \(self.selectedLocationName ?? "nil"), coordinates: \(location.coordinate.latitude), \(location.coordinate.longitude)")
             }
         }
     }
