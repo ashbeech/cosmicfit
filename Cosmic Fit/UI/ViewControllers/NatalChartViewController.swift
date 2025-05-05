@@ -187,20 +187,22 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         scrollView.addSubview(contentView)
         
         NSLayoutConstraint.activate([
+            // Pin scroll view to all edges of the safe area
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor), // Extend to bottom of view
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
+            // Pin content view to all edges of the scroll view
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
         ])
         
-        // Add this line to ensure content is at least as tall as the screen
-        let contentHeightConstraint = contentView.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor)
+        // Set minimum height constraint for the content view to ensure it fills the screen
+        let contentHeightConstraint = contentView.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor)
         contentHeightConstraint.priority = .defaultLow
         contentHeightConstraint.isActive = true
     }
@@ -219,7 +221,7 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
     private func scrollToLocationField() {
         // Calculate the position of the location field in the scroll view coordinates
         let locationFieldRect = locationTextField.convert(locationTextField.bounds, to: scrollView)
-        
+        /*
         // Create a rect that includes the location label at the top
         var visibleRect = CGRect(
             x: locationFieldRect.minX,
@@ -227,9 +229,9 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
             width: locationFieldRect.width,
             height: locationFieldRect.height + 300 // Add extra space for dropdown
         )
-        
+        */
         // Scroll to the top of the location section
-        scrollView.scrollRectToVisible(visibleRect, animated: true)
+        //scrollView.scrollRectToVisible(visibleRect, animated: true)
     }
 
     private func setupDateSection() {
@@ -564,7 +566,7 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         
         // Setup constraints
         NSLayoutConstraint.activate([
-            generateButton.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 100),
+            generateButton.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 80), // Reduced from 100
             generateButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             generateButton.widthAnchor.constraint(equalToConstant: 180),
             generateButton.heightAnchor.constraint(equalToConstant: 44),
@@ -618,7 +620,7 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
             chartTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             chartTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             chartTextView.heightAnchor.constraint(equalToConstant: 300),
-            chartTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            chartTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
             
             chartWheelView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 10),
             chartWheelView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
