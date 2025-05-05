@@ -11,9 +11,14 @@ import MapKit
 import PDFKit
 
 class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate {
-    // UI Components
+    // Scroll view
     private let scrollView = UIScrollView()
-    private let contentView = UIView()
+    
+    // Main container for all content
+    private let contentStackView = UIStackView()
+    
+    // Chart result view
+    private let chartResultView = UIView()
     
     // Date components
     private let dateLabel = UILabel()
@@ -69,6 +74,9 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
     
     // Current chart
     private var currentChart: NatalChart?
+    
+    // Keyboard height for adjusting scroll position
+    private var keyboardHeight: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -127,7 +135,7 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         title = "Natal Chart Generator"
         view.backgroundColor = .systemBackground
         
-        // Setup scroll view for better form handling
+        // Setup scroll view and main stack view
         setupScrollView()
         
         // Setup date pickers
@@ -144,6 +152,9 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         
         // Setup chart display
         setupChartDisplay()
+        
+        // Hide chart result view initially
+        chartResultView.isHidden = true
         
         // Set up tap gesture to dismiss keyboard
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -180,61 +191,84 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
     }
     
     private func setupScrollView() {
+        // Configure scroll view
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        
         view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
         
+        // Pin scroll view to edges of the safe area
         NSLayoutConstraint.activate([
-            // Pin scroll view to all edges of the safe area
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            // Pin content view to all edges of the scroll view
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
-        // Set minimum height constraint for the content view to ensure it fills the screen
-        let contentHeightConstraint = contentView.heightAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.heightAnchor)
-        contentHeightConstraint.priority = .defaultLow
-        contentHeightConstraint.isActive = true
+        // Configure main stack view for all content
+        contentStackView.axis = .vertical
+        contentStackView.alignment = .fill
+        contentStackView.spacing = 20
+        contentStackView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentStackView)
+        
+        // Pin stack view to scroll view with proper width
+        NSLayoutConstraint.activate([
+            contentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20),
+            contentStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
+            contentStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
+            contentStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20),
+            contentStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -40)
+        ])
+        
+        // Configure chart result view
+        chartResultView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(chartResultView)
+        
+        // Pin chart result view to fill the entire safe area
+        NSLayoutConstraint.activate([
+            chartResultView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            chartResultView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            chartResultView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            chartResultView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
     
     @objc private func keyboardWillShow(notification: NSNotification) {
-        // Check if location text field is first responder
-        if locationTextField.isFirstResponder {
-            scrollToLocationField()
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            keyboardHeight = keyboardSize.height
+            
+            // If the location field is the first responder, scroll to it
+            if locationTextField.isFirstResponder {
+                scrollToLocationField()
+            }
         }
     }
 
     @objc private func keyboardWillHide(notification: NSNotification) {
-        // Reset scroll position if needed
+        keyboardHeight = 0
     }
-
+    
     private func scrollToLocationField() {
-        // Calculate the position of the location field in the scroll view coordinates
-        let locationFieldRect = locationTextField.convert(locationTextField.bounds, to: scrollView)
-        /*
-        // Create a rect that includes the location label at the top
-        var visibleRect = CGRect(
-            x: locationFieldRect.minX,
-            y: locationLabel.convert(locationLabel.bounds, to: scrollView).minY,
-            width: locationFieldRect.width,
-            height: locationFieldRect.height + 300 // Add extra space for dropdown
-        )
-        */
-        // Scroll to the top of the location section
-        //scrollView.scrollRectToVisible(visibleRect, animated: true)
+        // Convert the location text field's frame to the scroll view's coordinate space
+        let locationFieldFrame = locationTextField.convert(locationTextField.bounds, to: scrollView)
+        
+        // Calculate the bottom of the location field in scroll view coordinates
+        let fieldBottom = locationFieldFrame.maxY
+        
+        // Calculate the visible area of the scroll view (accounting for keyboard)
+        let visibleHeight = scrollView.bounds.height - keyboardHeight
+        
+        // Calculate how much additional scrolling is needed
+        let scrollPoint = CGPoint(x: 0, y: max(0, fieldBottom - visibleHeight + 20))
+        
+        // Animate scrolling to the location field
+        scrollView.setContentOffset(scrollPoint, animated: true)
     }
 
     private func setupDateSection() {
+        // Create date section container
+        let dateSectionView = UIView()
+        dateSectionView.translatesAutoresizingMaskIntoConstraints = false
+        
         // Configure date label
         dateLabel.text = "Birth Date"
         dateLabel.font = StyleUtility.Fonts.subtitle
@@ -263,17 +297,11 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         yearLabel.textAlignment = .center
         yearLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        // Add labels to container
-        dateContainer.addSubview(dayLabel)
-        dateContainer.addSubview(monthLabel)
-        dateContainer.addSubview(yearLabel)
-        
         // Configure pickers
         dayPicker.tag = 0
         monthPicker.tag = 1
         yearPicker.tag = 2
         
-        // Updated to avoid the delegate/datasource assignment errors
         dayPicker.dataSource = self
         dayPicker.delegate = self
         monthPicker.dataSource = self
@@ -286,24 +314,31 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         yearPicker.translatesAutoresizingMaskIntoConstraints = false
         
         // Add subviews
-        contentView.addSubview(dateLabel)
-        contentView.addSubview(dateContainer)
+        dateSectionView.addSubview(dateLabel)
+        dateSectionView.addSubview(dateContainer)
         dateContainer.addSubview(dayPicker)
         dateContainer.addSubview(monthPicker)
         dateContainer.addSubview(yearPicker)
+        dateContainer.addSubview(dayLabel)
+        dateContainer.addSubview(monthLabel)
+        dateContainer.addSubview(yearLabel)
+        
+        // Add to stack view
+        contentStackView.addArrangedSubview(dateSectionView)
         
         // Setup constraints
         NSLayoutConstraint.activate([
-            dateLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            dateLabel.topAnchor.constraint(equalTo: dateSectionView.topAnchor),
+            dateLabel.leadingAnchor.constraint(equalTo: dateSectionView.leadingAnchor),
             
             dateContainer.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 10),
-            dateContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            dateContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            dateContainer.heightAnchor.constraint(equalToConstant: 150), // Increased height for labels
+            dateContainer.leadingAnchor.constraint(equalTo: dateSectionView.leadingAnchor),
+            dateContainer.trailingAnchor.constraint(equalTo: dateSectionView.trailingAnchor),
+            dateContainer.heightAnchor.constraint(equalToConstant: 150),
+            dateContainer.bottomAnchor.constraint(equalTo: dateSectionView.bottomAnchor),
             
             // Day picker (leftmost)
-            dayPicker.topAnchor.constraint(equalTo: dateContainer.topAnchor, constant: 25), // Add space for label
+            dayPicker.topAnchor.constraint(equalTo: dateContainer.topAnchor, constant: 25),
             dayPicker.leadingAnchor.constraint(equalTo: dateContainer.leadingAnchor),
             dayPicker.heightAnchor.constraint(equalToConstant: 120),
             dayPicker.widthAnchor.constraint(equalTo: dateContainer.widthAnchor, multiplier: 0.25),
@@ -338,6 +373,10 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
     }
     
     private func setupTimeSection() {
+        // Create time section container
+        let timeSectionView = UIView()
+        timeSectionView.translatesAutoresizingMaskIntoConstraints = false
+        
         // Configure time label
         timeLabel.text = "Birth Time"
         timeLabel.font = StyleUtility.Fonts.subtitle
@@ -366,17 +405,11 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         amPmLabel.textAlignment = .center
         amPmLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        // Add labels to container
-        timeContainer.addSubview(hourLabel)
-        timeContainer.addSubview(minuteLabel)
-        timeContainer.addSubview(amPmLabel)
-        
         // Configure pickers
         hourPicker.tag = 3
         minutePicker.tag = 4
         amPmPicker.tag = 5
         
-        // Updated to avoid the delegate/datasource assignment errors
         hourPicker.dataSource = self
         hourPicker.delegate = self
         minutePicker.dataSource = self
@@ -389,24 +422,31 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         amPmPicker.translatesAutoresizingMaskIntoConstraints = false
         
         // Add subviews
-        contentView.addSubview(timeLabel)
-        contentView.addSubview(timeContainer)
+        timeSectionView.addSubview(timeLabel)
+        timeSectionView.addSubview(timeContainer)
         timeContainer.addSubview(hourPicker)
         timeContainer.addSubview(minutePicker)
         timeContainer.addSubview(amPmPicker)
+        timeContainer.addSubview(hourLabel)
+        timeContainer.addSubview(minuteLabel)
+        timeContainer.addSubview(amPmLabel)
+        
+        // Add to stack view
+        contentStackView.addArrangedSubview(timeSectionView)
         
         // Setup constraints
         NSLayoutConstraint.activate([
-            timeLabel.topAnchor.constraint(equalTo: dateContainer.bottomAnchor, constant: 20),
-            timeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            timeLabel.topAnchor.constraint(equalTo: timeSectionView.topAnchor),
+            timeLabel.leadingAnchor.constraint(equalTo: timeSectionView.leadingAnchor),
             
             timeContainer.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 10),
-            timeContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            timeContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            timeContainer.heightAnchor.constraint(equalToConstant: 150), // Increased height for labels
+            timeContainer.leadingAnchor.constraint(equalTo: timeSectionView.leadingAnchor),
+            timeContainer.trailingAnchor.constraint(equalTo: timeSectionView.trailingAnchor),
+            timeContainer.heightAnchor.constraint(equalToConstant: 150),
+            timeContainer.bottomAnchor.constraint(equalTo: timeSectionView.bottomAnchor),
             
             // Hour picker
-            hourPicker.topAnchor.constraint(equalTo: timeContainer.topAnchor, constant: 25), // Add space for label
+            hourPicker.topAnchor.constraint(equalTo: timeContainer.topAnchor, constant: 25),
             hourPicker.leadingAnchor.constraint(equalTo: timeContainer.leadingAnchor),
             hourPicker.heightAnchor.constraint(equalToConstant: 120),
             hourPicker.widthAnchor.constraint(equalTo: timeContainer.widthAnchor, multiplier: 0.33),
@@ -441,6 +481,10 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
     }
     
     private func setupLocationSection() {
+        // Create location section container
+        let locationSectionView = UIView()
+        locationSectionView.translatesAutoresizingMaskIntoConstraints = false
+        
         // Configure location label
         locationLabel.text = "Birth Location"
         locationLabel.font = StyleUtility.Fonts.subtitle
@@ -491,36 +535,38 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         useLocationButton.tintColor = StyleUtility.Colors.primary
         
         // Add subviews
-        contentView.addSubview(locationLabel)
-        contentView.addSubview(locationTextField)
-        contentView.addSubview(helperLabel)
-        contentView.addSubview(locationSearchTable)
-        contentView.addSubview(useLocationButton)
+        locationSectionView.addSubview(locationLabel)
+        locationSectionView.addSubview(locationTextField)
+        locationSectionView.addSubview(helperLabel)
+        locationSectionView.addSubview(locationSearchTable)
+        locationSectionView.addSubview(useLocationButton)
         
-        // Setup constraints with correct z-ordering
+        // Add to stack view
+        contentStackView.addArrangedSubview(locationSectionView)
+        
+        // Setup constraints
         NSLayoutConstraint.activate([
-            locationLabel.topAnchor.constraint(equalTo: timeContainer.bottomAnchor, constant: 20),
-            locationLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            locationLabel.topAnchor.constraint(equalTo: locationSectionView.topAnchor),
+            locationLabel.leadingAnchor.constraint(equalTo: locationSectionView.leadingAnchor),
             
             locationTextField.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 10),
-            locationTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            locationTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            locationTextField.leadingAnchor.constraint(equalTo: locationSectionView.leadingAnchor),
+            locationTextField.trailingAnchor.constraint(equalTo: locationSectionView.trailingAnchor),
+            locationTextField.heightAnchor.constraint(equalToConstant: 44),
             
             helperLabel.topAnchor.constraint(equalTo: locationTextField.bottomAnchor, constant: 5),
             helperLabel.leadingAnchor.constraint(equalTo: locationTextField.leadingAnchor, constant: 5),
             helperLabel.trailingAnchor.constraint(equalTo: locationTextField.trailingAnchor),
             
             locationSearchTable.topAnchor.constraint(equalTo: helperLabel.bottomAnchor, constant: 5),
-            locationSearchTable.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            locationSearchTable.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            locationSearchTable.heightAnchor.constraint(equalToConstant: 250),
+            locationSearchTable.leadingAnchor.constraint(equalTo: locationSectionView.leadingAnchor),
+            locationSearchTable.trailingAnchor.constraint(equalTo: locationSectionView.trailingAnchor),
+            locationSearchTable.heightAnchor.constraint(equalToConstant: 200),
             
             useLocationButton.topAnchor.constraint(equalTo: locationSearchTable.bottomAnchor, constant: 10),
-            useLocationButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
+            useLocationButton.leadingAnchor.constraint(equalTo: locationSectionView.leadingAnchor),
+            useLocationButton.bottomAnchor.constraint(equalTo: locationSectionView.bottomAnchor)
         ])
-        
-        // Ensure the search table appears above other views
-        contentView.bringSubviewToFront(locationSearchTable)
     }
     
     private func setupLocationManager() {
@@ -539,62 +585,43 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         generateButton.translatesAutoresizingMaskIntoConstraints = false
         StyleUtility.styleButton(generateButton)
         
-        // Create share button
-        let shareButton = UIButton(type: .system)
-        shareButton.setTitle("Share Chart", for: .normal)
-        shareButton.addTarget(self, action: #selector(shareChartTapped), for: .touchUpInside)
-        shareButton.translatesAutoresizingMaskIntoConstraints = false
-        shareButton.alpha = 0.0 // Initially hidden until chart is generated
-        shareButton.tag = 1001  // Tag for later reference
-        StyleUtility.styleButton(shareButton)
-        shareButton.backgroundColor = StyleUtility.Colors.secondary
-        
-        // Create PDF export button
-        let exportButton = UIButton(type: .system)
-        exportButton.setTitle("Export PDF", for: .normal)
-        exportButton.addTarget(self, action: #selector(exportPDFTapped), for: .touchUpInside)
-        exportButton.translatesAutoresizingMaskIntoConstraints = false
-        exportButton.alpha = 0.0 // Initially hidden until chart is generated
-        exportButton.tag = 1002  // Tag for later reference
-        StyleUtility.styleButton(exportButton)
-        exportButton.backgroundColor = UIColor.systemGreen
-        
-        // Add subviews
-        contentView.addSubview(generateButton)
-        contentView.addSubview(shareButton)
-        contentView.addSubview(exportButton)
+        // Add to stack view
+        contentStackView.addArrangedSubview(generateButton)
         
         // Setup constraints
         NSLayoutConstraint.activate([
-            generateButton.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 80), // Reduced from 100
-            generateButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            generateButton.widthAnchor.constraint(equalToConstant: 180),
-            generateButton.heightAnchor.constraint(equalToConstant: 44),
-            
-            shareButton.topAnchor.constraint(equalTo: generateButton.topAnchor),
-            shareButton.leadingAnchor.constraint(equalTo: generateButton.trailingAnchor, constant: 10),
-            shareButton.widthAnchor.constraint(equalToConstant: 100),
-            shareButton.heightAnchor.constraint(equalToConstant: 44),
-            
-            exportButton.topAnchor.constraint(equalTo: generateButton.topAnchor),
-            exportButton.leadingAnchor.constraint(equalTo: shareButton.trailingAnchor, constant: 10),
-            exportButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            exportButton.heightAnchor.constraint(equalToConstant: 44)
+            generateButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     
     private func setupChartDisplay() {
+        // Create chart view scroll view for scrolling chart content
+        let chartScrollView = UIScrollView()
+        chartScrollView.translatesAutoresizingMaskIntoConstraints = false
+        chartResultView.addSubview(chartScrollView)
+        
+        // Create a container view for chart content
+        let chartContentView = UIView()
+        chartContentView.translatesAutoresizingMaskIntoConstraints = false
+        chartScrollView.addSubview(chartContentView)
+        
+        // Add a back button to return to the form
+        let backButton = UIButton(type: .system)
+        backButton.setTitle("Back to Form", for: .normal)
+        backButton.addTarget(self, action: #selector(backToFormTapped), for: .touchUpInside)
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        StyleUtility.styleButton(backButton)
+        backButton.backgroundColor = StyleUtility.Colors.secondary
+        
         // Configure segmented control
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        segmentedControl.alpha = 0.0 // Initially hidden
         
         // Configure chart text view
         chartTextView.isEditable = false
         chartTextView.font = UIFont.monospacedSystemFont(ofSize: 14, weight: .regular)
         chartTextView.translatesAutoresizingMaskIntoConstraints = false
-        chartTextView.alpha = 0.0 // Initially hidden
         
         // Configure chart wheel view
         chartWheelView.backgroundColor = .white
@@ -603,34 +630,95 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         chartWheelView.layer.borderWidth = 1
         chartWheelView.layer.cornerRadius = 8
         chartWheelView.translatesAutoresizingMaskIntoConstraints = false
-        chartWheelView.alpha = 0.0 // Initially hidden
+        
+        // Create action buttons container
+        let actionButtonsContainer = UIView()
+        actionButtonsContainer.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Create share button
+        let shareButton = UIButton(type: .system)
+        shareButton.setTitle("Share Chart", for: .normal)
+        shareButton.addTarget(self, action: #selector(shareChartTapped), for: .touchUpInside)
+        shareButton.translatesAutoresizingMaskIntoConstraints = false
+        StyleUtility.styleButton(shareButton)
+        shareButton.backgroundColor = StyleUtility.Colors.primary
+        
+        // Create PDF export button
+        let exportButton = UIButton(type: .system)
+        exportButton.setTitle("Export PDF", for: .normal)
+        exportButton.addTarget(self, action: #selector(exportPDFTapped), for: .touchUpInside)
+        exportButton.translatesAutoresizingMaskIntoConstraints = false
+        StyleUtility.styleButton(exportButton)
+        exportButton.backgroundColor = UIColor.systemGreen
         
         // Add subviews
-        contentView.addSubview(segmentedControl)
-        contentView.addSubview(chartTextView)
-        contentView.addSubview(chartWheelView)
+        chartContentView.addSubview(backButton)
+        chartContentView.addSubview(segmentedControl)
+        chartContentView.addSubview(chartTextView)
+        chartContentView.addSubview(chartWheelView)
+        chartContentView.addSubview(actionButtonsContainer)
+        actionButtonsContainer.addSubview(shareButton)
+        actionButtonsContainer.addSubview(exportButton)
         
-        // Setup constraints
+        // Set up scroll view and content view constraints
         NSLayoutConstraint.activate([
-            segmentedControl.topAnchor.constraint(equalTo: generateButton.bottomAnchor, constant: 20),
-            segmentedControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            segmentedControl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            chartScrollView.topAnchor.constraint(equalTo: chartResultView.safeAreaLayoutGuide.topAnchor),
+            chartScrollView.leadingAnchor.constraint(equalTo: chartResultView.leadingAnchor),
+            chartScrollView.trailingAnchor.constraint(equalTo: chartResultView.trailingAnchor),
+            chartScrollView.bottomAnchor.constraint(equalTo: chartResultView.safeAreaLayoutGuide.bottomAnchor),
+            
+            chartContentView.topAnchor.constraint(equalTo: chartScrollView.topAnchor),
+            chartContentView.leadingAnchor.constraint(equalTo: chartScrollView.leadingAnchor, constant: 20),
+            chartContentView.trailingAnchor.constraint(equalTo: chartScrollView.trailingAnchor, constant: -20),
+            chartContentView.bottomAnchor.constraint(equalTo: chartScrollView.bottomAnchor, constant: -20),
+            chartContentView.widthAnchor.constraint(equalTo: chartScrollView.widthAnchor, constant: -40),
+            
+            backButton.topAnchor.constraint(equalTo: chartContentView.topAnchor, constant: 10),
+            backButton.leadingAnchor.constraint(equalTo: chartContentView.leadingAnchor),
+            backButton.trailingAnchor.constraint(equalTo: chartContentView.trailingAnchor),
+            backButton.heightAnchor.constraint(equalToConstant: 44),
+            
+            segmentedControl.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 20),
+            segmentedControl.leadingAnchor.constraint(equalTo: chartContentView.leadingAnchor),
+            segmentedControl.trailingAnchor.constraint(equalTo: chartContentView.trailingAnchor),
             
             chartTextView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 10),
-            chartTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            chartTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            chartTextView.heightAnchor.constraint(equalToConstant: 300),
-            chartTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
+            chartTextView.leadingAnchor.constraint(equalTo: chartContentView.leadingAnchor),
+            chartTextView.trailingAnchor.constraint(equalTo: chartContentView.trailingAnchor),
+            chartTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 300),
             
             chartWheelView.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 10),
-            chartWheelView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            chartWheelView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            chartWheelView.leadingAnchor.constraint(equalTo: chartContentView.leadingAnchor),
+            chartWheelView.trailingAnchor.constraint(equalTo: chartContentView.trailingAnchor),
             chartWheelView.heightAnchor.constraint(equalToConstant: 300),
-            chartWheelView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40)
+            
+            actionButtonsContainer.topAnchor.constraint(equalTo: chartTextView.bottomAnchor, constant: 20),
+            actionButtonsContainer.leadingAnchor.constraint(equalTo: chartContentView.leadingAnchor),
+            actionButtonsContainer.trailingAnchor.constraint(equalTo: chartContentView.trailingAnchor),
+            actionButtonsContainer.heightAnchor.constraint(equalToConstant: 44),
+            actionButtonsContainer.bottomAnchor.constraint(equalTo: chartContentView.bottomAnchor),
+            
+            shareButton.leadingAnchor.constraint(equalTo: actionButtonsContainer.leadingAnchor),
+            shareButton.topAnchor.constraint(equalTo: actionButtonsContainer.topAnchor),
+            shareButton.bottomAnchor.constraint(equalTo: actionButtonsContainer.bottomAnchor),
+            shareButton.widthAnchor.constraint(equalTo: actionButtonsContainer.widthAnchor, multiplier: 0.48),
+            
+            exportButton.trailingAnchor.constraint(equalTo: actionButtonsContainer.trailingAnchor),
+            exportButton.topAnchor.constraint(equalTo: actionButtonsContainer.topAnchor),
+            exportButton.bottomAnchor.constraint(equalTo: actionButtonsContainer.bottomAnchor),
+            exportButton.widthAnchor.constraint(equalTo: actionButtonsContainer.widthAnchor, multiplier: 0.48)
         ])
     }
     
     // MARK: - Actions
+    
+    @objc private func backToFormTapped() {
+        // Hide chart view and show form
+        UIView.transition(with: view, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            self.chartResultView.isHidden = true
+            self.scrollView.isHidden = false
+        }, completion: nil)
+    }
     
     @objc private func useCurrentLocationTapped() {
         // Show a loading indicator
@@ -684,358 +772,344 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         
         print("Location validation passed: \(location.coordinate.latitude), \(location.coordinate.longitude)")
         
-            
-            // Create date components
-            var dateComponents = DateComponents()
-            dateComponents.year = selectedYear
-            dateComponents.month = selectedMonth + 1 // Month is 0-based in our picker
-            dateComponents.day = selectedDay
-            
-            // Calculate hour in 24-hour format
-            let hour24 = selectedAmPm == 1
-                ? (selectedHour == 12 ? 12 : selectedHour + 12)
-                : (selectedHour == 12 ? 0 : selectedHour)
-            
-            dateComponents.hour = hour24
-            dateComponents.minute = selectedMinute
-            
-            // Create date
-            let calendar = Calendar.current
-            guard let birthDate = calendar.date(from: dateComponents) else {
-                showAlert(message: "Invalid date combination. Please check your date selection.")
-                return nil
-            }
-            
-            // Validate future dates - birth date shouldn't be in the future
-            if birthDate > Date() {
-                showAlert(message: "Birth date cannot be in the future")
-                return nil
-            }
-            
-            // Validate extremely old birth dates (over 120 years)
-            let age = calculateAge(from: birthDate)
-            if age > 120 {
-                // Allow it but show a confirmation
-                let confirmMessage = "The birth date you entered is over \(age) years ago. Is this correct?"
-                
-                // We'll let it pass but show this message
-                let alert = UIAlertController(title: "Confirm Birth Date", message: confirmMessage, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Yes, Continue", style: .default))
-                alert.addAction(UIAlertAction(title: "No, Edit Date", style: .cancel) { _ in
-                    return
-                })
-                present(alert, animated: true)
-            }
-            
-            return (birthDate, location)
+        // Create date components
+        var dateComponents = DateComponents()
+        dateComponents.year = selectedYear
+        dateComponents.month = selectedMonth + 1 // Month is 0-based in our picker
+        dateComponents.day = selectedDay
+        
+        // Calculate hour in 24-hour format
+        let hour24 = selectedAmPm == 1
+            ? (selectedHour == 12 ? 12 : selectedHour + 12)
+            : (selectedHour == 12 ? 0 : selectedHour)
+        
+        dateComponents.hour = hour24
+        dateComponents.minute = selectedMinute
+        
+        // Create date
+        let calendar = Calendar.current
+        guard let birthDate = calendar.date(from: dateComponents) else {
+            showAlert(message: "Invalid date combination. Please check your date selection.")
+            return nil
         }
         
-        @objc private func generateChartTapped() {
-            // Show loading indicator
-            let activityIndicator = UIActivityIndicatorView(style: .large)
-            activityIndicator.center = view.center
-            activityIndicator.startAnimating()
-            view.addSubview(activityIndicator)
+        // Validate future dates - birth date shouldn't be in the future
+        if birthDate > Date() {
+            showAlert(message: "Birth date cannot be in the future")
+            return nil
+        }
+        
+        // Validate extremely old birth dates (over 120 years)
+        let age = calculateAge(from: birthDate)
+        if age > 120 {
+            // Allow it but show a confirmation
+            let confirmMessage = "The birth date you entered is over \(age) years ago. Is this correct?"
             
-            // Validate inputs
-            guard let validInputs = validateInputs() else {
-                activityIndicator.removeFromSuperview()
+            // We'll let it pass but show this message
+            let alert = UIAlertController(title: "Confirm Birth Date", message: confirmMessage, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Yes, Continue", style: .default))
+            alert.addAction(UIAlertAction(title: "No, Edit Date", style: .cancel) { _ in
                 return
-            }
+            })
+            present(alert, animated: true)
+        }
+        
+        return (birthDate, location)
+    }
+    
+    @objc private func generateChartTapped() {
+        // Show loading indicator
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.center = view.center
+        activityIndicator.startAnimating()
+        view.addSubview(activityIndicator)
+        
+        // Validate inputs
+        guard let validInputs = validateInputs() else {
+            activityIndicator.removeFromSuperview()
+            return
+        }
+        
+        // Save input data for future use
+        if let locationName = selectedLocationName {
+            UserDefaultsManager.saveBirthData(
+                day: selectedDay,
+                month: selectedMonth,
+                year: selectedYear,
+                hour: selectedHour,
+                minute: selectedMinute,
+                amPm: selectedAmPm,
+                locationName: locationName,
+                location: validInputs.location
+            )
+        }
+        
+        // Generate chart in background to avoid UI freeze
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
             
-            // Save input data for future use
-            if let locationName = selectedLocationName {
-                UserDefaultsManager.saveBirthData(
-                    day: selectedDay,
-                    month: selectedMonth,
-                    year: selectedYear,
-                    hour: selectedHour,
-                    minute: selectedMinute,
-                    amPm: selectedAmPm,
-                    locationName: locationName,
-                    location: validInputs.location
-                )
-            }
+            // Generate chart
+            self.currentChart = NatalChart(
+                birthDate: validInputs.birthDate,
+                latitude: validInputs.location.coordinate.latitude,
+                longitude: validInputs.location.coordinate.longitude
+            )
             
-            // Generate chart in background to avoid UI freeze
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                guard let self = self else { return }
+            // Update UI on main thread
+            DispatchQueue.main.async {
+                activityIndicator.removeFromSuperview()
                 
-                // Generate chart
-                self.currentChart = NatalChart(
-                    birthDate: validInputs.birthDate,
-                    latitude: validInputs.location.coordinate.latitude,
-                    longitude: validInputs.location.coordinate.longitude
-                )
+                // Show chart and hide form
+                UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                    self.scrollView.isHidden = true
+                    self.chartResultView.isHidden = false
+                }, completion: nil)
                 
-                // Update UI on main thread
-                DispatchQueue.main.async {
-                    activityIndicator.removeFromSuperview()
-                    
-                    // Add animation for the appearance of results
-                    UIView.animate(withDuration: 0.3) {
-                        self.segmentedControl.alpha = 1.0
-                        self.chartTextView.alpha = 1.0
-                        self.chartWheelView.alpha = 1.0
-                        
-                        // Show share and export buttons
-                        if let shareButton = self.contentView.viewWithTag(1001) as? UIButton {
-                            shareButton.alpha = 1.0
-                        }
-                        
-                        if let exportButton = self.contentView.viewWithTag(1002) as? UIButton {
-                            exportButton.alpha = 1.0
-                        }
-                    }
-                    
-                    // Display the report
-                    if let chart = self.currentChart {
-                        self.chartTextView.text = chart.generateReport()
-                        self.chartWheelView.chart = chart
-                        self.chartWheelView.setNeedsDisplay()
-                    }
+                // Display the report
+                if let chart = self.currentChart {
+                    self.chartTextView.text = chart.generateReport()
+                    self.chartWheelView.chart = chart
+                    self.chartWheelView.setNeedsDisplay()
                 }
             }
         }
-        
-        @objc private func shareChartTapped() {
-            guard let chart = currentChart else {
-                showAlert(message: "No chart has been generated yet")
-                return
-            }
-            
-            // Create text to share
-            let chartText = chart.generateReport()
-            
-            // Create activity view controller
-            let activityViewController = UIActivityViewController(
-                activityItems: [chartText],
-                applicationActivities: nil
-            )
-            
-            // Present the view controller
-            present(activityViewController, animated: true)
+    }
+    
+    @objc private func shareChartTapped() {
+        guard let chart = currentChart else {
+            showAlert(message: "No chart has been generated yet")
+            return
         }
         
-        @objc private func exportPDFTapped() {
-            guard let chart = currentChart else {
-                showAlert(message: "Please generate a chart first")
-                return
-            }
+        // Create text to share
+        let chartText = chart.generateReport()
+        
+        // Create activity view controller
+        let activityViewController = UIActivityViewController(
+            activityItems: [chartText],
+            applicationActivities: nil
+        )
+        
+        // Present the view controller
+        present(activityViewController, animated: true)
+    }
+    
+    @objc private func exportPDFTapped() {
+        guard let chart = currentChart else {
+            showAlert(message: "Please generate a chart first")
+            return
+        }
+        
+        // Show loading indicator
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.center = view.center
+        activityIndicator.startAnimating()
+        view.addSubview(activityIndicator)
+        
+        // Generate PDF in background
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
             
-            // Show loading indicator
-            let activityIndicator = UIActivityIndicatorView(style: .large)
-            activityIndicator.center = view.center
-            activityIndicator.startAnimating()
-            view.addSubview(activityIndicator)
-            
-            // Generate PDF in background
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                guard let self = self else { return }
-                
-                if let pdfData = PDFGenerator.generatePDF(from: chart) {
-                    if let fileURL = PDFGenerator.savePDF(data: pdfData) {
-                        DispatchQueue.main.async {
-                            activityIndicator.removeFromSuperview()
-                            
-                            // Show PDF preview and share options
-                            let pdfViewController = UIActivityViewController(
-                                activityItems: [fileURL],
-                                applicationActivities: nil
-                            )
-                            
-                            self.present(pdfViewController, animated: true)
-                        }
-                    } else {
-                        DispatchQueue.main.async {
-                            activityIndicator.removeFromSuperview()
-                            self.showAlert(message: "Failed to save PDF file")
-                        }
+            if let pdfData = PDFGenerator.generatePDF(from: chart) {
+                if let fileURL = PDFGenerator.savePDF(data: pdfData) {
+                    DispatchQueue.main.async {
+                        activityIndicator.removeFromSuperview()
+                        
+                        // Show PDF preview and share options
+                        let pdfViewController = UIActivityViewController(
+                            activityItems: [fileURL],
+                            applicationActivities: nil
+                        )
+                        
+                        self.present(pdfViewController, animated: true)
                     }
                 } else {
                     DispatchQueue.main.async {
                         activityIndicator.removeFromSuperview()
-                        self.showAlert(message: "Failed to generate PDF")
+                        self.showAlert(message: "Failed to save PDF file")
                     }
                 }
-            }
-        }
-        
-        private func showAlert(message: String, title: String = "Input Error") {
-            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alert, animated: true)
-        }
-        
-        // MARK: - Location Search Methods
-        
-        private func lookUpLocationDetails(for placemark: MKPlacemark) {
-            selectedLocation = CLLocation(latitude: placemark.coordinate.latitude, longitude: placemark.coordinate.longitude)
-            selectedLocationName = placemark.name ?? "\(placemark.locality ?? ""), \(placemark.country ?? "")"
-            locationTextField.text = selectedLocationName
-            locationSearchTable.isHidden = true
-        }
-        
-        private func search(for query: String) {
-            // Don't search for very short queries
-            guard query.count >= 2 else {
-                self.searchResults = []
-                self.locationSearchTable.reloadData()
-                return
-            }
-            
-            locationService.searchLocation(query: query) { [weak self] results in
-                guard let self = self else { return }
-                self.searchResults = results
+            } else {
                 DispatchQueue.main.async {
-                    self.locationSearchTable.reloadData()
-                    self.locationSearchTable.isHidden = self.searchResults.isEmpty
+                    activityIndicator.removeFromSuperview()
+                    self.showAlert(message: "Failed to generate PDF")
                 }
             }
         }
-        
-        // MARK: - UIPickerViewDataSource & UIPickerViewDelegate
-        
-        func numberOfComponents(in pickerView: UIPickerView) -> Int {
-            return 1
+    }
+    
+    private func showAlert(message: String, title: String = "Input Error") {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
+    // MARK: - Location Search Methods
+    
+    private func lookUpLocationDetails(for placemark: MKPlacemark) {
+        selectedLocation = CLLocation(latitude: placemark.coordinate.latitude, longitude: placemark.coordinate.longitude)
+        selectedLocationName = placemark.name ?? "\(placemark.locality ?? ""), \(placemark.country ?? "")"
+        locationTextField.text = selectedLocationName
+        locationSearchTable.isHidden = true
+    }
+    
+    private func search(for query: String) {
+        // Don't search for very short queries
+        guard query.count >= 2 else {
+            self.searchResults = []
+            self.locationSearchTable.reloadData()
+            return
         }
         
-        func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-            switch pickerView.tag {
-            case 0: // Day
-                return days.count
-            case 1: // Month
-                return months.count
-            case 2: // Year
-                return years.count
-            case 3: // Hour
-                return hours.count
-            case 4: // Minute
-                return minutes.count
-            case 5: // AM/PM
-                return amPm.count
-            default:
-                return 0
+        locationService.searchLocation(query: query) { [weak self] results in
+            guard let self = self else { return }
+            self.searchResults = results
+            DispatchQueue.main.async {
+                self.locationSearchTable.reloadData()
+                self.locationSearchTable.isHidden = self.searchResults.isEmpty
             }
         }
+    }
+    
+    // MARK: - UIPickerViewDataSource & UIPickerViewDelegate
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        switch pickerView.tag {
+        case 0: // Day
+            return days.count
+        case 1: // Month
+            return months.count
+        case 2: // Year
+            return years.count
+        case 3: // Hour
+            return hours.count
+        case 4: // Minute
+            return minutes.count
+        case 5: // AM/PM
+            return amPm.count
+        default:
+            return 0
+        }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        switch pickerView.tag {
+        case 0: // Day
+            return "\(days[row])"
+        case 1: // Month
+            return months[row]
+        case 2: // Year
+            return "\(years[row])"
+        case 3: // Hour
+            return "\(hours[row])"
+        case 4: // Minute
+            // Format minutes with leading zero
+            return String(format: "%02d", minutes[row])
+        case 5: // AM/PM
+            return amPm[row]
+        default:
+            return ""
+        }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        switch pickerView.tag {
+        case 0: // Day
+            selectedDay = days[row]
+        case 1: // Month
+            selectedMonth = row
+            updateDaysInMonth()
+        case 2: // Year
+            selectedYear = years[row]
+            updateDaysInMonth()
+        case 3: // Hour
+            selectedHour = hours[row]
+        case 4: // Minute
+            selectedMinute = minutes[row]
+        case 5: // AM/PM
+            selectedAmPm = row
+        default:
+            break
+        }
+    }
+    
+    private func updateDaysInMonth() {
+        let calendar = Calendar.current
+        var dateComponents = DateComponents()
+        dateComponents.year = selectedYear
+        dateComponents.month = selectedMonth + 1
         
-        func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-            switch pickerView.tag {
-            case 0: // Day
-                return "\(days[row])"
-            case 1: // Month
-                return months[row]
-            case 2: // Year
-                return "\(years[row])"
-            case 3: // Hour
-                return "\(hours[row])"
-            case 4: // Minute
-                // Format minutes with leading zero
-                return String(format: "%02d", minutes[row])
-            case 5: // AM/PM
-                return amPm[row]
-            default:
-                return ""
-            }
+        guard let date = calendar.date(from: dateComponents),
+              let range = calendar.range(of: .day, in: .month, for: date) else {
+            return
         }
         
-        func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-            switch pickerView.tag {
-            case 0: // Day
-                selectedDay = days[row]
-            case 1: // Month
-                selectedMonth = row
-                updateDaysInMonth()
-            case 2: // Year
-                selectedYear = years[row]
-                updateDaysInMonth()
-            case 3: // Hour
-                selectedHour = hours[row]
-            case 4: // Minute
-                selectedMinute = minutes[row]
-            case 5: // AM/PM
-                selectedAmPm = row
-            default:
-                break
-            }
+        // If the selected day is greater than the number of days in the month,
+        // set it to the last day of the month
+        if selectedDay > range.count {
+            selectedDay = range.count
+            dayPicker.selectRow(selectedDay - 1, inComponent: 0, animated: true)
         }
-        
-        private func updateDaysInMonth() {
-            let calendar = Calendar.current
-            var dateComponents = DateComponents()
-            dateComponents.year = selectedYear
-            dateComponents.month = selectedMonth + 1
-            
-            guard let date = calendar.date(from: dateComponents),
-                  let range = calendar.range(of: .day, in: .month, for: date) else {
-                return
-            }
-            
-            // If the selected day is greater than the number of days in the month,
-            // set it to the last day of the month
-            if selectedDay > range.count {
-                selectedDay = range.count
-                dayPicker.selectRow(selectedDay - 1, inComponent: 0, animated: true)
-            }
+    }
+    
+    // MARK: - UITextFieldDelegate
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        if textField == locationTextField, let searchText = textField.text {
+            search(for: searchText)
+            // The location table visibility is handled in the search completion handler
         }
-        
-        // MARK: - UITextFieldDelegate
-        
-        func textFieldDidChangeSelection(_ textField: UITextField) {
-            if textField == locationTextField, let searchText = textField.text {
-                search(for: searchText)
-                // The location table visibility is handled in the search completion handler
-            }
-        }
-        
-        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            textField.resignFirstResponder()
-            locationSearchTable.isHidden = true
-            return true
-        }
-        
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        locationSearchTable.isHidden = true
+        return true
+    }
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField == locationTextField {
-            // Scroll to make location field visible
-            scrollToLocationField()
-            
             // Show search results if there's text
             if let searchText = textField.text, !searchText.isEmpty {
                 search(for: searchText)
             }
         }
     }
-        
-        func textFieldShouldClear(_ textField: UITextField) -> Bool {
-            // If the text field is cleared, hide the search results
-            if textField == locationTextField {
-                searchResults = []
-                locationSearchTable.reloadData()
-                locationSearchTable.isHidden = true
-            }
-            return true
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        // If the text field is cleared, hide the search results
+        if textField == locationTextField {
+            searchResults = []
+            locationSearchTable.reloadData()
+            locationSearchTable.isHidden = true
+        }
+        return true
+    }
+    
+    // MARK: - UITableViewDataSource & UITableViewDelegate
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80 // Height for our custom location cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return searchResults.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: LocationResultTableViewCell.identifier, for: indexPath) as? LocationResultTableViewCell else {
+            return UITableViewCell()
         }
         
-        // MARK: - UITableViewDataSource & UITableViewDelegate
-        
-        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-            return 80 // Height for our custom location cell
-        }
-        
-        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return searchResults.count
-        }
-        
-        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: LocationResultTableViewCell.identifier, for: indexPath) as? LocationResultTableViewCell else {
-                return UITableViewCell()
-            }
-            
-            let searchResult = searchResults[indexPath.row]
-            cell.configure(with: searchResult)
-            return cell
-        }
-        
+        let searchResult = searchResults[indexPath.row]
+        cell.configure(with: searchResult)
+        return cell
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -1076,51 +1150,73 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
             }
         }
     }
-        
-        // MARK: - CLLocationManagerDelegate
-        
-        func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-            if let location = locations.first {
-                selectedLocation = location
+    
+    // MARK: - CLLocationManagerDelegate
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.first {
+            selectedLocation = location
+            
+            // Reverse geocode to get the place name
+            let geocoder = CLGeocoder()
+            geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
+                guard let self = self else { return }
                 
-                // Reverse geocode to get the place name
-                let geocoder = CLGeocoder()
-                geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
-                    guard let self = self else { return }
+                // Remove loading indicator
+                if let loadingIndicator = self.view.viewWithTag(9999) as? UIActivityIndicatorView {
+                    loadingIndicator.stopAnimating()
+                    loadingIndicator.removeFromSuperview()
+                }
+                
+                // Re-enable text field
+                self.locationTextField.isEnabled = true
+                
+                if let error = error {
+                    print("Reverse geocoding error: \(error.localizedDescription)")
+                    self.locationTextField.text = ""
+                    self.showAlert(message: "Unable to get location details. Please try again or enter manually.")
+                    return
+                }
+                
+                if let placemark = placemarks?.first {
+                    let locationName = [
+                        placemark.locality,
+                        placemark.administrativeArea,
+                        placemark.country
+                    ].compactMap { $0 }.joined(separator: ", ")
                     
-                    // Remove loading indicator
-                    if let loadingIndicator = self.view.viewWithTag(9999) as? UIActivityIndicatorView {
-                        loadingIndicator.stopAnimating()
-                        loadingIndicator.removeFromSuperview()
-                    }
-                    
-                    // Re-enable text field
-                    self.locationTextField.isEnabled = true
-                    
-                    if let error = error {
-                        print("Reverse geocoding error: \(error.localizedDescription)")
-                        self.locationTextField.text = ""
-                        self.showAlert(message: "Unable to get location details. Please try again or enter manually.")
-                        return
-                    }
-                    
-                    if let placemark = placemarks?.first {
-                        let locationName = [
-                            placemark.locality,
-                            placemark.administrativeArea,
-                            placemark.country
-                        ].compactMap { $0 }.joined(separator: ", ")
-                        
-                        self.selectedLocationName = locationName
-                        self.locationTextField.text = locationName
-                    }
+                    self.selectedLocationName = locationName
+                    self.locationTextField.text = locationName
                 }
             }
         }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Location manager error: \(error.localizedDescription)")
         
-        func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-            print("Location manager error: \(error.localizedDescription)")
-            
+        // Remove loading indicator
+        if let loadingIndicator = view.viewWithTag(9999) as? UIActivityIndicatorView {
+            loadingIndicator.stopAnimating()
+            loadingIndicator.removeFromSuperview()
+        }
+        
+        // Re-enable text field
+        locationTextField.isEnabled = true
+        locationTextField.text = ""
+        
+        showAlert(message: "Unable to get your location. Please enter location manually.")
+    }
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        // Check if the authorization status changed
+        let status = manager.authorizationStatus
+        
+        switch status {
+        case .authorizedWhenInUse, .authorizedAlways:
+            // User granted permission, try to get location
+            manager.requestLocation()
+        case .denied, .restricted:
             // Remove loading indicator
             if let loadingIndicator = view.viewWithTag(9999) as? UIActivityIndicatorView {
                 loadingIndicator.stopAnimating()
@@ -1131,35 +1227,13 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
             locationTextField.isEnabled = true
             locationTextField.text = ""
             
-            showAlert(message: "Unable to get your location. Please enter location manually.")
-        }
-        
-        func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-            // Check if the authorization status changed
-            let status = manager.authorizationStatus
-            
-            switch status {
-            case .authorizedWhenInUse, .authorizedAlways:
-                // User granted permission, try to get location
-                manager.requestLocation()
-            case .denied, .restricted:
-                // Remove loading indicator
-                if let loadingIndicator = view.viewWithTag(9999) as? UIActivityIndicatorView {
-                    loadingIndicator.stopAnimating()
-                    loadingIndicator.removeFromSuperview()
-                }
-                
-                // Re-enable text field
-                locationTextField.isEnabled = true
-                locationTextField.text = ""
-                
-                // Show alert about denied permissions
-                showAlert(
-                    message: "Location access is denied. Please go to Settings > Privacy > Location Services to enable location access for this app, or enter your location manually.",
-                    title: "Location Access Denied"
-                )
-            default:
-                break
-            }
+            // Show alert about denied permissions
+            showAlert(
+                message: "Location access is denied. Please go to Settings > Privacy > Location Services to enable location access for this app, or enter your location manually.",
+                title: "Location Access Denied"
+            )
+        default:
+            break
         }
     }
+}
