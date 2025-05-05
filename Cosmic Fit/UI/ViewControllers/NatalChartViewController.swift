@@ -10,7 +10,7 @@ import CoreLocation
 import MapKit
 import PDFKit
 
-class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate {
+class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
     // Scroll view
     private let scrollView = UIScrollView()
     
@@ -80,9 +80,12 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Clear any previous location data
+        selectedLocation = nil
+        selectedLocationName = nil
+        
         setupUI()
-        setupLocationManager()
-        setupSearchCompleter()
         loadSavedData()
         
         // Add keyboard notifications
@@ -206,7 +209,7 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         // Configure main stack view for all content
         contentStackView.axis = .vertical
         contentStackView.alignment = .fill
-        contentStackView.spacing = 20
+        contentStackView.spacing = 10
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentStackView)
         
@@ -515,31 +518,11 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         locationSearchTable.separatorStyle = .none
         locationSearchTable.backgroundColor = .systemBackground
         
-        // Configure use current location button
-        let useLocationButton = UIButton(type: .system)
-        useLocationButton.setTitle("Use Current Location", for: .normal)
-        useLocationButton.addTarget(self, action: #selector(useCurrentLocationTapped), for: .touchUpInside)
-        useLocationButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        if #available(iOS 15.0, *) {
-            var config = UIButton.Configuration.plain()
-            config.image = UIImage(systemName: "location.fill")
-            config.imagePlacement = .leading
-            config.imagePadding = 8
-            useLocationButton.configuration = config
-        } else {
-            useLocationButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
-            useLocationButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -8, bottom: 0, right: 0)
-        }
-        
-        useLocationButton.tintColor = StyleUtility.Colors.primary
-        
         // Add subviews
         locationSectionView.addSubview(locationLabel)
         locationSectionView.addSubview(locationTextField)
         locationSectionView.addSubview(helperLabel)
         locationSectionView.addSubview(locationSearchTable)
-        locationSectionView.addSubview(useLocationButton)
         
         // Add to stack view
         contentStackView.addArrangedSubview(locationSectionView)
@@ -563,19 +546,9 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
             locationSearchTable.trailingAnchor.constraint(equalTo: locationSectionView.trailingAnchor),
             locationSearchTable.heightAnchor.constraint(equalToConstant: 200),
             
-            useLocationButton.topAnchor.constraint(equalTo: locationSearchTable.bottomAnchor, constant: 10),
-            useLocationButton.leadingAnchor.constraint(equalTo: locationSectionView.leadingAnchor),
-            useLocationButton.bottomAnchor.constraint(equalTo: locationSectionView.bottomAnchor)
+            // Make sure the section view's bottom is at the bottom of the helper label when the search table is hidden
+            locationSectionView.bottomAnchor.constraint(equalTo: helperLabel.bottomAnchor, constant: 10)
         ])
-    }
-    
-    private func setupLocationManager() {
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-    }
-    
-    private func setupSearchCompleter() {
-        // Already set up in LocationService class
     }
     
     private func setupGenerateButton() {
@@ -719,24 +692,7 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
             self.scrollView.isHidden = false
         }, completion: nil)
     }
-    
-    @objc private func useCurrentLocationTapped() {
-        // Show a loading indicator
-        let loadingIndicator = UIActivityIndicatorView(style: .medium)
-        loadingIndicator.center = locationTextField.center
-        loadingIndicator.tag = 9999 // Tag for easy finding later
-        view.addSubview(loadingIndicator)
-        loadingIndicator.startAnimating()
-        
-        // Clear previous text
-        locationTextField.text = "Detecting location..."
-        locationTextField.isEnabled = false
-        
-        // Request location
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.requestLocation()
-    }
-    
+  
     @objc private func segmentChanged(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
             chartTextView.isHidden = false
@@ -760,17 +716,16 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
     }
     
     private func validateInputs() -> (birthDate: Date, location: CLLocation)? {
-        // Validate location with better debugging
+        // Verify that we have a location selected
         guard let location = selectedLocation else {
-            print("Location validation failed: selectedLocation is nil")
-            if let locationName = selectedLocationName {
-                print("selectedLocationName exists but coordinates are missing: \(locationName)")
-            }
-            showAlert(message: "Please enter a valid birth location")
+            print("ERROR in validateInputs: selectedLocation is nil")
+            print("locationTextField.text = \(locationTextField.text ?? "nil")")
+            print("selectedLocationName = \(selectedLocationName ?? "nil")")
+            showAlert(message: "Please enter and select a valid birth location")
             return nil
         }
         
-        print("Location validation passed: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+        print("Validated location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
         
         // Create date components
         var dateComponents = DateComponents()
@@ -1111,129 +1066,62 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        // Get the selected location result
+        let result = searchResults[indexPath.row]
         
-        let selectedResult = searchResults[indexPath.row]
+        print("User selected location: \(result.title), \(result.subtitle)")
         
-        // Show loading indicator
+        // Show a loading indicator
         let loadingIndicator = UIActivityIndicatorView(style: .medium)
-        loadingIndicator.center = self.view.center
+        loadingIndicator.center = view.center
         loadingIndicator.startAnimating()
-        self.view.addSubview(loadingIndicator)
+        view.addSubview(loadingIndicator)
         
-        // Use LocationService to get coordinates first
-        locationService.getCoordinates(for: selectedResult) { [weak self] location in
+        // Create a search request
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = "\(result.title), \(result.subtitle)"
+        
+        // Perform the search directly here instead of using the service
+        let search = MKLocalSearch(request: searchRequest)
+        search.start { [weak self] (response, error) in
             guard let self = self else { return }
             
-            // Make sure UI updates are on the main thread
             DispatchQueue.main.async {
                 // Remove loading indicator
                 loadingIndicator.removeFromSuperview()
                 
-                if let location = location {
-                    // Set location explicitly
-                    self.selectedLocation = location
-                    self.selectedLocationName = "\(selectedResult.title), \(selectedResult.subtitle)"
-                    
-                    // Update text field text
-                    self.locationTextField.text = self.selectedLocationName
-                    
-                    // Add debug logging
-                    print("Location set: \(self.selectedLocationName ?? "nil") at \(location.coordinate.latitude), \(location.coordinate.longitude)")
-                } else {
-                    // Show error if location couldn't be found
-                    self.showAlert(message: "Could not find coordinates for the selected location. Please try another location.")
-                }
-                
-                // Hide the location search table
-                self.locationSearchTable.isHidden = true
-            }
-        }
-    }
-    
-    // MARK: - CLLocationManagerDelegate
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first {
-            selectedLocation = location
-            
-            // Reverse geocode to get the place name
-            let geocoder = CLGeocoder()
-            geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
-                guard let self = self else { return }
-                
-                // Remove loading indicator
-                if let loadingIndicator = self.view.viewWithTag(9999) as? UIActivityIndicatorView {
-                    loadingIndicator.stopAnimating()
-                    loadingIndicator.removeFromSuperview()
-                }
-                
-                // Re-enable text field
-                self.locationTextField.isEnabled = true
-                
                 if let error = error {
-                    print("Reverse geocoding error: \(error.localizedDescription)")
-                    self.locationTextField.text = ""
-                    self.showAlert(message: "Unable to get location details. Please try again or enter manually.")
+                    print("Search error: \(error.localizedDescription)")
+                    self.showAlert(message: "Error finding location. Please try again.")
                     return
                 }
                 
-                if let placemark = placemarks?.first {
-                    let locationName = [
-                        placemark.locality,
-                        placemark.administrativeArea,
-                        placemark.country
-                    ].compactMap { $0 }.joined(separator: ", ")
-                    
-                    self.selectedLocationName = locationName
-                    self.locationTextField.text = locationName
+                guard let response = response,
+                      let item = response.mapItems.first,
+                      let location = item.placemark.location else {
+                    print("No location found in search results")
+                    self.showAlert(message: "Could not get coordinates for this location. Please try another.")
+                    return
                 }
+                
+                // Explicitly set all location-related properties
+                self.selectedLocation = location
+                self.locationTextField.text = "\(result.title), \(result.subtitle)"
+                self.selectedLocationName = "\(result.title), \(result.subtitle)"
+                
+                // Debug log the successful location setting
+                print("LOCATION SET: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+                print("Location name: \(self.selectedLocationName ?? "unknown")")
+                
+                // Save location immediately to UserDefaults for persistence
+                UserDefaultsManager.saveLocation(
+                    name: self.selectedLocationName ?? "\(result.title), \(result.subtitle)",
+                    location: location
+                )
+                
+                // Hide search results table
+                self.locationSearchTable.isHidden = true
             }
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Location manager error: \(error.localizedDescription)")
-        
-        // Remove loading indicator
-        if let loadingIndicator = view.viewWithTag(9999) as? UIActivityIndicatorView {
-            loadingIndicator.stopAnimating()
-            loadingIndicator.removeFromSuperview()
-        }
-        
-        // Re-enable text field
-        locationTextField.isEnabled = true
-        locationTextField.text = ""
-        
-        showAlert(message: "Unable to get your location. Please enter location manually.")
-    }
-    
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        // Check if the authorization status changed
-        let status = manager.authorizationStatus
-        
-        switch status {
-        case .authorizedWhenInUse, .authorizedAlways:
-            // User granted permission, try to get location
-            manager.requestLocation()
-        case .denied, .restricted:
-            // Remove loading indicator
-            if let loadingIndicator = view.viewWithTag(9999) as? UIActivityIndicatorView {
-                loadingIndicator.stopAnimating()
-                loadingIndicator.removeFromSuperview()
-            }
-            
-            // Re-enable text field
-            locationTextField.isEnabled = true
-            locationTextField.text = ""
-            
-            // Show alert about denied permissions
-            showAlert(
-                message: "Location access is denied. Please go to Settings > Privacy > Location Services to enable location access for this app, or enter your location manually.",
-                title: "Location Access Denied"
-            )
-        default:
-            break
         }
     }
 }

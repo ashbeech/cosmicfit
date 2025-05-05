@@ -71,7 +71,7 @@ class LocationService: NSObject {
     ///   - searchResult: The search result to get coordinates for
     ///   - completion: The completion handler to call with the location
     func getCoordinates(for searchResult: MKLocalSearchCompletion, completion: @escaping CoordinateCompletionHandler) {
-        // Create a search request using the full title and subtitle
+        // Create a search request using the selected location
         let searchRequest = MKLocalSearch.Request()
         searchRequest.naturalLanguageQuery = "\(searchResult.title), \(searchResult.subtitle)"
         
@@ -91,11 +91,13 @@ class LocationService: NSObject {
             guard let response = response,
                   let firstMapItem = response.mapItems.first,
                   let location = firstMapItem.placemark.location else {
+                print("No location found in search results")
                 completion(nil)
                 return
             }
             
-            // Return the location
+            // Successfully found location
+            print("Found coordinates: \(location.coordinate.latitude), \(location.coordinate.longitude) for \(searchResult.title)")
             completion(location)
         }
     }
