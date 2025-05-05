@@ -77,7 +77,8 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
     
     // Keyboard height for adjusting scroll position
     private var keyboardHeight: CGFloat = 0
-    
+    private var tableHeightConstraint: NSLayoutConstraint?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -518,11 +519,31 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         locationSearchTable.separatorStyle = .none
         locationSearchTable.backgroundColor = .systemBackground
         
+        // Configure use current location button
+        let useLocationButton = UIButton(type: .system)
+        useLocationButton.setTitle("Use Current Location", for: .normal)
+        useLocationButton.addTarget(self, action: #selector(useCurrentLocationTapped), for: .touchUpInside)
+        useLocationButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        if #available(iOS 15.0, *) {
+            var config = UIButton.Configuration.plain()
+            config.image = UIImage(systemName: "location.fill")
+            config.imagePlacement = .leading
+            config.imagePadding = 8
+            useLocationButton.configuration = config
+        } else {
+            useLocationButton.setImage(UIImage(systemName: "location.fill"), for: .normal)
+            useLocationButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -8, bottom: 0, right: 0)
+        }
+        
+        useLocationButton.tintColor = StyleUtility.Colors.primary
+        
         // Add subviews
         locationSectionView.addSubview(locationLabel)
         locationSectionView.addSubview(locationTextField)
         locationSectionView.addSubview(helperLabel)
         locationSectionView.addSubview(locationSearchTable)
+        locationSectionView.addSubview(useLocationButton)
         
         // Add to stack view
         contentStackView.addArrangedSubview(locationSectionView)
@@ -544,11 +565,15 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
             locationSearchTable.topAnchor.constraint(equalTo: helperLabel.bottomAnchor, constant: 5),
             locationSearchTable.leadingAnchor.constraint(equalTo: locationSectionView.leadingAnchor),
             locationSearchTable.trailingAnchor.constraint(equalTo: locationSectionView.trailingAnchor),
-            locationSearchTable.heightAnchor.constraint(equalToConstant: 200),
             
-            // Make sure the section view's bottom is at the bottom of the helper label when the search table is hidden
-            locationSectionView.bottomAnchor.constraint(equalTo: helperLabel.bottomAnchor, constant: 10)
+            useLocationButton.topAnchor.constraint(equalTo: locationSearchTable.bottomAnchor, constant: 10),
+            useLocationButton.leadingAnchor.constraint(equalTo: locationSectionView.leadingAnchor),
+            useLocationButton.bottomAnchor.constraint(equalTo: locationSectionView.bottomAnchor)
         ])
+        
+        // Store references to constraints that need to be modified
+        tableHeightConstraint = locationSearchTable.heightAnchor.constraint(equalToConstant: 0)
+        tableHeightConstraint?.isActive = true  // Unwrapped the optional
     }
     
     private func setupGenerateButton() {
@@ -685,6 +710,23 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
     
     // MARK: - Actions
     
+    @objc private func useCurrentLocationTapped() {
+        // Show a loading indicator
+        let loadingIndicator = UIActivityIndicatorView(style: .medium)
+        loadingIndicator.center = locationTextField.center
+        loadingIndicator.tag = 9999 // Tag for easy finding later
+        view.addSubview(loadingIndicator)
+        loadingIndicator.startAnimating()
+        
+        // Clear previous text
+        locationTextField.text = "Detecting location..."
+        locationTextField.isEnabled = false
+        
+        // Request location
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation()
+    }
+    
     @objc private func backToFormTapped() {
         // Hide chart view and show form
         UIView.transition(with: view, duration: 0.3, options: .transitionCrossDissolve, animations: {
@@ -705,7 +747,7 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
     
     @objc private func dismissKeyboard() {
         view.endEditing(true)
-        locationSearchTable.isHidden = true
+        updateSearchTableVisibility(isVisible: false)
     }
     
     // Calculate age from birth date
@@ -908,11 +950,29 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         locationSearchTable.isHidden = true
     }
     
+    private func updateSearchTableVisibility(isVisible: Bool) {
+        // Update the height constraint instead of hiding the view
+        UIView.animate(withDuration: 0.3) {
+            if isVisible {
+                self.tableHeightConstraint?.constant = 200 // Set to desired height
+                self.locationSearchTable.isHidden = false
+            } else {
+                self.tableHeightConstraint?.constant = 0
+            }
+            self.view.layoutIfNeeded() // Force layout update
+        } completion: { completed in
+            if !isVisible {
+                self.locationSearchTable.isHidden = true
+            }
+        }
+    }
+    
     private func search(for query: String) {
         // Don't search for very short queries
         guard query.count >= 2 else {
             self.searchResults = []
             self.locationSearchTable.reloadData()
+            self.updateSearchTableVisibility(isVisible: false)
             return
         }
         
@@ -921,7 +981,7 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
             self.searchResults = results
             DispatchQueue.main.async {
                 self.locationSearchTable.reloadData()
-                self.locationSearchTable.isHidden = self.searchResults.isEmpty
+                self.updateSearchTableVisibility(isVisible: !self.searchResults.isEmpty)
             }
         }
     }
@@ -1022,7 +1082,7 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        locationSearchTable.isHidden = true
+        updateSearchTableVisibility(isVisible: false)
         return true
     }
     
@@ -1040,7 +1100,7 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
         if textField == locationTextField {
             searchResults = []
             locationSearchTable.reloadData()
-            locationSearchTable.isHidden = true
+            updateSearchTableVisibility(isVisible: false)
         }
         return true
     }
@@ -1066,61 +1126,42 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Get the selected location result
-        let result = searchResults[indexPath.row]
+        tableView.deselectRow(at: indexPath, animated: true)
         
-        print("User selected location: \(result.title), \(result.subtitle)")
+        let selectedResult = searchResults[indexPath.row]
         
-        // Show a loading indicator
+        // Show loading indicator
         let loadingIndicator = UIActivityIndicatorView(style: .medium)
-        loadingIndicator.center = view.center
+        loadingIndicator.center = self.view.center
         loadingIndicator.startAnimating()
-        view.addSubview(loadingIndicator)
+        self.view.addSubview(loadingIndicator)
         
-        // Create a search request
-        let searchRequest = MKLocalSearch.Request()
-        searchRequest.naturalLanguageQuery = "\(result.title), \(result.subtitle)"
-        
-        // Perform the search directly here instead of using the service
-        let search = MKLocalSearch(request: searchRequest)
-        search.start { [weak self] (response, error) in
+        // Use LocationService to get coordinates first
+        locationService.getCoordinates(for: selectedResult) { [weak self] location in
             guard let self = self else { return }
             
+            // Make sure UI updates are on the main thread
             DispatchQueue.main.async {
                 // Remove loading indicator
                 loadingIndicator.removeFromSuperview()
                 
-                if let error = error {
-                    print("Search error: \(error.localizedDescription)")
-                    self.showAlert(message: "Error finding location. Please try again.")
-                    return
+                if let location = location {
+                    // Set location explicitly
+                    self.selectedLocation = location
+                    self.selectedLocationName = "\(selectedResult.title), \(selectedResult.subtitle)"
+                    
+                    // Update text field text
+                    self.locationTextField.text = self.selectedLocationName
+                    
+                    // Add debug logging
+                    print("Location set: \(self.selectedLocationName ?? "nil") at \(location.coordinate.latitude), \(location.coordinate.longitude)")
+                } else {
+                    // Show error if location couldn't be found
+                    self.showAlert(message: "Could not find coordinates for the selected location. Please try another location.")
                 }
                 
-                guard let response = response,
-                      let item = response.mapItems.first,
-                      let location = item.placemark.location else {
-                    print("No location found in search results")
-                    self.showAlert(message: "Could not get coordinates for this location. Please try another.")
-                    return
-                }
-                
-                // Explicitly set all location-related properties
-                self.selectedLocation = location
-                self.locationTextField.text = "\(result.title), \(result.subtitle)"
-                self.selectedLocationName = "\(result.title), \(result.subtitle)"
-                
-                // Debug log the successful location setting
-                print("LOCATION SET: \(location.coordinate.latitude), \(location.coordinate.longitude)")
-                print("Location name: \(self.selectedLocationName ?? "unknown")")
-                
-                // Save location immediately to UserDefaults for persistence
-                UserDefaultsManager.saveLocation(
-                    name: self.selectedLocationName ?? "\(result.title), \(result.subtitle)",
-                    location: location
-                )
-                
-                // Hide search results table
-                self.locationSearchTable.isHidden = true
+                // Hide the location search table
+                self.updateSearchTableVisibility(isVisible: false)
             }
         }
     }
