@@ -11,12 +11,12 @@ struct Planet {
     let type: PlanetType
     let longitude: Double
     let latitude: Double
-    let inHouse: Int
+    var inHouse: Int  // Changed from 'let' to 'var' to make it mutable
     
     // Return the zodiac sign the planet is in
     func getSign() -> ZodiacSign {
         let signIndex = Int(longitude / 30.0)
-        return ZodiacSign.allCases[signIndex]
+        return ZodiacSign.allCases[signIndex % 12]  // Added % 12 to ensure valid index
     }
     
     // Return the degrees within the sign
