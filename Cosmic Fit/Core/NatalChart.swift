@@ -57,8 +57,8 @@ class NatalChart {
         // Get Julian day for the birth time
         let jd = AstronomicalUtils.julianDay(from: birthDate)
         
-        // Calculate Sun position
-        let sunPosition = PlanetaryCalculations.calculateSunPosition(jd: jd)
+        // Calculate Sun position using VSOP87
+        let sunPosition = VSOP87Calculator.calculateSunPosition(jd: jd)
         planets.append(Planet(
             type: .sun,
             longitude: sunPosition,
@@ -67,81 +67,88 @@ class NatalChart {
         ))
         
         // Calculate Moon position
-        let moonPosition = PlanetaryCalculations.calculateMoonPosition(jd: jd)
+        let moonPosition = VSOP87Calculator.calculateMoonPosition(jd: jd)
         planets.append(Planet(
             type: .moon,
-            longitude: moonPosition,
-            latitude: PlanetaryCalculations.calculateMoonLatitude(jd: jd),
-            inHouse: HouseCalculations.findHouse(position: moonPosition, houses: houses)
+            longitude: moonPosition.longitude,
+            latitude: moonPosition.latitude,
+            inHouse: HouseCalculations.findHouse(position: moonPosition.longitude, houses: houses)
         ))
         
-        // Calculate positions for other planets
-        let mercuryPosition = PlanetaryCalculations.calculateMercuryPosition(jd: jd)
+        // Calculate Mercury position
+        let mercuryPosition = VSOP87Calculator.calculatePlanetPosition(planet: .mercury, jd: jd)
         planets.append(Planet(
             type: .mercury,
-            longitude: mercuryPosition,
-            latitude: PlanetaryCalculations.calculatePlanetLatitude(.mercury, jd: jd),
-            inHouse: HouseCalculations.findHouse(position: mercuryPosition, houses: houses)
+            longitude: mercuryPosition.longitude,
+            latitude: mercuryPosition.latitude,
+            inHouse: HouseCalculations.findHouse(position: mercuryPosition.longitude, houses: houses)
         ))
         
-        let venusPosition = PlanetaryCalculations.calculateVenusPosition(jd: jd)
+        // Calculate Venus position
+        let venusPosition = VSOP87Calculator.calculatePlanetPosition(planet: .venus, jd: jd)
         planets.append(Planet(
             type: .venus,
-            longitude: venusPosition,
-            latitude: PlanetaryCalculations.calculatePlanetLatitude(.venus, jd: jd),
-            inHouse: HouseCalculations.findHouse(position: venusPosition, houses: houses)
+            longitude: venusPosition.longitude,
+            latitude: venusPosition.latitude,
+            inHouse: HouseCalculations.findHouse(position: venusPosition.longitude, houses: houses)
         ))
         
-        let marsPosition = PlanetaryCalculations.calculateMarsPosition(jd: jd)
+        // Calculate Mars position
+        let marsPosition = VSOP87Calculator.calculatePlanetPosition(planet: .mars, jd: jd)
         planets.append(Planet(
             type: .mars,
-            longitude: marsPosition,
-            latitude: PlanetaryCalculations.calculatePlanetLatitude(.mars, jd: jd),
-            inHouse: HouseCalculations.findHouse(position: marsPosition, houses: houses)
+            longitude: marsPosition.longitude,
+            latitude: marsPosition.latitude,
+            inHouse: HouseCalculations.findHouse(position: marsPosition.longitude, houses: houses)
         ))
         
-        let jupiterPosition = PlanetaryCalculations.calculateJupiterPosition(jd: jd)
+        // Calculate Jupiter position
+        let jupiterPosition = VSOP87Calculator.calculatePlanetPosition(planet: .jupiter, jd: jd)
         planets.append(Planet(
             type: .jupiter,
-            longitude: jupiterPosition,
-            latitude: PlanetaryCalculations.calculatePlanetLatitude(.jupiter, jd: jd),
-            inHouse: HouseCalculations.findHouse(position: jupiterPosition, houses: houses)
+            longitude: jupiterPosition.longitude,
+            latitude: jupiterPosition.latitude,
+            inHouse: HouseCalculations.findHouse(position: jupiterPosition.longitude, houses: houses)
         ))
         
-        let saturnPosition = PlanetaryCalculations.calculateSaturnPosition(jd: jd)
+        // Calculate Saturn position
+        let saturnPosition = VSOP87Calculator.calculatePlanetPosition(planet: .saturn, jd: jd)
         planets.append(Planet(
             type: .saturn,
-            longitude: saturnPosition,
-            latitude: PlanetaryCalculations.calculatePlanetLatitude(.saturn, jd: jd),
-            inHouse: HouseCalculations.findHouse(position: saturnPosition, houses: houses)
+            longitude: saturnPosition.longitude,
+            latitude: saturnPosition.latitude,
+            inHouse: HouseCalculations.findHouse(position: saturnPosition.longitude, houses: houses)
         ))
         
-        let uranusPosition = PlanetaryCalculations.calculateUranusPosition(jd: jd)
+        // Calculate Uranus position
+        let uranusPosition = VSOP87Calculator.calculatePlanetPosition(planet: .uranus, jd: jd)
         planets.append(Planet(
             type: .uranus,
-            longitude: uranusPosition,
-            latitude: PlanetaryCalculations.calculatePlanetLatitude(.uranus, jd: jd),
-            inHouse: HouseCalculations.findHouse(position: uranusPosition, houses: houses)
+            longitude: uranusPosition.longitude,
+            latitude: uranusPosition.latitude,
+            inHouse: HouseCalculations.findHouse(position: uranusPosition.longitude, houses: houses)
         ))
         
-        let neptunePosition = PlanetaryCalculations.calculateNeptunePosition(jd: jd)
+        // Calculate Neptune position
+        let neptunePosition = VSOP87Calculator.calculatePlanetPosition(planet: .neptune, jd: jd)
         planets.append(Planet(
             type: .neptune,
-            longitude: neptunePosition,
-            latitude: PlanetaryCalculations.calculatePlanetLatitude(.neptune, jd: jd),
-            inHouse: HouseCalculations.findHouse(position: neptunePosition, houses: houses)
+            longitude: neptunePosition.longitude,
+            latitude: neptunePosition.latitude,
+            inHouse: HouseCalculations.findHouse(position: neptunePosition.longitude, houses: houses)
         ))
         
-        let plutoPosition = PlanetaryCalculations.calculatePlutoPosition(jd: jd)
+        // Calculate Pluto position
+        let plutoPosition = VSOP87Calculator.calculatePlanetPosition(planet: .pluto, jd: jd)
         planets.append(Planet(
             type: .pluto,
-            longitude: plutoPosition,
-            latitude: PlanetaryCalculations.calculatePlanetLatitude(.pluto, jd: jd),
-            inHouse: HouseCalculations.findHouse(position: plutoPosition, houses: houses)
+            longitude: plutoPosition.longitude,
+            latitude: plutoPosition.latitude,
+            inHouse: HouseCalculations.findHouse(position: plutoPosition.longitude, houses: houses)
         ))
         
         // Calculate North Node (Lunar Node)
-        let northNodePosition = PlanetaryCalculations.calculateNorthNode(jd: jd)
+        let northNodePosition = VSOP87Calculator.calculateNorthNodePosition(jd: jd)
         planets.append(Planet(
             type: .northNode,
             longitude: northNodePosition,
@@ -158,7 +165,7 @@ class NatalChart {
     
     // Convert zodiac position in degrees to sign and degrees within sign
     func getZodiacPosition(_ longitude: Double) -> (sign: ZodiacSign, degrees: Double) {
-        let signIndex = Int(longitude / 30.0)
+        let signIndex = Int(longitude / 30.0) % 12
         let degreesInSign = longitude - Double(signIndex) * 30.0
         
         return (ZodiacSign.allCases[signIndex], degreesInSign)

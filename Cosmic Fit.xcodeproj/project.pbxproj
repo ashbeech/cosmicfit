@@ -6,6 +6,59 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5E022C7F2DCA532E004F1D78 /* VSOP87.nep in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C512DCA532E004F1D78 /* VSOP87.nep */; };
+		5E022C802DCA532E004F1D78 /* VSOP87E.ura in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C7D2DCA532E004F1D78 /* VSOP87E.ura */; };
+		5E022C812DCA532E004F1D78 /* VSOP87A.sat in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C5B2DCA532E004F1D78 /* VSOP87A.sat */; };
+		5E022C822DCA532E004F1D78 /* VSOP87E.jup in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C772DCA532E004F1D78 /* VSOP87E.jup */; };
+		5E022C832DCA532E004F1D78 /* VSOP87E.sun in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C7C2DCA532E004F1D78 /* VSOP87E.sun */; };
+		5E022C842DCA532E004F1D78 /* VSOP87B.sat in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C632DCA532E004F1D78 /* VSOP87B.sat */; };
+		5E022C852DCA532E004F1D78 /* VSOP87.emb in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C4D2DCA532E004F1D78 /* VSOP87.emb */; };
+		5E022C862DCA532E004F1D78 /* VSOP87E.sat in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C7B2DCA532E004F1D78 /* VSOP87E.sat */; };
+		5E022C872DCA532E004F1D78 /* VSOP87B.mar in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C602DCA532E004F1D78 /* VSOP87B.mar */; };
+		5E022C882DCA532E004F1D78 /* VSOP87B.ven in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C652DCA532E004F1D78 /* VSOP87B.ven */; };
+		5E022C892DCA532E004F1D78 /* VSOP87B.mer in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C612DCA532E004F1D78 /* VSOP87B.mer */; };
+		5E022C8A2DCA532E004F1D78 /* VSOP87.jup in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C4E2DCA532E004F1D78 /* VSOP87.jup */; };
+		5E022C8B2DCA532E004F1D78 /* VSOP87C.sat in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C6B2DCA532E004F1D78 /* VSOP87C.sat */; };
+		5E022C8C2DCA532E004F1D78 /* VSOP87.mer in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C502DCA532E004F1D78 /* VSOP87.mer */; };
+		5E022C8D2DCA532E004F1D78 /* VSOP87A.nep in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C5A2DCA532E004F1D78 /* VSOP87A.nep */; };
+		5E022C8E2DCA532E004F1D78 /* VSOP87C.ven in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C6D2DCA532E004F1D78 /* VSOP87C.ven */; };
+		5E022C8F2DCA532E004F1D78 /* VSOP87.ura in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C532DCA532E004F1D78 /* VSOP87.ura */; };
+		5E022C902DCA532E004F1D78 /* VSOP87B.jup in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C5F2DCA532E004F1D78 /* VSOP87B.jup */; };
+		5E022C912DCA532E004F1D78 /* VSOP87D.nep in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C722DCA532E004F1D78 /* VSOP87D.nep */; };
+		5E022C922DCA532E004F1D78 /* VSOP87D.ura in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C742DCA532E004F1D78 /* VSOP87D.ura */; };
+		5E022C932DCA532E004F1D78 /* VSOP87E.mar in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C782DCA532E004F1D78 /* VSOP87E.mar */; };
+		5E022C942DCA532E004F1D78 /* VSOP87.sat in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C522DCA532E004F1D78 /* VSOP87.sat */; };
+		5E022C952DCA532E004F1D78 /* VSOP87D.mar in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C702DCA532E004F1D78 /* VSOP87D.mar */; };
+		5E022C962DCA532E004F1D78 /* VSOP87A.jup in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C572DCA532E004F1D78 /* VSOP87A.jup */; };
+		5E022C972DCA532E004F1D78 /* VSOP87D.ven in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C752DCA532E004F1D78 /* VSOP87D.ven */; };
+		5E022C982DCA532E004F1D78 /* VSOP87A.emb in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C562DCA532E004F1D78 /* VSOP87A.emb */; };
+		5E022C992DCA532E004F1D78 /* VSOP87.ven in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C542DCA532E004F1D78 /* VSOP87.ven */; };
+		5E022C9A2DCA532E004F1D78 /* VSOP87E.nep in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C7A2DCA532E004F1D78 /* VSOP87E.nep */; };
+		5E022C9B2DCA532E004F1D78 /* VSOP87D.jup in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C6F2DCA532E004F1D78 /* VSOP87D.jup */; };
+		5E022C9C2DCA532E004F1D78 /* VSOP87B.ura in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C642DCA532E004F1D78 /* VSOP87B.ura */; };
+		5E022C9D2DCA532E004F1D78 /* VSOP87A.ven in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C5D2DCA532E004F1D78 /* VSOP87A.ven */; };
+		5E022C9E2DCA532E004F1D78 /* VSOP87C.jup in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C672DCA532E004F1D78 /* VSOP87C.jup */; };
+		5E022C9F2DCA532E004F1D78 /* VSOP87C.nep in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C6A2DCA532E004F1D78 /* VSOP87C.nep */; };
+		5E022CA02DCA532E004F1D78 /* VSOP87E.mer in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C792DCA532E004F1D78 /* VSOP87E.mer */; };
+		5E022CA12DCA532E004F1D78 /* VSOP87A.mer in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C592DCA532E004F1D78 /* VSOP87A.mer */; };
+		5E022CA22DCA532E004F1D78 /* VSOP87.mar in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C4F2DCA532E004F1D78 /* VSOP87.mar */; };
+		5E022CA32DCA532E004F1D78 /* VSOP87A.mar in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C582DCA532E004F1D78 /* VSOP87A.mar */; };
+		5E022CA42DCA532E004F1D78 /* VSOP87D.sat in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C732DCA532E004F1D78 /* VSOP87D.sat */; };
+		5E022CA52DCA532E004F1D78 /* VSOP87C.mar in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C682DCA532E004F1D78 /* VSOP87C.mar */; };
+		5E022CA62DCA532E004F1D78 /* VSOP87D.mer in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C712DCA532E004F1D78 /* VSOP87D.mer */; };
+		5E022CA72DCA532E004F1D78 /* VSOP87C.ura in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C6C2DCA532E004F1D78 /* VSOP87C.ura */; };
+		5E022CA82DCA532E004F1D78 /* VSOP87E.ven in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C7E2DCA532E004F1D78 /* VSOP87E.ven */; };
+		5E022CA92DCA532E004F1D78 /* VSOP87A.ura in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C5C2DCA532E004F1D78 /* VSOP87A.ura */; };
+		5E022CAA2DCA532E004F1D78 /* VSOP87B.nep in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C622DCA532E004F1D78 /* VSOP87B.nep */; };
+		5E022CAB2DCA532E004F1D78 /* VSOP87C.mer in Resources */ = {isa = PBXBuildFile; fileRef = 5E022C692DCA532E004F1D78 /* VSOP87C.mer */; };
+		5E022CAC2DCA532E004F1D78 /* VSOP87C.ear in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E022C662DCA532E004F1D78 /* VSOP87C.ear */; };
+		5E022CAD2DCA532E004F1D78 /* VSOP87D.ear in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E022C6E2DCA532E004F1D78 /* VSOP87D.ear */; };
+		5E022CAE2DCA532E004F1D78 /* VSOP87E.ear in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E022C762DCA532E004F1D78 /* VSOP87E.ear */; };
+		5E022CAF2DCA532E004F1D78 /* VSOP87B.ear in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E022C5E2DCA532E004F1D78 /* VSOP87B.ear */; };
+		5E022CB02DCA532E004F1D78 /* VSOP87A.ear in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E022C552DCA532E004F1D78 /* VSOP87A.ear */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		5EB2E4DD2DC75C8D00644BAD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,27 +77,64 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5E022C4D2DCA532E004F1D78 /* VSOP87.emb */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87.emb; sourceTree = "<group>"; };
+		5E022C4E2DCA532E004F1D78 /* VSOP87.jup */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87.jup; sourceTree = "<group>"; };
+		5E022C4F2DCA532E004F1D78 /* VSOP87.mar */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87.mar; sourceTree = "<group>"; };
+		5E022C502DCA532E004F1D78 /* VSOP87.mer */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87.mer; sourceTree = "<group>"; };
+		5E022C512DCA532E004F1D78 /* VSOP87.nep */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87.nep; sourceTree = "<group>"; };
+		5E022C522DCA532E004F1D78 /* VSOP87.sat */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87.sat; sourceTree = "<group>"; };
+		5E022C532DCA532E004F1D78 /* VSOP87.ura */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87.ura; sourceTree = "<group>"; };
+		5E022C542DCA532E004F1D78 /* VSOP87.ven */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87.ven; sourceTree = "<group>"; };
+		5E022C552DCA532E004F1D78 /* VSOP87A.ear */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87A.ear; sourceTree = "<group>"; };
+		5E022C562DCA532E004F1D78 /* VSOP87A.emb */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87A.emb; sourceTree = "<group>"; };
+		5E022C572DCA532E004F1D78 /* VSOP87A.jup */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87A.jup; sourceTree = "<group>"; };
+		5E022C582DCA532E004F1D78 /* VSOP87A.mar */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87A.mar; sourceTree = "<group>"; };
+		5E022C592DCA532E004F1D78 /* VSOP87A.mer */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87A.mer; sourceTree = "<group>"; };
+		5E022C5A2DCA532E004F1D78 /* VSOP87A.nep */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87A.nep; sourceTree = "<group>"; };
+		5E022C5B2DCA532E004F1D78 /* VSOP87A.sat */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87A.sat; sourceTree = "<group>"; };
+		5E022C5C2DCA532E004F1D78 /* VSOP87A.ura */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87A.ura; sourceTree = "<group>"; };
+		5E022C5D2DCA532E004F1D78 /* VSOP87A.ven */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87A.ven; sourceTree = "<group>"; };
+		5E022C5E2DCA532E004F1D78 /* VSOP87B.ear */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87B.ear; sourceTree = "<group>"; };
+		5E022C5F2DCA532E004F1D78 /* VSOP87B.jup */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87B.jup; sourceTree = "<group>"; };
+		5E022C602DCA532E004F1D78 /* VSOP87B.mar */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87B.mar; sourceTree = "<group>"; };
+		5E022C612DCA532E004F1D78 /* VSOP87B.mer */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87B.mer; sourceTree = "<group>"; };
+		5E022C622DCA532E004F1D78 /* VSOP87B.nep */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87B.nep; sourceTree = "<group>"; };
+		5E022C632DCA532E004F1D78 /* VSOP87B.sat */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87B.sat; sourceTree = "<group>"; };
+		5E022C642DCA532E004F1D78 /* VSOP87B.ura */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87B.ura; sourceTree = "<group>"; };
+		5E022C652DCA532E004F1D78 /* VSOP87B.ven */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87B.ven; sourceTree = "<group>"; };
+		5E022C662DCA532E004F1D78 /* VSOP87C.ear */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87C.ear; sourceTree = "<group>"; };
+		5E022C672DCA532E004F1D78 /* VSOP87C.jup */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87C.jup; sourceTree = "<group>"; };
+		5E022C682DCA532E004F1D78 /* VSOP87C.mar */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87C.mar; sourceTree = "<group>"; };
+		5E022C692DCA532E004F1D78 /* VSOP87C.mer */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87C.mer; sourceTree = "<group>"; };
+		5E022C6A2DCA532E004F1D78 /* VSOP87C.nep */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87C.nep; sourceTree = "<group>"; };
+		5E022C6B2DCA532E004F1D78 /* VSOP87C.sat */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87C.sat; sourceTree = "<group>"; };
+		5E022C6C2DCA532E004F1D78 /* VSOP87C.ura */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87C.ura; sourceTree = "<group>"; };
+		5E022C6D2DCA532E004F1D78 /* VSOP87C.ven */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87C.ven; sourceTree = "<group>"; };
+		5E022C6E2DCA532E004F1D78 /* VSOP87D.ear */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87D.ear; sourceTree = "<group>"; };
+		5E022C6F2DCA532E004F1D78 /* VSOP87D.jup */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87D.jup; sourceTree = "<group>"; };
+		5E022C702DCA532E004F1D78 /* VSOP87D.mar */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87D.mar; sourceTree = "<group>"; };
+		5E022C712DCA532E004F1D78 /* VSOP87D.mer */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87D.mer; sourceTree = "<group>"; };
+		5E022C722DCA532E004F1D78 /* VSOP87D.nep */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87D.nep; sourceTree = "<group>"; };
+		5E022C732DCA532E004F1D78 /* VSOP87D.sat */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87D.sat; sourceTree = "<group>"; };
+		5E022C742DCA532E004F1D78 /* VSOP87D.ura */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87D.ura; sourceTree = "<group>"; };
+		5E022C752DCA532E004F1D78 /* VSOP87D.ven */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87D.ven; sourceTree = "<group>"; };
+		5E022C762DCA532E004F1D78 /* VSOP87E.ear */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87E.ear; sourceTree = "<group>"; };
+		5E022C772DCA532E004F1D78 /* VSOP87E.jup */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87E.jup; sourceTree = "<group>"; };
+		5E022C782DCA532E004F1D78 /* VSOP87E.mar */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87E.mar; sourceTree = "<group>"; };
+		5E022C792DCA532E004F1D78 /* VSOP87E.mer */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87E.mer; sourceTree = "<group>"; };
+		5E022C7A2DCA532E004F1D78 /* VSOP87E.nep */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87E.nep; sourceTree = "<group>"; };
+		5E022C7B2DCA532E004F1D78 /* VSOP87E.sat */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87E.sat; sourceTree = "<group>"; };
+		5E022C7C2DCA532E004F1D78 /* VSOP87E.sun */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87E.sun; sourceTree = "<group>"; };
+		5E022C7D2DCA532E004F1D78 /* VSOP87E.ura */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87E.ura; sourceTree = "<group>"; };
+		5E022C7E2DCA532E004F1D78 /* VSOP87E.ven */ = {isa = PBXFileReference; explicitFileType = compiled; path = VSOP87E.ven; sourceTree = "<group>"; };
 		5EB2E4CF2DC75C8A00644BAD /* Cosmic Fit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cosmic Fit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EB2E4DC2DC75C8D00644BAD /* Cosmic FitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Cosmic FitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EB2E4E62DC75C8D00644BAD /* Cosmic FitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Cosmic FitUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		5E022BE92DC7C154004F1D78 /* Exceptions for "Cosmic Fit" folder in "Cosmic Fit" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Cosmic-Fit-Info.plist",
-			);
-			target = 5EB2E4CE2DC75C8A00644BAD /* Cosmic Fit */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5EB2E4D12DC75C8A00644BAD /* Cosmic Fit */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				5E022BE92DC7C154004F1D78 /* Exceptions for "Cosmic Fit" folder in "Cosmic Fit" target */,
-			);
 			path = "Cosmic Fit";
 			sourceTree = "<group>";
 		};
@@ -65,6 +155,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E022CAC2DCA532E004F1D78 /* VSOP87C.ear in Frameworks */,
+				5E022CAD2DCA532E004F1D78 /* VSOP87D.ear in Frameworks */,
+				5E022CAE2DCA532E004F1D78 /* VSOP87E.ear in Frameworks */,
+				5E022CAF2DCA532E004F1D78 /* VSOP87B.ear in Frameworks */,
+				5E022CB02DCA532E004F1D78 /* VSOP87A.ear in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,9 +180,67 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5E022C4C2DCA5238004F1D78 /* VSOP87Data */ = {
+			isa = PBXGroup;
+			children = (
+				5E022C4D2DCA532E004F1D78 /* VSOP87.emb */,
+				5E022C4E2DCA532E004F1D78 /* VSOP87.jup */,
+				5E022C4F2DCA532E004F1D78 /* VSOP87.mar */,
+				5E022C502DCA532E004F1D78 /* VSOP87.mer */,
+				5E022C512DCA532E004F1D78 /* VSOP87.nep */,
+				5E022C522DCA532E004F1D78 /* VSOP87.sat */,
+				5E022C532DCA532E004F1D78 /* VSOP87.ura */,
+				5E022C542DCA532E004F1D78 /* VSOP87.ven */,
+				5E022C552DCA532E004F1D78 /* VSOP87A.ear */,
+				5E022C562DCA532E004F1D78 /* VSOP87A.emb */,
+				5E022C572DCA532E004F1D78 /* VSOP87A.jup */,
+				5E022C582DCA532E004F1D78 /* VSOP87A.mar */,
+				5E022C592DCA532E004F1D78 /* VSOP87A.mer */,
+				5E022C5A2DCA532E004F1D78 /* VSOP87A.nep */,
+				5E022C5B2DCA532E004F1D78 /* VSOP87A.sat */,
+				5E022C5C2DCA532E004F1D78 /* VSOP87A.ura */,
+				5E022C5D2DCA532E004F1D78 /* VSOP87A.ven */,
+				5E022C5E2DCA532E004F1D78 /* VSOP87B.ear */,
+				5E022C5F2DCA532E004F1D78 /* VSOP87B.jup */,
+				5E022C602DCA532E004F1D78 /* VSOP87B.mar */,
+				5E022C612DCA532E004F1D78 /* VSOP87B.mer */,
+				5E022C622DCA532E004F1D78 /* VSOP87B.nep */,
+				5E022C632DCA532E004F1D78 /* VSOP87B.sat */,
+				5E022C642DCA532E004F1D78 /* VSOP87B.ura */,
+				5E022C652DCA532E004F1D78 /* VSOP87B.ven */,
+				5E022C662DCA532E004F1D78 /* VSOP87C.ear */,
+				5E022C672DCA532E004F1D78 /* VSOP87C.jup */,
+				5E022C682DCA532E004F1D78 /* VSOP87C.mar */,
+				5E022C692DCA532E004F1D78 /* VSOP87C.mer */,
+				5E022C6A2DCA532E004F1D78 /* VSOP87C.nep */,
+				5E022C6B2DCA532E004F1D78 /* VSOP87C.sat */,
+				5E022C6C2DCA532E004F1D78 /* VSOP87C.ura */,
+				5E022C6D2DCA532E004F1D78 /* VSOP87C.ven */,
+				5E022C6E2DCA532E004F1D78 /* VSOP87D.ear */,
+				5E022C6F2DCA532E004F1D78 /* VSOP87D.jup */,
+				5E022C702DCA532E004F1D78 /* VSOP87D.mar */,
+				5E022C712DCA532E004F1D78 /* VSOP87D.mer */,
+				5E022C722DCA532E004F1D78 /* VSOP87D.nep */,
+				5E022C732DCA532E004F1D78 /* VSOP87D.sat */,
+				5E022C742DCA532E004F1D78 /* VSOP87D.ura */,
+				5E022C752DCA532E004F1D78 /* VSOP87D.ven */,
+				5E022C762DCA532E004F1D78 /* VSOP87E.ear */,
+				5E022C772DCA532E004F1D78 /* VSOP87E.jup */,
+				5E022C782DCA532E004F1D78 /* VSOP87E.mar */,
+				5E022C792DCA532E004F1D78 /* VSOP87E.mer */,
+				5E022C7A2DCA532E004F1D78 /* VSOP87E.nep */,
+				5E022C7B2DCA532E004F1D78 /* VSOP87E.sat */,
+				5E022C7C2DCA532E004F1D78 /* VSOP87E.sun */,
+				5E022C7D2DCA532E004F1D78 /* VSOP87E.ura */,
+				5E022C7E2DCA532E004F1D78 /* VSOP87E.ven */,
+			);
+			path = VSOP87Data;
+			sourceTree = "<group>";
+		};
 		5EB2E4C62DC75C8A00644BAD = {
 			isa = PBXGroup;
 			children = (
+				5E022C4C2DCA5238004F1D78 /* VSOP87Data */,
 				5EB2E4D12DC75C8A00644BAD /* Cosmic Fit */,
 				5EB2E4DF2DC75C8D00644BAD /* Cosmic FitTests */,
 				5EB2E4E92DC75C8D00644BAD /* Cosmic FitUITests */,
@@ -225,6 +378,51 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E022C7F2DCA532E004F1D78 /* VSOP87.nep in Resources */,
+				5E022C802DCA532E004F1D78 /* VSOP87E.ura in Resources */,
+				5E022C812DCA532E004F1D78 /* VSOP87A.sat in Resources */,
+				5E022C822DCA532E004F1D78 /* VSOP87E.jup in Resources */,
+				5E022C832DCA532E004F1D78 /* VSOP87E.sun in Resources */,
+				5E022C842DCA532E004F1D78 /* VSOP87B.sat in Resources */,
+				5E022C852DCA532E004F1D78 /* VSOP87.emb in Resources */,
+				5E022C862DCA532E004F1D78 /* VSOP87E.sat in Resources */,
+				5E022C872DCA532E004F1D78 /* VSOP87B.mar in Resources */,
+				5E022C882DCA532E004F1D78 /* VSOP87B.ven in Resources */,
+				5E022C892DCA532E004F1D78 /* VSOP87B.mer in Resources */,
+				5E022C8A2DCA532E004F1D78 /* VSOP87.jup in Resources */,
+				5E022C8B2DCA532E004F1D78 /* VSOP87C.sat in Resources */,
+				5E022C8C2DCA532E004F1D78 /* VSOP87.mer in Resources */,
+				5E022C8D2DCA532E004F1D78 /* VSOP87A.nep in Resources */,
+				5E022C8E2DCA532E004F1D78 /* VSOP87C.ven in Resources */,
+				5E022C8F2DCA532E004F1D78 /* VSOP87.ura in Resources */,
+				5E022C902DCA532E004F1D78 /* VSOP87B.jup in Resources */,
+				5E022C912DCA532E004F1D78 /* VSOP87D.nep in Resources */,
+				5E022C922DCA532E004F1D78 /* VSOP87D.ura in Resources */,
+				5E022C932DCA532E004F1D78 /* VSOP87E.mar in Resources */,
+				5E022C942DCA532E004F1D78 /* VSOP87.sat in Resources */,
+				5E022C952DCA532E004F1D78 /* VSOP87D.mar in Resources */,
+				5E022C962DCA532E004F1D78 /* VSOP87A.jup in Resources */,
+				5E022C972DCA532E004F1D78 /* VSOP87D.ven in Resources */,
+				5E022C982DCA532E004F1D78 /* VSOP87A.emb in Resources */,
+				5E022C992DCA532E004F1D78 /* VSOP87.ven in Resources */,
+				5E022C9A2DCA532E004F1D78 /* VSOP87E.nep in Resources */,
+				5E022C9B2DCA532E004F1D78 /* VSOP87D.jup in Resources */,
+				5E022C9C2DCA532E004F1D78 /* VSOP87B.ura in Resources */,
+				5E022C9D2DCA532E004F1D78 /* VSOP87A.ven in Resources */,
+				5E022C9E2DCA532E004F1D78 /* VSOP87C.jup in Resources */,
+				5E022C9F2DCA532E004F1D78 /* VSOP87C.nep in Resources */,
+				5E022CA02DCA532E004F1D78 /* VSOP87E.mer in Resources */,
+				5E022CA12DCA532E004F1D78 /* VSOP87A.mer in Resources */,
+				5E022CA22DCA532E004F1D78 /* VSOP87.mar in Resources */,
+				5E022CA32DCA532E004F1D78 /* VSOP87A.mar in Resources */,
+				5E022CA42DCA532E004F1D78 /* VSOP87D.sat in Resources */,
+				5E022CA52DCA532E004F1D78 /* VSOP87C.mar in Resources */,
+				5E022CA62DCA532E004F1D78 /* VSOP87D.mer in Resources */,
+				5E022CA72DCA532E004F1D78 /* VSOP87C.ura in Resources */,
+				5E022CA82DCA532E004F1D78 /* VSOP87E.ven in Resources */,
+				5E022CA92DCA532E004F1D78 /* VSOP87A.ura in Resources */,
+				5E022CAA2DCA532E004F1D78 /* VSOP87B.nep in Resources */,
+				5E022CAB2DCA532E004F1D78 /* VSOP87C.mer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
