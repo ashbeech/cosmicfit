@@ -853,6 +853,10 @@ class NatalChartViewController: UIViewController, UIPickerViewDataSource, UIPick
                 longitude: validInputs.location.coordinate.longitude
             )
             
+            // Run validation and tests (DEBUG ONLY)
+            self.currentChart?.validateCalculations()
+            self.currentChart?.testAgainstKnownPositions()
+            
             // Update UI on main thread
             DispatchQueue.main.async {
                 activityIndicator.removeFromSuperview()

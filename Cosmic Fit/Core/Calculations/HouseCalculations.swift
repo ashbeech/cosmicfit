@@ -58,20 +58,85 @@ class HouseCalculations {
     
     // Calculate houses using the more accurate Placidus implementation
     static func calculateAccuratePlacidusHouses(jd: Double, latitude: Double, longitude: Double) -> [House] {
-        // For now, let's use the simpler method to avoid runtime errors
-        // We can gradually refine this implementation once the basic system works
+        var houses: [House] = []
         
         // Calculate Local Sidereal Time
         let lst = AstronomicalCalculations.calculateLocalSiderealTime(jd: jd, longitude: longitude)
         
         // Calculate Ascendant
         let asc = AstronomicalCalculations.calculateAscendant(lst: lst, latitude: latitude)
+        houses.append(House(number: 1, cusp: asc))
         
         // Calculate Midheaven (MC)
         let mc = AstronomicalCalculations.calculateMidheaven(lst: lst)
+        houses.append(House(number: 10, cusp: mc))
         
-        // Use the simpler method that's proven to work
-        return calculatePlacidusHouses(ascendant: asc, midheaven: mc)
+        // Calculate obliquity of the ecliptic
+        let obliquity = AstronomicalUtils.obliquityOfEcliptic(jd: jd)
+        let obliquityRad = AstronomicalUtils.degreesToRadians(obliquity)
+        
+        // Convert latitude to radians
+        let latRad = AstronomicalUtils.degreesToRadians(latitude)
+        
+        // Calculate house cusps using Placidus system
+        // For houses 11 and 12
+        for i in 1...2 {
+            // Semi-arc calculation
+            let ra = i * 30.0
+            let raRad = AstronomicalUtils.degreesToRadians(ra)
+            
+            // Calculate intermediate value
+            let a = atan2(tan(obliquityRad) * sin(raRad), cos(raRad))
+            let d = atan2(sin(a) * sin(obliquityRad), cos(a))
+            
+            // Calculate semi-diurnal arc
+            let H = acos(-tan(latRad) * tan(d))
+            
+            // Calculate house cusps
+            let R = (3.0 - Double(i)) / 3.0
+            let cusP = 2.0 * atan2(tan((H * R + .pi / 2.0) / 2.0) * cos(latRad), cos(d))
+            let ra1 = AstronomicalUtils.normalizeAngle(AstronomicalUtils.radiansToDegrees(cusP + raRad))
+            
+            // Convert to ecliptic longitude
+            let ecliptic = AstronomicalCalculations.equatorialToEcliptic(rightAscension: ra1, declination: 0, obliquity: obliquity)
+            
+            houses.append(House(number: 9 + i, cusp: AstronomicalUtils.normalizeAngle(ecliptic.longitude)))
+        }
+        
+        // For houses 2 and 3
+        for i in 1...2 {
+            // Semi-arc calculation
+            let ra = 180.0 + i * 30.0
+            let raRad = AstronomicalUtils.degreesToRadians(ra)
+            
+            // Calculate intermediate value
+            let a = atan2(tan(obliquityRad) * sin(raRad), cos(raRad))
+            let d = atan2(sin(a) * sin(obliquityRad), cos(a))
+            
+            // Calculate semi-diurnal arc
+            let H = acos(-tan(latRad) * tan(d))
+            
+            // Calculate house cusps
+            let R = (3.0 - Double(i)) / 3.0
+            let cusP = 2.0 * atan2(tan((H * R + .pi / 2.0) / 2.0) * cos(latRad), cos(d))
+            let ra1 = AstronomicalUtils.normalizeAngle(AstronomicalUtils.radiansToDegrees(cusP + raRad))
+            
+            // Convert to ecliptic longitude
+            let ecliptic = AstronomicalCalculations.equatorialToEcliptic(rightAscension: ra1, declination: 0, obliquity: obliquity)
+            
+            houses.append(House(number: i + 1, cusp: AstronomicalUtils.normalizeAngle(ecliptic.longitude)))
+        }
+        
+        // Calculate remaining houses as opposites
+        houses.append(House(number: 4, cusp: AstronomicalUtils.normalizeAngle(mc + 180.0)))
+        houses.append(House(number: 5, cusp: AstronomicalUtils.normalizeAngle(houses[8].cusp + 180.0)))
+        houses.append(House(number: 6, cusp: AstronomicalUtils.normalizeAngle(houses[7].cusp + 180.0)))
+        houses.append(House(number: 7, cusp: AstronomicalUtils.normalizeAngle(asc + 180.0)))
+        houses.append(House(number: 8, cusp: AstronomicalUtils.normalizeAngle(houses[1].cusp + 180.0)))
+        houses.append(House(number: 9, cusp: AstronomicalUtils.normalizeAngle(houses[2].cusp + 180.0)))
+        
+        // Sort houses by number
+        return houses.sorted { $0.number < $1.number }
     }
     
     // Calculate houses using the Equal House system
@@ -106,20 +171,54 @@ class HouseCalculations {
     
     // Calculate houses using the Koch system
     static func calculateKochHouses(jd: Double, latitude: Double, longitude: Double) -> [House] {
-        // For now, let's use the simpler method to avoid runtime errors
-        // We can gradually refine this implementation once the basic system works
+        var houses: [House] = []
         
         // Calculate Local Sidereal Time
         let lst = AstronomicalCalculations.calculateLocalSiderealTime(jd: jd, longitude: longitude)
         
-        // Calculate Ascendant
+        // Calculate Ascendant and Midheaven
         let asc = AstronomicalCalculations.calculateAscendant(lst: lst, latitude: latitude)
-        
-        // Calculate Midheaven (MC)
         let mc = AstronomicalCalculations.calculateMidheaven(lst: lst)
         
-        // Use the simpler method that's proven to work
-        return calculatePlacidusHouses(ascendant: asc, midheaven: mc)
+        // Add Ascendant, Midheaven and their opposites
+        houses.append(House(number: 1, cusp: asc))
+        houses.append(House(number: 10, cusp: mc))
+        houses.append(House(number: 7, cusp: AstronomicalUtils.normalizeAngle(asc + 180.0)))
+        houses.append(House(number: 4, cusp: AstronomicalUtils.normalizeAngle(mc + 180.0)))
+        
+        // Calculate obliquity of the ecliptic
+        let obliquity = AstronomicalUtils.obliquityOfEcliptic(jd: jd)
+        
+        // Convert to radians
+        let latRad = AstronomicalUtils.degreesToRadians(latitude)
+        let obliquityRad = AstronomicalUtils.degreesToRadians(obliquity)
+        
+        // Convert MC to right ascension
+        let mcRA = AstronomicalUtils.degreesToRadians(lst * 15.0)
+        
+        // Calculate house cusps for houses 11, 12, 2, 3
+        for i in [11, 12, 2, 3] {
+            // Calculate the house position in the diurnal arc
+            let housePos = (Double(i) - 1.0) / 3.0
+            let angle = asin(sin(latRad) * sin(mcRA + .pi/2.0 * (housePos - 1.0)))
+            
+            // Calculate the ecliptic longitude
+            let lon = AstronomicalUtils.radiansToDegrees(atan2(
+                tan(angle) / cos(obliquityRad),
+                cos(mcRA + .pi/2.0 * (housePos - 1.0))
+            ))
+            
+            houses.append(House(number: i, cusp: AstronomicalUtils.normalizeAngle(lon)))
+        }
+        
+        // Calculate opposite houses
+        houses.append(House(number: 5, cusp: AstronomicalUtils.normalizeAngle(houses[8].cusp + 180.0)))
+        houses.append(House(number: 6, cusp: AstronomicalUtils.normalizeAngle(houses[7].cusp + 180.0)))
+        houses.append(House(number: 8, cusp: AstronomicalUtils.normalizeAngle(houses[1].cusp + 180.0)))
+        houses.append(House(number: 9, cusp: AstronomicalUtils.normalizeAngle(houses[2].cusp + 180.0)))
+        
+        // Sort houses by number
+        return houses.sorted { $0.number < $1.number }
     }
     
     // Find which house a planet falls into
@@ -128,7 +227,7 @@ class HouseCalculations {
             let currentHouse = houses[i]
             let nextHouse = houses[(i + 1) % houses.count]
             
-            let startCusp = currentHouse.cusp
+            var startCusp = currentHouse.cusp
             var endCusp = nextHouse.cusp
             
             // Handle the case where house spans 0° Aries

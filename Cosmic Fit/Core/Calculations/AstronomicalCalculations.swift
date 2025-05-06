@@ -11,81 +11,48 @@ import CoreLocation
 class AstronomicalCalculations {
     // Calculate Local Sidereal Time
     static func calculateLocalSiderealTime(jd: Double, longitude: Double) -> Double {
+        // Calculate T - centuries since J2000.0
+        let t = (jd - 2451545.0) / 36525.0
+        
         // Calculate Greenwich Sidereal Time (GST)
-        let theta = AstronomicalUtils.greenwichSiderealTime(jd: jd)
+        var theta = 280.46061837 + 360.98564736629 * (jd - 2451545.0) +
+                   0.000387933 * t * t - t * t * t / 38710000.0
         
-        // Calculate nutation
-        let nutation = AstronomicalUtils.nutation(jd: jd)
+        // Normalize to 0-360 range
+        theta = AstronomicalUtils.normalizeAngle(theta)
         
-        // Mean obliquity of the ecliptic
-        let epsilon = AstronomicalUtils.obliquityOfEcliptic(jd: jd)
+        // Convert GST to Local Sidereal Time by adding the longitude
+        let lst = theta + longitude
         
-        // True obliquity
-        let trueEpsilon = epsilon + nutation.obliquity
-        
-        // Apparent sidereal time at Greenwich
-        let apparentTheta = theta + nutation.longitude * cos(AstronomicalUtils.degreesToRadians(trueEpsilon)) / 15.0
-        
-        // Convert GST to Local Sidereal Time by adding the longitude (in degrees)
-        // East longitude is positive, West is negative
-        let lst = apparentTheta + longitude / 15.0
-        
-        return AstronomicalUtils.normalizeAngle(lst * 15.0) // Convert from hours to degrees
+        return AstronomicalUtils.normalizeAngle(lst)
     }
     
     // Calculate ascendant (rising sign)
     static func calculateAscendant(lst: Double, latitude: Double) -> Double {
-        // Convert to radians for trigonometric functions
+        // Convert degrees to radians for trigonometric functions
         let latRad = AstronomicalUtils.degreesToRadians(latitude)
         let lstRad = AstronomicalUtils.degreesToRadians(lst)
         
-        // Get obliquity of the ecliptic
-        let jd = 2451545.0 // J2000.0 as default, will be more accurate if real JD is used
-        let obliquityRad = AstronomicalUtils.degreesToRadians(AstronomicalUtils.obliquityOfEcliptic(jd: jd))
-        
         // Formula for calculating the ascendant
-        // tan(ascendant) = -cos(lst) / (sin(lst) * cos(obliquity) - tan(latitude) * sin(obliquity))
-        let numerator = -cos(lstRad)
-        let denominator = sin(lstRad) * cos(obliquityRad) - tan(latRad) * sin(obliquityRad)
-        
-        var ascRad = atan2(numerator, denominator)
+        let tanAsc = -cos(lstRad) / (sin(lstRad) * cos(latRad) - tan(0.0) * sin(latRad))
+        var ascRad = atan(tanAsc)
         
         // Convert back to degrees
         var asc = AstronomicalUtils.radiansToDegrees(ascRad)
         
-        // Normalize to 0-360 range
-        asc = AstronomicalUtils.normalizeAngle(asc)
+        // Adjust quadrant
+        if cos(lstRad) > 0 {
+            asc += 180.0
+        }
         
-        return asc
+        return AstronomicalUtils.normalizeAngle(asc)
     }
     
     // Calculate Midheaven (MC)
     static func calculateMidheaven(lst: Double) -> Double {
         // The Midheaven is the point where the ecliptic crosses the local meridian
-        // Get obliquity of the ecliptic
-        let jd = 2451545.0 // J2000.0 as default, will be more accurate if real JD is used
-        let obliquity = AstronomicalUtils.obliquityOfEcliptic(jd: jd)
-        let obliquityRad = AstronomicalUtils.degreesToRadians(obliquity)
-        
-        // Convert LST to radians
-        let lstRad = AstronomicalUtils.degreesToRadians(lst)
-        
-        // Calculate Midheaven using formula from Astronomical Algorithms by Jean Meeus
-        let tanMC = tan(lstRad) / cos(obliquityRad)
-        let mcRad = atan(tanMC)
-        
-        // Convert to degrees
-        var mc = AstronomicalUtils.radiansToDegrees(mcRad)
-        
-        // Adjust quadrant
-        if sin(lstRad) < 0 {
-            mc += 180.0
-        }
-        
-        // Normalize to 0-360 range
-        mc = AstronomicalUtils.normalizeAngle(mc)
-        
-        return mc
+        // In simple terms, it's approximately the LST converted to ecliptic longitude
+        return AstronomicalUtils.normalizeAngle(lst)
     }
     
     // Convert equatorial to ecliptic coordinates
@@ -94,19 +61,16 @@ class AstronomicalCalculations {
         let declRad = AstronomicalUtils.degreesToRadians(declination)
         let oblRad = AstronomicalUtils.degreesToRadians(obliquity)
         
-        // Calculate ecliptic longitude
+        let sinLat = sin(declRad) * cos(oblRad) - cos(declRad) * sin(oblRad) * sin(raRad)
+        let lat = AstronomicalUtils.radiansToDegrees(asin(sinLat))
+        
         let y = sin(raRad) * cos(oblRad) + tan(declRad) * sin(oblRad)
         let x = cos(raRad)
-        let longRad = atan2(y, x)
+        var lon = AstronomicalUtils.radiansToDegrees(atan2(y, x))
         
-        // Calculate ecliptic latitude
-        let latRad = asin(sin(declRad) * cos(oblRad) - cos(declRad) * sin(oblRad) * sin(raRad))
+        lon = AstronomicalUtils.normalizeAngle(lon)
         
-        // Convert to degrees
-        let longitude = AstronomicalUtils.radiansToDegrees(longRad)
-        let latitude = AstronomicalUtils.radiansToDegrees(latRad)
-        
-        return (AstronomicalUtils.normalizeAngle(longitude), latitude)
+        return (lon, lat)
     }
     
     // Convert ecliptic to equatorial coordinates
@@ -115,59 +79,15 @@ class AstronomicalCalculations {
         let latRad = AstronomicalUtils.degreesToRadians(latitude)
         let oblRad = AstronomicalUtils.degreesToRadians(obliquity)
         
-        // Calculate right ascension
+        let sinDec = sin(latRad) * cos(oblRad) + cos(latRad) * sin(oblRad) * sin(lonRad)
+        let dec = AstronomicalUtils.radiansToDegrees(asin(sinDec))
+        
         let y = sin(lonRad) * cos(oblRad) - tan(latRad) * sin(oblRad)
         let x = cos(lonRad)
-        let raRad = atan2(y, x)
+        var ra = AstronomicalUtils.radiansToDegrees(atan2(y, x))
         
-        // Calculate declination
-        let sinDec = sin(latRad) * cos(oblRad) + cos(latRad) * sin(oblRad) * sin(lonRad)
-        let declRad = asin(sinDec)
+        ra = AstronomicalUtils.normalizeAngle(ra)
         
-        // Convert to degrees
-        let ra = AstronomicalUtils.radiansToDegrees(raRad)
-        let decl = AstronomicalUtils.radiansToDegrees(declRad)
-        
-        return (AstronomicalUtils.normalizeAngle(ra), decl)
-    }
-    
-    // Calculate parallax correction
-    static func parallaxCorrection(longitude: Double, latitude: Double, distance: Double,
-                                  geoLat: Double, geoLong: Double, height: Double, siderealTime: Double) -> (longitude: Double, latitude: Double) {
-        // Convert to radians
-        let lonRad = AstronomicalUtils.degreesToRadians(longitude)
-        let latRad = AstronomicalUtils.degreesToRadians(latitude)
-        let geoLatRad = AstronomicalUtils.degreesToRadians(geoLat)
-        let lstRad = AstronomicalUtils.degreesToRadians(siderealTime)
-        
-        // Earth radius in AU (astronomical units)
-        let earthRadius = 6378.137 / 149597870.7 // km to AU
-        
-        // Geocentric coordinates to rectangular coordinates
-        let x = distance * cos(latRad) * cos(lonRad)
-        let y = distance * cos(latRad) * sin(lonRad)
-        let z = distance * sin(latRad)
-        
-        // Observer's position
-        let rho = earthRadius * cos(geoLatRad)
-        let obsX = rho * cos(lstRad)
-        let obsY = rho * sin(lstRad)
-        let obsZ = earthRadius * sin(geoLatRad)
-        
-        // Topocentric rectangular coordinates
-        let topoX = x - obsX
-        let topoY = y - obsY
-        let topoZ = z - obsZ
-        
-        // Convert back to spherical coordinates
-        let topoDistance = sqrt(topoX * topoX + topoY * topoY + topoZ * topoZ)
-        let topoLongRad = atan2(topoY, topoX)
-        let topoLatRad = asin(topoZ / topoDistance)
-        
-        // Convert to degrees
-        let topoLong = AstronomicalUtils.radiansToDegrees(topoLongRad)
-        let topoLat = AstronomicalUtils.radiansToDegrees(topoLatRad)
-        
-        return (AstronomicalUtils.normalizeAngle(topoLong), topoLat)
+        return (ra, dec)
     }
 }
