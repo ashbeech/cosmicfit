@@ -8,6 +8,8 @@
 import Foundation
 
 struct NatalChartCalculator {
+    // MARK: – Data Types --------------------------------------------------
+
     struct PlanetPosition {
         let name: String
         let symbol: String
@@ -18,7 +20,7 @@ struct NatalChartCalculator {
         let inHouse: Int
         let isRetrograde: Bool
     }
-    
+
     struct NatalChart {
         let planets: [PlanetPosition]
         let houses: [Double]
@@ -32,323 +34,138 @@ struct NatalChartCalculator {
         let partOfFortune: Double
         let lilith: Double
         let chiron: Double
-        
-        // Additional chart points
         let lunarPhase: Double
         let aspects: [(planet1: String, planet2: String, aspectType: String, exactness: Double)]
     }
-    
-    // Calculate entire natal chart based on birth information
-    static func calculateNatalChart(birthDate: Date, latitude: Double, longitude: Double, timeZone: TimeZone) -> NatalChart {
-        // Convert birth date to UTC
-        let utcDate = JulianDateCalculator.localToUTC(date: birthDate, timezone: timeZone)
-        
-        // Calculate Julian Date
-        let julianDay = JulianDateCalculator.calculateJulianDate(from: utcDate)
-        
-        // House system calculations
-        let houses = AstronomicalCalculator.calculateHouseCusps(julianDay: julianDay, latitude: latitude, longitude: longitude)
-        
-        // Calculate chart angles
-        let ascendant = AstronomicalCalculator.calculateAscendant(julianDay: julianDay, latitude: latitude, longitude: longitude)
-        let midheaven = AstronomicalCalculator.calculateMidheaven(julianDay: julianDay, longitude: longitude)
-        let descendant = CoordinateTransformations.normalizeAngle(ascendant + 180.0)
-        let imumCoeli = CoordinateTransformations.normalizeAngle(midheaven + 180.0)
-        
-        // Calculate vertex
-        let vertex = AstronomicalCalculator.calculateVertex(julianDay: julianDay, latitude: latitude, longitude: longitude)
-        
-        // Calculate North and South Nodes
-        let (northNode, southNode) = AstronomicalCalculator.calculateLunarNodes(julianDay: julianDay)
-        
-        // Calculate planets
+
+    // MARK: – Public API --------------------------------------------------
+
+    static func calculateNatalChart(birthDate: Date,
+                                    latitude: Double,
+                                    longitude: Double,
+                                    timeZone: TimeZone) -> NatalChart {
+
+        // Ensure Swiss Ephemeris path is set
+        AsteroidCalculator.bootstrap()
+
+        // 1) Convert to UTC & Julian Day -----------------------------------
+        let utcDate   = JulianDateCalculator.localToUTC(date: birthDate, timezone: timeZone)
+        let jd        = JulianDateCalculator.calculateJulianDate(from: utcDate)
+
+        // 2) Houses & Angles ----------------------------------------------
+        let houses     = AstronomicalCalculator.calculateHouseCusps(julianDay: jd,
+                                                                    latitude: latitude,
+                                                                    longitude: longitude)
+        let ascendant  = AstronomicalCalculator.calculateAscendant(julianDay: jd,
+                                                                   latitude: latitude,
+                                                                   longitude: longitude)
+        let midheaven  = AstronomicalCalculator.calculateMidheaven(julianDay: jd,
+                                                                    longitude: longitude)
+        let descendant = CoordinateTransformations.normalizeAngle(ascendant + 180)
+        let imumCoeli  = CoordinateTransformations.normalizeAngle(midheaven + 180)
+        let vertex     = AstronomicalCalculator.calculateVertex(julianDay: jd,
+                                                                 latitude: latitude,
+                                                                 longitude: longitude)
+
+        // 3) Nodes ---------------------------------------------------------
+        let (northNode, southNode) = AstronomicalCalculator.calculateLunarNodes(julianDay: jd)
+
+        // 4) Planet array ---------------------------------------------------
         var planets: [PlanetPosition] = []
-        
-        // Sun
-        let (sunLongitude, sunLatitude) = AstronomicalCalculator.calculateSunPosition(julianDay: julianDay)
-        let (sunSign, sunPosition) = CoordinateTransformations.decimalDegreesToZodiac(sunLongitude)
-        let sunHouse = findHouse(longitude: sunLongitude, houses: houses)
-        planets.append(PlanetPosition(
-            name: "Sun",
-            symbol: "☉",
-            longitude: sunLongitude,
-            latitude: sunLatitude,
-            zodiacSign: sunSign,
-            zodiacPosition: sunPosition,
-            inHouse: sunHouse,
-            isRetrograde: false
-        ))
-        
-        // Moon
-        let (moonLongitude, moonLatitude) = AstronomicalCalculator.calculateMoonPosition(julianDay: julianDay)
-        let (moonSign, moonPosition) = CoordinateTransformations.decimalDegreesToZodiac(moonLongitude)
-        let moonHouse = findHouse(longitude: moonLongitude, houses: houses)
-        planets.append(PlanetPosition(
-            name: "Moon",
-            symbol: "☽",
-            longitude: moonLongitude,
-            latitude: moonLatitude,
-            zodiacSign: moonSign,
-            zodiacPosition: moonPosition,
-            inHouse: moonHouse,
-            isRetrograde: false
-        ))
-        
-        // Mercury
-        let mercuryPosition = VSOP87Parser.calculateGeocentricCoordinates(planet: .mercury, julianDay: julianDay)
-        let mercuryLongitude = CoordinateTransformations.radiansToDegrees(mercuryPosition.longitude)
-        let mercuryLatitude = CoordinateTransformations.radiansToDegrees(mercuryPosition.latitude)
-        let (mercurySign, mercuryPos) = CoordinateTransformations.decimalDegreesToZodiac(mercuryLongitude)
-        let mercuryHouse = findHouse(longitude: mercuryLongitude, houses: houses)
-        let mercuryRetrograde = isRetrograde(planet: .mercury, julianDay: julianDay)
-        planets.append(PlanetPosition(
-            name: "Mercury",
-            symbol: "☿",
-            longitude: mercuryLongitude,
-            latitude: mercuryLatitude,
-            zodiacSign: mercurySign,
-            zodiacPosition: mercuryPos,
-            inHouse: mercuryHouse,
-            isRetrograde: mercuryRetrograde
-        ))
-        
-        // Venus
-        let venusPosition = VSOP87Parser.calculateGeocentricCoordinates(planet: .venus, julianDay: julianDay)
-        let venusLongitude = CoordinateTransformations.radiansToDegrees(venusPosition.longitude)
-        let venusLatitude = CoordinateTransformations.radiansToDegrees(venusPosition.latitude)
-        let (venusSign, venusPos) = CoordinateTransformations.decimalDegreesToZodiac(venusLongitude)
-        let venusHouse = findHouse(longitude: venusLongitude, houses: houses)
-        let venusRetrograde = isRetrograde(planet: .venus, julianDay: julianDay)
-        planets.append(PlanetPosition(
-            name: "Venus",
-            symbol: "♀",
-            longitude: venusLongitude,
-            latitude: venusLatitude,
-            zodiacSign: venusSign,
-            zodiacPosition: venusPos,
-            inHouse: venusHouse,
-            isRetrograde: venusRetrograde
-        ))
-        
-        // Mars
-        let marsPosition = VSOP87Parser.calculateGeocentricCoordinates(planet: .mars, julianDay: julianDay)
-        let marsLongitude = CoordinateTransformations.radiansToDegrees(marsPosition.longitude)
-        let marsLatitude = CoordinateTransformations.radiansToDegrees(marsPosition.latitude)
-        let (marsSign, marsPos) = CoordinateTransformations.decimalDegreesToZodiac(marsLongitude)
-        let marsHouse = findHouse(longitude: marsLongitude, houses: houses)
-        let marsRetrograde = isRetrograde(planet: .mars, julianDay: julianDay)
-        planets.append(PlanetPosition(
-            name: "Mars",
-            symbol: "♂",
-            longitude: marsLongitude,
-            latitude: marsLatitude,
-            zodiacSign: marsSign,
-            zodiacPosition: marsPos,
-            inHouse: marsHouse,
-            isRetrograde: marsRetrograde
-        ))
-        
-        // Jupiter
-        let jupiterPosition = VSOP87Parser.calculateGeocentricCoordinates(planet: .jupiter, julianDay: julianDay)
-        let jupiterLongitude = CoordinateTransformations.radiansToDegrees(jupiterPosition.longitude)
-        let jupiterLatitude = CoordinateTransformations.radiansToDegrees(jupiterPosition.latitude)
-        let (jupiterSign, jupiterPos) = CoordinateTransformations.decimalDegreesToZodiac(jupiterLongitude)
-        let jupiterHouse = findHouse(longitude: jupiterLongitude, houses: houses)
-        let jupiterRetrograde = isRetrograde(planet: .jupiter, julianDay: julianDay)
-        planets.append(PlanetPosition(
-            name: "Jupiter",
-            symbol: "♃",
-            longitude: jupiterLongitude,
-            latitude: jupiterLatitude,
-            zodiacSign: jupiterSign,
-            zodiacPosition: jupiterPos,
-            inHouse: jupiterHouse,
-            isRetrograde: jupiterRetrograde
-        ))
-        
-        // Saturn
-        let saturnPosition = VSOP87Parser.calculateGeocentricCoordinates(planet: .saturn, julianDay: julianDay)
-        let saturnLongitude = CoordinateTransformations.radiansToDegrees(saturnPosition.longitude)
-        let saturnLatitude = CoordinateTransformations.radiansToDegrees(saturnPosition.latitude)
-        let (saturnSign, saturnPos) = CoordinateTransformations.decimalDegreesToZodiac(saturnLongitude)
-        let saturnHouse = findHouse(longitude: saturnLongitude, houses: houses)
-        let saturnRetrograde = isRetrograde(planet: .saturn, julianDay: julianDay)
-        planets.append(PlanetPosition(
-            name: "Saturn",
-            symbol: "♄",
-            longitude: saturnLongitude,
-            latitude: saturnLatitude,
-            zodiacSign: saturnSign,
-            zodiacPosition: saturnPos,
-            inHouse: saturnHouse,
-            isRetrograde: saturnRetrograde
-        ))
-        
-        // Uranus
-        let uranusPosition = VSOP87Parser.calculateGeocentricCoordinates(planet: .uranus, julianDay: julianDay)
-        let uranusLongitude = CoordinateTransformations.radiansToDegrees(uranusPosition.longitude)
-        let uranusLatitude = CoordinateTransformations.radiansToDegrees(uranusPosition.latitude)
-        let (uranusSign, uranusPos) = CoordinateTransformations.decimalDegreesToZodiac(uranusLongitude)
-        let uranusHouse = findHouse(longitude: uranusLongitude, houses: houses)
-        let uranusRetrograde = isRetrograde(planet: .uranus, julianDay: julianDay)
-        planets.append(PlanetPosition(
-            name: "Uranus",
-            symbol: "♅",
-            longitude: uranusLongitude,
-            latitude: uranusLatitude,
-            zodiacSign: uranusSign,
-            zodiacPosition: uranusPos,
-            inHouse: uranusHouse,
-            isRetrograde: uranusRetrograde
-        ))
-        
-        // Neptune
-        let neptunePosition = VSOP87Parser.calculateGeocentricCoordinates(planet: .neptune, julianDay: julianDay)
-        let neptuneLongitude = CoordinateTransformations.radiansToDegrees(neptunePosition.longitude)
-        let neptuneLatitude = CoordinateTransformations.radiansToDegrees(neptunePosition.latitude)
-        let (neptuneSign, neptunePos) = CoordinateTransformations.decimalDegreesToZodiac(neptuneLongitude)
-        let neptuneHouse = findHouse(longitude: neptuneLongitude, houses: houses)
-        let neptuneRetrograde = isRetrograde(planet: .neptune, julianDay: julianDay)
-        planets.append(PlanetPosition(
-            name: "Neptune",
-            symbol: "♆",
-            longitude: neptuneLongitude,
-            latitude: neptuneLatitude,
-            zodiacSign: neptuneSign,
-            zodiacPosition: neptunePos,
-            inHouse: neptuneHouse,
-            isRetrograde: neptuneRetrograde
-        ))
-        
-        // Pluto (not technically a planet, but commonly used in astrology)
-        // For Pluto, we use a simplified calculation
-        let plutoLongitude = calculateSimplifiedPlanetPosition(julianDay: julianDay, planet: "Pluto")
-        let (plutoSign, plutoPos) = CoordinateTransformations.decimalDegreesToZodiac(plutoLongitude)
-        let plutoHouse = findHouse(longitude: plutoLongitude, houses: houses)
-        planets.append(PlanetPosition(
-            name: "Pluto",
-            symbol: "♇",
-            longitude: plutoLongitude,
-            latitude: 0.0,
-            zodiacSign: plutoSign,
-            zodiacPosition: plutoPos,
-            inHouse: plutoHouse,
-            isRetrograde: false
-        ))
-        
-        // Calculate Chiron position
-        let chironLongitude = AstronomicalCalculator.calculateChironPosition(julianDay: julianDay)
-        let (chironSign, chironPos) = CoordinateTransformations.decimalDegreesToZodiac(chironLongitude)
-        let chironHouse = findHouse(longitude: chironLongitude, houses: houses)
-        
-        // Calculate Lilith (Mean Black Moon Lilith) position
-        let lilithLongitude = calculateLilithPosition(julianDay: julianDay)
-        let (lilithSign, lilithPos) = CoordinateTransformations.decimalDegreesToZodiac(lilithLongitude)
-        let lilithHouse = findHouse(longitude: lilithLongitude, houses: houses)
-        
-        // Add asteroid Ceres
-        let ceresLongitude = calculateSimplifiedPlanetPosition(julianDay: julianDay, planet: "Ceres")
-        let (ceresSign, ceresPos) = CoordinateTransformations.decimalDegreesToZodiac(ceresLongitude)
-        let ceresHouse = findHouse(longitude: ceresLongitude, houses: houses)
-        planets.append(PlanetPosition(
-            name: "Ceres",
-            symbol: "⚳",
-            longitude: ceresLongitude,
-            latitude: 0.0,
-            zodiacSign: ceresSign,
-            zodiacPosition: ceresPos,
-            inHouse: ceresHouse,
-            isRetrograde: false
-        ))
-        
-        // Add asteroid Pallas
-        let pallasLongitude = calculateSimplifiedPlanetPosition(julianDay: julianDay, planet: "Pallas")
-        let (pallasSign, pallasPos) = CoordinateTransformations.decimalDegreesToZodiac(pallasLongitude)
-        let pallasHouse = findHouse(longitude: pallasLongitude, houses: houses)
-        planets.append(PlanetPosition(
-            name: "Pallas",
-            symbol: "⚴",
-            longitude: pallasLongitude,
-            latitude: 0.0,
-            zodiacSign: pallasSign,
-            zodiacPosition: pallasPos,
-            inHouse: pallasHouse,
-            isRetrograde: false
-        ))
-        
-        // Add asteroid Juno
-        let junoLongitude = calculateSimplifiedPlanetPosition(julianDay: julianDay, planet: "Juno")
-        let (junoSign, junoPos) = CoordinateTransformations.decimalDegreesToZodiac(junoLongitude)
-        let junoHouse = findHouse(longitude: junoLongitude, houses: houses)
-        planets.append(PlanetPosition(
-            name: "Juno",
-            symbol: "⚵",
-            longitude: junoLongitude,
-            latitude: 0.0,
-            zodiacSign: junoSign,
-            zodiacPosition: junoPos,
-            inHouse: junoHouse,
-            isRetrograde: false
-        ))
-        
-        // Calculate Part of Fortune
-        let partOfFortune = calculatePartOfFortune(ascendant: ascendant, sunLongitude: sunLongitude, moonLongitude: moonLongitude)
-        
-        // Calculate lunar phase
-        let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: julianDay)
-        
-        // Calculate aspects between planets
-        var aspects: [(planet1: String, planet2: String, aspectType: String, exactness: Double)] = []
-        
+
+        // local helper
+        func appendPlanet(_ name: String, _ symbol: String,
+                          _ lon: Double, _ lat: Double, _ retro: Bool) {
+            let (sign, posStr) = CoordinateTransformations.decimalDegreesToZodiac(lon)
+            planets.append(PlanetPosition(name: name,
+                                           symbol: symbol,
+                                           longitude: lon,
+                                           latitude: lat,
+                                           zodiacSign: sign,
+                                           zodiacPosition: posStr,
+                                           inHouse: findHouse(longitude: lon, houses: houses),
+                                           isRetrograde: retro))
+        }
+
+        // --- Sun & Moon ----------------------------------------------------
+        do {
+            let (lon, lat) = AstronomicalCalculator.calculateSunPosition(julianDay: jd)
+            appendPlanet("Sun", "☉", lon, lat, false)
+        }
+        do {
+            let (lon, lat) = AstronomicalCalculator.calculateMoonPosition(julianDay: jd)
+            appendPlanet("Moon", "☽", lon, lat, false)
+        }
+
+        // --- VSOP87 planets -----------------------------------------------
+        func addVSOP(_ p: VSOP87Parser.Planet, _ name: String, _ symbol: String) {
+            let geo = VSOP87Parser.calculateGeocentricCoordinates(planet: p, julianDay: jd)
+            let lon = CoordinateTransformations.radiansToDegrees(geo.longitude)
+            let lat = CoordinateTransformations.radiansToDegrees(geo.latitude)
+            let retro = isRetrograde(planet: p, julianDay: jd)
+            appendPlanet(name, symbol, lon, lat, retro)
+        }
+        addVSOP(.mercury, "Mercury", "☿")
+        addVSOP(.venus,   "Venus",   "♀")
+        addVSOP(.mars,    "Mars",    "♂")
+        addVSOP(.jupiter, "Jupiter", "♃")
+        addVSOP(.saturn,  "Saturn",  "♄")
+        addVSOP(.uranus,  "Uranus",  "♅")
+        addVSOP(.neptune, "Neptune", "♆")
+
+        // --- Pluto (simplified) -------------------------------------------
+        let plutoLon = calculateSimplifiedPlanetPosition(julianDay: jd, planet: "Pluto")
+        appendPlanet("Pluto", "♇", plutoLon, 0, false)
+
+        // --- Swiss‑Ephemeris asteroids ------------------------------------
+        let asteroidPositions = AsteroidCalculator.positions(at: jd)
+        for (ast, pos) in asteroidPositions {
+            let retro = AsteroidCalculator.isRetrograde(ast, at: jd)
+            appendPlanet(ast.displayName, ast.symbol, pos.longitude, pos.latitude, retro)
+        }
+        let chironLongitude = asteroidPositions[.chiron]?.longitude ?? 0
+
+        // 5) Other points ---------------------------------------------------
+        let lilithLongitude = calculateLilithPosition(julianDay: jd)
+        let partOfFortune   = calculatePartOfFortune(ascendant: ascendant,
+                                                     sunLongitude: planets.first { $0.name == "Sun" }!.longitude,
+                                                     moonLongitude: planets.first { $0.name == "Moon" }!.longitude)
+
+        // 6) Lunar phase ----------------------------------------------------
+        let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: jd)
+
+        // 7) Aspects --------------------------------------------------------
+        var aspects: [(String,String,String,Double)] = []
         for i in 0..<planets.count {
-            // Calculate aspects between planets
-            for j in (i + 1)..<planets.count {
-                if let aspect = AstronomicalCalculator.calculateAspect(point1: planets[i].longitude, point2: planets[j].longitude) {
-                    aspects.append((
-                        planet1: planets[i].name,
-                        planet2: planets[j].name,
-                        aspectType: aspect.aspectType,
-                        exactness: aspect.exactness
-                    ))
+            for j in (i+1)..<planets.count {
+                if let a = AstronomicalCalculator.calculateAspect(point1: planets[i].longitude,
+                                                                 point2: planets[j].longitude) {
+                    aspects.append((planets[i].name, planets[j].name, a.aspectType, a.exactness))
                 }
             }
-            
-            // Calculate aspects with chart angles
-            if let aspectWithAsc = AstronomicalCalculator.calculateAspect(point1: planets[i].longitude, point2: ascendant) {
-                aspects.append((
-                    planet1: planets[i].name,
-                    planet2: "Ascendant",
-                    aspectType: aspectWithAsc.aspectType,
-                    exactness: aspectWithAsc.exactness
-                ))
+            if let a = AstronomicalCalculator.calculateAspect(point1: planets[i].longitude, point2: ascendant) {
+                aspects.append((planets[i].name, "Ascendant", a.aspectType, a.exactness))
             }
-            
-            if let aspectWithMC = AstronomicalCalculator.calculateAspect(point1: planets[i].longitude, point2: midheaven) {
-                aspects.append((
-                    planet1: planets[i].name,
-                    planet2: "Midheaven",
-                    aspectType: aspectWithMC.aspectType,
-                    exactness: aspectWithMC.exactness
-                ))
+            if let a = AstronomicalCalculator.calculateAspect(point1: planets[i].longitude, point2: midheaven) {
+                aspects.append((planets[i].name, "Midheaven", a.aspectType, a.exactness))
             }
         }
-        
-        return NatalChart(
-            planets: planets,
-            houses: houses,
-            ascendant: ascendant,
-            midheaven: midheaven,
-            descendant: descendant,
-            imumCoeli: imumCoeli,
-            northNode: northNode,
-            southNode: southNode,
-            vertex: vertex,
-            partOfFortune: partOfFortune,
-            lilith: lilithLongitude,
-            chiron: chironLongitude,
-            lunarPhase: lunarPhase,
-            aspects: aspects
-        )
+
+        // 8) Return full chart ---------------------------------------------
+        return NatalChart(planets: planets,
+                          houses: houses,
+                          ascendant: ascendant,
+                          midheaven: midheaven,
+                          descendant: descendant,
+                          imumCoeli: imumCoeli,
+                          northNode: northNode,
+                          southNode: southNode,
+                          vertex: vertex,
+                          partOfFortune: partOfFortune,
+                          lilith: lilithLongitude,
+                          chiron: chironLongitude,
+                          lunarPhase: lunarPhase,
+                          aspects: aspects)
     }
     
     // Find which house a planet is in
@@ -380,80 +197,37 @@ struct NatalChartCalculator {
     
     // Calculate if a planet is retrograde
     private static func isRetrograde(planet: VSOP87Parser.Planet, julianDay: Double) -> Bool {
-        // We need to calculate positions at two close points in time
-        // and see if the longitude is decreasing (retrograde) or increasing
-        
-        let position1 = VSOP87Parser.calculateGeocentricCoordinates(planet: planet, julianDay: julianDay)
-        let position2 = VSOP87Parser.calculateGeocentricCoordinates(planet: planet, julianDay: julianDay + 1.0)
-        
-        let longitude1 = CoordinateTransformations.radiansToDegrees(position1.longitude)
-        let longitude2 = CoordinateTransformations.radiansToDegrees(position2.longitude)
-        
-        // Adjust for 0°/360° boundary
-        var diff = longitude2 - longitude1
-        if diff > 180.0 {
-            diff -= 360.0
-        } else if diff < -180.0 {
-            diff += 360.0
-        }
-        
-        // If longitude is decreasing, the planet is retrograde
+        let pos1 = VSOP87Parser.calculateGeocentricCoordinates(planet: planet, julianDay: julianDay)
+        let pos2 = VSOP87Parser.calculateGeocentricCoordinates(planet: planet, julianDay: julianDay + 1)
+        var lon1 = CoordinateTransformations.radiansToDegrees(pos1.longitude)
+        var lon2 = CoordinateTransformations.radiansToDegrees(pos2.longitude)
+        var diff = lon2 - lon1
+        if diff > 180 { diff -= 360 } else if diff < -180 { diff += 360 }
         return diff < 0
     }
     
     // Calculate Part of Fortune
     private static func calculatePartOfFortune(ascendant: Double, sunLongitude: Double, moonLongitude: Double) -> Double {
-        // Part of Fortune = Ascendant + Moon - Sun
-        let pof = ascendant + moonLongitude - sunLongitude
-        return CoordinateTransformations.normalizeAngle(pof)
+        return CoordinateTransformations.normalizeAngle(ascendant + moonLongitude - sunLongitude)
     }
     
     // Calculate Lilith (Mean Black Moon) position
     private static func calculateLilithPosition(julianDay: Double) -> Double {
-        // T is the number of centuries since J2000.0
-        let T = (julianDay - 2451545.0) / 36525.0
-        
-        // Mean Lunar apogee (Lilith)
-        var lilith = 280.0 + 36000.0 * T + 13.0 * T * T
-        
-        // Mean motion of Lilith (approximation)
-        lilith += 18.0 * 360.0 / 365.25 * (julianDay - 2451545.0) / 360.0
+        let T = (julianDay - 2451545) / 36525
+        var lilith = 280 + 36000 * T + 13 * T * T
+        lilith += 18 * 360 / 365.25 * (julianDay - 2451545) / 360
         lilith = CoordinateTransformations.normalizeAngle(lilith)
-        
-        // Apply nutation
-        let (nutationLongitude, _) = AstronomicalCalculator.calculateNutation(julianDay: julianDay)
-        lilith += nutationLongitude
-        
+        let (nutLon, _) = AstronomicalCalculator.calculateNutation(julianDay: julianDay)
+        lilith += nutLon
         return CoordinateTransformations.normalizeAngle(lilith)
     }
     
     // Simplified planetary positions for additional bodies
     private static func calculateSimplifiedPlanetPosition(julianDay: Double, planet: String) -> Double {
-        // This is a very simplified calculation
-        // For a real implementation, proper ephemeris data should be used
-        
-        // For demonstration purposes, we'll use approximate positions based on the Julian day
-        let T = (julianDay - 2451545.0) / 36525.0
-        
+        let T = (julianDay - 2451545) / 36525
         switch planet {
-        case "Pluto":
-            // Very simplified Pluto longitude calculation
-            return CoordinateTransformations.normalizeAngle(238.96 + 144.96 * T)
-            
-        case "Ceres":
-            // Simplified Ceres longitude calculation
-            return CoordinateTransformations.normalizeAngle(107.68 + 59.5 * T)
-            
-        case "Pallas":
-            // Simplified Pallas longitude calculation
-            return CoordinateTransformations.normalizeAngle(310.17 + 42.3 * T)
-            
-        case "Juno":
-            // Simplified Juno longitude calculation
-            return CoordinateTransformations.normalizeAngle(27.68 + 31.4 * T)
-            
-        default:
-            return 0.0
+        case "Pluto": return CoordinateTransformations.normalizeAngle(238.96 + 144.96 * T)
+        default:      return 0
         }
     }
     

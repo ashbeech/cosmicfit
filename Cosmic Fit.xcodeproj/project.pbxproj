@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5EA810562DCBA9F20092DE9B /* SwissEphemeris in Frameworks */ = {isa = PBXBuildFile; productRef = 5EA810552DCBA9F20092DE9B /* SwissEphemeris */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		5EB2E4DD2DC75C8D00644BAD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -75,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5EA810562DCBA9F20092DE9B /* SwissEphemeris in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,6 +140,7 @@
 			);
 			name = "Cosmic Fit";
 			packageProductDependencies = (
+				5EA810552DCBA9F20092DE9B /* SwissEphemeris */,
 			);
 			productName = "Cosmic Fit";
 			productReference = 5EB2E4CF2DC75C8A00644BAD /* Cosmic Fit.app */;
@@ -218,6 +224,9 @@
 			);
 			mainGroup = 5EB2E4C62DC75C8A00644BAD;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				5EA810542DCBA9F20092DE9B /* XCRemoteSwiftPackageReference "SwissEphemeris" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5EB2E4D02DC75C8A00644BAD /* Products */;
 			projectDirPath = "";
@@ -575,6 +584,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5EA810542DCBA9F20092DE9B /* XCRemoteSwiftPackageReference "SwissEphemeris" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vsmithers1087/SwissEphemeris.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.0.99;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5EA810552DCBA9F20092DE9B /* SwissEphemeris */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5EA810542DCBA9F20092DE9B /* XCRemoteSwiftPackageReference "SwissEphemeris" */;
+			productName = SwissEphemeris;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5EB2E4C72DC75C8A00644BAD /* Project object */;
 }

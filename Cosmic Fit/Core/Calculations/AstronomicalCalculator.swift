@@ -8,6 +8,7 @@
 import Foundation
 
 struct AstronomicalCalculator {
+    
     // Calculate Earth's nutation
     static func calculateNutation(julianDay: Double) -> (nutationInLongitude: Double, nutationInObliquity: Double) {
         // T is the number of centuries since J2000.0
