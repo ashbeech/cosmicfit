@@ -49,7 +49,7 @@ struct CoordinateTransformations {
         
         let y = sin(lon) * cos(obl) - tan(lat) * sin(obl)
         let x = cos(lon)
-        var rightAscension = atan2(y, x)
+        let rightAscension = atan2(y, x)
         
         // Convert back to degrees and normalize
         let ra = normalizeAngle(radiansToDegrees(rightAscension))
@@ -99,7 +99,7 @@ struct CoordinateTransformations {
         // Calculate ecliptic longitude
         let y = sin(ra) * cos(obl) + tan(dec) * sin(obl)
         let x = cos(ra)
-        var longitude = atan2(y, x)
+        let longitude = atan2(y, x)
         
         // Convert back to degrees and normalize
         let lon = normalizeAngle(radiansToDegrees(longitude))

@@ -30,11 +30,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		5EA8103C2DCAA2C90092DE9B /* Exceptions for "Cosmic Fit" folder in "Link Binary With Libraries" phase from "Cosmic Fit" target */ = {
+		5EA8104F2DCAACF70092DE9B /* Exceptions for "Cosmic Fit" folder in "Link Binary With Libraries" phase from "Cosmic Fit" target */ = {
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
 			buildPhase = 5EB2E4CC2DC75C8A00644BAD /* Frameworks */;
 			membershipExceptions = (
-				Resources/VSOP87Data/VSOP87C.ear,
+				Resources/VSOP87Data/VSOP87D.ear,
 			);
 		};
 /* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
@@ -43,17 +43,17 @@
 		5EB2E4D12DC75C8A00644BAD /* Cosmic Fit */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				5EA8103C2DCAA2C90092DE9B /* Exceptions for "Cosmic Fit" folder in "Link Binary With Libraries" phase from "Cosmic Fit" target */,
+				5EA8104F2DCAACF70092DE9B /* Exceptions for "Cosmic Fit" folder in "Link Binary With Libraries" phase from "Cosmic Fit" target */,
 			);
 			explicitFileTypes = {
-				Resources/VSOP87Data/VSOP87C.ear = compiled;
-				Resources/VSOP87Data/VSOP87C.jup = compiled;
-				Resources/VSOP87Data/VSOP87C.mar = compiled;
-				Resources/VSOP87Data/VSOP87C.mer = compiled;
-				Resources/VSOP87Data/VSOP87C.nep = compiled;
-				Resources/VSOP87Data/VSOP87C.sat = compiled;
-				Resources/VSOP87Data/VSOP87C.ura = compiled;
-				Resources/VSOP87Data/VSOP87C.ven = compiled;
+				Resources/VSOP87Data/VSOP87D.ear = compiled;
+				Resources/VSOP87Data/VSOP87D.jup = compiled;
+				Resources/VSOP87Data/VSOP87D.mar = compiled;
+				Resources/VSOP87Data/VSOP87D.mer = compiled;
+				Resources/VSOP87Data/VSOP87D.nep = compiled;
+				Resources/VSOP87Data/VSOP87D.sat = compiled;
+				Resources/VSOP87Data/VSOP87D.ura = compiled;
+				Resources/VSOP87Data/VSOP87D.ven = compiled;
 			};
 			path = "Cosmic Fit";
 			sourceTree = "<group>";
