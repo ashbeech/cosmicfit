@@ -221,7 +221,7 @@ struct CoordinateTransformations {
         
         let deg = Int(position)
         let min = Int((position - Double(deg)) * 60.0)
-        let sec = Int(((position - Double(deg)) * 60.0 - Double(min)) * 60.0)
+        //let sec = Int(((position - Double(deg)) * 60.0 - Double(min)) * 60.0)
         
         return (sign, String(format: "%d°%02d'", deg, min))
     }

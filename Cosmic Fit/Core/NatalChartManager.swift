@@ -153,23 +153,6 @@ class NatalChartManager {
             "zodiacSymbol": CoordinateTransformations.getZodiacSignSymbol(sign: mercurySign)
         ]
         
-        // Calculate aspects between transit and natal planets
-        var aspects: [[String: Any]] = []
-        
-        // Example: Check aspect between transit Sun and natal Moon
-        if let moonPlanet = natalChart.planets.first(where: { $0.name == "Moon" }) {
-            if let aspect = AstronomicalCalculator.calculateAspect(point1: sunLongitude, point2: moonPlanet.longitude) {
-                aspects.append([
-                    "transitPlanet": "Sun",
-                    "natalPlanet": "Moon",
-                    "aspectType": aspect.aspectType,
-                    "exactness": aspect.exactness
-                ])
-            }
-        }
-        
-        transitData["aspects"] = aspects
-        
         return transitData
     }
 }

@@ -15,7 +15,7 @@ struct AstronomicalCalculator {
         let T = (julianDay - 2451545.0) / 36525.0
         
         // Mean elongation of the Moon from the Sun
-        let D = 297.85036 + 445267.111480 * T - 0.0019142 * T * T + T * T * T / 189474.0
+        //let D = 297.85036 + 445267.111480 * T - 0.0019142 * T * T + T * T * T / 189474.0
         
         // Mean anomaly of the Sun
         let M = 357.52772 + 35999.050340 * T - 0.0001603 * T * T - T * T * T / 300000.0
@@ -24,16 +24,16 @@ struct AstronomicalCalculator {
         let Mprime = 134.96298 + 477198.867398 * T + 0.0086972 * T * T + T * T * T / 56250.0
         
         // Moon's argument of latitude
-        let F = 93.27191 + 483202.017538 * T - 0.0036825 * T * T + T * T * T / 327270.0
+        //let F = 93.27191 + 483202.017538 * T - 0.0036825 * T * T + T * T * T / 327270.0
         
         // Longitude of the ascending node of the Moon's mean orbit
         let omega = 125.04452 - 1934.136261 * T + 0.0020708 * T * T + T * T * T / 450000.0
         
         // Convert to radians
-        let dRad = CoordinateTransformations.degreesToRadians(D)
+        //let dRad = CoordinateTransformations.degreesToRadians(D)
         let mRad = CoordinateTransformations.degreesToRadians(M)
         let mPrimeRad = CoordinateTransformations.degreesToRadians(Mprime)
-        let fRad = CoordinateTransformations.degreesToRadians(F)
+        //let fRad = CoordinateTransformations.degreesToRadians(F)
         let omegaRad = CoordinateTransformations.degreesToRadians(omega)
         
         // Calculate nutation in longitude (simplified)
@@ -69,10 +69,10 @@ struct AstronomicalCalculator {
         M = CoordinateTransformations.normalizeAngle(M)
         
         // Eccentricity of Earth's orbit
-        let e = 0.016708634 - 0.000042037 * T - 0.0000001267 * T * T
+        //let e = 0.016708634 - 0.000042037 * T - 0.0000001267 * T * T
         
         // Convert to radians
-        let L0Rad = CoordinateTransformations.degreesToRadians(L0)
+        //let L0Rad = CoordinateTransformations.degreesToRadians(L0)
         let MRad = CoordinateTransformations.degreesToRadians(M)
         
         // Calculate the equation of center
@@ -118,7 +118,7 @@ struct AstronomicalCalculator {
         M = CoordinateTransformations.normalizeAngle(M)
         
         // Eccentricity of Earth's orbit
-        let e = 0.016708634 - 0.000042037 * T - 0.0000001267 * T * T
+        //let e = 0.016708634 - 0.000042037 * T - 0.0000001267 * T * T
         
         // Convert to radians
         let MRad = CoordinateTransformations.degreesToRadians(M)
@@ -181,7 +181,7 @@ struct AstronomicalCalculator {
                       0.185116 * sin(MRad) - 0.114332 * sin(2 * FRad)
         
         // Latitude perturbations (simplified)
-        var latitude = 5.128189 * sin(FRad) + 0.280606 * sin(MprimeRad + FRad) +
+        let latitude = 5.128189 * sin(FRad) + 0.280606 * sin(MprimeRad + FRad) +
                      0.277693 * sin(MprimeRad - FRad) + 0.173238 * sin(2 * DRad - FRad)
         
         // Apply nutation
@@ -247,7 +247,7 @@ struct AstronomicalCalculator {
         let oblRad = CoordinateTransformations.degreesToRadians(obliquity)
         
         // Calculate RAMC (Right Ascension of Midheaven)
-        var ramc = lst
+        let ramc = lst
         
         // Convert RAMC to ecliptic longitude (Midheaven)
         let tanMC = tan(lstRad) / cos(oblRad)
@@ -313,7 +313,7 @@ struct AstronomicalCalculator {
         let lst = JulianDateCalculator.calculateLocalSiderealTime(julianDay: julianDay, longitude: longitude)
         
         // Convert to radians
-        let latRad = CoordinateTransformations.degreesToRadians(latitude)
+        //let latRad = CoordinateTransformations.degreesToRadians(latitude)
         let oblRad = CoordinateTransformations.degreesToRadians(obliquity)
         
         // Calculate houses 11, 12, 2, 3 using Placidus method
@@ -432,9 +432,9 @@ struct AstronomicalCalculator {
         let T = (julianDay - 2451545.0) / 36525.0
         
         // Simplified orbital elements of Chiron at J2000
-        let a = 13.6518 // Semi-major axis in AU
+        //let a = 13.6518 // Semi-major axis in AU
         let e = 0.3814 // Eccentricity
-        let i = 6.923 * Double.pi / 180.0 // Inclination
+        //let i = 6.923 * Double.pi / 180.0 // Inclination
         let w = 339.483 * Double.pi / 180.0 // Argument of perihelion
         let o = 209.365 * Double.pi / 180.0 // Longitude of the ascending node
         let meanLongitude = 224.598 * Double.pi / 180.0 // Mean longitude at epoch

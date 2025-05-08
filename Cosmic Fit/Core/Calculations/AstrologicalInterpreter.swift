@@ -15,13 +15,13 @@ struct AstrologicalInterpreter {
         // Interpret Sun sign
         let sunPlanet = chart.planets.first { $0.name == "Sun" }
         if let sun = sunPlanet {
-            interpretations["Sun"] = interpretPlanet(name: "Sun", sign: sun.zodiacSign, house: sun.inHouse, isRetrograde: sun.isRetrograde)
+            interpretations["Sun"] = interpretPlanet(name: "Sun", sign: sun.zodiacSign, isRetrograde: sun.isRetrograde)
         }
         
         // Interpret Moon sign
         let moonPlanet = chart.planets.first { $0.name == "Moon" }
         if let moon = moonPlanet {
-            interpretations["Moon"] = interpretPlanet(name: "Moon", sign: moon.zodiacSign, house: moon.inHouse, isRetrograde: moon.isRetrograde)
+            interpretations["Moon"] = interpretPlanet(name: "Moon", sign: moon.zodiacSign, isRetrograde: moon.isRetrograde)
         }
         
         // Interpret Ascendant
@@ -35,25 +35,9 @@ struct AstrologicalInterpreter {
         // Interpret other planets
         for planet in chart.planets {
             if planet.name != "Sun" && planet.name != "Moon" {
-                interpretations[planet.name] = interpretPlanet(name: planet.name, sign: planet.zodiacSign, house: planet.inHouse, isRetrograde: planet.isRetrograde)
+                interpretations[planet.name] = interpretPlanet(name: planet.name, sign: planet.zodiacSign, isRetrograde: planet.isRetrograde)
             }
         }
-        
-        // Interpret houses
-        for i in 1...12 {
-            let houseSign = CoordinateTransformations.decimalDegreesToZodiac(chart.houses[i]).sign
-            interpretations["House\(i)"] = interpretHouse(house: i, sign: houseSign)
-        }
-        
-        // Interpret major aspects
-        var aspectInterpretations: [String] = []
-        for aspect in chart.aspects {
-            // Only interpret major aspects
-            if ["Conjunction", "Opposition", "Trine", "Square", "Sextile"].contains(aspect.aspectType) {
-                aspectInterpretations.append(interpretAspect(planet1: aspect.planet1, planet2: aspect.planet2, aspectType: aspect.aspectType))
-            }
-        }
-        interpretations["Aspects"] = aspectInterpretations.joined(separator: "\n\n")
         
         // Overall chart interpretation
         interpretations["Overall"] = generateOverallInterpretation(chart: chart)
@@ -61,19 +45,15 @@ struct AstrologicalInterpreter {
         return interpretations
     }
     
-    // Interpret planet in sign and house
-    private static func interpretPlanet(name: String, sign: Int, house: Int, isRetrograde: Bool) -> String {
+    // Interpret planet in sign
+    private static func interpretPlanet(name: String, sign: Int, isRetrograde: Bool) -> String {
         let signName = CoordinateTransformations.getZodiacSignName(sign: sign)
         let retrogradeText = isRetrograde ? " (Retrograde)" : ""
         
-        var interpretation = "\(name) in \(signName)\(retrogradeText) in House \(house):\n\n"
+        var interpretation = "\(name) in \(signName)\(retrogradeText):\n\n"
         
         // Planet in sign interpretation
         interpretation += planetInSignInterpretation(planet: name, sign: sign)
-        
-        // Planet in house interpretation
-        interpretation += "\n\n\(name) in House \(house):\n"
-        interpretation += planetInHouseInterpretation(planet: name, house: house)
         
         // Retrograde interpretation if applicable
         if isRetrograde {
@@ -233,66 +213,6 @@ struct AstrologicalInterpreter {
         }
     }
     
-    // Interpret planet in house
-    private static func planetInHouseInterpretation(planet: String, house: Int) -> String {
-        switch planet {
-        case "Sun":
-            switch house {
-            case 1: return "Your identity and purpose find expression through your personal presence, appearance, and direct action. Self-development and personal initiative are central to your life path."
-            case 2: return "Your identity and purpose find expression through building resources, managing values, and creating security. Self-worth and developing practical talents are central to your life path."
-            case 3: return "Your identity and purpose find expression through communication, learning, and connecting with your immediate environment. Developing your mind and voice are central to your life path."
-            case 4: return "Your identity and purpose find expression through creating home, family connections, and emotional foundations. Inner security and honoring your roots are central to your life path."
-            case 5: return "Your identity and purpose find expression through creativity, romance, and self-expression. Developing your unique talents and experiencing joy are central to your life path."
-            case 6: return "Your identity and purpose find expression through service, improvement, and developing skills. Being useful and refining your daily life are central to your life path."
-            case 7: return "Your identity and purpose find expression through relationships, partnerships, and balancing opposites. Understanding others and creating harmony are central to your life path."
-            case 8: return "Your identity and purpose find expression through transformation, shared resources, and psychological depth. Embracing change and powerful exchanges are central to your life path."
-            case 9: return "Your identity and purpose find expression through exploration, higher learning, and broad vision. Developing wisdom and expanding horizons are central to your life path."
-            case 10: return "Your identity and purpose find expression through career, public role, and structured achievement. Building a legacy and finding your place in society are central to your life path."
-            case 11: return "Your identity and purpose find expression through group involvement, friendship, and future-oriented thinking. Social networks and humanitarian ideals are central to your life path."
-            case 12: return "Your identity and purpose find expression through spiritual connection, compassion, and transcending limitations. Inner work and universal service are central to your life path."
-            default: return "Your Sun in the \(house)th house shapes where you seek to express your core identity and purpose."
-            }
-            
-        case "Moon":
-            switch house {
-            case 1: return "Your emotional needs express through personal autonomy and direct emotional expression. You need freedom to respond authentically and may be emotionally self-focused."
-            case 2: return "Your emotional needs express through stability, comfort, and material security. You need reliable resources and tangible expressions of care to feel emotionally secure."
-            case 3: return "Your emotional needs express through communication, mental stimulation, and connection with your environment. You need to process feelings verbally and gather information to feel emotionally secure."
-            case 4: return "Your emotional needs express through deep family connections, private space, and nurturing exchanges. You need strong roots and emotional intimacy to feel secure."
-            case 5: return "Your emotional needs express through play, creativity, and receiving appreciation. You need opportunities for self-expression and enjoyable experiences to feel emotionally fulfilled."
-            case 6: return "Your emotional needs express through being useful, creating order, and attending to details. You need to feel needed and to maintain healthy routines for emotional security."
-            case 7: return "Your emotional needs express through relationships, balanced exchanges, and harmonious connections. You need responsive partnerships and fair treatment to feel emotionally secure."
-            case 8: return "Your emotional needs express through deep bonding, transformation, and emotional intensity. You need authentic intimacy and opportunities for renewal to feel emotionally fulfilled."
-            case 9: return "Your emotional needs express through freedom, meaning, and broad experiences. You need inspiration, space to explore, and philosophical understanding to feel emotionally secure."
-            case 10: return "Your emotional needs express through achievement, structure, and recognition. You need to fulfill responsibilities and attain goals to feel emotionally secure."
-            case 11: return "Your emotional needs express through friendship, group belonging, and unique expression. You need social networks and freedom to be yourself to feel emotionally secure."
-            case 12: return "Your emotional needs express through retreat, spiritual connection, and compassionate service. You need quiet time, imagination, and opportunities to help others to feel emotionally fulfilled."
-            default: return "Your Moon in the \(house)th house shapes your emotional needs and how you seek security."
-            }
-            
-        case "Mercury":
-            switch house {
-            case 1: return "You communicate in a direct, personal way, often centered on your own experiences and perspectives. Your thinking style is self-motivated and you express yourself with physical energy."
-            case 2: return "You communicate in a practical, resource-oriented way, focusing on tangible values and security. Your thinking style is methodical and you express yourself through managing resources."
-            case 3: return "You communicate in a versatile, curious way, gathering and sharing diverse information. Your thinking style is adaptable and you express yourself through active dialogue and exploration of your environment."
-            case 4: return "You communicate in an intuitive, emotionally sensitive way, often focused on personal or family matters. Your thinking style is influenced by feelings and you express yourself through creating connection."
-            case 5: return "You communicate in a creative, dramatic way, often focused on self-expression and enjoyment. Your thinking style is playful and you express yourself through storytelling and performance."
-            case 6: return "You communicate in a precise, analytical way, focused on improvement and practical details. Your thinking style is methodical and you express yourself through solving problems and organizing information."
-            case 7: return "You communicate in a balanced, relationship-oriented way, seeking fairness and mutual understanding. Your thinking style involves considering multiple perspectives and you express yourself through diplomacy."
-            case 8: return "You communicate in a penetrating, investigative way, exploring hidden motivations and taboo subjects. Your thinking style is psychologically astute and you express yourself with strategic intensity."
-            case 9: return "You communicate in a broad, philosophical way, connecting ideas into larger frameworks of meaning. Your thinking style is optimistic and you express yourself through teaching and inspiring others."
-            case 10: return "You communicate in a structured, authoritative way, focused on practical goals and public matters. Your thinking style is organized and you express yourself through leadership and careful planning."
-            case 11: return "You communicate in an innovative, group-oriented way, often focused on progressive ideas and social concerns. Your thinking style is original and you express yourself through collaborative networks."
-            case 12: return "You communicate in an intuitive, subtle way, often picking up unspoken information and expressing through imagery. Your thinking style is imaginative and you may express yourself indirectly or through creative media."
-            default: return "Your Mercury in the \(house)th house shapes how you communicate and process information."
-            }
-            
-        // Additional planets and their house placements could be added here
-        default:
-            return "\(planet) in the \(house)th house shapes how you express the energies of this planet in that area of life."
-        }
-    }
-    
     // Interpret retrograde planets
     private static func planetRetrogradeInterpretation(planet: String) -> String {
         switch planet {
@@ -417,113 +337,6 @@ struct AstrologicalInterpreter {
         }
     }
     
-    // Interpret house with sign on cusp
-    private static func interpretHouse(house: Int, sign: Int) -> String {
-        let signName = CoordinateTransformations.getZodiacSignName(sign: sign)
-        
-        switch house {
-        case 1:
-            return "With \(signName) on your 1st house cusp, you approach life and express your personal identity with the qualities of this sign, appearing \(signQuality(sign: sign)) to others."
-            
-        case 2:
-            return "With \(signName) on your 2nd house cusp, you manage resources and develop self-worth with the qualities of this sign, creating security in a \(signQuality(sign: sign)) manner."
-            
-        case 3:
-            return "With \(signName) on your 3rd house cusp, you communicate and process information with the qualities of this sign, learning and connecting with your environment in a \(signQuality(sign: sign)) style."
-            
-        case 4:
-            return "With \(signName) on your 4th house cusp, you create home and emotional foundations with the qualities of this sign, establishing roots and private life in a \(signQuality(sign: sign)) way."
-            
-        case 5:
-            return "With \(signName) on your 5th house cusp, you express creativity and seek enjoyment with the qualities of this sign, approaching recreation and romance in a \(signQuality(sign: sign)) manner."
-            
-        case 6:
-            return "With \(signName) on your 6th house cusp, you approach daily work and health with the qualities of this sign, developing skills and managing routines in a \(signQuality(sign: sign)) style."
-            
-        case 7:
-            return "With \(signName) on your 7th house cusp, you relate to partners and engage with others with the qualities of this sign, experiencing one-to-one relationships in a \(signQuality(sign: sign)) way."
-            
-        case 8:
-            return "With \(signName) on your 8th house cusp, you approach transformation and shared resources with the qualities of this sign, experiencing profound changes and intimacy in a \(signQuality(sign: sign)) manner."
-            
-        case 9:
-            return "With \(signName) on your 9th house cusp, you seek meaning and expand horizons with the qualities of this sign, developing higher understanding and belief systems in a \(signQuality(sign: sign)) style."
-            
-        case 10:
-            return "With \(signName) on your 10th house cusp, you approach career and public role with the qualities of this sign, building achievement and reputation in a \(signQuality(sign: sign)) way."
-            
-        case 11:
-            return "With \(signName) on your 11th house cusp, you engage with groups and develop future vision with the qualities of this sign, approaching friendship and collective endeavors in a \(signQuality(sign: sign)) manner."
-            
-        case 12:
-            return "With \(signName) on your 12th house cusp, you process the unconscious and connect spiritually with the qualities of this sign, experiencing retreat and transcendence in a \(signQuality(sign: sign)) style."
-            
-        default:
-            return "The sign \(signName) on your \(house)th house cusp colors how you experience and express the matters of this area of life."
-        }
-    }
-    
-    // Helper function to provide sign qualities for house interpretations
-    private static func signQuality(sign: Int) -> String {
-        let signName = CoordinateTransformations.getZodiacSignName(sign: sign)
-        
-        switch signName {
-        case "Aries": return "direct, independent, and pioneering"
-        case "Taurus": return "steady, sensual, and security-oriented"
-        case "Gemini": return "versatile, communicative, and intellectually curious"
-        case "Cancer": return "nurturing, protective, and emotionally responsive"
-        case "Leo": return "expressive, confident, and warmhearted"
-        case "Virgo": return "analytical, practical, and detail-oriented"
-        case "Libra": return "balanced, cooperative, and aesthetically aware"
-        case "Scorpio": return "intense, transformative, and psychologically perceptive"
-        case "Sagittarius": return "expansive, optimistic, and truth-seeking"
-        case "Capricorn": return "structured, responsible, and goal-oriented"
-        case "Aquarius": return "innovative, independent, and humanitarian"
-        case "Pisces": return "intuitive, compassionate, and imaginative"
-        default: return "unique"
-        }
-    }
-    
-    // Interpret aspect between planets
-    private static func interpretAspect(planet1: String, planet2: String, aspectType: String) -> String {
-        // Create a basic aspect interpretation
-        let aspect = "\(planet1) \(aspectType) \(planet2):"
-        
-        if planet1 == planet2 {
-            return "\(aspect)\nThis indicates an intensification of the energies of \(planet1) in your chart."
-        }
-        
-        var interpretation = "\(aspect)\n"
-        
-        switch aspectType {
-        case "Conjunction":
-            interpretation += "The energies of \(planet1) and \(planet2) blend and operate together, creating a focused, intense expression of these combined planetary forces in your life. This can manifest as both heightened potential and challenges in integrating these energies."
-            
-        case "Opposition":
-            interpretation += "The energies of \(planet1) and \(planet2) exist in dynamic tension, creating awareness through polarization and relationship. This aspect often manifests through relationships or external circumstances that require you to balance these complementary energies."
-            
-        case "Trine":
-            interpretation += "The energies of \(planet1) and \(planet2) flow harmoniously, supporting each other with ease. This aspect represents natural talents and favorable connections between these planetary forces, often operating smoothly in the background of your experience."
-            
-        case "Square":
-            interpretation += "The energies of \(planet1) and \(planet2) create dynamic tension that motivates growth through challenge. This aspect represents areas where effort is required to integrate these planetary forces, often manifesting as internal conflicts or external obstacles that lead to development."
-            
-        case "Sextile":
-            interpretation += "The energies of \(planet1) and \(planet2) support each other with gentle harmony, creating opportunities for positive connection. This aspect represents potential that can be activated through conscious effort, offering resources for growth when engaged."
-            
-        case "Quincunx":
-            interpretation += "The energies of \(planet1) and \(planet2) relate in an awkward manner that requires adjustment and flexibility. This aspect represents areas where continuous adaptation is necessary, often manifesting as situations that don't quite 'fit' conventional approaches."
-            
-        case "Semi-sextile":
-            interpretation += "The energies of \(planet1) and \(planet2) relate in ways that require minor adjustments and conscious integration. This aspect represents subtle connections that may initially seem uncomfortable but lead to growth through small, consistent efforts."
-            
-        default:
-            interpretation += "This aspect creates a specific relationship between these planetary energies in your chart, influencing how they express and interact within your experience."
-        }
-        
-        return interpretation
-    }
-    
     // Generate overall chart interpretation
     private static func generateOverallInterpretation(chart: NatalChartCalculator.NatalChart) -> String {
         // Get core placements
@@ -551,14 +364,6 @@ struct AstrologicalInterpreter {
         // Add modality balance
         let modalityBalance = analyzeModalityBalance(chart: chart)
         interpretation += modalityBalance + "\n\n"
-        
-        // Add house emphasis
-        let houseEmphasis = analyzeHouseEmphasis(chart: chart)
-        interpretation += "In terms of life areas, " + houseEmphasis + "\n\n"
-        
-        // Add aspect patterns
-        let aspectPatterns = analyzeAspectPatterns(chart: chart)
-        interpretation += aspectPatterns
         
         return interpretation
     }
@@ -733,190 +538,6 @@ struct AstrologicalInterpreter {
         case 3, 6, 9, 12: return "Mutable"
         default: return "Unknown"
         }
-    }
-    
-    // Helper function to analyze house emphasis
-    private static func analyzeHouseEmphasis(chart: NatalChartCalculator.NatalChart) -> String {
-        var houseCounts = [Int: Int]()
-        
-        // Initialize all houses with 0 count
-        for i in 1...12 {
-            houseCounts[i] = 0
-        }
-        
-        // Count planets in houses
-        for planet in chart.planets {
-            houseCounts[planet.inHouse, default: 0] += 1
-        }
-        
-        // Identify houses with 3 or more planets (stellium)
-        var stelliumHouses: [Int] = []
-        for (house, count) in houseCounts {
-            if count >= 3 {
-                stelliumHouses.append(house)
-            }
-        }
-        
-        // Identify empty houses
-        var emptyHouses: [Int] = []
-        for (house, count) in houseCounts {
-            if count == 0 {
-                emptyHouses.append(house)
-            }
-        }
-        
-        // Create interpretation
-        var interpretation = ""
-        
-        if !stelliumHouses.isEmpty {
-            interpretation += "you have a concentration of energy in the "
-            for (index, house) in stelliumHouses.enumerated() {
-                interpretation += "\(houseDescription(house: house))"
-                if index < stelliumHouses.count - 1 {
-                    interpretation += " and "
-                }
-            }
-            interpretation += ". "
-        }
-        
-        // Group houses into quadrants
-        let quadrant1 = houseCounts[1]! + houseCounts[2]! + houseCounts[3]!
-        let quadrant2 = houseCounts[4]! + houseCounts[5]! + houseCounts[6]!
-        let quadrant3 = houseCounts[7]! + houseCounts[8]! + houseCounts[9]!
-        let quadrant4 = houseCounts[10]! + houseCounts[11]! + houseCounts[12]!
-        
-        // Analyze quadrants
-        var strongestQuadrant = 0
-        var strongestCount = 0
-        
-        if quadrant1 > strongestCount {
-            strongestQuadrant = 1
-            strongestCount = quadrant1
-        }
-        if quadrant2 > strongestCount {
-            strongestQuadrant = 2
-            strongestCount = quadrant2
-        }
-        if quadrant3 > strongestCount {
-            strongestQuadrant = 3
-            strongestCount = quadrant3
-        }
-        if quadrant4 > strongestCount {
-            strongestQuadrant = 4
-            strongestCount = quadrant4
-        }
-        
-        // Only add quadrant interpretation if there's a clear emphasis
-        let totalPlanets = quadrant1 + quadrant2 + quadrant3 + quadrant4
-        let threshold = totalPlanets / 4 + 1
-        
-        if strongestCount >= threshold {
-            interpretation += "There's an emphasis on the "
-            
-            switch strongestQuadrant {
-            case 1:
-                interpretation += "first quadrant (houses 1-3), suggesting a focus on personal identity, resources, and immediate environment. "
-            case 2:
-                interpretation += "second quadrant (houses 4-6), suggesting a focus on emotional foundations, creative expression, and daily work. "
-            case 3:
-                interpretation += "third quadrant (houses 7-9), suggesting a focus on relationships, shared resources, and expanding horizons. "
-            case 4:
-                interpretation += "fourth quadrant (houses 10-12), suggesting a focus on public role, social connections, and spiritual dimensions. "
-            default:
-                break
-            }
-        }
-        
-        if interpretation.isEmpty {
-            interpretation = "your energy is distributed relatively evenly across different areas of life. "
-        }
-        
-        return interpretation
-    }
-    
-    // Helper function to get house description
-    private static func houseDescription(house: Int) -> String {
-        switch house {
-        case 1: return "1st house (personal identity and approach to life)"
-        case 2: return "2nd house (resources, values, and self-worth)"
-        case 3: return "3rd house (communication, learning, and immediate environment)"
-        case 4: return "4th house (home, family, and emotional foundations)"
-        case 5: return "5th house (creativity, pleasure, and self-expression)"
-        case 6: return "6th house (work, health, and service)"
-        case 7: return "7th house (relationships, partnerships, and open enemies)"
-        case 8: return "8th house (transformation, shared resources, and intimacy)"
-        case 9: return "9th house (higher learning, beliefs, and long-distance travel)"
-        case 10: return "10th house (career, public image, and authority)"
-        case 11: return "11th house (friends, groups, and future aspirations)"
-        case 12: return "12th house (unconscious, spirituality, and hidden matters)"
-        default: return "\(house)th house"
-        }
-    }
-    
-    // Helper function to analyze aspect patterns
-    private static func analyzeAspectPatterns(chart: NatalChartCalculator.NatalChart) -> String {
-        var aspectPatterns = "The aspects in your chart create unique patterns of energy flow. "
-        
-        // Count major aspects
-        var conjunctions = 0
-        var oppositions = 0
-        var trines = 0
-        var squares = 0
-        var sextiles = 0
-        
-        for aspect in chart.aspects {
-            switch aspect.aspectType {
-            case "Conjunction": conjunctions += 1
-            case "Opposition": oppositions += 1
-            case "Trine": trines += 1
-            case "Square": squares += 1
-            case "Sextile": sextiles += 1
-            default: break
-            }
-        }
-        
-        // Check for dominant aspect type
-        let maxCount = max(conjunctions, oppositions, trines, squares, sextiles)
-        
-        if maxCount >= 3 {
-            if conjunctions == maxCount {
-                aspectPatterns += "There's an emphasis on conjunctions, suggesting a focused concentration of energies that create intensity and new beginnings in the areas affected. "
-            } else if oppositions == maxCount {
-                aspectPatterns += "There's an emphasis on oppositions, suggesting important relationship dynamics, awareness through polarity, and the need to integrate seemingly contrary energies. "
-            } else if trines == maxCount {
-                aspectPatterns += "There's an emphasis on trines, suggesting natural talent, easy flow of energy, and harmonious expression in the areas affected. "
-            } else if squares == maxCount {
-                aspectPatterns += "There's an emphasis on squares, suggesting dynamic tension that motivates growth through overcoming challenges and taking constructive action. "
-            } else if sextiles == maxCount {
-                aspectPatterns += "There's an emphasis on sextiles, suggesting opportunities for growth through conscious effort and favorable connections between different areas of life. "
-            }
-        }
-        
-        // Check for Grand Trine
-        // This is a simplified check - a proper implementation would verify actual planetary positions
-        if trines >= 3 {
-            aspectPatterns += "Your chart may contain a Grand Trine, creating a circuit of flowing energy that brings ease and natural talent, though it may need conscious activation. "
-        }
-        
-        // Check for Grand Cross
-        // This is a simplified check - a proper implementation would verify actual planetary positions
-        if squares >= 4 && oppositions >= 2 {
-            aspectPatterns += "Your chart may contain a Grand Cross, creating dynamic tension that can lead to significant achievement through overcoming substantial challenges. "
-        }
-        
-        // Check for T-Square
-        // This is a simplified check - a proper implementation would verify actual planetary positions
-        if squares >= 2 && oppositions >= 1 && maxCount < 4 {
-            aspectPatterns += "Your chart may contain a T-Square, directing energy toward a specific area of life where growth comes through focused action and resolving tension. "
-        }
-        
-        // Check for Yod
-        // This is a simplified check - a proper implementation would verify actual planetary positions
-        if chart.aspects.contains(where: { $0.aspectType == "Quincunx" }) && sextiles >= 1 {
-            aspectPatterns += "Your chart may contain a Yod (Finger of God), pointing to a specific mission or area of fated experience that requires adjustment and special attention. "
-        }
-        
-        return aspectPatterns
     }
     
     // Generate specific guidance based on chart elements

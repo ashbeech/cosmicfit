@@ -180,7 +180,14 @@ class MainViewController: UIViewController {
     @objc private func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             scrollView.contentInset.bottom = keyboardSize.height
-            scrollView.scrollIndicatorInsets.bottom = keyboardSize.height
+            
+            // Use the appropriate API based on iOS version
+            if #available(iOS 13.0, *) {
+                scrollView.verticalScrollIndicatorInsets.bottom = keyboardSize.height
+            } else {
+                // Use deprecated API for iOS versions < 13.0
+                scrollView.scrollIndicatorInsets.bottom = keyboardSize.height
+            }
             
             // Scroll to active text field if any
             if locationTextField.isFirstResponder {
@@ -192,7 +199,14 @@ class MainViewController: UIViewController {
     
     @objc private func keyboardWillHide(notification: NSNotification) {
         scrollView.contentInset.bottom = 0
-        scrollView.scrollIndicatorInsets.bottom = 0
+        
+        // Use the appropriate API based on iOS version
+        if #available(iOS 13.0, *) {
+            scrollView.verticalScrollIndicatorInsets.bottom = 0
+        } else {
+            // Use deprecated API for iOS versions < 13.0
+            scrollView.scrollIndicatorInsets.bottom = 0
+        }
     }
     
     // MARK: - Actions
