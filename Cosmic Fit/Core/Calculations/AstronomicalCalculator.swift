@@ -333,6 +333,7 @@ struct AstronomicalCalculator {
         #else
        
         // ---------- fallback: equal‑house -------------------------------
+        // Note: this is accurate aside from 2nd and 8th house cusps
          
         let asc = calculateAscendant(julianDay: julianDay,
                                      latitude: latitude,

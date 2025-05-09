@@ -35,6 +35,13 @@ struct NatalChartCalculator {
         let chiron: Double
         let lunarPhase: Double
     }
+    
+    // MARK: - Progression Types --------------------------------------------
+    
+    enum ProgressionMethod {
+        case naiveDate    // Recalculate angles for progressed date
+        case solarArc     // Add solar arc distance to natal angles
+    }
 
     // MARK: – Public API --------------------------------------------------
 
@@ -148,6 +155,159 @@ struct NatalChartCalculator {
                           lunarPhase: lunarPhase)
     }
     
+    // MARK: - Progressed Chart Calculation --------------------------------
+    
+    /// Calculate a progressed chart using secondary progressions (day-for-a-year)
+    /// - Parameters:
+    ///   - birthDate: Original birth date and time
+    ///   - targetAge: Age in years for progression
+    ///   - latitude: Birth location latitude
+    ///   - longitude: Birth location longitude
+    ///   - timeZone: Birth location time zone
+    ///   - progressAnglesMethod: Method to use for progressing angles
+    /// - Returns: A NatalChart object with progressed positions
+    static func calculateProgressedChart(birthDate: Date,
+                                       targetAge: Int,
+                                       latitude: Double,
+                                       longitude: Double,
+                                       timeZone: TimeZone,
+                                       progressAnglesMethod: ProgressionMethod = .solarArc) -> NatalChart {
+        
+        // Calculate natal chart first (we need it for comparison and solar arc)
+        let natalChart = calculateNatalChart(birthDate: birthDate,
+                                           latitude: latitude,
+                                           longitude: longitude,
+                                           timeZone: timeZone)
+        
+        // 1) Add targetAge days to birth date to get progressed date
+        let calendar = Calendar.current
+        let progressedDate = calendar.date(byAdding: .day, value: targetAge, to: birthDate)!
+        
+        // 2) Calculate Julian Day for progressed date (keeping same birth time)
+        let utcProgressedDate = JulianDateCalculator.localToUTC(date: progressedDate, timezone: timeZone)
+        let progressedJD = JulianDateCalculator.calculateJulianDate(from: utcProgressedDate)
+        
+        // 3) Calculate progressed planetary positions
+        var planets: [PlanetPosition] = []
+        
+        func appendPlanet(_ name: String, _ symbol: String,
+                          _ lon: Double, _ lat: Double, _ retro: Bool) {
+            let (sign, posStr) = CoordinateTransformations.decimalDegreesToZodiac(lon)
+            planets.append(PlanetPosition(name: name,
+                                          symbol: symbol,
+                                          longitude: lon,
+                                          latitude: lat,
+                                          zodiacSign: sign,
+                                          zodiacPosition: posStr,
+                                          isRetrograde: retro))
+        }
+        
+        // --- Sun & Moon ---------------
+        do {
+            let (lon, lat) = AstronomicalCalculator.calculateSunPosition(julianDay: progressedJD)
+            appendPlanet("Sun", "☉", lon, lat, false)
+        }
+        
+        do {
+            let (lon, lat) = AstronomicalCalculator.calculateMoonPosition(julianDay: progressedJD)
+            appendPlanet("Moon", "☽", lon, lat, false)
+        }
+        
+        // --- VSOP87 planets -----------
+        func addVSOP(_ p: VSOP87Parser.Planet, _ name: String, _ symbol: String) {
+            let geo = VSOP87Parser.calculateGeocentricCoordinates(planet: p, julianDay: progressedJD)
+            let lon = CoordinateTransformations.radiansToDegrees(geo.longitude)
+            let lat = CoordinateTransformations.radiansToDegrees(geo.latitude)
+            appendPlanet(name, symbol, lon, lat, isRetrograde(planet: p, julianDay: progressedJD))
+        }
+        
+        addVSOP(.mercury, "Mercury", "☿")
+        addVSOP(.venus,   "Venus",   "♀")
+        addVSOP(.mars,    "Mars",    "♂")
+        addVSOP(.jupiter, "Jupiter", "♃")
+        addVSOP(.saturn,  "Saturn",  "♄")
+        addVSOP(.uranus,  "Uranus",  "♅")
+        addVSOP(.neptune, "Neptune", "♆")
+        
+        // --- Pluto (simplified) -------
+        let plutoLon = calculateSimplifiedPlanetPosition(julianDay: progressedJD, planet: "Pluto")
+        appendPlanet("Pluto", "♇", plutoLon, 0, false)
+        
+        // --- Asteroids ----------------
+        let asteroidPositions = AsteroidCalculator.positions(at: progressedJD)
+        for (ast, pos) in asteroidPositions {
+            appendPlanet(ast.displayName, ast.symbol,
+                         pos.longitude, pos.latitude,
+                         AsteroidCalculator.isRetrograde(ast, at: progressedJD))
+        }
+        let chironLongitude = asteroidPositions[.chiron]?.longitude ?? 0
+        
+        // 4) Progress the angles based on the chosen method
+        var progressedAscendant: Double
+        var progressedMidheaven: Double
+        
+        if progressAnglesMethod == .naiveDate {
+            // Naive method: recalculate angles for the progressed date and birth place
+            progressedAscendant = AstronomicalCalculator.calculateAscendant(julianDay: progressedJD,
+                                                                           latitude: latitude,
+                                                                           longitude: longitude)
+            progressedMidheaven = AstronomicalCalculator.calculateMidheaven(julianDay: progressedJD,
+                                                                           longitude: longitude)
+        } else {
+            // Solar arc method: add solar arc to natal angles
+            let natalSun = natalChart.planets.first { $0.name == "Sun" }!.longitude
+            let progressedSun = planets.first { $0.name == "Sun" }!.longitude
+            
+            // Calculate solar arc (the shortest distance between the two points)
+            var solarArc = progressedSun - natalSun
+            if solarArc > 180 { solarArc -= 360 } else if solarArc < -180 { solarArc += 360 }
+            
+            progressedAscendant = CoordinateTransformations.normalizeAngle(natalChart.ascendant + solarArc)
+            progressedMidheaven = CoordinateTransformations.normalizeAngle(natalChart.midheaven + solarArc)
+        }
+        
+        let progressedDescendant = CoordinateTransformations.normalizeAngle(progressedAscendant + 180)
+        let progressedImumCoeli = CoordinateTransformations.normalizeAngle(progressedMidheaven + 180)
+        
+        // 5) Calculate progressed house cusps
+        let progressedCusps = AstronomicalCalculator.calculateHouseCusps(julianDay: progressedJD,
+                                                                        latitude: latitude,
+                                                                        longitude: longitude)
+        
+        // 6) Other points
+        let (northNode, southNode) = AstronomicalCalculator.calculateLunarNodes(julianDay: progressedJD)
+        let lilithLongitude = calculateLilithPosition(julianDay: progressedJD)
+        let partOfFortune = calculatePartOfFortune(ascendant: progressedAscendant,
+                                                 sunLongitude: planets.first { $0.name == "Sun" }!.longitude,
+                                                 moonLongitude: planets.first { $0.name == "Moon" }!.longitude)
+        
+        let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: progressedJD)
+        
+        // 7) Return the progressed chart
+        return NatalChart(planets: planets,
+                          ascendant: progressedAscendant,
+                          midheaven: progressedMidheaven,
+                          descendant: progressedDescendant,
+                          imumCoeli: progressedImumCoeli,
+                          houseCusps: progressedCusps,
+                          northNode: northNode,
+                          southNode: southNode,
+                          vertex: AstronomicalCalculator.calculateVertex(julianDay: progressedJD,
+                                                                       latitude: latitude,
+                                                                       longitude: longitude),
+                          partOfFortune: partOfFortune,
+                          lilith: lilithLongitude,
+                          chiron: chironLongitude,
+                          lunarPhase: lunarPhase)
+    }
+    
+    // Calculate current age in years from birth date
+    static func calculateCurrentAge(from birthDate: Date) -> Int {
+        let calendar = Calendar.current
+        let ageComponents = calendar.dateComponents([.year], from: birthDate, to: Date())
+        return ageComponents.year ?? 0
+    }
+    
     // Calculate if a planet is retrograde
     private static func isRetrograde(planet: VSOP87Parser.Planet, julianDay: Double) -> Bool {
         let pos1 = VSOP87Parser.calculateGeocentricCoordinates(planet: planet, julianDay: julianDay)
@@ -184,6 +344,29 @@ struct NatalChartCalculator {
         }
     }
     
+    // NEW: Determine which house a planet is in based on its longitude
+    static func determineHouse(longitude: Double, houseCusps: [Double]) -> Int {
+        for i in 1...12 {
+            let currentCusp = houseCusps[i]
+            let nextIndex = i % 12 + 1
+            let nextCusp = houseCusps[nextIndex]
+            
+            // Handle the case where the house crosses the 0° point (e.g., house 12 to house 1)
+            if nextCusp < currentCusp {
+                if longitude >= currentCusp || longitude < nextCusp {
+                    return i
+                }
+            } else {
+                if longitude >= currentCusp && longitude < nextCusp {
+                    return i
+                }
+            }
+        }
+        
+        // Fallback (should not happen with valid data)
+        return 1
+    }
+    
     // Format natal chart data for display
     /// Convert `NatalChart` to a dictionary for display in the UI.
     static func formatNatalChart(_ chart: NatalChart) -> [String: Any] {
@@ -193,6 +376,9 @@ struct NatalChartCalculator {
         // Planets ----------------------------------------------------------
         var planetArr: [[String: Any]] = []
         for p in chart.planets {
+            // Determine which house the planet is in
+            let house = determineHouse(longitude: p.longitude, houseCusps: chart.houseCusps)
+            
             planetArr.append([
                 "name":              p.name,
                 "symbol":            p.symbol,
@@ -200,7 +386,8 @@ struct NatalChartCalculator {
                 "formattedPosition": "\(p.zodiacPosition) \(CoordinateTransformations.getZodiacSignName(sign: p.zodiacSign))",
                 "zodiacSign":        CoordinateTransformations.getZodiacSignName(sign: p.zodiacSign),
                 "zodiacSymbol":      CoordinateTransformations.getZodiacSignSymbol(sign: p.zodiacSign),
-                "isRetrograde":      p.isRetrograde
+                "isRetrograde":      p.isRetrograde,
+                "house":             house  // Add house number
             ])
         }
         formatted["planets"] = planetArr

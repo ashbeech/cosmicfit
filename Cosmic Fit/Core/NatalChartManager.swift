@@ -45,6 +45,37 @@ class NatalChartManager {
         return formattedChart
     }
     
+    /// Calculate a progressed chart based on birth information
+    /// - Parameters:
+    ///   - date: Date of birth
+    ///   - latitude: Birth location latitude
+    ///   - longitude: Birth location longitude
+    ///   - timeZone: Time zone of birth location
+    /// - Returns: Formatted progressed chart data
+    func calculateProgressedChart(date: Date,
+                                latitude: Double,
+                                longitude: Double,
+                                timeZone: TimeZone) -> [String: Any] {
+        
+        // Calculate current age
+        let targetAge = NatalChartCalculator.calculateCurrentAge(from: date)
+        
+        // Calculate the progressed chart
+        let chart = NatalChartCalculator.calculateProgressedChart(
+            birthDate: date,
+            targetAge: targetAge,
+            latitude: latitude,
+            longitude: longitude,
+            timeZone: timeZone,
+            progressAnglesMethod: .solarArc
+        )
+        
+        // Format the chart data for display
+        let formattedChart = NatalChartCalculator.formatNatalChart(chart)
+        
+        return formattedChart
+    }
+    
     /// Generate interpretations for a natal chart
     /// - Parameter chart: The calculated natal chart
     /// - Returns: Dictionary of interpretations for different chart elements

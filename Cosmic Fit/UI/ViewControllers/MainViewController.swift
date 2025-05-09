@@ -35,7 +35,7 @@ class MainViewController: UIViewController {
     // MARK: - UI Setup
     private func setupUI() {
         view.backgroundColor = .systemBackground
-        title = "Natal Chart Calculator"
+        title = "Cosmic Fit"
         
         // Set up scroll view
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -98,7 +98,7 @@ class MainViewController: UIViewController {
         contentView.addSubview(locationTextField)
         
         // Calculate Button
-        calculateButton.setTitle("Calculate Natal Chart", for: .normal)
+        calculateButton.setTitle("Calculate Chart", for: .normal)
         calculateButton.backgroundColor = .systemBlue
         calculateButton.setTitleColor(.white, for: .normal)
         calculateButton.layer.cornerRadius = 8
@@ -149,7 +149,7 @@ class MainViewController: UIViewController {
         // Set default date (e.g., for Maria's chart: April 28, 1989, 4 AM)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        if let defaultDate = dateFormatter.date(from: "1989-04-28 04:00") {
+        if let defaultDate = dateFormatter.date(from: "1989-04-28 04:30") {
             birthDatePicker.date = defaultDate
             birthTimePicker.date = defaultDate
         }
@@ -223,7 +223,7 @@ class MainViewController: UIViewController {
             guard let self = self else { return }
             
             if success {
-                self.calculateNatalChart()
+                self.calculateChart()
             } else {
                 DispatchQueue.main.async {
                     self.activityIndicator.stopAnimating()
@@ -270,7 +270,7 @@ class MainViewController: UIViewController {
         }
     }
     
-    private func calculateNatalChart() {
+    private func calculateChart() {
         // Combine date and time from the pickers
         let calendar = Calendar.current
         let dateComponents = calendar.dateComponents([.year, .month, .day], from: birthDatePicker.date)
@@ -303,20 +303,23 @@ class MainViewController: UIViewController {
             DispatchQueue.main.async {
                 self.activityIndicator.stopAnimating()
                 
+                // Format birth info for display
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateStyle = .long
+                dateFormatter.timeStyle = .short
+                let birthInfo = "\(dateFormatter.string(from: birthDateTime)) at \(self.locationName) (Lat: \(String(format: "%.4f", self.latitude)), Long: \(String(format: "%.4f", self.longitude)))"
+                
                 // Create and present the chart view controller
                 let chartVC = NatalChartViewController()
-                chartVC.configure(with: chartData, birthInfo: self.formatBirthInfo(date: birthDateTime))
+                chartVC.configure(with: chartData,
+                                 birthInfo: birthInfo,
+                                 birthDate: birthDateTime,
+                                 latitude: self.latitude,
+                                 longitude: self.longitude,
+                                 timeZone: self.timeZone)
                 self.navigationController?.pushViewController(chartVC, animated: true)
             }
         }
-    }
-    
-    private func formatBirthInfo(date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .short
-        
-        return "\(dateFormatter.string(from: date)) at \(locationName) (Lat: \(String(format: "%.4f", latitude)), Long: \(String(format: "%.4f", longitude)))"
     }
     
     private func showAlert(title: String, message: String) {
