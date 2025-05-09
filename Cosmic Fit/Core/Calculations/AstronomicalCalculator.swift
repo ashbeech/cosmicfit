@@ -6,6 +6,9 @@
 //
 
 import Foundation
+#if canImport(CSwissEphemeris)
+import CSwissEphemeris        // SwiftPM / CocoaPods module name
+#endif
 
 struct AstronomicalCalculator {
     
@@ -292,84 +295,66 @@ struct AstronomicalCalculator {
         return vertex
     }
     
-    // Calculate house cusps (Placidus system)
-    static func calculateHouseCusps(julianDay: Double, latitude: Double, longitude: Double) -> [Double] {
-        var cusps = [Double](repeating: 0.0, count: 13) // 1-12 houses plus extra position at index 0
+    // MARK: - House cusps --------------------------------------------------
+
+    static func calculateHouseCusps(julianDay: Double,
+                                    latitude: Double,
+                                    longitude: Double) -> [Double] {
         
-        // Calculate Ascendant and Midheaven
-        let asc = calculateAscendant(julianDay: julianDay, latitude: latitude, longitude: longitude)
-        let mc = calculateMidheaven(julianDay: julianDay, longitude: longitude)
+        var c = [Double](repeating: 0.0, count: 13)
         
-        // Assign the angles
-        cusps[1] = asc // Ascendant (1st house cusp)
-        cusps[10] = mc // Midheaven (10th house cusp)
+        #if canImport(CSwissEphemeris)
         
-        // Calculate opposite points for Descendant and IC
-        cusps[7] = CoordinateTransformations.normalizeAngle(asc + 180.0) // Descendant (7th house cusp)
-        cusps[4] = CoordinateTransformations.normalizeAngle(mc + 180.0) // IC (4th house cusp)
-        
-        // Calculate intermediate house cusps (Placidus method)
-        let obliquity = calculateTrueObliquity(julianDay: julianDay)
-        let lst = JulianDateCalculator.calculateLocalSiderealTime(julianDay: julianDay, longitude: longitude)
-        
-        // Convert to radians
-        //let latRad = CoordinateTransformations.degreesToRadians(latitude)
-        let oblRad = CoordinateTransformations.degreesToRadians(obliquity)
-        
-        // Calculate houses 11, 12, 2, 3 using Placidus method
-        // This is a simplified implementation
-        
-        // Houses 11 and 12 (from MC)
-        for i in 0..<2 {
-            let houseAngle = 30.0 * Double(i + 1)
-            let ramc = lst
-            
-            // Calculate intermediate house cusps
-            let ra = ramc + 90.0 - houseAngle
-            let raDec = CoordinateTransformations.degreesToRadians(ra)
-            
-            let tanHouse = tan(raDec) * cos(oblRad)
-            var house = CoordinateTransformations.radiansToDegrees(atan(tanHouse))
-            
-            // Adjust quadrant
-            if ra > 180.0 && ra < 360.0 {
-                house += 180.0
+            print("Natal Chart House Cusps: Using Swiss Ephem")
+            // 1 · Tell Swiss Ephemeris where the .se1… files live
+            if let path = Bundle.main.resourcePath {
+                path.withCString { cStr in
+                    swe_set_ephe_path(UnsafeMutablePointer(mutating: cStr))
+                }
             }
             
-            // Normalize and assign
-            cusps[11 - i] = CoordinateTransformations.normalizeAngle(house)
-        }
-        
-        // Houses 2 and 3 (from IC)
-        for i in 0..<2 {
-            let houseAngle = 30.0 * Double(i + 1)
-            let raic = lst + 180.0
+            // 2 · Prepare buffers
+            var ascmc = [Double](repeating: 0.0, count: 10)   // ASC, MC, etc.
             
-            // Calculate intermediate house cusps
-            let ra = raic + 90.0 - houseAngle
-            let raDec = CoordinateTransformations.degreesToRadians(ra)
+            // 3 · Call swe_houses     (hsys 'P' = Placidus)
+            let hsys = Int32(Character("P").asciiValue!)      // UInt8 → Int32
             
-            let tanHouse = tan(raDec) * cos(oblRad)
-            var house = CoordinateTransformations.radiansToDegrees(atan(tanHouse))
-            
-            // Adjust quadrant
-            if ra > 180.0 && ra < 360.0 {
-                house += 180.0
+            c.withUnsafeMutableBufferPointer { cuspPtr -> Void in
+                ascmc.withUnsafeMutableBufferPointer { ascmcPtr -> Void in
+                    swe_houses(julianDay,
+                               latitude,
+                               longitude,
+                               hsys,
+                               cuspPtr.baseAddress!,   // arrays are non‑empty, safe force‑unwrap
+                               ascmcPtr.baseAddress!)
+                }
             }
             
-            // Normalize and assign
-            cusps[2 + i] = CoordinateTransformations.normalizeAngle(house)
+        #else
+       
+        // ---------- fallback: equal‑house -------------------------------
+         
+        let asc = calculateAscendant(julianDay: julianDay,
+                                     latitude: latitude,
+                                     longitude: longitude)
+        let mc  = calculateMidheaven(julianDay: julianDay,
+                                     longitude: longitude)
+        
+        c[1]  = asc
+        c[4]  = CoordinateTransformations.normalizeAngle(mc + 180)
+        c[7]  = CoordinateTransformations.normalizeAngle(asc + 180)
+        c[10] = mc
+        
+        for i in [2,3,5,6,8,9,11,12] {
+            c[i] = CoordinateTransformations.normalizeAngle(c[i-1] + 30)
         }
         
-        // Houses 5, 6, 8, 9 (equal house from angles)
-        cusps[5] = CoordinateTransformations.normalizeAngle(cusps[4] + 30.0)
-        cusps[6] = CoordinateTransformations.normalizeAngle(cusps[5] + 30.0)
-        cusps[8] = CoordinateTransformations.normalizeAngle(cusps[7] + 30.0)
-        cusps[9] = CoordinateTransformations.normalizeAngle(cusps[8] + 30.0)
+        #endif
         
-        return cusps
+        return c
+
+        
     }
-    
     // Calculate aspects between two points
     static func calculateAspect(point1: Double, point2: Double, orb: Double = 5.0) -> (aspectType: String, exactness: Double)? {
         let angle = abs(point1 - point2).truncatingRemainder(dividingBy: 360.0)

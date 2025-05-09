@@ -26,6 +26,7 @@ struct NatalChartCalculator {
         let midheaven: Double
         let descendant: Double
         let imumCoeli: Double
+        let houseCusps: [Double]         // NEW  – indices 1‑12
         let northNode: Double
         let southNode: Double
         let vertex: Double
@@ -46,10 +47,11 @@ struct NatalChartCalculator {
         AsteroidCalculator.bootstrap()
 
         // 1) Convert to UTC & Julian Day -----------------------------------
-        let utcDate   = JulianDateCalculator.localToUTC(date: birthDate, timezone: timeZone)
+        let utcDate   = JulianDateCalculator.localToUTC(date: birthDate,
+                                                        timezone: timeZone)
         let jd        = JulianDateCalculator.calculateJulianDate(from: utcDate)
 
-        // 2) Angles ----------------------------------------------
+        // 2) Angles ---------------------------------------------------------
         let ascendant  = AstronomicalCalculator.calculateAscendant(julianDay: jd,
                                                                    latitude: latitude,
                                                                    longitude: longitude)
@@ -57,30 +59,31 @@ struct NatalChartCalculator {
                                                                     longitude: longitude)
         let descendant = CoordinateTransformations.normalizeAngle(ascendant + 180)
         let imumCoeli  = CoordinateTransformations.normalizeAngle(midheaven + 180)
-        let vertex     = AstronomicalCalculator.calculateVertex(julianDay: jd,
-                                                                 latitude: latitude,
-                                                                 longitude: longitude)
 
-        // 3) Nodes ---------------------------------------------------------
+        // 3) House cusps ----------------------------------------------------
+        let cusps = AstronomicalCalculator.calculateHouseCusps(julianDay: jd,
+                                                               latitude: latitude,
+                                                               longitude: longitude)
+
+        // 4) Nodes ----------------------------------------------------------
         let (northNode, southNode) = AstronomicalCalculator.calculateLunarNodes(julianDay: jd)
 
-        // 4) Planet array ---------------------------------------------------
+        // 5) Planets --------------------------------------------------------
         var planets: [PlanetPosition] = []
 
-        // local helper
         func appendPlanet(_ name: String, _ symbol: String,
                           _ lon: Double, _ lat: Double, _ retro: Bool) {
             let (sign, posStr) = CoordinateTransformations.decimalDegreesToZodiac(lon)
             planets.append(PlanetPosition(name: name,
-                                           symbol: symbol,
-                                           longitude: lon,
-                                           latitude: lat,
-                                           zodiacSign: sign,
-                                           zodiacPosition: posStr,
-                                           isRetrograde: retro))
+                                          symbol: symbol,
+                                          longitude: lon,
+                                          latitude: lat,
+                                          zodiacSign: sign,
+                                          zodiacPosition: posStr,
+                                          isRetrograde: retro))
         }
 
-        // --- Sun & Moon ----------------------------------------------------
+        // --- Sun & Moon ---------------
         do {
             let (lon, lat) = AstronomicalCalculator.calculateSunPosition(julianDay: jd)
             appendPlanet("Sun", "☉", lon, lat, false)
@@ -90,13 +93,12 @@ struct NatalChartCalculator {
             appendPlanet("Moon", "☽", lon, lat, false)
         }
 
-        // --- VSOP87 planets -----------------------------------------------
+        // --- VSOP87 planets -----------
         func addVSOP(_ p: VSOP87Parser.Planet, _ name: String, _ symbol: String) {
             let geo = VSOP87Parser.calculateGeocentricCoordinates(planet: p, julianDay: jd)
             let lon = CoordinateTransformations.radiansToDegrees(geo.longitude)
             let lat = CoordinateTransformations.radiansToDegrees(geo.latitude)
-            let retro = isRetrograde(planet: p, julianDay: jd)
-            appendPlanet(name, symbol, lon, lat, retro)
+            appendPlanet(name, symbol, lon, lat, isRetrograde(planet: p, julianDay: jd))
         }
         addVSOP(.mercury, "Mercury", "☿")
         addVSOP(.venus,   "Venus",   "♀")
@@ -106,36 +108,40 @@ struct NatalChartCalculator {
         addVSOP(.uranus,  "Uranus",  "♅")
         addVSOP(.neptune, "Neptune", "♆")
 
-        // --- Pluto (simplified) -------------------------------------------
+        // --- Pluto (simplified) -------
         let plutoLon = calculateSimplifiedPlanetPosition(julianDay: jd, planet: "Pluto")
         appendPlanet("Pluto", "♇", plutoLon, 0, false)
 
-        // --- Swiss‑Ephemeris asteroids ------------------------------------
+        // --- Asteroids ----------------
         let asteroidPositions = AsteroidCalculator.positions(at: jd)
         for (ast, pos) in asteroidPositions {
-            let retro = AsteroidCalculator.isRetrograde(ast, at: jd)
-            appendPlanet(ast.displayName, ast.symbol, pos.longitude, pos.latitude, retro)
+            appendPlanet(ast.displayName, ast.symbol,
+                         pos.longitude, pos.latitude,
+                         AsteroidCalculator.isRetrograde(ast, at: jd))
         }
         let chironLongitude = asteroidPositions[.chiron]?.longitude ?? 0
 
-        // 5) Other points ---------------------------------------------------
-        let lilithLongitude = calculateLilithPosition(julianDay: jd)
-        let partOfFortune   = calculatePartOfFortune(ascendant: ascendant,
-                                                     sunLongitude: planets.first { $0.name == "Sun" }!.longitude,
-                                                     moonLongitude: planets.first { $0.name == "Moon" }!.longitude)
+        // 6) Other points ---------------------------------------------------
+        let lilithLongitude  = calculateLilithPosition(julianDay: jd)
+        let partOfFortune    = calculatePartOfFortune(ascendant: ascendant,
+                                                      sunLongitude: planets.first { $0.name == "Sun" }!.longitude,
+                                                      moonLongitude: planets.first { $0.name == "Moon" }!.longitude)
 
-        // 6) Lunar phase ----------------------------------------------------
+        // 7) Lunar phase ----------------------------------------------------
         let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: jd)
 
-        // 7) Return chart ---------------------------------------------
+        // 8) Return chart ---------------------------------------------------
         return NatalChart(planets: planets,
                           ascendant: ascendant,
                           midheaven: midheaven,
                           descendant: descendant,
                           imumCoeli: imumCoeli,
+                          houseCusps: cusps,
                           northNode: northNode,
                           southNode: southNode,
-                          vertex: vertex,
+                          vertex: AstronomicalCalculator.calculateVertex(julianDay: jd,
+                                                                         latitude: latitude,
+                                                                         longitude: longitude),
                           partOfFortune: partOfFortune,
                           lilith: lilithLongitude,
                           chiron: chironLongitude,
@@ -179,59 +185,57 @@ struct NatalChartCalculator {
     }
     
     // Format natal chart data for display
+    /// Convert `NatalChart` to a dictionary for display in the UI.
     static func formatNatalChart(_ chart: NatalChart) -> [String: Any] {
-        // Create a dictionary to hold the formatted chart data
-        var formattedChart: [String: Any] = [:]
-        
-        // Format planets
-        var formattedPlanets: [[String: Any]] = []
-        for planet in chart.planets {
-            let zodiacSignName = CoordinateTransformations.getZodiacSignName(sign: planet.zodiacSign)
-            let zodiacSignSymbol = CoordinateTransformations.getZodiacSignSymbol(sign: planet.zodiacSign)
-            
-            formattedPlanets.append([
-                "name": planet.name,
-                "symbol": planet.symbol,
-                "longitude": planet.longitude,
-                "formattedPosition": "\(planet.zodiacPosition) \(zodiacSignName)",
-                "zodiacSign": zodiacSignName,
-                "zodiacSymbol": zodiacSignSymbol,
-                "isRetrograde": planet.isRetrograde
+
+        var formatted: [String: Any] = [:]
+
+        // Planets ----------------------------------------------------------
+        var planetArr: [[String: Any]] = []
+        for p in chart.planets {
+            planetArr.append([
+                "name":              p.name,
+                "symbol":            p.symbol,
+                "longitude":         p.longitude,
+                "formattedPosition": "\(p.zodiacPosition) \(CoordinateTransformations.getZodiacSignName(sign: p.zodiacSign))",
+                "zodiacSign":        CoordinateTransformations.getZodiacSignName(sign: p.zodiacSign),
+                "zodiacSymbol":      CoordinateTransformations.getZodiacSignSymbol(sign: p.zodiacSign),
+                "isRetrograde":      p.isRetrograde
             ])
         }
-        
-        // Format angles and points
-        let (ascSign, ascPos) = CoordinateTransformations.decimalDegreesToZodiac(chart.ascendant)
-        let (mcSign, mcPos) = CoordinateTransformations.decimalDegreesToZodiac(chart.midheaven)
-        let (descSign, descPos) = CoordinateTransformations.decimalDegreesToZodiac(chart.descendant)
-        let (icSign, icPos) = CoordinateTransformations.decimalDegreesToZodiac(chart.imumCoeli)
-        
-        let angles: [String: Any] = [
-            "Ascendant": [
-                "longitude": chart.ascendant,
-                "formattedPosition": "\(ascPos) \(CoordinateTransformations.getZodiacSignName(sign: ascSign))",
-                "zodiacSign": CoordinateTransformations.getZodiacSignName(sign: ascSign),
-                "zodiacSymbol": CoordinateTransformations.getZodiacSignSymbol(sign: ascSign)
-            ],
-            "Midheaven": [
-                "longitude": chart.midheaven,
-                "formattedPosition": "\(mcPos) \(CoordinateTransformations.getZodiacSignName(sign: mcSign))",
-                "zodiacSign": CoordinateTransformations.getZodiacSignName(sign: mcSign),
-                "zodiacSymbol": CoordinateTransformations.getZodiacSignSymbol(sign: mcSign)
-            ],
-            "Descendant": [
-                "longitude": chart.descendant,
-                "formattedPosition": "\(descPos) \(CoordinateTransformations.getZodiacSignName(sign: descSign))",
-                "zodiacSign": CoordinateTransformations.getZodiacSignName(sign: descSign),
-                "zodiacSymbol": CoordinateTransformations.getZodiacSignSymbol(sign: descSign)
-            ],
-            "ImumCoeli": [
-                "longitude": chart.imumCoeli,
-                "formattedPosition": "\(icPos) \(CoordinateTransformations.getZodiacSignName(sign: icSign))",
-                "zodiacSign": CoordinateTransformations.getZodiacSignName(sign: icSign),
-                "zodiacSymbol": CoordinateTransformations.getZodiacSignSymbol(sign: icSign)
+        formatted["planets"] = planetArr
+
+        // Angles -----------------------------------------------------------
+        func angleDict(_ lon: Double) -> [String: Any] {
+            let (s, pos) = CoordinateTransformations.decimalDegreesToZodiac(lon)
+            return [
+                "longitude":         lon,
+                "formattedPosition": "\(pos) \(CoordinateTransformations.getZodiacSignName(sign: s))",
+                "zodiacSign":        CoordinateTransformations.getZodiacSignName(sign: s),
+                "zodiacSymbol":      CoordinateTransformations.getZodiacSignSymbol(sign: s)
             ]
+        }
+        formatted["angles"] = [
+            "Ascendant":  angleDict(chart.ascendant),
+            "Midheaven":  angleDict(chart.midheaven),
+            "Descendant": angleDict(chart.descendant),
+            "ImumCoeli":  angleDict(chart.imumCoeli)
         ]
+
+        // Houses -----------------------------------------------------------
+        var houses: [[String: Any]] = []
+        for i in 1...12 {
+            let lon = chart.houseCusps[i]
+            let (s, pos) = CoordinateTransformations.decimalDegreesToZodiac(lon)
+            houses.append([
+                "number":            i,
+                "longitude":         lon,
+                "formattedPosition": "\(pos) \(CoordinateTransformations.getZodiacSignName(sign: s))",
+                "zodiacSign":        CoordinateTransformations.getZodiacSignName(sign: s),
+                "zodiacSymbol":      CoordinateTransformations.getZodiacSignSymbol(sign: s)
+            ])
+        }
+        formatted["houses"] = houses
         
         // Format nodes, Lilith, Chiron and other points
         let (nnSign, nnPos) = CoordinateTransformations.decimalDegreesToZodiac(chart.northNode)
@@ -273,10 +277,9 @@ struct NatalChartCalculator {
             ]
         ]
         
-        // Add all formatted data to the chart dictionary
-        formattedChart["planets"] = formattedPlanets
-        formattedChart["angles"] = angles
-        formattedChart["points"] = points
+        // Add all formatted data to the chart dictionary.
+        // We already saved planets & angles above; just add the points block.
+        formatted["points"] = points
         
         // Add lunar phase
         var phaseDescription = ""
@@ -300,11 +303,11 @@ struct NatalChartCalculator {
             phaseDescription = "Waning Crescent"
         }
         
-        formattedChart["lunarPhase"] = [
+        formatted["lunarPhase"] = [
             "angle": chart.lunarPhase,
             "description": phaseDescription
         ]
         
-        return formattedChart
+        return formatted
     }
 }
