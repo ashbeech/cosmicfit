@@ -3,6 +3,7 @@
 //  Cosmic Fit
 //
 //  Fetches current‑day weather from Open‑Meteo
+//  Updated 15/05/2025 – Logs latitude & longitude being queried
 //
 
 import Foundation
@@ -24,6 +25,14 @@ final class WeatherService {
     
     /// Returns the weather summary for **right now / today** at `lat,lon`.
     func fetch(lat: Double, lon: Double) async throws -> TodayWeather {
+        // ------------------------------------------------------------------
+        // Debug: show exactly which coordinates we’re requesting
+        // ------------------------------------------------------------------
+        #if DEBUG
+        print("[WeatherService] Fetching weather for lat \(lat), lon \(lon)")
+        #endif
+        // ------------------------------------------------------------------
+        
         let url = URL(string:
             "https://api.open-meteo.com/v1/forecast" +
             "?latitude=\(lat)&longitude=\(lon)" +
@@ -35,6 +44,7 @@ final class WeatherService {
         guard (resp as? HTTPURLResponse)?.statusCode == 200 else {
             throw WeatherError.badResponse
         }
+        
         struct Root: Decodable {
             struct Current: Decodable {
                 let temperature: Double
@@ -49,9 +59,10 @@ final class WeatherService {
             let current_weather: Current
             let hourly: Hourly
         }
+        
         let r = try JSONDecoder().decode(Root.self, from: data)
         
-        // pick humidity value whose timestamp matches current weather time
+        // Match humidity reading to the current‑weather timestamp
         let idx = r.hourly.time.firstIndex(of: r.current_weather.time) ?? 0
         let humidity = r.hourly.relativehumidity_2m[idx]
         
@@ -59,10 +70,11 @@ final class WeatherService {
             conditions: Self.describe(code: r.current_weather.weathercode),
             temp:       r.current_weather.temperature,
             humidity:   humidity,
-            windKph:    r.current_weather.windspeed)
+            windKph:    r.current_weather.windspeed
+        )
     }
     
-    // Open‑Meteo weather‑code → text
+    // Open‑Meteo weather‑code → human‑readable text
     private static func describe(code: Int) -> String {
         switch code {
         case 0:   return "Clear"

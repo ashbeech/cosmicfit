@@ -3,10 +3,12 @@
 //  Cosmic Fit
 //
 //  Created by Ashley Davison on 04/05/2025.
-//  Updated 12/05/2025 – adds local “Today’s Weather” section (Open‑Meteo),
-//  vector wheel, house clean‑up, and Swift‑6 fixes.
-//
-//  ➜  Add NSLocationWhenInUseUsageDescription to Info.plist.
+//  Updated 14/05/2025 – Fixes dynamic table height so “Today’s Weather”
+//  section becomes visible once data arrives. Replaces the previous
+//  strategy of adding a *new* height‑anchor each refresh (which caused
+//  Auto‑Layout conflicts and prevented the weather row from ever
+//  appearing) with a single stored constraint whose constant is updated
+//  in‑place.
 //
 
 import UIKit
@@ -26,6 +28,9 @@ final class NatalChartViewController: UIViewController {
     private let birthInfoLabel  = UILabel()
     private let chartWheelView  = ChartWheelView()
     private let tableView       = UITableView(frame: .zero, style: .grouped)
+    
+    /// Single table‑height constraint (updated, never recreated)
+    private var tableHeightConstraint: NSLayoutConstraint?
     
     // MARK: Chart & section data -----------------------------------------
     
@@ -67,7 +72,8 @@ final class NatalChartViewController: UIViewController {
         startWeatherFetch()
     }
     
-    required init?(coder: NSCoder) { super.init(coder: coder) }   // Swift 6
+    required init?(coder: NSCoder) { super.init(coder: coder) }   // Swift 6 support
+    init() { super.init(nibName: nil, bundle: nil) }
     
     // MARK: Public configure() -------------------------------------------
     
@@ -116,9 +122,33 @@ final class NatalChartViewController: UIViewController {
     // MARK: Weather
     // --------------------------------------------------------------------
     
+    private func useDefaultWeatherLocation() {
+        Task {
+            do {
+                // Hornsea, England fallback
+                let wx = try await WeatherService.shared.fetch(
+                    lat: 53.9108,
+                    lon: -0.1667)
+                todayWeather = wx
+                refreshUI()
+            } catch {
+                print("Weather fetch failed:", error.localizedDescription)
+            }
+        }
+    }
+    
     private func startWeatherFetch() {
+        // fallback timer
+        let timeout = DispatchWorkItem { [weak self] in
+            print("Location timeout, using default location")
+            // NOTE: Should cache long an lat at some point during the app
+            self?.useDefaultWeatherLocation()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: timeout)
+        
         locManager.onLocation = { [weak self] coord in
             guard let self else { return }
+            timeout.cancel()
             Task {
                 do {
                     let wx = try await WeatherService.shared.fetch(
@@ -128,8 +158,13 @@ final class NatalChartViewController: UIViewController {
                     self.refreshUI()
                 } catch {
                     print("Weather fetch failed:", error.localizedDescription)
+                    self.useDefaultWeatherLocation()
                 }
             }
+        }
+        locManager.onError = { [weak self] error in
+            print("Location error: \(error.localizedDescription)")
+            self?.useDefaultWeatherLocation()
         }
         locManager.requestOnce()
     }
@@ -182,6 +217,10 @@ final class NatalChartViewController: UIViewController {
         tableView.register(ChartDataCell.self, forCellReuseIdentifier: "ChartDataCell")
         contentView.addSubview(tableView)
         
+        // single, reusable height constraint
+        tableHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
+        tableHeightConstraint?.isActive = true
+        
         NSLayoutConstraint.activate([
             birthInfoLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             birthInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -198,7 +237,7 @@ final class NatalChartViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         
-        refreshUI()
+        refreshUI()   // first pass
     }
     
     // --------------------------------------------------------------------
@@ -244,7 +283,7 @@ final class NatalChartViewController: UIViewController {
             }
             height += tableView.rectForFooter(inSection: s).height
         }
-        tableView.heightAnchor.constraint(equalToConstant: height).isActive = true
+        tableHeightConstraint?.constant = height
     }
     
     // --------------------------------------------------------------------
