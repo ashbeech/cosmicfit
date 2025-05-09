@@ -9,41 +9,47 @@
 import UIKit
 
 class NatalChartViewController: UIViewController {
-
+    
     // MARK: - Properties --------------------------------------------------
-
+    
     private let scrollView  = UIScrollView()
     private let contentView = UIView()
-
+    
     private let birthInfoLabel = UILabel()
     private let chartImageView = UIImageView()
     private let tableView      = UITableView(frame: .zero, style: .grouped)
-
+    
     private var chartData: [String: Any] = [:]
     private var progressedChartData: [String: Any] = [:]
-
+    
     private var planetSections: [[String: Any]] = []
     private var angleSections:  [[String: Any]] = []
     private var houseSections:  [[String: Any]] = []
     private var progressedPlanetSections: [[String: Any]] = []
     private var progressedAngleSections: [[String: Any]] = []
     private var currentAge: Int = 0
-
+    
+    private var transitAspectSections: [[String: Any]] = []
+    private var shortTermTransits: [[String: Any]] = []
+    private var regularTransits: [[String: Any]] = []
+    private var longTermTransits: [[String: Any]] = []
+    private var transitDate: String = ""
+    
     private var birthInfo: String = ""
     private var birthDate: Date?
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
     private var timeZone: TimeZone?
-
+    
     // MARK: - Lifecycle ---------------------------------------------------
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
     }
-
+    
     // MARK: - Configuration ----------------------------------------------
-
+    
     func configure(with chartData: [String: Any], birthInfo: String, birthDate: Date, latitude: Double, longitude: Double, timeZone: TimeZone) {
         self.chartData = chartData
         self.birthInfo = birthInfo
@@ -65,43 +71,68 @@ class NatalChartViewController: UIViewController {
             )
         }
         
+        // Calculate natal chart for transit calculations
+        let calculator = NatalChartCalculator.self
+        let natalChart = calculator.calculateNatalChart(
+            birthDate: birthDate,
+            latitude: latitude,
+            longitude: longitude,
+            timeZone: timeZone
+        )
+        
+        // Calculate transit chart
+        let transitData = NatalChartManager.shared.calculateTransitChart(natalChart: natalChart)
+        if let aspects = transitData["aspects"] as? [[String: Any]] {
+            self.transitAspectSections = aspects
+        }
+        
+        if let groupedAspects = transitData["groupedAspects"] as? [String: [[String: Any]]] {
+            self.shortTermTransits = groupedAspects["Short-term Influences"] ?? []
+            self.regularTransits = groupedAspects["Regular Influences"] ?? []
+            self.longTermTransits = groupedAspects["Long-term Influences"] ?? []
+        }
+        
+        if let date = transitData["date"] as? String {
+            self.transitDate = date
+        }
+        
         processChartData()
         if isViewLoaded { updateUI() }
     }
-
+    
     // MARK: - UI Setup ----------------------------------------------------
-
+    
     private func setupUI() {
-
+        
         view.backgroundColor = .systemBackground
         title = "Natal Chart"
-
+        
         navigationItem.rightBarButtonItem =
-            UIBarButtonItem(title: "Interpret",
-                            style: .plain,
-                            target: self,
-                            action: #selector(showInterpretation))
-
+        UIBarButtonItem(title: "Interpret",
+                        style: .plain,
+                        target: self,
+                        action: #selector(showInterpretation))
+        
         // ---------- Scroll / Content hierarchy ---------------------------
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-
+        
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-
+            
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
-
+        
         // ---------- Birth‑info label -------------------------------------
         birthInfoLabel.font          = .systemFont(ofSize: 14)
         birthInfoLabel.textColor     = .secondaryLabel
@@ -109,7 +140,7 @@ class NatalChartViewController: UIViewController {
         birthInfoLabel.numberOfLines = 0
         birthInfoLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(birthInfoLabel)
-
+        
         // ---------- Chart wheel placeholder ------------------------------
         chartImageView.translatesAutoresizingMaskIntoConstraints = false
         chartImageView.contentMode   = .scaleAspectFit
@@ -118,7 +149,7 @@ class NatalChartViewController: UIViewController {
         chartImageView.clipsToBounds = true
         contentView.addSubview(chartImageView)
         chartImageView.image = makePlaceholderWheel()
-
+        
         // ---------- Table view -------------------------------------------
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate   = self
@@ -127,28 +158,28 @@ class NatalChartViewController: UIViewController {
                            forCellReuseIdentifier: "ChartDataCell")
         tableView.isScrollEnabled = false
         contentView.addSubview(tableView)
-
+        
         // ---------- Layout constraints -----------------------------------
         NSLayoutConstraint.activate([
             birthInfoLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             birthInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             birthInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-
+            
             chartImageView.topAnchor.constraint(equalTo: birthInfoLabel.bottomAnchor, constant: 16),
             chartImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             chartImageView.widthAnchor.constraint(equalToConstant: 300),
             chartImageView.heightAnchor.constraint(equalToConstant: 300),
-
+            
             tableView.topAnchor.constraint(equalTo: chartImageView.bottomAnchor, constant: 16),
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-
+        
         // ---------- Initial UI refresh -----------------------------------
         updateUI()
     }
-
+    
     // Renders a simple wheel placeholder
     private func makePlaceholderWheel() -> UIImage {
         let size = CGSize(width: 300, height: 300)
@@ -156,11 +187,11 @@ class NatalChartViewController: UIViewController {
             let rect = CGRect(origin: .zero, size: size)
             ctx.cgContext.setFillColor(UIColor.systemBackground.cgColor)
             ctx.cgContext.fillEllipse(in: rect)
-
+            
             ctx.cgContext.setStrokeColor(UIColor.label.cgColor)
             ctx.cgContext.setLineWidth(2)
             ctx.cgContext.strokeEllipse(in: rect.insetBy(dx: 2, dy: 2))
-
+            
             let text = "Natal Chart"
             let attrs: [NSAttributedString.Key: Any] = [
                 .font: UIFont.boldSystemFont(ofSize: 16),
@@ -175,16 +206,16 @@ class NatalChartViewController: UIViewController {
             text.draw(in: textRect, withAttributes: attrs)
         }
     }
-
+    
     // MARK: - Data preprocessing -----------------------------------------
-
+    
     private func processChartData() {
-
+        
         // ---------- Planets ----------------------------------------------
         if let planets = chartData["planets"] as? [[String: Any]] {
             planetSections = planets
         }
-
+        
         // ---------- Angles -----------------------------------------------
         if let angles = chartData["angles"] as? [String: Any] {
             var arr: [[String: Any]] = []
@@ -196,7 +227,7 @@ class NatalChartViewController: UIViewController {
             }
             angleSections = arr
         }
-
+        
         // ---------- Houses -----------------------------------------------
         if let houses = chartData["houses"] as? [[String: Any]] {
             houseSections = houses.sorted {
@@ -223,13 +254,13 @@ class NatalChartViewController: UIViewController {
             progressedAngleSections = arr
         }
     }
-
+    
     // MARK: - UI refresh --------------------------------------------------
-
+    
     private func updateUI() {
         birthInfoLabel.text = birthInfo
         tableView.reloadData()
-
+        
         tableView.layoutIfNeeded()
         var height: CGFloat = 0
         for section in 0..<tableView.numberOfSections {
@@ -241,9 +272,9 @@ class NatalChartViewController: UIViewController {
         }
         tableView.heightAnchor.constraint(equalToConstant: height).isActive = true
     }
-
+    
     // MARK: - Actions -----------------------------------------------------
-
+    
     @objc private func showInterpretation() {
         let interpretationVC = InterpretationViewController()
         interpretationVC.configure(with:
@@ -257,32 +288,34 @@ class NatalChartViewController: UIViewController {
 // MARK: - UITableViewDataSource & UITableViewDelegate --------------------
 
 extension NatalChartViewController: UITableViewDataSource, UITableViewDelegate {
-
+    
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 5   // Planets · House Cusps · Angles · Progressed Planets · Progressed Angles
+        return 8   // Planets · House Cusps · Angles · Progressed Planets · Progressed Angles · Transit Aspects
     }
-
-    func tableView(_ tableView: UITableView,
-                   numberOfRowsInSection section: Int) -> Int {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0: return planetSections.count
         case 1: return houseSections.count
         case 2: return angleSections.count
         case 3: return progressedPlanetSections.count
         case 4: return progressedAngleSections.count
+        case 5: return shortTermTransits.count
+        case 6: return regularTransits.count
+        case 7: return longTermTransits.count
         default: return 0
         }
     }
-
+    
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChartDataCell",
                                                  for: indexPath) as! ChartDataCell
-
+        
         switch indexPath.section {
-
-        // -------- Planets -------------------------------------------------
+            
+            // -------- Planets -------------------------------------------------
         case 0:
             let p = planetSections[indexPath.row]
             let name   = p["name"] as? String ?? ""
@@ -295,8 +328,8 @@ extension NatalChartViewController: UITableViewDataSource, UITableViewDelegate {
             cell.configure(title: "\(symbol) \(name)\(retro)",
                            detail: pos,
                            secondary: houseStr)
-
-        // -------- House Cusps ---------------------------------------------
+            
+            // -------- House Cusps ---------------------------------------------
         case 1:
             let h   = houseSections[indexPath.row]
             let num = h["number"] as? Int ?? 0
@@ -304,8 +337,8 @@ extension NatalChartViewController: UITableViewDataSource, UITableViewDelegate {
             cell.configure(title: "House Cusp \(num)",
                            detail: pos,
                            secondary: "")
-
-        // -------- Angles --------------------------------------------------
+            
+            // -------- Angles --------------------------------------------------
         case 2:
             let a   = angleSections[indexPath.row]
             let name = a["name"] as? String ?? ""
@@ -314,7 +347,7 @@ extension NatalChartViewController: UITableViewDataSource, UITableViewDelegate {
                            detail: pos,
                            secondary: "")
             
-        // -------- Progressed Planets -------------------------------------
+            // -------- Progressed Planets -------------------------------------
         case 3:
             let p = progressedPlanetSections[indexPath.row]
             let name   = p["name"] as? String ?? ""
@@ -328,7 +361,7 @@ extension NatalChartViewController: UITableViewDataSource, UITableViewDelegate {
                            detail: pos,
                            secondary: houseStr)
             
-        // -------- Progressed Angles -------------------------------------
+            // -------- Progressed Angles -------------------------------------
         case 4:
             let a = progressedAngleSections[indexPath.row]
             let name = a["name"] as? String ?? ""
@@ -336,27 +369,62 @@ extension NatalChartViewController: UITableViewDataSource, UITableViewDelegate {
             cell.configure(title: name,
                            detail: pos,
                            secondary: "")
-
-        default: break
-        }
-        return cell
+            
+            // -------- Short-term Transit Aspects -------------------------------------
+            case 5:
+                let transit = shortTermTransits[indexPath.row]
+                configureTransitCell(cell, with: transit)
+            
+            // -------- Regular Transit Aspects ---------------------------------------
+            case 6:
+                let transit = regularTransits[indexPath.row]
+                configureTransitCell(cell, with: transit)
+            
+            // -------- Long-term Transit Aspects ------------------------------------
+            case 7:
+                let transit = longTermTransits[indexPath.row]
+                configureTransitCell(cell, with: transit)
+            
+            default: break
+            }
+            return cell
     }
-
-    func tableView(_ tableView: UITableView,
-                   titleForHeaderInSection section: Int) -> String? {
+    
+    // Helper method to configure transit cells
+    private func configureTransitCell(_ cell: ChartDataCell, with transit: [String: Any]) {
+        let description = transit["description"] as? String ?? ""
+        
+        // For this cell type, we'll use the full description in the title
+        // and leave the detail empty since the description already contains
+        // all the necessary information
+        cell.configure(title: description,
+                     detail: "",
+                     secondary: "")
+        
+        // Set a custom cell height for these cells to accommodate the longer text
+        cell.heightAdjustment = 80 // Provide extra space for the multi-line description
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0: return "Planets"
         case 1: return "House Cusps"
         case 2: return "Angles"
         case 3: return "Progressed Planets (Age \(currentAge))"
         case 4: return "Progressed Angles (Age \(currentAge))"
+        case 5: return "Short-term Transits (\(transitDate))"
+        case 6: return "Regular Transits (\(transitDate))"
+        case 7: return "Long-term Transits (\(transitDate))"
         default: return nil
         }
     }
-
-    func tableView(_ tableView: UITableView,
-                   heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        // Transit cells need more height for the detailed descriptions
+        if indexPath.section >= 5 {
+            return 120 // Taller cells for transit descriptions
+        }
+        return 60 // Standard height for other cells
     }
 }
 
@@ -367,6 +435,9 @@ class ChartDataCell: UITableViewCell {
     private let titleLabel     = UILabel()
     private let detailLabel    = UILabel()
     private let secondaryLabel = UILabel()
+    
+    // Property to adjust height based on content
+    var heightAdjustment: CGFloat = 0
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -378,10 +449,13 @@ class ChartDataCell: UITableViewCell {
     }
 
     private func setupUI() {
-
         titleLabel.font = .boldSystemFont(ofSize: 16)
+        titleLabel.numberOfLines = 0 // Allow multiple lines for transit descriptions
+        
         detailLabel.font = .systemFont(ofSize: 14)
         detailLabel.textColor = .secondaryLabel
+        detailLabel.numberOfLines = 0 // Allow multiple lines
+        
         secondaryLabel.font = .systemFont(ofSize: 14)
         secondaryLabel.textColor = .tertiaryLabel
 
@@ -397,10 +471,11 @@ class ChartDataCell: UITableViewCell {
 
             detailLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             detailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+            detailLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
             secondaryLabel.leadingAnchor.constraint(equalTo: detailLabel.trailingAnchor, constant: 16),
-            secondaryLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -16),
-            secondaryLabel.centerYAnchor.constraint(equalTo: detailLabel.centerYAnchor)
+            secondaryLabel.bottomAnchor.constraint(equalTo: detailLabel.bottomAnchor),
+            secondaryLabel.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -16)
         ])
     }
 

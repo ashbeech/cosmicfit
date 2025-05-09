@@ -308,6 +308,386 @@ struct NatalChartCalculator {
         return ageComponents.year ?? 0
     }
     
+    // MARK: - Transit Calculations -------------------------------------------
+
+    struct TransitAspect {
+        let transitPlanet: String
+        let transitPlanetSymbol: String
+        let natalPlanet: String
+        let natalPlanetSymbol: String
+        let aspectType: String
+        let aspectSymbol: String
+        let orb: Double
+        let applying: Bool
+        let effectiveFrom: Date
+        let effectiveTo: Date
+        let description: String
+        let category: TransitCategory
+    }
+
+    enum TransitCategory: String {
+        case shortTerm = "Short-term Influences"
+        case regular = "Regular Influences"
+        case longTerm = "Long-term Influences"
+    }
+
+    // Calculate transits to natal chart
+    static func calculateTransits(natalChart: NatalChart) -> [TransitAspect] {
+        let currentDate = Date()
+        let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
+        var transitAspects: [TransitAspect] = []
+        
+        // Get current planetary positions
+        let transitPositions = calculateCurrentPlanetaryPositions(julianDay: currentJulianDay)
+        
+        // For each transit position, check aspects to natal planets
+        for transit in transitPositions {
+            for natal in natalChart.planets {
+                if let aspect = calculateTransitAspect(
+                    transitPlanet: transit.name,
+                    transitSymbol: transit.symbol,
+                    transitLongitude: transit.longitude,
+                    transitIsRetrograde: transit.isRetrograde,
+                    natalPlanet: natal.name,
+                    natalSymbol: natal.symbol,
+                    natalLongitude: natal.longitude) {
+                        transitAspects.append(aspect)
+                }
+            }
+            
+            // Check aspects to natal angles (Ascendant, Midheaven)
+            if let aspect = calculateTransitAspect(
+                transitPlanet: transit.name,
+                transitSymbol: transit.symbol,
+                transitLongitude: transit.longitude,
+                transitIsRetrograde: transit.isRetrograde,
+                natalPlanet: "Ascendant",
+                natalSymbol: "Asc",
+                natalLongitude: natalChart.ascendant) {
+                    transitAspects.append(aspect)
+            }
+            
+            if let aspect = calculateTransitAspect(
+                transitPlanet: transit.name,
+                transitSymbol: transit.symbol,
+                transitLongitude: transit.longitude,
+                transitIsRetrograde: transit.isRetrograde,
+                natalPlanet: "Midheaven",
+                natalSymbol: "MC",
+                natalLongitude: natalChart.midheaven) {
+                    transitAspects.append(aspect)
+            }
+        }
+        
+        // Sort transit aspects
+        return sortTransitAspects(transitAspects)
+    }
+
+    private static func calculateCurrentPlanetaryPositions(julianDay: Double) -> [PlanetPosition] {
+        var positions: [PlanetPosition] = []
+        
+        // Calculate Sun
+        let (sunLon, sunLat) = AstronomicalCalculator.calculateSunPosition(julianDay: julianDay)
+        let (sunSign, sunPos) = CoordinateTransformations.decimalDegreesToZodiac(sunLon)
+        positions.append(PlanetPosition(
+            name: "Sun",
+            symbol: "☉",
+            longitude: sunLon,
+            latitude: sunLat,
+            zodiacSign: sunSign,
+            zodiacPosition: sunPos,
+            isRetrograde: false
+        ))
+        
+        // Calculate Moon
+        let (moonLon, moonLat) = AstronomicalCalculator.calculateMoonPosition(julianDay: julianDay)
+        let (moonSign, moonPos) = CoordinateTransformations.decimalDegreesToZodiac(moonLon)
+        positions.append(PlanetPosition(
+            name: "Moon",
+            symbol: "☽",
+            longitude: moonLon,
+            latitude: moonLat,
+            zodiacSign: moonSign,
+            zodiacPosition: moonPos,
+            isRetrograde: false
+        ))
+        
+        // Calculate planets using VSOP87
+        func addVSOP(_ p: VSOP87Parser.Planet, _ name: String, _ symbol: String) {
+            let geo = VSOP87Parser.calculateGeocentricCoordinates(planet: p, julianDay: julianDay)
+            let lon = CoordinateTransformations.radiansToDegrees(geo.longitude)
+            let lat = CoordinateTransformations.radiansToDegrees(geo.latitude)
+            let (sign, pos) = CoordinateTransformations.decimalDegreesToZodiac(lon)
+            let isRetro = isRetrograde(planet: p, julianDay: julianDay)
+            positions.append(PlanetPosition(
+                name: name,
+                symbol: symbol,
+                longitude: lon,
+                latitude: lat,
+                zodiacSign: sign,
+                zodiacPosition: pos,
+                isRetrograde: isRetro
+            ))
+        }
+        
+        addVSOP(.mercury, "Mercury", "☿")
+        addVSOP(.venus,   "Venus",   "♀")
+        addVSOP(.mars,    "Mars",    "♂")
+        addVSOP(.jupiter, "Jupiter", "♃")
+        addVSOP(.saturn,  "Saturn",  "♄")
+        addVSOP(.uranus,  "Uranus",  "♅")
+        addVSOP(.neptune, "Neptune", "♆")
+        
+        // Add Pluto (simplified)
+        let plutoLon = calculateSimplifiedPlanetPosition(julianDay: julianDay, planet: "Pluto")
+        let (plutoSign, plutoPos) = CoordinateTransformations.decimalDegreesToZodiac(plutoLon)
+        positions.append(PlanetPosition(
+            name: "Pluto",
+            symbol: "♇",
+            longitude: plutoLon,
+            latitude: 0.0,
+            zodiacSign: plutoSign,
+            zodiacPosition: plutoPos,
+            isRetrograde: false
+        ))
+        
+        // Add Chiron
+        let chironLon = AstronomicalCalculator.calculateChironPosition(julianDay: julianDay)
+        let (chironSign, chironPos) = CoordinateTransformations.decimalDegreesToZodiac(chironLon)
+        positions.append(PlanetPosition(
+            name: "Chiron",
+            symbol: "⚷",
+            longitude: chironLon,
+            latitude: 0.0,
+            zodiacSign: chironSign,
+            zodiacPosition: chironPos,
+            isRetrograde: false
+        ))
+        
+        return positions
+    }
+
+    private static func calculateTransitAspect(
+        transitPlanet: String,
+        transitSymbol: String,
+        transitLongitude: Double,
+        transitIsRetrograde: Bool,
+        natalPlanet: String,
+        natalSymbol: String,
+        natalLongitude: Double) -> TransitAspect? {
+        
+        // Skip same planet to same planet aspects (except Sun to Sun which is the solar return)
+        if transitPlanet == natalPlanet && transitPlanet != "Sun" {
+            return nil
+        }
+        
+        // Define orbs based on the planet (tighter orbs for transits than natal)
+        let maxOrb: Double
+        switch transitPlanet {
+        case "Sun", "Moon":
+            maxOrb = 3.0 // Slightly larger to catch more aspects
+        case "Mercury", "Venus", "Mars":
+            maxOrb = 2.0
+        case "Jupiter", "Saturn":
+            maxOrb = 2.5
+        case "Uranus", "Neptune", "Pluto", "Chiron":
+            maxOrb = 2.5
+        default:
+            maxOrb = 2.0
+        }
+        
+        // Calculate the aspect
+        if let (aspectType, exactness) = AstronomicalCalculator.calculateAspect(
+            point1: transitLongitude,
+            point2: natalLongitude,
+            orb: maxOrb) {
+            
+            // Determine the category based on planet speed
+            let category: TransitCategory
+            if transitPlanet == "Moon" {
+                category = .shortTerm
+            } else if ["Uranus", "Neptune", "Pluto", "Chiron"].contains(transitPlanet) {
+                category = .longTerm
+            } else {
+                category = .regular
+            }
+            
+            // Determine if the aspect is applying or separating
+            // This is simplified; in reality we'd need to calculate future positions
+            let applying = !transitIsRetrograde
+            
+            // Calculate effective dates (simplified estimate)
+            let effectiveDays: Double
+            switch transitPlanet {
+            case "Moon":
+                effectiveDays = 0.5 // Half-day for Moon
+            case "Sun", "Mercury", "Venus":
+                effectiveDays = 7.0 // One week for personal planets
+            case "Mars":
+                effectiveDays = 10.0 // Ten days for Mars
+            case "Jupiter", "Saturn":
+                effectiveDays = 21.0 // Three weeks for social planets
+            case "Uranus", "Neptune", "Pluto", "Chiron":
+                effectiveDays = 90.0 // Three months for outer planets
+            default:
+                effectiveDays = 7.0
+            }
+            
+            // Create date range
+            let now = Date()
+            let effectiveFrom = Calendar.current.date(byAdding: .day, value: -Int(effectiveDays/2), to: now)!
+            let effectiveTo = Calendar.current.date(byAdding: .day, value: Int(effectiveDays/2), to: now)!
+            
+            // Format dates for display
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd/MM/yyyy"
+            let fromStr = dateFormatter.string(from: effectiveFrom)
+            let toStr = dateFormatter.string(from: effectiveTo)
+            
+            // Get signs for display
+            let (transitSign, _) = CoordinateTransformations.decimalDegreesToZodiac(transitLongitude)
+            let transitSignSymbol = CoordinateTransformations.getZodiacSignSymbol(sign: transitSign)
+            
+            let (natalSign, _) = CoordinateTransformations.decimalDegreesToZodiac(natalLongitude)
+            let natalSignSymbol = CoordinateTransformations.getZodiacSignSymbol(sign: natalSign)
+            
+            // Create description based on format in the example
+            let retroMark = transitIsRetrograde ? " Rx" : ""
+            let description = "\(transitPlanet) \(aspectType) \(natalPlanet)\n(effective from \(fromStr) to \(toStr))"
+            let detailedInfo = "orb \(String(format: "%.2f", exactness))° \(applying ? "applying" : "separating")   (\(transitPlanet) \(transitSignSymbol) \(String(format: "%.2f", transitLongitude))°\(retroMark), \(natalPlanet) \(natalSignSymbol) \(String(format: "%.2f", natalLongitude))°)"
+            
+            // Get aspect symbol
+            let aspectSymbol = getAspectSymbol(aspectType)
+            
+            return TransitAspect(
+                transitPlanet: transitPlanet,
+                transitPlanetSymbol: transitSymbol,
+                natalPlanet: natalPlanet,
+                natalPlanetSymbol: natalSymbol,
+                aspectType: aspectType,
+                aspectSymbol: aspectSymbol,
+                orb: exactness,
+                applying: applying,
+                effectiveFrom: effectiveFrom,
+                effectiveTo: effectiveTo,
+                description: description + "\n" + detailedInfo,
+                category: category
+            )
+        }
+        
+        return nil
+    }
+
+    private static func getAspectSymbol(_ aspectType: String) -> String {
+        switch aspectType {
+        case "Conjunction": return "☌"
+        case "Opposition": return "☍"
+        case "Trine": return "△"
+        case "Square": return "□"
+        case "Sextile": return "⚹"
+        case "Quincunx": return "⚻"
+        case "Semi-sextile": return "⚺"
+        case "Semi-square": return "∠"
+        case "Sesquiquadrate": return "⚼"
+        case "Quintile": return "Q"
+        case "Bi-quintile": return "bQ"
+        default: return "?"
+        }
+    }
+
+    private static func sortTransitAspects(_ aspects: [TransitAspect]) -> [TransitAspect] {
+        // Define planet order for sorting (faster moving first within each category)
+        let planetOrder = [
+            "Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn",
+            "Chiron", "Uranus", "Neptune", "Pluto"
+        ]
+        
+        // Define aspect order for secondary sorting (major aspects first)
+        let aspectOrder = [
+            "Conjunction", "Opposition", "Square", "Trine", "Sextile",
+            "Quincunx", "Semi-sextile", "Semi-square", "Sesquiquadrate", "Quintile", "Bi-quintile"
+        ]
+        
+        return aspects.sorted { a, b in
+            // First sort by category (short-term, regular, long-term)
+            if a.category.rawValue != b.category.rawValue {
+                if a.category == .shortTerm { return true }
+                if b.category == .shortTerm { return false }
+                if a.category == .regular { return true }
+                if b.category == .regular { return false }
+                return false
+            }
+            
+            // Then sort by transit planet within each category
+            let planetIndexA = planetOrder.firstIndex(of: a.transitPlanet) ?? 100
+            let planetIndexB = planetOrder.firstIndex(of: b.transitPlanet) ?? 100
+            
+            if planetIndexA != planetIndexB {
+                // For short-term, faster moving first
+                if a.category == .shortTerm {
+                    return planetIndexA < planetIndexB
+                }
+                // For regular and long-term, slower moving first
+                return planetIndexA > planetIndexB
+            }
+            
+            // Then sort by aspect type
+            let aspectIndexA = aspectOrder.firstIndex(of: a.aspectType) ?? 100
+            let aspectIndexB = aspectOrder.firstIndex(of: b.aspectType) ?? 100
+            
+            if aspectIndexA != aspectIndexB {
+                return aspectIndexA < aspectIndexB
+            }
+            
+            // Finally sort by orb (exact aspects first)
+            return a.orb < b.orb
+        }
+    }
+
+    // Format transit aspects for display
+    static func formatTransitAspects(_ aspects: [TransitAspect]) -> [[String: Any]] {
+        var formatted: [[String: Any]] = []
+        
+        for aspect in aspects {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd/MM/yyyy"
+            
+            formatted.append([
+                "transitPlanet": aspect.transitPlanet,
+                "transitSymbol": aspect.transitPlanetSymbol,
+                "natalPlanet": aspect.natalPlanet,
+                "natalSymbol": aspect.natalPlanetSymbol,
+                "aspectType": aspect.aspectType,
+                "aspectSymbol": aspect.aspectSymbol,
+                "orb": aspect.orb,
+                "applying": aspect.applying,
+                "effectiveFrom": dateFormatter.string(from: aspect.effectiveFrom),
+                "effectiveTo": dateFormatter.string(from: aspect.effectiveTo),
+                "description": aspect.description,
+                "category": aspect.category.rawValue
+            ])
+        }
+        
+        return formatted
+    }
+
+    // Group transit aspects by category
+    static func groupTransitAspectsByCategory(_ aspects: [[String: Any]]) -> [String: [[String: Any]]] {
+        var grouped: [String: [[String: Any]]] = [
+            TransitCategory.shortTerm.rawValue: [],
+            TransitCategory.regular.rawValue: [],
+            TransitCategory.longTerm.rawValue: []
+        ]
+        
+        for aspect in aspects {
+            if let category = aspect["category"] as? String {
+                grouped[category, default: []].append(aspect)
+            }
+        }
+        
+        return grouped
+    }
+    
     // Calculate if a planet is retrograde
     private static func isRetrograde(planet: VSOP87Parser.Planet, julianDay: Double) -> Bool {
         let pos1 = VSOP87Parser.calculateGeocentricCoordinates(planet: planet, julianDay: julianDay)

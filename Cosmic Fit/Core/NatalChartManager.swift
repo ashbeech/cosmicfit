@@ -141,6 +141,32 @@ class NatalChartManager {
     /// - Parameter natalChart: The base natal chart
     /// - Returns: Transit chart data
     func calculateTransitChart(natalChart: NatalChartCalculator.NatalChart) -> [String: Any] {
+        var transitData: [String: Any] = [:]
+        
+        // Calculate transit aspects
+        let transitAspects = NatalChartCalculator.calculateTransits(natalChart: natalChart)
+        let formattedAspects = NatalChartCalculator.formatTransitAspects(transitAspects)
+        
+        // Group aspects by category
+        let groupedAspects = NatalChartCalculator.groupTransitAspectsByCategory(formattedAspects)
+        
+        // Add to transit data
+        transitData["aspects"] = formattedAspects
+        transitData["groupedAspects"] = groupedAspects
+        
+        // Get current date for display
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        transitData["date"] = dateFormatter.string(from: Date())
+        
+        return transitData
+    }
+    
+    /*
+    /// Calculate a transit chart (current planetary positions relative to natal chart)
+    /// - Parameter natalChart: The base natal chart
+    /// - Returns: Transit chart data
+    func calculateTransitChart(natalChart: NatalChartCalculator.NatalChart) -> [String: Any] {
         // Calculate current planetary positions
         let currentDate = Date()
         let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
@@ -186,6 +212,7 @@ class NatalChartManager {
         
         return transitData
     }
+     */
 }
 
 // MARK: - Saved Chart Models
