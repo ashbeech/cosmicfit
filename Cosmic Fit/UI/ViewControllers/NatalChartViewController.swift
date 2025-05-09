@@ -26,6 +26,7 @@ class NatalChartViewController: UIViewController {
     private var angleSections:  [[String: Any]] = []
     private var houseSections:  [[String: Any]] = []
     private var progressedPlanetSections: [[String: Any]] = []
+    private var progressedAngleSections: [[String: Any]] = []
     private var currentAge: Int = 0
 
     private var birthInfo: String = ""
@@ -209,6 +210,18 @@ class NatalChartViewController: UIViewController {
         if let progPlanets = progressedChartData["planets"] as? [[String: Any]] {
             progressedPlanetSections = progPlanets
         }
+        
+        // ---------- Progressed Angles -----------------------------------
+        if let progAngles = progressedChartData["angles"] as? [String: Any] {
+            var arr: [[String: Any]] = []
+            for (k, v) in progAngles {
+                if var dict = v as? [String: Any] {
+                    dict["name"] = k
+                    arr.append(dict)
+                }
+            }
+            progressedAngleSections = arr
+        }
     }
 
     // MARK: - UI refresh --------------------------------------------------
@@ -246,7 +259,7 @@ class NatalChartViewController: UIViewController {
 extension NatalChartViewController: UITableViewDataSource, UITableViewDelegate {
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4   // Planets · House Cusps · Angles · Progressed Planets
+        return 5   // Planets · House Cusps · Angles · Progressed Planets · Progressed Angles
     }
 
     func tableView(_ tableView: UITableView,
@@ -256,6 +269,7 @@ extension NatalChartViewController: UITableViewDataSource, UITableViewDelegate {
         case 1: return houseSections.count
         case 2: return angleSections.count
         case 3: return progressedPlanetSections.count
+        case 4: return progressedAngleSections.count
         default: return 0
         }
     }
@@ -313,6 +327,15 @@ extension NatalChartViewController: UITableViewDataSource, UITableViewDelegate {
             cell.configure(title: "\(symbol) \(name)\(retro)",
                            detail: pos,
                            secondary: houseStr)
+            
+        // -------- Progressed Angles -------------------------------------
+        case 4:
+            let a = progressedAngleSections[indexPath.row]
+            let name = a["name"] as? String ?? ""
+            let pos  = a["formattedPosition"] as? String ?? ""
+            cell.configure(title: name,
+                           detail: pos,
+                           secondary: "")
 
         default: break
         }
@@ -326,6 +349,7 @@ extension NatalChartViewController: UITableViewDataSource, UITableViewDelegate {
         case 1: return "House Cusps"
         case 2: return "Angles"
         case 3: return "Progressed Planets (Age \(currentAge))"
+        case 4: return "Progressed Angles (Age \(currentAge))"
         default: return nil
         }
     }
