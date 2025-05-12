@@ -31,6 +31,9 @@ class InterpretationViewController: UIViewController {
         textView.text = interpretationText
         titleLabel.text = interpretationTitle
         themeLabel.text = themeName.isEmpty ? "" : "Theme: \(themeName)"
+        
+        // Apply styling after the text is set
+        setupTextViewStyling()
     }
 
     // Also add this method to check lifecycle
@@ -134,60 +137,73 @@ class InterpretationViewController: UIViewController {
         present(alert, animated: true)
     }
 
-    // Skip the complex styling for now
     private func setupTextViewStyling() {
-        // Don't do anything fancy yet
-        print("Skipping complex styling for debugging")
-    }
-    /*
-    private func setupTextViewStyling() {
-        // Apply styling to the text view for better readability
+        // Skip if text is empty
+        guard let text = textView.text, !text.isEmpty else {
+            print("⚠️ Cannot style empty text")
+            return
+        }
         
-        // Check if we have attributed text with styling already
-        guard textView.attributedText == nil else { return }
+        print("Applying styling to text of length: \(text.count)")
         
         // Check if we're using a dark or light interface
         let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        let textColor = isDarkMode ? UIColor.white : UIColor.black
+        let headerColor = isDarkMode ? UIColor.white : UIColor.darkText
         
-        // Create paragraph style
+        // Create paragraph style with safe values
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 6
         paragraphStyle.paragraphSpacing = 12
         
-        // Create attributed string
-        let attributedText = NSMutableAttributedString(string: interpretationText)
+        // Create attributed string safely
+        let attributedText = NSMutableAttributedString(string: text)
         
-        // Apply paragraph style to the entire text
-        attributedText.addAttribute(
-            .paragraphStyle,
-            value: paragraphStyle,
-            range: NSRange(location: 0, length: attributedText.length)
-        )
+        // Apply base text color and paragraph style to the entire text
+        attributedText.addAttributes([
+            .foregroundColor: textColor,
+            .paragraphStyle: paragraphStyle,
+            .font: UIFont.systemFont(ofSize: 16)
+        ], range: NSRange(location: 0, length: attributedText.length))
         
-        // Look for section headers (all caps followed by newlines)
-        let headerRegex = try? NSRegularExpression(pattern: "([A-Z][A-Z\\s]+):?\n", options: [])
-        if let matches = headerRegex?.matches(in: interpretationText, options: [], range: NSRange(location: 0, length: interpretationText.count)) {
-            for match in matches.reversed() {
+        // Apply header styling
+        do {
+            // Find section headers (all caps followed by newlines or colons)
+            let headerRegex = try NSRegularExpression(pattern: "([A-Z][A-Z\\s]+[A-Z]):?(?:\n|$)", options: [])
+            let matches = headerRegex.matches(in: text, options: [], range: NSRange(location: 0, length: text.count))
+            
+            print("Found \(matches.count) headers to style")
+            
+            for match in matches {
                 let range = match.range
-                
                 // Apply bold and slightly larger font to section headers
                 attributedText.addAttributes([
                     .font: UIFont.boldSystemFont(ofSize: 18),
-                    .foregroundColor: isDarkMode ? UIColor.white : UIColor.black
+                    .foregroundColor: headerColor
                 ], range: range)
             }
+        } catch {
+            print("⚠️ Regex error: \(error.localizedDescription)")
+            // Continue without header styling
         }
         
+        // Apply the styled text
         textView.attributedText = attributedText
+        print("✅ Successfully applied styling")
     }
-    */
+    
     // MARK: - UITraitCollection
+    @available(iOS, introduced: 13.0, deprecated: 17.0, message: "Use the trait change registration APIs instead")
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         
-        // Re-apply styling when appearance changes (e.g., dark/light mode)
-        if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
-            setupTextViewStyling()
+        if #available(iOS 17.0, *) {
+            // Use the new registration API in iOS 17+
+        } else {
+            // Re-apply styling when appearance changes (e.g., dark/light mode)
+            if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
+                setupTextViewStyling()
+            }
         }
     }
     

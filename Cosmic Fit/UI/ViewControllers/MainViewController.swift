@@ -263,11 +263,37 @@ class MainViewController: UIViewController {
                 self.timeZone = timeZone
             } else {
                 // Fallback to a default time zone based on the location
-                self.timeZone = TimeZone(identifier: "Europe/Athens") ?? TimeZone.current
+                self.timeZone = TimeZone(identifier: "Europe/London") ?? TimeZone.current
             }
+            
+            print("✅ GEOCODING SUCCESS")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            print("📍 Location: \(self.locationName)")
+            print("🌐 Resolved to: Lat \(String(format: "%.6f", self.latitude)), Long \(String(format: "%.6f", self.longitude))")
+            print("⏰ Time Zone: \(self.timeZone.identifier)")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
             
             completion(true)
         }
+    }
+    
+    private func logBirthDetails(date: Date, locationName: String, latitude: Double, longitude: Double, timeZone: TimeZone) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .medium
+        
+        let formattedDate = dateFormatter.string(from: date)
+        let tzName = timeZone.identifier
+        let tzOffset = timeZone.secondsFromGMT() / 3600
+        let offsetSign = tzOffset >= 0 ? "+" : ""
+        
+        print("🔍 BIRTH DETAILS LOG 🔍")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("📅 Date & Time: \(formattedDate)")
+        print("📍 Location: \(locationName)")
+        print("🌐 Coordinates: Lat \(String(format: "%.6f", latitude)), Long \(String(format: "%.6f", longitude))")
+        print("⏰ Time Zone: \(tzName) (GMT\(offsetSign)\(tzOffset))")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     }
     
     private func calculateChart() {
@@ -288,6 +314,12 @@ class MainViewController: UIViewController {
             activityIndicator.stopAnimating()
             return
         }
+        
+        logBirthDetails(date: birthDateTime,
+                        locationName: self.locationName,
+                        latitude: self.latitude,
+                        longitude: self.longitude,
+                        timeZone: self.timeZone)
         
         // Calculate the natal chart
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in

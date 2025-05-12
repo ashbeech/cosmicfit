@@ -22,8 +22,7 @@ class CosmicFitInterpretationEngine {
         // Score tokens against themes to find the best-fit theme
         let themeName = ThemeSelector.scoreThemes(tokens: tokens)
         
-        // Get paragraph blocks for the selected theme
-        let paragraphBlocks = ParagraphAssembler.getBlocksForTheme(themeName)
+        // Note: We're removing the unused initialization of paragraphBlocks here
         
         // Generate the complete blueprint interpretation
         let stitchedParagraph = ParagraphAssembler.generateBlueprintInterpretation(
