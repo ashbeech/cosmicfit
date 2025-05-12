@@ -16,12 +16,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Create window
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        // Set up the main view controller and navigation controller
+        // Set up the animated launch screen as the initial view controller
+        let launchScreenVC = AnimatedLaunchScreenViewController()
+        
+        // Create the main view controller and navigation controller
         let mainViewController = MainViewController()
         let navigationController = UINavigationController(rootViewController: mainViewController)
         
-        // Set the navigation controller as the root view controller
-        window?.rootViewController = navigationController
+        // Tell the launch screen which view controller to transition to
+        launchScreenVC.setMainViewController(navigationController)
+        
+        // Set the launch screen as the root view controller
+        window?.rootViewController = launchScreenVC
         window?.makeKeyAndVisible()
         
         // Configure appearance

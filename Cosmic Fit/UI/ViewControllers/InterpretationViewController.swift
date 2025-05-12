@@ -69,10 +69,6 @@ class InterpretationViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = "Style Interpretation"
         
-        // Add debug background colors to identify layout issues
-        scrollView.backgroundColor = UIColor.red.withAlphaComponent(0.1)
-        contentView.backgroundColor = UIColor.blue.withAlphaComponent(0.1)
-        
         // Setup Scroll View
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -81,49 +77,50 @@ class InterpretationViewController: UIViewController {
         scrollView.addSubview(contentView)
         
         NSLayoutConstraint.activate([
+            // ScrollView fills the entire safe area
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
+            // ContentView matches width of scrollView but can expand in height
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            // Note: We deliberately don't constrain contentView's height to scrollView
         ])
         
-        // *** SIMPLIFIED TEXT VIEW APPROACH ***
-        // Create a simpler text view directly
+        // Create a text view for interpretation
         textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isEditable = false
         textView.font = UIFont.systemFont(ofSize: 16)
-        textView.textColor = .label // Uses system text color
-        textView.backgroundColor = UIColor.green.withAlphaComponent(0.1) // Debug color
+        textView.textColor = .label
+        textView.backgroundColor = .clear // Remove debug color
         textView.text = interpretationText
+        
+        // Important: Set these properties to ensure proper scrolling
+        textView.isScrollEnabled = false // We want the scrollView to handle scrolling, not the textView
+        textView.textContainerInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         
         contentView.addSubview(textView)
         
         NSLayoutConstraint.activate([
-            textView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            textView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            textView.heightAnchor.constraint(greaterThanOrEqualToConstant: 500) // Force a minimum height
+            // TextView fills contentView with margins
+            textView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            textView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
         ])
         
-        // Add a debug button to verify the view controller is responsive
-        let debugButton = UIButton(type: .system)
-        debugButton.setTitle("Debug: Tap Me", for: .normal)
-        debugButton.addTarget(self, action: #selector(debugButtonTapped), for: .touchUpInside)
-        debugButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(debugButton)
-        
-        NSLayoutConstraint.activate([
-            debugButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            debugButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
-        ])
+        // Add a share button to the navigation bar
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .action,
+            target: self,
+            action: #selector(shareInterpretation)
+        )
         
         print("UI setup completed with text length: \(textView.text?.count ?? 0)")
     }
