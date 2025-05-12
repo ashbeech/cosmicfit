@@ -28,6 +28,7 @@ final class NatalChartViewController: UIViewController {
     private let birthInfoLabel  = UILabel()
     private let chartWheelView  = ChartWheelView()
     private let tableView       = UITableView(frame: .zero, style: .grouped)
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
     
     /// Single table‑height constraint (updated, never recreated)
     private var tableHeightConstraint: NSLayoutConstraint?
@@ -217,6 +218,12 @@ final class NatalChartViewController: UIViewController {
         tableView.register(ChartDataCell.self, forCellReuseIdentifier: "ChartDataCell")
         contentView.addSubview(tableView)
         
+        // Setup activity indicator
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = .systemBlue
+        view.addSubview(activityIndicator)
+        
         // single, reusable height constraint
         tableHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
         tableHeightConstraint?.isActive = true
@@ -234,7 +241,11 @@ final class NatalChartViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: chartWheelView.bottomAnchor, constant: 16),
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),   
+            
+            // Activity indicator centered in view
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         
         refreshUI()   // first pass
@@ -291,9 +302,55 @@ final class NatalChartViewController: UIViewController {
     // --------------------------------------------------------------------
     
     @objc private func showInterpretation() {
-        let vc = InterpretationViewController()
-        vc.configure(with: "This is a placeholder for the detailed interpretation of your natal chart.")
-        navigationController?.pushViewController(vc, animated: true)
+        guard let natalChart = natalChart else {
+            // Fallback if chart isn't available
+            let vc = InterpretationViewController()
+            vc.configure(with: "Chart data is not available. Please try again.")
+            navigationController?.pushViewController(vc, animated: true)
+            return
+        }
+        
+        // Show loading indicator
+        activityIndicator.startAnimating()
+        
+        // Generate interpretation in background
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            
+            // Get progressed chart
+            let progressedChartData = self.progressedChartData
+            
+            // Get transits
+            let transits = [self.shortTermTransits, self.regularTransits, self.longTermTransits].flatMap { $0 }
+            
+            // Generate full interpretation
+            let interpretationText: String
+            
+            if let manager = NatalChartManager.shared as? NatalChartManager {
+                interpretationText = manager.generateFullInterpretation(
+                    for: natalChart,
+                    progressedChart: natalChart, // Using natal for now, to be replaced with proper progressed chart
+                    transits: transits,
+                    weather: self.todayWeather
+                )
+            } else {
+                // Fallback interpretation if manager extension not available
+                interpretationText = "Your cosmic style is a unique blend of planetary influences. Today's transits suggest potential for personal expression through your wardrobe choices."
+            }
+            
+            // Update UI on main thread
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+                
+                let vc = InterpretationViewController()
+                vc.configure(
+                    with: interpretationText,
+                    title: "Your Cosmic Style Guide",
+                    themeName: "Personalized Fashion Guidance"
+                )
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
     }
 }
 
