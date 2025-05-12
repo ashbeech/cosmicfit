@@ -23,15 +23,6 @@ struct ParagraphAssembler {
         // Build the complete blueprint with all sections
         var blueprint = ""
         
-        // Add birth info if available
-        if let info = birthInfo {
-            blueprint += "Profile: \(info)\n\n"
-            blueprint += "---\n\n"
-        }
-        
-        // Title
-        blueprint += "# Your Cosmic Blueprint\n\n"
-        
         // Upper sections
         blueprint += "## Essence\n\n"
         blueprint += generateEssenceSection(from: tokens) + "\n\n"

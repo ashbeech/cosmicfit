@@ -39,7 +39,7 @@ class InterpretationViewController: UIViewController {
         // Ensure text is displayed
         textView.text = interpretationText
         titleLabel.text = interpretationTitle
-        themeLabel.text = themeName.isEmpty ? "" : "Theme: \(themeName)"
+        themeLabel.text = ""//themeName.isEmpty ? "" : "Theme: \(themeName)"
         
         // Apply styling after the text is set
         setupTextViewStyling()
@@ -75,7 +75,7 @@ class InterpretationViewController: UIViewController {
     // MARK: - UI Setup
     private func setupUI() {
         view.backgroundColor = .black // Change to black for blueprint style
-        title = "Style Interpretation"
+        title = ""
         
         // Setup Scroll View
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -176,7 +176,7 @@ class InterpretationViewController: UIViewController {
         
         // Profile Label
         profileLabel.text = "PROFILE"
-        profileLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        profileLabel.font = UIFont.systemFont(ofSize: 16, weight: .light)
         profileLabel.textColor = .white
         profileLabel.textAlignment = .left
         profileLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -234,10 +234,14 @@ class InterpretationViewController: UIViewController {
             birthInfoLabel.text = "Born --.--.----, --:--"
         }
         
-        // Set location
+        
+        // Set location - ONLY city and country, no time information
         let city = self.birthCity.isEmpty ? "CITY" : self.birthCity.uppercased()
         let country = self.birthCountry.isEmpty ? "COUNTRY" : self.birthCountry.uppercased()
         locationLabel.text = "\(city), \(country)"
+        
+        print(city)
+        print(country)
         
         // Show/hide the profile header based on whether this is a blueprint view
         profileHeaderView.isHidden = !isBlueprintView

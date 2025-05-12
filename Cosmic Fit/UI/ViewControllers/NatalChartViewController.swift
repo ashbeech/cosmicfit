@@ -381,13 +381,40 @@ final class NatalChartViewController: UIViewController {
         
         print("Generated Blueprint interpretation with \(interpretation.stitchedParagraph.count) characters")
         
+        // Extract location information from birthInfo if possible
+        var city = ""
+        var country = ""
+        
+        // Parse the location from birthInfo string by extracting only city, country
+        if let locationRange = birthInfo.range(of: "at ") {
+            let locationStartIndex = locationRange.upperBound
+            let locationSubstring = birthInfo[locationStartIndex...]
+            
+            if let coordinatesRange = locationSubstring.range(of: "(") {
+                let locationName = String(locationSubstring[..<coordinatesRange.lowerBound]).trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                // Try to split into city and country if there's a comma
+                let components = locationName.components(separatedBy: ", ")
+                if components.count >= 2 {
+                    city = components[0]
+                    country = components.dropFirst().joined(separator: ", ")
+                } else {
+                    // If can't split, just use the whole location name
+                    city = locationName
+                }
+            }
+        }
+        
         // Create and push the view controller with proper formatting for Blueprint
         let vc = InterpretationViewController()
         vc.configure(
             with: interpretation.stitchedParagraph,
             title: "Your Cosmic Fit Blueprint",
             themeName: interpretation.themeName,
-            isBlueprint: true
+            isBlueprint: true,
+            birthDate: birthDate,  // Pass the actual birth date
+            birthCity: city,       // Pass the extracted city (without "at" prefix)
+            birthCountry: country  // Pass the extracted country
         )
         
         // Stop the activity indicator
