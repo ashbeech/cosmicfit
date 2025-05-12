@@ -12,6 +12,11 @@ class InterpretationViewController: UIViewController {
     // MARK: - Properties
     private let scrollView = UIScrollView()
     private let contentView = UIView()
+    private let profileHeaderView = UIView()
+    private let profileLabel = UILabel()
+    private let birthInfoLabel = UILabel()
+    private let locationLabel = UILabel()
+    private let dividerView = UIView()
     private let titleLabel = UILabel()
     private var textView = UITextView()
     private let themeLabel = UILabel()
@@ -21,54 +26,55 @@ class InterpretationViewController: UIViewController {
     private var themeName: String = ""
     private var isBlueprintView: Bool = false
     
+    // Birth information properties
+    private var birthDate: Date?
+    private var birthCity: String = ""
+    private var birthCountry: String = ""
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("InterpretationViewController viewDidLoad called")
         setupUI()
         
         // Ensure text is displayed
-        print("Setting text: \(interpretationText.prefix(50))...")
         textView.text = interpretationText
         titleLabel.text = interpretationTitle
         themeLabel.text = themeName.isEmpty ? "" : "Theme: \(themeName)"
         
         // Apply styling after the text is set
         setupTextViewStyling()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        print("InterpretationViewController viewWillAppear")
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        print("InterpretationViewController viewDidAppear - text length: \(textView.text.count)")
+        updateProfileHeader()
     }
     
     // MARK: - Configuration
-    func configure(with interpretationText: String, title: String = "Cosmic Fit Interpretation", themeName: String = "", isBlueprint: Bool = false) {
-        print("Configuring InterpretationVC with \(interpretationText.count) characters of text")
+    func configure(with interpretationText: String,
+                  title: String = "Cosmic Fit Interpretation",
+                  themeName: String = "",
+                  isBlueprint: Bool = false,
+                  birthDate: Date? = nil,
+                  birthCity: String = "",
+                  birthCountry: String = "") {
+        
         self.interpretationText = interpretationText
         self.interpretationTitle = title
         self.themeName = themeName
         self.isBlueprintView = isBlueprint
+        self.birthDate = birthDate
+        self.birthCity = birthCity
+        self.birthCountry = birthCountry
         
         if isViewLoaded {
             textView.text = interpretationText
             titleLabel.text = interpretationTitle
             themeLabel.text = themeName.isEmpty ? "" : "Theme: \(themeName)"
             setupTextViewStyling()
-            print("View was loaded, text applied directly to textView")
-        } else {
-            print("View not yet loaded, text will be applied when view loads")
+            updateProfileHeader()
         }
     }
     
     // MARK: - UI Setup
     private func setupUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .black // Change to black for blueprint style
         title = "Style Interpretation"
         
         // Setup Scroll View
@@ -91,21 +97,23 @@ class InterpretationViewController: UIViewController {
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-            // Note: We deliberately don't constrain contentView's height to scrollView
         ])
         
+        // Setup Profile Header
+        setupProfileHeader()
+        
         // Title label
-        titleLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        titleLabel.textColor = .label
-        titleLabel.textAlignment = .center
+        titleLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        titleLabel.textColor = .white
+        titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 0
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(titleLabel)
         
         // Theme label
         themeLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        themeLabel.textColor = .secondaryLabel
-        themeLabel.textAlignment = .center
+        themeLabel.textColor = .white
+        themeLabel.textAlignment = .left
         themeLabel.numberOfLines = 0
         themeLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(themeLabel)
@@ -115,32 +123,43 @@ class InterpretationViewController: UIViewController {
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isEditable = false
         textView.font = UIFont.systemFont(ofSize: 16)
-        textView.textColor = .label
-        textView.backgroundColor = .clear
+        textView.textColor = .white
+        textView.backgroundColor = .black
         textView.text = interpretationText
         
         // Important: Set these properties to ensure proper scrolling
         textView.isScrollEnabled = false // We want the scrollView to handle scrolling, not the textView
-        textView.textContainerInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        textView.textContainerInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
         
         contentView.addSubview(textView)
         
         NSLayoutConstraint.activate([
+            // Profile header view
+            profileHeaderView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            profileHeaderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            profileHeaderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            
+            // Divider view
+            dividerView.topAnchor.constraint(equalTo: profileHeaderView.bottomAnchor, constant: 16),
+            dividerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            dividerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            dividerView.heightAnchor.constraint(equalToConstant: 1),
+            
             // Title label
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            titleLabel.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: 24),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
             // Theme label
             themeLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-            themeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            themeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            themeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            themeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
             // TextView fills contentView below labels
-            textView.topAnchor.constraint(equalTo: themeLabel.bottomAnchor, constant: 16),
-            textView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
+            textView.topAnchor.constraint(equalTo: themeLabel.bottomAnchor, constant: 24),
+            textView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24)
         ])
         
         // Add a share button to the navigation bar
@@ -149,11 +168,84 @@ class InterpretationViewController: UIViewController {
             target: self,
             action: #selector(shareInterpretation)
         )
-        
-        print("UI setup completed with text length: \(textView.text?.count ?? 0)")
     }
-
-    private func setupTextViewStyling() {
+    
+    private func setupProfileHeader() {
+        profileHeaderView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(profileHeaderView)
+        
+        // Profile Label
+        profileLabel.text = "PROFILE"
+        profileLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        profileLabel.textColor = .white
+        profileLabel.textAlignment = .left
+        profileLabel.translatesAutoresizingMaskIntoConstraints = false
+        profileHeaderView.addSubview(profileLabel)
+        
+        // Birth Info Label
+        birthInfoLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        birthInfoLabel.textColor = .white
+        birthInfoLabel.textAlignment = .left
+        birthInfoLabel.translatesAutoresizingMaskIntoConstraints = false
+        profileHeaderView.addSubview(birthInfoLabel)
+        
+        // Location Label
+        locationLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        locationLabel.textColor = .white
+        locationLabel.textAlignment = .left
+        locationLabel.translatesAutoresizingMaskIntoConstraints = false
+        profileHeaderView.addSubview(locationLabel)
+        
+        // Divider
+        dividerView.backgroundColor = .gray
+        dividerView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(dividerView)
+        
+        // Set constraints for profile header components
+        NSLayoutConstraint.activate([
+            profileLabel.topAnchor.constraint(equalTo: profileHeaderView.topAnchor),
+            profileLabel.leadingAnchor.constraint(equalTo: profileHeaderView.leadingAnchor),
+            profileLabel.trailingAnchor.constraint(equalTo: profileHeaderView.trailingAnchor),
+            
+            birthInfoLabel.topAnchor.constraint(equalTo: profileLabel.bottomAnchor, constant: 8),
+            birthInfoLabel.leadingAnchor.constraint(equalTo: profileHeaderView.leadingAnchor),
+            birthInfoLabel.trailingAnchor.constraint(equalTo: profileHeaderView.trailingAnchor),
+            
+            locationLabel.topAnchor.constraint(equalTo: birthInfoLabel.bottomAnchor, constant: 8),
+            locationLabel.leadingAnchor.constraint(equalTo: profileHeaderView.leadingAnchor),
+            locationLabel.trailingAnchor.constraint(equalTo: profileHeaderView.trailingAnchor),
+            locationLabel.bottomAnchor.constraint(equalTo: profileHeaderView.bottomAnchor)
+        ])
+    }
+    
+    private func updateProfileHeader() {
+        // Format birth date if available
+        if let date = self.birthDate {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd.MM.yyyy"
+            let timeFormatter = DateFormatter()
+            timeFormatter.dateFormat = "hh:mma"
+            
+            let dateString = dateFormatter.string(from: date)
+            let timeString = timeFormatter.string(from: date)
+            
+            birthInfoLabel.text = "Born \(dateString), \(timeString)"
+        } else {
+            birthInfoLabel.text = "Born --.--.----, --:--"
+        }
+        
+        // Set location
+        let city = self.birthCity.isEmpty ? "CITY" : self.birthCity.uppercased()
+        let country = self.birthCountry.isEmpty ? "COUNTRY" : self.birthCountry.uppercased()
+        locationLabel.text = "\(city), \(country)"
+        
+        // Show/hide the profile header based on whether this is a blueprint view
+        profileHeaderView.isHidden = !isBlueprintView
+        dividerView.isHidden = !isBlueprintView
+    }
+    
+    // MARK: - Text Styling
+    func setupTextViewStyling() {
         // Skip if text is empty
         guard let text = textView.text, !text.isEmpty else {
             print("⚠️ Cannot style empty text")
@@ -162,134 +254,82 @@ class InterpretationViewController: UIViewController {
         
         print("Applying styling to text of length: \(text.count)")
         
-        // Check if we're using a dark or light interface
-        let isDarkMode = traitCollection.userInterfaceStyle == .dark
-        let textColor = isDarkMode ? UIColor.white : UIColor.black
-        let headerColor = isDarkMode ? UIColor.systemBlue : UIColor.systemBlue
-        let subHeaderColor = isDarkMode ? UIColor.systemTeal : UIColor.systemTeal
+        // Create a mutable attributed string
+        let attributedText = NSMutableAttributedString()
         
-        // Create an attributed string from the markdown-like text
-        let attributedText = NSMutableAttributedString(string: text)
+        // Split the text into lines for processing
+        let lines = text.components(separatedBy: "\n")
+        var currentIndex = 0
         
-        // Apply base styling to the entire text
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 6
-        paragraphStyle.paragraphSpacing = 12
-        
-        attributedText.addAttributes([
-            .foregroundColor: textColor,
-            .paragraphStyle: paragraphStyle,
-            .font: UIFont.systemFont(ofSize: 16)
-        ], range: NSRange(location: 0, length: attributedText.length))
-        
-        // Apply header styling for different levels
-        styleTitleHeaders(in: attributedText, text: text, color: headerColor)
-        styleSubtitleHeaders(in: attributedText, text: text, color: subHeaderColor)
-        
-        // Apply divider styling
-        styleDividers(in: attributedText, text: text)
-        
-        // Apply blueprint-specific styling if needed
-        if isBlueprintView {
-            styleBlueprintSections(in: attributedText, text: text)
+        // Process each line to apply appropriate styling
+        for (i, line) in lines.enumerated() {
+            let trimmedLine = line.trimmingCharacters(in: .whitespacesAndNewlines)
+            let lineLength = line.count
+            
+            // Add newline for all but the first line
+            if i > 0 {
+                attributedText.append(NSAttributedString(string: "\n"))
+            }
+            
+            // Check if line is empty
+            if trimmedLine.isEmpty {
+                continue
+            }
+            
+            // SECTION HEADERS (e.g., "Essence", "Core", "Expression")
+            if line.hasPrefix("# ") {
+                // Main title (e.g., "Your Cosmic Blueprint")
+                let titleText = String(line.dropFirst(2))
+                let titleAttributes: [NSAttributedString.Key: Any] = [
+                    .font: UIFont.systemFont(ofSize: 28, weight: .bold),
+                    .foregroundColor: UIColor.white
+                ]
+                attributedText.append(NSAttributedString(string: titleText, attributes: titleAttributes))
+                
+            } else if line.hasPrefix("## ") {
+                // Section header (e.g., "Essence", "Core")
+                let headerText = String(line.dropFirst(3))
+                let headerAttributes: [NSAttributedString.Key: Any] = [
+                    .font: UIFont.systemFont(ofSize: 22, weight: .bold),
+                    .foregroundColor: UIColor.white
+                ]
+                attributedText.append(NSAttributedString(string: headerText, attributes: headerAttributes))
+                
+            } else if line.hasSuffix(":") && line.components(separatedBy: " ").count == 1 {
+                // Category headers (e.g., "Style Keywords:", "Nourishing Fabrics:")
+                let categoryAttributes: [NSAttributedString.Key: Any] = [
+                    .font: UIFont.systemFont(ofSize: 18, weight: .semibold),
+                    .foregroundColor: UIColor.white
+                ]
+                attributedText.append(NSAttributedString(string: line, attributes: categoryAttributes))
+                
+            } else if line == "---" {
+                // Divider line
+                let dividerAttributes: [NSAttributedString.Key: Any] = [
+                    .font: UIFont.systemFont(ofSize: 6),
+                    .foregroundColor: UIColor.gray
+                ]
+                attributedText.append(NSAttributedString(string: "　", attributes: dividerAttributes)) // Empty space with divider styling
+                
+            } else {
+                // Regular body text
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineSpacing = 4
+                paragraphStyle.paragraphSpacing = 8
+                
+                let bodyAttributes: [NSAttributedString.Key: Any] = [
+                    .font: UIFont.systemFont(ofSize: 16),
+                    .foregroundColor: UIColor.white,
+                    .paragraphStyle: paragraphStyle
+                ]
+                attributedText.append(NSAttributedString(string: line, attributes: bodyAttributes))
+            }
+            
+            currentIndex += lineLength + 1 // +1 for the newline
         }
         
         // Apply the styled text
         textView.attributedText = attributedText
-    }
-    
-    // Helper method to style main headers (# Title)
-    private func styleTitleHeaders(in attributedText: NSMutableAttributedString, text: String, color: UIColor) {
-        do {
-            // Find section title headers (# Title)
-            let headerRegex = try NSRegularExpression(pattern: "# ([^\n]+)", options: [])
-            let matches = headerRegex.matches(in: text, options: [], range: NSRange(location: 0, length: text.count))
-            
-            for match in matches {
-                let fullRange = match.range
-                
-                // Apply styling to the header text (excluding the # symbol)
-                let headerTextRange = NSRange(location: match.range(at: 1).location, length: match.range(at: 1).length)
-                
-                attributedText.addAttributes([
-                    .font: UIFont.boldSystemFont(ofSize: 22),
-                    .foregroundColor: color
-                ], range: headerTextRange)
-                
-                // Replace the # with empty space to maintain alignment but hide the markdown symbol
-                attributedText.replaceCharacters(in: NSRange(location: fullRange.location, length: 2), with: "")
-            }
-        } catch {
-            print("⚠️ Regex error for headers: \(error.localizedDescription)")
-        }
-    }
-    
-    // Helper method to style subheaders (## Subtitle)
-    private func styleSubtitleHeaders(in attributedText: NSMutableAttributedString, text: String, color: UIColor) {
-        do {
-            // Find section subtitle headers (## Subtitle)
-            let subheaderRegex = try NSRegularExpression(pattern: "## ([^\n]+)", options: [])
-            let matches = subheaderRegex.matches(in: text, options: [], range: NSRange(location: 0, length: text.count))
-            
-            for match in matches {
-                let fullRange = match.range
-                
-                // Apply styling to the header text (excluding the ## symbols)
-                let headerTextRange = NSRange(location: match.range(at: 1).location, length: match.range(at: 1).length)
-                
-                attributedText.addAttributes([
-                    .font: UIFont.boldSystemFont(ofSize: 18),
-                    .foregroundColor: color
-                ], range: headerTextRange)
-                
-                // Replace the ## with empty space to maintain alignment but hide the markdown symbol
-                attributedText.replaceCharacters(in: NSRange(location: fullRange.location, length: 3), with: "")
-            }
-        } catch {
-            print("⚠️ Regex error for subheaders: \(error.localizedDescription)")
-        }
-    }
-    
-    // Helper method to style dividers (---)
-    private func styleDividers(in attributedText: NSMutableAttributedString, text: String) {
-        do {
-            // Find divider lines (---)
-            let dividerRegex = try NSRegularExpression(pattern: "---+", options: [])
-            let matches = dividerRegex.matches(in: text, options: [], range: NSRange(location: 0, length: text.count))
-            
-            for match in matches {
-                let range = match.range
-                
-                // Create a divider line with spacing
-                let divider = "\n\n\n"
-                
-                // Replace the --- with divider
-                attributedText.replaceCharacters(in: range, with: divider)
-            }
-        } catch {
-            print("⚠️ Regex error for dividers: \(error.localizedDescription)")
-        }
-    }
-    
-    // Helper method for blueprint-specific styling
-    private func styleBlueprintSections(in attributedText: NSMutableAttributedString, text: String) {
-        // Custom styling for special blueprint sections (if needed)
-        // This could highlight keywords, color-code specific sections, etc.
-    }
-    
-    // MARK: - UITraitCollection
-    @available(iOS, introduced: 13.0, deprecated: 17.0, message: "Use the trait change registration APIs instead")
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        
-        if #available(iOS 17.0, *) {
-            // Use the new registration API in iOS 17+
-        } else {
-            // Re-apply styling when appearance changes (e.g., dark/light mode)
-            if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
-                setupTextViewStyling()
-            }
-        }
     }
     
     // MARK: - Actions

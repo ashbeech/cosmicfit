@@ -17,7 +17,7 @@ class SemanticTokenGenerator {
         // Process planets with updated weighting and source tracking
         for planet in chart.planets {
             // Default base weight for natal placements
-            var baseWeight: Double = 2.0
+            let baseWeight: Double = 2.0
             
             // Apply weighting according to spec
             var priorityMultiplier: Double = 1.0

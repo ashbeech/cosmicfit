@@ -27,8 +27,7 @@ class CosmicFitInterpretationEngine {
         
         // Find the Sun position for sign information
         if let sunPlanet = chart.planets.first(where: { $0.name == "Sun" }) {
-            let sunSign = sunPlanet.zodiacSign
-            let sunSignName = CoordinateTransformations.getZodiacSignName(sign: sunSign)
+            let sunSignName = CoordinateTransformations.getZodiacSignName(sign: sunPlanet.zodiacSign)
             birthInfoText = "Natal Chart: \(sunSignName) Energy"
         }
         
@@ -103,8 +102,8 @@ class CosmicFitInterpretationEngine {
         }
         
         // Generate a simpler daily vibe paragraph
-        let vibeText = generateDailyVibeText(from: tokens, weather: weather)
-        fullText += vibeText
+        let dailyVibeText = generateDailyVibeText(from: tokens, weather: weather)
+        fullText += dailyVibeText
         
         print("✅ Daily vibe generated successfully!")
         print("Theme: \(themeName)")

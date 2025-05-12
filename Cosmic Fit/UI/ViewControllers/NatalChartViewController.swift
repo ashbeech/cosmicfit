@@ -3,7 +3,12 @@
 //  Cosmic Fit
 //
 //  Created by Ashley Davison on 04/05/2025.
-//  Updated with Blueprint specification implementation
+//  Updated 14/05/2025 – Fixes dynamic table height so "Today's Weather"
+//  section becomes visible once data arrives. Replaces the previous
+//  strategy of adding a *new* height‑anchor each refresh (which caused
+//  Auto‑Layout conflicts and prevented the weather row from ever
+//  appearing) with a single stored constraint whose constant is updated
+//  in‑place.
 //
 
 import UIKit
@@ -33,7 +38,6 @@ final class NatalChartViewController: UIViewController {
     private var chartData:               [String: Any] = [:]
     private var progressedChartData:     [String: Any] = [:]
     private var natalChart: NatalChartCalculator.NatalChart?
-    private var progressedChart: NatalChartCalculator.NatalChart?
     
     private var planetSections:           [[String: Any]] = []
     private var houseSections:            [[String: Any]] = []
@@ -90,22 +94,12 @@ final class NatalChartViewController: UIViewController {
         
         currentAge = NatalChartCalculator.calculateCurrentAge(from: birthDate)
         
-        // Calculate natal chart
         natalChart = NatalChartCalculator.calculateNatalChart(
             birthDate: birthDate,
             latitude: latitude,
             longitude: longitude,
             timeZone: timeZone)
         if let nat = natalChart { chartWheelView.setChart(nat) }
-        
-        // Calculate progressed chart
-        progressedChart = NatalChartCalculator.calculateProgressedChart(
-            birthDate: birthDate,
-            targetAge: currentAge,
-            latitude: latitude,
-            longitude: longitude,
-            timeZone: timeZone,
-            progressAnglesMethod: .solarArc)
         
         progressedChartData = NatalChartManager.shared.calculateProgressedChart(
             date: birthDate,
@@ -317,44 +311,45 @@ final class NatalChartViewController: UIViewController {
     // --------------------------------------------------------------------
     
     @objc private func showDailyVibeInterpretation() {
-        guard let natalChart = natalChart, let progChart = progressedChart else {
-            showAlert(message: "Chart data is not available. Please try again.")
+        guard let natalChart = natalChart else {
+            let vc = InterpretationViewController()
+            vc.configure(with: "Chart data is not available. Please try again.")
+            navigationController?.pushViewController(vc, animated: true)
             return
         }
         
         // Show loading indicator
         activityIndicator.startAnimating()
         
-        print("Generating Daily Vibe interpretation")
+        print("Starting daily vibe interpretation generation")
         
         // Collect transits
         let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
         
         // Generate the daily vibe interpretation
-        let interpretation = CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
-            from: natalChart,
-            progressedChart: progChart,
+        let interpretationText = NatalChartManager.shared.generateDailyVibeInterpretation(
+            for: natalChart,
+            progressedChart: natalChart,
             transits: allTransits,
             weather: todayWeather
         )
         
-        print("Generated Daily Vibe interpretation with \(interpretation.stitchedParagraph.count) characters")
+        print("Generated daily vibe interpretation with \(interpretationText.count) characters")
         
         // Create and push the view controller
         let vc = InterpretationViewController()
         vc.configure(
-            with: interpretation.stitchedParagraph,
+            with: interpretationText,
             title: "Your Daily Cosmic Fit Vibe",
-            themeName: interpretation.themeName,
-            isBlueprint: false
+            themeName: "Today's Style Guidance"
         )
         
         // Stop the activity indicator
         self.activityIndicator.stopAnimating()
         
-        // Navigate to interpretation view
+        // Important: Make sure we have a navigation controller before pushing
         if let navController = self.navigationController {
-            print("Pushing Daily Vibe interpretation view controller")
+            print("Pushing daily vibe interpretation view controller")
             navController.pushViewController(vc, animated: true)
         } else {
             print("ERROR: No navigation controller available")
@@ -365,53 +360,44 @@ final class NatalChartViewController: UIViewController {
     
     @objc private func showBlueprintInterpretation() {
         guard let natalChart = natalChart else {
-            showAlert(message: "Chart data is not available. Please try again.")
+            let vc = InterpretationViewController()
+            vc.configure(with: "Chart data is not available. Please try again.")
+            navigationController?.pushViewController(vc, animated: true)
             return
         }
         
         // Show loading indicator
         activityIndicator.startAnimating()
         
-        print("Generating Blueprint interpretation")
+        print("Starting blueprint interpretation generation")
         
         // Generate the blueprint interpretation (based only on natal chart)
-        let interpretation = CosmicFitInterpretationEngine.generateBlueprintInterpretation(
-            from: natalChart
+        let interpretationText = NatalChartManager.shared.generateBlueprintInterpretation(
+            for: natalChart
         )
         
-        print("Generated Blueprint interpretation with \(interpretation.stitchedParagraph.count) characters")
+        print("Generated blueprint interpretation with \(interpretationText.count) characters")
         
-        // Create and push the view controller with proper formatting for Blueprint
+        // Create and push the view controller
         let vc = InterpretationViewController()
         vc.configure(
-            with: interpretation.stitchedParagraph,
+            with: interpretationText,
             title: "Your Cosmic Fit Blueprint",
-            themeName: interpretation.themeName,
-            isBlueprint: true
+            themeName: "Core Style Essence"
         )
         
         // Stop the activity indicator
         self.activityIndicator.stopAnimating()
         
-        // Navigate to interpretation view
+        // Important: Make sure we have a navigation controller before pushing
         if let navController = self.navigationController {
-            print("Pushing Blueprint interpretation view controller")
+            print("Pushing blueprint interpretation view controller")
             navController.pushViewController(vc, animated: true)
         } else {
             print("ERROR: No navigation controller available")
             // Fallback: Present modally if navigation controller isn't available
             self.present(vc, animated: true)
         }
-    }
-    
-    private func showAlert(message: String) {
-        let alert = UIAlertController(
-            title: "Chart Error",
-            message: message,
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
     }
 }
 
