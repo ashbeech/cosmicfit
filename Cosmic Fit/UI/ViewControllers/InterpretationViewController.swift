@@ -13,7 +13,7 @@ class InterpretationViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let titleLabel = UILabel()
-    private let textView = UITextView()
+    private var textView = UITextView()
     private let themeLabel = UILabel()
     
     private var interpretationText: String = ""
@@ -23,11 +23,30 @@ class InterpretationViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("InterpretationViewController viewDidLoad called")
         setupUI()
+        
+        // Ensure text is displayed
+        print("Setting text: \(interpretationText.prefix(50))...")
+        textView.text = interpretationText
+        titleLabel.text = interpretationTitle
+        themeLabel.text = themeName.isEmpty ? "" : "Theme: \(themeName)"
+    }
+
+    // Also add this method to check lifecycle
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("InterpretationViewController viewWillAppear")
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("InterpretationViewController viewDidAppear - text length: \(textView.text.count)")
     }
     
     // MARK: - Configuration
     func configure(with interpretationText: String, title: String = "Cosmic Fit Interpretation", themeName: String = "") {
+        print("Configuring InterpretationVC with \(interpretationText.count) characters of text")
         self.interpretationText = interpretationText
         self.interpretationTitle = title
         self.themeName = themeName
@@ -36,6 +55,9 @@ class InterpretationViewController: UIViewController {
             textView.text = interpretationText
             titleLabel.text = interpretationTitle
             themeLabel.text = themeName.isEmpty ? "" : "Theme: \(themeName)"
+            print("View was loaded, text applied directly to textView")
+        } else {
+            print("View not yet loaded, text will be applied when view loads")
         }
     }
     
@@ -44,9 +66,9 @@ class InterpretationViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = "Style Interpretation"
         
-        // Add share button
-        let shareButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareInterpretation))
-        navigationItem.rightBarButtonItem = shareButton
+        // Add debug background colors to identify layout issues
+        scrollView.backgroundColor = UIColor.red.withAlphaComponent(0.1)
+        contentView.backgroundColor = UIColor.blue.withAlphaComponent(0.1)
         
         // Setup Scroll View
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -68,50 +90,56 @@ class InterpretationViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
         
-        // Setup Title Label
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        titleLabel.textAlignment = .center
-        titleLabel.numberOfLines = 0
-        titleLabel.text = interpretationTitle
-        
-        // Setup Theme Label
-        themeLabel.translatesAutoresizingMaskIntoConstraints = false
-        themeLabel.font = UIFont.italicSystemFont(ofSize: 16)
-        themeLabel.textAlignment = .center
-        themeLabel.textColor = .secondaryLabel
-        themeLabel.text = themeName.isEmpty ? "" : "Theme: \(themeName)"
-        
-        // Setup Text View
+        // *** SIMPLIFIED TEXT VIEW APPROACH ***
+        // Create a simpler text view directly
+        textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isEditable = false
         textView.font = UIFont.systemFont(ofSize: 16)
-        textView.textContainerInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        textView.textColor = .label // Uses system text color
+        textView.backgroundColor = UIColor.green.withAlphaComponent(0.1) // Debug color
         textView.text = interpretationText
         
-        // Apply styling to make paragraphs more readable
-        setupTextViewStyling()
-        
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(themeLabel)
         contentView.addSubview(textView)
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            
-            themeLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-            themeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            themeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            
-            textView.topAnchor.constraint(equalTo: themeLabel.bottomAnchor, constant: 16),
-            textView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            textView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            textView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            textView.heightAnchor.constraint(greaterThanOrEqualToConstant: 500) // Force a minimum height
         ])
+        
+        // Add a debug button to verify the view controller is responsive
+        let debugButton = UIButton(type: .system)
+        debugButton.setTitle("Debug: Tap Me", for: .normal)
+        debugButton.addTarget(self, action: #selector(debugButtonTapped), for: .touchUpInside)
+        debugButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(debugButton)
+        
+        NSLayoutConstraint.activate([
+            debugButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            debugButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+        ])
+        
+        print("UI setup completed with text length: \(textView.text?.count ?? 0)")
     }
     
+    @objc private func debugButtonTapped() {
+        print("Debug button tapped - text length: \(textView.text?.count ?? 0)")
+        let alert = UIAlertController(title: "Debug Info",
+                                     message: "Text length: \(textView.text?.count ?? 0)",
+                                     preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+
+    // Skip the complex styling for now
+    private func setupTextViewStyling() {
+        // Don't do anything fancy yet
+        print("Skipping complex styling for debugging")
+    }
+    /*
     private func setupTextViewStyling() {
         // Apply styling to the text view for better readability
         
@@ -152,7 +180,7 @@ class InterpretationViewController: UIViewController {
         
         textView.attributedText = attributedText
     }
-    
+    */
     // MARK: - UITraitCollection
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)

@@ -303,7 +303,6 @@ final class NatalChartViewController: UIViewController {
     
     @objc private func showInterpretation() {
         guard let natalChart = natalChart else {
-            // Fallback if chart isn't available
             let vc = InterpretationViewController()
             vc.configure(with: "Chart data is not available. Please try again.")
             navigationController?.pushViewController(vc, animated: true)
@@ -313,43 +312,41 @@ final class NatalChartViewController: UIViewController {
         // Show loading indicator
         activityIndicator.startAnimating()
         
-        // Generate interpretation in background
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
-            
-            // Get progressed chart
-            let progressedChartData = self.progressedChartData
-            
-            // Get transits
-            let transits = [self.shortTermTransits, self.regularTransits, self.longTermTransits].flatMap { $0 }
-            
-            // Generate full interpretation
-            let interpretationText: String
-            
-            if let manager = NatalChartManager.shared as? NatalChartManager {
-                interpretationText = manager.generateFullInterpretation(
-                    for: natalChart,
-                    progressedChart: natalChart, // Using natal for now, to be replaced with proper progressed chart
-                    transits: transits,
-                    weather: self.todayWeather
-                )
-            } else {
-                // Fallback interpretation if manager extension not available
-                interpretationText = "Your cosmic style is a unique blend of planetary influences. Today's transits suggest potential for personal expression through your wardrobe choices."
-            }
-            
-            // Update UI on main thread
-            DispatchQueue.main.async {
-                self.activityIndicator.stopAnimating()
-                
-                let vc = InterpretationViewController()
-                vc.configure(
-                    with: interpretationText,
-                    title: "Your Cosmic Style Guide",
-                    themeName: "Personalized Fashion Guidance"
-                )
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
+        // SIMPLIFY: Generate interpretation on main thread first for testing
+        print("Starting interpretation generation")
+        
+        // Collect transits
+        let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
+        
+        // Generate the interpretation text directly
+        let interpretationText = NatalChartManager.shared.generateFullInterpretation(
+            for: natalChart,
+            progressedChart: natalChart,
+            transits: allTransits,
+            weather: todayWeather
+        )
+        
+        print("Generated interpretation with \(interpretationText.count) characters")
+        
+        // Create and push the view controller
+        let vc = InterpretationViewController()
+        vc.configure(
+            with: interpretationText,
+            title: "Your Cosmic Style Guide",
+            themeName: "Personalized Fashion Guidance"
+        )
+        
+        // Stop the activity indicator
+        self.activityIndicator.stopAnimating()
+        
+        // Important: Make sure we have a navigation controller before pushing
+        if let navController = self.navigationController {
+            print("Pushing interpretation view controller")
+            navController.pushViewController(vc, animated: true)
+        } else {
+            print("ERROR: No navigation controller available")
+            // Fallback: Present modally if navigation controller isn't available
+            self.present(vc, animated: true)
         }
     }
 }
