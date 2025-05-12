@@ -3,7 +3,7 @@
 //  Cosmic Fit
 //
 //  Created by Ashley Davison on 06/05/2025.
-//
+//  Updated to better display the Blueprint format
 
 import UIKit
 
@@ -19,6 +19,7 @@ class InterpretationViewController: UIViewController {
     private var interpretationText: String = ""
     private var interpretationTitle: String = "Cosmic Fit Interpretation"
     private var themeName: String = ""
+    private var isBlueprintView: Bool = false
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -36,7 +37,6 @@ class InterpretationViewController: UIViewController {
         setupTextViewStyling()
     }
 
-    // Also add this method to check lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("InterpretationViewController viewWillAppear")
@@ -48,16 +48,18 @@ class InterpretationViewController: UIViewController {
     }
     
     // MARK: - Configuration
-    func configure(with interpretationText: String, title: String = "Cosmic Fit Interpretation", themeName: String = "") {
+    func configure(with interpretationText: String, title: String = "Cosmic Fit Interpretation", themeName: String = "", isBlueprint: Bool = false) {
         print("Configuring InterpretationVC with \(interpretationText.count) characters of text")
         self.interpretationText = interpretationText
         self.interpretationTitle = title
         self.themeName = themeName
+        self.isBlueprintView = isBlueprint
         
         if isViewLoaded {
             textView.text = interpretationText
             titleLabel.text = interpretationTitle
             themeLabel.text = themeName.isEmpty ? "" : "Theme: \(themeName)"
+            setupTextViewStyling()
             print("View was loaded, text applied directly to textView")
         } else {
             print("View not yet loaded, text will be applied when view loads")
@@ -92,13 +94,29 @@ class InterpretationViewController: UIViewController {
             // Note: We deliberately don't constrain contentView's height to scrollView
         ])
         
+        // Title label
+        titleLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        titleLabel.textColor = .label
+        titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 0
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(titleLabel)
+        
+        // Theme label
+        themeLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        themeLabel.textColor = .secondaryLabel
+        themeLabel.textAlignment = .center
+        themeLabel.numberOfLines = 0
+        themeLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(themeLabel)
+        
         // Create a text view for interpretation
         textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isEditable = false
         textView.font = UIFont.systemFont(ofSize: 16)
         textView.textColor = .label
-        textView.backgroundColor = .clear // Remove debug color
+        textView.backgroundColor = .clear
         textView.text = interpretationText
         
         // Important: Set these properties to ensure proper scrolling
@@ -108,8 +126,18 @@ class InterpretationViewController: UIViewController {
         contentView.addSubview(textView)
         
         NSLayoutConstraint.activate([
-            // TextView fills contentView with margins
-            textView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            // Title label
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            
+            // Theme label
+            themeLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            themeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            themeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            
+            // TextView fills contentView below labels
+            textView.topAnchor.constraint(equalTo: themeLabel.bottomAnchor, constant: 16),
             textView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
@@ -124,15 +152,6 @@ class InterpretationViewController: UIViewController {
         
         print("UI setup completed with text length: \(textView.text?.count ?? 0)")
     }
-    
-    @objc private func debugButtonTapped() {
-        print("Debug button tapped - text length: \(textView.text?.count ?? 0)")
-        let alert = UIAlertController(title: "Debug Info",
-                                     message: "Text length: \(textView.text?.count ?? 0)",
-                                     preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
 
     private func setupTextViewStyling() {
         // Skip if text is empty
@@ -146,47 +165,116 @@ class InterpretationViewController: UIViewController {
         // Check if we're using a dark or light interface
         let isDarkMode = traitCollection.userInterfaceStyle == .dark
         let textColor = isDarkMode ? UIColor.white : UIColor.black
-        let headerColor = isDarkMode ? UIColor.white : UIColor.darkText
+        let headerColor = isDarkMode ? UIColor.systemBlue : UIColor.systemBlue
+        let subHeaderColor = isDarkMode ? UIColor.systemTeal : UIColor.systemTeal
         
-        // Create paragraph style with safe values
+        // Create an attributed string from the markdown-like text
+        let attributedText = NSMutableAttributedString(string: text)
+        
+        // Apply base styling to the entire text
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 6
         paragraphStyle.paragraphSpacing = 12
         
-        // Create attributed string safely
-        let attributedText = NSMutableAttributedString(string: text)
-        
-        // Apply base text color and paragraph style to the entire text
         attributedText.addAttributes([
             .foregroundColor: textColor,
             .paragraphStyle: paragraphStyle,
             .font: UIFont.systemFont(ofSize: 16)
         ], range: NSRange(location: 0, length: attributedText.length))
         
-        // Apply header styling
-        do {
-            // Find section headers (all caps followed by newlines or colons)
-            let headerRegex = try NSRegularExpression(pattern: "([A-Z][A-Z\\s]+[A-Z]):?(?:\n|$)", options: [])
-            let matches = headerRegex.matches(in: text, options: [], range: NSRange(location: 0, length: text.count))
-            
-            print("Found \(matches.count) headers to style")
-            
-            for match in matches {
-                let range = match.range
-                // Apply bold and slightly larger font to section headers
-                attributedText.addAttributes([
-                    .font: UIFont.boldSystemFont(ofSize: 18),
-                    .foregroundColor: headerColor
-                ], range: range)
-            }
-        } catch {
-            print("⚠️ Regex error: \(error.localizedDescription)")
-            // Continue without header styling
+        // Apply header styling for different levels
+        styleTitleHeaders(in: attributedText, text: text, color: headerColor)
+        styleSubtitleHeaders(in: attributedText, text: text, color: subHeaderColor)
+        
+        // Apply divider styling
+        styleDividers(in: attributedText, text: text)
+        
+        // Apply blueprint-specific styling if needed
+        if isBlueprintView {
+            styleBlueprintSections(in: attributedText, text: text)
         }
         
         // Apply the styled text
         textView.attributedText = attributedText
-        print("✅ Successfully applied styling")
+    }
+    
+    // Helper method to style main headers (# Title)
+    private func styleTitleHeaders(in attributedText: NSMutableAttributedString, text: String, color: UIColor) {
+        do {
+            // Find section title headers (# Title)
+            let headerRegex = try NSRegularExpression(pattern: "# ([^\n]+)", options: [])
+            let matches = headerRegex.matches(in: text, options: [], range: NSRange(location: 0, length: text.count))
+            
+            for match in matches {
+                let fullRange = match.range
+                
+                // Apply styling to the header text (excluding the # symbol)
+                let headerTextRange = NSRange(location: match.range(at: 1).location, length: match.range(at: 1).length)
+                
+                attributedText.addAttributes([
+                    .font: UIFont.boldSystemFont(ofSize: 22),
+                    .foregroundColor: color
+                ], range: headerTextRange)
+                
+                // Replace the # with empty space to maintain alignment but hide the markdown symbol
+                attributedText.replaceCharacters(in: NSRange(location: fullRange.location, length: 2), with: "")
+            }
+        } catch {
+            print("⚠️ Regex error for headers: \(error.localizedDescription)")
+        }
+    }
+    
+    // Helper method to style subheaders (## Subtitle)
+    private func styleSubtitleHeaders(in attributedText: NSMutableAttributedString, text: String, color: UIColor) {
+        do {
+            // Find section subtitle headers (## Subtitle)
+            let subheaderRegex = try NSRegularExpression(pattern: "## ([^\n]+)", options: [])
+            let matches = subheaderRegex.matches(in: text, options: [], range: NSRange(location: 0, length: text.count))
+            
+            for match in matches {
+                let fullRange = match.range
+                
+                // Apply styling to the header text (excluding the ## symbols)
+                let headerTextRange = NSRange(location: match.range(at: 1).location, length: match.range(at: 1).length)
+                
+                attributedText.addAttributes([
+                    .font: UIFont.boldSystemFont(ofSize: 18),
+                    .foregroundColor: color
+                ], range: headerTextRange)
+                
+                // Replace the ## with empty space to maintain alignment but hide the markdown symbol
+                attributedText.replaceCharacters(in: NSRange(location: fullRange.location, length: 3), with: "")
+            }
+        } catch {
+            print("⚠️ Regex error for subheaders: \(error.localizedDescription)")
+        }
+    }
+    
+    // Helper method to style dividers (---)
+    private func styleDividers(in attributedText: NSMutableAttributedString, text: String) {
+        do {
+            // Find divider lines (---)
+            let dividerRegex = try NSRegularExpression(pattern: "---+", options: [])
+            let matches = dividerRegex.matches(in: text, options: [], range: NSRange(location: 0, length: text.count))
+            
+            for match in matches {
+                let range = match.range
+                
+                // Create a divider line with spacing
+                let divider = "\n\n\n"
+                
+                // Replace the --- with divider
+                attributedText.replaceCharacters(in: range, with: divider)
+            }
+        } catch {
+            print("⚠️ Regex error for dividers: \(error.localizedDescription)")
+        }
+    }
+    
+    // Helper method for blueprint-specific styling
+    private func styleBlueprintSections(in attributedText: NSMutableAttributedString, text: String) {
+        // Custom styling for special blueprint sections (if needed)
+        // This could highlight keywords, color-code specific sections, etc.
     }
     
     // MARK: - UITraitCollection
