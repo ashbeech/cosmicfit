@@ -50,8 +50,13 @@ class CosmicFitInterpretationEngine {
         )
     }
     
-    /// Generate a daily vibe interpretation based on current transits, progressions, and weather
-    /// - Uses Hybrid house system approach according to specification
+    /// Generate a daily vibe interpretation with hybrid house system approach
+    /// - Parameters:
+    ///   - natalChart: The natal chart for base style resonance (Whole Sign)
+    ///   - progressedChart: The progressed chart for emotional vibe (Placidus)
+    ///   - transits: Array of transit aspects
+    ///   - weather: Optional current weather conditions
+    /// - Returns: An interpretation result with the daily vibe
     static func generateDailyVibeInterpretation(
         from natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
@@ -61,52 +66,52 @@ class CosmicFitInterpretationEngine {
         print("\n☀️ GENERATING DAILY COSMIC VIBE ☀️")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
-        // Generate tokens focused on daily influences
-        let tokens = SemanticTokenGenerator.generateDailyVibeTokens(
-            progressed: progressedChart,
+        // Get the current lunar phase
+        let currentDate = Date()
+        let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
+        let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: currentJulianDay)
+        
+        // Generate the daily vibe using the DailyVibeGenerator
+        let dailyVibeText = DailyVibeGenerator.generateDailyVibe(
+            natalChart: natalChart,
+            progressedChart: progressedChart,
             transits: transits,
-            weather: weather
+            weather: weather,
+            moonPhase: lunarPhase
         )
         
+        // Combine all token types for theme determination
+        var allTokens: [StyleToken] = []
+        
+        // 1. Base style tokens (Whole Sign)
+        let baseStyleTokens = SemanticTokenGenerator.generateBaseStyleTokens(natal: natalChart)
+        allTokens.append(contentsOf: baseStyleTokens)
+        
+        // 2. Emotional vibe tokens (60% progressed Moon, 40% natal Moon, Placidus)
+        let emotionalTokens = SemanticTokenGenerator.generateEmotionalVibeTokens(
+            natal: natalChart,
+            progressed: progressedChart
+        )
+        allTokens.append(contentsOf: emotionalTokens)
+        
+        // 3. Transit tokens (Placidus houses)
+        let transitTokens = SemanticTokenGenerator.generateTransitTokens(
+            transits: transits,
+            natal: natalChart
+        )
+        allTokens.append(contentsOf: transitTokens)
+        
         // Score tokens against themes to find the best-fit theme
-        let themeName = ThemeSelector.scoreThemes(tokens: tokens)
-        
-        // Create opening line based on weather if available
-        var fullText = ""
-        if let weather = weather {
-            let tempFeeling = weather.temp < 15 ? "cool" : (weather.temp > 25 ? "warm" : "mild")
-            let conditions = weather.conditions.lowercased()
-            
-            if conditions.contains("rain") || conditions.contains("shower") {
-                fullText += "With today's wet weather and \(tempFeeling) temperatures, your cosmic vibe calls for:\n\n"
-            } else if conditions.contains("cloud") {
-                fullText += "Under today's cloudy skies and \(tempFeeling) air, your cosmic style suggests:\n\n"
-            } else if conditions.contains("sun") || conditions.contains("clear") {
-                fullText += "With today's sunny conditions and \(tempFeeling) temperatures, your cosmic fit is:\n\n"
-            } else if conditions.contains("snow") {
-                fullText += "In today's snowy conditions, your cosmic protection layer is:\n\n"
-            } else if conditions.contains("wind") {
-                fullText += "Against today's winds and \(tempFeeling) temperatures, your cosmic armor is:\n\n"
-            } else {
-                fullText += "Today's cosmic currents suggest:\n\n"
-            }
-        } else {
-            fullText += "Today's cosmic currents suggest:\n\n"
-        }
-        
-        // Generate a simpler daily vibe paragraph
-        let dailyVibeText = generateDailyVibeText(from: tokens, weather: weather)
-        fullText += dailyVibeText
+        let themeName = ThemeSelector.scoreThemes(tokens: allTokens)
         
         print("✅ Daily vibe generated successfully!")
         print("Theme: \(themeName)")
-        print("Weather included: \(weather != nil)")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
         
         return InterpretationResult(
             themeName: themeName,
-            stitchedParagraph: fullText,
-            tokensUsed: tokens,
+            stitchedParagraph: dailyVibeText,
+            tokensUsed: allTokens,
             isBlueprintReport: false,
             reportDate: Date()
         )
@@ -172,31 +177,40 @@ class CosmicFitInterpretationEngine {
         return vibeText
     }
     
-    /// Generate a combined full interpretation (blueprint + daily vibe)
+    /// Generate a combined interpretation including daily vibe and blueprint
     /// - Parameters:
     ///   - natalChart: The base natal chart
     ///   - progressedChart: The current progressed chart
     ///   - transits: Array of transit aspects
     ///   - weather: Optional current weather conditions
-    /// - Returns: A combined interpretation with both blueprint and daily vibe
+    /// - Returns: A combined interpretation string
     static func generateFullInterpretation(
         from natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
         transits: [[String: Any]],
         weather: TodayWeather?) -> String {
         
+        // Get current lunar phase
+        let currentDate = Date()
+        let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
+        let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: currentJulianDay)
+        
+        // Generate blueprint (using Whole Sign)
         let blueprint = generateBlueprintInterpretation(from: natalChart)
-        let dailyVibe = generateDailyVibeInterpretation(
-            from: natalChart,
+        
+        // Generate daily vibe (using hybrid house system)
+        let dailyVibe = DailyVibeGenerator.generateDailyVibe(
+            natalChart: natalChart,
             progressedChart: progressedChart,
             transits: transits,
-            weather: weather
+            weather: weather,
+            moonPhase: lunarPhase
         )
         
         // Format the date for display
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
-        let dateString = dateFormatter.string(from: dailyVibe.reportDate)
+        let dateString = dateFormatter.string(from: Date())
         
         // Combine the two interpretations
         return """
@@ -209,7 +223,7 @@ class CosmicFitInterpretationEngine {
         TODAY'S COSMIC VIBE (\(dateString))
         ====================
         
-        \(dailyVibe.stitchedParagraph)
+        \(dailyVibe)
         """
     }
     
@@ -242,4 +256,5 @@ class CosmicFitInterpretationEngine {
         
         return ParagraphAssembler.generateWardrobeStoryline(from: tokens)
     }
+    
 }

@@ -330,22 +330,27 @@ final class NatalChartViewController: UIViewController {
         // Collect transits
         let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
         
-        // Generate the daily vibe interpretation
-        let interpretation = CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
-            from: natalChart,
+        // Get the current lunar phase
+        let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: Date())
+        let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: currentJulianDay)
+        
+        // Generate the daily vibe interpretation with hybrid house system approach
+        let dailyVibeText = DailyVibeGenerator.generateDailyVibe(
+            natalChart: natalChart,
             progressedChart: progChart,
             transits: allTransits,
-            weather: todayWeather
+            weather: todayWeather,
+            moonPhase: lunarPhase
         )
         
-        print("Generated Daily Vibe interpretation with \(interpretation.stitchedParagraph.count) characters")
+        print("Generated Daily Vibe interpretation with \(dailyVibeText.count) characters")
         
         // Create and push the view controller
         let vc = InterpretationViewController()
         vc.configure(
-            with: interpretation.stitchedParagraph,
+            with: dailyVibeText,
             title: "Your Daily Cosmic Fit Vibe",
-            themeName: interpretation.themeName,
+            themeName: "", // Theme is embedded in daily vibe text
             isBlueprint: false
         )
         
@@ -440,6 +445,7 @@ final class NatalChartViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
+    
 }
 
 // ------------------------------------------------------------------------

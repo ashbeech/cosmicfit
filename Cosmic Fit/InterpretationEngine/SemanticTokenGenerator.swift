@@ -1195,4 +1195,1992 @@ class SemanticTokenGenerator {
         
         return tokens
     }
+    
+    // MARK: - Daily Vibe Token Generation
+
+    /// Generate tokens for base style resonance (100% natal, Whole Sign)
+    static func generateBaseStyleTokens(natal: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        // Use the existing Blueprint tokens generation as base style resonance uses the same approach
+        return generateBlueprintTokens(natal: natal)
+    }
+
+    /// Generate tokens for emotional vibe of the day (60% progressed Moon, 40% natal Moon, Placidus)
+    static func generateEmotionalVibeTokens(
+        natal: NatalChartCalculator.NatalChart,
+        progressed: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        
+        var tokens: [StyleToken] = []
+        
+        // Find natal Moon
+        if let natalMoon = natal.planets.first(where: { $0.name == "Moon" }) {
+            // Generate tokens from natal Moon with 40% weight
+            let moonSign = natalMoon.zodiacSign
+            let signName = CoordinateTransformations.getZodiacSignName(sign: moonSign)
+            
+            // Determine house using Placidus system
+            let moonHouse = NatalChartCalculator.determineHouse(
+                longitude: natalMoon.longitude,
+                houseCusps: natal.houseCusps)
+            
+            // Add emotional style tokens based on Moon sign with 40% weight
+            switch signName {
+            case "Aries":
+                tokens.append(StyleToken(
+                    name: "energetic",
+                    type: "mood",
+                    weight: 2.0 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "direct",
+                    type: "expression",
+                    weight: 1.8 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Taurus":
+                tokens.append(StyleToken(
+                    name: "grounded",
+                    type: "mood",
+                    weight: 2.0 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "sensual",
+                    type: "texture",
+                    weight: 1.8 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Gemini":
+                tokens.append(StyleToken(
+                    name: "versatile",
+                    type: "structure",
+                    weight: 2.0 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "communicative",
+                    type: "expression",
+                    weight: 1.8 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Cancer":
+                tokens.append(StyleToken(
+                    name: "protective",
+                    type: "structure",
+                    weight: 2.0 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "nurturing",
+                    type: "mood",
+                    weight: 1.8 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Leo":
+                tokens.append(StyleToken(
+                    name: "expressive",
+                    type: "mood",
+                    weight: 2.0 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "warm",
+                    type: "color",
+                    weight: 1.8 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Virgo":
+                tokens.append(StyleToken(
+                    name: "precise",
+                    type: "structure",
+                    weight: 2.0 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "refined",
+                    type: "texture",
+                    weight: 1.8 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Libra":
+                tokens.append(StyleToken(
+                    name: "balanced",
+                    type: "structure",
+                    weight: 2.0 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "harmonious",
+                    type: "expression",
+                    weight: 1.8 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Scorpio":
+                tokens.append(StyleToken(
+                    name: "intense",
+                    type: "mood",
+                    weight: 2.0 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "transformative",
+                    type: "structure",
+                    weight: 1.8 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Sagittarius":
+                tokens.append(StyleToken(
+                    name: "expansive",
+                    type: "structure",
+                    weight: 2.0 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "optimistic",
+                    type: "mood",
+                    weight: 1.8 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Capricorn":
+                tokens.append(StyleToken(
+                    name: "structured",
+                    type: "structure",
+                    weight: 2.0 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "disciplined",
+                    type: "expression",
+                    weight: 1.8 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Aquarius":
+                tokens.append(StyleToken(
+                    name: "innovative",
+                    type: "structure",
+                    weight: 2.0 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "detached",
+                    type: "mood",
+                    weight: 1.8 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Pisces":
+                tokens.append(StyleToken(
+                    name: "fluid",
+                    type: "structure",
+                    weight: 2.0 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "intuitive",
+                    type: "mood",
+                    weight: 1.8 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            default:
+                tokens.append(StyleToken(
+                    name: "responsive",
+                    type: "mood",
+                    weight: 1.5 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            }
+            
+            // Add tokens based on Placidus house placement
+            switch moonHouse {
+            case 1:
+                tokens.append(StyleToken(
+                    name: "self-expressive",
+                    type: "expression",
+                    weight: 1.5 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 2:
+                tokens.append(StyleToken(
+                    name: "value-oriented",
+                    type: "expression",
+                    weight: 1.5 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 3:
+                tokens.append(StyleToken(
+                    name: "communicative",
+                    type: "expression",
+                    weight: 1.5 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 4:
+                tokens.append(StyleToken(
+                    name: "nurturing",
+                    type: "mood",
+                    weight: 1.5 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 5:
+                tokens.append(StyleToken(
+                    name: "creative",
+                    type: "expression",
+                    weight: 1.5 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 6:
+                tokens.append(StyleToken(
+                    name: "practical",
+                    type: "structure",
+                    weight: 1.5 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 7:
+                tokens.append(StyleToken(
+                    name: "relationship-oriented",
+                    type: "expression",
+                    weight: 1.5 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 8:
+                tokens.append(StyleToken(
+                    name: "transformative",
+                    type: "structure",
+                    weight: 1.5 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 9:
+                tokens.append(StyleToken(
+                    name: "exploratory",
+                    type: "expression",
+                    weight: 1.5 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 10:
+                tokens.append(StyleToken(
+                    name: "goal-oriented",
+                    type: "structure",
+                    weight: 1.5 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 11:
+                tokens.append(StyleToken(
+                    name: "community-minded",
+                    type: "expression",
+                    weight: 1.5 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 12:
+                tokens.append(StyleToken(
+                    name: "introspective",
+                    type: "mood",
+                    weight: 1.5 * 0.4,
+                    planetarySource: "Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            default:
+                break
+            }
+        }
+        
+        // Find progressed Moon
+        if let progressedMoon = progressed.planets.first(where: { $0.name == "Moon" }) {
+            // Generate tokens from progressed Moon with 60% weight
+            let moonSign = progressedMoon.zodiacSign
+            let signName = CoordinateTransformations.getZodiacSignName(sign: moonSign)
+            
+            // Determine house using Placidus system
+            let moonHouse = NatalChartCalculator.determineHouse(
+                longitude: progressedMoon.longitude,
+                houseCusps: progressed.houseCusps)
+            
+            // Add emotional style tokens based on progressed Moon sign with 60% weight
+            switch signName {
+            case "Aries":
+                tokens.append(StyleToken(
+                    name: "energetic",
+                    type: "mood",
+                    weight: 2.0 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "direct",
+                    type: "expression",
+                    weight: 1.8 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Taurus":
+                tokens.append(StyleToken(
+                    name: "grounded",
+                    type: "mood",
+                    weight: 2.0 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "sensual",
+                    type: "texture",
+                    weight: 1.8 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Gemini":
+                tokens.append(StyleToken(
+                    name: "versatile",
+                    type: "structure",
+                    weight: 2.0 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "communicative",
+                    type: "expression",
+                    weight: 1.8 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Cancer":
+                tokens.append(StyleToken(
+                    name: "protective",
+                    type: "structure",
+                    weight: 2.0 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "nurturing",
+                    type: "mood",
+                    weight: 1.8 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Leo":
+                tokens.append(StyleToken(
+                    name: "expressive",
+                    type: "mood",
+                    weight: 2.0 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "warm",
+                    type: "color",
+                    weight: 1.8 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Virgo":
+                tokens.append(StyleToken(
+                    name: "precise",
+                    type: "structure",
+                    weight: 2.0 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "refined",
+                    type: "texture",
+                    weight: 1.8 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Libra":
+                tokens.append(StyleToken(
+                    name: "balanced",
+                    type: "structure",
+                    weight: 2.0 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "harmonious",
+                    type: "expression",
+                    weight: 1.8 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Scorpio":
+                tokens.append(StyleToken(
+                    name: "intense",
+                    type: "mood",
+                    weight: 2.0 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "transformative",
+                    type: "structure",
+                    weight: 1.8 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Sagittarius":
+                tokens.append(StyleToken(
+                    name: "expansive",
+                    type: "structure",
+                    weight: 2.0 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "optimistic",
+                    type: "mood",
+                    weight: 1.8 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Capricorn":
+                tokens.append(StyleToken(
+                    name: "structured",
+                    type: "structure",
+                    weight: 2.0 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "disciplined",
+                    type: "expression",
+                    weight: 1.8 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Aquarius":
+                tokens.append(StyleToken(
+                    name: "innovative",
+                    type: "structure",
+                    weight: 2.0 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "detached",
+                    type: "mood",
+                    weight: 1.8 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case "Pisces":
+                tokens.append(StyleToken(
+                    name: "fluid",
+                    type: "structure",
+                    weight: 2.0 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+                tokens.append(StyleToken(
+                    name: "intuitive",
+                    type: "mood",
+                    weight: 1.8 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            default:
+                tokens.append(StyleToken(
+                    name: "responsive",
+                    type: "mood",
+                    weight: 1.5 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            }
+            
+            // Add tokens based on Placidus house placement for progressed Moon
+            switch moonHouse {
+            case 1:
+                tokens.append(StyleToken(
+                    name: "self-expressive",
+                    type: "expression",
+                    weight: 1.5 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 2:
+                tokens.append(StyleToken(
+                    name: "value-oriented",
+                    type: "expression",
+                    weight: 1.5 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 3:
+                tokens.append(StyleToken(
+                    name: "communicative",
+                    type: "expression",
+                    weight: 1.5 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 4:
+                tokens.append(StyleToken(
+                    name: "nurturing",
+                    type: "mood",
+                    weight: 1.5 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 5:
+                tokens.append(StyleToken(
+                    name: "creative",
+                    type: "expression",
+                    weight: 1.5 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 6:
+                tokens.append(StyleToken(
+                    name: "practical",
+                    type: "structure",
+                    weight: 1.5 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 7:
+                tokens.append(StyleToken(
+                    name: "relationship-oriented",
+                    type: "expression",
+                    weight: 1.5 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 8:
+                tokens.append(StyleToken(
+                    name: "transformative",
+                    type: "structure",
+                    weight: 1.5 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 9:
+                tokens.append(StyleToken(
+                    name: "exploratory",
+                    type: "expression",
+                    weight: 1.5 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 10:
+                tokens.append(StyleToken(
+                    name: "goal-oriented",
+                    type: "structure",
+                    weight: 1.5 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 11:
+                tokens.append(StyleToken(
+                    name: "community-minded",
+                    type: "expression",
+                    weight: 1.5 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            case 12:
+                tokens.append(StyleToken(
+                    name: "introspective",
+                    type: "mood",
+                    weight: 1.5 * 0.6,
+                    planetarySource: "Progressed Moon",
+                    signSource: signName,
+                    houseSource: moonHouse
+                ))
+            default:
+                break
+            }
+        }
+        
+        return tokens
+    }
+
+    /// Generate tokens from planetary transits (Placidus houses)
+    static func generateTransitTokens(
+        transits: [[String: Any]],
+        natal: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        
+        var tokens: [StyleToken] = []
+        
+        for transit in transits {
+            let transitPlanet = transit["transitPlanet"] as? String ?? ""
+            let natalPlanet = transit["natalPlanet"] as? String ?? ""
+            let aspectType = transit["aspectType"] as? String ?? ""
+            let orb = transit["orb"] as? Double ?? 5.0
+            
+            // Calculate weight based on orb and aspect type
+            var weight = 2.0
+            
+            // Adjust weight based on orb (closer orb = higher weight)
+            if orb < 1.0 {
+                weight += 0.5 // Very tight aspect
+            } else if orb > 3.0 {
+                weight -= 0.5 // Wide aspect
+            }
+            
+            // Adjust weight based on aspect type
+            switch aspectType {
+            case "Conjunction":
+                weight += 0.5
+            case "Opposition":
+                weight += 0.3
+            case "Square":
+                weight += 0.2
+            case "Trine":
+                weight += 0.1
+            default:
+                break // No adjustment for minor aspects
+            }
+            
+            // Craft a transit aspect source description
+            let aspectSource = "transit \(transitPlanet) \(aspectType) natal \(natalPlanet)"
+            
+            // Generate tokens specific to this transit
+            switch transitPlanet {
+            case "Sun":
+                switch aspectType {
+                case "Conjunction":
+                    tokens.append(StyleToken(
+                        name: "illuminated",
+                        type: "mood",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "conscious",
+                        type: "expression",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Opposition":
+                    tokens.append(StyleToken(
+                        name: "balanced",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "relational",
+                        type: "expression",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Trine":
+                    tokens.append(StyleToken(
+                        name: "flowing",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "expressive",
+                        type: "mood",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Square":
+                    tokens.append(StyleToken(
+                        name: "dynamic",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "energetic",
+                        type: "mood",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                default:
+                    tokens.append(StyleToken(
+                        name: "subtle",
+                        type: "expression",
+                        weight: weight - 0.3,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                }
+            case "Moon":
+                switch aspectType {
+                case "Conjunction":
+                    tokens.append(StyleToken(
+                        name: "emotional",
+                        type: "mood",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "responsive",
+                        type: "texture",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Opposition":
+                    tokens.append(StyleToken(
+                        name: "reflective",
+                        type: "mood",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "processed",
+                        type: "texture",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Trine":
+                    tokens.append(StyleToken(
+                        name: "flowing",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "intuitive",
+                        type: "mood",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Square":
+                    tokens.append(StyleToken(
+                        name: "changeable",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "dynamic",
+                        type: "mood",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                default:
+                    tokens.append(StyleToken(
+                        name: "subtle",
+                        type: "expression",
+                        weight: weight - 0.3,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                }
+            case "Mercury":
+                switch aspectType {
+                case "Conjunction":
+                    tokens.append(StyleToken(
+                        name: "communicative",
+                        type: "expression",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "detailed",
+                        type: "structure",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Opposition":
+                    tokens.append(StyleToken(
+                        name: "interactive",
+                        type: "expression",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "conversational",
+                        type: "mood",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Trine":
+                    tokens.append(StyleToken(
+                        name: "expressive",
+                        type: "expression",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "articulate",
+                        type: "structure",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Square":
+                    tokens.append(StyleToken(
+                        name: "dynamic",
+                        type: "expression",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "quick",
+                        type: "pace",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                default:
+                    tokens.append(StyleToken(
+                        name: "subtle",
+                        type: "expression",
+                        weight: weight - 0.3,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                }
+            case "Venus":
+                switch aspectType {
+                case "Conjunction":
+                    tokens.append(StyleToken(
+                        name: "harmonious",
+                        type: "expression",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "attractive",
+                        type: "mood",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Opposition":
+                    tokens.append(StyleToken(
+                        name: "balanced",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "relational",
+                        type: "expression",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Trine":
+                    tokens.append(StyleToken(
+                        name: "flowing",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "pleasing",
+                        type: "texture",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Square":
+                    tokens.append(StyleToken(
+                        name: "creative",
+                        type: "expression",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "dynamic",
+                        type: "structure",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                default:
+                    tokens.append(StyleToken(
+                        name: "subtle",
+                        type: "expression",
+                        weight: weight - 0.3,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                }
+            case "Mars":
+                switch aspectType {
+                case "Conjunction":
+                    tokens.append(StyleToken(
+                        name: "energetic",
+                        type: "mood",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "active",
+                        type: "structure",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Opposition":
+                    tokens.append(StyleToken(
+                        name: "dynamic",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "forceful",
+                        type: "texture",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Trine":
+                    tokens.append(StyleToken(
+                        name: "flowing",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "assertive",
+                        type: "mood",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Square":
+                    tokens.append(StyleToken(
+                        name: "edgy",
+                        type: "texture",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "bold",
+                        type: "expression",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                default:
+                    tokens.append(StyleToken(
+                        name: "subtle",
+                        type: "expression",
+                        weight: weight - 0.3,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                }
+            case "Jupiter":
+                switch aspectType {
+                case "Conjunction":
+                    tokens.append(StyleToken(
+                        name: "expansive",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "optimistic",
+                        type: "mood",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Opposition":
+                    tokens.append(StyleToken(
+                        name: "balanced",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "philosophical",
+                        type: "expression",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Trine":
+                    tokens.append(StyleToken(
+                        name: "flowing",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "generous",
+                        type: "expression",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Square":
+                    tokens.append(StyleToken(
+                        name: "bold",
+                        type: "expression",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "exuberant",
+                        type: "mood",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                default:
+                    tokens.append(StyleToken(
+                        name: "subtle",
+                        type: "expression",
+                        weight: weight - 0.3,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                }
+            case "Saturn":
+                switch aspectType {
+                case "Conjunction":
+                    tokens.append(StyleToken(
+                        name: "structured",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "disciplined",
+                        type: "expression",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Opposition":
+                    tokens.append(StyleToken(
+                        name: "balanced",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "mature",
+                        type: "expression",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Trine":
+                    tokens.append(StyleToken(
+                        name: "stable",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "enduring",
+                        type: "texture",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Square":
+                    tokens.append(StyleToken(
+                        name: "structured",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "restrained",
+                        type: "expression",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                default:
+                    tokens.append(StyleToken(
+                        name: "subtle",
+                        type: "expression",
+                        weight: weight - 0.3,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                }
+            case "Uranus":
+                switch aspectType {
+                case "Conjunction":
+                    tokens.append(StyleToken(
+                        name: "innovative",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "unexpected",
+                        type: "expression",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Opposition":
+                    tokens.append(StyleToken(
+                        name: "balanced",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "original",
+                        type: "expression",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Trine":
+                    tokens.append(StyleToken(
+                        name: "expressive",
+                        type: "expression",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "progressive",
+                        type: "structure",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Square":
+                    tokens.append(StyleToken(
+                        name: "disruptive",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "unconventional",
+                        type: "expression",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                default:
+                    tokens.append(StyleToken(
+                        name: "subtle",
+                        type: "expression",
+                        weight: weight - 0.3,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                }
+            case "Neptune":
+                switch aspectType {
+                case "Conjunction":
+                    tokens.append(StyleToken(
+                        name: "dreamy",
+                        type: "mood",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "fluid",
+                        type: "structure",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Opposition":
+                    tokens.append(StyleToken(
+                        name: "ethereal",
+                        type: "texture",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "intuitive",
+                        type: "mood",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Trine":
+                    tokens.append(StyleToken(
+                        name: "flowing",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "spiritual",
+                        type: "expression",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Square":
+                    tokens.append(StyleToken(
+                        name: "diffused",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "sensitive",
+                        type: "mood",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                default:
+                    tokens.append(StyleToken(
+                        name: "subtle",
+                        type: "expression",
+                        weight: weight - 0.3,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                }
+            case "Pluto":
+                switch aspectType {
+                case "Conjunction":
+                    tokens.append(StyleToken(
+                        name: "transformative",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "intense",
+                        type: "mood",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Opposition":
+                    tokens.append(StyleToken(
+                        name: "balanced",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "powerful",
+                        type: "expression",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Trine":
+                    tokens.append(StyleToken(
+                        name: "flowing",
+                        type: "structure",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "transformative",
+                        type: "expression",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                case "Square":
+                    tokens.append(StyleToken(
+                        name: "edgy",
+                        type: "texture",
+                        weight: weight,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                    tokens.append(StyleToken(
+                        name: "potent",
+                        type: "mood",
+                        weight: weight - 0.2,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                default:
+                    tokens.append(StyleToken(
+                        name: "subtle",
+                        type: "expression",
+                        weight: weight - 0.3,
+                        planetarySource: transitPlanet,
+                        aspectSource: aspectSource
+                    ))
+                }
+            default:
+                tokens.append(StyleToken(
+                    name: "influential",
+                    type: "expression",
+                    weight: weight - 0.3,
+                    planetarySource: transitPlanet,
+                    aspectSource: aspectSource
+                ))
+            }
+        }
+        
+        return tokens
+    }
+
+    /// Generate tokens from moon phase
+    static func generateMoonPhaseTokens(moonPhase: Double) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Base weight for moon phase tokens
+        let baseWeight = 1.5
+        
+        // Create tokens based on moon phase
+        if moonPhase < 45.0 {
+            // New Moon
+            tokens.append(StyleToken(
+                name: "minimal",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "New Moon"
+            ))
+            tokens.append(StyleToken(
+                name: "introspective",
+                type: "mood",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "New Moon"
+            ))
+            tokens.append(StyleToken(
+                name: "subtle",
+                type: "texture",
+                weight: baseWeight - 0.2,
+                planetarySource: "Moon Phase",
+                aspectSource: "New Moon"
+            ))
+        } else if moonPhase < 90.0 {
+            // Waxing Crescent
+            tokens.append(StyleToken(
+                name: "emerging",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "Waxing Crescent"
+            ))
+            tokens.append(StyleToken(
+                name: "intentional",
+                type: "expression",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "Waxing Crescent"
+            ))
+            tokens.append(StyleToken(
+                name: "forming",
+                type: "texture",
+                weight: baseWeight - 0.2,
+                planetarySource: "Moon Phase",
+                aspectSource: "Waxing Crescent"
+            ))
+        } else if moonPhase < 135.0 {
+            // First Quarter
+            tokens.append(StyleToken(
+                name: "decisive",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "First Quarter"
+            ))
+            tokens.append(StyleToken(
+                name: "active",
+                type: "expression",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "First Quarter"
+            ))
+            tokens.append(StyleToken(
+                name: "dynamic",
+                type: "texture",
+                weight: baseWeight - 0.2,
+                planetarySource: "Moon Phase",
+                aspectSource: "First Quarter"
+            ))
+        } else if moonPhase < 180.0 {
+            // Waxing Gibbous
+            tokens.append(StyleToken(
+                name: "developing",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "Waxing Gibbous"
+            ))
+            tokens.append(StyleToken(
+                name: "refining",
+                type: "expression",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "Waxing Gibbous"
+            ))
+            tokens.append(StyleToken(
+                name: "detailed",
+                type: "texture",
+                weight: baseWeight - 0.2,
+                planetarySource: "Moon Phase",
+                aspectSource: "Waxing Gibbous"
+            ))
+        } else if moonPhase < 225.0 {
+            // Full Moon
+            tokens.append(StyleToken(
+                name: "expressive",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "Full Moon"
+            ))
+            tokens.append(StyleToken(
+                name: "illuminated",
+                type: "mood",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "Full Moon"
+            ))
+            tokens.append(StyleToken(
+                name: "vibrant",
+                type: "texture",
+                weight: baseWeight - 0.2,
+                planetarySource: "Moon Phase",
+                aspectSource: "Full Moon"
+            ))
+        } else if moonPhase < 270.0 {
+            // Waning Gibbous
+            tokens.append(StyleToken(
+                name: "substantial",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "Waning Gibbous"
+            ))
+            tokens.append(StyleToken(
+                name: "sharing",
+                type: "expression",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "Waning Gibbous"
+            ))
+            tokens.append(StyleToken(
+                name: "fulfilling",
+                type: "mood",
+                weight: baseWeight - 0.2,
+                planetarySource: "Moon Phase",
+                aspectSource: "Waning Gibbous"
+            ))
+        } else if moonPhase < 315.0 {
+            // Last Quarter
+            tokens.append(StyleToken(
+                name: "releasing",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "Last Quarter"
+            ))
+            tokens.append(StyleToken(
+                name: "resolving",
+                type: "expression",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "Last Quarter"
+            ))
+            tokens.append(StyleToken(
+                name: "transitional",
+                type: "texture",
+                weight: baseWeight - 0.2,
+                planetarySource: "Moon Phase",
+                aspectSource: "Last Quarter"
+            ))
+        } else {
+            // Waning Crescent
+            tokens.append(StyleToken(
+                name: "diminishing",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "Waning Crescent"
+            ))
+            tokens.append(StyleToken(
+                name: "reflective",
+                type: "mood",
+                weight: baseWeight,
+                planetarySource: "Moon Phase",
+                aspectSource: "Waning Crescent"
+            ))
+            tokens.append(StyleToken(
+                name: "subtle",
+                type: "texture",
+                weight: baseWeight - 0.2,
+                planetarySource: "Moon Phase",
+                aspectSource: "Waning Crescent"
+            ))
+        }
+        
+        return tokens
+    }
+
+    /// Generate tokens from weather conditions
+    static func generateWeatherTokens(weather: TodayWeather) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Base weight for weather tokens
+        let baseWeight = 1.5
+        
+        // Temperature tokens
+        if weather.temp < 10 {
+            tokens.append(StyleToken(
+                name: "insulating",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Cold Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "layered",
+                type: "texture",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Cold Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "protective",
+                type: "mood",
+                weight: baseWeight - 0.2,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Cold Weather"
+            ))
+        } else if weather.temp < 20 {
+            tokens.append(StyleToken(
+                name: "adaptable",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Cool Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "layered",
+                type: "texture",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Cool Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "versatile",
+                type: "mood",
+                weight: baseWeight - 0.2,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Cool Weather"
+            ))
+        } else if weather.temp < 30 {
+            tokens.append(StyleToken(
+                name: "breathable",
+                type: "texture",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Warm Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "light",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Warm Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "fluid",
+                type: "mood",
+                weight: baseWeight - 0.2,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Warm Weather"
+            ))
+        } else {
+            tokens.append(StyleToken(
+                name: "minimal",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Hot Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "breathable",
+                type: "texture",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Hot Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "light",
+                type: "mood",
+                weight: baseWeight - 0.2,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Hot Weather"
+            ))
+        }
+        
+        // Weather condition tokens
+        let conditions = weather.conditions.lowercased()
+        
+        if conditions.contains("rain") || conditions.contains("shower") {
+            tokens.append(StyleToken(
+                name: "protective",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Rainy Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "water-resistant",
+                type: "texture",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Rainy Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "adaptable",
+                type: "mood",
+                weight: baseWeight - 0.2,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Rainy Weather"
+            ))
+        } else if conditions.contains("snow") {
+            tokens.append(StyleToken(
+                name: "insulating",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Snowy Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "protective",
+                type: "texture",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Snowy Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "layered",
+                type: "mood",
+                weight: baseWeight - 0.2,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Snowy Weather"
+            ))
+        } else if conditions.contains("cloud") {
+            tokens.append(StyleToken(
+                name: "muted",
+                type: "color",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Cloudy Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "textured",
+                type: "texture",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Cloudy Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "thoughtful",
+                type: "mood",
+                weight: baseWeight - 0.2,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Cloudy Weather"
+            ))
+        } else if conditions.contains("sun") || conditions.contains("clear") {
+            tokens.append(StyleToken(
+                name: "bright",
+                type: "color",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Sunny Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "structured",
+                type: "texture",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Sunny Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "defined",
+                type: "mood",
+                weight: baseWeight - 0.2,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Sunny Weather"
+            ))
+        } else if conditions.contains("wind") {
+            tokens.append(StyleToken(
+                name: "anchored",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Windy Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "secured",
+                type: "texture",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Windy Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "dynamic",
+                type: "mood",
+                weight: baseWeight - 0.2,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Windy Weather"
+            ))
+        } else if conditions.contains("fog") {
+            tokens.append(StyleToken(
+                name: "diffused",
+                type: "structure",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Foggy Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "layered",
+                type: "texture",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Foggy Weather"
+            ))
+            tokens.append(StyleToken(
+                name: "mysterious",
+                type: "mood",
+                weight: baseWeight - 0.2,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Foggy Weather"
+            ))
+        }
+        
+        // Humidity tokens
+        if weather.humidity > 80 {
+            tokens.append(StyleToken(
+                name: "breathable",
+                type: "texture",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "High Humidity"
+            ))
+        } else if weather.humidity < 30 {
+            tokens.append(StyleToken(
+                name: "moisturizing",
+                type: "texture",
+                weight: baseWeight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Low Humidity"
+            ))
+        }
+        
+        return tokens
+    }
 }
