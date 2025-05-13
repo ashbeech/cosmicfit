@@ -2,8 +2,6 @@
 //  AstronomicalCalculator.swift
 //  Cosmic Fit
 //
-//  Created by Ashley Davison on 06/05/2025.
-//
 
 import Foundation
 #if canImport(CSwissEphemeris)
@@ -11,6 +9,21 @@ import CSwissEphemeris        // SwiftPM / CocoaPods module name
 #endif
 
 struct AstronomicalCalculator {
+    
+    // MARK: - House System Enum
+    
+    enum HouseSystem {
+        case placidus
+        case wholeSign
+        
+        // Convert to Swiss Ephemeris character
+        var swissEphemChar: Int32 {
+            switch self {
+            case .placidus: return Int32(Character("P").asciiValue!)
+            case .wholeSign: return 0 // Whole Sign is handled separately
+            }
+        }
+    }
     
     // Calculate Earth's nutation
     static func calculateNutation(julianDay: Double) -> (nutationInLongitude: Double, nutationInObliquity: Double) {
@@ -297,26 +310,56 @@ struct AstronomicalCalculator {
     
     // MARK: - House cusps --------------------------------------------------
 
+    // Calculate Whole Sign house cusps
+    static func calculateWholeSignHouseCusps(ascendant: Double) -> [Double] {
+        // Determine the sign of the ascendant (1-12)
+        let ascendantSign = Int(ascendant / 30.0) % 12 + 1
+        
+        // Create array for house cusps [1-12]
+        var cusps = [Double](repeating: 0.0, count: 13)
+        
+        // In Whole Sign, each house begins at 0° of a sign
+        for i in 1...12 {
+            // Calculate the sign for this house (1st house = ascendant sign)
+            let houseSign = (ascendantSign + i - 2) % 12 + 1
+            
+            // Set the cusp at 0° of the sign
+            cusps[i] = Double(houseSign - 1) * 30.0
+        }
+        
+        return cusps
+    }
+
     static func calculateHouseCusps(julianDay: Double,
                                     latitude: Double,
-                                    longitude: Double) -> [Double] {
+                                    longitude: Double,
+                                    houseSystem: HouseSystem = .placidus) -> [Double] {
         
+        // For Whole Sign house system, calculate based on the ascendant sign
+        if houseSystem == .wholeSign {
+            let ascendant = calculateAscendant(julianDay: julianDay,
+                                               latitude: latitude,
+                                               longitude: longitude)
+            return calculateWholeSignHouseCusps(ascendant: ascendant)
+        }
+        
+        // Placidus house system (default)
         var c = [Double](repeating: 0.0, count: 13)
         
         #if canImport(CSwissEphemeris)
         
             print("Natal Chart House Cusps: Using Swiss Ephem")
-            // 1 · Tell Swiss Ephemeris where the .se1… files live
+            // 1 · Tell Swiss Ephemeris where the .se1… files live
             if let path = Bundle.main.resourcePath {
                 path.withCString { cStr in
                     swe_set_ephe_path(UnsafeMutablePointer(mutating: cStr))
                 }
             }
             
-            // 2 · Prepare buffers
+            // 2 · Prepare buffers
             var ascmc = [Double](repeating: 0.0, count: 10)   // ASC, MC, etc.
             
-            // 3 · Call swe_houses     (hsys 'P' = Placidus)
+            // 3 · Call swe_houses     (hsys 'P' = Placidus)
             let hsys = Int32(Character("P").asciiValue!)      // UInt8 → Int32
             
             c.withUnsafeMutableBufferPointer { cuspPtr -> Void in
@@ -353,9 +396,8 @@ struct AstronomicalCalculator {
         #endif
         
         return c
-
-        
     }
+    
     // Calculate aspects between two points
     static func calculateAspect(point1: Double, point2: Double, orb: Double = 5.0) -> (aspectType: String, exactness: Double)? {
         let angle = abs(point1 - point2).truncatingRemainder(dividingBy: 360.0)

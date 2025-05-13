@@ -2,8 +2,6 @@
 //  ParagraphAssembler.swift
 //  Cosmic Fit
 //
-//  Created by Ashley Davison on 11/05/2025.
-//  Completely rewritten for the detailed Blueprint specification
 
 import Foundation
 
@@ -17,17 +15,17 @@ struct ParagraphAssembler {
     ///   - birthInfo: Optional birth date/time/location string for header
     /// - Returns: A fully formatted blueprint interpretation
     static func generateBlueprintInterpretation(tokens: [StyleToken], birthInfo: String? = nil) -> String {
-        // Log tokens for debugging/validation
+        // Log tokens for validation
         logTokensForValidation(tokens)
         
         // Build the complete blueprint with all sections
         var blueprint = ""
         
-        // Upper sections
-        blueprint += "## Essence\n\n"
+        // Upper sections - all using Whole Sign system
+        blueprint += "## Style Essence\n\n"
         blueprint += generateEssenceSection(from: tokens) + "\n\n"
         
-        blueprint += "## Core\n\n"
+        blueprint += "## Celestial Style ID\n\n"
         blueprint += generateCoreSection(from: tokens) + "\n\n"
         
         blueprint += "## Expression\n\n"
@@ -44,25 +42,25 @@ struct ParagraphAssembler {
         
         blueprint += "---\n\n"
         
-        // Fabric guide
+        // Fabric guide - using Whole Sign system
         blueprint += "# Energetic Fabric Guide\n\n"
         blueprint += generateFabricRecommendations(from: tokens) + "\n\n"
         
-        // Style pulse
+        // Style pulse - 90% natal, 10% progressed flavor (handled by token weighting)
         blueprint += "# Style Pulse\n\n"
         blueprint += generateStylePulse(from: tokens) + "\n\n"
         
         blueprint += "---\n\n"
         
-        // Fashion guidance
+        // Fashion guidance - using Whole Sign system
         blueprint += "# Fashion Dos & Don'ts\n\n"
         blueprint += generateFashionGuidance(from: tokens) + "\n\n"
         
-        // Color guidance
+        // Color guidance - 70% natal, 30% progressed (handled by token weighting)
         blueprint += "# Elemental Colours\n\n"
         blueprint += generateColorRecommendations(from: tokens) + "\n\n"
         
-        // Wardrobe storyline
+        // Wardrobe storyline - 60% progressed with Placidus, 40% natal (handled by token weighting)
         blueprint += "# Wardrobe Storyline\n\n"
         blueprint += generateWardrobeStoryline(from: tokens)
         
@@ -112,11 +110,9 @@ struct ParagraphAssembler {
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
     }
     
-    // MARK: - Upper Blueprint Sections
+    // MARK: - Upper Blueprint Sections (100% Natal, Whole Sign)
     
-    /// Generates the Essence paragraph based on Sun, Venus, and Ascendant signs
-    /// - Parameter tokens: Weighted style tokens from the natal chart
-    /// - Returns: A paragraph describing the user's style essence
+    /// Generates the Essence paragraph based on Sun, Venus, and Ascendant signs using Whole Sign
     private static func generateEssenceSection(from tokens: [StyleToken]) -> String {
         // ✴️ SOURCE: Sun sign + Venus sign + Ascendant sign
         // ⚖️ WEIGHTING: Sun x1.1, Venus x1.5, Ascendant x1.3
@@ -139,7 +135,7 @@ struct ParagraphAssembler {
             themes.append(token.name)
         }
         
-        // Process 12th house influence (dreamlike)
+        // Process 12th house influence (dreamlike) - using Whole Sign house
         let has12thHouse = tokens.contains { $0.houseSource == 12 && $0.weight > 2.0 }
         
         // Build the essence paragraph
@@ -191,9 +187,7 @@ struct ParagraphAssembler {
         return essence
     }
     
-    /// Generates the Core paragraph based on Sun, Venus, and Moon signs
-    /// - Parameter tokens: Weighted style tokens from the natal chart
-    /// - Returns: A paragraph describing the user's style core
+    /// Generates the Core paragraph based on Sun, Venus, and Moon signs using Whole Sign
     private static func generateCoreSection(from tokens: [StyleToken]) -> String {
         // ✴️ SOURCE: Sun sign + Venus sign + Moon sign
         // ⚖️ Look for consistent tone across these planets
@@ -270,9 +264,7 @@ struct ParagraphAssembler {
         return core
     }
     
-    /// Generates the Expression paragraph based on Ascendant and Mercury/Mars
-    /// - Parameter tokens: Weighted style tokens from the natal chart
-    /// - Returns: A paragraph describing the user's style expression
+    /// Generates the Expression paragraph based on Ascendant and Mercury/Mars using Whole Sign
     private static func generateExpressionSection(from tokens: [StyleToken]) -> String {
         // ✴️ SOURCE: Ascendant sign, Mercury + Mars in visual houses (1st, 3rd, 5th)
         // ✴️ Venus in fixed/cardinal/mutable signs for structure of expression
@@ -364,9 +356,7 @@ struct ParagraphAssembler {
         return expression
     }
     
-    /// Generates the Magnetism paragraph based on Venus placement and aspects
-    /// - Parameter tokens: Weighted style tokens from the natal chart
-    /// - Returns: A paragraph describing the user's style magnetism
+    /// Generates the Magnetism paragraph based on Venus placement and aspects using Whole Sign
     private static func generateMagnetismSection(from tokens: [StyleToken]) -> String {
         // ✴️ SOURCE: Venus sign + house, Moon sign, retrograde planets
         // ✴️ Affecting visual/relationship houses (1st, 7th)
@@ -416,9 +406,7 @@ struct ParagraphAssembler {
         return "\(magnetismQuality). \(magnetismImpact)"
     }
     
-    /// Generates the Emotional Dressing paragraph based on Moon placement
-    /// - Parameter tokens: Weighted style tokens from the natal chart
-    /// - Returns: A paragraph describing the user's emotional dressing style
+    /// Generates the Emotional Dressing paragraph based on Moon placement using Whole Sign
     private static func generateEmotionalDressingSection(from tokens: [StyleToken]) -> String {
         // ✴️ SOURCE: Moon sign + house, Neptune/Pisces/12th house influence
         // ✴️ Hard aspects to Venus or Moon
@@ -458,9 +446,7 @@ struct ParagraphAssembler {
         return emotionalStyle
     }
     
-    /// Generates the Planetary Frequency paragraph based on elemental dominance
-    /// - Parameter tokens: Weighted style tokens from the natal chart
-    /// - Returns: A paragraph describing the user's planetary frequency
+    /// Generates the Planetary Frequency paragraph based on elemental dominance using Whole Sign
     private static func generatePlanetaryFrequencySection(from tokens: [StyleToken]) -> String {
         // ✴️ SOURCE: Elemental dominance, planet dignities, retrograde frequency
         
@@ -540,11 +526,9 @@ struct ParagraphAssembler {
         return frequency
     }
     
-    // MARK: - Fabric Guide
+    // MARK: - Fabric Guide (100% Natal, Whole Sign)
     
-    /// Generates fabric recommendations based on chart elements
-    /// - Parameter tokens: Weighted style tokens from the natal chart
-    /// - Returns: A formatted fabric guide with nourishing and depleting fabrics
+    /// Generates fabric recommendations based on chart elements using Whole Sign
     private static func generateFabricRecommendations(from tokens: [StyleToken]) -> String {
         // ⚖️ WEIGHTING: Venus x1.5, Ascendant x1.3, Mars x1.2
         var nourishingFabrics: [String] = []
@@ -652,11 +636,10 @@ struct ParagraphAssembler {
         return guide
     }
     
-    // MARK: - Style Pulse
+    // MARK: - Style Pulse (90% natal, 10% progressed flavor)
     
     /// Generates style pulse elements (keywords, priorities, journey)
-    /// - Parameter tokens: Weighted style tokens from the natal chart
-    /// - Returns: A formatted style pulse section
+    /// - Tokens weighted: 90% natal, 10% progressed flavor
     private static func generateStylePulse(from tokens: [StyleToken]) -> String {
         // STYLE KEYWORDS = Top 5 token names (weight ≥ 2.5)
         // SENSORY PRIORITIES = Token type == "texture" or "mood" with weight ≥ 2.5
@@ -718,17 +701,37 @@ struct ParagraphAssembler {
             styleJourney = "From exploration to refinement, "
         }
         
+        // Add flavor of progressed chart (10%) - subtle influence from progressed tokens
+        let hasProgressedTokens = tokens.contains { $0.planetarySource?.contains("Progressed") == true }
+        
+        if hasProgressedTokens {
+            styleJourney += "you've been evolving toward a more ";
+            
+            // Look for progressed Moon sign influence
+            if tokens.contains(where: { $0.planetarySource?.contains("Progressed Moon") == true && $0.signSource?.contains("Fire") == true }) {
+                styleJourney += "energized and expressive style. ";
+            } else if tokens.contains(where: { $0.planetarySource?.contains("Progressed Moon") == true && $0.signSource?.contains("Earth") == true }) {
+                styleJourney += "grounded and practical style. ";
+            } else if tokens.contains(where: { $0.planetarySource?.contains("Progressed Moon") == true && $0.signSource?.contains("Air") == true }) {
+                styleJourney += "intellectual and communicative style. ";
+            } else if tokens.contains(where: { $0.planetarySource?.contains("Progressed Moon") == true && $0.signSource?.contains("Water") == true }) {
+                styleJourney += "intuitive and emotionally responsive style. ";
+            } else {
+                styleJourney += "authentic personal style. ";
+            }
+        }
+        
         // Complete the journey description
         if tokens.contains(where: { $0.name == "grounded" || $0.name == "earthy" }) {
-            styleJourney += "your evolution has been steady, soulful, and deeply felt."
+            styleJourney += "Your evolution has been steady, soulful, and deeply felt."
         } else if tokens.contains(where: { $0.name == "passionate" || $0.name == "dynamic" }) {
-            styleJourney += "your evolution has been energetic, transformative, and boldly expressed."
+            styleJourney += "Your evolution has been energetic, transformative, and boldly expressed."
         } else if tokens.contains(where: { $0.name == "adaptable" || $0.name == "intellectual" }) {
-            styleJourney += "your evolution has been thoughtful, communicative, and always evolving."
+            styleJourney += "Your evolution has been thoughtful, communicative, and always evolving."
         } else if tokens.contains(where: { $0.name == "sensitive" || $0.name == "intuitive" }) {
-            styleJourney += "your evolution has been intuitive, responsive, and emotionally attuned."
+            styleJourney += "Your evolution has been intuitive, responsive, and emotionally attuned."
         } else {
-            styleJourney += "your evolution has been personal, meaningful, and authentically yours."
+            styleJourney += "Your evolution has been personal, meaningful, and authentically yours."
         }
         
         // Format the style pulse section
@@ -746,11 +749,9 @@ struct ParagraphAssembler {
         return pulse
     }
     
-    // MARK: - Fashion Guidance
+    // MARK: - Fashion Guidance (100% Natal, Whole Sign)
     
-    /// Generates fashion do's and don'ts based on chart elements
-    /// - Parameter tokens: Weighted style tokens from the natal chart
-    /// - Returns: A formatted fashion guidance section
+    /// Generates fashion do's and don'ts based on chart elements using Whole Sign
     private static func generateFashionGuidance(from tokens: [StyleToken]) -> String {
         // LEAN INTO = Top tokens with consistent tone (weight > 2.5)
         // RELEASE = Token pairs in opposition
@@ -872,12 +873,10 @@ struct ParagraphAssembler {
         return guidance
     }
     
-    // MARK: - Color Recommendations
+    // MARK: - Color Recommendations (70% natal, 30% progressed)
     
-    /// Generates color recommendations based on chart elements
-    /// - Parameter tokens: Weighted style tokens from the natal chart
-    /// - Returns: A formatted color recommendations section
-    private static func generateColorRecommendations(from tokens: [StyleToken]) -> String {
+    /// Generates color recommendations - tokens weighted: 70% natal, 30% progressed
+    public static func generateColorRecommendations(from tokens: [StyleToken]) -> String {
         // Analyze tokens to determine color preferences
         var elementalColors: [String] = []
         var currentPhaseColors: [String] = []
@@ -900,10 +899,10 @@ struct ParagraphAssembler {
             elementalColors.append(contentsOf: ["red", "orange", "bright yellow"])
         }
         
-        // Current phase colors based on progressed planets
-        let hasProgressedVenus = tokens.contains { $0.name.contains("progressed") && $0.planetarySource == "Venus" }
-        let hasProgressedMars = tokens.contains { $0.name.contains("progressed") && $0.planetarySource == "Mars" }
-        let hasProgressedMoon = tokens.contains { $0.name.contains("progressed") && $0.planetarySource == "Moon" }
+        // Current phase colors based on progressed planets (30% influence)
+        let hasProgressedVenus = tokens.contains { $0.planetarySource?.contains("Progressed Venus") == true }
+        let hasProgressedMars = tokens.contains { $0.planetarySource?.contains("Progressed Mars") == true }
+        let hasProgressedMoon = tokens.contains { $0.planetarySource?.contains("Progressed Moon") == true }
         
         if hasProgressedVenus {
             currentPhaseColors.append("dusty rose")
@@ -972,12 +971,10 @@ struct ParagraphAssembler {
         return colors
     }
     
-    // MARK: - Wardrobe Storyline
+    // MARK: - Wardrobe Storyline (60% progressed with Placidus, 40% natal)
     
-    /// Generates wardrobe storyline based on chart progressions
-    /// - Parameter tokens: Weighted style tokens from the natal chart
-    /// - Returns: A formatted wardrobe storyline section
-    private static func generateWardrobeStoryline(from tokens: [StyleToken]) -> String {
+    /// Generates wardrobe storyline - tokens weighted: 60% progressed with Placidus, 40% natal
+    public static func generateWardrobeStoryline(from tokens: [StyleToken]) -> String {
         // PAST ARC = Moon/Venus hard aspects, fixed signs
         // PRESENT PHASE = Current progressions + natal themes
         // EMERGING CHAPTER = Progressed Ascendant/Venus changes, Pluto/Uranus transits
@@ -1016,54 +1013,83 @@ struct ParagraphAssembler {
             pastArc += "Varied, experimental, with phases that reflected your evolving sense of self."
         }
         
-        // Determine present phase
+        // Determine present phase - emphasize progressed planets (60% influence)
         var presentPhase = ""
         
-        // Look for Earth sign Venus/Moon or balanced tokens
-        let hasEarthVenusOrMoon = tokens.contains {
-            ($0.planetarySource == "Venus" || $0.planetarySource == "Moon") &&
-            ($0.signSource == "Taurus" || $0.signSource == "Virgo" || $0.signSource == "Capricorn")
-        }
+        // Look for progressed planets using Placidus house system
+        let hasProgressedMoon = tokens.contains { $0.planetarySource?.contains("Progressed Moon") == true }
+        let hasProgressedVenus = tokens.contains { $0.planetarySource?.contains("Progressed Venus") == true }
         
-        let hasBalancedTokens = tokens.contains { $0.name == "balanced" || $0.name == "harmonious" }
-        let hasIntentionalTokens = tokens.contains { $0.name == "intentional" || $0.name == "refined" }
-        
-        if hasEarthVenusOrMoon {
-            presentPhase = "Streamlined and intentional. You know what suits your energy, and you choose with care. "
-            presentPhase += "Fewer pieces, stronger presence."
-        } else if hasBalancedTokens {
-            presentPhase = "Harmonious and integrated. You've found balance between different aspects of your style. "
-            presentPhase += "Versatile, adaptable, with pieces that work together in multiple ways."
-        } else if hasIntentionalTokens {
-            presentPhase = "Refined and purposeful. Your choices reflect deeper considerations about quality and impact. "
-            presentPhase += "Thoughtful curation, meaningful selection."
+        if hasProgressedMoon && hasProgressedVenus {
+            presentPhase = "Emotionally attuned and aesthetically refined. Your current phase integrates emotional awareness with visual harmony. "
+            presentPhase += "You're drawn to pieces that reflect your inner state while maintaining a cohesive visual language."
+        } else if hasProgressedMoon {
+            presentPhase = "Emotionally responsive and intuitive. Your current phase prioritizes how clothing feels on multiple levels. "
+            presentPhase += "You're drawn to pieces that support your emotional well-being and inner sense of security."
+        } else if hasProgressedVenus {
+            presentPhase = "Aesthetically evolved and relationally aware. Your current phase emphasizes visual harmony and social connection. "
+            presentPhase += "You're drawn to pieces that communicate your values while creating meaningful impression."
         } else {
-            presentPhase = "Authentic and present. Your style reflects who you are now, not who you were or should be. "
-            presentPhase += "Honest, current, responsive to your actual life."
+            // Fall back to natal chart influences (40%)
+            let hasEarthVenusOrMoon = tokens.contains {
+                ($0.planetarySource == "Venus" || $0.planetarySource == "Moon") &&
+                ($0.signSource == "Taurus" || $0.signSource == "Virgo" || $0.signSource == "Capricorn")
+            }
+            
+            let hasBalancedTokens = tokens.contains { $0.name == "balanced" || $0.name == "harmonious" }
+            let hasIntentionalTokens = tokens.contains { $0.name == "intentional" || $0.name == "refined" }
+            
+            if hasEarthVenusOrMoon {
+                presentPhase = "Streamlined and intentional. You know what suits your energy, and you choose with care. "
+                presentPhase += "Fewer pieces, stronger presence."
+            } else if hasBalancedTokens {
+                presentPhase = "Harmonious and integrated. You've found balance between different aspects of your style. "
+                presentPhase += "Versatile, adaptable, with pieces that work together in multiple ways."
+            } else if hasIntentionalTokens {
+                presentPhase = "Refined and purposeful. Your choices reflect deeper considerations about quality and impact. "
+                presentPhase += "Thoughtful curation, meaningful selection."
+            } else {
+                presentPhase = "Authentic and present. Your style reflects who you are now, not who you were or should be. "
+                presentPhase += "Honest, current, responsive to your actual life."
+            }
         }
         
-        // Determine emerging chapter
+        // Determine emerging chapter - emphasize progressive trends using Placidus house system
         var emergingChapter = ""
         
-        // Look for Pluto/Uranus transits or Venus/Ascendant progressions
-        let hasTransformativeTokens = tokens.contains { $0.name == "transformative" || $0.name == "evolutionary" }
-        let hasProgressedAscendantOrVenus = tokens.contains {
-            $0.name.contains("progressed") &&
-            ($0.planetarySource == "Ascendant" || $0.planetarySource == "Venus")
-        }
+        // Prioritize progressed Ascendant/MC from Placidus system (part of the 60% progressed influence)
+        let hasProgressedAscendant = tokens.contains { $0.planetarySource?.contains("Progressed Ascendant") == true }
+        let hasProgressedMC = tokens.contains { $0.planetarySource?.contains("Progressed MC") == true }
         
-        if hasTransformativeTokens || hasProgressedAscendantOrVenus {
-            emergingChapter = "Reclamation and refinement. You're honoring the past versions of yourself "
-            emergingChapter += "through custom, quality, and a slow, soulful approach to style."
-        } else if tokens.contains { $0.name == "innovative" || $0.name == "unique" } {
-            emergingChapter = "Innovation and personalization. You're moving toward more custom, unique expressions "
-            emergingChapter += "that integrate technical advances with personal meaning."
-        } else if tokens.contains { $0.name == "authentic" || $0.name == "honest" } {
-            emergingChapter = "Authenticity and integrity. You're evolving toward choices that align deeply with your values, "
-            emergingChapter += "prioritizing ethical production and personal resonance."
+        if hasProgressedAscendant || hasProgressedMC {
+            emergingChapter = "Evolution of self-expression and public identity. As your ascendant ";
+            
+            if hasProgressedAscendant && hasProgressedMC {
+                emergingChapter += "and midheaven progress, you're entering a phase where both personal and public expression are shifting. ";
+            } else if hasProgressedAscendant {
+                emergingChapter += "progresses, you're entering a phase of renewed self-definition and personal presence. ";
+            } else {
+                emergingChapter += "evolves, you're entering a phase of reconnection with your public role and visible impact. ";
+            }
+            
+            emergingChapter += "This chapter invites conscious integration of evolving identity with enduring essence."
         } else {
-            emergingChapter = "Integration and evolution. You're bringing together the most resonant elements of past phases "
-            emergingChapter += "while staying open to new approaches that honor your current self."
+            // Fall back to transformative themes or general evolution
+            let hasTransformativeTokens = tokens.contains { $0.name == "transformative" || $0.name == "evolutionary" }
+            
+            if hasTransformativeTokens {
+                emergingChapter = "Reclamation and refinement. You're honoring the past versions of yourself "
+                emergingChapter += "through custom, quality, and a slow, soulful approach to style."
+            } else if tokens.contains { $0.name == "innovative" || $0.name == "unique" } {
+                emergingChapter = "Innovation and personalization. You're moving toward more custom, unique expressions "
+                emergingChapter += "that integrate technical advances with personal meaning."
+            } else if tokens.contains { $0.name == "authentic" || $0.name == "honest" } {
+                emergingChapter = "Authenticity and integrity. You're evolving toward choices that align deeply with your values, "
+                emergingChapter += "prioritizing ethical production and personal resonance."
+            } else {
+                emergingChapter = "Integration and evolution. You're bringing together the most resonant elements of past phases "
+                emergingChapter += "while staying open to new approaches that honor your current self."
+            }
         }
         
         // Format wardrobe storyline

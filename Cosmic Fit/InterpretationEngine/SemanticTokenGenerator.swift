@@ -2,12 +2,266 @@
 //  SemanticTokenGenerator.swift
 //  Cosmic Fit
 //
-//  Created by Ashley Davison on 11/05/2025.
+//  Created by Ashley Davison on 12/05/2025.
 //  Enhanced with source tracking and improved weighting
 
 import Foundation
 
 class SemanticTokenGenerator {
+    
+    // MARK: - Blueprint Specific Token Generation
+    
+    /// Generate Blueprint tokens with Whole Sign house system according to specification
+    static func generateBlueprintTokens(natal: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Process planets with updated weighting and source tracking - using Whole Sign houses
+        for planet in natal.planets {
+            // Default base weight for natal placements
+            let baseWeight: Double = 2.0
+            
+            // Apply weighting according to spec
+            var priorityMultiplier: Double = 1.0
+            switch planet.name {
+            case "Sun": priorityMultiplier = 1.1  // Core identity
+            case "Venus": priorityMultiplier = 1.5  // Aesthetic preferences
+            case "Moon": priorityMultiplier = 1.3   // Emotional comfort
+            case "Mars": priorityMultiplier = 1.2   // Energy and cut
+            case "Mercury": priorityMultiplier = 1.1 // Communication style
+            case "Jupiter": priorityMultiplier = 0.9 // Expansion, principles
+            case "Saturn": priorityMultiplier = 0.9  // Structure, discipline
+            default: priorityMultiplier = 0.8        // Outer planets
+            }
+            
+            let weight = baseWeight * priorityMultiplier
+            
+            // Get tokens based on planet in sign with source tracking
+            let planetTokens = tokenizeForPlanetInSign(
+                planet: planet.name,
+                sign: planet.zodiacSign,
+                isRetrograde: planet.isRetrograde,
+                weight: weight)
+            tokens.append(contentsOf: planetTokens)
+        }
+        
+        // Process rising sign (ascendant) - high influence on appearance
+        let ascendantSign = CoordinateTransformations.decimalDegreesToZodiac(natal.ascendant).sign
+        let ascSignName = CoordinateTransformations.getZodiacSignName(sign: ascendantSign)
+        let ascendantTokens = tokenizeForAscendant(
+            sign: ascendantSign,
+            signName: ascSignName,
+            weight: 3.0)
+        tokens.append(contentsOf: ascendantTokens)
+        
+        // Process Whole Sign house placements with source tracking
+        for planet in natal.planets {
+            // Determine house by using Whole Sign system for Blueprint
+            let wholeSignHouse = NatalChartCalculator.determineWholeSignHouse(
+                longitude: planet.longitude,
+                ascendant: natal.ascendant)
+            
+            // Higher weight for fashion-relevant planets in visible houses
+            let houseWeight = isVisibleHouse(wholeSignHouse) ? 2.5 : 2.0
+            
+            let houseTokens = tokenizeForPlanetInHouse(
+                planet: planet.name,
+                house: wholeSignHouse,
+                weight: houseWeight)
+            tokens.append(contentsOf: houseTokens)
+        }
+        
+        // Generate elemental balance tokens
+        let elementalTokens = generateElementalTokens(chart: natal)
+        tokens.append(contentsOf: elementalTokens)
+        
+        // Generate aspect-based tokens
+        let aspectTokens = generateAspectTokens(chart: natal)
+        tokens.append(contentsOf: aspectTokens)
+        
+        return tokens
+    }
+    
+    // MARK: - Color Frequency Token Generation
+    
+    /// Generate tokens for Color Frequency section (70% natal, 30% progressed)
+    static func generateColorFrequencyTokens(natal: NatalChartCalculator.NatalChart,
+                                             progressed: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Generate natal tokens with 70% weight
+        let natalTokens = generateTokensFromNatalChart(natal)
+        for token in natalTokens {
+            // Create a new token with adjusted weight
+            let adjustedToken = StyleToken(
+                name: token.name,
+                type: token.type,
+                weight: token.weight * 0.7,
+                planetarySource: token.planetarySource,
+                signSource: token.signSource,
+                houseSource: token.houseSource,
+                aspectSource: token.aspectSource
+            )
+            tokens.append(adjustedToken)
+        }
+        
+        // Generate progressed tokens with 30% weight
+        let progressedTokens = generateTokensFromProgressedChart(progressed)
+        for token in progressedTokens {
+            // Create a new token with adjusted weight
+            let adjustedToken = StyleToken(
+                name: token.name,
+                type: token.type,
+                weight: token.weight * 0.3,
+                planetarySource: token.planetarySource,
+                signSource: token.signSource,
+                houseSource: token.houseSource,
+                aspectSource: token.aspectSource
+            )
+            tokens.append(adjustedToken)
+        }
+        
+        return tokens
+    }
+    
+    // MARK: - Wardrobe Storyline Token Generation
+    
+    /// Generate tokens for Wardrobe Storyline (60% progressed using Placidus, 40% natal)
+    static func generateWardrobeStorylineTokens(natal: NatalChartCalculator.NatalChart,
+                                                progressed: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Generate natal tokens with 40% weight using Whole Sign
+        let natalTokens = generateBlueprintTokens(natal: natal)
+        for token in natalTokens {
+            // Create a new token with adjusted weight
+            let adjustedToken = StyleToken(
+                name: token.name,
+                type: token.type,
+                weight: token.weight * 0.4,
+                planetarySource: token.planetarySource,
+                signSource: token.signSource,
+                houseSource: token.houseSource,
+                aspectSource: token.aspectSource
+            )
+            tokens.append(adjustedToken)
+        }
+        
+        // Generate progressed tokens with 60% weight using Placidus house system
+        let progressedTokens = generateProgressedTokensForWardrobeStoryline(progressed)
+        for token in progressedTokens {
+            // Create a new token with adjusted weight
+            let adjustedToken = StyleToken(
+                name: token.name,
+                type: token.type,
+                weight: token.weight * 0.6,
+                planetarySource: token.planetarySource,
+                signSource: token.signSource,
+                houseSource: token.houseSource,
+                aspectSource: token.aspectSource
+            )
+            tokens.append(adjustedToken)
+        }
+        
+        return tokens
+    }
+    
+    // Helper to generate progressed tokens for Wardrobe Storyline (Placidus system)
+    private static func generateProgressedTokensForWardrobeStoryline(_ chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Process planets with progressed weight and emphasis on emotional arc with Placidus houses
+        for planet in chart.planets {
+            // Base weight for progressed placements
+            let baseWeight: Double = 2.0
+            
+            // Prioritize fashion-relevant planets with emphasis on Moon for Wardrobe Storyline
+            var priorityMultiplier: Double = 1.0
+            switch planet.name {
+            case "Moon": priorityMultiplier = 2.0 // Extra emphasis on progressed Moon for emotional arc
+            case "Venus": priorityMultiplier = 1.4
+            case "Mars": priorityMultiplier = 1.1
+            case "Sun": priorityMultiplier = 1.0
+            default: priorityMultiplier = 0.7
+            }
+            
+            let weight = baseWeight * priorityMultiplier
+            
+            // Get tokens based on planet in sign
+            let planetTokens = tokenizeForPlanetInSign(
+                planet: planet.name,
+                sign: planet.zodiacSign,
+                isRetrograde: planet.isRetrograde,
+                weight: weight,
+                isProgressed: true)
+            tokens.append(contentsOf: planetTokens)
+            
+            // Get Placidus house tokens for progressed planets
+            let placidusHouse = NatalChartCalculator.determineHouse(
+                longitude: planet.longitude,
+                houseCusps: chart.houseCusps)
+            
+            let houseTokens = tokenizeForPlanetInHouse(
+                planet: planet.name,
+                house: placidusHouse,
+                weight: weight,
+                isProgressed: true)
+            tokens.append(contentsOf: houseTokens)
+        }
+        
+        // Add extra tokens for progressed Ascendant/MC if needed
+        let ascendantSign = CoordinateTransformations.decimalDegreesToZodiac(chart.ascendant).sign
+        let ascSignName = CoordinateTransformations.getZodiacSignName(sign: ascendantSign)
+        
+        tokens.append(StyleToken(
+            name: "evolving",
+            type: "expression",
+            weight: 2.0,
+            planetarySource: "Progressed Ascendant",
+            signSource: ascSignName
+        ))
+        
+        return tokens
+    }
+    
+    // MARK: - Style Pulse Token Generation
+    
+    /// Generate tokens for Style Pulse (90% natal, 10% progressed flavor)
+    static func generateStylePulseTokens(natal: NatalChartCalculator.NatalChart,
+                                         progressed: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Generate natal tokens with 90% weight
+        let natalTokens = generateBlueprintTokens(natal: natal)
+        for token in natalTokens {
+            // Create a new token with adjusted weight
+            let adjustedToken = StyleToken(
+                name: token.name,
+                type: token.type,
+                weight: token.weight * 0.9,
+                planetarySource: token.planetarySource,
+                signSource: token.signSource,
+                houseSource: token.houseSource,
+                aspectSource: token.aspectSource
+            )
+            tokens.append(adjustedToken)
+        }
+        
+        // Add just a flavor of progressed chart (10%)
+        // Focus on Moon (emotional evolution) and Venus (style evolution)
+        for planet in progressed.planets {
+            if planet.name == "Moon" || planet.name == "Venus" {
+                let flavorTokens = tokenizeForPlanetInSign(
+                    planet: planet.name,
+                    sign: planet.zodiacSign,
+                    isRetrograde: planet.isRetrograde,
+                    weight: 1.0 * 0.1, // Reduced weight for just flavor
+                    isProgressed: true)
+                tokens.append(contentsOf: flavorTokens)
+            }
+        }
+        
+        return tokens
+    }
     
     // MARK: - Token Generation from Natal Chart
     
@@ -52,7 +306,7 @@ class SemanticTokenGenerator {
             weight: 3.0)
         tokens.append(contentsOf: ascendantTokens)
         
-        // Process house placements with source tracking
+        // Process house placements with source tracking - using Placidus by default for general use
         for planet in chart.planets {
             // Determine house by comparing planet longitude to house cusps
             let house = NatalChartCalculator.determineHouse(longitude: planet.longitude, houseCusps: chart.houseCusps)
@@ -540,58 +794,64 @@ class SemanticTokenGenerator {
     }
     
     /// Generate tokens for a planet in a specific house with source tracking
-    private static func tokenizeForPlanetInHouse(planet: String, house: Int, weight: Double) -> [StyleToken] {
+    private static func tokenizeForPlanetInHouse(
+        planet: String,
+        house: Int,
+        weight: Double,
+        isProgressed: Bool = false) -> [StyleToken] {
+        
         var tokens: [StyleToken] = []
+        let planetSource = isProgressed ? "Progressed \(planet)" : planet
         
         // Different house meanings
         switch house {
         case 1: // 1st house - Self, appearance
-            tokens.append(StyleToken(name: "visible", type: "expression", weight: weight, planetarySource: planet, houseSource: house))
-            tokens.append(StyleToken(name: "defining", type: "structure", weight: weight, planetarySource: planet, houseSource: house))
+            tokens.append(StyleToken(name: "visible", type: "expression", weight: weight, planetarySource: planetSource, houseSource: house))
+            tokens.append(StyleToken(name: "defining", type: "structure", weight: weight, planetarySource: planetSource, houseSource: house))
             
         case 2: // 2nd house - Values, possessions
-            tokens.append(StyleToken(name: "tactile", type: "texture", weight: weight, planetarySource: planet, houseSource: house))
-            tokens.append(StyleToken(name: "substantial", type: "structure", weight: weight, planetarySource: planet, houseSource: house))
+            tokens.append(StyleToken(name: "tactile", type: "texture", weight: weight, planetarySource: planetSource, houseSource: house))
+            tokens.append(StyleToken(name: "substantial", type: "structure", weight: weight, planetarySource: planetSource, houseSource: house))
             
         case 3: // 3rd house - Communication, local environment
-            tokens.append(StyleToken(name: "communicative", type: "expression", weight: weight, planetarySource: planet, houseSource: house))
-            tokens.append(StyleToken(name: "adaptable", type: "structure", weight: weight, planetarySource: planet, houseSource: house))
+            tokens.append(StyleToken(name: "communicative", type: "expression", weight: weight, planetarySource: planetSource, houseSource: house))
+            tokens.append(StyleToken(name: "adaptable", type: "structure", weight: weight, planetarySource: planetSource, houseSource: house))
             
         case 4: // 4th house - Home, roots, security
-            tokens.append(StyleToken(name: "comforting", type: "texture", weight: weight, planetarySource: planet, houseSource: house))
-            tokens.append(StyleToken(name: "grounded", type: "structure", weight: weight, planetarySource: planet, houseSource: house))
+            tokens.append(StyleToken(name: "comforting", type: "texture", weight: weight, planetarySource: planetSource, houseSource: house))
+            tokens.append(StyleToken(name: "grounded", type: "structure", weight: weight, planetarySource: planetSource, houseSource: house))
             
         case 5: // 5th house - Creativity, pleasure
-            tokens.append(StyleToken(name: "playful", type: "expression", weight: weight, planetarySource: planet, houseSource: house))
-            tokens.append(StyleToken(name: "expressive", type: "structure", weight: weight, planetarySource: planet, houseSource: house))
+            tokens.append(StyleToken(name: "playful", type: "expression", weight: weight, planetarySource: planetSource, houseSource: house))
+            tokens.append(StyleToken(name: "expressive", type: "structure", weight: weight, planetarySource: planetSource, houseSource: house))
             
         case 6: // 6th house - Work, health, service
-            tokens.append(StyleToken(name: "practical", type: "structure", weight: weight, planetarySource: planet, houseSource: house))
-            tokens.append(StyleToken(name: "functional", type: "texture", weight: weight, planetarySource: planet, houseSource: house))
+            tokens.append(StyleToken(name: "practical", type: "structure", weight: weight, planetarySource: planetSource, houseSource: house))
+            tokens.append(StyleToken(name: "functional", type: "texture", weight: weight, planetarySource: planetSource, houseSource: house))
             
         case 7: // 7th house - Partnerships, relationships
-            tokens.append(StyleToken(name: "balanced", type: "structure", weight: weight, planetarySource: planet, houseSource: house))
-            tokens.append(StyleToken(name: "harmonious", type: "expression", weight: weight, planetarySource: planet, houseSource: house))
+            tokens.append(StyleToken(name: "balanced", type: "structure", weight: weight, planetarySource: planetSource, houseSource: house))
+            tokens.append(StyleToken(name: "harmonious", type: "expression", weight: weight, planetarySource: planetSource, houseSource: house))
             
         case 8: // 8th house - Transformation, shared resources
-            tokens.append(StyleToken(name: "intense", type: "expression", weight: weight, planetarySource: planet, houseSource: house))
-            tokens.append(StyleToken(name: "transformative", type: "structure", weight: weight, planetarySource: planet, houseSource: house))
+            tokens.append(StyleToken(name: "intense", type: "expression", weight: weight, planetarySource: planetSource, houseSource: house))
+            tokens.append(StyleToken(name: "transformative", type: "structure", weight: weight, planetarySource: planetSource, houseSource: house))
             
         case 9: // 9th house - Philosophy, travel, higher learning
-            tokens.append(StyleToken(name: "expansive", type: "structure", weight: weight, planetarySource: planet, houseSource: house))
-            tokens.append(StyleToken(name: "cultural", type: "expression", weight: weight, planetarySource: planet, houseSource: house))
+            tokens.append(StyleToken(name: "expansive", type: "structure", weight: weight, planetarySource: planetSource, houseSource: house))
+            tokens.append(StyleToken(name: "cultural", type: "expression", weight: weight, planetarySource: planetSource, houseSource: house))
             
         case 10: // 10th house - Career, public image
-            tokens.append(StyleToken(name: "authoritative", type: "structure", weight: weight, planetarySource: planet, houseSource: house))
-            tokens.append(StyleToken(name: "polished", type: "texture", weight: weight, planetarySource: planet, houseSource: house))
+            tokens.append(StyleToken(name: "authoritative", type: "structure", weight: weight, planetarySource: planetSource, houseSource: house))
+            tokens.append(StyleToken(name: "polished", type: "texture", weight: weight, planetarySource: planetSource, houseSource: house))
             
         case 11: // 11th house - Friends, groups, aspirations
-            tokens.append(StyleToken(name: "unconventional", type: "structure", weight: weight, planetarySource: planet, houseSource: house))
-            tokens.append(StyleToken(name: "innovative", type: "expression", weight: weight, planetarySource: planet, houseSource: house))
+            tokens.append(StyleToken(name: "unconventional", type: "structure", weight: weight, planetarySource: planetSource, houseSource: house))
+            tokens.append(StyleToken(name: "innovative", type: "expression", weight: weight, planetarySource: planetSource, houseSource: house))
             
         case 12: // 12th house - Spirituality, unconscious
-            tokens.append(StyleToken(name: "mystical", type: "expression", weight: weight, planetarySource: planet, houseSource: house))
-            tokens.append(StyleToken(name: "fluid", type: "structure", weight: weight, planetarySource: planet, houseSource: house))
+            tokens.append(StyleToken(name: "mystical", type: "expression", weight: weight, planetarySource: planetSource, houseSource: house))
+            tokens.append(StyleToken(name: "fluid", type: "structure", weight: weight, planetarySource: planetSource, houseSource: house))
             
         default:
             break
@@ -599,7 +859,7 @@ class SemanticTokenGenerator {
         
         // Special case for planets in houses that particularly affect appearance
         if [1, 5, 7, 10].contains(house) && ["Sun", "Venus", "Moon", "Mars"].contains(planet) {
-            tokens.append(StyleToken(name: "appearance-focused", type: "expression", weight: weight * 1.2, planetarySource: planet, houseSource: house))
+            tokens.append(StyleToken(name: "appearance-focused", type: "expression", weight: weight * 1.2, planetarySource: planetSource, houseSource: house))
         }
         
         return tokens
@@ -775,7 +1035,7 @@ class SemanticTokenGenerator {
         
         // If no clear elemental dominance, add a balanced token
         if fireCount <= threshold + 1 && earthCount <= threshold + 1 &&
-           airCount <= threshold + 1 && waterCount <= threshold + 1 {
+            airCount <= threshold + 1 && waterCount <= threshold + 1 {
             tokens.append(StyleToken(name: "balanced", type: "element", weight: 2.5, planetarySource: "Elemental Balance", signSource: "All Elements"))
         }
         
@@ -818,62 +1078,62 @@ class SemanticTokenGenerator {
                     case "Conjunction":
                         // Planets fused together - intensified energy
                         tokens.append(StyleToken(name: "intensified", type: "mood", weight: aspectWeight,
-                                              planetarySource: "\(planet1.name)-\(planet2.name)", aspectSource: aspectSource))
+                                                 planetarySource: "\(planet1.name)-\(planet2.name)", aspectSource: aspectSource))
                         
                         // Venus-Mars conjunction can indicate style with sensuality
                         if (planet1.name == "Venus" && planet2.name == "Mars") ||
-                           (planet1.name == "Mars" && planet2.name == "Venus") {
+                            (planet1.name == "Mars" && planet2.name == "Venus") {
                             tokens.append(StyleToken(name: "sensual", type: "expression", weight: aspectWeight,
-                                                 planetarySource: "Venus-Mars", aspectSource: aspectSource))
+                                                     planetarySource: "Venus-Mars", aspectSource: aspectSource))
                         }
                         
                         // Sun-Moon conjunction can indicate harmony between conscious and unconscious
                         if (planet1.name == "Sun" && planet2.name == "Moon") ||
-                           (planet1.name == "Moon" && planet2.name == "Sun") {
+                            (planet1.name == "Moon" && planet2.name == "Sun") {
                             tokens.append(StyleToken(name: "integrated", type: "mood", weight: aspectWeight,
-                                                 planetarySource: "Sun-Moon", aspectSource: aspectSource))
+                                                     planetarySource: "Sun-Moon", aspectSource: aspectSource))
                         }
                         
                     case "Opposition":
                         // Planets in polarity - balance or tension
                         tokens.append(StyleToken(name: "balanced", type: "structure", weight: aspectWeight,
-                                              planetarySource: "\(planet1.name)-\(planet2.name)", aspectSource: aspectSource))
+                                                 planetarySource: "\(planet1.name)-\(planet2.name)", aspectSource: aspectSource))
                         
                         // Venus-Mars opposition can indicate style with contrasting elements
                         if (planet1.name == "Venus" && planet2.name == "Mars") ||
-                           (planet1.name == "Mars" && planet2.name == "Venus") {
+                            (planet1.name == "Mars" && planet2.name == "Venus") {
                             tokens.append(StyleToken(name: "contrasting", type: "expression", weight: aspectWeight,
-                                                 planetarySource: "Venus-Mars", aspectSource: aspectSource))
+                                                     planetarySource: "Venus-Mars", aspectSource: aspectSource))
                         }
                         
                     case "Trine":
                         // Planets in harmony - flow and ease
                         tokens.append(StyleToken(name: "flowing", type: "structure", weight: aspectWeight,
-                                              planetarySource: "\(planet1.name)-\(planet2.name)", aspectSource: aspectSource))
+                                                 planetarySource: "\(planet1.name)-\(planet2.name)", aspectSource: aspectSource))
                         
                         // Venus-Moon trine can indicate style with emotional harmony
                         if (planet1.name == "Venus" && planet2.name == "Moon") ||
-                           (planet1.name == "Moon" && planet2.name == "Venus") {
+                            (planet1.name == "Moon" && planet2.name == "Venus") {
                             tokens.append(StyleToken(name: "harmonious", type: "mood", weight: aspectWeight,
-                                                 planetarySource: "Venus-Moon", aspectSource: aspectSource))
+                                                     planetarySource: "Venus-Moon", aspectSource: aspectSource))
                         }
                         
                     case "Square":
                         // Planets in tension - dynamic energy
                         tokens.append(StyleToken(name: "dynamic", type: "structure", weight: aspectWeight,
-                                              planetarySource: "\(planet1.name)-\(planet2.name)", aspectSource: aspectSource))
+                                                 planetarySource: "\(planet1.name)-\(planet2.name)", aspectSource: aspectSource))
                         
                         // Venus-Saturn square can indicate style with structured restraint
                         if (planet1.name == "Venus" && planet2.name == "Saturn") ||
-                           (planet1.name == "Saturn" && planet2.name == "Venus") {
+                            (planet1.name == "Saturn" && planet2.name == "Venus") {
                             tokens.append(StyleToken(name: "restrained", type: "expression", weight: aspectWeight,
-                                                 planetarySource: "Venus-Saturn", aspectSource: aspectSource))
+                                                     planetarySource: "Venus-Saturn", aspectSource: aspectSource))
                         }
                         
                     default:
                         // Minor aspects - subtler influence
                         tokens.append(StyleToken(name: "nuanced", type: "mood", weight: aspectWeight * 0.8,
-                                              planetarySource: "\(planet1.name)-\(planet2.name)", aspectSource: aspectSource))
+                                                 planetarySource: "\(planet1.name)-\(planet2.name)", aspectSource: aspectSource))
                     }
                 }
             }
@@ -886,9 +1146,9 @@ class SemanticTokenGenerator {
     
     /// Generates tokens from natal chart, progressed chart, transits, and weather data
     static func generateAllTokens(natal: NatalChartCalculator.NatalChart,
-                                 progressed: NatalChartCalculator.NatalChart,
-                                 transits: [[String: Any]],
-                                 weather: TodayWeather?) -> [StyleToken] {
+                                  progressed: NatalChartCalculator.NatalChart,
+                                  transits: [[String: Any]],
+                                  weather: TodayWeather?) -> [StyleToken] {
         
         var allTokens: [StyleToken] = []
         
@@ -913,15 +1173,10 @@ class SemanticTokenGenerator {
         return allTokens
     }
     
-    /// Helper to generate tokens for blueprint (natal chart only)
-    static func generateBlueprintTokens(natal: NatalChartCalculator.NatalChart) -> [StyleToken] {
-        return generateTokensFromNatalChart(natal)
-    }
-    
     /// Helper to generate tokens for daily vibe (progressed, transits, weather)
     static func generateDailyVibeTokens(progressed: NatalChartCalculator.NatalChart,
-                                      transits: [[String: Any]],
-                                      weather: TodayWeather?) -> [StyleToken] {
+                                        transits: [[String: Any]],
+                                        weather: TodayWeather?) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
         // Generate tokens from progressed chart

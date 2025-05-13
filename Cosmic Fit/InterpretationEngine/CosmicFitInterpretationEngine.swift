@@ -2,8 +2,6 @@
 //  CosmicFitInterpretationEngine.swift
 //  Cosmic Fit
 //
-//  Created by Ashley Davison on 11/05/2025.
-//  Updated with detailed Blueprint specification implementation
 
 import Foundation
 
@@ -19,7 +17,7 @@ class CosmicFitInterpretationEngine {
         print("\n🧩 GENERATING COSMIC FIT BLUEPRINT 🧩")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
-        // Generate tokens from natal chart with enhanced source tracking
+        // Generate tokens from natal chart with Whole Sign houses for Blueprint
         let tokens = SemanticTokenGenerator.generateBlueprintTokens(natal: chart)
         
         // Format birth info for display in the blueprint header
@@ -53,12 +51,7 @@ class CosmicFitInterpretationEngine {
     }
     
     /// Generate a daily vibe interpretation based on current transits, progressions, and weather
-    /// - Parameters:
-    ///   - natalChart: The base natal chart
-    ///   - progressedChart: The current progressed chart
-    ///   - transits: Array of transit aspects
-    ///   - weather: Optional current weather conditions
-    /// - Returns: An interpretation result with the daily cosmic vibe
+    /// - Uses Hybrid house system approach according to specification
     static func generateDailyVibeInterpretation(
         from natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
@@ -218,5 +211,35 @@ class CosmicFitInterpretationEngine {
         
         \(dailyVibe.stitchedParagraph)
         """
+    }
+    
+    // MARK: - Specialized Section Generation Methods
+    
+    /// Generate color frequency interpretation (70% natal, 30% progressed)
+    static func generateColorFrequencyInterpretation(
+        from natalChart: NatalChartCalculator.NatalChart,
+        progressedChart: NatalChartCalculator.NatalChart) -> String {
+        
+        // Generate tokens with specific weighting (70% natal, 30% progressed)
+        let tokens = SemanticTokenGenerator.generateColorFrequencyTokens(
+            natal: natalChart,
+            progressed: progressedChart)
+        
+        // Here we'd pass these tokens to a specific color interpretation function
+        // For now we'll use the standard ParagraphAssembler method
+        return ParagraphAssembler.generateColorRecommendations(from: tokens)
+    }
+    
+    /// Generate wardrobe storyline interpretation (60% progressed with Placidus, 40% natal)
+    static func generateWardrobeStorylineInterpretation(
+        from natalChart: NatalChartCalculator.NatalChart,
+        progressedChart: NatalChartCalculator.NatalChart) -> String {
+        
+        // Generate tokens with specific weighting (60% progressed using Placidus, 40% natal)
+        let tokens = SemanticTokenGenerator.generateWardrobeStorylineTokens(
+            natal: natalChart,
+            progressed: progressedChart)
+        
+        return ParagraphAssembler.generateWardrobeStoryline(from: tokens)
     }
 }
