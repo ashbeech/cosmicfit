@@ -28,29 +28,41 @@ class DailyVibeGenerator {
         
         print("\n☀️ GENERATING DAILY COSMIC VIBE ☀️")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("🧩 USING HYBRID HOUSE SYSTEM APPROACH:")
+        print("  • Base Style Resonance: Whole Sign (100% natal)")
+        print("  • Emotional Vibe: Placidus (60% progressed Moon, 40% natal Moon)")
+        print("  • Transit Impact: Placidus")
+        print("  • Fashion Output: 50% natal + 50% transit-based")
         
         // 1. Generate tokens for base style resonance (100% natal, Whole Sign)
         let baseStyleTokens = SemanticTokenGenerator.generateBaseStyleTokens(natal: natalChart)
+        logTokenSet("BASE STYLE TOKENS (WHOLE SIGN)", baseStyleTokens)
         
         // 2. Generate tokens for emotional vibe of day (60% progressed Moon, 40% natal Moon, Placidus)
         let emotionalVibeTokens = SemanticTokenGenerator.generateEmotionalVibeTokens(
             natal: natalChart,
             progressed: progressedChart
         )
+        logTokenSet("EMOTIONAL VIBE TOKENS (PLACIDUS - 60% PROGRESSED, 40% NATAL)", emotionalVibeTokens)
         
         // 3. Generate tokens from planetary transits (Placidus houses)
         let transitTokens = SemanticTokenGenerator.generateTransitTokens(
             transits: transits,
             natal: natalChart
         )
+        logTokenSet("TRANSIT TOKENS (PLACIDUS)", transitTokens)
         
         // 4. Generate tokens from moon phase
         let moonPhaseTokens = SemanticTokenGenerator.generateMoonPhaseTokens(moonPhase: moonPhase)
+        logTokenSet("MOON PHASE TOKENS", moonPhaseTokens)
         
         // 5. Generate tokens from weather if available
         var weatherTokens: [StyleToken] = []
         if let weather = weather {
             weatherTokens = SemanticTokenGenerator.generateWeatherTokens(weather: weather)
+            logTokenSet("WEATHER TOKENS", weatherTokens)
+        } else {
+            print("❗️ No weather data available")
         }
         
         // 6. Combine all tokens with appropriate weighting
@@ -126,16 +138,87 @@ class DailyVibeGenerator {
             allTokens.append(adjustedToken)
         }
         
+        // Log combined weighted tokens
+        logTokenSet("COMBINED WEIGHTED TOKENS", allTokens)
+        
         // 7. Generate the daily vibe paragraphs
         let dailyVibe = assembleDailyVibe(tokens: allTokens, weather: weather, moonPhase: moonPhase)
         
-        print("✅ Daily vibe generated successfully!")
+        // Log theme determination
+        let themeName = ThemeSelector.scoreThemes(tokens: allTokens)
+        print("\n🎨 THEME DETERMINATION:")
+        print("  • Selected Theme: \(themeName)")
+        
+        // Log the top themes with scores for debugging
+        let topThemes = ThemeSelector.rankThemes(tokens: allTokens, topCount: 3)
+        for (i, theme) in topThemes.enumerated() {
+            print("  \(i+1). \(theme.name): Score \(String(format: "%.2f", theme.score))")
+        }
+        
+        print("\n✅ Daily vibe generation completed successfully")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
         
         return dailyVibe
     }
     
     // MARK: - Private Helper Methods
+    
+    /// Log a set of tokens with descriptive title for debugging
+    private static func logTokenSet(_ title: String, _ tokens: [StyleToken]) {
+        print("\n🪙 \(title) 🪙")
+        print("  ▶ Count: \(tokens.count)")
+        
+        // Group by type
+        var tokensByType: [String: [StyleToken]] = [:]
+        for token in tokens {
+            if tokensByType[token.type] == nil {
+                tokensByType[token.type] = []
+            }
+            tokensByType[token.type]?.append(token)
+        }
+        
+        // Print by type with weights
+        for (type, typeTokens) in tokensByType.sorted(by: { $0.key < $1.key }) {
+            print("  📊 \(type.uppercased())")
+            
+            // Sort by weight (highest first)
+            let sorted = typeTokens.sorted { $0.weight > $1.weight }
+            for token in sorted {
+                var sourceInfo = ""
+                if let planet = token.planetarySource {
+                    sourceInfo += "[\(planet)]"
+                }
+                if let sign = token.signSource {
+                    sourceInfo += "[\(sign)]"
+                }
+                if let house = token.houseSource {
+                    sourceInfo += "[House \(house)]"
+                }
+                if let aspect = token.aspectSource {
+                    sourceInfo += "[\(aspect)]"
+                }
+                
+                print("    • \(token.name): \(String(format: "%.2f", token.weight)) \(sourceInfo)")
+            }
+        }
+        
+        // Count tokens by source
+        var sourceCounts: [String: Int] = [:]
+        for token in tokens {
+            var source = "Unknown"
+            if let planet = token.planetarySource {
+                source = planet
+            } else if let aspect = token.aspectSource {
+                source = aspect
+            }
+            sourceCounts[source, default: 0] += 1
+        }
+        
+        print("  🔍 SOURCE DISTRIBUTION:")
+        for (source, count) in sourceCounts.sorted(by: { $0.key < $1.key }) {
+            print("    • \(source): \(count) tokens")
+        }
+    }
     
     /// Assemble the daily vibe text from tokens
     private static func assembleDailyVibe(tokens: [StyleToken], weather: TodayWeather?, moonPhase: Double) -> String {
