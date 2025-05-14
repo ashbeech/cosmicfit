@@ -30,6 +30,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = launchScreenVC
         window?.makeKeyAndVisible()
         
+        // Initialize debug enhancements
+        DebugInitializer.setupDebugEnhancements()
+        
         // Configure appearance
         configureAppearance()
         

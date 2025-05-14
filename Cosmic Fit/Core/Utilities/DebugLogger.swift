@@ -2,144 +2,171 @@
 //  DebugLogger.swift
 //  Cosmic Fit
 //
-//  Created to provide detailed interpretation assembly debugging
+//  Created for detailed paragraph assembly debugging
 //
 
 import Foundation
 
-/// Utility for detailed debug logging of interpretation assembly process
+/// Debug logging utility specifically for the interpretation engine
 class DebugLogger {
     
-    // MARK: - Logging Levels
+    // MARK: - Log Levels
     
-    /// Different levels of detail for debugging
-    enum LogLevel: Int {
-        case none = 0      // No logging
-        case basic = 1     // Basic section headers
-        case detailed = 2  // Full token influence details
-        case verbose = 3   // Exhaustive token evaluation and paragraph building
+    enum LogLevel: Int, Comparable {
+        case none = 0
+        case error = 1
+        case warning = 2
+        case info = 3
+        case debug = 4
+        case verbose = 5
+        
+        static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
+            return lhs.rawValue < rhs.rawValue
+        }
     }
     
     // MARK: - Properties
     
-    /// Current logging level
-    static var level: LogLevel = .verbose
+    /// Current log level - set to .none to disable all logging
+    static var currentLogLevel: LogLevel = .verbose
     
-    /// Whether to include token weights in logs
-    static var showWeights = true
+    /// Enable/disable paragraph assembly logging specifically
+    static var enableParagraphAssemblyLogging = true
     
-    /// Whether to show source information (planets, signs, houses)
-    static var showSources = true
+    /// Enable/disable token debug logging
+    static var enableTokenDebugLogging = true
     
-    /// Whether section separators should be used
-    static var useSeparators = true
+    // MARK: - Standard Logging Methods
     
-    // MARK: - Basic Logging
-    
-    /// Log a simple message
-    static func log(_ message: String) {
-        guard level.rawValue >= LogLevel.basic.rawValue else { return }
-        print(message)
-    }
-    
-    /// Log a section header
-    static func logSection(_ sectionName: String) {
-        guard level.rawValue >= LogLevel.basic.rawValue else { return }
-        
-        if useSeparators {
-            print("\n🔶 GENERATING SECTION: \(sectionName) 🔶")
-            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-        } else {
-            print("\n🔶 GENERATING SECTION: \(sectionName)")
+    /// Log an error message
+    static func error(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
+        if currentLogLevel >= .error {
+            log("❌ ERROR: \(message)", file: file, function: function, line: line)
         }
     }
     
-    /// Log the end of a section
-    static func logSectionEnd(_ sectionName: String) {
-        guard level.rawValue >= LogLevel.basic.rawValue else { return }
-        
-        if useSeparators {
-            print("✅ COMPLETED SECTION: \(sectionName)")
-            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-        } else {
-            print("✅ COMPLETED SECTION: \(sectionName)")
+    /// Log a warning message
+    static func warning(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
+        if currentLogLevel >= .warning {
+            log("⚠️ WARNING: \(message)", file: file, function: function, line: line)
         }
     }
     
-    // MARK: - Paragraph Logging
+    /// Log an informational message
+    static func info(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
+        if currentLogLevel >= .info {
+            log("ℹ️ INFO: \(message)", file: file, function: function, line: line)
+        }
+    }
     
-    /// Log a generated paragraph with its influencing tokens
-    static func logParagraph(_ paragraph: String, influencedBy tokens: [StyleToken] = [],
-                            decisionFactors: [String] = []) {
-        guard level.rawValue >= LogLevel.detailed.rawValue else { return }
-        
-        print("\n📝 PARAGRAPH OUTPUT:")
-        print(paragraph)
-        
-        if !tokens.isEmpty {
-            print("\n🧩 INFLUENCING TOKENS:")
-            for token in tokens {
-                var tokenInfo = "  • \(token.name)"
-                
-                if showWeights {
-                    tokenInfo += " (weight: \(String(format: "%.2f", token.weight)))"
-                }
-                
-                if showSources, let source = getSourceDescription(for: token) {
-                    tokenInfo += " - \(source)"
-                }
-                
-                print(tokenInfo)
-            }
+    /// Log a debug message
+    static func debug(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
+        if currentLogLevel >= .debug {
+            log("🔍 DEBUG: \(message)", file: file, function: function, line: line)
         }
-        
-        if !decisionFactors.isEmpty {
-            print("\n🔍 DECISION FACTORS:")
-            for factor in decisionFactors {
-                print("  • \(factor)")
-            }
+    }
+    
+    /// Log a verbose message
+    static func verbose(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
+        if currentLogLevel >= .verbose {
+            log("📝 VERBOSE: \(message)", file: file, function: function, line: line)
         }
+    }
+    
+    // MARK: - Paragraph Assembly Logging
+    
+    /// Log information about a paragraph being assembled
+    static func paragraphAssembly(sectionName: String, paragraphText: String, tokens: [StyleToken]) {
+        guard enableParagraphAssemblyLogging else { return }
         
+        // Create a separator based on section name length
+        let separatorLength = min(max(sectionName.count, 20), 100)
+        let separator = String(repeating: "━", count: separatorLength)
+        
+        // Begin section
+        print("\n🔄 PARAGRAPH ASSEMBLY: \(sectionName.uppercased()) 🔄")
+        print(separator)
+        
+        // Print the paragraph text
+        print("📄 PARAGRAPH TEXT:")
+        print(paragraphText)
         print("")
+        
+        // Show tokens that influenced this paragraph
+        logInfluentialTokens(tokens)
+        
+        // Show astrological factors
+        logAstrologicalFactors(tokens)
+        
+        // End separator
+        print(separator)
     }
     
-    /// Log a specific text choice and the tokens that influenced it
-    static func logTextChoice(text: String, reason: String,
-                             influencedBy tokens: [StyleToken] = []) {
-        guard level.rawValue >= LogLevel.verbose.rawValue else { return }
+    /// Log a specific sentence being added to a paragraph with its influencing tokens
+    static func sentence(text: String, influencedBy tokens: [StyleToken], inSection section: String) {
+        guard enableParagraphAssemblyLogging else { return }
         
-        print("\n🔤 TEXT CHOICE: \"\(text)\"")
-        print("📌 REASON: \(reason)")
+        // Create a smaller separator
+        let separator = String(repeating: "┄", count: 60)
         
-        if !tokens.isEmpty {
-            print("🧩 KEY TOKENS:")
-            for token in tokens {
-                var tokenInfo = "  • \(token.name)"
+        print("\n📝 SENTENCE: [\(section)]")
+        print(separator)
+        
+        // Print the sentence text
+        print("\"" + text + "\"")
+        
+        // Show top tokens (limited to 3 for readability)
+        let topTokens = tokens.sorted { $0.weight > $1.weight }.prefix(3)
+        if !topTokens.isEmpty {
+            print("🏷️ TOP INFLUENCING TOKENS:")
+            for token in topTokens {
+                print("  • \(token.name) (\(token.type)): weight \(String(format: "%.2f", token.weight))")
                 
-                if showWeights {
-                    tokenInfo += " (weight: \(String(format: "%.2f", token.weight)))"
+                // Add source information if available
+                var sourceInfo = ""
+                if let planet = token.planetarySource {
+                    sourceInfo += " from \(planet)"
+                }
+                if let sign = token.signSource {
+                    sourceInfo += " in \(sign)"
+                }
+                if let house = token.houseSource {
+                    sourceInfo += " in house \(house)"
+                }
+                if let aspect = token.aspectSource {
+                    sourceInfo += " via \(aspect)"
                 }
                 
-                if showSources, let source = getSourceDescription(for: token) {
-                    tokenInfo += " - \(source)"
+                if !sourceInfo.isEmpty {
+                    print("    \(sourceInfo)")
                 }
-                
-                print(tokenInfo)
             }
         }
         
-        print("")
+        print(separator)
     }
     
-    // MARK: - Token Analysis
+    /// Log transition between paragraphs
+    static func paragraphTransition(from: String, to: String) {
+        guard enableParagraphAssemblyLogging else { return }
+        
+        print("\n🔀 PARAGRAPH TRANSITION")
+        print("┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+        print("FROM: \(from)")
+        print("TO: \(to)")
+        print("┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+    }
     
-    /// Log detailed token evaluation for a section
-    static func logTokenEvaluation(sectionName: String, tokens: [StyleToken]) {
-        guard level.rawValue >= LogLevel.verbose.rawValue else { return }
+    // MARK: - Token Debugging
+    
+    /// Log token set with descriptive title
+    static func tokenSet(_ title: String, _ tokens: [StyleToken]) {
+        guard enableTokenDebugLogging else { return }
         
-        print("\n🔬 TOKEN EVALUATION FOR: \(sectionName)")
+        print("\n🪙 \(title) 🪙")
+        print("  ▶ Count: \(tokens.count)")
         
-        // Group tokens by type
+        // Group by type
         var tokensByType: [String: [StyleToken]] = [:]
         for token in tokens {
             if tokensByType[token.type] == nil {
@@ -148,136 +175,142 @@ class DebugLogger {
             tokensByType[token.type]?.append(token)
         }
         
-        // Print tokens by type
+        // Print by type with weights
         for (type, typeTokens) in tokensByType.sorted(by: { $0.key < $1.key }) {
-            print("\n  📊 \(type.uppercased())")
+            print("  📊 \(type.uppercased())")
             
-            // Sort by weight
-            let sortedTokens = typeTokens.sorted { $0.weight > $1.weight }
-            for token in sortedTokens {
-                var tokenInfo = "    • \(token.name)"
-                
-                if showWeights {
-                    tokenInfo += " (weight: \(String(format: "%.2f", token.weight)))"
+            // Sort by weight (highest first)
+            let sorted = typeTokens.sorted { $0.weight > $1.weight }
+            for token in sorted {
+                var sourceInfo = ""
+                if let planet = token.planetarySource {
+                    sourceInfo += "[\(planet)]"
+                }
+                if let sign = token.signSource {
+                    sourceInfo += "[\(sign)]"
+                }
+                if let house = token.houseSource {
+                    sourceInfo += "[House \(house)]"
+                }
+                if let aspect = token.aspectSource {
+                    sourceInfo += "[\(aspect)]"
                 }
                 
-                if showSources, let source = getSourceDescription(for: token) {
-                    tokenInfo += " - \(source)"
-                }
-                
-                print(tokenInfo)
+                print("    • \(token.name): \(String(format: "%.2f", token.weight)) \(sourceInfo)")
             }
         }
         
-        // Count tokens by planetary source
-        var sourceCount: [String: Int] = [:]
+        // Count tokens by source
+        var sourceCounts: [String: Int] = [:]
         for token in tokens {
-            if let source = token.planetarySource {
-                sourceCount[source, default: 0] += 1
+            var source = "Unknown"
+            if let planet = token.planetarySource {
+                source = planet
+            } else if let aspect = token.aspectSource {
+                source = aspect
             }
+            sourceCounts[source, default: 0] += 1
         }
         
-        if !sourceCount.isEmpty {
-            print("\n  🪐 PLANETARY INFLUENCE:")
-            for (source, count) in sourceCount.sorted(by: { $0.value > $1.value }) {
-                print("    • \(source): \(count) tokens")
-            }
+        print("  🔍 SOURCE DISTRIBUTION:")
+        for (source, count) in sourceCounts.sorted(by: { $0.value > $1.value }) {
+            print("    • \(source): \(count) tokens")
         }
-        
-        // Count tokens by house
-        var houseCount: [Int: Int] = [:]
-        for token in tokens where token.houseSource != nil {
-            if let house = token.houseSource {
-                houseCount[house, default: 0] += 1
-            }
-        }
-        
-        if !houseCount.isEmpty {
-            print("\n  🏠 HOUSE INFLUENCE:")
-            for (house, count) in houseCount.sorted(by: { $0.key < $1.key }) {
-                print("    • House \(house): \(count) tokens")
-            }
-        }
-        
-        print("")
-    }
-    
-    /// Log decision points in the paragraph assembly
-    static func logDecisionPoint(description: String, options: [String],
-                                selectedOption: String, reason: String) {
-        guard level.rawValue >= LogLevel.verbose.rawValue else { return }
-        
-        print("\n🔀 DECISION POINT: \(description)")
-        print("  Options:")
-        for (index, option) in options.enumerated() {
-            let marker = option == selectedOption ? "✓" : " "
-            print("  \(marker) [\(index + 1)] \(option)")
-        }
-        print("  Selected: \"\(selectedOption)\"")
-        print("  Reason: \(reason)")
-        print("")
     }
     
     // MARK: - Helper Methods
     
-    /// Get a formatted description of a token's source
-    private static func getSourceDescription(for token: StyleToken) -> String? {
-        var sources: [String] = []
+    /// Log a message with file, function, and line information
+    private static func log(_ message: String, file: String, function: String, line: Int) {
+        // Extract file name without path and extension
+        let fileName = URL(fileURLWithPath: file).lastPathComponent.components(separatedBy: ".").first ?? file
         
-        if let planet = token.planetarySource {
-            sources.append(planet)
-        }
-        
-        if let sign = token.signSource {
-            sources.append(sign)
-        }
-        
-        if let house = token.houseSource {
-            sources.append("House \(house)")
-        }
-        
-        if let aspect = token.aspectSource {
-            sources.append(aspect)
-        }
-        
-        return sources.isEmpty ? nil : sources.joined(separator: ", ")
+        print("\(message) [\(fileName):\(line) \(function)]")
     }
     
-    /// Log theme selection process
-    static func logThemeSelection(tokens: [StyleToken], selectedTheme: String,
-                                 scoredThemes: [(name: String, score: Double)]) {
-        guard level.rawValue >= LogLevel.detailed.rawValue else { return }
+    /// Log tokens that influenced a paragraph
+    private static func logInfluentialTokens(_ tokens: [StyleToken]) {
+        print("🏷️ INFLUENTIAL TOKENS:")
         
-        print("\n🎨 THEME SELECTION")
-        print("  Selected Theme: \(selectedTheme)")
-        
-        if !scoredThemes.isEmpty {
-            print("\n  Theme Scores:")
-            for (index, theme) in scoredThemes.enumerated() {
-                let marker = theme.name == selectedTheme ? "✓" : " "
-                print("  \(marker) [\(index + 1)] \(theme.name): \(String(format: "%.2f", theme.score))")
+        // Group tokens by type for better organization
+        var tokensByType: [String: [StyleToken]] = [:]
+        for token in tokens {
+            if tokensByType[token.type] == nil {
+                tokensByType[token.type] = []
             }
+            tokensByType[token.type]?.append(token)
         }
         
-        // Log top tokens that influenced the theme
-        let topTokens = tokens.sorted(by: { $0.weight > $1.weight }).prefix(5)
-        if !topTokens.isEmpty {
-            print("\n  Top Influencing Tokens:")
+        // Print by type with weights
+        for (type, typeTokens) in tokensByType.sorted(by: { $0.key < $1.key }) {
+            print("  📊 \(type.uppercased())")
+            
+            // Sort by weight (highest first) and only show top 3 per type
+            let sorted = typeTokens.sorted { $0.weight > $1.weight }.prefix(3)
+            for token in sorted {
+                print("    • \(token.name): \(String(format: "%.2f", token.weight))")
+            }
+        }
+    }
+    
+    /// Log astrological factors that influenced a paragraph
+    private static func logAstrologicalFactors(_ tokens: [StyleToken]) {
+        print("🔮 ASTROLOGICAL FACTORS:")
+        
+        // Group by planetary source
+        var planetarySources: [String: [StyleToken]] = [:]
+        for token in tokens where token.planetarySource != nil {
+            if planetarySources[token.planetarySource!] == nil {
+                planetarySources[token.planetarySource!] = []
+            }
+            planetarySources[token.planetarySource!]?.append(token)
+        }
+        
+        // Print by planetary source
+        for (planet, planetTokens) in planetarySources.sorted(by: { $0.key < $1.key }) {
+            // Get sign and house info if available
+            var signInfo = ""
+            var houseInfo = ""
+            
+            if let sign = planetTokens.first?.signSource {
+                signInfo = " in \(sign)"
+            }
+            
+            if let house = planetTokens.first?.houseSource {
+                houseInfo = " in House \(house)"
+            }
+            
+            print("  • \(planet)\(signInfo)\(houseInfo)")
+            
+            // Show top tokens for this planet (limited to 2 for readability)
+            let topTokens = planetTokens.sorted { $0.weight > $1.weight }.prefix(2)
             for token in topTokens {
-                var tokenInfo = "    • \(token.name)"
-                
-                if showWeights {
-                    tokenInfo += " (weight: \(String(format: "%.2f", token.weight)))"
-                }
-                
-                if showSources, let source = getSourceDescription(for: token) {
-                    tokenInfo += " - \(source)"
-                }
-                
-                print(tokenInfo)
+                print("      → \(token.name) (\(String(format: "%.2f", token.weight)))")
             }
         }
         
-        print("")
+        // Group by aspect source
+        var aspectSources: [String] = []
+        for token in tokens where token.aspectSource != nil {
+            if !aspectSources.contains(token.aspectSource!) {
+                aspectSources.append(token.aspectSource!)
+            }
+        }
+        
+        // Print aspects
+        if !aspectSources.isEmpty {
+            print("  • Aspects:")
+            for aspect in aspectSources.sorted() {
+                print("      → \(aspect)")
+            }
+        }
+    }
+}
+
+// Extension to make arrays of style tokens loggable
+extension Array where Element == StyleToken {
+    /// Log this array of tokens with the given title
+    func debugLog(title: String) {
+        DebugLogger.tokenSet(title, self)
     }
 }

@@ -185,17 +185,18 @@ final class NatalChartViewController: UIViewController {
         title = "Natal Chart"
         
         // Set up navigation bar buttons - one for daily vibe, one for blueprint
+        // IMPORTANT NOTE: Currently set to DEBUG version. Should remove `WithDebug` for production.
         let dailyVibeButton = UIBarButtonItem(
             title: "Daily Vibe",
             style: .plain,
             target: self,
-            action: #selector(showDailyVibeInterpretation))
+            action: #selector(showDailyVibeInterpretationWithDebug))
         
         let blueprintButton = UIBarButtonItem(
             title: "Blueprint",
             style: .plain,
             target: self,
-            action: #selector(showBlueprintInterpretation))
+            action: #selector(showBlueprintInterpretationWithDebug))
         
         navigationItem.rightBarButtonItems = [dailyVibeButton, blueprintButton]
         
@@ -354,6 +355,247 @@ final class NatalChartViewController: UIViewController {
             // Fallback: Present modally if navigation controller isn't available
             self.present(dailyVibeVC, animated: true)
         }
+    }
+    
+    /// Override the Blueprint interpretation generation to use the debug version
+    @objc func showBlueprintInterpretationWithDebug() {
+        guard let natalChart = natalChart else {
+            showAlert(message: "Chart data is not available. Please try again.")
+            return
+        }
+        
+        // Show loading indicator
+        activityIndicator.startAnimating()
+        
+        print("\n🔍 STARTING DETAILED DEBUG BLUEPRINT GENERATION 🔍")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        
+        // Generate the blueprint interpretation with detailed debugging
+        let interpretation = CosmicFitInterpretationEngine.generateBlueprintInterpretationWithDebug(
+            from: natalChart
+        )
+        
+        print("Generated Blueprint interpretation with \(interpretation.stitchedParagraph.count) characters")
+        
+        // Extract location information from birthInfo if possible
+        var city = ""
+        var country = ""
+        
+        // Parse the location from birthInfo string by extracting only city, country
+        if let locationRange = birthInfo.range(of: "at ") {
+            let locationStartIndex = locationRange.upperBound
+            let locationSubstring = birthInfo[locationStartIndex...]
+            
+            if let coordinatesRange = locationSubstring.range(of: "(") {
+                let locationName = String(locationSubstring[..<coordinatesRange.lowerBound]).trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                // Try to split into city and country if there's a comma
+                let components = locationName.components(separatedBy: ", ")
+                if components.count >= 2 {
+                    city = components[0]
+                    country = components.dropFirst().joined(separator: ", ")
+                } else {
+                    // If can't split, just use the whole location name
+                    city = locationName
+                }
+                
+                // Check if city contains a time pattern like "04:30" followed by a space
+                if let timeRange = city.range(of: "\\d{1,2}:\\d{2}", options: .regularExpression) {
+                    // Find the first space after the time
+                    if let spaceAfterTime = city.range(of: " ", range: timeRange.upperBound..<city.endIndex) {
+                        // Extract everything after the space
+                        city = String(city[spaceAfterTime.upperBound...]).trimmingCharacters(in: .whitespacesAndNewlines)
+                    }
+                }
+                
+                // Remove "AT " prefix if present (case insensitive)
+                if city.uppercased().hasPrefix("AT ") {
+                    city = String(city.dropFirst(3)).trimmingCharacters(in: .whitespacesAndNewlines)
+                }
+            }
+        }
+        
+        // Create and push the view controller with proper formatting for Blueprint
+        let vc = InterpretationViewController()
+        vc.configure(
+            with: interpretation.stitchedParagraph,
+            title: "Your Cosmic Fit Blueprint",
+            themeName: interpretation.themeName,
+            isBlueprint: true,
+            birthDate: birthDate,  // Pass the actual birth date
+            birthCity: city,       // Pass the extracted city (without time or "AT" prefix)
+            birthCountry: country  // Pass the extracted country
+        )
+        
+        // Stop the activity indicator
+        self.activityIndicator.stopAnimating()
+        
+        // Navigate to interpretation view
+        if let navController = self.navigationController {
+            print("Pushing Blueprint interpretation view controller")
+            navController.pushViewController(vc, animated: true)
+        } else {
+            print("ERROR: No navigation controller available")
+            // Fallback: Present modally if navigation controller isn't available
+            self.present(vc, animated: true)
+        }
+        
+        print("✅ DEBUG BLUEPRINT GENERATION COMPLETE")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    }
+    
+    /// Override the Daily Vibe interpretation generation to use the debug version
+    @objc func showDailyVibeInterpretationWithDebug() {
+        guard let natalChart = natalChart, let progChart = progressedChart else {
+            showAlert(message: "Chart data is not available. Please try again.")
+            return
+        }
+        
+        // Show loading indicator
+        activityIndicator.startAnimating()
+        
+        print("\n🔍 STARTING DETAILED DEBUG DAILY VIBE GENERATION 🔍")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        
+        // Collect transits
+        let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
+        
+        // Generate daily vibe content using the debug-enhanced version
+        let dailyVibeContent = CosmicFitInterpretationEngine.generateDailyVibeInterpretationWithDebug(
+            from: natalChart,
+            progressedChart: progChart,
+            transits: allTransits,
+            weather: todayWeather
+        )
+        
+        // Create and push the DailyVibeInterpretationViewController
+        let dailyVibeVC = DailyVibeInterpretationViewController()
+        dailyVibeVC.configure(with: dailyVibeContent)
+        
+        // Stop the activity indicator
+        self.activityIndicator.stopAnimating()
+        
+        // Navigate to daily vibe view
+        if let navController = self.navigationController {
+            print("Pushing Daily Vibe interpretation view controller")
+            navController.pushViewController(dailyVibeVC, animated: true)
+        } else {
+            print("ERROR: No navigation controller available")
+            // Fallback: Present modally if navigation controller isn't available
+            self.present(dailyVibeVC, animated: true)
+        }
+        
+        print("✅ DEBUG DAILY VIBE GENERATION COMPLETE")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    }
+    
+    /// Add debug menu options to the view controller
+    func addDebugMenuOptions() {
+        // Create a debug options button
+        let debugButton = UIBarButtonItem(
+            title: "Debug",
+            style: .plain,
+            target: self,
+            action: #selector(showDebugOptions))
+        
+        // Add to left side of navigation bar
+        navigationItem.leftBarButtonItem = debugButton
+    }
+    
+    /// Show debug options menu
+    @objc func showDebugOptions() {
+        let alert = UIAlertController(
+            title: "Debug Options",
+            message: "Select a debug option",
+            preferredStyle: .actionSheet
+        )
+        
+        // Debug Blueprint option
+        alert.addAction(UIAlertAction(
+            title: "Debug Blueprint Generation",
+            style: .default,
+            handler: { [weak self] _ in
+                self?.showBlueprintInterpretationWithDebug()
+            }
+        ))
+        
+        // Debug Daily Vibe option
+        alert.addAction(UIAlertAction(
+            title: "Debug Daily Vibe Generation",
+            style: .default,
+            handler: { [weak self] _ in
+                self?.showDailyVibeInterpretationWithDebug()
+            }
+        ))
+        
+        // Debug log level options
+        alert.addAction(UIAlertAction(
+            title: "Set Debug Level",
+            style: .default,
+            handler: { [weak self] _ in
+                self?.showDebugLevelOptions()
+            }
+        ))
+        
+        // Cancel option
+        alert.addAction(UIAlertAction(
+            title: "Cancel",
+            style: .cancel
+        ))
+        
+        // Present the alert
+        present(alert, animated: true)
+    }
+    
+    /// Show debug level options
+    @objc func showDebugLevelOptions() {
+        let alert = UIAlertController(
+            title: "Debug Log Level",
+            message: "Select a debug log level",
+            preferredStyle: .actionSheet
+        )
+        
+        // Add options for each debug level
+        for level in [
+            DebugLogger.LogLevel.verbose,
+            DebugLogger.LogLevel.debug,
+            DebugLogger.LogLevel.info,
+            DebugLogger.LogLevel.warning,
+            DebugLogger.LogLevel.error,
+            DebugLogger.LogLevel.none
+        ] {
+            let isCurrentLevel = level == DebugLogger.currentLogLevel
+            let checkmark = isCurrentLevel ? " ✓" : ""
+            
+            alert.addAction(UIAlertAction(
+                title: "\(level)" + checkmark,
+                style: .default,
+                handler: { _ in
+                    DebugLogger.currentLogLevel = level
+                    print("Debug log level set to: \(level)")
+                }
+            ))
+        }
+        
+        // Additional options for paragraph assembly logging
+        alert.addAction(UIAlertAction(
+            title: "Toggle Paragraph Assembly Logging " +
+                  (DebugLogger.enableParagraphAssemblyLogging ? "✓" : ""),
+            style: .default,
+            handler: { _ in
+                DebugLogger.enableParagraphAssemblyLogging.toggle()
+                print("Paragraph assembly logging: \(DebugLogger.enableParagraphAssemblyLogging ? "Enabled" : "Disabled")")
+            }
+        ))
+        
+        // Cancel option
+        alert.addAction(UIAlertAction(
+            title: "Cancel",
+            style: .cancel
+        ))
+        
+        // Present the alert
+        present(alert, animated: true)
     }
     
     @objc private func showBlueprintInterpretation() {
@@ -595,5 +837,47 @@ final class ChartDataCell: UITableViewCell {
         titleLabel.text     = title
         detailLabel.text    = detail
         secondaryLabel.text = secondary
+    }
+}
+
+/// Swizzle the original viewDidLoad method to add our debug menu
+extension UIViewController {
+    static let swizzleViewDidLoad: Void = {
+        let originalSelector = #selector(UIViewController.viewDidLoad)
+        let swizzledSelector = #selector(UIViewController.swizzled_viewDidLoad)
+        
+        guard let originalMethod = class_getInstanceMethod(UIViewController.self, originalSelector),
+              let swizzledMethod = class_getInstanceMethod(UIViewController.self, swizzledSelector) else {
+            return
+        }
+        
+        method_exchangeImplementations(originalMethod, swizzledMethod)
+    }()
+    
+    @objc func swizzled_viewDidLoad() {
+        swizzled_viewDidLoad()
+        
+        // Add debug menu if this is NatalChartViewController
+        if let natalChartVC = self as? NatalChartViewController {
+            natalChartVC.addDebugMenuOptions()
+        }
+    }
+}
+
+/// Debug initialization to be called at app launch
+class DebugInitializer {
+    static func setupDebugEnhancements() {
+        // Enable method swizzling to add debug menu
+        UIViewController.swizzleViewDidLoad
+        
+        // Set initial debug log level
+        DebugLogger.currentLogLevel = .verbose
+        DebugLogger.enableParagraphAssemblyLogging = true
+        DebugLogger.enableTokenDebugLogging = true
+        
+        print("🧩 DEBUG ENHANCEMENTS INITIALIZED 🧩")
+        print("Debug log level: \(DebugLogger.currentLogLevel)")
+        print("Paragraph assembly logging: \(DebugLogger.enableParagraphAssemblyLogging ? "Enabled" : "Disabled")")
+        print("Token debug logging: \(DebugLogger.enableTokenDebugLogging ? "Enabled" : "Disabled")")
     }
 }

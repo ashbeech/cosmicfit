@@ -113,7 +113,7 @@ struct ParagraphAssembler {
     // MARK: - Upper Blueprint Sections (100% Natal, Whole Sign)
     
     /// Generates the Essence paragraph based on Sun, Venus, and Ascendant signs using Whole Sign
-    private static func generateEssenceSection(from tokens: [StyleToken]) -> String {
+    static func generateEssenceSection(from tokens: [StyleToken]) -> String {
         // ✴️ SOURCE: Sun sign + Venus sign + Ascendant sign
         // ⚖️ WEIGHTING: Sun x1.1, Venus x1.5, Ascendant x1.3
         
@@ -188,7 +188,7 @@ struct ParagraphAssembler {
     }
     
     /// Generates the Core paragraph based on Sun, Venus, and Moon signs using Whole Sign
-    private static func generateCoreSection(from tokens: [StyleToken]) -> String {
+    static func generateCoreSection(from tokens: [StyleToken]) -> String {
         // ✴️ SOURCE: Sun sign + Venus sign + Moon sign
         // ⚖️ Look for consistent tone across these planets
         
@@ -265,7 +265,7 @@ struct ParagraphAssembler {
     }
     
     /// Generates the Expression paragraph based on Ascendant and Mercury/Mars using Whole Sign
-    private static func generateExpressionSection(from tokens: [StyleToken]) -> String {
+    static func generateExpressionSection(from tokens: [StyleToken]) -> String {
         // ✴️ SOURCE: Ascendant sign, Mercury + Mars in visual houses (1st, 3rd, 5th)
         // ✴️ Venus in fixed/cardinal/mutable signs for structure of expression
         
@@ -357,7 +357,7 @@ struct ParagraphAssembler {
     }
     
     /// Generates the Magnetism paragraph based on Venus placement and aspects using Whole Sign
-    private static func generateMagnetismSection(from tokens: [StyleToken]) -> String {
+    static func generateMagnetismSection(from tokens: [StyleToken]) -> String {
         // ✴️ SOURCE: Venus sign + house, Moon sign, retrograde planets
         // ✴️ Affecting visual/relationship houses (1st, 7th)
         
@@ -407,7 +407,7 @@ struct ParagraphAssembler {
     }
     
     /// Generates the Emotional Dressing paragraph based on Moon placement using Whole Sign
-    private static func generateEmotionalDressingSection(from tokens: [StyleToken]) -> String {
+    static func generateEmotionalDressingSection(from tokens: [StyleToken]) -> String {
         // ✴️ SOURCE: Moon sign + house, Neptune/Pisces/12th house influence
         // ✴️ Hard aspects to Venus or Moon
         
@@ -447,7 +447,7 @@ struct ParagraphAssembler {
     }
     
     /// Generates the Planetary Frequency paragraph based on elemental dominance using Whole Sign
-    private static func generatePlanetaryFrequencySection(from tokens: [StyleToken]) -> String {
+    static func generatePlanetaryFrequencySection(from tokens: [StyleToken]) -> String {
         // ✴️ SOURCE: Elemental dominance, planet dignities, retrograde frequency
         
         // Count tokens by element
@@ -529,7 +529,7 @@ struct ParagraphAssembler {
     // MARK: - Fabric Guide (100% Natal, Whole Sign)
     
     /// Generates fabric recommendations based on chart elements using Whole Sign
-    private static func generateFabricRecommendations(from tokens: [StyleToken]) -> String {
+    static func generateFabricRecommendations(from tokens: [StyleToken]) -> String {
         // ⚖️ WEIGHTING: Venus x1.5, Ascendant x1.3, Mars x1.2
         var nourishingFabrics: [String] = []
         var depletingFabrics: [String] = []
@@ -640,7 +640,7 @@ struct ParagraphAssembler {
     
     /// Generates style pulse elements (keywords, priorities, journey)
     /// - Tokens weighted: 90% natal, 10% progressed flavor
-    private static func generateStylePulse(from tokens: [StyleToken]) -> String {
+    static func generateStylePulse(from tokens: [StyleToken]) -> String {
         // STYLE KEYWORDS = Top 5 token names (weight ≥ 2.5)
         // SENSORY PRIORITIES = Token type == "texture" or "mood" with weight ≥ 2.5
         // STYLE JOURNEY NOTES = Custom mapping
@@ -752,7 +752,7 @@ struct ParagraphAssembler {
     // MARK: - Fashion Guidance (100% Natal, Whole Sign)
     
     /// Generates fashion do's and don'ts based on chart elements using Whole Sign
-    private static func generateFashionGuidance(from tokens: [StyleToken]) -> String {
+    static func generateFashionGuidance(from tokens: [StyleToken]) -> String {
         // LEAN INTO = Top tokens with consistent tone (weight > 2.5)
         // RELEASE = Token pairs in opposition
         // WATCH OUT FOR = Logic conflict detection
@@ -876,7 +876,7 @@ struct ParagraphAssembler {
     // MARK: - Color Recommendations (70% natal, 30% progressed)
     
     /// Generates color recommendations - tokens weighted: 70% natal, 30% progressed
-    public static func generateColorRecommendations(from tokens: [StyleToken]) -> String {
+    static func generateColorRecommendations(from tokens: [StyleToken]) -> String {
         // Analyze tokens to determine color preferences
         var elementalColors: [String] = []
         var currentPhaseColors: [String] = []
@@ -974,7 +974,7 @@ struct ParagraphAssembler {
     // MARK: - Wardrobe Storyline (60% progressed with Placidus, 40% natal)
     
     /// Generates wardrobe storyline - tokens weighted: 60% progressed with Placidus, 40% natal
-    public static func generateWardrobeStoryline(from tokens: [StyleToken]) -> String {
+    static func generateWardrobeStoryline(from tokens: [StyleToken]) -> String {
         // PAST ARC = Moon/Venus hard aspects, fixed signs
         // PRESENT PHASE = Current progressions + natal themes
         // EMERGING CHAPTER = Progressed Ascendant/Venus changes, Pluto/Uranus transits

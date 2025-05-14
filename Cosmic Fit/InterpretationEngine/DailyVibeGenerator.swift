@@ -317,7 +317,7 @@ class DailyVibeGenerator {
     }
     
     /// Generate textiles recommendations
-    private static func generateTextiles(tokens: [StyleToken]) -> String {
+    static func generateTextiles(tokens: [StyleToken]) -> String {
         // Extract relevant characteristics for fabric recommendations
         let hasSoft = tokens.contains { $0.name == "soft" && $0.weight > 1.0 }
         let hasStructured = tokens.contains { $0.name == "structured" && $0.weight > 1.0 }
@@ -388,7 +388,7 @@ class DailyVibeGenerator {
     }
     
     /// Generate color recommendations
-    private static func generateColors(tokens: [StyleToken]) -> String {
+    static func generateColors(tokens: [StyleToken]) -> String {
         // Extract relevant characteristics for color recommendations
         let hasEarthy = tokens.contains { $0.name == "earthy" && $0.weight > 1.0 }
         let hasWatery = tokens.contains { $0.name == "watery" || $0.name == "fluid" && $0.weight > 1.0 }
@@ -495,7 +495,7 @@ class DailyVibeGenerator {
     }
     
     /// Calculate vibrancy percentage based on tokens
-    private static func calculateVibrancy(tokens: [StyleToken]) -> Int {
+    static func calculateVibrancy(tokens: [StyleToken]) -> Int {
         // Start with a base value
         var vibrancyValue = 50
         
@@ -523,7 +523,7 @@ class DailyVibeGenerator {
     }
     
     /// Generate pattern recommendations
-    private static func generatePatterns(tokens: [StyleToken]) -> String {
+    static func generatePatterns(tokens: [StyleToken]) -> String {
         // Extract relevant characteristics for pattern recommendations
         let hasMinimal = tokens.contains { $0.name == "minimal" && $0.weight > 1.0 }
         let hasTextured = tokens.contains { $0.name == "textured" && $0.weight > 1.0 }
@@ -556,7 +556,7 @@ class DailyVibeGenerator {
     }
     
     /// Generate shape recommendations
-    private static func generateShape(tokens: [StyleToken]) -> String {
+    static func generateShape(tokens: [StyleToken]) -> String {
         // Extract relevant characteristics for shape recommendations
         let hasStructured = tokens.contains { $0.name == "structured" && $0.weight > 1.0 }
         let hasFluid = tokens.contains { $0.name == "fluid" && $0.weight > 1.0 }
@@ -587,7 +587,7 @@ class DailyVibeGenerator {
     }
     
     /// Generate accessories recommendations
-    private static func generateAccessories(tokens: [StyleToken]) -> String {
+    static func generateAccessories(tokens: [StyleToken]) -> String {
         // Extract relevant characteristics for accessories recommendations
         let hasMinimal = tokens.contains { $0.name == "minimal" && $0.weight > 1.0 }
         let hasExpressive = tokens.contains { $0.name == "expressive" || $0.name == "bold" && $0.weight > 1.0 }
@@ -616,7 +616,7 @@ class DailyVibeGenerator {
     }
     
     /// Generate final takeaway message
-    private static func generateTakeaway(tokens: [StyleToken], moonPhase: Double) -> String {
+    static func generateTakeaway(tokens: [StyleToken], moonPhase: Double) -> String {
         // Create takeaway options based on token combinations
         var takeawayOptions: [String] = []
         
