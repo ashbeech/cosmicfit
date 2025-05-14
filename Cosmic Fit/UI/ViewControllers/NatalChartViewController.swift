@@ -330,41 +330,29 @@ final class NatalChartViewController: UIViewController {
         // Collect transits
         let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
         
-        // Get the current lunar phase
-        let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: Date())
-        let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: currentJulianDay)
-        
-        // Generate the daily vibe interpretation with hybrid house system approach
-        let dailyVibeText = DailyVibeGenerator.generateDailyVibe(
-            natalChart: natalChart,
+        // Generate daily vibe content using the NatalChartManager
+        let dailyVibeContent = NatalChartManager.shared.generateDailyVibeInterpretation(
+            for: natalChart,
             progressedChart: progChart,
             transits: allTransits,
-            weather: todayWeather,
-            moonPhase: lunarPhase
+            weather: todayWeather
         )
         
-        print("Generated Daily Vibe interpretation with \(dailyVibeText.count) characters")
-        
-        // Create and push the view controller
-        let vc = InterpretationViewController()
-        vc.configure(
-            with: dailyVibeText,
-            title: "Your Daily Cosmic Fit Vibe",
-            themeName: "", // Theme is embedded in daily vibe text
-            isBlueprint: false
-        )
+        // Create and push the DailyVibeInterpretationViewController
+        let dailyVibeVC = DailyVibeInterpretationViewController()
+        dailyVibeVC.configure(with: dailyVibeContent)
         
         // Stop the activity indicator
         self.activityIndicator.stopAnimating()
         
-        // Navigate to interpretation view
+        // Navigate to daily vibe view
         if let navController = self.navigationController {
             print("Pushing Daily Vibe interpretation view controller")
-            navController.pushViewController(vc, animated: true)
+            navController.pushViewController(dailyVibeVC, animated: true)
         } else {
             print("ERROR: No navigation controller available")
             // Fallback: Present modally if navigation controller isn't available
-            self.present(vc, animated: true)
+            self.present(dailyVibeVC, animated: true)
         }
     }
     

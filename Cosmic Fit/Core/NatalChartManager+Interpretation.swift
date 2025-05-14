@@ -25,21 +25,20 @@ extension NatalChartManager {
     ///   - progressedChart: The current progressed chart (can be the same as natal chart if needed)
     ///   - transits: Array of transit aspects
     ///   - weather: Optional current weather conditions
-    /// - Returns: A string containing the daily vibe interpretation
+    /// - Returns: A daily vibe content object
     func generateDailyVibeInterpretation(
         for natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
         transits: [[String: Any]],
-        weather: TodayWeather?) -> String {
+        weather: TodayWeather?) -> DailyVibeContent {
         
-        let interpretation = CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
+        // Use the CosmicFitInterpretationEngine to generate daily vibe content
+        return CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
             from: natalChart,
             progressedChart: progressedChart,
             transits: transits,
             weather: weather
         )
-        
-        return interpretation.stitchedParagraph
     }
     
     /// Generate a complete interpretation including both blueprint and daily vibe

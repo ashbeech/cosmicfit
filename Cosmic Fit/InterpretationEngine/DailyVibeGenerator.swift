@@ -24,7 +24,7 @@ class DailyVibeGenerator {
         progressedChart: NatalChartCalculator.NatalChart,
         transits: [[String: Any]],
         weather: TodayWeather?,
-        moonPhase: Double) -> String {
+        moonPhase: Double) -> DailyVibeContent {
         
         print("\n☀️ GENERATING DAILY COSMIC VIBE ☀️")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
@@ -141,8 +141,8 @@ class DailyVibeGenerator {
         // Log combined weighted tokens
         logTokenSet("COMBINED WEIGHTED TOKENS", allTokens)
         
-        // 7. Generate the daily vibe paragraphs
-        let dailyVibe = assembleDailyVibe(tokens: allTokens, weather: weather, moonPhase: moonPhase)
+        // 7. Generate the daily vibe content
+        let dailyVibeContent = generateDailyVibeContent(tokens: allTokens, weather: weather, moonPhase: moonPhase)
         
         // Log theme determination
         let themeName = ThemeSelector.scoreThemes(tokens: allTokens)
@@ -158,7 +158,511 @@ class DailyVibeGenerator {
         print("\n✅ Daily vibe generation completed successfully")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
         
-        return dailyVibe
+        return dailyVibeContent
+    }
+    
+    // MARK: - New Daily Vibe Content Generation
+    
+    /// Generate structured daily vibe content according to the specified format
+    static func generateDailyVibeContent(tokens: [StyleToken], weather: TodayWeather?, moonPhase: Double) -> DailyVibeContent {
+        // Create content object
+        var content = DailyVibeContent()
+        
+        // Generate title
+        content.title = generateVibeTitle(tokens: tokens)
+        
+        // Generate main paragraph
+        content.mainParagraph = generateMainParagraph(tokens: tokens, moonPhase: moonPhase)
+        
+        // Generate textiles section
+        content.textiles = generateTextiles(tokens: tokens)
+        
+        // Generate colors section
+        content.colors = generateColors(tokens: tokens)
+        
+        // Calculate brightness and vibrancy values
+        content.brightness = calculateBrightness(tokens: tokens, moonPhase: moonPhase)
+        content.vibrancy = calculateVibrancy(tokens: tokens)
+        
+        // Generate patterns section
+        content.patterns = generatePatterns(tokens: tokens)
+        
+        // Generate shape section
+        content.shape = generateShape(tokens: tokens)
+        
+        // Generate accessories section
+        content.accessories = generateAccessories(tokens: tokens)
+        
+        // Generate takeaway line
+        content.takeaway = generateTakeaway(tokens: tokens, moonPhase: moonPhase)
+        
+        return content
+    }
+    
+    /// Generate a poetic title for the daily vibe
+    private static func generateVibeTitle(tokens: [StyleToken]) -> String {
+        // Extract dominant characteristics from tokens
+        let hasStructured = tokens.contains { $0.name == "structured" && $0.weight > 1.5 }
+        let hasFluid = tokens.contains { $0.name == "fluid" && $0.weight > 1.5 }
+        let hasBold = tokens.contains { $0.name == "bold" && $0.weight > 1.5 }
+        let hasSubtle = tokens.contains { $0.name == "subtle" && $0.weight > 1.5 }
+        let hasEarthy = tokens.contains { $0.name == "earthy" && $0.weight > 1.5 }
+        let hasEthereal = tokens.contains { $0.name == "ethereal" || $0.name == "dreamy" && $0.weight > 1.5 }
+        let hasMinimal = tokens.contains { $0.name == "minimal" && $0.weight > 1.5 }
+        let hasLayered = tokens.contains { $0.name == "layered" && $0.weight > 1.5 }
+        let hasInstinctive = tokens.contains { $0.name == "instinctive" || $0.name == "intuitive" && $0.weight > 1.5 }
+        
+        // First word options based on dominant tokens
+        var firstWordOptions: [String] = []
+        if hasEarthy { firstWordOptions.append(contentsOf: ["Cinders", "Earth", "Roots", "Soil", "Ember"]) }
+        if hasEthereal { firstWordOptions.append(contentsOf: ["Mist", "Whispers", "Echoes", "Shadow", "Ghost"]) }
+        if hasFluid { firstWordOptions.append(contentsOf: ["Flow", "Current", "Rivers", "Waves", "Drift"]) }
+        if hasStructured { firstWordOptions.append(contentsOf: ["Structure", "Framework", "Scaffold", "Bones", "Pillars"]) }
+        if hasSubtle { firstWordOptions.append(contentsOf: ["Subtle", "Quiet", "Gentle", "Soft", "Tender"]) }
+        if hasBold { firstWordOptions.append(contentsOf: ["Bold", "Statement", "Command", "Presence", "Power"]) }
+        if hasMinimal { firstWordOptions.append(contentsOf: ["Minimal", "Essential", "Core", "Basic", "Pure"]) }
+        if hasLayered { firstWordOptions.append(contentsOf: ["Layers", "Depths", "Textured", "Woven", "Veiled"]) }
+        if hasInstinctive { firstWordOptions.append(contentsOf: ["Instinct", "Intuition", "Primal", "Wild", "Raw"]) }
+        
+        // If no specific dominant characteristic, use general options
+        if firstWordOptions.isEmpty {
+            firstWordOptions = ["Resonance", "Threshold", "Echo", "Whisper", "Rhythm", "Pulse", "Thread", "Cinders", "Veil", "Shift"]
+        }
+        
+        // Second/third word options for the title
+        let connectionWords = ["Beneath", "Within", "Beyond", "Between", "Through", "Against", "Beside", "Behind", "Under", "Above"]
+        let finalWords = ["the Surface", "the Veil", "the Noise", "the Current", "the Light", "the Shadow", "the Day", "the Self", "the Moment", "the Form"]
+        
+        // Select words randomly with weighting based on token strength
+        let firstWord = firstWordOptions.randomElement() ?? "Resonance"
+        let connectionWord = connectionWords.randomElement() ?? "Beneath"
+        let finalWord = finalWords.randomElement() ?? "the Surface"
+        
+        // Additional title options with different patterns
+        let styleTitles = [
+            "\(firstWord) \(connectionWord) \(finalWord)",
+            "The \(firstWord) of \(finalWord)",
+            "\(firstWord) and \(finalWord)",
+            "\(connectionWord) \(finalWord)",
+            "\(firstWord) in \(finalWord)"
+        ]
+        
+        // Select a title format randomly
+        return styleTitles.randomElement() ?? "Cinders Beneath the Surface"
+    }
+    
+    /// Generate the main paragraph describing the overall vibe
+    private static func generateMainParagraph(tokens: [StyleToken], moonPhase: Double) -> String {
+        // Extract dominant characteristics
+        let hasStructured = tokens.contains { $0.name == "structured" && $0.weight > 1.5 }
+        let hasFluid = tokens.contains { $0.name == "fluid" && $0.weight > 1.5 }
+        let hasBold = tokens.contains { $0.name == "bold" && $0.weight > 1.5 }
+        let hasSubtle = tokens.contains { $0.name == "subtle" && $0.weight > 1.5 }
+        let hasEarthy = tokens.contains { $0.name == "earthy" && $0.weight > 1.5 }
+        let hasDreamy = tokens.contains { $0.name == "dreamy" || $0.name == "ethereal" && $0.weight > 1.5 }
+        let hasMinimal = tokens.contains { $0.name == "minimal" && $0.weight > 1.5 }
+        let hasLayered = tokens.contains { $0.name == "layered" && $0.weight > 1.5 }
+        let hasIntuitive = tokens.contains { $0.name == "intuitive" || $0.name == "instinctive" && $0.weight > 1.5 }
+        
+        // Create paragraph based on dominant characteristics
+        var paragraph = ""
+        
+        // Opening sentence based on dominant characteristics
+        if hasSubtle {
+            paragraph += "A quiet smoulder glows today, asking for warmth without noise, texture without spectacle. "
+        } else if hasBold {
+            paragraph += "An electric current runs through today, asking for clarity and presence in your expression. "
+        } else if hasFluid {
+            paragraph += "A flowing current moves through today, asking you to adapt and shift with intuitive ease. "
+        } else if hasStructured {
+            paragraph += "A grounded foundation supports today, asking for intention and purpose in your choices. "
+        } else if hasDreamy {
+            paragraph += "A misty veil surrounds today, blurring boundaries and inviting you to trust the unseen. "
+        } else {
+            paragraph += "A balanced energy permeates today, inviting you to find harmony between expression and restraint. "
+        }
+        
+        // Middle section based on secondary characteristics
+        if hasEarthy && hasIntuitive {
+            paragraph += "You're not meant to burn bright—just burn real. There's an undercurrent pulling you inward to dress for your inner world, not the outer gaze. "
+        } else if hasLayered && hasMinimal {
+            paragraph += "You're meant to reveal through concealing, to speak volumes through careful restraint. Your layers should tell a story only you fully understand. "
+        } else if hasBold && hasLayered {
+            paragraph += "You're meant to command attention through depth rather than flash. Build a presence that reveals itself layer by layer, each with intention. "
+        } else if hasFluid && hasIntuitive {
+            paragraph += "You're meant to flow with your instincts today, allowing your outer expression to mirror your inner currents. Trust the subtle shifts you feel. "
+        } else {
+            paragraph += "You're meant to find balance between what you show and what you keep hidden. Your style today should feel like an authentic extension of your interior landscape. "
+        }
+        
+        // Closing guidance based on moon phase
+        if moonPhase < 90.0 {
+            // New Moon to First Quarter - beginnings, intentions
+            paragraph += "It's a day to layer comfort with mystery, to carry softness like armour, and to resist the urge to explain yourself. "
+        } else if moonPhase < 180.0 {
+            // First Quarter to Full Moon - growth, expression
+            paragraph += "It's a day to build presence through intention, to communicate through texture and form, and to trust your evolving intuition. "
+        } else if moonPhase < 270.0 {
+            // Full Moon to Last Quarter - culmination, visibility
+            paragraph += "It's a day to embody your full expression, to balance what you reveal and what you protect, and to honor your authentic presence. "
+        } else {
+            // Last Quarter to New Moon - release, introspection
+            paragraph += "It's a day to release what no longer serves, to simplify your expression to its essence, and to prepare for new cycles of creativity. "
+        }
+        
+        // Final unifying statement
+        paragraph += "What matters is how it feels, not how it looks from the outside. Trust the flicker in your gut."
+        
+        return paragraph
+    }
+    
+    /// Generate textiles recommendations
+    private static func generateTextiles(tokens: [StyleToken]) -> String {
+        // Extract relevant characteristics for fabric recommendations
+        let hasSoft = tokens.contains { $0.name == "soft" && $0.weight > 1.0 }
+        let hasStructured = tokens.contains { $0.name == "structured" && $0.weight > 1.0 }
+        let hasFluid = tokens.contains { $0.name == "fluid" && $0.weight > 1.0 }
+        let hasTextured = tokens.contains { $0.name == "textured" && $0.weight > 1.0 }
+        let hasLayered = tokens.contains { $0.name == "layered" && $0.weight > 1.0 }
+        let hasEarthy = tokens.contains { $0.name == "earthy" && $0.weight > 1.0 }
+        let hasLuxurious = tokens.contains { $0.name == "luxurious" && $0.weight > 1.0 }
+        
+        // Fabric options based on characteristics
+        var fabricOptions: [String] = []
+        
+        if hasSoft {
+            fabricOptions.append(contentsOf: ["brushed cotton", "cashmere", "velvet", "mohair", "silk", "flannel"])
+        }
+        
+        if hasStructured {
+            fabricOptions.append(contentsOf: ["denim", "wool gabardine", "canvas", "heavyweight cotton", "leather", "suede"])
+        }
+        
+        if hasFluid {
+            fabricOptions.append(contentsOf: ["silk", "lyocell", "matte satin", "modal", "fluid jersey", "lightweight wool"])
+        }
+        
+        if hasTextured {
+            fabricOptions.append(contentsOf: ["tweed", "bouclé", "corduroy", "raw silk", "nubby linen", "textured knits"])
+        }
+        
+        if hasLayered {
+            fabricOptions.append(contentsOf: ["layered jersey", "tissue-weight cotton", "fine wool", "lightweight layers"])
+        }
+        
+        if hasEarthy {
+            fabricOptions.append(contentsOf: ["washed leather", "stonewashed cotton", "linen", "hemp", "raw denim"])
+        }
+        
+        if hasLuxurious {
+            fabricOptions.append(contentsOf: ["fine wool", "silk velvet", "cashmere", "merino", "high-quality leather"])
+        }
+        
+        // If not enough specific fabrics, add some general options
+        if fabricOptions.count < 3 {
+            fabricOptions.append(contentsOf: ["cotton blends", "jersey", "wool", "linen", "denim"])
+        }
+        
+        // Randomly select 4-6 fabric options
+        let shuffledFabrics = fabricOptions.shuffled()
+        let selectedCount = min(shuffledFabrics.count, Int.random(in: 4...6))
+        let selectedFabrics = shuffledFabrics.prefix(selectedCount)
+        
+        // Create the fabric description
+        var description = selectedFabrics.joined(separator: ", ")
+        
+        // Add a descriptive second sentence
+        if hasSoft && hasTextured {
+            description += "—anything that feels like second skin with a touch of shadow. Choose tactile layers that soften the wind but hold your power close."
+        } else if hasStructured && hasEarthy {
+            description += "—anything with substance and character. Choose materials with presence that ground you while letting you move with intention."
+        } else if hasFluid && hasLayered {
+            description += "—anything that flows and adapts to your movement. Choose fabrics that create dimension through layering rather than weight."
+        } else if hasLuxurious {
+            description += "—anything that elevates through quality rather than flash. Choose materials that feel transformative against your skin."
+        } else {
+            description += "—anything that resonates with your body's needs today. Choose fabrics that support rather than distract from your presence."
+        }
+        
+        return description
+    }
+    
+    /// Generate color recommendations
+    private static func generateColors(tokens: [StyleToken]) -> String {
+        // Extract relevant characteristics for color recommendations
+        let hasEarthy = tokens.contains { $0.name == "earthy" && $0.weight > 1.0 }
+        let hasWatery = tokens.contains { $0.name == "watery" || $0.name == "fluid" && $0.weight > 1.0 }
+        let hasAiry = tokens.contains { $0.name == "airy" && $0.weight > 1.0 }
+        let hasFiery = tokens.contains { $0.name == "fiery" || $0.name == "passionate" && $0.weight > 1.0 }
+        let hasDark = tokens.contains { $0.name == "deep" || $0.name == "intense" && $0.weight > 1.0 }
+        let hasLight = tokens.contains { $0.name == "light" || $0.name == "bright" && $0.weight > 1.0 }
+        let hasMuted = tokens.contains { $0.name == "muted" || $0.name == "subtle" && $0.weight > 1.0 }
+        let hasVibrant = tokens.contains { $0.name == "vibrant" || $0.name == "bold" && $0.weight > 1.0 }
+        
+        // Color options based on characteristics
+        var colorOptions: [String] = []
+        
+        if hasEarthy {
+            colorOptions.append(contentsOf: ["olive", "terracotta", "moss", "ochre", "walnut", "sand", "umber"])
+        }
+        
+        if hasWatery {
+            colorOptions.append(contentsOf: ["navy ink", "teal", "indigo", "slate blue", "stormy gray", "deep aqua"])
+        }
+        
+        if hasAiry {
+            colorOptions.append(contentsOf: ["pale blue", "silver gray", "cloud white", "light lavender", "sky"])
+        }
+        
+        if hasFiery {
+            colorOptions.append(contentsOf: ["oxblood", "rust", "amber", "burnt orange", "burgundy", "ruby"])
+        }
+        
+        if hasDark {
+            colorOptions.append(contentsOf: ["coal", "espresso", "midnight blue", "deep forest", "smoky plum", "charcoal"])
+        }
+        
+        if hasLight {
+            colorOptions.append(contentsOf: ["ivory", "bone", "pearl", "light gray", "soft white", "pale gold"])
+        }
+        
+        if hasMuted {
+            colorOptions.append(contentsOf: ["faded indigo", "dove gray", "dusty rose", "sage", "muted mauve", "ash grey"])
+        }
+        
+        if hasVibrant {
+            colorOptions.append(contentsOf: ["electric blue", "emerald", "crimson", "royal purple", "bright mustard"])
+        }
+        
+        // If not enough specific colors, add some neutral options
+        if colorOptions.count < 3 {
+            colorOptions.append(contentsOf: ["navy", "charcoal", "ivory", "taupe", "black", "gray"])
+        }
+        
+        // Randomly select 5-7 color options
+        let shuffledColors = colorOptions.shuffled()
+        let selectedCount = min(shuffledColors.count, Int.random(in: 5...7))
+        let selectedColors = shuffledColors.prefix(selectedCount)
+        
+        // Create the color description
+        var description = selectedColors.joined(separator: ", ")
+        
+        // Add a descriptive closing phrase
+        if hasDark || hasMuted {
+            description += ". Let them absorb the light, not reflect it"
+        } else if hasLight || hasAiry {
+            description += ". Let them diffuse the light with subtle presence"
+        } else if hasVibrant || hasFiery {
+            description += ". Let them express your energy with intention"
+        } else {
+            description += ". Let them ground and center your presence today"
+        }
+        
+        return description
+    }
+    
+    /// Calculate brightness percentage based on tokens
+    private static func calculateBrightness(tokens: [StyleToken], moonPhase: Double) -> Int {
+        // Start with a base value
+        var brightnessValue = 50
+        
+        // Adjust based on tokens
+        if tokens.contains(where: { $0.name == "dark" && $0.weight > 1.5 }) { brightnessValue -= 20 }
+        if tokens.contains(where: { $0.name == "deep" && $0.weight > 1.5 }) { brightnessValue -= 15 }
+        if tokens.contains(where: { $0.name == "muted" && $0.weight > 1.5 }) { brightnessValue -= 10 }
+        if tokens.contains(where: { $0.name == "intense" && $0.weight > 1.5 }) { brightnessValue -= 10 }
+        
+        if tokens.contains(where: { $0.name == "light" && $0.weight > 1.5 }) { brightnessValue += 20 }
+        if tokens.contains(where: { $0.name == "bright" && $0.weight > 1.5 }) { brightnessValue += 15 }
+        if tokens.contains(where: { $0.name == "clear" && $0.weight > 1.5 }) { brightnessValue += 10 }
+        if tokens.contains(where: { $0.name == "illuminated" && $0.weight > 1.5 }) { brightnessValue += 10 }
+        
+        // Adjust based on moon phase (new moon = darker, full moon = brighter)
+        if moonPhase < 90.0 {
+            brightnessValue -= 10 // New Moon to First Quarter
+        } else if moonPhase < 180.0 {
+            brightnessValue += 5 // First Quarter to Full Moon
+        } else if moonPhase < 270.0 {
+            brightnessValue += 10 // Full Moon to Last Quarter
+        } else {
+            brightnessValue -= 5 // Last Quarter to New Moon
+        }
+        
+        // Ensure value is within 0-100 range
+        brightnessValue = max(0, min(100, brightnessValue))
+        
+        return brightnessValue
+    }
+    
+    /// Calculate vibrancy percentage based on tokens
+    private static func calculateVibrancy(tokens: [StyleToken]) -> Int {
+        // Start with a base value
+        var vibrancyValue = 50
+        
+        // Adjust based on tokens
+        if tokens.contains(where: { $0.name == "vibrant" && $0.weight > 1.5 }) { vibrancyValue += 25 }
+        if tokens.contains(where: { $0.name == "bold" && $0.weight > 1.5 }) { vibrancyValue += 20 }
+        if tokens.contains(where: { $0.name == "expressive" && $0.weight > 1.5 }) { vibrancyValue += 15 }
+        if tokens.contains(where: { $0.name == "dynamic" && $0.weight > 1.5 }) { vibrancyValue += 10 }
+        
+        if tokens.contains(where: { $0.name == "muted" && $0.weight > 1.5 }) { vibrancyValue -= 20 }
+        if tokens.contains(where: { $0.name == "subtle" && $0.weight > 1.5 }) { vibrancyValue -= 15 }
+        if tokens.contains(where: { $0.name == "minimal" && $0.weight > 1.5 }) { vibrancyValue -= 10 }
+        if tokens.contains(where: { $0.name == "quiet" && $0.weight > 1.5 }) { vibrancyValue -= 10 }
+        
+        // Adjust based on elemental prevalence
+        if tokens.contains(where: { $0.name == "fiery" && $0.weight > 1.5 }) { vibrancyValue += 15 }
+        if tokens.contains(where: { $0.name == "watery" && $0.weight > 1.5 }) { vibrancyValue += 5 }
+        if tokens.contains(where: { $0.name == "earthy" && $0.weight > 1.5 }) { vibrancyValue -= 10 }
+        if tokens.contains(where: { $0.name == "airy" && $0.weight > 1.5 }) { vibrancyValue -= 5 }
+        
+        // Ensure value is within 0-100 range
+        vibrancyValue = max(0, min(100, vibrancyValue))
+        
+        return vibrancyValue
+    }
+    
+    /// Generate pattern recommendations
+    private static func generatePatterns(tokens: [StyleToken]) -> String {
+        // Extract relevant characteristics for pattern recommendations
+        let hasMinimal = tokens.contains { $0.name == "minimal" && $0.weight > 1.0 }
+        let hasTextured = tokens.contains { $0.name == "textured" && $0.weight > 1.0 }
+        let hasExpressive = tokens.contains { $0.name == "expressive" || $0.name == "bold" && $0.weight > 1.0 }
+        let hasStructured = tokens.contains { $0.name == "structured" && $0.weight > 1.0 }
+        let hasFluid = tokens.contains { $0.name == "fluid" && $0.weight > 1.0 }
+        let hasSubtle = tokens.contains { $0.name == "subtle" && $0.weight > 1.0 }
+        let hasEclectic = tokens.contains { $0.name == "eclectic" || $0.name == "unique" && $0.weight > 1.0 }
+        
+        // Pattern suggestions based on characteristics
+        var patterns = ""
+        
+        if hasMinimal && hasTextured {
+            patterns = "Uneven dye effects (stonewash, acid, mineral). Minimal prints that feel faded or lived-in—nothing polished or loud."
+        } else if hasExpressive && hasEclectic {
+            patterns = "Bold geometrics, unexpected color combinations, statement prints. Patterns that tell a story or reference art—each with a clear point of view."
+        } else if hasStructured && hasMinimal {
+            patterns = "Architectural lines, subtle grids, precision pinstripes. Patterns with mathematical order rather than organic flow."
+        } else if hasFluid && hasExpressive {
+            patterns = "Watercolor effects, organic forms, nature-inspired motifs. Patterns that move and flow with a sense of natural rhythm."
+        } else if hasSubtle {
+            patterns = "Barely-there textures, monochromatic tone-on-tone, shadow effects. Patterns that reveal themselves only upon closer inspection."
+        } else if hasEclectic {
+            patterns = "Unexpected combinations, vintage-inspired motifs, cultural references. Mix patterns of different scales for a curated eclectic approach."
+        } else {
+            patterns = "Balanced, intentional patterns that enhance rather than overwhelm. Choose prints that feel authentic to your energy today."
+        }
+        
+        return patterns
+    }
+    
+    /// Generate shape recommendations
+    private static func generateShape(tokens: [StyleToken]) -> String {
+        // Extract relevant characteristics for shape recommendations
+        let hasStructured = tokens.contains { $0.name == "structured" && $0.weight > 1.0 }
+        let hasFluid = tokens.contains { $0.name == "fluid" && $0.weight > 1.0 }
+        let hasLayered = tokens.contains { $0.name == "layered" && $0.weight > 1.0 }
+        let hasMinimal = tokens.contains { $0.name == "minimal" && $0.weight > 1.0 }
+        let hasExpressive = tokens.contains { $0.name == "expressive" || $0.name == "bold" && $0.weight > 1.0 }
+        let hasBalanced = tokens.contains { $0.name == "balanced" && $0.weight > 1.0 }
+        let hasProtective = tokens.contains { $0.name == "protective" && $0.weight > 1.0 }
+        
+        // Shape description based on characteristics
+        var shape = ""
+        
+        if hasStructured && hasProtective {
+            shape = "Cocooned, but defined. A wrap coat with structure. A tapered sleeve that holds the wrist. Layer your look like secrets stacked: fitted base, fluid overlay, something sculptural to finish."
+        } else if hasFluid && hasLayered {
+            shape = "Flowing layers with intentional drape. Pieces that move with your body rather than constrain. Create dimension through differential lengths and weights that interact as you move."
+        } else if hasMinimal && hasBalanced {
+            shape = "Clean lines with precise proportion. Focus on the relationship between pieces rather than individual statements. Create intentional negative space within your silhouette."
+        } else if hasExpressive && hasLayered {
+            shape = "Bold volume balanced with definition. Create dimension through contrast—fitted against full, structured against fluid. Allow one element to command focus within a cohesive whole."
+        } else if hasProtective {
+            shape = "Protective without restriction. Forms that create personal space while allowing movement. Consider overlapping layers that shield without weighing you down."
+        } else {
+            shape = "Balanced proportions that honor your body's needs today. Create a silhouette that supports your energy rather than forcing it into a predetermined shape."
+        }
+        
+        return shape
+    }
+    
+    /// Generate accessories recommendations
+    private static func generateAccessories(tokens: [StyleToken]) -> String {
+        // Extract relevant characteristics for accessories recommendations
+        let hasMinimal = tokens.contains { $0.name == "minimal" && $0.weight > 1.0 }
+        let hasExpressive = tokens.contains { $0.name == "expressive" || $0.name == "bold" && $0.weight > 1.0 }
+        let hasProtective = tokens.contains { $0.name == "protective" && $0.weight > 1.0 }
+        let hasEclectic = tokens.contains { $0.name == "eclectic" || $0.name == "unique" && $0.weight > 1.0 }
+        let hasStructured = tokens.contains { $0.name == "structured" && $0.weight > 1.0 }
+        let hasEarthy = tokens.contains { $0.name == "earthy" && $0.weight > 1.0 }
+        let hasWatery = tokens.contains { $0.name == "watery" || $0.name == "fluid" && $0.weight > 1.0 }
+        
+        // Accessories description based on characteristics
+        var accessories = ""
+        
+        if hasMinimal && hasProtective {
+            accessories = "One object only, and it must mean something—your protective piece. A locket, a band, a scent worn like armor. No flash. Just focus. Fragrance: vetiver, resin, or something bitter-green."
+        } else if hasExpressive && hasEclectic {
+            accessories = "Statement pieces with personal significance. Items that invite questions and create connection. Focus on one primary focal point balanced by subtle supporting elements. Fragrance: spiced citrus, rich amber, or something unexpectedly botanical."
+        } else if hasStructured && hasEarthy {
+            accessories = "Natural materials with clear purpose. Items that ground and center through weight and texture. Choose pieces with history or handmade quality. Fragrance: cedarwood, tobacco, or something mineral-based."
+        } else if hasWatery && hasProtective {
+            accessories = "Fluid forms that move with you. Items that adapt to different contexts through the day. Consider pieces with emotional resonance that anchor your shifting states. Fragrance: salt air, clean musk, or something aquatic but warm."
+        } else {
+            accessories = "Intentional selections that enhance rather than distract. Choose pieces that feel like natural extensions of your energy rather than additions. Fragrance: something that resonates with your skin chemistry and emotional state today."
+        }
+        
+        return accessories
+    }
+    
+    /// Generate final takeaway message
+    private static func generateTakeaway(tokens: [StyleToken], moonPhase: Double) -> String {
+        // Create takeaway options based on token combinations
+        var takeawayOptions: [String] = []
+        
+        // Based on dominant token combinations
+        if tokens.contains(where: { $0.name == "authentic" && $0.weight > 1.5 }) {
+            takeawayOptions.append("No one else has to get it. But you do. That's the point.")
+            takeawayOptions.append("Trust what feels true, not what looks obvious.")
+        }
+        
+        if tokens.contains(where: { $0.name == "intuitive" && $0.weight > 1.5 }) {
+            takeawayOptions.append("Your instinct knows before your mind does. Listen.")
+            takeawayOptions.append("The inner voice speaks in textures and weights, not just words.")
+        }
+        
+        if tokens.contains(where: { $0.name == "balanced" && $0.weight > 1.5 }) {
+            takeawayOptions.append("Balance isn't static. It's a continuous recalibration.")
+            takeawayOptions.append("The middle path isn't always halfway between extremes.")
+        }
+        
+        if tokens.contains(where: { $0.name == "expressive" && $0.weight > 1.5 }) {
+            takeawayOptions.append("Expression is most powerful when it's intentional, not just loud.")
+            takeawayOptions.append("Speak through what you choose, not just what you say.")
+        }
+        
+        // Based on moon phase
+        if moonPhase < 90.0 {
+            takeawayOptions.append("Begin with intention. The rest will follow.")
+            takeawayOptions.append("New cycles start with quiet commitment, not grand gestures.")
+        } else if moonPhase < 180.0 {
+            takeawayOptions.append("Growth happens in the tension between comfort and challenge.")
+            takeawayOptions.append("The path forward reveals itself one step at a time.")
+        } else if moonPhase < 270.0 {
+            takeawayOptions.append("Full expression requires both vulnerability and strength.")
+            takeawayOptions.append("What you reveal is as important as what you conceal.")
+        } else {
+            takeawayOptions.append("Release what no longer serves before seeking what's next.")
+            takeawayOptions.append("Completion is just another form of beginning.")
+        }
+        
+        // Add general takeaways
+        takeawayOptions.append("Dress for the energy you need, not just the one you have.")
+        takeawayOptions.append("Your body knows. Your clothes should listen.")
+        takeawayOptions.append("What you wear changes how you move. Choose accordingly.")
+        
+        // Randomly select a takeaway
+        return takeawayOptions.randomElement() ?? "No one else has to get it. But you do. That's the point."
     }
     
     // MARK: - Private Helper Methods
@@ -219,387 +723,27 @@ class DailyVibeGenerator {
             print("    • \(source): \(count) tokens")
         }
     }
+}
+
+/// Structure to hold all daily vibe content
+struct DailyVibeContent {
+    // Main content
+    var title: String = ""
+    var mainParagraph: String = ""
     
-    /// Assemble the daily vibe text from tokens
-    private static func assembleDailyVibe(tokens: [StyleToken], weather: TodayWeather?, moonPhase: Double) -> String {
-        // 1. Create opening based on weather and moon phase
-        var dailyVibe = createDailyVibeOpening(weather: weather, moonPhase: moonPhase) + "\n\n"
-        
-        // 2. Add style resonance paragraph
-        dailyVibe += createStyleResonanceParagraph(tokens: tokens) + "\n\n"
-        
-        // 3. Add emotional vibe paragraph
-        dailyVibe += createEmotionalVibeParagraph(tokens: tokens, moonPhase: moonPhase) + "\n\n"
-        
-        // 4. Add transit impact paragraph
-        dailyVibe += createTransitImpactParagraph(tokens: tokens) + "\n\n"
-        
-        // 5. Add practical styling suggestions
-        dailyVibe += createStylingGuidance(tokens: tokens, weather: weather)
-        
-        return dailyVibe
-    }
+    // Style guidance sections
+    var textiles: String = ""
+    var colors: String = ""
+    var brightness: Int = 50 // Percentage (0-100)
+    var vibrancy: Int = 50   // Percentage (0-100)
+    var patterns: String = ""
+    var shape: String = ""
+    var accessories: String = ""
     
-    /// Create opening sentence based on weather and moon phase
-    private static func createDailyVibeOpening(weather: TodayWeather?, moonPhase: Double) -> String {
-        var opening = "# Your Cosmic Fit Daily Vibe\n\n"
-        
-        // Format today's date
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .full
-        let todayString = dateFormatter.string(from: Date())
-        opening += "## \(todayString)\n\n"
-        
-        // Create moon phase descriptor
-        let moonPhaseDescription = getMoonPhaseDescription(moonPhase)
-        
-        // Create weather-based opening if available
-        if let weather = weather {
-            let tempFeeling = weather.temp < 15 ? "cool" : (weather.temp > 25 ? "warm" : "mild")
-            let conditions = weather.conditions.lowercased()
-            
-            if conditions.contains("rain") || conditions.contains("shower") {
-                opening += "With today's rainy weather, \(tempFeeling) temperatures, and the \(moonPhaseDescription) Moon, your cosmic fit calls for intentional layers and mood-enhancing choices."
-            } else if conditions.contains("cloud") {
-                opening += "Under today's cloudy skies, \(tempFeeling) temperatures, and the \(moonPhaseDescription) Moon, your cosmic fit invites nuanced textures and subtle definition."
-            } else if conditions.contains("sun") || conditions.contains("clear") {
-                opening += "With today's clear skies, \(tempFeeling) temperatures, and the \(moonPhaseDescription) Moon, your cosmic fit embraces clarity of expression and purposeful choices."
-            } else if conditions.contains("snow") {
-                opening += "In today's snowy landscape, with the \(moonPhaseDescription) Moon overhead, your cosmic fit focuses on protective layers with emotional resonance."
-            } else if conditions.contains("wind") {
-                opening += "Against today's winds and the backdrop of a \(moonPhaseDescription) Moon, your cosmic fit emphasizes structure and intentional flexibility."
-            } else {
-                opening += "Today's cosmic weather, with the \(moonPhaseDescription) Moon, suggests a style approach that balances your core essence with current energetic currents."
-            }
-        } else {
-            // Weather-independent opening
-            opening += "Today's cosmic weather, with the \(moonPhaseDescription) Moon, invites you to dress in alignment with both your core essence and current planetary energies."
-        }
-        
-        return opening
-    }
+    // Final line
+    var takeaway: String = ""
     
-    /// Create style resonance paragraph based on base style tokens
-    private static func createStyleResonanceParagraph(tokens: [StyleToken]) -> String {
-        var paragraph = "## Base Style Resonance\n\n"
-        
-        // Extract dominant style characteristics
-        let hasStructured = tokens.contains { $0.name == "structured" && $0.weight > 1.0 }
-        let hasFluid = tokens.contains { $0.name == "fluid" && $0.weight > 1.0 }
-        let hasBold = tokens.contains { $0.name == "bold" && $0.weight > 1.0 }
-        let hasSubtle = tokens.contains { $0.name == "subtle" && $0.weight > 1.0 }
-        let hasEarthy = tokens.contains { $0.name == "earthy" && $0.weight > 1.0 }
-        let hasEthereal = tokens.contains { $0.name == "ethereal" || $0.name == "dreamy" && $0.weight > 1.0 }
-        
-        // Get top tokens for keywords
-        let topTokens = tokens
-            .filter { $0.weight > 1.0 }
-            .sorted { $0.weight > $1.weight }
-            .prefix(3)
-            .map { $0.name }
-        
-        // Create first sentence based on dominant characteristic
-        if hasStructured {
-            paragraph += "Your core style essence today remains grounded in structure and definition. "
-        } else if hasFluid {
-            paragraph += "Your core style essence today flows with adaptability and intuitive movement. "
-        } else if hasBold {
-            paragraph += "Your core style essence today emanates confident energy and clear presence. "
-        } else if hasSubtle {
-            paragraph += "Your core style essence today expresses through nuance and thoughtful detail. "
-        } else if hasEarthy {
-            paragraph += "Your core style essence today connects with tactile grounding and practical wisdom. "
-        } else if hasEthereal {
-            paragraph += "Your core style essence today channels dreamlike intuition and fluid boundaries. "
-        } else {
-            paragraph += "Your core style essence today balances multiple energies with authentic expression. "
-        }
-        
-        // Add keywords from top tokens
-        if !topTokens.isEmpty {
-            paragraph += "The qualities of " + topTokens.joined(separator: ", ") + " inform your baseline style energy, providing a consistent foundation regardless of daily fluctuations."
-        } else {
-            paragraph += "Your authentic style foundation provides consistent orientation regardless of daily fluctuations."
-        }
-        
-        return paragraph
-    }
-    
-    /// Create emotional vibe paragraph based on emotional tokens and moon phase
-    private static func createEmotionalVibeParagraph(tokens: [StyleToken], moonPhase: Double) -> String {
-        var paragraph = "## Emotional Vibe Today\n\n"
-        
-        // Extract emotional tone characteristics
-        let hasIntrospective = tokens.contains { ($0.name == "introspective" || $0.name == "reflective") && $0.weight > 0.8 }
-        let hasExpressive = tokens.contains { ($0.name == "expressive" || $0.name == "communicative") && $0.weight > 0.8 }
-        let hasSensitive = tokens.contains { ($0.name == "sensitive" || $0.name == "intuitive") && $0.weight > 0.8 }
-        let hasGrounded = tokens.contains { ($0.name == "grounded" || $0.name == "stable") && $0.weight > 0.8 }
-        let hasIntense = tokens.contains { ($0.name == "intense" || $0.name == "passionate") && $0.weight > 0.8 }
-        
-        // Get moon phase qualities
-        let isWaxing = moonPhase >= 0 && moonPhase < 180
-        let isWaning = moonPhase >= 180 && moonPhase < 360
-        let isNewMoon = moonPhase >= 0 && moonPhase < 45
-        let isFullMoon = moonPhase >= 135 && moonPhase < 225
-        
-        // Create first sentence based on emotional tone and moon phase
-        if hasIntrospective {
-            paragraph += "Your emotional landscape today has a reflective, inward-focused quality. "
-            if isWaning {
-                paragraph += "This aligns with the waning moon's energy of release and processing. "
-            } else if isNewMoon {
-                paragraph += "The new moon amplifies this introspective quality, inviting deeper self-connection. "
-            }
-        } else if hasExpressive {
-            paragraph += "Your emotional landscape today has an outward, communicative quality. "
-            if isWaxing {
-                paragraph += "This harmonizes with the waxing moon's energy of growth and expansion. "
-            } else if isFullMoon {
-                paragraph += "The full moon amplifies this expressive quality, bringing emotions to the surface. "
-            }
-        } else if hasSensitive {
-            paragraph += "Your emotional landscape today has a sensitive, receptive quality. "
-            if isFullMoon {
-                paragraph += "The full moon intensifies this sensitivity, heightening your emotional awareness. "
-            } else {
-                paragraph += "The moon's current phase may bring subtle emotional currents to your awareness. "
-            }
-        } else if hasGrounded {
-            paragraph += "Your emotional landscape today has a stable, centered quality. "
-            paragraph += "This provides emotional steadiness regardless of the moon's phase. "
-        } else if hasIntense {
-            paragraph += "Your emotional landscape today has a potent, transformative quality. "
-            if isFullMoon {
-                paragraph += "The full moon amplifies this intensity, bringing powerful feelings to consciousness. "
-            } else {
-                paragraph += "The moon's current phase adds a layer of depth to your emotional experience. "
-            }
-        } else {
-            paragraph += "Your emotional landscape today has a balanced, flowing quality. "
-            paragraph += "The moon's current phase offers subtle emotional currents to navigate. "
-        }
-        
-        // Add styling advice based on emotional tone
-        paragraph += "Express this emotionally by choosing "
-        
-        if hasIntrospective {
-            paragraph += "pieces that create a sense of protective comfort and self-containment. Layers that can be adjusted throughout the day will accommodate your changing inner landscape."
-        } else if hasExpressive {
-            paragraph += "pieces that facilitate connection and communication. Consider colors and shapes that externalize your inner state in ways that feel authentic and affirming."
-        } else if hasSensitive {
-            paragraph += "gentle textures and responsive fabrics. Prioritize physical comfort today, as your body is processing subtle energies and needs supportive materials."
-        } else if hasGrounded {
-            paragraph += "materials with substance and presence. The stability in your emotional field allows you to wear pieces with definition and structure without feeling confined."
-        } else if hasIntense {
-            paragraph += "pieces that can channel and transform emotional energy. Consider garments that have personal significance or transformative quality."
-        } else {
-            paragraph += "items that balance comfort with expression. Your emotional flexibility today allows for adaptability in how you present yourself."
-        }
-        
-        return paragraph
-    }
-    
-    /// Create transit impact paragraph based on transit tokens
-    private static func createTransitImpactParagraph(tokens: [StyleToken]) -> String {
-        var paragraph = "## Planetary Influences\n\n"
-        
-        // Extract transit characteristics from tokens
-        let significantTransits = tokens.filter {
-            $0.aspectSource != nil &&
-            $0.aspectSource!.contains("transit") &&
-            $0.weight > 0.5
-        }.sorted { $0.weight > $1.weight }
-        
-        // If we have significant transits, describe them
-        if !significantTransits.isEmpty {
-            // Get the most significant transit
-            if let topTransit = significantTransits.first {
-                if let source = topTransit.aspectSource {
-                    if source.contains("Venus") {
-                        paragraph += "Venus transits are highlighting your aesthetic sensibilities today. "
-                        paragraph += "This planetary influence brings a heightened appreciation for beauty, harmony, and pleasure. "
-                        paragraph += "Express this through thoughtful color coordination and pieces that feel good against your skin. "
-                    } else if source.contains("Mercury") {
-                        paragraph += "Mercury transits are activating your communication style today. "
-                        paragraph += "This planetary influence brings mental clarity and expressive communication. "
-                        paragraph += "Consider incorporating subtle message elements or pieces that facilitate conversation. "
-                    } else if source.contains("Mars") {
-                        paragraph += "Mars transits are energizing your personal expression today. "
-                        paragraph += "This planetary influence brings dynamic energy and assertive action. "
-                        paragraph += "Channel this through pieces with defined structure and intentional edge. "
-                    } else if source.contains("Jupiter") {
-                        paragraph += "Jupiter transits are expanding your style potential today. "
-                        paragraph += "This planetary influence brings optimism and a sense of possibility. "
-                        paragraph += "Consider expressing this through one statement piece or a more expansive silhouette. "
-                    } else if source.contains("Saturn") {
-                        paragraph += "Saturn transits are refining your approach to style today. "
-                        paragraph += "This planetary influence brings discipline and structural integrity. "
-                        paragraph += "Express this through quality over quantity and attention to proper fit and proportion. "
-                    } else if source.contains("Uranus") {
-                        paragraph += "Uranus transits are innovating your style approach today. "
-                        paragraph += "This planetary influence brings unexpected shifts and creative breakthroughs. "
-                        paragraph += "Consider incorporating one unconventional element that expresses your unique perspective. "
-                    } else if source.contains("Neptune") {
-                        paragraph += "Neptune transits are dissolving boundaries in your style expression today. "
-                        paragraph += "This planetary influence brings intuitive flow and spiritual connection. "
-                        paragraph += "Express this through layers with subtle transparency or pieces with fluid movement. "
-                    } else if source.contains("Pluto") {
-                        paragraph += "Pluto transits are transforming aspects of your style identity today. "
-                        paragraph += "This planetary influence brings depth and potential for renewal. "
-                        paragraph += "Consider incorporating pieces with transformative quality or personal significance. "
-                    } else if source.contains("Moon") {
-                        paragraph += "Lunar transits are cycling through your emotional style patterns today. "
-                        paragraph += "This fleeting influence brings shifting moods and intuitive responses. "
-                        paragraph += "Stay adaptable with layers or accessories that can be adjusted as your feelings evolve. "
-                    } else if source.contains("Sun") {
-                        paragraph += "Solar transits are illuminating your authentic style expression today. "
-                        paragraph += "This vital influence brings clarity and conscious intention. "
-                        paragraph += "Express this through pieces that feel aligned with your core identity and purpose. "
-                    } else {
-                        paragraph += "Today's planetary transits are creating subtle shifts in your style energy. "
-                        paragraph += "These cosmic influences invite mindful adjustments to your personal expression. "
-                        paragraph += "Consider how your outfit can reflect both your stable essence and current cosmic weather. "
-                    }
-                } else {
-                    // Default if we can't identify the transit source
-                    paragraph += "Today's planetary positions create a unique cosmic weather pattern that influences your style expression. "
-                    paragraph += "These transient energies invite you to adapt your core style essence to current conditions. "
-                    paragraph += "Consider how your outfit can both ground your identity and respond to the day's particular qualities. "
-                }
-            } else {
-                // Default if we don't have significant transits
-                paragraph += "Today's planetary positions create a relatively neutral background for your personal style expression. "
-                paragraph += "This allows your core essence to shine through with minimal cosmic interference. "
-                paragraph += "Focus on pieces that authentically reflect your baseline style preferences and personal comfort. "
-            }
-        } else {
-            // Default if we don't have transit data
-            paragraph += "Today's planetary positions form a unique cosmic pattern that colors your personal style expression. "
-            paragraph += "While subtle, these transient energies create a specific backdrop for how your style is received and experienced. "
-            paragraph += "Tune into how different pieces feel today, as the planetary weather may shift how colors and textures resonate with you. "
-        }
-        
-        return paragraph
-    }
-    
-    /// Create practical styling guidance based on all tokens and weather
-    private static func createStylingGuidance(tokens: [StyleToken], weather: TodayWeather?) -> String {
-        var guidance = "## Today's Styling Guidance\n\n"
-        
-        // Extract top style tokens
-        let topTokens = tokens
-            .filter { $0.type == "structure" || $0.type == "texture" || $0.type == "mood" }
-            .sorted { $0.weight > $1.weight }
-            .prefix(5)
-        
-        // Create style keywords line
-        var keywords: [String] = []
-        for token in topTokens {
-            keywords.append(token.name)
-        }
-        
-        if !keywords.isEmpty {
-            guidance += "**Style Keywords:** " + keywords.joined(separator: ", ") + "\n\n"
-        } else {
-            guidance += "**Style Keywords:** balanced, authentic, responsive\n\n"
-        }
-        
-        // Add specific guidance based on token presence
-        guidance += "**Focus Areas:**\n\n"
-        
-        // Color guidance
-        if tokens.contains(where: { $0.name == "earthy" && $0.weight > 0.8 }) {
-            guidance += "- **Colors:** Warm neutrals, terracotta, olive, or any earth tones that ground your energy\n"
-        } else if tokens.contains(where: { $0.name == "watery" && $0.weight > 0.8 }) {
-            guidance += "- **Colors:** Deep blues, teal, or fluid gradients that express emotional depth\n"
-        } else if tokens.contains(where: { $0.name == "airy" && $0.weight > 0.8 }) {
-            guidance += "- **Colors:** Light blues, whites, or subtle pastels that create mental space\n"
-        } else if tokens.contains(where: { $0.name == "fiery" && $0.weight > 0.8 }) {
-            guidance += "- **Colors:** Warm reds, oranges, or vibrant accents that express vital energy\n"
-        } else {
-            guidance += "- **Colors:** Choose tones that resonate with your current emotional state while grounding your core essence\n"
-        }
-        
-        // Texture guidance
-        if tokens.contains(where: { $0.name == "structured" && $0.weight > 0.8 }) {
-            guidance += "- **Textures:** Crisp, defined fabrics with intentional weight and presence\n"
-        } else if tokens.contains(where: { $0.name == "fluid" && $0.weight > 0.8 }) {
-            guidance += "- **Textures:** Flowing, adaptable materials that move with your body\n"
-        } else if tokens.contains(where: { $0.name == "tactile" && $0.weight > 0.8 }) {
-            guidance += "- **Textures:** Richly textured surfaces that invite touch and sensory engagement\n"
-        } else if tokens.contains(where: { $0.name == "layered" && $0.weight > 0.8 }) {
-            guidance += "- **Textures:** Combinations of different weights and densities that create depth\n"
-        } else {
-            guidance += "- **Textures:** Select materials that support both physical comfort and emotional expression\n"
-        }
-        
-        // Structure guidance
-        if tokens.contains(where: { $0.name == "bold" && $0.weight > 0.8 }) {
-            guidance += "- **Structure:** Defined silhouettes with intentional presence and clear lines\n"
-        } else if tokens.contains(where: { $0.name == "subtle" && $0.weight > 0.8 }) {
-            guidance += "- **Structure:** Understated shapes that reveal their quality through detail and fit\n"
-        } else if tokens.contains(where: { $0.name == "balanced" && $0.weight > 0.8 }) {
-            guidance += "- **Structure:** Harmonious proportions that create visual balance and ease\n"
-        } else if tokens.contains(where: { $0.name == "dynamic" && $0.weight > 0.8 }) {
-            guidance += "- **Structure:** Pieces that facilitate movement and active engagement\n"
-        } else {
-            guidance += "- **Structure:** Create a silhouette that honors your body's current needs and energy level\n"
-        }
-        
-        // Add weather-specific guidance if available
-        if let weather = weather {
-            guidance += "\n**Weather Adaptation:**\n\n"
-            
-            // Temperature guidance
-            if weather.temp < 10 {
-                guidance += "- **Temperature:** With today's cold conditions, focus on insulating layers that maintain your style expression\n"
-            } else if weather.temp < 20 {
-                guidance += "- **Temperature:** With today's cool temperatures, incorporate strategic layers that can be adjusted\n"
-            } else if weather.temp < 30 {
-                guidance += "- **Temperature:** With today's moderate temperatures, balance comfort with style expression\n"
-            } else {
-                guidance += "- **Temperature:** With today's warmth, choose breathable fabrics that maintain your style integrity\n"
-            }
-            
-            // Conditions guidance
-            let conditions = weather.conditions.lowercased()
-            if conditions.contains("rain") || conditions.contains("shower") {
-                guidance += "- **Conditions:** Incorporate water-resistant elements that protect without compromising expression\n"
-            } else if conditions.contains("snow") {
-                guidance += "- **Conditions:** Select insulating, water-resistant pieces with visual interest despite functional needs\n"
-            } else if conditions.contains("wind") {
-                guidance += "- **Conditions:** Choose pieces that stay anchored in breeze while maintaining intended silhouette\n"
-            } else if conditions.contains("cloud") {
-                guidance += "- **Conditions:** Consider how colors and textures will read in diffused light\n"
-            } else if conditions.contains("sun") || conditions.contains("clear") {
-                guidance += "- **Conditions:** Pay attention to how fabrics and colors respond to direct sunlight\n"
-            }
-        }
-        
-        // Final integrative prompt
-        guidance += "\nToday, let your style be a dynamic conversation between your core essence and the current cosmic weather. The most authentic expression comes when you honor both your foundation and the present moment."
-        
-        return guidance
-    }
-    
-    /// Get moon phase description
-    private static func getMoonPhaseDescription(_ phase: Double) -> String {
-        if phase < 45.0 {
-            return "New"
-        } else if phase < 90.0 {
-            return "Waxing Crescent"
-        } else if phase < 135.0 {
-            return "First Quarter"
-        } else if phase < 180.0 {
-            return "Waxing Gibbous"
-        } else if phase < 225.0 {
-            return "Full"
-        } else if phase < 270.0 {
-            return "Waning Gibbous"
-        } else if phase < 315.0 {
-            return "Last Quarter"
-        } else {
-            return "Waning Crescent"
-        }
-    }
+    // Weather information
+    var temperature: Double? = nil
+    var weatherCondition: String? = nil
 }
