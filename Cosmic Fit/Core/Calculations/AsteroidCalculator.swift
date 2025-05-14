@@ -19,9 +19,9 @@ import CSwissEphemeris   // raw C symbols (swe_calc_ut, SE_* ids, flags)
 /// Every function is *thread‑safe* thanks to the internal serial queue ‑‑
 /// Swiss Ephemeris’ C core is not re‑entrant.
 enum AsteroidCalculator {
-
+    
     // MARK: – Public types ------------------------------------------------
-
+    
     struct Position {
         /// Ecliptic longitude (true, equinox‑of‑date) in **degrees 0‑360**.
         let longitude: Double
@@ -30,10 +30,10 @@ enum AsteroidCalculator {
         /// Earth‑asteroid distance in **astronomical units**.
         let distanceAU: Double
     }
-
+    
     enum Asteroid: CaseIterable {
         case ceres, pallas, juno, vesta, chiron, pholus
-
+        
         // Swiss Ephemeris integer IDs ------------------------------------
         var seId: Int32 {
             switch self {
@@ -45,7 +45,7 @@ enum AsteroidCalculator {
             case .pholus: return SE_PHOLUS   // minor planet 5145
             }
         }
-
+        
         /// Unicode symbols recommended by contemporary astrology fonts.
         var symbol: String {
             switch self {
@@ -57,7 +57,7 @@ enum AsteroidCalculator {
             case .pholus: return "⚸"
             }
         }
-
+        
         var displayName: String {
             switch self {
             case .ceres:  return "Ceres"
@@ -69,29 +69,29 @@ enum AsteroidCalculator {
             }
         }
     }
-
+    
     // MARK: – Public API --------------------------------------------------
-
+    
     /// Make sure Swiss Ephemeris has its ephemeris path set.
     /// You can call this manually if your app does not already invoke
     /// `SwissEphemerisBootstrap.initialise()` at launch.
     static func bootstrap() {
         SwissEphemerisBootstrap.initialise()
     }
-
+    
     /// Geocentric position of one asteroid at the given Julian Day (UT).
     static func position(of asteroid: Asteroid, at julianDayUT: Double) -> Position {
         queryQueue.sync {
             var xx   = [Double](repeating: 0, count: 6) // output array
             var serr = [CChar](repeating: 0, count: 256)
-
+            
             let iflag: Int32 = SEFLG_SWIEPH            // Swiss ephemeris, true ecliptic
             swe_calc_ut(julianDayUT, asteroid.seId, iflag, &xx, &serr)
-
+            
             return Position(longitude: xx[0], latitude: xx[1], distanceAU: xx[2])
         }
     }
-
+    
     /// Convenience: true if the asteroid is **retrograde** on the given day.
     ///
     /// Algorithm: compare longitudes one day apart; account for 360° wrap.
@@ -102,7 +102,7 @@ enum AsteroidCalculator {
         if delta > 180 { delta -= 360 } else if delta < -180 { delta += 360 }
         return delta < 0
     }
-
+    
     /// Batch query – returns a dictionary keyed by Asteroid.
     static func positions(of asteroids: [Asteroid] = Asteroid.allCases,
                           at julianDayUT: Double) -> [Asteroid: Position] {
@@ -110,9 +110,9 @@ enum AsteroidCalculator {
         for a in asteroids { dict[a] = position(of: a, at: julianDayUT) }
         return dict
     }
-
+    
     // MARK: – Implementation details -------------------------------------
-
+    
     /// Serial queue guarding calls into the non‑re‑entrant C core.
     private static let queryQueue = DispatchQueue(label: "AsteroidCalculator.SEQueue")
 }

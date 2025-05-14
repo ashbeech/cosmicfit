@@ -15,16 +15,16 @@ extension Date {
         // 1) Calendar + guaranteed‑non‑nil UTC zone  -------------------------
         let cal = Calendar(identifier: .gregorian)
         let utc = TimeZone(secondsFromGMT: 0)!          // ← unwrap once, safe
-
+        
         // 2) Break the long expression into smaller pieces  ------------------
         let c = cal.dateComponents(in: utc, from: self)
-
+        
         // Fractional hours  (Swift gets slow if you chain them on one line)
         let hourFrac =
-              Double(c.hour   ?? 0)
-            + Double(c.minute ?? 0) / 60
-            + Double(c.second ?? 0) / 3600
-
+        Double(c.hour   ?? 0)
+        + Double(c.minute ?? 0) / 60
+        + Double(c.second ?? 0) / 3600
+        
         // 3) Call the C function – all optionals unwrapped, compiler is fast --
         return swe_julday(
             Int32(c.year!),  Int32(c.month!), Int32(c.day!),
@@ -52,14 +52,14 @@ enum Ephemeris {
         ("Juno",   SE_JUNO),
         ("Vesta",  SE_VESTA)
     ]
-
+    
     /// Return the four big‑asteroid positions for an arbitrary date.
     static func bigFour(on date: Date, flags: Int32 = SEFLG_SWIEPH) -> [BodyPosition] {
         let jd = date.julianDayUT
         var out = [BodyPosition]()
         var xx = [Double](repeating: 0, count: 6)
         var serr = [CChar](repeating: 0, count: 256)
-
+        
         for (label, ip) in ids {
             swe_calc_ut(jd, ip, flags, &xx, &serr)
             out.append(BodyPosition(body: label,

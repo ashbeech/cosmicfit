@@ -3,7 +3,6 @@
 //  Cosmic Fit
 //
 //  Created by Ashley Davison on 04/05/2025.
-//  Updated with Blueprint specification implementation
 //
 
 import UIKit
@@ -580,7 +579,7 @@ final class NatalChartViewController: UIViewController {
         // Additional options for paragraph assembly logging
         alert.addAction(UIAlertAction(
             title: "Toggle Paragraph Assembly Logging " +
-                  (DebugLogger.enableParagraphAssemblyLogging ? "✓" : ""),
+            (DebugLogger.enableParagraphAssemblyLogging ? "✓" : ""),
             style: .default,
             handler: { _ in
                 DebugLogger.enableParagraphAssemblyLogging.toggle()

@@ -83,7 +83,7 @@ struct ThemeSelector {
     static func scoreThemes(tokens: [StyleToken], themes: [CompositeTheme] = themes) -> String {
         var bestTheme: String = "Default Flow"
         var bestScore: Double = 0.0
-
+        
         for theme in themes {
             var score: Double = 0.0
             var matchedRequired = Set<String>()

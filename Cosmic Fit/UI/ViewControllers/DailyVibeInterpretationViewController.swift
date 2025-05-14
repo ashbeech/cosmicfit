@@ -473,26 +473,39 @@ class DailyVibeInterpretationViewController: UIViewController {
         dateFormatter.dateFormat = "EEEE d MMMM yyyy"
         dateLabel.text = dateFormatter.string(from: Date())
         
-        // Update weather info
-        if let temp = content.temperature, let condition = content.weatherCondition {
-            weatherInfoLabel.text = "☀️ \(Int(temp))°C"
+        // Weather
+        if let temp = content.temperature,
+           let condition = content.weatherCondition {       // <-- ‘condition’ now used!
+            
+            let symbol: String
+            switch condition.lowercased() {
+            case "sunny", "clear":                 symbol = "☀️"
+            case "partly cloudy", "cloudy":        symbol = "☁️"
+            case "rain", "rainy", "showers":       symbol = "🌧"
+            case "storm", "thunderstorm":          symbol = "⛈"
+            case "snow", "snowy":                  symbol = "❄️"
+            case "fog", "mist":                    symbol = "🌫"
+            default:                               symbol = "🌤"
+            }
+            
+            weatherInfoLabel.text = "\(symbol) \(Int(temp))°C — \(condition.capitalized)"
         } else {
             weatherInfoLabel.text = ""
         }
         
-        // Update content sections
-        textilesContentLabel.text = content.textiles
-        colorsContentLabel.text = content.colors
-        patternsContentLabel.text = content.patterns
-        shapeContentLabel.text = content.shape
+        // Populate content sections
+        textilesContentLabel.text   = content.textiles
+        colorsContentLabel.text     = content.colors
+        patternsContentLabel.text   = content.patterns
+        shapeContentLabel.text      = content.shape
         accessoriesContentLabel.text = content.accessories
         
-        // Update takeaway
+        // Take‑away
         takeawayLabel.text = content.takeaway
         
         // Redraw sliders
         drawBrightnessSlider(value: content.brightness)
-        drawVibrancySlider(value: content.vibrancy)
+        drawVibrancySlider(value:  content.vibrancy)
     }
     
     // MARK: - Actions

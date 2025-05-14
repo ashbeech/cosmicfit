@@ -16,8 +16,8 @@ struct JulianDateCalculator {
         
         // Check if date is in Gregorian calendar (after October 15, 1582)
         let gregorian = (year > 1582) ||
-                       (year == 1582 && month > 10) ||
-                       (year == 1582 && month == 10 && day >= 15)
+        (year == 1582 && month > 10) ||
+        (year == 1582 && month == 10 && day >= 15)
         
         // Calculate A and B terms for Julian/Gregorian calendar
         let a = Int(y / 100.0)
@@ -46,7 +46,7 @@ struct JulianDateCalculator {
         }
         
         return calculateJulianDate(year: year, month: month, day: day,
-                                  hour: hour, minute: minute, second: second)
+                                   hour: hour, minute: minute, second: second)
     }
     
     // Convert local time to UTC

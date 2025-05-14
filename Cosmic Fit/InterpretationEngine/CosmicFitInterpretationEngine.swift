@@ -62,23 +62,23 @@ class CosmicFitInterpretationEngine {
         progressedChart: NatalChartCalculator.NatalChart,
         transits: [[String: Any]],
         weather: TodayWeather?) -> DailyVibeContent {
-        
-        // Get current lunar phase
-        let currentDate = Date()
-        let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
-        let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: currentJulianDay)
-        
-        // Generate the daily vibe content using the DailyVibeGenerator
-        let dailyVibeContent = DailyVibeGenerator.generateDailyVibe(
-            natalChart: natalChart,
-            progressedChart: progressedChart,
-            transits: transits,
-            weather: weather,
-            moonPhase: lunarPhase
-        )
-        
-        return dailyVibeContent
-    }
+            
+            // Get current lunar phase
+            let currentDate = Date()
+            let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
+            let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: currentJulianDay)
+            
+            // Generate the daily vibe content using the DailyVibeGenerator
+            let dailyVibeContent = DailyVibeGenerator.generateDailyVibe(
+                natalChart: natalChart,
+                progressedChart: progressedChart,
+                transits: transits,
+                weather: weather,
+                moonPhase: lunarPhase
+            )
+            
+            return dailyVibeContent
+        }
     
     /// Generate a combined interpretation including both blueprint and daily vibe
     /// - Parameters:
@@ -92,25 +92,25 @@ class CosmicFitInterpretationEngine {
         progressedChart: NatalChartCalculator.NatalChart,
         transits: [[String: Any]],
         weather: TodayWeather?) -> String {
-        
-        // Generate blueprint (using Whole Sign)
-        let blueprint = generateBlueprintInterpretation(from: natalChart)
-        
-        // Generate daily vibe content
-        let dailyVibe = generateDailyVibeInterpretation(
-            from: natalChart,
-            progressedChart: progressedChart,
-            transits: transits,
-            weather: weather
-        )
-        
-        // Format the date for display
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        let dateString = dateFormatter.string(from: Date())
-        
-        // Combine the two interpretations
-        return """
+            
+            // Generate blueprint (using Whole Sign)
+            let blueprint = generateBlueprintInterpretation(from: natalChart)
+            
+            // Generate daily vibe content
+            let dailyVibe = generateDailyVibeInterpretation(
+                from: natalChart,
+                progressedChart: progressedChart,
+                transits: transits,
+                weather: weather
+            )
+            
+            // Format the date for display
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = .medium
+            let dateString = dateFormatter.string(from: Date())
+            
+            // Combine the two interpretations
+            return """
         YOUR COSMIC BLUEPRINT
         ====================
         
@@ -136,7 +136,7 @@ class CosmicFitInterpretationEngine {
         
         \(dailyVibe.takeaway)
         """
-    }
+        }
     
     // MARK: - Specialized Section Generation Methods
     
@@ -144,27 +144,27 @@ class CosmicFitInterpretationEngine {
     static func generateColorFrequencyInterpretation(
         from natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart) -> String {
-        
-        // Generate tokens with specific weighting (70% natal, 30% progressed)
-        let tokens = SemanticTokenGenerator.generateColorFrequencyTokens(
-            natal: natalChart,
-            progressed: progressedChart)
-        
-        // Here we'd pass these tokens to a specific color interpretation function
-        // For now we'll use the standard ParagraphAssembler method
-        return ParagraphAssembler.generateColorRecommendations(from: tokens)
-    }
+            
+            // Generate tokens with specific weighting (70% natal, 30% progressed)
+            let tokens = SemanticTokenGenerator.generateColorFrequencyTokens(
+                natal: natalChart,
+                progressed: progressedChart)
+            
+            // Here we'd pass these tokens to a specific color interpretation function
+            // For now we'll use the standard ParagraphAssembler method
+            return ParagraphAssembler.generateColorRecommendations(from: tokens)
+        }
     
     /// Generate wardrobe storyline interpretation (60% progressed with Placidus, 40% natal)
     static func generateWardrobeStorylineInterpretation(
         from natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart) -> String {
-        
-        // Generate tokens with specific weighting (60% progressed using Placidus, 40% natal)
-        let tokens = SemanticTokenGenerator.generateWardrobeStorylineTokens(
-            natal: natalChart,
-            progressed: progressedChart)
-        
-        return ParagraphAssembler.generateWardrobeStoryline(from: tokens)
-    }
+            
+            // Generate tokens with specific weighting (60% progressed using Placidus, 40% natal)
+            let tokens = SemanticTokenGenerator.generateWardrobeStorylineTokens(
+                natal: natalChart,
+                progressed: progressedChart)
+            
+            return ParagraphAssembler.generateWardrobeStoryline(from: tokens)
+        }
 }

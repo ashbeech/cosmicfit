@@ -155,7 +155,7 @@ struct AstrologicalInterpreter {
             default: return "Your Mars in \(signName) reflects how you assert yourself and express energy."
             }
             
-        // Interpretations for outer planets are more generational but still have personal significance
+            // Interpretations for outer planets are more generational but still have personal significance
         case "Jupiter":
             switch signName {
             case "Aries": return "You seek growth through initiative, leadership, and independent action. Your optimism is expressed through pioneering new territory and taking risks."

@@ -48,12 +48,12 @@ class InterpretationViewController: UIViewController {
     
     // MARK: - Configuration
     func configure(with interpretationText: String,
-                  title: String = "Cosmic Fit Interpretation",
-                  themeName: String = "",
-                  isBlueprint: Bool = false,
-                  birthDate: Date? = nil,
-                  birthCity: String = "",
-                  birthCountry: String = "") {
+                   title: String = "Cosmic Fit Interpretation",
+                   themeName: String = "",
+                   isBlueprint: Bool = false,
+                   birthDate: Date? = nil,
+                   birthCity: String = "",
+                   birthCountry: String = "") {
         
         self.interpretationText = interpretationText
         self.interpretationTitle = title
@@ -239,9 +239,6 @@ class InterpretationViewController: UIViewController {
         let city = self.birthCity.isEmpty ? "CITY" : self.birthCity.uppercased()
         let country = self.birthCountry.isEmpty ? "COUNTRY" : self.birthCountry.uppercased()
         locationLabel.text = "\(city), \(country)"
-        
-        print(city)
-        print(country)
         
         // Show/hide the profile header based on whether this is a blueprint view
         profileHeaderView.isHidden = !isBlueprintView

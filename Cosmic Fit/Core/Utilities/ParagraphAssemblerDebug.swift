@@ -372,23 +372,23 @@ extension ParagraphAssembler {
         if hasEarthy && hasIntuitive {
             sentence = "You walk the line between earth and ether—rooted, but always sensing something deeper. "
             debugLogSentence(sentence, tokens: tokens, section: "Style Essence",
-                          context: "hasEarthy && hasIntuitive")
+                             context: "hasEarthy && hasIntuitive")
         } else if hasEarthy {
             sentence = "You embody a grounded presence, drawing strength from what feels stable and real. "
             debugLogSentence(sentence, tokens: tokens, section: "Style Essence",
-                          context: "hasEarthy")
+                             context: "hasEarthy")
         } else if hasFluid {
             sentence = "There's a flowing energy to your presence—adaptable, intuitive, and subtly responsive. "
             debugLogSentence(sentence, tokens: tokens, section: "Style Essence",
-                          context: "hasFluid")
+                             context: "hasFluid")
         } else if hasBold {
             sentence = "You project a confident energy that leaves an impression—unmistakable, defined, and purposeful. "
             debugLogSentence(sentence, tokens: tokens, section: "Style Essence",
-                          context: "hasBold")
+                             context: "hasBold")
         } else {
             sentence = "Your style essence balances personal expression with authentic presence. "
             debugLogSentence(sentence, tokens: tokens, section: "Style Essence",
-                          context: "default")
+                             context: "default")
         }
         essence += sentence
         
@@ -400,7 +400,7 @@ extension ParagraphAssembler {
             sentence += "quiet force in your presence, a soft kind of defiance. "
         }
         debugLogSentence(sentence, tokens: tokens, section: "Style Essence",
-                      context: "Force in presence: hasBold = \(hasBold)")
+                         context: "Force in presence: hasBold = \(hasBold)")
         essence += sentence
         
         // Third sentence about energy
@@ -411,7 +411,7 @@ extension ParagraphAssembler {
             sentence += "loud, but it lingers. "
         }
         debugLogSentence(sentence, tokens: tokens, section: "Style Essence",
-                      context: "Energy description: hasBold = \(hasBold)")
+                         context: "Energy description: hasBold = \(hasBold)")
         essence += sentence
         
         // Final sentence about dressing
@@ -423,18 +423,18 @@ extension ParagraphAssembler {
         }
         sentence += "texture, color, and the way fabric falls. This blueprint reflects a wardrobe built on "
         debugLogSentence(sentence, tokens: tokens, section: "Style Essence",
-                      context: "Dressing style: has12thHouse = \(has12thHouse)")
+                         context: "Dressing style: has12thHouse = \(has12thHouse)")
         essence += sentence
         
         // Add the three themes as closing qualities
         if !themes.isEmpty {
             sentence = themes.joined(separator: ", ") + "."
             debugLogSentence(sentence, tokens: tokens, section: "Style Essence",
-                          context: "Closing themes")
+                             context: "Closing themes")
         } else {
             sentence = "intuition, integrity, and evolution."
             debugLogSentence(sentence, tokens: tokens, section: "Style Essence",
-                          context: "Default closing themes")
+                             context: "Default closing themes")
         }
         essence += sentence
         

@@ -12,7 +12,7 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
     var onLocation: ((CLLocationCoordinate2D) -> Void)?
     var onError: ((Error) -> Void)?
-
+    
     func requestOnce() {
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyThreeKilometers

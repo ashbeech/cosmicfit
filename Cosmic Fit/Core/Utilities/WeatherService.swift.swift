@@ -28,17 +28,17 @@ final class WeatherService {
         // ------------------------------------------------------------------
         // Debug: show exactly which coordinates we’re requesting
         // ------------------------------------------------------------------
-        #if DEBUG
+#if DEBUG
         print("[WeatherService] Fetching weather for lat \(lat), lon \(lon)")
-        #endif
+#endif
         // ------------------------------------------------------------------
         
         let url = URL(string:
-            "https://api.open-meteo.com/v1/forecast" +
-            "?latitude=\(lat)&longitude=\(lon)" +
-            "&current_weather=true" +
-            "&hourly=relativehumidity_2m" +
-            "&timezone=auto")!
+                        "https://api.open-meteo.com/v1/forecast" +
+                      "?latitude=\(lat)&longitude=\(lon)" +
+                      "&current_weather=true" +
+                      "&hourly=relativehumidity_2m" +
+                      "&timezone=auto")!
         
         let (data, resp) = try await URLSession.shared.data(from: url)
         guard (resp as? HTTPURLResponse)?.statusCode == 200 else {

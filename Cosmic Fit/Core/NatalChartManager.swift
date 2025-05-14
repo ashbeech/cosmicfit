@@ -53,9 +53,9 @@ class NatalChartManager {
     ///   - timeZone: Time zone of birth location
     /// - Returns: Formatted progressed chart data
     func calculateProgressedChart(date: Date,
-                                latitude: Double,
-                                longitude: Double,
-                                timeZone: TimeZone) -> [String: Any] {
+                                  latitude: Double,
+                                  longitude: Double,
+                                  timeZone: TimeZone) -> [String: Any] {
         
         // Calculate current age
         let targetAge = NatalChartCalculator.calculateCurrentAge(from: date)
@@ -163,55 +163,55 @@ class NatalChartManager {
     }
     
     /*
-    /// Calculate a transit chart (current planetary positions relative to natal chart)
-    /// - Parameter natalChart: The base natal chart
-    /// - Returns: Transit chart data
-    func calculateTransitChart(natalChart: NatalChartCalculator.NatalChart) -> [String: Any] {
-        // Calculate current planetary positions
-        let currentDate = Date()
-        let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
-        
-        // This is a simplified implementation that would need to be expanded
-        // with actual transit calculations
-        var transitData: [String: Any] = [:]
-        
-        // Calculate current positions of planets
-        let sunPosition = AstronomicalCalculator.calculateSunPosition(julianDay: currentJulianDay)
-        let sunLongitude = sunPosition.longitude
-        let (sunSign, sunPos) = CoordinateTransformations.decimalDegreesToZodiac(sunLongitude)
-        
-        let moonPosition = AstronomicalCalculator.calculateMoonPosition(julianDay: currentJulianDay)
-        let moonLongitude = moonPosition.longitude
-        let (moonSign, moonPos) = CoordinateTransformations.decimalDegreesToZodiac(moonLongitude)
-        
-        let mercuryPosition = VSOP87Parser.calculateGeocentricCoordinates(planet: .mercury, julianDay: currentJulianDay)
-        let mercuryLongitude = CoordinateTransformations.radiansToDegrees(mercuryPosition.longitude)
-        let (mercurySign, mercuryPos) = CoordinateTransformations.decimalDegreesToZodiac(mercuryLongitude)
-        
-        // Add current planet positions to transit data
-        transitData["Sun"] = [
-            "longitude": sunLongitude,
-            "formattedPosition": "\(sunPos) \(CoordinateTransformations.getZodiacSignName(sign: sunSign))",
-            "zodiacSign": CoordinateTransformations.getZodiacSignName(sign: sunSign),
-            "zodiacSymbol": CoordinateTransformations.getZodiacSignSymbol(sign: sunSign)
-        ]
-        
-        transitData["Moon"] = [
-            "longitude": moonLongitude,
-            "formattedPosition": "\(moonPos) \(CoordinateTransformations.getZodiacSignName(sign: moonSign))",
-            "zodiacSign": CoordinateTransformations.getZodiacSignName(sign: moonSign),
-            "zodiacSymbol": CoordinateTransformations.getZodiacSignSymbol(sign: moonSign)
-        ]
-        
-        transitData["Mercury"] = [
-            "longitude": mercuryLongitude,
-            "formattedPosition": "\(mercuryPos) \(CoordinateTransformations.getZodiacSignName(sign: mercurySign))",
-            "zodiacSign": CoordinateTransformations.getZodiacSignName(sign: mercurySign),
-            "zodiacSymbol": CoordinateTransformations.getZodiacSignSymbol(sign: mercurySign)
-        ]
-        
-        return transitData
-    }
+     /// Calculate a transit chart (current planetary positions relative to natal chart)
+     /// - Parameter natalChart: The base natal chart
+     /// - Returns: Transit chart data
+     func calculateTransitChart(natalChart: NatalChartCalculator.NatalChart) -> [String: Any] {
+     // Calculate current planetary positions
+     let currentDate = Date()
+     let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
+     
+     // This is a simplified implementation that would need to be expanded
+     // with actual transit calculations
+     var transitData: [String: Any] = [:]
+     
+     // Calculate current positions of planets
+     let sunPosition = AstronomicalCalculator.calculateSunPosition(julianDay: currentJulianDay)
+     let sunLongitude = sunPosition.longitude
+     let (sunSign, sunPos) = CoordinateTransformations.decimalDegreesToZodiac(sunLongitude)
+     
+     let moonPosition = AstronomicalCalculator.calculateMoonPosition(julianDay: currentJulianDay)
+     let moonLongitude = moonPosition.longitude
+     let (moonSign, moonPos) = CoordinateTransformations.decimalDegreesToZodiac(moonLongitude)
+     
+     let mercuryPosition = VSOP87Parser.calculateGeocentricCoordinates(planet: .mercury, julianDay: currentJulianDay)
+     let mercuryLongitude = CoordinateTransformations.radiansToDegrees(mercuryPosition.longitude)
+     let (mercurySign, mercuryPos) = CoordinateTransformations.decimalDegreesToZodiac(mercuryLongitude)
+     
+     // Add current planet positions to transit data
+     transitData["Sun"] = [
+     "longitude": sunLongitude,
+     "formattedPosition": "\(sunPos) \(CoordinateTransformations.getZodiacSignName(sign: sunSign))",
+     "zodiacSign": CoordinateTransformations.getZodiacSignName(sign: sunSign),
+     "zodiacSymbol": CoordinateTransformations.getZodiacSignSymbol(sign: sunSign)
+     ]
+     
+     transitData["Moon"] = [
+     "longitude": moonLongitude,
+     "formattedPosition": "\(moonPos) \(CoordinateTransformations.getZodiacSignName(sign: moonSign))",
+     "zodiacSign": CoordinateTransformations.getZodiacSignName(sign: moonSign),
+     "zodiacSymbol": CoordinateTransformations.getZodiacSignSymbol(sign: moonSign)
+     ]
+     
+     transitData["Mercury"] = [
+     "longitude": mercuryLongitude,
+     "formattedPosition": "\(mercuryPos) \(CoordinateTransformations.getZodiacSignName(sign: mercurySign))",
+     "zodiacSign": CoordinateTransformations.getZodiacSignName(sign: mercurySign),
+     "zodiacSymbol": CoordinateTransformations.getZodiacSignSymbol(sign: mercurySign)
+     ]
+     
+     return transitData
+     }
      */
 }
 

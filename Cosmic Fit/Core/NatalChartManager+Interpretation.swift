@@ -31,15 +31,15 @@ extension NatalChartManager {
         progressedChart: NatalChartCalculator.NatalChart,
         transits: [[String: Any]],
         weather: TodayWeather?) -> DailyVibeContent {
-        
-        // Use the CosmicFitInterpretationEngine to generate daily vibe content
-        return CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
-            from: natalChart,
-            progressedChart: progressedChart,
-            transits: transits,
-            weather: weather
-        )
-    }
+            
+            // Use the CosmicFitInterpretationEngine to generate daily vibe content
+            return CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
+                from: natalChart,
+                progressedChart: progressedChart,
+                transits: transits,
+                weather: weather
+            )
+        }
     
     /// Generate a complete interpretation including both blueprint and daily vibe
     /// - Parameters:
@@ -53,14 +53,14 @@ extension NatalChartManager {
         progressedChart: NatalChartCalculator.NatalChart,
         transits: [[String: Any]],
         weather: TodayWeather?) -> String {
-        
-        return CosmicFitInterpretationEngine.generateFullInterpretation(
-            from: natalChart,
-            progressedChart: progressedChart,
-            transits: transits,
-            weather: weather
-        )
-    }
+            
+            return CosmicFitInterpretationEngine.generateFullInterpretation(
+                from: natalChart,
+                progressedChart: progressedChart,
+                transits: transits,
+                weather: weather
+            )
+        }
     
     /// Generate a custom style guidance for a specific situation
     /// - Parameters:
@@ -70,25 +70,25 @@ extension NatalChartManager {
     func generateCustomStyleGuidance(
         for natalChart: NatalChartCalculator.NatalChart,
         query: String) -> String {
-        
-        // Generate tokens from natal chart
-        let tokens = SemanticTokenGenerator.generateBlueprintTokens(natal: natalChart)
-        
-        // Score tokens against themes to find the best-fit theme
-        let themeName = ThemeSelector.scoreThemes(tokens: tokens)
-        
-        // Generate custom guidance based on the query and theme
-        var guidance = "Custom Style Guidance: \(query)\n\n"
-        
-        // Add theme-specific recommendations
-        guidance += "Based on your Cosmic Blueprint theme of \"\(themeName)\", here are styling recommendations for \(query):\n\n"
-        
-        // Add situation-specific guidance
-        let situationGuidance = generateSituationGuidance(query: query, tokens: tokens, themeName: themeName)
-        guidance += situationGuidance
-        
-        return guidance
-    }
+            
+            // Generate tokens from natal chart
+            let tokens = SemanticTokenGenerator.generateBlueprintTokens(natal: natalChart)
+            
+            // Score tokens against themes to find the best-fit theme
+            let themeName = ThemeSelector.scoreThemes(tokens: tokens)
+            
+            // Generate custom guidance based on the query and theme
+            var guidance = "Custom Style Guidance: \(query)\n\n"
+            
+            // Add theme-specific recommendations
+            guidance += "Based on your Cosmic Blueprint theme of \"\(themeName)\", here are styling recommendations for \(query):\n\n"
+            
+            // Add situation-specific guidance
+            let situationGuidance = generateSituationGuidance(query: query, tokens: tokens, themeName: themeName)
+            guidance += situationGuidance
+            
+            return guidance
+        }
     
     // MARK: - Helper Methods
     

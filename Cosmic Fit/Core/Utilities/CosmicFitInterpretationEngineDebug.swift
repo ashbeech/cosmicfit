@@ -67,160 +67,160 @@ extension CosmicFitInterpretationEngine {
         progressedChart: NatalChartCalculator.NatalChart,
         transits: [[String: Any]],
         weather: TodayWeather?) -> DailyVibeContent {
-        
-        print("\n☀️ GENERATING DAILY COSMIC VIBE WITH DETAILED DEBUG ☀️")
-        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-        
-        // Start a new debug session
-        DebugLogger.info("Starting Daily Vibe interpretation debug session")
-        
-        // Get current lunar phase
-        let currentDate = Date()
-        let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
-        let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: currentJulianDay)
-        
-        DebugLogger.info("Current lunar phase: \(String(format: "%.2f", lunarPhase))")
-        
-        // Generate the daily vibe content using the DailyVibeGenerator - we'll access its internals
-        // directly for detailed debugging
-        DebugLogger.info("Preparing token generation for Daily Vibe")
-        
-        // Log house system approach
-        DebugLogger.info("HYBRID HOUSE SYSTEM APPROACH:")
-        DebugLogger.info("  • Base Style Resonance: Whole Sign (100% natal)")
-        DebugLogger.info("  • Emotional Vibe: Placidus (60% progressed Moon, 40% natal Moon)")
-        DebugLogger.info("  • Transit Impact: Placidus")
-        DebugLogger.info("  • Fashion Output: 50% natal + 50% transit-based")
-        
-        // 1. Generate tokens for base style resonance (100% natal, Whole Sign)
-        let baseStyleTokens = SemanticTokenGenerator.generateBaseStyleTokens(natal: natalChart)
-        DebugLogger.tokenSet("BASE STYLE TOKENS (WHOLE SIGN)", baseStyleTokens)
-        
-        // 2. Generate tokens for emotional vibe of day (60% progressed Moon, 40% natal Moon, Placidus)
-        let emotionalVibeTokens = SemanticTokenGenerator.generateEmotionalVibeTokens(
-            natal: natalChart,
-            progressed: progressedChart
-        )
-        DebugLogger.tokenSet("EMOTIONAL VIBE TOKENS (PLACIDUS - 60% PROGRESSED, 40% NATAL)", emotionalVibeTokens)
-        
-        // 3. Generate tokens from planetary transits (Placidus houses)
-        let transitTokens = SemanticTokenGenerator.generateTransitTokens(
-            transits: transits,
-            natal: natalChart
-        )
-        DebugLogger.tokenSet("TRANSIT TOKENS (PLACIDUS)", transitTokens)
-        
-        // 4. Generate tokens from moon phase
-        let moonPhaseTokens = SemanticTokenGenerator.generateMoonPhaseTokens(moonPhase: lunarPhase)
-        DebugLogger.tokenSet("MOON PHASE TOKENS", moonPhaseTokens)
-        
-        // 5. Generate tokens from weather if available
-        var weatherTokens: [StyleToken] = []
-        if let weather = weather {
-            weatherTokens = SemanticTokenGenerator.generateWeatherTokens(weather: weather)
-            DebugLogger.tokenSet("WEATHER TOKENS", weatherTokens)
-        } else {
-            DebugLogger.warning("No weather data available")
-        }
-        
-        // 6. Combine all tokens with appropriate weighting
-        var allTokens: [StyleToken] = []
-        
-        // Add base style tokens (50% weight in final output)
-        for token in baseStyleTokens {
-            let adjustedToken = StyleToken(
-                name: token.name,
-                type: token.type,
-                weight: token.weight * 0.5,
-                planetarySource: token.planetarySource,
-                signSource: token.signSource,
-                houseSource: token.houseSource,
-                aspectSource: token.aspectSource
+            
+            print("\n☀️ GENERATING DAILY COSMIC VIBE WITH DETAILED DEBUG ☀️")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            
+            // Start a new debug session
+            DebugLogger.info("Starting Daily Vibe interpretation debug session")
+            
+            // Get current lunar phase
+            let currentDate = Date()
+            let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
+            let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: currentJulianDay)
+            
+            DebugLogger.info("Current lunar phase: \(String(format: "%.2f", lunarPhase))")
+            
+            // Generate the daily vibe content using the DailyVibeGenerator - we'll access its internals
+            // directly for detailed debugging
+            DebugLogger.info("Preparing token generation for Daily Vibe")
+            
+            // Log house system approach
+            DebugLogger.info("HYBRID HOUSE SYSTEM APPROACH:")
+            DebugLogger.info("  • Base Style Resonance: Whole Sign (100% natal)")
+            DebugLogger.info("  • Emotional Vibe: Placidus (60% progressed Moon, 40% natal Moon)")
+            DebugLogger.info("  • Transit Impact: Placidus")
+            DebugLogger.info("  • Fashion Output: 50% natal + 50% transit-based")
+            
+            // 1. Generate tokens for base style resonance (100% natal, Whole Sign)
+            let baseStyleTokens = SemanticTokenGenerator.generateBaseStyleTokens(natal: natalChart)
+            DebugLogger.tokenSet("BASE STYLE TOKENS (WHOLE SIGN)", baseStyleTokens)
+            
+            // 2. Generate tokens for emotional vibe of day (60% progressed Moon, 40% natal Moon, Placidus)
+            let emotionalVibeTokens = SemanticTokenGenerator.generateEmotionalVibeTokens(
+                natal: natalChart,
+                progressed: progressedChart
             )
-            allTokens.append(adjustedToken)
-        }
-        
-        // Add emotional vibe tokens (integrated into 50% transit weight)
-        for token in emotionalVibeTokens {
-            let adjustedToken = StyleToken(
-                name: token.name,
-                type: token.type,
-                weight: token.weight * 0.2,  // 20% of total (part of the 50% transit-based)
-                planetarySource: token.planetarySource,
-                signSource: token.signSource,
-                houseSource: token.houseSource,
-                aspectSource: token.aspectSource
+            DebugLogger.tokenSet("EMOTIONAL VIBE TOKENS (PLACIDUS - 60% PROGRESSED, 40% NATAL)", emotionalVibeTokens)
+            
+            // 3. Generate tokens from planetary transits (Placidus houses)
+            let transitTokens = SemanticTokenGenerator.generateTransitTokens(
+                transits: transits,
+                natal: natalChart
             )
-            allTokens.append(adjustedToken)
+            DebugLogger.tokenSet("TRANSIT TOKENS (PLACIDUS)", transitTokens)
+            
+            // 4. Generate tokens from moon phase
+            let moonPhaseTokens = SemanticTokenGenerator.generateMoonPhaseTokens(moonPhase: lunarPhase)
+            DebugLogger.tokenSet("MOON PHASE TOKENS", moonPhaseTokens)
+            
+            // 5. Generate tokens from weather if available
+            var weatherTokens: [StyleToken] = []
+            if let weather = weather {
+                weatherTokens = SemanticTokenGenerator.generateWeatherTokens(weather: weather)
+                DebugLogger.tokenSet("WEATHER TOKENS", weatherTokens)
+            } else {
+                DebugLogger.warning("No weather data available")
+            }
+            
+            // 6. Combine all tokens with appropriate weighting
+            var allTokens: [StyleToken] = []
+            
+            // Add base style tokens (50% weight in final output)
+            for token in baseStyleTokens {
+                let adjustedToken = StyleToken(
+                    name: token.name,
+                    type: token.type,
+                    weight: token.weight * 0.5,
+                    planetarySource: token.planetarySource,
+                    signSource: token.signSource,
+                    houseSource: token.houseSource,
+                    aspectSource: token.aspectSource
+                )
+                allTokens.append(adjustedToken)
+            }
+            
+            // Add emotional vibe tokens (integrated into 50% transit weight)
+            for token in emotionalVibeTokens {
+                let adjustedToken = StyleToken(
+                    name: token.name,
+                    type: token.type,
+                    weight: token.weight * 0.2,  // 20% of total (part of the 50% transit-based)
+                    planetarySource: token.planetarySource,
+                    signSource: token.signSource,
+                    houseSource: token.houseSource,
+                    aspectSource: token.aspectSource
+                )
+                allTokens.append(adjustedToken)
+            }
+            
+            // Add transit tokens (part of the 50% transit-based weight)
+            for token in transitTokens {
+                let adjustedToken = StyleToken(
+                    name: token.name,
+                    type: token.type,
+                    weight: token.weight * 0.2,  // 20% of total (part of the 50% transit-based)
+                    planetarySource: token.planetarySource,
+                    signSource: token.signSource,
+                    houseSource: token.houseSource,
+                    aspectSource: token.aspectSource
+                )
+                allTokens.append(adjustedToken)
+            }
+            
+            // Add moon phase tokens (integrated into transit portion)
+            for token in moonPhaseTokens {
+                let adjustedToken = StyleToken(
+                    name: token.name,
+                    type: token.type,
+                    weight: token.weight * 0.05,  // 5% of total
+                    planetarySource: token.planetarySource,
+                    signSource: token.signSource,
+                    houseSource: token.houseSource,
+                    aspectSource: token.aspectSource
+                )
+                allTokens.append(adjustedToken)
+            }
+            
+            // Add weather tokens (final styling filter)
+            for token in weatherTokens {
+                let adjustedToken = StyleToken(
+                    name: token.name,
+                    type: token.type,
+                    weight: token.weight * 0.05,  // 5% of total
+                    planetarySource: token.planetarySource,
+                    signSource: token.signSource,
+                    houseSource: token.houseSource,
+                    aspectSource: token.aspectSource
+                )
+                allTokens.append(adjustedToken)
+            }
+            
+            // Log combined weighted tokens
+            DebugLogger.tokenSet("COMBINED WEIGHTED TOKENS", allTokens)
+            
+            // 7. Generate the daily vibe content with detailed logging at each step
+            DebugLogger.info("Generating Daily Vibe content with paragraph-level logging")
+            
+            // Create a debug-enhanced daily vibe generation
+            let dailyVibeContent = generateDailyVibeContentWithDebug(tokens: allTokens, weather: weather, moonPhase: lunarPhase)
+            
+            // Log theme determination
+            let themeName = ThemeSelector.scoreThemes(tokens: allTokens)
+            DebugLogger.info("Selected Theme: \(themeName)")
+            
+            // Log the top themes with scores for debugging
+            let topThemes = ThemeSelector.rankThemes(tokens: allTokens, topCount: 3)
+            for (i, theme) in topThemes.enumerated() {
+                DebugLogger.info("  \(i+1). \(theme.name): Score \(String(format: "%.2f", theme.score))")
+            }
+            
+            print("\n✅ Daily vibe generation with detailed debug completed!")
+            print("Theme: \(themeName)")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+            
+            return dailyVibeContent
         }
-        
-        // Add transit tokens (part of the 50% transit-based weight)
-        for token in transitTokens {
-            let adjustedToken = StyleToken(
-                name: token.name,
-                type: token.type,
-                weight: token.weight * 0.2,  // 20% of total (part of the 50% transit-based)
-                planetarySource: token.planetarySource,
-                signSource: token.signSource,
-                houseSource: token.houseSource,
-                aspectSource: token.aspectSource
-            )
-            allTokens.append(adjustedToken)
-        }
-        
-        // Add moon phase tokens (integrated into transit portion)
-        for token in moonPhaseTokens {
-            let adjustedToken = StyleToken(
-                name: token.name,
-                type: token.type,
-                weight: token.weight * 0.05,  // 5% of total
-                planetarySource: token.planetarySource,
-                signSource: token.signSource,
-                houseSource: token.houseSource,
-                aspectSource: token.aspectSource
-            )
-            allTokens.append(adjustedToken)
-        }
-        
-        // Add weather tokens (final styling filter)
-        for token in weatherTokens {
-            let adjustedToken = StyleToken(
-                name: token.name,
-                type: token.type,
-                weight: token.weight * 0.05,  // 5% of total
-                planetarySource: token.planetarySource,
-                signSource: token.signSource,
-                houseSource: token.houseSource,
-                aspectSource: token.aspectSource
-            )
-            allTokens.append(adjustedToken)
-        }
-        
-        // Log combined weighted tokens
-        DebugLogger.tokenSet("COMBINED WEIGHTED TOKENS", allTokens)
-        
-        // 7. Generate the daily vibe content with detailed logging at each step
-        DebugLogger.info("Generating Daily Vibe content with paragraph-level logging")
-        
-        // Create a debug-enhanced daily vibe generation
-        let dailyVibeContent = generateDailyVibeContentWithDebug(tokens: allTokens, weather: weather, moonPhase: lunarPhase)
-        
-        // Log theme determination
-        let themeName = ThemeSelector.scoreThemes(tokens: allTokens)
-        DebugLogger.info("Selected Theme: \(themeName)")
-        
-        // Log the top themes with scores for debugging
-        let topThemes = ThemeSelector.rankThemes(tokens: allTokens, topCount: 3)
-        for (i, theme) in topThemes.enumerated() {
-            DebugLogger.info("  \(i+1). \(theme.name): Score \(String(format: "%.2f", theme.score))")
-        }
-        
-        print("\n✅ Daily vibe generation with detailed debug completed!")
-        print("Theme: \(themeName)")
-        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
-        
-        return dailyVibeContent
-    }
     
     // MARK: - Daily Vibe Debug Helpers
     

@@ -361,86 +361,118 @@ struct ParagraphAssembler {
         // ✴️ SOURCE: Venus sign + house, Moon sign, retrograde planets
         // ✴️ Affecting visual/relationship houses (1st, 7th)
         
-        let venusTokens = tokens.filter { $0.planetarySource == "Venus" }
-        let moonTokens = tokens.filter { $0.planetarySource == "Moon" }
-        let visualHouseTokens = tokens.filter { $0.houseSource == 1 || $0.houseSource == 7 }
-        let retrogradeTokens = tokens.filter { $0.name.contains("reflective") || $0.name.contains("introspective") }
+        let venusTokens        = tokens.filter { $0.planetarySource == "Venus" }
+        let moonTokens         = tokens.filter { $0.planetarySource == "Moon"  }
+        let visualHouseTokens  = tokens.filter { $0.houseSource == 1 || $0.houseSource == 7 }
+        let retrogradeTokens   = tokens.filter { $0.name.contains("reflective")
+                                             || $0.name.contains("introspective") }
         
-        // Determine magnetism style
-        let hasQuiet = tokens.contains { $0.name == "quiet" || $0.name == "subtle" }
-        let hasBold = tokens.contains { $0.name == "bold" || $0.name == "radiant" }
-        let hasDeep = tokens.contains { $0.name == "deep" || $0.name == "intense" }
-        let hasPlayful = tokens.contains { $0.name == "playful" || $0.name == "expressive" }
+        // ‑‑‑ Aggregate influence scores ‑‑‑
+        let venusInfluence     = venusTokens.reduce(0.0) { $0 + $1.weight }
+        let moonInfluence      = moonTokens.reduce(0.0) { $0 + $1.weight }
+        let visualInfluence    = visualHouseTokens.reduce(0.0) { $0 + $1.weight }
+        let retroInfluence     = retrogradeTokens.reduce(0.0) { $0 + $1.weight }
         
-        var magnetismQuality = ""
-        var magnetismImpact = ""
-        
-        // Determine primary quality
-        if hasQuiet && hasDeep {
-            magnetismQuality = "Quiet strength and depth"
-        } else if hasQuiet && hasPlayful {
-            magnetismQuality = "Subtle playfulness and charm"
-        } else if hasBold && hasDeep {
-            magnetismQuality = "Powerful presence and depth"
-        } else if hasBold && hasPlayful {
-            magnetismQuality = "Radiant charisma and playfulness"
-        } else if hasQuiet {
-            magnetismQuality = "Subtle presence and authenticity"
-        } else if hasBold {
-            magnetismQuality = "Bold energy and confidence"
-        } else if hasDeep {
-            magnetismQuality = "Deep resonance and substance"
-        } else if hasPlayful {
-            magnetismQuality = "Playful spirit and versatility"
-        } else {
-            magnetismQuality = "Authentic presence and natural appeal"
+        // Determine dominant celestial influence on magnetism
+        enum Lure { case venus, moon, visual, balanced }
+        let dominantLure: Lure
+        switch max(venusInfluence, moonInfluence, visualInfluence) {
+        case venusInfluence : dominantLure = .venus
+        case moonInfluence  : dominantLure = .moon
+        case visualInfluence: dominantLure = .visual
+        default             : dominantLure = .balanced
         }
         
-        // Determine impact style
+        // High‑level qualities pulled from the wider token pool
+        let hasQuiet   = tokens.contains { $0.name == "quiet"  || $0.name == "subtle"   }
+        let hasBold    = tokens.contains { $0.name == "bold"   || $0.name == "radiant"  }
+        let hasDeep    = tokens.contains { $0.name == "deep"   || $0.name == "intense"  }
+        let hasPlayful = tokens.contains { $0.name == "playful" || $0.name == "expressive" }
+        
+        // ‑‑‑ Primary quality string ‑‑‑
+        var magnetismQuality: String
+        switch (hasQuiet, hasBold, hasDeep, hasPlayful) {
+        case (true,  false, true,  _    ): magnetismQuality = "Quiet strength and depth"
+        case (true,  false, _   , true ): magnetismQuality = "Subtle playfulness and charm"
+        case (_   , true , true , _    ): magnetismQuality = "Powerful presence and depth"
+        case (_   , true , _   , true ): magnetismQuality = "Radiant charisma and playfulness"
+        case (true,  _   , _   , _    ): magnetismQuality = "Subtle presence and authenticity"
+        case (_   , true , _   , _    ): magnetismQuality = "Bold energy and confidence"
+        case (_   , _    , true, _    ): magnetismQuality = "Deep resonance and substance"
+        case (_   , _    , _   , true ): magnetismQuality = "Playful spirit and versatility"
+        default                         : magnetismQuality = "Authentic presence and natural appeal"
+        }
+        
+        // Append dominant lure nuance
+        switch dominantLure {
+        case .venus:
+            magnetismQuality += " (Venus‑led—visually harmonious and relational)."
+        case .moon:
+            magnetismQuality += " (Moon‑led—emotionally resonant and inviting)."
+        case .visual:
+            magnetismQuality += " (House‑led—one‑to‑one connections feel immediate)."
+        case .balanced:
+            magnetismQuality += "."
+        }
+        
+        // ‑‑‑ Impact string ‑‑‑
+        var magnetismImpact: String
         if hasQuiet || (!hasBold && !hasPlayful) {
             magnetismImpact = "People may not always notice your outfit first, but they remember how it felt."
         } else {
             magnetismImpact = "Your style creates an immediate impression that lingers in others' memories."
         }
         
-        return "\(magnetismQuality). \(magnetismImpact)"
+        // Retrograde undertone
+        if retroInfluence > 0 {
+            magnetismImpact += " A retrograde undertone makes the allure contemplative—others sense unspoken stories."
+        }
+        
+        return "\(magnetismQuality) \(magnetismImpact)"
     }
     
     /// Generates the Emotional Dressing paragraph based on Moon placement using Whole Sign
     static func generateEmotionalDressingSection(from tokens: [StyleToken]) -> String {
         // ✴️ SOURCE: Moon sign + house, Neptune/Pisces/12th house influence
-        // ✴️ Hard aspects to Venus or Moon
         
         let moonTokens = tokens.filter { $0.planetarySource == "Moon" }
         let neptuneTokens = tokens.filter {
             $0.planetarySource == "Neptune" ||
-            $0.signSource == "Pisces" ||
-            $0.houseSource == 12
+            $0.signSource      == "Pisces" ||
+            $0.houseSource     == 12
         }
         
+        // Weighted impact
+        let moonDepth     = moonTokens.reduce(0.0) { $0 + $1.weight }
+        let neptuneDepth  = neptuneTokens.reduce(0.0) { $0 + $1.weight }
+        
         let hasProtective = tokens.contains { $0.name.contains("protective") }
-        let hasIntuitive = tokens.contains { $0.name.contains("intuitive") }
-        let hasEmotional = tokens.contains { $0.name.contains("emotional") }
-        let hasHonest = tokens.contains { $0.name.contains("honest") || $0.name.contains("authentic") }
+        let hasIntuitive  = tokens.contains { $0.name.contains("intuitive")  }
+        let hasEmotional  = tokens.contains { $0.name.contains("emotional")  }
+        let hasHonest     = tokens.contains { $0.name.contains("honest")
+            || $0.name.contains("authentic") }
         
         var emotionalStyle = ""
         
-        if hasHonest && hasEmotional {
-            emotionalStyle = "You dress as a form of honest self-reflection—truthful, tactile, and emotionally expressive."
-        } else if hasProtective && hasEmotional {
-            emotionalStyle = "You dress as a form of emotional protection—creating a safe boundary between your sensitive core and the outside world."
-        } else if hasIntuitive && hasEmotional {
-            emotionalStyle = "You dress intuitively, in harmony with your emotional currents—flowing, responsive, and deeply personal."
-        } else if hasProtective {
-            emotionalStyle = "Your clothing creates a protective boundary, allowing you to regulate how much of yourself you share with the world."
-        } else if hasIntuitive {
-            emotionalStyle = "You follow your intuition with clothing choices, creating harmony between your inner landscape and outer expression."
-        } else if hasEmotional {
-            emotionalStyle = "Your clothing choices reflect your emotional state, serving as an authentic expression of your inner world."
-        } else if hasHonest {
-            emotionalStyle = "Your style reflects a commitment to authenticity, choosing pieces that resonate with your true self."
-        } else {
-            emotionalStyle = "Your clothing choices balance emotional expression with practical considerations, creating a wardrobe that supports your full range of feelings."
+        // Base narrative from original branch‑matrix
+        switch (hasHonest, hasEmotional, hasProtective, hasIntuitive) {
+        case (true , true , _, _): emotionalStyle = "You dress as a form of honest self‑reflection—truthful, tactile, and emotionally expressive."
+        case (_    , true , true, _): emotionalStyle = "You dress as emotional protection—creating a safe boundary between your sensitive core and the outside world."
+        case (_    , true , _ , true): emotionalStyle = "You dress intuitively, in harmony with emotional currents—flowing, responsive, and personal."
+        case (_    , _   , true, _): emotionalStyle = "Your clothing creates a protective boundary, regulating how much of yourself you share."
+        case (_    , _   , _ , true): emotionalStyle = "You follow intuition, aligning inner landscape with outer expression."
+        case (_    , true , _ , _): emotionalStyle = "Your choices reflect your emotional state, expressing your inner world."
+        case (true , _   , _ , _): emotionalStyle = "Your style reflects a commitment to authenticity, choosing pieces that resonate with your true self."
+        default: emotionalStyle = "You balance emotional expression with practical considerations."
+        }
+        
+        // Layer in lunar / Neptunian potency
+        if moonDepth > neptuneDepth * 1.2 {
+            emotionalStyle += " A pronounced lunar influence means comfort and security are your first checkpoints."
+        } else if neptuneDepth > moonDepth * 1.2 {
+            emotionalStyle += " A strong Neptunian undertow lends a dreamlike, imaginative veil to how you clothe yourself."
+        } else if moonDepth > 0 && neptuneDepth > 0 {
+            emotionalStyle += " Moon and Neptune share the stage—clothes feel like living, breathing memories."
         }
         
         return emotionalStyle
@@ -1080,10 +1112,10 @@ struct ParagraphAssembler {
             if hasTransformativeTokens {
                 emergingChapter = "Reclamation and refinement. You're honoring the past versions of yourself "
                 emergingChapter += "through custom, quality, and a slow, soulful approach to style."
-            } else if tokens.contains { $0.name == "innovative" || $0.name == "unique" } {
+            } else if tokens.contains(where: { $0.name == "innovative" || $0.name == "unique" }) {
                 emergingChapter = "Innovation and personalization. You're moving toward more custom, unique expressions "
                 emergingChapter += "that integrate technical advances with personal meaning."
-            } else if tokens.contains { $0.name == "authentic" || $0.name == "honest" } {
+            } else if tokens.contains(where: { $0.name == "authentic" || $0.name == "honest" }) {
                 emergingChapter = "Authenticity and integrity. You're evolving toward choices that align deeply with your values, "
                 emergingChapter += "prioritizing ethical production and personal resonance."
             } else {

@@ -39,7 +39,7 @@ import Foundation
 
 struct VSOP87Parser {
     // MARK: – Public API -------------------------------------------------------------------------
-
+    
     enum Planet: String, CaseIterable {
         case mercury = "MERCURY"
         case venus   = "VENUS"
@@ -49,7 +49,7 @@ struct VSOP87Parser {
         case saturn  = "SATURN"
         case uranus  = "URANUS"
         case neptune = "NEPTUNE"
-
+        
         var filename: String {
             switch self {
             case .mercury: return "VSOP87D.mer"
@@ -62,7 +62,7 @@ struct VSOP87Parser {
             case .neptune: return "VSOP87D.nep"
             }
         }
-
+        
         /// Semi‑major axis in AU – used only by the fallback orbit approximation.
         var semiMajorAxis: Double {
             switch self {
@@ -77,24 +77,24 @@ struct VSOP87Parser {
             }
         }
     }
-
+    
     struct Term      { let a, b, c: Double }
     struct Variable  { var terms: [Term]; let power: Int }
     struct Component { var variables: [Variable]; let label: String/*"L"|"B"|"R"*/ }
-
+    
     // MARK: – Static storage --------------------------------------------------------------------
-
+    
     private static var planetData: [Planet: [String: Component]] = [:]
     private static var useFallback = false
-
+    
     // MARK: – Public loading helper --------------------------------------------------------------
-
+    
     static func loadData() {
         guard planetData.isEmpty else { return }
-
+        
         var failures = 0
         print("\n----- VSOP87 PARSER INITIALISATION -----")
-
+        
         for planet in Planet.allCases {
             let comps = loadComponents(for: planet)
             if comps["L"] != nil && comps["B"] != nil && comps["R"] != nil {
@@ -105,7 +105,7 @@ struct VSOP87Parser {
                 print("❌  FAILED to load VSOP87D for \(planet.rawValue) – using fallback")
             }
         }
-
+        
         if failures > 0 {
             useFallback = true
             print("\n⚠️  Fallback orbital elements will be used for *all* planets – accuracy reduced.\n-----------------------------------------\n")
@@ -113,9 +113,9 @@ struct VSOP87Parser {
             print("\n✅  All VSOP87D files parsed successfully.\n-----------------------------------------\n")
         }
     }
-
+    
     // MARK: – PRIVATE: File I/O -----------------------------------------------------------------
-
+    
     private static func loadComponents(for planet: Planet) -> [String: Component] {
         guard let url = Bundle.main.url(forResource: planet.filename, withExtension: nil),
               let content = try? String(contentsOf: url, encoding: .utf8) else {
@@ -124,18 +124,18 @@ struct VSOP87Parser {
         }
         return parseVSOPFile(content, planetName: planet.rawValue)
     }
-
+    
     // MARK: – 🔑  THE FIXED PARSER ----------------------------------------------------------------
-
+    
     /// Returns a dictionary {"L": …, "B": …, "R": …}
     private static func parseVSOPFile(_ raw: String, planetName: String) -> [String: Component] {
         var components: [String: Component] = [:]
-
+        
         // Current building context --------------------------------------------------------------
         var currentVarLetter: String? = nil  // "L"|"B"|"R"
         var currentPower: Int? = nil         // 0…5
         var currentTerms: [Term] = []
-
+        
         func flush() {
             guard let v = currentVarLetter, let p = currentPower, !currentTerms.isEmpty else { return }
             let variable = Variable(terms: currentTerms, power: p)
@@ -143,19 +143,19 @@ struct VSOP87Parser {
             components[v]!.variables.append(variable)
             currentTerms.removeAll(keepingCapacity: true)
         }
-
+        
         // Regular‑expressions -------------------------------------------------------------------
         let headerRX   = try! NSRegularExpression(pattern: #"VARIABLE\s+(\d).*?\*T\*\*(\d+)"#, options: [])
         let powerOnlyRX = try! NSRegularExpression(pattern: #"\*T\*\*(\d+)"#, options: [])
-
+        
         for line in raw.split(separator: "\n", omittingEmptySubsequences: false) {
             let trimmed = line.trimmingCharacters(in: .whitespaces)
             if trimmed.isEmpty { continue }
-
+            
             // (1) Combined VARIABLE+power header  ---------------------------------------------
             if let m = headerRX.firstMatch(in: trimmed, options: [], range: NSRange(trimmed.startIndex..., in: trimmed)) {
                 flush()
-
+                
                 if let vRange = Range(m.range(at: 1), in: trimmed),
                    let vNo = Int(trimmed[vRange]) {
                     switch vNo {
@@ -171,7 +171,7 @@ struct VSOP87Parser {
                 }
                 continue
             }
-
+            
             // (2) Line that *only* changes the power ------------------------------------------
             if let m = powerOnlyRX.firstMatch(in: trimmed, options: [], range: NSRange(trimmed.startIndex..., in: trimmed)),
                currentVarLetter != nil {
@@ -182,38 +182,38 @@ struct VSOP87Parser {
                 }
                 continue
             }
-
+            
             // (3) Data line  ------------------------------------------------------------------
             guard let _ = currentVarLetter, let _ = currentPower else { continue }
-
+            
             let numbers = trimmed.split{ $0 == " " || $0 == "\t" }.compactMap { Double($0) }
             guard numbers.count >= 3 else { continue }
-
+            
             // ►► FIX: grab **last three** numeric fields as A, B, C ◄◄
             let a = numbers[numbers.count - 3]
             let b = numbers[numbers.count - 2]
             let c = numbers[numbers.count - 1]
             currentTerms.append(Term(a: a, b: b, c: c))
         }
-
+        
         flush() // commit the final batch
         return components
     }
-
+    
     // MARK: – Public evaluation helpers (unchanged) ---------------------------------------------
-
+    
     /// Heliocentric ecliptic longitude/latitude/radius (radians/AU)
     static func calculateHeliocentricCoordinates(planet: Planet, julianDay: Double)
-        -> (longitude: Double, latitude: Double, radius: Double) {
-
+    -> (longitude: Double, latitude: Double, radius: Double) {
+        
         loadData()
         if useFallback { return calculateFallbackHeliocentricCoordinates(planet: planet, julianDay: julianDay) }
-
+        
         guard let comps = planetData[planet],
               let L = comps["L"], let B = comps["B"], let R = comps["R"] else {
             return calculateFallbackHeliocentricCoordinates(planet: planet, julianDay: julianDay)
         }
-
+        
         let T = (julianDay - 2451545.0) / 365_250.0
         func value(from comp: Component) -> Double {
             var sum = 0.0
@@ -226,25 +226,25 @@ struct VSOP87Parser {
             }
             return sum
         }
-
+        
         var lon = value(from: L)
         lon.formTruncatingRemainder(dividingBy: 2 * .pi)
         if lon < 0 { lon += 2 * .pi }
         return (lon, value(from: B), value(from: R))
     }
-
+    
     /// Geocentric ecliptic coordinates (λ, β) in radians.
     static func calculateGeocentricCoordinates(planet: Planet, julianDay: Double)
-        -> (longitude: Double, latitude: Double) {
-
+    -> (longitude: Double, latitude: Double) {
+        
         if planet == .earth { return (0, 0) }
         if useFallback {
             return calculateFallbackGeocentricCoordinates(planet: planet, julianDay: julianDay)
         }
-
+        
         let earth = calculateHeliocentricCoordinates(planet: .earth, julianDay: julianDay)
         let target = calculateHeliocentricCoordinates(planet: planet, julianDay: julianDay)
-
+        
         func toXYZ(lon: Double, lat: Double, r: Double) -> (x: Double,y: Double,z: Double) {
             let cl = cos(lat)
             return (r * cl * cos(lon), r * cl * sin(lon), r * sin(lat))
@@ -257,11 +257,11 @@ struct VSOP87Parser {
         let lat = asin(dz / r)
         return (lon, lat)
     }
-
+    
     // -------------------------------------------------------------------------
     // Fallback analytic approximations – unchanged from original -------------
     // -------------------------------------------------------------------------
-
+    
     private static func calculateFallbackHeliocentricCoordinates(planet: Planet, julianDay: Double) -> (longitude: Double, latitude: Double, radius: Double) {
         // (implementation unchanged – see previous version)
         // …
@@ -269,7 +269,7 @@ struct VSOP87Parser {
         // the parser reads the files correctly.
         fatalError("Fallback implementation omitted in snippet – copy from previous source if needed.")
     }
-
+    
     private static func calculateFallbackGeocentricCoordinates(planet: Planet, julianDay: Double) -> (longitude: Double, latitude: Double) {
         fatalError("Fallback implementation omitted in snippet – copy from previous source if needed.")
     }

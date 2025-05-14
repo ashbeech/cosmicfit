@@ -344,11 +344,11 @@ class MainViewController: UIViewController {
                 // Create and present the chart view controller
                 let chartVC = NatalChartViewController()
                 chartVC.configure(with: chartData,
-                                 birthInfo: birthInfo,
-                                 birthDate: birthDateTime,
-                                 latitude: self.latitude,
-                                 longitude: self.longitude,
-                                 timeZone: self.timeZone)
+                                  birthInfo: birthInfo,
+                                  birthDate: birthDateTime,
+                                  latitude: self.latitude,
+                                  longitude: self.longitude,
+                                  timeZone: self.timeZone)
                 self.navigationController?.pushViewController(chartVC, animated: true)
             }
         }

@@ -93,8 +93,8 @@ struct AstronomicalCalculator {
         
         // Calculate the equation of center
         let C = (1.914602 - 0.004817 * T - 0.000014 * T * T) * sin(MRad) +
-                (0.019993 - 0.000101 * T) * sin(2 * MRad) +
-                0.000289 * sin(3 * MRad)
+        (0.019993 - 0.000101 * T) * sin(2 * MRad) +
+        0.000289 * sin(3 * MRad)
         
         // True longitude of the Sun
         let lambda = L0 + C
@@ -141,8 +141,8 @@ struct AstronomicalCalculator {
         
         // Calculate the equation of center
         let C = (1.914602 - 0.004817 * T - 0.000014 * T * T) * sin(MRad) +
-                (0.019993 - 0.000101 * T) * sin(2 * MRad) +
-                0.000289 * sin(3 * MRad)
+        (0.019993 - 0.000101 * T) * sin(2 * MRad) +
+        0.000289 * sin(3 * MRad)
         
         // True longitude of the Sun
         let lambda = L0 + C
@@ -193,12 +193,12 @@ struct AstronomicalCalculator {
         
         // Longitude perturbations (simplified)
         var longitude = L + 6.288774 * sin(MprimeRad) + 1.274027 * sin(2 * DRad - MprimeRad) +
-                      0.658314 * sin(2 * DRad) + 0.213618 * sin(2 * MprimeRad) -
-                      0.185116 * sin(MRad) - 0.114332 * sin(2 * FRad)
+        0.658314 * sin(2 * DRad) + 0.213618 * sin(2 * MprimeRad) -
+        0.185116 * sin(MRad) - 0.114332 * sin(2 * FRad)
         
         // Latitude perturbations (simplified)
         let latitude = 5.128189 * sin(FRad) + 0.280606 * sin(MprimeRad + FRad) +
-                     0.277693 * sin(MprimeRad - FRad) + 0.173238 * sin(2 * DRad - FRad)
+        0.277693 * sin(MprimeRad - FRad) + 0.173238 * sin(2 * DRad - FRad)
         
         // Apply nutation
         let (nutationLongitude, _) = calculateNutation(julianDay: julianDay)
@@ -309,7 +309,7 @@ struct AstronomicalCalculator {
     }
     
     // MARK: - House cusps --------------------------------------------------
-
+    
     // Calculate Whole Sign house cusps
     static func calculateWholeSignHouseCusps(ascendant: Double) -> [Double] {
         // Determine the sign of the ascendant (1-12)
@@ -329,7 +329,7 @@ struct AstronomicalCalculator {
         
         return cusps
     }
-
+    
     static func calculateHouseCusps(julianDay: Double,
                                     latitude: Double,
                                     longitude: Double,
@@ -346,38 +346,38 @@ struct AstronomicalCalculator {
         // Placidus house system (default)
         var c = [Double](repeating: 0.0, count: 13)
         
-        #if canImport(CSwissEphemeris)
+#if canImport(CSwissEphemeris)
         
-            print("Natal Chart House Cusps: Using Swiss Ephem")
-            // 1 · Tell Swiss Ephemeris where the .se1… files live
-            if let path = Bundle.main.resourcePath {
-                path.withCString { cStr in
-                    swe_set_ephe_path(UnsafeMutablePointer(mutating: cStr))
-                }
+        print("Natal Chart House Cusps: Using Swiss Ephem")
+        // 1 · Tell Swiss Ephemeris where the .se1… files live
+        if let path = Bundle.main.resourcePath {
+            path.withCString { cStr in
+                swe_set_ephe_path(UnsafeMutablePointer(mutating: cStr))
             }
-            
-            // 2 · Prepare buffers
-            var ascmc = [Double](repeating: 0.0, count: 10)   // ASC, MC, etc.
-            
-            // 3 · Call swe_houses     (hsys 'P' = Placidus)
-            let hsys = Int32(Character("P").asciiValue!)      // UInt8 → Int32
-            
-            c.withUnsafeMutableBufferPointer { cuspPtr -> Void in
-                ascmc.withUnsafeMutableBufferPointer { ascmcPtr -> Void in
-                    swe_houses(julianDay,
-                               latitude,
-                               longitude,
-                               hsys,
-                               cuspPtr.baseAddress!,   // arrays are non‑empty, safe force‑unwrap
-                               ascmcPtr.baseAddress!)
-                }
+        }
+        
+        // 2 · Prepare buffers
+        var ascmc = [Double](repeating: 0.0, count: 10)   // ASC, MC, etc.
+        
+        // 3 · Call swe_houses     (hsys 'P' = Placidus)
+        let hsys = Int32(Character("P").asciiValue!)      // UInt8 → Int32
+        
+        c.withUnsafeMutableBufferPointer { cuspPtr -> Void in
+            ascmc.withUnsafeMutableBufferPointer { ascmcPtr -> Void in
+                swe_houses(julianDay,
+                           latitude,
+                           longitude,
+                           hsys,
+                           cuspPtr.baseAddress!,   // arrays are non‑empty, safe force‑unwrap
+                           ascmcPtr.baseAddress!)
             }
-            
-        #else
-       
+        }
+        
+#else
+        
         // ---------- fallback: equal‑house -------------------------------
         // Note: this is accurate aside from 2nd and 8th house cusps
-         
+        
         let asc = calculateAscendant(julianDay: julianDay,
                                      latitude: latitude,
                                      longitude: longitude)
@@ -393,7 +393,7 @@ struct AstronomicalCalculator {
             c[i] = CoordinateTransformations.normalizeAngle(c[i-1] + 30)
         }
         
-        #endif
+#endif
         
         return c
     }

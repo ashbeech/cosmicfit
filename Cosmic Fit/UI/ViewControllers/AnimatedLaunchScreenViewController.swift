@@ -44,15 +44,15 @@ class AnimatedLaunchScreenViewController: UIViewController {
         view.addSubview(logoImageView)
         
         /*
-        // App Name Label
-        appNameLabel.text = "Cosmic Fit"
-        appNameLabel.font = UIFont.systemFont(ofSize: 28, weight: .semibold)
-        appNameLabel.textAlignment = .center
-        appNameLabel.textColor = .tintColor
-        appNameLabel.alpha = 0 // Start invisible
-        appNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(appNameLabel)
-        */
+         // App Name Label
+         appNameLabel.text = "Cosmic Fit"
+         appNameLabel.font = UIFont.systemFont(ofSize: 28, weight: .semibold)
+         appNameLabel.textAlignment = .center
+         appNameLabel.textColor = .tintColor
+         appNameLabel.alpha = 0 // Start invisible
+         appNameLabel.translatesAutoresizingMaskIntoConstraints = false
+         view.addSubview(appNameLabel)
+         */
         // Get a star image to use for all stars
         let starImage = UIImage(systemName: "sparkle")?.withRenderingMode(.alwaysTemplate)
         
@@ -88,12 +88,12 @@ class AnimatedLaunchScreenViewController: UIViewController {
             logoImageView.heightAnchor.constraint(equalToConstant: 180),
             
             /*
-            // App name label
-            appNameLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 20),
-            appNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            appNameLabel.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 20),
-            appNameLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -20),
-            */
+             // App name label
+             appNameLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 20),
+             appNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+             appNameLabel.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 20),
+             appNameLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -20),
+             */
             // Star1 position and size - individually adjustable
             star1.trailingAnchor.constraint(equalTo: logoImageView.leadingAnchor, constant: 33),
             star1.topAnchor.constraint(equalTo: logoImageView.topAnchor, constant: 130),
@@ -128,9 +128,9 @@ class AnimatedLaunchScreenViewController: UIViewController {
         
         // App name fade in
         /*
-        UIView.animate(withDuration: 1.0, delay: 0.8, options: [], animations: {
-            self.appNameLabel.alpha = 1.0
-        }, completion: nil)
+         UIView.animate(withDuration: 1.0, delay: 0.8, options: [], animations: {
+         self.appNameLabel.alpha = 1.0
+         }, completion: nil)
          */
         
         // Animate stars with different delays

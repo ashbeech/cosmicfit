@@ -229,7 +229,7 @@ struct CoordinateTransformations {
     // Get zodiac sign name from sign number (1-12)
     static func getZodiacSignName(sign: Int) -> String {
         let signs = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
-                    "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
+                     "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
         
         if sign >= 1 && sign <= 12 {
             return signs[sign - 1]
