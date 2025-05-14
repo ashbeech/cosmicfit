@@ -395,6 +395,20 @@ final class NatalChartViewController: UIViewController {
                     // If can't split, just use the whole location name
                     city = locationName
                 }
+                
+                // Check if city contains a time pattern like "04:30" followed by a space
+                if let timeRange = city.range(of: "\\d{1,2}:\\d{2}", options: .regularExpression) {
+                    // Find the first space after the time
+                    if let spaceAfterTime = city.range(of: " ", range: timeRange.upperBound..<city.endIndex) {
+                        // Extract everything after the space
+                        city = String(city[spaceAfterTime.upperBound...]).trimmingCharacters(in: .whitespacesAndNewlines)
+                    }
+                }
+                
+                // Remove "AT " prefix if present (case insensitive)
+                if city.uppercased().hasPrefix("AT ") {
+                    city = String(city.dropFirst(3)).trimmingCharacters(in: .whitespacesAndNewlines)
+                }
             }
         }
         
@@ -406,7 +420,7 @@ final class NatalChartViewController: UIViewController {
             themeName: interpretation.themeName,
             isBlueprint: true,
             birthDate: birthDate,  // Pass the actual birth date
-            birthCity: city,       // Pass the extracted city (without "at" prefix)
+            birthCity: city,       // Pass the extracted city (without time or "AT" prefix)
             birthCountry: country  // Pass the extracted country
         )
         
