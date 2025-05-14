@@ -355,37 +355,44 @@ class DailyVibeInterpretationViewController: UIViewController {
         gradientView.translatesAutoresizingMaskIntoConstraints = false
         brightnessSliderView.addSubview(gradientView)
         
-        // Create gradient layer
+        // Position gradient view
+        NSLayoutConstraint.activate([
+            gradientView.topAnchor.constraint(equalTo: brightnessSliderView.topAnchor),
+            gradientView.leadingAnchor.constraint(equalTo: brightnessSliderView.leadingAnchor),
+            gradientView.trailingAnchor.constraint(equalTo: brightnessSliderView.trailingAnchor),
+            gradientView.heightAnchor.constraint(equalToConstant: 20)
+        ])
+        
+        // Create gradient layer after layout to ensure correct sizing
+        brightnessSliderView.layoutIfNeeded()
+        
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [UIColor.black.cgColor, UIColor.white.cgColor]
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
         gradientLayer.cornerRadius = 4
+        gradientLayer.frame = gradientView.bounds
+        
         gradientView.layer.cornerRadius = 4
         gradientView.layer.masksToBounds = true
+        gradientView.layer.addSublayer(gradientLayer)
         
         // Create indicator triangle
         let triangleView = TriangleView()
         triangleView.translatesAutoresizingMaskIntoConstraints = false
         brightnessSliderView.addSubview(triangleView)
         
-        // Position views
+        // Calculate position based on gradient view width
+        let fullWidth = gradientView.bounds.width
+        let position = fullWidth * CGFloat(value) / 100.0
+        
+        // Position triangle under the gradient at the appropriate position
         NSLayoutConstraint.activate([
-            gradientView.topAnchor.constraint(equalTo: brightnessSliderView.topAnchor),
-            gradientView.leadingAnchor.constraint(equalTo: brightnessSliderView.leadingAnchor),
-            gradientView.trailingAnchor.constraint(equalTo: brightnessSliderView.trailingAnchor),
-            gradientView.heightAnchor.constraint(equalToConstant: 20),
-            
             triangleView.topAnchor.constraint(equalTo: gradientView.bottomAnchor),
             triangleView.widthAnchor.constraint(equalToConstant: 10),
             triangleView.heightAnchor.constraint(equalToConstant: 8),
-            triangleView.centerXAnchor.constraint(equalTo: brightnessSliderView.leadingAnchor, constant: CGFloat(value) / 100.0 * brightnessSliderView.bounds.width)
+            triangleView.centerXAnchor.constraint(equalTo: gradientView.leadingAnchor, constant: position)
         ])
-        
-        // Apply gradient layer
-        gradientView.layoutIfNeeded()
-        gradientLayer.frame = gradientView.bounds
-        gradientView.layer.addSublayer(gradientLayer)
         
         // Update value label
         brightnessValueLabel.text = "\(value)%"
@@ -400,37 +407,44 @@ class DailyVibeInterpretationViewController: UIViewController {
         gradientView.translatesAutoresizingMaskIntoConstraints = false
         vibrancySliderView.addSubview(gradientView)
         
-        // Create gradient layer
+        // Position gradient view
+        NSLayoutConstraint.activate([
+            gradientView.topAnchor.constraint(equalTo: vibrancySliderView.topAnchor),
+            gradientView.leadingAnchor.constraint(equalTo: vibrancySliderView.leadingAnchor),
+            gradientView.trailingAnchor.constraint(equalTo: vibrancySliderView.trailingAnchor),
+            gradientView.heightAnchor.constraint(equalToConstant: 20)
+        ])
+        
+        // Create gradient layer after layout to ensure correct sizing
+        vibrancySliderView.layoutIfNeeded()
+        
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [UIColor.gray.cgColor, UIColor.purple.cgColor]
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
         gradientLayer.cornerRadius = 4
+        gradientLayer.frame = gradientView.bounds
+        
         gradientView.layer.cornerRadius = 4
         gradientView.layer.masksToBounds = true
+        gradientView.layer.addSublayer(gradientLayer)
         
         // Create indicator triangle
         let triangleView = TriangleView()
         triangleView.translatesAutoresizingMaskIntoConstraints = false
         vibrancySliderView.addSubview(triangleView)
         
-        // Position views
+        // Calculate position based on gradient view width
+        let fullWidth = gradientView.bounds.width
+        let position = fullWidth * CGFloat(value) / 100.0
+        
+        // Position triangle under the gradient at the appropriate position
         NSLayoutConstraint.activate([
-            gradientView.topAnchor.constraint(equalTo: vibrancySliderView.topAnchor),
-            gradientView.leadingAnchor.constraint(equalTo: vibrancySliderView.leadingAnchor),
-            gradientView.trailingAnchor.constraint(equalTo: vibrancySliderView.trailingAnchor),
-            gradientView.heightAnchor.constraint(equalToConstant: 20),
-            
             triangleView.topAnchor.constraint(equalTo: gradientView.bottomAnchor),
             triangleView.widthAnchor.constraint(equalToConstant: 10),
             triangleView.heightAnchor.constraint(equalToConstant: 8),
-            triangleView.centerXAnchor.constraint(equalTo: vibrancySliderView.leadingAnchor, constant: CGFloat(value) / 100.0 * vibrancySliderView.bounds.width)
+            triangleView.centerXAnchor.constraint(equalTo: gradientView.leadingAnchor, constant: position)
         ])
-        
-        // Apply gradient layer
-        gradientView.layoutIfNeeded()
-        gradientLayer.frame = gradientView.bounds
-        gradientView.layer.addSublayer(gradientLayer)
         
         // Update value label
         vibrancyValueLabel.text = "\(value)%"
@@ -441,6 +455,8 @@ class DailyVibeInterpretationViewController: UIViewController {
         
         // Redraw sliders after layout to ensure correct positioning
         if let content = vibeContent {
+            // Force layout before drawing to ensure views have correct sizes
+            view.layoutIfNeeded()
             drawBrightnessSlider(value: content.brightness)
             drawVibrancySlider(value: content.vibrancy)
         }
