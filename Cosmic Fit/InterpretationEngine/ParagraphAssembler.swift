@@ -781,6 +781,30 @@ struct ParagraphAssembler {
         return pulse
     }
     
+    // MARK: - Style Push–Pull Friction Detection
+    // TODO: Integrate this, go read ChatGPT -> paste into Claude for full code.
+    func detectStylePushPullConflicts(from tokens: [StyleToken]) -> [String] {
+        let pairs: [(String, String, String)] = [
+            ("fluid", "structured", "A tension between flow and form—your outfits might oscillate between surrender and definition."),
+            ("intuitive", "practical", "You sense your way through style, but also crave function. Dressing may feel like balancing instinct and purpose."),
+            ("minimal", "expressive", "You prefer restraint, yet there’s a desire to be seen. Your look may shift between quiet and pronounced."),
+            ("airy", "grounded", "Your chart straddles weightlessness and rootedness—a dialogue between freedom and stability."),
+            ("bold", "reserved", "Sometimes loud, sometimes soft. You dress to declare—and sometimes to disappear."),
+            ("emotive", "cool", "You feel deeply, but show selectively. Style becomes a method of managing what’s seen.")
+        ]
+
+        let tokenNames = Set(tokens.map { $0.name })
+        var found: [String] = []
+
+        for (a, b, description) in pairs {
+            if tokenNames.contains(a) && tokenNames.contains(b) {
+                found.append(description)
+            }
+        }
+
+        return found
+    }
+    
     // MARK: - Fashion Guidance (100% Natal, Whole Sign)
     
     /// Generates fashion do's and don'ts based on chart elements using Whole Sign
