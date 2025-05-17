@@ -40,6 +40,10 @@ struct ParagraphAssembler {
         blueprint += "## Planetary Frequency\n\n"
         blueprint += generatePlanetaryFrequencySection(from: tokens) + "\n\n"
         
+        // Add Style Tensions section - new addition
+        blueprint += "## Style Tensions\n\n"
+        blueprint += generateStyleTensionsSection(from: tokens) + "\n\n"
+        
         blueprint += "---\n\n"
         
         // Fabric guide - using Whole Sign system
@@ -108,6 +112,65 @@ struct ParagraphAssembler {
         }
         
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+    }
+    
+    // MARK: - Style Push-Pull Tension Detection
+    
+    /// Detects style push-pull conflicts from the token set
+    /// - Parameter tokens: Array of weighted style tokens
+    /// - Returns: Array of descriptive strings identifying style tensions
+    static func detectStylePushPullConflicts(from tokens: [StyleToken]) -> [String] {
+        let pairs: [(String, String, String)] = [
+            ("fluid", "structured", "A tension between flow and form—your outfits might oscillate between surrender and definition."),
+            ("intuitive", "practical", "You sense your way through style, but also crave function. Dressing may feel like balancing instinct and purpose."),
+            ("minimal", "expressive", "You prefer restraint, yet there's a desire to be seen. Your look may shift between quiet and pronounced."),
+            ("airy", "grounded", "Your chart straddles weightlessness and rootedness—a dialogue between freedom and stability."),
+            ("bold", "reserved", "Sometimes loud, sometimes soft. You dress to declare—and sometimes to disappear."),
+            ("emotive", "cool", "You feel deeply, but show selectively. Style becomes a method of managing what's seen."),
+            ("playful", "serious", "You oscillate between lighthearted expression and grounded purpose in how you present yourself."),
+            ("luxurious", "minimal", "A pull between lavish richness and clean simplicity—your style negotiates abundance and restraint."),
+            ("vibrant", "muted", "Your wardrobe might swing between saturated statements and quiet neutrals as you balance visibility and subtlety."),
+            ("classic", "experimental", "You honor tradition while craving novelty—your style weaves between timeless pieces and unexpected choices."),
+            ("soft", "structured", "Your chart balances yielding textures with architectural forms—a conversation between comfort and definition.")
+        ]
+
+        // Extract all token names as a set for efficient lookup
+        let tokenNames = Set(tokens.map { $0.name })
+        var found: [String] = []
+
+        // Check for each push-pull pair
+        for (a, b, description) in pairs {
+            // Only add conflicts where both opposing tokens are present
+            if tokenNames.contains(a) && tokenNames.contains(b) {
+                found.append(description)
+            }
+        }
+
+        return found
+    }
+    
+    /// Generates style tensions paragraph based on push-pull conflicts
+    static func generateStyleTensionsSection(from tokens: [StyleToken]) -> String {
+        let conflicts = detectStylePushPullConflicts(from: tokens)
+        
+        if conflicts.isEmpty {
+            return "Your style shows a harmonious integration of elements without significant opposing tensions. Your chart suggests a natural coherence between different aspects of your style expression."
+        }
+        
+        var result = "Your chart reveals meaningful tensions that add depth to your style profile:\n\n"
+        for (index, conflict) in conflicts.enumerated() {
+            result += "- " + conflict
+            if index < conflicts.count - 1 {
+                result += "\n"
+            }
+        }
+        
+        // Add a closing insight if tensions were found
+        if !conflicts.isEmpty {
+            result += "\n\nThese contrasts aren't flaws—they're dimensions. The most compelling personal style emerges from resolving these creative tensions in ways that feel authentic to you."
+        }
+        
+        return result
     }
     
     // MARK: - Upper Blueprint Sections (100% Natal, Whole Sign)
@@ -779,30 +842,6 @@ struct ParagraphAssembler {
         pulse += styleJourney
         
         return pulse
-    }
-    
-    // MARK: - Style Push–Pull Friction Detection
-    // TODO: Integrate this, go read ChatGPT -> paste into Claude for full code.
-    func detectStylePushPullConflicts(from tokens: [StyleToken]) -> [String] {
-        let pairs: [(String, String, String)] = [
-            ("fluid", "structured", "A tension between flow and form—your outfits might oscillate between surrender and definition."),
-            ("intuitive", "practical", "You sense your way through style, but also crave function. Dressing may feel like balancing instinct and purpose."),
-            ("minimal", "expressive", "You prefer restraint, yet there’s a desire to be seen. Your look may shift between quiet and pronounced."),
-            ("airy", "grounded", "Your chart straddles weightlessness and rootedness—a dialogue between freedom and stability."),
-            ("bold", "reserved", "Sometimes loud, sometimes soft. You dress to declare—and sometimes to disappear."),
-            ("emotive", "cool", "You feel deeply, but show selectively. Style becomes a method of managing what’s seen.")
-        ]
-
-        let tokenNames = Set(tokens.map { $0.name })
-        var found: [String] = []
-
-        for (a, b, description) in pairs {
-            if tokenNames.contains(a) && tokenNames.contains(b) {
-                found.append(description)
-            }
-        }
-
-        return found
     }
     
     // MARK: - Fashion Guidance (100% Natal, Whole Sign)
