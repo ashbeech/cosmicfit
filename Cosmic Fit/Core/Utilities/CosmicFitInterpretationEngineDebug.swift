@@ -12,15 +12,23 @@ extension CosmicFitInterpretationEngine {
     
     /// Generate a Blueprint interpretation with detailed paragraph assembly logging
     static func generateBlueprintInterpretationWithDebug(from chart: NatalChartCalculator.NatalChart) -> InterpretationResult {
-        print("\n🧩 GENERATING COSMIC FIT BLUEPRINT WITH DETAILED DEBUG 🧩")
+        print("\n🔍 GENERATING BLUEPRINT WITH DETAILED DEBUG INFO 🔍")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-        
-        // Start a new debug session
-        DebugLogger.info("Starting Blueprint interpretation debug session")
         
         // Generate tokens from natal chart with Whole Sign houses for Blueprint
         let tokens = SemanticTokenGenerator.generateBlueprintTokens(natal: chart)
-        DebugLogger.tokenSet("BLUEPRINT TOKENS", tokens)
+        
+        // Identify style tensions/conflicts in the token set
+        let styleTensions = ParagraphAssembler.detectStylePushPullConflicts(from: tokens)
+        if !styleTensions.isEmpty {
+            print("\n🔄 STYLE TENSIONS DETECTED 🔄")
+            for tension in styleTensions {
+                print("  • \(tension)")
+            }
+            print("")
+        } else {
+            print("\n✅ No significant style tensions detected")
+        }
         
         // Format birth info for display in the blueprint header
         var birthInfoText: String? = nil
@@ -31,25 +39,23 @@ extension CosmicFitInterpretationEngine {
             birthInfoText = "Natal Chart: \(sunSignName) Energy"
         }
         
-        // Generate the complete blueprint with all sections according to spec - using debug version
-        DebugLogger.info("Generating blueprint text with detailed paragraph debugging")
-        let blueprintText = ParagraphAssembler.generateBlueprintInterpretationWithDebug(
+        // Generate the complete blueprint with all sections according to spec
+        let blueprintText = ParagraphAssembler.generateBlueprintInterpretation(
             tokens: tokens,
             birthInfo: birthInfoText
         )
         
         // Determine the dominant theme from tokens
         let themeName = ThemeSelector.scoreThemes(tokens: tokens)
-        DebugLogger.info("Theme selected: \(themeName)")
         
-        // Log theme selection process
+        // Get ranking of top themes for debug info
         let topThemes = ThemeSelector.rankThemes(tokens: tokens, topCount: 3)
-        DebugLogger.debug("Top 3 themes:")
+        print("\n🔝 TOP SCORING THEMES:")
         for (i, theme) in topThemes.enumerated() {
-            DebugLogger.debug("  \(i+1). \(theme.name): Score \(String(format: "%.2f", theme.score))")
+            print("  \(i+1). \(theme.name): \(String(format: "%.2f", theme.score))")
         }
         
-        print("\n✅ Blueprint generation with detailed debug completed!")
+        print("\n✅ Debug blueprint generation complete!")
         print("Theme: \(themeName)")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
         
@@ -125,6 +131,18 @@ extension CosmicFitInterpretationEngine {
             
             // 6. Combine all tokens with appropriate weighting
             var allTokens: [StyleToken] = []
+            
+            // Check for style tensions/conflicts
+            let styleTensions = ParagraphAssembler.detectStylePushPullConflicts(from: allTokens)
+            if !styleTensions.isEmpty {
+                print("\n🔄 DAILY STYLE TENSIONS DETECTED 🔄")
+                for tension in styleTensions {
+                    print("  • \(tension)")
+                }
+                print("")
+            } else {
+                print("\n✅ No significant daily style tensions detected")
+            }
             
             // Add base style tokens (50% weight in final output)
             for token in baseStyleTokens {

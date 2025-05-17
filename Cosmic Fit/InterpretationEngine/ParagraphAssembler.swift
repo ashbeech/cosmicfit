@@ -133,11 +133,11 @@ struct ParagraphAssembler {
             ("classic", "experimental", "You honor tradition while craving novelty—your style weaves between timeless pieces and unexpected choices."),
             ("soft", "structured", "Your chart balances yielding textures with architectural forms—a conversation between comfort and definition.")
         ]
-
+        
         // Extract all token names as a set for efficient lookup
         let tokenNames = Set(tokens.map { $0.name })
         var found: [String] = []
-
+        
         // Check for each push-pull pair
         for (a, b, description) in pairs {
             // Only add conflicts where both opposing tokens are present
@@ -145,7 +145,7 @@ struct ParagraphAssembler {
                 found.append(description)
             }
         }
-
+        
         return found
     }
     
@@ -428,7 +428,7 @@ struct ParagraphAssembler {
         let moonTokens         = tokens.filter { $0.planetarySource == "Moon"  }
         let visualHouseTokens  = tokens.filter { $0.houseSource == 1 || $0.houseSource == 7 }
         let retrogradeTokens   = tokens.filter { $0.name.contains("reflective")
-                                             || $0.name.contains("introspective") }
+            || $0.name.contains("introspective") }
         
         // ‑‑‑ Aggregate influence scores ‑‑‑
         let venusInfluence     = venusTokens.reduce(0.0) { $0 + $1.weight }

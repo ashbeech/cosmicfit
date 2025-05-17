@@ -194,7 +194,8 @@ class SemanticTokenGenerator {
             let colorTokens = generateColorTokensForPlanetInSign(
                 planet: planet.name,
                 sign: planet.zodiacSign,
-                weight: weight)
+                weight: weight,
+                isRetrograde: planet.isRetrograde)
             
             // Apply age-dependent weighting
             let ageWeightedTokens = colorTokens.map { $0.applyingAgeWeight(currentAge: currentAge) }
@@ -217,6 +218,16 @@ class SemanticTokenGenerator {
         // Add elemental color tokens
         let elementalTokens = generateElementalColorTokens(chart: chart)
         tokens.append(contentsOf: elementalTokens)
+        
+        // Add aspect-based color tokens - NEW
+        let aspectColorTokens = generateAspectColorTokens(chart: chart)
+        tokens.append(contentsOf: aspectColorTokens)
+        
+        // Process aspects with relevant planets for color nuance - NEW
+        tokens.append(contentsOf: generateColorNuanceFromAspects(chart: chart))
+        
+        // Generate color palette based on planetary dignity - NEW
+        tokens.append(contentsOf: generateColorTokensFromDignities(chart: chart))
         
         return tokens
     }
@@ -272,57 +283,337 @@ class SemanticTokenGenerator {
         return tokens
     }
     
-    /// Generate specialized color tokens for a planet in a sign
+    // MARK: - Enhanced Color Token Generation
+    
+    /// Generate aspect-based color tokens specifically for color nuance
+    static func generateAspectColorTokens(chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Look for significant color-influencing aspects
+        for i in 0..<chart.planets.count {
+            let planet1 = chart.planets[i]
+            // Focus on Venus, Moon, Sun, Neptune, and Mars for color aspects
+            if !["Venus", "Moon", "Sun", "Neptune", "Mars"].contains(planet1.name) { continue }
+            
+            for j in (i+1)..<chart.planets.count {
+                let planet2 = chart.planets[j]
+                if !["Venus", "Moon", "Sun", "Neptune", "Mars"].contains(planet2.name) { continue }
+                
+                // Check for aspect
+                if let (aspectType, orb) = AstronomicalCalculator.calculateAspect(
+                    point1: planet1.longitude,
+                    point2: planet2.longitude,
+                    orb: 5.0) {
+                    
+                    let aspectSource = "\(planet1.name) \(aspectType) \(planet2.name)"
+                    var aspectWeight = 1.8
+                    
+                    // Close orbs get higher weight
+                    if orb < 1.0 {
+                        aspectWeight += 0.4
+                    }
+                    
+                    // Generate color tokens based on the aspect
+                    switch aspectType {
+                    case "Conjunction":
+                        // Planets merged - intensified, pure color
+                        if planet1.name == "Venus" && planet2.name == "Moon" {
+                            tokens.append(StyleToken(
+                                name: "iridescent pearl",
+                                type: "color",
+                                weight: aspectWeight,
+                                planetarySource: "Venus-Moon",
+                                aspectSource: aspectSource
+                            ))
+                            tokens.append(StyleToken(
+                                name: "luminous",
+                                type: "color_quality",
+                                weight: aspectWeight - 0.2,
+                                planetarySource: "Venus-Moon",
+                                aspectSource: aspectSource
+                            ))
+                        } else if planet1.name == "Venus" && planet2.name == "Sun" {
+                            tokens.append(StyleToken(
+                                name: "radiant gold",
+                                type: "color",
+                                weight: aspectWeight,
+                                planetarySource: "Venus-Sun",
+                                aspectSource: aspectSource
+                            ))
+                            tokens.append(StyleToken(
+                                name: "warm champagne",
+                                type: "color",
+                                weight: aspectWeight - 0.2,
+                                planetarySource: "Venus-Sun",
+                                aspectSource: aspectSource
+                            ))
+                        } else if planet1.name == "Moon" && planet2.name == "Neptune" {
+                            tokens.append(StyleToken(
+                                name: "moonlit aqua",
+                                type: "color",
+                                weight: aspectWeight,
+                                planetarySource: "Moon-Neptune",
+                                aspectSource: aspectSource
+                            ))
+                            tokens.append(StyleToken(
+                                name: "dream blue",
+                                type: "color",
+                                weight: aspectWeight - 0.2,
+                                planetarySource: "Moon-Neptune",
+                                aspectSource: aspectSource
+                            ))
+                        } else if planet1.name == "Venus" && planet2.name == "Neptune" {
+                            tokens.append(StyleToken(
+                                name: "opalescent lavender",
+                                type: "color",
+                                weight: aspectWeight,
+                                planetarySource: "Venus-Neptune",
+                                aspectSource: aspectSource
+                            ))
+                            tokens.append(StyleToken(
+                                name: "ethereal",
+                                type: "color_quality",
+                                weight: aspectWeight - 0.2,
+                                planetarySource: "Venus-Neptune",
+                                aspectSource: aspectSource
+                            ))
+                        } else if planet1.name == "Mars" && planet2.name == "Venus" {
+                            tokens.append(StyleToken(
+                                name: "passionate crimson",
+                                type: "color",
+                                weight: aspectWeight,
+                                planetarySource: "Mars-Venus",
+                                aspectSource: aspectSource
+                            ))
+                            tokens.append(StyleToken(
+                                name: "dynamic",
+                                type: "color_quality",
+                                weight: aspectWeight - 0.2,
+                                planetarySource: "Mars-Venus",
+                                aspectSource: aspectSource
+                            ))
+                        }
+                        
+                    case "Trine":
+                        // Harmonious flow between planets - blended colors
+                        if (planet1.name == "Venus" || planet2.name == "Venus") &&
+                            (planet1.name == "Neptune" || planet2.name == "Neptune") {
+                            tokens.append(StyleToken(
+                                name: "oceanic teal",
+                                type: "color",
+                                weight: aspectWeight,
+                                planetarySource: "Venus-Neptune",
+                                aspectSource: aspectSource
+                            ))
+                            tokens.append(StyleToken(
+                                name: "flowing",
+                                type: "color_quality",
+                                weight: aspectWeight - 0.2,
+                                planetarySource: "Venus-Neptune",
+                                aspectSource: aspectSource
+                            ))
+                        } else if (planet1.name == "Moon" || planet2.name == "Moon") &&
+                                    (planet1.name == "Venus" || planet2.name == "Venus") {
+                            tokens.append(StyleToken(
+                                name: "luminous mother of pearl",
+                                type: "color",
+                                weight: aspectWeight,
+                                planetarySource: "Moon-Venus",
+                                aspectSource: aspectSource
+                            ))
+                            tokens.append(StyleToken(
+                                name: "harmonious",
+                                type: "color_quality",
+                                weight: aspectWeight - 0.2,
+                                planetarySource: "Moon-Venus",
+                                aspectSource: aspectSource
+                            ))
+                        } else if (planet1.name == "Sun" || planet2.name == "Sun") &&
+                                    (planet1.name == "Venus" || planet2.name == "Venus") {
+                            tokens.append(StyleToken(
+                                name: "warm amber",
+                                type: "color",
+                                weight: aspectWeight,
+                                planetarySource: "Sun-Venus",
+                                aspectSource: aspectSource
+                            ))
+                            tokens.append(StyleToken(
+                                name: "honeyed",
+                                type: "color_quality",
+                                weight: aspectWeight - 0.2,
+                                planetarySource: "Sun-Venus",
+                                aspectSource: aspectSource
+                            ))
+                        }
+                        
+                    case "Square":
+                        // Tension between planets - contrasting colors
+                        if (planet1.name == "Venus" || planet2.name == "Venus") &&
+                            (planet1.name == "Mars" || planet2.name == "Mars") {
+                            tokens.append(StyleToken(
+                                name: "dynamic burgundy",
+                                type: "color",
+                                weight: aspectWeight,
+                                planetarySource: "Venus-Mars",
+                                aspectSource: aspectSource
+                            ))
+                            tokens.append(StyleToken(
+                                name: "contrasting",
+                                type: "color_quality",
+                                weight: aspectWeight - 0.2,
+                                planetarySource: "Venus-Mars",
+                                aspectSource: aspectSource
+                            ))
+                        } else if (planet1.name == "Moon" || planet2.name == "Moon") &&
+                                    (planet1.name == "Venus" || planet2.name == "Venus") {
+                            tokens.append(StyleToken(
+                                name: "complex slate blue",
+                                type: "color",
+                                weight: aspectWeight,
+                                planetarySource: "Moon-Venus",
+                                aspectSource: aspectSource
+                            ))
+                            tokens.append(StyleToken(
+                                name: "dualistic",
+                                type: "color_quality",
+                                weight: aspectWeight - 0.2,
+                                planetarySource: "Moon-Venus",
+                                aspectSource: aspectSource
+                            ))
+                        }
+                        
+                    case "Opposition":
+                        // Polarized planets - complementary colors
+                        if (planet1.name == "Venus" || planet2.name == "Venus") &&
+                            (planet1.name == "Neptune" || planet2.name == "Neptune") {
+                            tokens.append(StyleToken(
+                                name: "mysterious indigo",
+                                type: "color",
+                                weight: aspectWeight,
+                                planetarySource: "Venus-Neptune",
+                                aspectSource: aspectSource
+                            ))
+                            tokens.append(StyleToken(
+                                name: "counterbalanced",
+                                type: "color_quality",
+                                weight: aspectWeight - 0.2,
+                                planetarySource: "Venus-Neptune",
+                                aspectSource: aspectSource
+                            ))
+                        } else if (planet1.name == "Sun" || planet2.name == "Sun") &&
+                                    (planet1.name == "Moon" || planet2.name == "Moon") {
+                            tokens.append(StyleToken(
+                                name: "balanced silver-gold",
+                                type: "color",
+                                weight: aspectWeight,
+                                planetarySource: "Sun-Moon",
+                                aspectSource: aspectSource
+                            ))
+                            tokens.append(StyleToken(
+                                name: "complementary",
+                                type: "color_quality",
+                                weight: aspectWeight - 0.2,
+                                planetarySource: "Sun-Moon",
+                                aspectSource: aspectSource
+                            ))
+                        }
+                        
+                    default:
+                        // Minor aspects - subtle color influences
+                        if (planet1.name == "Venus" || planet2.name == "Venus") {
+                            tokens.append(StyleToken(
+                                name: "subtle",
+                                type: "color_quality",
+                                weight: aspectWeight - 0.5,
+                                planetarySource: "\(planet1.name)-\(planet2.name)",
+                                aspectSource: aspectSource
+                            ))
+                        }
+                    }
+                }
+            }
+        }
+        
+        return tokens
+    }
+    
+    /// Generate specialized color tokens based on planet in a sign
     private static func generateColorTokensForPlanetInSign(
         planet: String,
         sign: Int,
         weight: Double,
-        isProgressed: Bool = false) -> [StyleToken] {
+        isProgressed: Bool = false,
+        isRetrograde: Bool = false) -> [StyleToken] {
+            
             
             var tokens: [StyleToken] = []
             let signName = CoordinateTransformations.getZodiacSignName(sign: sign)
             let source = isProgressed ? "Progressed \(planet)" : planet
             
-            // Color palette based on planet and sign
+            // ENHANCED: More detailed color palette based on planet and sign
             switch planet {
             case "Sun":
                 switch signName {
                 case "Aries":
-                    tokens.append(StyleToken(name: "bright red", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "vivid", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "bright vermilion", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "poppy red", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "vibrant", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "energetic", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Taurus":
-                    tokens.append(StyleToken(name: "forest green", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "earthy", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "deep moss green", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "rich olive", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "earthy", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "substantial", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Gemini":
-                    tokens.append(StyleToken(name: "yellow", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "bright", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "bright canary yellow", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "citrine", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "bright", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "dynamic", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Cancer":
-                    tokens.append(StyleToken(name: "silver", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "luminous", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "moonlit silver", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "mother of pearl", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "luminous", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "reflective", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Leo":
-                    tokens.append(StyleToken(name: "gold", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "royal gold", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "burnished amber", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "regal", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Virgo":
-                    tokens.append(StyleToken(name: "wheat", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "refined", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "warm wheat", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "soft taupe", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "refined", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "precise", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Libra":
-                    tokens.append(StyleToken(name: "rose pink", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "balanced", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "delicate rose pink", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "soft mauve", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "balanced", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "harmonious", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Scorpio":
-                    tokens.append(StyleToken(name: "burgundy", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "deep", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "deep oxblood", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "intense maroon", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "deep", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "mysterious", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Sagittarius":
-                    tokens.append(StyleToken(name: "royal blue", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "vibrant", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "rich cobalt blue", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "royal purple", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "expansive", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "bold", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Capricorn":
-                    tokens.append(StyleToken(name: "charcoal", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "structured", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "deep graphite", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "slate grey", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "structured", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "enduring", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Aquarius":
                     tokens.append(StyleToken(name: "electric blue", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "innovative", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "neon turquoise", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "innovative", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "futuristic", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Pisces":
-                    tokens.append(StyleToken(name: "sea green", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "fluid", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "iridescent aqua", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "ocean teal", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "flowing", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "ethereal", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 default:
                     break
                 }
@@ -330,41 +621,65 @@ class SemanticTokenGenerator {
             case "Moon":
                 switch signName {
                 case "Aries":
-                    tokens.append(StyleToken(name: "cherry red", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "warm", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "coral blush", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "warm terracotta", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "emotive", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "vivid", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Taurus":
-                    tokens.append(StyleToken(name: "moss green", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "comforting", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "soft sage green", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "mossy celadon", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "comforting", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "nurturing", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Gemini":
-                    tokens.append(StyleToken(name: "pale yellow", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "light", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "pale buttercream", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "luminous primrose", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "versatile", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "adaptive", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Cancer":
-                    tokens.append(StyleToken(name: "pearl", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "iridescent", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "lustrous pearl", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "moonstone white", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "receptive", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "iridescent", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Leo":
-                    tokens.append(StyleToken(name: "amber", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "warm", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "warm honey", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "amber gold", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "warm", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "glowing", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Virgo":
-                    tokens.append(StyleToken(name: "taupe", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "earthy", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "stoneware taupe", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "soft chamois", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "careful", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "detailed", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Libra":
-                    tokens.append(StyleToken(name: "lavender", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "delicate", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "tender lavender", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "soft lilac", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "delicate", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "balanced", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Scorpio":
-                    tokens.append(StyleToken(name: "deep plum", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "mysterious", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "midnight plum", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "shadowed amethyst", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "profound", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "transformative", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Sagittarius":
-                    tokens.append(StyleToken(name: "indigo", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "expansive", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "midnight sapphire", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "deepest azure", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "expansive", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "philosophical", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Capricorn":
-                    tokens.append(StyleToken(name: "slate gray", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "stately", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "smoky slate", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "graphite grey", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "disciplined", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "enduring", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Aquarius":
-                    tokens.append(StyleToken(name: "turquoise", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "cool", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "glacial turquoise", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "electric ice blue", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "innovative", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "visionary", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Pisces":
-                    tokens.append(StyleToken(name: "seafoam", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "dreamy", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "mist seafoam", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "opalescent azure", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "dreamy", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "transcendent", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 default:
                     break
                 }
@@ -372,41 +687,65 @@ class SemanticTokenGenerator {
             case "Venus":
                 switch signName {
                 case "Aries":
-                    tokens.append(StyleToken(name: "coral", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "bold", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "vibrant coral", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "warm peach", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "dynamic", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "passionate", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Taurus":
-                    tokens.append(StyleToken(name: "emerald", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "luxurious", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "rich emerald", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "deep jade", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "luxurious", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "tactile", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Gemini":
-                    tokens.append(StyleToken(name: "peach", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "playful", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "fresh apricot", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "luminous peach", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "playful", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "versatile", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Cancer":
-                    tokens.append(StyleToken(name: "cream", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "nurturing", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "mother of pearl", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "soft cream", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "nurturing", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "protective", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Leo":
-                    tokens.append(StyleToken(name: "warm gold", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "glamorous", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "sunlit gold", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "burnished bronze", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "glamorous", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Virgo":
-                    tokens.append(StyleToken(name: "sage", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "subtle", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "soft sage", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "herbal green", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "refined", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "considerate", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Libra":
                     tokens.append(StyleToken(name: "rose quartz", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "harmonious", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "soft blush", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "harmonious", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "elegant", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Scorpio":
-                    tokens.append(StyleToken(name: "wine red", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "intense", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "deep wine", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "rich burgundy", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "magnetic", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "intense", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Sagittarius":
-                    tokens.append(StyleToken(name: "teal", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "expansive", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "peacock teal", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "vibrant turquoise", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "expansive", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "optimistic", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Capricorn":
-                    tokens.append(StyleToken(name: "merlot", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "classic", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "burgundy wine", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "aged merlot", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "refined", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "timeless", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Aquarius":
-                    tokens.append(StyleToken(name: "periwinkle", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "unconventional", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "lavender blue", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "periwinkle", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "innovative", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "futuristic", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Pisces":
-                    tokens.append(StyleToken(name: "lilac", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "dreamy", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "misty lilac", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "opalescent lavender", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "dreamy", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "mystical", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 default:
                     break
                 }
@@ -414,43 +753,191 @@ class SemanticTokenGenerator {
             case "Mars":
                 switch signName {
                 case "Aries":
-                    tokens.append(StyleToken(name: "crimson", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "vivid", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "blazing crimson", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "fire engine red", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "energetic", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "bold", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 case "Taurus":
-                    tokens.append(StyleToken(name: "rust", type: "color", weight: weight, planetarySource: source, signSource: signName))
-                    tokens.append(StyleToken(name: "substantial", type: "color_quality", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "terracotta rust", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "earthy sienna", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "substantial", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "grounded", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Gemini":
+                    tokens.append(StyleToken(name: "zesty orange", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "bright coral", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "lively", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "quick", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Cancer":
+                    tokens.append(StyleToken(name: "dark ruby", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "garnet", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "protective", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "defensive", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Leo":
+                    tokens.append(StyleToken(name: "burnished copper", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "fiery bronze", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "commanding", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "dramatic", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Virgo":
+                    tokens.append(StyleToken(name: "rustic brick", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "warm terracotta", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "precise", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "efficient", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Libra":
+                    tokens.append(StyleToken(name: "dusty rose", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "balanced coral", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "purposeful", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "diplomatic", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Scorpio":
+                    tokens.append(StyleToken(name: "darkest burgundy", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "blood red", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "intense", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "powerful", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Sagittarius":
+                    tokens.append(StyleToken(name: "royal magenta", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "dynamic violet", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "adventurous", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "expansive", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Capricorn":
+                    tokens.append(StyleToken(name: "mahogany brown", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "deep cedar", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "disciplined", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "structured", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Aquarius":
+                    tokens.append(StyleToken(name: "electric magenta", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "neon rust", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "progressive", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "revolutionary", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Pisces":
+                    tokens.append(StyleToken(name: "deep ocean blue", type: "color", weight: weight, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "complex teal", type: "color", weight: weight - 0.2, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "spiritual", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "intuitive", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 default:
-                    // Add fewer tokens for Mars in other signs (less color relevance)
-                    if ["Fire", "Earth", "Air", "Water"].contains(getElementForSign(signName: signName)) {
-                        tokens.append(StyleToken(name: getElementColor(element: getElementForSign(signName: signName)),
-                                                 type: "color",
-                                                 weight: weight - 0.4,
-                                                 planetarySource: source,
-                                                 signSource: signName))
-                    }
+                    break
                 }
                 
             case "Mercury":
-                // Mercury's influence on color is more subtle, focusing on qualities
-                tokens.append(StyleToken(name: getMercuryColorQuality(sign: signName),
-                                         type: "color_quality",
-                                         weight: weight - 0.3,
-                                         planetarySource: source,
-                                         signSource: signName))
+                switch signName {
+                case "Aries":
+                    tokens.append(StyleToken(name: "clear red", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "crisp", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Taurus":
+                    tokens.append(StyleToken(name: "verdant olive", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "textured", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Gemini":
+                    tokens.append(StyleToken(name: "bright lemon", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "varied", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Cancer":
+                    tokens.append(StyleToken(name: "pearlescent silver", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "nuanced", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Leo":
+                    tokens.append(StyleToken(name: "bright amber", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "distinct", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Virgo":
+                    tokens.append(StyleToken(name: "wheat brown", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "precise", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Libra":
+                    tokens.append(StyleToken(name: "balanced mauve", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "harmonious", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Scorpio":
+                    tokens.append(StyleToken(name: "penetrating burgundy", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "incisive", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Sagittarius":
+                    tokens.append(StyleToken(name: "clear sapphire", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "direct", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Capricorn":
+                    tokens.append(StyleToken(name: "defined graphite", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "structured", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Aquarius":
+                    tokens.append(StyleToken(name: "electric cerulean", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "innovative", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                case "Pisces":
+                    tokens.append(StyleToken(name: "shifting aquamarine", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "fluid", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                default:
+                    break
+                }
                 
             case "Neptune":
-                // Neptune brings dreamy, subtle color qualities
-                tokens.append(StyleToken(name: "oceanic", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
-                tokens.append(StyleToken(name: "diffuse", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                // Neptune brings dreamy, ethereal colors
+                tokens.append(StyleToken(name: "opalescent blue", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "mermaid teal", type: "color", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "misty lavender", type: "color", weight: weight - 0.5, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "ethereal", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "dreamlike", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                
+            case "Pluto":
+                // Pluto brings intense, transformative colors
+                tokens.append(StyleToken(name: "abyssal black", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "plutonium purple", type: "color", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "transformative", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "intense", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                
+            case "Jupiter":
+                // Jupiter brings abundant, expansive colors
+                tokens.append(StyleToken(name: "royal purple", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "abundant indigo", type: "color", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "expansive", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "abundant", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                
+            case "Saturn":
+                // Saturn brings structured, solid colors
+                tokens.append(StyleToken(name: "structured charcoal", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "leaden grey", type: "color", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "disciplined", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "enduring", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                
+            case "Uranus":
+                // Uranus brings electric, unexpected colors
+                tokens.append(StyleToken(name: "electric blue", type: "color", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "neon turquoise", type: "color", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "unexpected", type: "color_quality", weight: weight - 0.3, planetarySource: source, signSource: signName))
+                tokens.append(StyleToken(name: "innovative", type: "color_quality", weight: weight - 0.4, planetarySource: source, signSource: signName))
                 
             default:
-                // For other planets, add element-based color tokens with reduced weight
-                if ["Fire", "Earth", "Air", "Water"].contains(getElementForSign(signName: signName)) {
-                    tokens.append(StyleToken(name: getElementColor(element: getElementForSign(signName: signName)),
-                                             type: "color",
-                                             weight: weight - 0.5,
-                                             planetarySource: source,
-                                             signSource: signName))
+                // For other planets, add elemental tokens
+                switch signName {
+                case "Aries", "Leo", "Sagittarius":
+                    tokens.append(StyleToken(name: "fiery", type: "mood", weight: weight * 0.8, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "warm bronze", type: "color", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "vibrant", type: "color_quality", weight: weight - 0.5, planetarySource: source, signSource: signName))
+                case "Taurus", "Virgo", "Capricorn":
+                    tokens.append(StyleToken(name: "earthy", type: "mood", weight: weight * 0.8, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "rich brown", type: "color", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "grounded", type: "color_quality", weight: weight - 0.5, planetarySource: source, signSource: signName))
+                case "Gemini", "Libra", "Aquarius":
+                    tokens.append(StyleToken(name: "airy", type: "mood", weight: weight * 0.8, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "clear azure", type: "color", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "light", type: "color_quality", weight: weight - 0.5, planetarySource: source, signSource: signName))
+                case "Cancer", "Scorpio", "Pisces":
+                    tokens.append(StyleToken(name: "watery", type: "mood", weight: weight * 0.8, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "oceanic teal", type: "color", weight: weight - 0.4, planetarySource: source, signSource: signName))
+                    tokens.append(StyleToken(name: "fluid", type: "color_quality", weight: weight - 0.5, planetarySource: source, signSource: signName))
+                default:
+                    break
+                }
+            }
+            
+            // Add retrograde tokens if applicable with source tracking
+            if isRetrograde {
+                tokens.append(StyleToken(name: "muted", type: "color_quality", weight: weight * 0.8, planetarySource: source, signSource: signName, aspectSource: "Retrograde"))
+                tokens.append(StyleToken(name: "contemplative", type: "color_quality", weight: weight * 0.7, planetarySource: source, signSource: signName, aspectSource: "Retrograde"))
+                
+                // Add specific retrograde color modifications
+                if ["Venus", "Mercury", "Mars"].contains(planet) {
+                    tokens.append(StyleToken(name: "vintage", type: "color_quality", weight: weight * 0.7, planetarySource: source, signSource: signName, aspectSource: "Retrograde"))
+                    
+                    // Add specific color modifications for retrograde planets
+                    switch planet {
+                    case "Venus":
+                        tokens.append(StyleToken(name: "faded rose", type: "color", weight: weight * 0.7, planetarySource: source, signSource: signName, aspectSource: "Retrograde"))
+                    case "Mars":
+                        tokens.append(StyleToken(name: "smoldering brick", type: "color", weight: weight * 0.7, planetarySource: source, signSource: signName, aspectSource: "Retrograde"))
+                    case "Mercury":
+                        tokens.append(StyleToken(name: "misty grey", type: "color", weight: weight * 0.7, planetarySource: source, signSource: signName, aspectSource: "Retrograde"))
+                    default:
+                        break
+                    }
                 }
             }
             
@@ -465,46 +952,81 @@ class SemanticTokenGenerator {
             
             var tokens: [StyleToken] = []
             
-            // Ascendant has a strong influence on color presentation
+            // ENHANCED: More specific color variations for ascendant
             switch signName {
             case "Aries":
-                tokens.append(StyleToken(name: "bold red", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
-                tokens.append(StyleToken(name: "dynamic", type: "color_quality", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "vibrant crimson", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "dynamic vermilion", type: "color", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "bold", type: "color_quality", weight: weight - 0.3, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "energetic", type: "color_quality", weight: weight - 0.4, planetarySource: "Ascendant", signSource: signName))
             case "Taurus":
-                tokens.append(StyleToken(name: "earthy green", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
-                tokens.append(StyleToken(name: "grounded", type: "color_quality", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "rich moss green", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "deep olive", type: "color", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "grounded", type: "color_quality", weight: weight - 0.3, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "substantial", type: "color_quality", weight: weight - 0.4, planetarySource: "Ascendant", signSource: signName))
             case "Gemini":
-                tokens.append(StyleToken(name: "bright yellow", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
-                tokens.append(StyleToken(name: "vivid", type: "color_quality", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "bright lemon yellow", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "vibrant citrine", type: "color", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "versatile", type: "color_quality", weight: weight - 0.3, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "communicative", type: "color_quality", weight: weight - 0.4, planetarySource: "Ascendant", signSource: signName))
             case "Cancer":
-                tokens.append(StyleToken(name: "moonlit silver", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
-                tokens.append(StyleToken(name: "reflective", type: "color_quality", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "luminous silver", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "pearlescent white", type: "color", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "protective", type: "color_quality", weight: weight - 0.3, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "reflective", type: "color_quality", weight: weight - 0.4, planetarySource: "Ascendant", signSource: signName))
             case "Leo":
-                tokens.append(StyleToken(name: "royal gold", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
-                tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "regal gold", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "sunlit amber", type: "color", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: weight - 0.3, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "commanding", type: "color_quality", weight: weight - 0.4, planetarySource: "Ascendant", signSource: signName))
             case "Virgo":
-                tokens.append(StyleToken(name: "wheat brown", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
-                tokens.append(StyleToken(name: "precise", type: "color_quality", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "warm taupe", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "soft beige", type: "color", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "precise", type: "color_quality", weight: weight - 0.3, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "refined", type: "color_quality", weight: weight - 0.4, planetarySource: "Ascendant", signSource: signName))
             case "Libra":
-                tokens.append(StyleToken(name: "pastel pink", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
-                tokens.append(StyleToken(name: "harmonious", type: "color_quality", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "delicate blush pink", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "balanced mauve", type: "color", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "harmonious", type: "color_quality", weight: weight - 0.3, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "elegant", type: "color_quality", weight: weight - 0.4, planetarySource: "Ascendant", signSource: signName))
             case "Scorpio":
-                tokens.append(StyleToken(name: "deep burgundy", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
-                tokens.append(StyleToken(name: "intense", type: "color_quality", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "deep oxblood", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "intense burgundy", type: "color", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "mysterious", type: "color_quality", weight: weight - 0.3, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "magnetic", type: "color_quality", weight: weight - 0.4, planetarySource: "Ascendant", signSource: signName))
             case "Sagittarius":
-                tokens.append(StyleToken(name: "royal purple", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
-                tokens.append(StyleToken(name: "expansive", type: "color_quality", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "rich indigo", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "deep royal purple", type: "color", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "expansive", type: "color_quality", weight: weight - 0.3, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "adventurous", type: "color_quality", weight: weight - 0.4, planetarySource: "Ascendant", signSource: signName))
             case "Capricorn":
-                tokens.append(StyleToken(name: "deep charcoal", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
-                tokens.append(StyleToken(name: "structured", type: "color_quality", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "polished graphite", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "deep charcoal", type: "color", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "structured", type: "color_quality", weight: weight - 0.3, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "authoritative", type: "color_quality", weight: weight - 0.4, planetarySource: "Ascendant", signSource: signName))
             case "Aquarius":
-                tokens.append(StyleToken(name: "electric blue", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
-                tokens.append(StyleToken(name: "innovative", type: "color_quality", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "electric cerulean", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "neon azure", type: "color", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "innovative", type: "color_quality", weight: weight - 0.3, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "futuristic", type: "color_quality", weight: weight - 0.4, planetarySource: "Ascendant", signSource: signName))
             case "Pisces":
-                tokens.append(StyleToken(name: "aquamarine", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
-                tokens.append(StyleToken(name: "fluid", type: "color_quality", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "iridescent aqua", type: "color", weight: weight, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "misty seafoam", type: "color", weight: weight - 0.2, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "ethereal", type: "color_quality", weight: weight - 0.3, planetarySource: "Ascendant", signSource: signName))
+                tokens.append(StyleToken(name: "dreamy", type: "color_quality", weight: weight - 0.4, planetarySource: "Ascendant", signSource: signName))
             default:
                 break
+            }
+            
+            // Add elemental token based on the sign
+            if ["Aries", "Leo", "Sagittarius"].contains(signName) {
+                tokens.append(StyleToken(name: "fiery", type: "element", weight: weight * 0.9, planetarySource: "Ascendant", signSource: signName))
+            } else if ["Taurus", "Virgo", "Capricorn"].contains(signName) {
+                tokens.append(StyleToken(name: "earthy", type: "element", weight: weight * 0.9, planetarySource: "Ascendant", signSource: signName))
+            } else if ["Gemini", "Libra", "Aquarius"].contains(signName) {
+                tokens.append(StyleToken(name: "airy", type: "element", weight: weight * 0.9, planetarySource: "Ascendant", signSource: signName))
+            } else if ["Cancer", "Scorpio", "Pisces"].contains(signName) {
+                tokens.append(StyleToken(name: "watery", type: "element", weight: weight * 0.9, planetarySource: "Ascendant", signSource: signName))
             }
             
             return tokens
@@ -552,77 +1074,349 @@ class SemanticTokenGenerator {
         let total = fireCount + earthCount + airCount + waterCount
         let threshold = total / 4
         
+        // ENHANCED: More nuanced elemental color tokens
         if fireCount > threshold + 1 {
-            tokens.append(StyleToken(name: "warm red", type: "color", weight: 2.5, planetarySource: "Elemental Balance", signSource: "Fire Signs"))
-            tokens.append(StyleToken(name: "golden yellow", type: "color", weight: 2.3, planetarySource: "Elemental Balance", signSource: "Fire Signs"))
+            tokens.append(StyleToken(name: "blazing vermilion", type: "color", weight: 2.5, planetarySource: "Elemental Balance", signSource: "Fire Signs"))
+            tokens.append(StyleToken(name: "warm amber", type: "color", weight: 2.3, planetarySource: "Elemental Balance", signSource: "Fire Signs"))
+            tokens.append(StyleToken(name: "burnished copper", type: "color", weight: 2.2, planetarySource: "Elemental Balance", signSource: "Fire Signs"))
             tokens.append(StyleToken(name: "vibrant", type: "color_quality", weight: 2.3, planetarySource: "Elemental Balance", signSource: "Fire Signs"))
-            tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: 2.2, planetarySource: "Elemental Balance", signSource: "Fire Signs"))
+            tokens.append(StyleToken(name: "energetic", type: "color_quality", weight: 2.2, planetarySource: "Elemental Balance", signSource: "Fire Signs"))
         }
         
         if earthCount > threshold + 1 {
-            tokens.append(StyleToken(name: "forest green", type: "color", weight: 2.5, planetarySource: "Elemental Balance", signSource: "Earth Signs"))
-            tokens.append(StyleToken(name: "sienna brown", type: "color", weight: 2.3, planetarySource: "Elemental Balance", signSource: "Earth Signs"))
+            tokens.append(StyleToken(name: "rich olive", type: "color", weight: 2.5, planetarySource: "Elemental Balance", signSource: "Earth Signs"))
+            tokens.append(StyleToken(name: "warm terracotta", type: "color", weight: 2.3, planetarySource: "Elemental Balance", signSource: "Earth Signs"))
+            tokens.append(StyleToken(name: "deep moss", type: "color", weight: 2.2, planetarySource: "Elemental Balance", signSource: "Earth Signs"))
             tokens.append(StyleToken(name: "grounded", type: "color_quality", weight: 2.3, planetarySource: "Elemental Balance", signSource: "Earth Signs"))
-            tokens.append(StyleToken(name: "earthy", type: "color_quality", weight: 2.2, planetarySource: "Elemental Balance", signSource: "Earth Signs"))
+            tokens.append(StyleToken(name: "tactile", type: "color_quality", weight: 2.2, planetarySource: "Elemental Balance", signSource: "Earth Signs"))
         }
         
         if airCount > threshold + 1 {
-            tokens.append(StyleToken(name: "sky blue", type: "color", weight: 2.5, planetarySource: "Elemental Balance", signSource: "Air Signs"))
-            tokens.append(StyleToken(name: "silver gray", type: "color", weight: 2.3, planetarySource: "Elemental Balance", signSource: "Air Signs"))
+            tokens.append(StyleToken(name: "clear azure", type: "color", weight: 2.5, planetarySource: "Elemental Balance", signSource: "Air Signs"))
+            tokens.append(StyleToken(name: "luminous silver", type: "color", weight: 2.3, planetarySource: "Elemental Balance", signSource: "Air Signs"))
+            tokens.append(StyleToken(name: "pale citrine", type: "color", weight: 2.2, planetarySource: "Elemental Balance", signSource: "Air Signs"))
             tokens.append(StyleToken(name: "light", type: "color_quality", weight: 2.3, planetarySource: "Elemental Balance", signSource: "Air Signs"))
             tokens.append(StyleToken(name: "bright", type: "color_quality", weight: 2.2, planetarySource: "Elemental Balance", signSource: "Air Signs"))
         }
         
         if waterCount > threshold + 1 {
-            tokens.append(StyleToken(name: "deep blue", type: "color", weight: 2.5, planetarySource: "Elemental Balance", signSource: "Water Signs"))
-            tokens.append(StyleToken(name: "teal", type: "color", weight: 2.3, planetarySource: "Elemental Balance", signSource: "Water Signs"))
-            tokens.append(StyleToken(name: "flowing", type: "color_quality", weight: 2.3, planetarySource: "Elemental Balance", signSource: "Water Signs"))
-            tokens.append(StyleToken(name: "fluid", type: "color_quality", weight: 2.2, planetarySource: "Elemental Balance", signSource: "Water Signs"))
+            tokens.append(StyleToken(name: "deep sapphire", type: "color", weight: 2.5, planetarySource: "Elemental Balance", signSource: "Water Signs"))
+            tokens.append(StyleToken(name: "oceanic teal", type: "color", weight: 2.3, planetarySource: "Elemental Balance", signSource: "Water Signs"))
+            tokens.append(StyleToken(name: "misty aquamarine", type: "color", weight: 2.2, planetarySource: "Elemental Balance", signSource: "Water Signs"))
+            tokens.append(StyleToken(name: "fluid", type: "color_quality", weight: 2.3, planetarySource: "Elemental Balance", signSource: "Water Signs"))
+            tokens.append(StyleToken(name: "reflective", type: "color_quality", weight: 2.2, planetarySource: "Elemental Balance", signSource: "Water Signs"))
         }
         
         return tokens
     }
     
-    // Helper methods for color generation
-    private static func getElementForSign(signName: String) -> String {
-        if ["Aries", "Leo", "Sagittarius"].contains(signName) {
-            return "Fire"
-        } else if ["Taurus", "Virgo", "Capricorn"].contains(signName) {
-            return "Earth"
-        } else if ["Gemini", "Libra", "Aquarius"].contains(signName) {
-            return "Air"
-        } else if ["Cancer", "Scorpio", "Pisces"].contains(signName) {
-            return "Water"
+    // MARK: - New Color Interpretation Methods
+    
+    /// Generate color tokens based on planetary dignities and debilities
+    static func generateColorTokensFromDignities(chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        for planet in chart.planets {
+            // Skip outer planets for this analysis
+            if ["Uranus", "Neptune", "Pluto"].contains(planet.name) {
+                continue
+            }
+            
+            let signName = CoordinateTransformations.getZodiacSignName(sign: planet.zodiacSign)
+            var dignity = getDignityStatus(planet: planet.name, sign: signName)
+            
+            // Add color tokens based on dignity status
+            switch dignity {
+            case .domicile:
+                // Planet in its own sign - pure, strong colors
+                switch planet.name {
+                case "Sun":
+                    tokens.append(StyleToken(name: "pure gold", type: "color", weight: 2.2, planetarySource: planet.name, signSource: signName, aspectSource: "Domicile"))
+                    tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: 2.0, planetarySource: planet.name, signSource: signName, aspectSource: "Domicile"))
+                case "Moon":
+                    tokens.append(StyleToken(name: "pure silver", type: "color", weight: 2.2, planetarySource: planet.name, signSource: signName, aspectSource: "Domicile"))
+                    tokens.append(StyleToken(name: "luminous", type: "color_quality", weight: 2.0, planetarySource: planet.name, signSource: signName, aspectSource: "Domicile"))
+                case "Mercury":
+                    tokens.append(StyleToken(name: "quicksilver", type: "color", weight: 2.2, planetarySource: planet.name, signSource: signName, aspectSource: "Domicile"))
+                    tokens.append(StyleToken(name: "brilliant", type: "color_quality", weight: 2.0, planetarySource: planet.name, signSource: signName, aspectSource: "Domicile"))
+                case "Venus":
+                    tokens.append(StyleToken(name: "purest rose", type: "color", weight: 2.2, planetarySource: planet.name, signSource: signName, aspectSource: "Domicile"))
+                    tokens.append(StyleToken(name: "exquisite", type: "color_quality", weight: 2.0, planetarySource: planet.name, signSource: signName, aspectSource: "Domicile"))
+                case "Mars":
+                    tokens.append(StyleToken(name: "perfect crimson", type: "color", weight: 2.2, planetarySource: planet.name, signSource: signName, aspectSource: "Domicile"))
+                    tokens.append(StyleToken(name: "intense", type: "color_quality", weight: 2.0, planetarySource: planet.name, signSource: signName, aspectSource: "Domicile"))
+                case "Jupiter":
+                    tokens.append(StyleToken(name: "regal purple", type: "color", weight: 2.2, planetarySource: planet.name, signSource: signName, aspectSource: "Domicile"))
+                    tokens.append(StyleToken(name: "expansive", type: "color_quality", weight: 2.0, planetarySource: planet.name, signSource: signName, aspectSource: "Domicile"))
+                case "Saturn":
+                    tokens.append(StyleToken(name: "perfect obsidian", type: "color", weight: 2.2, planetarySource: planet.name, signSource: signName, aspectSource: "Domicile"))
+                    tokens.append(StyleToken(name: "enduring", type: "color_quality", weight: 2.0, planetarySource: planet.name, signSource: signName, aspectSource: "Domicile"))
+                default:
+                    break
+                }
+                
+            case .exaltation:
+                // Planet exalted - elevated, refined colors
+                switch planet.name {
+                case "Sun":
+                    tokens.append(StyleToken(name: "exalted amber", type: "color", weight: 2.0, planetarySource: planet.name, signSource: signName, aspectSource: "Exaltation"))
+                    tokens.append(StyleToken(name: "noble", type: "color_quality", weight: 1.8, planetarySource: planet.name, signSource: signName, aspectSource: "Exaltation"))
+                case "Moon":
+                    tokens.append(StyleToken(name: "exalted pearl", type: "color", weight: 2.0, planetarySource: planet.name, signSource: signName, aspectSource: "Exaltation"))
+                    tokens.append(StyleToken(name: "sublime", type: "color_quality", weight: 1.8, planetarySource: planet.name, signSource: signName, aspectSource: "Exaltation"))
+                case "Mercury":
+                    tokens.append(StyleToken(name: "elevated citrine", type: "color", weight: 2.0, planetarySource: planet.name, signSource: signName, aspectSource: "Exaltation"))
+                    tokens.append(StyleToken(name: "refined", type: "color_quality", weight: 1.8, planetarySource: planet.name, signSource: signName, aspectSource: "Exaltation"))
+                case "Venus":
+                    tokens.append(StyleToken(name: "exalted jade", type: "color", weight: 2.0, planetarySource: planet.name, signSource: signName, aspectSource: "Exaltation"))
+                    tokens.append(StyleToken(name: "harmonious", type: "color_quality", weight: 1.8, planetarySource: planet.name, signSource: signName, aspectSource: "Exaltation"))
+                case "Mars":
+                    tokens.append(StyleToken(name: "elevated garnet", type: "color", weight: 2.0, planetarySource: planet.name, signSource: signName, aspectSource: "Exaltation"))
+                    tokens.append(StyleToken(name: "powerful", type: "color_quality", weight: 1.8, planetarySource: planet.name, signSource: signName, aspectSource: "Exaltation"))
+                case "Jupiter":
+                    tokens.append(StyleToken(name: "exalted sapphire", type: "color", weight: 2.0, planetarySource: planet.name, signSource: signName, aspectSource: "Exaltation"))
+                    tokens.append(StyleToken(name: "abundant", type: "color_quality", weight: 1.8, planetarySource: planet.name, signSource: signName, aspectSource: "Exaltation"))
+                case "Saturn":
+                    tokens.append(StyleToken(name: "elevated graphite", type: "color", weight: 2.0, planetarySource: planet.name, signSource: signName, aspectSource: "Exaltation"))
+                    tokens.append(StyleToken(name: "disciplined", type: "color_quality", weight: 1.8, planetarySource: planet.name, signSource: signName, aspectSource: "Exaltation"))
+                default:
+                    break
+                }
+            case .fall:
+                // Planet in fall - subdued, muted colors
+                switch planet.name {
+                case "Sun":
+                    tokens.append(StyleToken(name: "muted amber", type: "color", weight: 1.8, planetarySource: planet.name, signSource: signName, aspectSource: "Fall"))
+                    tokens.append(StyleToken(name: "subdued", type: "color_quality", weight: 1.6, planetarySource: planet.name, signSource: signName, aspectSource: "Fall"))
+                case "Moon":
+                    tokens.append(StyleToken(name: "clouded silver", type: "color", weight: 1.8, planetarySource: planet.name, signSource: signName, aspectSource: "Fall"))
+                    tokens.append(StyleToken(name: "diffused", type: "color_quality", weight: 1.6, planetarySource: planet.name, signSource: signName, aspectSource: "Fall"))
+                case "Mercury":
+                    tokens.append(StyleToken(name: "misty grey", type: "color", weight: 1.8, planetarySource: planet.name, signSource: signName, aspectSource: "Fall"))
+                    tokens.append(StyleToken(name: "complex", type: "color_quality", weight: 1.6, planetarySource: planet.name, signSource: signName, aspectSource: "Fall"))
+                case "Venus":
+                    tokens.append(StyleToken(name: "muted rose", type: "color", weight: 1.8, planetarySource: planet.name, signSource: signName, aspectSource: "Fall"))
+                    tokens.append(StyleToken(name: "subtle", type: "color_quality", weight: 1.6, planetarySource: planet.name, signSource: signName, aspectSource: "Fall"))
+                case "Mars":
+                    tokens.append(StyleToken(name: "subdued terracotta", type: "color", weight: 1.8, planetarySource: planet.name, signSource: signName, aspectSource: "Fall"))
+                    tokens.append(StyleToken(name: "tempered", type: "color_quality", weight: 1.6, planetarySource: planet.name, signSource: signName, aspectSource: "Fall"))
+                case "Jupiter":
+                    tokens.append(StyleToken(name: "muted indigo", type: "color", weight: 1.8, planetarySource: planet.name, signSource: signName, aspectSource: "Fall"))
+                    tokens.append(StyleToken(name: "restrained", type: "color_quality", weight: 1.6, planetarySource: planet.name, signSource: signName, aspectSource: "Fall"))
+                case "Saturn":
+                    tokens.append(StyleToken(name: "subtle charcoal", type: "color", weight: 1.8, planetarySource: planet.name, signSource: signName, aspectSource: "Fall"))
+                    tokens.append(StyleToken(name: "introspective", type: "color_quality", weight: 1.6, planetarySource: planet.name, signSource: signName, aspectSource: "Fall"))
+                default:
+                    break
+                }
+                
+            case .detriment:
+                // Planet in detriment - challenging, complex colors
+                switch planet.name {
+                case "Sun":
+                    tokens.append(StyleToken(name: "complex ochre", type: "color", weight: 1.6, planetarySource: planet.name, signSource: signName, aspectSource: "Detriment"))
+                    tokens.append(StyleToken(name: "nuanced", type: "color_quality", weight: 1.5, planetarySource: planet.name, signSource: signName, aspectSource: "Detriment"))
+                case "Moon":
+                    tokens.append(StyleToken(name: "shadowed pearl", type: "color", weight: 1.6, planetarySource: planet.name, signSource: signName, aspectSource: "Detriment"))
+                    tokens.append(StyleToken(name: "reflective", type: "color_quality", weight: 1.5, planetarySource: planet.name, signSource: signName, aspectSource: "Detriment"))
+                case "Mercury":
+                    tokens.append(StyleToken(name: "complex pewter", type: "color", weight: 1.6, planetarySource: planet.name, signSource: signName, aspectSource: "Detriment"))
+                    tokens.append(StyleToken(name: "contemplative", type: "color_quality", weight: 1.5, planetarySource: planet.name, signSource: signName, aspectSource: "Detriment"))
+                case "Venus":
+                    tokens.append(StyleToken(name: "complex mauve", type: "color", weight: 1.6, planetarySource: planet.name, signSource: signName, aspectSource: "Detriment"))
+                    tokens.append(StyleToken(name: "interesting", type: "color_quality", weight: 1.5, planetarySource: planet.name, signSource: signName, aspectSource: "Detriment"))
+                case "Mars":
+                    tokens.append(StyleToken(name: "complex rust", type: "color", weight: 1.6, planetarySource: planet.name, signSource: signName, aspectSource: "Detriment"))
+                    tokens.append(StyleToken(name: "challenging", type: "color_quality", weight: 1.5, planetarySource: planet.name, signSource: signName, aspectSource: "Detriment"))
+                case "Jupiter":
+                    tokens.append(StyleToken(name: "complex slate", type: "color", weight: 1.6, planetarySource: planet.name, signSource: signName, aspectSource: "Detriment"))
+                    tokens.append(StyleToken(name: "transformative", type: "color_quality", weight: 1.5, planetarySource: planet.name, signSource: signName, aspectSource: "Detriment"))
+                case "Saturn":
+                    tokens.append(StyleToken(name: "complex rust", type: "color", weight: 1.6, planetarySource: planet.name, signSource: signName, aspectSource: "Detriment"))
+                    tokens.append(StyleToken(name: "evolving", type: "color_quality", weight: 1.5, planetarySource: planet.name, signSource: signName, aspectSource: "Detriment"))
+                default:
+                    break
+                }
+                
+            case .peregrine:
+                // Planet peregrine (neutral) - standard colors
+                // No special tokens for peregrine planets
+                break
+            }
         }
-        return "Balanced"
+        
+        return tokens
     }
     
-    private static func getElementColor(element: String) -> String {
-        switch element {
-        case "Fire": return "warm orange"
-        case "Earth": return "olive green"
-        case "Air": return "pale blue"
-        case "Water": return "deep teal"
-        default: return "neutral gray"
+    /// Get dignity status for a planet in a sign
+    private static func getDignityStatus(planet: String, sign: String) -> DignityStatus {
+        switch planet {
+        case "Sun":
+            if sign == "Leo" { return .domicile }
+            else if sign == "Aries" { return .exaltation }
+            else if sign == "Aquarius" { return .detriment }
+            else if sign == "Libra" { return .fall }
+            else { return .peregrine }
+            
+        case "Moon":
+            if sign == "Cancer" { return .domicile }
+            else if sign == "Taurus" { return .exaltation }
+            else if sign == "Capricorn" { return .detriment }
+            else if sign == "Scorpio" { return .fall }
+            else { return .peregrine }
+            
+        case "Mercury":
+            if sign == "Gemini" || sign == "Virgo" { return .domicile }
+            else if sign == "Virgo" { return .exaltation }
+            else if sign == "Sagittarius" || sign == "Pisces" { return .detriment }
+            else if sign == "Pisces" { return .fall }
+            else { return .peregrine }
+            
+        case "Venus":
+            if sign == "Taurus" || sign == "Libra" { return .domicile }
+            else if sign == "Pisces" { return .exaltation }
+            else if sign == "Aries" || sign == "Scorpio" { return .detriment }
+            else if sign == "Virgo" { return .fall }
+            else { return .peregrine }
+            
+        case "Mars":
+            if sign == "Aries" || sign == "Scorpio" { return .domicile }
+            else if sign == "Capricorn" { return .exaltation }
+            else if sign == "Taurus" || sign == "Libra" { return .detriment }
+            else if sign == "Cancer" { return .fall }
+            else { return .peregrine }
+            
+        case "Jupiter":
+            if sign == "Sagittarius" || sign == "Pisces" { return .domicile }
+            else if sign == "Cancer" { return .exaltation }
+            else if sign == "Gemini" || sign == "Virgo" { return .detriment }
+            else if sign == "Capricorn" { return .fall }
+            else { return .peregrine }
+            
+        case "Saturn":
+            if sign == "Capricorn" || sign == "Aquarius" { return .domicile }
+            else if sign == "Libra" { return .exaltation }
+            else if sign == "Cancer" || sign == "Leo" { return .detriment }
+            else if sign == "Aries" { return .fall }
+            else { return .peregrine }
+            
+        default:
+            return .peregrine
         }
     }
     
-    private static func getMercuryColorQuality(sign: String) -> String {
-        switch sign {
-        case "Aries": return "crisp"
-        case "Taurus": return "textured"
-        case "Gemini": return "varied"
-        case "Cancer": return "nuanced"
-        case "Leo": return "distinct"
-        case "Virgo": return "precise"
-        case "Libra": return "balanced"
-        case "Scorpio": return "intense"
-        case "Sagittarius": return "clear"
-        case "Capricorn": return "defined"
-        case "Aquarius": return "unique"
-        case "Pisces": return "blended"
-        default: return "communicative"
+    /// Represents the dignity status of a planet in a sign
+    enum DignityStatus {
+        case domicile  // Planet in its own sign (strongest)
+        case exaltation // Planet exalted
+        case peregrine // Planet in neutral sign
+        case detriment // Planet in sign opposite its domicile
+        case fall      // Planet in sign opposite its exaltation (weakest)
+    }
+    
+    /// Generate color nuance tokens based on chart aspects
+    static func generateColorNuanceFromAspects(chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Look for aspects between Venus and other planets for color nuance
+        // Venus is the planet most associated with aesthetics and color preferences
+        if let venus = chart.planets.first(where: { $0.name == "Venus" }) {
+            for planet in chart.planets {
+                if planet.name == "Venus" { continue } // Skip self-aspect
+                
+                // Check for aspect
+                if let (aspectType, orb) = AstronomicalCalculator.calculateAspect(
+                    point1: venus.longitude,
+                    point2: planet.longitude,
+                    orb: 6.0) {
+                    
+                    let aspectName = "\(planet.name) \(aspectType) Venus"
+                    var weight = 1.8
+                    
+                    // Tighter orbs get higher weight
+                    if orb < 2.0 {
+                        weight += 0.3
+                    }
+                    
+                    // Generate color nuance based on the aspect type and planet
+                    switch (aspectType, planet.name) {
+                        // Sun aspects to Venus
+                    case ("Conjunction", "Sun"):
+                        tokens.append(StyleToken(name: "luminous gold", type: "color", weight: weight, planetarySource: "Venus-Sun", aspectSource: aspectName))
+                        tokens.append(StyleToken(name: "warm", type: "color_quality", weight: weight - 0.2, planetarySource: "Venus-Sun", aspectSource: aspectName))
+                        tokens.append(StyleToken(name: "harmonious", type: "color_quality", weight: weight - 0.3, planetarySource: "Venus-Sun", aspectSource: aspectName))
+                    case ("Trine", "Sun"):
+                        tokens.append(StyleToken(name: "golden amber", type: "color", weight: weight, planetarySource: "Venus-Sun", aspectSource: aspectName))
+                        tokens.append(StyleToken(name: "balanced", type: "color_quality", weight: weight - 0.2, planetarySource: "Venus-Sun", aspectSource: aspectName))
+                    case ("Square", "Sun"):
+                        tokens.append(StyleToken(name: "complex terracotta", type: "color", weight: weight, planetarySource: "Venus-Sun", aspectSource: aspectName))
+                        tokens.append(StyleToken(name: "contrasting", type: "color_quality", weight: weight - 0.2, planetarySource: "Venus-Sun", aspectSource: aspectName))
+                    case ("Opposition", "Sun"):
+                        tokens.append(StyleToken(name: "gold and silver blend", type: "color", weight: weight, planetarySource: "Venus-Sun", aspectSource: aspectName))
+                        tokens.append(StyleToken(name: "complementary", type: "color_quality", weight: weight - 0.2, planetarySource: "Venus-Sun", aspectSource: aspectName))
+                        
+                        // Moon aspects to Venus
+                    case ("Conjunction", "Moon"):
+                        tokens.append(StyleToken(name: "pearl luminescence", type: "color", weight: weight, planetarySource: "Venus-Moon", aspectSource: aspectName))
+                        tokens.append(StyleToken(name: "luminous", type: "color_quality", weight: weight - 0.2, planetarySource: "Venus-Moon", aspectSource: aspectName))
+                    case ("Trine", "Moon"):
+                        tokens.append(StyleToken(name: "moonlit rose", type: "color", weight: weight, planetarySource: "Venus-Moon", aspectSource: aspectName))
+                        tokens.append(StyleToken(name: "nurturing", type: "color_quality", weight: weight - 0.2, planetarySource: "Venus-Moon", aspectSource: aspectName))
+                    case ("Square", "Moon"):
+                        tokens.append(StyleToken(name: "complex mauve", type: "color", weight: weight, planetarySource: "Venus-Moon", aspectSource: aspectName))
+                        tokens.append(StyleToken(name: "emotionally dynamic", type: "color_quality", weight: weight - 0.2, planetarySource: "Venus-Moon", aspectSource: aspectName))
+                    case ("Opposition", "Moon"):
+                        tokens.append(StyleToken(name: "silver-rose balance", type: "color", weight: weight, planetarySource: "Venus-Moon", aspectSource: aspectName))
+                        tokens.append(StyleToken(name: "emotionally complex", type: "color_quality", weight: weight - 0.2, planetarySource: "Venus-Moon", aspectSource: aspectName))
+                        
+                        // Mars aspects to Venus
+                    case ("Conjunction", "Mars"):
+                        tokens.append(StyleToken(name: "passionate rose-red", type: "color", weight: weight, planetarySource: "Venus-Mars", aspectSource: aspectName))
+                        tokens.append(StyleToken(name: "vibrant", type: "color_quality", weight: weight - 0.2, planetarySource: "Venus-Mars", aspectSource: aspectName))
+                    case ("Trine", "Mars"):
+                        tokens.append(StyleToken(name: "harmonious crimson", type: "color", weight: weight, planetarySource: "Venus-Mars", aspectSource: aspectName))
+                        tokens.append(StyleToken(name: "energetic", type: "color_quality", weight: weight - 0.2, planetarySource: "Venus-Mars", aspectSource: aspectName))
+                    case ("Square", "Mars"):
+                        tokens.append(StyleToken(name: "dynamic burgundy", type: "color", weight: weight, planetarySource: "Venus-Mars", aspectSource: aspectName))
+                        tokens.append(StyleToken(name: "intense", type: "color_quality", weight: weight - 0.2, planetarySource: "Venus-Mars", aspectSource: aspectName))
+                    case ("Opposition", "Mars"):
+                        tokens.append(StyleToken(name: "red-pink contrast", type: "color", weight: weight, planetarySource: "Venus-Mars", aspectSource: aspectName))
+                        tokens.append(StyleToken(name: "dramatically balanced", type: "color_quality", weight: weight - 0.2, planetarySource: "Venus-Mars", aspectSource: aspectName))
+                        
+                        // Neptune aspects to Venus (dreamy, ethereal qualities)
+                    case (_, "Neptune"):
+                        tokens.append(StyleToken(name: "opalescent", type: "color_quality", weight: weight - 0.2, planetarySource: "Venus-Neptune", aspectSource: aspectName))
+                        
+                        if aspectType == "Conjunction" {
+                            tokens.append(StyleToken(name: "ethereal aquamarine", type: "color", weight: weight, planetarySource: "Venus-Neptune", aspectSource: aspectName))
+                            tokens.append(StyleToken(name: "dreamy", type: "color_quality", weight: weight - 0.3, planetarySource: "Venus-Neptune", aspectSource: aspectName))
+                        } else if aspectType == "Trine" {
+                            tokens.append(StyleToken(name: "flowing teal", type: "color", weight: weight, planetarySource: "Venus-Neptune", aspectSource: aspectName))
+                            tokens.append(StyleToken(name: "imaginative", type: "color_quality", weight: weight - 0.3, planetarySource: "Venus-Neptune", aspectSource: aspectName))
+                        }
+                        
+                        // Jupiter aspects to Venus (expansion, abundance)
+                    case (_, "Jupiter"):
+                        if ["Conjunction", "Trine"].contains(aspectType) {
+                            tokens.append(StyleToken(name: "abundant", type: "color_quality", weight: weight - 0.2, planetarySource: "Venus-Jupiter", aspectSource: aspectName))
+                            tokens.append(StyleToken(name: "opulent", type: "color_quality", weight: weight - 0.3, planetarySource: "Venus-Jupiter", aspectSource: aspectName))
+                        }
+                        
+                        // Saturn aspects to Venus (structure, restraint)
+                    case (_, "Saturn"):
+                        if ["Conjunction", "Square", "Opposition"].contains(aspectType) {
+                            tokens.append(StyleToken(name: "structured", type: "color_quality", weight: weight - 0.2, planetarySource: "Venus-Saturn", aspectSource: aspectName))
+                            tokens.append(StyleToken(name: "refined", type: "color_quality", weight: weight - 0.3, planetarySource: "Venus-Saturn", aspectSource: aspectName))
+                        }
+                        
+                    default:
+                        break
+                    }
+                }
+            }
         }
+        
+        return tokens
     }
     
     // MARK: - Wardrobe Storyline Token Generation
