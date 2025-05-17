@@ -469,11 +469,11 @@ struct ParagraphAssembler {
         // Append dominant lure nuance
         switch dominantLure {
         case .venus:
-            magnetismQuality += " (Venus‑led—visually harmonious and relational)."
+            magnetismQuality += " (Visually harmonious and naturally relational)."
         case .moon:
-            magnetismQuality += " (Moon‑led—emotionally resonant and inviting)."
+            magnetismQuality += " (Emotionally resonant and naturally inviting)."
         case .visual:
-            magnetismQuality += " (House‑led—one‑to‑one connections feel immediate)."
+            magnetismQuality += " (Poised for connection—one‑to‑one interactions feel immediate)."
         case .balanced:
             magnetismQuality += "."
         }
@@ -531,11 +531,11 @@ struct ParagraphAssembler {
         
         // Layer in lunar / Neptunian potency
         if moonDepth > neptuneDepth * 1.2 {
-            emotionalStyle += " A pronounced lunar influence means comfort and security are your first checkpoints."
+            emotionalStyle += " Emotional comfort and security are consistently your first checkpoints when dressing."
         } else if neptuneDepth > moonDepth * 1.2 {
-            emotionalStyle += " A strong Neptunian undertow lends a dreamlike, imaginative veil to how you clothe yourself."
+            emotionalStyle += " A dreamlike, imaginative quality consistently influences how you clothe yourself."
         } else if moonDepth > 0 && neptuneDepth > 0 {
-            emotionalStyle += " Moon and Neptune share the stage—clothes feel like living, breathing memories."
+            emotionalStyle += " You balance emotional comfort with artistic imagination—clothes feel like living, breathing memories."
         }
         
         return emotionalStyle
