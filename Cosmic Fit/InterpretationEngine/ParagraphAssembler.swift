@@ -972,26 +972,46 @@ struct ParagraphAssembler {
     
     /// Generates color recommendations - tokens weighted: 70% natal, 30% progressed
     static func generateColorRecommendations(from tokens: [StyleToken]) -> String {
-        // Analyze tokens to determine color preferences
+        // Extract color tokens specifically - prioritize specific color names over general qualities
+        let colorTokens = tokens.filter { $0.type == "color" }
+        let colorQualityTokens = tokens.filter { $0.type == "color_quality" }
+        
+        // Organize tokens by category based on their sources and names
         var elementalColors: [String] = []
         var currentPhaseColors: [String] = []
         var powerColors: [String] = []
         
-        // Add elemental colors based on token presence
-        if tokens.contains(where: { $0.name == "earthy" }) {
-            elementalColors.append(contentsOf: ["rust", "olive", "camel"])
+        // Extract specific color names from color tokens
+        var specificColorNames: [String] = []
+        let topColorTokens = colorTokens.sorted { $0.weight > $1.weight }.prefix(8)
+        
+        for token in topColorTokens {
+            // Add specific color names (these are the nuanced colors like "iridescent aqua", "warm terracotta")
+            if !["white", "black", "red", "blue", "green", "yellow", "orange", "purple", "brown", "gray"].contains(token.name) {
+                specificColorNames.append(token.name)
+            }
         }
         
-        if tokens.contains(where: { $0.name == "watery" }) {
-            elementalColors.append(contentsOf: ["navy", "teal", "deep blue"])
-        }
-        
-        if tokens.contains(where: { $0.name == "airy" }) {
-            elementalColors.append(contentsOf: ["sky blue", "light grey", "white"])
-        }
-        
-        if tokens.contains(where: { $0.name == "fiery" }) {
-            elementalColors.append(contentsOf: ["red", "orange", "bright yellow"])
+        // If we have specific color names from the nuanced color system, use those
+        if !specificColorNames.isEmpty {
+            elementalColors.append(contentsOf: Array(Set(specificColorNames)))
+        } else {
+            // Fallback to token analysis for elemental colors
+            if tokens.contains(where: { $0.name == "earthy" }) {
+                elementalColors.append(contentsOf: ["olive", "terracotta", "moss", "ochre", "walnut", "sand", "umber"])
+            }
+            
+            if tokens.contains(where: { $0.name == "watery" }) {
+                elementalColors.append(contentsOf: ["navy ink", "teal", "indigo", "slate blue", "stormy gray", "deep aqua"])
+            }
+            
+            if tokens.contains(where: { $0.name == "airy" }) {
+                elementalColors.append(contentsOf: ["pale blue", "silver gray", "cloud white", "light lavender", "sky"])
+            }
+            
+            if tokens.contains(where: { $0.name == "fiery" }) {
+                elementalColors.append(contentsOf: ["oxblood", "rust", "amber", "burnt orange", "burgundy", "ruby"])
+            }
         }
         
         // Current phase colors based on progressed planets (30% influence)
@@ -1011,12 +1031,20 @@ struct ParagraphAssembler {
             currentPhaseColors.append("silver grey")
         }
         
-        // If no progressed planets, add some generic current phase colors
+        // Look for moon phase tokens to add current phase colors
+        let moonPhaseTokens = tokens.filter { $0.aspectSource?.contains("Moon Phase") == true }
+        for token in moonPhaseTokens {
+            if token.type == "color" {
+                currentPhaseColors.append(token.name)
+            }
+        }
+        
+        // If no progressed planets and no moon phase colors, add some generic current phase colors
         if currentPhaseColors.isEmpty {
             currentPhaseColors = ["muted sage", "faded black", "soft cream"]
         }
         
-        // Generate power colors
+        // Generate power colors based on token analysis
         if tokens.contains(where: { $0.name == "bold" && $0.weight > 2.5 }) {
             powerColors.append("deep oxblood")
             powerColors.append("electric blue")
@@ -1037,6 +1065,15 @@ struct ParagraphAssembler {
             powerColors.append("metallic bronze")
         }
         
+        // Check for specific power color tokens from the color system
+        let powerColorTokens = colorTokens.filter {
+            $0.name.contains("royal") || $0.name.contains("deep") || $0.name.contains("electric") ||
+            $0.name.contains("rich") || $0.name.contains("intense") || $0.name.contains("bold")
+        }
+        for token in powerColorTokens.prefix(3) {
+            powerColors.append(token.name)
+        }
+        
         // Default options if no strong preferences
         if elementalColors.isEmpty {
             elementalColors = ["stone", "navy", "charcoal", "cream"]
@@ -1046,10 +1083,15 @@ struct ParagraphAssembler {
             powerColors = ["deep indigo", "matte silver", "burgundy"]
         }
         
-        // Remove duplicates
+        // Remove duplicates and limit selections
         elementalColors = Array(Set(elementalColors))
         currentPhaseColors = Array(Set(currentPhaseColors))
         powerColors = Array(Set(powerColors))
+        
+        // Limit to reasonable numbers
+        elementalColors = Array(elementalColors.prefix(5))
+        currentPhaseColors = Array(currentPhaseColors.prefix(4))
+        powerColors = Array(powerColors.prefix(3))
         
         // Format color recommendations
         var colors = ""

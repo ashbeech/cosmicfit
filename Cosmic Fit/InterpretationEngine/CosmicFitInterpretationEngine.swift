@@ -17,8 +17,19 @@ class CosmicFitInterpretationEngine {
         print("\n🧩 GENERATING COSMIC FIT BLUEPRINT 🧩")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
-        // Generate tokens from natal chart with Whole Sign houses for Blueprint
-        let tokens = SemanticTokenGenerator.generateBlueprintTokens(natal: chart)
+        // Generate base tokens from natal chart with Whole Sign houses for Blueprint
+        let baseTokens = SemanticTokenGenerator.generateBlueprintTokens(natal: chart)
+        
+        // IMPORTANT: Generate color frequency tokens to get nuanced colors
+        // This ensures the Blueprint uses the same sophisticated color logic as the Color Frequency section
+        let colorFrequencyTokens = SemanticTokenGenerator.generateColorFrequencyTokens(
+            natal: chart,
+            progressed: chart // Use natal as progressed for blueprint (100% natal for blueprint colors)
+        )
+        
+        // Combine base tokens with color frequency tokens
+        var allTokens = baseTokens
+        allTokens.append(contentsOf: colorFrequencyTokens)
         
         // Format birth info for display in the blueprint header
         var birthInfoText: String? = nil
@@ -31,12 +42,12 @@ class CosmicFitInterpretationEngine {
         
         // Generate the complete blueprint with all sections according to spec
         let blueprintText = ParagraphAssembler.generateBlueprintInterpretation(
-            tokens: tokens,
+            tokens: allTokens,
             birthInfo: birthInfoText
         )
         
         // Determine the dominant theme from tokens
-        let themeName = ThemeSelector.scoreThemes(tokens: tokens)
+        let themeName = ThemeSelector.scoreThemes(tokens: allTokens)
         
         print("✅ Blueprint generated successfully!")
         print("Theme: \(themeName)")
@@ -45,7 +56,7 @@ class CosmicFitInterpretationEngine {
         return InterpretationResult(
             themeName: themeName,
             stitchedParagraph: blueprintText,
-            tokensUsed: tokens,
+            tokensUsed: allTokens,
             isBlueprintReport: true
         )
     }

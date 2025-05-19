@@ -79,14 +79,15 @@ class SemanticTokenGenerator {
             tokens.append(contentsOf: ageWeightedHouseTokens)
         }
         
-        // Generate elemental balance tokens
-        let elementalTokens = generateElementalTokens(chart: natal)
+        // Generate elemental balance tokens with enhanced color tokens
+        let elementalTokens = generateElementalColorTokens(chart: natal)
         let ageWeightedElementalTokens = elementalTokens.map { $0.applyingAgeWeight(currentAge: currentAge) }
         tokens.append(contentsOf: ageWeightedElementalTokens)
         
-        // Generate aspect-based tokens
+        // Generate aspect-based tokens including aspect color tokens
         let aspectTokens = generateAspectTokens(chart: natal)
-        let ageWeightedAspectTokens = aspectTokens.map { $0.applyingAgeWeight(currentAge: currentAge) }
+        let aspectColorTokens = generateAspectColorTokens(chart: natal)
+        let ageWeightedAspectTokens = (aspectTokens + aspectColorTokens).map { $0.applyingAgeWeight(currentAge: currentAge) }
         tokens.append(contentsOf: ageWeightedAspectTokens)
         
         // Get current lunar phase and add moon phase tokens
@@ -95,7 +96,26 @@ class SemanticTokenGenerator {
         let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: currentJulianDay)
         let moonPhase = MoonPhaseInterpreter.Phase.fromDegrees(lunarPhase)
         let moonPhaseTokens = MoonPhaseInterpreter.tokensForBlueprintRelevance(phase: moonPhase)
+        
+        // Add color palette from moon phase
+        let colorPalette = MoonPhaseInterpreter.colorPaletteForPhase(phase: moonPhase)
+        var moonColorTokens: [StyleToken] = []
+        for (index, color) in colorPalette.enumerated() {
+            // Give higher weight to the first colors in the palette
+            let weight = 1.5 - (Double(index) * 0.2)
+            moonColorTokens.append(StyleToken(
+                name: color,
+                type: "color",
+                weight: weight,
+                planetarySource: nil,
+                signSource: nil,
+                houseSource: nil,
+                aspectSource: "Moon Phase: \(moonPhase.description)"
+            ))
+        }
+        
         tokens.append(contentsOf: moonPhaseTokens)
+        tokens.append(contentsOf: moonColorTokens)
         
         return tokens
     }
@@ -1123,7 +1143,7 @@ class SemanticTokenGenerator {
             }
             
             let signName = CoordinateTransformations.getZodiacSignName(sign: planet.zodiacSign)
-            var dignity = getDignityStatus(planet: planet.name, sign: signName)
+            let dignity = getDignityStatus(planet: planet.name, sign: signName)
             
             // Add color tokens based on dignity status
             switch dignity {

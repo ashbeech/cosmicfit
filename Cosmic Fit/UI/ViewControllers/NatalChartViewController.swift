@@ -57,6 +57,10 @@ final class NatalChartViewController: UIViewController {
     private var longitude:  Double = 0
     private var timeZone:   TimeZone?
     
+    // Daily vibe management
+    private var chartIdentifier: String?
+    private var cachedDailyVibeContent: DailyVibeContent?
+    
     // Helpers
     private let locManager = LocationManager()
     
@@ -66,6 +70,12 @@ final class NatalChartViewController: UIViewController {
         super.viewDidLoad()
         buildUI()
         startWeatherFetch()
+        setupDateChangeObserver()
+    }
+    
+    deinit {
+        // Remove observers
+        NotificationCenter.default.removeObserver(self)
     }
     
     required init?(coder: NSCoder) { super.init(coder: coder) }   // Swift 6 support
@@ -86,6 +96,13 @@ final class NatalChartViewController: UIViewController {
         self.latitude    = latitude
         self.longitude   = longitude
         self.timeZone    = timeZone
+        
+        // Generate chart identifier for daily vibe persistence
+        self.chartIdentifier = DailyVibeStorage.generateChartIdentifier(
+            birthDate: birthDate,
+            latitude: latitude,
+            longitude: longitude
+        )
         
         currentAge = NatalChartCalculator.calculateCurrentAge(from: birthDate)
         
@@ -122,6 +139,38 @@ final class NatalChartViewController: UIViewController {
         
         assembleSections()
         if isViewLoaded { refreshUI() }
+    }
+    
+    // --------------------------------------------------------------------
+    // MARK: Date Change Observer
+    // --------------------------------------------------------------------
+    
+    private func setupDateChangeObserver() {
+        // Listen for date change notifications
+        NotificationCenter.default.addObserver(
+            forName: .dailyVibeNeedsRefresh,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.handleDateChange()
+        }
+    }
+    
+    private func handleDateChange() {
+        print("📅 NatalChartViewController received date change notification")
+        
+        // Clear cached daily vibe content so new content gets generated
+        cachedDailyVibeContent = nil
+        
+        // If we have a cached daily vibe view controller, notify it to refresh
+        if let navController = navigationController {
+            for viewController in navController.viewControllers {
+                if let dailyVibeVC = viewController as? DailyVibeInterpretationViewController {
+                    // The daily vibe view controller will handle its own refresh
+                    break
+                }
+            }
+        }
     }
     
     // --------------------------------------------------------------------
@@ -313,30 +362,110 @@ final class NatalChartViewController: UIViewController {
     }
     
     // --------------------------------------------------------------------
-    // MARK: Actions
+    // MARK: Daily Vibe Management
     // --------------------------------------------------------------------
     
-    @objc private func showDailyVibeInterpretation() {
-        guard let natalChart = natalChart, let progChart = progressedChart else {
-            showAlert(message: "Chart data is not available. Please try again.")
-            return
+    /// Generate or load daily vibe content for today
+    private func getDailyVibeContent() -> DailyVibeContent? {
+        guard let natalChart = natalChart,
+              let progChart = progressedChart,
+              let chartId = chartIdentifier else {
+            print("❌ Missing required data for daily vibe generation")
+            return nil
         }
         
-        // Show loading indicator
-        activityIndicator.startAnimating()
+        // Check if we already have content for today
+        if let existingContent = DailyVibeStorage.shared.loadDailyVibe(
+            for: Date(),
+            chartIdentifier: chartId
+        ) {
+            print("✅ Loaded existing daily vibe for today")
+            return existingContent
+        }
         
-        print("Generating Daily Vibe interpretation")
+        // Generate new content for today
+        print("🆕 Generating new daily vibe for today")
         
         // Collect transits
         let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
         
-        // Generate daily vibe content using the NatalChartManager
+        // Generate daily vibe content
         let dailyVibeContent = NatalChartManager.shared.generateDailyVibeInterpretation(
             for: natalChart,
             progressedChart: progChart,
             transits: allTransits,
             weather: todayWeather
         )
+        
+        // Save the generated content
+        DailyVibeStorage.shared.saveDailyVibe(
+            dailyVibeContent,
+            for: Date(),
+            chartIdentifier: chartId
+        )
+        
+        return dailyVibeContent
+    }
+    
+    /// Generate or load daily vibe content with debug information
+    private func getDailyVibeContentWithDebug() -> DailyVibeContent? {
+        guard let natalChart = natalChart,
+              let progChart = progressedChart,
+              let chartId = chartIdentifier else {
+            print("❌ Missing required data for daily vibe generation")
+            return nil
+        }
+        
+        // Check if we already have content for today
+        if let existingContent = DailyVibeStorage.shared.loadDailyVibe(
+            for: Date(),
+            chartIdentifier: chartId
+        ) {
+            print("✅ Loaded existing daily vibe for today")
+            print("🔄 Skipping debug generation since content already exists")
+            return existingContent
+        }
+        
+        // Generate new content for today with debug
+        print("🆕 Generating new daily vibe for today with debug information")
+        
+        // Collect transits
+        let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
+        
+        // Generate daily vibe content with debug
+        let dailyVibeContent = CosmicFitInterpretationEngine.generateDailyVibeInterpretationWithDebug(
+            from: natalChart,
+            progressedChart: progChart,
+            transits: allTransits,
+            weather: todayWeather
+        )
+        
+        // Save the generated content
+        DailyVibeStorage.shared.saveDailyVibe(
+            dailyVibeContent,
+            for: Date(),
+            chartIdentifier: chartId
+        )
+        
+        return dailyVibeContent
+    }
+    
+    // --------------------------------------------------------------------
+    // MARK: Actions
+    // --------------------------------------------------------------------
+    
+    @objc private func showDailyVibeInterpretation() {
+        // Show loading indicator
+        activityIndicator.startAnimating()
+        
+        print("Generating/Loading Daily Vibe interpretation")
+        
+        // Get daily vibe content (load existing or generate new)
+        guard let dailyVibeContent = getDailyVibeContent() else {
+            activityIndicator.stopAnimating()
+            showAlert(message: "Unable to generate daily vibe. Please try again.")
+            return
+        }
         
         // Create and push the DailyVibeInterpretationViewController
         let dailyVibeVC = DailyVibeInterpretationViewController()
@@ -445,27 +574,18 @@ final class NatalChartViewController: UIViewController {
     
     /// Override the Daily Vibe interpretation generation to use the debug version
     @objc func showDailyVibeInterpretationWithDebug() {
-        guard let natalChart = natalChart, let progChart = progressedChart else {
-            showAlert(message: "Chart data is not available. Please try again.")
-            return
-        }
-        
         // Show loading indicator
         activityIndicator.startAnimating()
         
         print("\n🔍 STARTING DETAILED DEBUG DAILY VIBE GENERATION 🔍")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
-        // Collect transits
-        let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
-        
-        // Generate daily vibe content using the debug-enhanced version
-        let dailyVibeContent = CosmicFitInterpretationEngine.generateDailyVibeInterpretationWithDebug(
-            from: natalChart,
-            progressedChart: progChart,
-            transits: allTransits,
-            weather: todayWeather
-        )
+        // Get daily vibe content (load existing or generate new with debug)
+        guard let dailyVibeContent = getDailyVibeContentWithDebug() else {
+            activityIndicator.stopAnimating()
+            showAlert(message: "Unable to generate daily vibe. Please try again.")
+            return
+        }
         
         // Create and push the DailyVibeInterpretationViewController
         let dailyVibeVC = DailyVibeInterpretationViewController()
@@ -536,6 +656,24 @@ final class NatalChartViewController: UIViewController {
             }
         ))
         
+        // Debug Daily Vibe Storage option
+        alert.addAction(UIAlertAction(
+            title: "Daily Vibe Storage Info",
+            style: .default,
+            handler: { [weak self] _ in
+                self?.showDailyVibeStorageInfo()
+            }
+        ))
+        
+        // Clear Daily Vibe option
+        alert.addAction(UIAlertAction(
+            title: "Clear Today's Daily Vibe",
+            style: .destructive,
+            handler: { [weak self] _ in
+                self?.clearTodaysDailyVibe()
+            }
+        ))
+        
         // Cancel option
         alert.addAction(UIAlertAction(
             title: "Cancel",
@@ -595,6 +733,60 @@ final class NatalChartViewController: UIViewController {
         
         // Present the alert
         present(alert, animated: true)
+    }
+    
+    /// Show daily vibe storage information
+    @objc func showDailyVibeStorageInfo() {
+        guard let chartId = chartIdentifier else {
+            showAlert(message: "Chart identifier not available")
+            return
+        }
+        
+        let savedDates = DailyVibeStorage.shared.getSavedDates(for: chartId)
+        let hasTodaysVibe = DailyVibeStorage.shared.hasDailyVibe(for: Date(), chartIdentifier: chartId)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        
+        var message = "Chart ID: \(chartId)\n\n"
+        message += "Today's vibe exists: \(hasTodaysVibe ? "Yes" : "No")\n\n"
+        message += "Saved daily vibes: \(savedDates.count)\n"
+        
+        if !savedDates.isEmpty {
+            message += "\nRecent dates:\n"
+            for (index, date) in savedDates.prefix(5).enumerated() {
+                message += "• \(dateFormatter.string(from: date))\n"
+            }
+            if savedDates.count > 5 {
+                message += "... and \(savedDates.count - 5) more"
+            }
+        }
+        
+        let alert = UIAlertController(
+            title: "Daily Vibe Storage",
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
+    /// Clear today's daily vibe
+    @objc func clearTodaysDailyVibe() {
+        guard let chartId = chartIdentifier else {
+            showAlert(message: "Chart identifier not available")
+            return
+        }
+        
+        let hasVibe = DailyVibeStorage.shared.hasDailyVibe(for: Date(), chartIdentifier: chartId)
+        
+        if hasVibe {
+            DailyVibeStorage.shared.deleteDailyVibe(for: Date(), chartIdentifier: chartId)
+            cachedDailyVibeContent = nil
+            showAlert(message: "Today's daily vibe has been cleared. A new one will be generated next time you view it.")
+        } else {
+            showAlert(message: "No daily vibe exists for today.")
+        }
     }
     
     @objc private func showBlueprintInterpretation() {

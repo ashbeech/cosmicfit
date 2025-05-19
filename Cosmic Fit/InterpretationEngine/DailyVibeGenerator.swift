@@ -196,6 +196,12 @@ class DailyVibeGenerator {
         // Generate takeaway line
         content.takeaway = generateTakeaway(tokens: tokens, moonPhase: moonPhase)
         
+        // Add weather information if available
+        if let weather = weather {
+            content.temperature = weather.temp
+            content.weatherCondition = weather.conditions
+        }
+        
         return content
     }
     
@@ -726,7 +732,7 @@ class DailyVibeGenerator {
 }
 
 /// Structure to hold all daily vibe content
-struct DailyVibeContent {
+struct DailyVibeContent: Codable {
     // Main content
     var title: String = ""
     var mainParagraph: String = ""
@@ -743,7 +749,7 @@ struct DailyVibeContent {
     // Final line
     var takeaway: String = ""
     
-    // Weather information
+    // Weather information (optional)
     var temperature: Double? = nil
     var weatherCondition: String? = nil
 }
