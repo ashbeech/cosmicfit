@@ -10,24 +10,56 @@ import Foundation
 /// Debug extension for the CosmicFitInterpretationEngine
 extension CosmicFitInterpretationEngine {
     
-    /// Generate a Blueprint interpretation with detailed paragraph assembly logging
-    static func generateBlueprintInterpretationWithDebug(from chart: NatalChartCalculator.NatalChart) -> InterpretationResult {
-        print("\n🔍 GENERATING BLUEPRINT WITH DETAILED DEBUG INFO 🔍")
+    /// Generate a complete natal chart interpretation (Cosmic Blueprint) with detailed debugging
+    /// - Parameter chart: The natal chart to interpret
+    /// - Parameter currentAge: User's current age for age-dependent weighting
+    /// - Returns: An interpretation result with the cosmic blueprint
+    static func generateBlueprintInterpretationWithDebug(from chart: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> InterpretationResult {
+        print("\n🧩 GENERATING COSMIC FIT BLUEPRINT WITH DEBUG 🧩")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("📊 Chart Data Analysis:")
+        print("Sun Sign: \(CoordinateTransformations.getZodiacSignName(sign: chart.planets.first(where: { $0.name == "Sun" })?.zodiacSign ?? 0))")
+        print("Ascendant Sign: \(CoordinateTransformations.getZodiacSignName(sign: CoordinateTransformations.decimalDegreesToZodiac(chart.ascendant).sign))")
+        print("Current Age Parameter: \(currentAge)")
         
-        // Generate tokens from natal chart with Whole Sign houses for Blueprint
-        let tokens = SemanticTokenGenerator.generateBlueprintTokens(natal: chart)
+        // Generate base tokens from natal chart with Whole Sign houses for Blueprint
+        print("\n🪙 GENERATING BASE TOKENS 🪙")
+        let baseTokens = SemanticTokenGenerator.generateBlueprintTokens(natal: chart, currentAge: currentAge)
+        print("Generated \(baseTokens.count) base tokens")
         
-        // Identify style tensions/conflicts in the token set
-        let styleTensions = ParagraphAssembler.detectStylePushPullConflicts(from: tokens)
-        if !styleTensions.isEmpty {
-            print("\n🔄 STYLE TENSIONS DETECTED 🔄")
-            for tension in styleTensions {
-                print("  • \(tension)")
+        // Log token categories
+        var tokenCategories: [String: Int] = [:]
+        for token in baseTokens {
+            tokenCategories[token.type, default: 0] += 1
+        }
+        print("Token categories:")
+        for (category, count) in tokenCategories.sorted(by: { $0.key < $1.key }) {
+            print("  - \(category): \(count) tokens")
+        }
+        
+        // Generate color frequency tokens for nuanced colors
+        print("\n🎨 GENERATING COLOR FREQUENCY TOKENS 🎨")
+        let colorFrequencyTokens = SemanticTokenGenerator.generateColorFrequencyTokens(
+            natal: chart,
+            progressed: chart, // Use natal as progressed for blueprint (100% natal for blueprint colors)
+            currentAge: currentAge
+        )
+        print("Generated \(colorFrequencyTokens.count) color frequency tokens")
+        
+        // Combine base tokens with color frequency tokens
+        print("\n🔄 COMBINING ALL TOKENS 🔄")
+        var allTokens = baseTokens
+        allTokens.append(contentsOf: colorFrequencyTokens)
+        print("Total combined tokens: \(allTokens.count)")
+        
+        // Log top weighted tokens
+        let topTokens = allTokens.sorted { $0.weight > $1.weight }.prefix(10)
+        print("\n⭐ TOP 10 WEIGHTED TOKENS ⭐")
+        for (index, token) in topTokens.enumerated() {
+            print("\(index + 1). \(token.name) (\(token.type), weight: \(String(format: "%.2f", token.weight)))")
+            if let source = token.planetarySource {
+                print("   Source: \(source)")
             }
-            print("")
-        } else {
-            print("\n✅ No significant style tensions detected")
         }
         
         // Format birth info for display in the blueprint header
@@ -40,109 +72,150 @@ extension CosmicFitInterpretationEngine {
         }
         
         // Generate the complete blueprint with all sections according to spec
+        print("\n📝 GENERATING BLUEPRINT SECTIONS 📝")
         let blueprintText = ParagraphAssembler.generateBlueprintInterpretation(
-            tokens: tokens,
+            tokens: allTokens,
             birthInfo: birthInfoText
         )
         
-        // Determine the dominant theme from tokens
-        let themeName = ThemeSelector.scoreThemes(tokens: tokens)
+        print("Blueprint text length: \(blueprintText.count) characters")
         
-        // Get ranking of top themes for debug info
-        let topThemes = ThemeSelector.rankThemes(tokens: tokens, topCount: 3)
-        print("\n🔝 TOP SCORING THEMES:")
+        // Determine the dominant theme from tokens
+        print("\n🎭 DETERMINING DOMINANT THEME 🎭")
+        let themeName = ThemeSelector.scoreThemes(tokens: allTokens)
+        print("Selected Theme: \(themeName)")
+        
+        // Log the top themes with scores for debugging
+        let topThemes = ThemeSelector.rankThemes(tokens: allTokens, topCount: 5)
+        print("\n📊 TOP THEMES BY SCORE:")
         for (i, theme) in topThemes.enumerated() {
-            print("  \(i+1). \(theme.name): \(String(format: "%.2f", theme.score))")
+            print("  \(i+1). \(theme.name): Score \(String(format: "%.2f", theme.score))")
         }
         
-        print("\n✅ Debug blueprint generation complete!")
+        // Log any style tensions detected
+        print("\n⚖️ STYLE TENSIONS DETECTED:")
+        let styleTensions = ParagraphAssembler.detectStylePushPullConflicts(from: allTokens)
+        if styleTensions.isEmpty {
+            print("  None detected - harmonious integration of elements")
+        } else {
+            for (i, tension) in styleTensions.enumerated() {
+                print("  \(i+1). \(tension)")
+            }
+        }
+        
+        print("\n✅ Blueprint generation completed successfully!")
         print("Theme: \(themeName)")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
         
         return InterpretationResult(
             themeName: themeName,
             stitchedParagraph: blueprintText,
-            tokensUsed: tokens,
-            isBlueprintReport: true
+            tokensUsed: allTokens,
+            isBlueprintReport: true,
+            reportDate: Date()
         )
     }
     
-    /// Generate a daily vibe interpretation with detailed paragraph assembly logging
+    /// Generate a daily vibe interpretation with detailed debugging output
+    /// - Parameters:
+    ///   - natalChart: The base natal chart
+    ///   - progressedChart: The current progressed chart
+    ///   - transits: Array of transit aspects
+    ///   - weather: Optional current weather conditions
+    /// - Returns: A daily vibe content object with formatted sections
     static func generateDailyVibeInterpretationWithDebug(
         from natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
         transits: [[String: Any]],
         weather: TodayWeather?) -> DailyVibeContent {
             
-            print("\n☀️ GENERATING DAILY COSMIC VIBE WITH DETAILED DEBUG ☀️")
+            print("\n🔍 STARTING DETAILED DEBUG DAILY VIBE GENERATION 🔍")
             print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
             
-            // Start a new debug session
-            DebugLogger.info("Starting Daily Vibe interpretation debug session")
+            // Log chart information
+            print("📊 CHART DATA ANALYSIS:")
+            print("Natal Sun Sign: \(CoordinateTransformations.getZodiacSignName(sign: natalChart.planets.first(where: { $0.name == "Sun" })?.zodiacSign ?? 0))")
+            print("Natal Moon Sign: \(CoordinateTransformations.getZodiacSignName(sign: natalChart.planets.first(where: { $0.name == "Moon" })?.zodiacSign ?? 0))")
+            print("Progressed Moon Sign: \(CoordinateTransformations.getZodiacSignName(sign: progressedChart.planets.first(where: { $0.name == "Moon" })?.zodiacSign ?? 0))")
+            print("Natal Ascendant Sign: \(CoordinateTransformations.getZodiacSignName(sign: CoordinateTransformations.decimalDegreesToZodiac(natalChart.ascendant).sign))")
+            
+            // Log transit information
+            print("\n🔄 TRANSIT INFORMATION:")
+            print("Total transit aspects: \(transits.count)")
+            
+            let planetCounts = transits.reduce(into: [String: Int]()) { counts, transit in
+                if let planet = transit["transitPlanet"] as? String {
+                    counts[planet, default: 0] += 1
+                }
+            }
+            
+            print("Transit planets:")
+            for (planet, count) in planetCounts.sorted(by: { $0.key < $1.key }) {
+                print("  - \(planet): \(count) aspects")
+            }
+            
+            // Log weather information if available
+            if let weather = weather {
+                print("\n☀️ WEATHER INFORMATION:")
+                print("Temperature: \(weather.temp)°C")
+                print("Conditions: \(weather.conditions)")
+                print("Humidity: \(weather.humidity)%")
+                print("Wind: \(weather.windKph) km/h")
+            } else {
+                print("\n⚠️ No weather information available")
+            }
             
             // Get current lunar phase
             let currentDate = Date()
             let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
             let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: currentJulianDay)
+            let moonPhase = MoonPhaseInterpreter.Phase.fromDegrees(lunarPhase)
             
-            DebugLogger.info("Current lunar phase: \(String(format: "%.2f", lunarPhase))")
+            print("\n🌙 MOON PHASE INFORMATION:")
+            print("Current lunar phase: \(moonPhase.description) (\(String(format: "%.1f", lunarPhase))°)")
             
-            // Generate the daily vibe content using the DailyVibeGenerator - we'll access its internals
-            // directly for detailed debugging
-            DebugLogger.info("Preparing token generation for Daily Vibe")
-            
-            // Log house system approach
-            DebugLogger.info("HYBRID HOUSE SYSTEM APPROACH:")
-            DebugLogger.info("  • Base Style Resonance: Whole Sign (100% natal)")
-            DebugLogger.info("  • Emotional Vibe: Placidus (60% progressed Moon, 40% natal Moon)")
-            DebugLogger.info("  • Transit Impact: Placidus")
-            DebugLogger.info("  • Fashion Output: 50% natal + 50% transit-based")
+            // Log token generation process
+            print("\n🪙 TOKEN GENERATION PROCESS:")
             
             // 1. Generate tokens for base style resonance (100% natal, Whole Sign)
+            print("\n1️⃣ GENERATING BASE STYLE TOKENS (100% NATAL, WHOLE SIGN)")
             let baseStyleTokens = SemanticTokenGenerator.generateBaseStyleTokens(natal: natalChart)
-            DebugLogger.tokenSet("BASE STYLE TOKENS (WHOLE SIGN)", baseStyleTokens)
+            logTokenSet("BASE STYLE TOKENS", baseStyleTokens)
             
             // 2. Generate tokens for emotional vibe of day (60% progressed Moon, 40% natal Moon, Placidus)
+            print("\n2️⃣ GENERATING EMOTIONAL VIBE TOKENS (60% PROGRESSED, 40% NATAL, PLACIDUS)")
             let emotionalVibeTokens = SemanticTokenGenerator.generateEmotionalVibeTokens(
                 natal: natalChart,
                 progressed: progressedChart
             )
-            DebugLogger.tokenSet("EMOTIONAL VIBE TOKENS (PLACIDUS - 60% PROGRESSED, 40% NATAL)", emotionalVibeTokens)
+            logTokenSet("EMOTIONAL VIBE TOKENS", emotionalVibeTokens)
             
             // 3. Generate tokens from planetary transits (Placidus houses)
+            print("\n3️⃣ GENERATING TRANSIT TOKENS (PLACIDUS)")
             let transitTokens = SemanticTokenGenerator.generateTransitTokens(
                 transits: transits,
                 natal: natalChart
             )
-            DebugLogger.tokenSet("TRANSIT TOKENS (PLACIDUS)", transitTokens)
+            logTokenSet("TRANSIT TOKENS", transitTokens)
             
             // 4. Generate tokens from moon phase
+            print("\n4️⃣ GENERATING MOON PHASE TOKENS")
             let moonPhaseTokens = SemanticTokenGenerator.generateMoonPhaseTokens(moonPhase: lunarPhase)
-            DebugLogger.tokenSet("MOON PHASE TOKENS", moonPhaseTokens)
+            logTokenSet("MOON PHASE TOKENS", moonPhaseTokens)
             
             // 5. Generate tokens from weather if available
+            print("\n5️⃣ GENERATING WEATHER TOKENS")
             var weatherTokens: [StyleToken] = []
             if let weather = weather {
                 weatherTokens = SemanticTokenGenerator.generateWeatherTokens(weather: weather)
-                DebugLogger.tokenSet("WEATHER TOKENS", weatherTokens)
+                logTokenSet("WEATHER TOKENS", weatherTokens)
             } else {
-                DebugLogger.warning("No weather data available")
+                print("❗️ No weather data available - skipping weather tokens")
             }
             
             // 6. Combine all tokens with appropriate weighting
+            print("\n6️⃣ COMBINING TOKENS WITH APPROPRIATE WEIGHTING")
             var allTokens: [StyleToken] = []
-            
-            // Check for style tensions/conflicts
-            let styleTensions = ParagraphAssembler.detectStylePushPullConflicts(from: allTokens)
-            if !styleTensions.isEmpty {
-                print("\n🔄 DAILY STYLE TENSIONS DETECTED 🔄")
-                for tension in styleTensions {
-                    print("  • \(tension)")
-                }
-                print("")
-            } else {
-                print("\n✅ No significant daily style tensions detected")
-            }
             
             // Add base style tokens (50% weight in final output)
             for token in baseStyleTokens {
@@ -153,7 +226,8 @@ extension CosmicFitInterpretationEngine {
                     planetarySource: token.planetarySource,
                     signSource: token.signSource,
                     houseSource: token.houseSource,
-                    aspectSource: token.aspectSource
+                    aspectSource: token.aspectSource,
+                    originType: token.originType
                 )
                 allTokens.append(adjustedToken)
             }
@@ -167,7 +241,8 @@ extension CosmicFitInterpretationEngine {
                     planetarySource: token.planetarySource,
                     signSource: token.signSource,
                     houseSource: token.houseSource,
-                    aspectSource: token.aspectSource
+                    aspectSource: token.aspectSource,
+                    originType: token.originType
                 )
                 allTokens.append(adjustedToken)
             }
@@ -181,7 +256,8 @@ extension CosmicFitInterpretationEngine {
                     planetarySource: token.planetarySource,
                     signSource: token.signSource,
                     houseSource: token.houseSource,
-                    aspectSource: token.aspectSource
+                    aspectSource: token.aspectSource,
+                    originType: token.originType
                 )
                 allTokens.append(adjustedToken)
             }
@@ -195,7 +271,8 @@ extension CosmicFitInterpretationEngine {
                     planetarySource: token.planetarySource,
                     signSource: token.signSource,
                     houseSource: token.houseSource,
-                    aspectSource: token.aspectSource
+                    aspectSource: token.aspectSource,
+                    originType: token.originType
                 )
                 allTokens.append(adjustedToken)
             }
@@ -209,36 +286,109 @@ extension CosmicFitInterpretationEngine {
                     planetarySource: token.planetarySource,
                     signSource: token.signSource,
                     houseSource: token.houseSource,
-                    aspectSource: token.aspectSource
+                    aspectSource: token.aspectSource,
+                    originType: token.originType
                 )
                 allTokens.append(adjustedToken)
             }
             
             // Log combined weighted tokens
-            DebugLogger.tokenSet("COMBINED WEIGHTED TOKENS", allTokens)
+            logTokenSet("COMBINED WEIGHTED TOKENS", allTokens)
             
-            // 7. Generate the daily vibe content with detailed logging at each step
-            DebugLogger.info("Generating Daily Vibe content with paragraph-level logging")
+            // Log top weighted tokens
+            let topTokens = allTokens.sorted { $0.weight > $1.weight }.prefix(10)
+            print("\n⭐ TOP 10 WEIGHTED TOKENS ⭐")
+            for (index, token) in topTokens.enumerated() {
+                print("\(index + 1). \(token.name) (\(token.type), weight: \(String(format: "%.2f", token.weight)))")
+                if let source = token.planetarySource {
+                    print("   Source: \(source)")
+                }
+            }
             
-            // Create a debug-enhanced daily vibe generation
-            let dailyVibeContent = generateDailyVibeContentWithDebug(tokens: allTokens, weather: weather, moonPhase: lunarPhase)
+            // 7. Generate the daily vibe content
+            print("\n7️⃣ GENERATING DAILY VIBE CONTENT")
+            let dailyVibeContent = DailyVibeGenerator.generateDailyVibeContent(tokens: allTokens, weather: weather, moonPhase: lunarPhase)
+            
+            // Log the generated content
+            print("\n📋 GENERATED DAILY VIBE CONTENT:")
+            print("Title: \(dailyVibeContent.title)")
+            print("Main Paragraph: \(dailyVibeContent.mainParagraph.prefix(50))...")
+            print("Brightness: \(dailyVibeContent.brightness)%")
+            print("Vibrancy: \(dailyVibeContent.vibrancy)%")
             
             // Log theme determination
             let themeName = ThemeSelector.scoreThemes(tokens: allTokens)
-            DebugLogger.info("Selected Theme: \(themeName)")
+            print("\n🎨 THEME DETERMINATION:")
+            print("  • Selected Theme: \(themeName)")
             
             // Log the top themes with scores for debugging
             let topThemes = ThemeSelector.rankThemes(tokens: allTokens, topCount: 3)
             for (i, theme) in topThemes.enumerated() {
-                DebugLogger.info("  \(i+1). \(theme.name): Score \(String(format: "%.2f", theme.score))")
+                print("  \(i+1). \(theme.name): Score \(String(format: "%.2f", theme.score))")
             }
             
-            print("\n✅ Daily vibe generation with detailed debug completed!")
-            print("Theme: \(themeName)")
+            print("\n✅ Daily vibe generation completed successfully")
             print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
             
             return dailyVibeContent
+    }
+
+    // Helper function for logging token sets in a consistent format
+    private static func logTokenSet(_ title: String, _ tokens: [StyleToken]) {
+        print("\n🪙 \(title) 🪙")
+        print("  ▶ Count: \(tokens.count)")
+        
+        // Group by type
+        var tokensByType: [String: [StyleToken]] = [:]
+        for token in tokens {
+            if tokensByType[token.type] == nil {
+                tokensByType[token.type] = []
+            }
+            tokensByType[token.type]?.append(token)
         }
+        
+        // Print by type with weights
+        for (type, typeTokens) in tokensByType.sorted(by: { $0.key < $1.key }) {
+            print("  📊 \(type.uppercased())")
+            
+            // Sort by weight (highest first)
+            let sorted = typeTokens.sorted { $0.weight > $1.weight }
+            for token in sorted {
+                var sourceInfo = ""
+                if let planet = token.planetarySource {
+                    sourceInfo += "[\(planet)]"
+                }
+                if let sign = token.signSource {
+                    sourceInfo += "[\(sign)]"
+                }
+                if let house = token.houseSource {
+                    sourceInfo += "[House \(house)]"
+                }
+                if let aspect = token.aspectSource {
+                    sourceInfo += "[\(aspect)]"
+                }
+                
+                print("    • \(token.name): \(String(format: "%.2f", token.weight)) \(sourceInfo)")
+            }
+        }
+        
+        // Count tokens by source
+        var sourceCounts: [String: Int] = [:]
+        for token in tokens {
+            var source = "Unknown"
+            if let planet = token.planetarySource {
+                source = planet
+            } else if let aspect = token.aspectSource {
+                source = aspect
+            }
+            sourceCounts[source, default: 0] += 1
+        }
+        
+        print("  🔍 SOURCE DISTRIBUTION:")
+        for (source, count) in sourceCounts.sorted(by: { $0.key < $1.key }) {
+            print("    • \(source): \(count) tokens")
+        }
+    }
     
     // MARK: - Daily Vibe Debug Helpers
     

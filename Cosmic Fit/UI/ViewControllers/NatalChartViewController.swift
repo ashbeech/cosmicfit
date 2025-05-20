@@ -580,12 +580,32 @@ final class NatalChartViewController: UIViewController {
         print("\n🔍 STARTING DETAILED DEBUG DAILY VIBE GENERATION 🔍")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
-        // Get daily vibe content (load existing or generate new with debug)
-        guard let dailyVibeContent = getDailyVibeContentWithDebug() else {
+        guard let natalChart = natalChart,
+              let progChart = progressedChart,
+              let chartId = chartIdentifier else {
             activityIndicator.stopAnimating()
             showAlert(message: "Unable to generate daily vibe. Please try again.")
             return
         }
+        
+        // Collect transits
+        let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
+        
+        // Generate daily vibe content with debug
+        print("Generating Daily Vibe with detailed debugging...")
+        let dailyVibeContent = CosmicFitInterpretationEngine.generateDailyVibeInterpretationWithDebug(
+            from: natalChart,
+            progressedChart: progChart,
+            transits: allTransits,
+            weather: todayWeather
+        )
+        
+        // Save the generated content
+        DailyVibeStorage.shared.saveDailyVibe(
+            dailyVibeContent,
+            for: Date(),
+            chartIdentifier: chartId
+        )
         
         // Create and push the DailyVibeInterpretationViewController
         let dailyVibeVC = DailyVibeInterpretationViewController()
