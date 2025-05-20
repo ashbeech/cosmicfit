@@ -7,6 +7,15 @@
 
 import Foundation
 
+// Origin type for better source-based filtering
+enum OriginType: String {
+    case natal
+    case progressed
+    case transit
+    case phase
+    case weather
+}
+
 struct StyleToken {
     let name: String         // e.g., "earthy", "bold", "fluid"
     let type: String         // e.g., "fabric", "mood", "color", "texture"
@@ -18,6 +27,9 @@ struct StyleToken {
     let houseSource: Int?         // House number 1-12
     let aspectSource: String?     // e.g., "Sun trine Venus"
     
+    // Origin type for improved filtering and processing
+    let originType: OriginType    // e.g., .natal, .progressed, .transit
+    
     // Convenience initializer with default values
     init(name: String,
          type: String,
@@ -25,7 +37,8 @@ struct StyleToken {
          planetarySource: String? = nil,
          signSource: String? = nil,
          houseSource: Int? = nil,
-         aspectSource: String? = nil) {
+         aspectSource: String? = nil,
+         originType: OriginType = .natal) {
         
         self.name = name
         self.type = type
@@ -34,6 +47,7 @@ struct StyleToken {
         self.signSource = signSource
         self.houseSource = houseSource
         self.aspectSource = aspectSource
+        self.originType = originType
     }
     
     // Helper for debugging and validation
@@ -115,7 +129,8 @@ struct StyleToken {
             planetarySource: planetarySource,
             signSource: signSource,
             houseSource: houseSource,
-            aspectSource: aspectSource
+            aspectSource: aspectSource,
+            originType: originType
         )
     }
 }

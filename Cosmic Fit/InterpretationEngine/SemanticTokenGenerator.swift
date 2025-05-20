@@ -5,6 +5,25 @@
 //  Created by Ashley Davison on 12/05/2025.
 //  Enhanced with source tracking, improved weighting, and color handling
 
+/*
+ STYLE ENGINE HIERARCHY:
+ 
+ | Layer                        | Role                               | Dynamic?             |
+ | ---------------------------- | ---------------------------------- | -------------------- |
+ | **Natal Sun/Moon/Venus**     | Core style signature               | ❌ No fade            |
+ | **Ascendant**                | Early mask / social adaptation     | ✅ Fades with age     |
+ | **Progressed Inner Planets** | Emotional tone, texture overlays   | ♻ Ongoing modulation |
+ | **Transits**                 | Daily color/shape/emotional shifts | ✅ Weighted impact    |
+ 
+ Progressed chart acts as a STYLE MODULATOR, not replacer:
+ - Modifies *Finish*: matte vs glossy (→ texture tokens)
+ - Shifts *Tone*: bright vs muted (→ color_quality tokens)
+ - Adjusts *Pairing logic*: layered vs monochrome (→ structure tokens)
+ 
+ Progressed tokens are never allowed to introduce colors or fabrics that directly conflict
+ with natal base palette - they enhance rather than replace.
+ */
+
 import Foundation
 
 class SemanticTokenGenerator {
@@ -130,7 +149,7 @@ class SemanticTokenGenerator {
             
             var tokens: [StyleToken] = []
             
-            // Generate natal tokens with 70% weight
+            // Generate natal tokens with 70% weight - these establish core colors
             let natalTokens = generateNatalColorTokens(natal, currentAge: currentAge)
             for token in natalTokens {
                 // Create a new token with adjusted weight
@@ -141,25 +160,36 @@ class SemanticTokenGenerator {
                     planetarySource: token.planetarySource,
                     signSource: token.signSource,
                     houseSource: token.houseSource,
-                    aspectSource: token.aspectSource
+                    aspectSource: token.aspectSource,
+                    originType: .natal
                 )
                 tokens.append(adjustedToken)
             }
             
             // Generate progressed tokens with 30% weight
+            // MODULATION: Only apply progressed influences to texture, color_quality, and structure
+            // This ensures progressed chart acts as a style modulator, not a replacer
             let progressedTokens = generateProgressedColorTokens(progressed)
             for token in progressedTokens {
-                // Create a new token with adjusted weight
-                let adjustedToken = StyleToken(
-                    name: token.name,
-                    type: token.type,
-                    weight: token.weight * 0.3,
-                    planetarySource: token.planetarySource,
-                    signSource: token.signSource,
-                    houseSource: token.houseSource,
-                    aspectSource: token.aspectSource
-                )
-                tokens.append(adjustedToken)
+                // Skip tokens that introduce new colors - only keep modulating tokens
+                if token.type == "color" {
+                    continue // Skip actual colors from progressed chart
+                }
+                
+                // Keep only tokens that modulate finish, tone, and pairing logic
+                if ["texture", "color_quality", "structure"].contains(token.type) {
+                    let adjustedToken = StyleToken(
+                        name: token.name,
+                        type: token.type,
+                        weight: token.weight * 0.3, // progressions limited to flavor
+                        planetarySource: token.planetarySource,
+                        signSource: token.signSource,
+                        houseSource: token.houseSource,
+                        aspectSource: token.aspectSource,
+                        originType: .progressed
+                    )
+                    tokens.append(adjustedToken)
+                }
             }
             
             // Add moon phase influence on colors
@@ -182,7 +212,8 @@ class SemanticTokenGenerator {
                     planetarySource: nil,
                     signSource: nil,
                     houseSource: nil,
-                    aspectSource: "Moon Phase: \(moonPhase.description)"
+                    aspectSource: "Moon Phase: \(moonPhase.description)",
+                    originType: .phase
                 ))
             }
             
@@ -1447,7 +1478,7 @@ class SemanticTokenGenerator {
                                                 currentAge: Int = 30) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
-        // Generate natal tokens with 40% weight using Whole Sign
+        // Generate natal tokens with 40% weight using Whole Sign - these provide the foundation
         let natalTokens = generateBlueprintTokens(natal: natal, currentAge: currentAge)
         for token in natalTokens {
             // Create a new token with adjusted weight
@@ -1458,25 +1489,32 @@ class SemanticTokenGenerator {
                 planetarySource: token.planetarySource,
                 signSource: token.signSource,
                 houseSource: token.houseSource,
-                aspectSource: token.aspectSource
+                aspectSource: token.aspectSource,
+                originType: .natal
             )
             tokens.append(adjustedToken)
         }
         
-        // Generate progressed tokens with 60% weight using Placidus house system
+        // MODULATION: Generate progressed tokens with 60% weight using Placidus house system
+        // But ensure progressed tokens only modulate rather than introduce conflicting elements
         let progressedTokens = generateProgressedTokensForWardrobeStoryline(progressed)
         for token in progressedTokens {
-            // Create a new token with adjusted weight
-            let adjustedToken = StyleToken(
-                name: token.name,
-                type: token.type,
-                weight: token.weight * 0.6,
-                planetarySource: token.planetarySource,
-                signSource: token.signSource,
-                houseSource: token.houseSource,
-                aspectSource: token.aspectSource
-            )
-            tokens.append(adjustedToken)
+            // Movement through contrast - apply progressed chart for modulation
+            // Only keep tokens that affect texture, color quality, and structure
+            if ["texture", "color_quality", "structure", "mood", "expression"].contains(token.type) {
+                // Air to structure - progressed chart provides dynamic evolution
+                let adjustedToken = StyleToken(
+                    name: token.name,
+                    type: token.type,
+                    weight: token.weight * 0.6,
+                    planetarySource: token.planetarySource,
+                    signSource: token.signSource,
+                    houseSource: token.houseSource,
+                    aspectSource: token.aspectSource,
+                    originType: .progressed
+                )
+                tokens.append(adjustedToken)
+            }
         }
         
         // Add moon phase influence
@@ -1495,7 +1533,8 @@ class SemanticTokenGenerator {
                 planetarySource: token.planetarySource,
                 signSource: token.signSource,
                 houseSource: token.houseSource,
-                aspectSource: token.aspectSource
+                aspectSource: token.aspectSource,
+                originType: .phase
             )
             tokens.append(adjustedToken)
         }
@@ -1569,7 +1608,7 @@ class SemanticTokenGenerator {
                                          currentAge: Int = 30) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
-        // Generate natal tokens with 90% weight
+        // Generate natal tokens with 90% weight - these establish the core style
         let natalTokens = generateBlueprintTokens(natal: natal, currentAge: currentAge)
         for token in natalTokens {
             // Create a new token with adjusted weight
@@ -1580,22 +1619,41 @@ class SemanticTokenGenerator {
                 planetarySource: token.planetarySource,
                 signSource: token.signSource,
                 houseSource: token.houseSource,
-                aspectSource: token.aspectSource
+                aspectSource: token.aspectSource,
+                originType: .natal
             )
             tokens.append(adjustedToken)
         }
         
-        // Add just a flavor of progressed chart (10%)
+        // MODULATION: Add just a flavor of progressed chart (10%)
         // Focus on Moon (emotional evolution) and Venus (style evolution)
+        // Only include tokens that modulate rather than replace
         for planet in progressed.planets {
             if planet.name == "Moon" || planet.name == "Venus" {
                 let flavorTokens = tokenizeForPlanetInSign(
                     planet: planet.name,
                     sign: planet.zodiacSign,
                     isRetrograde: planet.isRetrograde,
-                    weight: 1.0 * 0.1, // Reduced weight for just flavor
+                    weight: 1.0, // Base weight before adjustment
                     isProgressed: true)
-                tokens.append(contentsOf: flavorTokens)
+                
+                // Filter to keep only modulating token types
+                for token in flavorTokens {
+                    if ["texture", "color_quality", "structure"].contains(token.type) {
+                        // Shimmer on earth - add modulation, not replacement
+                        let modulatingToken = StyleToken(
+                            name: token.name,
+                            type: token.type,
+                            weight: token.weight * 0.1, // Reduced weight for just flavor
+                            planetarySource: token.planetarySource,
+                            signSource: token.signSource,
+                            houseSource: token.houseSource,
+                            aspectSource: token.aspectSource,
+                            originType: .progressed
+                        )
+                        tokens.append(modulatingToken)
+                    }
+                }
             }
         }
         
@@ -1615,7 +1673,8 @@ class SemanticTokenGenerator {
                 planetarySource: token.planetarySource,
                 signSource: token.signSource,
                 houseSource: token.houseSource,
-                aspectSource: token.aspectSource
+                aspectSource: token.aspectSource,
+                originType: .phase
             )
             tokens.append(adjustedToken)
         }
@@ -1751,54 +1810,177 @@ class SemanticTokenGenerator {
         return tokens
     }
     
+    /// Helper method to get natal planet power score
+    private static func getNatalPlanetPowerScore(_ planet: String, chart: NatalChartCalculator.NatalChart) -> Double {
+        // Get additional context for better power evaluation
+        var sign: String? = nil
+        var house: Int? = nil
+        var isAngular = false
+        var isChartRuler = false
+        
+        // Find planet in chart
+        if let natalPlanet = chart.planets.first(where: { $0.name == planet }) {
+            // Get sign name
+            sign = CoordinateTransformations.getZodiacSignName(sign: natalPlanet.zodiacSign)
+            
+            // Get house and check if angular
+            house = NatalChartCalculator.determineHouse(longitude: natalPlanet.longitude, houseCusps: chart.houseCusps)
+            isAngular = [1, 4, 7, 10].contains(house ?? 0)
+            
+            // Check if chart ruler
+            if let ascendant = chart.planets.first(where: { $0.name == "Ascendant" }) {
+                let risingSign = ascendant.zodiacSign
+                let rulingPlanet = getRulingPlanet(for: risingSign)
+                isChartRuler = (rulingPlanet == planet)
+            }
+        }
+        
+        // Use PlanetPowerEvaluator for accurate power calculation
+        return PlanetPowerEvaluator.evaluatePower(
+            for: planet,
+            sign: sign,
+            house: house,
+            isAngular: isAngular,
+            isChartRuler: isChartRuler
+        )
+    }
+
+    /// Helper method to extract natal planet from aspect source
+    private static func extractNatalPlanetFromAspect(_ aspectSource: String) -> String? {
+        let parts = aspectSource.components(separatedBy: " ")
+        return parts.count >= 3 ? parts[2] : nil
+    }
+
+    /// Helper method to get the ruling planet for a sign
+    private static func getRulingPlanet(for sign: Int) -> String? {
+        switch sign {
+        case 1: return "Mars"      // Aries
+        case 2: return "Venus"     // Taurus
+        case 3: return "Mercury"   // Gemini
+        case 4: return "Moon"      // Cancer
+        case 5: return "Sun"       // Leo
+        case 6: return "Mercury"   // Virgo
+        case 7: return "Venus"     // Libra
+        case 8: return "Mars"      // Scorpio (traditional ruler)
+        case 9: return "Jupiter"   // Sagittarius
+        case 10: return "Saturn"   // Capricorn
+        case 11: return "Saturn"   // Aquarius (traditional ruler)
+        case 12: return "Jupiter"  // Pisces (traditional ruler)
+        default: return nil
+        }
+    }
+    
     // MARK: - Token Generation from Transits
     
     static func generateTransitTokens(
         transits: [[String: Any]],
         natal: NatalChartCalculator.NatalChart) -> [StyleToken] {
             
-            var tokens: [StyleToken] = []
+        var tokens: [StyleToken] = []
+        
+        for transit in transits {
+            // Extract transit data
+            let transitPlanet = transit["transitPlanet"] as? String ?? ""
+            let natalPlanet = transit["natalPlanet"] as? String ?? ""
+            let aspectType = transit["aspectType"] as? String ?? ""
+            let orb = transit["orb"] as? Double ?? 1.0
+            let transitSign = transit["transitSign"] as? String
+            let isSensitivePoint = PlanetPowerEvaluator.isSensitiveTarget(natalPlanet: natalPlanet)
             
-            for transit in transits {
-                let transitPlanet = transit["transitPlanet"] as? String ?? ""
-                let natalPlanet = transit["natalPlanet"] as? String ?? ""
-                let aspectType = transit["aspectType"] as? String ?? ""
-                let applying = transit["applying"] as? Bool ?? false
-                
-                // Determine base weight
-                var baseWeight: Double = 1.5 // Default for loose aspects
-                
-                // Major aspects get higher weight
-                if ["Conjunction", "Opposition", "Trine", "Square", "Sextile"].contains(aspectType) {
-                    baseWeight = 2.5
-                }
-                
-                // Applying aspects get slightly higher weight
-                if applying {
-                    baseWeight += 0.5
-                }
-                
-                // Modulate by planet importance for fashion
-                var planetMultiplier: Double = 1.0
-                if ["Venus", "Moon", "Sun"].contains(transitPlanet) {
-                    planetMultiplier = 1.2
-                }
-                
-                let weight = baseWeight * planetMultiplier
-                
-                // Generate tokens based on the transit with aspect source tracking
-                let aspectSource = "\(transitPlanet) \(aspectType) \(natalPlanet)"
-                let transitTokens = tokenizeForTransit(
-                    transitPlanet: transitPlanet,
-                    natalPlanet: natalPlanet,
-                    aspectType: aspectType,
-                    weight: weight,
-                    aspectSource: aspectSource)
-                tokens.append(contentsOf: transitTokens)
+            // Get natal planet power score
+            let natalPowerScore = getNatalPlanetPowerScore(natalPlanet, chart: natal)
+            
+            // Calculate transit weight using the specialized calculator
+            let transitWeight = TransitWeightCalculator.calculateTransitWeight(
+                aspectType: aspectType,
+                orb: orb,
+                transitPlanet: transitPlanet,
+                natalPlanet: natalPlanet,
+                natalPowerScore: natalPowerScore,
+                hitsSensitivePoint: isSensitivePoint
+            )
+            
+            // Skip insignificant transits
+            if transitWeight < 0.5 {
+                continue
             }
             
-            return tokens
+            // Get influence category and token weight scale
+            let influenceCategory = TransitWeightCalculator.getStyleInfluenceCategory(weight: transitWeight)
+            let tokenScale = TransitWeightCalculator.getTokenWeightScale(for: influenceCategory)
+            
+            // Generate tokens based on the transit with aspect source tracking
+            let aspectSource = "\(transitPlanet) \(aspectType) \(natalPlanet)"
+            let transitTokens = tokenizeForTransit(
+                transitPlanet: transitPlanet,
+                natalPlanet: natalPlanet,
+                aspectType: aspectType,
+                weight: transitWeight * tokenScale,
+                aspectSource: aspectSource)
+            
+            // Update the tokens with correct origin type
+            let updatedTokens = transitTokens.map { token in
+                return StyleToken(
+                    name: token.name,
+                    type: token.type,
+                    weight: token.weight,
+                    planetarySource: token.planetarySource,
+                    signSource: token.signSource,
+                    houseSource: token.houseSource,
+                    aspectSource: token.aspectSource,
+                    originType: .transit
+                )
+            }
+            
+            tokens.append(contentsOf: updatedTokens)
         }
+        
+        // Handle multiple transits to the same target
+        if !tokens.isEmpty {
+            // Group tokens by natal planet target
+            var tokensByNatalPlanet: [String: [StyleToken]] = [:]
+            for token in tokens {
+                if let aspectSource = token.aspectSource,
+                   let natalPlanet = extractNatalPlanetFromAspect(aspectSource) {
+                    if tokensByNatalPlanet[natalPlanet] == nil {
+                        tokensByNatalPlanet[natalPlanet] = []
+                    }
+                    tokensByNatalPlanet[natalPlanet]?.append(token)
+                }
+            }
+            
+            // Apply multi-transit adjustment for planets with multiple hits
+            for (natalPlanet, planetTokens) in tokensByNatalPlanet {
+                if planetTokens.count > 1 {
+                    let weights = planetTokens.map { $0.weight }
+                    let combinedWeight = TransitWeightCalculator.calculateCombinedTransitWeight(
+                        transitWeights: weights,
+                        sameTargetPlanet: true
+                    )
+                    
+                    // Adjust token weights
+                    let adjustmentFactor = combinedWeight / weights.reduce(0, +)
+                    for token in planetTokens {
+                        // Find the token in the original array and adjust its weight
+                        if let index = tokens.firstIndex(where: { $0.aspectSource == token.aspectSource }) {
+                            tokens[index] = StyleToken(
+                                name: token.name,
+                                type: token.type,
+                                weight: token.weight * adjustmentFactor,
+                                planetarySource: token.planetarySource,
+                                signSource: token.signSource,
+                                houseSource: token.houseSource,
+                                aspectSource: token.aspectSource,
+                                originType: .transit
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        
+        return tokens
+    }
     
     // MARK: - Token Generation from Weather
     
@@ -1810,48 +1992,48 @@ class SemanticTokenGenerator {
         
         // Temperature tokens
         if weather.temp < 10 {
-            tokens.append(StyleToken(name: "cold", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
-            tokens.append(StyleToken(name: "cozy", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
+            tokens.append(StyleToken(name: "cold", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "cozy", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
         } else if weather.temp < 20 {
-            tokens.append(StyleToken(name: "cool", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
-            tokens.append(StyleToken(name: "layered", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
+            tokens.append(StyleToken(name: "cool", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "layered", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
         } else if weather.temp < 30 {
-            tokens.append(StyleToken(name: "warm", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
-            tokens.append(StyleToken(name: "breathable", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
+            tokens.append(StyleToken(name: "warm", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "breathable", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
         } else {
-            tokens.append(StyleToken(name: "hot", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
-            tokens.append(StyleToken(name: "light", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
+            tokens.append(StyleToken(name: "hot", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "light", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
         }
         
         // Condition tokens
         switch weather.conditions.lowercased() {
         case let c where c.contains("rain") || c.contains("drizzle") || c.contains("shower"):
-            tokens.append(StyleToken(name: "damp", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
-            tokens.append(StyleToken(name: "protected", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
+            tokens.append(StyleToken(name: "damp", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "protected", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
         case let c where c.contains("cloud"):
-            tokens.append(StyleToken(name: "muted", type: "color", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
-            tokens.append(StyleToken(name: "subdued", type: "mood", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
+            tokens.append(StyleToken(name: "muted", type: "color", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "subdued", type: "mood", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
         case let c where c.contains("snow") || c.contains("ice"):
-            tokens.append(StyleToken(name: "crisp", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
-            tokens.append(StyleToken(name: "insulated", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
+            tokens.append(StyleToken(name: "crisp", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "insulated", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
         case let c where c.contains("fog"):
-            tokens.append(StyleToken(name: "diffused", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
-            tokens.append(StyleToken(name: "soft", type: "edges", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
+            tokens.append(StyleToken(name: "diffused", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "soft", type: "edges", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
         case let c where c.contains("sun") || c.contains("clear"):
-            tokens.append(StyleToken(name: "bright", type: "color", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
-            tokens.append(StyleToken(name: "vibrant", type: "mood", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
+            tokens.append(StyleToken(name: "bright", type: "color", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "vibrant", type: "mood", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
         case let c where c.contains("wind"):
-            tokens.append(StyleToken(name: "anchored", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
-            tokens.append(StyleToken(name: "secure", type: "fabric", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
+            tokens.append(StyleToken(name: "anchored", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "secure", type: "fabric", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
         default:
-            tokens.append(StyleToken(name: "adaptable", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
+            tokens.append(StyleToken(name: "adaptable", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
         }
         
         // Humidity tokens
         if weather.humidity > 80 {
-            tokens.append(StyleToken(name: "moisture-wicking", type: "fabric", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
+            tokens.append(StyleToken(name: "moisture-wicking", type: "fabric", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
         } else if weather.humidity < 30 {
-            tokens.append(StyleToken(name: "hydrating", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather"))
+            tokens.append(StyleToken(name: "hydrating", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
         }
         
         return tokens

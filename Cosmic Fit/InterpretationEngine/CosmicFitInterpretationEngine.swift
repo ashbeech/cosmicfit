@@ -13,18 +13,23 @@ class CosmicFitInterpretationEngine {
     /// Generate a complete natal chart interpretation (Cosmic Blueprint)
     /// - Parameter chart: The natal chart to interpret
     /// - Returns: An interpretation result with the cosmic blueprint
-    static func generateBlueprintInterpretation(from chart: NatalChartCalculator.NatalChart) -> InterpretationResult {
+    /// Generate a complete natal chart interpretation (Cosmic Blueprint)
+    /// - Parameter chart: The natal chart to interpret
+    /// - Parameter currentAge: User's current age for age-dependent weighting
+    /// - Returns: An interpretation result with the cosmic blueprint
+    static func generateBlueprintInterpretation(from chart: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> InterpretationResult {
         print("\n🧩 GENERATING COSMIC FIT BLUEPRINT 🧩")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
         // Generate base tokens from natal chart with Whole Sign houses for Blueprint
-        let baseTokens = SemanticTokenGenerator.generateBlueprintTokens(natal: chart)
+        let baseTokens = SemanticTokenGenerator.generateBlueprintTokens(natal: chart, currentAge: currentAge)
         
         // IMPORTANT: Generate color frequency tokens to get nuanced colors
         // This ensures the Blueprint uses the same sophisticated color logic as the Color Frequency section
         let colorFrequencyTokens = SemanticTokenGenerator.generateColorFrequencyTokens(
             natal: chart,
-            progressed: chart // Use natal as progressed for blueprint (100% natal for blueprint colors)
+            progressed: chart, // Use natal as progressed for blueprint (100% natal for blueprint colors)
+            currentAge: currentAge
         )
         
         // Combine base tokens with color frequency tokens
@@ -154,12 +159,14 @@ class CosmicFitInterpretationEngine {
     /// Generate color frequency interpretation (70% natal, 30% progressed)
     static func generateColorFrequencyInterpretation(
         from natalChart: NatalChartCalculator.NatalChart,
-        progressedChart: NatalChartCalculator.NatalChart) -> String {
+        progressedChart: NatalChartCalculator.NatalChart,
+        currentAge: Int = 30) -> String {
             
             // Generate tokens with specific weighting (70% natal, 30% progressed)
             let tokens = SemanticTokenGenerator.generateColorFrequencyTokens(
                 natal: natalChart,
-                progressed: progressedChart)
+                progressed: progressedChart,
+                currentAge: currentAge)
             
             // Here we'd pass these tokens to a specific color interpretation function
             // For now we'll use the standard ParagraphAssembler method
@@ -169,12 +176,14 @@ class CosmicFitInterpretationEngine {
     /// Generate wardrobe storyline interpretation (60% progressed with Placidus, 40% natal)
     static func generateWardrobeStorylineInterpretation(
         from natalChart: NatalChartCalculator.NatalChart,
-        progressedChart: NatalChartCalculator.NatalChart) -> String {
+        progressedChart: NatalChartCalculator.NatalChart,
+        currentAge: Int = 30) -> String {
             
             // Generate tokens with specific weighting (60% progressed using Placidus, 40% natal)
             let tokens = SemanticTokenGenerator.generateWardrobeStorylineTokens(
                 natal: natalChart,
-                progressed: progressedChart)
+                progressed: progressedChart,
+                currentAge: currentAge)
             
             return ParagraphAssembler.generateWardrobeStoryline(from: tokens)
         }
