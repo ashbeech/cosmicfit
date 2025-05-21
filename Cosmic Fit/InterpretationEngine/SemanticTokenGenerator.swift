@@ -1984,62 +1984,117 @@ class SemanticTokenGenerator {
     
     // MARK: - Token Generation from Weather
     
+    /// Generate enhanced weather tokens with daily variation
     static func generateWeatherTokens(weather: TodayWeather) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
         // Base weight for weather
         let baseWeight: Double = 1.0
         
-        // Temperature tokens
-        if weather.temp < 10 {
+        // Temperature tokens with enhanced nuance
+        if weather.temp < 5 {
+            tokens.append(StyleToken(name: "frigid", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "insulated", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+        } else if weather.temp < 10 {
             tokens.append(StyleToken(name: "cold", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
             tokens.append(StyleToken(name: "cozy", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
-        } else if weather.temp < 20 {
+        } else if weather.temp < 15 {
             tokens.append(StyleToken(name: "cool", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
             tokens.append(StyleToken(name: "layered", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
-        } else if weather.temp < 30 {
+        } else if weather.temp < 20 {
+            tokens.append(StyleToken(name: "mild", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "versatile", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+        } else if weather.temp < 25 {
             tokens.append(StyleToken(name: "warm", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
             tokens.append(StyleToken(name: "breathable", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
-        } else {
+        } else if weather.temp < 30 {
             tokens.append(StyleToken(name: "hot", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
             tokens.append(StyleToken(name: "light", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+        } else {
+            tokens.append(StyleToken(name: "scorching", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "minimal", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
         }
         
-        // Condition tokens
+        // Expanded condition tokens for more daily variation
         switch weather.conditions.lowercased() {
-        case let c where c.contains("rain") || c.contains("drizzle") || c.contains("shower"):
+        case let c where c.contains("light rain") || c.contains("drizzle"):
+            tokens.append(StyleToken(name: "misty", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "water-resistant", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+        
+        case let c where c.contains("heavy rain") || c.contains("shower"):
+            tokens.append(StyleToken(name: "drenched", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "waterproof", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+        
+        case let c where c.contains("rain"):
             tokens.append(StyleToken(name: "damp", type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
             tokens.append(StyleToken(name: "protected", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
-        case let c where c.contains("cloud"):
+        
+        case let c where c.contains("overcast") || c.contains("cloudy"):
             tokens.append(StyleToken(name: "muted", type: "color", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
             tokens.append(StyleToken(name: "subdued", type: "mood", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+        
+        case let c where c.contains("partly cloudy"):
+            tokens.append(StyleToken(name: "changeable", type: "mood", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "adaptable", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+        
         case let c where c.contains("snow") || c.contains("ice"):
             tokens.append(StyleToken(name: "crisp", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
             tokens.append(StyleToken(name: "insulated", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
-        case let c where c.contains("fog"):
+        
+        case let c where c.contains("fog") || c.contains("mist"):
             tokens.append(StyleToken(name: "diffused", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
             tokens.append(StyleToken(name: "soft", type: "edges", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+        
         case let c where c.contains("sun") || c.contains("clear"):
             tokens.append(StyleToken(name: "bright", type: "color", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
             tokens.append(StyleToken(name: "vibrant", type: "mood", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
-        case let c where c.contains("wind"):
+        
+        case let c where c.contains("storm"):
+            tokens.append(StyleToken(name: "dramatic", type: "mood", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+            tokens.append(StyleToken(name: "protective", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+        
+        case let c where c.contains("wind") || c.contains("breezy"):
             tokens.append(StyleToken(name: "anchored", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
             tokens.append(StyleToken(name: "secure", type: "fabric", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+        
         default:
             tokens.append(StyleToken(name: "adaptable", type: "structure", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
         }
         
-        // Humidity tokens
-        if weather.humidity > 80 {
+        // More nuanced humidity tokens
+        if weather.humidity > 90 {
+            tokens.append(StyleToken(name: "highly-breathable", type: "fabric", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+        } else if weather.humidity > 70 {
             tokens.append(StyleToken(name: "moisture-wicking", type: "fabric", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
-        } else if weather.humidity < 30 {
+        } else if weather.humidity < 20 {
+            tokens.append(StyleToken(name: "moisture-balancing", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+        } else if weather.humidity < 40 {
             tokens.append(StyleToken(name: "hydrating", type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
+        }
+        
+        // Add daily variation based on exact conditions
+        let patternSeed = getDailyPatternSeed()
+        if patternSeed % 3 == 0 {
+            tokens.append(StyleToken(name: "responsive", type: "structure", weight: baseWeight * 0.9, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Weather Nuance", originType: .weather))
+        } else if patternSeed % 3 == 1 {
+            tokens.append(StyleToken(name: "adaptive", type: "texture", weight: baseWeight * 0.9, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Weather Nuance", originType: .weather))
+        } else {
+            tokens.append(StyleToken(name: "flexible", type: "mood", weight: baseWeight * 0.9, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Weather Nuance", originType: .weather))
         }
         
         return tokens
     }
     
     // MARK: - Helper Methods for Token Generation
+    
+    /// Helper function to get daily pattern seed
+    private static func getDailyPatternSeed() -> Int {
+        // Generate a unique but stable seed for each day
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day], from: Date())
+        return (components.day ?? 1) + ((components.month ?? 1) * 31) +
+               ((components.year ?? 2025) * 366)
+    }
     
     /// Generate tokens for a planet in a specific sign with source tracking
     static func tokenizeForPlanetInSign(
@@ -3871,7 +3926,7 @@ class SemanticTokenGenerator {
             return tokens
         }
     
-    /// Generate tokens from moon phase
+    /// Generate tokens for moon phase with enhanced daily influence
     static func generateMoonPhaseTokens(moonPhase: Double) -> [StyleToken] {
         // Get the moon phase interpretation
         let phase = MoonPhaseInterpreter.Phase.fromDegrees(moonPhase)
@@ -3880,7 +3935,7 @@ class SemanticTokenGenerator {
         let baseTokens = MoonPhaseInterpreter.tokensForDailyVibe(phase: phase)
         
         // Update tokens with originType
-        let tokens = baseTokens.map { token in
+        var tokens = baseTokens.map { token in
             return StyleToken(
                 name: token.name,
                 type: token.type,
@@ -3891,6 +3946,43 @@ class SemanticTokenGenerator {
                 aspectSource: token.aspectSource,
                 originType: .phase
             )
+        }
+        
+        // Add daily lunar specific color variations based on exact degree
+        // This provides nuanced daily changes even within the same phase
+        let lunarDegree = Int(moonPhase) % 30
+        
+        // Add specific color/mood based on degree within sign
+        if lunarDegree < 10 {
+            // Early degrees
+            tokens.append(StyleToken(
+                name: "emerging",
+                type: "mood",
+                weight: 1.8,
+                planetarySource: "Moon Phase",
+                aspectSource: "Lunar degree \(lunarDegree)",
+                originType: .phase
+            ))
+        } else if lunarDegree < 20 {
+            // Middle degrees
+            tokens.append(StyleToken(
+                name: "established",
+                type: "mood",
+                weight: 1.8,
+                planetarySource: "Moon Phase",
+                aspectSource: "Lunar degree \(lunarDegree)",
+                originType: .phase
+            ))
+        } else {
+            // Late degrees
+            tokens.append(StyleToken(
+                name: "completing",
+                type: "mood",
+                weight: 1.8,
+                planetarySource: "Moon Phase",
+                aspectSource: "Lunar degree \(lunarDegree)",
+                originType: .phase
+            ))
         }
         
         return tokens
