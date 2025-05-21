@@ -10,6 +10,7 @@ import Foundation
 /// Debug extension for the CosmicFitInterpretationEngine
 extension CosmicFitInterpretationEngine {
     
+    /*
     /// Generate a complete natal chart interpretation (Cosmic Blueprint) with detailed debugging
     /// - Parameter chart: The natal chart to interpret
     /// - Parameter currentAge: User's current age for age-dependent weighting
@@ -114,8 +115,9 @@ extension CosmicFitInterpretationEngine {
             isBlueprintReport: true,
             reportDate: Date()
         )
-    }
+    }*/
     
+    /*
     /// Generate a daily vibe interpretation with detailed debugging output
     /// - Parameters:
     ///   - natalChart: The base natal chart
@@ -332,7 +334,9 @@ extension CosmicFitInterpretationEngine {
             
             return dailyVibeContent
     }
+     */
 
+    /*
     // Helper function for logging token sets in a consistent format
     private static func logTokenSet(_ title: String, _ tokens: [StyleToken]) {
         print("\n🪙 \(title) 🪙")
@@ -389,6 +393,7 @@ extension CosmicFitInterpretationEngine {
             print("    • \(source): \(count) tokens")
         }
     }
+     */
     
     // MARK: - Daily Vibe Debug Helpers
     
