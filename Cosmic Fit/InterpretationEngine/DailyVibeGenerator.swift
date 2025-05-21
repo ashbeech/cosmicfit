@@ -402,123 +402,172 @@ class DailyVibeGenerator {
         
         // NEW: Opening sentence variations based on pattern seed
         let openingPatterns = [
-            "A %s glows today, asking for %s without %s. ",
-            "Today carries a %s current, inviting %s with %s. ",
-            "There's a %s quality to today's energy, suggesting %s and %s. ",
-            "%s weaves through today, encouraging a balance of %s and %s. ",
-            "The day unfolds with a %s rhythm, connecting %s to %s. "
+            "A %@ glows today, asking for %@ without %@. ",
+            "Today carries a %@ current, inviting %@ with %@. ",
+            "There's a %@ quality to today's energy, suggesting %@ and %@. ",
+            "%@ weaves through today, encouraging a balance of %@ and %@. ",
+            "The day unfolds with a %@ rhythm, connecting %@ to %@. "
         ]
         
         // Get opening pattern based on seed
-        let openingPattern = openingPatterns[patternSeed % openingPatterns.count]
+        let openingPatternIndex = patternSeed % openingPatterns.count
+        let openingPattern = openingPatterns[openingPatternIndex]
         
         // Create paragraph based on dominant characteristics
         var paragraph = ""
         
+        // Fill in the opening pattern using interpolation helpers
+        func applyOpeningPattern(word1: String, word2: String, word3: String) -> String {
+            let components = openingPattern.components(separatedBy: "%@")
+            if components.count >= 4 {
+                return components[0] + word1 + components[1] + word2 + components[2] + word3 + components[3]
+            } else {
+                // Fallback if pattern is malformed
+                return "A \(word1) quality today suggests \(word2) with \(word3). "
+            }
+        }
+        
         // Fill in the opening pattern based on dominant characteristics
         if hasSubtle {
-            paragraph += String(format: openingPattern, "quiet smoulder", "warmth", "noise")
+            paragraph += applyOpeningPattern(word1: "quiet smoulder", word2: "warmth", word3: "noise")
         } else if hasBold {
-            paragraph += String(format: openingPattern, "electric", "clarity", "presence")
+            paragraph += applyOpeningPattern(word1: "electric", word2: "clarity", word3: "presence")
         } else if hasFluid {
-            paragraph += String(format: openingPattern, "flowing", "adaptability", "intuitive ease")
+            paragraph += applyOpeningPattern(word1: "flowing", word2: "adaptability", word3: "intuitive ease")
         } else if hasStructured {
-            paragraph += String(format: openingPattern, "grounded", "intention", "purpose")
+            paragraph += applyOpeningPattern(word1: "grounded", word2: "intention", word3: "purpose")
         } else if hasDreamy {
-            paragraph += String(format: openingPattern, "misty", "trust", "the unseen")
+            paragraph += applyOpeningPattern(word1: "misty", word2: "trust", word3: "the unseen")
         } else {
-            paragraph += String(format: openingPattern, "balanced", "harmony", "expression")
+            paragraph += applyOpeningPattern(word1: "balanced", word2: "harmony", word3: "expression")
         }
         
         // NEW: Middle section variations based on pattern seed
         let middlePatterns = [
-            "You're %s. There's an %s pulling you %s to dress for your %s, not the %s. ",
-            "You're meant to %s through %s. Your %s should tell a story only you fully %s. ",
-            "Today asks you to embrace %s and release %s. Your style can reflect this through %s and %s. ",
-            "Find the courage to %s rather than %s. Your appearance today is more about %s than %s. "
+            "You're %@. There's an %@ pulling you %@ to dress for your %@, not the %@. ",
+            "You're meant to %@ through %@. Your %@ should tell a story only you fully %@. ",
+            "Today asks you to embrace %@ and release %@. Your style can reflect this through %@ and %@. ",
+            "Find the courage to %@ rather than %@. Your appearance today is more about %@ than %@. "
         ]
         
         // Get middle pattern based on seed
-        let middlePattern = middlePatterns[(patternSeed * 3) % middlePatterns.count]
+        let middlePatternIndex = (patternSeed * 3) % middlePatterns.count
+        let middlePattern = middlePatterns[middlePatternIndex]
+        
+        // Helper function for middle pattern
+        func applyMiddlePattern(words: [String]) -> String {
+            let components = middlePattern.components(separatedBy: "%@")
+            var result = ""
+            for i in 0..<min(components.count - 1, words.count) {
+                result += components[i] + words[i]
+            }
+            if components.count > words.count {
+                result += components[words.count]
+            }
+            return result
+        }
         
         // Middle section based on secondary characteristics
         if hasEarthy && hasIntuitive {
-            paragraph += String(format: middlePattern,
-                               "not meant to burn bright—just burn real",
-                               "undercurrent",
-                               "inward",
-                               "inner world",
-                               "outer gaze")
+            paragraph += applyMiddlePattern(words: [
+                "not meant to burn bright—just burn real",
+                "undercurrent",
+                "inward",
+                "inner world",
+                "outer gaze"
+            ])
         } else if hasLayered && hasMinimal {
-            paragraph += String(format: middlePattern,
-                               "meant to reveal through concealing",
-                               "careful restraint",
-                               "layers",
-                               "understand")
+            paragraph += applyMiddlePattern(words: [
+                "meant to reveal through concealing",
+                "careful restraint",
+                "layers",
+                "understand"
+            ])
         } else if hasBold && hasLayered {
-            paragraph += String(format: middlePattern,
-                               "depth",
-                               "flash",
-                               "presence",
-                               "layer by layer")
+            paragraph += applyMiddlePattern(words: [
+                "depth",
+                "flash",
+                "presence",
+                "layer by layer"
+            ])
         } else if hasFluid && hasIntuitive {
-            paragraph += String(format: middlePattern,
-                               "flow with your instincts",
-                               "allowing",
-                               "outer expression",
-                               "inner currents")
+            paragraph += applyMiddlePattern(words: [
+                "flow with your instincts",
+                "allowing",
+                "outer expression",
+                "inner currents"
+            ])
         } else {
-            paragraph += String(format: middlePattern,
-                               "find balance between what you show and what you keep hidden",
-                               "authentic extension",
-                               "style",
-                               "interior landscape")
+            paragraph += applyMiddlePattern(words: [
+                "find balance between what you show and what you keep hidden",
+                "authentic extension",
+                "style",
+                "interior landscape"
+            ])
         }
         
         // NEW: Closing guidance variations based on pattern seed and moon phase
         let closingPatterns = [
-            "It's a day to %s with %s, to carry %s like %s, and to resist the urge to %s. ",
-            "Today invites you to %s through %s, to embody %s with %s, and to trust your %s. ",
-            "Consider how to %s your %s today, allowing %s to guide your %s rather than %s. ",
-            "The day's energy supports %s that %s, creating a sense of %s without sacrificing %s. "
+            "It's a day to %@ with %@, to carry %@ like %@, and to resist the urge to %@. ",
+            "Today invites you to %@ through %@, to embody %@ with %@, and to trust your %@. ",
+            "Consider how to %@ your %@ today, allowing %@ to guide your %@ rather than %@. ",
+            "The day's energy supports %@ that %@, creating a sense of %@ without sacrificing %@. "
         ]
         
         // Get closing pattern based on seed
-        let closingPattern = closingPatterns[(patternSeed * 7) % closingPatterns.count]
+        let closingPatternIndex = (patternSeed * 7) % closingPatterns.count
+        let closingPattern = closingPatterns[closingPatternIndex]
+        
+        // Helper function for closing pattern
+        func applyClosingPattern(words: [String]) -> String {
+            let components = closingPattern.components(separatedBy: "%@")
+            var result = ""
+            for i in 0..<min(components.count - 1, words.count) {
+                result += components[i] + words[i]
+            }
+            if components.count > words.count {
+                result += components[words.count]
+            }
+            return result
+        }
         
         // Closing guidance based on moon phase
         if moonPhase < 90.0 {
             // New Moon to First Quarter - beginnings, intentions
-            paragraph += String(format: closingPattern,
-                               "layer comfort",
-                               "mystery",
-                               "softness",
-                               "armour",
-                               "explain yourself")
+            paragraph += applyClosingPattern(words: [
+                "layer comfort",
+                "mystery",
+                "softness",
+                "armour",
+                "explain yourself"
+            ])
         } else if moonPhase < 180.0 {
             // First Quarter to Full Moon - growth, expression
-            paragraph += String(format: closingPattern,
-                               "build presence",
-                               "intention",
-                               "texture and form",
-                               "clarity",
-                               "evolving intuition")
+            paragraph += applyClosingPattern(words: [
+                "build presence",
+                "intention",
+                "texture and form",
+                "clarity",
+                "evolving intuition"
+            ])
         } else if moonPhase < 270.0 {
             // Full Moon to Last Quarter - culmination, visibility
-            paragraph += String(format: closingPattern,
-                               "embody",
-                               "full expression",
-                               "what you reveal",
-                               "what you protect",
-                               "authentic presence")
+            paragraph += applyClosingPattern(words: [
+                "embody",
+                "full expression",
+                "what you reveal",
+                "what you protect",
+                "authentic presence"
+            ])
         } else {
             // Last Quarter to New Moon - release, introspection
-            paragraph += String(format: closingPattern,
-                               "release",
-                               "what no longer serves",
-                               "simplify",
-                               "its essence",
-                               "new cycles of creativity")
+            paragraph += applyClosingPattern(words: [
+                "release",
+                "what no longer serves",
+                "simplify",
+                "its essence",
+                "new cycles of creativity"
+            ])
         }
         
         // NEW: Final statements with variations
@@ -531,8 +580,8 @@ class DailyVibeGenerator {
         ]
         
         // Get final statement based on seed
-        let finalStatement = finalStatements[(patternSeed * 11) % finalStatements.count]
-        paragraph += finalStatement
+        let finalStatementIndex = (patternSeed * 11) % finalStatements.count
+        paragraph += finalStatements[finalStatementIndex]
         
         return paragraph
     }
@@ -601,45 +650,64 @@ class DailyVibeGenerator {
         
         // NEW: Add varied descriptive second sentences
         let descriptivePatterns = [
-            "—anything that feels like %s with a touch of %s. Choose %s that %s.",
-            "—anything with %s and %s. Choose materials that %s while letting you %s.",
-            "—anything that %s and %s to your movement. Choose fabrics that %s through %s.",
-            "—anything that %s through %s rather than %s. Choose materials that %s against your skin."
+            "—anything that feels like %@ with a touch of %@. Choose %@ that %@.",
+            "—anything with %@ and %@. Choose materials that %@ while letting you %@.",
+            "—anything that %@ and %@ to your movement. Choose fabrics that %@ through %@.",
+            "—anything that %@ through %@ rather than %@. Choose materials that %@ against your skin."
         ]
         
-        let descriptivePattern = descriptivePatterns[(patternSeed * 13) % descriptivePatterns.count]
+        let descriptivePatternIndex = (patternSeed * 13) % descriptivePatterns.count
+        let descriptivePattern = descriptivePatterns[descriptivePatternIndex]
+        
+        // Helper function for the descriptive pattern
+        func applyDescriptivePattern(words: [String]) -> String {
+            let components = descriptivePattern.components(separatedBy: "%@")
+            var result = ""
+            for i in 0..<min(components.count - 1, words.count) {
+                result += components[i] + words[i]
+            }
+            if components.count > words.count {
+                result += components[words.count]
+            }
+            return result
+        }
         
         // Add a descriptive second sentence
         if hasSoft && hasTextured {
-            description += String(format: descriptivePattern,
-                                 "second skin",
-                                 "shadow",
-                                 "tactile layers",
-                                 "soften the wind but hold your power close")
+            description += applyDescriptivePattern(words: [
+                "second skin",
+                "shadow",
+                "tactile layers",
+                "soften the wind but hold your power close"
+            ])
         } else if hasStructured && hasEarthy {
-            description += String(format: descriptivePattern,
-                                 "substance",
-                                 "character",
-                                 "ground you",
-                                 "move with intention")
+            description += applyDescriptivePattern(words: [
+                "substance",
+                "character",
+                "ground you",
+                "move with intention"
+            ])
         } else if hasFluid && hasLayered {
-            description += String(format: descriptivePattern,
-                                 "flows",
-                                 "adapts",
-                                 "create dimension",
-                                 "layering rather than weight")
+            description += applyDescriptivePattern(words: [
+                "flows",
+                "adapts",
+                "create dimension",
+                "layering rather than weight"
+            ])
         } else if hasLuxurious {
-            description += String(format: descriptivePattern,
-                                 "elevates",
-                                 "quality rather than flash",
-                                 "feel transformative",
-                                 "transformative")
+            description += applyDescriptivePattern(words: [
+                "elevates",
+                "quality rather than flash",
+                "feel transformative",
+                "transformative"
+            ])
         } else {
-            description += String(format: descriptivePattern,
-                                 "resonates",
-                                 "your body's needs today",
-                                 "support",
-                                 "rather than distract from your presence")
+            description += applyDescriptivePattern(words: [
+                "resonates",
+                "your body's needs today",
+                "support",
+                "rather than distract from your presence"
+            ])
         }
         
         return description
@@ -714,24 +782,38 @@ class DailyVibeGenerator {
         
         // NEW: Add varied closing phrases
         let closingPhrases = [
-            ". Let them %s the light, not %s it",
-            ". Let them %s with %s presence",
-            ". Let them %s your energy with %s",
-            ". Let them %s and %s your presence today",
-            ". Let them %s your %s with subtle %s"
+            ". Let them %@ the light, not %@ it",
+            ". Let them %@ with %@ presence",
+            ". Let them %@ your energy with %@",
+            ". Let them %@ and %@ your presence today",
+            ". Let them %@ your %@ with subtle %@"
         ]
         
-        let closingPhrase = closingPhrases[(patternSeed * 19) % closingPhrases.count]
+        let closingPhraseIndex = (patternSeed * 19) % closingPhrases.count
+        let closingPhrase = closingPhrases[closingPhraseIndex]
+        
+        // Helper function for the closing phrase
+        func applyClosingPhrase(words: [String]) -> String {
+            let components = closingPhrase.components(separatedBy: "%@")
+            var result = ""
+            for i in 0..<min(components.count - 1, words.count) {
+                result += components[i] + words[i]
+            }
+            if components.count > words.count {
+                result += components[words.count]
+            }
+            return result
+        }
         
         // Add a descriptive closing phrase
         if hasDark || hasMuted {
-            description += String(format: closingPhrase, "absorb", "reflect")
+            description += applyClosingPhrase(words: ["absorb", "reflect"])
         } else if hasLight || hasAiry {
-            description += String(format: closingPhrase, "diffuse", "subtle")
+            description += applyClosingPhrase(words: ["diffuse", "subtle"])
         } else if hasVibrant || hasFiery {
-            description += String(format: closingPhrase, "express", "intention")
+            description += applyClosingPhrase(words: ["express", "intention"])
         } else {
-            description += String(format: closingPhrase, "ground", "center")
+            description += applyClosingPhrase(words: ["ground", "center"])
         }
         
         return description
@@ -824,52 +906,77 @@ class DailyVibeGenerator {
         // Pattern suggestions based on characteristics and daily emphasis
         var patterns = ""
         
-        // NEW: Add varied pattern descriptions based on daily seed
-        let patternDescriptions = [
-            "%s. %s—%s.",
-            "%s. Let these patterns %s with %s.",
-            "Today favors %s. %s that %s.",
-            "Consider %s. These create %s without %s."
-        ]
-        
-        let patternDescription = patternDescriptions[(patternSeed * 17) % patternDescriptions.count]
-        
-        // Include daily pattern emphasis in description
+        // Direct string interpolation instead of format strings
         if hasMinimal && hasTextured {
-            patterns = String(format: patternDescription,
-                             "Uneven dye effects (stonewash, acid, mineral)" + dailyPatternEmphasis,
-                             "Minimal prints that feel faded or lived-in",
-                             "nothing polished or loud")
+            if patternSeed % 4 == 0 {
+                patterns = "Uneven dye effects (stonewash, acid, mineral)\(dailyPatternEmphasis). Minimal prints that feel faded or lived-in—nothing polished or loud."
+            } else if patternSeed % 4 == 1 {
+                patterns = "Today favors uneven dye effects (stonewash, acid, mineral)\(dailyPatternEmphasis). Minimal prints that feel faded or lived-in."
+            } else if patternSeed % 4 == 2 {
+                patterns = "Consider uneven dye effects (stonewash, acid, mineral)\(dailyPatternEmphasis). These create texture without overwhelming."
+            } else {
+                patterns = "Uneven dye effects (stonewash, acid, mineral)\(dailyPatternEmphasis). Let these patterns connect with subtlety."
+            }
         } else if hasExpressive && hasEclectic {
-            patterns = String(format: patternDescription,
-                             "Bold geometrics, unexpected color combinations" + dailyPatternEmphasis,
-                             "Statement prints that tell a story or reference art",
-                             "each with a clear point of view")
+            if patternSeed % 4 == 0 {
+                patterns = "Bold geometrics, unexpected color combinations\(dailyPatternEmphasis). Statement prints that tell a story or reference art—each with a clear point of view."
+            } else if patternSeed % 4 == 1 {
+                patterns = "Today favors bold geometrics, unexpected color combinations\(dailyPatternEmphasis). Statement prints that tell a story or reference art."
+            } else if patternSeed % 4 == 2 {
+                patterns = "Consider bold geometrics, unexpected color combinations\(dailyPatternEmphasis). These create impact without overwhelming."
+            } else {
+                patterns = "Bold geometrics, unexpected color combinations\(dailyPatternEmphasis). Let these patterns speak with intention."
+            }
         } else if hasStructured && hasMinimal {
-            patterns = String(format: patternDescription,
-                             "Architectural lines, subtle grids" + dailyPatternEmphasis,
-                             "Patterns with mathematical order",
-                             "rather than organic flow")
+            if patternSeed % 4 == 0 {
+                patterns = "Architectural lines, subtle grids\(dailyPatternEmphasis). Patterns with mathematical order—rather than organic flow."
+            } else if patternSeed % 4 == 1 {
+                patterns = "Today favors architectural lines, subtle grids\(dailyPatternEmphasis). Patterns with mathematical order."
+            } else if patternSeed % 4 == 2 {
+                patterns = "Consider architectural lines, subtle grids\(dailyPatternEmphasis). These create structure without complexity."
+            } else {
+                patterns = "Architectural lines, subtle grids\(dailyPatternEmphasis). Let these patterns bring order with elegance."
+            }
         } else if hasFluid && hasExpressive {
-            patterns = String(format: patternDescription,
-                             "Watercolor effects, organic forms" + dailyPatternEmphasis,
-                             "Patterns that move and flow",
-                             "with a sense of natural rhythm")
+            if patternSeed % 4 == 0 {
+                patterns = "Watercolor effects, organic forms\(dailyPatternEmphasis). Patterns that move and flow—with a sense of natural rhythm."
+            } else if patternSeed % 4 == 1 {
+                patterns = "Today favors watercolor effects, organic forms\(dailyPatternEmphasis). Patterns that move and flow."
+            } else if patternSeed % 4 == 2 {
+                patterns = "Consider watercolor effects, organic forms\(dailyPatternEmphasis). These create movement without constraint."
+            } else {
+                patterns = "Watercolor effects, organic forms\(dailyPatternEmphasis). Let these patterns flow with your movements."
+            }
         } else if hasSubtle {
-            patterns = String(format: patternDescription,
-                             "Barely-there textures, monochromatic tone-on-tone" + dailyPatternEmphasis,
-                             "Patterns that reveal themselves",
-                             "only upon closer inspection")
+            if patternSeed % 4 == 0 {
+                patterns = "Barely-there textures, monochromatic tone-on-tone\(dailyPatternEmphasis). Patterns that reveal themselves—only upon closer inspection."
+            } else if patternSeed % 4 == 1 {
+                patterns = "Today favors barely-there textures, monochromatic tone-on-tone\(dailyPatternEmphasis). Patterns that reveal themselves."
+            } else if patternSeed % 4 == 2 {
+                patterns = "Consider barely-there textures, monochromatic tone-on-tone\(dailyPatternEmphasis). These create depth without distraction."
+            } else {
+                patterns = "Barely-there textures, monochromatic tone-on-tone\(dailyPatternEmphasis). Let these patterns whisper rather than shout."
+            }
         } else if hasEclectic {
-            patterns = String(format: patternDescription,
-                             "Unexpected combinations, vintage-inspired motifs" + dailyPatternEmphasis,
-                             "Mix patterns of different scales",
-                             "for a curated eclectic approach")
+            if patternSeed % 4 == 0 {
+                patterns = "Unexpected combinations, vintage-inspired motifs\(dailyPatternEmphasis). Mix patterns of different scales—for a curated eclectic approach."
+            } else if patternSeed % 4 == 1 {
+                patterns = "Today favors unexpected combinations, vintage-inspired motifs\(dailyPatternEmphasis). Mix patterns of different scales."
+            } else if patternSeed % 4 == 2 {
+                patterns = "Consider unexpected combinations, vintage-inspired motifs\(dailyPatternEmphasis). These create interest without chaos."
+            } else {
+                patterns = "Unexpected combinations, vintage-inspired motifs\(dailyPatternEmphasis). Let these patterns tell your unique story."
+            }
         } else {
-            patterns = String(format: patternDescription,
-                             "Balanced, intentional patterns" + dailyPatternEmphasis,
-                             "Choose prints that feel authentic",
-                             "to your energy today")
+            if patternSeed % 4 == 0 {
+                patterns = "Balanced, intentional patterns\(dailyPatternEmphasis). Choose prints that feel authentic—to your energy today."
+            } else if patternSeed % 4 == 1 {
+                patterns = "Today favors balanced, intentional patterns\(dailyPatternEmphasis). Choose prints that feel authentic."
+            } else if patternSeed % 4 == 2 {
+                patterns = "Consider balanced, intentional patterns\(dailyPatternEmphasis). These create harmony without overwhelming."
+            } else {
+                patterns = "Balanced, intentional patterns\(dailyPatternEmphasis). Let these patterns enhance your natural presence."
+            }
         }
         
         return patterns
@@ -893,47 +1000,69 @@ class DailyVibeGenerator {
         // Shape description based on characteristics and daily emphasis
         var shape = ""
         
-        // NEW: Add varied shape descriptions based on seed
-        let shapeDescriptions = [
-            "%s. %s. %s.",
-            "%s. Consider %s that %s as you move.",
-            "Today's energy favors %s. %s that %s rather than %s.",
-            "Focus on %s. Create %s through %s."
-        ]
+        // Direct string interpolation based on seed pattern
+        let seedMod = patternSeed % 4
         
-        let shapeDescription = shapeDescriptions[(patternSeed * 23) % shapeDescriptions.count]
-        
-        // Create shape description with daily emphasis included
         if hasStructured && hasProtective {
-            shape = String(format: shapeDescription,
-                          "Cocooned, but defined" + dailyShapeEmphasis,
-                          "A wrap coat with structure",
-                          "Layer your look like secrets stacked: fitted base, fluid overlay, something sculptural to finish")
+            if seedMod == 0 {
+                shape = "Cocooned, but defined\(dailyShapeEmphasis). A wrap coat with structure. Layer your look like secrets stacked: fitted base, fluid overlay, something sculptural to finish."
+            } else if seedMod == 1 {
+                shape = "Cocooned, but defined\(dailyShapeEmphasis). Consider a wrap coat with structure that moves with your body as you move."
+            } else if seedMod == 2 {
+                shape = "Today's energy favors cocooned, but defined\(dailyShapeEmphasis). A wrap coat with structure that protects rather than restricts."
+            } else {
+                shape = "Focus on cocooned, but defined\(dailyShapeEmphasis). Create a wrap coat with structure through layered elements."
+            }
         } else if hasFluid && hasLayered {
-            shape = String(format: shapeDescription,
-                          "Flowing layers with intentional drape" + dailyShapeEmphasis,
-                          "pieces",
-                          "move with your body rather than constrain")
+            if seedMod == 0 {
+                shape = "Flowing layers with intentional drape\(dailyShapeEmphasis). Pieces that breathe. Movement is key, restriction is counterproductive."
+            } else if seedMod == 1 {
+                shape = "Flowing layers with intentional drape\(dailyShapeEmphasis). Consider pieces that move with your body as you move."
+            } else if seedMod == 2 {
+                shape = "Today's energy favors flowing layers with intentional drape\(dailyShapeEmphasis). Pieces that move with your body rather than constrain."
+            } else {
+                shape = "Focus on flowing layers with intentional drape\(dailyShapeEmphasis). Create movement through thoughtful layering."
+            }
         } else if hasMinimal && hasBalanced {
-            shape = String(format: shapeDescription,
-                          "Clean lines with precise proportion" + dailyShapeEmphasis,
-                          "the relationship between pieces",
-                          "rather than individual statements")
+            if seedMod == 0 {
+                shape = "Clean lines with precise proportion\(dailyShapeEmphasis). The relationship between pieces. Quality over quantity, space over clutter."
+            } else if seedMod == 1 {
+                shape = "Clean lines with precise proportion\(dailyShapeEmphasis). Consider the relationship between pieces that balance as you move."
+            } else if seedMod == 2 {
+                shape = "Today's energy favors clean lines with precise proportion\(dailyShapeEmphasis). The relationship between pieces rather than individual statements."
+            } else {
+                shape = "Focus on clean lines with precise proportion\(dailyShapeEmphasis). Create harmony through balanced elements."
+            }
         } else if hasExpressive && hasLayered {
-            shape = String(format: shapeDescription,
-                          "Bold volume balanced with definition" + dailyShapeEmphasis,
-                          "dimension through contrast",
-                          "fitted against full, structured against fluid")
+            if seedMod == 0 {
+                shape = "Bold volume balanced with definition\(dailyShapeEmphasis). Dimension through contrast. Fitted against full, structured against fluid."
+            } else if seedMod == 1 {
+                shape = "Bold volume balanced with definition\(dailyShapeEmphasis). Consider dimension through contrast that evolves as you move."
+            } else if seedMod == 2 {
+                shape = "Today's energy favors bold volume balanced with definition\(dailyShapeEmphasis). Dimension through contrast rather than uniformity."
+            } else {
+                shape = "Focus on bold volume balanced with definition\(dailyShapeEmphasis). Create dimension through contrasting elements."
+            }
         } else if hasProtective {
-            shape = String(format: shapeDescription,
-                          "Protective without restriction" + dailyShapeEmphasis,
-                          "Forms that create personal space",
-                          "while allowing movement")
+            if seedMod == 0 {
+                shape = "Protective without restriction\(dailyShapeEmphasis). Forms that create personal space. Soft armor that moves with you, not against you."
+            } else if seedMod == 1 {
+                shape = "Protective without restriction\(dailyShapeEmphasis). Consider forms that create personal space that adapts as you move."
+            } else if seedMod == 2 {
+                shape = "Today's energy favors protective without restriction\(dailyShapeEmphasis). Forms that create personal space while allowing movement."
+            } else {
+                shape = "Focus on protective without restriction\(dailyShapeEmphasis). Create personal space through thoughtful construction."
+            }
         } else {
-            shape = String(format: shapeDescription,
-                          "Balanced proportions that honor your body's needs today" + dailyShapeEmphasis,
-                          "a silhouette that supports your energy",
-                          "rather than forcing it into a predetermined shape")
+            if seedMod == 0 {
+                shape = "Balanced proportions that honor your body's needs today\(dailyShapeEmphasis). A silhouette that supports your energy. Neither constricting nor obscuring."
+            } else if seedMod == 1 {
+                shape = "Balanced proportions that honor your body's needs today\(dailyShapeEmphasis). Consider a silhouette that supports your energy as you move."
+            } else if seedMod == 2 {
+                shape = "Today's energy favors balanced proportions that honor your body's needs today\(dailyShapeEmphasis). A silhouette that supports your energy rather than forcing it into a predetermined shape."
+            } else {
+                shape = "Focus on balanced proportions that honor your body's needs today\(dailyShapeEmphasis). Create support through thoughtful silhouettes."
+            }
         }
         
         return shape
@@ -959,59 +1088,78 @@ class DailyVibeGenerator {
         
         // NEW: Add varied accessory descriptions based on seed
         let accessoryDescriptions = [
-            "%s, and it must %s—%s. %s. %s: %s.",
-            "%s with %s. Items that %s and %s. %s. %s: %s.",
-            "Choose %s that %s. %s through %s and %s. %s: %s.",
-            "Accessories that %s to %s through the day. %s that %s. %s: %s."
+            "%@, and it must %@—%@. %@. %@: %@.",
+            "%@ with %@. Items that %@ and %@. %@. %@: %@.",
+            "Choose %@ that %@. %@ through %@ and %@. %@: %@.",
+            "Accessories that %@ to %@ through the day. %@ that %@. %@: %@."
         ]
         
-        let accessoryDescription = accessoryDescriptions[(patternSeed * 11) % accessoryDescriptions.count]
+        let accessoryDescriptionIndex = (patternSeed * 11) % accessoryDescriptions.count
+        let accessoryDescription = accessoryDescriptions[accessoryDescriptionIndex]
+        
+        // Helper function for applying the accessory description
+        func applyAccessoryDescription(words: [String]) -> String {
+            let components = accessoryDescription.components(separatedBy: "%@")
+            var result = ""
+            for i in 0..<min(components.count - 1, words.count) {
+                result += components[i] + words[i]
+            }
+            if components.count > words.count {
+                result += components[words.count]
+            }
+            return result
+        }
         
         // Create accessories description with daily emphasis
         if hasMinimal && hasProtective {
-            accessories = String(format: accessoryDescription,
-                                "One object only" + dailyAccessoryEmphasis,
-                                "mean something",
-                                "your protective piece",
-                                "A locket, a band, a scent worn like armor. No flash. Just focus",
-                                "Fragrance",
-                                "vetiver, resin, or something bitter-green")
+            accessories = applyAccessoryDescription(words: [
+                "One object only" + dailyAccessoryEmphasis,
+                "mean something",
+                "your protective piece",
+                "A locket, a band, a scent worn like armor. No flash. Just focus",
+                "Fragrance",
+                "vetiver, resin, or something bitter-green"
+            ])
         } else if hasExpressive && hasEclectic {
-            accessories = String(format: accessoryDescription,
-                                "Statement pieces" + dailyAccessoryEmphasis,
-                                "personal significance",
-                                "invite questions",
-                                "create connection",
-                                "Focus on one primary focal point balanced by subtle supporting elements",
-                                "Fragrance",
-                                "spiced citrus, rich amber, or something unexpectedly botanical")
+            accessories = applyAccessoryDescription(words: [
+                "Statement pieces" + dailyAccessoryEmphasis,
+                "personal significance",
+                "invite questions",
+                "create connection",
+                "Focus on one primary focal point balanced by subtle supporting elements",
+                "Fragrance",
+                "spiced citrus, rich amber, or something unexpectedly botanical"
+            ])
         } else if hasStructured && hasEarthy {
-            accessories = String(format: accessoryDescription,
-                                "Natural materials" + dailyAccessoryEmphasis,
-                                "with clear purpose",
-                                "ground and center",
-                                "weight",
-                                "texture",
-                                "Fragrance",
-                                "cedarwood, tobacco, or something mineral-based")
+            accessories = applyAccessoryDescription(words: [
+                "Natural materials" + dailyAccessoryEmphasis,
+                "with clear purpose",
+                "ground and center",
+                "weight",
+                "texture",
+                "Fragrance",
+                "cedarwood, tobacco, or something mineral-based"
+            ])
         } else if hasWatery && hasProtective {
-            accessories = String(format: accessoryDescription,
-                                "Fluid forms" + dailyAccessoryEmphasis,
-                                "move with you",
-                                "adapt",
-                                "different contexts",
-                                "Consider pieces with emotional resonance that anchor your shifting states",
-                                "Fragrance",
-                                "salt air, clean musk, or something aquatic but warm")
+            accessories = applyAccessoryDescription(words: [
+                "Fluid forms" + dailyAccessoryEmphasis,
+                "move with you",
+                "adapt",
+                "different contexts",
+                "Consider pieces with emotional resonance that anchor your shifting states",
+                "Fragrance",
+                "salt air, clean musk, or something aquatic but warm"
+            ])
         } else {
-            accessories = String(format: accessoryDescription,
-                                "Intentional selections" + dailyAccessoryEmphasis,
-                                "enhance rather than distract",
-                                "feel like natural extensions of your energy",
-                                "rather than additions",
-                                "Choose pieces that resonate with your current state",
-                                "Fragrance",
-                                "something that resonates with your skin chemistry and emotional state today")
+            accessories = applyAccessoryDescription(words: [
+                "Intentional selections" + dailyAccessoryEmphasis,
+                "enhance rather than distract",
+                "feel like natural extensions of your energy",
+                "rather than additions",
+                "Choose pieces that resonate with your current state",
+                "Fragrance",
+                "something that resonates with your skin chemistry and emotional state today"
+            ])
         }
         
         return accessories
