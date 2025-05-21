@@ -394,6 +394,7 @@ extension CosmicFitInterpretationEngine {
     
     /// Generate daily vibe content with detailed debugging
     private static func generateDailyVibeContentWithDebug(tokens: [StyleToken], weather: TodayWeather?, moonPhase: Double) -> DailyVibeContent {
+        
         // Create content object
         var content = DailyVibeContent()
         
@@ -422,8 +423,9 @@ extension CosmicFitInterpretationEngine {
         // Generate accessories section
         content.accessories = generateAccessoriesWithDebug(tokens: tokens)
         
-        // Generate takeaway line
-        content.takeaway = generateTakeawayWithDebug(tokens: tokens, moonPhase: moonPhase)
+        // Generate takeaway line - extract just the string from the tuple
+        let (takeaway, _) = generateTakeawayWithDebug(tokens: tokens, moonPhase: moonPhase)
+        content.takeaway = takeaway
         
         return content
     }
@@ -770,13 +772,80 @@ extension CosmicFitInterpretationEngine {
     }
     
     /// Generate takeaway with debugging
-    private static func generateTakeawayWithDebug(tokens: [StyleToken], moonPhase: Double) -> String {
-        DebugLogger.info("Generating takeaway")
+    static func generateTakeawayWithDebug(tokens: [StyleToken], moonPhase: Double) -> (String, [String]) {
+        print("\n🧠 GENERATING DAILY TAKEAWAY MESSAGE")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
-        // Using the regular DailyVibeGenerator implementation
-        let result = DailyVibeGenerator.generateTakeaway(tokens: tokens, moonPhase: moonPhase)
-        DebugLogger.paragraphAssembly(sectionName: "Takeaway", paragraphText: result, tokens: filterTokensForTakeaway(tokens))
-        return result
+        // Create takeaway options based on token combinations
+        var takeawayOptions: [String] = []
+        
+        // Based on dominant token combinations
+        if tokens.contains(where: { $0.name == "authentic" && $0.weight > 1.5 }) {
+            takeawayOptions.append("No one else has to get it. But you do. That's the point.")
+            takeawayOptions.append("Trust what feels true, not what looks obvious.")
+        }
+        
+        if tokens.contains(where: { $0.name == "intuitive" && $0.weight > 1.5 }) {
+            takeawayOptions.append("Your instinct knows before your mind does. Listen.")
+            takeawayOptions.append("The inner voice speaks in textures and weights, not just words.")
+        }
+        
+        if tokens.contains(where: { $0.name == "balanced" && $0.weight > 1.5 }) {
+            takeawayOptions.append("Balance isn't static. It's a continuous recalibration.")
+            takeawayOptions.append("The middle path isn't always halfway between extremes.")
+        }
+        
+        if tokens.contains(where: { $0.name == "expressive" && $0.weight > 1.5 }) {
+            takeawayOptions.append("Expression is most powerful when it's intentional, not just loud.")
+            takeawayOptions.append("Speak through what you choose, not just what you say.")
+        }
+        
+        // Based on moon phase
+        if moonPhase < 90.0 {
+            takeawayOptions.append("Begin with intention. The rest will follow.")
+            takeawayOptions.append("New cycles start with quiet commitment, not grand gestures.")
+        } else if moonPhase < 180.0 {
+            takeawayOptions.append("Growth happens in the tension between comfort and challenge.")
+            takeawayOptions.append("The path forward reveals itself one step at a time.")
+        } else if moonPhase < 270.0 {
+            takeawayOptions.append("Full expression requires both vulnerability and strength.")
+            takeawayOptions.append("What you reveal is as important as what you conceal.")
+        } else {
+            takeawayOptions.append("Release what no longer serves before seeking what's next.")
+            takeawayOptions.append("Completion is just another form of beginning.")
+        }
+        
+        // Add general takeaways
+        takeawayOptions.append("Dress for the energy you need, not just the one you have.")
+        takeawayOptions.append("Your body knows. Your clothes should listen.")
+        takeawayOptions.append("What you wear changes how you move. Choose accordingly.")
+        
+        // NEW: Add daily variations
+        takeawayOptions.append("Today's energy speaks through form. Let your clothes translate.")
+        takeawayOptions.append("The most authentic style comes from within, not from outside.")
+        takeawayOptions.append("Trust the conversation between your body and your clothes today.")
+        takeawayOptions.append("Your physical presence carries a message. Make it intentional.")
+        takeawayOptions.append("Style isn't about being seen, but about seeing yourself clearly.")
+        
+        print("📝 AVAILABLE TAKEAWAY OPTIONS:")
+        for (index, option) in takeawayOptions.enumerated() {
+            print("  \(index + 1). \(option)")
+        }
+        
+        // Get the daily pattern seed for consistent selection
+        let patternSeed = DailyVibeGenerator.getDailyPatternSeed()
+        
+        // Use seed to select takeaway consistently for the day
+        let index = patternSeed % takeawayOptions.count
+        let selectedTakeaway = takeawayOptions[index]
+        
+        print("\n✅ SELECTED TAKEAWAY: \(selectedTakeaway)")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+        
+        // Call the actual generateTakeaway function with the patternSeed parameter
+        let takeaway = DailyVibeGenerator.generateTakeaway(tokens: tokens, moonPhase: moonPhase, patternSeed: patternSeed)
+        
+        return (takeaway, takeawayOptions)
     }
     
     // MARK: - Token Filtering for Sections
