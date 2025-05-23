@@ -56,12 +56,9 @@ class DailyVibeGenerator {
             var slowTransitTokens: [StyleToken] = []
 
             for token in rawTransitTokens {
-                if let planetarySource = token.planetarySource, let aspectSource = token.aspectSource {
-                    // Extract just the aspect type from the aspect source
-                    let aspectComponents = aspectSource.split(separator: " ")
-                    let aspectType = aspectComponents.count > 1 ? String(aspectComponents[1]) : aspectSource
-                    
-                    let freshnessBoost = applyFreshnessBoost(transitPlanet: planetarySource, aspectType: aspectSource)
+                if let planetarySource = token.planetarySource {
+                    // Remove the unused aspectType extraction
+                    let freshnessBoost = applyFreshnessBoost(transitPlanet: planetarySource, aspectType: token.aspectSource ?? "")
                     
                     // Create adjusted token with freshness boost
                     let adjustedToken = StyleToken(
@@ -1281,12 +1278,15 @@ class DailyVibeGenerator {
         let weekday = calendar.component(.weekday, from: Date())
         let seed = getDailyPatternSeed()
         
+        // Use seed for daily weight variations (subtle but consistent)
+        let weightVariation = 1.0 + (Double(seed % 21) - 10.0) / 100.0 // ±10% variation
+        
         switch weekday {
         case 1: // Sunday (Sun)
             tokens.append(StyleToken(
                 name: "illuminated",
                 type: "texture",
-                weight: 2.2,
+                weight: 2.2 * weightVariation,
                 planetarySource: "Daily Signature",
                 aspectSource: "Sun Day",
                 originType: .transit
@@ -1294,7 +1294,7 @@ class DailyVibeGenerator {
             tokens.append(StyleToken(
                 name: "radiant",
                 type: "color_quality",
-                weight: 2.0,
+                weight: 2.0 * weightVariation,
                 planetarySource: "Daily Signature",
                 aspectSource: "Sun Day",
                 originType: .transit
@@ -1302,7 +1302,7 @@ class DailyVibeGenerator {
             tokens.append(StyleToken(
                 name: "amber gold",
                 type: "color",
-                weight: 2.0,
+                weight: 2.0 * weightVariation,
                 planetarySource: "Daily Signature",
                 aspectSource: "Sun Day",
                 originType: .transit
@@ -1312,7 +1312,7 @@ class DailyVibeGenerator {
             tokens.append(StyleToken(
                 name: "reflective",
                 type: "mood",
-                weight: 2.2,
+                weight: 2.2 * weightVariation,
                 planetarySource: "Daily Signature",
                 aspectSource: "Moon Day",
                 originType: .transit
@@ -1320,7 +1320,7 @@ class DailyVibeGenerator {
             tokens.append(StyleToken(
                 name: "intuitive",
                 type: "structure",
-                weight: 2.0,
+                weight: 2.0 * weightVariation,
                 planetarySource: "Daily Signature",
                 aspectSource: "Moon Day",
                 originType: .transit
@@ -1328,7 +1328,7 @@ class DailyVibeGenerator {
             tokens.append(StyleToken(
                 name: "pearl silver",
                 type: "color",
-                weight: 2.0,
+                weight: 2.0 * weightVariation,
                 planetarySource: "Daily Signature",
                 aspectSource: "Moon Day",
                 originType: .transit
@@ -1338,7 +1338,7 @@ class DailyVibeGenerator {
             tokens.append(StyleToken(
                 name: "energetic",
                 type: "mood",
-                weight: 2.2,
+                weight: 2.2 * weightVariation,
                 planetarySource: "Daily Signature",
                 aspectSource: "Mars Day",
                 originType: .transit
@@ -1346,7 +1346,7 @@ class DailyVibeGenerator {
             tokens.append(StyleToken(
                 name: "dynamic",
                 type: "structure",
-                weight: 2.0,
+                weight: 2.0 * weightVariation,
                 planetarySource: "Daily Signature",
                 aspectSource: "Mars Day",
                 originType: .transit
@@ -1354,7 +1354,7 @@ class DailyVibeGenerator {
             tokens.append(StyleToken(
                 name: "ruby red",
                 type: "color",
-                weight: 2.0,
+                weight: 2.0 * weightVariation,
                 planetarySource: "Daily Signature",
                 aspectSource: "Mars Day",
                 originType: .transit
@@ -1364,7 +1364,7 @@ class DailyVibeGenerator {
             tokens.append(StyleToken(
                 name: "communicative",
                 type: "mood",
-                weight: 2.2,
+                weight: 2.2 * weightVariation,
                 planetarySource: "Daily Signature",
                 aspectSource: "Mercury Day",
                 originType: .transit
@@ -1372,7 +1372,7 @@ class DailyVibeGenerator {
             tokens.append(StyleToken(
                 name: "versatile",
                 type: "structure",
-                weight: 2.0,
+                weight: 2.0 * weightVariation,
                 planetarySource: "Daily Signature",
                 aspectSource: "Mercury Day",
                 originType: .transit
@@ -1380,7 +1380,7 @@ class DailyVibeGenerator {
             tokens.append(StyleToken(
                 name: "quicksilver",
                 type: "color",
-                weight: 2.0,
+                weight: 2.0 * weightVariation,
                 planetarySource: "Daily Signature",
                 aspectSource: "Mercury Day",
                 originType: .transit
@@ -1390,7 +1390,7 @@ class DailyVibeGenerator {
             tokens.append(StyleToken(
                 name: "expansive",
                 type: "mood",
-                weight: 2.2,
+                weight: 2.2 * weightVariation,
                 planetarySource: "Daily Signature",
                 aspectSource: "Jupiter Day",
                 originType: .transit
@@ -1398,7 +1398,7 @@ class DailyVibeGenerator {
             tokens.append(StyleToken(
                 name: "abundant",
                 type: "structure",
-                weight: 2.0,
+                weight: 2.0 * weightVariation,
                 planetarySource: "Daily Signature",
                 aspectSource: "Jupiter Day",
                 originType: .transit
@@ -1406,7 +1406,7 @@ class DailyVibeGenerator {
             tokens.append(StyleToken(
                 name: "royal blue",
                 type: "color",
-                weight: 2.0,
+                weight: 2.0 * weightVariation,
                 planetarySource: "Daily Signature",
                 aspectSource: "Jupiter Day",
                 originType: .transit
@@ -1415,339 +1415,359 @@ class DailyVibeGenerator {
         case 6: // Friday (Venus)
             tokens.append(StyleToken(
                 name: "harmonious",
-                        type: "mood",
-                        weight: 2.2,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Venus Day",
-                        originType: .transit
-                    ))
-                    tokens.append(StyleToken(
-                        name: "balanced",
-                        type: "structure",
-                        weight: 2.0,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Venus Day",
-                        originType: .transit
-                    ))
-                    tokens.append(StyleToken(
-                        name: "emerald",
-                        type: "color",
-                        weight: 2.0,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Venus Day",
-                        originType: .transit
-                    ))
-                    
-                case 7: // Saturday (Saturn)
-                    tokens.append(StyleToken(
-                        name: "structured",
-                        type: "mood",
-                        weight: 2.2,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Saturn Day",
-                        originType: .transit
-                    ))
-                    tokens.append(StyleToken(
-                        name: "enduring",
-                        type: "structure",
-                        weight: 2.0,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Saturn Day",
-                        originType: .transit
-                    ))
-                    tokens.append(StyleToken(
-                        name: "obsidian",
-                        type: "color",
-                        weight: 2.0,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Saturn Day",
-                        originType: .transit
-                    ))
-                    
-                default:
-                    tokens.append(StyleToken(
-                        name: "balanced",
-                        type: "mood",
-                        weight: 2.0,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Day Energy",
-                        originType: .transit
-                    ))
-                }
+                type: "mood",
+                weight: 2.2 * weightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Venus Day",
+                originType: .transit
+            ))
+            tokens.append(StyleToken(
+                name: "balanced",
+                type: "structure",
+                weight: 2.0 * weightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Venus Day",
+                originType: .transit
+            ))
+            tokens.append(StyleToken(
+                name: "emerald",
+                type: "color",
+                weight: 2.0 * weightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Venus Day",
+                originType: .transit
+            ))
+            
+        case 7: // Saturday (Saturn)
+            tokens.append(StyleToken(
+                name: "structured",
+                type: "mood",
+                weight: 2.2 * weightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Saturn Day",
+                originType: .transit
+            ))
+            tokens.append(StyleToken(
+                name: "enduring",
+                type: "structure",
+                weight: 2.0 * weightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Saturn Day",
+                originType: .transit
+            ))
+            tokens.append(StyleToken(
+                name: "obsidian",
+                type: "color",
+                weight: 2.0 * weightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Saturn Day",
+                originType: .transit
+            ))
+            
+        default:
+            tokens.append(StyleToken(
+                name: "balanced",
+                type: "mood",
+                weight: 2.0 * weightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Day Energy",
+                originType: .transit
+            ))
+        }
 
-                // Add temporal markers (season, time of day)
-                let month = calendar.component(.month, from: Date())
-                let hour = calendar.component(.hour, from: Date())
+        // Add temporal markers (season, time of day)
+        let month = calendar.component(.month, from: Date())
+        let hour = calendar.component(.hour, from: Date())
 
-                // Seasonal influence
-                switch month {
-                case 3...5: // Spring
-                    tokens.append(StyleToken(
-                        name: "emerging",
-                        type: "structure",
-                        weight: 1.8,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Spring Energy",
-                        originType: .transit
-                    ))
-                    tokens.append(StyleToken(
-                        name: "fresh",
-                        type: "texture",
-                        weight: 1.7,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Spring Energy",
-                        originType: .transit
-                    ))
-                    
-                case 6...8: // Summer
-                    tokens.append(StyleToken(
-                        name: "expansive",
-                        type: "structure",
-                        weight: 1.8,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Summer Energy",
-                        originType: .transit
-                    ))
-                    tokens.append(StyleToken(
-                        name: "vibrant",
-                        type: "color_quality",
-                        weight: 1.7,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Summer Energy",
-                        originType: .transit
-                    ))
-                    
-                case 9...11: // Fall
-                    tokens.append(StyleToken(
-                        name: "layered",
-                        type: "structure",
-                        weight: 1.8,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Autumn Energy",
-                        originType: .transit
-                    ))
-                    tokens.append(StyleToken(
-                        name: "transitional",
-                        type: "texture",
-                        weight: 1.7,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Autumn Energy",
-                        originType: .transit
-                    ))
-                    
-                default: // Winter (12, 1, 2)
-                    tokens.append(StyleToken(
-                        name: "protective",
-                        type: "structure",
-                        weight: 1.8,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Winter Energy",
-                        originType: .transit
-                    ))
-                    tokens.append(StyleToken(
-                        name: "insulating",
-                        type: "texture",
-                        weight: 1.7,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Winter Energy",
-                        originType: .transit
-                    ))
-                }
+        // Seasonal influence with seed-based weight variation
+        let seasonalWeightVariation = 1.0 + (Double((seed * 7) % 21) - 10.0) / 100.0
+        
+        switch month {
+        case 3...5: // Spring
+            tokens.append(StyleToken(
+                name: "emerging",
+                type: "structure",
+                weight: 1.8 * seasonalWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Spring Energy",
+                originType: .transit
+            ))
+            tokens.append(StyleToken(
+                name: "fresh",
+                type: "texture",
+                weight: 1.7 * seasonalWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Spring Energy",
+                originType: .transit
+            ))
+            
+        case 6...8: // Summer
+            tokens.append(StyleToken(
+                name: "expansive",
+                type: "structure",
+                weight: 1.8 * seasonalWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Summer Energy",
+                originType: .transit
+            ))
+            tokens.append(StyleToken(
+                name: "vibrant",
+                type: "color_quality",
+                weight: 1.7 * seasonalWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Summer Energy",
+                originType: .transit
+            ))
+            
+        case 9...11: // Fall
+            tokens.append(StyleToken(
+                name: "layered",
+                type: "structure",
+                weight: 1.8 * seasonalWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Autumn Energy",
+                originType: .transit
+            ))
+            tokens.append(StyleToken(
+                name: "transitional",
+                type: "texture",
+                weight: 1.7 * seasonalWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Autumn Energy",
+                originType: .transit
+            ))
+            
+        default: // Winter (12, 1, 2)
+            tokens.append(StyleToken(
+                name: "protective",
+                type: "structure",
+                weight: 1.8 * seasonalWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Winter Energy",
+                originType: .transit
+            ))
+            tokens.append(StyleToken(
+                name: "insulating",
+                type: "texture",
+                weight: 1.7 * seasonalWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Winter Energy",
+                originType: .transit
+            ))
+        }
 
-                // Time of day influence
-                if hour >= 5 && hour < 12 {
-                    // Morning
-                    tokens.append(StyleToken(
-                        name: "fresh",
-                        type: "mood",
-                        weight: 1.6,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Morning Energy",
-                        originType: .transit
-                    ))
-                } else if hour >= 12 && hour < 17 {
-                    // Afternoon
-                    tokens.append(StyleToken(
-                        name: "active",
-                        type: "mood",
-                        weight: 1.6,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Afternoon Energy",
-                        originType: .transit
-                    ))
-                } else if hour >= 17 && hour < 22 {
-                    // Evening
-                    tokens.append(StyleToken(
-                        name: "mellow",
-                        type: "mood",
-                        weight: 1.6,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Evening Energy",
-                        originType: .transit
-                    ))
-                } else {
-                    // Night
-                    tokens.append(StyleToken(
-                        name: "introspective",
-                        type: "mood",
-                        weight: 1.6,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Night Energy",
-                        originType: .transit
-                    ))
-                }
+        // Time of day influence with seed-based weight variation
+        let timeWeightVariation = 1.0 + (Double((seed * 11) % 21) - 10.0) / 100.0
+        
+        if hour >= 5 && hour < 12 {
+            // Morning
+            tokens.append(StyleToken(
+                name: "fresh",
+                type: "mood",
+                weight: 1.6 * timeWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Morning Energy",
+                originType: .transit
+            ))
+        } else if hour >= 12 && hour < 17 {
+            // Afternoon
+            tokens.append(StyleToken(
+                name: "active",
+                type: "mood",
+                weight: 1.6 * timeWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Afternoon Energy",
+                originType: .transit
+            ))
+        } else if hour >= 17 && hour < 22 {
+            // Evening
+            tokens.append(StyleToken(
+                name: "mellow",
+                type: "mood",
+                weight: 1.6 * timeWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Evening Energy",
+                originType: .transit
+            ))
+        } else {
+            // Night
+            tokens.append(StyleToken(
+                name: "introspective",
+                type: "mood",
+                weight: 1.6 * timeWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Night Energy",
+                originType: .transit
+            ))
+        }
 
-                // Add lunar day influence (1-29.5)
-                let lunarDate = calendar.dateComponents([.day], from: Date()).day ?? 1
-                let lunarDay = (lunarDate % 30) + 1
+        // Add lunar day influence (1-29.5)
+        let lunarDate = calendar.dateComponents([.day], from: Date()).day ?? 1
+        let lunarDay = (lunarDate % 30) + 1
 
-                if lunarDay <= 7 {
-                    // Waxing crescent - beginning energy
-                    tokens.append(StyleToken(
-                        name: "initiating",
-                        type: "mood",
-                        weight: 1.5,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Lunar Day \(lunarDay)",
-                        originType: .transit
-                    ))
-                } else if lunarDay <= 14 {
-                    // Waxing gibbous - building energy
-                    tokens.append(StyleToken(
-                        name: "developing",
-                        type: "mood",
-                        weight: 1.5,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Lunar Day \(lunarDay)",
-                        originType: .transit
-                    ))
-                } else if lunarDay <= 21 {
-                    // Waning gibbous - expressing energy
-                    tokens.append(StyleToken(
-                        name: "expressing",
-                        type: "mood",
-                        weight: 1.5,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Lunar Day \(lunarDay)",
-                        originType: .transit
-                    ))
-                } else {
-                    // Waning crescent - releasing energy
-                    tokens.append(StyleToken(
-                        name: "releasing",
-                        type: "mood",
-                        weight: 1.5,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Lunar Day \(lunarDay)",
-                        originType: .transit
-                    ))
-                }
+        // Lunar weight variation using seed
+        let lunarWeightVariation = 1.0 + (Double((seed * 13) % 21) - 10.0) / 100.0
+        
+        if lunarDay <= 7 {
+            // Waxing crescent - beginning energy
+            tokens.append(StyleToken(
+                name: "initiating",
+                type: "mood",
+                weight: 1.5 * lunarWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Lunar Day \(lunarDay)",
+                originType: .transit
+            ))
+        } else if lunarDay <= 14 {
+            // Waxing gibbous - building energy
+            tokens.append(StyleToken(
+                name: "developing",
+                type: "mood",
+                weight: 1.5 * lunarWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Lunar Day \(lunarDay)",
+                originType: .transit
+            ))
+        } else if lunarDay <= 21 {
+            // Waning gibbous - expressing energy
+            tokens.append(StyleToken(
+                name: "expressing",
+                type: "mood",
+                weight: 1.5 * lunarWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Lunar Day \(lunarDay)",
+                originType: .transit
+            ))
+        } else {
+            // Waning crescent - releasing energy
+            tokens.append(StyleToken(
+                name: "releasing",
+                type: "mood",
+                weight: 1.5 * lunarWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Lunar Day \(lunarDay)",
+                originType: .transit
+            ))
+        }
 
-                // Daily numerical influence (based on day number)
-                let dayNumber = calendar.dateComponents([.day], from: Date()).day ?? 1
-                let dayDigitSum = sumDigits(dayNumber)
+        // Daily numerical influence (based on day number) with seed variation
+        let dayNumber = calendar.dateComponents([.day], from: Date()).day ?? 1
+        let dayDigitSum = sumDigits(dayNumber)
+        let numerologyWeightVariation = 1.0 + (Double((seed * 17) % 21) - 10.0) / 100.0
 
-                // Numerological influence
-                switch dayDigitSum {
-                case 1:
-                    tokens.append(StyleToken(
-                        name: "pioneering",
-                        type: "mood",
-                        weight: 1.4,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Day Number 1",
-                        originType: .transit
-                    ))
-                case 2:
-                    tokens.append(StyleToken(
-                        name: "receptive",
-                        type: "mood",
-                        weight: 1.4,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Day Number 2",
-                        originType: .transit
-                    ))
-                case 3:
-                    tokens.append(StyleToken(
-                        name: "expressive",
-                        type: "mood",
-                        weight: 1.4,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Day Number 3",
-                        originType: .transit
-                    ))
-                case 4:
-                    tokens.append(StyleToken(
-                        name: "structured",
-                        type: "mood",
-                        weight: 1.4,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Day Number 4",
-                        originType: .transit
-                    ))
-                case 5:
-                    tokens.append(StyleToken(
-                        name: "dynamic",
-                        type: "mood",
-                        weight: 1.4,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Day Number 5",
-                        originType: .transit
-                    ))
-                case 6:
-                    tokens.append(StyleToken(
-                        name: "harmonious",
-                        type: "mood",
-                        weight: 1.4,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Day Number 6",
-                        originType: .transit
-                    ))
-                case 7:
-                    tokens.append(StyleToken(
-                        name: "reflective",
-                        type: "mood",
-                        weight: 1.4,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Day Number 7",
-                        originType: .transit
-                    ))
-                case 8:
-                    tokens.append(StyleToken(
-                        name: "powerful",
-                        type: "mood",
-                        weight: 1.4,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Day Number 8",
-                        originType: .transit
-                    ))
-                case 9:
-                    tokens.append(StyleToken(
-                        name: "completing",
-                        type: "mood",
-                        weight: 1.4,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Day Number 9",
-                        originType: .transit
-                    ))
-                default:
-                    tokens.append(StyleToken(
-                        name: "flexible",
-                        type: "mood",
-                        weight: 1.4,
-                        planetarySource: "Daily Signature",
-                        aspectSource: "Day Energy",
-                        originType: .transit
-                    ))
-                }
+        // Numerological influence
+        switch dayDigitSum {
+        case 1:
+            tokens.append(StyleToken(
+                name: "pioneering",
+                type: "mood",
+                weight: 1.4 * numerologyWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Day Number 1",
+                originType: .transit
+            ))
+        case 2:
+            tokens.append(StyleToken(
+                name: "receptive",
+                type: "mood",
+                weight: 1.4 * numerologyWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Day Number 2",
+                originType: .transit
+            ))
+        case 3:
+            tokens.append(StyleToken(
+                name: "expressive",
+                type: "mood",
+                weight: 1.4 * numerologyWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Day Number 3",
+                originType: .transit
+            ))
+        case 4:
+            tokens.append(StyleToken(
+                name: "structured",
+                type: "mood",
+                weight: 1.4 * numerologyWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Day Number 4",
+                originType: .transit
+            ))
+        case 5:
+            tokens.append(StyleToken(
+                name: "dynamic",
+                type: "mood",
+                weight: 1.4 * numerologyWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Day Number 5",
+                originType: .transit
+            ))
+        case 6:
+            tokens.append(StyleToken(
+                name: "harmonious",
+                type: "mood",
+                weight: 1.4 * numerologyWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Day Number 6",
+                originType: .transit
+            ))
+        case 7:
+            tokens.append(StyleToken(
+                name: "reflective",
+                type: "mood",
+                weight: 1.4 * numerologyWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Day Number 7",
+                originType: .transit
+            ))
+        case 8:
+            tokens.append(StyleToken(
+                name: "powerful",
+                type: "mood",
+                weight: 1.4 * numerologyWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Day Number 8",
+                originType: .transit
+            ))
+        case 9:
+            tokens.append(StyleToken(
+                name: "completing",
+                type: "mood",
+                weight: 1.4 * numerologyWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Day Number 9",
+                originType: .transit
+            ))
+        default:
+            tokens.append(StyleToken(
+                name: "flexible",
+                type: "mood",
+                weight: 1.4 * numerologyWeightVariation,
+                planetarySource: "Daily Signature",
+                aspectSource: "Day Energy",
+                originType: .transit
+            ))
+        }
+        
+        // Add additional daily variation tokens based on seed
+        let dailyVariationTokens = [
+            "resonant", "calibrated", "attuned", "aligned", "grounded",
+            "elevated", "centered", "focused", "integrated", "balanced"
+        ]
+        
+        let selectedVariationToken = dailyVariationTokens[seed % dailyVariationTokens.count]
+        tokens.append(StyleToken(
+            name: selectedVariationToken,
+            type: "mood",
+            weight: 1.3,
+            planetarySource: "Daily Signature",
+            aspectSource: "Daily Variation (seed: \(seed))",
+            originType: .transit
+        ))
 
-                return tokens
-                }
+        return tokens
+    }
 
- 
-
-
-    
     /// Add temporal context markers for freshness
     static func addTemporalMarkers() -> [StyleToken] {
     var tokens: [StyleToken] = []
@@ -1878,64 +1898,65 @@ class DailyVibeGenerator {
     }
     
     /// Apply controlled variation to tokens for daily freshness
+    /// Apply controlled variation to tokens for daily freshness
     static func introduceControlledVariation(baseTokens: [StyleToken]) -> [StyleToken] {
-    var tokens = baseTokens
-    let seed = getDailyPatternSeed()
+        var tokens = baseTokens
+        let seed = getDailyPatternSeed()
 
-    // Daily emphasis on a random token type
-    let tokenTypes = ["mood", "texture", "structure", "color_quality"]
-    let targetType = tokenTypes[seed % tokenTypes.count]
-    let emphasisFactor = 1.0 + Double(seed % 3) * 0.1 + 0.1 // 1.1 to 1.3
+        // Daily emphasis on a random token type
+        let tokenTypes = ["mood", "texture", "structure", "color_quality"]
+        let targetType = tokenTypes[seed % tokenTypes.count]
+        let emphasisFactor = 1.0 + Double(seed % 3) * 0.1 + 0.1 // 1.1 to 1.3
 
-    // Apply the emphasis
-    for i in 0..<tokens.count {
-        if tokens[i].type == targetType {
-            tokens[i] = StyleToken(
-                name: tokens[i].name,
-                type: tokens[i].type,
-                weight: tokens[i].weight * emphasisFactor,
-                planetarySource: tokens[i].planetarySource,
-                signSource: tokens[i].signSource,
-                houseSource: tokens[i].houseSource,
-                aspectSource: (tokens[i].aspectSource ?? "") + " (Daily Emphasis)",
-                originType: tokens[i].originType
-            )
+        // Apply the emphasis
+        for i in 0..<tokens.count {
+            if tokens[i].type == targetType {
+                tokens[i] = StyleToken(
+                    name: tokens[i].name,
+                    type: tokens[i].type,
+                    weight: tokens[i].weight * emphasisFactor,
+                    planetarySource: tokens[i].planetarySource,
+                    signSource: tokens[i].signSource,
+                    houseSource: tokens[i].houseSource,
+                    aspectSource: (tokens[i].aspectSource ?? "") + " (Daily Emphasis)",
+                    originType: tokens[i].originType
+                )
+            }
         }
-    }
 
-    // Add 1-2 daily wildcard tokens
-    let wildcardOptions = [
-        "unexpected", "juxtaposed", "nuanced", "transitional",
-        "distinctive", "paradoxical", "intuitive", "emergent",
-        "responsive", "calibrated", "resonant", "harmonized",
-        "textured", "articulated", "considered", "attentive"
-    ]
+        // Add 1-2 daily wildcard tokens using the seed
+        let wildcardOptions = [
+            "unexpected", "juxtaposed", "nuanced", "transitional",
+            "distinctive", "paradoxical", "intuitive", "emergent",
+            "responsive", "calibrated", "resonant", "harmonized",
+            "textured", "articulated", "considered", "attentive"
+        ]
 
-    let wildcard1 = wildcardOptions[seed % wildcardOptions.count]
-    let wildcard2 = wildcardOptions[(seed * 7) % wildcardOptions.count]
-
-    tokens.append(StyleToken(
-        name: wildcard1,
-        type: "mood",
-        weight: 1.5,
-        planetarySource: "Daily Variation",
-        aspectSource: "Daily Wildcard",
-        originType: .transit
-    ))
-
-    // Add a second wildcard half the time for more variation
-    if seed % 2 == 0 {
+        let wildcard1 = wildcardOptions[seed % wildcardOptions.count]
+        
         tokens.append(StyleToken(
-            name: wildcard2,
-            type: "texture",
-            weight: 1.4,
+            name: wildcard1,
+            type: "mood",
+            weight: 1.5,
             planetarySource: "Daily Variation",
-            aspectSource: "Daily Wildcard 2",
+            aspectSource: "Daily Wildcard",
             originType: .transit
         ))
-    }
 
-    return tokens
+        // Add a second wildcard half the time for more variation
+        if seed % 2 == 0 {
+            let wildcard2 = wildcardOptions[(seed * 7) % wildcardOptions.count]
+            tokens.append(StyleToken(
+                name: wildcard2,
+                type: "texture",
+                weight: 1.4,
+                planetarySource: "Daily Variation",
+                aspectSource: "Daily Wildcard 2",
+                originType: .transit
+            ))
+        }
+
+        return tokens
     }
     
     /// Get daily fabric emphasis

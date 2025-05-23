@@ -152,7 +152,9 @@ final class NatalChartViewController: UIViewController {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.handleDateChange()
+            Task { @MainActor in
+                self?.handleDateChange()
+            }
         }
     }
     
@@ -165,7 +167,7 @@ final class NatalChartViewController: UIViewController {
         // If we have a cached daily vibe view controller, notify it to refresh
         if let navController = navigationController {
             for viewController in navController.viewControllers {
-                if let dailyVibeVC = viewController as? DailyVibeInterpretationViewController {
+                if viewController is DailyVibeInterpretationViewController {
                     // The daily vibe view controller will handle its own refresh
                     break
                 }
@@ -774,7 +776,7 @@ final class NatalChartViewController: UIViewController {
         
         if !savedDates.isEmpty {
             message += "\nRecent dates:\n"
-            for (index, date) in savedDates.prefix(5).enumerated() {
+            for (_, date) in savedDates.prefix(5).enumerated() {
                 message += "• \(dateFormatter.string(from: date))\n"
             }
             if savedDates.count > 5 {

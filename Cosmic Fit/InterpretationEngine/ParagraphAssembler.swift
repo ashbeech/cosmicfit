@@ -974,7 +974,7 @@ struct ParagraphAssembler {
     static func generateColorRecommendations(from tokens: [StyleToken]) -> String {
         // Extract color tokens specifically - prioritize specific color names over general qualities
         let colorTokens = tokens.filter { $0.type == "color" }
-        let colorQualityTokens = tokens.filter { $0.type == "color_quality" }
+        // Remove unused colorQualityTokens variable
         
         // Organize tokens by category based on their sources and names
         var elementalColors: [String] = []
@@ -991,6 +991,8 @@ struct ParagraphAssembler {
                 specificColorNames.append(token.name)
             }
         }
+        
+        // Rest of the function remains the same...
         
         // If we have specific color names from the nuanced color system, use those
         if !specificColorNames.isEmpty {
