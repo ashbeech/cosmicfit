@@ -121,17 +121,17 @@ struct ParagraphAssembler {
     /// - Returns: Array of descriptive strings identifying style tensions
     static func detectStylePushPullConflicts(from tokens: [StyleToken]) -> [String] {
         let pairs: [(String, String, String)] = [
-            ("fluid", "structured", "A tension between flow and form—your outfits might oscillate between surrender and definition."),
-            ("intuitive", "practical", "You sense your way through style, but also crave function. Dressing may feel like balancing instinct and purpose."),
-            ("minimal", "expressive", "You prefer restraint, yet there's a desire to be seen. Your look may shift between quiet and pronounced."),
-            ("airy", "grounded", "Your chart straddles weightlessness and rootedness—a dialogue between freedom and stability."),
-            ("bold", "reserved", "Sometimes loud, sometimes soft. You dress to declare—and sometimes to disappear."),
-            ("emotive", "cool", "You feel deeply, but show selectively. Style becomes a method of managing what's seen."),
+            ("fluid", "structured", "A tension exists between flow and form. Your outfits might oscillate between surrender and definition."),
+            ("intuitive", "practical", "You sense your way through style, but also crave function. Dressing may feel like balancing instinct with purpose."),
+            ("minimal", "expressive", "You prefer restraint, yet there's a desire to be seen. Your look may shift between quiet and pronounced statements."),
+            ("airy", "grounded", "Your chart straddles weightlessness and rootedness, creating a dialogue between freedom and stability."),
+            ("bold", "reserved", "Sometimes loud, sometimes soft. You dress to declare and sometimes to disappear."),
+            ("emotive", "cool", "You feel deeply but show selectively. Style becomes a method of managing what's visible."),
             ("playful", "serious", "You oscillate between lighthearted expression and grounded purpose in how you present yourself."),
-            ("luxurious", "minimal", "A pull between lavish richness and clean simplicity—your style negotiates abundance and restraint."),
+            ("luxurious", "minimal", "A pull exists between lavish richness and clean simplicity. Your style negotiates abundance and restraint."),
             ("vibrant", "muted", "Your wardrobe might swing between saturated statements and quiet neutrals as you balance visibility and subtlety."),
-            ("classic", "experimental", "You honor tradition while craving novelty—your style weaves between timeless pieces and unexpected choices."),
-            ("soft", "structured", "Your chart balances yielding textures with architectural forms—a conversation between comfort and definition.")
+            ("classic", "experimental", "You honor tradition while craving novelty. Your style weaves between timeless pieces and unexpected choices."),
+            ("soft", "structured", "Your chart balances yielding textures with architectural forms, creating a conversation between comfort and definition.")
         ]
         
         // Extract all token names as a set for efficient lookup
@@ -177,9 +177,6 @@ struct ParagraphAssembler {
     
     /// Generates the Essence paragraph based on Sun, Venus, and Ascendant signs using Whole Sign
     static func generateEssenceSection(from tokens: [StyleToken]) -> String {
-        // ✴️ SOURCE: Sun sign + Venus sign + Ascendant sign
-        // ⚖️ WEIGHTING: Sun x1.1, Venus x1.5, Ascendant x1.3
-        
         // Get top 3 tokens by weight
         let topTokens = tokens
             .filter { $0.type == "mood" || $0.type == "texture" || $0.type == "structure" }
@@ -204,45 +201,52 @@ struct ParagraphAssembler {
         // Build the essence paragraph
         var essence = ""
         
+        // Opening statement based on dominant characteristics
         if hasEarthy && hasIntuitive {
-            essence += "You walk the line between earth and ether—rooted, but always sensing something deeper. "
+            essence += "You walk the line between earth and ether, rooted yet always sensing something deeper. "
         } else if hasEarthy {
             essence += "You embody a grounded presence, drawing strength from what feels stable and real. "
         } else if hasFluid {
-            essence += "There's a flowing energy to your presence—adaptable, intuitive, and subtly responsive. "
+            essence += "There's a flowing energy to your presence that's adaptable, intuitive, and subtly responsive. "
         } else if hasBold {
             essence += "You project a confident energy that leaves an impression—unmistakable, defined, and purposeful. "
         } else {
             essence += "Your style essence balances personal expression with authentic presence. "
         }
         
-        essence += "There's a "
-        
+        // Second statement about force/energy
         if hasBold {
-            essence += "compelling force in your presence, a clear kind of intention. "
+            essence += "There's a compelling force in your presence, a clear kind of intention. "
         } else {
-            essence += "quiet force in your presence, a soft kind of defiance. "
+            essence += "There's a quiet force in your presence, a soft kind of defiance. "
         }
         
-        essence += "Your energy isn't "
-        
+        // Third statement about energy quality
         if hasBold {
-            essence += "subtle, but it resonates. "
+            essence += "Your energy isn't subtle, but it resonates deeply. "
         } else {
-            essence += "loud, but it lingers. "
+            essence += "Your energy isn't loud, but it lingers meaningfully. "
         }
         
+        // Fourth statement about dressing philosophy
         if has12thHouse {
-            essence += "You dress like someone who remembers dreams—and honors them through "
+            essence += "You dress like someone who remembers dreams and honors them through "
         } else {
-            essence += "You dress like someone who remembers every version of yourself—and honors them through "
+            essence += "You dress like someone who remembers every version of yourself and honors them through "
         }
         
-        essence += "texture, color, and the way fabric falls. This blueprint reflects a wardrobe built on "
+        essence += "texture, color, and the way fabric falls. "
+        
+        // Closing statement
+        essence += "This blueprint reflects a wardrobe built on "
         
         // Add the three themes as closing qualities
-        if !themes.isEmpty {
-            essence += themes.joined(separator: ", ") + "."
+        if themes.count >= 3 {
+            essence += themes[0] + ", " + themes[1] + ", and " + themes[2] + "."
+        } else if themes.count == 2 {
+            essence += themes[0] + " and " + themes[1] + "."
+        } else if themes.count == 1 {
+            essence += themes[0] + " and authentic expression."
         } else {
             essence += "intuition, integrity, and evolution."
         }
@@ -252,9 +256,6 @@ struct ParagraphAssembler {
     
     /// Generates the Core paragraph based on Sun, Venus, and Moon signs using Whole Sign
     static func generateCoreSection(from tokens: [StyleToken]) -> String {
-        // ✴️ SOURCE: Sun sign + Venus sign + Moon sign
-        // ⚖️ Look for consistent tone across these planets
-        
         // Get tokens specifically from Sun, Venus, and Moon
         let coreTokens = tokens.filter {
             $0.planetarySource == "Sun" ||
@@ -307,20 +308,21 @@ struct ParagraphAssembler {
         var core = ""
         
         if descriptors.count >= 3 {
-            core += "\(descriptors[0].capitalized), \(descriptors[1]), and \(descriptors[2])—"
+            core += descriptors[0].capitalized + ", " + descriptors[1] + ", and " + descriptors[2] + "—"
         } else {
             core += "Naturally expressive and authentic—"
         }
         
-        if dominantElement == "earth" {
+        switch dominantElement {
+        case "earth":
             core += "your foundation is built on clothing that feels like home."
-        } else if dominantElement == "water" {
+        case "water":
             core += "your foundation is built on clothing that flows with your emotions."
-        } else if dominantElement == "fire" {
+        case "fire":
             core += "your foundation is built on clothing that expresses your energy."
-        } else if dominantElement == "air" {
+        case "air":
             core += "your foundation is built on clothing that adapts to your social contexts."
-        } else {
+        default:
             core += "your foundation is built on clothing that balances multiple aspects of your identity."
         }
         
@@ -329,9 +331,6 @@ struct ParagraphAssembler {
     
     /// Generates the Expression paragraph based on Ascendant and Mercury/Mars using Whole Sign
     static func generateExpressionSection(from tokens: [StyleToken]) -> String {
-        // ✴️ SOURCE: Ascendant sign, Mercury + Mars in visual houses (1st, 3rd, 5th)
-        // ✴️ Venus in fixed/cardinal/mutable signs for structure of expression
-        
         let ascendantTokens = tokens.filter { $0.planetarySource == "Ascendant" }
         let mercuryMarsTokens = tokens.filter {
             ($0.planetarySource == "Mercury" || $0.planetarySource == "Mars") &&
@@ -369,7 +368,6 @@ struct ParagraphAssembler {
         } else if hasMutableVenus {
             expressionStyle = "Adaptable and fluid"
         } else {
-            // Default if Venus modality can't be determined
             expressionStyle = "Personal and authentic"
         }
         
@@ -402,7 +400,7 @@ struct ParagraphAssembler {
         }
         
         // Compose expression paragraph
-        var expression = "\(expressionStyle). You favor a \(intentionStyle). "
+        var expression = expressionStyle + ". You favor a " + intentionStyle + ". "
         
         expression += "You choose clothes that do more than look good—they "
         
@@ -421,69 +419,76 @@ struct ParagraphAssembler {
     
     /// Generates the Magnetism paragraph based on Venus placement and aspects using Whole Sign
     static func generateMagnetismSection(from tokens: [StyleToken]) -> String {
-        // ✴️ SOURCE: Venus sign + house, Moon sign, retrograde planets
-        // ✴️ Affecting visual/relationship houses (1st, 7th)
+        let venusTokens = tokens.filter { $0.planetarySource == "Venus" }
+        let moonTokens = tokens.filter { $0.planetarySource == "Moon" }
+        let visualHouseTokens = tokens.filter { $0.houseSource == 1 || $0.houseSource == 7 }
+        let retrogradeTokens = tokens.filter {
+            $0.name.contains("reflective") || $0.name.contains("introspective")
+        }
         
-        let venusTokens        = tokens.filter { $0.planetarySource == "Venus" }
-        let moonTokens         = tokens.filter { $0.planetarySource == "Moon"  }
-        let visualHouseTokens  = tokens.filter { $0.houseSource == 1 || $0.houseSource == 7 }
-        let retrogradeTokens   = tokens.filter { $0.name.contains("reflective")
-            || $0.name.contains("introspective") }
-        
-        // ‑‑‑ Aggregate influence scores ‑‑‑
-        let venusInfluence     = venusTokens.reduce(0.0) { $0 + $1.weight }
-        let moonInfluence      = moonTokens.reduce(0.0) { $0 + $1.weight }
-        let visualInfluence    = visualHouseTokens.reduce(0.0) { $0 + $1.weight }
-        let retroInfluence     = retrogradeTokens.reduce(0.0) { $0 + $1.weight }
+        // Aggregate influence scores
+        let venusInfluence = venusTokens.reduce(0.0) { $0 + $1.weight }
+        let moonInfluence = moonTokens.reduce(0.0) { $0 + $1.weight }
+        let visualInfluence = visualHouseTokens.reduce(0.0) { $0 + $1.weight }
+        let retroInfluence = retrogradeTokens.reduce(0.0) { $0 + $1.weight }
         
         // Determine dominant celestial influence on magnetism
         enum Lure { case venus, moon, visual, balanced }
         let dominantLure: Lure
         switch max(venusInfluence, moonInfluence, visualInfluence) {
-        case venusInfluence : dominantLure = .venus
-        case moonInfluence  : dominantLure = .moon
+        case venusInfluence: dominantLure = .venus
+        case moonInfluence: dominantLure = .moon
         case visualInfluence: dominantLure = .visual
-        default             : dominantLure = .balanced
+        default: dominantLure = .balanced
         }
         
-        // High‑level qualities pulled from the wider token pool
-        let hasQuiet   = tokens.contains { $0.name == "quiet"  || $0.name == "subtle"   }
-        let hasBold    = tokens.contains { $0.name == "bold"   || $0.name == "radiant"  }
-        let hasDeep    = tokens.contains { $0.name == "deep"   || $0.name == "intense"  }
+        // High-level qualities pulled from the wider token pool
+        let hasQuiet = tokens.contains { $0.name == "quiet" || $0.name == "subtle" }
+        let hasBold = tokens.contains { $0.name == "bold" || $0.name == "radiant" }
+        let hasDeep = tokens.contains { $0.name == "deep" || $0.name == "intense" }
         let hasPlayful = tokens.contains { $0.name == "playful" || $0.name == "expressive" }
         
-        // ‑‑‑ Primary quality string ‑‑‑
+        // Primary quality string
         var magnetismQuality: String
         switch (hasQuiet, hasBold, hasDeep, hasPlayful) {
-        case (true,  false, true,  _    ): magnetismQuality = "Quiet strength and depth"
-        case (true,  false, _   , true ): magnetismQuality = "Subtle playfulness and charm"
-        case (_   , true , true , _    ): magnetismQuality = "Powerful presence and depth"
-        case (_   , true , _   , true ): magnetismQuality = "Radiant charisma and playfulness"
-        case (true,  _   , _   , _    ): magnetismQuality = "Subtle presence and authenticity"
-        case (_   , true , _   , _    ): magnetismQuality = "Bold energy and confidence"
-        case (_   , _    , true, _    ): magnetismQuality = "Deep resonance and substance"
-        case (_   , _    , _   , true ): magnetismQuality = "Playful spirit and versatility"
-        default                         : magnetismQuality = "Authentic presence and natural appeal"
+        case (true, false, true, _):
+            magnetismQuality = "Quiet strength and depth"
+        case (true, false, _, true):
+            magnetismQuality = "Subtle playfulness and charm"
+        case (_, true, true, _):
+            magnetismQuality = "Powerful presence and depth"
+        case (_, true, _, true):
+            magnetismQuality = "Radiant charisma and playfulness"
+        case (true, _, _, _):
+            magnetismQuality = "Subtle presence and authenticity"
+        case (_, true, _, _):
+            magnetismQuality = "Bold energy and confidence"
+        case (_, _, true, _):
+            magnetismQuality = "Deep resonance and substance"
+        case (_, _, _, true):
+            magnetismQuality = "Playful spirit and versatility"
+        default:
+            magnetismQuality = "Authentic presence and natural appeal"
         }
         
         // Append dominant lure nuance
         switch dominantLure {
         case .venus:
-            magnetismQuality += " (Visually harmonious and naturally relational)."
+            magnetismQuality += " (visually harmonious and naturally relational)."
         case .moon:
-            magnetismQuality += " (Emotionally resonant and naturally inviting)."
+            magnetismQuality += " (emotionally resonant and naturally inviting)."
         case .visual:
-            magnetismQuality += " (Poised for connection—one‑to‑one interactions feel immediate)."
+            magnetismQuality += " (poised for connection—one-to-one interactions feel immediate)."
         case .balanced:
             magnetismQuality += "."
         }
         
-        // ‑‑‑ Impact string ‑‑‑
+        // Impact string
         var magnetismImpact: String
         if hasQuiet || (!hasBold && !hasPlayful) {
-            magnetismImpact = "People may not always notice your outfit first, but they remember how it felt."
+            magnetismImpact = " People may not always notice your outfit first, but they remember how it felt."
         } else {
-            magnetismImpact = "Your style creates an immediate impression that lingers in others' memories."
+            magnetismImpact = " Your style creates an immediate impression that lingers in others' memories."
         }
         
         // Retrograde undertone
@@ -491,45 +496,51 @@ struct ParagraphAssembler {
             magnetismImpact += " A retrograde undertone makes the allure contemplative—others sense unspoken stories."
         }
         
-        return "\(magnetismQuality) \(magnetismImpact)"
+        return magnetismQuality + magnetismImpact
     }
     
     /// Generates the Emotional Dressing paragraph based on Moon placement using Whole Sign
     static func generateEmotionalDressingSection(from tokens: [StyleToken]) -> String {
-        // ✴️ SOURCE: Moon sign + house, Neptune/Pisces/12th house influence
-        
         let moonTokens = tokens.filter { $0.planetarySource == "Moon" }
         let neptuneTokens = tokens.filter {
             $0.planetarySource == "Neptune" ||
-            $0.signSource      == "Pisces" ||
-            $0.houseSource     == 12
+            $0.signSource == "Pisces" ||
+            $0.houseSource == 12
         }
         
         // Weighted impact
-        let moonDepth     = moonTokens.reduce(0.0) { $0 + $1.weight }
-        let neptuneDepth  = neptuneTokens.reduce(0.0) { $0 + $1.weight }
+        let moonDepth = moonTokens.reduce(0.0) { $0 + $1.weight }
+        let neptuneDepth = neptuneTokens.reduce(0.0) { $0 + $1.weight }
         
         let hasProtective = tokens.contains { $0.name.contains("protective") }
-        let hasIntuitive  = tokens.contains { $0.name.contains("intuitive")  }
-        let hasEmotional  = tokens.contains { $0.name.contains("emotional")  }
-        let hasHonest     = tokens.contains { $0.name.contains("honest")
-            || $0.name.contains("authentic") }
+        let hasIntuitive = tokens.contains { $0.name.contains("intuitive") }
+        let hasEmotional = tokens.contains { $0.name.contains("emotional") }
+        let hasHonest = tokens.contains {
+            $0.name.contains("honest") || $0.name.contains("authentic")
+        }
         
         var emotionalStyle = ""
         
-        // Base narrative from original branch‑matrix
-        switch (hasHonest, hasEmotional, hasProtective, hasIntuitive) {
-        case (true , true , _, _): emotionalStyle = "You dress as a form of honest self‑reflection—truthful, tactile, and emotionally expressive."
-        case (_    , true , true, _): emotionalStyle = "You dress as emotional protection—creating a safe boundary between your sensitive core and the outside world."
-        case (_    , true , _ , true): emotionalStyle = "You dress intuitively, in harmony with emotional currents—flowing, responsive, and personal."
-        case (_    , _   , true, _): emotionalStyle = "Your clothing creates a protective boundary, regulating how much of yourself you share."
-        case (_    , _   , _ , true): emotionalStyle = "You follow intuition, aligning inner landscape with outer expression."
-        case (_    , true , _ , _): emotionalStyle = "Your choices reflect your emotional state, expressing your inner world."
-        case (true , _   , _ , _): emotionalStyle = "Your style reflects a commitment to authenticity, choosing pieces that resonate with your true self."
-        default: emotionalStyle = "You balance emotional expression with practical considerations."
+        // Base narrative from combinations
+        if hasHonest && hasEmotional {
+            emotionalStyle = "You dress as a form of honest self-reflection—truthful, tactile, and emotionally expressive."
+        } else if hasEmotional && hasProtective {
+            emotionalStyle = "You dress as emotional protection, creating a safe boundary between your sensitive core and the outside world."
+        } else if hasEmotional && hasIntuitive {
+            emotionalStyle = "You dress intuitively, in harmony with emotional currents—flowing, responsive, and personal."
+        } else if hasProtective {
+            emotionalStyle = "Your clothing creates a protective boundary, regulating how much of yourself you share."
+        } else if hasIntuitive {
+            emotionalStyle = "You follow intuition, aligning inner landscape with outer expression."
+        } else if hasEmotional {
+            emotionalStyle = "Your choices reflect your emotional state, expressing your inner world."
+        } else if hasHonest {
+            emotionalStyle = "Your style reflects a commitment to authenticity, choosing pieces that resonate with your true self."
+        } else {
+            emotionalStyle = "You balance emotional expression with practical considerations."
         }
         
-        // Layer in lunar / Neptunian potency
+        // Layer in lunar/Neptunian potency
         if moonDepth > neptuneDepth * 1.2 {
             emotionalStyle += " Emotional comfort and security are consistently your first checkpoints when dressing."
         } else if neptuneDepth > moonDepth * 1.2 {
@@ -543,8 +554,6 @@ struct ParagraphAssembler {
     
     /// Generates the Planetary Frequency paragraph based on elemental dominance using Whole Sign
     static func generatePlanetaryFrequencySection(from tokens: [StyleToken]) -> String {
-        // ✴️ SOURCE: Elemental dominance, planet dignities, retrograde frequency
-        
         // Count tokens by element
         var earthCount = tokens.filter { $0.name == "earthy" || $0.name == "grounded" }.count
         var waterCount = tokens.filter { $0.name == "watery" || $0.name == "fluid" }.count
@@ -552,7 +561,7 @@ struct ParagraphAssembler {
         var airCount = tokens.filter { $0.name == "airy" || $0.name == "intellectual" }.count
         var metalCount = tokens.filter { $0.name == "structured" || $0.name == "disciplined" }.count
         
-        // Apply weighting
+        // Apply weighting based on planetary sources
         earthCount = max(earthCount, tokens.filter {
             $0.planetarySource == "Venus" &&
             ($0.signSource == "Taurus" || $0.signSource == "Virgo" || $0.signSource == "Capricorn")
@@ -590,31 +599,32 @@ struct ParagraphAssembler {
         var frequency = ""
         
         if elements[0].1 > 0 && elements[1].1 > 0 {
-            frequency = "\(elements[0].0.capitalized)-heavy with pulses of \(elements[1].0)"
+            frequency = elements[0].0.capitalized + "-heavy with pulses of " + elements[1].0
             
             if elements[2].1 > 0 {
-                frequency += " and \(elements[2].0)"
+                frequency += " and " + elements[2].0
             }
             
             frequency += ". "
         } else if elements[0].1 > 0 {
-            frequency = "Predominantly \(elements[0].0)-oriented. "
+            frequency = "Predominantly " + elements[0].0 + "-oriented. "
         } else {
             frequency = "Balanced across elemental influences. "
         }
         
         // Add descriptive content based on primary element
-        if elements[0].0 == "earth" {
+        switch elements[0].0 {
+        case "earth":
             frequency += "You are drawn to what feels lived-in, weathered, and raw—with details that speak softly but stay."
-        } else if elements[0].0 == "water" {
+        case "water":
             frequency += "You are drawn to what flows, adapts, and carries emotional resonance—with details that evoke feeling and memory."
-        } else if elements[0].0 == "fire" {
+        case "fire":
             frequency += "You are drawn to what energizes, transforms, and expresses vitality—with details that catch the light and command attention."
-        } else if elements[0].0 == "air" {
+        case "air":
             frequency += "You are drawn to what communicates, connects, and conceptualizes—with details that stimulate the mind and facilitate exchange."
-        } else if elements[0].0 == "metal" {
+        case "metal":
             frequency += "You are drawn to what endures, structures, and refines—with details that demonstrate craftsmanship and longevity."
-        } else {
+        default:
             frequency += "You are drawn to a balance of elements—incorporating details that address multiple sensory and emotional needs."
         }
         
@@ -625,7 +635,6 @@ struct ParagraphAssembler {
     
     /// Generates fabric recommendations based on chart elements using Whole Sign
     static func generateFabricRecommendations(from tokens: [StyleToken]) -> String {
-        // ⚖️ WEIGHTING: Venus x1.5, Ascendant x1.3, Mars x1.2
         var nourishingFabrics: [String] = []
         var depletingFabrics: [String] = []
         var groundingTextures: [String] = []
@@ -669,7 +678,7 @@ struct ParagraphAssembler {
         
         if tokens.contains(where: { $0.name == "fluid" && $0.weight > 2.0 }) {
             nourishingFabrics.append(contentsOf: ["silk", "lyocell", "rayon"])
-            depletingFabrics.append(contentsOf: ["stiff brocades", "crisp organiza"])
+            depletingFabrics.append(contentsOf: ["stiff brocades", "crisp organza"])
             groundingTextures.append(contentsOf: ["flowing", "draping", "liquid"])
         }
         
@@ -736,10 +745,6 @@ struct ParagraphAssembler {
     /// Generates style pulse elements (keywords, priorities, journey)
     /// - Tokens weighted: 90% natal, 10% progressed flavor
     static func generateStylePulse(from tokens: [StyleToken]) -> String {
-        // STYLE KEYWORDS = Top 5 token names (weight ≥ 2.5)
-        // SENSORY PRIORITIES = Token type == "texture" or "mood" with weight ≥ 2.5
-        // STYLE JOURNEY NOTES = Custom mapping
-        
         // Get top 5 keywords by weight
         let styleKeywords = tokens
             .filter { $0.weight >= 2.5 }
@@ -800,19 +805,31 @@ struct ParagraphAssembler {
         let hasProgressedTokens = tokens.contains { $0.planetarySource?.contains("Progressed") == true }
         
         if hasProgressedTokens {
-            styleJourney += "you've been evolving toward a more ";
+            styleJourney += "you've been evolving toward a more "
             
             // Look for progressed Moon sign influence
-            if tokens.contains(where: { $0.planetarySource?.contains("Progressed Moon") == true && $0.signSource?.contains("Fire") == true }) {
-                styleJourney += "energized and expressive style. ";
-            } else if tokens.contains(where: { $0.planetarySource?.contains("Progressed Moon") == true && $0.signSource?.contains("Earth") == true }) {
-                styleJourney += "grounded and practical style. ";
-            } else if tokens.contains(where: { $0.planetarySource?.contains("Progressed Moon") == true && $0.signSource?.contains("Air") == true }) {
-                styleJourney += "intellectual and communicative style. ";
-            } else if tokens.contains(where: { $0.planetarySource?.contains("Progressed Moon") == true && $0.signSource?.contains("Water") == true }) {
-                styleJourney += "intuitive and emotionally responsive style. ";
+            if tokens.contains(where: {
+                $0.planetarySource?.contains("Progressed Moon") == true &&
+                ($0.signSource == "Aries" || $0.signSource == "Leo" || $0.signSource == "Sagittarius")
+            }) {
+                styleJourney += "energized and expressive style. "
+            } else if tokens.contains(where: {
+                $0.planetarySource?.contains("Progressed Moon") == true &&
+                ($0.signSource == "Taurus" || $0.signSource == "Virgo" || $0.signSource == "Capricorn")
+            }) {
+                styleJourney += "grounded and practical style. "
+            } else if tokens.contains(where: {
+                $0.planetarySource?.contains("Progressed Moon") == true &&
+                ($0.signSource == "Gemini" || $0.signSource == "Libra" || $0.signSource == "Aquarius")
+            }) {
+                styleJourney += "intellectual and communicative style. "
+            } else if tokens.contains(where: {
+                $0.planetarySource?.contains("Progressed Moon") == true &&
+                ($0.signSource == "Cancer" || $0.signSource == "Scorpio" || $0.signSource == "Pisces")
+            }) {
+                styleJourney += "intuitive and emotionally responsive style. "
             } else {
-                styleJourney += "authentic personal style. ";
+                styleJourney += "authentic personal style. "
             }
         }
         
@@ -848,10 +865,6 @@ struct ParagraphAssembler {
     
     /// Generates fashion do's and don'ts based on chart elements using Whole Sign
     static func generateFashionGuidance(from tokens: [StyleToken]) -> String {
-        // LEAN INTO = Top tokens with consistent tone (weight > 2.5)
-        // RELEASE = Token pairs in opposition
-        // WATCH OUT FOR = Logic conflict detection
-        
         // Identify top consistent tokens for "lean into"
         let topTokens = tokens
             .filter { $0.weight > 2.5 }
@@ -862,23 +875,24 @@ struct ParagraphAssembler {
         
         // Create phrases from tokens
         for token in topTokens {
-            if token.name == "layered" || token.name == "structured" {
+            switch token.name {
+            case "layered", "structured":
                 leanIntoItems.append("layering with intention")
-            } else if token.name == "comfortable" || token.name == "practical" {
+            case "comfortable", "practical":
                 leanIntoItems.append("structured comfort")
-            } else if token.name == "bold" || token.name == "expressive" {
+            case "bold", "expressive":
                 leanIntoItems.append("expressive details")
-            } else if token.name == "earthy" || token.name == "grounded" {
+            case "earthy", "grounded":
                 leanIntoItems.append("warm neutrals")
-            } else if token.name == "slow" || token.name == "intentional" {
+            case "slow", "intentional":
                 leanIntoItems.append("slow fashion")
-            } else if token.name == "textured" || token.name == "tactile" {
+            case "textured", "tactile":
                 leanIntoItems.append("textured surfaces")
-            } else if token.name == "vintage" || token.name == "nostalgic" {
+            case "vintage", "nostalgic":
                 leanIntoItems.append("reworking pieces")
-            } else if token.name == "balanced" || token.name == "harmonic" {
+            case "balanced", "harmonic":
                 leanIntoItems.append("balanced proportions")
-            } else {
+            default:
                 leanIntoItems.append(token.name + " elements")
             }
         }
@@ -891,13 +905,13 @@ struct ParagraphAssembler {
         let hasFluid = tokens.contains { $0.name == "fluid" && $0.weight > 2.0 }
         
         let hasMinimal = tokens.contains { $0.name == "minimal" && $0.weight > 2.0 }
-        let hasMaximal = tokens.contains { $0.name == "maximal" || $0.name == "decorative" && $0.weight > 2.0 }
+        let hasMaximal = tokens.contains { ($0.name == "maximal" || $0.name == "decorative") && $0.weight > 2.0 }
         
-        let hasMatte = tokens.contains { $0.name == "matte" || $0.name == "earthy" && $0.weight > 2.0 }
-        let hasShiny = tokens.contains { $0.name == "shiny" || $0.name == "glossy" && $0.weight > 2.0 }
+        let hasMatte = tokens.contains { ($0.name == "matte" || $0.name == "earthy") && $0.weight > 2.0 }
+        let hasShiny = tokens.contains { ($0.name == "shiny" || $0.name == "glossy") && $0.weight > 2.0 }
         
-        let hasRevealing = tokens.contains { $0.name == "revealing" || $0.name == "sensual" && $0.weight > 2.0 }
-        let hasModest = tokens.contains { $0.name == "modest" || $0.name == "protective" && $0.weight > 2.0 }
+        let hasRevealing = tokens.contains { ($0.name == "revealing" || $0.name == "sensual") && $0.weight > 2.0 }
+        let hasModest = tokens.contains { ($0.name == "modest" || $0.name == "protective") && $0.weight > 2.0 }
         
         // Add opposing release items based on token conflicts
         if hasStructured && !hasFluid {
@@ -941,13 +955,13 @@ struct ParagraphAssembler {
         // Identify "watch out for" warnings
         var watchOutForItem = ""
         
-        if tokens.contains(where: { $0.name == "subtle" || $0.name == "quiet" && $0.weight > 2.5 }) {
+        if tokens.contains(where: { ($0.name == "subtle" || $0.name == "quiet") && $0.weight > 2.5 }) {
             watchOutForItem = "Mistaking simplicity for invisibility. You can be subtle and still be seen."
-        } else if tokens.contains(where: { $0.name == "bold" || $0.name == "expressive" && $0.weight > 2.5 }) {
+        } else if tokens.contains(where: { ($0.name == "bold" || $0.name == "expressive") && $0.weight > 2.5 }) {
             watchOutForItem = "Confusing loudness with impact. True power can be focused and intentional."
-        } else if tokens.contains(where: { $0.name == "practical" || $0.name == "functional" && $0.weight > 2.5 }) {
+        } else if tokens.contains(where: { ($0.name == "practical" || $0.name == "functional") && $0.weight > 2.5 }) {
             watchOutForItem = "Sacrificing beauty for function. The two can and should coexist."
-        } else if tokens.contains(where: { $0.name == "unique" || $0.name == "creative" && $0.weight > 2.5 }) {
+        } else if tokens.contains(where: { ($0.name == "unique" || $0.name == "creative") && $0.weight > 2.5 }) {
             watchOutForItem = "Pursuing originality at the expense of wearability. Your best pieces will be both unique and practical."
         } else {
             watchOutForItem = "Letting external expectations override your authentic preferences. Your style is most powerful when it's truly yours."
@@ -974,7 +988,6 @@ struct ParagraphAssembler {
     static func generateColorRecommendations(from tokens: [StyleToken]) -> String {
         // Extract color tokens specifically - prioritize specific color names over general qualities
         let colorTokens = tokens.filter { $0.type == "color" }
-        // Remove unused colorQualityTokens variable
         
         // Organize tokens by category based on their sources and names
         var elementalColors: [String] = []
@@ -991,8 +1004,6 @@ struct ParagraphAssembler {
                 specificColorNames.append(token.name)
             }
         }
-        
-        // Rest of the function remains the same...
         
         // If we have specific color names from the nuanced color system, use those
         if !specificColorNames.isEmpty {
@@ -1030,7 +1041,7 @@ struct ParagraphAssembler {
         }
         
         if hasProgressedMoon {
-            currentPhaseColors.append("silver grey")
+            currentPhaseColors.append("silver gray")
         }
         
         // Look for moon phase tokens to add current phase colors
@@ -1114,10 +1125,6 @@ struct ParagraphAssembler {
     
     /// Generates wardrobe storyline - tokens weighted: 60% progressed with Placidus, 40% natal
     static func generateWardrobeStoryline(from tokens: [StyleToken]) -> String {
-        // PAST ARC = Moon/Venus hard aspects, fixed signs
-        // PRESENT PHASE = Current progressions + natal themes
-        // EMERGING CHAPTER = Progressed Ascendant/Venus changes, Pluto/Uranus transits
-        
         // Determine past arc
         var pastArc = ""
         
@@ -1137,7 +1144,7 @@ struct ParagraphAssembler {
         let has8thOr12thHouse = tokens.contains { $0.houseSource == 8 || $0.houseSource == 12 }
         
         if hasMoonVenusHardAspect || has8thOr12thHouse {
-            pastArc = "Style as armour—layers that protected and defined your identity. "
+            pastArc = "Style as armor—layers that protected and defined your identity. "
             
             if hasStrongFixedSigns {
                 pastArc += "Edgy, expressive, unafraid to resist the mainstream."
@@ -1201,14 +1208,14 @@ struct ParagraphAssembler {
         let hasProgressedMC = tokens.contains { $0.planetarySource?.contains("Progressed MC") == true }
         
         if hasProgressedAscendant || hasProgressedMC {
-            emergingChapter = "Evolution of self-expression and public identity. As your ascendant ";
+            emergingChapter = "Evolution of self-expression and public identity. "
             
             if hasProgressedAscendant && hasProgressedMC {
-                emergingChapter += "and midheaven progress, you're entering a phase where both personal and public expression are shifting. ";
+                emergingChapter += "As your ascendant and midheaven progress, you're entering a phase where both personal and public expression are shifting. "
             } else if hasProgressedAscendant {
-                emergingChapter += "progresses, you're entering a phase of renewed self-definition and personal presence. ";
+                emergingChapter += "As your ascendant progresses, you're entering a phase of renewed self-definition and personal presence. "
             } else {
-                emergingChapter += "evolves, you're entering a phase of reconnection with your public role and visible impact. ";
+                emergingChapter += "As your midheaven evolves, you're entering a phase of reconnection with your public role and visible impact. "
             }
             
             emergingChapter += "This chapter invites conscious integration of evolving identity with enduring essence."

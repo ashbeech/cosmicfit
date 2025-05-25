@@ -16,20 +16,20 @@ struct InterpretationTextLibrary {
         
         // MARK: - Essence Section Text
         struct Essence {
-            static let earthyIntuitive = "You walk the line between earth and ether—rooted, but always sensing something deeper. "
+            static let earthyIntuitive = "You walk the line between earth and ether, rooted yet always sensing something deeper. "
             static let earthyOnly = "You embody a grounded presence, drawing strength from what feels stable and real. "
-            static let fluidOnly = "There's a flowing energy to your presence—adaptable, intuitive, and subtly responsive. "
+            static let fluidOnly = "There's a flowing energy to your presence that's adaptable, intuitive, and subtly responsive. "
             static let boldOnly = "You project a confident energy that leaves an impression—unmistakable, defined, and purposeful. "
             static let defaultEssence = "Your style essence balances personal expression with authentic presence. "
             
             static let compellingForce = "compelling force in your presence, a clear kind of intention. "
             static let quietForce = "quiet force in your presence, a soft kind of defiance. "
             
-            static let energyNotSubtle = "subtle, but it resonates. "
-            static let energyNotLoud = "loud, but it lingers. "
+            static let energyNotSubtle = "subtle, but it resonates deeply. "
+            static let energyNotLoud = "loud, but it lingers meaningfully. "
             
-            static let dreamsDressing = "You dress like someone who remembers dreams—and honors them through "
-            static let versionsDressing = "You dress like someone who remembers every version of yourself—and honors them through "
+            static let dreamsDressing = "You dress like someone who remembers dreams and honors them through "
+            static let versionsDressing = "You dress like someone who remembers every version of yourself and honors them through "
             
             static let dressingMedium = "texture, color, and the way fabric falls. This blueprint reflects a wardrobe built on "
             static let defaultClosing = "intuition, integrity, and evolution."
