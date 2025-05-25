@@ -1154,7 +1154,6 @@ class SemanticTokenGenerator {
                 let natalPlanet = transit["natalPlanet"] as? String ?? ""
                 let aspectType = transit["aspectType"] as? String ?? ""
                 let orb = transit["orb"] as? Double ?? 1.0
-                let transitSign = transit["transitSign"] as? String
                 let isSensitivePoint = PlanetPowerEvaluator.isSensitiveTarget(natalPlanet: natalPlanet)
                 
                 // Get natal planet power score
@@ -1220,7 +1219,7 @@ class SemanticTokenGenerator {
                 }
                 
                 // Apply multi-transit adjustment for planets with multiple hits
-                for (natalPlanet, planetTokens) in tokensByNatalPlanet {
+                for (_, planetTokens) in tokensByNatalPlanet {
                     if planetTokens.count > 1 {
                         let weights = planetTokens.map { $0.weight }
                         let combinedWeight = TransitWeightCalculator.calculateCombinedTransitWeight(
@@ -1263,7 +1262,7 @@ class SemanticTokenGenerator {
         
         // Temperature tokens with enhanced nuance using library
         let temperatureDescriptions = InterpretationTextLibrary.Weather.Temperature.descriptions
-        for (threshold, weatherType, textureType, structureType) in temperatureDescriptions {
+        for (threshold, weatherType, textureType, _) in temperatureDescriptions {
             if weather.temp < Double(threshold) {
                 tokens.append(StyleToken(name: weatherType, type: "weather", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
                 tokens.append(StyleToken(name: textureType, type: "texture", weight: baseWeight, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Current Weather", originType: .weather))
