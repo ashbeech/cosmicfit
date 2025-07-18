@@ -397,18 +397,15 @@ extension CosmicFitInterpretationEngine {
     
     // MARK: - Daily Vibe Debug Helpers
     
+    
     /// Generate daily vibe content with detailed debugging
     private static func generateDailyVibeContentWithDebug(tokens: [StyleToken], weather: TodayWeather?, moonPhase: Double) -> DailyVibeContent {
         
         // Create content object
         var content = DailyVibeContent()
         
-        // Generate title
-        content.title = generateVibeTitleWithDebug(tokens: tokens)
-        
-        // Generate main paragraph
-        content.mainParagraph = generateMainParagraphWithDebug(tokens: tokens, moonPhase: moonPhase)
-        
+        content.styleBrief = generateStyleBriefWithDebug(tokens: tokens, moonPhase: moonPhase)
+
         // Generate textiles section
         content.textiles = generateTextilesWithDebug(tokens: tokens)
         
@@ -435,6 +432,32 @@ extension CosmicFitInterpretationEngine {
         return content
     }
     
+    /// Generate Style Brief with debugging
+    private static func generateStyleBriefWithDebug(tokens: [StyleToken], moonPhase: Double) -> String {
+        DebugLogger.info("Generating Style Brief in Maria's voice")
+        
+        // Extract dominant characteristics from tokens
+        let hasIntuitive = tokens.contains { ($0.name == "intuitive" || $0.name == "instinctive") && $0.weight > 1.5 }
+        let hasConfident = tokens.contains { $0.name == "confident" && $0.weight > 1.5 }
+        let hasGrounded = tokens.contains { $0.name == "grounded" && $0.weight > 1.5 }
+        let hasCreative = tokens.contains { $0.name == "creative" && $0.weight > 1.5 }
+        let hasReflective = tokens.contains { $0.name == "reflective" && $0.weight > 1.5 }
+        
+        DebugLogger.debug("Style Brief token analysis:")
+        DebugLogger.debug("  • intuitive: \(hasIntuitive)")
+        DebugLogger.debug("  • confident: \(hasConfident)")
+        DebugLogger.debug("  • grounded: \(hasGrounded)")
+        DebugLogger.debug("  • creative: \(hasCreative)")
+        DebugLogger.debug("  • reflective: \(hasReflective)")
+        
+        let styleBrief = DailyVibeGenerator.generateStyleBrief(tokens: tokens, moonPhase: moonPhase, patternSeed: 0)
+        
+        DebugLogger.info("Generated Style Brief: \(styleBrief.prefix(50))...")
+        
+        return styleBrief
+    }
+    
+    /*
     /// Generate vibe title with debugging
     private static func generateVibeTitleWithDebug(tokens: [StyleToken]) -> String {
         DebugLogger.info("Generating Daily Vibe title")
@@ -610,6 +633,7 @@ extension CosmicFitInterpretationEngine {
         DebugLogger.info("Generated main paragraph with \(paragraph.count) characters")
         return paragraph
     }
+     */
     
     /// Create moon phase tokens for debugging
     private static func moonPhaseTokens(_ phase: Double) -> [StyleToken] {
@@ -805,19 +829,38 @@ extension CosmicFitInterpretationEngine {
             takeawayOptions.append("Speak through what you choose, not just what you say.")
         }
         
-        // Based on moon phase
+        // Based on moon phase - FIXED LOGIC
         if moonPhase < 90.0 {
+            // New Moon to First Quarter - new beginnings
             takeawayOptions.append("Begin with intention. The rest will follow.")
             takeawayOptions.append("New cycles start with quiet commitment, not grand gestures.")
         } else if moonPhase < 180.0 {
+            // First Quarter to Full Moon - building energy
             takeawayOptions.append("Growth happens in the tension between comfort and challenge.")
             takeawayOptions.append("The path forward reveals itself one step at a time.")
         } else if moonPhase < 270.0 {
-            takeawayOptions.append("Full expression requires both vulnerability and strength.")
-            takeawayOptions.append("What you reveal is as important as what you conceal.")
+            // Full Moon to Last Quarter - WANING ENERGY (not full moon energy!)
+            takeawayOptions.append("Release what no longer serves you today.")
+            takeawayOptions.append("There's wisdom in knowing when to let go.")
+            takeawayOptions.append("Trust the process of natural endings.")
         } else {
+            // Last Quarter to New Moon - releasing and preparing
             takeawayOptions.append("Release what no longer serves before seeking what's next.")
             takeawayOptions.append("Completion is just another form of beginning.")
+        }
+        
+        print("\n🌙 MOON PHASE DEBUG:")
+        print("Moon phase angle: \(String(format: "%.2f", moonPhase))°")
+        print("Phase name: \(MoonPhaseInterpreter.Phase.fromDegrees(moonPhase).description)")
+        print("Takeaway category: ", terminator: "")
+        if moonPhase < 90.0 {
+            print("New beginnings (< 90°)")
+        } else if moonPhase < 180.0 {
+            print("Building energy (90° - 180°)")
+        } else if moonPhase < 270.0 {
+            print("Waning/releasing energy (180° - 270°) - FIXED!")
+        } else {
+            print("Completion/preparation (270° - 360°)")
         }
         
         // Add general takeaways

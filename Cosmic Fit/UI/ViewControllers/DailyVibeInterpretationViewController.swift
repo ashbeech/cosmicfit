@@ -9,19 +9,20 @@ import UIKit
 
 class DailyVibeInterpretationViewController: UIViewController {
     
+    
     // MARK: - Properties
     private let scrollView = UIScrollView()
     private let contentView = UIView()
-    
+
     // Header views
     private let headerLabel = UILabel()
     private let dateLabel = UILabel()
     private let weatherInfoLabel = UILabel()
     private let topDividerView = UIView()
-    
-    // Title and main paragraph
-    private let titleLabel = UILabel()
-    private let mainParagraphLabel = UILabel()
+
+    // Style Brief
+    private let styleBriefHeaderLabel = UILabel()
+    private let styleBriefLabel = UILabel()
     private let middleDividerView = UIView()
     
     // Content section views
@@ -105,7 +106,7 @@ class DailyVibeInterpretationViewController: UIViewController {
         setupHeader()
         
         // Setup Title and Main Paragraph
-        setupTitleAndMainParagraph()
+        setupStyleBrief()
         
         // Setup Content Sections
         setupContentSections()
@@ -169,20 +170,20 @@ class DailyVibeInterpretationViewController: UIViewController {
         ])
     }
     
-    private func setupTitleAndMainParagraph() {
-        // Title Label
-        titleLabel.font = UIFont.systemFont(ofSize: 28, weight: .bold)
-        titleLabel.textColor = .label
-        titleLabel.numberOfLines = 0
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(titleLabel)
+    private func setupStyleBrief() {
+        // Style Brief Header
+        styleBriefHeaderLabel.text = "Style Brief"
+        styleBriefHeaderLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        styleBriefHeaderLabel.textColor = .label
+        styleBriefHeaderLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(styleBriefHeaderLabel)
         
-        // Main Paragraph Label
-        mainParagraphLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        mainParagraphLabel.textColor = .label
-        mainParagraphLabel.numberOfLines = 0
-        mainParagraphLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(mainParagraphLabel)
+        // Style Brief Label
+        styleBriefLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        styleBriefLabel.textColor = .label
+        styleBriefLabel.numberOfLines = 0
+        styleBriefLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(styleBriefLabel)
         
         // Middle Divider
         middleDividerView.backgroundColor = .separator
@@ -190,15 +191,15 @@ class DailyVibeInterpretationViewController: UIViewController {
         contentView.addSubview(middleDividerView)
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: topDividerView.bottomAnchor, constant: 24),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            styleBriefHeaderLabel.topAnchor.constraint(equalTo: topDividerView.bottomAnchor, constant: 24),
+            styleBriefHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            styleBriefHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
-            mainParagraphLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-            mainParagraphLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            mainParagraphLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            styleBriefLabel.topAnchor.constraint(equalTo: styleBriefHeaderLabel.bottomAnchor, constant: 8),
+            styleBriefLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            styleBriefLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
-            middleDividerView.topAnchor.constraint(equalTo: mainParagraphLabel.bottomAnchor, constant: 24),
+            middleDividerView.topAnchor.constraint(equalTo: styleBriefLabel.bottomAnchor, constant: 24),
             middleDividerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             middleDividerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             middleDividerView.heightAnchor.constraint(equalToConstant: 1)
@@ -464,9 +465,8 @@ class DailyVibeInterpretationViewController: UIViewController {
     
     // MARK: - Update UI with Content
     private func updateUI(with content: DailyVibeContent) {
-        // Update title and main paragraph
-        titleLabel.text = content.title
-        mainParagraphLabel.text = content.mainParagraph
+        // Update Style Brief
+        styleBriefLabel.text = content.styleBrief
         
         // Update date
         let dateFormatter = DateFormatter()
@@ -522,8 +522,7 @@ class DailyVibeInterpretationViewController: UIViewController {
         if let content = vibeContent {
             // Create formatted text for sharing
             var shareText = "TODAY'S COSMIC VIBE\n\n"
-            shareText += "\(content.title)\n\n"
-            shareText += "\(content.mainParagraph)\n\n"
+            shareText += "\(content.styleBrief)\n\n"
             shareText += "---\n\n"
             shareText += "TEXTILES\n\(content.textiles)\n\n"
             shareText += "COLORS\n\(content.colors)\n\n"

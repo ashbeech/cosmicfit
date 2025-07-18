@@ -25,19 +25,19 @@ struct MoonPhaseInterpreter {
             switch normalized {
             case 0..<2, 358..<360:
                 return .newMoon
-            case 2..<85:
+            case 2..<87:
                 return .waxingCrescent
-            case 85..<95:
+            case 87..<93:
                 return .firstQuarter
-            case 95..<175:
+            case 93..<177:
                 return .waxingGibbous
-            case 175..<185:
+            case 177..<183:
                 return .fullMoon
-            case 185..<265:
+            case 183..<267:
                 return .waningGibbous
-            case 265..<275:
+            case 267..<273:
                 return .lastQuarter
-            case 275..<358:
+            case 273..<358:
                 return .waningCrescent
             default:
                 return .newMoon

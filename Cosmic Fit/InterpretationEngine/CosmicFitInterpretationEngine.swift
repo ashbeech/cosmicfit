@@ -142,9 +142,7 @@ class CosmicFitInterpretationEngine {
         TODAY'S COSMIC VIBE (\(dateString))
         ====================
 
-        \(dailyVibe.title)
-
-        \(dailyVibe.mainParagraph)
+        \(dailyVibe.styleBrief)
 
         TEXTILES: \(dailyVibe.textiles)
 
