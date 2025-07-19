@@ -1253,6 +1253,31 @@ class SemanticTokenGenerator {
     
     // MARK: - Token Generation from Weather
     
+    static func generateWeatherTokens(weather: TodayWeather) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // ONLY temperature-based tokens - ignore conditions completely
+        let temperatureDescriptions = InterpretationTextLibrary.Weather.Temperature.descriptions
+        for (threshold, weatherType, textureType, _) in temperatureDescriptions {
+            if weather.temp < Double(threshold) {
+                // Calculate weight based on temperature extremity
+                let extremityWeight = calculateTemperatureWeight(temp: weather.temp, threshold: threshold)
+                
+                tokens.append(StyleToken(name: weatherType, type: "weather", weight: extremityWeight,
+                                       planetarySource: nil, signSource: nil, houseSource: nil,
+                                       aspectSource: "Temperature Safety", originType: .weather))
+                tokens.append(StyleToken(name: textureType, type: "texture", weight: extremityWeight,
+                                       planetarySource: nil, signSource: nil, houseSource: nil,
+                                       aspectSource: "Temperature Safety", originType: .weather))
+                break
+            }
+        }
+        
+        // Remove all condition-based logic (rain, storms, etc.)
+        return tokens
+    }
+    
+    /*
     /// Generate enhanced weather tokens with daily variation
     static func generateWeatherTokens(weather: TodayWeather) -> [StyleToken] {
         var tokens: [StyleToken] = []
@@ -1305,6 +1330,52 @@ class SemanticTokenGenerator {
         tokens.append(StyleToken(name: selectedVariation, type: "structure", weight: baseWeight * 0.9, planetarySource: nil, signSource: nil, houseSource: nil, aspectSource: "Weather Nuance", originType: .weather))
         
         return tokens
+    }
+    */
+    
+    private static func calculateTemperatureWeight(temp: Double, threshold: Int) -> Double {
+        let thresholdTemp = Double(threshold)
+        
+        switch threshold {
+        case ...0:      return 8.0  // Freezing - MUST override cosmic suggestions
+        case 1...10:    return 6.0  // Cold - strong override
+        case 11...15:   return 3.0  // Cool - moderate influence
+        case 16...24:   return 1.0  // Mild - minimal influence
+        case 25...29:   return 3.0  // Warm - moderate influence
+        case 30...34:   return 6.0  // Hot - strong override
+        default:        return 8.0  // Scorching - MUST override
+        }
+    }
+    
+    // Add to your token processing pipeline
+    static func resolveTemperatureConflicts(tokens: [StyleToken], weather: TodayWeather) -> [StyleToken] {
+        var resolvedTokens = tokens
+        
+        if weather.temp > 28 {  // Hot weather
+            // Remove/downweight conflicting tokens
+            resolvedTokens = resolvedTokens.map { token in
+                if ["luxurious", "thick", "heavy", "layered", "cozy", "insulated"].contains(token.name) {
+                    return StyleToken(name: token.name, type: token.type, weight: token.weight * 0.1, // Heavily suppress
+                                    planetarySource: token.planetarySource, signSource: token.signSource,
+                                    houseSource: token.houseSource, aspectSource: token.aspectSource,
+                                    originType: token.originType)
+                }
+                return token
+            }
+        } else if weather.temp < 8 {  // Cold weather
+            // Suppress minimal coverage suggestions
+            resolvedTokens = resolvedTokens.map { token in
+                if ["minimal", "light", "breathable", "sheer"].contains(token.name) {
+                    return StyleToken(name: token.name, type: token.type, weight: token.weight * 0.1,
+                                    planetarySource: token.planetarySource, signSource: token.signSource,
+                                    houseSource: token.houseSource, aspectSource: token.aspectSource,
+                                    originType: token.originType)
+                }
+                return token
+            }
+        }
+        
+        return resolvedTokens
     }
     
     // MARK: - Helper Methods for Token Generation
@@ -1923,6 +1994,7 @@ class SemanticTokenGenerator {
     
     // MARK: - Public Interface Methods
     
+    /*
     /// Generates tokens from natal chart, progressed chart, transits, and weather data
     static func generateAllTokens(natal: NatalChartCalculator.NatalChart,
                                   progressed: NatalChartCalculator.NatalChart,
@@ -1954,10 +2026,13 @@ class SemanticTokenGenerator {
         if let weather = weather {
             let weatherTokens = generateWeatherTokens(weather: weather)
             tokens.append(contentsOf: weatherTokens)
+            
+            // 🔥⚔️❄️ Apply temperature conflict resolution
+            tokens = resolveTemperatureConflicts(tokens: tokens, weather: weather)
         }
         
         return tokens
-    }
+    }*/
     
     // MARK: - Library Helper Methods
     
