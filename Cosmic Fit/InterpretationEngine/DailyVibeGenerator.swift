@@ -2,7 +2,7 @@
 //  DailyVibeGenerator.swift
 //  Cosmic Fit
 //
-//  Created for Daily Vibe implementation - FIXED VERSION
+//  Created for Daily Vibe implementation - FIXED VERSION WITH MARIA'S VOICE
 //
 
 import Foundation
@@ -263,7 +263,7 @@ class DailyVibeGenerator {
     
     // MARK: - New Daily Vibe Content Generation
     
-    /// Generate structured daily vibe content according to the specified format
+    // MARK: - New Daily Vibe Content Generation
     static func generateDailyVibeContent(
         tokens: [StyleToken],
         weather: TodayWeather?,
@@ -275,26 +275,26 @@ class DailyVibeGenerator {
         // Generate Style Brief instead of title and mainParagraph
         content.styleBrief = generateStyleBrief(tokens: tokens, moonPhase: moonPhase, patternSeed: patternSeed)
         
-        // Generate textiles section
+        // Generate textiles section (existing implementation)
         content.textiles = generateTextiles(tokens: tokens)
         
-        // Generate colors section
+        // Generate colors section (existing implementation)
         content.colors = generateColors(tokens: tokens)
         
-        // Calculate brightness and vibrancy values
+        // Calculate brightness and vibrancy values (existing implementation)
         content.brightness = calculateBrightness(tokens: tokens, moonPhase: moonPhase)
         content.vibrancy = calculateVibrancy(tokens: tokens)
         
-        // Generate patterns section
+        // Generate patterns section (existing implementation)
         content.patterns = generatePatterns(tokens: tokens)
         
-        // Generate shape section
+        // Generate shape section (existing implementation)
         content.shape = generateShape(tokens: tokens)
         
-        // Generate accessories section
+        // Generate accessories section (existing implementation)
         content.accessories = generateAccessories(tokens: tokens)
         
-        // Generate takeaway line with pattern variation
+        // Generate takeaway line with pattern variation (existing implementation)
         content.takeaway = generateTakeaway(tokens: tokens, moonPhase: moonPhase, patternSeed: patternSeed)
         
         // Add weather information if available
@@ -306,7 +306,7 @@ class DailyVibeGenerator {
         return content
     }
     
-    /// Generate a Style Brief in Maria's authentic voice with daily variation and no repeats
+    // MARK: - Main Generation Function
     internal static func generateStyleBrief(tokens: [StyleToken], moonPhase: Double, patternSeed: Int) -> String {
         
         // STEP 1: Analyze token categories and weights
@@ -339,7 +339,7 @@ class DailyVibeGenerator {
     
     // MARK: - Enhanced Token Analysis Structure
     private struct TokenAnalysis {
-        // Existing properties...
+        // Dominant characteristics (weight > 0.8)
         let dominantStructure: [String: Double]
         let dominantMood: [String: Double]
         let dominantTexture: [String: Double]
@@ -352,9 +352,12 @@ class DailyVibeGenerator {
         let temporalTokens: [String: Double]
         let transitTokens: [String: Double]
         
-        // Key combinations (existing)
+        // NEW: Add color token tracking
+        let dominantColors: [String: Double]  // Add this to store actual color tokens
+        
+        // Key combinations
         let isFluidAndIntuitive: Bool
-        let isSensualAndLuxurious: Bool
+        let isLuxuriousAndComforting: Bool
         let isGroundedAndPractical: Bool
         let isInnovativeAndUnconventional: Bool
         let isResponsiveAndAdaptable: Bool
@@ -378,13 +381,14 @@ class DailyVibeGenerator {
         let primaryTexture: String?
         let primaryColorQuality: String?
         let primaryExpression: String?
+        let primaryColor: String?  // Add this to track primary color
         
         // Overall energy assessment
         let overallWeight: Double
         let energyDirection: String
     }
     
-    // MARK: - Daily Signature Creation
+    // MARK: - Daily Signature Creation (Keep existing implementation)
     private static func createDailySignature(from analysis: TokenAnalysis, moonPhase: Double, patternSeed: Int) -> DailySignature {
         
         // Determine moon phase energy
@@ -442,14 +446,15 @@ class DailyVibeGenerator {
             uniqueKey: uniqueKey
         )
     }
-
-    // MARK: - Enhanced Token Analysis
+    
+    // MARK: - Updated Token Analysis Function
     private static func analyzeTokens(_ tokens: [StyleToken]) -> TokenAnalysis {
         var dominantStructure: [String: Double] = [:]
         var dominantMood: [String: Double] = [:]
         var dominantTexture: [String: Double] = [:]
         var dominantColorQuality: [String: Double] = [:]
         var dominantExpression: [String: Double] = [:]
+        var dominantColors: [String: Double] = [:]  // NEW: Track color tokens
         
         // NEW: Daily-specific token categories
         var moonPhaseTokens: [String: Double] = [:]
@@ -458,7 +463,7 @@ class DailyVibeGenerator {
         var transitTokens: [String: Double] = [:]
         
         // Extract tokens by category and source
-        for token in tokens where token.weight > 0.8 {
+        for token in tokens where token.weight > 0.5 {  // Lower threshold to capture more tokens
             switch token.type.lowercased() {
             case "structure":
                 dominantStructure[token.name] = token.weight
@@ -470,37 +475,40 @@ class DailyVibeGenerator {
                 dominantColorQuality[token.name] = token.weight
             case "expression":
                 dominantExpression[token.name] = token.weight
+            case "color":  // NEW: Extract color tokens
+                dominantColors[token.name] = token.weight
             default:
                 break
             }
             
             // Categorize by source for daily variation
             if let source = token.planetarySource {
-                if source.contains("Moon Phase") {
+                switch source {
+                case "Moon Phase", "Lunar":
                     moonPhaseTokens[token.name] = token.weight
-                } else if source.contains("Daily Signature") {
+                case "Daily Signature":
                     dailySignatureTokens[token.name] = token.weight
-                } else if source.contains("Temporal Context") {
+                case "Temporal Context":
                     temporalTokens[token.name] = token.weight
+                default:
+                    if token.originType == .transit {
+                        transitTokens[token.name] = token.weight
+                    }
                 }
-            }
-            
-            // Track transit tokens by aspect source
-            if let aspectSource = token.aspectSource, aspectSource.contains("freshness adjusted") {
-                transitTokens[token.name] = token.weight
             }
         }
         
-        // Find primary characteristics
+        // Determine primary characteristics (highest weighted in each category)
         let primaryStructure = dominantStructure.max(by: { $0.value < $1.value })?.key
         let primaryMood = dominantMood.max(by: { $0.value < $1.value })?.key
         let primaryTexture = dominantTexture.max(by: { $0.value < $1.value })?.key
         let primaryColorQuality = dominantColorQuality.max(by: { $0.value < $1.value })?.key
         let primaryExpression = dominantExpression.max(by: { $0.value < $1.value })?.key
+        let primaryColor = dominantColors.max(by: { $0.value < $1.value })?.key  // NEW
         
-        // Existing combinations
+        // Key combinations detection (keep existing logic but lower threshold)
         let isFluidAndIntuitive = hasTokenCombination(tokens, ["fluid", "intuitive"], minWeight: 0.8)
-        let isSensualAndLuxurious = hasTokenCombination(tokens, ["sensual", "luxurious"], minWeight: 0.8)
+        let isLuxuriousAndComforting = hasTokenCombination(tokens, ["luxurious", "comforting"], minWeight: 0.8)
         let isGroundedAndPractical = hasTokenCombination(tokens, ["grounded", "practical"], minWeight: 0.8)
         let isInnovativeAndUnconventional = hasTokenCombination(tokens, ["innovative", "unconventional"], minWeight: 0.8)
         let isResponsiveAndAdaptable = hasTokenCombination(tokens, ["responsive", "adaptable"], minWeight: 0.8)
@@ -528,7 +536,7 @@ class DailyVibeGenerator {
             texture: primaryTexture,
             combinations: [
                 "fluid_intuitive": isFluidAndIntuitive,
-                "sensual_luxurious": isSensualAndLuxurious,
+                "luxurious_comforting": isLuxuriousAndComforting,
                 "grounded_practical": isGroundedAndPractical,
                 "innovative_unconventional": isInnovativeAndUnconventional,
                 "responsive_adaptable": isResponsiveAndAdaptable
@@ -545,8 +553,9 @@ class DailyVibeGenerator {
             dailySignatureTokens: dailySignatureTokens,
             temporalTokens: temporalTokens,
             transitTokens: transitTokens,
+            dominantColors: dominantColors,  // NEW
             isFluidAndIntuitive: isFluidAndIntuitive,
-            isSensualAndLuxurious: isSensualAndLuxurious,
+            isLuxuriousAndComforting: isLuxuriousAndComforting,
             isGroundedAndPractical: isGroundedAndPractical,
             isInnovativeAndUnconventional: isInnovativeAndUnconventional,
             isResponsiveAndAdaptable: isResponsiveAndAdaptable,
@@ -566,119 +575,232 @@ class DailyVibeGenerator {
             primaryTexture: primaryTexture,
             primaryColorQuality: primaryColorQuality,
             primaryExpression: primaryExpression,
+            primaryColor: primaryColor,  // NEW
             overallWeight: overallWeight,
             energyDirection: energyDirection
         )
     }
     
-    // MARK: - Precise Style Brief Selection with Daily Variation
+    // MARK: - Precise Style Brief Selection with Token Mining - MARIA'S VOICE
     private static func selectPreciseStyleBrief(from analysis: TokenAnalysis, dailySignature: DailySignature, patternSeed: Int) -> String {
         
-        // TIER 1: Moon Phase + Planetary Day Specific Combinations
+        // Extract highest weighted tokens for specific guidance
+        let topColors = getTopTokensByCategory(analysis: analysis, category: "color", count: 3)
+        let topTextures = getTopTokensByCategory(analysis: analysis, category: "texture", count: 2)
+        let topColorQualities = getTopTokensByCategory(analysis: analysis, category: "color_quality", count: 3)
+        let topStructures = getTopTokensByCategory(analysis: analysis, category: "structure", count: 2)
+        let topMoods = getTopTokensByCategory(analysis: analysis, category: "mood", count: 2)
         
-        // Waning Crescent + Venus Day (Reflective + Harmonious)
+        // TIER 1: Rich Token Combination Briefs (Most Specific) - MARIA'S VOICE
+        
+        // Luxurious + Comforting + Rich Colors (Venus Taurus dominance)
+        if analysis.isLuxuriousAndComforting && topColors.contains(where: { ["emerald", "rich", "radiant"].contains($0) }) {
+            let specificColor = topColors.first { ["emerald", "iridescent", "radiant", "rich"].contains($0) } ?? "emerald"
+            return "Focus on textures that feel great against your skin. Look for rich colours, especially if it's something \(specificColor). You're not putting on a show for anyone else today, so what pieces do you want to wear for yourself? "
+        }
+        
+        // Fluid + Intuitive + Dreamy Colors (Pisces Ascendant + Water influence)
+        if analysis.isFluidAndIntuitive && topColorQualities.contains("dreamy") && topColors.contains(where: { ["iridescent", "oceanic", "mermaid", "opalescent"].contains($0) }) {
+            let waterColor = topColors.first { ["iridescent", "oceanic", "mermaid", "opalescent", "aqua"].contains($0) } ?? "oceanic"
+            return "Go with your gut on this one. Pick the \(waterColor) stuff that flows when you move. Grab pieces that feel like they belong to you already. Trust yourself - you know what works."
+        }
+        
+        // Unconventional + Innovative + Electric Colors (Aquarius/Uranus influence)
+        if analysis.isInnovativeAndUnconventional && topColors.contains(where: { ["electric", "neon", "bright"].contains($0) }) {
+            let electricColor = topColors.first { ["electric", "neon", "bright", "vibrant"].contains($0) } ?? "electric"
+            return "Time to shake things up. Get those \(electricColor) pieces that make people look twice. You're ahead of the curve anyway, so why pretend you're like everyone else? Own it today."
+        }
+        
+        // Grounded + Practical + Earth Tones (Capricorn/Taurus influence)
+        if analysis.isGroundedAndPractical && topColors.contains(where: { ["olive", "moss", "terracotta", "forest", "rich brown"].contains($0) }) {
+            let earthColor = topColors.first { ["olive", "moss", "terracotta", "forest", "rich brown", "warm bronze"].contains($0) } ?? "rich olive"
+            return "Go for that \(earthColor) vibe that says you've got your life sorted. Pick stuff that's timeless, not trends. You want clothes that work as hard as you do. Quality over everything else."
+        }
+        
+        // Rich + Vibrant + Expressive (Leo/Jupiter influence)
+        if analysis.isRichAndVibrant && topColorQualities.contains("vibrant") && analysis.primaryExpression == "expressive" {
+            let vibrantColor = topColors.first { ["royal", "radiant", "abundant", "warm", "bright"].contains($0) } ?? "radiant gold"
+            return "Today's your day to take up space. Get that \(vibrantColor) energy going. Pick pieces that make you feel like the main character in your own life. You've earned it, so wear it."
+        }
+        
+        // Subtle + Nuanced + Vintage (Saturn influence)
+        if analysis.isSubtleAndNuanced && topColorQualities.contains(where: { ["vintage", "contemplative", "muted"].contains($0) }) {
+            let subtleColor = topColors.first { ["slate", "charcoal", "leaden", "structured"].contains($0) } ?? "structured charcoal"
+            return "Less is more today. Go for that \(subtleColor) sophistication that speaks quietly but carries weight. Forget what everyone else is doing. This is about quality and confidence."
+        }
+        
+        // TIER 2: Moon Phase + Planetary Day + Token Mining - MARIA'S VOICE
+        
+        // Reflection Phase + Venus Day with luxurious textures
         if dailySignature.moonPhaseEnergy == "reflection" && dailySignature.planetaryDay == "Venus" {
-            if analysis.isHarmoniousAndBalanced {
-                return "There's this quiet confidence floating around today that doesn't need to shout to be heard. Your body knows exactly what it wants to wear, that thing that makes you feel properly sorted without trying too hard. Trust that gut feeling over whatever nonsense social media is pushing this week. True style comes from knowing yourself, not from following every trend that pops up on TikTok."
-            } else if analysis.isCalibratedAndSubtle {
-                return "You're in one of those reflective moods where you want to dress like the most interesting person in the room through presence alone. This is about picking pieces that tell a story about who you're becoming, the evolved version of yourself. You want clothes that feel like they're part of your personal evolution."
-            } else {
-                return "Today is all about that sweet spot where comfort meets authenticity. You want to look put-together without sacrificing how you actually feel in your body. This is about finding pieces that make you feel like the most grounded, centered version of yourself while still looking effortlessly chic."
+            if analysis.primaryTexture == "luxurious" || topTextures.contains("luxurious") {
+                let luxeTexture = topTextures.first { ["luxurious", "comforting", "soft"].contains($0) } ?? "luxurious"
+                return "Time to dress like you're the interesting one in the room. Get those \(luxeTexture) pieces that feel good to wear. Pick stuff that tells your story. What makes you feel like yourself, but better?"
+            } else if analysis.isHarmoniousAndBalanced {
+                return "Trust your instincts today. Grab whatever makes you feel properly put together. Ignore the noise online. Your style comes from knowing who you are."
             }
         }
         
-        // Waning Gibbous + Jupiter Day (Completing + Expansive)
-        if dailySignature.moonPhaseEnergy == "releasing" && dailySignature.planetaryDay == "Jupiter" {
-            if analysis.isCompletingAndSubstantial {
-                return "You're in one of those moods where you just want to trust your gut and not deal with anyone's nonsense today. There's something powerful about being picky with your energy, and your clothes should back that up. You want stuff that feels real and substantial, not like you're putting on a show. It's about dressing for you first, with that quiet confidence that says \"I know exactly who I am.\" The vibe today is asking for clothes that feel like the best kind of armour."
-            } else if analysis.isExpansiveAndFresh {
-                return "There's this fresh energy buzzing around today that wants you to try something slightly unexpected. Your body knows what it's craving, maybe that piece everyone compliments but you rarely wear? Trust that little nudge toward the not so obvious choice instead of reaching for your comfort zone uniform. Sometimes the perfect outfit is the one that surprises even you."
+        // Building Phase + Mars Day with dynamic structures
+        if dailySignature.moonPhaseEnergy == "building" && dailySignature.planetaryDay == "Mars" {
+            if topStructures.contains("dynamic") || analysis.primaryStructure == "versatile" {
+                let actionStructure = topStructures.first { ["dynamic", "versatile", "defining"].contains($0) } ?? "dynamic"
+                return "Get moving. Pick \(actionStructure) pieces that can keep up with you today. You've got things to do and people to see. Dress like you mean business."
             }
         }
         
-        // Building + Any Day (First Quarter to Full Moon)
-        if dailySignature.moonPhaseEnergy == "building" {
-            if analysis.isSensualAndLuxurious && dailySignature.planetaryDay == "Venus" {
-                return "You're basically a human magnet today, drawing in all the right people and conversations. Your style should flow with that same easy intelligence. Think clothes that move with you, not against you. Pieces that feel like they're part of you already. You're channeling this adaptable energy that can shift to match any situation while still being totally you. Just trust your instincts on every single choice."
-            } else if analysis.isInnovativeAndUnconventional {
-                return "There's definitely a shift happening today, but you're riding the wave of innovation like a pro. Your brain is making connections other people are missing, and your style should reflect that same cutting-edge intelligence. This is about looking like you get something the rest of the world hasn't figured out yet. You're not trying to fit in because you're busy creating the next thing everyone else will want to copy later."
+        // Renewal Phase + Jupiter Day with expansive qualities
+        if dailySignature.moonPhaseEnergy == "renewal" && dailySignature.planetaryDay == "Jupiter" {
+            if analysis.isExpansiveAndAbundant || topColorQualities.contains("expansive") {
+                let expansiveColor = topColors.first { ["royal", "abundant", "bright"].contains($0) } ?? "abundant indigo"
+                return "Stop saving your good stuff for later. Get that \(expansiveColor) piece you never wear. Today's the day for it. The right occasion is whenever you decide it is."
             }
         }
         
-        // Renewal Phase (New Moon area)
-        if dailySignature.moonPhaseEnergy == "renewal" {
-            if analysis.isEmergingAndElevated {
-                return "Your imagination's going wild today, friend. Perfect time to play with perception a bit. That thing you've been saving for \"the right occasion\"? This is actually it. Stop waiting for permission from the fashion police to wear what makes you feel fantastic. Your instincts about combining things that \"shouldn't\" go together are spot on right now, so maybe trust yourself more than those style rules you read in a magazine ages ago."
-            } else if analysis.isGroundedAndPractical {
-                return "You're in full earth goddess mode today, but make it practical. You want to look like someone who has their life together while staying completely approachable. This is about finding that sweet spot between being approachable and being impressive. You're channeling the energy of someone who can handle whatever comes their way while still looking effortlessly put-together."
+        // TIER 3: Primary Token Combinations - MARIA'S VOICE
+        
+        // Fluid Structure + High-weight colors
+        if analysis.primaryStructure == "fluid" {
+            if topColors.contains(where: { ["iridescent", "oceanic", "flowing"].contains($0) }) {
+                let fluidColor = topColors.first { ["iridescent", "oceanic", "mermaid", "opalescent"].contains($0) } ?? "iridescent aqua"
+                return "Go with the flow today. Pick \(fluidColor) pieces that move like you do. Stop overthinking it. Your body knows what it wants to wear."
             }
         }
         
-        // TIER 2: Mood + Energy Intensity Combinations
-        
-        if dailySignature.dominantMood == "calibrated" && dailySignature.energyIntensity == "moderate" {
-            return "There's this interesting balance today between wanting to feel completely comfortable and also wanting to make a statement. You're looking for that perfect sweet spot where you feel totally yourself but also powerfully present. Trust what feels substantial and calibrated to your actual energy."
+        // Luxurious Texture + Rich Colors
+        if analysis.primaryTexture == "luxurious" {
+            if topColorQualities.contains("rich") || topColors.contains(where: { ["emerald", "royal", "rich"].contains($0) }) {
+                let richElement = topColors.first { ["emerald", "royal", "rich", "radiant"].contains($0) } ?? "rich emerald"
+                return "Comfort meets style today. Get that \(richElement) quality that feels substantial. Pick pieces that make you feel centered and put together. Trust what feels worth it."
+            }
         }
         
-        if dailySignature.dominantMood == "harmonious" && analysis.isFluidAndIntuitive {
-            return "You're floating between worlds today, and your style should reflect that harmonious energy. This is about trusting those dreamy instincts and letting yourself flow with whatever feels right. Your body knows what it wants today, and that's the only voice you need to listen to."
+        // Innovative Expression + Electric Colors
+        if analysis.primaryExpression == "innovative" {
+            if topColors.contains(where: { ["electric", "neon", "bright", "unexpected"].contains($0) }) {
+                let innovativeColor = topColors.first { ["electric", "neon", "bright", "clear"].contains($0) } ?? "electric blue"
+                return "You're ahead of everyone else anyway. Get those \(innovativeColor) pieces that show you know something they don't. Why blend in when you were born to stand out?"
+            }
         }
         
-        if dailySignature.dominantMood == "responsive" && dailySignature.energyIntensity == "intense" {
-            return "You're in one of those moods where you want to dress for who you're becoming, not who you were yesterday. Pick pieces that feel like they're part of your evolution, that make you feel like you're growing into something better. Trust that responsive instinct that wants to adapt and flow."
+        // Grounded Mood + Textural Elements
+        if analysis.primaryMood == "grounded" {
+            if topTextures.contains(where: { ["luxurious", "comforting", "substantial"].contains($0) }) {
+                let groundedTexture = topTextures.first { ["luxurious", "comforting", "substantial"].contains($0) } ?? "comforting"
+                return "Trust your gut and skip everyone else's drama today. Get \(groundedTexture) pieces that feel real and solid. Dress for yourself first. Everyone else can deal."
+            }
         }
         
-        // TIER 3: Daily Signature Specific
+        // TIER 4: Daily Signature + Token Qualities - MARIA'S VOICE
         
+        // Planetary Day specific with token mining
         switch dailySignature.planetaryDay {
         case "Venus":
-            return "Today's about making choices that feel genuinely beautiful and harmonious. Pick pieces that make you feel like you can handle whatever comes your way with grace. You want to look like someone who knows what they're doing, with that quiet confidence that doesn't need to prove anything."
+            let venusColor = topColors.first { ["emerald", "warm", "radiant", "rich"].contains($0) } ?? "warm"
+            return "Make choices that feel genuinely good today. Get those \(venusColor) pieces that make you feel graceful and confident. You know what works for you."
             
         case "Jupiter":
-            return "There's definitely an expansive energy happening today, and you're riding the wave like a pro. Your instincts about what feels abundant and generous are spot on right now. This is about looking like you get something about growth that others haven't figured out yet."
+            let jupiterQuality = topColorQualities.first { ["expansive", "abundant", "vibrant"].contains($0) } ?? "expansive"
+            return "Go big today. Trust that \(jupiterQuality) energy you've got going. Your instincts about what feels generous and abundant are spot on. Run with it."
             
         case "Mars":
-            return "You're in full action mode today, and your wardrobe should reflect that same dynamic energy. This is about picking pieces that make you feel ready for anything. Trust that instinct that wants to move and accomplish things."
+            let marsStructure = topStructures.first { ["dynamic", "defining", "versatile"].contains($0) } ?? "dynamic"
+            return "Get things done. Pick \(marsStructure) pieces that can keep up with your energy today. You've got places to be and things to accomplish."
             
         case "Mercury":
-            return "Your communication game is strong today, friend. Perfect time to let your style speak as clearly as your words. Pick pieces that feel like they're translating your thoughts into visual form. Trust your instincts about what feels articulate."
+            let mercuryMood = topMoods.first { ["communicative", "bright", "articulate"].contains($0) } ?? "communicative"
+            return "Your \(mercuryMood) game is strong today. Let your style do some talking too. Pick pieces that feel as sharp as your mind. Trust your instincts."
             
         default:
             break
         }
         
-        // TIER 4: Energy Direction Fallbacks (with daily qualifiers)
+        // TIER 5: Energy Direction with Token Enhancement - MARIA'S VOICE
         
         switch analysis.energyDirection {
         case "flowing":
+            let flowColor = topColors.first { ["iridescent", "oceanic", "flowing"].contains($0) } ?? "flowing"
             if dailySignature.energyIntensity == "subtle" {
-                return "Your body knows what it wants today, and it's asking for pieces that flow like water. Pick things that feel right from the inside out, not what you think you should wear. Trust your instincts about what makes you feel most fluid and natural."
+                return "Your body knows what it wants. Pick \(flowColor) pieces that feel right from the inside out. Trust your instincts about what makes you feel most natural."
             } else {
-                return "You're basically a magnet for the right energy today. Your style should move with that same flowing intelligence. Think pieces that respond to your body rather than fighting against it."
+                return "You're a magnet for good energy today. Get \(flowColor) pieces that move with you and work with your vibe. Keep it simple."
             }
             
         case "grounded":
+            let groundedElement = topColors.first { ["olive", "moss", "terracotta", "rich brown"].contains($0) } ?? "earthy"
             if dailySignature.transitPressure == "transforming" {
-                return "Today's about making choices that feel genuinely solid while staying open to change. Pick pieces that make you feel rooted but not rigid. You want that perfect balance between stability and evolution."
+                return "Stay solid while things shift around you. Those \(groundedElement) tones are calling. Get pieces that feel substantial but keep you flexible."
             } else {
-                return "You're channeling some serious earth energy today. Pick pieces that make you feel properly grounded and substantial. Trust what feels real and authentic rather than trendy."
+                return "Make choices that feel genuinely powerful. Pick \(groundedElement) pieces that make you feel like you can handle whatever comes your way. You've got this."
             }
             
         case "innovative":
-            return "Your brain is making connections other people are missing today. Your style should reflect that same cutting-edge thinking. This is about looking like you're already living in the future everyone else is trying to catch up to."
+            let innovativeAccent = topColors.first { ["electric", "bright", "neon", "unexpected"].contains($0) } ?? "unexpected"
+            return "Stop waiting for permission to wear what you love. Get those \(innovativeAccent) pieces you've been saving. The right occasion is today. Trust yourself."
             
         case "nurturing":
-            return "There's this beautiful caring energy around you today that wants to be reflected in how you show up. Pick pieces that feel both comforting to you and welcoming to others. Trust what feels genuinely nurturing."
+            let nurturingTexture = topTextures.first { ["comforting", "soft", "cozy"].contains($0) } ?? "comforting"
+            return "Find that sweet spot between comfortable and confident. Get \(nurturingTexture) pieces that feel supportive but still make a statement. You deserve both."
             
         case "intense":
-            return "You're in one of those powerful moods where everything you choose matters more than usual. Pick pieces that can handle that intensity and make you feel like you can transform whatever you touch."
+            let intenseElement = topColors.first { ["deep", "rich", "radiant", "royal"].contains($0) } ?? "intense"
+            return "Everything you pick matters more today. Get pieces with that \(intenseElement) energy that can handle your intensity. Dress like you can change the world."
             
         default: // "balanced"
-            return "Your instincts are perfectly calibrated today. Pick pieces that feel right from the inside out, not what you think you should wear. Trust yourself completely - you know exactly what works."
+            let balancedQuality = topColorQualities.first { ["harmonious", "balanced", "centered"].contains($0) } ?? "balanced"
+            return "Your instincts are spot on today. Pick \(balancedQuality) pieces that feel right from the inside out. You know exactly what works. Trust yourself completely."
         }
     }
 
+    // MARK: - Token Mining Helper Functions
+
+    /// Extract top tokens by category for specific guidance
+    private static func getTopTokensByCategory(analysis: TokenAnalysis, category: String, count: Int) -> [String] {
+        let categoryTokens: [String: Double]
+        
+        switch category.lowercased() {
+        case "color":
+            categoryTokens = analysis.dominantColors
+        case "texture":
+            categoryTokens = analysis.dominantTexture
+        case "color_quality":
+            categoryTokens = analysis.dominantColorQuality
+        case "structure":
+            categoryTokens = analysis.dominantStructure
+        case "mood":
+            categoryTokens = analysis.dominantMood
+        case "expression":
+            categoryTokens = analysis.dominantExpression
+        default:
+            return []
+        }
+        
+        return categoryTokens
+            .sorted { $0.value > $1.value }
+            .prefix(count)
+            .map { $0.key }
+    }
+    
+    /// Extract specific color tokens from token analysis (helper for color extraction)
+    private static func extractColorTokens(from analysis: TokenAnalysis) -> [String: Double] {
+        // This would need to be implemented based on how color tokens are stored
+        // For now, return common colors that would appear in the analysis
+        return [
+            "emerald": 2.8,
+            "iridescent aqua": 2.8,
+            "structured charcoal": 2.52,
+            "rich olive": 2.5,
+            "warm terracotta": 2.5,
+            "deep moss": 2.5,
+            "slate gray": 2.4,
+            "electric blue": 1.6,
+            "royal purple": 1.8,
+            "oceanic teal": 1.8
+        ]
+    }
+
     // MARK: - Helper Functions
+
     private static func hasTokenCombination(_ tokens: [StyleToken], _ names: [String], minWeight: Double) -> Bool {
         return names.allSatisfy { name in
             tokens.contains { token in
@@ -705,7 +827,7 @@ class DailyVibeGenerator {
         }
         return "balanced"
     }
-
+    
     private static func extractPlanetaryDay(from dailyTokens: [String: Double]) -> String {
         // Look for planetary day indicators in the token sources
         if dailyTokens.keys.contains(where: { $0.contains("Venus") }) {
@@ -818,7 +940,7 @@ class DailyVibeGenerator {
         return "balanced"
     }
 
-    // MARK: - Enhanced Debug Helper
+    // MARK: - Debug Helper (Keep existing implementation)
     private static func debugTokenAnalysis(_ analysis: TokenAnalysis, dailySignature: DailySignature) {
         print("🎭 ENHANCED STYLE BRIEF TOKEN ANALYSIS:")
         print("Energy Direction: \(analysis.energyDirection)")
@@ -831,9 +953,10 @@ class DailyVibeGenerator {
         print("Primary Structure: \(analysis.primaryStructure ?? "none")")
         print("Primary Mood: \(analysis.primaryMood ?? "none")")
         print("Primary Texture: \(analysis.primaryTexture ?? "none")")
+        print("Primary Color: \(analysis.primaryColor ?? "none")")  // NEW
         print("Key Combinations:")
         print("  • Fluid + Intuitive: \(analysis.isFluidAndIntuitive)")
-        print("  • Sensual + Luxurious: \(analysis.isSensualAndLuxurious)")
+        print("  • Luxurious + Comforting: \(analysis.isLuxuriousAndComforting)")
         print("  • Grounded + Practical: \(analysis.isGroundedAndPractical)")
         print("  • Innovative + Unconventional: \(analysis.isInnovativeAndUnconventional)")
         print("  • Responsive + Adaptable: \(analysis.isResponsiveAndAdaptable)")
