@@ -269,33 +269,41 @@ class DailyVibeGenerator {
         weather: TodayWeather?,
         moonPhase: Double,
         patternSeed: Int = 0) -> DailyVibeContent {
+        
+        // 🔥⚔️❄️ Apply temperature conflict resolution BEFORE generating content
+        var processedTokens = tokens
+        if let weather = weather {
+            print("Applying temperature conflict resolution...")
+            processedTokens = SemanticTokenGenerator.resolveTemperatureConflicts(tokens: tokens, weather: weather)
+        }
+        
         // Create content object
         var content = DailyVibeContent()
         
-        // Generate Style Brief instead of title and mainParagraph
-        content.styleBrief = generateStyleBrief(tokens: tokens, moonPhase: moonPhase, patternSeed: patternSeed)
+        // Generate Style Brief using temperature-resolved tokens
+        content.styleBrief = generateStyleBrief(tokens: processedTokens, moonPhase: moonPhase, patternSeed: patternSeed)
         
-        // Generate textiles section (existing implementation)
-        content.textiles = generateTextiles(tokens: tokens)
+        // Generate textiles section using temperature-resolved tokens
+        content.textiles = generateTextiles(tokens: processedTokens)
         
-        // Generate colors section (existing implementation)
-        content.colors = generateColors(tokens: tokens)
+        // Generate colors section using temperature-resolved tokens
+        content.colors = generateColors(tokens: processedTokens)
         
-        // Calculate brightness and vibrancy values (existing implementation)
-        content.brightness = calculateBrightness(tokens: tokens, moonPhase: moonPhase)
-        content.vibrancy = calculateVibrancy(tokens: tokens)
+        // Calculate brightness and vibrancy values using temperature-resolved tokens
+        content.brightness = calculateBrightness(tokens: processedTokens, moonPhase: moonPhase)
+        content.vibrancy = calculateVibrancy(tokens: processedTokens)
         
-        // Generate patterns section (existing implementation)
-        content.patterns = generatePatterns(tokens: tokens)
+        // Generate patterns section using temperature-resolved tokens
+        content.patterns = generatePatterns(tokens: processedTokens)
         
-        // Generate shape section (existing implementation)
-        content.shape = generateShape(tokens: tokens)
+        // Generate shape section using temperature-resolved tokens
+        content.shape = generateShape(tokens: processedTokens)
         
-        // Generate accessories section (existing implementation)
-        content.accessories = generateAccessories(tokens: tokens)
+        // Generate accessories section using temperature-resolved tokens
+        content.accessories = generateAccessories(tokens: processedTokens)
         
-        // Generate takeaway line with pattern variation (existing implementation)
-        content.takeaway = generateTakeaway(tokens: tokens, moonPhase: moonPhase, patternSeed: patternSeed)
+        // Generate takeaway line using temperature-resolved tokens
+        content.takeaway = generateTakeaway(tokens: processedTokens, moonPhase: moonPhase, patternSeed: patternSeed)
         
         // Add weather information if available
         if let weather = weather {
