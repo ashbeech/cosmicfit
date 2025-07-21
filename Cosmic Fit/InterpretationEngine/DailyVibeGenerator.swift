@@ -355,72 +355,157 @@ class DailyVibeGenerator {
         let dominantPrefix = getDominantPrefix(prefixedTokens: prefixedTokens, analysis: analysis)
         
         // TIER 1: Rich Token Combination Briefs with Prefixes (Most Specific) - MARIA'S VOICE
+        // Updated with more realistic thresholds and flexible combinations
         
-        // Luxurious + Comforting + Rich Colors (Venus Taurus dominance)
-        if analysis.isLuxuriousAndComforting && topColors.contains(where: { ["emerald", "rich", "radiant"].contains($0) }) {
-            let specificColor = topColors.first { ["emerald", "iridescent", "radiant", "rich"].contains($0) } ?? "emerald"
+        // Luxurious + Sensual (Venus Taurus dominance) - Lowered threshold to 1.1
+        if hasFlexibleTokenCombination(analysis.allTokens, ["luxurious", "sensual"], minWeight: 1.1)
+           && topColors.contains(where: { ["emerald", "rich", "radiant", "forest", "moss"].contains($0) }) {
+            let specificColor = topColors.first { ["emerald", "rich", "radiant", "forest", "moss"].contains($0) } ?? "emerald"
             return "\(dominantPrefix). Focus on textures that feel great against your skin. Look for rich colours, especially if it's something \(specificColor). You're not putting on a show for anyone else today, so what pieces do you want to wear for yourself?"
         }
         
-        // Fluid + Intuitive + Dreamy Colors (Pisces Ascendant + Water influence)
-        if analysis.isFluidAndIntuitive && topColorQualities.contains("dreamy") && topColors.contains(where: { ["iridescent", "oceanic", "mermaid", "opalescent"].contains($0) }) {
-            let waterColor = topColors.first { ["iridescent", "oceanic", "mermaid", "opalescent", "aqua"].contains($0) } ?? "oceanic"
-            return "\(dominantPrefix). Go with your gut on this one. Pick the \(waterColor) stuff that flows when you move. Grab pieces that feel like they belong to you already. Trust yourself, you know what works."
-        }
-        
-        // Bold + Dynamic + Electric Colors (Aries/Leo Mars dominance)
-        if analysis.isBoldAndDynamic && topColors.contains(where: { ["electric", "bright", "radiant", "fire"].contains($0) }) {
-            let dynamicColor = topColors.first { ["electric", "bright", "radiant", "fire"].contains($0) } ?? "electric blue"
-            return "\(dominantPrefix). You're ahead of everyone else anyway. Get those \(dynamicColor) pieces that show you know something they don't. Why blend in when you were born to stand out?"
-        }
-        
-        // Structured + Minimal + Elegant (Capricorn/Virgo Earth dominance)
-        if analysis.isStructuredAndMinimal && topColorQualities.contains("elegant") {
-            let structuredColor = topColors.first { ["charcoal", "slate", "elegant", "precise"].contains($0) } ?? "charcoal"
-            return "\(dominantPrefix). Clean lines, quality pieces. Get that \(structuredColor) foundation that makes everything else look better. Less noise, more intention. You know what works."
-        }
-        
-        // Grounded + Sensual + Earth Colors (Taurus Earth dominance)
-        if analysis.isGroundedAndSensual && topColors.contains(where: { ["moss", "olive", "terracotta", "earth"].contains($0) }) {
-            let earthColor = topColors.first { ["moss", "olive", "terracotta", "forest"].contains($0) } ?? "moss green"
+        // Grounded + Sensual (Earth + Venus influence) - New combination
+        if hasFlexibleTokenCombination(analysis.allTokens, ["grounded", "sensual"], minWeight: 1.2) {
+            let earthColor = topColors.first { ["emerald", "moss", "olive", "forest", "terracotta"].contains($0) } ?? "moss green"
             return "\(dominantPrefix). Trust your gut and skip everyone else's drama today. Get \(earthColor) pieces that feel real and solid. Dress for yourself first. Everyone else can deal."
         }
         
-        // TIER 2: Moon Phase + Planetary Day + Token Mining with Prefixes - MARIA'S VOICE
+        // Fluid + Intuitive + Dreamy Colors (Pisces Ascendant + Water influence) - Lowered threshold
+        if hasFlexibleTokenCombination(analysis.allTokens, ["fluid", "intuitive"], minWeight: 1.0)
+           && topColorQualities.contains("dreamy") || topColors.contains(where: { ["iridescent", "oceanic", "aqua", "pearl"].contains($0) }) {
+            let waterColor = topColors.first { ["iridescent", "oceanic", "aqua", "pearl"].contains($0) } ?? "oceanic"
+            return "\(dominantPrefix). Go with your gut on this one. Pick the \(waterColor) stuff that flows when you move. Grab pieces that feel like they belong to you already. Trust yourself, you know what works."
+        }
         
-        // Reflection Phase + Venus Day with luxurious textures
-        if dailySignature.moonPhaseEnergy == "reflection" && dailySignature.planetaryDay == "Venus" {
+        // Single high-weight token dominance (for when combinations don't meet thresholds)
+        if let dominantToken = getDominantSingleToken(analysis.allTokens, minWeight: 1.3) {
+            switch dominantToken.name.lowercased() {
+            case "sensual":
+                let luxeColor = topColors.first { ["emerald", "rich", "deep"].contains($0) } ?? "emerald"
+                return "\(dominantPrefix). This is about feeling good in your own skin. Get \(luxeColor) pieces that make you want to touch the fabric. Quality over everything else today."
+                
+            case "grounded":
+                let earthColor = topColors.first { ["moss", "terracotta", "olive"].contains($0) } ?? "moss"
+                return "\(dominantPrefix). Keep it real today. Choose \(earthColor) pieces that feel solid and substantial. No need to prove anything to anyone."
+                
+            case "luxurious":
+                let richColor = topColors.first { ["emerald", "gold", "deep"].contains($0) } ?? "emerald"
+                return "\(dominantPrefix). Treat yourself right. Get those \(richColor) pieces that feel expensive to wear. You deserve to feel elevated."
+                
+            case "fluid":
+                let flowColor = topColors.first { ["aqua", "oceanic", "pearl"].contains($0) } ?? "oceanic"
+                return "\(dominantPrefix). Let yourself flow today. Pick \(flowColor) pieces that move with you and change with the light."
+                
+            default:
+                break
+            }
+        }
+        
+        // TIER 2: Moon Phase + Planetary Day + Enhanced Token Mining - MARIA'S VOICE
+        
+        // Reflection Phase + Moon Day (from debug output)
+        if dailySignature.moonPhaseEnergy == "reflection" || dailySignature.planetaryDay == "Moon" {
             if analysis.primaryTexture == "luxurious" || topTextures.contains("luxurious") {
                 let luxeTexture = topTextures.first { ["luxurious", "comforting", "soft"].contains($0) } ?? "luxurious"
-                return "\(dominantPrefix). Time to dress like you're the interesting one in the room. Get those \(luxeTexture) pieces that feel good to wear. Pick stuff that tells your story. What makes you feel like yourself, but better?"
-            } else if analysis.isHarmoniousAndBalanced {
-                return "\(dominantPrefix). Trust your instincts today. Grab whatever makes you feel properly put together. Ignore the noise online. Your style comes from knowing who you are."
+                return "\(dominantPrefix). Time to dress like you're the interesting one in the room. Get those \(luxeTexture) pieces that feel good to wear. Pick stuff that tells your story."
+            } else if hasAnyToken(analysis.allTokens, ["intuitive", "reflective", "pearl"], minWeight: 1.0) {
+                let reflectiveColor = topColors.first { ["pearl", "silver", "soft"].contains($0) } ?? "pearl silver"
+                return "\(dominantPrefix). Trust your instincts today. Grab whatever makes you feel properly put together in \(reflectiveColor) tones. Your style comes from knowing who you are."
             }
         }
         
-        // Building Phase + Mars Day with dynamic structures
-        if dailySignature.moonPhaseEnergy == "building" && dailySignature.planetaryDay == "Mars" {
-            if topStructures.contains("dynamic") || analysis.primaryStructure == "versatile" {
-                let actionStructure = topStructures.first { ["dynamic", "versatile", "defining"].contains($0) } ?? "dynamic"
-                return "\(dominantPrefix). Get moving. Pick \(actionStructure) pieces that can keep up with you today. You've got things to do and people to see. Dress like you mean business."
+        // Peak Light + Summer Energy (from temporal context in debug)
+        if hasAnyToken(analysis.allTokens, ["bright", "radiant", "active"], minWeight: 1.5) {
+            let brightColor = topColors.first { ["bright", "radiant", "emerald"].contains($0) } ?? "emerald"
+            return "\(dominantPrefix). You're in full summer energy mode. Get those \(brightColor) pieces that catch the light. Don't hide your glow today."
+        }
+        
+        // TIER 3: Enhanced texture-first approach (when combinations fail)
+        if let primaryTexture = analysis.primaryTexture {
+            switch primaryTexture.lowercased() {
+            case "luxurious":
+                let richColor = topColors.first ?? "emerald"
+                return "\(dominantPrefix). All about that luxurious feel today. Choose \(richColor) pieces that feel as good as they look. Touch comes first."
+                
+            case "comforting", "soft":
+                let comfortColor = topColors.first ?? "warm"
+                return "\(dominantPrefix). Comfort is your priority. Get \(comfortColor) pieces that feel like a hug. You don't need to try hard today."
+                
+            case "structured":
+                let structuredColor = topColors.first ?? "charcoal"
+                return "\(dominantPrefix). Clean lines, clear intentions. Choose \(structuredColor) pieces that have good bones. Less noise, more purpose."
+                
+            default:
+                break
             }
         }
         
-        // Renewal Phase + Jupiter Day with expansive qualities
-        if dailySignature.moonPhaseEnergy == "renewal" && dailySignature.planetaryDay == "Jupiter" {
-            if analysis.isExpansiveAndAbundant || topColorQualities.contains("expansive") {
-                let expansiveColor = topColors.first { ["royal", "abundant", "bright"].contains($0) } ?? "abundant indigo"
-                return "\(dominantPrefix). Stop saving your good stuff for later. Get that \(expansiveColor) piece you never wear. Today's the day for it. The right occasion is whenever you decide it is."
+        // TIER 4: Color-first approach (when texture/combination approaches fail)
+        if let primaryColor = analysis.primaryColor {
+            switch primaryColor.lowercased() {
+            case "emerald", "forest", "moss":
+                return "\(dominantPrefix). Green is your power color today. Get emerald pieces that make you feel connected to your strength. Nature vibes with intention."
+                
+            case "pearl", "silver", "aqua":
+                return "\(dominantPrefix). Soft but powerful today. Choose pearl or aqua pieces that shift with the light. Let your intuition guide the choices."
+                
+            default:
+                let colorChoice = primaryColor
+                return "\(dominantPrefix). \(colorChoice.capitalized) is calling you today. Trust that instinct and choose pieces that feel right in that shade."
             }
         }
         
-        // TIER 5: Fallback with Primary Prefix
-        let fallbackColor = topColors.first ?? "charcoal"
-        let fallbackTexture = topTextures.first ?? "comfortable"
+        // TIER 5: Enhanced Fallback with better token analysis
+        let fallbackColor = topColors.first ?? "emerald"
+        let fallbackTexture = topTextures.first ?? "luxurious"
         
+        // Check if we have strong energy indicators for enhanced fallback
+        if hasAnyToken(analysis.allTokens, ["expressing", "manifesting", "active"], minWeight: 1.4) {
+            return "\(dominantPrefix). You're in manifestation mode today. Pick \(fallbackColor) pieces with \(fallbackTexture) energy that make you feel powerful. Trust your gut over everyone else's opinions."
+        }
+        
+        // Standard enhanced fallback
         return "\(dominantPrefix). Pick \(fallbackColor) pieces with \(fallbackTexture) energy that make you feel like yourself today. Trust your gut over everyone else's opinions. You know what works."
     }
     
+    /// More flexible token combination checking with weighted approach
+    private static func hasFlexibleTokenCombination(_ tokens: [StyleToken], _ names: [String], minWeight: Double) -> Bool {
+        // Check if we have both tokens, but allow for slight weight variations
+        let foundTokens = names.compactMap { name in
+            tokens.first { token in
+                token.name.lowercased() == name.lowercased()
+            }
+        }
+        
+        // Must have all required tokens
+        guard foundTokens.count == names.count else { return false }
+        
+        // At least one token must meet the minimum weight
+        let hasMinWeight = foundTokens.contains { $0.weight >= minWeight }
+        
+        // Combined weight should be meaningful
+        let combinedWeight = foundTokens.reduce(0) { $0 + $1.weight }
+        let averageWeight = combinedWeight / Double(foundTokens.count)
+        
+        return hasMinWeight && averageWeight >= (minWeight * 0.8)
+    }
+    
+    /// Check for any token from a list meeting weight threshold
+    private static func hasAnyToken(_ tokens: [StyleToken], _ names: [String], minWeight: Double) -> Bool {
+        return names.contains { name in
+            tokens.contains { token in
+                token.name.lowercased() == name.lowercased() && token.weight >= minWeight
+            }
+        }
+    }
+    
+    /// Get the single most dominant token if it meets threshold
+    private static func getDominantSingleToken(_ tokens: [StyleToken], minWeight: Double) -> StyleToken? {
+        return tokens
+            .filter { $0.weight >= minWeight }
+            .max { $0.weight < $1.weight }
+    }
+        
     /// Get the most relevant prefix based on dominant tokens
     private static func getDominantPrefix(prefixedTokens: [(token: StyleToken, prefix: String)], analysis: TokenAnalysis) -> String {
         
@@ -471,6 +556,8 @@ class DailyVibeGenerator {
         
         let overallWeight: Double
         let energyDirection: String
+        
+        let allTokens: [StyleToken]
     }
     
     // MARK: - Daily Signature Structure
@@ -995,22 +1082,22 @@ class DailyVibeGenerator {
         // Calculate overall weight
         let overallWeight = tokens.reduce(0) { $0 + $1.weight }
         
-        // Determine token combinations (threshold = 1.5 weight)
-        let isFluidAndIntuitive = hasTokenCombination(tokens, ["fluid", "intuitive"], minWeight: 1.5)
-        let isBoldAndDynamic = hasTokenCombination(tokens, ["bold", "dynamic"], minWeight: 1.5)
-        let isLuxuriousAndComforting = hasTokenCombination(tokens, ["luxurious", "comforting"], minWeight: 1.5)
-        let isStructuredAndMinimal = hasTokenCombination(tokens, ["structured", "minimal"], minWeight: 1.5)
-        let isGroundedAndSensual = hasTokenCombination(tokens, ["grounded", "sensual"], minWeight: 1.5)
-        let isHarmoniousAndBalanced = hasTokenCombination(tokens, ["harmonious", "balanced"], minWeight: 1.5)
-        let isCalibratedAndSubtle = hasTokenCombination(tokens, ["calibrated", "subtle"], minWeight: 1.5)
-        let isExpansiveAndFresh = hasTokenCombination(tokens, ["expansive", "fresh"], minWeight: 1.5)
-        let isCompletingAndSubstantial = hasTokenCombination(tokens, ["completing", "substantial"], minWeight: 1.5)
-        let isEmergingAndElevated = hasTokenCombination(tokens, ["emerging", "elevated"], minWeight: 1.5)
+        // Determine token combinations with more flexible thresholds
+        let isFluidAndIntuitive = hasFlexibleTokenCombination(tokens, ["fluid", "intuitive"], minWeight: 1.0)
+        let isBoldAndDynamic = hasFlexibleTokenCombination(tokens, ["bold", "dynamic"], minWeight: 1.0)
+        let isLuxuriousAndComforting = hasFlexibleTokenCombination(tokens, ["luxurious", "comforting"], minWeight: 1.0)
+        let isStructuredAndMinimal = hasFlexibleTokenCombination(tokens, ["structured", "minimal"], minWeight: 1.0)
+        let isGroundedAndSensual = hasFlexibleTokenCombination(tokens, ["grounded", "sensual"], minWeight: 1.0)
+        let isHarmoniousAndBalanced = hasFlexibleTokenCombination(tokens, ["harmonious", "balanced"], minWeight: 1.0)
+        let isCalibratedAndSubtle = hasFlexibleTokenCombination(tokens, ["calibrated", "subtle"], minWeight: 1.0)
+        let isExpansiveAndFresh = hasFlexibleTokenCombination(tokens, ["expansive", "fresh"], minWeight: 1.0)
+        let isCompletingAndSubstantial = hasFlexibleTokenCombination(tokens, ["completing", "substantial"], minWeight: 1.0)
+        let isEmergingAndElevated = hasFlexibleTokenCombination(tokens, ["emerging", "elevated"], minWeight: 1.0)
         
         // Additional combinations
-        let isExpansiveAndAbundant = hasTokenCombination(tokens, ["expansive", "abundant"], minWeight: 1.5)
-        let isSensualAndLuxurious = hasTokenCombination(tokens, ["sensual", "luxurious"], minWeight: 1.5)
-        let isInnovativeAndUnconventional = hasTokenCombination(tokens, ["innovative", "unconventional"], minWeight: 1.5)
+        let isExpansiveAndAbundant = hasFlexibleTokenCombination(tokens, ["expansive", "abundant"], minWeight: 1.0)
+        let isSensualAndLuxurious = hasFlexibleTokenCombination(tokens, ["sensual", "luxurious"], minWeight: 1.0)
+        let isInnovativeAndUnconventional = hasFlexibleTokenCombination(tokens, ["innovative", "unconventional"], minWeight: 1.0)
         
         // Determine energy direction
         let combinations = [
@@ -1048,7 +1135,8 @@ class DailyVibeGenerator {
             primaryExpression: primaryExpression,
             primaryColor: primaryColor,
             overallWeight: overallWeight,
-            energyDirection: energyDirection
+            energyDirection: energyDirection,
+            allTokens: tokens
         )
     }
     
