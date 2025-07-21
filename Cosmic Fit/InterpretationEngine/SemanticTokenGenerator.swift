@@ -1261,7 +1261,7 @@ class SemanticTokenGenerator {
         for (threshold, weatherType, textureType, _) in temperatureDescriptions {
             if weather.temp < Double(threshold) {
                 // Calculate weight based on temperature extremity
-                let extremityWeight = calculateTemperatureWeight(temp: weather.temp, threshold: threshold)
+                let extremityWeight = calculateTemperatureWeight(temp: weather.temp)
                 
                 tokens.append(StyleToken(name: weatherType, type: "weather", weight: extremityWeight,
                                        planetarySource: nil, signSource: nil, houseSource: nil,
@@ -1333,10 +1333,8 @@ class SemanticTokenGenerator {
     }
     */
     
-    private static func calculateTemperatureWeight(temp: Double, threshold: Int) -> Double {
-        let thresholdTemp = Double(threshold)
-        
-        switch threshold {
+    private static func calculateTemperatureWeight(temp: Double) -> Double {
+        switch temp {
         case ...0:      return 8.0  // Freezing - MUST override cosmic suggestions
         case 1...10:    return 6.0  // Cold - strong override
         case 11...15:   return 3.0  // Cool - moderate influence
@@ -1350,49 +1348,74 @@ class SemanticTokenGenerator {
     // Enhanced temperature conflict resolution
     static func resolveTemperatureConflicts(tokens: [StyleToken], weather: TodayWeather) -> [StyleToken] {
         var resolvedTokens = tokens
+        let currentTemp = weather.temp
         
-        // Define comprehensive conflicting elements by temperature ranges
-        let hotWeatherConflicts = [
-            // Fabric types
-            "wool", "cashmere", "fleece", "velvet", "corduroy", "tweed", "mohair", "alpaca",
-            // Texture descriptors
-            "thick", "heavy", "insulated", "cozy", "plush", "padded", "quilted", "lined",
-            // Style descriptors
-            "luxurious", "layered", "bundled", "wrapped", "covered", "enclosed",
-            // Coverage levels
-            "full-coverage", "high-coverage", "conservative", "modest"
-        ]
+        // Define temperature thresholds for conflict resolution
+        let coldThreshold = 10.0  // Below this = cold weather
+        let hotThreshold = 25.0   // Above this = hot weather
         
-        let coldWeatherConflicts = [
-            // Fabric types
-            "chiffon", "voile", "organza", "tulle", "mesh", "lace", "gauze", "silk charmeuse",
-            // Texture descriptors
-            "sheer", "translucent", "transparent", "breathable", "airy", "lightweight", "delicate",
-            // Style descriptors
-            "minimal", "exposed", "open", "flowing", "loose", "breezy",
-            // Coverage levels
-            "minimal-coverage", "low-coverage", "revealing", "bare"
-        ]
-        
-        // Temperature-based conflict resolution with graduated responses
-        if weather.temp >= 32 {  // Scorching (32°C+)
-            resolvedTokens = suppressConflictingTokens(resolvedTokens, hotWeatherConflicts, 0.05) // Extreme suppression
-        } else if weather.temp >= 28 {  // Hot (28-31°C)
-            resolvedTokens = suppressConflictingTokens(resolvedTokens, hotWeatherConflicts, 0.15) // Heavy suppression
-        } else if weather.temp >= 25 {  // Warm (25-27°C)
-            let lightConflicts = ["thick", "heavy", "insulated", "cozy", "wool", "cashmere", "fleece"]
-            resolvedTokens = suppressConflictingTokens(resolvedTokens, lightConflicts, 0.4) // Moderate suppression
-        } else if weather.temp <= 2 {  // Freezing (2°C and below)
-            resolvedTokens = suppressConflictingTokens(resolvedTokens, coldWeatherConflicts, 0.05) // Extreme suppression
-        } else if weather.temp <= 8 {  // Cold (3-8°C)
-            resolvedTokens = suppressConflictingTokens(resolvedTokens, coldWeatherConflicts, 0.15) // Heavy suppression
-        } else if weather.temp <= 12 {  // Cool (9-12°C)
-            let lightConflicts = ["sheer", "translucent", "minimal", "lightweight", "chiffon", "voile"]
-            resolvedTokens = suppressConflictingTokens(resolvedTokens, lightConflicts, 0.4) // Moderate suppression
+        // Temperature-based token adjustments
+        if currentTemp < coldThreshold {
+            // Cold weather - boost protective, warm tokens
+            resolvedTokens = resolvedTokens.map { token in
+                if ["protective", "warm", "layered", "cozy", "insulating"].contains(token.name) {
+                    return StyleToken(
+                        name: token.name,
+                        type: token.type,
+                        weight: token.weight * 1.5, // Boost cold-appropriate tokens
+                        planetarySource: token.planetarySource,
+                        signSource: token.signSource,
+                        houseSource: token.houseSource,
+                        aspectSource: (token.aspectSource ?? "") + " (Cold Weather Boost)",
+                        originType: token.originType
+                    )
+                } else if ["light", "airy", "minimal", "breathable"].contains(token.name) {
+                    return StyleToken(
+                        name: token.name,
+                        type: token.type,
+                        weight: token.weight * 0.6, // Reduce hot-weather tokens
+                        planetarySource: token.planetarySource,
+                        signSource: token.signSource,
+                        houseSource: token.houseSource,
+                        aspectSource: token.aspectSource,
+                        originType: token.originType
+                    )
+                }
+                return token
+            }
+            
+        } else if currentTemp > hotThreshold {
+            // Hot weather - boost light, breathable tokens
+            resolvedTokens = resolvedTokens.map { token in
+                if ["light", "airy", "minimal", "breathable", "cooling"].contains(token.name) {
+                    return StyleToken(
+                        name: token.name,
+                        type: token.type,
+                        weight: token.weight * 1.5, // Boost hot-appropriate tokens
+                        planetarySource: token.planetarySource,
+                        signSource: token.signSource,
+                        houseSource: token.houseSource,
+                        aspectSource: (token.aspectSource ?? "") + " (Hot Weather Boost)",
+                        originType: token.originType
+                    )
+                } else if ["protective", "layered", "heavy", "insulating"].contains(token.name) {
+                    return StyleToken(
+                        name: token.name,
+                        type: token.type,
+                        weight: token.weight * 0.6, // Reduce cold-weather tokens
+                        planetarySource: token.planetarySource,
+                        signSource: token.signSource,
+                        houseSource: token.houseSource,
+                        aspectSource: token.aspectSource,
+                        originType: token.originType
+                    )
+                }
+                return token
+            }
         }
         
-        // Add temperature-appropriate enhancement tokens
-        resolvedTokens = addTemperatureAppropriateTokens(resolvedTokens, weather.temp)
+        // Remove tokens that fall below minimum weight after adjustment
+        resolvedTokens = resolvedTokens.filter { $0.weight > 0.3 }
         
         return resolvedTokens
     }
