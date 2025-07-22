@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         
         // Initialize debug enhancements
-        DebugInitializer.setupDebugEnhancements()
+        //DebugInitializer.setupDebugEnhancements()
         
         // Configure appearance
         configureAppearance()

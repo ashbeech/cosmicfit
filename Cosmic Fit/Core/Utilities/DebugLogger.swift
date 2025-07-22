@@ -2,7 +2,7 @@
 //  DebugLogger.swift
 //  Cosmic Fit
 //
-//  Enhanced debug logging system for interpretation generation
+//  Unified debug logging system that eliminates duplication
 //
 
 import Foundation
@@ -97,37 +97,14 @@ struct DebugLogger {
             for token in sorted {
                 var sourceInfo = ""
                 if let planet = token.planetarySource {
-                    sourceInfo += "[\(planet)]"
+                    sourceInfo += " (\(planet)"
+                    if let aspect = token.aspectSource {
+                        sourceInfo += " - \(aspect)"
+                    }
+                    sourceInfo += ")"
                 }
-                if let sign = token.signSource {
-                    sourceInfo += "[\(sign)]"
-                }
-                if let house = token.houseSource {
-                    sourceInfo += "[House \(house)]"
-                }
-                if let aspect = token.aspectSource {
-                    sourceInfo += "[\(aspect)]"
-                }
-                
-                print("    • \(token.name): \(String(format: "%.2f", token.weight)) \(sourceInfo)")
+                print("    • \(token.name): \(String(format: "%.2f", token.weight))\(sourceInfo)")
             }
-        }
-        
-        // Count tokens by source
-        var sourceCounts: [String: Int] = [:]
-        for token in tokens {
-            var source = "Unknown"
-            if let planet = token.planetarySource {
-                source = planet
-            } else if let aspect = token.aspectSource {
-                source = aspect
-            }
-            sourceCounts[source, default: 0] += 1
-        }
-        
-        print("  🔍 SOURCE DISTRIBUTION:")
-        for (source, count) in sourceCounts.sorted(by: { $0.key < $1.key }) {
-            print("    • \(source): \(count) tokens")
         }
     }
     
@@ -136,65 +113,52 @@ struct DebugLogger {
         guard enableParagraphAssemblyLogging && currentLogLevel.priority <= LogLevel.debug.priority else { return }
         
         print("\n📝 PARAGRAPH ASSEMBLY: \(sectionName.uppercased()) 📝")
-        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("  ✨ Generated Text Length: \(paragraphText.count) characters")
+        print("  🪙 Tokens Used: \(tokens.count)")
         
-        // Show the generated text
-        print("📄 Generated Text:")
-        let lines = paragraphText.components(separatedBy: ". ")
-        for (index, line) in lines.enumerated() {
-            if !line.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                print("  \(index + 1). \(line.trimmingCharacters(in: .whitespacesAndNewlines))\(line.hasSuffix(".") ? "" : ".")")
-            }
+        // Show top influencing tokens
+        let topTokens = tokens.sorted { $0.weight > $1.weight }.prefix(5)
+        print("  🎯 Top Influencing Tokens:")
+        for (index, token) in topTokens.enumerated() {
+            print("    \(index + 1). \(token.name) (weight: \(String(format: "%.2f", token.weight)))")
         }
         
-        // Show influential tokens
-        print("\n🎯 Influential Tokens:")
-        let sortedTokens = tokens.sorted { $0.weight > $1.weight }.prefix(5)
-        for (index, token) in sortedTokens.enumerated() {
-            var sourceInfo = ""
-            if let planet = token.planetarySource {
-                sourceInfo += " from \(planet)"
-            }
-            if let sign = token.signSource {
-                sourceInfo += " in \(sign)"
-            }
-            if let house = token.houseSource {
-                sourceInfo += " (House \(house))"
-            }
-            
-            print("  \(index + 1). \(token.name): \(String(format: "%.2f", token.weight))\(sourceInfo)")
-        }
-        
-        // Text analysis
-        print("\n📊 Text Analysis:")
-        print("  • Character count: \(paragraphText.count)")
-        print("  • Word count: \(paragraphText.components(separatedBy: .whitespacesAndNewlines).filter { !$0.isEmpty }.count)")
-        print("  • Sentence count: \(paragraphText.components(separatedBy: ". ").filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }.count)")
-        
-        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+        // Show first 100 characters of generated text
+        let preview = paragraphText.count > 100 ?
+            String(paragraphText.prefix(100)) + "..." :
+            paragraphText
+        print("  💬 Text Preview: \"\(preview)\"")
     }
     
-    /// Log individual sentence generation with influencing tokens
-    static func sentence(text: String, influencedBy tokens: [StyleToken], inSection section: String) {
-        guard enableParagraphAssemblyLogging && currentLogLevel.priority <= LogLevel.verbose.priority else { return }
+    /// Log section generation
+    static func sectionGeneration(_ sectionName: String, tokensUsed: [StyleToken], result: String) {
+        guard enableParagraphAssemblyLogging && currentLogLevel.priority <= LogLevel.debug.priority else { return }
         
-        print("🔤 SENTENCE (\(section)):")
-        print("  Text: \"\(text.trimmingCharacters(in: .whitespacesAndNewlines))\"")
+        print("\n🔧 SECTION: \(sectionName.uppercased()) 🔧")
+        print("  📊 Tokens Analyzed: \(tokensUsed.count)")
+        print("  📏 Output Length: \(result.count) characters")
         
-        if !tokens.isEmpty {
-            print("  Influenced by:")
-            for token in tokens.prefix(3) {
-                var sourceInfo = ""
-                if let planet = token.planetarySource {
-                    sourceInfo += " [\(planet)]"
-                }
-                if let sign = token.signSource {
-                    sourceInfo += " [\(sign)]"
-                }
-                print("    • \(token.name) (\(String(format: "%.2f", token.weight)))\(sourceInfo)")
+        // Log key tokens that influenced this section
+        let significantTokens = tokensUsed.filter { $0.weight > 1.5 }.sorted { $0.weight > $1.weight }
+        if !significantTokens.isEmpty {
+            print("  🎯 Significant Tokens:")
+            for token in significantTokens.prefix(3) {
+                print("    • \(token.name): \(String(format: "%.2f", token.weight))")
             }
         }
-        print("")
+    }
+    
+    /// Log sentence generation with context
+    static func sentenceGeneration(_ sentence: String, tokens: [StyleToken], section: String, context: String) {
+        guard enableParagraphAssemblyLogging && currentLogLevel.priority <= LogLevel.verbose.priority else { return }
+        
+        print("  🗣️ [\(section)] \(context): \"\(sentence)\"")
+        
+        // Log tokens that influenced this specific sentence
+        let relevantTokens = tokens.filter { sentence.lowercased().contains($0.name.lowercased()) }
+        if !relevantTokens.isEmpty {
+            print("      📍 Influenced by: \(relevantTokens.map { $0.name }.joined(separator: ", "))")
+        }
     }
     
     /// Log chart calculation details
@@ -232,6 +196,66 @@ struct DebugLogger {
         if kerr == KERN_SUCCESS {
             let memoryMB = Double(info.resident_size) / 1024 / 1024
             print("🧠 MEMORY (\(context)): \(String(format: "%.2f", memoryMB)) MB")
+        }
+    }
+    
+    // MARK: - Interpretation Engine Specific Logging
+    
+    /// Log blueprint generation start
+    static func blueprintGenerationStart(_ tokens: [StyleToken]) {
+        guard currentLogLevel.priority <= LogLevel.info.priority else { return }
+        
+        print("\n🧩 GENERATING COSMIC FIT BLUEPRINT 🧩")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        
+        if enableTokenDebugLogging {
+            tokenSet("BLUEPRINT TOKENS", tokens)
+            logTokenAnalysisForBlueprint(tokens)
+        }
+    }
+    
+    /// Log daily vibe generation start
+    static func dailyVibeGenerationStart(natal: NatalChartCalculator.NatalChart, progressed: NatalChartCalculator.NatalChart, transits: [[String: Any]]) {
+        guard currentLogLevel.priority <= LogLevel.info.priority else { return }
+        
+        print("\n☀️ GENERATING DAILY COSMIC VIBE ☀️")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        
+        if enableTokenDebugLogging {
+            print("📊 CHART DATA ANALYSIS:")
+            print("Natal Sun Sign: \(CoordinateTransformations.getZodiacSignName(sign: natal.planets.first(where: { $0.name == "Sun" })?.zodiacSign ?? 0))")
+            print("Natal Moon Sign: \(CoordinateTransformations.getZodiacSignName(sign: natal.planets.first(where: { $0.name == "Moon" })?.zodiacSign ?? 0))")
+            print("Progressed Moon Sign: \(CoordinateTransformations.getZodiacSignName(sign: progressed.planets.first(where: { $0.name == "Moon" })?.zodiacSign ?? 0))")
+            print("Natal Ascendant Sign: \(CoordinateTransformations.getZodiacSignName(sign: CoordinateTransformations.decimalDegreesToZodiac(natal.ascendant).sign))")
+            print("Total transit aspects: \(transits.count)")
+        }
+    }
+    
+    /// Log token analysis for blueprint
+    private static func logTokenAnalysisForBlueprint(_ tokens: [StyleToken]) {
+        guard enableTokenDebugLogging else { return }
+        
+        info("Analyzing token set for Blueprint generation")
+        
+        // Count tokens by source
+        var planetaryCounts: [String: Int] = [:]
+        for token in tokens {
+            if let planet = token.planetarySource {
+                planetaryCounts[planet, default: 0] += 1
+            }
+        }
+        
+        // Log planetary distributions
+        debug("Planetary token distribution:")
+        for (planet, count) in planetaryCounts.sorted(by: { $0.value > $1.value }) {
+            debug("  • \(planet): \(count) tokens")
+        }
+        
+        // Log top tokens by weight
+        let topTokensByWeight = tokens.sorted { $0.weight > $1.weight }.prefix(10)
+        debug("Top 10 tokens by weight:")
+        for (index, token) in topTokensByWeight.enumerated() {
+            debug("  \(index+1). \(token.name): \(String(format: "%.2f", token.weight))")
         }
     }
     

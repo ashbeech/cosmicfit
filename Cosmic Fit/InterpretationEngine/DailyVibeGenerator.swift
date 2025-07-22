@@ -2,9 +2,6 @@
 //  DailyVibeGenerator.swift
 //  Cosmic Fit
 //
-//  Created for Daily Vibe implementation - TRANSIT-PRIMARY WEIGHT DISTRIBUTION
-//  Fixed proper weight distribution: Transit analysis creates PRIMARY influences, Natal provides BASE foundation
-//
 
 import Foundation
 
@@ -230,7 +227,7 @@ class DailyVibeGenerator {
             verifyWeightDistribution(tokens: allTokens)
             
             // 7. Generate interpretative elements
-            let analysis = analyzeTokens(allTokens)
+            //let analysis = analyzeTokens(allTokens)
             let patternSeed = getDailyPatternSeed()
             let styleBrief = generateStyleBrief(tokens: allTokens, moonPhase: moonPhase, patternSeed: patternSeed)
             
