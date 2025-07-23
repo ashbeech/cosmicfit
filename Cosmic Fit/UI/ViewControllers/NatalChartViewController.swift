@@ -435,7 +435,7 @@ final class NatalChartViewController: UIViewController {
         let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
         
         // Generate daily vibe content with debug
-        let dailyVibeContent = CosmicFitInterpretationEngine.generateDailyVibeInterpretationWithDebug(
+        let dailyVibeContent = CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
             from: natalChart,
             progressedChart: progChart,
             transits: allTransits,
@@ -595,7 +595,7 @@ final class NatalChartViewController: UIViewController {
         
         // Generate daily vibe content with debug
         print("Generating Daily Vibe with detailed debugging...")
-        let dailyVibeContent = CosmicFitInterpretationEngine.generateDailyVibeInterpretationWithDebug(
+        let dailyVibeContent = CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
             from: natalChart,
             progressedChart: progChart,
             transits: allTransits,

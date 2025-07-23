@@ -471,22 +471,6 @@ extension CosmicFitInterpretationEngine {
         // This now just calls the unified method - no separate implementation needed
         return generateBlueprintInterpretation(from: chart, currentAge: currentAge)
     }
-    
-    /// Debug wrapper for daily vibe generation (maintains compatibility during transition)
-    static func generateDailyVibeInterpretationWithDebug(
-        from natalChart: NatalChartCalculator.NatalChart,
-        progressedChart: NatalChartCalculator.NatalChart,
-        transits: [[String: Any]],
-        weather: TodayWeather?) -> DailyVibeContent {
-        
-        // This now just calls the unified method - no separate implementation needed
-        return generateDailyVibeInterpretation(
-            from: natalChart,
-            progressedChart: progressedChart,
-            transits: transits,
-            weather: weather
-        )
-    }
 }
 
 // MARK: - Private Helper Methods
