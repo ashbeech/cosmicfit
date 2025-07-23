@@ -174,20 +174,25 @@ class CosmicFitInterpretationEngine {
             print("\n☀️ GENERATING DAILY COSMIC VIBE ☀️")
             print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         }
+            
+            // Calculate current lunar phase
+            let currentDate = Date()
+            let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
+            let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: currentJulianDay)
 
-        // Calculate current lunar phase
-        let currentDate = Date()
-        let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
-        let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: currentJulianDay)
+            // Declare weights model
+            let weights = WeightingModel.self
 
-        // Use the existing DailyVibeGenerator implementation
-        let dailyVibeContent = DailyVibeGenerator.generateDailyVibe(
-            natalChart: natalChart,
-            progressedChart: progressedChart,
-            transits: transits,
-            weather: weather,
-            moonPhase: lunarPhase
-        )
+            // Use the existing DailyVibeGenerator implementation
+            let dailyVibeContent = DailyVibeGenerator.generateDailyVibe(
+                natalChart: natalChart,
+                progressedChart: progressedChart,
+                transits: transits,
+                weather: weather,
+                moonPhase: lunarPhase,
+                weights: weights
+            )
+
         
         DebugConfiguration.debugLog {
             print("\n✅ Daily Vibe generation completed successfully!")
