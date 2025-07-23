@@ -162,8 +162,8 @@ class CosmicFitInterpretationEngine {
             
             if let weather = weather {
                 print("\n🌤️ WEATHER INTEGRATION:")
-                print("Conditions: \(weather.conditions)")
-                print("Temperature: \(weather.temp)°C")
+                print("Conditions: \(weather.condition)")
+                print("Temperature: \(weather.temperature)°C")
                 print("Humidity: \(weather.humidity)%")
                 print("Wind: \(weather.windKph) km/h")
             }

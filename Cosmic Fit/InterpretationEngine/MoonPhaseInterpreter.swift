@@ -21,7 +21,7 @@ struct MoonPhaseInterpreter {
         
         static func fromDegrees(_ degrees: Double) -> Phase {
             let normalized = degrees.truncatingRemainder(dividingBy: 360.0)
-            
+                        
             switch normalized {
             case 0..<2, 358..<360:
                 return .newMoon

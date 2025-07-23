@@ -965,7 +965,7 @@ extension NatalChartViewController: UITableViewDataSource, UITableViewDelegate {
         case 7: configureTransitCell(cell, with: longTermTransits[indexPath.row])
         case 8:
             if let wx = todayWeather {
-                let title  = "\(wx.conditions) • \(Int(wx.temp)) ℃"
+                let title  = "\(wx.condition) • \(Int(wx.temperature)) ℃"
                 let detail = "Humidity \(wx.humidity)% • Wind \(Int(wx.windKph)) km/h"
                 cell.configure(title: title, detail: detail, secondary: "Today")
             }

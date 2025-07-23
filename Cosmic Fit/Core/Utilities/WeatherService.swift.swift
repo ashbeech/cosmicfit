@@ -10,8 +10,8 @@ import Foundation
 import CoreLocation
 
 struct TodayWeather {
-    let conditions : String   // e.g. "Partly cloudy"
-    let temp       : Double   // °C
+    let condition : String   // e.g. "Partly cloudy"
+    let temperature       : Double   // °C
     let humidity   : Int      // %
     let windKph    : Double   // km/h
 }
@@ -67,8 +67,8 @@ final class WeatherService {
         let humidity = r.hourly.relativehumidity_2m[idx]
         
         return TodayWeather(
-            conditions: Self.describe(code: r.current_weather.weathercode),
-            temp:       r.current_weather.temperature,
+            condition: Self.describe(code: r.current_weather.weathercode),
+            temperature:       r.current_weather.temperature,
             humidity:   humidity,
             windKph:    r.current_weather.windspeed
         )
