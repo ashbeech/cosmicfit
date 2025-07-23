@@ -415,19 +415,20 @@ class SemanticTokenGenerator {
                 }
                 
                 // Apply WeightingModel transit weight
-                let adjustedTransitWeight = transitWeight * WeightingModel.transitWeight
-                
+                let adjustedTransitWeight: Double = transitWeight * WeightingModel.transitWeight
+
                 // Get influence category and token weight scale
                 let influenceCategory = TransitWeightCalculator.getStyleInfluenceCategory(weight: adjustedTransitWeight)
-                let tokenScale = TransitWeightCalculator.getTokenWeightScale(for: influenceCategory)
-                
+                let tokenScale: Double = TransitWeightCalculator.getTokenWeightScale(for: influenceCategory)
+
                 // Generate tokens based on the transit with aspect source tracking
                 let aspectSource = "\(transitPlanet) \(aspectType) \(natalPlanet)"
+                let finalWeight: Double = adjustedTransitWeight * tokenScale
                 let transitTokens = tokenizeForTransit(
                     transitPlanet: transitPlanet,
                     natalPlanet: natalPlanet,
                     aspectType: aspectType,
-                    weight: adjustedTransitWeight * tokenScale,
+                    weight: finalWeight,
                     aspectSource: aspectSource)
                 
                 tokens.append(contentsOf: transitTokens)

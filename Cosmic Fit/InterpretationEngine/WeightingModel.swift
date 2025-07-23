@@ -6,9 +6,9 @@
 //
 
 struct WeightingModel {
-    static let natalWeight = 0.0
-    static let progressedWeight = 0.0
-    static let transitWeight = 1
-    static let moonPhaseWeight = 0.0
-    static let weatherWeight = 0.0
+    static let natalWeight: Double = 0.2
+    static let progressedWeight: Double = 0.1
+    static let transitWeight: Double = 0.50
+    static let moonPhaseWeight: Double = 0.1
+    static let weatherWeight: Double = 0.1
 }
