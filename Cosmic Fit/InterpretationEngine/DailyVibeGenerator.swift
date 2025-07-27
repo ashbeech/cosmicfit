@@ -210,8 +210,8 @@ class DailyVibeGenerator {
             // 7. Generate interpretative elements
             //let analysis = analyzeTokens(allTokens)
             let patternSeed = getDailyPatternSeed()
-            let styleBrief = generateStyleBrief(tokens: allTokens, moonPhase: moonPhase, patternSeed: patternSeed)
-            
+            let styleBrief = generateStyleBrief(tokens: allTokens, moonPhase: moonPhase, patternSeed: patternSeed, weights: weights)
+
             // 8. Generate specific fashion elements
             let textiles = generateTextiles(tokens: allTokens)
             let colors = generateColors(tokens: allTokens)
@@ -734,50 +734,249 @@ class DailyVibeGenerator {
         return dayOfYear
     }
     
-    private static func generateStyleBrief(tokens: [StyleToken], moonPhase: Double, patternSeed: Int) -> String {
-        let topTokens = tokens.sorted { $0.weight > $1.weight }.prefix(5)
+    // MARK: - Maria's Voice Style Brief Generation
+    
+    private static func generateStyleBrief(tokens: [StyleToken], moonPhase: Double, patternSeed: Int, weights: WeightingModel.Type) -> String {
+        
+        let sortedTokens = tokens.sorted { $0.weight > $1.weight }
+        let topTokens = Array(sortedTokens.prefix(8))
+        
+        // Analyze token composition
         let dominantMoods = topTokens.filter { $0.type == "mood" }
         let dominantStructures = topTokens.filter { $0.type == "structure" }
+        let dominantExpressions = topTokens.filter { $0.type == "expression" }
+        let dominantTextures = topTokens.filter { $0.type == "texture" }
+        let dominantColorQualities = topTokens.filter { $0.type == "color_quality" }
         
-        var brief = "Today's cosmic signature suggests "
+        // Calculate weight distribution for Maria's voice adaptation
+        let transitWeight = weights.DailyFit.transitWeight
+        let natalWeight = weights.natalWeight
+        let moonPhaseWeight = weights.DailyFit.moonPhaseWeight
+        let weatherWeight = weights.DailyFit.weatherWeight
         
-        if let primaryMood = dominantMoods.first {
-            brief += "a \(primaryMood.name) energy "
+        // Get moon phase for contextual advice
+        let moonPhaseEnum = MoonPhaseInterpreter.Phase.fromDegrees(moonPhase)
+        
+        // Generate Maria's style brief based on dominant themes and weights
+        return generateMariaStyleParagraph(
+            topTokens: topTokens,
+            dominantMoods: dominantMoods,
+            dominantStructures: dominantStructures,
+            dominantExpressions: dominantExpressions,
+            dominantTextures: dominantTextures,
+            dominantColorQualities: dominantColorQualities,
+            moonPhase: moonPhaseEnum,
+            transitWeight: transitWeight,
+            natalWeight: natalWeight,
+            moonPhaseWeight: moonPhaseWeight,
+            weatherWeight: weatherWeight,
+            patternSeed: patternSeed
+        )
+    }
+    
+    private static func generateMariaStyleParagraph(
+        topTokens: [StyleToken],
+        dominantMoods: [StyleToken],
+        dominantStructures: [StyleToken],
+        dominantExpressions: [StyleToken],
+        dominantTextures: [StyleToken],
+        dominantColorQualities: [StyleToken],
+        moonPhase: MoonPhaseInterpreter.Phase,
+        transitWeight: Double,
+        natalWeight: Double,
+        moonPhaseWeight: Double,
+        weatherWeight: Double,
+        patternSeed: Int
+    ) -> String {
+        
+        // Determine primary energy source based on weights
+        let energySource = determineEnergySource(transitWeight: transitWeight, natalWeight: natalWeight, moonPhaseWeight: moonPhaseWeight, weatherWeight: weatherWeight)
+        
+        // Get primary token characteristics
+        let primaryMood = dominantMoods.first?.name ?? "balanced"
+        let primaryStructure = dominantStructures.first?.name ?? "adaptable"
+        let primaryExpression = dominantExpressions.first?.name ?? "authentic"
+        let primaryTexture = dominantTextures.first?.name ?? "comfortable"
+        let primaryColorQuality = dominantColorQualities.first?.name ?? "clear"
+        
+        // Generate opening based on energy source and primary characteristics
+        let opening = generateMariaOpening(energySource: energySource, primaryMood: primaryMood, primaryExpression: primaryExpression, patternSeed: patternSeed)
+        
+        // Generate core advice based on dominant tokens
+        let coreAdvice = generateMariaCoreAdvice(
+            primaryStructure: primaryStructure,
+            primaryTexture: primaryTexture,
+            primaryColorQuality: primaryColorQuality,
+            moonPhase: moonPhase,
+            patternSeed: patternSeed
+        )
+        
+        // Generate closing based on overall energy and moon phase
+        let closing = generateMariaClosing(moonPhase: moonPhase, primaryExpression: primaryExpression, patternSeed: patternSeed)
+        
+        return "\(opening) \(coreAdvice) \(closing)"
+    }
+    
+    private static func determineEnergySource(transitWeight: Double, natalWeight: Double, moonPhaseWeight: Double, weatherWeight: Double) -> String {
+        let weights = [
+            ("transit", transitWeight),
+            ("natal", natalWeight),
+            ("lunar", moonPhaseWeight),
+            ("environmental", weatherWeight)
+        ]
+        return weights.max { $0.1 < $1.1 }?.0 ?? "balanced"
+    }
+    
+    private static func generateMariaOpening(energySource: String, primaryMood: String, primaryExpression: String, patternSeed: Int) -> String {
+        let openings: [String: [String]] = [
+            "transit": [
+                "There's definitely a shift happening today, and you're riding that wave like a pro.",
+                "You're feeling this fresh energy buzzing around today that wants you to try something slightly unexpected.",
+                "There's this fresh energy buzzing around today that wants you to try something slightly unexpected.",
+                "You're breaking free from something that's been making you feel small, and your clothes need to back that up."
+            ],
+            "natal": [
+                "You're in one of those moods where you just want to trust your gut and deal with anyone's nonsense today.",
+                "You're basically a human magnet today, drawing in all the right people and conversations.",
+                "You're in one of those reflective moods where you want to dress like the most interesting person in the room through presence alone.",
+                "There's something powerful about being picky with your energy, and your clothes should back that up."
+            ],
+            "lunar": [
+                "There's this quiet confidence floating around today that doesn't need to shout to be heard.",
+                "Your imagination's going wild today, friend. Perfect time to play with perception a bit.",
+                "You're in full earth goddess mode today, but make it practical.",
+                "Your body knows what it's craving, maybe that piece everyone compliments but you rarely wear?"
+            ],
+            "environmental": [
+                "The weather's setting the tone today, and your wardrobe should flow with that same energy.",
+                "Today's about working with what the universe is giving you, starting with what's happening outside your window.",
+                "There's something about today's atmosphere that's asking you to be more intentional with your choices."
+            ],
+            "balanced": [
+                "You want stuff that feels real and substantial, like you're putting on a show.",
+                "It's about dressing for you first, with that quiet confidence that says 'I know exactly who I am.'",
+                "Your style should flow with that same easy intelligence."
+            ]
+        ]
+        
+        let moodAdjustments: [String: [String]] = [
+            "intense": ["Your brain is making connections other people are missing", "You're channeling this cutting-edge intelligence"],
+            "dreamy": ["This is about picking pieces that tell a story about who you're becoming", "You want clothes that feel like they're part of your personal evolution"],
+            "confident": ["This is about picking pieces that make you feel genuinely powerful when you catch yourself in the mirror", "You want to dress like someone who's figured out what actually matters"],
+            "rebellious": ["That thing you've been saving for 'the right occasion'? This is actually it", "Stop waiting for permission from the fashion police to wear what makes you feel fantastic"],
+            "practical": ["You want to look like someone who has their life together while staying completely approachable", "This is about finding that sweet spot between being approachable and being impressive"]
+        ]
+        
+        let sourceOpenings = openings[energySource] ?? openings["balanced"]!
+        let baseOpening = sourceOpenings[patternSeed % sourceOpenings.count]
+        
+        if let adjustments = moodAdjustments[primaryMood] {
+            let adjustment = adjustments[patternSeed % adjustments.count]
+            return "\(baseOpening) \(adjustment)."
         }
         
-        if let primaryStructure = dominantStructures.first {
-            brief += "with \(primaryStructure.name) lines"
+        return baseOpening
+    }
+    
+    private static func generateMariaCoreAdvice(primaryStructure: String, primaryTexture: String, primaryColorQuality: String, moonPhase: MoonPhaseInterpreter.Phase, patternSeed: Int) -> String {
+            
+            let structureAdvice: [String: [String]] = [
+                "flowing": ["Think clothes that move with you, not against you", "You want pieces that feel like they're part of you already"],
+                "structured": ["You're asking for clothes that feel like the best kind of armour", "This is about looking like you get something the rest of the world hasn't figured out yet"],
+                "adaptable": ["Your style should reflect that same adaptable energy that can shift to match any situation while still being totally you", "Just trust your instincts on every single choice"],
+                "balanced": ["You're channeling the energy of someone who can handle whatever comes their way while still looking effortlessly put-together", "This is about finding that sweet spot between being approachable and being impressive"],
+                "innovative": ["Your style should reflect that same cutting-edge intelligence", "You're not trying to fit in because you're busy creating the next thing everyone else will want to copy later"],
+                "protective": ["The vibe today is asking for clothes that feel like the best kind of armour", "You want to dress like someone who's figured out what actually matters and is focused on what truly counts"]
+            ]
+            
+            let textureAdvice: [String: [String]] = [
+                "soft": ["Trust that little nudge toward the not so obvious choice instead of reaching for your comfort zone uniform", "Your body knows exactly what it wants to wear, that thing that makes you feel properly sorted without trying too hard"],
+                "luxurious": ["Your instincts about combining things that 'shouldn't' go together are spot on right now", "Sometimes the perfect outfit is the one that surprises even you"],
+                "comfortable": ["Trust that gut feeling over whatever nonsense social media is pushing this week", "True style comes from knowing yourself, rather than following every trend that pops up on TikTok"],
+                "substantial": ["You want stuff that feels real and substantial, like you're putting on a show", "There's something beautiful about the moment when you stop caring what other people think and start caring about what makes you feel alive"],
+                "flowing": ["Think pieces that feel like they're part of you already", "Your style should flow with that same easy intelligence"]
+            ]
+            
+            let colorAdvice: [String: [String]] = [
+                "bright": ["Trust that little nudge toward the not so obvious choice", "Maybe trust yourself more than those style rules you read in a magazine ages ago"],
+                "soft": ["There's this quiet confidence floating around that doesn't need to shout to be heard", "True style comes from knowing yourself, rather than following every trend"],
+                "warm": ["Your body knows what it's craving, maybe that piece everyone compliments but you rarely wear?", "Trust your instincts about what makes you feel fantastic"],
+                "electric": ["Your imagination's going wild today, friend. Perfect time to play with perception a bit", "Sometimes the perfect outfit is the one that surprises even you"],
+                "grounded": ["You want to look like someone who has their life together while staying completely approachable", "This is about finding that sweet spot between being approachable and being impressive"]
+            ]
+            
+            let structureKey = structureAdvice.keys.contains(primaryStructure) ? primaryStructure : "balanced"
+            let textureKey = textureAdvice.keys.contains(primaryTexture) ? primaryTexture : "comfortable"
+            let colorKey = colorAdvice.keys.contains(primaryColorQuality) ? primaryColorQuality : "soft"
+            
+            let structurePick = structureAdvice[structureKey]![patternSeed % structureAdvice[structureKey]!.count]
+            let texturePick = textureAdvice[textureKey]![(patternSeed + 1) % textureAdvice[textureKey]!.count]
+            let colorPick = colorAdvice[colorKey]![(patternSeed + 2) % colorAdvice[colorKey]!.count]
+            
+            // Combine all three advice types naturally
+            return "\(structurePick). \(texturePick). \(colorPick)."
+        }
+    
+    private static func generateMariaClosing(moonPhase: MoonPhaseInterpreter.Phase, primaryExpression: String, patternSeed: Int) -> String {
+        
+        let moonPhaseClosings: [MoonPhaseInterpreter.Phase: [String]] = [
+            .newMoon: [
+                "Sometimes the perfect outfit is the one that surprises even you.",
+                "Trust that gut feeling over whatever nonsense social media is pushing this week.",
+                "Your instincts about what makes you feel fantastic are spot on right now."
+            ],
+            .waxingCrescent: [
+                "Stop waiting for permission from the fashion police to wear what makes you feel fantastic.",
+                "True style comes from knowing yourself, rather than following every trend that pops up on TikTok.",
+                "Maybe trust yourself more than those style rules you read in a magazine ages ago."
+            ],
+            .firstQuarter: [
+                "There's something beautiful about the moment when you stop caring what other people think and start caring about what makes you feel alive.",
+                "This is about dressing for the version of yourself you're growing into, and today that energy is particularly strong.",
+                "Just trust your instincts on every single choice."
+            ],
+            .waxingGibbous: [
+                "Your instincts about combining things that 'shouldn't' go together are spot on right now.",
+                "Sometimes the perfect outfit is the one that surprises even you.",
+                "Trust that little nudge toward the not so obvious choice instead of reaching for your comfort zone uniform."
+            ],
+            .fullMoon: [
+                "That thing you've been saving for 'the right occasion'? This is actually it.",
+                "Stop waiting for permission from the fashion police to wear what makes you feel fantastic.",
+                "Your imagination's going wild today, friend. Perfect time to play with perception a bit."
+            ],
+            .waningGibbous: [
+                "True style comes from knowing yourself, rather than following every trend that pops up on TikTok.",
+                "There's something powerful about the moment when you stop caring what other people think and start caring about what makes you feel alive.",
+                "This is about picking pieces that tell a story about who you're becoming, the evolved version of yourself."
+            ],
+            .lastQuarter: [
+                "Your body knows exactly what it wants to wear, that thing that makes you feel properly sorted without trying too hard.",
+                "Trust that gut feeling over whatever nonsense social media is pushing this week.",
+                "Sometimes the perfect outfit is the one that surprises even you."
+            ],
+            .waningCrescent: [
+                "Just trust your instincts on every single choice.",
+                "There's something beautiful about the moment when you stop caring what other people think and start caring about what makes you feel alive.",
+                "True style comes from knowing yourself, rather than following every trend."
+            ]
+        ]
+        
+        let expressionModifiers: [String: [String]] = [
+            "bold": ["Stop waiting for permission", "That thing you've been saving for 'the right occasion'? This is actually it"],
+            "confident": ["Trust that gut feeling", "Your instincts about what makes you feel fantastic are spot on right now"],
+            "authentic": ["True style comes from knowing yourself", "There's something beautiful about the moment when you stop caring what other people think"],
+            "creative": ["Your imagination's going wild today", "Sometimes the perfect outfit is the one that surprises even you"],
+            "elegant": ["Your body knows exactly what it wants to wear", "This is about picking pieces that tell a story about who you're becoming"]
+        ]
+        
+        // Use expression-based closing if available, otherwise fall back to moon phase
+        if let expressionClosings = expressionModifiers[primaryExpression] {
+            return expressionClosings[patternSeed % expressionClosings.count]
         }
         
-        brief += ". "
-        
-        // Add moon phase influence
-        let _moonPhase = MoonPhaseInterpreter.Phase.fromDegrees(moonPhase)
-        
-        print("🌝 MOON PHASE TODAY: \(_moonPhase)")
-
-        brief += {
-            switch _moonPhase {
-            case .newMoon:
-                return "The new moon invites quiet intention — keep your look minimal and anchored inward."
-            case .waxingCrescent:
-                return "The waxing crescent supports fresh starts — style with clarity and emerging confidence."
-            case .firstQuarter:
-                return "First quarter energy is decisive and directional — dress with strong lines and intent."
-            case .waxingGibbous:
-                return "The waxing gibbous builds energy — layering, texture, and anticipation suit the vibe."
-            case .fullMoon:
-                return "The full moon heightens drama and visibility — go bold, expressive, and emotionally clear."
-            case .waningGibbous:
-                return "The waning gibbous distills experience — focus on refinement and quiet confidence."
-            case .lastQuarter:
-                return "The last quarter urges release — strip back, clarify, and let your outfit breathe."
-            case .waningCrescent:
-                return "The waning crescent signals rest — fluid shapes, gentle tones, and emotional ease win."
-            }
-        }()
-        
-        return brief
+        let moonClosings = moonPhaseClosings[moonPhase] ?? moonPhaseClosings[.newMoon]!
+        return moonClosings[patternSeed % moonClosings.count]
     }
     
     private static func generateTextiles(tokens: [StyleToken]) -> String {
