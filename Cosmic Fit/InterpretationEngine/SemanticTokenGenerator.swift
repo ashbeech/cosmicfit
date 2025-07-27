@@ -92,12 +92,12 @@ class SemanticTokenGenerator {
         let aspectTokens = generateAspectTokens(chart: natal, baseWeight: WeightingModel.natalWeight)
         tokens.append(contentsOf: aspectTokens)
         
+        /*
         // Add moon phase influence using WeightingModel moon phase weight
         let currentDate = Date()
         let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
         let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: currentJulianDay)
         let moonPhase = MoonPhaseInterpreter.Phase.fromDegrees(lunarPhase)
-        print("🌝 MOON PHASE: \(moonPhase)")
         let moonPhaseTokens = MoonPhaseInterpreter.tokensForBlueprintRelevance(phase: moonPhase)
         
         for token in moonPhaseTokens {
@@ -117,6 +117,7 @@ class SemanticTokenGenerator {
         // Generate moon phase color tokens using WeightingModel moon phase weight
         let moonColorTokens = generateMoonPhaseColorTokens(moonPhase: lunarPhase, weight: WeightingModel.moonPhaseWeight)
         tokens.append(contentsOf: moonColorTokens)
+        */
         
         return tokens
     }
@@ -178,9 +179,7 @@ class SemanticTokenGenerator {
             
             return tokens
         }
-    
-    // MARK: - Daily Vibe Token Generation
-    
+        
     /// Generate tokens for base style resonance (100% natal, Whole Sign)
     static func generateBaseStyleTokens(natal: NatalChartCalculator.NatalChart) -> [StyleToken] {
         return generateBlueprintTokens(natal: natal)
@@ -270,6 +269,7 @@ class SemanticTokenGenerator {
                 }
             }
             
+            /*
             // Add moon phase influence using WeightingModel moon phase weight
             let currentDate = Date()
             let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
@@ -290,6 +290,7 @@ class SemanticTokenGenerator {
                 )
                 tokens.append(adjustedToken)
             }
+             */
             
             return tokens
         }
@@ -355,6 +356,7 @@ class SemanticTokenGenerator {
             }
         }
         
+        /*
         // Add moon phase influence using WeightingModel moon phase weight
         let currentDate = Date()
         let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
@@ -375,6 +377,7 @@ class SemanticTokenGenerator {
             )
             tokens.append(adjustedToken)
         }
+         */
         
         return tokens
     }
@@ -415,7 +418,7 @@ class SemanticTokenGenerator {
                 }
                 
                 // Apply WeightingModel transit weight
-                let adjustedTransitWeight: Double = transitWeight * WeightingModel.transitWeight
+                let adjustedTransitWeight: Double = transitWeight * WeightingModel.DailyFit.transitWeight
 
                 // Get influence category and token weight scale
                 let influenceCategory = TransitWeightCalculator.getStyleInfluenceCategory(weight: adjustedTransitWeight)
@@ -492,7 +495,7 @@ class SemanticTokenGenerator {
             let adjustedToken = StyleToken(
                 name: token.name,
                 type: token.type,
-                weight: token.weight * WeightingModel.weatherWeight,
+                weight: token.weight * WeightingModel.DailyFit.weatherWeight,
                 planetarySource: token.planetarySource,
                 signSource: token.signSource,
                 houseSource: token.houseSource,

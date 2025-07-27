@@ -26,7 +26,7 @@ class DailyVibeGenerator {
         moonPhase: Double,
         weights: WeightingModel.Type = WeightingModel.self) -> DailyVibeContent {
             
-            print("Using weights: natal=\(weights.natalWeight), progressed=\(weights.progressedWeight), transit=\(weights.transitWeight), moon=\(weights.moonPhaseWeight), weather=\(weights.weatherWeight)")
+            print("Using weights: natal=\(weights.natalWeight), progressed=\(weights.progressedWeight), transit=\(weights.DailyFit.transitWeight), moon=\(weights.DailyFit.moonPhaseWeight), weather=\(weights.DailyFit.weatherWeight)")
             
             print("\n☀️ GENERATING DAILY COSMIC VIBE - TRANSIT-PRIMARY SYSTEM ☀️")
             print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
@@ -97,9 +97,9 @@ class DailyVibeGenerator {
             print("\n🎯 APPLYING WEIGHTING MODEL:")
             print("  • Natal Base: \(weights.natalWeight * 100)% (balanced foundation)")
             print("  • Progressed: \(weights.progressedWeight * 100)% (emotional tone)")
-            print("  • Transit: \(weights.transitWeight * 100)% (daily shifts)")
-            print("  • Moon Phase: \(weights.moonPhaseWeight * 100)% (mood overlay)")
-            print("  • Weather: \(weights.weatherWeight * 100)% (practical adjustment)")
+            print("  • Transit: \(weights.DailyFit.transitWeight * 100)% (daily shifts)")
+            print("  • Moon Phase: \(weights.DailyFit.moonPhaseWeight * 100)% (mood overlay)")
+            print("  • Weather: \(weights.DailyFit.weatherWeight * 100)% (practical adjustment)")
             
             // Apply natal weight
             for token in baseStyleTokens {
@@ -138,7 +138,7 @@ class DailyVibeGenerator {
                 let adjustedToken = StyleToken(
                     name: token.name,
                     type: token.type,
-                    weight: strongBoostedWeight * weights.transitWeight,
+                    weight: strongBoostedWeight * weights.DailyFit.transitWeight,
                     planetarySource: token.planetarySource,
                     signSource: token.signSource,
                     houseSource: token.houseSource,
@@ -153,7 +153,7 @@ class DailyVibeGenerator {
                 let adjustedToken = StyleToken(
                     name: token.name,
                     type: token.type,
-                    weight: moderateBoostedWeight * weights.transitWeight,
+                    weight: moderateBoostedWeight * weights.DailyFit.transitWeight,
                     planetarySource: token.planetarySource,
                     signSource: token.signSource,
                     houseSource: token.houseSource,
@@ -168,7 +168,7 @@ class DailyVibeGenerator {
                 let adjustedToken = StyleToken(
                     name: token.name,
                     type: token.type,
-                    weight: token.weight * weights.weatherWeight,
+                    weight: token.weight * weights.DailyFit.weatherWeight,
                     planetarySource: token.planetarySource,
                     signSource: token.signSource,
                     houseSource: token.houseSource,
@@ -183,7 +183,7 @@ class DailyVibeGenerator {
                 let adjustedToken = StyleToken(
                     name: token.name,
                     type: token.type,
-                    weight: token.weight * weights.moonPhaseWeight,
+                    weight: token.weight * weights.DailyFit.moonPhaseWeight,
                     planetarySource: token.planetarySource,
                     signSource: token.signSource,
                     houseSource: token.houseSource,
@@ -753,6 +753,8 @@ class DailyVibeGenerator {
         
         // Add moon phase influence
         let _moonPhase = MoonPhaseInterpreter.Phase.fromDegrees(moonPhase)
+        
+        print("🌝 MOON PHASE TODAY: \(_moonPhase)")
 
         brief += {
             switch _moonPhase {
