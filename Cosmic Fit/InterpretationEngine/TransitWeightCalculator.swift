@@ -132,7 +132,7 @@ class TransitWeightCalculator {
     }
     
     /// Calculate fashion relevance score for planet combinations
-    private static func getFashionRelevanceScore(
+    internal static func getFashionRelevanceScore(
         transitPlanet: String,
         natalPlanet: String,
         aspectType: String

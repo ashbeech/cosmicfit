@@ -137,7 +137,7 @@ class PlanetPowerEvaluator {
     }
     
     /// Determine dignity status of planet in sign
-    private static func getDignityStatus(planet: String, sign: String) -> DignityStatus {
+    internal static func getDignityStatus(planet: String, sign: String) -> DignityStatus {
         switch planet {
         case "Sun":
             if sign == "Leo" { return .domicile }

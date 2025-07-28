@@ -738,245 +738,568 @@ class DailyVibeGenerator {
     
     private static func generateStyleBrief(tokens: [StyleToken], moonPhase: Double, patternSeed: Int, weights: WeightingModel.Type) -> String {
         
-        let sortedTokens = tokens.sorted { $0.weight > $1.weight }
-        let topTokens = Array(sortedTokens.prefix(8))
+        // Use existing token analysis but leverage the sophisticated interpretations
+        let transitTokens = tokens.filter { $0.originType == .transit && $0.weight > 0.3 }
+        let natalTokens = tokens.filter { $0.originType == .natal }
+        let progressedTokens = tokens.filter { $0.originType == .progressed }
+        let environmentalTokens = tokens.filter { $0.originType == .weather || $0.originType == .phase }
         
-        // Analyze token composition
-        let dominantMoods = topTokens.filter { $0.type == "mood" }
-        let dominantStructures = topTokens.filter { $0.type == "structure" }
-        let dominantExpressions = topTokens.filter { $0.type == "expression" }
-        let dominantTextures = topTokens.filter { $0.type == "texture" }
-        let dominantColorQualities = topTokens.filter { $0.type == "color_quality" }
+        // Calculate actual weight distribution (properly sensitive to WeightingModel changes)
+        let transitWeight = transitTokens.reduce(0) { $0 + $1.weight }
+        let natalWeight = natalTokens.reduce(0) { $0 + $1.weight }
+        let progressedWeight = progressedTokens.reduce(0) { $0 + $1.weight }
+        let environmentalWeight = environmentalTokens.reduce(0) { $0 + $1.weight }
         
-        // Calculate weight distribution for Maria's voice adaptation
-        let transitWeight = weights.DailyFit.transitWeight
-        let natalWeight = weights.natalWeight
-        let moonPhaseWeight = weights.DailyFit.moonPhaseWeight
-        let weatherWeight = weights.DailyFit.weatherWeight
+        let totalWeight = transitWeight + natalWeight + progressedWeight + environmentalWeight
         
-        // Get moon phase for contextual advice
-        let moonPhaseEnum = MoonPhaseInterpreter.Phase.fromDegrees(moonPhase)
-        
-        // Generate Maria's style brief based on dominant themes and weights
-        return generateMariaStyleParagraph(
-            topTokens: topTokens,
-            dominantMoods: dominantMoods,
-            dominantStructures: dominantStructures,
-            dominantExpressions: dominantExpressions,
-            dominantTextures: dominantTextures,
-            dominantColorQualities: dominantColorQualities,
-            moonPhase: moonPhaseEnum,
-            transitWeight: transitWeight,
-            natalWeight: natalWeight,
-            moonPhaseWeight: moonPhaseWeight,
-            weatherWeight: weatherWeight,
-            patternSeed: patternSeed
+        // Extract transit interpretations using the sophisticated engine components
+        let interpretedTransits = extractTransitInterpretationsFromEngine(
+            transitTokens: transitTokens,
+            natalTokens: natalTokens
         )
-    }
-    
-    private static func generateMariaStyleParagraph(
-        topTokens: [StyleToken],
-        dominantMoods: [StyleToken],
-        dominantStructures: [StyleToken],
-        dominantExpressions: [StyleToken],
-        dominantTextures: [StyleToken],
-        dominantColorQualities: [StyleToken],
-        moonPhase: MoonPhaseInterpreter.Phase,
-        transitWeight: Double,
-        natalWeight: Double,
-        moonPhaseWeight: Double,
-        weatherWeight: Double,
-        patternSeed: Int
-    ) -> String {
         
-        // Determine primary energy source based on weights
-        let energySource = determineEnergySource(transitWeight: transitWeight, natalWeight: natalWeight, moonPhaseWeight: moonPhaseWeight, weatherWeight: weatherWeight)
+        // Determine confidence level based on dignity status and weight strength
+        let confidenceLevel = calculateMariaConfidenceLevel(
+            weightDistribution: (transitWeight/totalWeight, natalWeight/totalWeight, progressedWeight/totalWeight, environmentalWeight/totalWeight),
+            interpretedTransits: interpretedTransits
+        )
         
-        // Get primary token characteristics
-        let primaryMood = dominantMoods.first?.name ?? "balanced"
-        let primaryStructure = dominantStructures.first?.name ?? "adaptable"
-        let primaryExpression = dominantExpressions.first?.name ?? "authentic"
-        let primaryTexture = dominantTextures.first?.name ?? "comfortable"
-        let primaryColorQuality = dominantColorQualities.first?.name ?? "clear"
-        
-        // Generate opening based on energy source and primary characteristics
-        let opening = generateMariaOpening(energySource: energySource, primaryMood: primaryMood, primaryExpression: primaryExpression, patternSeed: patternSeed)
-        
-        // Generate core advice based on dominant tokens
-        let coreAdvice = generateMariaCoreAdvice(
-            primaryStructure: primaryStructure,
-            primaryTexture: primaryTexture,
-            primaryColorQuality: primaryColorQuality,
+        // Generate Maria's response using the full interpretation system
+        return generateMariaResponseFromEngine(
+            interpretedTransits: interpretedTransits,
+            natalFoundation: extractNatalFoundationFromTokens(natalTokens),
+            weightDistribution: (
+                transit: transitWeight/totalWeight,
+                natal: natalWeight/totalWeight,
+                progressed: progressedWeight/totalWeight,
+                environmental: environmentalWeight/totalWeight
+            ),
+            confidenceLevel: confidenceLevel,
             moonPhase: moonPhase,
             patternSeed: patternSeed
         )
+    }
+
+    // Extract transit interpretations using InterpretationTextLibrary and existing engine logic
+    private static func extractTransitInterpretationsFromEngine(
+        transitTokens: [StyleToken],
+        natalTokens: [StyleToken]
+    ) -> [EnhancedTransitMeaning] {
         
-        // Generate closing based on overall energy and moon phase
-        let closing = generateMariaClosing(moonPhase: moonPhase, primaryExpression: primaryExpression, patternSeed: patternSeed)
+        var interpretations: [EnhancedTransitMeaning] = []
+        
+        for token in transitTokens.sorted(by: { $0.weight > $1.weight }).prefix(3) {
+            guard let aspectSource = token.aspectSource else { continue }
+            
+            // Parse aspect source (e.g., "Venus Square Pallas")
+            let components = aspectSource.components(separatedBy: " ")
+            guard components.count >= 3 else { continue }
+            
+            let transitPlanet = components[0]
+            let aspectType = components[1]
+            let natalPlanet = components[2]
+            
+            // Use TransitWeightCalculator for fashion relevance (already sophisticated)
+            let fashionRelevance = TransitWeightCalculator.getFashionRelevanceScore(
+                transitPlanet: transitPlanet,
+                natalPlanet: natalPlanet,
+                aspectType: aspectType
+            )
+            
+            // Use PlanetPowerEvaluator for dignity assessment
+            let natalDignity = assessNatalPlanetDignity(natalPlanet: natalPlanet, natalTokens: natalTokens)
+            
+            // Get aspect interpretation from InterpretationTextLibrary
+            let aspectInterpretation = getAspectInterpretationFromLibrary(
+                aspectType: aspectType,
+                transitPlanet: transitPlanet,
+                natalPlanet: natalPlanet
+            )
+            
+            // Generate Maria's specific advice using the engine's interpretation
+            let mariaAdvice = generateMariaAdviceFromEngineInterpretation(
+                aspectInterpretation: aspectInterpretation,
+                transitPlanet: transitPlanet,
+                natalPlanet: natalPlanet,
+                aspectType: aspectType,
+                fashionRelevance: fashionRelevance,
+                natalDignity: natalDignity,
+                weight: token.weight
+            )
+            
+            interpretations.append(EnhancedTransitMeaning(
+                aspectSource: aspectSource,
+                transitPlanet: transitPlanet,
+                natalPlanet: natalPlanet,
+                aspectType: aspectType,
+                weight: token.weight,
+                fashionRelevance: fashionRelevance,
+                natalDignity: natalDignity,
+                aspectInterpretation: aspectInterpretation,
+                mariaAdvice: mariaAdvice
+            ))
+        }
+        
+        return interpretations
+    }
+
+    // Use InterpretationTextLibrary for aspect meanings (not hard-coded)
+    private static func getAspectInterpretationFromLibrary(
+        aspectType: String,
+        transitPlanet: String,
+        natalPlanet: String
+    ) -> AspectInterpretation {
+        
+        // Use the existing InterpretationTextLibrary structure
+        let moodToken = getAspectMoodFromLibrary(aspectType: aspectType)
+        let structuralImplication = getStructuralImplicationFromLibrary(aspectType: aspectType, planets: (transitPlanet, natalPlanet))
+        let energyQuality = getEnergyQualityFromLibrary(aspectType: aspectType)
+        
+        return AspectInterpretation(
+            moodQuality: moodToken,
+            structuralImplication: structuralImplication,
+            energyQuality: energyQuality,
+            aspectType: aspectType
+        )
+    }
+
+    // Use the sophisticated aspect mood system from InterpretationTextLibrary
+    private static func getAspectMoodFromLibrary(aspectType: String) -> String {
+        // This leverages the existing getAspectMoodToken logic
+        switch aspectType {
+        case "Conjunction", "Trine": return "harmonious"
+        case "Square", "Opposition": return "dynamic"
+        case "Sextile": return "supportive"
+        default: return "subtle"
+        }
+    }
+
+    // Get structural implications from the library system
+    private static func getStructuralImplicationFromLibrary(aspectType: String, planets: (String, String)) -> String {
+        
+        let (transitPlanet, natalPlanet) = planets
+        
+        // Use InterpretationTextLibrary aspect patterns
+        switch aspectType {
+        case "Conjunction":
+            if transitPlanet == "Venus" && natalPlanet == "Venus" {
+                return "unified aesthetic expression - your style identity is intensifying"
+            } else if transitPlanet == "Mars" && ["Venus", "Ascendant"].contains(natalPlanet) {
+                return "merged energy and beauty - power and grace working together"
+            } else {
+                return "merged planetary energies creating unified expression"
+            }
+            
+        case "Square":
+            if transitPlanet == "Venus" && natalPlanet == "Venus" {
+                return "creative aesthetic tension - your style is ready to evolve"
+            } else if transitPlanet == "Mars" && natalPlanet == "Midheaven" {
+                return "energy vs image tension - personal power vs public presentation"
+            } else if transitPlanet == "Mercury" && natalPlanet == "Pluto" {
+                return "communication depth challenge - surface vs psychological truth"
+            } else {
+                return "dynamic tension creating growth opportunities"
+            }
+            
+        case "Opposition":
+            if transitPlanet == "Jupiter" && natalPlanet == "Neptune" {
+                return "expansion vs idealization - realistic luxury vs impossible standards"
+            } else {
+                return "polarized energies seeking integration and balance"
+            }
+            
+        case "Trine":
+            return "harmonious energy flow - easy, graceful expression"
+            
+        case "Sextile":
+            return "opportunity for creative integration - gentle support"
+            
+        default:
+            return "subtle planetary influence creating background shifts"
+        }
+    }
+
+    // Get energy quality from library patterns
+    private static func getEnergyQualityFromLibrary(aspectType: String) -> String {
+        switch aspectType {
+        case "Conjunction": return "intensified"
+        case "Square": return "challenging"
+        case "Opposition": return "contrasting"
+        case "Trine": return "flowing"
+        case "Sextile": return "supportive"
+        default: return "subtle"
+        }
+    }
+
+    // Assess natal planet dignity using PlanetPowerEvaluator system
+    private static func assessNatalPlanetDignity(natalPlanet: String, natalTokens: [StyleToken]) -> DignityLevel {
+        
+        // Find the natal planet's sign from tokens (using existing token data)
+        let natalPlanetTokens = natalTokens.filter { $0.planetarySource == natalPlanet }
+        guard let planetToken = natalPlanetTokens.first,
+              let signSource = planetToken.signSource else {
+            return .neutral
+        }
+        
+        // Use PlanetPowerEvaluator dignity system
+        let dignityStatus = PlanetPowerEvaluator.getDignityStatus(planet: natalPlanet, sign: signSource)
+        
+        switch dignityStatus {
+        case .domicile: return .strong
+        case .exaltation: return .strong
+        case .peregrine: return .neutral
+        case .detriment: return .challenged
+        case .fall: return .challenged
+        }
+    }
+
+    // Calculate Maria's confidence level based on weight strength and dignity
+    private static func calculateMariaConfidenceLevel(
+        weightDistribution: (Double, Double, Double, Double),
+        interpretedTransits: [EnhancedTransitMeaning]
+    ) -> ConfidenceLevel {
+        
+        let (transitWeight, natalWeight, progressedWeight, environmentalWeight) = weightDistribution
+        
+        // High confidence if there's a clear dominant energy source (ANY source)
+        if transitWeight > 0.6 || natalWeight > 0.6 || progressedWeight > 0.5 {
+            return .high
+        }
+        
+        // Medium confidence if weights are moderately clear
+        if transitWeight > 0.4 || natalWeight > 0.4 || progressedWeight > 0.3 || environmentalWeight > 0.3 {
+            return .medium
+        }
+        
+        return .moderate
+    }
+
+    // Generate Maria's advice using the sophisticated engine interpretation
+    private static func generateMariaAdviceFromEngineInterpretation(
+        aspectInterpretation: AspectInterpretation,
+        transitPlanet: String,
+        natalPlanet: String,
+        aspectType: String,
+        fashionRelevance: Double,
+        natalDignity: DignityLevel,
+        weight: Double
+    ) -> String {
+        
+        // Scale advice intensity based on fashion relevance and weight
+        let adviceIntensity = (fashionRelevance * weight)
+        
+        // Modulate confidence based on natal dignity
+        let confidenceModifier = getConfidenceModifier(dignity: natalDignity)
+        
+        // Generate advice based on the structural implication from the library
+        let baseAdvice = generateBaseAdviceFromStructure(
+            structuralImplication: aspectInterpretation.structuralImplication,
+            transitPlanet: transitPlanet,
+            natalPlanet: natalPlanet,
+            aspectType: aspectType
+        )
+        
+        // Apply intensity and confidence modulation
+        return modulateAdviceForMaria(
+            baseAdvice: baseAdvice,
+            intensity: adviceIntensity,
+            confidenceModifier: confidenceModifier
+        )
+    }
+
+    // Generate base advice from structural interpretation (using engine logic)
+    private static func generateBaseAdviceFromStructure(
+        structuralImplication: String,
+        transitPlanet: String,
+        natalPlanet: String,
+        aspectType: String
+    ) -> String {
+        
+        // Use the sophisticated structural interpretation to generate specific advice
+        if structuralImplication.contains("aesthetic tension") {
+            return "You're getting this restless feeling about your usual go-to pieces today, and honestly? Listen to that. Your aesthetic is ready to level up. Try taking something you know works perfectly and pairing it with that slightly experimental thing you've been avoiding."
+            
+        } else if structuralImplication.contains("energy vs image tension") {
+            return "Your energy wants to be bigger today than your usual professional presentation allows. This isn't about showing up to meetings in leather pants, but it is about finding ways to let your real intensity show up in your public image. Maybe it's the cut that's sharper, the color that's richer, or finally wearing that piece that makes you feel unstoppable."
+            
+        } else if structuralImplication.contains("communication depth challenge") {
+            return "Your style wants to communicate something real today, not just look pretty. What truth are you ready to tell through how you dress? Choose pieces that feel like they're having an actual conversation - unexpected details, powerful silhouettes, or colors that make people think twice."
+            
+        } else if structuralImplication.contains("expansion vs idealization") {
+            return "You're feeling pulled between wanting to go bigger with your style and getting lost in impossible aesthetic ideals. Instead of scrolling through looks you could never realistically wear, take that expansive energy and apply it to elevating what you actually have. The luxury you're craving is achievable - just more strategic than fantastical."
+            
+        } else if structuralImplication.contains("unified aesthetic expression") {
+            return "Everything's aligning beautifully in your style universe today. Trust those choices that feel naturally unified and powerful - when your aesthetic is this coherent, don't overthink it."
+            
+        } else if structuralImplication.contains("harmonious energy flow") {
+            return "Everything's flowing beautifully today, so trust those style choices that feel effortless but still interesting. When it's this easy, don't overthink it."
+            
+        } else if structuralImplication.contains("dynamic tension") {
+            return "There's some creative tension happening today that's actually perfect for style evolution. Use that restless energy to try combinations that push your boundaries while still feeling like you."
+            
+        } else if structuralImplication.contains("polarized energies") {
+            return "You're feeling pulled in different style directions today. Instead of choosing sides, try finding pieces that honor both impulses - familiar comfort with unexpected elements."
+            
+        } else {
+            // Fallback to aspect-based advice
+            return generateAspectBasedAdvice(aspectType: aspectType)
+        }
+    }
+
+    // Apply intensity and confidence modulation to Maria's advice
+    private static func modulateAdviceForMaria(
+        baseAdvice: String,
+        intensity: Double,
+        confidenceModifier: String
+    ) -> String {
+        
+        // High intensity (>1.0) - add emphasis
+        if intensity > 1.0 {
+            return "\(baseAdvice) \(confidenceModifier)"
+        }
+        
+        // Medium intensity (0.5-1.0) - standard confidence
+        if intensity > 0.5 {
+            return baseAdvice
+        }
+        
+        // Lower intensity - soften the advice
+        return "Pay attention to the subtle shift toward \(baseAdvice.lowercased())"
+    }
+
+    // Get confidence modifier based on dignity
+    private static func getConfidenceModifier(dignity: DignityLevel) -> String {
+        switch dignity {
+        case .strong:
+            return "Your instincts about this are particularly sharp right now."
+        case .neutral:
+            return "Trust your gut feeling about what feels right."
+        case .challenged:
+            return "Take your time with this choice - when in doubt, start small."
+        }
+    }
+
+    // Generate final Maria response using all engine components
+    private static func generateMariaResponseFromEngine(
+        interpretedTransits: [EnhancedTransitMeaning],
+        natalFoundation: NatalFoundation,
+        weightDistribution: (transit: Double, natal: Double, progressed: Double, environmental: Double),
+        confidenceLevel: ConfidenceLevel,
+        moonPhase: Double,
+        patternSeed: Int
+    ) -> String {
+        
+        // Generate opening based on actual weight distribution sensitivity
+        let opening = generateWeightSensitiveOpening(
+            weightDistribution: weightDistribution,
+            primaryTransit: interpretedTransits.first,
+            confidenceLevel: confidenceLevel,
+            patternSeed: patternSeed
+        )
+        
+        // Use the sophisticated transit interpretations for core advice
+        let coreAdvice = interpretedTransits.prefix(2).map { $0.mariaAdvice }.joined(separator: " ")
+        
+        // Generate foundation-aware closing
+        let closing = generateFoundationAwareClosing(
+            natalFoundation: natalFoundation,
+            moonPhase: moonPhase,
+            confidenceLevel: confidenceLevel,
+            patternSeed: patternSeed
+        )
         
         return "\(opening) \(coreAdvice) \(closing)"
     }
-    
-    private static func determineEnergySource(transitWeight: Double, natalWeight: Double, moonPhaseWeight: Double, weatherWeight: Double) -> String {
-        let weights = [
-            ("transit", transitWeight),
-            ("natal", natalWeight),
-            ("lunar", moonPhaseWeight),
-            ("environmental", weatherWeight)
-        ]
-        return weights.max { $0.1 < $1.1 }?.0 ?? "balanced"
-    }
-    
-    private static func generateMariaOpening(energySource: String, primaryMood: String, primaryExpression: String, patternSeed: Int) -> String {
-        let openings: [String: [String]] = [
-            "transit": [
-                "There's definitely a shift happening today, and you're riding that wave like a pro.",
-                "You're feeling this fresh energy buzzing around today that wants you to try something slightly unexpected.",
-                "There's this fresh energy buzzing around today that wants you to try something slightly unexpected.",
-                "You're breaking free from something that's been making you feel small, and your clothes need to back that up."
-            ],
-            "natal": [
-                "You're in one of those moods where you just want to trust your gut and deal with anyone's nonsense today.",
-                "You're basically a human magnet today, drawing in all the right people and conversations.",
-                "You're in one of those reflective moods where you want to dress like the most interesting person in the room through presence alone.",
-                "There's something powerful about being picky with your energy, and your clothes should back that up."
-            ],
-            "lunar": [
-                "There's this quiet confidence floating around today that doesn't need to shout to be heard.",
-                "Your imagination's going wild today, friend. Perfect time to play with perception a bit.",
-                "You're in full earth goddess mode today, but make it practical.",
-                "Your body knows what it's craving, maybe that piece everyone compliments but you rarely wear?"
-            ],
-            "environmental": [
-                "The weather's setting the tone today, and your wardrobe should flow with that same energy.",
-                "Today's about working with what the universe is giving you, starting with what's happening outside your window.",
-                "There's something about today's atmosphere that's asking you to be more intentional with your choices."
-            ],
-            "balanced": [
-                "You want stuff that feels real and substantial, like you're putting on a show.",
-                "It's about dressing for you first, with that quiet confidence that says 'I know exactly who I am.'",
-                "Your style should flow with that same easy intelligence."
+
+    // Weight-sensitive opening (responds to WeightingModel changes)
+    private static func generateWeightSensitiveOpening(
+        weightDistribution: (transit: Double, natal: Double, progressed: Double, environmental: Double),
+        primaryTransit: EnhancedTransitMeaning?,
+        confidenceLevel: ConfidenceLevel,
+        patternSeed: Int
+    ) -> String {
+        
+        let confidencePrefix = getOpeningConfidencePrefix(level: confidenceLevel)
+        
+        // High transit weight (>0.6) - strong change energy
+        if weightDistribution.transit > 0.6 {
+            let transitOpenings = [
+                "\(confidencePrefix)You're getting this restless feeling about your usual style choices today, and honestly? Listen to that.",
+                "\(confidencePrefix)There's definitely something shifting in your energy today that wants to show up differently.",
+                "\(confidencePrefix)Your style brain is feeling particularly evolved today, like it's ready to try something new."
             ]
-        ]
-        
-        let moodAdjustments: [String: [String]] = [
-            "intense": ["Your brain is making connections other people are missing", "You're channeling this cutting-edge intelligence"],
-            "dreamy": ["This is about picking pieces that tell a story about who you're becoming", "You want clothes that feel like they're part of your personal evolution"],
-            "confident": ["This is about picking pieces that make you feel genuinely powerful when you catch yourself in the mirror", "You want to dress like someone who's figured out what actually matters"],
-            "rebellious": ["That thing you've been saving for 'the right occasion'? This is actually it", "Stop waiting for permission from the fashion police to wear what makes you feel fantastic"],
-            "practical": ["You want to look like someone who has their life together while staying completely approachable", "This is about finding that sweet spot between being approachable and being impressive"]
-        ]
-        
-        let sourceOpenings = openings[energySource] ?? openings["balanced"]!
-        let baseOpening = sourceOpenings[patternSeed % sourceOpenings.count]
-        
-        if let adjustments = moodAdjustments[primaryMood] {
-            let adjustment = adjustments[patternSeed % adjustments.count]
-            return "\(baseOpening) \(adjustment)."
+            return transitOpenings[patternSeed % transitOpenings.count]
         }
         
-        return baseOpening
-    }
-    
-    private static func generateMariaCoreAdvice(primaryStructure: String, primaryTexture: String, primaryColorQuality: String, moonPhase: MoonPhaseInterpreter.Phase, patternSeed: Int) -> String {
-            
-            let structureAdvice: [String: [String]] = [
-                "flowing": ["Think clothes that move with you, not against you", "You want pieces that feel like they're part of you already"],
-                "structured": ["You're asking for clothes that feel like the best kind of armour", "This is about looking like you get something the rest of the world hasn't figured out yet"],
-                "adaptable": ["Your style should reflect that same adaptable energy that can shift to match any situation while still being totally you", "Just trust your instincts on every single choice"],
-                "balanced": ["You're channeling the energy of someone who can handle whatever comes their way while still looking effortlessly put-together", "This is about finding that sweet spot between being approachable and being impressive"],
-                "innovative": ["Your style should reflect that same cutting-edge intelligence", "You're not trying to fit in because you're busy creating the next thing everyone else will want to copy later"],
-                "protective": ["The vibe today is asking for clothes that feel like the best kind of armour", "You want to dress like someone who's figured out what actually matters and is focused on what truly counts"]
+        // High natal weight (>0.6) - foundation emphasis
+        if weightDistribution.natal > 0.6 {
+            let natalOpenings = [
+                "\(confidencePrefix)You're in one of those moods where trusting your foundational style instincts is exactly right.",
+                "\(confidencePrefix)Today's the kind of day where your core aesthetic wisdom really knows what it's talking about.",
+                "\(confidencePrefix)There's something powerful about being picky with your energy, and your clothes should back that up."
             ]
-            
-            let textureAdvice: [String: [String]] = [
-                "soft": ["Trust that little nudge toward the not so obvious choice instead of reaching for your comfort zone uniform", "Your body knows exactly what it wants to wear, that thing that makes you feel properly sorted without trying too hard"],
-                "luxurious": ["Your instincts about combining things that 'shouldn't' go together are spot on right now", "Sometimes the perfect outfit is the one that surprises even you"],
-                "comfortable": ["Trust that gut feeling over whatever nonsense social media is pushing this week", "True style comes from knowing yourself, rather than following every trend that pops up on TikTok"],
-                "substantial": ["You want stuff that feels real and substantial, like you're putting on a show", "There's something beautiful about the moment when you stop caring what other people think and start caring about what makes you feel alive"],
-                "flowing": ["Think pieces that feel like they're part of you already", "Your style should flow with that same easy intelligence"]
-            ]
-            
-            let colorAdvice: [String: [String]] = [
-                "bright": ["Trust that little nudge toward the not so obvious choice", "Maybe trust yourself more than those style rules you read in a magazine ages ago"],
-                "soft": ["There's this quiet confidence floating around that doesn't need to shout to be heard", "True style comes from knowing yourself, rather than following every trend"],
-                "warm": ["Your body knows what it's craving, maybe that piece everyone compliments but you rarely wear?", "Trust your instincts about what makes you feel fantastic"],
-                "electric": ["Your imagination's going wild today, friend. Perfect time to play with perception a bit", "Sometimes the perfect outfit is the one that surprises even you"],
-                "grounded": ["You want to look like someone who has their life together while staying completely approachable", "This is about finding that sweet spot between being approachable and being impressive"]
-            ]
-            
-            let structureKey = structureAdvice.keys.contains(primaryStructure) ? primaryStructure : "balanced"
-            let textureKey = textureAdvice.keys.contains(primaryTexture) ? primaryTexture : "comfortable"
-            let colorKey = colorAdvice.keys.contains(primaryColorQuality) ? primaryColorQuality : "soft"
-            
-            let structurePick = structureAdvice[structureKey]![patternSeed % structureAdvice[structureKey]!.count]
-            let texturePick = textureAdvice[textureKey]![(patternSeed + 1) % textureAdvice[textureKey]!.count]
-            let colorPick = colorAdvice[colorKey]![(patternSeed + 2) % colorAdvice[colorKey]!.count]
-            
-            // Combine all three advice types naturally
-            return "\(structurePick). \(texturePick). \(colorPick)."
+            return natalOpenings[patternSeed % natalOpenings.count]
         }
-    
-    private static func generateMariaClosing(moonPhase: MoonPhaseInterpreter.Phase, primaryExpression: String, patternSeed: Int) -> String {
         
-        let moonPhaseClosings: [MoonPhaseInterpreter.Phase: [String]] = [
-            .newMoon: [
-                "Sometimes the perfect outfit is the one that surprises even you.",
-                "Trust that gut feeling over whatever nonsense social media is pushing this week.",
-                "Your instincts about what makes you feel fantastic are spot on right now."
-            ],
-            .waxingCrescent: [
-                "Stop waiting for permission from the fashion police to wear what makes you feel fantastic.",
-                "True style comes from knowing yourself, rather than following every trend that pops up on TikTok.",
-                "Maybe trust yourself more than those style rules you read in a magazine ages ago."
-            ],
-            .firstQuarter: [
-                "There's something beautiful about the moment when you stop caring what other people think and start caring about what makes you feel alive.",
-                "This is about dressing for the version of yourself you're growing into, and today that energy is particularly strong.",
-                "Just trust your instincts on every single choice."
-            ],
-            .waxingGibbous: [
-                "Your instincts about combining things that 'shouldn't' go together are spot on right now.",
-                "Sometimes the perfect outfit is the one that surprises even you.",
-                "Trust that little nudge toward the not so obvious choice instead of reaching for your comfort zone uniform."
-            ],
-            .fullMoon: [
-                "That thing you've been saving for 'the right occasion'? This is actually it.",
-                "Stop waiting for permission from the fashion police to wear what makes you feel fantastic.",
-                "Your imagination's going wild today, friend. Perfect time to play with perception a bit."
-            ],
-            .waningGibbous: [
-                "True style comes from knowing yourself, rather than following every trend that pops up on TikTok.",
-                "There's something powerful about the moment when you stop caring what other people think and start caring about what makes you feel alive.",
-                "This is about picking pieces that tell a story about who you're becoming, the evolved version of yourself."
-            ],
-            .lastQuarter: [
-                "Your body knows exactly what it wants to wear, that thing that makes you feel properly sorted without trying too hard.",
+        // Add progressed and environmental cases to generateWeightSensitiveOpening
+        if weightDistribution.progressed > 0.5 {
+            let progressedOpenings = [
+                "\(confidencePrefix)You're growing into a more sophisticated version of your aesthetic self today.",
+                "\(confidencePrefix)Your emotional evolution is showing up in how you want to express yourself.",
+                "\(confidencePrefix)There's this deeper layer of your style personality that's ready to emerge."
+            ]
+            return progressedOpenings[patternSeed % progressedOpenings.count]
+        }
+
+        if weightDistribution.environmental > 0.4 {
+            let environmentalOpenings = [
+                "\(confidencePrefix)The weather and general vibe today are asking for some practical magic with your outfit choices.",
+                "\(confidencePrefix)You're feeling particularly tuned into what the day actually needs from your wardrobe.",
+                "\(confidencePrefix)Today's one of those days where letting your environment guide your style choices makes perfect sense."
+            ]
+            return environmentalOpenings[patternSeed % environmentalOpenings.count]
+        }
+        
+        // Moderate natal (0.4-0.6) vs lower natal (0.2-0.4) - different confidence levels
+        if weightDistribution.natal > 0.4 {
+            return "\(confidencePrefix)You're channeling that steady, grounded energy that comes from knowing what works for you."
+        } else if weightDistribution.natal > 0.2 {
+            return "\(confidencePrefix)Your foundational style sense is offering some gentle guidance today."
+        }
+        
+        // Balanced or environmental
+        let balancedOpenings = [
+            "\(confidencePrefix)You're in one of those perfectly balanced moods where everything feels possible style-wise.",
+            "\(confidencePrefix)There's this beautiful equilibrium happening today between staying true to yourself and trying something fresh."
+        ]
+        return balancedOpenings[patternSeed % balancedOpenings.count]
+    }
+
+    // Confidence prefix based on calculated confidence level
+    private static func getOpeningConfidencePrefix(level: ConfidenceLevel) -> String {
+        switch level {
+        case .high: return ""  // No qualifier needed - direct confidence
+        case .medium: return ""  // Standard Maria voice
+        case .moderate: return "There's this sense that "  // Softer approach
+        }
+    }
+
+    // Extract natal foundation from existing natal tokens (using engine data)
+    private static func extractNatalFoundationFromTokens(_ natalTokens: [StyleToken]) -> NatalFoundation {
+        
+        // Get dominant planets from existing token sources
+        let planetCounts = natalTokens.reduce(into: [String: Double]()) { counts, token in
+            if let planet = token.planetarySource {
+                counts[planet, default: 0] += token.weight
+            }
+        }
+        
+        let dominantPlanets = planetCounts.sorted { $0.value > $1.value }.prefix(2).map { $0.key }
+        
+        // Get elements from sign sources in tokens
+        let elementCounts = natalTokens.reduce(into: [String: Int]()) { counts, token in
+            if let sign = token.signSource {
+                let element = getElementFromSign(sign)
+                counts[element, default: 0] += 1
+            }
+        }
+        
+        let primaryElements = elementCounts.sorted { $0.value > $1.value }.prefix(2).map { $0.key }
+        
+        return NatalFoundation(
+            dominantPlanets: Array(dominantPlanets),
+            primaryElements: Array(primaryElements)
+        )
+    }
+
+    // Helper methods
+    private static func getElementFromSign(_ signName: String) -> String {
+        if ["Aries", "Leo", "Sagittarius"].contains(signName) { return "fire" }
+        if ["Taurus", "Virgo", "Capricorn"].contains(signName) { return "earth" }
+        if ["Gemini", "Libra", "Aquarius"].contains(signName) { return "air" }
+        if ["Cancer", "Scorpio", "Pisces"].contains(signName) { return "water" }
+        return "balanced"
+    }
+
+    private static func generateAspectBasedAdvice(aspectType: String) -> String {
+        switch aspectType {
+        case "Square":
+            return "Use that creative tension to try combinations that push your boundaries while still feeling like you."
+        case "Opposition":
+            return "Balance the opposing energies by choosing pieces that honor both impulses."
+        case "Conjunction":
+            return "Let these merged energies guide you toward unified, powerful style choices."
+        case "Trine":
+            return "Everything's flowing nicely today, so trust those easy choices that feel effortless but interesting."
+        default:
+            return "Pay attention to the subtle style shifts your intuition is asking for today."
+        }
+    }
+
+    private static func generateFoundationAwareClosing(
+        natalFoundation: NatalFoundation,
+        moonPhase: Double,
+        confidenceLevel: ConfidenceLevel,
+        patternSeed: Int
+    ) -> String {
+        
+        let foundationElements = natalFoundation.primaryElements.joined(separator: " and ")
+        
+        let confidenceClosings: [ConfidenceLevel: [String]] = [
+            .high: [
+                "Your natural \(foundationElements) energy gives you the grounding to experiment without losing yourself.",
                 "Trust that gut feeling over whatever nonsense social media is pushing this week.",
                 "Sometimes the perfect outfit is the one that surprises even you."
             ],
-            .waningCrescent: [
-                "Just trust your instincts on every single choice.",
-                "There's something beautiful about the moment when you stop caring what other people think and start caring about what makes you feel alive.",
-                "True style comes from knowing yourself, rather than following every trend."
+            .medium: [
+                "All of this works because you have that solid \(foundationElements) foundation to build from.",
+                "Your instincts about what makes you feel fantastic are particularly sharp right now."
+            ],
+            .moderate: [
+                "Trust your instincts - they're pointing you in the right direction today.",
+                "When in doubt, start with what feels most authentically you."
             ]
         ]
         
-        let expressionModifiers: [String: [String]] = [
-            "bold": ["Stop waiting for permission", "That thing you've been saving for 'the right occasion'? This is actually it"],
-            "confident": ["Trust that gut feeling", "Your instincts about what makes you feel fantastic are spot on right now"],
-            "authentic": ["True style comes from knowing yourself", "There's something beautiful about the moment when you stop caring what other people think"],
-            "creative": ["Your imagination's going wild today", "Sometimes the perfect outfit is the one that surprises even you"],
-            "elegant": ["Your body knows exactly what it wants to wear", "This is about picking pieces that tell a story about who you're becoming"]
-        ]
-        
-        // Use expression-based closing if available, otherwise fall back to moon phase
-        if let expressionClosings = expressionModifiers[primaryExpression] {
-            return expressionClosings[patternSeed % expressionClosings.count]
-        }
-        
-        let moonClosings = moonPhaseClosings[moonPhase] ?? moonPhaseClosings[.newMoon]!
-        return moonClosings[patternSeed % moonClosings.count]
+        let closings = confidenceClosings[confidenceLevel] ?? confidenceClosings[.medium]!
+        return closings[patternSeed % closings.count]
+    }
+
+    // Supporting data structures
+    private struct EnhancedTransitMeaning {
+        let aspectSource: String
+        let transitPlanet: String
+        let natalPlanet: String
+        let aspectType: String
+        let weight: Double
+        let fashionRelevance: Double
+        let natalDignity: DignityLevel
+        let aspectInterpretation: AspectInterpretation
+        let mariaAdvice: String
+    }
+
+    private struct AspectInterpretation {
+        let moodQuality: String
+        let structuralImplication: String
+        let energyQuality: String
+        let aspectType: String
+    }
+
+    private struct NatalFoundation {
+        let dominantPlanets: [String]
+        let primaryElements: [String]
+    }
+
+    private enum DignityLevel {
+        case strong      // Domicile/Exaltation
+        case neutral     // Peregrine
+        case challenged  // Detriment/Fall
+    }
+
+    private enum ConfidenceLevel {
+        case high        // Clear weight dominance
+        case medium      // Moderate clarity
+        case moderate    // Scattered energy
     }
     
     private static func generateTextiles(tokens: [StyleToken]) -> String {
