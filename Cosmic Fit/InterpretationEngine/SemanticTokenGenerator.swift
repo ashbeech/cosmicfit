@@ -6,25 +6,6 @@
 //  Enhanced with source tracking, improved weighting, and color handling
 //  Refactored to use InterpretationTextLibrary
 
-/*
- STYLE ENGINE HIERARCHY:
- 
- | Layer                        | Role                               | Dynamic?             |
- | ---------------------------- | ---------------------------------- | -------------------- |
- | **Natal Sun/Moon/Venus**     | Core style signature               | ❌ No fade            |
- | **Ascendant**                | Early mask / social adaptation     | ✅ Fades with age     |
- | **Progressed Inner Planets** | Emotional tone, texture overlays   | ♻ Ongoing modulation |
- | **Transits**                 | Daily color/shape/emotional shifts | ✅ Weighted impact    |
- 
- Progressed chart acts as a STYLE MODULATOR, not replacer:
- - Modifies *Finish*: matte vs glossy (→ texture tokens)
- - Shifts *Tone*: bright vs muted (→ color_quality tokens)
- - Adjusts *Pairing logic*: layered vs monochrome (→ structure tokens)
- 
- Progressed tokens are never allowed to introduce colors or fabrics that directly conflict
- with natal base palette - they enhance rather than replace.
- */
-
 import Foundation
 
 class SemanticTokenGenerator {
