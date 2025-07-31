@@ -58,6 +58,37 @@ struct MoonPhaseInterpreter {
         }
     }
     
+    /// Format moon phase for console output with percentage and name
+     /// - Parameter degrees: Moon phase angle in degrees (0-360)
+     /// - Returns: Formatted console string
+     static func formatForConsole(_ degrees: Double) -> String {
+         let phase = Phase.fromDegrees(degrees)
+         let illumination = calculateIlluminationPercentage(from: degrees)
+         
+         return "\(phase.description) (\(illumination)% illuminated)"
+     }
+     
+     /// Calculate illumination percentage from degrees
+     /// - Parameter degrees: Moon phase angle in degrees
+     /// - Returns: Illumination percentage (0-100)
+     static func calculateIlluminationPercentage(from degrees: Double) -> Int {
+         let normalizedDegrees = degrees.truncatingRemainder(dividingBy: 360.0)
+         
+         // Use cosine formula for accurate illumination calculation
+         let illumination: Double
+         
+         if normalizedDegrees <= 180.0 {
+             // Waxing phase: 0% to 100%
+             illumination = (1.0 - cos(normalizedDegrees * .pi / 180.0)) / 2.0
+         } else {
+             // Waning phase: 100% to 0%
+             let waningAngle = normalizedDegrees - 180.0
+             illumination = (1.0 + cos(waningAngle * .pi / 180.0)) / 2.0
+         }
+         
+         return Int(round(illumination * 100.0))
+     }
+    
     // Generate tokens for Blueprint relevance
     static func tokensForBlueprintRelevance(phase: Phase) -> [StyleToken] {
         var tokens: [StyleToken] = []

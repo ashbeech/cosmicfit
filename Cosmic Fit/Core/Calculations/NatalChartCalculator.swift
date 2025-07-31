@@ -388,11 +388,21 @@ struct NatalChartCalculator {
         let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
         var transitAspects: [TransitAspect] = []
         
+        // 🧪 DEBUG: Start transit debugging
+        DebugLogger.info("🔍 STARTING TRANSIT ASPECT DETECTION")
+        DebugLogger.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        
         // Get current planetary positions
         let transitPositions = calculateCurrentPlanetaryPositions(julianDay: currentJulianDay)
         
+        var totalDetectedAspects = 0
+        var aspectsByPlanet: [String: Int] = [:]
+        var filteredOutAspects: [(String, String, String, Double, String)] = []
+        
         // For each transit position, check aspects to natal planets
         for transit in transitPositions {
+            DebugLogger.debug("🌍 Checking transit \(transit.name) at \(String(format: "%.2f", transit.longitude))°")
+            
             for natal in natalChart.planets {
                 if let aspect = calculateTransitAspect(
                     transitPlanet: transit.name,
@@ -402,7 +412,24 @@ struct NatalChartCalculator {
                     natalPlanet: natal.name,
                     natalSymbol: natal.symbol,
                     natalLongitude: natal.longitude) {
+                    
                     transitAspects.append(aspect)
+                    totalDetectedAspects += 1
+                    aspectsByPlanet[transit.name, default: 0] += 1
+                    
+                    // 🧪 DEBUG: Log each detected aspect with exact orb
+                    DebugLogger.info("✅ ASPECT DETECTED: \(transit.name) \(aspect.aspectType) \(natal.name) (orb: \(String(format: "%.2f", aspect.orb))°)")
+                } else {
+                    // Check if an aspect was calculated but filtered out
+                    let maxOrb = getMaxOrbForPlanet(transit.name)
+                    if let (aspectType, exactness) = AstronomicalCalculator.calculateAspect(
+                        point1: transit.longitude,
+                        point2: natal.longitude,
+                        orb: maxOrb) {
+                        
+                        // This aspect was calculated but filtered by other logic
+                        filteredOutAspects.append((transit.name, aspectType, natal.name, exactness, "Filtered by logic"))
+                    }
                 }
             }
             
@@ -415,7 +442,12 @@ struct NatalChartCalculator {
                 natalPlanet: "Ascendant",
                 natalSymbol: "Asc",
                 natalLongitude: natalChart.ascendant) {
+                
                 transitAspects.append(aspect)
+                totalDetectedAspects += 1
+                aspectsByPlanet[transit.name, default: 0] += 1
+                
+                DebugLogger.info("✅ ASPECT DETECTED: \(transit.name) \(aspect.aspectType) Ascendant (orb: \(String(format: "%.2f", aspect.orb))°)")
             }
             
             if let aspect = calculateTransitAspect(
@@ -426,12 +458,100 @@ struct NatalChartCalculator {
                 natalPlanet: "Midheaven",
                 natalSymbol: "MC",
                 natalLongitude: natalChart.midheaven) {
+                
                 transitAspects.append(aspect)
+                totalDetectedAspects += 1
+                aspectsByPlanet[transit.name, default: 0] += 1
+                
+                DebugLogger.info("✅ ASPECT DETECTED: \(transit.name) \(aspect.aspectType) Midheaven (orb: \(String(format: "%.2f", aspect.orb))°)")
+            }
+            
+            // Check aspects to additional points (if they exist in your chart)
+            if let aspect = calculateTransitAspect(
+                transitPlanet: transit.name,
+                transitSymbol: transit.symbol,
+                transitLongitude: transit.longitude,
+                transitIsRetrograde: transit.isRetrograde,
+                natalPlanet: "North Node",
+                natalSymbol: "☊",
+                natalLongitude: natalChart.northNode) {
+                
+                transitAspects.append(aspect)
+                totalDetectedAspects += 1
+                aspectsByPlanet[transit.name, default: 0] += 1
+                
+                DebugLogger.info("✅ ASPECT DETECTED: \(transit.name) \(aspect.aspectType) North Node (orb: \(String(format: "%.2f", aspect.orb))°)")
+            }
+            
+            if let aspect = calculateTransitAspect(
+                transitPlanet: transit.name,
+                transitSymbol: transit.symbol,
+                transitLongitude: transit.longitude,
+                transitIsRetrograde: transit.isRetrograde,
+                natalPlanet: "Lilith",
+                natalSymbol: "⚸",
+                natalLongitude: natalChart.lilith) {
+                
+                transitAspects.append(aspect)
+                totalDetectedAspects += 1
+                aspectsByPlanet[transit.name, default: 0] += 1
+                
+                DebugLogger.info("✅ ASPECT DETECTED: \(transit.name) \(aspect.aspectType) Lilith (orb: \(String(format: "%.2f", aspect.orb))°)")
+            }
+            
+            if let aspect = calculateTransitAspect(
+                transitPlanet: transit.name,
+                transitSymbol: transit.symbol,
+                transitLongitude: transit.longitude,
+                transitIsRetrograde: transit.isRetrograde,
+                natalPlanet: "Chiron",
+                natalSymbol: "⚷",
+                natalLongitude: natalChart.chiron) {
+                
+                transitAspects.append(aspect)
+                totalDetectedAspects += 1
+                aspectsByPlanet[transit.name, default: 0] += 1
+                
+                DebugLogger.info("✅ ASPECT DETECTED: \(transit.name) \(aspect.aspectType) Chiron (orb: \(String(format: "%.2f", aspect.orb))°)")
             }
         }
         
-        // Sort transit aspects
+        // 🧪 DEBUG: Summary of detected aspects
+        DebugLogger.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        DebugLogger.info("📊 TRANSIT DETECTION SUMMARY:")
+        DebugLogger.info("   • Total Aspects Detected: \(totalDetectedAspects)")
+        DebugLogger.info("   • Aspects by Transit Planet:")
+        
+        for (planet, count) in aspectsByPlanet.sorted(by: { $0.key < $1.key }) {
+            DebugLogger.info("     - \(planet): \(count) aspects")
+        }
+        
+        if !filteredOutAspects.isEmpty {
+            DebugLogger.info("   • Filtered Out Aspects:")
+            for (transitPlanet, aspectType, natalPlanet, orb, reason) in filteredOutAspects {
+                DebugLogger.info("     ❌ \(transitPlanet) \(aspectType) \(natalPlanet) (orb: \(String(format: "%.2f", orb))°) - \(reason)")
+            }
+        }
+        
+        DebugLogger.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        
+        // Sort transit aspects (keep your existing sort method)
         return sortTransitAspects(transitAspects)
+    }
+    
+    private static func getMaxOrbForPlanet(_ planet: String) -> Double {
+        switch planet {
+        case "Sun", "Moon":
+            return 3.0
+        case "Mercury", "Venus", "Mars":
+            return 2.0
+        case "Jupiter", "Saturn":
+            return 2.5
+        case "Uranus", "Neptune", "Pluto", "Chiron":
+            return 2.5
+        default:
+            return 2.0
+        }
     }
     
     private static func calculateCurrentPlanetaryPositions(julianDay: Double) -> [PlanetPosition] {
@@ -553,6 +673,9 @@ struct NatalChartCalculator {
                 point2: natalLongitude,
                 orb: maxOrb) {
                 
+                DebugLogger.debug("   🎯 \(transitPlanet) → \(natalPlanet): \(aspectType) (orb: \(String(format: "%.2f", exactness))°, max orb: \(maxOrb)°)")
+                
+                
                 // Determine the category based on planet speed
                 let category: TransitCategory
                 if transitPlanet == "Moon" {
@@ -624,6 +747,8 @@ struct NatalChartCalculator {
                     description: description + "\n" + detailedInfo,
                     category: category
                 )
+            } else {
+                DebugLogger.debug("   ❌ \(transitPlanet) → \(natalPlanet): No aspect within \(maxOrb)° orb")
             }
             
             return nil

@@ -91,21 +91,41 @@ class DailyVibeGenerator {
         print("  🔄 Progressed Chart:")
         print("    • Progressed Moon: \(CoordinateTransformations.getZodiacSignName(sign: progressed.planets.first(where: { $0.name == "Moon" })?.zodiacSign ?? 0))")
         
-        print("  🌟 Transits:")
-        print("    • Total Transit Aspects: \(transits.count)")
-        
-        // Count transits by planet
-        var planetCounts: [String: Int] = [:]
-        for transit in transits {
-            if let planet = transit["transitPlanet"] as? String {
-                planetCounts[planet, default: 0] += 1
+            print("  🌟 Transits:")
+            print("    • Total Transit Aspects: \(transits.count)")
+            
+            // Count transits by planet with detailed orb information
+            var planetCounts: [String: Int] = [:]
+            var detailedTransits: [String] = []
+            
+            for transit in transits {
+                if let planet = transit["transitPlanet"] as? String {
+                    planetCounts[planet, default: 0] += 1
+                    
+                    // Collect detailed information for debug
+                    if let natalPlanet = transit["natalPlanet"] as? String,
+                       let aspectType = transit["aspectType"] as? String,
+                       let orb = transit["orb"] as? Double {
+                        let orbStr = String(format: "%.2f", orb)
+                        detailedTransits.append("      \(planet) \(aspectType) \(natalPlanet) (orb: \(orbStr)°)")
+                    }
+                }
             }
-        }
-        for (planet, count) in planetCounts.sorted(by: { $0.key < $1.key }) {
-            print("      - \(planet): \(count) aspects")
-        }
+            
+            for (planet, count) in planetCounts.sorted(by: { $0.key < $1.key }) {
+                print("      - \(planet): \(count) aspects")
+            }
+            
+            // Show detailed transit list if there are transits
+            if !detailedTransits.isEmpty {
+                print("    • Detailed Aspects:")
+                for transitDetail in detailedTransits.sorted() {
+                    print(transitDetail)
+                }
+            }
         
-        print("  🌙 Moon Phase: \(String(format: "%.1f", moonPhase))°")
+        print("  🌙 Moon Phase: \(MoonPhaseInterpreter.formatForConsole(moonPhase))")
+
         
         if let weather = weather {
             print("  🌤️ Weather: \(weather.condition) (\(weather.temperature)°C)")
