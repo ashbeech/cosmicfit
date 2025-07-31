@@ -89,12 +89,13 @@ class DailyVibeInterpretationViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
+        
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
+
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
@@ -109,10 +110,10 @@ class DailyVibeInterpretationViewController: UIViewController {
         setupStyleBrief()
         
         // Setup Content Sections
-        setupContentSections()
+        //setupContentSections()
         
         // Setup Bottom Section
-        setupBottomSection()
+        //setupBottomSection()
         
         // Add a share button to the navigation bar
         navigationItem.rightBarButtonItem = UIBarButtonItem(
