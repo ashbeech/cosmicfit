@@ -38,7 +38,7 @@ class DailyVibeGenerator {
             print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
             
             // 1. Generate tokens for base style resonance (100% natal, Whole Sign)
-            let baseStyleTokens = SemanticTokenGenerator.generateBaseStyleTokens(natal: natalChart)
+            let baseStyleTokens = SemanticTokenGenerator.generateBlueprintTokens(natal: natalChart)
             logTokenSet("BASE STYLE TOKENS (WHOLE SIGN)", baseStyleTokens)
             
             // 2. Generate tokens for emotional vibe of day (60% progressed Moon, 40% natal Moon, Placidus)
@@ -84,7 +84,7 @@ class DailyVibeGenerator {
             logTokenSet("SLOW TRANSIT TOKENS (Jupiter, Saturn, Uranus, Neptune, Pluto)", slowTransitTokens)
             
             // 4. Generate tokens for current weather
-            let weatherTokens = generateWeatherTokens(weather: weather)
+            let weatherTokens = SemanticTokenGenerator.generateWeatherTokens(weather: weather)
             logTokenSet("WEATHER TOKENS", weatherTokens)
             
             // 5. Generate daily signature tokens (includes temporal markers - NO DUPLICATION)
@@ -659,40 +659,6 @@ class DailyVibeGenerator {
     }
     
     // MARK: - Content Generation Methods
-    
-    private static func generateWeatherTokens(weather: TodayWeather?) -> [StyleToken] {
-        var tokens: [StyleToken] = []
-        
-        guard let weather = weather else { return tokens }
-        
-        // Generate tokens based on weather condition
-        switch weather.condition.lowercased() {
-        case let condition where condition.contains("rain"):
-            tokens.append(StyleToken(name: "protective", type: "texture", weight: 0.8, originType: .weather))
-            tokens.append(StyleToken(name: "waterproof", type: "structure", weight: 0.7, originType: .weather))
-        case let condition where condition.contains("sun"):
-            tokens.append(StyleToken(name: "bright", type: "color_quality", weight: 0.8, originType: .weather))
-            tokens.append(StyleToken(name: "light", type: "texture", weight: 0.7, originType: .weather))
-        case let condition where condition.contains("cloud"):
-            tokens.append(StyleToken(name: "layered", type: "structure", weight: 0.6, originType: .weather))
-            tokens.append(StyleToken(name: "muted", type: "color_quality", weight: 0.5, originType: .weather))
-        default:
-            tokens.append(StyleToken(name: "versatile", type: "structure", weight: 0.5, originType: .weather))
-        }
-        
-        // Generate tokens based on temperature
-        let temp = weather.temperature
-        if temp < 10 {
-            tokens.append(StyleToken(name: "warm", type: "texture", weight: 0.9, originType: .weather))
-            tokens.append(StyleToken(name: "cozy", type: "mood", weight: 0.8, originType: .weather))
-        } else if temp > 25 {
-            tokens.append(StyleToken(name: "cool", type: "texture", weight: 0.9, originType: .weather))
-            tokens.append(StyleToken(name: "breathable", type: "structure", weight: 0.8, originType: .weather))
-        }
-
-        
-        return tokens
-    }
     
     private static func generateDailySignature() -> [StyleToken] {
         var tokens: [StyleToken] = []
