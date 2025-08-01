@@ -195,36 +195,33 @@ final class NatalChartViewController: UIViewController {
     }
     
     private func startWeatherFetch() {
-        // fallback timer
-        let timeout = DispatchWorkItem { [weak self] in
-            print("Location timeout, using default location")
-            // NOTE: Should cache long an lat at some point during the app
-            self?.useDefaultWeatherLocation()
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: timeout)
-        
-        locManager.onLocation = { [weak self] coord in
-            guard let self else { return }
-            timeout.cancel()
-            Task {
-                do {
-                    let wx = try await WeatherService.shared.fetch(
-                        lat: coord.latitude,
-                        lon: coord.longitude)
-                    self.todayWeather = wx
-                    self.refreshUI()
-                } catch {
-                    print("Weather fetch failed:", error.localizedDescription)
-                    self.useDefaultWeatherLocation()
-                }
-            }
-        }
-        locManager.onError = { [weak self] error in
-            print("Location error: \(error.localizedDescription)")
-            self?.useDefaultWeatherLocation()
-        }
-        locManager.requestOnce()
-    }
+         // Use the enhanced LocationManager
+         LocationManager.shared.requestLocation(
+             onSuccess: { [weak self] coordinate in
+                 guard let self = self else { return }
+                 
+                 Task {
+                     do {
+                         let wx = try await WeatherService.shared.fetch(
+                             lat: coordinate.latitude,
+                             lon: coordinate.longitude
+                         )
+                         self.todayWeather = wx
+                         self.refreshUI()
+                         
+                         print("✅ Weather fetched successfully for device location")
+                     } catch {
+                         print("Weather fetch failed: \(error.localizedDescription)")
+                         self.useDefaultWeatherLocation()
+                     }
+                 }
+             },
+             onError: { [weak self] error in
+                 print("Location error for weather: \(error.localizedDescription)")
+                 self?.useDefaultWeatherLocation()
+             }
+         )
+     }
     
     // --------------------------------------------------------------------
     // MARK: UI construction
