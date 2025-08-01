@@ -29,6 +29,10 @@ class MainViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Request early device location
+        LocationManager.shared.startLocationUpdates()
+        
         setupUI()
     }
     

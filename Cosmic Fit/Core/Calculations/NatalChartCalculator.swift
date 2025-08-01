@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct NatalChartCalculator {
     // MARK: – Data Types --------------------------------------------------
@@ -395,6 +396,14 @@ struct NatalChartCalculator {
         // Get current planetary positions
         let transitPositions = calculateCurrentPlanetaryPositions(julianDay: currentJulianDay)
         
+        // Get device location for Moon and angle transits
+        let deviceLocation = LocationManager.shared.deviceLocation
+        if let deviceCoord = deviceLocation {
+            DebugLogger.info("📍 Using device location for Moon/Angle transits: \(String(format: "%.6f", deviceCoord.latitude)), \(String(format: "%.6f", deviceCoord.longitude))")
+        } else {
+            DebugLogger.info("⚠️ No device location available - using geocentric positions for all transits")
+        }
+        
         var totalDetectedAspects = 0
         var aspectsByPlanet: [String: Int] = [:]
         var filteredOutAspects: [(String, String, String, Double, String)] = []
@@ -411,7 +420,9 @@ struct NatalChartCalculator {
                     transitIsRetrograde: transit.isRetrograde,
                     natalPlanet: natal.name,
                     natalSymbol: natal.symbol,
-                    natalLongitude: natal.longitude) {
+                    natalLongitude: natal.longitude,
+                    currentJulianDay: currentJulianDay,
+                    deviceLocation: deviceLocation) {
                     
                     transitAspects.append(aspect)
                     totalDetectedAspects += 1
@@ -433,37 +444,41 @@ struct NatalChartCalculator {
                 }
             }
             
-            // Check aspects to natal angles (Ascendant, Midheaven)
-            if let aspect = calculateTransitAspect(
+            // Check aspects to natal angles (Ascendant, Midheaven) using device location
+            if let aspect = calculateTransitAspectToAngle(
                 transitPlanet: transit.name,
                 transitSymbol: transit.symbol,
                 transitLongitude: transit.longitude,
                 transitIsRetrograde: transit.isRetrograde,
-                natalPlanet: "Ascendant",
-                natalSymbol: "Asc",
-                natalLongitude: natalChart.ascendant) {
+                natalAngle: "Ascendant",
+                natalAngleSymbol: "Asc",
+                natalAngleLongitude: natalChart.ascendant,
+                currentJulianDay: currentJulianDay,
+                deviceLocation: deviceLocation) {
                 
                 transitAspects.append(aspect)
                 totalDetectedAspects += 1
                 aspectsByPlanet[transit.name, default: 0] += 1
                 
-                DebugLogger.info("✅ ASPECT DETECTED: \(transit.name) \(aspect.aspectType) Ascendant (orb: \(String(format: "%.2f", aspect.orb))°)")
+                DebugLogger.info("✅ ASPECT DETECTED: \(transit.name) \(aspect.aspectType) Ascendant (orb: \(String(format: "%.2f", aspect.orb))°) [Device Location]")
             }
             
-            if let aspect = calculateTransitAspect(
+            if let aspect = calculateTransitAspectToAngle(
                 transitPlanet: transit.name,
                 transitSymbol: transit.symbol,
                 transitLongitude: transit.longitude,
                 transitIsRetrograde: transit.isRetrograde,
-                natalPlanet: "Midheaven",
-                natalSymbol: "MC",
-                natalLongitude: natalChart.midheaven) {
+                natalAngle: "Midheaven",
+                natalAngleSymbol: "MC",
+                natalAngleLongitude: natalChart.midheaven,
+                currentJulianDay: currentJulianDay,
+                deviceLocation: deviceLocation) {
                 
                 transitAspects.append(aspect)
                 totalDetectedAspects += 1
                 aspectsByPlanet[transit.name, default: 0] += 1
                 
-                DebugLogger.info("✅ ASPECT DETECTED: \(transit.name) \(aspect.aspectType) Midheaven (orb: \(String(format: "%.2f", aspect.orb))°)")
+                DebugLogger.info("✅ ASPECT DETECTED: \(transit.name) \(aspect.aspectType) Midheaven (orb: \(String(format: "%.2f", aspect.orb))°) [Device Location]")
             }
             
             // Check aspects to additional points (if they exist in your chart)
@@ -474,7 +489,9 @@ struct NatalChartCalculator {
                 transitIsRetrograde: transit.isRetrograde,
                 natalPlanet: "North Node",
                 natalSymbol: "☊",
-                natalLongitude: natalChart.northNode) {
+                natalLongitude: natalChart.northNode,
+                currentJulianDay: currentJulianDay,
+                deviceLocation: nil) { // Use nil to force geocentric calculation
                 
                 transitAspects.append(aspect)
                 totalDetectedAspects += 1
@@ -490,7 +507,9 @@ struct NatalChartCalculator {
                 transitIsRetrograde: transit.isRetrograde,
                 natalPlanet: "Lilith",
                 natalSymbol: "⚸",
-                natalLongitude: natalChart.lilith) {
+                natalLongitude: natalChart.lilith,
+                currentJulianDay: currentJulianDay,
+                deviceLocation: nil) { // Use nil to force geocentric calculation
                 
                 transitAspects.append(aspect)
                 totalDetectedAspects += 1
@@ -506,7 +525,9 @@ struct NatalChartCalculator {
                 transitIsRetrograde: transit.isRetrograde,
                 natalPlanet: "Chiron",
                 natalSymbol: "⚷",
-                natalLongitude: natalChart.chiron) {
+                natalLongitude: natalChart.chiron,
+                currentJulianDay: currentJulianDay,
+                deviceLocation: nil) { // Use nil to force geocentric calculation
                 
                 transitAspects.append(aspect)
                 totalDetectedAspects += 1
@@ -645,7 +666,9 @@ struct NatalChartCalculator {
         transitIsRetrograde: Bool,
         natalPlanet: String,
         natalSymbol: String,
-        natalLongitude: Double) -> TransitAspect? {
+        natalLongitude: Double,
+        currentJulianDay: Double,
+        deviceLocation: CLLocationCoordinate2D?) -> TransitAspect? {
             
             // Skip same planet to same planet aspects (except Sun to Sun which is the solar return)
             if transitPlanet == natalPlanet && transitPlanet != "Sun" {
@@ -667,14 +690,29 @@ struct NatalChartCalculator {
                 maxOrb = 2.0
             }
             
+            // Determine the final transit position to use
+            var finalTransitLongitude = transitLongitude
+            
+            // Use device location for Moon transits only
+            if transitPlanet == "Moon", let deviceCoord = deviceLocation {
+                // Calculate topocentric Moon position from device location
+                if let topocentricMoonLon = calculateTopocentricMoonPosition(
+                    julianDay: currentJulianDay,
+                    observerLatitude: deviceCoord.latitude,
+                    observerLongitude: deviceCoord.longitude) {
+                    
+                    finalTransitLongitude = topocentricMoonLon
+                    DebugLogger.debug("   🌙 Using topocentric Moon position: \(String(format: "%.2f", finalTransitLongitude))° (vs geocentric: \(String(format: "%.2f", transitLongitude))°)")
+                }
+            }
+            
             // Calculate the aspect
             if let (aspectType, exactness) = AstronomicalCalculator.calculateAspect(
-                point1: transitLongitude,
+                point1: finalTransitLongitude,
                 point2: natalLongitude,
                 orb: maxOrb) {
                 
                 DebugLogger.debug("   🎯 \(transitPlanet) → \(natalPlanet): \(aspectType) (orb: \(String(format: "%.2f", exactness))°, max orb: \(maxOrb)°)")
-                
                 
                 // Determine the category based on planet speed
                 let category: TransitCategory
@@ -719,7 +757,7 @@ struct NatalChartCalculator {
                 let toStr = dateFormatter.string(from: effectiveTo)
                 
                 // Get signs for display
-                let (transitSign, _) = CoordinateTransformations.decimalDegreesToZodiac(transitLongitude)
+                let (transitSign, _) = CoordinateTransformations.decimalDegreesToZodiac(finalTransitLongitude)
                 let transitSignSymbol = CoordinateTransformations.getZodiacSignSymbol(sign: transitSign)
                 
                 let (natalSign, _) = CoordinateTransformations.decimalDegreesToZodiac(natalLongitude)
@@ -727,8 +765,9 @@ struct NatalChartCalculator {
                 
                 // Create description based on format in the example
                 let retroMark = transitIsRetrograde ? " Rx" : ""
-                let description = "\(transitPlanet) \(aspectType) \(natalPlanet)\n(effective from \(fromStr) to \(toStr))"
-                let detailedInfo = "orb \(String(format: "%.2f", exactness))° \(applying ? "applying" : "separating")   (\(transitPlanet) \(transitSignSymbol) \(String(format: "%.2f", transitLongitude))°\(retroMark), \(natalPlanet) \(natalSignSymbol) \(String(format: "%.2f", natalLongitude))°)"
+                let locationNote = (transitPlanet == "Moon" && deviceLocation != nil) ? " [Topocentric]" : ""
+                let description = "\(transitPlanet) \(aspectType) \(natalPlanet)\(locationNote)\n(effective from \(fromStr) to \(toStr))"
+                let detailedInfo = "orb \(String(format: "%.2f", exactness))° \(applying ? "applying" : "separating")   (\(transitPlanet) \(transitSignSymbol) \(String(format: "%.2f", finalTransitLongitude))°\(retroMark), \(natalPlanet) \(natalSignSymbol) \(String(format: "%.2f", natalLongitude))°)"
                 
                 // Get aspect symbol
                 let aspectSymbol = getAspectSymbol(aspectType)
@@ -753,6 +792,239 @@ struct NatalChartCalculator {
             
             return nil
         }
+    
+    private static func calculateTransitAspectToAngle(
+        transitPlanet: String,
+        transitSymbol: String,
+        transitLongitude: Double,
+        transitIsRetrograde: Bool,
+        natalAngle: String,
+        natalAngleSymbol: String,
+        natalAngleLongitude: Double,
+        currentJulianDay: Double,
+        deviceLocation: CLLocationCoordinate2D?) -> TransitAspect? {
+            
+            // Define orbs based on the planet (tighter orbs for transits than natal)
+            let maxOrb: Double
+            switch transitPlanet {
+            case "Sun", "Moon":
+                maxOrb = 3.0 // Slightly larger to catch more aspects
+            case "Mercury", "Venus", "Mars":
+                maxOrb = 2.0
+            case "Jupiter", "Saturn":
+                maxOrb = 2.5
+            case "Uranus", "Neptune", "Pluto", "Chiron":
+                maxOrb = 2.5
+            default:
+                maxOrb = 2.0
+            }
+            
+            // Determine final positions to use
+            var finalTransitLongitude = transitLongitude
+            var finalAngleLongitude = natalAngleLongitude
+            
+            // Use device location for current angles if available
+            if let deviceCoord = deviceLocation {
+                // Calculate current angles from device location
+                let currentAscendant = AstronomicalCalculator.calculateAscendant(
+                    julianDay: currentJulianDay,
+                    latitude: deviceCoord.latitude,
+                    longitude: deviceCoord.longitude
+                )
+                
+                let currentMidheaven = AstronomicalCalculator.calculateMidheaven(
+                    julianDay: currentJulianDay,
+                    longitude: deviceCoord.longitude
+                )
+                
+                // Use current device-location-based angles instead of natal angles
+                switch natalAngle {
+                case "Ascendant":
+                    finalAngleLongitude = currentAscendant
+                    DebugLogger.debug("   🏠 Using current Ascendant from device location: \(String(format: "%.2f", finalAngleLongitude))° (vs natal: \(String(format: "%.2f", natalAngleLongitude))°)")
+                case "Midheaven":
+                    finalAngleLongitude = currentMidheaven
+                    DebugLogger.debug("   🏠 Using current Midheaven from device location: \(String(format: "%.2f", finalAngleLongitude))° (vs natal: \(String(format: "%.2f", natalAngleLongitude))°)")
+                default:
+                    // For other angles, use natal position
+                    break
+                }
+                
+                // Use topocentric position for Moon transits to angles
+                if transitPlanet == "Moon" {
+                    if let topocentricMoonLon = calculateTopocentricMoonPosition(
+                        julianDay: currentJulianDay,
+                        observerLatitude: deviceCoord.latitude,
+                        observerLongitude: deviceCoord.longitude) {
+                        
+                        finalTransitLongitude = topocentricMoonLon
+                        DebugLogger.debug("   🌙 Using topocentric Moon position for angle aspect: \(String(format: "%.2f", finalTransitLongitude))°")
+                    }
+                }
+            } else {
+                DebugLogger.debug("   ⚠️ No device location available - using natal angle position")
+            }
+            
+            // Calculate the aspect
+            if let (aspectType, exactness) = AstronomicalCalculator.calculateAspect(
+                point1: finalTransitLongitude,
+                point2: finalAngleLongitude,
+                orb: maxOrb) {
+                
+                DebugLogger.debug("   🎯 \(transitPlanet) → \(natalAngle): \(aspectType) (orb: \(String(format: "%.2f", exactness))°, max orb: \(maxOrb)°)")
+                
+                // Determine the category based on planet speed
+                let category: TransitCategory
+                if transitPlanet == "Moon" {
+                    category = .shortTerm
+                } else if ["Uranus", "Neptune", "Pluto", "Chiron"].contains(transitPlanet) {
+                    category = .longTerm
+                } else {
+                    category = .regular
+                }
+                
+                // Determine if the aspect is applying or separating
+                let applying = !transitIsRetrograde
+                
+                // Calculate effective dates (simplified estimate)
+                let effectiveDays: Double
+                switch transitPlanet {
+                case "Moon":
+                    effectiveDays = 0.5 // Half-day for Moon
+                case "Sun", "Mercury", "Venus":
+                    effectiveDays = 7.0 // One week for personal planets
+                case "Mars":
+                    effectiveDays = 10.0 // Ten days for Mars
+                case "Jupiter", "Saturn":
+                    effectiveDays = 21.0 // Three weeks for social planets
+                case "Uranus", "Neptune", "Pluto", "Chiron":
+                    effectiveDays = 90.0 // Three months for outer planets
+                default:
+                    effectiveDays = 7.0
+                }
+                
+                // Create date range
+                let now = Date()
+                let effectiveFrom = Calendar.current.date(byAdding: .day, value: -Int(effectiveDays/2), to: now)!
+                let effectiveTo = Calendar.current.date(byAdding: .day, value: Int(effectiveDays/2), to: now)!
+                
+                // Format dates for display
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "dd/MM/yyyy"
+                let fromStr = dateFormatter.string(from: effectiveFrom)
+                let toStr = dateFormatter.string(from: effectiveTo)
+                
+                // Get signs for display
+                let (transitSign, _) = CoordinateTransformations.decimalDegreesToZodiac(finalTransitLongitude)
+                let transitSignSymbol = CoordinateTransformations.getZodiacSignSymbol(sign: transitSign)
+                
+                let (angleSign, _) = CoordinateTransformations.decimalDegreesToZodiac(finalAngleLongitude)
+                let angleSignSymbol = CoordinateTransformations.getZodiacSignSymbol(sign: angleSign)
+                
+                // Create description with location note
+                let retroMark = transitIsRetrograde ? " Rx" : ""
+                let locationNote = deviceLocation != nil ? " [Current Location]" : ""
+                let description = "\(transitPlanet) \(aspectType) \(natalAngle)\(locationNote)\n(effective from \(fromStr) to \(toStr))"
+                let detailedInfo = "orb \(String(format: "%.2f", exactness))° \(applying ? "applying" : "separating")   (\(transitPlanet) \(transitSignSymbol) \(String(format: "%.2f", finalTransitLongitude))°\(retroMark), \(natalAngle) \(angleSignSymbol) \(String(format: "%.2f", finalAngleLongitude))°)"
+                
+                // Get aspect symbol
+                let aspectSymbol = getAspectSymbol(aspectType)
+                
+                return TransitAspect(
+                    transitPlanet: transitPlanet,
+                    transitPlanetSymbol: transitSymbol,
+                    natalPlanet: natalAngle,
+                    natalPlanetSymbol: natalAngleSymbol,
+                    aspectType: aspectType,
+                    aspectSymbol: aspectSymbol,
+                    orb: exactness,
+                    applying: applying,
+                    effectiveFrom: effectiveFrom,
+                    effectiveTo: effectiveTo,
+                    description: description + "\n" + detailedInfo,
+                    category: category
+                )
+            } else {
+                DebugLogger.debug("   ❌ \(transitPlanet) → \(natalAngle): No aspect within \(maxOrb)° orb")
+            }
+            
+            return nil
+        }
+    
+    /// Calculate topocentric Moon position from a specific observer location
+    /// This accounts for the Moon's proximity to Earth and provides location-specific coordinates
+    private static func calculateTopocentricMoonPosition(
+        julianDay: Double,
+        observerLatitude: Double,
+        observerLongitude: Double) -> Double? {
+        
+        // Calculate geocentric Moon position first
+        let (geocentricLon, geocentricLat) = AstronomicalCalculator.calculateMoonPosition(julianDay: julianDay)
+        
+        // Calculate Moon's distance (approximate)
+        let moonDistance = calculateMoonDistance(julianDay: julianDay)
+        
+        // Calculate Local Sidereal Time at observer location
+        let lst = JulianDateCalculator.calculateLocalSiderealTime(julianDay: julianDay, longitude: observerLongitude)
+        
+        // Convert to radians
+        let latRad = CoordinateTransformations.degreesToRadians(observerLatitude)
+        let lonRad = CoordinateTransformations.degreesToRadians(geocentricLon)
+        let latMoonRad = CoordinateTransformations.degreesToRadians(geocentricLat)
+        let lstRad = CoordinateTransformations.degreesToRadians(lst)
+        
+        // Earth's equatorial radius in km
+        let earthRadius = 6378.137
+        
+        // Calculate observer's geocentric coordinates
+        let rho = cos(latRad)
+        let z = sin(latRad)
+        
+        // Calculate Moon's rectangular coordinates (geocentric)
+        let moonX = moonDistance * cos(latMoonRad) * cos(lonRad)
+        let moonY = moonDistance * cos(latMoonRad) * sin(lonRad)
+        let moonZ = moonDistance * sin(latMoonRad)
+        
+        // Calculate observer's rectangular coordinates
+        let obsX = earthRadius * rho * cos(lstRad)
+        let obsY = earthRadius * rho * sin(lstRad)
+        let obsZ = earthRadius * z
+        
+        // Calculate topocentric rectangular coordinates
+        let topoX = moonX - obsX
+        let topoY = moonY - obsY
+        let topoZ = moonZ - obsZ
+        
+        // Convert back to spherical coordinates
+        let topoDistance = sqrt(topoX * topoX + topoY * topoY + topoZ * topoZ)
+        let topoLonRad = atan2(topoY, topoX)
+        
+        // Convert back to degrees
+        let topocentricLongitude = CoordinateTransformations.normalizeAngle(
+            CoordinateTransformations.radiansToDegrees(topoLonRad)
+        )
+        
+        return topocentricLongitude
+    }
+
+    /// Calculate approximate Moon distance in kilometers
+    private static func calculateMoonDistance(julianDay: Double) -> Double {
+        // Simplified calculation - in reality this would be more complex
+        // Using average lunar distance with basic perturbations
+        let T = (julianDay - 2451545.0) / 36525.0
+        
+        // Mean distance in km (approximately)
+        let meanDistance = 384400.0
+        
+        // Simple perturbation based on lunar anomaly
+        let M = 134.9633964 + 477198.8675055 * T
+        let MRad = CoordinateTransformations.degreesToRadians(M)
+        
+        // Apply basic distance variation (simplified)
+        let distanceVariation = 21000.0 * cos(MRad) // ~21,000 km variation
+        
+        return meanDistance + distanceVariation
+    }
     
     private static func getAspectSymbol(_ aspectType: String) -> String {
         switch aspectType {
