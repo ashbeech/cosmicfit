@@ -31,7 +31,7 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         
         // Request early device location
-        LocationManager.shared.startLocationUpdates()
+        //LocationManager.shared.startLocationUpdates()
         
         setupUI()
     }

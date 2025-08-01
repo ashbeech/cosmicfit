@@ -144,11 +144,30 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
         requestLocationPermissionAndUpdate()
     }
     
+    private func startLocationIfAllowed() {
+        guard CLLocationManager.locationServicesEnabled(),
+              manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways else {
+            return
+        }
+        
+        if !locationUpdateCallbacks.isEmpty {
+            manager.startUpdatingLocation()
+            print("📍 Authorized — starting location updates after permission")
+        }
+        
+        if onLocation != nil {
+            manager.requestLocation()
+        }
+    }
+    
     // MARK: - Permission Handling
     private func requestLocationPermissionAndUpdate() {
         switch manager.authorizationStatus {
         case .notDetermined:
             manager.requestWhenInUseAuthorization()
+            // Defer any location start until delegate is triggered
+        case .authorizedWhenInUse, .authorizedAlways:
+            startLocationIfAllowed()
         case .denied, .restricted:
             let error = NSError(
                 domain: "LocationManager",
@@ -156,8 +175,6 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
                 userInfo: [NSLocalizedDescriptionKey: "Location access denied. Please enable location services in Settings."]
             )
             handleLocationError(error)
-        case .authorizedWhenInUse, .authorizedAlways:
-            manager.requestLocation()
         @unknown default:
             manager.requestWhenInUseAuthorization()
         }
@@ -296,10 +313,7 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
         
         switch status {
         case .authorizedWhenInUse, .authorizedAlways:
-            // Permission granted, request location if we have pending callbacks
-            if onLocation != nil || !locationUpdateCallbacks.isEmpty {
-                manager.requestLocation()
-            }
+            startLocationIfAllowed()
         case .denied, .restricted:
             let error = NSError(
                 domain: "LocationManager",
@@ -307,9 +321,11 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
                 userInfo: [NSLocalizedDescriptionKey: "Location access denied or restricted."]
             )
             handleLocationError(error)
+            
         case .notDetermined:
-            // Still waiting for user decision
+            // Don't call requestLocation() yet — wait for the user to decide
             break
+            
         @unknown default:
             break
         }
