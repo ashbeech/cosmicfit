@@ -270,13 +270,6 @@ class MainViewController: UIViewController {
                 self.timeZone = TimeZone(identifier: "Europe/London") ?? TimeZone.current
             }
             
-            print("✅ GEOCODING SUCCESS")
-            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-            print("📍 Location: \(self.locationName)")
-            print("🌐 Resolved to: Lat \(String(format: "%.6f", self.latitude)), Long \(String(format: "%.6f", self.longitude))")
-            print("⏰ Time Zone: \(self.timeZone.identifier)")
-            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-            
             completion(true)
         }
     }

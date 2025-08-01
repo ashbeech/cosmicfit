@@ -996,7 +996,6 @@ struct NatalChartCalculator {
         let topoZ = moonZ - obsZ
         
         // Convert back to spherical coordinates
-        let topoDistance = sqrt(topoX * topoX + topoY * topoY + topoZ * topoZ)
         let topoLonRad = atan2(topoY, topoX)
         
         // Convert back to degrees
