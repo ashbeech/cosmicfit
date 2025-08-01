@@ -1,372 +1,257 @@
-# Cosmic Fit Interpretation Engine
+# Cosmic Fit
 
-## Overview
+**An astrological fashion guidance iOS application that translates natal charts into personalized style recommendations.**
 
-The Cosmic Fit Interpretation Engine translates astrological data into stylistic and emotional fashion guidance. It is designed to produce two core outputs:
+Cosmic Fit combines astronomical precision with fashion intelligence, generating two core experiences: a foundational **Cosmic Blueprint** based on your natal chart, and a dynamic **Daily Fit** that adapts to current transits, weather, and lunar phases.
 
-1. **Cosmic Blueprint** – a foundational, personality-rooted style profile based on the natal chart.
-2. **Daily Fit (formerly Daily Vibe)** – a day-specific energetic style guide based on transits, progressed chart, lunar phase, and weather.
+## 🌟 Features
 
-Outputs are constructed using modular "StyleTokens" and scored theme composites, which are assembled into poetic but structured interpretations.
+### Cosmic Blueprint
+- **Personality-rooted style profiles** derived from natal chart analysis
+- **Whole Sign house system** for authentic astrological interpretation
+- **Age-weighted influences** that evolve as you mature
+- **Comprehensive style guidance** including essence, expression, and fabric recommendations
 
----
+### Daily Fit
+- **Real-time style guidance** based on current astrological transits
+- **Weather-integrated recommendations** for practical styling
+- **Lunar phase considerations** for energetic alignment
+- **Progressive chart integration** for emotional styling nuances
 
-## Core Components
+### Technical Highlights
+- **Swiss Ephemeris integration** for astronomical precision
+- **VSOP87 planetary calculations** for accurate positioning
+- **Semantic token architecture** for modular interpretation building
+- **Advanced weighting algorithms** for nuanced astrological influence
 
-### 1. `CosmicFitInterpretationEngine.swift`
+## 🏗️ Architecture
 
-**Role**: Orchestrator of interpretation flow. Exposes public methods:
+### Core Engine Components
 
-* `generateBlueprintInterpretation(from:currentAge:)`
-* `generateDailyVibeInterpretation(from:progressedChart:transits:weather:)`
-* `generateFullInterpretation(...)`
-* `generateColorFrequencyInterpretation(...)`
-* `generateWardrobeStorylineInterpretation(...)`
+#### `CosmicFitInterpretationEngine`
+Central orchestrator exposing public methods:
+- `generateBlueprintInterpretation(from:currentAge:)`
+- `generateDailyVibeInterpretation(from:progressedChart:transits:weather:)`
+- `generateFullInterpretation(...)`
 
-Delegates token creation to `SemanticTokenGenerator` and assembly to `ParagraphAssembler`.
+#### `SemanticTokenGenerator`
+Core logic hub converting chart data into weighted `StyleToken`s:
+- **Blueprint tokens**: 100% natal chart analysis using Whole Sign system
+- **Daily tokens**: Transit analysis with sophisticated weighting
+- **Color frequency tokens**: 70% natal, 30% progressed for color guidance
+- **Emotional vibe tokens**: Progressed Moon integration for mood styling
 
----
-
-### 2. `SemanticTokenGenerator.swift`
-
-**Role**: Core logic hub. Converts chart data into weighted `StyleToken`s.
-
-#### Main Token Generators:
-
-* `generateBlueprintTokens` – 100% natal, Whole Sign
-* `generateColorFrequencyTokens` – 70% natal, 30% progressed, restricted to modulating types
-* `generateWardrobeStorylineTokens` – 60% progressed, 40% natal
-* `generateTransitTokens` – day-specific tokens using `TransitWeightCalculator`
-* `generateEmotionalVibeTokens` – 60% progressed Moon, 40% natal Moon
-* `generateMoonPhaseTokens`, `generateWeatherTokens`
-
-#### Token Filtering Rules:
-
-* **Progressed tokens**:
-
-  * Only allowed for `texture`, `structure`, `color_quality`, `mood`, `expression`
-  * Never introduce new `color` tokens
-  * Weight capped at 0.3 (Color Frequency), 0.6 (Wardrobe), 0.2 (Daily)
-
-* **Ascendant weighting**:
-
-  * Age-faded using `StyleToken.applyingAgeWeight()`
-  * Full weight under age 30, gradually diminishing
-
-* **Planetary weighting**:
-
-  * Based on planet importance (e.g. Venus = 2.0, Sun = 1.5)
-  * Bonuses for dignity, angularity, rulership
-
----
-
-### 3. `StyleToken.swift`
-
-Defines the core unit of meaning. A `StyleToken` represents a weighted attribute, e.g. `earthy`, `fluid`, `vibrant`, etc.
-
-Attributes:
-
-* `name`, `type`, `weight`
-* `planetarySource`, `signSource`, `houseSource`, `aspectSource`
-* `originType` (.natal, .progressed, .transit, .phase, .weather)
-
-Supports age-based weight adjustments via:
-
-* `applyingAgeWeight(currentAge:)`
-
----
-
-### 4. `TransitWeightCalculator.swift`
-
-Calculates influence score for each transit based on:
-
-* Aspect strength (conjunction > square > trine > sextile, etc.)
-* Orb tightness
-* Transit planet power (e.g. Pluto > Mars > Mercury)
-* Natal planet power (via `PlanetPowerEvaluator`)
-* Context multiplier (e.g. Moon hit by Pluto = boost)
-* Fashion relevance filter (Venus, Moon, Ascendant emphasized)
-
-Returns a weight from 0.0 to 5.0+, used to scale token weights.
-
----
-
-### 5. `PlanetPowerEvaluator.swift`
-
-Provides natal planet strength scoring:
-
-* Base power by planet
-* Bonus for dignity (domicile, exaltation)
-* Angular house presence
-* Role: ruler of Ascendant, sect light
-
-Used to calculate `natalPowerScore` in transit weighting.
-
----
-
-### 6. `ParagraphAssembler.swift`
-
-Builds human-readable interpretation from tokens.
-
-Sections include:
-
-* Style Essence
-* Celestial Style ID (Core / Expression / Magnetism / Emotional Dressing / Frequency)
-* Style Tensions
-* Energetic Fabric Guide
-* Style Pulse
-* Fashion Dos & Don'ts
-* Color Frequency
-* Wardrobe Storyline
-
-Also generates Daily Fit content:
-
-* Title, Main Paragraph, Textiles, Colors, Patterns, Shape, Accessories, Takeaway
-
----
-
-### 7. `ThemeSelector.swift`
-
-Matches tokens against predefined style themes (`CompositeTheme`). Each theme has:
-
-* Required tokens (must match all)
-* Optional tokens (score bonus if matched)
-* Minimum threshold score
-
-Used to:
-
-* Set Daily Fit theme label
-* Select dominant blueprint style profile
-
----
-
-### 8. `ParagraphBlock.swift`
-
-Used to format final text blocks with tonal and positional metadata. Types include:
-
-* Tones: `warm`, `grounded`, `playful`, `poetic`, `bold`, `minimal`
-* Positions: `opener`, `middle`, `closer`
-
-Not yet used dynamically, but available for future layout enhancements.
-
----
-
-### 9. `CompositeTheme.swift`
-
-Struct definition for themes:
-
+#### `StyleToken`
+Fundamental unit representing weighted style attributes:
 ```swift
-struct CompositeTheme {
-  let name: String
-  let required: [String]
-  let optional: [String]
-  let minimumScore: Double
+struct StyleToken {
+    let name: String           // e.g., "earthy", "vibrant", "structured"
+    let type: String           // e.g., "texture", "color", "mood"
+    let weight: Double         // Influence strength (0.0-5.0+)
+    let planetarySource: String?
+    let signSource: String?
+    let aspectSource: String?
+    let originType: OriginType // .natal, .progressed, .transit, .weather
 }
 ```
 
-Defined themes include `Dream Layering`, `Comfort at the Core`, `Grounded Glamour`, etc.
+#### `TransitWeightCalculator`
+Sophisticated transit influence scoring based on:
+- **Aspect strength**: Conjunction > Square > Trine > Sextile
+- **Orb tightness**: Closer aspects carry more weight
+- **Planetary power**: Pluto > Saturn > Jupiter > Mars > Venus > Sun > Mercury > Moon
+- **Natal planet strength**: Dignity, angularity, rulership bonuses
+- **Fashion relevance**: Venus, Moon, Ascendant emphasis
 
----
+#### `PlanetPowerEvaluator`
+Natal planet strength assessment:
+- Base planetary power ratings
+- Dignity bonuses (domicile, exaltation)
+- Angular house presence
+- Chart ruler and sect light roles
 
-## Summary of Key Architectural Principles
+### Interpretation Assembly
 
-* **Natal chart defines essence**. Always remains the foundation.
-* **Progressed chart modulates tone only**. Never overrides or contradicts natal essence.
-* **Ascendant influence fades with maturity**. Modulated by age.
-* **Transits vary in importance**. Weight based on angle + planet strength + relevance.
-* **All content is generated from tokens**, not hardcoded. Tokens → Theme → Paragraphs.
+#### `ParagraphAssembler`
+Transforms semantic tokens into human-readable guidance:
 
----
+**Blueprint Sections:**
+- Style Essence
+- Celestial Style ID (Core/Expression/Magnetism)
+- Emotional Dressing
+- Planetary Frequency
+- Style Tensions
+- Energetic Fabric Guide
 
-## Adding New Features
+**Daily Fit Sections:**
+- Dynamic title generation
+- Weather-integrated guidance
+- Textile recommendations
+- Color and pattern suggestions
+- Accessory guidance
 
-To extend or adjust:
+#### `ThemeSelector`
+Matches token patterns to predefined style themes:
+- **Composite themes** with required and optional tokens
+- **Scoring algorithms** for theme matching
+- **Style profiles** like "Dream Layering", "Grounded Glamour", "Comfort at the Core"
 
-* **New token types**: Add logic in `SemanticTokenGenerator`
-* **New interpretation sections**: Add generator method in `ParagraphAssembler`
-* **New transit rules**: Modify `TransitWeightCalculator`
-* **New planetary bonuses**: Update `PlanetPowerEvaluator`
-* **New themes**: Extend `CompositeTheme` array in `ThemeSelector`
+### Astronomical Calculations
 
----
+#### `VSOP87Parser`
+Handles precise planetary position calculations:
+- **Bureau des Longitudes VSOP87D format** parsing
+- **Fallback orbital elements** for reduced accuracy scenarios
+- **Multi-century precision** for historical and future dates
 
-## Dependencies
+#### `SwissEphemerisBootstrap`
+Manages Swiss Ephemeris initialization:
+- **High-precision ephemeris data** integration
+- **seas_18.se1 file** management
+- **Memory-efficient** resource handling
 
-* `NatalChartCalculator` (not included in this upload): must provide sign, house, aspect, and progressed placements.
-* `JulianDateCalculator` and `AstronomicalCalculator`: used for Moon Phase.
-* `TodayWeather`: input struct for real-world weather token integration.
+#### `JulianDateCalculator`
+Core astronomical date conversions:
+- **Gregorian to Julian** date transformation
+- **UTC coordination** for global accuracy
+- **Sidereal time calculations** for house systems
 
----
+### User Interface
 
-## For Debugging
+#### `MainViewController`
+Entry point for birth data collection:
+- Location geocoding
+- Date/time input validation
+- Chart generation initiation
 
-Use `logTokenSet(...)` in `DailyVibeGenerator.swift` and `ParagraphAssembler.swift` to print tokens by type and weight. Inspect `themeName` from `ThemeSelector.scoreThemes(...)` to trace theme logic.
+#### `NatalChartViewController`
+Data orchestration hub:
+- Natal and progressed chart calculation
+- Weather API integration
+- Transit compilation
+- Interpretation routing
 
----
+#### `InterpretationViewController`
+Cosmic Blueprint display:
+- **Markdown-style formatting** for structured text
+- Header with birth location and date
+- Export and sharing capabilities
+- **Responsive typography** for readability
 
-## Final Note
+#### `DailyVibeInterpretationViewController`
+Daily Fit experience:
+- **Interactive sliders** for brightness and vibrancy
+- Weather integration with emoji indicators
+- Segmented guidance (textiles, colors, patterns, shapes)
+- **Custom gradient visualizations**
 
-The Cosmic Fit engine is designed to "read the current, not the cables." All astrological logic is embedded and translated into intuitive, emotionally honest fashion guidance—without referencing astrology explicitly in output.
+## 🔧 Key Architectural Principles
 
-Use this engine as a dynamic base to extend stylistic intelligence, integrate user prompts, or expand to non-fashion domains like interiors, branding, or wellness aesthetics.
+### Astrological Integrity
+- **Natal chart defines essence** - Always the foundational layer
+- **Progressed chart modulates tone** - Never overrides natal patterns
+- **Ascendant influence fades with maturity** - Age-weighted calculations
+- **Transit importance varies** - Dynamic weighting based on multiple factors
 
-# Cosmic Fit UI Integration Layer — Interpretation Display System
+### Token-Driven Generation
+- **No hardcoded content** - All interpretations built from semantic tokens
+- **Modular composition** - Tokens → Themes → Paragraphs
+- **Weighted influence** - Sophisticated algorithms determine token strength
+- **Origin tracking** - Full traceability of style recommendations
 
-This document explains how the Interpretation Engine results (Blueprint and Daily Fit) are routed and rendered across the front-end components in **Cosmic Fit**. This layer ensures users see the correct output, styled and segmented appropriately.
+### Technical Excellence
+- **Astronomical precision** - Swiss Ephemeris and VSOP87 integration
+- **Performance optimization** - Efficient calculations and caching
+- **Memory management** - Resource-conscious design
+- **Debug infrastructure** - Comprehensive logging and validation
 
----
+## 🔄 Daily Refresh System
 
-## Display Architecture Overview
+### Automatic Updates
+- **Midnight detection** across time zones
+- **App lifecycle integration** for seamless updates
+- **Cached storage** for offline accessibility
+- **Background refresh** when returning to foreground
 
-1. **MainViewController** – User inputs birth data.
-2. **NatalChartViewController** – Generates natal/progressed charts + transits + weather.
-3. **Interpretation Engine** – Called via `NatalChartManager+Interpretation.swift`.
-4. **DailyVibeInterpretationViewController** – Renders Daily Fit.
-5. **InterpretationViewController** – Renders Blueprint.
-
-All user interpretations are passed from the engine via `InterpretationResult` or `DailyVibeContent` structs.
-
----
-
-## Key ViewControllers
-
-### 1. `MainViewController.swift`
-
-* Initial screen where users enter date, time, and location.
-* Geocodes the location and sends the data to `NatalChartViewController`.
-
-### 2. `NatalChartViewController.swift`
-
-* Performs all data orchestration:
-
-  * Calculates natal and progressed charts
-  * Retrieves weather info
-  * Prepares transits
-  * Generates interpretations by calling methods in `NatalChartManager+Interpretation.swift`
-* Has methods:
-
-  * `showDailyVibeInterpretation()` → pushes `DailyVibeInterpretationViewController`
-  * `showBlueprintInterpretation()` → pushes `InterpretationViewController`
-
-Also manages daily caching via `DailyVibeStorage`.
-
-### 3. `NatalChartManager+Interpretation.swift`
-
-This extension is the bridge to the Interpretation Engine:
-
-* Calls:
-
-  * `generateBlueprintInterpretation(...)`
-  * `generateDailyVibeInterpretation(...)`
-  * `generateFullInterpretation(...)`
-* Returns either a full stitched string or a `DailyVibeContent` object
-
----
-
-## Rendering Blueprint
-
-### `InterpretationViewController.swift`
-
-* Renders the **Cosmic Blueprint** output
-* Consumes:
-
-  * `InterpretationResult.stitchedParagraph`
-  * `themeName`
-  * Birth data for display
-* Features:
-
-  * Header with city, date, country
-  * Black background, white typography
-  * Uses Markdown-like parsing in `setupTextViewStyling()` to style sections (`##`, `---`, etc.)
-  * Formats sections: headings, body, dividers
-  * Adds export/share button
-
----
-
-## Rendering Daily Fit
-
-### `DailyVibeInterpretationViewController.swift`
-
-* Renders the **Daily Fit** experience using `DailyVibeContent`
-
-* Displayed fields:
-
-  * Title
-  * Main paragraph
-  * Textiles
-  * Colors
-  * Brightness (with slider)
-  * Vibrancy (with slider)
-  * Patterns
-  * Shape
-  * Accessories
-  * Takeaway
-
-* Weather is displayed at the top (with emoji)
-
-* Sliders drawn with custom gradient layers
-
-* Has `shareInterpretation()` to export as text/image
-
----
-
-## Interpretation Flow
-
-### Blueprint
-
-1. User generates chart
-2. `NatalChartViewController` calls:
-
+### Weather Integration
 ```swift
-let interpretation = CosmicFitInterpretationEngine.generateBlueprintInterpretation(from: natalChart)
+struct TodayWeather {
+    let condition: String
+    let temperature: Double
+    let humidity: Double
+    let windSpeed: Double
+}
 ```
 
-3. Passes to `InterpretationViewController.configure(...)`
-4. `setupTextViewStyling()` formats Markdown-style text visually
+## 🧪 Development Tools
 
-### Daily Fit
+### Debug Configuration
+- **Token validation** and weight analysis
+- **Paragraph assembly** tracing
+- **Transit calculation** verification
+- **Performance monitoring** for optimization
 
-1. User opens Daily Vibe
-2. `getDailyVibeContent()` runs engine call:
-
+### Logging Infrastructure
 ```swift
-CosmicFitInterpretationEngine.generateDailyVibeInterpretation(from: natal, progressedChart, transits, weather)
+class DebugLogger {
+    static func tokenSet(_ label: String, _ tokens: [StyleToken])
+    static func paragraphAssembly(sectionName: String, ...)
+    static func transitCalculation(...)
+}
 ```
 
-3. Results passed to `DailyVibeInterpretationViewController.configure(...)`
-4. Fields mapped to labels + gradient sliders drawn
+## 🚀 Extension Architecture
+
+### Adding New Features
+
+**New Token Types:**
+Extend `SemanticTokenGenerator` with additional logic patterns
+
+**New Interpretation Sections:**
+Add generator methods to `ParagraphAssembler`
+
+**New Transit Rules:**
+Modify `TransitWeightCalculator` weighting algorithms
+
+**New Planetary Bonuses:**
+Update `PlanetPowerEvaluator` scoring system
+
+**New Style Themes:**
+Extend `CompositeTheme` definitions in `ThemeSelector`
+
+### Dependencies
+
+#### Internal
+- `NatalChartCalculator` - Chart computation engine
+- `JulianDateCalculator` - Astronomical date handling
+- `AstronomicalCalculator` - Celestial mechanics
+- `TodayWeather` - Weather data integration
+
+#### External
+- **Swiss Ephemeris** (CSwissEphemeris SPM)
+- **CoreLocation** - Geocoding and location services
+- **UIKit** - iOS user interface framework
+
+## 📊 Performance Characteristics
+
+### Calculation Efficiency
+- **Cached chart data** prevents redundant calculations
+- **Optimized token generation** with early filtering
+- **Lazy loading** of astronomical data files
+- **Memory pooling** for frequent operations
+
+### User Experience
+- **Sub-second interpretation generation** for most queries
+- **Smooth UI transitions** with activity indicators
+- **Offline capability** with cached daily content
+- **Responsive design** across device sizes
+
+## 🎯 Design Philosophy
+
+**"Read the current, not the cables"** - All astrological complexity is elegantly translated into intuitive, emotionally resonant fashion guidance without exposing technical jargon to users.
+
+The engine serves as a **dynamic foundation** for extending stylistic intelligence into other domains like interior design, branding, or wellness aesthetics while maintaining the core principle of authentic, personalized guidance.
 
 ---
 
-## Daily Refresh Logic
-
-Handled in:
-
-* `AppDelegate.swift` → observes midnight + time zone changes
-* `NatalChartViewController` → observes `.dailyVibeNeedsRefresh` and regenerates content
-
----
-
-## Debugging Tools
-
-* `generateDailyVibeInterpretationWithDebug()` available
-* `generateBlueprintInterpretationWithDebug()` available
-* ViewController logs token counts, parsing steps
-
----
-
-## Summary
-
-* **Blueprints** → displayed in `InterpretationViewController` with styled Markdown
-* **Daily Fits** → displayed in `DailyVibeInterpretationViewController` with labeled sections and visual sliders
-* ViewControllers respond to date, location, and chart changes dynamically
-* Interpretation Engine content **is fully routed and displayed correctly**
-
-✅ Everything from the Interpretation Engine is reaching the front-end and displaying as expected.
-
-To add new interpretations:
-
-* Add tokens → engine
-* Add content to `DailyVibeContent` or `.stitchedParagraph`
-* Extend UI to reflect new sections or sliders.
-
+*Cosmic Fit represents the intersection of ancient wisdom and modern technology, delivering personalized style guidance that honors both astronomical precision and individual expression.*
