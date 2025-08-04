@@ -567,6 +567,11 @@ class SemanticTokenGenerator {
             DebugLogger.tokenSet("BASE STYLE TOKENS", baseTokens)
             allTokens.append(contentsOf: baseTokens)
             
+            //Generate current Sun sign background energy tokens ***
+            let currentSunTokens = generateCurrentSunSignTokens()
+            DebugLogger.tokenSet("CURRENT SUN SIGN BACKGROUND", currentSunTokens)
+            allTokens.append(contentsOf: currentSunTokens)
+            
             // Generate emotional vibe tokens
             let emotionalTokens = generateEmotionalVibeTokens(natal: natal, progressed: progressed)
             DebugLogger.tokenSet("EMOTIONAL VIBE TOKENS", emotionalTokens)
@@ -591,6 +596,62 @@ class SemanticTokenGenerator {
             
             return allTokens
         }
+    
+    /// Generate tokens for the current Sun sign as a background energy influence
+    static func generateCurrentSunSignTokens() -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Calculate current Sun position
+        let currentDate = Date()
+        let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
+        let sunPosition = AstronomicalCalculator.calculateSunPosition(julianDay: currentJulianDay)
+        let (currentSunSign, _) = CoordinateTransformations.decimalDegreesToZodiac(sunPosition.longitude)
+        let currentSunSignName = CoordinateTransformations.getZodiacSignName(sign: currentSunSign)
+        
+        // Get tokens for current Sun sign with appropriate background weight
+        let backgroundWeight = WeightingModel.currentSunSignBackgroundWeight
+        let sunSignTokens = tokenizeForCurrentSunSign(
+            sign: currentSunSign,
+            signName: currentSunSignName,
+            weight: backgroundWeight
+        )
+        
+        tokens.append(contentsOf: sunSignTokens)
+        
+        // Debug logging
+        DebugLogger.info("🌞 CURRENT SUN SIGN BACKGROUND ENERGY:")
+        DebugLogger.info("  • Current Sun in: \(currentSunSignName)")
+        DebugLogger.info("  • Background tokens generated: \(sunSignTokens.count)")
+        DebugLogger.info("  • Background weight applied: \(backgroundWeight)")
+        
+        return tokens
+    }
+    
+    /// Generate style tokens for the current Sun sign as background energy
+    private static func tokenizeForCurrentSunSign(
+        sign: Int,
+        signName: String,
+        weight: Double) -> [StyleToken] {
+            
+        var tokens: [StyleToken] = []
+        
+        // Get Sun in sign tokens from the text library
+        if let tokenDescriptions = InterpretationTextLibrary.TokenGeneration.PlanetInSign.Sun.descriptions[signName] {
+            for (tokenName, tokenType) in tokenDescriptions {
+                tokens.append(StyleToken(
+                    name: tokenName,
+                    type: tokenType,
+                    weight: weight,
+                    planetarySource: "CurrentSun",
+                    signSource: signName,
+                    aspectSource: "Current Sun in \(signName)",
+                    originType: .currentSun
+                ))
+            }
+        }
+        
+        return tokens
+    }
     
     // MARK: - Transit Token Helper Methods
     

@@ -4,6 +4,7 @@
 //
 //  Created by Ashley Davison on 12/05/2025.
 //  Updated with origin tracking for Blueprint and age-dependent weighting
+//  Enhanced with Current Sun Sign background energy support
 
 import Foundation
 
@@ -14,6 +15,7 @@ enum OriginType: String {
     case transit
     case phase
     case weather
+    case currentSun    // NEW: Current Sun sign background energy
 }
 
 struct StyleToken {
@@ -22,13 +24,13 @@ struct StyleToken {
     let weight: Double       // numerical weight based on source importance
     
     // Origin tracking for Blueprint generation
-    let planetarySource: String?  // e.g., "Sun", "Venus", "Moon"
-    let signSource: String?       // e.g., "Aries", "Taurus"
+    let planetarySource: String?  // e.g., "Sun", "Venus", "Moon", "CurrentSun"
+    let signSource: String?       // e.g., "Aries", "Taurus", "Leo"
     let houseSource: Int?         // House number 1-12
-    let aspectSource: String?     // e.g., "Sun trine Venus"
+    let aspectSource: String?     // e.g., "Sun trine Venus", "Current Sun in Leo"
     
     // Origin type for improved filtering and processing
-    let originType: OriginType    // e.g., .natal, .progressed, .transit
+    let originType: OriginType    // e.g., .natal, .progressed, .transit, .currentSun
     
     // Convenience initializer with default values
     init(name: String,
@@ -52,7 +54,7 @@ struct StyleToken {
     
     // Helper for debugging and validation
     func description() -> String {
-        var desc = "\(name) (\(type), weight: \(weight))"
+        var desc = "\(name) (\(type), weight: \(String(format: "%.2f", weight)))"
         
         if let planet = planetarySource {
             desc += " from \(planet)"
@@ -70,6 +72,8 @@ struct StyleToken {
             desc += " via \(aspect)"
         }
         
+        desc += " [\(originType.rawValue)]"
+        
         return desc
     }
     
@@ -79,58 +83,106 @@ struct StyleToken {
         
         if let planet = planetarySource {
             // Ascendant influence gradually diminishes with age
-            if planet == "Ascendant" || planet == "Rising" {
-                if currentAge > 30 {
-                    let reductionFactor = min(0.5, Double(currentAge - 30) * 0.02)
-                    adjustedWeight *= (1.0 - reductionFactor)
+            if planet == "Ascendant" {
+                if currentAge > 40 {
+                    adjustedWeight *= 0.8
+                } else if currentAge > 25 {
+                    adjustedWeight *= 0.9
                 }
             }
-            // Sun, Saturn, Pluto, and Chiron influence increases with age
-            else if planet == "Sun" {
-                if currentAge > 25 {
-                    let increaseFactor = min(0.4, Double(currentAge - 25) * 0.02)
-                    adjustedWeight *= (1.0 + increaseFactor)
+            
+            // Venus influence peaks during relationship-focused years
+            if planet == "Venus" {
+                if currentAge >= 25 && currentAge <= 35 {
+                    adjustedWeight *= 1.1
                 }
             }
-            else if planet == "Saturn" {
-                // Saturn becomes especially important during Saturn returns (around 28-30, 56-60)
-                if (currentAge >= 28 && currentAge <= 32) || (currentAge >= 56 && currentAge <= 60) {
-                    adjustedWeight *= 1.4
-                } else if currentAge > 30 {
+            
+            // Saturn gains importance after Saturn return (age 29)
+            if planet == "Saturn" {
+                if currentAge > 29 {
                     adjustedWeight *= 1.2
                 }
             }
-            else if planet == "Pluto" && currentAge > 40 {
-                adjustedWeight *= 1.15
-            }
-            else if planet == "Chiron" && currentAge >= 50 {
-                adjustedWeight *= 1.25
-            }
-            // Moon and Venus influence remains fairly consistent throughout life
-            else if planet == "Moon" || planet == "Venus" {
-                // Slight adjustment based on life phases
-                if currentAge < 20 {
-                    adjustedWeight *= 1.1 // Slightly higher in youth
-                } else if currentAge > 60 {
-                    adjustedWeight *= 1.08 // Slightly higher in later years
-                }
-            }
-            // Mars influence slightly decreases with age
-            else if planet == "Mars" && currentAge > 35 {
-                let reductionFactor = min(0.25, Double(currentAge - 35) * 0.01)
-                adjustedWeight *= (1.0 - reductionFactor)
+            
+            // Current Sun background energy maintains consistent influence regardless of age
+            if planet == "CurrentSun" {
+                // No age adjustment - this is a universal seasonal background
             }
         }
         
         return StyleToken(
-            name: name,
-            type: type,
+            name: self.name,
+            type: self.type,
             weight: adjustedWeight,
-            planetarySource: planetarySource,
-            signSource: signSource,
-            houseSource: houseSource,
-            aspectSource: aspectSource,
-            originType: originType
+            planetarySource: self.planetarySource,
+            signSource: self.signSource,
+            houseSource: self.houseSource,
+            aspectSource: self.aspectSource,
+            originType: self.originType
+        )
+    }
+    
+    // MARK: - Token Analysis Helpers
+    
+    /// Check if this token represents background energy (like current Sun sign)
+    var isBackgroundEnergy: Bool {
+        return originType == .currentSun
+    }
+    
+    /// Check if this token is from the natal chart
+    var isNatal: Bool {
+        return originType == .natal
+    }
+    
+    /// Check if this token is from progressions
+    var isProgressed: Bool {
+        return originType == .progressed
+    }
+    
+    /// Check if this token is from current transits
+    var isTransit: Bool {
+        return originType == .transit
+    }
+    
+    /// Check if this token is from environmental factors (weather, phase, etc.)
+    var isEnvironmental: Bool {
+        return [.weather, .phase].contains(originType)
+    }
+    
+    /// Get a user-friendly description of the token's origin
+    var originDescription: String {
+        switch originType {
+        case .natal:
+            return "Birth Chart"
+        case .progressed:
+            return "Life Evolution"
+        case .transit:
+            return "Current Cosmic Weather"
+        case .phase:
+            return "Daily Rhythm"
+        case .weather:
+            return "Environmental"
+        case .currentSun:
+            if let sign = signSource {
+                return "\(sign) Season"
+            } else {
+                return "Current Season"
+            }
+        }
+    }
+    
+    /// Create a copy of this token with a modified weight
+    func withWeight(_ newWeight: Double) -> StyleToken {
+        return StyleToken(
+            name: self.name,
+            type: self.type,
+            weight: newWeight,
+            planetarySource: self.planetarySource,
+            signSource: self.signSource,
+            houseSource: self.houseSource,
+            aspectSource: self.aspectSource,
+            originType: self.originType
         )
     }
 }
