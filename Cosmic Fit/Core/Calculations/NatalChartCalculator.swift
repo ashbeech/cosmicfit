@@ -978,17 +978,17 @@ struct NatalChartCalculator {
         
         // Calculate observer's geocentric coordinates
         let rho = cos(latRad)
-        let z = sin(latRad)
+        //let z = sin(latRad)
         
         // Calculate Moon's rectangular coordinates (geocentric)
         let moonX = moonDistance * cos(latMoonRad) * cos(lonRad)
         let moonY = moonDistance * cos(latMoonRad) * sin(lonRad)
-        let moonZ = moonDistance * sin(latMoonRad)
+        //let moonZ = moonDistance * sin(latMoonRad)
         
         // Calculate observer's rectangular coordinates
         let obsX = earthRadius * rho * cos(lstRad)
         let obsY = earthRadius * rho * sin(lstRad)
-        let obsZ = earthRadius * z
+        //let obsZ = earthRadius * z
         
         // Calculate topocentric rectangular coordinates
         let topoX = moonX - obsX

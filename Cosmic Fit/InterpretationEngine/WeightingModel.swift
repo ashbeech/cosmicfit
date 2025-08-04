@@ -9,14 +9,14 @@
 struct WeightingModel {
     
     // MARK: - Core Chart Weights
-    static let natalWeight: Double = 0.45
-    static let progressedWeight: Double = 0.2
+    static let natalWeight: Double = 0.30
+    static let progressedWeight: Double = 0.15
     
     // MARK: - Current Sun Sign Background Energy (NEW)
     /// Weight for the current Sun's zodiacal sign as a subtle background energy influence
     /// This provides the monthly seasonal backdrop (Leo season, Virgo season, etc.)
     /// Applied as a gentle but consistent backdrop to daily interpretations
-    static let currentSunSignBackgroundWeight: Double = 0.25
+    static let currentSunSignBackgroundWeight: Double = 0.20
     
     // MARK: - Age-Based Weighting
     static let progressionInfluence: Double = 0.3
@@ -87,12 +87,13 @@ struct WeightingModel {
 
     // MARK: - Daily Fit Weights
     struct DailyFit {
-        static let transitWeight: Double = 0.15
-        static let moonPhaseWeight: Double = 0.2
-        static let weatherWeight: Double = 0.2
+        static let transitWeight: Double = 0.35        // UP from 0.15
+        static let moonPhaseWeight: Double = 0.30      // UP from 0.2
+        static let weatherWeight: Double = 0.40        // UP from 0.2
         
-        // Note: Current Sun Sign Background is handled by the main currentSunSignBackgroundWeight
-        // and is integrated into the daily token generation automatically
+        // Dynamic multipliers for high-impact situations
+        static let tightOrbMultiplier: Double = 3.0    // Orbs < 1°
+        static let extremeWeatherMultiplier: Double = 2.0  // < 10° or > 30°
     }
     
     // MARK: - Helper Methods

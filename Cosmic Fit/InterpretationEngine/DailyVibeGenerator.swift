@@ -51,9 +51,13 @@ class DailyVibeGenerator {
         
         // Generate Maria's Style Brief from tokens
         let styleBrief = generateMariaStyleBrief(from: allTokens)
-        
+        // Generate Vibe Breakdown from tokens
+        let vibeBreakdown = VibeBreakdownGenerator.generateVibeBreakdown(from: allTokens)
+        debugVibeBreakdownAnalysis(breakdown: vibeBreakdown, tokens: allTokens)
+            
         print("\n✨ MARIA'S STYLE BRIEF GENERATED:")
         print("  \"\(styleBrief)\"")
+        print("  Dominant Energy: \(getDominantEnergyName(from: vibeBreakdown))")
         print("\n🎯 DAILY VIBE GENERATOR - COMPLETE")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
         
@@ -183,6 +187,276 @@ class DailyVibeGenerator {
         }
     }
     
+    // MARK: - Vibe Breakdown Debug Method
+
+    private static func debugVibeBreakdownAnalysis(breakdown: VibeBreakdown, tokens: [StyleToken]) {
+        
+        print("\n🎨 VIBE BREAKDOWN ANALYSIS 🎨")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        
+        // Show final distribution with visual bars
+        print("📊 FINAL ENERGY DISTRIBUTION (21 points total):")
+        printEnergyBar("Classic", breakdown.classic, 10, "🏛️")
+        printEnergyBar("Playful", breakdown.playful, 8, "🎈")
+        printEnergyBar("Romantic", breakdown.romantic, 8, "💕")
+        printEnergyBar("Utility", breakdown.utility, 7, "🔧")
+        printEnergyBar("Drama", breakdown.drama, 6, "🎭")
+        printEnergyBar("Edge", breakdown.edge, 5, "⚡")
+        
+        // Validation check
+        let total = breakdown.totalPoints
+        if total == 21 {
+            print("✅ Valid breakdown - Total: \(total) points")
+        } else {
+            print("❌ Invalid breakdown - Total: \(total) points (expected 21)")
+        }
+        
+        // Show dominant energy
+        let dominantEnergy = getDominantEnergyName(from: breakdown)
+        print("⭐ Dominant Energy: \(dominantEnergy)")
+        
+        print("\n🔍 TOKEN MAPPING ANALYSIS:")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        
+        // Analyze each energy's contributing tokens
+        analyzeEnergyContributors("🏛️ CLASSIC", breakdown.classic, tokens, getClassicTokens())
+        analyzeEnergyContributors("🎈 PLAYFUL", breakdown.playful, tokens, getPlayfulTokens())
+        analyzeEnergyContributors("💕 ROMANTIC", breakdown.romantic, tokens, getRomanticTokens())
+        analyzeEnergyContributors("🔧 UTILITY", breakdown.utility, tokens, getUtilityTokens())
+        analyzeEnergyContributors("🎭 DRAMA", breakdown.drama, tokens, getDramaTokens())
+        analyzeEnergyContributors("⚡ EDGE", breakdown.edge, tokens, getEdgeTokens())
+        
+        print("\n📈 MAPPING LOGIC EXPLANATION:")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        explainMappingLogic(breakdown: breakdown, tokens: tokens)
+        
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+    }
+
+    // MARK: - Helper Methods for Debug Analysis
+
+    private static func printEnergyBar(_ name: String, _ points: Int, _ maxPoints: Int, _ emoji: String) {
+        let barLength = 20
+        let filledLength = Int((Double(points) / Double(maxPoints)) * Double(barLength))
+        let bar = String(repeating: "█", count: filledLength) + String(repeating: "░", count: barLength - filledLength)
+        let percentage = points > 0 ? Int((Double(points) / 21.0) * 100) : 0
+        print("  \(emoji) \(name.padding(toLength: 9, withPad: " ", startingAt: 0)): \(bar) \(points)/\(maxPoints) (\(percentage)%)")
+    }
+
+    private static func analyzeEnergyContributors(_ energyName: String, _ points: Int, _ tokens: [StyleToken], _ energyTokens: Set<String>) {
+        print("\n\(energyName) ENERGY (\(points) points):")
+        
+        // Find tokens that contributed to this energy
+        let contributors = tokens.filter { token in
+            energyTokens.contains(token.name.lowercased())
+        }.sorted { $0.weight > $1.weight }
+        
+        if contributors.isEmpty {
+            print("  • No direct token matches (points from bonuses/scaling)")
+        } else {
+            print("  • Key Contributors:")
+            for contributor in contributors.prefix(5) {
+                let source = contributor.planetarySource ?? contributor.aspectSource ?? "Unknown"
+                print("    - \(contributor.name) (weight: \(String(format: "%.2f", contributor.weight))) from \(source)")
+            }
+            
+            if contributors.count > 5 {
+                print("    - ... and \(contributors.count - 5) more contributors")
+            }
+        }
+        
+        // Show bonus factors
+        showBonusFactors(energyName, tokens)
+    }
+
+    private static func showBonusFactors(_ energyName: String, _ tokens: [StyleToken]) {
+        print("  • Bonus Factors:")
+        
+        switch energyName.lowercased() {
+        case let name where name.contains("classic"):
+            let saturnTokens = tokens.filter { $0.planetarySource == "Saturn" }.count
+            let highWeightTokens = tokens.filter { $0.weight > 2.0 }.count
+            let earthSigns = tokens.filter {
+                guard let sign = $0.signSource else { return false }
+                return ["Taurus", "Virgo", "Capricorn"].contains(sign)
+            }.count
+            print("    - Saturn tokens: \(saturnTokens) (+1.5 each)")
+            print("    - High weight tokens (>2.0): \(highWeightTokens) (+1.0 each)")
+            print("    - Earth sign tokens: \(earthSigns) (+0.5 each)")
+            
+        case let name where name.contains("romantic"):
+            let venusTokens = tokens.filter { $0.planetarySource == "Venus" }.count
+            let moonTokens = tokens.filter { $0.planetarySource == "Moon" }.count
+            let waterSigns = tokens.filter {
+                guard let sign = $0.signSource else { return false }
+                return ["Cancer", "Scorpio", "Pisces"].contains(sign)
+            }.count
+            print("    - Venus tokens: \(venusTokens) (+2.0 each)")
+            print("    - Moon tokens: \(moonTokens) (+1.5 each)")
+            print("    - Water sign tokens: \(waterSigns) (+1.0 each)")
+            
+        case let name where name.contains("utility"):
+            let weatherTokens = tokens.filter { $0.originType == .weather }.count
+            let saturnTokens = tokens.filter { $0.planetarySource == "Saturn" }.count
+            print("    - Weather tokens: \(weatherTokens) (+2.0 each)")
+            print("    - Saturn tokens: \(saturnTokens) (+1.5 each)")
+            
+        case let name where name.contains("drama"):
+            let plutoTokens = tokens.filter { $0.planetarySource == "Pluto" }.count
+            let marsTokens = tokens.filter { $0.planetarySource == "Mars" }.count
+            let highWeightTokens = tokens.filter { $0.weight > 3.0 }.count
+            let fireSigns = tokens.filter {
+                guard let sign = $0.signSource else { return false }
+                return ["Aries", "Leo", "Sagittarius"].contains(sign)
+            }.count
+            print("    - Pluto tokens: \(plutoTokens) (+2.0 each)")
+            print("    - Mars tokens: \(marsTokens) (+1.0 each)")
+            print("    - Very high weight tokens (>3.0): \(highWeightTokens) (+1.5 each)")
+            print("    - Fire sign tokens: \(fireSigns) (+1.0 each)")
+            
+        case let name where name.contains("edge"):
+            let uranusTokens = tokens.filter { $0.planetarySource == "Uranus" }.count
+            let transitTokens = tokens.filter { token in
+                token.originType == .transit &&
+                ["innovative", "unexpected", "disruptive"].contains { keyword in
+                    token.name.lowercased().contains(keyword)
+                }
+            }.count
+            print("    - Uranus tokens: \(uranusTokens) (+2.5 each)")
+            print("    - Innovative transit tokens: \(transitTokens) (+1.0 each)")
+            
+        case let name where name.contains("playful"):
+            let mercuryTokens = tokens.filter { $0.planetarySource == "Mercury" }.count
+            let airSigns = tokens.filter {
+                guard let sign = $0.signSource else { return false }
+                return ["Gemini", "Libra", "Aquarius"].contains(sign)
+            }.count
+            let brightColors = tokens.filter { token in
+                token.type == "color_quality" &&
+                ["bright", "vibrant", "electric"].contains { keyword in
+                    token.name.lowercased().contains(keyword)
+                }
+            }.count
+            print("    - Mercury tokens: \(mercuryTokens) (+1.0 each)")
+            print("    - Air sign tokens: \(airSigns) (+0.5 each)")
+            print("    - Bright color tokens: \(brightColors) (+1.5 each)")
+            
+        default:
+            print("    - No specific bonus factors tracked")
+        }
+    }
+
+    private static func explainMappingLogic(breakdown: VibeBreakdown, tokens: [StyleToken]) {
+        
+        // Explain the overall approach
+        print("🔄 MAPPING PROCESS:")
+        print("  1. Raw scores calculated from token matches + bonuses")
+        print("  2. Weight scaling applied based on average token weight")
+        print("  3. Proportional distribution to total 21 points")
+        print("  4. Minimum thresholds applied (energies < 0.5 → 0)")
+        print("  5. Final integer adjustment to ensure exactly 21 points")
+        
+        print("\n📊 TOKEN INFLUENCE SUMMARY:")
+        
+        // Show most influential tokens overall
+        let sortedTokens = tokens.sorted { $0.weight > $1.weight }
+        print("  🌟 Top 5 Most Influential Tokens:")
+        for (index, token) in sortedTokens.prefix(5).enumerated() {
+            let energies = getTokenEnergyMappings(token)
+            let energyList = energies.isEmpty ? "none" : energies.joined(separator: ", ")
+            print("    \(index + 1). \(token.name) (weight: \(String(format: "%.2f", token.weight))) → \(energyList)")
+        }
+        
+        // Show planetary influence
+        print("\n  🪐 Planetary Influence Distribution:")
+        let planetaryGroups = Dictionary(grouping: tokens, by: { $0.planetarySource })
+        
+        for (planet, planetTokens) in planetaryGroups.sorted(by: { ($0.key ?? "") < ($1.key ?? "") }) {
+            guard let planetName = planet else { continue }
+            let tokenCount = planetTokens.count
+            let avgWeight = planetTokens.map { $0.weight }.reduce(0, +) / Double(tokenCount)
+            print("    - \(planetName): \(tokenCount) tokens (avg weight: \(String(format: "%.2f", avgWeight)))")
+        }
+        
+        // Show origin type influence
+        print("\n  📍 Origin Type Distribution:")
+        let originGroups = Dictionary(grouping: tokens, by: { $0.originType })
+        for (origin, originTokens) in originGroups.sorted(by: { $0.key.rawValue < $1.key.rawValue }) {
+            let tokenCount = originTokens.count
+            let totalWeight = originTokens.map { $0.weight }.reduce(0, +)
+            print("    - \(origin.rawValue): \(tokenCount) tokens (total weight: \(String(format: "%.2f", totalWeight)))")
+        }
+    }
+
+    private static func getTokenEnergyMappings(_ token: StyleToken) -> [String] {
+        let tokenName = token.name.lowercased()
+        var energies: [String] = []
+        
+        if getClassicTokens().contains(tokenName) { energies.append("Classic") }
+        if getPlayfulTokens().contains(tokenName) { energies.append("Playful") }
+        if getRomanticTokens().contains(tokenName) { energies.append("Romantic") }
+        if getUtilityTokens().contains(tokenName) { energies.append("Utility") }
+        if getDramaTokens().contains(tokenName) { energies.append("Drama") }
+        if getEdgeTokens().contains(tokenName) { energies.append("Edge") }
+        
+        return energies
+    }
+
+    // Token set getters (extract from VibeBreakdownGenerator for reuse)
+    private static func getClassicTokens() -> Set<String> {
+        return [
+            "structured", "grounded", "reserved", "solid", "refined", "polished",
+            "professional", "timeless", "balanced", "harmonious", "elegant",
+            "sophisticated", "classic", "conservative", "traditional", "disciplined",
+            "authoritative", "enduring", "substantial", "commanding", "navy",
+            "charcoal", "slate gray", "stone", "cream", "tailored", "crisp"
+        ]
+    }
+
+    private static func getPlayfulTokens() -> Set<String> {
+        return [
+            "bright", "vibrant", "dynamic", "energetic", "fun", "expressive",
+            "creative", "colorful", "light", "airy", "versatile", "quick",
+            "adaptable", "communicative", "cheerful", "bright yellow",
+            "neon turquoise", "electric blue", "playful", "lively", "spirited"
+        ]
+    }
+
+    private static func getRomanticTokens() -> Set<String> {
+        return [
+            "flowing", "soft", "gentle", "dreamy", "ethereal", "luxurious",
+            "sensual", "beautiful", "harmonious", "nurturing", "comfortable",
+            "warm", "delicate", "feminine", "graceful", "misty lavender",
+            "pale yellow", "seafoam", "opalescent blue", "flowing", "fluid"
+        ]
+    }
+
+    private static func getUtilityTokens() -> Set<String> {
+        return [
+            "practical", "functional", "comfortable", "waterproof", "durable",
+            "purposeful", "protective", "substantial", "enduring", "reliable",
+            "versatile", "structured", "tactical", "insulating", "layerable",
+            "breathable", "weatherproof"
+        ]
+    }
+
+    private static func getDramaTokens() -> Set<String> {
+        return [
+            "bold", "intense", "powerful", "dramatic", "striking", "rich",
+            "deep", "transformative", "commanding", "magnetic", "luxurious",
+            "royal", "electric", "plutonium", "metallic", "royal purple",
+            "deep burgundy", "electric blue", "plutonium purple", "radiant"
+        ]
+    }
+
+    private static func getEdgeTokens() -> Set<String> {
+        return [
+            "unconventional", "innovative", "unique", "unexpected", "electric",
+            "neon", "metallic", "textured", "distinctive", "rebellious",
+            "avant-garde", "edgy", "alternative", "disruptive", "experimental"
+        ]
+    }
+    
     // MARK: - Maria's Style Brief Generation
     
     private static func generateMariaStyleBrief(from tokens: [StyleToken]) -> String {
@@ -226,6 +500,21 @@ class DailyVibeGenerator {
         }
 
         return briefComponents.joined(separator: " ")
+    }
+    
+    // MARK: - Vibe Breakdown Helper Methods
+    
+    private static func getDominantEnergyName(from breakdown: VibeBreakdown) -> String {
+        let energies = [
+            ("Classic", breakdown.classic),
+            ("Playful", breakdown.playful),
+            ("Romantic", breakdown.romantic),
+            ("Utility", breakdown.utility),
+            ("Drama", breakdown.drama),
+            ("Edge", breakdown.edge)
+        ]
+        
+        return energies.max(by: { $0.1 < $1.1 })?.0 ?? "Classic"
     }
     
     private static func analyzeEnergyLevel(from tokens: [StyleToken]) -> String {
@@ -392,6 +681,9 @@ struct DailyVibeContent: Codable {
     // Main content - Style Brief replaces title and mainParagraph
     var styleBrief: String = ""
     
+    // Vibe Breakdown - 21 points across 6 energies
+    var vibeBreakdown: VibeBreakdown = VibeBreakdown(classic: 0, playful: 0, romantic: 0, utility: 0, drama: 0, edge: 0)
+    
     // Style guidance sections
     var textiles: String = ""
     var colors: String = ""
@@ -407,6 +699,25 @@ struct DailyVibeContent: Codable {
     // Weather information (optional)
     var temperature: Double? = nil
     var weatherCondition: String? = nil
+    
+    // Validation method
+    var isValid: Bool {
+        return vibeBreakdown.isValid
+    }
+    
+    // Get dominant energy for UI highlighting
+    var dominantEnergy: String {
+        let energies = [
+            ("classic", vibeBreakdown.classic),
+            ("playful", vibeBreakdown.playful),
+            ("romantic", vibeBreakdown.romantic),
+            ("utility", vibeBreakdown.utility),
+            ("drama", vibeBreakdown.drama),
+            ("edge", vibeBreakdown.edge)
+        ]
+        
+        return energies.max(by: { $0.1 < $1.1 })?.0 ?? "classic"
+    }
 }
 
 // MARK: - Helper Extensions
