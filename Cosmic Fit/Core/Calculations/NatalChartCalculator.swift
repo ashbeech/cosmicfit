@@ -993,7 +993,6 @@ struct NatalChartCalculator {
         // Calculate topocentric rectangular coordinates
         let topoX = moonX - obsX
         let topoY = moonY - obsY
-        let topoZ = moonZ - obsZ
         
         // Convert back to spherical coordinates
         let topoLonRad = atan2(topoY, topoX)

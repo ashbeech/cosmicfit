@@ -186,30 +186,46 @@ class DailyVibeGenerator {
     // MARK: - Maria's Style Brief Generation
     
     private static func generateMariaStyleBrief(from tokens: [StyleToken]) -> String {
+        
         print("\n🗣️ GENERATING MARIA'S STYLE BRIEF:")
         
-        // Analyze token composition to determine energy and themes
-        let energyLevel = analyzeEnergyLevel(from: tokens)
-        let primaryThemes = extractPrimaryThemes(from: tokens)
-        let dominantElements = analyzeDominantElements(from: tokens)
+        // Get top weighted tokens
+        let topTokens = tokens.sorted { $0.weight > $1.weight }.prefix(6)
         
-        print("  🔋 Energy Level: \(energyLevel)")
-        print("  🎯 Primary Themes: \(primaryThemes.joined(separator: ", "))")
-        print("  🌟 Dominant Elements: \(dominantElements.joined(separator: ", "))")
+        var briefComponents: [String] = []
         
-        // Build Maria's Style Brief components
-        let opening = generateMariaOpening(energy: energyLevel, themes: primaryThemes)
-        let guidance = generateMariaGuidance(energy: energyLevel, themes: primaryThemes, elements: dominantElements)
-        let closing = generateMariaClosing(energy: energyLevel)
+        // Add opening based on dominant mood
+        let moodTokens = topTokens.filter { $0.type == "mood" }
+        if let dominantMood = moodTokens.first {
+            let openings = [
+                "Today feels like a \(dominantMood.name) kind of day, so",
+                "I'm sensing \(dominantMood.name) energy from you today, which means",
+                "The vibe is definitely \(dominantMood.name) today, so let's"
+            ]
+            briefComponents.append(openings.randomElement() ?? "Let's")
+        } else {
+            briefComponents.append(["Let's", "Today", "I'm thinking"].randomElement() ?? "Let's")
+        }
         
-        let styleBrief = "\(opening) \(guidance) \(closing)"
+        // Translate tokens using new function
+        let translatedAdvice = topTokens.map { ParagraphAssembler.translateTokenToMariaVoice($0) }
         
-        print("  💬 Components:")
-        print("    Opening: \(opening)")
-        print("    Guidance: \(guidance)")
-        print("    Closing: \(closing)")
+        // Combine 2-3 pieces of advice
+        let selectedAdvice = Array(translatedAdvice.prefix(3))
+        briefComponents.append(contentsOf: selectedAdvice)
         
-        return styleBrief
+        // Add closing based on expression tokens
+        let expressionTokens = topTokens.filter { $0.type == "expression" }
+        if !expressionTokens.isEmpty {
+            let closings = [
+                "Trust yourself today - you've got this.",
+                "Remember, confidence is your best accessory.",
+                "Make it uniquely you, always."
+            ]
+            briefComponents.append(closings.randomElement() ?? "Make it yours.")
+        }
+
+        return briefComponents.joined(separator: " ")
     }
     
     private static func analyzeEnergyLevel(from tokens: [StyleToken]) -> String {

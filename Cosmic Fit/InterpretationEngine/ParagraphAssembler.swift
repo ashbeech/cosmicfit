@@ -1252,4 +1252,92 @@ struct ParagraphAssembler {
         
         return storyline
     }
+    
+    internal static func translateTokenToMariaVoice(_ token: StyleToken) -> String {
+        let tokenKey = "\(token.name)_\(token.type)"
+        
+        let mariaTranslations: [String: [String]] = [
+            // Sun translations
+            "radiant_color_quality": ["Go for colors that make you glow", "Choose shades that light you up", "Pick colors that make you shine"],
+            "confident_expression": ["Own your look today", "Wear something that makes you feel powerful", "Choose pieces that show your strength"],
+            "creative_mood": ["Try something artistic", "Play with unexpected combinations", "Let your imagination guide your choices"],
+            "dramatic_structure": ["Make a statement with your silhouette", "Choose pieces with strong lines", "Go bold with your proportions"],
+            "authoritative_structure": ["Choose pieces that command respect", "Go for structured, powerful silhouettes", "Pick outfits that show you're in charge"],
+            "challenging_mood": ["Turn tension into style power", "Use bold choices to work through challenges", "Let difficult energy fuel your fashion choices"],
+            "expressive_expression": ["Let your personality shine through", "Choose pieces that tell your story", "Go for looks that speak without words"],
+            
+            // Moon translations
+            "flowing_structure": ["Choose pieces that move with you", "Go for soft, flowing silhouettes", "Pick clothes that feel like a gentle hug"],
+            "nurturing_mood": ["Wear something that makes you feel safe", "Choose comforting textures", "Pick pieces that feel like home"],
+            "emotional_expression": ["Let your feelings guide your outfit", "Choose colors that match your mood", "Wear something that tells your story"],
+            "comfortable_expression": ["Prioritize how everything feels on your body", "Choose pieces that let you be yourself", "Go for effortless, natural looks"],
+            "protective_structure": ["Choose pieces that make you feel secure", "Go for structured comfort", "Pick outfits that give you confidence"],
+            "responsive_expression": ["Trust your instincts about what feels right", "Choose pieces that adapt to your energy", "Go with your gut feeling"],
+            
+            // Mercury translations
+            "articulate_expression": ["Choose pieces that speak clearly about who you are", "Go for clean, well-defined looks", "Pick outfits that communicate effortlessly"],
+            "precise_structure": ["Focus on perfect fits and clean lines", "Choose pieces with attention to detail", "Go for structured, well-tailored items"],
+            "scattered_mood": ["Mix and match different elements", "Try layering unexpected pieces", "Play with contrasting textures"],
+            "clever_mood": ["Add unexpected details that surprise", "Choose pieces with interesting twists", "Go for smart styling choices"],
+            "restless_expression": ["Keep changing elements throughout the day", "Try pieces you can layer and remove", "Go for versatile, adaptable looks"],
+            "complex_structure": ["Layer different textures and patterns", "Choose pieces with interesting construction", "Go for looks that reveal more on closer inspection"],
+            "communicative_expression": ["Wear pieces that start conversations", "Choose items with stories to tell", "Go for looks that invite questions"],
+            
+            // Venus translations
+            "harmonious_mood": ["Everything should feel perfectly balanced", "Choose pieces that work beautifully together", "Go for effortless elegance"],
+            "luxurious_texture": ["Treat yourself to something beautiful", "Choose the softest, most gorgeous fabrics", "Pick textures that feel indulgent"],
+            "indulgent_mood": ["It's okay to go a little over the top", "Choose something that feels like a treat", "Pick pieces that make you feel pampered"],
+            "beautiful_expression": ["Focus on pieces that make you feel gorgeous", "Choose items that enhance your natural beauty", "Go for looks that make you shine"],
+            
+            // Mars translations
+            "energetic_mood": ["Choose something that makes you feel ready for action", "Go for pieces that give you confidence", "Pick outfits that fuel your energy"],
+            "powerful_expression": ["Wear something that shows your strength", "Choose pieces that command attention", "Go for looks that mean business"],
+            "impulsive_mood": ["Trust your first instinct", "Choose something unexpected", "Go with whatever feels right in the moment"],
+            "dynamic_expression": ["Go for pieces that move and change", "Choose items with kinetic energy", "Pick looks that feel alive"],
+            "aggressive_expression": ["Channel intensity into bold choices", "Choose pieces with sharp edges", "Go for looks that make a statement"],
+            "assertive_expression": ["Choose pieces that show confidence", "Go for looks that take up space", "Pick outfits that announce your presence"],
+            
+            // Jupiter translations
+            "expansive_structure": ["Think bigger than usual", "Choose pieces with generous proportions", "Go for statement-making silhouettes"],
+            "optimistic_mood": ["Pick colors that lift your spirits", "Choose pieces that make you smile", "Go for looks that spread good vibes"],
+            "excessive_mood": ["Maybe tone it down just a little", "Choose one statement piece instead of many", "Focus on quality over quantity"],
+            "generous_structure": ["Go for flowing, abundant silhouettes", "Choose pieces with plenty of movement", "Pick looks that feel expansive"],
+            "abundant_expression": ["Layer on the richness", "Choose pieces that feel luxurious", "Go for looks that celebrate abundance"],
+            
+            // Saturn translations
+            "structured_expression": ["Choose pieces with strong, clean lines", "Go for tailored, professional looks", "Pick outfits that show you mean business"],
+            "restrictive_mood": ["Keep it simple and classic", "Choose tried-and-true combinations", "Go for timeless, conservative pieces"],
+            "disciplined_expression": ["Focus on impeccable fit and finish", "Choose pieces that require commitment", "Go for looks that show dedication"],
+            "refined_texture": ["Choose quality over quantity", "Go for sophisticated, subtle textures", "Pick pieces with understated elegance"],
+            "serious_mood": ["Choose pieces that command respect", "Go for professional, no-nonsense looks", "Pick outfits that mean business"],
+            "conservative_expression": ["Stick with classic, timeless pieces", "Choose tried-and-true style combinations", "Go for looks that never go out of style"],
+            
+            // Uranus translations
+            "innovative_expression": ["Try something completely new", "Mix unexpected elements", "Choose pieces that surprise people"],
+            "electric_color_quality": ["Go for colors that energize you", "Choose vibrant, attention-grabbing shades", "Pick colors that make you feel alive"],
+            "rebellious_expression": ["Break a few style rules today", "Choose something unconventional", "Go against what's expected"],
+            "unconventional_structure": ["Try silhouettes you've never worn", "Choose pieces with unusual proportions", "Go for looks that challenge expectations"],
+            "disruptive_mood": ["Make choices that shake things up", "Choose pieces that challenge the norm", "Go for looks that start conversations"],
+            "unique_expression": ["Choose pieces that only you would wear", "Go for one-of-a-kind items", "Pick looks that express your individuality"],
+            
+            // Neptune translations
+            "dreamy_mood": ["Choose pieces that feel magical", "Go for soft, romantic looks", "Pick outfits that transport you"],
+            "ethereal_texture": ["Focus on light, floating fabrics", "Choose pieces that feel otherworldly", "Go for textures that seem to shimmer"],
+            "confused_mood": ["Keep it simple when you're feeling uncertain", "Choose one clear style direction", "Go with what feels most like you"],
+            "inspired_expression": ["Let creativity guide your choices", "Choose pieces that spark imagination", "Go for looks that feel artistic"],
+            "unclear_expression": ["Don't overthink it today", "Choose pieces that feel intuitive", "Go with your first instinct"],
+            "intuitive_mood": ["Trust your style instincts completely", "Choose pieces that feel right in your body", "Go with what calls to you"],
+            
+            // Pluto translations
+            "transformative_expression": ["Choose pieces that feel like a new you", "Go for looks that mark a change", "Pick outfits that show growth"],
+            "powerful_mood": ["Channel your deepest strength", "Choose pieces that feel empowering", "Go for looks that show your intensity"],
+            "intense_texture": ["Choose fabrics with depth and richness", "Go for textures with strong presence", "Pick materials that demand attention"],
+            "obsessive_mood": ["Focus deeply on getting every detail right", "Choose pieces you're passionate about", "Go all-in on your style vision"],
+            "extreme_expression": ["Push your style boundaries", "Choose pieces that feel bold and intense", "Go for looks that make a powerful statement"],
+            "magnetic_expression": ["Choose pieces that draw people in", "Go for looks with mysterious appeal", "Pick outfits that have hidden depths"]
+        ]
+        
+        let options = mariaTranslations[tokenKey] ?? ["Consider pieces that feel \(token.name)"]
+        return options.randomElement() ?? "Consider pieces that feel \(token.name)"
+    }
 }

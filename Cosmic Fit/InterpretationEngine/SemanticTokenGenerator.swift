@@ -642,11 +642,15 @@ class SemanticTokenGenerator {
         case "Conjunction", "Trine":
             tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
             tokens.append(StyleToken(name: "confident", type: "expression", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "creative", type: "mood", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "authoritative", type: "structure", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
         case "Square", "Opposition":
             tokens.append(StyleToken(name: "bold", type: "expression", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
-            tokens.append(StyleToken(name: "striking", type: "color_quality", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "dramatic", type: "structure", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "challenging", type: "mood", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
         default:
             tokens.append(StyleToken(name: "warm", type: "color_quality", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "expressive", type: "expression", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
         }
         
         return tokens
@@ -659,11 +663,15 @@ class SemanticTokenGenerator {
         case "Conjunction", "Trine":
             tokens.append(StyleToken(name: "flowing", type: "structure", weight: baseWeight, planetarySource: "Moon", aspectSource: aspectSource, originType: .transit))
             tokens.append(StyleToken(name: "soft", type: "texture", weight: baseWeight, planetarySource: "Moon", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "nurturing", type: "mood", weight: baseWeight, planetarySource: "Moon", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "comfortable", type: "expression", weight: baseWeight, planetarySource: "Moon", aspectSource: aspectSource, originType: .transit))
         case "Square", "Opposition":
             tokens.append(StyleToken(name: "changeable", type: "mood", weight: baseWeight, planetarySource: "Moon", aspectSource: aspectSource, originType: .transit))
-            tokens.append(StyleToken(name: "adaptive", type: "expression", weight: baseWeight, planetarySource: "Moon", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "protective", type: "structure", weight: baseWeight, planetarySource: "Moon", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "emotional", type: "expression", weight: baseWeight, planetarySource: "Moon", aspectSource: aspectSource, originType: .transit))
         default:
             tokens.append(StyleToken(name: "intuitive", type: "mood", weight: baseWeight, planetarySource: "Moon", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "responsive", type: "expression", weight: baseWeight, planetarySource: "Moon", aspectSource: aspectSource, originType: .transit))
         }
         
         return tokens
@@ -674,13 +682,16 @@ class SemanticTokenGenerator {
         
         switch aspectType {
         case "Conjunction", "Trine":
-            tokens.append(StyleToken(name: "smart", type: "expression", weight: baseWeight, planetarySource: "Mercury", aspectSource: aspectSource, originType: .transit))
-            tokens.append(StyleToken(name: "clean", type: "structure", weight: baseWeight, planetarySource: "Mercury", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "articulate", type: "expression", weight: baseWeight, planetarySource: "Mercury", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "precise", type: "structure", weight: baseWeight, planetarySource: "Mercury", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "clever", type: "mood", weight: baseWeight, planetarySource: "Mercury", aspectSource: aspectSource, originType: .transit))
         case "Square", "Opposition":
-            tokens.append(StyleToken(name: "edgy", type: "expression", weight: baseWeight, planetarySource: "Mercury", aspectSource: aspectSource, originType: .transit))
-            tokens.append(StyleToken(name: "detailed", type: "structure", weight: baseWeight, planetarySource: "Mercury", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "scattered", type: "mood", weight: baseWeight, planetarySource: "Mercury", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "restless", type: "expression", weight: baseWeight, planetarySource: "Mercury", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "complex", type: "structure", weight: baseWeight, planetarySource: "Mercury", aspectSource: aspectSource, originType: .transit))
         default:
-            tokens.append(StyleToken(name: "versatile", type: "expression", weight: baseWeight, planetarySource: "Mercury", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "communicative", type: "expression", weight: baseWeight, planetarySource: "Mercury", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "detailed", type: "structure", weight: baseWeight, planetarySource: "Mercury", aspectSource: aspectSource, originType: .transit))
         }
         
         return tokens
