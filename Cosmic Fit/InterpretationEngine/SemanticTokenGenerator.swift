@@ -1395,16 +1395,19 @@ class SemanticTokenGenerator {
         
         // Weather condition-based tokens
         switch weather.condition.lowercased() {
-        case let condition where condition.contains("rain"):
+        case let condition where condition.contains("rain") || condition.contains("shower"):
             tokens.append(StyleToken(name: "waterproof", type: "fabric", weight: 3.0, originType: .weather))
             tokens.append(StyleToken(name: "practical", type: "structure", weight: 2.5, originType: .weather))
             tokens.append(StyleToken(name: "protective", type: "texture", weight: 0.8, originType: .weather))
-        case let condition where condition.contains("sun"):
+        case let condition where condition.contains("drizzle"):  // ✅ ADD DRIZZLE CASE
+            tokens.append(StyleToken(name: "water-resistant", type: "fabric", weight: 2.0, originType: .weather))
+            tokens.append(StyleToken(name: "practical", type: "structure", weight: 1.5, originType: .weather))
+        case let condition where condition.contains("sun") || condition.contains("clear"):
             tokens.append(StyleToken(name: "light-reflecting", type: "texture", weight: 2.0, originType: .weather))
             tokens.append(StyleToken(name: "cooling", type: "structure", weight: 1.8, originType: .weather))
             tokens.append(StyleToken(name: "bright", type: "color_quality", weight: 0.8, originType: .weather))
             tokens.append(StyleToken(name: "light", type: "texture", weight: 0.7, originType: .weather))
-        case let condition where condition.contains("cloud"):
+        case let condition where condition.contains("cloud") || condition.contains("overcast"):
             tokens.append(StyleToken(name: "layered", type: "structure", weight: 0.6, originType: .weather))
             tokens.append(StyleToken(name: "muted", type: "color_quality", weight: 0.5, originType: .weather))
         default:

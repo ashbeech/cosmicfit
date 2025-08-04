@@ -70,6 +70,103 @@ class VibeBreakdownGenerator {
         return breakdown
     }
     
+    // MARK: - Contextual Generation Method ⭐ ADD HERE ⭐
+    
+    /// Generate a context-aware vibe breakdown that adjusts for weather, day, and chart type
+    /// - Parameters:
+    ///   - tokens: Array of StyleTokens from SemanticTokenGenerator
+    ///   - weather: Current weather conditions for contextual adjustments
+    ///   - dayOfWeek: Day of week (1=Sunday, 2=Monday, etc.) for temporal context
+    ///   - natalChart: Natal chart for elemental balance analysis
+    /// - Returns: VibeBreakdown with contextual adjustments applied
+    static func generateContextualVibeBreakdown(
+        from tokens: [StyleToken],
+        weather: TodayWeather?,
+        dayOfWeek: Int,
+        natalChart: NatalChartCalculator.NatalChart
+    ) -> VibeBreakdown {
+        
+        print("\n🌟 GENERATING CONTEXTUAL VIBE BREAKDOWN 🌟")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("📊 Input: \(tokens.count) tokens")
+        print("🌤️ Weather: \(weather?.condition ?? "none")")
+        print("📅 Day: \(dayOfWeek) (1=Sunday)")
+        
+        // Step 1: Calculate base raw scores
+        var rawScores = calculateRawScores(from: tokens)
+        print("\n🎯 Base Raw Scores:")
+        for (energy, score) in rawScores {
+            print("  • \(energy): \(String(format: "%.2f", score))")
+        }
+        
+        // Step 2: Apply contextual adjustments
+        print("\n🔄 APPLYING CONTEXTUAL ADJUSTMENTS:")
+        
+        // Rainy day adjustments
+        if let condition = weather?.condition.lowercased(),
+           condition.contains("rain") || condition.contains("shower") || condition.contains("drizzle") {
+            print("  ☔ Rainy weather detected - boosting Utility, reducing Playful")
+            rawScores["utility"]! *= 2.0
+            rawScores["playful"]! *= 0.6
+            rawScores["classic"]! *= 0.8  // Reduce earth dominance
+        }
+        
+        // Monday adjustments (dayOfWeek 2 = Monday)
+        if dayOfWeek == 2 {
+            print("  📅 Monday detected - boosting practical energy")
+            rawScores["utility"]! *= 1.5
+            rawScores["playful"]! *= 0.7
+        }
+        
+        // Water-heavy chart adjustments
+        let waterPlacements = countWaterPlacements(natalChart)
+        if waterPlacements >= 2 {  // 2+ water signs
+            print("  🌊 Water-heavy chart detected (\(waterPlacements) placements) - boosting Romantic/Drama")
+            rawScores["romantic"]! *= 1.5
+            rawScores["drama"]! *= 1.3
+            rawScores["classic"]! *= 0.7  // Reduce earth bias
+        }
+        
+        print("\n🎯 Adjusted Raw Scores:")
+        for (energy, score) in rawScores {
+            print("  • \(energy): \(String(format: "%.2f", score))")
+        }
+        
+        // Step 3: Apply weight scaling and normalize
+        let weightedScores = applyWeightScaling(rawScores: rawScores, tokens: tokens)
+        let breakdown = normalizeToTwentyOne(weightedScores: weightedScores, tokens: tokens)
+        
+        print("\n✅ Final Contextual Breakdown: \(breakdown.debugDescription())")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+        
+        return breakdown
+    }
+    
+    // MARK: - Helper Method for Water Sign Detection
+    
+    private static func countWaterPlacements(_ chart: NatalChartCalculator.NatalChart) -> Int {
+        var count = 0
+        
+        // Check Sun sign
+        if let sunPlanet = chart.planets.first(where: { $0.name == "Sun" }) {
+            let sunSign = CoordinateTransformations.getZodiacSignName(sign: sunPlanet.zodiacSign)
+            if ["Cancer", "Scorpio", "Pisces"].contains(sunSign) { count += 1 }
+        }
+        
+        // Check Moon sign
+        if let moonPlanet = chart.planets.first(where: { $0.name == "Moon" }) {
+            let moonSign = CoordinateTransformations.getZodiacSignName(sign: moonPlanet.zodiacSign)
+            if ["Cancer", "Scorpio", "Pisces"].contains(moonSign) { count += 1 }
+        }
+        
+        // Check Ascendant sign - FIXED
+        let ascSign = CoordinateTransformations.decimalDegreesToZodiac(chart.ascendant).sign
+        let ascSignName = CoordinateTransformations.getZodiacSignName(sign: ascSign)
+        if ["Cancer", "Scorpio", "Pisces"].contains(ascSignName) { count += 1 }
+        
+        return count
+    }
+    
     // MARK: - Raw Score Calculation
     
     private static func calculateRawScores(from tokens: [StyleToken]) -> [String: Double] {
@@ -135,40 +232,61 @@ class VibeBreakdownGenerator {
         "authoritative", "enduring", "substantial", "commanding", "navy",
         "charcoal", "slate gray", "stone", "cream", "tailored", "crisp"
     ]
-    
+
     private static let playfulTokens: Set<String> = [
         "bright", "vibrant", "dynamic", "energetic", "fun", "expressive",
         "creative", "colorful", "light", "airy", "versatile", "quick",
         "adaptable", "communicative", "cheerful", "bright yellow",
         "neon turquoise", "electric blue", "playful", "lively", "spirited"
     ]
-    
+
     private static let romanticTokens: Set<String> = [
         "flowing", "soft", "gentle", "dreamy", "ethereal", "luxurious",
         "sensual", "beautiful", "harmonious", "nurturing", "comfortable",
         "warm", "delicate", "feminine", "graceful", "misty lavender",
-        "pale yellow", "seafoam", "opalescent blue", "flowing", "fluid"
+        "pale yellow", "seafoam", "opalescent blue", "fluid",
+        "pearl",          // Moon/Cancer color - ROMANTIC PRIMARY
+        "intuitive",      // Water sign core - ROMANTIC PRIMARY
+        "compassionate",  // Pisces trait - ROMANTIC PRIMARY
+        "receptive",      // Water trait - ROMANTIC PRIMARY
+        "empathetic",     // Water trait - ROMANTIC PRIMARY
+        "subtle"          // Water sign expression - ROMANTIC PRIMARY
     ]
-    
+
     private static let utilityTokens: Set<String> = [
-        "practical", "functional", "comfortable", "waterproof", "durable",
-        "purposeful", "protective", "substantial", "enduring", "reliable",
-        "versatile", "structured", "tactical", "insulating", "layerable",
+        "practical", "functional", "waterproof", "durable",
+        "purposeful", "protective", "reliable", // "protective" UTILITY PRIMARY
+        "tactical", "insulating", "layerable",
         "breathable", "weatherproof"
     ]
-    
+
     private static let dramaTokens: Set<String> = [
         "bold", "intense", "powerful", "dramatic", "striking", "rich",
-        "deep", "transformative", "commanding", "magnetic", "luxurious",
+        "deep", "transformative", "commanding", "magnetic",
         "royal", "electric", "plutonium", "metallic", "royal purple",
-        "deep burgundy", "electric blue", "plutonium purple", "radiant"
+        "deep burgundy", "plutonium purple", "radiant",
+        "mysterious",     // Scorpio core - DRAMA PRIMARY
+        "penetrating",    // Scorpio trait - DRAMA PRIMARY
+        "emotional",      // Water intensity - DRAMA PRIMARY
+        "passionate",     // Water/fire intensity - DRAMA PRIMARY
+        "hypnotic",       // Scorpio magnetism - DRAMA PRIMARY
+        "profound"        // Water depth - DRAMA PRIMARY
     ]
-    
+
     private static let edgeTokens: Set<String> = [
         "unconventional", "innovative", "unique", "unexpected", "electric",
         "neon", "metallic", "textured", "distinctive", "rebellious",
         "avant-garde", "edgy", "alternative", "disruptive", "experimental"
     ]
+    
+    // MARK: - Token Set Getters (for Debug Analysis) ⭐ ADD HERE ⭐
+    
+    static func getClassicTokens() -> Set<String> { return classicTokens }
+    static func getPlayfulTokens() -> Set<String> { return playfulTokens }
+    static func getRomanticTokens() -> Set<String> { return romanticTokens }
+    static func getUtilityTokens() -> Set<String> { return utilityTokens }
+    static func getDramaTokens() -> Set<String> { return dramaTokens }
+    static func getEdgeTokens() -> Set<String> { return edgeTokens }
     
     // MARK: - Bonus Calculation Methods
     
@@ -186,7 +304,7 @@ class VibeBreakdownGenerator {
         
         // Earth signs boost classic
         if let sign = token.signSource, ["Taurus", "Virgo", "Capricorn"].contains(sign) {
-            bonus += 0.5
+            bonus += 0.1  // 57 tokens × 0.1 = +5.7 points (reasonable)
         }
         
         return bonus

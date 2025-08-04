@@ -51,8 +51,15 @@ class DailyVibeGenerator {
         
         // Generate Maria's Style Brief from tokens
         let styleBrief = generateMariaStyleBrief(from: allTokens)
-        // Generate Vibe Breakdown from tokens
-        let vibeBreakdown = VibeBreakdownGenerator.generateVibeBreakdown(from: allTokens)
+        // Generate Contextual Vibe Breakdown from tokens
+        let calendar = Calendar.current
+        let dayOfWeek = calendar.component(.weekday, from: Date())
+        let vibeBreakdown = VibeBreakdownGenerator.generateContextualVibeBreakdown(
+            from: allTokens,
+            weather: weather,
+            dayOfWeek: dayOfWeek,
+            natalChart: natalChart
+        )
         debugVibeBreakdownAnalysis(breakdown: vibeBreakdown, tokens: allTokens)
             
         print("\n✨ MARIA'S STYLE BRIEF GENERATED:")
@@ -219,12 +226,12 @@ class DailyVibeGenerator {
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
         // Analyze each energy's contributing tokens
-        analyzeEnergyContributors("🏛️ CLASSIC", breakdown.classic, tokens, getClassicTokens())
-        analyzeEnergyContributors("🎈 PLAYFUL", breakdown.playful, tokens, getPlayfulTokens())
-        analyzeEnergyContributors("💕 ROMANTIC", breakdown.romantic, tokens, getRomanticTokens())
-        analyzeEnergyContributors("🔧 UTILITY", breakdown.utility, tokens, getUtilityTokens())
-        analyzeEnergyContributors("🎭 DRAMA", breakdown.drama, tokens, getDramaTokens())
-        analyzeEnergyContributors("⚡ EDGE", breakdown.edge, tokens, getEdgeTokens())
+        analyzeEnergyContributors("🏛️ CLASSIC", breakdown.classic, tokens, VibeBreakdownGenerator.getClassicTokens())
+        analyzeEnergyContributors("🎈 PLAYFUL", breakdown.playful, tokens, VibeBreakdownGenerator.getPlayfulTokens())
+        analyzeEnergyContributors("💕 ROMANTIC", breakdown.romantic, tokens, VibeBreakdownGenerator.getRomanticTokens())
+        analyzeEnergyContributors("🔧 UTILITY", breakdown.utility, tokens, VibeBreakdownGenerator.getUtilityTokens())
+        analyzeEnergyContributors("🎭 DRAMA", breakdown.drama, tokens, VibeBreakdownGenerator.getDramaTokens())
+        analyzeEnergyContributors("⚡ EDGE", breakdown.edge, tokens, VibeBreakdownGenerator.getEdgeTokens())
         
         print("\n📈 MAPPING LOGIC EXPLANATION:")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
@@ -392,71 +399,16 @@ class DailyVibeGenerator {
         let tokenName = token.name.lowercased()
         var energies: [String] = []
         
-        if getClassicTokens().contains(tokenName) { energies.append("Classic") }
-        if getPlayfulTokens().contains(tokenName) { energies.append("Playful") }
-        if getRomanticTokens().contains(tokenName) { energies.append("Romantic") }
-        if getUtilityTokens().contains(tokenName) { energies.append("Utility") }
-        if getDramaTokens().contains(tokenName) { energies.append("Drama") }
-        if getEdgeTokens().contains(tokenName) { energies.append("Edge") }
+        if VibeBreakdownGenerator.getClassicTokens().contains(tokenName) { energies.append("Classic") }
+        if VibeBreakdownGenerator.getPlayfulTokens().contains(tokenName) { energies.append("Playful") }
+        if VibeBreakdownGenerator.getRomanticTokens().contains(tokenName) { energies.append("Romantic") }
+        if VibeBreakdownGenerator.getUtilityTokens().contains(tokenName) { energies.append("Utility") }
+        if VibeBreakdownGenerator.getDramaTokens().contains(tokenName) { energies.append("Drama") }
+        if VibeBreakdownGenerator.getEdgeTokens().contains(tokenName) { energies.append("Edge") }
         
         return energies
     }
 
-    // Token set getters (extract from VibeBreakdownGenerator for reuse)
-    private static func getClassicTokens() -> Set<String> {
-        return [
-            "structured", "grounded", "reserved", "solid", "refined", "polished",
-            "professional", "timeless", "balanced", "harmonious", "elegant",
-            "sophisticated", "classic", "conservative", "traditional", "disciplined",
-            "authoritative", "enduring", "substantial", "commanding", "navy",
-            "charcoal", "slate gray", "stone", "cream", "tailored", "crisp"
-        ]
-    }
-
-    private static func getPlayfulTokens() -> Set<String> {
-        return [
-            "bright", "vibrant", "dynamic", "energetic", "fun", "expressive",
-            "creative", "colorful", "light", "airy", "versatile", "quick",
-            "adaptable", "communicative", "cheerful", "bright yellow",
-            "neon turquoise", "electric blue", "playful", "lively", "spirited"
-        ]
-    }
-
-    private static func getRomanticTokens() -> Set<String> {
-        return [
-            "flowing", "soft", "gentle", "dreamy", "ethereal", "luxurious",
-            "sensual", "beautiful", "harmonious", "nurturing", "comfortable",
-            "warm", "delicate", "feminine", "graceful", "misty lavender",
-            "pale yellow", "seafoam", "opalescent blue", "flowing", "fluid"
-        ]
-    }
-
-    private static func getUtilityTokens() -> Set<String> {
-        return [
-            "practical", "functional", "comfortable", "waterproof", "durable",
-            "purposeful", "protective", "substantial", "enduring", "reliable",
-            "versatile", "structured", "tactical", "insulating", "layerable",
-            "breathable", "weatherproof"
-        ]
-    }
-
-    private static func getDramaTokens() -> Set<String> {
-        return [
-            "bold", "intense", "powerful", "dramatic", "striking", "rich",
-            "deep", "transformative", "commanding", "magnetic", "luxurious",
-            "royal", "electric", "plutonium", "metallic", "royal purple",
-            "deep burgundy", "electric blue", "plutonium purple", "radiant"
-        ]
-    }
-
-    private static func getEdgeTokens() -> Set<String> {
-        return [
-            "unconventional", "innovative", "unique", "unexpected", "electric",
-            "neon", "metallic", "textured", "distinctive", "rebellious",
-            "avant-garde", "edgy", "alternative", "disruptive", "experimental"
-        ]
-    }
-    
     // MARK: - Maria's Style Brief Generation
     
     private static func generateMariaStyleBrief(from tokens: [StyleToken]) -> String {
