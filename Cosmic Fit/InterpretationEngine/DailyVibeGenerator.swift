@@ -51,15 +51,9 @@ class DailyVibeGenerator {
         
         // Generate Maria's Style Brief from tokens
         let styleBrief = generateMariaStyleBrief(from: allTokens)
-        // Generate Contextual Vibe Breakdown from tokens
-        let calendar = Calendar.current
-        let dayOfWeek = calendar.component(.weekday, from: Date())
-        let vibeBreakdown = VibeBreakdownGenerator.generateContextualVibeBreakdown(
-            from: allTokens,
-            weather: weather,
-            dayOfWeek: dayOfWeek,
-            natalChart: natalChart
-        )
+
+        let vibeBreakdown = VibeBreakdownGenerator.generateVibeBreakdown(from: allTokens)
+            
         debugVibeBreakdownAnalysis(breakdown: vibeBreakdown, tokens: allTokens)
             
         print("\n✨ MARIA'S STYLE BRIEF GENERATED:")
@@ -71,6 +65,7 @@ class DailyVibeGenerator {
         // Return simplified DailyVibeContent with only Style Brief populated
         return DailyVibeContent(
             styleBrief: styleBrief,
+            vibeBreakdown: vibeBreakdown,
             textiles: "",     // Empty - focused only on Style Brief
             colors: "",       // Empty - focused only on Style Brief
             brightness: 50,   // Default middle value
@@ -204,11 +199,11 @@ class DailyVibeGenerator {
         // Show final distribution with visual bars
         print("📊 FINAL ENERGY DISTRIBUTION (21 points total):")
         printEnergyBar("Classic", breakdown.classic, 10, "🏛️")
-        printEnergyBar("Playful", breakdown.playful, 8, "🎈")
-        printEnergyBar("Romantic", breakdown.romantic, 8, "💕")
-        printEnergyBar("Utility", breakdown.utility, 7, "🔧")
-        printEnergyBar("Drama", breakdown.drama, 6, "🎭")
-        printEnergyBar("Edge", breakdown.edge, 5, "⚡")
+        printEnergyBar("Playful", breakdown.playful, 10, "🎈")
+        printEnergyBar("Romantic", breakdown.romantic, 10, "💕")
+        printEnergyBar("Utility", breakdown.utility, 10, "🔧")
+        printEnergyBar("Drama", breakdown.drama, 10, "🎭")
+        printEnergyBar("Edge", breakdown.edge, 10, "⚡")
         
         // Validation check
         let total = breakdown.totalPoints

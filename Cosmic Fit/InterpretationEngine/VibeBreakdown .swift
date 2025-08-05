@@ -11,21 +11,21 @@ import Foundation
 // MARK: - Vibe Breakdown Structure
 
 struct VibeBreakdown: Codable {
-    let classic: Int      // 0-10 points - structured, grounded, refined, timeless
-    let playful: Int      // 0-8 points  - bright, dynamic, expressive, fun
-    let romantic: Int     // 0-8 points  - flowing, soft, harmonious, dreamy
-    let utility: Int      // 0-7 points  - practical, functional, protective
-    let drama: Int        // 0-6 points  - bold, intense, powerful, striking
-    let edge: Int         // 0-5 points  - unconventional, innovative, electric
+    let classic: Int
+    let playful: Int
+    let romantic: Int
+    let utility: Int
+    let drama: Int
+    let edge: Int
     
     init(classic: Int, playful: Int, romantic: Int, utility: Int, drama: Int, edge: Int) {
         // Clamp values to their maximums to prevent crashes
         self.classic = min(max(classic, 0), 10)
-        self.playful = min(max(playful, 0), 8)
-        self.romantic = min(max(romantic, 0), 8)
-        self.utility = min(max(utility, 0), 7)
-        self.drama = min(max(drama, 0), 6)
-        self.edge = min(max(edge, 0), 5)
+        self.playful = min(max(playful, 0), 10)
+        self.romantic = min(max(romantic, 0), 10)
+        self.utility = min(max(utility, 0), 10)
+        self.drama = min(max(drama, 0), 10)
+        self.edge = min(max(edge, 0), 10)
     }
     
     var totalPoints: Int {
@@ -49,9 +49,9 @@ class VibeBreakdownGenerator {
     
     // MARK: - Main Generation Method
     
-    /// Generate a 21-point vibe breakdown from StyleTokens
+    /// Generate a 21-point vibe breakdown from StyleTokens - SIMPLIFIED VERSION
     /// - Parameter tokens: Array of StyleTokens from SemanticTokenGenerator
-    /// - Returns: VibeBreakdown with points distributed across 6 energies
+    /// - Returns: VibeBreakdown with points distributed across 6 energies (0-10 each)
     static func generateVibeBreakdown(from tokens: [StyleToken]) -> VibeBreakdown {
         
         print("\n🌟 GENERATING VIBE BREAKDOWN FROM TOKENS 🌟")
@@ -65,88 +65,9 @@ class VibeBreakdownGenerator {
             print("  • \(energy): \(String(format: "%.2f", score))")
         }
         
-        // Step 2: Apply weight scaling
-        let weightedScores = applyWeightScaling(rawScores: rawScores, tokens: tokens)
-        print("\n⚖️ Weighted Scores:")
-        for (energy, score) in weightedScores {
-            print("  • \(energy): \(String(format: "%.2f", score))")
-        }
-        
-        // Step 3: Normalize to 21 points with intelligent distribution
-        let breakdown = normalizeToTwentyOne(weightedScores: weightedScores, tokens: tokens)
+        // Step 2: Normalize to 21 points (SIMPLIFIED - no scaling complexity)
+        let breakdown = normalizeToTwentyOne(weightedScores: rawScores)
         print("\n✅ Final Breakdown: \(breakdown.debugDescription())")
-        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
-        
-        return breakdown
-    }
-    
-    // MARK: - Contextual Generation Method ⭐ ADD HERE ⭐
-    
-    /// Generate a context-aware vibe breakdown that adjusts for weather, day, and chart type
-    /// - Parameters:
-    ///   - tokens: Array of StyleTokens from SemanticTokenGenerator
-    ///   - weather: Current weather conditions for contextual adjustments
-    ///   - dayOfWeek: Day of week (1=Sunday, 2=Monday, etc.) for temporal context
-    ///   - natalChart: Natal chart for elemental balance analysis
-    /// - Returns: VibeBreakdown with contextual adjustments applied
-    static func generateContextualVibeBreakdown(
-        from tokens: [StyleToken],
-        weather: TodayWeather?,
-        dayOfWeek: Int,
-        natalChart: NatalChartCalculator.NatalChart
-    ) -> VibeBreakdown {
-        
-        print("\n🌟 GENERATING CONTEXTUAL VIBE BREAKDOWN 🌟")
-        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-        print("📊 Input: \(tokens.count) tokens")
-        print("🌤️ Weather: \(weather?.condition ?? "none")")
-        print("📅 Day: \(dayOfWeek) (1=Sunday)")
-        
-        // Step 1: Calculate base raw scores
-        var rawScores = calculateRawScores(from: tokens)
-        print("\n🎯 Base Raw Scores:")
-        for (energy, score) in rawScores {
-            print("  • \(energy): \(String(format: "%.2f", score))")
-        }
-        
-        // Step 2: Apply contextual adjustments
-        print("\n🔄 APPLYING CONTEXTUAL ADJUSTMENTS:")
-        
-        // Rainy day adjustments
-        if let condition = weather?.condition.lowercased(),
-           condition.contains("rain") || condition.contains("shower") || condition.contains("drizzle") {
-            print("  ☔ Rainy weather detected - boosting Utility, reducing Playful")
-            rawScores["utility"]! *= 2.0
-            rawScores["playful"]! *= 0.6
-            rawScores["classic"]! *= 0.8  // Reduce earth dominance
-        }
-        
-        // Monday adjustments (dayOfWeek 2 = Monday)
-        if dayOfWeek == 2 {
-            print("  📅 Monday detected - boosting practical energy")
-            rawScores["utility"]! *= 1.5
-            rawScores["playful"]! *= 0.7
-        }
-        
-        // Water-heavy chart adjustments
-        let waterPlacements = countWaterPlacements(natalChart)
-        if waterPlacements >= 2 {  // 2+ water signs
-            print("  🌊 Water-heavy chart detected (\(waterPlacements) placements) - boosting Romantic/Drama")
-            rawScores["romantic"]! *= 1.5
-            rawScores["drama"]! *= 1.3
-            rawScores["classic"]! *= 0.7  // Reduce earth bias
-        }
-        
-        print("\n🎯 Adjusted Raw Scores:")
-        for (energy, score) in rawScores {
-            print("  • \(energy): \(String(format: "%.2f", score))")
-        }
-        
-        // Step 3: Apply weight scaling and normalize
-        let weightedScores = applyWeightScaling(rawScores: rawScores, tokens: tokens)
-        let breakdown = normalizeToTwentyOne(weightedScores: weightedScores, tokens: tokens)
-        
-        print("\n✅ Final Contextual Breakdown: \(breakdown.debugDescription())")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
         
         return breakdown
@@ -411,77 +332,47 @@ class VibeBreakdownGenerator {
         return bonus
     }
     
-    // MARK: - Weight Scaling
-    
-    private static func applyWeightScaling(rawScores: [String: Double], tokens: [StyleToken]) -> [String: Double] {
-        var scaledScores = rawScores
-        
-        // Calculate average token weight as scaling factor
-        let totalWeight = tokens.reduce(0.0) { $0 + $1.weight }
-        let averageWeight = totalWeight / Double(tokens.count)
-        let scaleFactor = max(averageWeight / 2.0, 0.5) // Minimum 0.5x scaling
-        
-        // Apply scaling to all energies
-        for (energy, score) in scaledScores {
-            scaledScores[energy] = score * scaleFactor
-        }
-        
-        return scaledScores
-    }
-    
     // MARK: - Normalization to 21 Points
     
-    private static func normalizeToTwentyOne(weightedScores: [String: Double], tokens: [StyleToken]) -> VibeBreakdown {
+    // Normalize raw scores to exactly 21 points with consistent 0-10 scaling
+    /// - Parameter weightedScores: Raw scores for each energy
+    /// - Returns: VibeBreakdown with proper distribution
+    private static func normalizeToTwentyOne(weightedScores: [String: Double]) -> VibeBreakdown {
         
         // Calculate total weighted score
         let totalScore = weightedScores.values.reduce(0, +)
         
         // If no scores, return balanced default
         guard totalScore > 0 else {
-            return VibeBreakdown(classic: 6, playful: 3, romantic: 4, utility: 4, drama: 2, edge: 2)
+            return VibeBreakdown(classic: 4, playful: 3, romantic: 4, utility: 4, drama: 3, edge: 3)
         }
         
-        // Apply proportional distribution
+        // Apply simple proportional distribution to 21 points
         var distributedScores: [String: Double] = [:]
         for (energy, score) in weightedScores {
             distributedScores[energy] = (score / totalScore) * 21.0
         }
         
-        // Apply minimum thresholds and convert to integers
+        // Convert to integers with rounding
         var integerScores: [String: Int] = [:]
         var remainingPoints = 21
         
-        // First pass: assign minimum viable points or zero
+        // First pass: round down and track points used
         for (energy, score) in distributedScores {
-            if score < 0.5 {
-                integerScores[energy] = 0
-            } else {
-                let minPoints = Int(score.rounded(.down))
-                integerScores[energy] = max(minPoints, 1)
-                remainingPoints -= integerScores[energy]!
-            }
+            let roundedDown = Int(score)
+            integerScores[energy] = roundedDown
+            remainingPoints -= roundedDown
         }
         
-        // Second pass: distribute remaining points to highest scoring energies
-        let sortedEnergies = distributedScores.sorted { $0.value > $1.value }
-        var pointsToDistribute = max(0, remainingPoints)
+        // Second pass: distribute remaining points to highest fractional remainders
+        let remainders = distributedScores.map { (energy, score) in
+            (energy: energy, remainder: score - Double(integerScores[energy]!))
+        }.sorted { $0.remainder > $1.remainder }
         
-        for (energy, _) in sortedEnergies {
-            if pointsToDistribute <= 0 { break }
-            if integerScores[energy]! > 0 { // Only boost active energies
-                let maxForEnergy = getMaxPointsForEnergy(energy)
-                if integerScores[energy]! < maxForEnergy {
-                    let canAdd = min(pointsToDistribute, maxForEnergy - integerScores[energy]!)
-                    integerScores[energy]! += canAdd
-                    pointsToDistribute -= canAdd
-                }
+        for i in 0..<remainingPoints {
+            if i < remainders.count {
+                integerScores[remainders[i].energy]! += 1
             }
-        }
-        
-        // Final adjustment to ensure exactly 21 points
-        let currentTotal = integerScores.values.reduce(0, +)
-        if currentTotal != 21 {
-            adjustToExactTotal(scores: &integerScores, targetTotal: 21)
         }
         
         return VibeBreakdown(
@@ -496,18 +387,7 @@ class VibeBreakdownGenerator {
     
     // MARK: - Helper Methods
     
-    private static func getMaxPointsForEnergy(_ energy: String) -> Int {
-        switch energy {
-        case "classic": return 10
-        case "playful": return 8
-        case "romantic": return 8
-        case "utility": return 7
-        case "drama": return 6
-        case "edge": return 5
-        default: return 5
-        }
-    }
-    
+    /*
     private static func adjustToExactTotal(scores: inout [String: Int], targetTotal: Int) {
         let currentTotal = scores.values.reduce(0, +)
         let difference = targetTotal - currentTotal
@@ -541,4 +421,5 @@ class VibeBreakdownGenerator {
             }
         }
     }
+     */
 }

@@ -9,9 +9,9 @@
 struct WeightingModel {
     
     // MARK: - Core Chart Weights
-    static let natalWeight: Double = 0.30
+    static let natalWeight: Double = 0.1
     // MARK: - Age-Based Weighting
-    static let progressedWeight: Double = 0.15
+    static let progressedWeight: Double = 0.05
     
     // MARK: - Current Sun Sign Background Energy (NEW)
     /// Weight for the current Sun's zodiacal sign as a subtle background energy influence
@@ -85,9 +85,9 @@ struct WeightingModel {
 
     // MARK: - Daily Fit Weights
     struct DailyFit {
-        static let transitWeight: Double = 0.35
-        static let moonPhaseWeight: Double = 0.30
-        static let weatherWeight: Double = 0.40
+        static let transitWeight: Double = 0.4
+        static let moonPhaseWeight: Double = 0.2
+        static let weatherWeight: Double = 0.2
     }
     
     // MARK: - Helper Methods
