@@ -1549,9 +1549,11 @@ class SemanticTokenGenerator {
         // Wind speed processing
         if weather.windKph > 20 { // High wind
             tokens.append(StyleToken(name: "wind-resistant", type: "fabric", weight: 4.0, originType: .weather))
-            tokens.append(StyleToken(name: "structured", type: "structure", weight: 3.5, originType: .weather))
-            tokens.append(StyleToken(name: "secure", type: "mood", weight: 3.0, originType: .weather))
-            tokens.append(StyleToken(name: "protective", type: "texture", weight: 2.5, originType: .weather))
+            tokens.append(StyleToken(name: "stable", type: "structure", weight: 2.0, originType: .weather))
+            tokens.append(StyleToken(name: "structured", type: "structure", weight: 2.0, originType: .weather))
+            tokens.append(StyleToken(name: "reliable", type: "mood", weight: 2.0, originType: .weather))
+            tokens.append(StyleToken(name: "secure", type: "mood", weight: 2.0, originType: .weather))
+            tokens.append(StyleToken(name: "protective", type: "texture", weight: 3.0, originType: .weather))
         } else if weather.windKph > 10 { // Moderate wind
             tokens.append(StyleToken(name: "stable", type: "structure", weight: 2.0, originType: .weather))
             tokens.append(StyleToken(name: "reliable", type: "mood", weight: 1.5, originType: .weather))
