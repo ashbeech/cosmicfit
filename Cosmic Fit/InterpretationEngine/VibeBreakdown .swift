@@ -18,6 +18,16 @@ struct VibeBreakdown: Codable {
     let drama: Int        // 0-6 points  - bold, intense, powerful, striking
     let edge: Int         // 0-5 points  - unconventional, innovative, electric
     
+    init(classic: Int, playful: Int, romantic: Int, utility: Int, drama: Int, edge: Int) {
+        // Clamp values to their maximums to prevent crashes
+        self.classic = min(max(classic, 0), 10)
+        self.playful = min(max(playful, 0), 8)
+        self.romantic = min(max(romantic, 0), 8)
+        self.utility = min(max(utility, 0), 7)
+        self.drama = min(max(drama, 0), 6)
+        self.edge = min(max(edge, 0), 5)
+    }
+    
     var totalPoints: Int {
         return classic + playful + romantic + utility + drama + edge
     }
@@ -232,47 +242,37 @@ class VibeBreakdownGenerator {
         "authoritative", "enduring", "substantial", "commanding", "navy",
         "charcoal", "slate gray", "stone", "cream", "tailored", "crisp"
     ]
-
+    
     private static let playfulTokens: Set<String> = [
         "bright", "vibrant", "dynamic", "energetic", "fun", "expressive",
         "creative", "colorful", "light", "airy", "versatile", "quick",
         "adaptable", "communicative", "cheerful", "bright yellow",
         "neon turquoise", "electric blue", "playful", "lively", "spirited"
     ]
-
+    
     private static let romanticTokens: Set<String> = [
         "flowing", "soft", "gentle", "dreamy", "ethereal", "luxurious",
         "sensual", "beautiful", "harmonious", "nurturing", "comfortable",
         "warm", "delicate", "feminine", "graceful", "misty lavender",
-        "pale yellow", "seafoam", "opalescent blue", "fluid",
-        "pearl",          // Moon/Cancer color - ROMANTIC PRIMARY
-        "intuitive",      // Water sign core - ROMANTIC PRIMARY
-        "compassionate",  // Pisces trait - ROMANTIC PRIMARY
-        "receptive",      // Water trait - ROMANTIC PRIMARY
-        "empathetic",     // Water trait - ROMANTIC PRIMARY
-        "subtle"          // Water sign expression - ROMANTIC PRIMARY
+        "pale yellow", "seafoam", "opalescent blue", "fluid", "pearl",
+        "intuitive", "compassionate", "receptive", "empathetic", "subtle"
     ]
-
+    
     private static let utilityTokens: Set<String> = [
         "practical", "functional", "waterproof", "durable",
-        "purposeful", "protective", "reliable", // "protective" UTILITY PRIMARY
+        "purposeful", "protective", "reliable",
         "tactical", "insulating", "layerable",
         "breathable", "weatherproof"
     ]
-
+    
     private static let dramaTokens: Set<String> = [
         "bold", "intense", "powerful", "dramatic", "striking", "rich",
         "deep", "transformative", "commanding", "magnetic",
         "royal", "electric", "plutonium", "metallic", "royal purple",
-        "deep burgundy", "plutonium purple", "radiant",
-        "mysterious",     // Scorpio core - DRAMA PRIMARY
-        "penetrating",    // Scorpio trait - DRAMA PRIMARY
-        "emotional",      // Water intensity - DRAMA PRIMARY
-        "passionate",     // Water/fire intensity - DRAMA PRIMARY
-        "hypnotic",       // Scorpio magnetism - DRAMA PRIMARY
-        "profound"        // Water depth - DRAMA PRIMARY
+        "deep burgundy", "plutonium purple", "radiant", "mysterious",
+        "penetrating", "emotional", "passionate", "hypnotic", "profound"
     ]
-
+    
     private static let edgeTokens: Set<String> = [
         "unconventional", "innovative", "unique", "unexpected", "electric",
         "neon", "metallic", "textured", "distinctive", "rebellious",
@@ -318,7 +318,7 @@ class VibeBreakdownGenerator {
         
         // Bright color qualities
         if token.type == "color_quality" &&
-           ["bright", "vibrant", "electric"].contains(where: { token.name.contains($0) }) {
+            ["bright", "vibrant", "electric"].contains(where: { token.name.contains($0) }) {
             bonus += 1.5
         }
         
@@ -364,7 +364,7 @@ class VibeBreakdownGenerator {
         
         // Mars aspects can boost utility (action-oriented)
         if token.planetarySource == "Mars" &&
-           ["practical", "protective", "tactical"].contains(where: { token.name.contains($0) }) {
+            ["practical", "protective", "tactical"].contains(where: { token.name.contains($0) }) {
             bonus += 1.0
         }
         
@@ -404,7 +404,7 @@ class VibeBreakdownGenerator {
         
         // Transit origin can boost edge (current cosmic weather)
         if token.originType == .transit &&
-           ["innovative", "unexpected", "disruptive"].contains(where: { token.name.contains($0) }) {
+            ["innovative", "unexpected", "disruptive"].contains(where: { token.name.contains($0) }) {
             bonus += 1.0
         }
         
