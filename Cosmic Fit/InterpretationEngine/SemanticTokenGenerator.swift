@@ -1578,7 +1578,7 @@ class SemanticTokenGenerator {
             tokens.append(StyleToken(name: "waterproof", type: "fabric", weight: 3.0, originType: .weather))
             tokens.append(StyleToken(name: "practical", type: "structure", weight: 2.5, originType: .weather))
             tokens.append(StyleToken(name: "protective", type: "texture", weight: 0.8, originType: .weather))
-        case let condition where condition.contains("drizzle"):  // ✅ ADD DRIZZLE CASE
+        case let condition where condition.contains("drizzle"):
             tokens.append(StyleToken(name: "water-resistant", type: "fabric", weight: 2.0, originType: .weather))
             tokens.append(StyleToken(name: "practical", type: "structure", weight: 1.5, originType: .weather))
         case let condition where condition.contains("sun") || condition.contains("clear"):
