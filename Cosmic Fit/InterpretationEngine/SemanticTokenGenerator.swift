@@ -21,23 +21,24 @@ class SemanticTokenGenerator {
             // Default base weight for natal placements
             let baseWeight: Double = 2.0
             
-            // Apply weighting using WeightingModel natal weight
-            var priorityMultiplier: Double = WeightingModel.natalWeight
+            // Apply weighting using WeightingModel natal weight FIRST
+            var priorityMultiplier: Double = 1.0
             switch planet.name {
-            case "Sun": priorityMultiplier *= 1.1  // Core identity
-            case "Venus": priorityMultiplier *= 1.5  // Aesthetic preferences
-            case "Moon": priorityMultiplier *= 1.3   // Emotional comfort
-            case "Mars": priorityMultiplier *= 1.2   // Energy and cut
-            case "Mercury": priorityMultiplier *= 1.0  // Communication style
-            case "Jupiter": priorityMultiplier *= 0.9  // Philosophy of style
-            case "Saturn": priorityMultiplier *= 0.8   // Structure and boundaries
-            case "Uranus": priorityMultiplier *= 0.7   // Unconventional elements
-            case "Neptune": priorityMultiplier *= 0.6  // Dreamy, ethereal qualities
-            case "Pluto": priorityMultiplier *= 0.5    // Transformative undercurrents
-            default: priorityMultiplier *= 0.4
+            case "Sun": priorityMultiplier = 1.1  // Core identity
+            case "Venus": priorityMultiplier = 1.5  // Aesthetic preferences
+            case "Moon": priorityMultiplier = 1.3   // Emotional comfort
+            case "Mars": priorityMultiplier = 1.2   // Energy and cut
+            case "Mercury": priorityMultiplier = 1.0  // Communication style
+            case "Jupiter": priorityMultiplier = 0.9  // Philosophy of style
+            case "Saturn": priorityMultiplier = 0.8   // Structure and boundaries
+            case "Uranus": priorityMultiplier = 0.7   // Unconventional elements
+            case "Neptune": priorityMultiplier = 0.6  // Dreamy, ethereal qualities
+            case "Pluto": priorityMultiplier = 0.5    // Transformative undercurrents
+            default: priorityMultiplier = 0.4
             }
             
-            let weight = baseWeight * priorityMultiplier
+            // Apply WeightingModel natal weight at the base level
+            let weight = baseWeight * priorityMultiplier * WeightingModel.natalWeight
             
             // Generate tokens for this planet in its sign
             let planetTokens = tokenizeForPlanetInSign(
@@ -114,7 +115,7 @@ class SemanticTokenGenerator {
                 // Apply WeightingModel transit weight
                 let adjustedTransitWeight: Double = transitWeight * WeightingModel.DailyFit.transitWeight
                 
-                // Apply tight orb boost for high-impact daily transits ***
+                // Apply tight orb boost for high-impact daily transits
                 let tightOrbBoost = orb < 1.0 ? 3.0 : 1.0
                 let finalAdjustedTransitWeight = adjustedTransitWeight * tightOrbBoost
                 
@@ -562,6 +563,172 @@ class SemanticTokenGenerator {
         transits: [[String: Any]],
         weather: TodayWeather?) -> [StyleToken] {
             
+            var tokens: [StyleToken] = []
+            
+            // Add all token types for daily fit with debug logging
+            DebugLogger.info("🌟 GENERATING COMPLETE DAILY FIT TOKEN SET 🌟")
+            
+            // Base style resonance - heavily reduced weight for daily fit
+            let baseStyleTokens = generateBaseStyleTokens(natal: natal)
+            for token in baseStyleTokens {
+                let adjustedToken = StyleToken(
+                    name: token.name,
+                    type: token.type,
+                    weight: token.weight * WeightingModel.natalWeight, // Apply natal weight
+                    planetarySource: token.planetarySource,
+                    signSource: token.signSource,
+                    houseSource: token.houseSource,
+                    aspectSource: token.aspectSource,
+                    originType: .natal
+                )
+                tokens.append(adjustedToken)
+            }
+            
+            // Emotional vibe from progressed chart
+            let emotionalTokens = generateEmotionalVibeTokens(natal: natal, progressed: progressed)
+            for token in emotionalTokens {
+                let adjustedToken = StyleToken(
+                    name: token.name,
+                    type: token.type,
+                    weight: token.weight * WeightingModel.progressedWeight, // Apply progressed weight
+                    planetarySource: token.planetarySource,
+                    signSource: token.signSource,
+                    houseSource: token.houseSource,
+                    aspectSource: token.aspectSource,
+                    originType: .progressed
+                )
+                tokens.append(adjustedToken)
+            }
+            
+            // Current transit influences
+            let transitTokens = generateTransitTokens(transits: transits, natal: natal)
+            tokens.append(contentsOf: transitTokens)
+            
+            // Weather-based practical considerations
+            if let weather = weather {
+                let weatherTokens = generateWeatherTokens(weather: weather)
+                tokens.append(contentsOf: weatherTokens)
+            }
+            
+            // Current Sun sign background energy
+            let currentSunTokens = generateCurrentSunSignBackgroundTokens()
+            tokens.append(contentsOf: currentSunTokens)
+            
+            // Moon phase energy
+            let moonPhaseTokens = generateMoonPhaseTokens()
+            for token in moonPhaseTokens {
+                let adjustedToken = StyleToken(
+                    name: token.name,
+                    type: token.type,
+                    weight: token.weight * WeightingModel.DailyFit.moonPhaseWeight, // Apply moon phase weight
+                    planetarySource: token.planetarySource,
+                    signSource: token.signSource,
+                    houseSource: token.houseSource,
+                    aspectSource: token.aspectSource,
+                    originType: .phase
+                )
+                tokens.append(adjustedToken)
+            }
+            
+            // Daily signature (day of week, time of day)
+            let dailySignatureTokens = generateDailySignature()
+            tokens.append(contentsOf: dailySignatureTokens)
+            
+            DebugLogger.info("✅ Complete Daily Fit token set generated: \(tokens.count) tokens")
+            
+            return tokens
+        }
+    
+    /// Generate current Sun sign background energy tokens
+    static func generateCurrentSunSignBackgroundTokens() -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        let calendar = Calendar.current
+        let now = Date()
+        let month = calendar.component(.month, from: now)
+        let day = calendar.component(.day, from: now)
+        
+        // Determine current Sun sign based on date
+        let currentSunSign = getCurrentSunSign(month: month, day: day)
+        
+        DebugLogger.info("🌞 CURRENT SUN SIGN BACKGROUND ENERGY:")
+        DebugLogger.info("  • Current Sun in: \(currentSunSign)")
+        DebugLogger.info("  • Background tokens generated: 4")
+        DebugLogger.info("  • Background weight applied: \(WeightingModel.currentSunSignBackgroundWeight)")
+        
+        // Generate background energy tokens for current Sun sign
+        let backgroundTokens = getCurrentSunSignBackgroundTokens(sunSign: currentSunSign)
+        
+        for (tokenName, tokenType) in backgroundTokens {
+            tokens.append(StyleToken(
+                name: tokenName,
+                type: tokenType,
+                weight: WeightingModel.currentSunSignBackgroundWeight,
+                planetarySource: "CurrentSun",
+                signSource: currentSunSign,
+                originType: .currentSun
+            ))
+        }
+        
+        return tokens
+    }
+    
+    /// Generate Moon phase energy tokens
+    static func generateMoonPhaseTokens() -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Calculate current moon phase
+        let currentDate = Date()
+        let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
+        let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: currentJulianDay)
+        
+        // Convert lunar phase to percentage for easier processing
+        let phasePercentage = (lunarPhase / 360.0) * 100.0
+        
+        // Generate tokens based on moon phase
+        switch phasePercentage {
+        case 0...12.5: // New Moon
+            tokens.append(StyleToken(name: "minimal", type: "structure", weight: 1.5, aspectSource: "New Moon", originType: .phase))
+            tokens.append(StyleToken(name: "introspective", type: "mood", weight: 1.3, aspectSource: "New Moon", originType: .phase))
+            tokens.append(StyleToken(name: "dark", type: "color", weight: 1.0, aspectSource: "New Moon", originType: .phase))
+        case 12.5...37.5: // Waxing Crescent
+            tokens.append(StyleToken(name: "emerging", type: "expression", weight: 1.2, aspectSource: "Waxing Crescent", originType: .phase))
+            tokens.append(StyleToken(name: "hopeful", type: "mood", weight: 1.0, aspectSource: "Waxing Crescent", originType: .phase))
+            tokens.append(StyleToken(name: "subtle", type: "color_quality", weight: 0.8, aspectSource: "Waxing Crescent", originType: .phase))
+        case 37.5...62.5: // First Quarter
+            tokens.append(StyleToken(name: "decisive", type: "expression", weight: 1.4, aspectSource: "First Quarter", originType: .phase))
+            tokens.append(StyleToken(name: "bold", type: "color_quality", weight: 1.2, aspectSource: "First Quarter", originType: .phase))
+            tokens.append(StyleToken(name: "structured", type: "structure", weight: 1.0, aspectSource: "First Quarter", originType: .phase))
+        case 62.5...87.5: // Waxing Gibbous
+            tokens.append(StyleToken(name: "refined", type: "expression", weight: 1.3, aspectSource: "Waxing Gibbous", originType: .phase))
+            tokens.append(StyleToken(name: "perfecting", type: "mood", weight: 1.1, aspectSource: "Waxing Gibbous", originType: .phase))
+            tokens.append(StyleToken(name: "polished", type: "texture", weight: 0.9, aspectSource: "Waxing Gibbous", originType: .phase))
+        case 87.5...100, 0...12.5: // Full Moon (including overlap)
+            tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: 1.8, aspectSource: "Full Moon", originType: .phase))
+            tokens.append(StyleToken(name: "expressive", type: "expression", weight: 1.6, aspectSource: "Full Moon", originType: .phase))
+            tokens.append(StyleToken(name: "luminous", type: "texture", weight: 1.4, aspectSource: "Full Moon", originType: .phase))
+        default: // Waning phases
+            tokens.append(StyleToken(name: "wise", type: "mood", weight: 1.2, aspectSource: "Waning Moon", originType: .phase))
+            tokens.append(StyleToken(name: "reflective", type: "expression", weight: 1.0, aspectSource: "Waning Moon", originType: .phase))
+            tokens.append(StyleToken(name: "muted", type: "color_quality", weight: 0.8, aspectSource: "Waning Moon", originType: .phase))
+        }
+        
+        return tokens
+    }
+    
+    /// Generate base style resonance tokens using natal chart
+    private static func generateBaseStyleTokens(natal: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        return generateBlueprintTokens(natal: natal)
+    }
+  
+    /*
+    /// Convenience method to generate all Daily Fit tokens in one call
+    static func generateDailyFitTokens(
+        natal: NatalChartCalculator.NatalChart,
+        progressed: NatalChartCalculator.NatalChart,
+        transits: [[String: Any]],
+        weather: TodayWeather?) -> [StyleToken] {
+            
             var allTokens: [StyleToken] = []
             
             DebugLogger.info("🌟 GENERATING COMPLETE DAILY FIT TOKEN SET 🌟")
@@ -600,6 +767,7 @@ class SemanticTokenGenerator {
             
             return allTokens
         }
+     */
     
     /// Generate tokens for the current Sun sign as a background energy influence
     static func generateCurrentSunSignTokens() -> [StyleToken] {
@@ -1378,6 +1546,17 @@ class SemanticTokenGenerator {
         // Calculate temperature-based weight (sophisticated logic from generateBaseWeatherTokens)
         let tempWeight = calculateTemperatureWeight(temp: weather.temperature)
         
+        // Wind speed processing
+        if weather.windKph > 20 { // High wind
+            tokens.append(StyleToken(name: "wind-resistant", type: "fabric", weight: 4.0, originType: .weather))
+            tokens.append(StyleToken(name: "structured", type: "structure", weight: 3.5, originType: .weather))
+            tokens.append(StyleToken(name: "secure", type: "mood", weight: 3.0, originType: .weather))
+            tokens.append(StyleToken(name: "protective", type: "texture", weight: 2.5, originType: .weather))
+        } else if weather.windKph > 10 { // Moderate wind
+            tokens.append(StyleToken(name: "stable", type: "structure", weight: 2.0, originType: .weather))
+            tokens.append(StyleToken(name: "reliable", type: "mood", weight: 1.5, originType: .weather))
+        }
+        
         // Temperature-based tokens with calculated weights
         if weather.temperature < 10 {
             tokens.append(StyleToken(name: "insulating", type: "fabric", weight: tempWeight, originType: .weather))
@@ -1650,6 +1829,55 @@ class SemanticTokenGenerator {
         }
         
         return tokens
+    }
+    
+    private static func getCurrentSunSign(month: Int, day: Int) -> String {
+        switch (month, day) {
+        case (3, 21...), (4, 1...19): return "Aries"
+        case (4, 20...), (5, 1...20): return "Taurus"
+        case (5, 21...), (6, 1...20): return "Gemini"
+        case (6, 21...), (7, 1...22): return "Cancer"
+        case (7, 23...), (8, 1...22): return "Leo"
+        case (8, 23...), (9, 1...22): return "Virgo"
+        case (9, 23...), (10, 1...22): return "Libra"
+        case (10, 23...), (11, 1...21): return "Scorpio"
+        case (11, 22...), (12, 1...21): return "Sagittarius"
+        case (12, 22...), (12, 31), (1, 1...19): return "Capricorn"
+        case (1, 20...), (2, 1...18): return "Aquarius"
+        case (2, 19...), (3, 1...20): return "Pisces"
+        default: return "Leo" // Default fallback
+        }
+    }
+    
+    private static func getCurrentSunSignBackgroundTokens(sunSign: String) -> [(String, String)] {
+        switch sunSign {
+        case "Aries":
+            return [("energetic", "mood"), ("bold", "color_quality"), ("dynamic", "expression"), ("fiery", "texture")]
+        case "Taurus":
+            return [("grounded", "mood"), ("luxurious", "texture"), ("sensual", "color_quality"), ("stable", "structure")]
+        case "Gemini":
+            return [("versatile", "expression"), ("bright", "color_quality"), ("communicative", "mood"), ("airy", "texture")]
+        case "Cancer":
+            return [("nurturing", "mood"), ("protective", "structure"), ("pearl", "color"), ("emotional", "expression")]
+        case "Leo":
+            return [("radiant", "color_quality"), ("bold", "expression"), ("warm", "texture"), ("dramatic", "mood")]
+        case "Virgo":
+            return [("precise", "structure"), ("refined", "texture"), ("practical", "mood"), ("earthy", "color_quality")]
+        case "Libra":
+            return [("harmonious", "mood"), ("elegant", "expression"), ("balanced", "structure"), ("beautiful", "color_quality")]
+        case "Scorpio":
+            return [("intense", "mood"), ("transformative", "expression"), ("mysterious", "color_quality"), ("deep", "texture")]
+        case "Sagittarius":
+            return [("adventurous", "mood"), ("expansive", "expression"), ("optimistic", "color_quality"), ("free", "structure")]
+        case "Capricorn":
+            return [("structured", "structure"), ("authoritative", "mood"), ("disciplined", "expression"), ("enduring", "texture")]
+        case "Aquarius":
+            return [("innovative", "expression"), ("unique", "structure"), ("electric", "color_quality"), ("progressive", "mood")]
+        case "Pisces":
+            return [("dreamy", "mood"), ("fluid", "texture"), ("intuitive", "expression"), ("ethereal", "color_quality")]
+        default:
+            return [("balanced", "mood"), ("harmonious", "expression"), ("neutral", "color_quality"), ("adaptable", "structure")]
+        }
     }
     
     /// Get sign-specific tokens modified by house context

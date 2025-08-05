@@ -86,8 +86,8 @@ struct WeightingModel {
     // MARK: - Daily Fit Weights
     struct DailyFit {
         static let transitWeight: Double = 0.4
-        static let moonPhaseWeight: Double = 0.2
-        static let weatherWeight: Double = 0.2
+        static let moonPhaseWeight: Double = 0.15
+        static let weatherWeight: Double = 0.3
     }
     
     // MARK: - Helper Methods

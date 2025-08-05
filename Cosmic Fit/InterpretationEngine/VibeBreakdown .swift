@@ -58,19 +58,33 @@ class VibeBreakdownGenerator {
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         print("📊 Input: \(tokens.count) tokens")
         
+        // Get sun sign for personality-based adjustments
+        let sunSign = extractSunSign(from: tokens)
+        print("Sun Sign: \(sunSign)")
+        
         // Step 1: Calculate raw scores for each energy
-        let rawScores = calculateRawScores(from: tokens)
+        let rawScores = calculateRawScores(from: tokens, sunSign: sunSign)
         print("\n🎯 Raw Scores:")
         for (energy, score) in rawScores {
             print("  • \(energy): \(String(format: "%.2f", score))")
         }
         
-        // Step 2: Normalize to 21 points (SIMPLIFIED - no scaling complexity)
+        // Step 2: Normalize to 21 points
         let breakdown = normalizeToTwentyOne(weightedScores: rawScores)
         print("\n✅ Final Breakdown: \(breakdown.debugDescription())")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
         
         return breakdown
+    }
+    
+    private static func extractSunSign(from tokens: [StyleToken]) -> String {
+        // Look for Sun planetary source tokens to determine natal sun sign
+        for token in tokens {
+            if token.planetarySource == "Sun", let signSource = token.signSource {
+                return signSource
+            }
+        }
+        return "NULL" // Default fallback
     }
     
     // MARK: - Helper Method for Water Sign Detection
@@ -100,7 +114,8 @@ class VibeBreakdownGenerator {
     
     // MARK: - Raw Score Calculation
     
-    private static func calculateRawScores(from tokens: [StyleToken]) -> [String: Double] {
+    // MARK: - Fixed Raw Score Calculation (REPLACE EXISTING)
+    private static func calculateRawScores(from tokens: [StyleToken], sunSign: String) -> [String: Double] {
         var scores: [String: Double] = [
             "classic": 0.0,
             "playful": 0.0,
@@ -110,6 +125,11 @@ class VibeBreakdownGenerator {
             "edge": 0.0
         ]
         
+        // Enhanced weather detection for utility prioritization
+        let hasWeatherTokens = tokens.contains { $0.originType == .weather }
+        let hasHighWindTokens = tokens.contains { $0.name.contains("wind-resistant") || $0.name.contains("secure") }
+        let hasRainTokens = tokens.contains { $0.name.contains("waterproof") || $0.name.contains("water-resistant") }
+        
         for token in tokens {
             let tokenName = token.name.lowercased()
             let baseWeight = token.weight
@@ -117,41 +137,153 @@ class VibeBreakdownGenerator {
             // Classic Energy Mapping
             if classicTokens.contains(tokenName) {
                 let bonus = getClassicBonus(token: token)
-                scores["classic"]! += (baseWeight * 2.0) + bonus
+                let sunSignBoost = getSunSignPersonalityBoost(token: token, sunSign: sunSign, energy: "classic")
+                scores["classic"]! += (baseWeight * 2.0) + bonus + sunSignBoost
             }
             
             // Playful Energy Mapping
             if playfulTokens.contains(tokenName) {
                 let bonus = getPlayfulBonus(token: token)
-                scores["playful"]! += (baseWeight * 2.0) + bonus
+                let sunSignBoost = getSunSignPersonalityBoost(token: token, sunSign: sunSign, energy: "playful")
+                scores["playful"]! += (baseWeight * 2.0) + bonus + sunSignBoost
             }
             
-            // Romantic Energy Mapping
+            // Romantic Energy Mapping - Reduced over-emphasis
             if romanticTokens.contains(tokenName) {
                 let bonus = getRomanticBonus(token: token)
-                scores["romantic"]! += (baseWeight * 2.0) + bonus
+                let sunSignBoost = getSunSignPersonalityBoost(token: token, sunSign: sunSign, energy: "romantic")
+                let romanticReduction = sunSign == "Scorpio" ? 0.7 : 1.0
+                scores["romantic"]! += ((baseWeight * 1.5) + bonus + sunSignBoost) * romanticReduction
             }
             
-            // Utility Energy Mapping
+            // Utility Energy Mapping - FIXED TO PREVENT OVER-WEIGHTING
             if utilityTokens.contains(tokenName) {
-                let bonus = getUtilityBonus(token: token)
-                scores["utility"]! += (baseWeight * 2.0) + bonus
+                let bonus = getUtilityBonus(token: token, hasWeatherTokens: hasWeatherTokens, hasHighWindTokens: hasHighWindTokens, hasRainTokens: hasRainTokens)
+                let sunSignBoost = getSunSignPersonalityBoost(token: token, sunSign: sunSign, energy: "utility")
+                scores["utility"]! += (baseWeight * 2.0) + bonus + sunSignBoost // Reduced from 3.0 to 2.0
             }
             
             // Drama Energy Mapping
             if dramaTokens.contains(tokenName) {
                 let bonus = getDramaBonus(token: token)
-                scores["drama"]! += (baseWeight * 2.0) + bonus
+                let sunSignBoost = getSunSignPersonalityBoost(token: token, sunSign: sunSign, energy: "drama")
+                scores["drama"]! += (baseWeight * 2.0) + bonus + sunSignBoost
             }
             
             // Edge Energy Mapping
             if edgeTokens.contains(tokenName) {
                 let bonus = getEdgeBonus(token: token)
-                scores["edge"]! += (baseWeight * 2.0) + bonus
+                let sunSignBoost = getSunSignPersonalityBoost(token: token, sunSign: sunSign, energy: "edge")
+                scores["edge"]! += (baseWeight * 2.0) + bonus + sunSignBoost
             }
         }
         
+        // Apply sun sign energy preferences globally
+        let sunSignPreferences = getSunSignEnergyPreference(sunSign: sunSign)
+        for (energy, multiplier) in sunSignPreferences {
+            scores[energy]! *= multiplier
+        }
+        
+        // FIXED: Moderate weather-based utility boost (not extreme)
+        if hasHighWindTokens || hasRainTokens {
+            scores["utility"]! *= 1.3  // Reduced from 2.0 to 1.3
+        }
+        
         return scores
+    }
+    
+    // MARK: - Sun Sign Personality Boost System
+    
+    private static func getSunSignPersonalityBoost(token: StyleToken, sunSign: String, energy: String) -> Double {
+        let tokenName = token.name.lowercased()
+        
+        switch sunSign {
+        case "Taurus":
+            if energy == "classic" && ["practical", "grounded", "reliable", "luxurious", "sensual", "enduring"].contains(tokenName) { return 2.0 }
+            if energy == "utility" && ["practical", "functional", "reliable", "durable"].contains(tokenName) { return 1.5 }
+            if energy == "romantic" && ["luxurious", "sensual", "comfortable", "beautiful"].contains(tokenName) { return 1.2 }
+            
+        case "Scorpio":
+            if energy == "drama" && ["intense", "transformative", "mysterious", "powerful", "deep", "magnetic"].contains(tokenName) { return 2.0 }
+            if energy == "utility" && ["practical", "protective", "functional", "tactical"].contains(tokenName) { return 2.0 }
+            if energy == "edge" && ["transformative", "intense", "mysterious", "powerful"].contains(tokenName) { return 1.5 }
+            
+        case "Cancer":
+            if energy == "romantic" && ["nurturing", "protective", "comfortable", "intuitive", "soft", "gentle"].contains(tokenName) { return 2.0 }
+            if energy == "utility" && ["protective", "practical", "comforting", "secure"].contains(tokenName) { return 1.5 }
+            
+        case "Leo":
+            if energy == "drama" && ["bold", "dramatic", "radiant", "expressive", "powerful", "commanding"].contains(tokenName) { return 2.0 }
+            if energy == "playful" && ["bold", "expressive", "creative", "dramatic"].contains(tokenName) { return 1.5 }
+            
+        case "Virgo":
+            if energy == "classic" && ["practical", "refined", "precise", "structured", "disciplined"].contains(tokenName) { return 2.0 }
+            if energy == "utility" && ["practical", "functional", "efficient", "precise"].contains(tokenName) { return 2.0 }
+            
+        case "Libra":
+            if energy == "romantic" && ["harmonious", "beautiful", "elegant", "balanced", "refined"].contains(tokenName) { return 2.0 }
+            if energy == "classic" && ["elegant", "refined", "balanced", "harmonious"].contains(tokenName) { return 1.5 }
+            
+        case "Aries":
+            if energy == "drama" && ["bold", "energetic", "dynamic", "assertive", "intense"].contains(tokenName) { return 2.0 }
+            if energy == "playful" && ["energetic", "dynamic", "bold", "active"].contains(tokenName) { return 1.5 }
+            
+        case "Gemini":
+            if energy == "playful" && ["versatile", "communicative", "bright", "adaptable", "quick"].contains(tokenName) { return 2.0 }
+            if energy == "edge" && ["innovative", "adaptable", "unique", "versatile"].contains(tokenName) { return 1.2 }
+            
+        case "Sagittarius":
+            if energy == "playful" && ["adventurous", "expansive", "optimistic", "dynamic"].contains(tokenName) { return 2.0 }
+            if energy == "drama" && ["bold", "expansive", "adventurous"].contains(tokenName) { return 1.5 }
+            
+        case "Capricorn":
+            if energy == "classic" && ["structured", "authoritative", "disciplined", "enduring", "professional"].contains(tokenName) { return 2.0 }
+            if energy == "utility" && ["practical", "functional", "structured", "reliable"].contains(tokenName) { return 1.5 }
+            
+        case "Aquarius":
+            if energy == "edge" && ["innovative", "unique", "unconventional", "experimental", "electric"].contains(tokenName) { return 2.0 }
+            if energy == "playful" && ["innovative", "unique", "creative", "experimental"].contains(tokenName) { return 1.2 }
+            
+        case "Pisces":
+            if energy == "romantic" && ["dreamy", "ethereal", "intuitive", "flowing", "gentle", "mystical"].contains(tokenName) { return 2.0 }
+            if energy == "edge" && ["ethereal", "mystical", "unconventional"].contains(tokenName) { return 1.2 }
+            
+        default:
+            break
+        }
+        
+        return 0.0
+    }
+    
+    private static func getSunSignEnergyPreference(sunSign: String) -> [String: Double] {
+        switch sunSign {
+        case "Taurus":
+            return ["classic": 1.5, "romantic": 1.3, "utility": 1.4, "playful": 0.8]  // Increased utility
+        case "Scorpio":
+            return ["drama": 1.8, "edge": 1.4, "utility": 1.6, "romantic": 0.6, "playful": 0.7]  // Increased utility, reduced romantic
+        case "Cancer":
+            return ["romantic": 1.4, "utility": 1.5, "classic": 1.1, "drama": 0.9]  // Increased utility (protective nature)
+        case "Leo":
+            return ["drama": 1.9, "playful": 1.4, "classic": 0.8, "utility": 0.8]
+        case "Virgo":
+            return ["classic": 1.7, "utility": 2.0, "romantic": 0.8, "drama": 0.7]  // Maximum utility preference
+        case "Libra":
+            return ["romantic": 1.6, "classic": 1.4, "playful": 1.2, "edge": 0.8]
+        case "Aries":
+            return ["drama": 1.7, "playful": 1.4, "edge": 1.2, "classic": 0.8]
+        case "Gemini":
+            return ["playful": 1.8, "edge": 1.2, "classic": 0.7, "utility": 1.0]
+        case "Sagittarius":
+            return ["playful": 1.6, "drama": 1.3, "edge": 1.2, "classic": 0.8]
+        case "Capricorn":
+            return ["classic": 1.8, "utility": 1.7, "drama": 1.1, "playful": 0.7]  // High utility (practical nature)
+        case "Aquarius":
+            return ["edge": 1.9, "playful": 1.3, "classic": 0.7, "romantic": 0.8]
+        case "Pisces":
+            return ["romantic": 1.7, "edge": 1.3, "playful": 1.1, "classic": 0.8]
+        default:
+            return [:]
+        }
     }
     
     // MARK: - Token Mapping Sets
@@ -180,10 +312,10 @@ class VibeBreakdownGenerator {
     ]
     
     private static let utilityTokens: Set<String> = [
-        "practical", "functional", "waterproof", "durable",
-        "purposeful", "protective", "reliable",
-        "tactical", "insulating", "layerable",
-        "breathable", "weatherproof"
+        "practical", "functional", "waterproof", "durable", "purposeful",
+        "protective", "reliable", "tactical", "insulating", "layerable",
+        "breathable", "weatherproof", "wind-resistant", "secure", "stable",
+        "efficient", "versatile", "adaptable", "multi-purpose", "performance"
     ]
     
     private static let dramaTokens: Set<String> = [
@@ -225,7 +357,7 @@ class VibeBreakdownGenerator {
         
         // Earth signs boost classic
         if let sign = token.signSource, ["Taurus", "Virgo", "Capricorn"].contains(sign) {
-            bonus += 0.1  // 57 tokens × 0.1 = +5.7 points (reasonable)
+            bonus += 0.5
         }
         
         return bonus
@@ -258,12 +390,12 @@ class VibeBreakdownGenerator {
         var bonus = 0.0
         
         // Texture type tokens boost romantic
-        if token.type == "texture" { bonus += 1.0 }
+        if token.type == "texture" { bonus += 1.5 }
         
         // Venus planetary source (beauty, harmony)
         if token.planetarySource == "Venus" { bonus += 2.0 }
         
-        // Moon planetary source (nurturing, flowing)
+        // Moon planetary source (emotional comfort)
         if token.planetarySource == "Moon" { bonus += 1.5 }
         
         // Water signs boost romantic
@@ -274,22 +406,52 @@ class VibeBreakdownGenerator {
         return bonus
     }
     
-    private static func getUtilityBonus(token: StyleToken) -> Double {
+    private static func getUtilityBonus(token: StyleToken, hasWeatherTokens: Bool, hasHighWindTokens: Bool, hasRainTokens: Bool) -> Double {
         var bonus = 0.0
         
-        // Weather origin tokens heavily boost utility
-        if token.originType == .weather { bonus += 2.0 }
+        // Weather origin tokens get moderate utility boost
+        if token.originType == .weather { bonus += 1.5 } // Reduced from 3.0
         
-        // Saturn aspects boost utility (practical discipline)
-        if token.planetarySource == "Saturn" { bonus += 1.5 }
+        // Saturn planetary source (practical structure)
+        if token.planetarySource == "Saturn" { bonus += 1.0 } // Reduced from 2.0
         
-        // Mars aspects can boost utility (action-oriented)
-        if token.planetarySource == "Mars" &&
-            ["practical", "protective", "tactical"].contains(where: { token.name.contains($0) }) {
-            bonus += 1.0
+        // High weight weather-resistant tokens
+        if token.weight > 3.0 && ["wind-resistant", "waterproof", "protective", "secure"].contains(token.name) {
+            bonus += 1.5 // Reduced from 3.0
+        }
+        
+        // Specific weather condition bonuses - REDUCED
+        if hasHighWindTokens && ["wind-resistant", "secure", "stable", "structured"].contains(token.name) {
+            bonus += 1.0 // Reduced from 2.5
+        }
+        
+        if hasRainTokens && ["waterproof", "water-resistant", "protective", "practical"].contains(token.name) {
+            bonus += 1.0 // Reduced from 2.5
+        }
+        
+        // Earth sign amplification for practical tokens
+        if let sign = token.signSource, ["Taurus", "Virgo", "Capricorn"].contains(sign) {
+            if ["practical", "functional", "reliable", "structured"].contains(token.name) {
+                bonus += 0.8 // Reduced from 1.5
+            }
         }
         
         return bonus
+    }
+    
+    /// Weather-based utility multiplier
+    private static func getWeatherUtilityMultiplier(token: StyleToken, hasWeatherTokens: Bool) -> Double {
+        if !hasWeatherTokens { return 1.0 }
+        
+        // Weather tokens get significant multiplier
+        if token.originType == .weather { return 2.5 }
+        
+        // Weather-responsive tokens get moderate multiplier
+        if ["practical", "protective", "structured", "reliable"].contains(token.name) {
+            return 1.8
+        }
+        
+        return 1.0
     }
     
     private static func getDramaBonus(token: StyleToken) -> Double {
@@ -339,50 +501,60 @@ class VibeBreakdownGenerator {
     /// - Returns: VibeBreakdown with proper distribution
     private static func normalizeToTwentyOne(weightedScores: [String: Double]) -> VibeBreakdown {
         
-        // Calculate total weighted score
-        let totalScore = weightedScores.values.reduce(0, +)
-        
-        // If no scores, return balanced default
-        guard totalScore > 0 else {
-            return VibeBreakdown(classic: 4, playful: 3, romantic: 4, utility: 4, drama: 3, edge: 3)
-        }
-        
-        // Apply simple proportional distribution to 21 points
-        var distributedScores: [String: Double] = [:]
-        for (energy, score) in weightedScores {
-            distributedScores[energy] = (score / totalScore) * 21.0
-        }
-        
-        // Convert to integers with rounding
-        var integerScores: [String: Int] = [:]
-        var remainingPoints = 21
-        
-        // First pass: round down and track points used
-        for (energy, score) in distributedScores {
-            let roundedDown = Int(score)
-            integerScores[energy] = roundedDown
-            remainingPoints -= roundedDown
-        }
-        
-        // Second pass: distribute remaining points to highest fractional remainders
-        let remainders = distributedScores.map { (energy, score) in
-            (energy: energy, remainder: score - Double(integerScores[energy]!))
-        }.sorted { $0.remainder > $1.remainder }
-        
-        for i in 0..<remainingPoints {
-            if i < remainders.count {
-                integerScores[remainders[i].energy]! += 1
-            }
-        }
-        
-        return VibeBreakdown(
-            classic: integerScores["classic"] ?? 0,
-            playful: integerScores["playful"] ?? 0,
-            romantic: integerScores["romantic"] ?? 0,
-            utility: integerScores["utility"] ?? 0,
-            drama: integerScores["drama"] ?? 0,
-            edge: integerScores["edge"] ?? 0
-        )
+         // Calculate total weighted score
+         let totalScore = weightedScores.values.reduce(0, +)
+         
+         // If no scores, return balanced default
+         guard totalScore > 0 else {
+             return VibeBreakdown(classic: 4, playful: 3, romantic: 4, utility: 4, drama: 3, edge: 3)
+         }
+         
+         // FIXED: Handle extreme outliers by capping individual energy maximums
+         var cappedScores: [String: Double] = [:]
+         let maxIndividualScore = totalScore * 0.6 // No single energy can be more than 60% of total
+         
+         for (energy, score) in weightedScores {
+             cappedScores[energy] = min(score, maxIndividualScore)
+         }
+         
+         let cappedTotal = cappedScores.values.reduce(0, +)
+         
+         // Apply proportional distribution to 21 points
+         var distributedScores: [String: Double] = [:]
+         for (energy, score) in cappedScores {
+             distributedScores[energy] = (score / cappedTotal) * 21.0
+         }
+         
+         // Convert to integers with rounding
+         var integerScores: [String: Int] = [:]
+         var remainingPoints = 21
+         
+         // First pass: round down and track points used
+         for (energy, score) in distributedScores {
+             let roundedDown = Int(score)
+             integerScores[energy] = roundedDown
+             remainingPoints -= roundedDown
+         }
+         
+         // Second pass: distribute remaining points to highest fractional remainders
+         let remainders = distributedScores.map { (energy, score) in
+             (energy: energy, remainder: score - Double(integerScores[energy]!))
+         }.sorted { $0.remainder > $1.remainder }
+         
+         for i in 0..<remainingPoints {
+             if i < remainders.count {
+                 integerScores[remainders[i].energy]! += 1
+             }
+         }
+         
+         return VibeBreakdown(
+             classic: integerScores["classic"] ?? 0,
+             playful: integerScores["playful"] ?? 0,
+             romantic: integerScores["romantic"] ?? 0,
+             utility: integerScores["utility"] ?? 0,
+             drama: integerScores["drama"] ?? 0,
+             edge: integerScores["edge"] ?? 0
+         )
     }
     
     // MARK: - Helper Methods

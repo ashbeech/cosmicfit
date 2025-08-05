@@ -408,45 +408,178 @@ class DailyVibeGenerator {
     
     private static func generateMariaStyleBrief(from tokens: [StyleToken]) -> String {
         
-        print("\n🗣️ GENERATING MARIA'S STYLE BRIEF:")
+        // Extract sun sign from tokens
+        let sunSign = extractSunSignFromTokens(tokens)
         
-        // Get top weighted tokens
-        let topTokens = tokens.sorted { $0.weight > $1.weight }.prefix(6)
+        // Get top weighted tokens for personalization
+        let topTokens = tokens.sorted { $0.weight > $1.weight }.prefix(3)
+        let topTokenNames = topTokens.map { $0.name }
         
-        var briefComponents: [String] = []
+        // Get dominant energy context
+        let vibeBreakdown = VibeBreakdownGenerator.generateVibeBreakdown(from: tokens)
         
-        // Add opening based on dominant mood
-        let moodTokens = topTokens.filter { $0.type == "mood" }
-        if let dominantMood = moodTokens.first {
-            let openings = [
-                "Today feels like a \(dominantMood.name) kind of day, so",
-                "I'm sensing \(dominantMood.name) energy from you today, which means",
-                "The vibe is definitely \(dominantMood.name) today, so let's"
-            ]
-            briefComponents.append(openings.randomElement() ?? "Let's")
-        } else {
-            briefComponents.append(["Let's", "Today", "I'm thinking"].randomElement() ?? "Let's")
+        // Generate sun sign-specific style brief
+        return generateSunSignSpecificBrief(
+            sunSign: sunSign,
+            topTokens: topTokenNames,
+            vibeBreakdown: vibeBreakdown,
+            allTokens: Array(tokens)
+        )
+    }
+    
+    // MARK: - Extract Sun Sign Helper (ADD NEW)
+    private static func extractSunSignFromTokens(_ tokens: [StyleToken]) -> String {
+        // Look for Sun planetary source tokens
+        for token in tokens {
+            if token.planetarySource == "Sun", let signSource = token.signSource {
+                return signSource
+            }
         }
         
-        // Translate tokens using new function
-        let translatedAdvice = topTokens.map { ParagraphAssembler.translateTokenToMariaVoice($0) }
-        
-        // Combine 2-3 pieces of advice
-        let selectedAdvice = Array(translatedAdvice.prefix(3))
-        briefComponents.append(contentsOf: selectedAdvice)
-        
-        // Add closing based on expression tokens
-        let expressionTokens = topTokens.filter { $0.type == "expression" }
-        if !expressionTokens.isEmpty {
-            let closings = [
-                "Trust yourself today - you've got this.",
-                "Remember, confidence is your best accessory.",
-                "Make it uniquely you, always."
-            ]
-            briefComponents.append(closings.randomElement() ?? "Make it yours.")
+        // Fallback: look for current sun sign
+        for token in tokens {
+            if token.planetarySource == "CurrentSun", let signSource = token.signSource {
+                return signSource
+            }
         }
-
-        return briefComponents.joined(separator: " ")
+        
+        return "NULL" // Default fallback
+    }
+    
+    // MARK: - Sun Sign Specific Brief Generator (ADD NEW)
+    private static func generateSunSignSpecificBrief(
+        sunSign: String,
+        topTokens: [String],
+        vibeBreakdown: VibeBreakdown,
+        allTokens: [StyleToken]) -> String {
+            
+        let primaryToken = topTokens.first ?? "balanced"
+        let secondaryTokens = Array(topTokens.dropFirst()).joined(separator: " and ")
+        
+        // Check for weather conditions
+        let hasWeatherInfluence = allTokens.contains { $0.originType == .weather && $0.weight > 1.0 }
+        let hasWindTokens = allTokens.contains { $0.name.contains("wind-resistant") || $0.name.contains("secure") }
+        let hasRainTokens = allTokens.contains { $0.name.contains("waterproof") || $0.name.contains("practical") }
+        
+        switch sunSign {
+        case "Taurus":
+            if hasWeatherInfluence {
+                return "Today calls for \(primaryToken) pieces that feel as good as they look, with practical touches for the weather. Your Taurus nature wants quality fabrics that handle whatever comes your way."
+            } else if vibeBreakdown.utility > 3 {
+                return "I'm sensing your practical Taurus energy today - choose \(primaryToken) pieces with \(secondaryTokens) elements. Trust your instincts on texture and lasting quality."
+            } else {
+                return "Today calls for \(primaryToken), luxurious pieces that feel as good as they look. Your Taurus sun wants quality fabrics with structure that speaks to your refined taste."
+            }
+            
+        case "Scorpio":
+            if hasWeatherInfluence && (hasWindTokens || hasRainTokens) {
+                return "I'm sensing intense \(primaryToken) energy today, plus the weather demands strategic choices. Your Scorpio depth wants powerful pieces that protect and perform."
+            } else if vibeBreakdown.utility > 4 {
+                return "Your Scorpio intensity is calling for \(primaryToken) pieces with serious functionality. Choose items that reflect your depth while handling practical demands."
+            } else if vibeBreakdown.drama > 5 {
+                return "I'm sensing intense, transformative energy today. Your Scorpio power wants \(primaryToken) pieces that reflect your magnetic depth and inner strength."
+            } else {
+                return "The energy feels \(primaryToken) and mysterious today. Your Scorpio intuition knows exactly what pieces will make you feel powerfully authentic."
+            }
+            
+        case "Cancer":
+            if hasWeatherInfluence {
+                return "Your intuition is spot-on today - lean into \(primaryToken) and \(secondaryTokens) pieces that make you feel emotionally secure, plus practical protection from the elements."
+            } else if vibeBreakdown.romantic > 6 {
+                return "Today feels deeply \(primaryToken) for you. Your Cancer moon wants pieces that feel like a warm hug while looking effortlessly beautiful."
+            } else {
+                return "Your intuition is spot-on today - lean into \(primaryToken) and \(secondaryTokens) pieces that make you feel emotionally secure and authentically you."
+            }
+            
+        case "Leo":
+            if vibeBreakdown.drama > 6 {
+                return "Your Leo fire is blazing today! Go for \(primaryToken) and \(secondaryTokens) pieces that command attention and let your natural radiance shine through."
+            } else if hasWeatherInfluence {
+                return "Even with weather considerations, your Leo spirit wants to shine. Choose \(primaryToken) pieces that are both practical and gloriously you."
+            } else {
+                return "Today's energy is calling for bold \(primaryToken) choices. Your Leo heart wants pieces that celebrate your natural charisma and creative expression."
+            }
+            
+        case "Virgo":
+            if vibeBreakdown.utility > 5 {
+                return "Your Virgo eye for perfection is in full focus today. Choose \(primaryToken) pieces with \(secondaryTokens) details that are both beautiful and brilliantly functional."
+            } else if hasWeatherInfluence {
+                return "Perfect timing for your practical Virgo nature - \(primaryToken) pieces that handle today's weather while maintaining your signature refined style."
+            } else {
+                return "Today calls for precisely \(primaryToken) pieces. Your Virgo attention to detail wants quality items that are both refined and perfectly practical."
+            }
+            
+        case "Libra":
+            if vibeBreakdown.romantic > 6 {
+                return "The harmony feels perfect today for \(primaryToken) and \(secondaryTokens) pieces. Your Libra sense of beauty wants elegance that feels effortlessly balanced."
+            } else if hasWeatherInfluence {
+                return "Even practical weather calls for beauty - your Libra spirit wants \(primaryToken) pieces that balance function with your innate sense of style."
+            } else {
+                return "Today's energy feels beautifully \(primaryToken). Your Libra heart wants pieces that create perfect harmony between comfort and elegance."
+            }
+            
+        case "Aries":
+            if vibeBreakdown.drama > 5 || vibeBreakdown.playful > 5 {
+                return "Your Aries fire is ready for action! Go bold with \(primaryToken) and \(secondaryTokens) pieces that match your dynamic energy and fearless spirit."
+            } else if hasWeatherInfluence {
+                return "Weather won't slow down your Aries energy - choose \(primaryToken) pieces that are ready for anything while keeping your pioneering spirit intact."
+            } else {
+                return "Today's calling for confident \(primaryToken) choices. Your Aries courage wants pieces that are as bold and direct as you are."
+            }
+            
+        case "Gemini":
+            if vibeBreakdown.playful > 5 {
+                return "Your Gemini versatility is sparkling today! Mix \(primaryToken) with \(secondaryTokens) pieces - your quick wit wants options that keep things interesting."
+            } else if hasWeatherInfluence {
+                return "Perfect day for your adaptable Gemini nature - \(primaryToken) pieces that work with changing weather and your ever-changing mood."
+            } else {
+                return "Today feels mentally \(primaryToken) - your Gemini curiosity wants pieces that are as versatile and communicative as your bright mind."
+            }
+            
+        case "Sagittarius":
+            if vibeBreakdown.playful > 5 || vibeBreakdown.drama > 4 {
+                return "Your Sagittarius adventure spirit is calling! Choose \(primaryToken) and \(secondaryTokens) pieces that are ready for whatever journey today brings."
+            } else if hasWeatherInfluence {
+                return "Weather just adds to the adventure - your Sagittarius spirit wants \(primaryToken) pieces that are optimistic, practical, and ready for anything."
+            } else {
+                return "The energy feels expansively \(primaryToken) today. Your Sagittarius heart wants pieces that reflect your philosophical approach to style."
+            }
+            
+        case "Capricorn":
+            if vibeBreakdown.classic > 5 || vibeBreakdown.utility > 4 {
+                return "Your Capricorn mastery is in full effect today. Choose \(primaryToken) pieces with \(secondaryTokens) structure that command respect and get things done."
+            } else if hasWeatherInfluence {
+                return "Perfect match for your practical Capricorn nature - \(primaryToken) pieces that handle weather challenges while maintaining your authoritative presence."
+            } else {
+                return "Today calls for masterfully \(primaryToken) choices. Your Capricorn discipline wants pieces that are timeless, structured, and undeniably powerful."
+            }
+            
+        case "Aquarius":
+            if vibeBreakdown.edge > 3 || vibeBreakdown.playful > 5 {
+                return "Your Aquarius innovation is electric today! Go for \(primaryToken) and \(secondaryTokens) pieces that express your unique vision and progressive spirit."
+            } else if hasWeatherInfluence {
+                return "Even weather bows to your Aquarius innovation - choose \(primaryToken) pieces that solve practical problems in your signature unconventional way."
+            } else {
+                return "The energy feels uniquely \(primaryToken) today. Your Aquarius originality wants pieces that are as forward-thinking and distinctive as you are."
+            }
+            
+        case "Pisces":
+            if vibeBreakdown.romantic > 6 {
+                return "Your Pisces intuition is flowing beautifully today. Choose \(primaryToken) and \(secondaryTokens) pieces that feel like they're swimming in perfect harmony with your soul."
+            } else if hasWeatherInfluence {
+                return "Your Pisces sensitivity feels the weather shift perfectly - \(primaryToken) pieces that adapt fluidly while keeping your dreamy essence intact."
+            } else {
+                return "Today feels dreamily \(primaryToken). Your Pisces imagination wants pieces that are as fluid and intuitive as your compassionate heart."
+            }
+            
+        default:
+            // Generic fallback
+            if hasWeatherInfluence {
+                return "Today's energy feels \(primaryToken) with practical considerations. Choose pieces that balance your natural style with weather-smart functionality."
+            } else {
+                return "I'm sensing \(primaryToken) energy from you today. Trust yourself today - you've got this."
+            }
+        }
     }
     
     // MARK: - Vibe Breakdown Helper Methods
