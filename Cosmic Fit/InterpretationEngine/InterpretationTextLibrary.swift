@@ -1500,13 +1500,6 @@ struct InterpretationTextLibrary {
                 "winter": [("protective", "structure"), ("insulating", "texture")]
             ]
             
-            static let timeOfDayTokens = [
-                "morning": [("fresh", "mood")],
-                "afternoon": [("active", "mood")],
-                "evening": [("mellow", "mood")],
-                "night": [("introspective", "mood")]
-            ]
-            
             static let numerologyTokens = [
                 1: [("pioneering", "mood")],
                 2: [("receptive", "mood")],

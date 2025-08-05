@@ -310,9 +310,10 @@ class TokenPrefixMatrix {
     /// - Returns: Array of all possible prefixes for this token
     static func getAllPrefixes(for tokenName: String) -> [String] {
         var prefixes: [String] = []
+        let lowercaseTokenName = tokenName.lowercased()
         
         // Check core tokens
-        if let weekdayMap = coreTokens[tokenName] {
+        if let weekdayMap = coreTokens[lowercaseTokenName] {
             for (_, versionMap) in weekdayMap {
                 for (_, prefix) in versionMap {
                     prefixes.append(prefix)
@@ -328,7 +329,7 @@ class TokenPrefixMatrix {
         ]
         
         for tokenMap in allTokenMaps {
-            if let prefix = tokenMap[tokenName] {
+            if let prefix = tokenMap[lowercaseTokenName] {
                 prefixes.append(prefix)
             }
         }
@@ -352,7 +353,6 @@ struct TokenContext {
     let weekdayNumber: Int       // 1-7 (Sunday = 1)
     let moonPhase: Double        // 0-360
     let season: String           // "spring", "summer", "autumn", "winter"
-    let timeOfDay: String        // "morning", "afternoon", "evening", "night"
     let planetaryDay: String     // "Venus", "Jupiter", etc. (based on weekday)
     let month: Int               // 1-12
     let dayOfMonth: Int          // 1-31
@@ -377,10 +377,6 @@ struct TokenContext {
         
         // Season (Northern Hemisphere)
         self.season = TokenContext.getSeason(for: month)
-        
-        // Time of day
-        let hour = calendar.component(.hour, from: now)
-        self.timeOfDay = TokenContext.getTimeOfDay(for: hour)
     }
     
     // MARK: - Helper Methods
@@ -420,13 +416,5 @@ struct TokenContext {
         default: return "spring"
         }
     }
-    
-    private static func getTimeOfDay(for hour: Int) -> String {
-        switch hour {
-        case 5..<12: return "morning"
-        case 12..<17: return "afternoon"
-        case 17..<22: return "evening"
-        default: return "night"
-        }
-    }
+
 }

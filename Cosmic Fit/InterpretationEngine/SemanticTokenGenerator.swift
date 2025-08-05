@@ -364,156 +364,6 @@ class SemanticTokenGenerator {
             ))
         }
         
-        // Time of day influence - Enhanced with energy transitions
-        switch hour {
-        case 5..<9: // Early morning - Fresh beginnings
-            tokens.append(StyleToken(
-                name: "fresh",
-                type: "color_quality",
-                weight: 0.8,
-                aspectSource: "Dawn Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "awakening",
-                type: "mood",
-                weight: 0.6,
-                aspectSource: "Dawn Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "light",
-                type: "texture",
-                weight: 0.5,
-                aspectSource: "Dawn Energy",
-                originType: .phase
-            ))
-            
-        case 9..<12: // Late morning - Peak clarity
-            tokens.append(StyleToken(
-                name: "clear",
-                type: "expression",
-                weight: 0.7,
-                aspectSource: "Morning Clarity",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "focused",
-                type: "mood",
-                weight: 0.8,
-                aspectSource: "Morning Clarity",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "precise",
-                type: "structure",
-                weight: 0.6,
-                aspectSource: "Morning Clarity",
-                originType: .phase
-            ))
-            
-        case 12..<15: // Midday - Peak energy and presence
-            tokens.append(StyleToken(
-                name: "radiant",
-                type: "color_quality",
-                weight: 0.9,
-                aspectSource: "Midday Power",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "powerful",
-                type: "expression",
-                weight: 0.8,
-                aspectSource: "Midday Power",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "commanding",
-                type: "mood",
-                weight: 0.7,
-                aspectSource: "Midday Power",
-                originType: .phase
-            ))
-            
-        case 15..<18: // Afternoon - Sustained confidence
-            tokens.append(StyleToken(
-                name: "confident",
-                type: "expression",
-                weight: 0.8,
-                aspectSource: "Afternoon Strength",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "steady",
-                type: "mood",
-                weight: 0.7,
-                aspectSource: "Afternoon Strength",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "substantial",
-                type: "texture",
-                weight: 0.6,
-                aspectSource: "Afternoon Strength",
-                originType: .phase
-            ))
-            
-        case 18..<21: // Evening - Sophistication and transition
-            tokens.append(StyleToken(
-                name: "sophisticated",
-                type: "expression",
-                weight: 0.9,
-                aspectSource: "Evening Elegance",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "rich",
-                type: "color_quality",
-                weight: 0.8,
-                aspectSource: "Evening Elegance",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "transitional",
-                type: "mood",
-                weight: 0.6,
-                aspectSource: "Evening Elegance",
-                originType: .phase
-            ))
-            
-        case 21..<24, 0..<5: // Night - Depth and mystery
-            tokens.append(StyleToken(
-                name: "mysterious",
-                type: "mood",
-                weight: 0.8,
-                aspectSource: "Night Depth",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "deep",
-                type: "color_quality",
-                weight: 0.7,
-                aspectSource: "Night Depth",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "intimate",
-                type: "expression",
-                weight: 0.6,
-                aspectSource: "Night Depth",
-                originType: .phase
-            ))
-            
-        default:
-            tokens.append(StyleToken(
-                name: "neutral",
-                type: "mood",
-                weight: 0.4,
-                aspectSource: "Default Time",
-                originType: .phase
-            ))
-        }
-        
         // Add seasonal micro-influence based on month
         let month = calendar.component(.month, from: now)
         switch month {
@@ -1548,9 +1398,9 @@ class SemanticTokenGenerator {
         
         // Wind speed processing
         if weather.windKph > 20 { // High wind
-            tokens.append(StyleToken(name: "wind-resistant", type: "fabric", weight: 4.0, originType: .weather))
+            tokens.append(StyleToken(name: "wind-resistant", type: "fabric", weight: 3.0, originType: .weather))
             tokens.append(StyleToken(name: "stable", type: "structure", weight: 2.0, originType: .weather))
-            tokens.append(StyleToken(name: "structured", type: "structure", weight: 2.0, originType: .weather))
+            //tokens.append(StyleToken(name: "structured", type: "structure", weight: 2.0, originType: .weather))
             tokens.append(StyleToken(name: "reliable", type: "mood", weight: 2.0, originType: .weather))
             tokens.append(StyleToken(name: "secure", type: "mood", weight: 2.0, originType: .weather))
             tokens.append(StyleToken(name: "protective", type: "texture", weight: 3.0, originType: .weather))

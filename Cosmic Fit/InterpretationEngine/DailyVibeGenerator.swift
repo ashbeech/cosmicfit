@@ -258,6 +258,7 @@ class DailyVibeGenerator {
         } else {
             print("  • Key Contributors:")
             for contributor in contributors.prefix(5) {
+                // TODO: catch contributor.originType
                 let source = contributor.planetarySource ?? contributor.aspectSource ?? "Unknown"
                 print("    - \(contributor.name) (weight: \(String(format: "%.2f", contributor.weight))) from \(source)")
             }
