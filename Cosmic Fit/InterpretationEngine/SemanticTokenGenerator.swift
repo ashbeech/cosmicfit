@@ -181,7 +181,7 @@ class SemanticTokenGenerator {
         }
     
     /// Generate daily signature tokens that provide temporal context and energy patterns
-    /// based on day of week and time of day for Daily Fit output
+    /// based on day of week for Daily Fit output
     static func generateDailySignature() -> [StyleToken] {
         var tokens: [StyleToken] = []
         
@@ -189,7 +189,6 @@ class SemanticTokenGenerator {
         let calendar = Calendar.current
         let now = Date()
         let dayOfWeek = calendar.component(.weekday, from: now)
-        let hour = calendar.component(.hour, from: now)
         
         // Day of week influence - Enhanced with more nuanced energy patterns
         switch dayOfWeek {

@@ -32,3 +32,47 @@ struct WeightingModel {
         static let weatherWeight: Double = 0.1
     }
 }
+
+struct DistributionTargets {
+    static let maxNatalInfluence: Double = 45.0
+    static let targetTransitInfluence: Double = 20.0
+    static let maxMoonPhaseInfluence: Double = 15.0
+    static let maxDayOfWeekInfluence: Double = 10.0
+    static let targetWeatherInfluence: Double = 10.0
+    
+    static func getScalingFactors(currentDistribution: [String: Double]) -> [String: Double] {
+        var factors: [String: Double] = [:]
+        
+        if let natalPercent = currentDistribution["natal"], natalPercent > maxNatalInfluence {
+            factors["natal"] = maxNatalInfluence / natalPercent
+        } else {
+            factors["natal"] = 1.0
+        }
+        
+        if let transitPercent = currentDistribution["transit"], transitPercent < targetTransitInfluence {
+            factors["transit"] = targetTransitInfluence / max(transitPercent, 1.0)
+        } else {
+            factors["transit"] = 1.0
+        }
+        
+        if let phasePercent = currentDistribution["phase"], phasePercent > maxMoonPhaseInfluence {
+            factors["phase"] = maxMoonPhaseInfluence / phasePercent
+        } else {
+            factors["phase"] = 1.0
+        }
+        
+        if let weatherPercent = currentDistribution["weather"], weatherPercent < targetWeatherInfluence {
+            factors["weather"] = targetWeatherInfluence / max(weatherPercent, 1.0)
+        } else {
+            factors["weather"] = 1.0
+        }
+        
+        if let dayPercent = currentDistribution["dayOfWeek"], dayPercent > maxDayOfWeekInfluence {
+            factors["dayOfWeek"] = maxDayOfWeekInfluence / dayPercent
+        } else {
+            factors["dayOfWeek"] = 1.0
+        }
+        
+        return factors
+    }
+}

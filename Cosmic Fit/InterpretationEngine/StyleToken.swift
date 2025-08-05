@@ -9,13 +9,13 @@
 import Foundation
 
 // Origin type for better source-based filtering
-enum OriginType: String {
+enum OriginType: String, CaseIterable {
     case natal
     case progressed
     case transit
     case phase
     case weather
-    case currentSun    // NEW: Current Sun sign background energy
+    case currentSun
 }
 
 struct StyleToken {

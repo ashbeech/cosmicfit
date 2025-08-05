@@ -55,15 +55,58 @@ class VibeBreakdownGenerator {
     static func generateVibeBreakdown(from tokens: [StyleToken]) -> VibeBreakdown {
         
         print("\n🌟 GENERATING VIBE BREAKDOWN FROM TOKENS 🌟")
+        
+        // DISTRIBUTION TRACKING - Add at start of generateVibeBreakdown method
+        let distribution = calculateInfluenceDistribution(from: tokens)
+
+        print("\n📊 TOKEN INFLUENCE DISTRIBUTION ANALYSIS 📊")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-        print("📊 Input: \(tokens.count) tokens")
+        print("🎯 TARGET vs ACTUAL:")
+        print("  Natal:      \(String(format: "%5.1f", distribution["natal"] ?? 0))% (target: ≤45%)")
+        print("  Transit:    \(String(format: "%5.1f", distribution["transit"] ?? 0))% (target: 20%)")
+        print("  Moon Phase: \(String(format: "%5.1f", distribution["phase"] ?? 0))% (target: ≤15%)")
+        print("  Weather:    \(String(format: "%5.1f", distribution["weather"] ?? 0))% (target: 10%)")
+        print("  Day of Week:\(String(format: "%5.1f", distribution["dayOfWeek"] ?? 0))% (target: ≤10%)")
+        print("  Progressed: \(String(format: "%5.1f", distribution["progressed"] ?? 0))%")
+        print("  Current Sun:\(String(format: "%5.1f", distribution["currentSun"] ?? 0))%")
+
+        if (distribution["natal"] ?? 0) > 45 {
+            print("⚠️  NATAL INFLUENCE EXCEEDS TARGET: \(String(format: "%.1f", distribution["natal"] ?? 0))% > 45%")
+        }
+        if (distribution["transit"] ?? 0) < 15 {
+            print("⚠️  TRANSIT INFLUENCE TOO LOW: \(String(format: "%.1f", distribution["transit"] ?? 0))% < 15%")
+        }
+        if (distribution["phase"] ?? 0) > 15 {
+            print("⚠️  MOON PHASE INFLUENCE EXCEEDS TARGET: \(String(format: "%.1f", distribution["phase"] ?? 0))% > 15%")
+        }
+        if (distribution["weather"] ?? 0) < 8 {
+            print("⚠️  WEATHER INFLUENCE TOO LOW: \(String(format: "%.1f", distribution["weather"] ?? 0))% < 8%")
+        }
+
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+
+        analyzeTokenGeneration(from: tokens)
+
+        let scaledTokens = applyDistributionScaling(to: tokens)
+
+        let postScalingDistribution = calculateInfluenceDistribution(from: scaledTokens)
+        print("📈 POST-SCALING DISTRIBUTION:")
+        print("  Natal:      \(String(format: "%5.1f", postScalingDistribution["natal"] ?? 0))%")
+        print("  Transit:    \(String(format: "%5.1f", postScalingDistribution["transit"] ?? 0))%")
+        print("  Moon Phase: \(String(format: "%5.1f", postScalingDistribution["phase"] ?? 0))%")
+        print("  Weather:    \(String(format: "%5.1f", postScalingDistribution["weather"] ?? 0))%")
+        print("  Day of Week:\(String(format: "%5.1f", postScalingDistribution["dayOfWeek"] ?? 0))%")
+        print("")
+        
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("📊 Input: \(scaledTokens.count) tokens")
         
         // Get sun sign for personality-based adjustments
-        let sunSign = extractSunSign(from: tokens)
+        let sunSign = extractSunSign(from: scaledTokens)
         print("Sun Sign: \(sunSign)")
         
         // Step 1: Calculate raw scores for each energy
-        let rawScores = calculateRawScores(from: tokens, sunSign: sunSign)
+        let rawScores = calculateRawScores(from: scaledTokens, sunSign: sunSign)
         print("\n🎯 Raw Scores:")
         for (energy, score) in rawScores {
             print("  • \(energy): \(String(format: "%.2f", score))")
@@ -85,6 +128,114 @@ class VibeBreakdownGenerator {
             }
         }
         return "NULL" // Default fallback
+    }
+    
+    private static func calculateInfluenceDistribution(from tokens: [StyleToken]) -> [String: Double] {
+        let totalWeight = tokens.map { $0.weight }.reduce(0, +)
+        
+        guard totalWeight > 0 else {
+            return ["natal": 0, "transit": 0, "phase": 0, "weather": 0, "dayOfWeek": 0, "currentSun": 0, "progressed": 0]
+        }
+        
+        var distribution: [String: Double] = [:]
+        
+        let natalInfluence = tokens.filter { $0.originType == .natal }.map { $0.weight }.reduce(0, +)
+        let transitInfluence = tokens.filter { $0.originType == .transit }.map { $0.weight }.reduce(0, +)
+        let phaseInfluence = tokens.filter { $0.originType == .phase }.map { $0.weight }.reduce(0, +)
+        let weatherInfluence = tokens.filter { $0.originType == .weather }.map { $0.weight }.reduce(0, +)
+        let progressedInfluence = tokens.filter { $0.originType == .progressed }.map { $0.weight }.reduce(0, +)
+        let currentSunInfluence = tokens.filter { $0.originType == .currentSun }.map { $0.weight }.reduce(0, +)
+        
+        let dayOfWeekInfluence = tokens.filter { token in
+            guard let aspectSource = token.aspectSource else { return false }
+            return ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+                .contains { aspectSource.contains($0) }
+        }.map { $0.weight }.reduce(0, +)
+        
+        distribution["natal"] = (natalInfluence / totalWeight) * 100
+        distribution["transit"] = (transitInfluence / totalWeight) * 100
+        distribution["phase"] = (phaseInfluence / totalWeight) * 100
+        distribution["weather"] = (weatherInfluence / totalWeight) * 100
+        distribution["progressed"] = (progressedInfluence / totalWeight) * 100
+        distribution["currentSun"] = (currentSunInfluence / totalWeight) * 100
+        distribution["dayOfWeek"] = (dayOfWeekInfluence / totalWeight) * 100
+        
+        return distribution
+    }
+    
+    private static func analyzeTokenGeneration(from tokens: [StyleToken]) {
+        print("\n🔢 TOKEN GENERATION ANALYSIS:")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        
+        let originGroups = Dictionary(grouping: tokens, by: { $0.originType })
+        
+        for originType in OriginType.allCases {
+            let tokensForOrigin = originGroups[originType] ?? []
+            let tokenCount = tokensForOrigin.count
+            let totalWeight = tokensForOrigin.map { $0.weight }.reduce(0, +)
+            let avgWeight = tokenCount > 0 ? totalWeight / Double(tokenCount) : 0
+            
+            print("  \(originType.rawValue.uppercased()):")
+            print("    Count: \(tokenCount) tokens")
+            print("    Total Weight: \(String(format: "%.2f", totalWeight))")
+            print("    Average Weight: \(String(format: "%.2f", avgWeight))")
+            
+            if tokenCount > 0 {
+                let sortedTokens = tokensForOrigin.sorted { $0.weight > $1.weight }
+                print("    Top 3: \(sortedTokens.prefix(3).map { "\($0.name)(\(String(format: "%.2f", $0.weight)))" }.joined(separator: ", "))")
+            }
+            print("")
+        }
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+    }
+
+    private static func applyDistributionScaling(to tokens: [StyleToken]) -> [StyleToken] {
+        let currentDistribution = calculateInfluenceDistribution(from: tokens)
+        let scalingFactors = DistributionTargets.getScalingFactors(currentDistribution: currentDistribution)
+        
+        print("🎛️ APPLYING DISTRIBUTION SCALING:")
+        for (origin, factor) in scalingFactors {
+            if factor != 1.0 {
+                print("  \(origin): \(String(format: "%.2f", factor))x")
+            }
+        }
+        print("")
+        
+        return tokens.map { token in
+            var scalingFactor: Double = 1.0
+            
+            switch token.originType {
+            case .natal:
+                scalingFactor = scalingFactors["natal"] ?? 1.0
+            case .transit:
+                scalingFactor = scalingFactors["transit"] ?? 1.0
+            case .phase:
+                scalingFactor = scalingFactors["phase"] ?? 1.0
+            case .weather:
+                scalingFactor = scalingFactors["weather"] ?? 1.0
+            case .progressed:
+                scalingFactor = 1.0
+            case .currentSun:
+                scalingFactor = 1.0
+            }
+            
+            if let aspectSource = token.aspectSource,
+               ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+                .contains(where: { aspectSource.contains($0) }) {
+                scalingFactor = scalingFactors["dayOfWeek"] ?? 1.0
+            }
+            
+            return StyleToken(
+                name: token.name,
+                type: token.type,
+                weight: token.weight * scalingFactor,
+                planetarySource: token.planetarySource,
+                signSource: token.signSource,
+                houseSource: token.houseSource,
+                aspectSource: token.aspectSource,
+                originType: token.originType
+            )
+        }
     }
     
     // MARK: - Helper Method for Water Sign Detection
