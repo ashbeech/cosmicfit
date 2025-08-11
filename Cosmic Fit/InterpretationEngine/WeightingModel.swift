@@ -17,12 +17,23 @@ struct WeightingModel {
     /// Weight for the current Sun's zodiacal sign as a subtle background energy influence
     /// This provides the monthly seasonal backdrop (Leo season, Virgo season, etc.)
     /// Applied as a gentle but consistent backdrop to daily interpretations
-    static let currentSunSignBackgroundWeight: Double = 0.25
+    // Current Sun sign provides subtle seasonal resonance without overpowering natal expression
+    // Reduced from 0.25 to allow enhanced Venus/Mars/Moon dominance
+    static let currentSunSignBackgroundWeight: Double = 0.15
     
     // MARK: - Blueprint Section Weights
     struct Blueprint {
-        // Blueprint uses 100% natal chart data
-        // Individual section weights are handled by paragraph assemblers
+        // HIERARCHY: Chart dominance > Practical filtering
+        // 1. Natal chart (Venus/Mars/Moon enhanced) - DOMINANT
+        // 2. Transit aspects - SIGNIFICANT (increased from 0.3 to 1.2)
+        // 3. Progressed chart - MODERATE (increased from 0.05 to 0.8)
+        // 4. Hard weather/temperature filters - PRACTICAL ONLY (reduced from 0.1 to 0.05)
+        // 5. Environmental factors - MINIMAL BACKGROUND (currentSun reduced to 0.15)
+        
+        static let transitWeight: Double = 1.2 // Increased from 0.3
+        static let progressedWeight: Double = 0.8 // Increased from 0.05 (for daily fit context)
+        static let weatherWeight: Double = 0.05 // Reduced from 0.1
+        static let moonPhaseWeight: Double = 0.1 // Keep current value
     }
 
     // MARK: - Daily Fit Weights

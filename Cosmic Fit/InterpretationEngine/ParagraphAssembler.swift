@@ -634,7 +634,8 @@ struct ParagraphAssembler {
     // MARK: - Fabric Guide (100% Natal, Whole Sign)
     
     /// Generates fabric recommendations based on chart elements using Whole Sign
-    static func generateFabricRecommendations(from tokens: [StyleToken]) -> String {
+    /// Now includes hard weather filtering for practical fabric guidance
+    static func generateFabricRecommendations(from tokens: [StyleToken], weather: TodayWeather? = nil) -> String {
         var nourishingFabrics: [String] = []
         var depletingFabrics: [String] = []
         var groundingTextures: [String] = []
@@ -716,6 +717,16 @@ struct ParagraphAssembler {
             activatingTextures = ["structured", "crisp", "defined"]
         }
         
+        // Apply hard weather filtering to nourishing fabrics BEFORE formatting
+        if let weather = weather {
+            nourishingFabrics = WeatherFabricFilter.applyWeatherFilters(
+                weather: weather,
+                baseFabrics: nourishingFabrics
+            )
+            
+            DebugLogger.info("🌡️ Weather filtering applied to fabric recommendations")
+        }
+        
         // Remove duplicates
         nourishingFabrics = Array(Set(nourishingFabrics))
         depletingFabrics = Array(Set(depletingFabrics))
@@ -736,6 +747,14 @@ struct ParagraphAssembler {
         
         guide += "## Activating Textures:\n\n"
         guide += activatingTextures.joined(separator: ", ") + "."
+        
+        // Add weather-specific guidance at the end if needed
+        if let weather = weather, WeatherFabricFilter.requiresWeatherOverride(weather: weather) {
+            let weatherGuidance = WeatherFabricFilter.generateWeatherFabricGuidance(weather: weather)
+            if !weatherGuidance.isEmpty {
+                guide += "\n\n## Weather Considerations:\n\n" + weatherGuidance
+            }
+        }
         
         return guide
     }

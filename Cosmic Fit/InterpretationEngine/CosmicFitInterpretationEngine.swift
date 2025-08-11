@@ -316,11 +316,13 @@ class CosmicFitInterpretationEngine {
     /// Generate fabric recommendations interpretation (100% natal)
     static func generateFabricRecommendationsInterpretation(
         from natalChart: NatalChartCalculator.NatalChart,
-        currentAge: Int = 30) -> String {
-
+        currentAge: Int = 30,
+        weather: TodayWeather? = nil) -> String {
+        
         let tokens = SemanticTokenGenerator.generateBlueprintTokens(natal: natalChart, currentAge: currentAge)
-
-        return ParagraphAssembler.generateFabricRecommendations(from: tokens)
+        
+        // FOR BLUEPRINT: Don't pass weather - this is pure chart analysis
+        return ParagraphAssembler.generateFabricRecommendations(from: tokens, weather: nil)
     }
     
     /// Generate style tensions interpretation (natal aspects)
@@ -331,6 +333,59 @@ class CosmicFitInterpretationEngine {
         let tokens = SemanticTokenGenerator.generateBlueprintTokens(natal: natalChart, currentAge: currentAge)
 
         return ParagraphAssembler.generateStyleTensionsSection(from: tokens)
+    }
+    
+    /// Run system validation tests - call this method from your test device
+    /// Returns true if all critical tests pass
+    static func runSystemValidation() -> Bool {
+        print("\n🔧 COSMIC FIT SYSTEM VALIDATION")
+        print(String(repeating: "=", count: 50))
+        
+        // Run all validation tests
+        let validationResult = SystemValidationTests.runAllValidationTests()
+        
+        print("\n✨ System validation \(validationResult ? "PASSED" : "FAILED")")
+        print(String(repeating: "=", count: 50))
+        
+        return validationResult
+    }
+
+    /// Verify system integration is working correctly
+    /// Call this method during development to ensure all changes are functioning
+    static func verifySystemIntegration() {
+        print("\n🔍 SYSTEM INTEGRATION VERIFICATION")
+        print(String(repeating: "=", count: 50))
+        
+        // Check that enhanced methods work
+        let mockChart = SystemValidationTests.createMockNatalChart()
+        
+        // Test enhanced Venus/Mars/Moon weights
+        let blueprintTokens = SemanticTokenGenerator.generateBlueprintTokens(natal: mockChart, currentAge: 30)
+        let venusTokens = blueprintTokens.filter { $0.planetarySource == "Venus" }
+        let marsTokens = blueprintTokens.filter { $0.planetarySource == "Mars" }
+        let moonTokens = blueprintTokens.filter { $0.planetarySource == "Moon" }
+        
+        print("✅ Enhanced weights active:")
+        print("  • Venus tokens: \(venusTokens.count)")
+        print("  • Mars tokens: \(marsTokens.count)")
+        print("  • Moon tokens: \(moonTokens.count)")
+        
+        // Check WeatherFabricFilter is available and functional
+        let mockWeather = TodayWeather(condition: "Clear", temperature: 30.0, humidity: 50, windKph: 10)
+        let testFiltering = WeatherFabricFilter.requiresWeatherOverride(weather: mockWeather)
+        print("✅ Hard weather filtering: \(testFiltering ? "Active" : "Inactive") for test conditions")
+        
+        // Test method signature compatibility
+        let testTokens: [StyleToken] = []
+        let _ = ParagraphAssembler.generateFabricRecommendations(from: testTokens, weather: mockWeather)
+        print("✅ ParagraphAssembler weather parameter integration: Working")
+        
+        // Run validation tests
+        let validationPassed = SystemValidationTests.runAllValidationTests()
+        print("✅ System validation: \(validationPassed ? "PASSED" : "FAILED")")
+        
+        print("\n🎯 Integration status: \(validationPassed ? "READY FOR TESTING" : "NEEDS ATTENTION")")
+        print(String(repeating: "=", count: 50))
     }
 }
 

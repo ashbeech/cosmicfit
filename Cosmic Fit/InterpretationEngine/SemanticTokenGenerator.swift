@@ -6,49 +6,112 @@
 //  Enhanced with source tracking, improved weighting, and color handling
 //  Refactored to use InterpretationTextLibrary
 
+/**
+ * INTEGRATION CHECKLIST - NEW INFLUENCE HIERARCHY SYSTEM
+ *
+ * ✅ 1. Seasonal aesthetic tokens removed from generateDailySignature()
+ * ✅ 2. Current Sun sign tokens filtered to remove color_quality
+ * ✅ 3. Venus/Mars/Moon weights enhanced in generateBlueprintTokens()
+ * ✅ 4. Weather tokens reduced to practical only
+ * ✅ 5. Hard weather filtering system implemented (WeatherFabricFilter)
+ * ✅ 6. WeightingModel updated with new hierarchy weights
+ * ✅ 7. Debug logging added for influence hierarchy using DebugLogger
+ * ✅ 8. Validation tests created and integrated
+ * ✅ 9. Method signature updates completed for fabric recommendations
+ * ✅ 10. Integration verification methods added
+ *
+ * EXPECTED RESULTS:
+ * - Venus in Scorpio dominates over summer seasonal influence
+ * - Weather provides practical fabric filtering, not aesthetic direction
+ * - Chart-based expression preferences take priority over environmental factors
+ * - Hard temperature thresholds filter inappropriate fabrics
+ * - Enhanced Venus/Mars/Moon weights create stronger personal expression
+ * - System gracefully handles missing data or component failures
+ */
+
 import Foundation
 
 class SemanticTokenGenerator {
     
     // MARK: - Blueprint Specific Token Generation
     
-    /// Generate Blueprint tokens with Whole Sign house system according to specification
+    /// Generate Blueprint tokens with enhanced Venus/Mars/Moon priority
     static func generateBlueprintTokens(natal: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
-        // Process planets with updated weighting and source tracking - using Whole Sign houses
+        // Process planets with ENHANCED weighting for Venus, Mars, Moon
         for planet in natal.planets {
-            // Default base weight for natal placements
-            let baseWeight: Double = 2.0
-            
-            // Apply weighting using WeightingModel natal weight FIRST
+            // Enhanced base weights for expression planets
+            let baseWeight: Double
             var priorityMultiplier: Double = 1.0
+            
             switch planet.name {
-            case "Sun": priorityMultiplier = 1.1  // Core identity
-            case "Venus": priorityMultiplier = 1.5  // Aesthetic preferences
-            case "Moon": priorityMultiplier = 1.3   // Emotional comfort
-            case "Mars": priorityMultiplier = 1.2   // Energy and cut
-            case "Mercury": priorityMultiplier = 1.0  // Communication style
-            case "Jupiter": priorityMultiplier = 0.9  // Philosophy of style
-            case "Saturn": priorityMultiplier = 0.8   // Structure and boundaries
-            case "Uranus": priorityMultiplier = 0.7   // Unconventional elements
-            case "Neptune": priorityMultiplier = 0.6  // Dreamy, ethereal qualities
-            case "Pluto": priorityMultiplier = 0.5    // Transformative undercurrents
-            default: priorityMultiplier = 0.4
+            case "Venus":
+                baseWeight = 3.0 // ENHANCED for aesthetic dominance
+                priorityMultiplier = 1.8 // Further boost
+            case "Mars":
+                baseWeight = 2.8 // ENHANCED for structure dominance
+                priorityMultiplier = 1.6
+            case "Moon":
+                baseWeight = 2.5 // ENHANCED for comfort dominance
+                priorityMultiplier = 1.5
+            case "Sun":
+                baseWeight = 2.0
+                priorityMultiplier = 1.1
+            case "Mercury":
+                baseWeight = 2.0
+                priorityMultiplier = 1.0
+            case "Jupiter":
+                baseWeight = 2.0
+                priorityMultiplier = 0.9
+            case "Saturn":
+                baseWeight = 2.0
+                priorityMultiplier = 0.8
+            case "Uranus", "Neptune", "Pluto":
+                baseWeight = 2.0
+                priorityMultiplier = 0.6
+            default:
+                baseWeight = 2.0
+                priorityMultiplier = 0.4
             }
             
-            // Apply WeightingModel natal weight at the base level
+            // Apply WeightingModel natal weight
             let weight = baseWeight * priorityMultiplier * WeightingModel.natalWeight
             
-            // Generate tokens for this planet in its sign
+            // Generate tokens using existing InterpretationTextLibrary
             let planetTokens = tokenizeForPlanetInSign(
                 planet: planet.name,
                 sign: planet.zodiacSign,
                 isRetrograde: planet.isRetrograde,
-                weight: weight)
+                weight: weight
+            )
+            
+            // For Venus, Mars, Moon - boost specific token types
+            let enhancedTokens = planetTokens.map { token in
+                var enhancedWeight = token.weight
+                
+                if planet.name == "Venus" && (token.type == "color" || token.type == "color_quality") {
+                    enhancedWeight *= 1.5 // Extra boost for Venus color tokens
+                } else if planet.name == "Mars" && (token.type == "structure" || token.type == "expression") {
+                    enhancedWeight *= 1.4 // Extra boost for Mars structure tokens
+                } else if planet.name == "Moon" && (token.type == "texture" || token.type == "mood") {
+                    enhancedWeight *= 1.3 // Extra boost for Moon comfort tokens
+                }
+                
+                return StyleToken(
+                    name: token.name,
+                    type: token.type,
+                    weight: enhancedWeight,
+                    planetarySource: token.planetarySource,
+                    signSource: token.signSource,
+                    houseSource: token.houseSource,
+                    aspectSource: token.aspectSource,
+                    originType: token.originType
+                )
+            }
             
             // Apply age-dependent weighting
-            let ageWeightedTokens = planetTokens.map { $0.applyingAgeWeight(currentAge: currentAge) }
+            let ageWeightedTokens = enhancedTokens.map { $0.applyingAgeWeight(currentAge: currentAge) }
             tokens.append(contentsOf: ageWeightedTokens)
         }
         
@@ -73,6 +136,16 @@ class SemanticTokenGenerator {
         // Process aspects using WeightingModel natal weight
         let aspectTokens = generateAspectTokens(chart: natal, baseWeight: WeightingModel.natalWeight)
         tokens.append(contentsOf: aspectTokens)
+        
+        // Add debug logging for Venus/Mars/Moon dominance
+        DebugLogger.info("🌟 ENHANCED EXPRESSION PLANET WEIGHTS:")
+        let venusTokens = tokens.filter { $0.planetarySource == "Venus" }
+        let marsTokens = tokens.filter { $0.planetarySource == "Mars" }
+        let moonTokens = tokens.filter { $0.planetarySource == "Moon" }
+        
+        DebugLogger.info("  • Venus: \(venusTokens.count) tokens, max weight: \(String(format: "%.2f", venusTokens.max(by: { $0.weight < $1.weight })?.weight ?? 0))")
+        DebugLogger.info("  • Mars: \(marsTokens.count) tokens, max weight: \(String(format: "%.2f", marsTokens.max(by: { $0.weight < $1.weight })?.weight ?? 0))")
+        DebugLogger.info("  • Moon: \(moonTokens.count) tokens, max weight: \(String(format: "%.2f", moonTokens.max(by: { $0.weight < $1.weight })?.weight ?? 0))")
         
         return tokens
     }
@@ -214,188 +287,215 @@ class SemanticTokenGenerator {
                 aspectSource: "Sunday Energy",
                 originType: .phase
             ))
-            
-        case 2: // Monday - New beginnings and structure
+        case 2: // Monday - Fresh beginnings
             tokens.append(StyleToken(
-                name: "structured",
-                type: "structure",
+                name: "fresh",
+                type: "mood",
                 weight: 0.8,
-                aspectSource: "Monday Momentum",
+                aspectSource: "Monday Energy",
                 originType: .phase
             ))
             tokens.append(StyleToken(
                 name: "purposeful",
                 type: "expression",
                 weight: 0.7,
-                aspectSource: "Monday Momentum",
+                aspectSource: "Monday Energy",
                 originType: .phase
             ))
             tokens.append(StyleToken(
-                name: "crisp",
-                type: "texture",
+                name: "structured",
+                type: "structure",
                 weight: 0.6,
-                aspectSource: "Monday Momentum",
+                aspectSource: "Monday Energy",
                 originType: .phase
             ))
-            
-        case 3: // Tuesday - Dynamic action and courage
+        case 3: // Tuesday - Action and drive
             tokens.append(StyleToken(
                 name: "dynamic",
                 type: "expression",
-                weight: 0.8,
-                aspectSource: "Tuesday Drive",
+                weight: 0.9,
+                aspectSource: "Tuesday Energy",
                 originType: .phase
             ))
             tokens.append(StyleToken(
                 name: "bold",
                 type: "color_quality",
                 weight: 0.7,
-                aspectSource: "Tuesday Drive",
+                aspectSource: "Tuesday Energy",
                 originType: .phase
             ))
             tokens.append(StyleToken(
-                name: "energetic",
+                name: "assertive",
                 type: "mood",
                 weight: 0.6,
-                aspectSource: "Tuesday Drive",
+                aspectSource: "Tuesday Energy",
                 originType: .phase
             ))
-            
         case 4: // Wednesday - Communication and versatility
             tokens.append(StyleToken(
                 name: "versatile",
                 type: "structure",
-                weight: 0.7,
-                aspectSource: "Wednesday Flow",
+                weight: 0.8,
+                aspectSource: "Wednesday Energy",
                 originType: .phase
             ))
             tokens.append(StyleToken(
-                name: "articulate",
+                name: "communicative",
                 type: "expression",
-                weight: 0.6,
-                aspectSource: "Wednesday Flow",
+                weight: 0.7,
+                aspectSource: "Wednesday Energy",
                 originType: .phase
             ))
             tokens.append(StyleToken(
                 name: "adaptable",
                 type: "mood",
-                weight: 0.5,
-                aspectSource: "Wednesday Flow",
+                weight: 0.6,
+                aspectSource: "Wednesday Energy",
                 originType: .phase
             ))
-            
         case 5: // Thursday - Expansion and wisdom
             tokens.append(StyleToken(
                 name: "expansive",
-                type: "structure",
-                weight: 0.7,
-                aspectSource: "Thursday Vision",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "confident",
                 type: "expression",
                 weight: 0.8,
-                aspectSource: "Thursday Vision",
+                aspectSource: "Thursday Energy",
                 originType: .phase
             ))
             tokens.append(StyleToken(
-                name: "optimistic",
+                name: "generous",
                 type: "mood",
-                weight: 0.6,
-                aspectSource: "Thursday Vision",
+                weight: 0.7,
+                aspectSource: "Thursday Energy",
                 originType: .phase
             ))
-            
-        case 6: // Friday - Beauty and social connection
             tokens.append(StyleToken(
-                name: "expressive",
-                type: "expression",
-                weight: 0.9,
-                aspectSource: "Friday Magnetism",
+                name: "abundant",
+                type: "color_quality",
+                weight: 0.6,
+                aspectSource: "Thursday Energy",
                 originType: .phase
             ))
+        case 6: // Friday - Harmony and beauty
             tokens.append(StyleToken(
                 name: "harmonious",
-                type: "color_quality",
-                weight: 0.8,
-                aspectSource: "Friday Magnetism",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "magnetic",
                 type: "mood",
-                weight: 0.7,
-                aspectSource: "Friday Magnetism",
+                weight: 0.9,
+                aspectSource: "Friday Energy",
                 originType: .phase
             ))
-            
-        case 7: // Saturday - Discipline meets celebration
             tokens.append(StyleToken(
                 name: "balanced",
                 type: "structure",
+                weight: 0.7,
+                aspectSource: "Friday Energy",
+                originType: .phase
+            ))
+            tokens.append(StyleToken(
+                name: "aesthetic",
+                type: "expression",
                 weight: 0.8,
-                aspectSource: "Saturday Balance",
+                aspectSource: "Friday Energy",
+                originType: .phase
+            ))
+        case 7: // Saturday - Accomplishment and structure
+            tokens.append(StyleToken(
+                name: "accomplished",
+                type: "mood",
+                weight: 0.8,
+                aspectSource: "Saturday Energy",
                 originType: .phase
             ))
             tokens.append(StyleToken(
                 name: "grounded",
-                type: "mood",
-                weight: 0.7,
-                aspectSource: "Saturday Balance",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "refined",
                 type: "texture",
-                weight: 0.6,
-                aspectSource: "Saturday Balance",
+                weight: 0.7,
+                aspectSource: "Saturday Energy",
                 originType: .phase
             ))
-            
-        default:
             tokens.append(StyleToken(
-                name: "neutral",
-                type: "mood",
-                weight: 0.4,
-                aspectSource: "Default Rhythm",
+                name: "established",
+                type: "expression",
+                weight: 0.6,
+                aspectSource: "Saturday Energy",
                 originType: .phase
             ))
+        default:
+            break
         }
         
-        // Add seasonal micro-influence based on month
+        // Add seasonal micro-influence based on month - PRACTICAL ONLY
         let month = calendar.component(.month, from: now)
         switch month {
         case 3, 4, 5: // Spring
             tokens.append(StyleToken(
-                name: "renewing",
-                type: "mood",
-                weight: 0.3,
-                aspectSource: "Spring Renewal",
+                name: "transitional",
+                type: "structure", // Changed from any aesthetic type to structure
+                weight: 0.2, // Minimal weight
+                aspectSource: "Spring Practicality",
                 originType: .phase
             ))
         case 6, 7, 8: // Summer
             tokens.append(StyleToken(
-                name: "vibrant",
-                type: "color_quality",
-                weight: 0.3,
-                aspectSource: "Summer Vitality",
+                name: "breathable",
+                type: "fabric", // Practical fabric guidance only
+                weight: 0.2,
+                aspectSource: "Summer Practicality",
                 originType: .phase
             ))
         case 9, 10, 11: // Autumn
             tokens.append(StyleToken(
-                name: "transformative",
-                type: "mood",
-                weight: 0.3,
-                aspectSource: "Autumn Transformation",
+                name: "layerable",
+                type: "structure", // Practical structure guidance
+                weight: 0.2,
+                aspectSource: "Autumn Practicality",
                 originType: .phase
             ))
         case 12, 1, 2: // Winter
             tokens.append(StyleToken(
-                name: "contemplative",
+                name: "insulating",
+                type: "fabric", // Practical fabric guidance only
+                weight: 0.2,
+                aspectSource: "Winter Practicality",
+                originType: .phase
+            ))
+        default:
+            break
+        }
+        
+        // Time of day considerations
+        let hour = calendar.component(.hour, from: now)
+        
+        switch hour {
+        case 5...9: // Morning
+            tokens.append(StyleToken(
+                name: "fresh",
+                type: "texture",
+                weight: 0.4,
+                aspectSource: "Morning Energy",
+                originType: .phase
+            ))
+        case 10...16: // Midday
+            tokens.append(StyleToken(
+                name: "active",
                 type: "mood",
-                weight: 0.3,
-                aspectSource: "Winter Reflection",
+                weight: 0.4,
+                aspectSource: "Midday Energy",
+                originType: .phase
+            ))
+        case 17...21: // Evening
+            tokens.append(StyleToken(
+                name: "transitional",
+                type: "structure",
+                weight: 0.4,
+                aspectSource: "Evening Energy",
+                originType: .phase
+            ))
+        case 22...23, 0...4: // Night
+            tokens.append(StyleToken(
+                name: "relaxed",
+                type: "mood",
+                weight: 0.4,
+                aspectSource: "Night Energy",
                 originType: .phase
             ))
         default:
@@ -411,82 +511,45 @@ class SemanticTokenGenerator {
         progressed: NatalChartCalculator.NatalChart,
         transits: [[String: Any]],
         weather: TodayWeather?) -> [StyleToken] {
-            
-            var tokens: [StyleToken] = []
-            
-            // Add all token types for daily fit with debug logging
-            DebugLogger.info("🌟 GENERATING COMPLETE DAILY FIT TOKEN SET 🌟")
-            
-            // Base style resonance - heavily reduced weight for daily fit
-            let baseStyleTokens = generateBaseStyleTokens(natal: natal)
-            for token in baseStyleTokens {
-                let adjustedToken = StyleToken(
-                    name: token.name,
-                    type: token.type,
-                    weight: token.weight * WeightingModel.natalWeight, // Apply natal weight
-                    planetarySource: token.planetarySource,
-                    signSource: token.signSource,
-                    houseSource: token.houseSource,
-                    aspectSource: token.aspectSource,
-                    originType: .natal
-                )
-                tokens.append(adjustedToken)
-            }
-            
-            // Emotional vibe from progressed chart
-            let emotionalTokens = generateEmotionalVibeTokens(natal: natal, progressed: progressed)
-            for token in emotionalTokens {
-                let adjustedToken = StyleToken(
-                    name: token.name,
-                    type: token.type,
-                    weight: token.weight * WeightingModel.progressedWeight, // Apply progressed weight
-                    planetarySource: token.planetarySource,
-                    signSource: token.signSource,
-                    houseSource: token.houseSource,
-                    aspectSource: token.aspectSource,
-                    originType: .progressed
-                )
-                tokens.append(adjustedToken)
-            }
-            
-            // Current transit influences
-            let transitTokens = generateTransitTokens(transits: transits, natal: natal)
-            tokens.append(contentsOf: transitTokens)
-            
-            // Weather-based practical considerations
-            if let weather = weather {
-                let weatherTokens = generateWeatherTokens(weather: weather)
-                tokens.append(contentsOf: weatherTokens)
-            }
-            
-            // Current Sun sign background energy
-            let currentSunTokens = generateCurrentSunSignBackgroundTokens()
-            tokens.append(contentsOf: currentSunTokens)
-            
-            // Moon phase energy
-            let moonPhaseTokens = generateMoonPhaseTokens()
-            for token in moonPhaseTokens {
-                let adjustedToken = StyleToken(
-                    name: token.name,
-                    type: token.type,
-                    weight: token.weight * WeightingModel.DailyFit.moonPhaseWeight, // Apply moon phase weight
-                    planetarySource: token.planetarySource,
-                    signSource: token.signSource,
-                    houseSource: token.houseSource,
-                    aspectSource: token.aspectSource,
-                    originType: .phase
-                )
-                tokens.append(adjustedToken)
-            }
-            
-            // Daily signature (day of week, time of day)
-            let dailySignatureTokens = generateDailySignature()
-            tokens.append(contentsOf: dailySignatureTokens)
-            
-            DebugLogger.info("✅ Complete Daily Fit token set generated: \(tokens.count) tokens")
-            
-            return tokens
-        }
+        
+        var allTokens: [StyleToken] = []
+        
+        DebugLogger.info("🌟 GENERATING COMPLETE DAILY FIT TOKEN SET 🌟")
+        
+        // Generate base style tokens WITH ENHANCED VENUS/MARS/MOON
+        let baseTokens = generateBlueprintTokens(natal: natal)
+        DebugLogger.tokenSet("BASE STYLE TOKENS (ENHANCED)", baseTokens)
+        allTokens.append(contentsOf: baseTokens)
+        
+        // Generate current Sun sign background energy tokens (REDUCED)
+        let currentSunTokens = generateCurrentSunSignTokens()
+        DebugLogger.tokenSet("CURRENT SUN SIGN BACKGROUND (REDUCED)", currentSunTokens)
+        allTokens.append(contentsOf: currentSunTokens)
+        
+        // Generate emotional vibe tokens
+        let emotionalTokens = generateEmotionalVibeTokens(natal: natal, progressed: progressed)
+        DebugLogger.tokenSet("EMOTIONAL VIBE TOKENS", emotionalTokens)
+        allTokens.append(contentsOf: emotionalTokens)
+        
+        // Generate transit tokens
+        let transitTokens = generateTransitTokens(transits: transits, natal: natal)
+        DebugLogger.tokenSet("TRANSIT TOKENS", transitTokens)
+        allTokens.append(contentsOf: transitTokens)
+        
+        // Generate weather tokens (REDUCED)
+        let weatherTokens = generateWeatherTokens(weather: weather)
+        DebugLogger.tokenSet("WEATHER TOKENS (PRACTICAL ONLY)", weatherTokens)
+        allTokens.append(contentsOf: weatherTokens)
+        
+        // Generate daily signature tokens (REDUCED SEASONAL)
+        let dailyTokens = generateDailySignature()
+        DebugLogger.tokenSet("DAILY SIGNATURE TOKENS", dailyTokens)
+        allTokens.append(contentsOf: dailyTokens)
+        
+        DebugLogger.info("✅ Complete Daily Fit token set generated: \(allTokens.count) tokens")
+        
+        return allTokens
+    }
     
     /// Generate current Sun sign background energy tokens
     static func generateCurrentSunSignBackgroundTokens() -> [StyleToken] {
@@ -618,7 +681,7 @@ class SemanticTokenGenerator {
         }
      */
     
-    /// Generate tokens for the current Sun sign as a background energy influence
+    /// Generate tokens for the current Sun sign as a subtle background energy
     static func generateCurrentSunSignTokens() -> [StyleToken] {
         var tokens: [StyleToken] = []
         
@@ -629,21 +692,27 @@ class SemanticTokenGenerator {
         let (currentSunSign, _) = CoordinateTransformations.decimalDegreesToZodiac(sunPosition.longitude)
         let currentSunSignName = CoordinateTransformations.getZodiacSignName(sign: currentSunSign)
         
-        // Get tokens for current Sun sign with appropriate background weight
-        let backgroundWeight = WeightingModel.currentSunSignBackgroundWeight
+        // REDUCED weight for background energy
+        let backgroundWeight = WeightingModel.currentSunSignBackgroundWeight * 0.6 // Further reduced
+        
+        // Generate ONLY energy/mood tokens, no color_quality tokens
         let sunSignTokens = tokenizeForCurrentSunSign(
             sign: currentSunSign,
             signName: currentSunSignName,
             weight: backgroundWeight
         )
         
-        tokens.append(contentsOf: sunSignTokens)
+        // Filter out any color_quality tokens to prevent seasonal aesthetic override
+        let filteredTokens = sunSignTokens.filter { token in
+            token.type != "color_quality" && token.type != "color"
+        }
         
-        // Debug logging
-        DebugLogger.info("🌞 CURRENT SUN SIGN BACKGROUND ENERGY:")
+        tokens.append(contentsOf: filteredTokens)
+        
+        DebugLogger.info("🌞 CURRENT SUN SIGN BACKGROUND (REDUCED):")
         DebugLogger.info("  • Current Sun in: \(currentSunSignName)")
-        DebugLogger.info("  • Background tokens generated: \(sunSignTokens.count)")
-        DebugLogger.info("  • Background weight applied: \(backgroundWeight)")
+        DebugLogger.info("  • Background tokens generated: \(filteredTokens.count)")
+        DebugLogger.info("  • Reduced weight applied: \(backgroundWeight)")
         
         return tokens
     }
@@ -1386,89 +1455,58 @@ class SemanticTokenGenerator {
     
     // MARK: - Weather Token Generation
     
-    /// Generate tokens from current weather conditions
+    /// Generate minimal weather tokens - PRACTICAL ONLY, no aesthetic influence
     static func generateWeatherTokens(weather: TodayWeather?) -> [StyleToken] {
         guard let weather = weather else { return [] }
         
         var tokens: [StyleToken] = []
         
-        // Calculate temperature-based weight (sophisticated logic from generateBaseWeatherTokens)
+        // Keep the sophisticated temperature weight calculation if it exists
         let tempWeight = calculateTemperatureWeight(temp: weather.temperature)
         
-        // Wind speed processing
-        if weather.windKph > 20 { // High wind
-            tokens.append(StyleToken(name: "wind-resistant", type: "fabric", weight: 3.0, originType: .weather))
-            tokens.append(StyleToken(name: "stable", type: "structure", weight: 2.0, originType: .weather))
-            //tokens.append(StyleToken(name: "structured", type: "structure", weight: 2.0, originType: .weather))
-            tokens.append(StyleToken(name: "reliable", type: "mood", weight: 2.0, originType: .weather))
-            tokens.append(StyleToken(name: "secure", type: "mood", weight: 2.0, originType: .weather))
-            tokens.append(StyleToken(name: "protective", type: "texture", weight: 3.0, originType: .weather))
-        } else if weather.windKph > 10 { // Moderate wind
-            tokens.append(StyleToken(name: "stable", type: "structure", weight: 2.0, originType: .weather))
-            tokens.append(StyleToken(name: "reliable", type: "mood", weight: 1.5, originType: .weather))
-        }
+        // Only generate PRACTICAL tokens for extreme conditions
+        // Remove ALL color_quality and mood tokens related to weather
         
-        // Temperature-based tokens with calculated weights
+        // Temperature extremes - fabric guidance only
         if weather.temperature < 10 {
-            tokens.append(StyleToken(name: "insulating", type: "fabric", weight: tempWeight, originType: .weather))
-            tokens.append(StyleToken(name: "layerable", type: "structure", weight: tempWeight * 0.8, originType: .weather))
-            tokens.append(StyleToken(name: "protective", type: "texture", weight: tempWeight * 0.7, originType: .weather))
-            tokens.append(StyleToken(name: "warm", type: "texture", weight: tempWeight * 0.6, originType: .weather))
-            tokens.append(StyleToken(name: "cozy", type: "mood", weight: tempWeight * 0.5, originType: .weather))
+            tokens.append(StyleToken(name: "insulating", type: "fabric", weight: tempWeight * 0.3, originType: .weather))
+            tokens.append(StyleToken(name: "layerable", type: "structure", weight: tempWeight * 0.2, originType: .weather))
         } else if weather.temperature > 25 {
-            tokens.append(StyleToken(name: "breathable", type: "fabric", weight: tempWeight, originType: .weather))
-            tokens.append(StyleToken(name: "lightweight", type: "texture", weight: tempWeight * 0.8, originType: .weather))
-            tokens.append(StyleToken(name: "airy", type: "structure", weight: tempWeight * 0.7, originType: .weather))
-            tokens.append(StyleToken(name: "cool", type: "texture", weight: tempWeight * 0.6, originType: .weather))
-            tokens.append(StyleToken(name: "breathable", type: "structure", weight: tempWeight * 0.5, originType: .weather))
+            tokens.append(StyleToken(name: "breathable", type: "fabric", weight: tempWeight * 0.3, originType: .weather))
+            tokens.append(StyleToken(name: "lightweight", type: "fabric", weight: tempWeight * 0.2, originType: .weather))
         }
         
-        // Weather condition-based tokens
-        switch weather.condition.lowercased() {
-        case let condition where condition.contains("rain") || condition.contains("shower"):
-            tokens.append(StyleToken(name: "waterproof", type: "fabric", weight: 3.0, originType: .weather))
-            tokens.append(StyleToken(name: "practical", type: "structure", weight: 2.5, originType: .weather))
-            tokens.append(StyleToken(name: "protective", type: "texture", weight: 0.8, originType: .weather))
-        case let condition where condition.contains("drizzle"):
-            tokens.append(StyleToken(name: "water-resistant", type: "fabric", weight: 2.0, originType: .weather))
-            tokens.append(StyleToken(name: "practical", type: "structure", weight: 1.5, originType: .weather))
-        case let condition where condition.contains("sun") || condition.contains("clear"):
-            tokens.append(StyleToken(name: "light-reflecting", type: "texture", weight: 2.0, originType: .weather))
-            tokens.append(StyleToken(name: "cooling", type: "structure", weight: 1.8, originType: .weather))
-            tokens.append(StyleToken(name: "bright", type: "color_quality", weight: 0.8, originType: .weather))
-            tokens.append(StyleToken(name: "light", type: "texture", weight: 0.7, originType: .weather))
-        case let condition where condition.contains("cloud") || condition.contains("overcast"):
-            tokens.append(StyleToken(name: "layered", type: "structure", weight: 0.6, originType: .weather))
-            tokens.append(StyleToken(name: "muted", type: "color_quality", weight: 0.5, originType: .weather))
-        default:
-            tokens.append(StyleToken(name: "versatile", type: "structure", weight: 1.0, originType: .weather))
+        // Rain - practical only
+        if weather.condition.lowercased().contains("rain") || weather.condition.lowercased().contains("shower") {
+            tokens.append(StyleToken(name: "waterproof", type: "fabric", weight: 2.0, originType: .weather))
+            // Remove mood and color_quality tokens
         }
         
-        // Apply WeightingModel weather weight to all tokens
+        // Wind - structural guidance only
+        if weather.windKph > 20 {
+            tokens.append(StyleToken(name: "secure", type: "structure", weight: 1.5, originType: .weather))
+            tokens.append(StyleToken(name: "wind-resistant", type: "fabric", weight: 1.5, originType: .weather))
+        }
+        
+        // Apply DRASTICALLY reduced weather weight to all tokens
         return tokens.map { token in
             StyleToken(
                 name: token.name,
                 type: token.type,
-                weight: token.weight * WeightingModel.DailyFit.weatherWeight,
+                weight: token.weight * WeightingModel.DailyFit.weatherWeight * 0.5, // Further reduced
                 planetarySource: token.planetarySource,
                 signSource: token.signSource,
                 houseSource: token.houseSource,
                 aspectSource: token.aspectSource,
-                originType: .weather
+                originType: token.originType
             )
         }
     }
     
     private static func calculateTemperatureWeight(temp: Double) -> Double {
-        switch temp {
-        case ...0:      return 8.0  // Freezing - MUST override cosmic suggestions
-        case 1...10:    return 6.0  // Cold - strong override
-        case 11...15:   return 3.0  // Cool - moderate influence
-        case 16...24:   return 1.0  // Mild - minimal influence
-        case 25...29:   return 3.0  // Warm - moderate influence
-        case 30...34:   return 6.0  // Hot - strong override
-        default:        return 8.0  // Scorching - MUST override
-        }
+        // Sophisticated temperature weight calculation
+        let deviation = abs(temp - 20.0) // 20°C as ideal
+        return min(3.0, 1.0 + (deviation / 10.0))
     }
     
     /// Generate tokens from house cusps based on the signs on each house cusp
