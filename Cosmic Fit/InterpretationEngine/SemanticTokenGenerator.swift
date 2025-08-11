@@ -35,44 +35,47 @@ class SemanticTokenGenerator {
     
     // MARK: - Blueprint Specific Token Generation
     
-    /// Generate Blueprint tokens with enhanced Venus/Mars/Moon priority
+    /// Generate Blueprint tokens with enhanced but balanced Venus/Mars/Moon priority
     static func generateBlueprintTokens(natal: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
-        // Process planets with ENHANCED weighting for Venus, Mars, Moon
+        // Process planets with BALANCED enhanced weighting for Venus, Mars, Moon
         for planet in natal.planets {
-            // Enhanced base weights for expression planets
+            // More moderate base weights to avoid overwhelming dominance
             let baseWeight: Double
             var priorityMultiplier: Double = 1.0
             
             switch planet.name {
             case "Venus":
-                baseWeight = 3.0 // ENHANCED for aesthetic dominance
-                priorityMultiplier = 1.8 // Further boost
+                baseWeight = 2.2 // Reduced from 3.0
+                priorityMultiplier = 1.4 // Reduced from 1.8
+                // Final: 2.2 × 1.4 × 0.2 = 0.616 (was 1.08)
             case "Mars":
-                baseWeight = 2.8 // ENHANCED for structure dominance
-                priorityMultiplier = 1.6
+                baseWeight = 2.0 // Reduced from 2.8
+                priorityMultiplier = 1.3 // Reduced from 1.6
+                // Final: 2.0 × 1.3 × 0.2 = 0.52 (was 0.896)
             case "Moon":
-                baseWeight = 2.5 // ENHANCED for comfort dominance
-                priorityMultiplier = 1.5
+                baseWeight = 1.8 // Reduced from 2.5
+                priorityMultiplier = 1.3 // Reduced from 1.5
+                // Final: 1.8 × 1.3 × 0.2 = 0.468 (was 0.75)
             case "Sun":
-                baseWeight = 2.0
-                priorityMultiplier = 1.1
+                baseWeight = 1.6 // Reduced from 2.0
+                priorityMultiplier = 1.0 // Reduced from 1.1
             case "Mercury":
-                baseWeight = 2.0
-                priorityMultiplier = 1.0
+                baseWeight = 1.5 // Reduced from 2.0
+                priorityMultiplier = 0.9 // Reduced from 1.0
             case "Jupiter":
-                baseWeight = 2.0
-                priorityMultiplier = 0.9
+                baseWeight = 1.4 // Reduced from 2.0
+                priorityMultiplier = 0.8 // Reduced from 0.9
             case "Saturn":
-                baseWeight = 2.0
-                priorityMultiplier = 0.8
+                baseWeight = 1.3 // Reduced from 2.0
+                priorityMultiplier = 0.7 // Reduced from 0.8
             case "Uranus", "Neptune", "Pluto":
-                baseWeight = 2.0
-                priorityMultiplier = 0.6
+                baseWeight = 1.2 // Reduced from 2.0
+                priorityMultiplier = 0.5 // Reduced from 0.6
             default:
-                baseWeight = 2.0
-                priorityMultiplier = 0.4
+                baseWeight = 1.0 // Reduced from 2.0
+                priorityMultiplier = 0.3 // Reduced from 0.4
             }
             
             // Apply WeightingModel natal weight
@@ -86,16 +89,16 @@ class SemanticTokenGenerator {
                 weight: weight
             )
             
-            // For Venus, Mars, Moon - boost specific token types
+            // For Venus, Mars, Moon - more moderate boost for specific token types
             let enhancedTokens = planetTokens.map { token in
                 var enhancedWeight = token.weight
                 
                 if planet.name == "Venus" && (token.type == "color" || token.type == "color_quality") {
-                    enhancedWeight *= 1.5 // Extra boost for Venus color tokens
+                    enhancedWeight *= 1.25 // Reduced from 1.5
                 } else if planet.name == "Mars" && (token.type == "structure" || token.type == "expression") {
-                    enhancedWeight *= 1.4 // Extra boost for Mars structure tokens
+                    enhancedWeight *= 1.2 // Reduced from 1.4
                 } else if planet.name == "Moon" && (token.type == "texture" || token.type == "mood") {
-                    enhancedWeight *= 1.3 // Extra boost for Moon comfort tokens
+                    enhancedWeight *= 1.15 // Reduced from 1.3
                 }
                 
                 return StyleToken(
@@ -115,7 +118,7 @@ class SemanticTokenGenerator {
             tokens.append(contentsOf: ageWeightedTokens)
         }
         
-        // Process ascendant - using WeightingModel natal weight
+        // Process ascendant with reduced weight
         let ascendantSign = CoordinateTransformations.decimalDegreesToZodiac(natal.ascendant).sign
         
         print("✅ Ascendant tokens generated for sign: \(CoordinateTransformations.getZodiacSignName(sign: ascendantSign))")
@@ -124,21 +127,21 @@ class SemanticTokenGenerator {
             planet: "Ascendant",
             sign: ascendantSign,
             isRetrograde: false,
-            weight: 2.5 * WeightingModel.natalWeight)
+            weight: 1.8 * WeightingModel.natalWeight) // Reduced from 2.5
         
         let ageWeightedAscTokens = ascendantTokens.map { $0.applyingAgeWeight(currentAge: currentAge) }
         tokens.append(contentsOf: ageWeightedAscTokens)
         
-        // Add house cusps using WeightingModel natal weight
-        let houseCuspTokens = generateHouseCuspTokens(chart: natal, weight: WeightingModel.natalWeight)
+        // Add house cusps with reduced weight
+        let houseCuspTokens = generateHouseCuspTokens(chart: natal, weight: WeightingModel.natalWeight * 0.7) // Reduced by 30%
         tokens.append(contentsOf: houseCuspTokens)
         
-        // Process aspects using WeightingModel natal weight
-        let aspectTokens = generateAspectTokens(chart: natal, baseWeight: WeightingModel.natalWeight)
+        // Process aspects with reduced weight
+        let aspectTokens = generateAspectTokens(chart: natal, baseWeight: WeightingModel.natalWeight * 0.8) // Reduced by 20%
         tokens.append(contentsOf: aspectTokens)
         
         // Add debug logging for Venus/Mars/Moon dominance
-        DebugLogger.info("🌟 ENHANCED EXPRESSION PLANET WEIGHTS:")
+        DebugLogger.info("🌟 BALANCED EXPRESSION PLANET WEIGHTS:")
         let venusTokens = tokens.filter { $0.planetarySource == "Venus" }
         let marsTokens = tokens.filter { $0.planetarySource == "Mars" }
         let moonTokens = tokens.filter { $0.planetarySource == "Moon" }
@@ -152,7 +155,6 @@ class SemanticTokenGenerator {
     
     // MARK: - Daily Token Generation
     
-    /// Generate tokens from transits using the specialized TransitWeightCalculator
     static func generateTransitTokens(
         transits: [[String: Any]],
         natal: NatalChartCalculator.NatalChart) -> [StyleToken] {
@@ -180,8 +182,8 @@ class SemanticTokenGenerator {
                     hitsSensitivePoint: isSensitivePoint
                 )
                 
-                // Skip insignificant transits
-                if transitWeight < 0.5 {
+                // REDUCED threshold to capture more transits
+                if transitWeight < 0.15 {  // ← CHANGE: Reduced from 0.2
                     continue
                 }
                 
@@ -189,7 +191,7 @@ class SemanticTokenGenerator {
                 let adjustedTransitWeight: Double = transitWeight * WeightingModel.DailyFit.transitWeight
                 
                 // Apply tight orb boost for high-impact daily transits
-                let tightOrbBoost = orb < 1.0 ? 3.0 : 1.0
+                let tightOrbBoost = orb < 1.0 ? 2.0 : 1.0  // ← CHANGE: Reduced from 3.0 to 2.0
                 let finalAdjustedTransitWeight = adjustedTransitWeight * tightOrbBoost
                 
                 // Get influence category and token weight scale
@@ -209,6 +211,7 @@ class SemanticTokenGenerator {
                 tokens.append(contentsOf: transitTokens)
             }
             
+            // [KEEP ALL THE MULTI-TRANSIT ADJUSTMENT LOGIC AS-IS]
             // Group tokens by natal planet for multi-transit adjustment
             var tokensByNatalPlanet: [String: [StyleToken]] = [:]
             for token in tokens {
@@ -1307,6 +1310,42 @@ class SemanticTokenGenerator {
                         retroWeight -= 0.1
                     }
                 }
+            }
+            
+            // LIMIT TOKEN GENERATION to prevent natal dominance
+            // Determine max tokens based on planet importance
+            let maxTokens: Int
+            switch planet {
+            case "Venus", "Mars", "Moon":
+                maxTokens = 4 // Expression planets get more tokens (priority planets)
+            case "Sun":
+                maxTokens = 3 // Core identity gets moderate tokens
+            case "Mercury", "Ascendant":
+                maxTokens = 3 // Communication/appearance planets
+            case "Jupiter", "Saturn":
+                maxTokens = 2 // Social planets get fewer tokens
+            case "Uranus", "Neptune", "Pluto":
+                maxTokens = 1 // Outer planets get minimal tokens
+            case let p where p.contains("Progressed"):
+                // Progressed planets get limited tokens
+                if p.contains("Moon") {
+                    maxTokens = 3 // Progressed Moon is important
+                } else {
+                    maxTokens = 2 // Other progressed planets
+                }
+            default:
+                maxTokens = 1 // Any other celestial bodies (Chiron, etc.)
+            }
+            
+            // Sort tokens by weight (highest first) and limit to maxTokens
+            tokens = tokens.sorted { $0.weight > $1.weight }
+            
+            // Apply the limit
+            if tokens.count > maxTokens {
+                tokens = Array(tokens.prefix(maxTokens))
+                
+                // Debug logging for token limiting
+                DebugLogger.info("  ⚠️ Token limiting applied for \(planet): \(tokens.count) tokens (was unlimited)")
             }
             
             return tokens
