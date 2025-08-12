@@ -637,10 +637,10 @@ class SemanticTokenGenerator {
         DebugLogger.tokenSet("CURRENT SUN SIGN BACKGROUND (REDUCED)", currentSunTokens)
         allTokens.append(contentsOf: currentSunTokens)
         
-        // Generate emotional vibe tokens
-        let emotionalTokens = generateEmotionalVibeTokens(natal: natal, progressed: progressed)
-        DebugLogger.tokenSet("EMOTIONAL VIBE TOKENS", emotionalTokens)
-        allTokens.append(contentsOf: emotionalTokens)
+            // Generate LIMITED emotional vibe tokens
+            let emotionalTokens = generateLimitedEmotionalVibeTokens(natal: natal, progressed: progressed)
+            DebugLogger.tokenSet("EMOTIONAL VIBE TOKENS (LIMITED)", emotionalTokens)
+            allTokens.append(contentsOf: emotionalTokens)
         
         // Generate transit tokens
         let transitTokens = generateTransitTokens(transits: transits, natal: natal)
@@ -660,6 +660,31 @@ class SemanticTokenGenerator {
         DebugLogger.info("✅ Complete Daily Fit token set generated: \(allTokens.count) tokens")
         
         return allTokens
+    }
+    
+    /// Generate LIMITED emotional vibe tokens for Daily Fit
+    static func generateLimitedEmotionalVibeTokens(
+        natal: NatalChartCalculator.NatalChart,
+        progressed: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        
+        var tokens: [StyleToken] = []
+        
+        // Only add ONE progressed Moon token for emotional evolution
+        if let progressedMoon = progressed.planets.first(where: { $0.name == "Moon" }) {
+            let progressedMoonTokens = tokenizeForPlanetInSign(
+                planet: "Moon",
+                sign: progressedMoon.zodiacSign,
+                isRetrograde: progressedMoon.isRetrograde,
+                weight: 0.3,  // Very light weight
+                isProgressed: true)
+            
+            // Take only the first token
+            if let firstToken = progressedMoonTokens.first {
+                tokens.append(firstToken)
+            }
+        }
+        
+        return tokens
     }
     
     /// Generate current Sun sign background energy tokens
