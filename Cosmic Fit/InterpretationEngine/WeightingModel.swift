@@ -7,6 +7,23 @@
 //
 
 struct WeightingModel {
+    // DRASTICALLY reduced natal weight
+    static let natalWeight: Double = 0.08  // Reduced from 0.15
+    
+    // Increased other weights to compensate
+    static let progressedWeight: Double = 0.10  // Increased from 0.08
+    static let currentSunSignBackgroundWeight: Double = 0.20  // Increased from 0.15
+    
+    struct DailyFit {
+        static let transitWeight: Double = 1.2  // Increased from 0.8
+        static let progressedWeight: Double = 0.8  // Increased from 0.6
+        static let weatherWeight: Double = 0.10  // Increased from 0.05
+        static let moonPhaseWeight: Double = 0.25  // Increased from 0.15
+    }
+}
+
+/*
+struct WeightingModel {
     
     // MARK: - Core Chart Weights
     // Reduced natal weight to prevent dominance
@@ -27,7 +44,7 @@ struct WeightingModel {
         static let weatherWeight: Double = 0.05 // Keep as is
         static let moonPhaseWeight: Double = 0.15 // Slight increase from 0.1
     }
-}
+}*/
 
 struct DistributionTargets {
     static let maxNatalInfluence: Double = 45.0

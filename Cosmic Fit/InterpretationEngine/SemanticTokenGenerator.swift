@@ -155,6 +155,114 @@ class SemanticTokenGenerator {
     
     // MARK: - Daily Token Generation
     
+    /// Generate LIMITED natal tokens specifically for Daily Fit
+    static func generateDailyFitNatalTokens(natal: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Only process major planets (no asteroids)
+        let majorPlanets = ["Sun", "Moon", "Mercury", "Venus", "Mars",
+                           "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]
+        
+        for planet in natal.planets {
+            guard majorPlanets.contains(planet.name) else { continue }
+            
+            // Lighter weights for Daily Fit
+            let baseWeight: Double
+            let maxTokens: Int
+            
+            switch planet.name {
+            case "Venus":
+                baseWeight = 1.5
+                maxTokens = 2
+            case "Mars":
+                baseWeight = 1.4
+                maxTokens = 2
+            case "Moon":
+                baseWeight = 1.3
+                maxTokens = 2
+            case "Sun":
+                baseWeight = 1.0
+                maxTokens = 1
+            case "Mercury":
+                baseWeight = 0.8
+                maxTokens = 1
+            case "Jupiter", "Saturn":
+                baseWeight = 0.6
+                maxTokens = 1
+            case "Uranus", "Neptune", "Pluto":
+                baseWeight = 0.4
+                maxTokens = 1
+            default:
+                baseWeight = 0.3
+                maxTokens = 1
+            }
+            
+            // Generate tokens with reduced weight
+            let weight = baseWeight * WeightingModel.natalWeight
+            let planetTokens = tokenizeForPlanetInSign(
+                planet: planet.name,
+                sign: planet.zodiacSign,
+                isRetrograde: planet.isRetrograde,
+                weight: weight
+            )
+            
+            // Sort by weight and apply strict limits
+            let sortedTokens = planetTokens.sorted { $0.weight > $1.weight }
+            tokens.append(contentsOf: Array(sortedTokens.prefix(maxTokens)))
+        }
+        
+        // Add ONE Ascendant token
+        let ascendantSign = CoordinateTransformations.decimalDegreesToZodiac(natal.ascendant).sign
+        let ascTokens = tokenizeForPlanetInSign(
+            planet: "Ascendant",
+            sign: ascendantSign,
+            isRetrograde: false,
+            weight: 0.8 * WeightingModel.natalWeight
+        )
+        let sortedAscTokens = ascTokens.sorted { $0.weight > $1.weight }
+        tokens.append(contentsOf: Array(sortedAscTokens.prefix(1)))
+        
+        // Only 4 angular house tokens
+        for house in [1, 4, 7, 10] {
+            let cuspLongitude = natal.houseCusps[house]
+            let cuspSign = Int(cuspLongitude / 30.0) % 12 + 1
+            let signName = CoordinateTransformations.getZodiacSignName(sign: cuspSign)
+            
+            let houseKeyword: String
+            switch house {
+            case 1:
+                houseKeyword = "personal"
+            case 4:
+                houseKeyword = "foundational"
+            case 7:
+                houseKeyword = "relational"
+            case 10:
+                houseKeyword = "professional"
+            default:
+                houseKeyword = "structural"
+            }
+            
+            tokens.append(StyleToken(
+                name: houseKeyword,
+                type: "structure",
+                weight: 0.3 * WeightingModel.natalWeight,
+                signSource: signName,
+                houseSource: house,
+                originType: .natal
+            ))
+        }
+        
+        // Log the limited token generation
+        DebugLogger.info("📉 DAILY FIT LIMITED NATAL TOKENS:")
+        DebugLogger.info("  • Total natal tokens: \(tokens.count) (limited from full Blueprint)")
+        DebugLogger.info("  • Venus tokens: \(tokens.filter { $0.planetarySource == "Venus" }.count)")
+        DebugLogger.info("  • Mars tokens: \(tokens.filter { $0.planetarySource == "Mars" }.count)")
+        DebugLogger.info("  • Moon tokens: \(tokens.filter { $0.planetarySource == "Moon" }.count)")
+        DebugLogger.info("  • House tokens: 4 (angular houses only)")
+        
+        return tokens
+    }
+    
     static func generateTransitTokens(
         transits: [[String: Any]],
         natal: NatalChartCalculator.NatalChart) -> [StyleToken] {
@@ -519,9 +627,9 @@ class SemanticTokenGenerator {
         
         DebugLogger.info("🌟 GENERATING COMPLETE DAILY FIT TOKEN SET 🌟")
         
-        // Generate base style tokens WITH ENHANCED VENUS/MARS/MOON
-        let baseTokens = generateBlueprintTokens(natal: natal)
-        DebugLogger.tokenSet("BASE STYLE TOKENS (ENHANCED)", baseTokens)
+        // Generate LIMITED natal tokens for Daily Fit (not full Blueprint tokens)
+        let baseTokens = generateDailyFitNatalTokens(natal: natal)
+        DebugLogger.tokenSet("BASE STYLE TOKENS (LIMITED FOR DAILY FIT)", baseTokens)
         allTokens.append(contentsOf: baseTokens)
         
         // Generate current Sun sign background energy tokens (REDUCED)
