@@ -8,14 +8,14 @@
 
 struct WeightingModel {
     // DRASTICALLY reduced natal weight
-    static let natalWeight: Double = 0.08  // Reduced from 0.15
+    static let natalWeight: Double = 0.60
     
     // Increased other weights to compensate
     static let progressedWeight: Double = 0.10  // Increased from 0.08
     static let currentSunSignBackgroundWeight: Double = 0.20  // Increased from 0.15
     
     struct DailyFit {
-        static let transitWeight: Double = 1.2  // Increased from 0.8
+        static let transitWeight: Double = 0.8  // Increased from 0.8
         static let progressedWeight: Double = 0.8  // Increased from 0.6
         static let weatherWeight: Double = 0.10  // Increased from 0.05
         static let moonPhaseWeight: Double = 0.25  // Increased from 0.15
