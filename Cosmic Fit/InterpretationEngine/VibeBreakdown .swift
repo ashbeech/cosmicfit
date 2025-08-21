@@ -86,7 +86,7 @@ class VibeBreakdownGenerator {
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
 
         analyzeTokenGeneration(from: tokens)
-
+/*
         let scaledTokens = applyDistributionScaling(to: tokens)
 
         let postScalingDistribution = calculateInfluenceDistribution(from: scaledTokens)
@@ -100,13 +100,14 @@ class VibeBreakdownGenerator {
         
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         print("📊 Input: \(scaledTokens.count) tokens")
-        
+ */
+
         // Get sun sign for personality-based adjustments
-        let sunSign = extractSunSign(from: scaledTokens)
+        let sunSign = extractSunSign(from: tokens)
         print("Sun Sign: \(sunSign)")
-        
-        // Step 1: Calculate raw scores for each energy
-        let rawScores = calculateRawScores(from: scaledTokens, sunSign: sunSign)
+
+         // Step 1: Calculate raw scores for each energy
+        let rawScores = calculateRawScores(from: tokens, sunSign: sunSign)
         print("\n🎯 Raw Scores:")
         for (energy, score) in rawScores {
             print("  • \(energy): \(String(format: "%.2f", score))")

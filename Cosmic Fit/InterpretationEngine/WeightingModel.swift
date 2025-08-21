@@ -8,7 +8,7 @@
 
 struct WeightingModel {
     // DRASTICALLY reduced natal weight
-    static let natalWeight: Double = 0.60
+    static let natalWeight: Double = 0.30
     
     // Increased other weights to compensate
     static let progressedWeight: Double = 0.10  // Increased from 0.08

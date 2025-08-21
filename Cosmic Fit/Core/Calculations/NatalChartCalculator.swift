@@ -167,7 +167,7 @@ struct NatalChartCalculator {
     }
     
     // MARK: - Progressed Chart Calculation --------------------------------
-    
+
     static func calculateProgressedChart(birthDate: Date,
                                          targetAge: Int,
                                          latitude: Double,
@@ -175,23 +175,29 @@ struct NatalChartCalculator {
                                          timeZone: TimeZone,
                                          progressAnglesMethod: ProgressionMethod = .solarArc) -> NatalChart {
         
+        // Ensure Swiss Ephemeris path is set
+        AsteroidCalculator.bootstrap()
+        
         // Calculate natal chart first (we need it for comparison and solar arc)
         let natalChart = calculateNatalChart(birthDate: birthDate,
                                              latitude: latitude,
                                              longitude: longitude,
                                              timeZone: timeZone)
         
-        // 1) Add targetAge days to birth date to get progressed date
-        let calendar = Calendar.current
-        let progressedDate = calendar.date(byAdding: .day, value: targetAge, to: birthDate)!
+        // Use precise age instead of integer for daily accuracy
+        let preciseAge = calculatePreciseAge(from: birthDate)
+
+        // 1) Add precise age in days to birth date to get progressed date
+        let progressedDate = birthDate.addingTimeInterval(preciseAge * 24 * 60 * 60)
         
-        // 2) Calculate Julian Day for progressed date (keeping same birth time)
-        let utcProgressedDate = JulianDateCalculator.localToUTC(date: progressedDate, timezone: timeZone)
-        let progressedJD = JulianDateCalculator.calculateJulianDate(from: utcProgressedDate)
+        // 2) Convert progressed date to Julian Day
+        let progressedUTC = JulianDateCalculator.localToUTC(date: progressedDate, timezone: timeZone)
+        let progressedJD = JulianDateCalculator.calculateJulianDate(from: progressedUTC)
         
-        // 3) Calculate progressed planetary positions
+        // 3) Calculate progressed planet positions
         var planets: [PlanetPosition] = []
         
+        // Helper function to append planets
         func appendPlanet(_ name: String, _ symbol: String,
                           _ lon: Double, _ lat: Double, _ retro: Bool) {
             let (sign, posStr) = CoordinateTransformations.decimalDegreesToZodiac(lon)
@@ -311,6 +317,21 @@ struct NatalChartCalculator {
                           lilith: lilithLongitude,
                           chiron: chironLongitude,
                           lunarPhase: lunarPhase)
+    }
+    
+    /// Calculate current age in years with decimal precision for accurate progressions
+    static func calculatePreciseAge(from birthDate: Date) -> Double {
+        let now = Date()
+        
+        // Get the exact time interval in seconds
+        let timeInterval = now.timeIntervalSince(birthDate)
+        
+        // Convert to years (accounting for leap years)
+        // Average year = 365.2425 days
+        let secondsInYear = 365.2425 * 24 * 60 * 60
+        let preciseAge = timeInterval / secondsInYear
+        
+        return preciseAge
     }
     
     // Calculate current age in years from birth date

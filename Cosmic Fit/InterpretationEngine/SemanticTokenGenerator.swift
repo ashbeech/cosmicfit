@@ -376,160 +376,20 @@ class SemanticTokenGenerator {
         
         // Day of week influence - Enhanced with more nuanced energy patterns
         switch dayOfWeek {
-        case 1: // Sunday - Rest and reflection
-            tokens.append(StyleToken(
-                name: "relaxed",
-                type: "mood",
-                weight: 0.7,
-                aspectSource: "Sunday Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "comfortable",
-                type: "texture",
-                weight: 0.6,
-                aspectSource: "Sunday Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "restorative",
-                type: "color_quality",
-                weight: 0.5,
-                aspectSource: "Sunday Energy",
-                originType: .phase
-            ))
-        case 2: // Monday - Fresh beginnings
-            tokens.append(StyleToken(
-                name: "fresh",
-                type: "mood",
-                weight: 0.8,
-                aspectSource: "Monday Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "purposeful",
-                type: "expression",
-                weight: 0.7,
-                aspectSource: "Monday Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "structured",
-                type: "structure",
-                weight: 0.6,
-                aspectSource: "Monday Energy",
-                originType: .phase
-            ))
-        case 3: // Tuesday - Action and drive
-            tokens.append(StyleToken(
-                name: "dynamic",
-                type: "expression",
-                weight: 0.9,
-                aspectSource: "Tuesday Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "bold",
-                type: "color_quality",
-                weight: 0.7,
-                aspectSource: "Tuesday Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "assertive",
-                type: "mood",
-                weight: 0.6,
-                aspectSource: "Tuesday Energy",
-                originType: .phase
-            ))
-        case 4: // Wednesday - Communication and versatility
-            tokens.append(StyleToken(
-                name: "versatile",
-                type: "structure",
-                weight: 0.8,
-                aspectSource: "Wednesday Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "communicative",
-                type: "expression",
-                weight: 0.7,
-                aspectSource: "Wednesday Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "adaptable",
-                type: "mood",
-                weight: 0.6,
-                aspectSource: "Wednesday Energy",
-                originType: .phase
-            ))
-        case 5: // Thursday - Expansion and wisdom
-            tokens.append(StyleToken(
-                name: "expansive",
-                type: "expression",
-                weight: 0.8,
-                aspectSource: "Thursday Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "generous",
-                type: "mood",
-                weight: 0.7,
-                aspectSource: "Thursday Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "abundant",
-                type: "color_quality",
-                weight: 0.6,
-                aspectSource: "Thursday Energy",
-                originType: .phase
-            ))
-        case 6: // Friday - Harmony and beauty
-            tokens.append(StyleToken(
-                name: "harmonious",
-                type: "mood",
-                weight: 0.9,
-                aspectSource: "Friday Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "balanced",
-                type: "structure",
-                weight: 0.7,
-                aspectSource: "Friday Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "aesthetic",
-                type: "expression",
-                weight: 0.8,
-                aspectSource: "Friday Energy",
-                originType: .phase
-            ))
-        case 7: // Saturday - Accomplishment and structure
-            tokens.append(StyleToken(
-                name: "accomplished",
-                type: "mood",
-                weight: 0.8,
-                aspectSource: "Saturday Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "grounded",
-                type: "texture",
-                weight: 0.7,
-                aspectSource: "Saturday Energy",
-                originType: .phase
-            ))
-            tokens.append(StyleToken(
-                name: "established",
-                type: "expression",
-                weight: 0.6,
-                aspectSource: "Saturday Energy",
-                originType: .phase
-            ))
+        case 1: // Sunday
+            tokens.append(StyleToken(name: "relaxed", type: "mood", weight: 0.4, aspectSource: "Sunday Energy", originType: .phase))
+        case 2: // Monday
+            tokens.append(StyleToken(name: "fresh", type: "expression", weight: 0.5, aspectSource: "Monday Energy", originType: .phase))
+        case 3: // Tuesday
+            tokens.append(StyleToken(name: "dynamic", type: "expression", weight: 0.5, aspectSource: "Tuesday Energy", originType: .phase))
+        case 4: // Wednesday
+            tokens.append(StyleToken(name: "adaptable", type: "structure", weight: 0.4, aspectSource: "Wednesday Energy", originType: .phase))
+        case 5: // Thursday
+            tokens.append(StyleToken(name: "expansive", type: "mood", weight: 0.5, aspectSource: "Thursday Energy", originType: .phase))
+        case 6: // Friday
+            tokens.append(StyleToken(name: "social", type: "expression", weight: 0.5, aspectSource: "Friday Energy", originType: .phase))
+        case 7: // Saturday
+            tokens.append(StyleToken(name: "playful", type: "mood", weight: 0.4, aspectSource: "Saturday Energy", originType: .phase))
         default:
             break
         }
@@ -572,47 +432,7 @@ class SemanticTokenGenerator {
         default:
             break
         }
-        
-        // Time of day considerations
-        let hour = calendar.component(.hour, from: now)
-        
-        switch hour {
-        case 5...9: // Morning
-            tokens.append(StyleToken(
-                name: "fresh",
-                type: "texture",
-                weight: 0.4,
-                aspectSource: "Morning Energy",
-                originType: .phase
-            ))
-        case 10...16: // Midday
-            tokens.append(StyleToken(
-                name: "active",
-                type: "mood",
-                weight: 0.4,
-                aspectSource: "Midday Energy",
-                originType: .phase
-            ))
-        case 17...21: // Evening
-            tokens.append(StyleToken(
-                name: "transitional",
-                type: "structure",
-                weight: 0.4,
-                aspectSource: "Evening Energy",
-                originType: .phase
-            ))
-        case 22...23, 0...4: // Night
-            tokens.append(StyleToken(
-                name: "relaxed",
-                type: "mood",
-                weight: 0.4,
-                aspectSource: "Night Energy",
-                originType: .phase
-            ))
-        default:
-            break
-        }
-        
+
         return tokens
     }
     
