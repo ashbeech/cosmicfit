@@ -482,29 +482,143 @@ class SemanticTokenGenerator {
         return allTokens
     }
     
-    /// Generate LIMITED emotional vibe tokens for Daily Fit
+    /// Generate enhanced emotional vibe tokens for Daily Fit - targeting ~30% progressed influence
     static func generateLimitedEmotionalVibeTokens(
         natal: NatalChartCalculator.NatalChart,
         progressed: NatalChartCalculator.NatalChart) -> [StyleToken] {
         
         var tokens: [StyleToken] = []
         
-        // Only add ONE progressed Moon token for emotional evolution
-        if let progressedMoon = progressed.planets.first(where: { $0.name == "Moon" }) {
-            let progressedMoonTokens = tokenizeForPlanetInSign(
-                planet: "Moon",
-                sign: progressedMoon.zodiacSign,
-                isRetrograde: progressedMoon.isRetrograde,
-                weight: 0.3,  // Very light weight
-                isProgressed: true)
-            
-            // Take only the first token
-            if let firstToken = progressedMoonTokens.first {
-                tokens.append(firstToken)
+        // Process major progressed planets with enhanced weights to achieve ~30% influence
+        let progressedPlanets = ["Moon", "Sun", "Mercury", "Venus", "Mars"]
+        
+        for planetName in progressedPlanets {
+            if let progressedPlanet = progressed.planets.first(where: { $0.name == planetName }) {
+                
+                // Enhanced weights based on planet importance for style expression
+                let baseWeight: Double
+                let maxTokens: Int
+                
+                switch planetName {
+                case "Moon":
+                    baseWeight = 0.5
+                    maxTokens = 2
+                case "Venus":
+                    baseWeight = 0.4
+                    maxTokens = 1
+                case "Mars":
+                    baseWeight = 0.3
+                    maxTokens = 1
+                case "Sun":
+                    baseWeight = 0.7  // Core identity evolution
+                    maxTokens = 2
+                case "Mercury":
+                    baseWeight = 0.6  // Communication and style expression evolution
+                    maxTokens = 1
+                default:
+                    baseWeight = 0.4
+                    maxTokens = 1
+                }
+                
+                let progressedTokens = tokenizeForPlanetInSign(
+                    planet: planetName,
+                    sign: progressedPlanet.zodiacSign,
+                    isRetrograde: progressedPlanet.isRetrograde,
+                    weight: baseWeight,
+                    isProgressed: true)
+                
+                // Take up to maxTokens, prioritizing higher weights
+                let limitedTokens = Array(progressedTokens.prefix(maxTokens))
+                tokens.append(contentsOf: limitedTokens)
             }
         }
         
+        // Add progressed aspects if they exist (for additional nuance)
+        if let progressedMoon = progressed.planets.first(where: { $0.name == "Moon" }),
+           let progressedSun = progressed.planets.first(where: { $0.name == "Sun" }) {
+            
+            // Check for progressed Moon-Sun aspect evolution
+            let moonSunAspect = calculateProgressedAspect(
+                planet1: progressedMoon,
+                planet2: progressedSun)
+            
+            if let aspectToken = generateProgressedAspectToken(
+                aspect: moonSunAspect,
+                weight: 0.5) {
+                tokens.append(aspectToken)
+            }
+        }
+        
+        DebugLogger.info("🌙 PROGRESSED TOKENS GENERATED:")
+        DebugLogger.info("  • Total progressed tokens: \(tokens.count)")
+        DebugLogger.info("  • Total progressed weight: \(String(format: "%.2f", tokens.map { $0.weight }.reduce(0, +)))")
+        DebugLogger.info("  • Average progressed weight: \(String(format: "%.2f", tokens.isEmpty ? 0 : tokens.map { $0.weight }.reduce(0, +) / Double(tokens.count)))")
+        
         return tokens
+    }
+
+    // MARK: - Helper Methods for Progressed Chart Enhancement
+
+    /// Calculate aspect between two progressed planets
+    private static func calculateProgressedAspect(
+        planet1: NatalChartCalculator.PlanetPosition,
+        planet2: NatalChartCalculator.PlanetPosition) -> String? {
+        
+        let orb = abs(planet1.longitude - planet2.longitude)
+        let normalizedOrb = min(orb, 360 - orb)
+        
+        // Only return major aspects with tight orbs for progressed
+        if normalizedOrb <= 3 {
+            return "conjunction"
+        } else if abs(normalizedOrb - 60) <= 2 {
+            return "sextile"
+        } else if abs(normalizedOrb - 90) <= 2 {
+            return "square"
+        } else if abs(normalizedOrb - 120) <= 2 {
+            return "trine"
+        } else if abs(normalizedOrb - 180) <= 2 {
+            return "opposition"
+        }
+        
+        return nil
+    }
+
+    /// Generate a token from a progressed aspect
+    private static func generateProgressedAspectToken(
+        aspect: String?,
+        weight: Double) -> StyleToken? {
+        
+        guard let aspect = aspect else { return nil }
+        
+        let tokenName: String
+        let tokenType: String
+        
+        switch aspect {
+        case "conjunction":
+            tokenName = "unified"
+            tokenType = "mood"
+        case "sextile":
+            tokenName = "harmonious"
+            tokenType = "mood"
+        case "square":
+            tokenName = "dynamic"
+            tokenType = "expression"
+        case "trine":
+            tokenName = "flowing"
+            tokenType = "structure"
+        case "opposition":
+            tokenName = "balanced"
+            tokenType = "expression"
+        default:
+            return nil
+        }
+        
+        return StyleToken(
+            name: tokenName,
+            type: tokenType,
+            weight: weight,
+            aspectSource: "Progressed \(aspect.capitalized)",
+            originType: .progressed)
     }
     
     /// Generate current Sun sign background energy tokens
