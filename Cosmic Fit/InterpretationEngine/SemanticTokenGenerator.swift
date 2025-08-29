@@ -290,17 +290,39 @@ class SemanticTokenGenerator {
                     hitsSensitivePoint: isSensitivePoint
                 )
                 
-                // REDUCED threshold to capture more transits
-                if transitWeight < 0.15 {  // ← CHANGE: Reduced from 0.2
+                // Enhanced threshold system for daily Moon movement
+                let threshold: Double
+                if transitPlanet == "Moon" {
+                    threshold = 0.08  // Very low threshold for Moon transits (daily drivers)
+                } else if transitPlanet == "Mercury" {
+                    threshold = 0.12  // Low threshold for Mercury (weekly changes)
+                } else {
+                    threshold = 0.15  // Standard threshold for other planets
+                }
+                
+                if transitWeight < threshold {
                     continue
                 }
                 
-                // Apply WeightingModel transit weight
-                let adjustedTransitWeight: Double = transitWeight * WeightingModel.DailyFit.transitWeight
+                // Apply WeightingModel transit weight with daily variation enhancements
+                var adjustedTransitWeight: Double = transitWeight * WeightingModel.DailyFit.transitWeight
                 
-                // Apply tight orb boost for high-impact daily transits
-                let tightOrbBoost = orb < 1.0 ? 2.0 : 1.0  // ← CHANGE: Reduced from 3.0 to 2.0
-                let finalAdjustedTransitWeight = adjustedTransitWeight * tightOrbBoost
+                // Special boost for daily drivers (Moon and fast-moving planets)
+                if transitPlanet == "Moon" {
+                    if orb < 0.5 {
+                        adjustedTransitWeight *= 2.0  // Major boost for exact Moon aspects
+                    } else if orb < 1.0 {
+                        adjustedTransitWeight *= 1.6  // Good boost for close Moon aspects
+                    } else {
+                        adjustedTransitWeight *= 1.3  // Moderate boost for wider Moon aspects
+                    }
+                } else if transitPlanet == "Mercury" && orb < 1.5 {
+                    adjustedTransitWeight *= 1.4  // Boost Mercury for daily mental shifts
+                } else if (transitPlanet == "Venus" || transitPlanet == "Mars") && orb < 2.0 {
+                    adjustedTransitWeight *= 1.2  // Moderate boost for personal planets
+                }
+                
+                let finalAdjustedTransitWeight = adjustedTransitWeight
                 
                 // Get influence category and token weight scale
                 let influenceCategory = TransitWeightCalculator.getStyleInfluenceCategory(weight: finalAdjustedTransitWeight)
@@ -393,6 +415,10 @@ class SemanticTokenGenerator {
         default:
             break
         }
+        
+        // Add moon phase tokens for enhanced daily variation
+        let moonPhaseTokens = generateMoonPhaseTokens()
+        tokens.append(contentsOf: moonPhaseTokens)
         
         // Add seasonal micro-influence based on month - PRACTICAL ONLY
         let month = calendar.component(.month, from: now)
@@ -1561,52 +1587,72 @@ class SemanticTokenGenerator {
     
     // MARK: - Weather Token Generation
     
-    /// Generate minimal weather tokens - PRACTICAL ONLY, no aesthetic influence
+    /// Generate enhanced weather tokens for meaningful daily variation
     static func generateWeatherTokens(weather: TodayWeather?) -> [StyleToken] {
-        guard let weather = weather else { return [] }
+        guard let weather = weather else { 
+            // Return minimal fallback tokens to prevent 0% weather influence
+            return [
+                StyleToken(name: "adaptable", type: "structure", weight: 0.4, originType: .weather),
+                StyleToken(name: "versatile", type: "expression", weight: 0.3, originType: .weather)
+            ]
+        }
         
         var tokens: [StyleToken] = []
         
-        // Keep the sophisticated temperature weight calculation if it exists
+        // Enhanced base weight to ensure meaningful daily influence
+        let baseWeatherWeight = WeightingModel.DailyFit.weatherWeight * 2.0
         let tempWeight = calculateTemperatureWeight(temp: weather.temperature)
         
-        // Only generate PRACTICAL tokens for extreme conditions
-        // Remove ALL color_quality and mood tokens related to weather
-        
-        // Temperature extremes - fabric guidance only
-        if weather.temperature < 10 {
-            tokens.append(StyleToken(name: "insulating", type: "fabric", weight: tempWeight * 0.3, originType: .weather))
-            tokens.append(StyleToken(name: "layerable", type: "structure", weight: tempWeight * 0.2, originType: .weather))
-        } else if weather.temperature > 25 {
-            tokens.append(StyleToken(name: "breathable", type: "fabric", weight: tempWeight * 0.3, originType: .weather))
-            tokens.append(StyleToken(name: "lightweight", type: "fabric", weight: tempWeight * 0.2, originType: .weather))
+        // TEMPERATURE INFLUENCE - Enhanced for daily variation
+        if weather.temperature > 25 { // Hot weather
+            tokens.append(StyleToken(name: "breathable", type: "fabric", weight: tempWeight * baseWeatherWeight * 1.5, originType: .weather))
+            tokens.append(StyleToken(name: "lightweight", type: "structure", weight: tempWeight * baseWeatherWeight * 1.2, originType: .weather))
+            tokens.append(StyleToken(name: "flowing", type: "structure", weight: tempWeight * baseWeatherWeight, originType: .weather))
+            tokens.append(StyleToken(name: "cooling", type: "mood", weight: tempWeight * baseWeatherWeight * 0.8, originType: .weather))
+            
+        } else if weather.temperature < 10 { // Cold weather
+            tokens.append(StyleToken(name: "insulating", type: "fabric", weight: tempWeight * baseWeatherWeight * 1.5, originType: .weather))
+            tokens.append(StyleToken(name: "layerable", type: "structure", weight: tempWeight * baseWeatherWeight * 1.3, originType: .weather))
+            tokens.append(StyleToken(name: "warming", type: "mood", weight: tempWeight * baseWeatherWeight, originType: .weather))
+            tokens.append(StyleToken(name: "cozy", type: "texture", weight: tempWeight * baseWeatherWeight, originType: .weather))
+            
+        } else { // Moderate temperature
+            tokens.append(StyleToken(name: "comfortable", type: "mood", weight: tempWeight * baseWeatherWeight * 0.8, originType: .weather))
+            tokens.append(StyleToken(name: "balanced", type: "structure", weight: tempWeight * baseWeatherWeight * 0.6, originType: .weather))
         }
         
-        // Rain - practical only
-        if weather.condition.lowercased().contains("rain") || weather.condition.lowercased().contains("shower") {
-            tokens.append(StyleToken(name: "waterproof", type: "fabric", weight: 2.0, originType: .weather))
-            // Remove mood and color_quality tokens
+        // CONDITION INFLUENCE - Enhanced for daily mood variation
+        let condition = weather.condition.lowercased()
+        let conditionWeight = baseWeatherWeight * 1.2
+        
+        if condition.contains("clear") || condition.contains("sunny") {
+            tokens.append(StyleToken(name: "radiant", type: "mood", weight: conditionWeight, originType: .weather))
+            tokens.append(StyleToken(name: "confident", type: "expression", weight: conditionWeight * 0.8, originType: .weather))
+            
+        } else if condition.contains("cloudy") || condition.contains("overcast") {
+            tokens.append(StyleToken(name: "subdued", type: "mood", weight: conditionWeight, originType: .weather))
+            tokens.append(StyleToken(name: "introspective", type: "expression", weight: conditionWeight * 0.7, originType: .weather))
+            
+        } else if condition.contains("rain") || condition.contains("shower") {
+            tokens.append(StyleToken(name: "protective", type: "structure", weight: conditionWeight * 1.3, originType: .weather))
+            tokens.append(StyleToken(name: "waterproof", type: "fabric", weight: conditionWeight * 1.5, originType: .weather))
+            tokens.append(StyleToken(name: "contemplative", type: "mood", weight: conditionWeight * 0.8, originType: .weather))
+            
+        } else if condition.contains("storm") || condition.contains("thunder") {
+            tokens.append(StyleToken(name: "dramatic", type: "expression", weight: conditionWeight * 1.4, originType: .weather))
+            tokens.append(StyleToken(name: "powerful", type: "mood", weight: conditionWeight * 1.2, originType: .weather))
+            tokens.append(StyleToken(name: "secure", type: "structure", weight: conditionWeight * 1.1, originType: .weather))
         }
         
-        // Wind - structural guidance only
+        // WIND INFLUENCE
         if weather.windKph > 20 {
-            tokens.append(StyleToken(name: "secure", type: "structure", weight: 1.5, originType: .weather))
-            tokens.append(StyleToken(name: "wind-resistant", type: "fabric", weight: 1.5, originType: .weather))
+            let windWeight = (weather.windKph / 50.0) * baseWeatherWeight
+            tokens.append(StyleToken(name: "wind-resistant", type: "fabric", weight: windWeight * 1.3, originType: .weather))
+            tokens.append(StyleToken(name: "structured", type: "structure", weight: windWeight * 1.1, originType: .weather))
+            tokens.append(StyleToken(name: "dynamic", type: "expression", weight: windWeight * 0.9, originType: .weather))
         }
         
-        // Apply DRASTICALLY reduced weather weight to all tokens
-        return tokens.map { token in
-            StyleToken(
-                name: token.name,
-                type: token.type,
-                weight: token.weight * WeightingModel.DailyFit.weatherWeight * 0.5, // Further reduced
-                planetarySource: token.planetarySource,
-                signSource: token.signSource,
-                houseSource: token.houseSource,
-                aspectSource: token.aspectSource,
-                originType: token.originType
-            )
-        }
+        return tokens
     }
     
     private static func calculateTemperatureWeight(temp: Double) -> Double {

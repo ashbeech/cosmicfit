@@ -55,10 +55,20 @@ class DailyVibeGenerator {
         let vibeBreakdown = VibeBreakdownGenerator.generateVibeBreakdown(from: allTokens)
             
         debugVibeBreakdownAnalysis(breakdown: vibeBreakdown, tokens: allTokens)
+        
+        // Generate Tarot card selection
+        let selectedTarotCard = TarotCardSelector.selectCard(
+            for: allTokens,
+            theme: nil, // Could extract theme from tokens in future
+            vibeBreakdown: vibeBreakdown
+        )
             
         print("\n✨ MARIA'S STYLE BRIEF GENERATED:")
         print("  \"\(styleBrief)\"")
         print("  Dominant Energy: \(getDominantEnergyName(from: vibeBreakdown))")
+        if let tarotCard = selectedTarotCard {
+            print("  Tarot Card: \(tarotCard.displayName)")
+        }
         print("\n🎯 DAILY VIBE GENERATOR - COMPLETE")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
         
@@ -75,7 +85,8 @@ class DailyVibeGenerator {
             accessories: "",  // Empty - focused only on Style Brief
             takeaway: "",     // Empty - focused only on Style Brief
             temperature: weather?.temperature,
-            weatherCondition: weather?.condition
+            weatherCondition: weather?.condition,
+            tarotCard: selectedTarotCard
         )
     }
     
@@ -780,6 +791,9 @@ struct DailyVibeContent: Codable {
     // Weather information (optional)
     var temperature: Double? = nil
     var weatherCondition: String? = nil
+    
+    // Tarot card for the day (optional)
+    var tarotCard: TarotCard? = nil
     
     // Validation method
     var isValid: Bool {

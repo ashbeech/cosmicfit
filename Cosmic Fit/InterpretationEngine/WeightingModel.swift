@@ -7,19 +7,20 @@
 //
 
 struct WeightingModel {
-    // Core weights for Blueprint and other interpretations
-    static let natalWeight: Double = 0.65
-    static let currentSunSignBackgroundWeight: Double = 0.57
+    // Reduced natal weight to allow more daily variation (was 0.65)
+    static let natalWeight: Double = 0.35
+    static let currentSunSignBackgroundWeight: Double = 0.25
     
-    // Daily Fit specific weights
+    // Enhanced Daily Fit specific weights for meaningful daily variation
     struct DailyFit {
-        static let transitWeight: Double = 0.65
-        static let weatherWeight: Double = 0.12
-        //static let moonPhaseWeight: Double = 0.8 // TODO: This should, but doesn't affect anything in the result so commenting-out for now
+        static let transitWeight: Double = 1.2  // Increased from 0.65 for daily Moon movement
+        static let weatherWeight: Double = 0.8  // Increased from 0.12 for meaningful weather influence
+        static let moonPhaseWeight: Double = 0.6  // Activated from commented out state
+        static let dailySignatureWeight: Double = 0.3  // New for day-of-week energy
     }
     
-    // DEV NOTE TODO: Should out this in Blueprint specific weight for now
-    static let progressedWeight: Double = 0.66  // DEV NOTE: This only affects wardrobe storyline in blueprint at the mo, NOT the daily fit.
+    // Reduced progressed weight to allow more daily responsiveness (was 0.66)
+    static let progressedWeight: Double = 0.45
 
 }
 
@@ -77,15 +78,38 @@ struct DistributionTargets {
             }
         }
         
-        // Scale other factors
+        // Enhanced transit scaling for daily Moon movement
         if let transitPercent = currentDistribution["transit"] {
-            let targetFactor = targetTransitInfluence / transitPercent
-            factors["transit"] = min(max(targetFactor, 0.5), 1.5)
+            if transitPercent < targetTransitInfluence * 0.8 {
+                // Boost transit influence to capture daily Moon movement
+                let targetFactor = targetTransitInfluence / transitPercent
+                factors["transit"] = min(max(targetFactor, 1.0), 2.5)  // Allow higher boost
+            } else {
+                factors["transit"] = 1.0
+            }
         }
         
         if let weatherPercent = currentDistribution["weather"] {
-            let targetFactor = targetWeatherInfluence / weatherPercent
-            factors["weather"] = min(max(targetFactor, 0.5), 2.0)
+            if weatherPercent < targetWeatherInfluence * 0.5 {
+                // Aggressive boost for broken weather system
+                let targetFactor = targetWeatherInfluence / max(weatherPercent, 0.1)
+                factors["weather"] = min(targetFactor, 5.0)  // Allow up to 5x boost
+            } else {
+                let targetFactor = targetWeatherInfluence / weatherPercent
+                factors["weather"] = min(max(targetFactor, 0.5), 2.0)
+            }
+        } else {
+            // Maximum boost if no weather tokens at all
+            factors["weather"] = 5.0
+        }
+        
+        // Boost moon phase influence if too low
+        if let phasePercent = currentDistribution["phase"] {
+            if phasePercent < 5.0 {
+                factors["phase"] = min(2.0, 8.0 / max(phasePercent, 0.1))
+            } else {
+                factors["phase"] = 1.0
+            }
         }
         
         return factors

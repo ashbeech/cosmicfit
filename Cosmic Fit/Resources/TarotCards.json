@@ -1,0 +1,1484 @@
+[
+  {
+    "name": "The Fool",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["spontaneous", "adventurous", "new", "fresh", "optimistic", "carefree", "innocent", "beginning"],
+    "themes": ["Fresh Start", "Spontaneous Adventure", "Open Possibility"],
+    "energyAffinity": {
+      "playful": 0.9,
+      "edge": 0.6,
+      "drama": 0.4,
+      "classic": 0.2,
+      "romantic": 0.5,
+      "utility": 0.3
+    },
+    "description": "The Fool represents new beginnings, spontaneity, and embracing the unknown with optimism.",
+    "reversedKeywords": ["reckless", "careless", "naive", "poor judgment"],
+    "symbolism": ["cliff edge", "white rose", "small bag", "loyal companion"]
+  },
+  {
+    "name": "The Magician",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["focused", "determined", "skillful", "resourceful", "confident", "manifesting", "powerful", "creative"],
+    "themes": ["Focused Intention", "Skillful Creation", "Resourceful Action"],
+    "energyAffinity": {
+      "drama": 0.8,
+      "classic": 0.7,
+      "utility": 0.8,
+      "playful": 0.6,
+      "edge": 0.5,
+      "romantic": 0.4
+    },
+    "description": "The Magician represents focused will, skill, and the power to manifest your intentions into reality.",
+    "reversedKeywords": ["manipulative", "unfocused", "poor planning", "unused talents"],
+    "symbolism": ["infinity symbol", "four suits", "pointing gesture", "altar"]
+  },
+  {
+    "name": "The High Priestess",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["intuitive", "mysterious", "inner", "wise", "spiritual", "psychic", "feminine", "receptive"],
+    "themes": ["Intuitive Wisdom", "Sacred Feminine", "Inner Knowing"],
+    "energyAffinity": {
+      "romantic": 0.9,
+      "edge": 0.6,
+      "classic": 0.7,
+      "drama": 0.5,
+      "playful": 0.3,
+      "utility": 0.4
+    },
+    "description": "The High Priestess represents intuition, inner wisdom, and connection to the subconscious mind.",
+    "reversedKeywords": ["disconnected", "repressed intuition", "secrets", "withdrawn"],
+    "symbolism": ["crescent moon", "pillars", "veil", "pomegranates"]
+  },
+  {
+    "name": "The Empress",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["nurturing", "abundant", "fertile", "creative", "sensual", "luxurious", "beautiful", "maternal"],
+    "themes": ["Abundant Creativity", "Sensual Luxury", "Nurturing Beauty"],
+    "energyAffinity": {
+      "romantic": 1.0,
+      "classic": 0.6,
+      "playful": 0.7,
+      "drama": 0.5,
+      "utility": 0.4,
+      "edge": 0.3
+    },
+    "description": "The Empress represents abundance, creativity, fertility, and nurturing feminine energy.",
+    "reversedKeywords": ["creative block", "dependence", "smothering", "lack of growth"],
+    "symbolism": ["wheat field", "crown of stars", "heart-shaped shield", "flowing river"]
+  },
+  {
+    "name": "The Emperor",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["authoritative", "structured", "disciplined", "controlling", "powerful", "leadership", "paternal", "stable"],
+    "themes": ["Structured Authority", "Disciplined Leadership", "Stable Foundation"],
+    "energyAffinity": {
+      "classic": 1.0,
+      "drama": 0.8,
+      "utility": 0.9,
+      "edge": 0.4,
+      "romantic": 0.3,
+      "playful": 0.2
+    },
+    "description": "The Emperor represents authority, structure, stability, and masculine leadership energy.",
+    "reversedKeywords": ["tyranny", "rigidity", "coldness", "domination"],
+    "symbolism": ["throne", "ram heads", "orb and scepter", "armor"]
+  },
+  {
+    "name": "The Hierophant",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["traditional", "spiritual", "conformity", "teaching", "guidance", "ritualistic", "orthodox", "conservative"],
+    "themes": ["Traditional Wisdom", "Spiritual Guidance", "Conservative Values"],
+    "energyAffinity": {
+      "classic": 0.9,
+      "romantic": 0.6,
+      "utility": 0.7,
+      "drama": 0.4,
+      "playful": 0.3,
+      "edge": 0.2
+    },
+    "description": "The Hierophant represents tradition, spiritual wisdom, conformity, and established institutions.",
+    "reversedKeywords": ["rebellion", "unconventional", "restriction", "dogma"],
+    "symbolism": ["papal cross", "two pillars", "keys", "religious vestments"]
+  },
+  {
+    "name": "The Lovers",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["harmonious", "romantic", "partnership", "choice", "union", "attraction", "values", "relationships"],
+    "themes": ["Romantic Harmony", "Perfect Union", "Heart-Centered Choice"],
+    "energyAffinity": {
+      "romantic": 1.0,
+      "playful": 0.6,
+      "classic": 0.5,
+      "drama": 0.6,
+      "utility": 0.3,
+      "edge": 0.4
+    },
+    "description": "The Lovers represents harmony, relationships, moral choices, and the union of opposites.",
+    "reversedKeywords": ["disharmony", "imbalance", "misalignment", "poor choices"],
+    "symbolism": ["angel", "tree of knowledge", "tree of life", "mountain"]
+  },
+  {
+    "name": "The Chariot",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["determined", "focused", "victory", "control", "direction", "willpower", "success", "momentum"],
+    "themes": ["Focused Victory", "Controlled Power", "Directional Success"],
+    "energyAffinity": {
+      "drama": 0.9,
+      "classic": 0.7,
+      "utility": 0.8,
+      "edge": 0.6,
+      "playful": 0.5,
+      "romantic": 0.4
+    },
+    "description": "The Chariot represents determination, control, victory through willpower, and focused direction.",
+    "reversedKeywords": ["lack of control", "aggression", "powerlessness", "defeat"],
+    "symbolism": ["sphinxes", "star crown", "armor", "city backdrop"]
+  },
+  {
+    "name": "Strength",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["inner", "courage", "patience", "gentle", "control", "compassion", "influence", "fortitude"],
+    "themes": ["Inner Strength", "Gentle Power", "Compassionate Control"],
+    "energyAffinity": {
+      "classic": 0.8,
+      "romantic": 0.7,
+      "drama": 0.6,
+      "utility": 0.7,
+      "playful": 0.5,
+      "edge": 0.4
+    },
+    "description": "Strength represents inner fortitude, gentle control, patience, and compassionate influence.",
+    "reversedKeywords": ["weakness", "self-doubt", "lack of discipline", "abuse of power"],
+    "symbolism": ["lion", "infinity symbol", "white robe", "flowers"]
+  },
+  {
+    "name": "The Hermit",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["introspective", "wise", "searching", "inner", "guidance", "solitude", "meditation", "contemplative"],
+    "themes": ["Inner Wisdom", "Solitary Journey", "Contemplative Search"],
+    "energyAffinity": {
+      "classic": 0.8,
+      "romantic": 0.6,
+      "edge": 0.5,
+      "utility": 0.6,
+      "drama": 0.4,
+      "playful": 0.2
+    },
+    "description": "The Hermit represents introspection, inner guidance, spiritual searching, and wisdom through solitude.",
+    "reversedKeywords": ["isolation", "withdrawn", "paranoia", "antisocial"],
+    "symbolism": ["lantern", "star", "mountain peak", "staff"]
+  },
+  {
+    "name": "Wheel of Fortune",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["fate", "destiny", "cycles", "change", "luck", "karma", "turning", "opportunity"],
+    "themes": ["Cyclical Change", "Karmic Destiny", "Fortunate Turning"],
+    "energyAffinity": {
+      "edge": 0.7,
+      "drama": 0.6,
+      "playful": 0.6,
+      "classic": 0.5,
+      "romantic": 0.5,
+      "utility": 0.4
+    },
+    "description": "Wheel of Fortune represents cycles, fate, karma, changing luck, and life's natural ups and downs.",
+    "reversedKeywords": ["bad luck", "lack of control", "breaking cycles", "unwanted change"],
+    "symbolism": ["wheel", "sphinx", "snake", "four creatures"]
+  },
+  {
+    "name": "Justice",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["balanced", "fair", "truth", "accountability", "law", "integrity", "ethical", "impartial"],
+    "themes": ["Balanced Justice", "Ethical Truth", "Fair Accountability"],
+    "energyAffinity": {
+      "classic": 0.9,
+      "utility": 0.8,
+      "drama": 0.6,
+      "edge": 0.5,
+      "romantic": 0.4,
+      "playful": 0.3
+    },
+    "description": "Justice represents balance, fairness, truth, accountability, and ethical decision-making.",
+    "reversedKeywords": ["unfairness", "lack of accountability", "dishonesty", "bias"],
+    "symbolism": ["scales", "sword", "crown", "purple veil"]
+  },
+  {
+    "name": "The Hanged Man",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["suspended", "patience", "surrender", "sacrifice", "perspective", "letting", "contemplation", "waiting"],
+    "themes": ["Patient Surrender", "New Perspective", "Suspended Wisdom"],
+    "energyAffinity": {
+      "romantic": 0.7,
+      "edge": 0.8,
+      "classic": 0.6,
+      "utility": 0.4,
+      "drama": 0.5,
+      "playful": 0.3
+    },
+    "description": "The Hanged Man represents surrender, patience, new perspectives, and wisdom through sacrifice.",
+    "reversedKeywords": ["delays", "resistance", "stalling", "indecision"],
+    "symbolism": ["inverted figure", "halo", "tree", "serene expression"]
+  },
+  {
+    "name": "Death",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["transformation", "ending", "rebirth", "renewal", "transition", "release", "metamorphosis", "change"],
+    "themes": ["Transformative Ending", "Powerful Rebirth", "Necessary Change"],
+    "energyAffinity": {
+      "drama": 1.0,
+      "edge": 0.9,
+      "classic": 0.5,
+      "romantic": 0.6,
+      "utility": 0.5,
+      "playful": 0.3
+    },
+    "description": "Death represents transformation, endings that lead to new beginnings, and necessary change.",
+    "reversedKeywords": ["resistance to change", "stagnation", "fear", "holding on"],
+    "symbolism": ["skeleton", "armor", "white rose", "rising sun"]
+  },
+  {
+    "name": "Temperance",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["balanced", "moderation", "patience", "purpose", "harmony", "healing", "synthesis", "calm"],
+    "themes": ["Perfect Balance", "Harmonious Moderation", "Healing Synthesis"],
+    "energyAffinity": {
+      "classic": 0.8,
+      "romantic": 0.8,
+      "utility": 0.7,
+      "playful": 0.5,
+      "drama": 0.4,
+      "edge": 0.4
+    },
+    "description": "Temperance represents balance, moderation, patience, healing, and the harmonious blending of opposites.",
+    "reversedKeywords": ["imbalance", "excess", "lack of long-term vision", "discord"],
+    "symbolism": ["angel", "water", "path", "mountains"]
+  },
+  {
+    "name": "The Devil",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["temptation", "bondage", "materialism", "addiction", "restriction", "shadow", "obsession", "trapped"],
+    "themes": ["Shadow Work", "Material Obsession", "Breaking Chains"],
+    "energyAffinity": {
+      "drama": 0.9,
+      "edge": 0.8,
+      "utility": 0.4,
+      "classic": 0.3,
+      "romantic": 0.5,
+      "playful": 0.3
+    },
+    "description": "The Devil represents temptation, bondage, materialism, and the need to confront your shadow self.",
+    "reversedKeywords": ["freedom", "release", "restoring control", "overcoming addiction"],
+    "symbolism": ["chained figures", "pentagram", "torch", "bat wings"]
+  },
+  {
+    "name": "The Tower",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["sudden", "upheaval", "revelation", "awakening", "destruction", "liberation", "shocking", "breakthrough"],
+    "themes": ["Sudden Revelation", "Liberating Destruction", "Shocking Awakening"],
+    "energyAffinity": {
+      "drama": 1.0,
+      "edge": 1.0,
+      "utility": 0.3,
+      "classic": 0.2,
+      "romantic": 0.3,
+      "playful": 0.4
+    },
+    "description": "The Tower represents sudden change, revelation, liberation through destruction, and shocking breakthroughs.",
+    "reversedKeywords": ["delayed disaster", "avoiding change", "fear of change", "personal transformation"],
+    "symbolism": ["lightning bolt", "falling crown", "falling figures", "rocky foundation"]
+  },
+  {
+    "name": "The Star",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["hope", "inspiration", "healing", "renewal", "guidance", "serenity", "spirituality", "faith"],
+    "themes": ["Hopeful Renewal", "Spiritual Guidance", "Serene Inspiration"],
+    "energyAffinity": {
+      "romantic": 0.9,
+      "classic": 0.6,
+      "playful": 0.7,
+      "edge": 0.5,
+      "drama": 0.4,
+      "utility": 0.5
+    },
+    "description": "The Star represents hope, inspiration, spiritual guidance, healing, and renewed faith in the future.",
+    "reversedKeywords": ["despair", "disconnection", "lack of faith", "pessimism"],
+    "symbolism": ["bright star", "seven smaller stars", "water", "naked figure"]
+  },
+  {
+    "name": "The Moon",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["illusion", "intuition", "mystery", "subconscious", "dreams", "psychic", "hidden", "unclear"],
+    "themes": ["Mysterious Intuition", "Hidden Truth", "Subconscious Dreams"],
+    "energyAffinity": {
+      "romantic": 0.8,
+      "edge": 0.7,
+      "drama": 0.6,
+      "classic": 0.4,
+      "utility": 0.3,
+      "playful": 0.5
+    },
+    "description": "The Moon represents illusion, intuition, the subconscious, dreams, and hidden or unclear situations.",
+    "reversedKeywords": ["clarity", "overcoming fear", "finding truth", "subsiding anxiety"],
+    "symbolism": ["moon phases", "two towers", "path", "crayfish"]
+  },
+  {
+    "name": "The Sun",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["joy", "success", "vitality", "enlightenment", "optimism", "achievement", "clarity", "happiness"],
+    "themes": ["Radiant Success", "Pure Joy", "Enlightened Achievement"],
+    "energyAffinity": {
+      "playful": 1.0,
+      "drama": 0.7,
+      "classic": 0.6,
+      "romantic": 0.8,
+      "utility": 0.5,
+      "edge": 0.4
+    },
+    "description": "The Sun represents joy, success, vitality, enlightenment, and the achievement of happiness and clarity.",
+    "reversedKeywords": ["temporary setbacks", "lack of success", "pessimism", "missing the point"],
+    "symbolism": ["bright sun", "child", "white horse", "sunflowers"]
+  },
+  {
+    "name": "Judgement",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["renewal", "inner", "calling", "absolution", "rebirth", "awakening", "resurrection", "reflection"],
+    "themes": ["Spiritual Awakening", "Inner Calling", "Renewed Purpose"],
+    "energyAffinity": {
+      "drama": 0.8,
+      "classic": 0.7,
+      "edge": 0.6,
+      "romantic": 0.6,
+      "utility": 0.5,
+      "playful": 0.4
+    },
+    "description": "Judgement represents spiritual awakening, inner calling, rebirth, renewal, and hearing your higher purpose.",
+    "reversedKeywords": ["self-doubt", "harsh judgment", "lack of self-awareness", "missed opportunities"],
+    "symbolism": ["angel", "trumpet", "resurrection", "mountains"]
+  },
+  {
+    "name": "The World",
+    "arcana": "Major",
+    "suit": null,
+    "number": null,
+    "keywords": ["completion", "fulfillment", "harmony", "success", "achievement", "cosmic", "wholeness", "integration"],
+    "themes": ["Complete Fulfillment", "Cosmic Harmony", "Perfect Achievement"],
+    "energyAffinity": {
+      "classic": 0.9,
+      "romantic": 0.8,
+      "drama": 0.7,
+      "playful": 0.6,
+      "utility": 0.6,
+      "edge": 0.5
+    },
+    "description": "The World represents completion, fulfillment, harmony, success, and the achievement of cosmic wholeness.",
+    "reversedKeywords": ["incompletion", "stagnation", "lack of progress", "unfulfilled goals"],
+    "symbolism": ["dancing figure", "laurel wreath", "four creatures", "infinity"]
+  },
+  {
+    "name": "Ace of Cups",
+    "arcana": "Minor",
+    "suit": "Cups",
+    "number": 1,
+    "keywords": ["emotional", "new", "love", "spirituality", "intuition", "compassion", "creativity", "overflowing"],
+    "themes": ["Emotional New Beginning", "Overflowing Love", "Spiritual Opening"],
+    "energyAffinity": {
+      "romantic": 1.0,
+      "playful": 0.6,
+      "classic": 0.4,
+      "drama": 0.5,
+      "utility": 0.3,
+      "edge": 0.4
+    },
+    "description": "Ace of Cups represents new emotional beginnings, love, spiritual awakening, and overflowing feelings.",
+    "reversedKeywords": ["emotional loss", "blocked creativity", "emptiness", "lack of love"],
+    "symbolism": ["overflowing cup", "dove", "wafer", "water"]
+  },
+  {
+    "name": "Two of Cups",
+    "arcana": "Minor",
+    "suit": "Cups",
+    "number": 2,
+    "keywords": ["partnership", "connection", "mutual", "attraction", "harmony", "unity", "cooperation", "balance"],
+    "themes": ["Mutual Connection", "Harmonious Partnership", "Balanced Union"],
+    "energyAffinity": {
+      "romantic": 1.0,
+      "classic": 0.6,
+      "playful": 0.5,
+      "drama": 0.4,
+      "utility": 0.4,
+      "edge": 0.3
+    },
+    "description": "Two of Cups represents partnership, mutual attraction, connection, and harmonious relationships.",
+    "reversedKeywords": ["disconnection", "imbalance", "broken communication", "disharmony"],
+    "symbolism": ["two cups", "caduceus", "lion's head", "wings"]
+  },
+  {
+    "name": "Three of Cups",
+    "arcana": "Minor",
+    "suit": "Cups",
+    "number": 3,
+    "keywords": ["celebration", "friendship", "community", "joy", "social", "reunion", "collaboration", "happiness"],
+    "themes": ["Joyful Celebration", "Community Connection", "Social Harmony"],
+    "energyAffinity": {
+      "playful": 1.0,
+      "romantic": 0.8,
+      "classic": 0.4,
+      "drama": 0.5,
+      "utility": 0.3,
+      "edge": 0.3
+    },
+    "description": "Three of Cups represents celebration, friendship, community, collaboration, and joyful social connections.",
+    "reversedKeywords": ["social isolation", "cancelled plans", "lack of teamwork", "overindulgence"],
+    "symbolism": ["three women", "raised cups", "fruits", "celebration"]
+  },
+  {
+    "name": "Four of Cups",
+    "arcana": "Minor",
+    "suit": "Cups",
+    "number": 4,
+    "keywords": ["contemplation", "apathy", "reevaluation", "boredom", "introspection", "withdrawal", "meditation", "disillusionment"],
+    "themes": ["Contemplative Withdrawal", "Emotional Reevaluation", "Introspective Pause"],
+    "energyAffinity": {
+      "classic": 0.7,
+      "romantic": 0.6,
+      "edge": 0.5,
+      "utility": 0.5,
+      "drama": 0.4,
+      "playful": 0.2
+    },
+    "description": "Four of Cups represents contemplation, apathy, reevaluation, and the need for introspective withdrawal.",
+    "reversedKeywords": ["renewed interest", "motivation", "new opportunities", "action"],
+    "symbolism": ["seated figure", "three cups", "offered cup", "tree"]
+  },
+  {
+    "name": "Five of Cups",
+    "arcana": "Minor",
+    "suit": "Cups",
+    "number": 5,
+    "keywords": ["disappointment", "regret", "loss", "grief", "sorrow", "mourning", "emotional", "setback"],
+    "themes": ["Emotional Loss", "Regretful Sorrow", "Disappointing Setback"],
+    "energyAffinity": {
+      "drama": 0.8,
+      "romantic": 0.7,
+      "classic": 0.5,
+      "edge": 0.4,
+      "utility": 0.4,
+      "playful": 0.2
+    },
+    "description": "Five of Cups represents disappointment, regret, loss, grief, and the need to process emotional setbacks.",
+    "reversedKeywords": ["acceptance", "moving on", "forgiveness", "healing"],
+    "symbolism": ["spilled cups", "standing cups", "bridge", "flowing water"]
+  },
+  {
+    "name": "Six of Cups",
+    "arcana": "Minor",
+    "suit": "Cups",
+    "number": 6,
+    "keywords": ["nostalgia", "childhood", "memories", "innocence", "simplicity", "past", "reunion", "carefree"],
+    "themes": ["Nostalgic Memory", "Innocent Simplicity", "Carefree Past"],
+    "energyAffinity": {
+      "romantic": 0.9,
+      "playful": 0.8,
+      "classic": 0.6,
+      "drama": 0.3,
+      "utility": 0.3,
+      "edge": 0.2
+    },
+    "description": "Six of Cups represents nostalgia, childhood memories, innocence, simplicity, and reconnection with the past.",
+    "reversedKeywords": ["stuck in past", "naivety", "lack of progress", "unrealistic expectations"],
+    "symbolism": ["children", "white flowers", "cups with flowers", "village"]
+  },
+  {
+    "name": "Seven of Cups",
+    "arcana": "Minor",
+    "suit": "Cups",
+    "number": 7,
+    "keywords": ["illusion", "choices", "wishful", "fantasy", "unrealistic", "dreams", "confusion", "options"],
+    "themes": ["Wishful Fantasy", "Confusing Choices", "Unrealistic Dreams"],
+    "energyAffinity": {
+      "romantic": 0.7,
+      "edge": 0.6,
+      "playful": 0.6,
+      "drama": 0.5,
+      "classic": 0.3,
+      "utility": 0.2
+    },
+    "description": "Seven of Cups represents illusion, wishful thinking, too many choices, fantasy, and unrealistic expectations.",
+    "reversedKeywords": ["clarity", "making decisions", "taking action", "focus"],
+    "symbolism": ["seven cups", "clouds", "various symbols", "silhouette"]
+  },
+  {
+    "name": "Eight of Cups",
+    "arcana": "Minor",
+    "suit": "Cups",
+    "number": 8,
+    "keywords": ["moving", "seeking", "disappointment", "abandonment", "spiritual", "quest", "transition", "letting"],
+    "themes": ["Spiritual Quest", "Moving Forward", "Seeking Truth"],
+    "energyAffinity": {
+      "drama": 0.7,
+      "edge": 0.6,
+      "classic": 0.6,
+      "romantic": 0.5,
+      "utility": 0.5,
+      "playful": 0.3
+    },
+    "description": "Eight of Cups represents moving on, seeking deeper meaning, spiritual quest, and leaving disappointment behind.",
+    "reversedKeywords": ["avoiding problems", "fear of change", "stagnation", "false hope"],
+    "symbolism": ["walking figure", "eight cups", "mountains", "moon"]
+  },
+  {
+    "name": "Nine of Cups",
+    "arcana": "Minor",
+    "suit": "Cups",
+    "number": 9,
+    "keywords": ["satisfaction", "contentment", "luxury", "pleasure", "gratitude", "wishes", "fulfillment", "abundance"],
+    "themes": ["Emotional Satisfaction", "Luxurious Contentment", "Grateful Fulfillment"],
+    "energyAffinity": {
+      "romantic": 0.9,
+      "classic": 0.7,
+      "playful": 0.7,
+      "drama": 0.5,
+      "utility": 0.4,
+      "edge": 0.3
+    },
+    "description": "Nine of Cups represents satisfaction, contentment, emotional fulfillment, luxury, and gratitude for abundance.",
+    "reversedKeywords": ["superficial happiness", "dissatisfaction", "greed", "materialism"],
+    "symbolism": ["satisfied figure", "nine cups", "arms crossed", "blue backdrop"]
+  },
+  {
+    "name": "Ten of Cups",
+    "arcana": "Minor",
+    "suit": "Cups",
+    "number": 10,
+    "keywords": ["emotional", "fulfillment", "happiness", "family", "harmony", "alignment", "bliss", "contentment"],
+    "themes": ["Family Harmony", "Emotional Bliss", "Perfect Contentment"],
+    "energyAffinity": {
+      "romantic": 1.0,
+      "classic": 0.8,
+      "playful": 0.6,
+      "drama": 0.4,
+      "utility": 0.5,
+      "edge": 0.2
+    },
+    "description": "Ten of Cups represents emotional fulfillment, family happiness, harmony, and perfect contentment in relationships.",
+    "reversedKeywords": ["family problems", "broken relationships", "disconnection", "unrealistic expectations"],
+    "symbolism": ["rainbow", "family", "ten cups", "home"]
+  },
+  {
+    "name": "Page of Cups",
+    "arcana": "Minor",
+    "suit": "Cups",
+    "number": 11,
+    "keywords": ["creative", "dreamy", "emotional", "intuitive", "artistic", "sensitive", "imaginative", "youthful"],
+    "themes": ["Creative Sensitivity", "Dreamy Imagination", "Artistic Expression"],
+    "energyAffinity": {
+      "romantic": 0.8,
+      "playful": 0.9,
+      "edge": 0.5,
+      "classic": 0.4,
+      "drama": 0.4,
+      "utility": 0.3
+    },
+    "description": "Page of Cups represents creative sensitivity, dreamy imagination, artistic expression, and youthful emotional openness.",
+    "reversedKeywords": ["emotional immaturity", "lack of creativity", "moodiness", "unrealistic"],
+    "symbolism": ["young figure", "cup", "fish", "water"]
+  },
+  {
+    "name": "Knight of Cups",
+    "arcana": "Minor",
+    "suit": "Cups",
+    "number": 12,
+    "keywords": ["romantic", "idealistic", "emotional", "sensitive", "dreamer", "artistic", "intuitive", "passionate"],
+    "themes": ["Romantic Idealism", "Passionate Dreams", "Emotional Journey"],
+    "energyAffinity": {
+      "romantic": 1.0,
+      "drama": 0.6,
+      "playful": 0.6,
+      "edge": 0.4,
+      "classic": 0.4,
+      "utility": 0.2
+    },
+    "description": "Knight of Cups represents romantic idealism, emotional passion, artistic pursuits, and following your heart's desires.",
+    "reversedKeywords": ["moodiness", "unrealistic expectations", "emotional manipulation", "disappointment"],
+    "symbolism": ["knight on horse", "cup", "flowing water", "winged helmet"]
+  },
+  {
+    "name": "Queen of Cups",
+    "arcana": "Minor",
+    "suit": "Cups",
+    "number": 13,
+    "keywords": ["compassionate", "intuitive", "emotional", "caring", "psychic", "nurturing", "empathetic", "wise"],
+    "themes": ["Compassionate Wisdom", "Intuitive Nurturing", "Emotional Intelligence"],
+    "energyAffinity": {
+      "romantic": 0.9,
+      "classic": 0.7,
+      "drama": 0.5,
+      "utility": 0.6,
+      "playful": 0.4,
+      "edge": 0.4
+    },
+    "description": "Queen of Cups represents compassionate wisdom, intuitive nurturing, emotional intelligence, and psychic sensitivity.",
+    "reversedKeywords": ["emotional manipulation", "moodiness", "lack of emotional control", "martyrdom"],
+    "symbolism": ["seated queen", "ornate cup", "throne by water", "pebbles"]
+  },
+  {
+    "name": "King of Cups",
+    "arcana": "Minor",
+    "suit": "Cups",
+    "number": 14,
+    "keywords": ["emotionally", "balanced", "compassionate", "diplomatic", "wise", "calm", "mature", "generous"],
+    "themes": ["Emotional Mastery", "Compassionate Leadership", "Diplomatic Wisdom"],
+    "energyAffinity": {
+      "classic": 0.8,
+      "romantic": 0.8,
+      "drama": 0.6,
+      "utility": 0.7,
+      "playful": 0.4,
+      "edge": 0.3
+    },
+    "description": "King of Cups represents emotional mastery, compassionate leadership, diplomatic wisdom, and balanced emotional control.",
+    "reversedKeywords": ["emotional manipulation", "moodiness", "volatility", "being overly emotional"],
+    "symbolism": ["king on throne", "cup", "water", "fish"]
+  },
+  {
+    "name": "Ace of Wands",
+    "arcana": "Minor",
+    "suit": "Wands",
+    "number": 1,
+    "keywords": ["inspiration", "new", "beginnings", "growth", "potential", "creative", "energy", "spark"],
+    "themes": ["Creative Inspiration", "New Energy", "Potential Growth"],
+    "energyAffinity": {
+      "drama": 0.8,
+      "playful": 0.9,
+      "edge": 0.6,
+      "classic": 0.4,
+      "romantic": 0.5,
+      "utility": 0.5
+    },
+    "description": "Ace of Wands represents inspiration, new creative beginnings, growth potential, and the spark of new energy.",
+    "reversedKeywords": ["lack of energy", "delays", "lack of passion", "cancelled plans"],
+    "symbolism": ["hand", "wand", "leaves", "clouds"]
+  },
+  {
+    "name": "Two of Wands",
+    "arcana": "Minor",
+    "suit": "Wands",
+    "number": 2,
+    "keywords": ["planning", "making", "decisions", "progress", "discovery", "personal", "power", "foresight"],
+    "themes": ["Strategic Planning", "Personal Power", "Future Vision"],
+    "energyAffinity": {
+      "classic": 0.7,
+      "drama": 0.6,
+      "utility": 0.8,
+      "edge": 0.5,
+      "romantic": 0.4,
+      "playful": 0.4
+    },
+    "description": "Two of Wands represents planning, making decisions, personal power, progress, and having a vision for the future.",
+    "reversedKeywords": ["lack of planning", "bad decisions", "avoiding responsibility", "playing it safe"],
+    "symbolism": ["figure with globe", "two wands", "castle", "landscape"]
+  },
+  {
+    "name": "Three of Wands",
+    "arcana": "Minor",
+    "suit": "Wands",
+    "number": 3,
+    "keywords": ["expansion", "looking", "ahead", "overseas", "opportunities", "foresight", "leadership", "progress"],
+    "themes": ["Expanding Horizons", "Forward Vision", "Leadership Growth"],
+    "energyAffinity": {
+      "drama": 0.7,
+      "classic": 0.6,
+      "playful": 0.6,
+      "utility": 0.7,
+      "edge": 0.5,
+      "romantic": 0.4
+    },
+    "description": "Three of Wands represents expansion, looking ahead, overseas opportunities, foresight, and leadership in progress.",
+    "reversedKeywords": ["lack of foresight", "unexpected delays", "lack of progress", "frustration"],
+    "symbolism": ["figure looking out", "three wands", "ships", "cliffs"]
+  },
+  {
+    "name": "Four of Wands",
+    "arcana": "Minor",
+    "suit": "Wands",
+    "number": 4,
+    "keywords": ["celebration", "harmony", "home", "marriage", "community", "stability", "achievement", "milestone"],
+    "themes": ["Celebratory Achievement", "Harmonious Community", "Stable Foundation"],
+    "energyAffinity": {
+      "playful": 0.8,
+      "romantic": 0.7,
+      "classic": 0.7,
+      "drama": 0.5,
+      "utility": 0.6,
+      "edge": 0.3
+    },
+    "description": "Four of Wands represents celebration, harmony, home, marriage, community, and achieving stable milestones.",
+    "reversedKeywords": ["lack of support", "instability", "cancelled celebrations", "broken relationships"],
+    "symbolism": ["four wands", "garland", "celebrating figures", "castle"]
+  },
+  {
+    "name": "Five of Wands",
+    "arcana": "Minor",
+    "suit": "Wands",
+    "number": 5,
+    "keywords": ["competition", "conflict", "struggles", "disagreement", "chaos", "fighting", "rivalry", "tension"],
+    "themes": ["Competitive Struggle", "Creative Conflict", "Chaotic Energy"],
+    "energyAffinity": {
+      "drama": 0.9,
+      "edge": 0.6,
+      "playful": 0.5,
+      "classic": 0.3,
+      "utility": 0.4,
+      "romantic": 0.2
+    },
+    "description": "Five of Wands represents competition, conflict, struggles, disagreement, and chaotic competitive energy.",
+    "reversedKeywords": ["avoiding conflict", "seeking compromise", "ending competition", "cooperation"],
+    "symbolism": ["five figures", "wands clashing", "struggle", "competition"]
+  },
+  {
+    "name": "Six of Wands",
+    "arcana": "Minor",
+    "suit": "Wands",
+    "number": 6,
+    "keywords": ["victory", "success", "achievement", "recognition", "triumph", "confidence", "praise", "acclaim"],
+    "themes": ["Triumphant Victory", "Public Recognition", "Confident Success"],
+    "energyAffinity": {
+      "drama": 0.9,
+      "classic": 0.7,
+      "playful": 0.7,
+      "utility": 0.6,
+      "edge": 0.5,
+      "romantic": 0.5
+    },
+    "description": "Six of Wands represents victory, success, achievement, recognition, triumph, and confident public acclaim.",
+    "reversedKeywords": ["lack of recognition", "fall from grace", "egotism", "lack of confidence"],
+    "symbolism": ["victorious rider", "laurel wreath", "wand", "crowd"]
+  },
+  {
+    "name": "Seven of Wands",
+    "arcana": "Minor",
+    "suit": "Wands",
+    "number": 7,
+    "keywords": ["defensive", "perseverance", "maintaining", "position", "challenge", "competition", "determination", "standing"],
+    "themes": ["Defensive Perseverance", "Maintaining Position", "Determined Stand"],
+    "energyAffinity": {
+      "drama": 0.8,
+      "classic": 0.6,
+      "utility": 0.8,
+      "edge": 0.5,
+      "romantic": 0.3,
+      "playful": 0.4
+    },
+    "description": "Seven of Wands represents defensive perseverance, maintaining your position, challenge, and determined resistance.",
+    "reversedKeywords": ["giving up", "lack of courage", "admitting defeat", "feeling overwhelmed"],
+    "symbolism": ["figure with wand", "six other wands", "high ground", "defense"]
+  },
+  {
+    "name": "Eight of Wands",
+    "arcana": "Minor",
+    "suit": "Wands",
+    "number": 8,
+    "keywords": ["speed", "action", "movement", "hasty", "decisions", "communication", "travel", "progress"],
+    "themes": ["Swift Action", "Rapid Communication", "Fast Progress"],
+    "energyAffinity": {
+      "playful": 0.8,
+      "drama": 0.7,
+      "edge": 0.6,
+      "utility": 0.7,
+      "classic": 0.4,
+      "romantic": 0.4
+    },
+    "description": "Eight of Wands represents speed, swift action, rapid movement, hasty decisions, and fast communication.",
+    "reversedKeywords": ["delays", "frustration", "lack of progress", "impatience"],
+    "symbolism": ["eight flying wands", "clear sky", "open landscape", "speed"]
+  },
+  {
+    "name": "Nine of Wands",
+    "arcana": "Minor",
+    "suit": "Wands",
+    "number": 9,
+    "keywords": ["resilience", "persistence", "last", "stand", "defensive", "wounded", "determination", "nearly"],
+    "themes": ["Resilient Persistence", "Final Stand", "Wounded Determination"],
+    "energyAffinity": {
+      "drama": 0.8,
+      "classic": 0.7,
+      "utility": 0.8,
+      "edge": 0.5,
+      "romantic": 0.4,
+      "playful": 0.3
+    },
+    "description": "Nine of Wands represents resilience, persistence, the last stand, defensive positioning, and wounded determination.",
+    "reversedKeywords": ["giving up", "lack of resilience", "feeling defeated", "paranoia"],
+    "symbolism": ["wounded figure", "bandaged head", "nine wands", "defensive stance"]
+  },
+  {
+    "name": "Ten of Wands",
+    "arcana": "Minor",
+    "suit": "Wands",
+    "number": 10,
+    "keywords": ["burden", "responsibility", "hard", "work", "achievement", "completion", "heavy", "load"],
+    "themes": ["Heavy Responsibility", "Burdensome Achievement", "Final Effort"],
+    "energyAffinity": {
+      "utility": 0.9,
+      "classic": 0.7,
+      "drama": 0.6,
+      "edge": 0.4,
+      "romantic": 0.3,
+      "playful": 0.2
+    },
+    "description": "Ten of Wands represents burden, responsibility, hard work, achievement through effort, and carrying heavy loads.",
+    "reversedKeywords": ["release", "delegation", "letting go", "lightening the load"],
+    "symbolism": ["bent figure", "ten wands", "heavy burden", "approaching goal"]
+  },
+  {
+    "name": "Page of Wands",
+    "arcana": "Minor",
+    "suit": "Wands",
+    "number": 11,
+    "keywords": ["enthusiastic", "exploration", "discovery", "free", "spirit", "adventure", "fearless", "eager"],
+    "themes": ["Enthusiastic Discovery", "Adventurous Spirit", "Fearless Exploration"],
+    "energyAffinity": {
+      "playful": 1.0,
+      "edge": 0.7,
+      "drama": 0.6,
+      "romantic": 0.5,
+      "classic": 0.3,
+      "utility": 0.4
+    },
+    "description": "Page of Wands represents enthusiastic exploration, discovery, free spirit, adventure, and fearless eagerness.",
+    "reversedKeywords": ["lack of direction", "procrastination", "lack of commitment", "hasty decisions"],
+    "symbolism": ["young figure", "wand", "desert", "pyramids"]
+  },
+  {
+    "name": "Knight of Wands",
+    "arcana": "Minor",
+    "suit": "Wands",
+    "number": 12,
+    "keywords": ["action", "adventure", "fearlessness", "energy", "impulsiveness", "heroic", "daring", "passionate"],
+    "themes": ["Daring Adventure", "Impulsive Action", "Heroic Energy"],
+    "energyAffinity": {
+      "drama": 0.9,
+      "playful": 0.8,
+      "edge": 0.7,
+      "classic": 0.3,
+      "utility": 0.4,
+      "romantic": 0.5
+    },
+    "description": "Knight of Wands represents action, adventure, fearlessness, impulsive energy, and daring heroic passion.",
+    "reversedKeywords": ["recklessness", "lack of self-control", "aggression", "impatience"],
+    "symbolism": ["knight on rearing horse", "armor", "wand", "desert"]
+  },
+  {
+    "name": "Queen of Wands",
+    "arcana": "Minor",
+    "suit": "Wands",
+    "number": 13,
+    "keywords": ["confident", "optimistic", "warm", "outgoing", "energetic", "cheerful", "self", "assured"],
+    "themes": ["Confident Leadership", "Warm Energy", "Optimistic Strength"],
+    "energyAffinity": {
+      "drama": 0.8,
+      "playful": 0.8,
+      "classic": 0.6,
+      "romantic": 0.6,
+      "utility": 0.6,
+      "edge": 0.5
+    },
+    "description": "Queen of Wands represents confident leadership, warm optimism, energetic charm, and self-assured strength.",
+    "reversedKeywords": ["selfishness", "jealousy", "insecurity", "temperamental"],
+    "symbolism": ["queen on throne", "sunflower", "black cat", "wand"]
+  },
+  {
+    "name": "King of Wands",
+    "arcana": "Minor",
+    "suit": "Wands",
+    "number": 14,
+    "keywords": ["leadership", "vision", "honour", "big", "picture", "taking", "control", "bold"],
+    "themes": ["Visionary Leadership", "Bold Control", "Honorable Command"],
+    "energyAffinity": {
+      "drama": 0.9,
+      "classic": 0.8,
+      "utility": 0.7,
+      "edge": 0.6,
+      "romantic": 0.4,
+      "playful": 0.5
+    },
+    "description": "King of Wands represents visionary leadership, taking control, honor, seeing the big picture, and bold command.",
+    "reversedKeywords": ["dictatorial", "overbearing", "lack of vision", "impulsiveness"],
+    "symbolism": ["king on throne", "lizards", "wand", "cape"]
+  },
+  {
+    "name": "Ace of Swords",
+    "arcana": "Minor",
+    "suit": "Swords",
+    "number": 1,
+    "keywords": ["clarity", "breakthrough", "new", "ideas", "mental", "focus", "truth", "communication"],
+    "themes": ["Mental Breakthrough", "Clear Communication", "Sharp Focus"],
+    "energyAffinity": {
+      "classic": 0.7,
+      "edge": 0.8,
+      "drama": 0.6,
+      "utility": 0.7,
+      "playful": 0.5,
+      "romantic": 0.4
+    },
+    "description": "Ace of Swords represents clarity, breakthrough, new ideas, mental focus, truth, and clear communication.",
+    "reversedKeywords": ["confusion", "lack of clarity", "poor communication", "clouded thinking"],
+    "symbolism": ["hand holding sword", "crown", "clouds", "mountains"]
+  },
+  {
+    "name": "Two of Swords",
+    "arcana": "Minor",
+    "suit": "Swords",
+    "number": 2,
+    "keywords": ["difficult", "decisions", "indecision", "stalemate", "avoidance", "blindfolded", "crossroads", "confusion"],
+    "themes": ["Difficult Decision", "Mental Stalemate", "Confused Choice"],
+    "energyAffinity": {
+      "classic": 0.6,
+      "edge": 0.5,
+      "drama": 0.5,
+      "utility": 0.6,
+      "romantic": 0.5,
+      "playful": 0.3
+    },
+    "description": "Two of Swords represents difficult decisions, indecision, stalemate, avoidance, and being at a crossroads.",
+    "reversedKeywords": ["indecision", "delay", "overanalyzing", "fear of making wrong choice"],
+    "symbolism": ["blindfolded figure", "two swords", "water", "crescent moon"]
+  },
+  {
+    "name": "Three of Swords",
+    "arcana": "Minor",
+    "suit": "Swords",
+    "number": 3,
+    "keywords": ["heartbreak", "betrayal", "separation", "sadness", "sorrow", "hurt", "loss", "grief"],
+    "themes": ["Heartbreak", "Emotional Pain", "Sorrowful Loss"],
+    "energyAffinity": {
+      "drama": 0.9,
+      "romantic": 0.6,
+      "classic": 0.4,
+      "edge": 0.5,
+      "utility": 0.3,
+      "playful": 0.1
+    },
+    "description": "Three of Swords represents heartbreak, betrayal, separation, sadness, emotional pain, and grieving loss.",
+    "reversedKeywords": ["healing", "forgiveness", "recovery", "optimism"],
+    "symbolism": ["heart pierced by swords", "storm clouds", "rain", "pain"]
+  },
+  {
+    "name": "Four of Swords",
+    "arcana": "Minor",
+    "suit": "Swords",
+    "number": 4,
+    "keywords": ["rest", "meditation", "contemplation", "recovery", "passive", "withdrawal", "peace", "stillness"],
+    "themes": ["Peaceful Rest", "Meditative Recovery", "Contemplative Withdrawal"],
+    "energyAffinity": {
+      "classic": 0.8,
+      "romantic": 0.6,
+      "utility": 0.6,
+      "edge": 0.4,
+      "drama": 0.3,
+      "playful": 0.2
+    },
+    "description": "Four of Swords represents rest, meditation, contemplation, recovery, passive withdrawal, and peaceful stillness.",
+    "reversedKeywords": ["restlessness", "burnout", "lack of progress", "stagnation"],
+    "symbolism": ["figure lying down", "four swords", "stained glass", "tomb"]
+  },
+  {
+    "name": "Five of Swords",
+    "arcana": "Minor",
+    "suit": "Swords",
+    "number": 5,
+    "keywords": ["conflict", "defeat", "winning", "at", "all", "costs", "betrayal", "revenge", "hostility"],
+    "themes": ["Hollow Victory", "Conflicted Defeat", "Costly Win"],
+    "energyAffinity": {
+      "drama": 0.9,
+      "edge": 0.7,
+      "classic": 0.3,
+      "utility": 0.4,
+      "romantic": 0.2,
+      "playful": 0.2
+    },
+    "description": "Five of Swords represents conflict, defeat, winning at all costs, betrayal, revenge, and hollow victory.",
+    "reversedKeywords": ["making amends", "forgiveness", "moving past conflict", "learning from defeat"],
+    "symbolism": ["figure with swords", "defeated figures", "stormy sky", "conflict"]
+  },
+  {
+    "name": "Six of Swords",
+    "arcana": "Minor",
+    "suit": "Swords",
+    "number": 6,
+    "keywords": ["transition", "moving", "on", "travel", "healing", "recovery", "moving", "forward"],
+    "themes": ["Healing Transition", "Moving Forward", "Recovery Journey"],
+    "energyAffinity": {
+      "classic": 0.7,
+      "utility": 0.8,
+      "romantic": 0.6,
+      "edge": 0.5,
+      "drama": 0.4,
+      "playful": 0.4
+    },
+    "description": "Six of Swords represents transition, moving on, travel, healing, recovery, and moving forward from difficulties.",
+    "reversedKeywords": ["stuck in past", "refusing to move on", "turbulent transitions", "unfinished business"],
+    "symbolism": ["boat journey", "six swords", "calm water", "passengers"]
+  },
+  {
+    "name": "Seven of Swords",
+    "arcana": "Minor",
+    "suit": "Swords",
+    "number": 7,
+    "keywords": ["deception", "theft", "getting", "away", "with", "something", "stealth", "strategy"],
+    "themes": ["Stealthy Strategy", "Deceptive Action", "Strategic Escape"],
+    "energyAffinity": {
+      "edge": 0.8,
+      "drama": 0.6,
+      "playful": 0.5,
+      "classic": 0.3,
+      "utility": 0.6,
+      "romantic": 0.2
+    },
+    "description": "Seven of Swords represents deception, theft, getting away with something, stealth, and strategic cunning.",
+    "reversedKeywords": ["getting caught", "conscience", "coming clean", "taking responsibility"],
+    "symbolism": ["figure stealing swords", "military camp", "stealth", "escape"]
+  },
+  {
+    "name": "Eight of Swords",
+    "arcana": "Minor",
+    "suit": "Swords",
+    "number": 8,
+    "keywords": ["imprisonment", "entrapment", "restriction", "powerlessness", "victim", "paralyzed", "trapped", "blindfolded"],
+    "themes": ["Mental Imprisonment", "Restricted Movement", "Feeling Trapped"],
+    "energyAffinity": {
+      "drama": 0.7,
+      "classic": 0.5,
+      "edge": 0.4,
+      "utility": 0.4,
+      "romantic": 0.4,
+      "playful": 0.2
+    },
+    "description": "Eight of Swords represents mental imprisonment, feeling trapped, restriction, powerlessness, and being a victim.",
+    "reversedKeywords": ["freedom", "release", "taking control", "empowerment"],
+    "symbolism": ["bound figure", "eight swords", "castle", "muddy ground"]
+  },
+  {
+    "name": "Nine of Swords",
+    "arcana": "Minor",
+    "suit": "Swords",
+    "number": 9,
+    "keywords": ["anxiety", "worry", "fear", "nightmares", "guilt", "anguish", "despair", "mental"],
+    "themes": ["Mental Anguish", "Anxious Worry", "Nightmare Fear"],
+    "energyAffinity": {
+      "drama": 0.9,
+      "classic": 0.4,
+      "edge": 0.5,
+      "utility": 0.3,
+      "romantic": 0.4,
+      "playful": 0.1
+    },
+    "description": "Nine of Swords represents anxiety, worry, fear, nightmares, guilt, mental anguish, and deep despair.",
+    "reversedKeywords": ["recovery", "learning to cope", "facing fears", "getting help"],
+    "symbolism": ["figure in bed", "nine swords", "dark night", "anguish"]
+  },
+  {
+    "name": "Ten of Swords",
+    "arcana": "Minor",
+    "suit": "Swords",
+    "number": 10,
+    "keywords": ["betrayal", "backstabbing", "hitting", "rock", "bottom", "defeat", "crisis", "ending"],
+    "themes": ["Rock Bottom", "Devastating Betrayal", "Crisis Ending"],
+    "energyAffinity": {
+      "drama": 1.0,
+      "edge": 0.6,
+      "classic": 0.3,
+      "utility": 0.4,
+      "romantic": 0.3,
+      "playful": 0.1
+    },
+    "description": "Ten of Swords represents betrayal, backstabbing, hitting rock bottom, complete defeat, and crisis endings.",
+    "reversedKeywords": ["recovery", "regeneration", "learning from failure", "new beginnings"],
+    "symbolism": ["fallen figure", "ten swords", "sunrise", "finality"]
+  },
+  {
+    "name": "Page of Swords",
+    "arcana": "Minor",
+    "suit": "Swords",
+    "number": 11,
+    "keywords": ["curious", "eager", "communicative", "mental", "energy", "learning", "vigilant", "alert"],
+    "themes": ["Curious Learning", "Mental Energy", "Vigilant Communication"],
+    "energyAffinity": {
+      "playful": 0.8,
+      "edge": 0.7,
+      "classic": 0.5,
+      "drama": 0.5,
+      "utility": 0.6,
+      "romantic": 0.4
+    },
+    "description": "Page of Swords represents curiosity, eager learning, mental energy, communication, vigilance, and alert awareness.",
+    "reversedKeywords": ["all talk no action", "haste", "unfocused energy", "poor communication"],
+    "symbolism": ["young figure", "raised sword", "wind", "birds"]
+  },
+  {
+    "name": "Knight of Swords",
+    "arcana": "Minor",
+    "suit": "Swords",
+    "number": 12,
+    "keywords": ["action", "fast", "thinking", "determined", "assertive", "direct", "impatient", "rash"],
+    "themes": ["Swift Action", "Direct Determination", "Impatient Movement"],
+    "energyAffinity": {
+      "drama": 0.8,
+      "edge": 0.7,
+      "playful": 0.6,
+      "classic": 0.4,
+      "utility": 0.7,
+      "romantic": 0.3
+    },
+    "description": "Knight of Swords represents swift action, fast thinking, determination, assertiveness, and direct approach.",
+    "reversedKeywords": ["recklessness", "impatience", "lack of planning", "aggression"],
+    "symbolism": ["charging knight", "horse in motion", "sword raised", "wind"]
+  },
+  {
+    "name": "Queen of Swords",
+    "arcana": "Minor",
+    "suit": "Swords",
+    "number": 13,
+    "keywords": ["independent", "unbiased", "straight", "talking", "open", "minded", "perceptive", "witty"],
+    "themes": ["Independent Wisdom", "Direct Communication", "Perceptive Judgment"],
+    "energyAffinity": {
+      "classic": 0.8,
+      "edge": 0.6,
+      "drama": 0.6,
+      "utility": 0.8,
+      "romantic": 0.4,
+      "playful": 0.5
+    },
+    "description": "Queen of Swords represents independent wisdom, unbiased judgment, direct communication, and perceptive insight.",
+    "reversedKeywords": ["coldness", "bitterness", "harsh judgment", "lack of empathy"],
+    "symbolism": ["queen on throne", "upright sword", "clear sky", "bird"]
+  },
+  {
+    "name": "King of Swords",
+    "arcana": "Minor",
+    "suit": "Swords",
+    "number": 14,
+    "keywords": ["intellectual", "power", "authority", "truth", "rules", "systems", "discipline", "routine"],
+    "themes": ["Intellectual Authority", "Systematic Truth", "Disciplined Power"],
+    "energyAffinity": {
+      "classic": 0.9,
+      "utility": 0.9,
+      "drama": 0.7,
+      "edge": 0.5,
+      "romantic": 0.3,
+      "playful": 0.3
+    },
+    "description": "King of Swords represents intellectual power, authority, truth, systematic rules, discipline, and structured routine.",
+    "reversedKeywords": ["abuse of power", "tyranny", "lack of discipline", "harsh judgment"],
+    "symbolism": ["king on throne", "sword upright", "butterflies", "clouds"]
+  },
+  {
+    "name": "Ace of Pentacles",
+    "arcana": "Minor",
+    "suit": "Pentacles",
+    "number": 1,
+    "keywords": ["opportunity", "manifestation", "new", "financial", "opportunities", "abundance", "prosperity", "security"],
+    "themes": ["Material Opportunity", "Abundant Manifestation", "Financial Security"],
+    "energyAffinity": {
+      "classic": 0.7,
+      "utility": 0.8,
+      "romantic": 0.6,
+      "drama": 0.5,
+      "playful": 0.4,
+      "edge": 0.4
+    },
+    "description": "Ace of Pentacles represents new opportunities, manifestation, financial opportunities, abundance, and material security.",
+    "reversedKeywords": ["missed opportunities", "lack of planning", "poor financial decisions", "scarcity"],
+    "symbolism": ["hand holding pentacle", "garden", "mountain", "path"]
+  },
+  {
+    "name": "Two of Pentacles",
+    "arcana": "Minor",
+    "suit": "Pentacles",
+    "number": 2,
+    "keywords": ["balancing", "priorities", "time", "management", "adaptability", "resourcefulness", "flexibility", "juggling"],
+    "themes": ["Balancing Priorities", "Flexible Management", "Adaptable Resources"],
+    "energyAffinity": {
+      "utility": 0.8,
+      "playful": 0.7,
+      "classic": 0.6,
+      "edge": 0.5,
+      "drama": 0.4,
+      "romantic": 0.4
+    },
+    "description": "Two of Pentacles represents balancing priorities, time management, adaptability, resourcefulness, and flexible juggling.",
+    "reversedKeywords": ["overwhelm", "disorganization", "poor time management", "dropping the ball"],
+    "symbolism": ["juggling figure", "two pentacles", "infinity symbol", "ships"]
+  },
+  {
+    "name": "Three of Pentacles",
+    "arcana": "Minor",
+    "suit": "Pentacles",
+    "number": 3,
+    "keywords": ["teamwork", "collaboration", "building", "group", "efforts", "learning", "working", "together"],
+    "themes": ["Collaborative Building", "Team Learning", "Group Success"],
+    "energyAffinity": {
+      "classic": 0.7,
+      "utility": 0.8,
+      "playful": 0.6,
+      "romantic": 0.5,
+      "drama": 0.4,
+      "edge": 0.4
+    },
+    "description": "Three of Pentacles represents teamwork, collaboration, building together, group efforts, and learning from others.",
+    "reversedKeywords": ["lack of teamwork", "disorganization", "competing egos", "poor collaboration"],
+    "symbolism": ["craftsmen", "cathedral", "three pentacles", "collaboration"]
+  },
+  {
+    "name": "Four of Pentacles",
+    "arcana": "Minor",
+    "suit": "Pentacles",
+    "number": 4,
+    "keywords": ["conservation", "frugality", "security", "control", "scarcity", "mindset", "holding", "tight"],
+    "themes": ["Security Control", "Conservative Protection", "Careful Conservation"],
+    "energyAffinity": {
+      "classic": 0.8,
+      "utility": 0.9,
+      "drama": 0.4,
+      "edge": 0.3,
+      "romantic": 0.3,
+      "playful": 0.2
+    },
+    "description": "Four of Pentacles represents conservation, frugality, security, control, scarcity mindset, and holding tight to resources.",
+    "reversedKeywords": ["generosity", "giving", "spending", "letting go"],
+    "symbolism": ["seated figure", "four pentacles", "crown", "city"]
+  },
+  {
+    "name": "Five of Pentacles",
+    "arcana": "Minor",
+    "suit": "Pentacles",
+    "number": 5,
+    "keywords": ["hardship", "loss", "isolation", "feeling", "left", "out", "hard", "times"],
+    "themes": ["Financial Hardship", "Isolated Struggle", "Material Loss"],
+    "energyAffinity": {
+      "drama": 0.7,
+      "utility": 0.6,
+      "classic": 0.5,
+      "edge": 0.4,
+      "romantic": 0.4,
+      "playful": 0.2
+    },
+    "description": "Five of Pentacles represents hardship, loss, isolation, feeling left out, and experiencing hard times.",
+    "reversedKeywords": ["recovery", "charity", "improvement", "spiritual growth"],
+    "symbolism": ["two figures", "church window", "snow", "poverty"]
+  },
+  {
+    "name": "Six of Pentacles",
+    "arcana": "Minor",
+    "suit": "Pentacles",
+    "number": 6,
+    "keywords": ["generosity", "charity", "giving", "receiving", "sharing", "wealth", "community", "balance"],
+    "themes": ["Generous Giving", "Balanced Sharing", "Community Wealth"],
+    "energyAffinity": {
+      "classic": 0.7,
+      "romantic": 0.8,
+      "utility": 0.6,
+      "playful": 0.5,
+      "drama": 0.4,
+      "edge": 0.3
+    },
+    "description": "Six of Pentacles represents generosity, charity, giving and receiving, sharing wealth, and community balance.",
+    "reversedKeywords": ["selfishness", "debt", "one-sided relationships", "taking advantage"],
+    "symbolism": ["merchant with scales", "beggars", "six pentacles", "charity"]
+  },
+  {
+    "name": "Seven of Pentacles",
+    "arcana": "Minor",
+    "suit": "Pentacles",
+    "number": 7,
+    "keywords": ["assessment", "reaping", "what", "you", "sow", "results", "evaluation", "patience"],
+    "themes": ["Patient Assessment", "Evaluating Progress", "Harvesting Results"],
+    "energyAffinity": {
+      "classic": 0.8,
+      "utility": 0.8,
+      "romantic": 0.5,
+      "drama": 0.4,
+      "edge": 0.4,
+      "playful": 0.3
+    },
+    "description": "Seven of Pentacles represents assessment, reaping what you sow, evaluating results, and patient cultivation.",
+    "reversedKeywords": ["impatience", "lack of reward", "poor investment", "giving up too soon"],
+    "symbolism": ["farmer", "growing pentacles", "garden", "contemplation"]
+  },
+  {
+    "name": "Eight of Pentacles",
+    "arcana": "Minor",
+    "suit": "Pentacles",
+    "number": 8,
+    "keywords": ["apprenticeship", "hard", "work", "dedication", "skill", "development", "craftsmanship", "learning"],
+    "themes": ["Dedicated Craftsmanship", "Skill Development", "Hard Work"],
+    "energyAffinity": {
+      "classic": 0.8,
+      "utility": 0.9,
+      "drama": 0.4,
+      "edge": 0.4,
+      "romantic": 0.4,
+      "playful": 0.3
+    },
+    "description": "Eight of Pentacles represents apprenticeship, hard work, dedication, skill development, and focused craftsmanship.",
+    "reversedKeywords": ["lack of focus", "poor quality", "shortcuts", "lack of commitment"],
+    "symbolism": ["craftsman", "eight pentacles", "workbench", "concentration"]
+  },
+  {
+    "name": "Nine of Pentacles",
+    "arcana": "Minor",
+    "suit": "Pentacles",
+    "number": 9,
+    "keywords": ["independence", "luxury", "self", "sufficiency", "material", "success", "abundance", "sophistication"],
+    "themes": ["Independent Luxury", "Self-Sufficient Success", "Sophisticated Abundance"],
+    "energyAffinity": {
+      "classic": 0.9,
+      "romantic": 0.8,
+      "drama": 0.6,
+      "utility": 0.6,
+      "playful": 0.5,
+      "edge": 0.4
+    },
+    "description": "Nine of Pentacles represents independence, luxury, self-sufficiency, material success, and sophisticated abundance.",
+    "reversedKeywords": ["financial dependence", "superficiality", "work-life imbalance", "isolation"],
+    "symbolism": ["elegant figure", "vineyard", "bird", "luxury"]
+  },
+  {
+    "name": "Ten of Pentacles",
+    "arcana": "Minor",
+    "suit": "Pentacles",
+    "number": 10,
+    "keywords": ["legacy", "culmination", "inheritance", "family", "wealth", "establishment", "tradition", "completion"],
+    "themes": ["Family Legacy", "Established Wealth", "Traditional Completion"],
+    "energyAffinity": {
+      "classic": 1.0,
+      "romantic": 0.7,
+      "utility": 0.8,
+      "drama": 0.5,
+      "playful": 0.4,
+      "edge": 0.3
+    },
+    "description": "Ten of Pentacles represents legacy, culmination, inheritance, family wealth, establishment, and traditional completion.",
+    "reversedKeywords": ["family disputes", "lack of long-term vision", "fleeting success", "family breakdown"],
+    "symbolism": ["family scene", "archway", "ten pentacles", "generations"]
+  },
+  {
+    "name": "Page of Pentacles",
+    "arcana": "Minor",
+    "suit": "Pentacles",
+    "number": 11,
+    "keywords": ["ambitious", "diligent", "scholarly", "new", "ideas", "practical", "learning", "manifestation"],
+    "themes": ["Ambitious Learning", "Practical Study", "Diligent Development"],
+    "energyAffinity": {
+      "classic": 0.7,
+      "utility": 0.8,
+      "playful": 0.6,
+      "edge": 0.5,
+      "drama": 0.4,
+      "romantic": 0.4
+    },
+    "description": "Page of Pentacles represents ambition, diligence, scholarly learning, new practical ideas, and manifestation focus.",
+    "reversedKeywords": ["lack of commitment", "procrastination", "lack of goals", "poor planning"],
+    "symbolism": ["young figure", "pentacle", "field", "mountain"]
+  },
+  {
+    "name": "Knight of Pentacles",
+    "arcana": "Minor",
+    "suit": "Pentacles",
+    "number": 12,
+    "keywords": ["efficiency", "hard", "work", "routine", "conservatism", "methodical", "dedicated", "reliable"],
+    "themes": ["Efficient Dedication", "Methodical Work", "Reliable Progress"],
+    "energyAffinity": {
+      "classic": 0.9,
+      "utility": 1.0,
+      "drama": 0.3,
+      "edge": 0.2,
+      "romantic": 0.4,
+      "playful": 0.2
+    },
+    "description": "Knight of Pentacles represents efficiency, hard work, routine, conservatism, methodical dedication, and reliable progress.",
+    "reversedKeywords": ["laziness", "obsessiveness", "work-life imbalance", "perfectionism"],
+    "symbolism": ["knight with pentacle", "heavy horse", "plowed field", "methodical"]
+  },
+  {
+    "name": "Queen of Pentacles",
+    "arcana": "Minor",
+    "suit": "Pentacles",
+    "number": 13,
+    "keywords": ["practical", "down", "to", "earth", "generous", "welcoming", "organized", "resourceful"],
+    "themes": ["Practical Generosity", "Down-to-Earth Wisdom", "Resourceful Organization"],
+    "energyAffinity": {
+      "classic": 0.8,
+      "romantic": 0.8,
+      "utility": 0.9,
+      "playful": 0.5,
+      "drama": 0.4,
+      "edge": 0.3
+    },
+    "description": "Queen of Pentacles represents practical wisdom, down-to-earth generosity, resourceful organization, and welcoming abundance.",
+    "reversedKeywords": ["financial insecurity", "smothering", "lack of common sense", "jealousy"],
+    "symbolism": ["queen on throne", "pentacle", "rabbit", "flowers"]
+  },
+  {
+    "name": "King of Pentacles",
+    "arcana": "Minor",
+    "suit": "Pentacles",
+    "number": 14,
+    "keywords": ["abundance", "prosperity", "security", "control", "power", "disciplined", "successful", "reliable"],
+    "themes": ["Abundant Success", "Financial Mastery", "Disciplined Prosperity"],
+    "energyAffinity": {
+      "classic": 1.0,
+      "utility": 0.9,
+      "drama": 0.7,
+      "romantic": 0.6,
+      "playful": 0.4,
+      "edge": 0.3
+    },
+    "description": "King of Pentacles represents abundance, prosperity, financial security, control, disciplined success, and reliable power.",
+    "reversedKeywords": ["greed", "materialism", "financial insecurity", "poor financial decisions"],
+    "symbolism": ["king on throne", "pentacle", "grapes", "abundance"]
+  }
+]

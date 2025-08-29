@@ -86,7 +86,8 @@ class VibeBreakdownGenerator {
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
 
         analyzeTokenGeneration(from: tokens)
-/*
+        
+        // ACTIVATE distribution scaling for optimal daily variation
         let scaledTokens = applyDistributionScaling(to: tokens)
 
         let postScalingDistribution = calculateInfluenceDistribution(from: scaledTokens)
@@ -96,18 +97,23 @@ class VibeBreakdownGenerator {
         print("  Moon Phase: \(String(format: "%5.1f", postScalingDistribution["phase"] ?? 0))%")
         print("  Weather:    \(String(format: "%5.1f", postScalingDistribution["weather"] ?? 0))%")
         print("  Day of Week:\(String(format: "%5.1f", postScalingDistribution["dayOfWeek"] ?? 0))%")
-        print("")
         
+        // Calculate total daily variation
+        let totalDailyVariation = (postScalingDistribution["transit"] ?? 0) + 
+                                 (postScalingDistribution["weather"] ?? 0) + 
+                                 (postScalingDistribution["phase"] ?? 0) +
+                                 (postScalingDistribution["dayOfWeek"] ?? 0)
+        
+        print("📊 DAILY VARIATION ACHIEVED: \(String(format: "%.1f", totalDailyVariation))% (target: 20-25%)")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         print("📊 Input: \(scaledTokens.count) tokens")
- */
 
-        // Get sun sign for personality-based adjustments
-        let sunSign = extractSunSign(from: tokens)
+                // Get sun sign for personality-based adjustments
+        let sunSign = extractSunSign(from: scaledTokens)
         print("Sun Sign: \(sunSign)")
 
-         // Step 1: Calculate raw scores for each energy
-        let rawScores = calculateRawScores(from: tokens, sunSign: sunSign)
+        // Step 1: Calculate raw scores for each energy using SCALED tokens
+        let rawScores = calculateRawScores(from: scaledTokens, sunSign: sunSign)
         print("\n🎯 Raw Scores:")
         for (energy, score) in rawScores {
             print("  • \(energy): \(String(format: "%.2f", score))")
