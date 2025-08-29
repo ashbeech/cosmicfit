@@ -7,18 +7,20 @@
 //
 
 struct WeightingModel {
-    // DRASTICALLY reduced natal weight
-    static let natalWeight: Double = 0.45
-    
-    // Increased other weights to compensate
-    static let progressedWeight: Double = 0.66
+    // Core weights for Blueprint and other interpretations
+    static let natalWeight: Double = 0.65
     static let currentSunSignBackgroundWeight: Double = 0.57
     
+    // Daily Fit specific weights
     struct DailyFit {
-        static let transitWeight: Double = 0.78
+        static let transitWeight: Double = 0.65
         static let weatherWeight: Double = 0.12
-        static let moonPhaseWeight: Double = 0.65
+        //static let moonPhaseWeight: Double = 0.8 // TODO: This should, but doesn't affect anything in the result so commenting-out for now
     }
+    
+    // DEV NOTE TODO: Should out this in Blueprint specific weight for now
+    static let progressedWeight: Double = 0.66  // DEV NOTE: This only affects wardrobe storyline in blueprint at the mo, NOT the daily fit.
+
 }
 
 /*
@@ -51,38 +53,39 @@ struct DistributionTargets {
     static let maxMoonPhaseInfluence: Double = 15.0
     static let maxDayOfWeekInfluence: Double = 10.0
     static let targetWeatherInfluence: Double = 10.0
+    static let minProgressedInfluence: Double = 15.0  // Add minimum threshold
+    static let maxProgressedInfluence: Double = 35.0  // Add maximum threshold
     
     static func getScalingFactors(currentDistribution: [String: Double]) -> [String: Double] {
         var factors: [String: Double] = [:]
         
+        // Scale natal if over limit
         if let natalPercent = currentDistribution["natal"], natalPercent > maxNatalInfluence {
             factors["natal"] = maxNatalInfluence / natalPercent
         } else {
             factors["natal"] = 1.0
         }
         
-        if let transitPercent = currentDistribution["transit"], transitPercent < targetTransitInfluence {
-            factors["transit"] = targetTransitInfluence / max(transitPercent, 1.0)
-        } else {
-            factors["transit"] = 1.0
+        // Ensure progressed is within bounds
+        if let progressedPercent = currentDistribution["progressed"] {
+            if progressedPercent < minProgressedInfluence {
+                factors["progressed"] = minProgressedInfluence / progressedPercent
+            } else if progressedPercent > maxProgressedInfluence {
+                factors["progressed"] = maxProgressedInfluence / progressedPercent
+            } else {
+                factors["progressed"] = 1.0
+            }
         }
         
-        if let phasePercent = currentDistribution["phase"], phasePercent > maxMoonPhaseInfluence {
-            factors["phase"] = maxMoonPhaseInfluence / phasePercent
-        } else {
-            factors["phase"] = 1.0
+        // Scale other factors
+        if let transitPercent = currentDistribution["transit"] {
+            let targetFactor = targetTransitInfluence / transitPercent
+            factors["transit"] = min(max(targetFactor, 0.5), 1.5)
         }
         
-        if let weatherPercent = currentDistribution["weather"], weatherPercent < targetWeatherInfluence {
-            factors["weather"] = targetWeatherInfluence / max(weatherPercent, 1.0)
-        } else {
-            factors["weather"] = 1.0
-        }
-        
-        if let dayPercent = currentDistribution["dayOfWeek"], dayPercent > maxDayOfWeekInfluence {
-            factors["dayOfWeek"] = maxDayOfWeekInfluence / dayPercent
-        } else {
-            factors["dayOfWeek"] = 1.0
+        if let weatherPercent = currentDistribution["weather"] {
+            let targetFactor = targetWeatherInfluence / weatherPercent
+            factors["weather"] = min(max(targetFactor, 0.5), 2.0)
         }
         
         return factors

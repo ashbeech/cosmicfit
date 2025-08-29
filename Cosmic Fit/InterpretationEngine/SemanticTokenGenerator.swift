@@ -501,23 +501,23 @@ class SemanticTokenGenerator {
                 
                 switch planetName {
                 case "Moon":
+                    baseWeight = 0.6
+                    maxTokens = 3
+                case "Venus":
                     baseWeight = 0.5
                     maxTokens = 2
-                case "Venus":
-                    baseWeight = 0.4
-                    maxTokens = 1
                 case "Mars":
-                    baseWeight = 0.3
-                    maxTokens = 1
-                case "Sun":
-                    baseWeight = 0.7  // Core identity evolution
-                    maxTokens = 2
-                case "Mercury":
-                    baseWeight = 0.6  // Communication and style expression evolution
-                    maxTokens = 1
-                default:
                     baseWeight = 0.4
-                    maxTokens = 1
+                    maxTokens = 2
+                case "Sun":
+                    baseWeight = 0.8  // Core identity evolution
+                    maxTokens = 3
+                case "Mercury":
+                    baseWeight = 0.7  // Communication and style expression evolution
+                    maxTokens = 2
+                default:
+                    baseWeight = 0.5
+                    maxTokens = 2
                 }
                 
                 let progressedTokens = tokenizeForPlanetInSign(
