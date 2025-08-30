@@ -1930,10 +1930,6 @@ class SemanticTokenGenerator {
         
         /// Determine color season based on astrological chart factors
         static func determineColorSeason(chart: NatalChartCalculator.NatalChart) -> ColorSeason {
-            let sunSign = getSunSign(chart: chart)
-            let venusSign = getVenusSign(chart: chart)
-            let ascendantSign = CoordinateTransformations.decimalDegreesToZodiac(chart.ascendant).sign
-            
             // Analyze elemental balance for warmth/coolness
             let fireCount = countFirePlacements(chart: chart)
             let earthCount = countEarthPlacements(chart: chart)
@@ -1949,19 +1945,17 @@ class SemanticTokenGenerator {
             // Determine lightness (light vs deep)
             let isLightExpression = hasLightExpression(chart: chart)
             
-            // Professional color season determination
+            // Professional color season determination (fixed redundant cases)
             switch (isWarmUndertone, venusIntensity, isLightExpression) {
             case (true, .bright, true): return .brightSpring
             case (true, .muted, true): return .lightSpring
             case (true, .bright, false): return .warmSpring
+            case (true, .muted, false): return .warmAutumn
+            case (true, .deep, false): return .deepAutumn
             case (false, .bright, true): return .brightSummer
             case (false, .muted, true): return .lightSummer
             case (false, .muted, false): return .coolSummer
-            case (true, .bright, false): return .brightAutumn
-            case (true, .muted, false): return .warmAutumn
-            case (true, .deep, false): return .deepAutumn
             case (false, .bright, false): return .brightWinter
-            case (false, .muted, false): return .coolWinter
             case (false, .deep, false): return .deepWinter
             default: return .deepAutumn // Fallback
             }
@@ -2005,13 +1999,7 @@ class SemanticTokenGenerator {
             // Add more seasonal mappings as needed
         ]
         
-        private static func getSunSign(chart: NatalChartCalculator.NatalChart) -> Int {
-            return chart.planets.first { $0.name == "Sun" }?.zodiacSign ?? 5
-        }
-        
-        private static func getVenusSign(chart: NatalChartCalculator.NatalChart) -> Int {
-            return chart.planets.first { $0.name == "Venus" }?.zodiacSign ?? 7
-        }
+
         
         private static func countFirePlacements(chart: NatalChartCalculator.NatalChart) -> Int {
             return chart.planets.filter { [1, 5, 9].contains($0.zodiacSign) }.count

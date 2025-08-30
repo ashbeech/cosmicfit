@@ -11,16 +11,16 @@ struct WeightingModel {
     static let natalWeight: Double = 0.75  // Increased to achieve 45-55% natal target
     static let currentSunSignBackgroundWeight: Double = 0.10  // Further reduced to rebalance
     
-    // Professional standard: 20-25% total daily variation
+    // Professional standard: 20-25% total daily variation with meaningful transit influence
     struct DailyFit {
-        static let transitWeight: Double = 0.5   // Further reduced to achieve 20-25% daily variation
-        static let weatherWeight: Double = 0.4   // Reduced for modulation role, not dominance
-        static let moonPhaseWeight: Double = 0.3  // Reduced for appropriate lunar influence
+        static let transitWeight: Double = 1.2   // Increased to achieve 15-20% transit influence
+        static let weatherWeight: Double = 0.4   // Maintained for modulation role
+        static let moonPhaseWeight: Double = 0.25  // Slightly reduced to achieve 20-25% daily variation target
         static let dailySignatureWeight: Double = 0.15  // Minimal day-of-week energy
     }
     
-    // Professional range: 15-20% progressed influence
-    static let progressedWeight: Double = 0.25  // Reduced to fit within 15-20% professional range
+    // Professional range: 15-20% progressed influence  
+    static let progressedWeight: Double = 0.20  // Further reduced to make room for stronger transit influence
 
 }
 
@@ -51,12 +51,13 @@ struct WeightingModel {
 struct DistributionTargets {
     static let maxNatalInfluence: Double = 55.0       // Professional standard: 45-55%
     static let minNatalInfluence: Double = 45.0       // Ensure natal dominance
-    static let targetTransitInfluence: Double = 18.0  // Professional standard: 15-20%
+    static let targetTransitInfluence: Double = 17.0  // Professional standard: 15-20% (strengthened target)
+    static let minTransitInfluence: Double = 15.0     // Minimum for meaningful daily variety
     static let maxMoonPhaseInfluence: Double = 12.0   // Reduced for balanced influence
     static let maxDayOfWeekInfluence: Double = 8.0    // Reduced for subtle daily signature
     static let targetWeatherInfluence: Double = 8.0   // Professional standard: 8-12%
     static let minProgressedInfluence: Double = 15.0  // Professional minimum
-    static let maxProgressedInfluence: Double = 20.0  // Professional maximum (reduced from 35)
+    static let maxProgressedInfluence: Double = 20.0  // Professional maximum
     
     static func getScalingFactors(currentDistribution: [String: Double]) -> [String: Double] {
         var factors: [String: Double] = [:]
@@ -79,12 +80,16 @@ struct DistributionTargets {
             }
         }
         
-        // Enhanced transit scaling for daily Moon movement
+        // Ensure minimum transit influence for daily fashion variety
         if let transitPercent = currentDistribution["transit"] {
-            if transitPercent < targetTransitInfluence * 0.8 {
-                // Boost transit influence to capture daily Moon movement
+            if transitPercent < minTransitInfluence {
+                // Boost transit influence to meet minimum threshold
+                let targetFactor = targetTransitInfluence / max(transitPercent, 1.0)
+                factors["transit"] = min(max(targetFactor, 1.0), 3.0)  // Allow stronger boost for daily variety
+            } else if transitPercent < targetTransitInfluence {
+                // Moderate boost toward target
                 let targetFactor = targetTransitInfluence / transitPercent
-                factors["transit"] = min(max(targetFactor, 1.0), 2.5)  // Allow higher boost
+                factors["transit"] = min(max(targetFactor, 1.0), 1.5)
             } else {
                 factors["transit"] = 1.0
             }

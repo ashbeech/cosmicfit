@@ -61,25 +61,25 @@ class TransitWeightCalculator {
     
     /// Get weight multiplier based on aspect type and orb
     private static func getAspectWeight(aspectType: String, orb: Double) -> Double {
-        // Base aspect weights
+        // Professional fashion-focused aspect weights (strengthened for daily variety)
         var baseWeight: Double
         switch aspectType {
         case "Conjunction":
-            baseWeight = 1.0
+            baseWeight = 2.5  // Increased for fashion impact
         case "Opposition":
-            baseWeight = 0.8
+            baseWeight = 2.0  // Increased for daily tension/balance
         case "Square":
-            baseWeight = 0.8
+            baseWeight = 2.0  // Increased for dynamic styling challenges
         case "Trine":
-            baseWeight = 0.6
+            baseWeight = 1.5  // Increased for harmonious daily flow
         case "Sextile":
-            baseWeight = 0.4
+            baseWeight = 1.2  // Increased for styling opportunities
         case "Quincunx", "Inconjunct":
-            baseWeight = 0.2
+            baseWeight = 0.8  // Increased for adjustment styling
         case "Semisextile", "Semisquare", "Sesquisquare", "Quintile", "BiQuintile":
-            baseWeight = 0.1
+            baseWeight = 0.5  // Increased for subtle daily accents
         default:
-            baseWeight = 0.03  // Background influence
+            baseWeight = 0.2  // Increased background influence
         }
         
         // Adjust for orb tightness
