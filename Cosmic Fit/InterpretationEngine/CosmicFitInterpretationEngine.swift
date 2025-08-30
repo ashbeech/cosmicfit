@@ -255,7 +255,7 @@ class CosmicFitInterpretationEngine {
 
         ACCESSORIES: \(dailyVibe.accessories)
 
-        \(dailyVibe.takeaway)
+        \(dailyVibe.styleBrief)
         """
     }
     

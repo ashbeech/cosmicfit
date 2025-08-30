@@ -49,45 +49,61 @@ class DailyVibeGenerator {
         // Debug: Analyze token composition
         debugAnalyzeTokens(allTokens)
         
-        // Generate Maria's Style Brief from tokens
+        // Generate all Daily System sections from tokens
         let styleBrief = generateMariaStyleBrief(from: allTokens)
-
         let vibeBreakdown = VibeBreakdownGenerator.generateVibeBreakdown(from: allTokens)
-            
+        
         debugVibeBreakdownAnalysis(breakdown: vibeBreakdown, tokens: allTokens)
         
-        // Generate Tarot card selection
+        // Generate Tarot card selection with keywords
         let selectedTarotCard = TarotCardSelector.selectCard(
             for: allTokens,
-            theme: nil, // Could extract theme from tokens in future
+            theme: nil,
             vibeBreakdown: vibeBreakdown
         )
-            
-        print("\n✨ MARIA'S STYLE BRIEF GENERATED:")
-        print("  \"\(styleBrief)\"")
+        let tarotKeywords = generateTarotKeywords(from: selectedTarotCard, tokens: allTokens)
+        
+        // Generate comprehensive sections
+        let textiles = generateTextilesSection(from: allTokens)
+        let colors = generateColorsSection(from: allTokens)
+        let colorScores = ColorScoring.calculateColorScores(from: allTokens)
+        let patterns = generatePatternsSection(from: allTokens)
+        let shape = generateShapeSection(from: allTokens)
+        let accessories = generateAccessoriesSection(from: allTokens)
+        let (layering, layeringScore) = generateLayeringSection(from: allTokens, weather: weather)
+        let angularCurvyScore = StructuralAxes.calculateAngularCurvyScore(from: allTokens)
+        
+        print("\n✨ COMPREHENSIVE DAILY SYSTEM GENERATED:")
+        print("  Style Brief: \"\(styleBrief.prefix(50))...\"")
         print("  Dominant Energy: \(getDominantEnergyName(from: vibeBreakdown))")
+        print("  Color Scores: D:\(colorScores.darkness) V:\(colorScores.vibrancy) C:\(colorScores.contrast)")
+        print("  Angular/Curvy: \(angularCurvyScore.score)/10")
+        print("  Layering Score: \(layeringScore)/10")
         if let tarotCard = selectedTarotCard {
             print("  Tarot Card: \(tarotCard.displayName)")
         }
         print("\n🎯 DAILY VIBE GENERATOR - COMPLETE")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
         
-        // Return simplified DailyVibeContent with only Style Brief populated
-        return DailyVibeContent(
-            styleBrief: styleBrief,
-            vibeBreakdown: vibeBreakdown,
-            textiles: "",     // Empty - focused only on Style Brief
-            colors: "",       // Empty - focused only on Style Brief
-            brightness: 50,   // Default middle value
-            vibrancy: 50,     // Default middle value
-            patterns: "",     // Empty - focused only on Style Brief
-            shape: "",        // Empty - focused only on Style Brief
-            accessories: "",  // Empty - focused only on Style Brief
-            takeaway: "",     // Empty - focused only on Style Brief
-            temperature: weather?.temperature,
-            weatherCondition: weather?.condition,
-            tarotCard: selectedTarotCard
-        )
+        // Return complete DailyVibeContent with all sections populated
+        var dailyContent = DailyVibeContent()
+        dailyContent.tarotCard = selectedTarotCard
+        dailyContent.tarotKeywords = tarotKeywords
+        dailyContent.styleBrief = styleBrief
+        dailyContent.textiles = textiles
+        dailyContent.colors = colors
+        dailyContent.colorScores = colorScores
+        dailyContent.patterns = patterns
+        dailyContent.shape = shape
+        dailyContent.accessories = accessories
+        dailyContent.layering = layering
+        dailyContent.layeringScore = layeringScore
+        dailyContent.vibeBreakdown = vibeBreakdown
+        dailyContent.angularCurvyScore = angularCurvyScore
+        dailyContent.temperature = weather?.temperature
+        dailyContent.weatherCondition = weather?.condition
+        
+        return dailyContent
     }
     
     // MARK: - Debug Methods
@@ -770,34 +786,71 @@ class DailyVibeGenerator {
 
 /// Structure for daily vibe content returned by DailyVibeGenerator
 struct DailyVibeContent: Codable {
-    // Main content - Style Brief replaces title and mainParagraph
+    // MARK: - Core Daily System Elements
+    
+    // Tarot Card Pull - represents day's overall energy
+    var tarotCard: TarotCard? = nil
+    var tarotKeywords: String = "" // 3 keywords separated by commas
+    
+    // Style Brief - 3-4 sentences in Maria's voice
     var styleBrief: String = ""
+    
+    // MARK: - Style Sections
+    
+    // Textiles Section - visual qualities and fabric feels (up to 2 sentences)
+    var textiles: String = ""
+    
+    // Colors Section - tonal mood, palette, and scores
+    var colors: String = ""
+    var colorScores: ColorScores = ColorScores(darkness: 5, vibrancy: 5, contrast: 5)
+    
+    // Patterns Section - descriptive vocabulary for visual rhythm (up to 2 sentences)
+    var patterns: String = ""
+    
+    // Shape Section - silhouettes and spatial flow (up to 2 sentences)
+    var shape: String = ""
+    
+    // Accessories Section - 2-3 recommendations with texture/emotional function (up to 2 sentences)
+    var accessories: String = ""
+    
+    // Layering Section - score out of 10 with weight/adaptability guidance (up to 2 sentences)
+    var layering: String = ""
+    var layeringScore: Int = 5
+    
+    // MARK: - Vibe Breakdown & Structural Axes
     
     // Vibe Breakdown - 21 points across 6 energies
     var vibeBreakdown: VibeBreakdown = VibeBreakdown(classic: 0, playful: 0, romantic: 0, utility: 0, drama: 0, edge: 0)
     
-    // Style guidance sections
-    var textiles: String = ""
-    var colors: String = ""
-    var brightness: Int = 50 // Percentage (0-100)
-    var vibrancy: Int = 50   // Percentage (0-100)
-    var patterns: String = ""
-    var shape: String = ""
-    var accessories: String = ""
-
-    // Final line
-    var takeaway: String = ""
-
+    // Angular vs Curvy structural axis (1-10)
+    var angularCurvyScore: AngularCurvyScore = AngularCurvyScore(score: 5)
+    
+    // MARK: - Environmental Context
+    
     // Weather information (optional)
     var temperature: Double? = nil
     var weatherCondition: String? = nil
     
-    // Tarot card for the day (optional)
-    var tarotCard: TarotCard? = nil
+    // MARK: - Legacy Properties (for transition compatibility)
+    
+    @available(*, deprecated, message: "Use colorScores.brightness instead")
+    var brightness: Int {
+        return 10 - colorScores.darkness // Inverse for backward compatibility
+    }
+    
+    @available(*, deprecated, message: "Use colorScores.vibrancy instead")
+    var vibrancy: Int {
+        return colorScores.vibrancy
+    }
+    
+    @available(*, deprecated, message: "Use styleBrief instead")
+    var takeaway: String = ""
+    
+    // MARK: - Computed Properties
     
     // Validation method
     var isValid: Bool {
-        return vibeBreakdown.isValid
+        return vibeBreakdown.isValid && !styleBrief.isEmpty
     }
     
     // Get dominant energy for UI highlighting
@@ -813,6 +866,79 @@ struct DailyVibeContent: Codable {
         
         return energies.max(by: { $0.1 < $1.1 })?.0 ?? "classic"
     }
+    
+    // MARK: - Daily System Formatted Output
+    
+    /// Generate complete Daily System formatted output
+    var dailySystemOutput: String {
+        var output = ""
+        
+        // Tarot Card Pull
+        if let tarotCard = tarotCard {
+            output += "🔮 TAROT CARD PULL\n"
+            output += "\(tarotCard.displayName)\n"
+            if !tarotKeywords.isEmpty {
+                output += "\(tarotKeywords)\n\n"
+            } else {
+                output += "\n"
+            }
+        }
+        
+        // Style Brief
+        output += "✨ STYLE BRIEF\n"
+        output += "\(styleBrief)\n\n"
+        
+        // Textiles
+        if !textiles.isEmpty {
+            output += "🧵 TEXTILES\n"
+            output += "\(textiles)\n\n"
+        }
+        
+        // Colors
+        if !colors.isEmpty {
+            output += "🎨 COLORS\n"
+            output += "\(colors)\n"
+            output += "Darkness: \(colorScores.darkness)/10 (\(colorScores.darknessDescription))\n"
+            output += "Vibrancy: \(colorScores.vibrancy)/10 (\(colorScores.vibrancyDescription))\n"
+            output += "Contrast: \(colorScores.contrast)/10 (\(colorScores.contrastDescription))\n\n"
+        }
+        
+        // Patterns
+        if !patterns.isEmpty {
+            output += "🌀 PATTERNS\n"
+            output += "\(patterns)\n\n"
+        }
+        
+        // Shape
+        if !shape.isEmpty {
+            output += "📐 SHAPE\n"
+            output += "\(shape)\n\n"
+        }
+        
+        // Accessories
+        if !accessories.isEmpty {
+            output += "💎 ACCESSORIES\n"
+            output += "\(accessories)\n\n"
+        }
+        
+        // Layering
+        if !layering.isEmpty {
+            output += "🧥 LAYERING\n"
+            output += "Score: \(layeringScore)/10\n"
+            output += "\(layering)\n\n"
+        }
+        
+        // Vibe Breakdown
+        output += "⚡ VIBE BREAKDOWN\n"
+        output += "Classic: \(vibeBreakdown.classic), Playful: \(vibeBreakdown.playful), Romantic: \(vibeBreakdown.romantic)\n"
+        output += "Utility: \(vibeBreakdown.utility), Drama: \(vibeBreakdown.drama), Edge: \(vibeBreakdown.edge)\n\n"
+        
+        // Structural Axes
+        output += "📏 ANGULAR vs CURVY\n"
+        output += "Score: \(angularCurvyScore.score)/10 (\(angularCurvyScore.description))\n"
+        
+        return output
+    }
 }
 
 // MARK: - Helper Extensions
@@ -822,5 +948,279 @@ extension Array {
         return stride(from: 0, to: count, by: size).map {
             Array(self[$0..<Swift.min($0 + size, count)])
         }
+    }
+}
+
+// MARK: - Daily System Section Generation Extensions
+
+extension DailyVibeGenerator {
+    
+    /// Generate tarot keywords (3 keywords separated by commas)
+    private static func generateTarotKeywords(from tarotCard: TarotCard?, tokens: [StyleToken]) -> String {
+        guard let tarotCard = tarotCard else { return "" }
+        
+        // Extract dominant mood tokens for keywords
+        let moodTokens = tokens.filter { $0.type == "mood" }.sorted { $0.weight > $1.weight }
+        let expressionTokens = tokens.filter { $0.type == "expression" }.sorted { $0.weight > $1.weight }
+        
+        var keywords: [String] = []
+        
+        // Try to get tarot-specific keywords first
+        switch tarotCard.name.lowercased() {
+        case "the fool":
+            keywords = ["adventurous", "spontaneous", "fresh"]
+        case "the magician":
+            keywords = ["powerful", "focused", "transformative"]
+        case "the high priestess":
+            keywords = ["intuitive", "mysterious", "wise"]
+        case "the empress":
+            keywords = ["luxurious", "abundant", "nurturing"]
+        case "the emperor":
+            keywords = ["structured", "authoritative", "bold"]
+        case "the hierophant":
+            keywords = ["classic", "traditional", "refined"]
+        case "the lovers":
+            keywords = ["romantic", "harmonious", "connected"]
+        case "the chariot":
+            keywords = ["dynamic", "determined", "confident"]
+        case "strength":
+            keywords = ["powerful", "graceful", "controlled"]
+        case "the hermit":
+            keywords = ["introspective", "minimal", "wise"]
+        case "wheel of fortune":
+            keywords = ["transformative", "dynamic", "opportunistic"]
+        case "justice":
+            keywords = ["balanced", "structured", "purposeful"]
+        case "the hanged man":
+            keywords = ["flowing", "contemplative", "adaptive"]
+        case "death":
+            keywords = ["transformative", "dramatic", "powerful"]
+        case "temperance":
+            keywords = ["balanced", "harmonious", "flowing"]
+        case "the devil":
+            keywords = ["intense", "magnetic", "bold"]
+        case "the tower":
+            keywords = ["dramatic", "transformative", "striking"]
+        case "the star":
+            keywords = ["radiant", "hopeful", "luminous"]
+        case "the moon":
+            keywords = ["intuitive", "mysterious", "flowing"]
+        case "the sun":
+            keywords = ["radiant", "confident", "energetic"]
+        case "judgement":
+            keywords = ["transformative", "purposeful", "awakening"]
+        case "the world":
+            keywords = ["complete", "harmonious", "celebratory"]
+        default:
+            // Fall back to token-based keywords
+            if moodTokens.count >= 2 {
+                keywords.append(moodTokens[0].name)
+                keywords.append(moodTokens[1].name)
+            }
+            if !expressionTokens.isEmpty {
+                keywords.append(expressionTokens[0].name)
+            }
+        }
+        
+        // Ensure we have exactly 3 keywords
+        while keywords.count < 3 && !moodTokens.isEmpty {
+            for token in moodTokens {
+                if !keywords.contains(token.name) {
+                    keywords.append(token.name)
+                    break
+                }
+            }
+            break
+        }
+        
+        while keywords.count < 3 && !expressionTokens.isEmpty {
+            for token in expressionTokens {
+                if !keywords.contains(token.name) {
+                    keywords.append(token.name)
+                    break
+                }
+            }
+            break
+        }
+        
+        // Default keywords if still insufficient
+        if keywords.count < 3 {
+            let defaults = ["intuitive", "expressive", "balanced"]
+            for defaultKeyword in defaults {
+                if keywords.count < 3 && !keywords.contains(defaultKeyword) {
+                    keywords.append(defaultKeyword)
+                }
+            }
+        }
+        
+        return Array(keywords.prefix(3)).joined(separator: ", ")
+    }
+    
+    /// Generate textiles section (up to 2 sentences)
+    private static func generateTextilesSection(from tokens: [StyleToken]) -> String {
+        let textileTokens = tokens.filter { $0.type == "textile" }.sorted { $0.weight > $1.weight }
+        let textureTokens = tokens.filter { $0.type == "texture" }.sorted { $0.weight > $1.weight }
+        
+        var qualities: [String] = []
+        
+        // Get top textile qualities
+        for token in textileTokens.prefix(3) {
+            qualities.append(token.name)
+        }
+        
+        // Add texture qualities
+        for token in textureTokens.prefix(2) {
+            if !qualities.contains(token.name) {
+                qualities.append(token.name)
+            }
+        }
+        
+        if qualities.isEmpty {
+            return "Choose fabrics that feel right against your skin and move with your energy."
+        }
+        
+        let qualitiesText = qualities.prefix(4).joined(separator: ", ")
+        return "Focus on \(qualitiesText) textiles that support today's energy. Let fabric weight and surface feel guide your comfort and confidence."
+    }
+    
+    /// Generate colors section with palette description
+    private static func generateColorsSection(from tokens: [StyleToken]) -> String {
+        let colorTokens = tokens.filter { $0.type == "color" || $0.type == "color_quality" }.sorted { $0.weight > $1.weight }
+        
+        var palette: [String] = []
+        var mood = "balanced"
+        
+        // Extract color qualities and mood
+        for token in colorTokens.prefix(3) {
+            if token.type == "color_quality" {
+                mood = token.name
+            } else {
+                palette.append(token.name)
+            }
+        }
+        
+        if palette.isEmpty {
+            palette = ["natural", "harmonious"]
+        }
+        
+        let paletteText = palette.prefix(3).joined(separator: ", ")
+        return "Today's palette leans \(mood) with \(paletteText) tones that reflect your inner rhythm."
+    }
+    
+    /// Generate patterns section (up to 2 sentences)
+    private static func generatePatternsSection(from tokens: [StyleToken]) -> String {
+        let patternTokens = tokens.filter { $0.type == "pattern" }.sorted { $0.weight > $1.weight }
+        
+        if patternTokens.isEmpty {
+            return "Choose patterns that speak to your mood—whether that's clean minimalism or playful expression."
+        }
+        
+        let topPattern = patternTokens[0].name
+        var description = ""
+        
+        switch topPattern {
+        case "geometric":
+            description = "Geometric patterns with clean lines resonate with today's energy."
+        case "organic":
+            description = "Organic, natural patterns that flow with intuitive rhythm."
+        case "abstract":
+            description = "Abstract patterns that invite curiosity and conversation."
+        case "flowing":
+            description = "Flowing, curved patterns that move with graceful energy."
+        case "angular":
+            description = "Angular patterns with sharp precision and directional power."
+        case "scattered":
+            description = "Scattered, playful patterns that dance with spontaneous energy."
+        case "symmetrical":
+            description = "Symmetrical patterns that create grounding through balance."
+        default:
+            description = "\(topPattern.capitalized) patterns that align with your natural expression."
+        }
+        
+        return "\(description) Look for visual rhythms that complement rather than compete with your presence."
+    }
+    
+    /// Generate shape section (up to 2 sentences)
+    private static func generateShapeSection(from tokens: [StyleToken]) -> String {
+        let structureTokens = tokens.filter { $0.type == "structure" }.sorted { $0.weight > $1.weight }
+        
+        var shapes: [String] = []
+        
+        for token in structureTokens.prefix(3) {
+            shapes.append(token.name)
+        }
+        
+        if shapes.isEmpty {
+            return "Choose silhouettes that honor your body's natural lines and today's energy flow."
+        }
+        
+        let shapesText = shapes.joined(separator: ", ")
+        return "Today's silhouettes lean toward \(shapesText) forms that create the right spatial relationship with your energy. Trust proportions that feel authentic to your inner rhythm."
+    }
+    
+    /// Generate accessories section (up to 2 sentences)
+    private static func generateAccessoriesSection(from tokens: [StyleToken]) -> String {
+        let accessoryTokens = tokens.filter { $0.type == "accessory" }.sorted { $0.weight > $1.weight }
+        
+        if accessoryTokens.isEmpty {
+            return "Choose accessories that add meaning rather than distraction—pieces that ground or uplift your energy."
+        }
+        
+        var recommendations: [String] = []
+        
+        for token in accessoryTokens.prefix(3) {
+            recommendations.append(token.name)
+        }
+        
+        let recText = recommendations.joined(separator: ", ")
+        return "Accessories with \(recText) energy will complete today's look. Choose pieces that feel like extensions of your inner state rather than afterthoughts."
+    }
+    
+    /// Generate layering section with score (up to 2 sentences)
+    private static func generateLayeringSection(from tokens: [StyleToken], weather: TodayWeather?) -> (String, Int) {
+        var score = 5 // Default middle score
+        
+        // Weather influence on layering score
+        if let weather = weather {
+            if weather.temperature < 10 {
+                score += 3 // Cold weather increases layering
+            } else if weather.temperature < 20 {
+                score += 1
+            } else if weather.temperature > 25 {
+                score -= 2 // Warm weather decreases layering
+            }
+        }
+        
+        // Astrological influences
+        let earthTokens = tokens.filter { $0.signSource != nil && ["Taurus", "Virgo", "Capricorn"].contains($0.signSource!) }
+        let waterTokens = tokens.filter { $0.signSource != nil && ["Cancer", "Scorpio", "Pisces"].contains($0.signSource!) }
+        let airTokens = tokens.filter { $0.signSource != nil && ["Gemini", "Libra", "Aquarius"].contains($0.signSource!) }
+        let fireTokens = tokens.filter { $0.signSource != nil && ["Aries", "Leo", "Sagittarius"].contains($0.signSource!) }
+        
+        // Earth signs like layering for comfort and structure
+        score += min(2, earthTokens.count / 3)
+        
+        // Water signs like layering for emotional comfort
+        score += min(1, waterTokens.count / 4)
+        
+        // Fire signs prefer less layering for freedom of movement
+        score -= min(2, fireTokens.count / 3)
+        
+        // Air signs are adaptable but generally prefer lighter layering
+        score -= min(1, airTokens.count / 4)
+        
+        // Constrain score to 1-10 range
+        score = max(1, min(10, score))
+        
+        let guidance: String
+        if score <= 3 {
+            guidance = "Keep layering minimal and lightweight for freedom of movement. Choose pieces that can be easily adjusted as your energy shifts."
+        } else if score <= 6 {
+            guidance = "Moderate layering offers adaptability without overwhelm. Think strategic pieces that can transition with your day's rhythm."
+        } else {
+            guidance = "Embrace thoughtful layering that creates depth and comfort. Multiple layers can provide both practical warmth and emotional grounding."
+        }
+        
+        return (guidance, score)
     }
 }

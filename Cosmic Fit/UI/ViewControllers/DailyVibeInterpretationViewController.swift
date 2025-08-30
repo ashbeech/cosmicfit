@@ -459,8 +459,8 @@ class DailyVibeInterpretationViewController: UIViewController {
         if let content = vibeContent {
             // Force layout before drawing to ensure views have correct sizes
             view.layoutIfNeeded()
-            drawBrightnessSlider(value: content.brightness)
-            drawVibrancySlider(value: content.vibrancy)
+            drawBrightnessSlider(value: 10 - content.colorScores.darkness) // Brightness is inverse of darkness
+            drawVibrancySlider(value: content.colorScores.vibrancy)
         }
     }
     
@@ -502,11 +502,11 @@ class DailyVibeInterpretationViewController: UIViewController {
         accessoriesContentLabel.text = content.accessories
         
         // Take‑away
-        takeawayLabel.text = content.takeaway
+        takeawayLabel.text = content.styleBrief
         
         // Redraw sliders
-        drawBrightnessSlider(value: content.brightness)
-        drawVibrancySlider(value:  content.vibrancy)
+        drawBrightnessSlider(value: 10 - content.colorScores.darkness) // Brightness is inverse of darkness
+        drawVibrancySlider(value: content.colorScores.vibrancy)
     }
     
     // MARK: - Actions
@@ -531,7 +531,7 @@ class DailyVibeInterpretationViewController: UIViewController {
             shareText += "SHAPE\n\(content.shape)\n\n"
             shareText += "ACCESSORIES\n\(content.accessories)\n\n"
             shareText += "---\n\n"
-            shareText += "\(content.takeaway)"
+            shareText += "\(content.styleBrief)"
             
             itemsToShare.append(shareText)
         }

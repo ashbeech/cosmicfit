@@ -44,48 +44,48 @@ class SemanticTokenGenerator {
         
         // Process planets with enhanced weighting for Venus, Mars, Moon + Chart Ruler dominance
         for planet in natal.planets {
-            // Professional base weights with chart ruler emphasis
+            // Professional base weights with proper hierarchy
             let baseWeight: Double
             var priorityMultiplier: Double = 1.0
             
-            // Chart ruler gets 3x multiplier for personal expression dominance
+            // Chart ruler gets significant multiplier but Venus retains fashion dominance
             var chartRulerMultiplier: Double = 1.0
             if planet.name == chartRuler {
-                chartRulerMultiplier = 3.0
-                DebugLogger.info("🔱 CHART RULER DOMINANCE: \(planet.name) receives 3x multiplier for personal expression")
+                chartRulerMultiplier = 2.5  // Strong but not overwhelming
+                DebugLogger.info("🔱 CHART RULER DOMINANCE: \(planet.name) receives 2.5x multiplier for personal expression")
             }
             
             switch planet.name {
             case "Venus":
-                baseWeight = 3.5 // Increased for professional astrological dominance
-                priorityMultiplier = 1.8 // Restored for Venus fashion authority
-                // Final: 3.5 × 1.8 × natal_weight = Professional Venus dominance
+                baseWeight = 4.0 // Maximum for fashion authority
+                priorityMultiplier = 2.0 // Venus dominates fashion choices
+                // Final: 4.0 × 2.0 × chart_ruler × natal_weight = Venus fashion authority
             case "Mars":
-                baseWeight = 1.8 // Reduced to maintain hierarchy below Venus
-                priorityMultiplier = 1.2 // Adjusted for energy expression role
-                // Final: 1.8 × 1.2 × natal_weight = Mars energy expression
+                baseWeight = 2.2 // Strong but secondary to Venus for fashion
+                priorityMultiplier = 1.3 // Energy expression role
+                // Final: 2.2 × 1.3 × chart_ruler × natal_weight = Mars energy expression
             case "Moon":
-                baseWeight = 2.0 // Increased for emotional receptivity importance
-                priorityMultiplier = 1.4 // Enhanced for comfort/emotional style preferences
-                // Final: 2.0 × 1.4 × natal_weight = Moon emotional resonance
+                baseWeight = 2.5 // Strong for emotional comfort
+                priorityMultiplier = 1.5 // Enhanced for emotional style preferences
+                // Final: 2.5 × 1.5 × chart_ruler × natal_weight = Moon emotional resonance
             case "Sun":
-                baseWeight = 1.6 // Reduced from 2.0
-                priorityMultiplier = 1.0 // Reduced from 1.1
+                baseWeight = 2.0 // Core identity
+                priorityMultiplier = 1.2 // Self-expression
             case "Mercury":
-                baseWeight = 1.5 // Reduced from 2.0
-                priorityMultiplier = 0.9 // Reduced from 1.0
+                baseWeight = 1.5 // Communication style
+                priorityMultiplier = 0.9 // Supporting role
             case "Jupiter":
-                baseWeight = 1.4 // Reduced from 2.0
-                priorityMultiplier = 0.8 // Reduced from 0.9
+                baseWeight = 1.4 // Expansion and growth
+                priorityMultiplier = 0.8 // Supporting role
             case "Saturn":
-                baseWeight = 1.3 // Reduced from 2.0
-                priorityMultiplier = 0.7 // Reduced from 0.8
+                baseWeight = 1.6 // Structure and discipline
+                priorityMultiplier = 1.0 // Practical grounding
             case "Uranus", "Neptune", "Pluto":
-                baseWeight = 1.2 // Reduced from 2.0
-                priorityMultiplier = 0.5 // Reduced from 0.6
+                baseWeight = 1.3 // Transformative but background
+                priorityMultiplier = 0.6 // Subtle influence
             default:
-                baseWeight = 1.0 // Reduced from 2.0
-                priorityMultiplier = 0.3 // Reduced from 0.4
+                baseWeight = 1.0 // Minor points
+                priorityMultiplier = 0.3 // Minimal influence
             }
             
             // Apply WeightingModel natal weight with chart ruler dominance
@@ -156,6 +156,18 @@ class SemanticTokenGenerator {
         tokens.append(contentsOf: seasonalTokens)
         
         DebugLogger.info("🎨 COLOR SEASON ANALYSIS: \(colorSeason.rawValue) with \(seasonalTokens.count) palette tokens")
+        
+        // Add expanded textile tokens for Daily System
+        let textileTokens = generateExpandedTextileTokens(chart: natal)
+        tokens.append(contentsOf: textileTokens)
+        
+        // Add pattern tokens for Daily System
+        let patternTokens = generatePatternTokens(chart: natal)
+        tokens.append(contentsOf: patternTokens)
+        
+        // Add accessory tokens for Daily System
+        let accessoryTokens = generateAccessoryTokens(chart: natal)
+        tokens.append(contentsOf: accessoryTokens)
         
         // Add debug logging for Venus/Mars/Moon dominance
         DebugLogger.info("🌟 BALANCED EXPRESSION PLANET WEIGHTS:")
@@ -413,22 +425,25 @@ class SemanticTokenGenerator {
         let now = Date()
         let dayOfWeek = calendar.component(.weekday, from: now)
         
+        // Apply WeightingModel daily signature weight
+        let baseDailyWeight = WeightingModel.DailyFit.dailySignatureWeight
+        
         // Day of week influence - Enhanced with more nuanced energy patterns
         switch dayOfWeek {
         case 1: // Sunday
-            tokens.append(StyleToken(name: "relaxed", type: "mood", weight: 0.4, aspectSource: "Sunday Energy", originType: .phase))
+            tokens.append(StyleToken(name: "relaxed", type: "mood", weight: 0.4 * baseDailyWeight, aspectSource: "Sunday Energy", originType: .phase))
         case 2: // Monday
-            tokens.append(StyleToken(name: "fresh", type: "expression", weight: 0.5, aspectSource: "Monday Energy", originType: .phase))
+            tokens.append(StyleToken(name: "fresh", type: "expression", weight: 0.5 * baseDailyWeight, aspectSource: "Monday Energy", originType: .phase))
         case 3: // Tuesday
-            tokens.append(StyleToken(name: "dynamic", type: "expression", weight: 0.5, aspectSource: "Tuesday Energy", originType: .phase))
+            tokens.append(StyleToken(name: "dynamic", type: "expression", weight: 0.5 * baseDailyWeight, aspectSource: "Tuesday Energy", originType: .phase))
         case 4: // Wednesday
-            tokens.append(StyleToken(name: "adaptable", type: "structure", weight: 0.4, aspectSource: "Wednesday Energy", originType: .phase))
+            tokens.append(StyleToken(name: "adaptable", type: "structure", weight: 0.4 * baseDailyWeight, aspectSource: "Wednesday Energy", originType: .phase))
         case 5: // Thursday
-            tokens.append(StyleToken(name: "expansive", type: "mood", weight: 0.5, aspectSource: "Thursday Energy", originType: .phase))
+            tokens.append(StyleToken(name: "expansive", type: "mood", weight: 0.5 * baseDailyWeight, aspectSource: "Thursday Energy", originType: .phase))
         case 6: // Friday
-            tokens.append(StyleToken(name: "social", type: "expression", weight: 0.5, aspectSource: "Friday Energy", originType: .phase))
+            tokens.append(StyleToken(name: "social", type: "expression", weight: 0.5 * baseDailyWeight, aspectSource: "Friday Energy", originType: .phase))
         case 7: // Saturday
-            tokens.append(StyleToken(name: "playful", type: "mood", weight: 0.4, aspectSource: "Saturday Energy", originType: .phase))
+            tokens.append(StyleToken(name: "playful", type: "mood", weight: 0.4 * baseDailyWeight, aspectSource: "Saturday Energy", originType: .phase))
         default:
             break
         }
@@ -710,32 +725,35 @@ class SemanticTokenGenerator {
         // Convert lunar phase to percentage for easier processing
         let phasePercentage = (lunarPhase / 360.0) * 100.0
         
+        // Apply WeightingModel moon phase weight
+        let basePhaseWeight = WeightingModel.DailyFit.moonPhaseWeight
+        
         // Generate tokens based on moon phase
         switch phasePercentage {
         case 0...12.5: // New Moon
-            tokens.append(StyleToken(name: "minimal", type: "structure", weight: 1.5, aspectSource: "New Moon", originType: .phase))
-            tokens.append(StyleToken(name: "introspective", type: "mood", weight: 1.3, aspectSource: "New Moon", originType: .phase))
-            tokens.append(StyleToken(name: "dark", type: "color", weight: 1.0, aspectSource: "New Moon", originType: .phase))
+            tokens.append(StyleToken(name: "minimal", type: "structure", weight: 1.5 * basePhaseWeight, aspectSource: "New Moon", originType: .phase))
+            tokens.append(StyleToken(name: "introspective", type: "mood", weight: 1.3 * basePhaseWeight, aspectSource: "New Moon", originType: .phase))
+            tokens.append(StyleToken(name: "dark", type: "color", weight: 1.0 * basePhaseWeight, aspectSource: "New Moon", originType: .phase))
         case 12.5...37.5: // Waxing Crescent
-            tokens.append(StyleToken(name: "emerging", type: "expression", weight: 1.2, aspectSource: "Waxing Crescent", originType: .phase))
-            tokens.append(StyleToken(name: "hopeful", type: "mood", weight: 1.0, aspectSource: "Waxing Crescent", originType: .phase))
-            tokens.append(StyleToken(name: "subtle", type: "color_quality", weight: 0.8, aspectSource: "Waxing Crescent", originType: .phase))
+            tokens.append(StyleToken(name: "emerging", type: "expression", weight: 1.2 * basePhaseWeight, aspectSource: "Waxing Crescent", originType: .phase))
+            tokens.append(StyleToken(name: "hopeful", type: "mood", weight: 1.0 * basePhaseWeight, aspectSource: "Waxing Crescent", originType: .phase))
+            tokens.append(StyleToken(name: "subtle", type: "color_quality", weight: 0.8 * basePhaseWeight, aspectSource: "Waxing Crescent", originType: .phase))
         case 37.5...62.5: // First Quarter
-            tokens.append(StyleToken(name: "decisive", type: "expression", weight: 1.4, aspectSource: "First Quarter", originType: .phase))
-            tokens.append(StyleToken(name: "bold", type: "color_quality", weight: 1.2, aspectSource: "First Quarter", originType: .phase))
-            tokens.append(StyleToken(name: "structured", type: "structure", weight: 1.0, aspectSource: "First Quarter", originType: .phase))
+            tokens.append(StyleToken(name: "decisive", type: "expression", weight: 1.4 * basePhaseWeight, aspectSource: "First Quarter", originType: .phase))
+            tokens.append(StyleToken(name: "bold", type: "color_quality", weight: 1.2 * basePhaseWeight, aspectSource: "First Quarter", originType: .phase))
+            tokens.append(StyleToken(name: "structured", type: "structure", weight: 1.0 * basePhaseWeight, aspectSource: "First Quarter", originType: .phase))
         case 62.5...87.5: // Waxing Gibbous
-            tokens.append(StyleToken(name: "refined", type: "expression", weight: 1.3, aspectSource: "Waxing Gibbous", originType: .phase))
-            tokens.append(StyleToken(name: "perfecting", type: "mood", weight: 1.1, aspectSource: "Waxing Gibbous", originType: .phase))
-            tokens.append(StyleToken(name: "polished", type: "texture", weight: 0.9, aspectSource: "Waxing Gibbous", originType: .phase))
+            tokens.append(StyleToken(name: "refined", type: "expression", weight: 1.3 * basePhaseWeight, aspectSource: "Waxing Gibbous", originType: .phase))
+            tokens.append(StyleToken(name: "perfecting", type: "mood", weight: 1.1 * basePhaseWeight, aspectSource: "Waxing Gibbous", originType: .phase))
+            tokens.append(StyleToken(name: "polished", type: "texture", weight: 0.9 * basePhaseWeight, aspectSource: "Waxing Gibbous", originType: .phase))
         case 87.5...100, 0...12.5: // Full Moon (including overlap)
-            tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: 1.8, aspectSource: "Full Moon", originType: .phase))
-            tokens.append(StyleToken(name: "expressive", type: "expression", weight: 1.6, aspectSource: "Full Moon", originType: .phase))
-            tokens.append(StyleToken(name: "luminous", type: "texture", weight: 1.4, aspectSource: "Full Moon", originType: .phase))
+            tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: 1.8 * basePhaseWeight, aspectSource: "Full Moon", originType: .phase))
+            tokens.append(StyleToken(name: "expressive", type: "expression", weight: 1.6 * basePhaseWeight, aspectSource: "Full Moon", originType: .phase))
+            tokens.append(StyleToken(name: "luminous", type: "texture", weight: 1.4 * basePhaseWeight, aspectSource: "Full Moon", originType: .phase))
         default: // Waning phases
-            tokens.append(StyleToken(name: "wise", type: "mood", weight: 1.2, aspectSource: "Waning Moon", originType: .phase))
-            tokens.append(StyleToken(name: "reflective", type: "expression", weight: 1.0, aspectSource: "Waning Moon", originType: .phase))
-            tokens.append(StyleToken(name: "muted", type: "color_quality", weight: 0.8, aspectSource: "Waning Moon", originType: .phase))
+            tokens.append(StyleToken(name: "wise", type: "mood", weight: 1.2 * basePhaseWeight, aspectSource: "Waning Moon", originType: .phase))
+            tokens.append(StyleToken(name: "reflective", type: "expression", weight: 1.0 * basePhaseWeight, aspectSource: "Waning Moon", originType: .phase))
+            tokens.append(StyleToken(name: "muted", type: "color_quality", weight: 0.8 * basePhaseWeight, aspectSource: "Waning Moon", originType: .phase))
         }
         
         return tokens
@@ -1616,8 +1634,8 @@ class SemanticTokenGenerator {
         
         var tokens: [StyleToken] = []
         
-        // Enhanced base weight to ensure meaningful daily influence
-        let baseWeatherWeight = WeightingModel.DailyFit.weatherWeight * 2.0
+        // Base weight for weather influence (reduced to prevent excessive stacking)
+        let baseWeatherWeight = WeightingModel.DailyFit.weatherWeight * 1.5
         let tempWeight = calculateTemperatureWeight(temp: weather.temperature)
         
         // TEMPERATURE INFLUENCE - Enhanced for daily variation
@@ -2607,5 +2625,219 @@ class SemanticTokenGenerator {
         case "Sextile": return "supportive"
         default: return "subtle"
         }
+    }
+    
+    // MARK: - Expanded Token Generation for Daily System
+    
+    /// Generate comprehensive textile tokens based on chart elements and planets
+    static func generateExpandedTextileTokens(chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Get dominant elements for textile guidance
+        let elementWeights = calculateElementalWeights(chart: chart)
+        let _ = elementWeights.max(by: { $0.value < $1.value })?.key ?? "balanced"
+        
+        // Venus-based textile preferences
+        if let venus = chart.planets.first(where: { $0.name == "Venus" }) {
+            let venusElement = getSignElement(sign: venus.zodiacSign)
+            let venusModality = getSignModality(sign: venus.zodiacSign)
+            
+            switch venusElement {
+            case "fire":
+                tokens.append(StyleToken(name: "lightweight", type: "textile", weight: 1.2, planetarySource: "Venus", signSource: CoordinateTransformations.getZodiacSignName(sign: venus.zodiacSign), originType: .natal))
+                tokens.append(StyleToken(name: "breathable", type: "textile", weight: 1.0, planetarySource: "Venus", signSource: CoordinateTransformations.getZodiacSignName(sign: venus.zodiacSign), originType: .natal))
+                tokens.append(StyleToken(name: "energetic", type: "textile", weight: 0.8, planetarySource: "Venus", signSource: CoordinateTransformations.getZodiacSignName(sign: venus.zodiacSign), originType: .natal))
+            case "earth":
+                tokens.append(StyleToken(name: "structured", type: "textile", weight: 1.3, planetarySource: "Venus", signSource: CoordinateTransformations.getZodiacSignName(sign: venus.zodiacSign), originType: .natal))
+                tokens.append(StyleToken(name: "textured", type: "textile", weight: 1.1, planetarySource: "Venus", signSource: CoordinateTransformations.getZodiacSignName(sign: venus.zodiacSign), originType: .natal))
+                tokens.append(StyleToken(name: "substantial", type: "textile", weight: 0.9, planetarySource: "Venus", signSource: CoordinateTransformations.getZodiacSignName(sign: venus.zodiacSign), originType: .natal))
+            case "air":
+                tokens.append(StyleToken(name: "flowing", type: "textile", weight: 1.2, planetarySource: "Venus", signSource: CoordinateTransformations.getZodiacSignName(sign: venus.zodiacSign), originType: .natal))
+                tokens.append(StyleToken(name: "airy", type: "textile", weight: 1.0, planetarySource: "Venus", signSource: CoordinateTransformations.getZodiacSignName(sign: venus.zodiacSign), originType: .natal))
+                tokens.append(StyleToken(name: "versatile", type: "textile", weight: 0.8, planetarySource: "Venus", signSource: CoordinateTransformations.getZodiacSignName(sign: venus.zodiacSign), originType: .natal))
+            case "water":
+                tokens.append(StyleToken(name: "soft", type: "textile", weight: 1.3, planetarySource: "Venus", signSource: CoordinateTransformations.getZodiacSignName(sign: venus.zodiacSign), originType: .natal))
+                tokens.append(StyleToken(name: "draping", type: "textile", weight: 1.1, planetarySource: "Venus", signSource: CoordinateTransformations.getZodiacSignName(sign: venus.zodiacSign), originType: .natal))
+                tokens.append(StyleToken(name: "fluid", type: "textile", weight: 0.9, planetarySource: "Venus", signSource: CoordinateTransformations.getZodiacSignName(sign: venus.zodiacSign), originType: .natal))
+            default:
+                tokens.append(StyleToken(name: "adaptable", type: "textile", weight: 1.0, planetarySource: "Venus", originType: .natal))
+            }
+            
+            // Modality-based additions
+            switch venusModality {
+            case "cardinal":
+                tokens.append(StyleToken(name: "crisp", type: "textile", weight: 0.8, planetarySource: "Venus", originType: .natal))
+            case "fixed":
+                tokens.append(StyleToken(name: "substantial", type: "textile", weight: 0.9, planetarySource: "Venus", originType: .natal))
+            case "mutable":
+                tokens.append(StyleToken(name: "adaptable", type: "textile", weight: 0.7, planetarySource: "Venus", originType: .natal))
+            default:
+                break
+            }
+        }
+        
+        // Mars-based energy textile preferences
+        if let mars = chart.planets.first(where: { $0.name == "Mars" }) {
+            let marsElement = getSignElement(sign: mars.zodiacSign)
+            
+            switch marsElement {
+            case "fire":
+                tokens.append(StyleToken(name: "dynamic", type: "textile", weight: 0.8, planetarySource: "Mars", originType: .natal))
+            case "earth":
+                tokens.append(StyleToken(name: "durable", type: "textile", weight: 0.7, planetarySource: "Mars", originType: .natal))
+            case "air":
+                tokens.append(StyleToken(name: "movement-friendly", type: "textile", weight: 0.6, planetarySource: "Mars", originType: .natal))
+            case "water":
+                tokens.append(StyleToken(name: "comfort-focused", type: "textile", weight: 0.7, planetarySource: "Mars", originType: .natal))
+            default:
+                break
+            }
+        }
+        
+        return tokens
+    }
+    
+    /// Generate pattern tokens based on planetary and elemental influences
+    static func generatePatternTokens(chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Venus pattern preferences
+        if let venus = chart.planets.first(where: { $0.name == "Venus" }) {
+            let venusElement = getSignElement(sign: venus.zodiacSign)
+            let venusModality = getSignModality(sign: venus.zodiacSign)
+            
+            switch venusElement {
+            case "fire":
+                tokens.append(StyleToken(name: "geometric", type: "pattern", weight: 1.0, planetarySource: "Venus", originType: .natal))
+                tokens.append(StyleToken(name: "angular", type: "pattern", weight: 0.8, planetarySource: "Venus", originType: .natal))
+                tokens.append(StyleToken(name: "bold", type: "pattern", weight: 0.7, planetarySource: "Venus", originType: .natal))
+            case "earth":
+                tokens.append(StyleToken(name: "organic", type: "pattern", weight: 1.1, planetarySource: "Venus", originType: .natal))
+                tokens.append(StyleToken(name: "natural", type: "pattern", weight: 0.9, planetarySource: "Venus", originType: .natal))
+                tokens.append(StyleToken(name: "textural", type: "pattern", weight: 0.8, planetarySource: "Venus", originType: .natal))
+            case "air":
+                tokens.append(StyleToken(name: "abstract", type: "pattern", weight: 1.0, planetarySource: "Venus", originType: .natal))
+                tokens.append(StyleToken(name: "scattered", type: "pattern", weight: 0.8, planetarySource: "Venus", originType: .natal))
+                tokens.append(StyleToken(name: "versatile", type: "pattern", weight: 0.7, planetarySource: "Venus", originType: .natal))
+            case "water":
+                tokens.append(StyleToken(name: "flowing", type: "pattern", weight: 1.1, planetarySource: "Venus", originType: .natal))
+                tokens.append(StyleToken(name: "soft-edged", type: "pattern", weight: 0.9, planetarySource: "Venus", originType: .natal))
+                tokens.append(StyleToken(name: "organic", type: "pattern", weight: 0.8, planetarySource: "Venus", originType: .natal))
+            default:
+                tokens.append(StyleToken(name: "balanced", type: "pattern", weight: 0.8, planetarySource: "Venus", originType: .natal))
+            }
+            
+            // Modality pattern additions
+            switch venusModality {
+            case "cardinal":
+                tokens.append(StyleToken(name: "directional", type: "pattern", weight: 0.7, planetarySource: "Venus", originType: .natal))
+            case "fixed":
+                tokens.append(StyleToken(name: "symmetrical", type: "pattern", weight: 0.8, planetarySource: "Venus", originType: .natal))
+            case "mutable":
+                tokens.append(StyleToken(name: "irregular", type: "pattern", weight: 0.6, planetarySource: "Venus", originType: .natal))
+            default:
+                break
+            }
+        }
+        
+        // Mercury pattern communication
+        if let mercury = chart.planets.first(where: { $0.name == "Mercury" }) {
+            let mercuryElement = getSignElement(sign: mercury.zodiacSign)
+            switch mercuryElement {
+            case "fire", "air":
+                tokens.append(StyleToken(name: "communicative", type: "pattern", weight: 0.6, planetarySource: "Mercury", originType: .natal))
+            case "earth", "water":
+                tokens.append(StyleToken(name: "subtle", type: "pattern", weight: 0.5, planetarySource: "Mercury", originType: .natal))
+            default:
+                break
+            }
+        }
+        
+        return tokens
+    }
+    
+    /// Generate accessory tokens based on planetary influences
+    static func generateAccessoryTokens(chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Venus accessory preferences
+        if let venus = chart.planets.first(where: { $0.name == "Venus" }) {
+            let venusElement = getSignElement(sign: venus.zodiacSign)
+            
+            switch venusElement {
+            case "fire":
+                tokens.append(StyleToken(name: "eye-catching", type: "accessory", weight: 1.0, planetarySource: "Venus", originType: .natal))
+                tokens.append(StyleToken(name: "dramatic", type: "accessory", weight: 0.8, planetarySource: "Venus", originType: .natal))
+            case "earth":
+                tokens.append(StyleToken(name: "grounding", type: "accessory", weight: 1.1, planetarySource: "Venus", originType: .natal))
+                tokens.append(StyleToken(name: "substantial", type: "accessory", weight: 0.9, planetarySource: "Venus", originType: .natal))
+            case "air":
+                tokens.append(StyleToken(name: "conversational", type: "accessory", weight: 0.9, planetarySource: "Venus", originType: .natal))
+                tokens.append(StyleToken(name: "versatile", type: "accessory", weight: 0.7, planetarySource: "Venus", originType: .natal))
+            case "water":
+                tokens.append(StyleToken(name: "romantic", type: "accessory", weight: 1.0, planetarySource: "Venus", originType: .natal))
+                tokens.append(StyleToken(name: "nostalgic", type: "accessory", weight: 0.8, planetarySource: "Venus", originType: .natal))
+            default:
+                tokens.append(StyleToken(name: "personal", type: "accessory", weight: 0.8, planetarySource: "Venus", originType: .natal))
+            }
+        }
+        
+        // Mars energy accessories
+        if let mars = chart.planets.first(where: { $0.name == "Mars" }) {
+            let marsElement = getSignElement(sign: mars.zodiacSign)
+            
+            switch marsElement {
+            case "fire":
+                tokens.append(StyleToken(name: "bold", type: "accessory", weight: 0.8, planetarySource: "Mars", originType: .natal))
+            case "earth":
+                tokens.append(StyleToken(name: "functional", type: "accessory", weight: 0.7, planetarySource: "Mars", originType: .natal))
+            case "air":
+                tokens.append(StyleToken(name: "expressive", type: "accessory", weight: 0.6, planetarySource: "Mars", originType: .natal))
+            case "water":
+                tokens.append(StyleToken(name: "protective", type: "accessory", weight: 0.7, planetarySource: "Mars", originType: .natal))
+            default:
+                break
+            }
+        }
+        
+        // Jupiter expansion accessories
+        if chart.planets.contains(where: { $0.name == "Jupiter" }) {
+            tokens.append(StyleToken(name: "generous", type: "accessory", weight: 0.5, planetarySource: "Jupiter", originType: .natal))
+        }
+        
+        return tokens
+    }
+    
+    // Helper methods for elemental and modal analysis
+    private static func getSignElement(sign: Int) -> String {
+        let elements = ["fire", "earth", "air", "water"]
+        return elements[sign % 4]
+    }
+    
+    private static func getSignModality(sign: Int) -> String {
+        let modalities = ["cardinal", "fixed", "mutable"]
+        return modalities[(sign / 4) % 3]
+    }
+    
+    private static func calculateElementalWeights(chart: NatalChartCalculator.NatalChart) -> [String: Double] {
+        var weights: [String: Double] = ["fire": 0, "earth": 0, "air": 0, "water": 0]
+        
+        for planet in chart.planets {
+            let element = getSignElement(sign: planet.zodiacSign)
+            let planetWeight: Double
+            
+            switch planet.name {
+            case "Sun": planetWeight = 2.0
+            case "Moon": planetWeight = 2.0
+            case "Venus": planetWeight = 1.8
+            case "Mars": planetWeight = 1.5
+            case "Mercury": planetWeight = 1.2
+            default: planetWeight = 1.0
+            }
+            
+            weights[element, default: 0] += planetWeight
+        }
+        
+        return weights
     }
 }
