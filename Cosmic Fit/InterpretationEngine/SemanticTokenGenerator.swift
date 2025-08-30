@@ -47,17 +47,17 @@ class SemanticTokenGenerator {
             
             switch planet.name {
             case "Venus":
-                baseWeight = 2.2 // Reduced from 3.0
-                priorityMultiplier = 1.4 // Reduced from 1.8
-                // Final: 2.2 × 1.4 × 0.2 = 0.616 (was 1.08)
+                baseWeight = 3.5 // Increased for professional astrological dominance
+                priorityMultiplier = 1.8 // Restored for Venus fashion authority
+                // Final: 3.5 × 1.8 × natal_weight = Professional Venus dominance
             case "Mars":
-                baseWeight = 2.0 // Reduced from 2.8
-                priorityMultiplier = 1.3 // Reduced from 1.6
-                // Final: 2.0 × 1.3 × 0.2 = 0.52 (was 0.896)
+                baseWeight = 1.8 // Reduced to maintain hierarchy below Venus
+                priorityMultiplier = 1.2 // Adjusted for energy expression role
+                // Final: 1.8 × 1.2 × natal_weight = Mars energy expression
             case "Moon":
-                baseWeight = 1.8 // Reduced from 2.5
-                priorityMultiplier = 1.3 // Reduced from 1.5
-                // Final: 1.8 × 1.3 × 0.2 = 0.468 (was 0.75)
+                baseWeight = 2.0 // Increased for emotional receptivity importance
+                priorityMultiplier = 1.4 // Enhanced for comfort/emotional style preferences
+                // Final: 2.0 × 1.4 × natal_weight = Moon emotional resonance
             case "Sun":
                 baseWeight = 1.6 // Reduced from 2.0
                 priorityMultiplier = 1.0 // Reduced from 1.1
@@ -94,11 +94,11 @@ class SemanticTokenGenerator {
                 var enhancedWeight = token.weight
                 
                 if planet.name == "Venus" && (token.type == "color" || token.type == "color_quality") {
-                    enhancedWeight *= 1.25 // Reduced from 1.5
+                    enhancedWeight *= 2.0 // Enhanced for Venus fashion authority
                 } else if planet.name == "Mars" && (token.type == "structure" || token.type == "expression") {
-                    enhancedWeight *= 1.2 // Reduced from 1.4
+                    enhancedWeight *= 1.3 // Mars energy expression enhancement
                 } else if planet.name == "Moon" && (token.type == "texture" || token.type == "mood") {
-                    enhancedWeight *= 1.15 // Reduced from 1.3
+                    enhancedWeight *= 1.5 // Enhanced for Moon emotional comfort priority
                 }
                 
                 return StyleToken(
@@ -1890,16 +1890,102 @@ class SemanticTokenGenerator {
         }
     }
     
+    // MARK: - Traditional Astrological Color Correspondences
+    
+    /// Traditional astrological color mappings per professional standards
+    struct TraditionalColors {
+        static let signColors: [String: [(String, String)]] = [
+            "Aries": [("red", "color"), ("bright_orange", "color"), ("bold_contrast", "color_quality")],
+            "Taurus": [("sage_green", "color"), ("rose", "color"), ("warm_brown", "color"), ("cream", "color")],
+            "Gemini": [("yellow", "color"), ("bright_patterns", "color_quality"), ("mixed_combinations", "color_quality")],
+            "Cancer": [("white", "color"), ("silver", "color"), ("pearl", "color"), ("nautical_themes", "color_quality")],
+            "Leo": [("gold", "color"), ("orange", "color"), ("dramatic_flair", "color_quality"), ("statement_pieces", "color_quality")],
+            "Virgo": [("navy", "color"), ("wheat", "color"), ("brown", "color"), ("precisely_tailored", "color_quality")],
+            "Libra": [("rose_pink", "color"), ("pastels", "color"), ("harmonious_combinations", "color_quality"), ("balanced_proportions", "color_quality")],
+            "Scorpio": [("black", "color"), ("burgundy", "color"), ("deep_colors", "color_quality"), ("power_silhouettes", "color_quality")],
+            "Sagittarius": [("purple", "color"), ("royal_blue", "color"), ("international_influences", "color_quality"), ("travel_ready", "color_quality")],
+            "Capricorn": [("charcoal", "color"), ("brown", "color"), ("black", "color"), ("classic_business", "color_quality")],
+            "Aquarius": [("electric_blue", "color"), ("unexpected_combinations", "color_quality"), ("technical_fabrics", "color_quality")],
+            "Pisces": [("sea_colors", "color_quality"), ("flowing_fabrics", "color_quality"), ("ethereal_elements", "color_quality")]
+        ]
+    }
+    
+    /// Enhanced traditional token generation with professional astrological accuracy
+    private static func generateTraditionalSignTokens(signName: String) -> [(String, String)] {
+        return TraditionalColors.signColors[signName] ?? [("neutral", "color")]
+    }
+    
+    // MARK: - Professional Astrological Validation
+    
+    /// Validation warnings for astrological accuracy
+    enum ValidationWarning {
+        case venusUnderwhelming
+        case dailyVariationExcessive
+        case natalInfluenceTooLow
+        case traditionalColorMismatch
+        case aspectMeaningMissing
+    }
+    
+    /// Professional astrological validation system
+    struct AstrologicalValidation {
+        
+        /// Validate token mappings against professional astrological standards
+        static func validateTokenMappings(tokens: [StyleToken], chart: NatalChartCalculator.NatalChart) -> [ValidationWarning] {
+            var warnings: [ValidationWarning] = []
+            
+            // Check Venus dominance for fashion
+            let venusTokens = tokens.filter { $0.planetarySource == "Venus" }
+            let totalWeight = tokens.reduce(0) { $0 + $1.weight }
+            let venusPercentage = venusTokens.reduce(0) { $0 + $1.weight } / totalWeight
+            
+            if venusPercentage < 0.3 {
+                warnings.append(.venusUnderwhelming)
+            }
+            
+            // Check daily variation target
+            let natalTokens = tokens.filter { $0.originType == .natal }
+            let dailyTokens = tokens.filter { [.transit, .weather, .phase].contains($0.originType) }
+            let natalPercentage = natalTokens.reduce(0) { $0 + $1.weight } / totalWeight
+            let dailyPercentage = dailyTokens.reduce(0) { $0 + $1.weight } / totalWeight
+            
+            if natalPercentage < 0.45 {
+                warnings.append(.natalInfluenceTooLow)
+            }
+            
+            if dailyPercentage > 0.25 {
+                warnings.append(.dailyVariationExcessive)
+            }
+            
+            return warnings
+        }
+        
+        /// Validate traditional sign-color alignment
+        static func validateTraditionalAlignment(tokens: [StyleToken]) -> Bool {
+            // Check that traditional color mappings are being used
+            let taurusTokens = tokens.filter { $0.signSource == "Taurus" }
+            let hasTraditionalTaurusColors = taurusTokens.contains { token in
+                ["sage_green", "rose", "warm_brown", "cream"].contains(token.name)
+            }
+            
+            let scorpioTokens = tokens.filter { $0.signSource == "Scorpio" }
+            let hasTraditionalScorpioElements = scorpioTokens.contains { token in
+                ["black", "burgundy", "leather", "power", "magnetic"].contains(token.name)
+            }
+            
+            return hasTraditionalTaurusColors && hasTraditionalScorpioElements
+        }
+    }
+
     private static func getCurrentSunSignBackgroundTokens(sunSign: String) -> [(String, String)] {
         switch sunSign {
         case "Aries":
             return [("energetic", "mood"), ("bold", "color_quality"), ("dynamic", "expression"), ("fiery", "texture")]
         case "Taurus":
-            return [("grounded", "mood"), ("luxurious", "texture"), ("sensual", "color_quality"), ("stable", "structure")]
+            return [("grounded", "mood"), ("luxurious", "texture"), ("sage_green", "color"), ("quality", "structure")]
         case "Gemini":
             return [("versatile", "expression"), ("bright", "color_quality"), ("communicative", "mood"), ("airy", "texture")]
         case "Cancer":
-            return [("nurturing", "mood"), ("protective", "structure"), ("pearl", "color"), ("emotional", "expression")]
+            return [("nurturing", "mood"), ("protective", "structure"), ("pearl", "color"), ("flowing", "texture")]
         case "Leo":
             return [("radiant", "color_quality"), ("bold", "expression"), ("warm", "texture"), ("dramatic", "mood")]
         case "Virgo":
@@ -1907,7 +1993,7 @@ class SemanticTokenGenerator {
         case "Libra":
             return [("harmonious", "mood"), ("elegant", "expression"), ("balanced", "structure"), ("beautiful", "color_quality")]
         case "Scorpio":
-            return [("intense", "mood"), ("transformative", "expression"), ("mysterious", "color_quality"), ("deep", "texture")]
+            return [("magnetic", "mood"), ("leather", "texture"), ("black", "color"), ("power", "structure")]
         case "Sagittarius":
             return [("adventurous", "mood"), ("expansive", "expression"), ("optimistic", "color_quality"), ("free", "structure")]
         case "Capricorn":
@@ -2019,6 +2105,7 @@ class SemanticTokenGenerator {
         case cadent     // 3, 6, 9, 12 - Mutable and transitional
     }
     
+    /// Enhanced aspect token generation with professional astrological meaning
     private static func generateAspectTokens(chart: NatalChartCalculator.NatalChart, baseWeight: Double) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
@@ -2035,24 +2122,122 @@ class SemanticTokenGenerator {
                     let aspectSource = "\(planet1.name) \(aspectType) \(planet2.name)"
                     var aspectWeight = baseWeight * 2.0
                     
+                    // Orb-based weight adjustment
                     if orb < 1.0 {
                         aspectWeight += 0.5
                     } else if orb > 3.0 {
                         aspectWeight -= 0.3
                     }
                     
-                    tokens.append(StyleToken(
-                        name: getAspectMoodToken(aspectType: aspectType),
-                        type: "mood",
-                        weight: aspectWeight,
-                        planetarySource: "\(planet1.name)-\(planet2.name)",
-                        aspectSource: aspectSource
-                    ))
+                    // Generate aspect-specific tokens with professional meanings
+                    let aspectSpecificTokens = generateAspectSpecificTokens(
+                        planet1: planet1.name,
+                        planet2: planet2.name,
+                        aspectType: aspectType,
+                        baseWeight: aspectWeight
+                    )
+                    
+                    for aspectToken in aspectSpecificTokens {
+                        tokens.append(StyleToken(
+                            name: aspectToken.name,
+                            type: aspectToken.type,
+                            weight: aspectToken.weight,
+                            planetarySource: "\(planet1.name)-\(planet2.name)",
+                            aspectSource: aspectSource,
+                            originType: .natal
+                        ))
+                    }
                 }
             }
         }
         
         return tokens
+    }
+    
+    /// Professional aspect-specific token generation based on astrological meaning
+    private static func generateAspectSpecificTokens(
+        planet1: String,
+        planet2: String,
+        aspectType: String,
+        baseWeight: Double
+    ) -> [(name: String, type: String, weight: Double)] {
+        
+        // Focus on Venus aspects for fashion authority
+        if (planet1 == "Venus" || planet2 == "Venus") {
+            let otherPlanet = planet1 == "Venus" ? planet2 : planet1
+            return generateVenusAspectTokens(otherPlanet: otherPlanet, aspectType: aspectType, baseWeight: baseWeight)
+        }
+        
+        // Focus on Moon aspects for emotional comfort
+        if (planet1 == "Moon" || planet2 == "Moon") {
+            let otherPlanet = planet1 == "Moon" ? planet2 : planet1
+            return generateMoonAspectTokens(otherPlanet: otherPlanet, aspectType: aspectType, baseWeight: baseWeight)
+        }
+        
+        // Focus on Mars aspects for energy expression
+        if (planet1 == "Mars" || planet2 == "Mars") {
+            let otherPlanet = planet1 == "Mars" ? planet2 : planet1
+            return generateMarsAspectTokens(otherPlanet: otherPlanet, aspectType: aspectType, baseWeight: baseWeight)
+        }
+        
+        // Default generic aspect token
+        return [(name: getAspectMoodToken(aspectType: aspectType), type: "mood", weight: baseWeight)]
+    }
+    
+    /// Venus aspect tokens with professional fashion implications
+    private static func generateVenusAspectTokens(otherPlanet: String, aspectType: String, baseWeight: Double) -> [(name: String, type: String, weight: Double)] {
+        switch (otherPlanet, aspectType) {
+        case ("Moon", "Trine"):
+            return [("effortless_beauty", "expression", baseWeight * 1.5), ("comfortable_luxury", "texture", baseWeight)]
+        case ("Moon", "Square"):
+            return [("polished_comfort", "approach", baseWeight), ("strategic_softness", "texture", baseWeight)]
+        case ("Moon", "Opposition"):
+            return [("sophisticated_comfort", "approach", baseWeight), ("public_private_balance", "structure", baseWeight)]
+        case ("Mars", "Trine"):
+            return [("confident_sensuality", "expression", baseWeight * 1.3), ("dynamic_beauty", "mood", baseWeight)]
+        case ("Mars", "Square"):
+            return [("tension_resolution", "approach", baseWeight), ("bold_refinement", "expression", baseWeight)]
+        case ("Jupiter", "Trine"):
+            return [("abundant_style", "approach", baseWeight), ("generous_beauty", "expression", baseWeight)]
+        case ("Saturn", "Trine"):
+            return [("timeless_elegance", "approach", baseWeight * 1.2), ("structured_beauty", "structure", baseWeight)]
+        case ("Saturn", "Square"):
+            return [("refined_discipline", "approach", baseWeight), ("earned_elegance", "expression", baseWeight)]
+        default:
+            return [(name: "harmonious", type: "mood", weight: baseWeight)]
+        }
+    }
+    
+    /// Moon aspect tokens with emotional comfort implications
+    private static func generateMoonAspectTokens(otherPlanet: String, aspectType: String, baseWeight: Double) -> [(name: String, type: String, weight: Double)] {
+        switch (otherPlanet, aspectType) {
+        case ("Venus", _): // Handled in Venus aspects
+            return []
+        case ("Mars", "Trine"):
+            return [("emotionally_dynamic", "expression", baseWeight), ("protective_strength", "structure", baseWeight)]
+        case ("Mars", "Square"):
+            return [("emotional_armor", "structure", baseWeight), ("defensive_style", "approach", baseWeight)]
+        case ("Saturn", "Trine"):
+            return [("emotional_security", "approach", baseWeight), ("stable_comfort", "texture", baseWeight)]
+        default:
+            return [(name: "emotionally_responsive", type: "mood", weight: baseWeight)]
+        }
+    }
+    
+    /// Mars aspect tokens with energy expression implications
+    private static func generateMarsAspectTokens(otherPlanet: String, aspectType: String, baseWeight: Double) -> [(name: String, type: String, weight: Double)] {
+        switch (otherPlanet, aspectType) {
+        case ("Venus", _), ("Moon", _): // Handled in other aspect functions
+            return []
+        case ("Jupiter", "Trine"):
+            return [("expansive_energy", "expression", baseWeight), ("confident_action", "structure", baseWeight)]
+        case ("Saturn", "Square"):
+            return [("disciplined_energy", "approach", baseWeight), ("strategic_action", "structure", baseWeight)]
+        case ("Uranus", "Trine"):
+            return [("innovative_action", "expression", baseWeight), ("electric_energy", "mood", baseWeight)]
+        default:
+            return [(name: "energetic", type: "mood", weight: baseWeight)]
+        }
     }
     
     private static func generateMoonPhaseColorTokens(moonPhase: Double, weight: Double) -> [StyleToken] {

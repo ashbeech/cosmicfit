@@ -344,13 +344,13 @@ struct InterpretationTextLibrary {
                         ("bold", "mood"), ("dynamic", "structure"), ("bright red", "color"), ("vibrant", "color_quality")
                     ],
                     "Taurus": [
-                        ("sensual", "texture"), ("earthy", "color"), ("forest green", "color"), ("grounded", "color_quality")
+                        ("luxurious", "texture"), ("sage green", "color"), ("rose", "color"), ("tactile", "color_quality")
                     ],
                     "Gemini": [
                         ("playful", "mood"), ("versatile", "structure"), ("yellow", "color"), ("bright", "color_quality")
                     ],
                     "Cancer": [
-                        ("protective", "structure"), ("comfortable", "texture"), ("silver", "color"), ("gentle", "color_quality")
+                        ("protective", "structure"), ("flowing", "texture"), ("pearl", "color"), ("nautical", "color_quality")
                     ],
                     "Leo": [
                         ("radiant", "mood"), ("expressive", "structure"), ("gold", "color"), ("warm", "color_quality")
@@ -362,7 +362,7 @@ struct InterpretationTextLibrary {
                         ("balanced", "structure"), ("harmonious", "color"), ("rose pink", "color"), ("elegant", "color_quality")
                     ],
                     "Scorpio": [
-                        ("intense", "mood"), ("transformative", "texture"), ("deep burgundy", "color"), ("intense", "color_quality")
+                        ("magnetic", "mood"), ("leather", "texture"), ("black", "color"), ("powerful", "color_quality")
                     ],
                     "Sagittarius": [
                         ("expansive", "structure"), ("adventurous", "mood"), ("royal blue", "color"), ("vibrant", "color_quality")
@@ -386,7 +386,7 @@ struct InterpretationTextLibrary {
                         ("energetic", "mood"), ("impulsive", "texture"), ("coral red", "color"), ("warm", "color_quality")
                     ],
                     "Taurus": [
-                        ("comforting", "texture"), ("stable", "mood"), ("moss green", "color"), ("rich", "color_quality")
+                        ("quality", "texture"), ("grounded", "mood"), ("warm brown", "color"), ("enduring", "color_quality")
                     ],
                     "Gemini": [
                         ("adaptable", "structure"), ("communicative", "mood"), ("pale yellow", "color"), ("bright", "color_quality")
@@ -404,7 +404,7 @@ struct InterpretationTextLibrary {
                         ("elegant", "structure"), ("social", "mood"), ("lavender", "color"), ("harmonious", "color_quality")
                     ],
                     "Scorpio": [
-                        ("deep", "color"), ("emotional", "texture"), ("deep plum", "color"), ("mysterious", "color_quality")
+                        ("structured", "color"), ("leather", "texture"), ("burgundy", "color"), ("intense", "color_quality")
                     ],
                     "Sagittarius": [
                         ("optimistic", "mood"), ("free-spirited", "structure"), ("indigo", "color"), ("deep", "color_quality")
@@ -428,7 +428,7 @@ struct InterpretationTextLibrary {
                         ("spontaneous", "structure"), ("bold", "color"), ("coral", "color"), ("dynamic", "color_quality")
                     ],
                     "Taurus": [
-                        ("luxurious", "texture"), ("sensual", "mood"), ("emerald", "color"), ("rich", "color_quality")
+                        ("indulgent", "texture"), ("sensual", "mood"), ("cream", "color"), ("luxurious", "color_quality")
                     ],
                     "Gemini": [
                         ("eclectic", "structure"), ("playful", "color"), ("peach", "color"), ("varied", "color_quality")
@@ -446,7 +446,7 @@ struct InterpretationTextLibrary {
                         ("harmonious", "structure"), ("balanced", "color"), ("rose quartz", "color"), ("elegant", "color_quality")
                     ],
                     "Scorpio": [
-                        ("magnetic", "mood"), ("transformative", "structure"), ("wine red", "color"), ("intense", "color_quality")
+                        ("magnetic", "mood"), ("power", "structure"), ("black", "color"), ("controlled", "color_quality")
                     ],
                     "Sagittarius": [
                         ("exuberant", "mood"), ("expansive", "color"), ("teal", "color"), ("vivid", "color_quality")
@@ -476,7 +476,7 @@ struct InterpretationTextLibrary {
                         ("versatile", "structure"), ("quick", "texture"), ("bright yellow", "color"), ("dynamic", "color_quality")
                     ],
                     "Cancer": [
-                        ("protective", "structure"), ("nurturing", "texture"), ("burgundy", "color"), ("deep", "color_quality")
+                        ("protective", "structure"), ("soft", "texture"), ("white", "color"), ("gentle", "color_quality")
                     ],
                     "Leo": [
                         ("confident", "structure"), ("bold", "color"), ("copper", "color"), ("radiant", "color_quality")
@@ -488,7 +488,7 @@ struct InterpretationTextLibrary {
                         ("balanced", "structure"), ("harmonious", "mood"), ("rose", "color"), ("balanced", "color_quality")
                     ],
                     "Scorpio": [
-                        ("intense", "color"), ("powerful", "structure"), ("deep red", "color"), ("intense", "color_quality")
+                        ("deep", "color"), ("power", "structure"), ("black", "color"), ("magnetic", "color_quality")
                     ],
                     "Sagittarius": [
                         ("adventurous", "structure"), ("expansive", "texture"), ("purple", "color"), ("dynamic", "color_quality")

@@ -416,29 +416,29 @@ class VibeBreakdownGenerator {
     private static func getSunSignEnergyPreference(sunSign: String) -> [String: Double] {
         switch sunSign {
         case "Taurus":
-            return ["classic": 1.5, "romantic": 1.3, "utility": 1.4, "playful": 0.8]  // Increased utility
+            return ["classic": 1.8, "romantic": 1.4, "utility": 1.3, "playful": 0.8, "drama": 0.7]  // Traditional earth emphasis
         case "Scorpio":
-            return ["drama": 1.8, "edge": 1.4, "utility": 1.6, "romantic": 0.6, "playful": 0.7]  // Increased utility, reduced romantic
+            return ["drama": 2.0, "edge": 1.3, "utility": 1.2, "romantic": 0.8, "playful": 0.7, "classic": 1.0]  // Drama dominance with power elements
         case "Cancer":
-            return ["romantic": 1.4, "utility": 1.5, "classic": 1.1, "drama": 0.9]  // Increased utility (protective nature)
+            return ["romantic": 1.6, "utility": 1.3, "classic": 1.2, "drama": 0.9, "playful": 1.0]  // Emotional comfort focus
         case "Leo":
-            return ["drama": 1.9, "playful": 1.4, "classic": 0.8, "utility": 0.8]
+            return ["drama": 2.1, "playful": 1.5, "classic": 0.8, "utility": 0.8, "romantic": 1.0]  // Theatrical emphasis
         case "Virgo":
-            return ["classic": 1.7, "utility": 2.0, "romantic": 0.8, "drama": 0.7]  // Maximum utility preference
+            return ["classic": 2.0, "utility": 1.8, "romantic": 0.8, "drama": 0.7, "playful": 0.9]  // Maximum classic and utility
         case "Libra":
-            return ["romantic": 1.6, "classic": 1.4, "playful": 1.2, "edge": 0.8]
+            return ["romantic": 1.7, "classic": 1.5, "playful": 1.2, "edge": 0.8, "drama": 0.9]  // Beauty and harmony focus
         case "Aries":
-            return ["drama": 1.7, "playful": 1.4, "edge": 1.2, "classic": 0.8]
+            return ["drama": 1.8, "playful": 1.4, "edge": 1.3, "classic": 0.8, "utility": 1.0]  // Dynamic energy
         case "Gemini":
-            return ["playful": 1.8, "edge": 1.2, "classic": 0.7, "utility": 1.0]
+            return ["playful": 1.9, "edge": 1.3, "classic": 0.7, "utility": 1.0, "romantic": 1.0]  // Communication and versatility
         case "Sagittarius":
-            return ["playful": 1.6, "drama": 1.3, "edge": 1.2, "classic": 0.8]
+            return ["playful": 1.7, "drama": 1.3, "edge": 1.2, "classic": 0.8, "utility": 1.0]  // Adventure and expansion
         case "Capricorn":
-            return ["classic": 1.8, "utility": 1.7, "drama": 1.1, "playful": 0.7]  // High utility (practical nature)
+            return ["classic": 2.2, "utility": 1.6, "drama": 1.0, "playful": 0.7, "romantic": 0.9]  // Maximum traditional structure
         case "Aquarius":
-            return ["edge": 1.9, "playful": 1.3, "classic": 0.7, "romantic": 0.8]
+            return ["edge": 2.0, "playful": 1.3, "classic": 0.7, "romantic": 0.8, "utility": 1.1]  // Innovation dominance
         case "Pisces":
-            return ["romantic": 1.7, "edge": 1.3, "playful": 1.1, "classic": 0.8]
+            return ["romantic": 1.8, "edge": 1.2, "playful": 1.1, "classic": 0.8, "drama": 1.0]  // Flowing and ethereal
         default:
             return [:]
         }
@@ -463,10 +463,11 @@ class VibeBreakdownGenerator {
     
     private static let romanticTokens: Set<String> = [
         "flowing", "soft", "gentle", "dreamy", "ethereal", "luxurious",
-        "sensual", "beautiful", "harmonious", "nurturing", "comfortable",
+        "sensual", "beautiful", "harmonious", "comfortable",
         "warm", "delicate", "feminine", "graceful", "misty lavender",
         "pale yellow", "seafoam", "opalescent blue", "fluid", "pearl",
-        "intuitive", "compassionate", "receptive", "empathetic", "subtle"
+        "intuitive", "compassionate", "receptive", "empathetic", "subtle",
+        "silk", "velvet", "cashmere", "beauty", "harmony", "luxury"
     ]
     
     private static let utilityTokens: Set<String> = [
@@ -481,13 +482,15 @@ class VibeBreakdownGenerator {
         "deep", "transformative", "commanding", "magnetic",
         "royal", "electric", "plutonium", "metallic", "royal purple",
         "deep burgundy", "plutonium purple", "radiant", "mysterious",
-        "penetrating", "emotional", "passionate", "hypnotic", "profound"
+        "penetrating", "emotional", "passionate", "hypnotic", "profound",
+        "leather", "black", "power", "structured", "allure"
     ]
     
     private static let edgeTokens: Set<String> = [
         "unconventional", "innovative", "unique", "unexpected", "electric",
         "neon", "metallic", "textured", "distinctive", "rebellious",
-        "avant-garde", "edgy", "alternative", "disruptive", "experimental"
+        "avant-garde", "edgy", "alternative", "disruptive", "experimental",
+        "asymmetry", "contrasts", "technical_fabrics", "unexpected_combinations"
     ]
     
     // MARK: - Token Set Getters (for Debug Analysis) ⭐ ADD HERE ⭐

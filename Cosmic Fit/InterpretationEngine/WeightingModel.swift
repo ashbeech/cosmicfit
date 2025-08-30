@@ -7,20 +7,20 @@
 //
 
 struct WeightingModel {
-    // Reduced natal weight to allow more daily variation (was 0.65)
-    static let natalWeight: Double = 0.35
-    static let currentSunSignBackgroundWeight: Double = 0.25
+    // Increased natal weight to match professional astrological standards (45-55%)
+    static let natalWeight: Double = 0.50  // Increased from 0.35 to achieve 45-55% target
+    static let currentSunSignBackgroundWeight: Double = 0.15  // Reduced to rebalance
     
-    // Enhanced Daily Fit specific weights for meaningful daily variation
+    // Rebalanced Daily Fit weights to achieve 20-25% daily variation target
     struct DailyFit {
-        static let transitWeight: Double = 1.2  // Increased from 0.65 for daily Moon movement
-        static let weatherWeight: Double = 0.8  // Increased from 0.12 for meaningful weather influence
-        static let moonPhaseWeight: Double = 0.6  // Activated from commented out state
-        static let dailySignatureWeight: Double = 0.3  // New for day-of-week energy
+        static let transitWeight: Double = 0.8   // Reduced from 1.2 to achieve target daily variation
+        static let weatherWeight: Double = 0.6   // Reduced from 0.8 for weather modulation not dominance
+        static let moonPhaseWeight: Double = 0.4  // Reduced from 0.6 for appropriate lunar influence
+        static let dailySignatureWeight: Double = 0.2  // Reduced from 0.3 for subtle day-of-week energy
     }
     
-    // Reduced progressed weight to allow more daily responsiveness (was 0.66)
-    static let progressedWeight: Double = 0.45
+    // Balanced progressed weight within professional range (15-20%)
+    static let progressedWeight: Double = 0.35  // Reduced from 0.45 to fit within recommended range
 
 }
 
@@ -49,13 +49,14 @@ struct WeightingModel {
 }*/
 
 struct DistributionTargets {
-    static let maxNatalInfluence: Double = 45.0
-    static let targetTransitInfluence: Double = 20.0
-    static let maxMoonPhaseInfluence: Double = 15.0
-    static let maxDayOfWeekInfluence: Double = 10.0
-    static let targetWeatherInfluence: Double = 10.0
-    static let minProgressedInfluence: Double = 15.0  // Add minimum threshold
-    static let maxProgressedInfluence: Double = 35.0  // Add maximum threshold
+    static let maxNatalInfluence: Double = 55.0       // Professional standard: 45-55%
+    static let minNatalInfluence: Double = 45.0       // Ensure natal dominance
+    static let targetTransitInfluence: Double = 18.0  // Professional standard: 15-20%
+    static let maxMoonPhaseInfluence: Double = 12.0   // Reduced for balanced influence
+    static let maxDayOfWeekInfluence: Double = 8.0    // Reduced for subtle daily signature
+    static let targetWeatherInfluence: Double = 8.0   // Professional standard: 8-12%
+    static let minProgressedInfluence: Double = 15.0  // Professional minimum
+    static let maxProgressedInfluence: Double = 20.0  // Professional maximum (reduced from 35)
     
     static func getScalingFactors(currentDistribution: [String: Double]) -> [String: Double] {
         var factors: [String: Double] = [:]
