@@ -328,11 +328,13 @@ class VibeBreakdownGenerator {
                 scores["drama"]! += (baseWeight * 2.0) + bonus + sunSignBoost
             }
             
-            // Edge Energy Mapping
-            if edgeTokens.contains(tokenName) {
+            // Edge Energy Mapping - Enhanced for Uranus tokens
+            if edgeTokens.contains(tokenName) || token.planetarySource == "Uranus" {
                 let bonus = getEdgeBonus(token: token)
                 let sunSignBoost = getSunSignPersonalityBoost(token: token, sunSign: sunSign, energy: "edge")
-                scores["edge"]! += (baseWeight * 2.0) + bonus + sunSignBoost
+                // Extra boost for Uranus planetary source
+                let uranusBoost = token.planetarySource == "Uranus" ? 1.5 : 0.0
+                scores["edge"]! += (baseWeight * 2.0) + bonus + sunSignBoost + uranusBoost
             }
         }
         

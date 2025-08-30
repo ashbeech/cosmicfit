@@ -39,11 +39,21 @@ class SemanticTokenGenerator {
     static func generateBlueprintTokens(natal: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
-        // Process planets with BALANCED enhanced weighting for Venus, Mars, Moon
+        // Get chart ruler for dominant influence
+        let chartRuler = getChartRuler(ascendantSign: CoordinateTransformations.decimalDegreesToZodiac(natal.ascendant).sign)
+        
+        // Process planets with enhanced weighting for Venus, Mars, Moon + Chart Ruler dominance
         for planet in natal.planets {
-            // More moderate base weights to avoid overwhelming dominance
+            // Professional base weights with chart ruler emphasis
             let baseWeight: Double
             var priorityMultiplier: Double = 1.0
+            
+            // Chart ruler gets 3x multiplier for personal expression dominance
+            var chartRulerMultiplier: Double = 1.0
+            if planet.name == chartRuler {
+                chartRulerMultiplier = 3.0
+                DebugLogger.info("🔱 CHART RULER DOMINANCE: \(planet.name) receives 3x multiplier for personal expression")
+            }
             
             switch planet.name {
             case "Venus":
@@ -78,8 +88,8 @@ class SemanticTokenGenerator {
                 priorityMultiplier = 0.3 // Reduced from 0.4
             }
             
-            // Apply WeightingModel natal weight
-            let weight = baseWeight * priorityMultiplier * WeightingModel.natalWeight
+            // Apply WeightingModel natal weight with chart ruler dominance
+            let weight = baseWeight * priorityMultiplier * chartRulerMultiplier * WeightingModel.natalWeight
             
             // Generate tokens using existing InterpretationTextLibrary
             let planetTokens = tokenizeForPlanetInSign(
@@ -139,6 +149,13 @@ class SemanticTokenGenerator {
         // Process aspects with reduced weight
         let aspectTokens = generateAspectTokens(chart: natal, baseWeight: WeightingModel.natalWeight * 0.8) // Reduced by 20%
         tokens.append(contentsOf: aspectTokens)
+        
+        // Add Color Season tokens for consistent fashion guidance (Partner's Feature)
+        let colorSeason = ColorSeasonAnalyzer.determineColorSeason(chart: natal)
+        let seasonalTokens = ColorSeasonAnalyzer.getSeasonalPalette(season: colorSeason)
+        tokens.append(contentsOf: seasonalTokens)
+        
+        DebugLogger.info("🎨 COLOR SEASON ANALYSIS: \(colorSeason.rawValue) with \(seasonalTokens.count) palette tokens")
         
         // Add debug logging for Venus/Mars/Moon dominance
         DebugLogger.info("🌟 BALANCED EXPRESSION PLANET WEIGHTS:")
@@ -1890,6 +1907,152 @@ class SemanticTokenGenerator {
         }
     }
     
+    // MARK: - Color Season System (Partner's Feature Request)
+    
+    /// Professional color season analysis based on astrological chart
+    enum ColorSeason: String, CaseIterable {
+        case brightSpring = "Bright Spring"
+        case lightSpring = "Light Spring" 
+        case warmSpring = "Warm Spring"
+        case brightSummer = "Bright Summer"
+        case lightSummer = "Light Summer"
+        case coolSummer = "Cool Summer"
+        case brightAutumn = "Bright Autumn"
+        case warmAutumn = "Warm Autumn"
+        case deepAutumn = "Deep Autumn"
+        case brightWinter = "Bright Winter"
+        case coolWinter = "Cool Winter"
+        case deepWinter = "Deep Winter"
+    }
+    
+    /// Color Season Analyzer for professional fashion guidance
+    struct ColorSeasonAnalyzer {
+        
+        /// Determine color season based on astrological chart factors
+        static func determineColorSeason(chart: NatalChartCalculator.NatalChart) -> ColorSeason {
+            let sunSign = getSunSign(chart: chart)
+            let venusSign = getVenusSign(chart: chart)
+            let ascendantSign = CoordinateTransformations.decimalDegreesToZodiac(chart.ascendant).sign
+            
+            // Analyze elemental balance for warmth/coolness
+            let fireCount = countFirePlacements(chart: chart)
+            let earthCount = countEarthPlacements(chart: chart)
+            let airCount = countAirPlacements(chart: chart)
+            let waterCount = countWaterPlacements(chart: chart)
+            
+            // Determine undertone (warm vs cool)
+            let isWarmUndertone = (fireCount + earthCount) > (airCount + waterCount)
+            
+            // Determine intensity (bright vs muted vs deep)
+            let venusIntensity = calculateVenusIntensity(chart: chart)
+            
+            // Determine lightness (light vs deep)
+            let isLightExpression = hasLightExpression(chart: chart)
+            
+            // Professional color season determination
+            switch (isWarmUndertone, venusIntensity, isLightExpression) {
+            case (true, .bright, true): return .brightSpring
+            case (true, .muted, true): return .lightSpring
+            case (true, .bright, false): return .warmSpring
+            case (false, .bright, true): return .brightSummer
+            case (false, .muted, true): return .lightSummer
+            case (false, .muted, false): return .coolSummer
+            case (true, .bright, false): return .brightAutumn
+            case (true, .muted, false): return .warmAutumn
+            case (true, .deep, false): return .deepAutumn
+            case (false, .bright, false): return .brightWinter
+            case (false, .muted, false): return .coolWinter
+            case (false, .deep, false): return .deepWinter
+            default: return .deepAutumn // Fallback
+            }
+        }
+        
+        /// Get seasonal color palette for consistent fashion guidance
+        static func getSeasonalPalette(season: ColorSeason) -> [StyleToken] {
+            let baseColors = seasonalColorMappings[season] ?? []
+            return baseColors.map { (colorName, intensity) in
+                StyleToken(
+                    name: colorName,
+                    type: "color",
+                    weight: intensity,
+                    planetarySource: "ColorSeason",
+                    aspectSource: "Color Season: \(season.rawValue)",
+                    originType: .natal
+                )
+            }
+        }
+        
+        /// Modulate daily intensity while maintaining seasonal coherence
+        static func modulateForDaily(palette: [StyleToken], transits: [Any]) -> [StyleToken] {
+            // Maintain palette but adjust intensity based on daily transits
+            return palette.map { token in
+                let dailyIntensity = calculateDailyIntensityModulation(transits: transits)
+                return token.withWeight(token.weight * dailyIntensity)
+            }
+        }
+        
+        // MARK: - Helper Methods
+        
+        private enum VenusIntensity {
+            case bright, muted, deep
+        }
+        
+        private static let seasonalColorMappings: [ColorSeason: [(String, Double)]] = [
+            .deepAutumn: [("rust", 2.0), ("olive", 1.8), ("burgundy", 1.9), ("golden_brown", 1.7), ("deep_orange", 1.6)],
+            .brightWinter: [("royal_blue", 2.0), ("emerald", 1.9), ("magenta", 1.8), ("black", 2.0), ("white", 1.7)],
+            .warmSpring: [("coral", 1.8), ("golden_yellow", 1.9), ("warm_green", 1.6), ("peach", 1.7), ("camel", 1.5)],
+            .coolSummer: [("lavender", 1.6), ("soft_blue", 1.7), ("rose", 1.5), ("mint", 1.4), ("pearl_gray", 1.6)]
+            // Add more seasonal mappings as needed
+        ]
+        
+        private static func getSunSign(chart: NatalChartCalculator.NatalChart) -> Int {
+            return chart.planets.first { $0.name == "Sun" }?.zodiacSign ?? 5
+        }
+        
+        private static func getVenusSign(chart: NatalChartCalculator.NatalChart) -> Int {
+            return chart.planets.first { $0.name == "Venus" }?.zodiacSign ?? 7
+        }
+        
+        private static func countFirePlacements(chart: NatalChartCalculator.NatalChart) -> Int {
+            return chart.planets.filter { [1, 5, 9].contains($0.zodiacSign) }.count
+        }
+        
+        private static func countEarthPlacements(chart: NatalChartCalculator.NatalChart) -> Int {
+            return chart.planets.filter { [2, 6, 10].contains($0.zodiacSign) }.count
+        }
+        
+        private static func countAirPlacements(chart: NatalChartCalculator.NatalChart) -> Int {
+            return chart.planets.filter { [3, 7, 11].contains($0.zodiacSign) }.count
+        }
+        
+        private static func countWaterPlacements(chart: NatalChartCalculator.NatalChart) -> Int {
+            return chart.planets.filter { [4, 8, 12].contains($0.zodiacSign) }.count
+        }
+        
+        private static func calculateVenusIntensity(chart: NatalChartCalculator.NatalChart) -> VenusIntensity {
+            guard let venus = chart.planets.first(where: { $0.name == "Venus" }) else { return .muted }
+            
+            // Fire/Mars aspects = bright, Earth/Saturn = deep, Water/Air = muted
+            switch venus.zodiacSign {
+            case 1, 5, 9: return .bright  // Fire signs
+            case 2, 6, 10: return .deep   // Earth signs  
+            default: return .muted        // Air/Water signs
+            }
+        }
+        
+        private static func hasLightExpression(chart: NatalChartCalculator.NatalChart) -> Bool {
+            // Light expression = more air/fire, fewer planets in deep signs
+            let lightSigns = [1, 3, 5, 7, 9, 11] // Fire and Air
+            let lightPlacements = chart.planets.filter { lightSigns.contains($0.zodiacSign) }.count
+            return lightPlacements > 3
+        }
+        
+        private static func calculateDailyIntensityModulation(transits: [Any]) -> Double {
+            // Placeholder for daily transit intensity calculation
+            return 1.0 + (Double.random(in: -0.2...0.2)) // ±20% daily variation
+        }
+    }
+    
     // MARK: - Traditional Astrological Color Correspondences
     
     /// Traditional astrological color mappings per professional standards
@@ -1899,7 +2062,7 @@ class SemanticTokenGenerator {
             "Taurus": [("sage_green", "color"), ("rose", "color"), ("warm_brown", "color"), ("cream", "color")],
             "Gemini": [("yellow", "color"), ("bright_patterns", "color_quality"), ("mixed_combinations", "color_quality")],
             "Cancer": [("white", "color"), ("silver", "color"), ("pearl", "color"), ("nautical_themes", "color_quality")],
-            "Leo": [("gold", "color"), ("orange", "color"), ("dramatic_flair", "color_quality"), ("statement_pieces", "color_quality")],
+            "Leo": [("gold", "color"), ("orange", "color"), ("red", "color"), ("purple", "color"), ("crimson", "color"), ("royal", "color_quality")],
             "Virgo": [("navy", "color"), ("wheat", "color"), ("brown", "color"), ("precisely_tailored", "color_quality")],
             "Libra": [("rose_pink", "color"), ("pastels", "color"), ("harmonious_combinations", "color_quality"), ("balanced_proportions", "color_quality")],
             "Scorpio": [("black", "color"), ("burgundy", "color"), ("deep_colors", "color_quality"), ("power_silhouettes", "color_quality")],
@@ -1913,6 +2076,41 @@ class SemanticTokenGenerator {
     /// Enhanced traditional token generation with professional astrological accuracy
     private static func generateTraditionalSignTokens(signName: String) -> [(String, String)] {
         return TraditionalColors.signColors[signName] ?? [("neutral", "color")]
+    }
+    
+    /// Get chart ruler (ruling planet of Ascendant) for dominant personal expression
+    private static func getChartRuler(ascendantSign: Int) -> String {
+        switch ascendantSign {
+        case 1: return "Mars"      // Aries
+        case 2: return "Venus"     // Taurus
+        case 3: return "Mercury"   // Gemini
+        case 4: return "Moon"      // Cancer
+        case 5: return "Sun"       // Leo
+        case 6: return "Mercury"   // Virgo
+        case 7: return "Venus"     // Libra
+        case 8: return "Mars"      // Scorpio (traditional ruler)
+        case 9: return "Jupiter"   // Sagittarius
+        case 10: return "Saturn"   // Capricorn
+        case 11: return "Saturn"   // Aquarius (traditional ruler)
+        case 12: return "Jupiter"  // Pisces (traditional ruler)
+        default: return "Sun"      // Fallback
+        }
+    }
+    
+    /// Professional aggressive orb-based weighting for precise astrological accuracy
+    private static func calculateProfessionalOrbMultiplier(orb: Double) -> Double {
+        switch orb {
+        case 0.0..<1.0:
+            return 2.0    // Exact aspects (like 0.11°) = 100% strength × 2x multiplier
+        case 1.0..<2.0:
+            return 1.5    // Tight aspects = 80% strength × 1.5x multiplier  
+        case 2.0..<3.0:
+            return 1.0    // Normal aspects = 50% strength × 1x multiplier
+        case 3.0..<4.0:
+            return 0.7    // Wide aspects = 30% strength × 0.7x multiplier
+        default:
+            return 0.3    // Very wide aspects = 20% strength × 0.3x multiplier
+        }
     }
     
     // MARK: - Professional Astrological Validation
@@ -2122,12 +2320,9 @@ class SemanticTokenGenerator {
                     let aspectSource = "\(planet1.name) \(aspectType) \(planet2.name)"
                     var aspectWeight = baseWeight * 2.0
                     
-                    // Orb-based weight adjustment
-                    if orb < 1.0 {
-                        aspectWeight += 0.5
-                    } else if orb > 3.0 {
-                        aspectWeight -= 0.3
-                    }
+                    // Professional aggressive orb-based weighting
+                    let orbMultiplier = calculateProfessionalOrbMultiplier(orb: orb)
+                    aspectWeight *= orbMultiplier
                     
                     // Generate aspect-specific tokens with professional meanings
                     let aspectSpecificTokens = generateAspectSpecificTokens(

@@ -7,20 +7,20 @@
 //
 
 struct WeightingModel {
-    // Increased natal weight to match professional astrological standards (45-55%)
-    static let natalWeight: Double = 0.50  // Increased from 0.35 to achieve 45-55% target
-    static let currentSunSignBackgroundWeight: Double = 0.15  // Reduced to rebalance
+    // Professional astrological standards: natal chart dominance (45-55%)
+    static let natalWeight: Double = 0.75  // Increased to achieve 45-55% natal target
+    static let currentSunSignBackgroundWeight: Double = 0.10  // Further reduced to rebalance
     
-    // Rebalanced Daily Fit weights to achieve 20-25% daily variation target
+    // Professional standard: 20-25% total daily variation
     struct DailyFit {
-        static let transitWeight: Double = 0.8   // Reduced from 1.2 to achieve target daily variation
-        static let weatherWeight: Double = 0.6   // Reduced from 0.8 for weather modulation not dominance
-        static let moonPhaseWeight: Double = 0.4  // Reduced from 0.6 for appropriate lunar influence
-        static let dailySignatureWeight: Double = 0.2  // Reduced from 0.3 for subtle day-of-week energy
+        static let transitWeight: Double = 0.5   // Further reduced to achieve 20-25% daily variation
+        static let weatherWeight: Double = 0.4   // Reduced for modulation role, not dominance
+        static let moonPhaseWeight: Double = 0.3  // Reduced for appropriate lunar influence
+        static let dailySignatureWeight: Double = 0.15  // Minimal day-of-week energy
     }
     
-    // Balanced progressed weight within professional range (15-20%)
-    static let progressedWeight: Double = 0.35  // Reduced from 0.45 to fit within recommended range
+    // Professional range: 15-20% progressed influence
+    static let progressedWeight: Double = 0.25  // Reduced to fit within 15-20% professional range
 
 }
 
