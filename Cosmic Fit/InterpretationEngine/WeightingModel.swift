@@ -13,14 +13,14 @@ struct WeightingModel {
     
     // Professional standard: 20-25% total daily variation with meaningful transit influence
     struct DailyFit {
-        static let transitWeight: Double = 1.2   // Increased to achieve 15-20% transit influence
+        static let transitWeight: Double = 0.8   // Reduced to achieve 15-20% transit influence (was too high at 1.2)
         static let weatherWeight: Double = 0.4   // Maintained for modulation role
         static let moonPhaseWeight: Double = 0.25  // Slightly reduced to achieve 20-25% daily variation target
         static let dailySignatureWeight: Double = 0.15  // Minimal day-of-week energy
     }
     
     // Professional range: 15-20% progressed influence  
-    static let progressedWeight: Double = 0.20  // Further reduced to make room for stronger transit influence
+    static let progressedWeight: Double = 0.25  // Increased to achieve 15-20% progressed influence
 
 }
 
@@ -85,11 +85,11 @@ struct DistributionTargets {
             if transitPercent < minTransitInfluence {
                 // Boost transit influence to meet minimum threshold
                 let targetFactor = targetTransitInfluence / max(transitPercent, 1.0)
-                factors["transit"] = min(max(targetFactor, 1.0), 3.0)  // Allow stronger boost for daily variety
+                factors["transit"] = min(max(targetFactor, 1.0), 2.0)  // Reduced max boost from 3.0 to 2.0
             } else if transitPercent < targetTransitInfluence {
                 // Moderate boost toward target
                 let targetFactor = targetTransitInfluence / transitPercent
-                factors["transit"] = min(max(targetFactor, 1.0), 1.5)
+                factors["transit"] = min(max(targetFactor, 1.0), 1.3)  // Reduced max boost from 1.5 to 1.3
             } else {
                 factors["transit"] = 1.0
             }
