@@ -11,6 +11,7 @@ import Foundation
 /// Data model representing a Tarot card with semantic matching capabilities
 struct TarotCard: Codable, Identifiable {
     let name: String               // e.g., "The Chariot", "Three of Cups"
+    let imagePath: String          // Path for Assets.xcassets (e.g., "Cards/00-TheFool")
     let arcana: ArcanaType         // Major or Minor
     let suit: SuitType?            // For Minor Arcana only
     let number: Int?               // For Minor Arcana: 1-14 (11=Page, 12=Knight, 13=Queen, 14=King)

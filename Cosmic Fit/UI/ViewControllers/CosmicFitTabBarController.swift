@@ -25,6 +25,11 @@ class CosmicFitTabBarController: UITabBarController {
     private var todayWeather: TodayWeather?
     private var chartIdentifier: String?
     
+    // Transition properties
+    private var isTransitioning = false
+    private var transitionContainer: UIView?
+    private var transitionAnimator: UIViewPropertyAnimator?
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -337,9 +342,21 @@ class CosmicFitTabBarController: UITabBarController {
 extension CosmicFitTabBarController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        // Allow all tab switches - view controllers remain in memory
-        print("🔄 Switching to tab: \(viewController.title ?? "Unknown")")
-        return true
+        // Prevent tab switching during transition
+        guard !isTransitioning else { return false }
+        
+        // Get the target tab index
+        guard let targetIndex = viewControllers?.firstIndex(of: viewController) else { return true }
+        let currentIndex = selectedIndex
+        
+        // Skip animation if selecting the same tab
+        guard targetIndex != currentIndex else { return true }
+        
+        // Perform smooth slide transition using proper container transitions
+        performSmoothSlideTransition(from: currentIndex, to: targetIndex, targetViewController: viewController)
+        
+        // Return false to prevent default tab switching (we'll handle it manually)
+        return false
     }
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
@@ -356,5 +373,104 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
                 print("🔮 Daily Fit tab active")
             }
         }
+    }
+    
+    // MARK: - Smooth Slide Transitions
+    
+    private func performSmoothSlideTransition(from fromIndex: Int, to toIndex: Int, targetViewController: UIViewController) {
+        guard let viewControllers = viewControllers,
+              fromIndex < viewControllers.count,
+              toIndex < viewControllers.count else { return }
+        
+        isTransitioning = true
+        
+        let fromVC = viewControllers[fromIndex]
+        let toVC = viewControllers[toIndex]
+        
+        // Determine slide direction: Blueprint (0) → Daily Fit (1) = slide left
+        // Daily Fit (1) → Blueprint (0) = slide right
+        let isSlideLeft = toIndex > fromIndex
+        
+        // Create a temporary container view that sits above the tab bar controller's content
+        let containerBounds = view.bounds
+        let contentFrame = CGRect(x: 0, y: 0, width: containerBounds.width, height: containerBounds.height - tabBar.frame.height)
+        
+        let transitionContainer = UIView(frame: contentFrame)
+        transitionContainer.clipsToBounds = true
+        view.insertSubview(transitionContainer, belowSubview: tabBar)
+        self.transitionContainer = transitionContainer
+        
+        // Take snapshots of the current and target views for smooth animation
+        // Use the full original view bounds to maintain proper aspect ratio
+        let fromSnapshot = fromVC.view.snapshotView(afterScreenUpdates: false) ?? UIView()
+        let toSnapshot = toVC.view.snapshotView(afterScreenUpdates: true) ?? UIView()
+        
+        // Set snapshots to match the original view size, not the content frame
+        let originalViewBounds = fromVC.view.bounds
+        fromSnapshot.frame = originalViewBounds
+        toSnapshot.frame = originalViewBounds
+        
+        // Position snapshots for animation
+        transitionContainer.addSubview(fromSnapshot)
+        transitionContainer.addSubview(toSnapshot)
+        
+        if isSlideLeft {
+            // Coming from right (Blueprint → Daily Fit)
+            toSnapshot.transform = CGAffineTransform(translationX: originalViewBounds.width, y: 0)
+        } else {
+            // Coming from left (Daily Fit → Blueprint)
+            toSnapshot.transform = CGAffineTransform(translationX: -originalViewBounds.width, y: 0)
+        }
+        
+        // Hide the original views during transition
+        fromVC.view.alpha = 0
+        toVC.view.alpha = 0
+        
+        // Create smooth animator
+        transitionAnimator = UIViewPropertyAnimator(duration: 0.35, dampingRatio: 0.9) {
+            if isSlideLeft {
+                // Slide left: current moves left, new comes from right
+                fromSnapshot.transform = CGAffineTransform(translationX: -originalViewBounds.width, y: 0)
+                toSnapshot.transform = .identity
+            } else {
+                // Slide right: current moves right, new comes from left
+                fromSnapshot.transform = CGAffineTransform(translationX: originalViewBounds.width, y: 0)
+                toSnapshot.transform = .identity
+            }
+        }
+        
+        transitionAnimator?.addCompletion { [weak self] _ in
+            // Clean up transition
+            self?.cleanupTransition(targetViewController: targetViewController, toViewController: toVC)
+        }
+        
+        transitionAnimator?.startAnimation()
+    }
+    
+    private func cleanupTransition(targetViewController: UIViewController, toViewController: UIViewController) {
+        // Remove transition container
+        transitionContainer?.removeFromSuperview()
+        transitionContainer = nil
+        transitionAnimator = nil
+        
+        // Restore view alpha
+        if let viewControllers = viewControllers {
+            for vc in viewControllers {
+                vc.view.alpha = 1.0
+            }
+        }
+        
+        // Update selected index properly
+        selectedIndex = viewControllers?.firstIndex(of: targetViewController) ?? selectedIndex
+        
+        // Add content fade-in animation for Daily Fit tab
+        if let navController = targetViewController as? UINavigationController,
+           let dailyFitVC = navController.topViewController as? DailyFitViewController {
+            dailyFitVC.animateContentFadeIn()
+        }
+        
+        isTransitioning = false
+        
+        print("✅ Smooth slide transition completed")
     }
 }

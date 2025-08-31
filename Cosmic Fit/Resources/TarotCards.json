@@ -1,6 +1,7 @@
 [
   {
     "name": "The Fool",
+    "imagePath": "Cards/00-TheFool",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -20,6 +21,7 @@
   },
   {
     "name": "The Magician",
+    "imagePath": "Cards/01-TheMagician",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -39,6 +41,7 @@
   },
   {
     "name": "The High Priestess",
+    "imagePath": "Cards/02-TheHighPriestess",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -58,6 +61,7 @@
   },
   {
     "name": "The Empress",
+    "imagePath": "Cards/03-TheEmpress",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -77,6 +81,7 @@
   },
   {
     "name": "The Emperor",
+    "imagePath": "Cards/04-TheEmperor",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -96,6 +101,7 @@
   },
   {
     "name": "The Hierophant",
+    "imagePath": "Cards/05-TheHierophant",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -115,6 +121,7 @@
   },
   {
     "name": "The Lovers",
+    "imagePath": "Cards/06-TheLovers",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -134,6 +141,7 @@
   },
   {
     "name": "The Chariot",
+    "imagePath": "Cards/07-TheChariot",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -153,6 +161,7 @@
   },
   {
     "name": "Strength",
+    "imagePath": "Cards/08-Strength",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -172,6 +181,7 @@
   },
   {
     "name": "The Hermit",
+    "imagePath": "Cards/09-TheHermit",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -191,6 +201,7 @@
   },
   {
     "name": "Wheel of Fortune",
+    "imagePath": "Cards/10-WheelOfFortune",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -210,6 +221,7 @@
   },
   {
     "name": "Justice",
+    "imagePath": "Cards/11-Justice",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -229,6 +241,7 @@
   },
   {
     "name": "The Hanged Man",
+    "imagePath": "Cards/12-TheHangedMan",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -248,6 +261,7 @@
   },
   {
     "name": "Death",
+    "imagePath": "Cards/13-Death",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -267,6 +281,7 @@
   },
   {
     "name": "Temperance",
+    "imagePath": "Cards/14-Temperance",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -286,6 +301,7 @@
   },
   {
     "name": "The Devil",
+    "imagePath": "Cards/15-TheDevil",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -305,6 +321,7 @@
   },
   {
     "name": "The Tower",
+    "imagePath": "Cards/16-TheTower",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -324,6 +341,7 @@
   },
   {
     "name": "The Star",
+    "imagePath": "Cards/17-TheStar",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -343,6 +361,7 @@
   },
   {
     "name": "The Moon",
+    "imagePath": "Cards/18-TheMoon",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -362,6 +381,7 @@
   },
   {
     "name": "The Sun",
+    "imagePath": "Cards/19-TheSun",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -381,6 +401,7 @@
   },
   {
     "name": "Judgement",
+    "imagePath": "Cards/20-Judgement",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -400,6 +421,7 @@
   },
   {
     "name": "The World",
+    "imagePath": "Cards/21-TheWorld",
     "arcana": "Major",
     "suit": null,
     "number": null,
@@ -419,6 +441,7 @@
   },
   {
     "name": "Ace of Cups",
+    "imagePath": "Cards/Cups01",
     "arcana": "Minor",
     "suit": "Cups",
     "number": 1,
@@ -438,6 +461,7 @@
   },
   {
     "name": "Two of Cups",
+    "imagePath": "Cards/Cups02",
     "arcana": "Minor",
     "suit": "Cups",
     "number": 2,
@@ -457,6 +481,7 @@
   },
   {
     "name": "Three of Cups",
+    "imagePath": "Cards/Cups03",
     "arcana": "Minor",
     "suit": "Cups",
     "number": 3,
@@ -476,6 +501,7 @@
   },
   {
     "name": "Four of Cups",
+    "imagePath": "Cards/Cups04",
     "arcana": "Minor",
     "suit": "Cups",
     "number": 4,
@@ -495,6 +521,7 @@
   },
   {
     "name": "Five of Cups",
+    "imagePath": "Cards/Cups05",
     "arcana": "Minor",
     "suit": "Cups",
     "number": 5,
@@ -514,6 +541,7 @@
   },
   {
     "name": "Six of Cups",
+    "imagePath": "Cards/Cups06",
     "arcana": "Minor",
     "suit": "Cups",
     "number": 6,
@@ -533,6 +561,7 @@
   },
   {
     "name": "Seven of Cups",
+    "imagePath": "Cards/Cups07",
     "arcana": "Minor",
     "suit": "Cups",
     "number": 7,
@@ -552,6 +581,7 @@
   },
   {
     "name": "Eight of Cups",
+    "imagePath": "Cards/Cups08",
     "arcana": "Minor",
     "suit": "Cups",
     "number": 8,
@@ -571,6 +601,7 @@
   },
   {
     "name": "Nine of Cups",
+    "imagePath": "Cards/Cups09",
     "arcana": "Minor",
     "suit": "Cups",
     "number": 9,
@@ -590,6 +621,7 @@
   },
   {
     "name": "Ten of Cups",
+    "imagePath": "Cards/Cups10",
     "arcana": "Minor",
     "suit": "Cups",
     "number": 10,
@@ -609,6 +641,7 @@
   },
   {
     "name": "Page of Cups",
+    "imagePath": "Cards/Cups11",
     "arcana": "Minor",
     "suit": "Cups",
     "number": 11,
@@ -628,6 +661,7 @@
   },
   {
     "name": "Knight of Cups",
+    "imagePath": "Cards/Cups12",
     "arcana": "Minor",
     "suit": "Cups",
     "number": 12,
@@ -647,6 +681,7 @@
   },
   {
     "name": "Queen of Cups",
+    "imagePath": "Cards/Cups13",
     "arcana": "Minor",
     "suit": "Cups",
     "number": 13,
@@ -666,6 +701,7 @@
   },
   {
     "name": "King of Cups",
+    "imagePath": "Cards/Cups14",
     "arcana": "Minor",
     "suit": "Cups",
     "number": 14,
@@ -685,6 +721,7 @@
   },
   {
     "name": "Ace of Wands",
+    "imagePath": "Cards/Wands01",
     "arcana": "Minor",
     "suit": "Wands",
     "number": 1,
@@ -704,6 +741,7 @@
   },
   {
     "name": "Two of Wands",
+    "imagePath": "Cards/Wands02",
     "arcana": "Minor",
     "suit": "Wands",
     "number": 2,
@@ -723,6 +761,7 @@
   },
   {
     "name": "Three of Wands",
+    "imagePath": "Cards/Wands03",
     "arcana": "Minor",
     "suit": "Wands",
     "number": 3,
@@ -742,6 +781,7 @@
   },
   {
     "name": "Four of Wands",
+    "imagePath": "Cards/Wands04",
     "arcana": "Minor",
     "suit": "Wands",
     "number": 4,
@@ -761,6 +801,7 @@
   },
   {
     "name": "Five of Wands",
+    "imagePath": "Cards/Wands05",
     "arcana": "Minor",
     "suit": "Wands",
     "number": 5,
@@ -780,6 +821,7 @@
   },
   {
     "name": "Six of Wands",
+    "imagePath": "Cards/Wands06",
     "arcana": "Minor",
     "suit": "Wands",
     "number": 6,
@@ -799,6 +841,7 @@
   },
   {
     "name": "Seven of Wands",
+    "imagePath": "Cards/Wands07",
     "arcana": "Minor",
     "suit": "Wands",
     "number": 7,
@@ -818,6 +861,7 @@
   },
   {
     "name": "Eight of Wands",
+    "imagePath": "Cards/Wands08",
     "arcana": "Minor",
     "suit": "Wands",
     "number": 8,
@@ -837,6 +881,7 @@
   },
   {
     "name": "Nine of Wands",
+    "imagePath": "Cards/Wands09",
     "arcana": "Minor",
     "suit": "Wands",
     "number": 9,
@@ -856,6 +901,7 @@
   },
   {
     "name": "Ten of Wands",
+    "imagePath": "Cards/Wands10",
     "arcana": "Minor",
     "suit": "Wands",
     "number": 10,
@@ -875,6 +921,7 @@
   },
   {
     "name": "Page of Wands",
+    "imagePath": "Cards/Wands11",
     "arcana": "Minor",
     "suit": "Wands",
     "number": 11,
@@ -894,6 +941,7 @@
   },
   {
     "name": "Knight of Wands",
+    "imagePath": "Cards/Wands12",
     "arcana": "Minor",
     "suit": "Wands",
     "number": 12,
@@ -913,6 +961,7 @@
   },
   {
     "name": "Queen of Wands",
+    "imagePath": "Cards/Wands13",
     "arcana": "Minor",
     "suit": "Wands",
     "number": 13,
@@ -932,6 +981,7 @@
   },
   {
     "name": "King of Wands",
+    "imagePath": "Cards/Wands14",
     "arcana": "Minor",
     "suit": "Wands",
     "number": 14,
@@ -951,6 +1001,7 @@
   },
   {
     "name": "Ace of Swords",
+    "imagePath": "Cards/Swords01",
     "arcana": "Minor",
     "suit": "Swords",
     "number": 1,
@@ -970,6 +1021,7 @@
   },
   {
     "name": "Two of Swords",
+    "imagePath": "Cards/Swords02",
     "arcana": "Minor",
     "suit": "Swords",
     "number": 2,
@@ -989,6 +1041,7 @@
   },
   {
     "name": "Three of Swords",
+    "imagePath": "Cards/Swords03",
     "arcana": "Minor",
     "suit": "Swords",
     "number": 3,
@@ -1008,6 +1061,7 @@
   },
   {
     "name": "Four of Swords",
+    "imagePath": "Cards/Swords04",
     "arcana": "Minor",
     "suit": "Swords",
     "number": 4,
@@ -1027,6 +1081,7 @@
   },
   {
     "name": "Five of Swords",
+    "imagePath": "Cards/Swords05",
     "arcana": "Minor",
     "suit": "Swords",
     "number": 5,
@@ -1046,6 +1101,7 @@
   },
   {
     "name": "Six of Swords",
+    "imagePath": "Cards/Swords06",
     "arcana": "Minor",
     "suit": "Swords",
     "number": 6,
@@ -1065,6 +1121,7 @@
   },
   {
     "name": "Seven of Swords",
+    "imagePath": "Cards/Swords07",
     "arcana": "Minor",
     "suit": "Swords",
     "number": 7,
@@ -1084,6 +1141,7 @@
   },
   {
     "name": "Eight of Swords",
+    "imagePath": "Cards/Swords08",
     "arcana": "Minor",
     "suit": "Swords",
     "number": 8,
@@ -1103,6 +1161,7 @@
   },
   {
     "name": "Nine of Swords",
+    "imagePath": "Cards/Swords09",
     "arcana": "Minor",
     "suit": "Swords",
     "number": 9,
@@ -1122,6 +1181,7 @@
   },
   {
     "name": "Ten of Swords",
+    "imagePath": "Cards/Swords10",
     "arcana": "Minor",
     "suit": "Swords",
     "number": 10,
@@ -1141,6 +1201,7 @@
   },
   {
     "name": "Page of Swords",
+    "imagePath": "Cards/Swords11",
     "arcana": "Minor",
     "suit": "Swords",
     "number": 11,
@@ -1160,6 +1221,7 @@
   },
   {
     "name": "Knight of Swords",
+    "imagePath": "Cards/Swords12",
     "arcana": "Minor",
     "suit": "Swords",
     "number": 12,
@@ -1179,6 +1241,7 @@
   },
   {
     "name": "Queen of Swords",
+    "imagePath": "Cards/Swords13",
     "arcana": "Minor",
     "suit": "Swords",
     "number": 13,
@@ -1198,6 +1261,7 @@
   },
   {
     "name": "King of Swords",
+    "imagePath": "Cards/Swords14",
     "arcana": "Minor",
     "suit": "Swords",
     "number": 14,
@@ -1217,6 +1281,7 @@
   },
   {
     "name": "Ace of Pentacles",
+    "imagePath": "Cards/Pentacles01",
     "arcana": "Minor",
     "suit": "Pentacles",
     "number": 1,
@@ -1236,6 +1301,7 @@
   },
   {
     "name": "Two of Pentacles",
+    "imagePath": "Cards/Pentacles02",
     "arcana": "Minor",
     "suit": "Pentacles",
     "number": 2,
@@ -1255,6 +1321,7 @@
   },
   {
     "name": "Three of Pentacles",
+    "imagePath": "Cards/Pentacles03",
     "arcana": "Minor",
     "suit": "Pentacles",
     "number": 3,
@@ -1274,6 +1341,7 @@
   },
   {
     "name": "Four of Pentacles",
+    "imagePath": "Cards/Pentacles04",
     "arcana": "Minor",
     "suit": "Pentacles",
     "number": 4,
@@ -1293,6 +1361,7 @@
   },
   {
     "name": "Five of Pentacles",
+    "imagePath": "Cards/Pentacles05",
     "arcana": "Minor",
     "suit": "Pentacles",
     "number": 5,
@@ -1312,6 +1381,7 @@
   },
   {
     "name": "Six of Pentacles",
+    "imagePath": "Cards/Pentacles06",
     "arcana": "Minor",
     "suit": "Pentacles",
     "number": 6,
@@ -1331,6 +1401,7 @@
   },
   {
     "name": "Seven of Pentacles",
+    "imagePath": "Cards/Pentacles07",
     "arcana": "Minor",
     "suit": "Pentacles",
     "number": 7,
@@ -1350,6 +1421,7 @@
   },
   {
     "name": "Eight of Pentacles",
+    "imagePath": "Cards/Pentacles08",
     "arcana": "Minor",
     "suit": "Pentacles",
     "number": 8,
@@ -1369,6 +1441,7 @@
   },
   {
     "name": "Nine of Pentacles",
+    "imagePath": "Cards/Pentacles09",
     "arcana": "Minor",
     "suit": "Pentacles",
     "number": 9,
@@ -1388,6 +1461,7 @@
   },
   {
     "name": "Ten of Pentacles",
+    "imagePath": "Cards/Pentacles10",
     "arcana": "Minor",
     "suit": "Pentacles",
     "number": 10,
@@ -1407,6 +1481,7 @@
   },
   {
     "name": "Page of Pentacles",
+    "imagePath": "Cards/Pentacles11",
     "arcana": "Minor",
     "suit": "Pentacles",
     "number": 11,
@@ -1426,6 +1501,7 @@
   },
   {
     "name": "Knight of Pentacles",
+    "imagePath": "Cards/Pentacles12",
     "arcana": "Minor",
     "suit": "Pentacles",
     "number": 12,
@@ -1445,6 +1521,7 @@
   },
   {
     "name": "Queen of Pentacles",
+    "imagePath": "Cards/Pentacles13",
     "arcana": "Minor",
     "suit": "Pentacles",
     "number": 13,
@@ -1464,6 +1541,7 @@
   },
   {
     "name": "King of Pentacles",
+    "imagePath": "Cards/Pentacles14",
     "arcana": "Minor",
     "suit": "Pentacles",
     "number": 14,

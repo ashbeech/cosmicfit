@@ -229,28 +229,17 @@ final class NatalChartViewController: UIViewController {
     
     private func buildUI() {
         view.backgroundColor = .systemBackground
-        title = "Natal Chart"
         
-        // Set up navigation bar buttons - one for daily vibe, one for blueprint
-        // IMPORTANT NOTE: Currently set to DEBUG version. Should remove `WithDebug` for production.
-        let dailyVibeButton = UIBarButtonItem(
-            title: "Daily Vibe",
-            style: .plain,
-            target: self,
-            action: #selector(showDailyVibeInterpretationWithDebug))
+        // Hide navigation bar completely
+        navigationController?.navigationBar.isHidden = true
         
-        let blueprintButton = UIBarButtonItem(
-            title: "Blueprint",
-            style: .plain,
-            target: self,
-            action: #selector(showBlueprintInterpretationWithDebug))
-        
-        navigationItem.rightBarButtonItems = [dailyVibeButton, blueprintButton]
+        // Navigation bar is hidden, so navigation buttons are not needed
+        // The tab bar controller now handles navigation between views
         
         [scrollView, contentView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         view.addSubview(scrollView); scrollView.addSubview(contentView)
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),

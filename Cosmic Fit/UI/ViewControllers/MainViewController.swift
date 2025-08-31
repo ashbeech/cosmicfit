@@ -39,7 +39,9 @@ class MainViewController: UIViewController {
     // MARK: - UI Setup
     private func setupUI() {
         view.backgroundColor = .systemBackground
-        title = "Cosmic Fit"
+        
+        // Hide navigation bar completely
+        navigationController?.navigationBar.isHidden = true
         
         // Set up scroll view
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -49,7 +51,7 @@ class MainViewController: UIViewController {
         scrollView.addSubview(contentView)
         
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -117,7 +119,7 @@ class MainViewController: UIViewController {
         
         // Setup Constraints
         NSLayoutConstraint.activate([
-            dateLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            dateLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 64), // Extra padding for status bar area
             dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
             birthDatePicker.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 8),

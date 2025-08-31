@@ -445,6 +445,7 @@ class TarotCardSelector {
         tarotDeck = [
             TarotCard(
                 name: "The Fool",
+                imagePath: "Cards/00-TheFool",
                 arcana: .major,
                 suit: nil,
                 number: nil,
@@ -457,6 +458,7 @@ class TarotCardSelector {
             ),
             TarotCard(
                 name: "The Magician",
+                imagePath: "Cards/01-TheMagician",
                 arcana: .major,
                 suit: nil,
                 number: nil,
@@ -469,6 +471,7 @@ class TarotCardSelector {
             ),
             TarotCard(
                 name: "The Empress",
+                imagePath: "Cards/03-TheEmpress",
                 arcana: .major,
                 suit: nil,
                 number: nil,
@@ -481,6 +484,7 @@ class TarotCardSelector {
             ),
             TarotCard(
                 name: "The Emperor",
+                imagePath: "Cards/04-TheEmperor",
                 arcana: .major,
                 suit: nil,
                 number: nil,
@@ -493,6 +497,7 @@ class TarotCardSelector {
             ),
             TarotCard(
                 name: "Ace of Cups",
+                imagePath: "Cards/Cups01",
                 arcana: .minor,
                 suit: .cups,
                 number: 1,
@@ -505,6 +510,7 @@ class TarotCardSelector {
             ),
             TarotCard(
                 name: "Ten of Wands",
+                imagePath: "Cards/Wands10",
                 arcana: .minor,
                 suit: .wands,
                 number: 10,

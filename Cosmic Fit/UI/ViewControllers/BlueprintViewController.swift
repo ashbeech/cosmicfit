@@ -55,11 +55,9 @@ class BlueprintViewController: UIViewController {
     // MARK: - UI Setup
     private func setupUI() {
         view.backgroundColor = .black
-        title = "Blueprint"
         
-        // Navigation bar configuration
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationItem.largeTitleDisplayMode = .never
+        // Hide navigation bar completely
+        navigationController?.navigationBar.isHidden = true
         
         // Setup Scroll View
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -69,7 +67,7 @@ class BlueprintViewController: UIViewController {
         scrollView.addSubview(contentView)
         
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -114,7 +112,7 @@ class BlueprintViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             // Profile header view
-            profileHeaderView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            profileHeaderView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 64), // Extra padding for status bar area
             profileHeaderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             profileHeaderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
@@ -140,12 +138,7 @@ class BlueprintViewController: UIViewController {
             debugButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24)
         ])
         
-        // Add a share button to the navigation bar
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .action,
-            target: self,
-            action: #selector(shareInterpretation)
-        )
+        // Navigation bar is hidden, share functionality can be added elsewhere if needed
     }
     
     private func setupProfileHeader() {

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5EA810562DCBA9F20092DE9B /* SwissEphemeris in Frameworks */ = {isa = PBXBuildFile; productRef = 5EA810552DCBA9F20092DE9B /* SwissEphemeris */; };
+		5E63651E2E63B5130066807C /* SwissEphemeris in Frameworks */ = {isa = PBXBuildFile; productRef = 5E63651D2E63B5130066807C /* SwissEphemeris */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,7 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5EA810562DCBA9F20092DE9B /* SwissEphemeris in Frameworks */,
+				5E63651E2E63B5130066807C /* SwissEphemeris in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,12 +100,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5E63651C2E63B5130066807C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		5EB2E4C62DC75C8A00644BAD = {
 			isa = PBXGroup;
 			children = (
 				5EB2E4D12DC75C8A00644BAD /* Cosmic Fit */,
 				5EB2E4DF2DC75C8D00644BAD /* Cosmic FitTests */,
 				5EB2E4E92DC75C8D00644BAD /* Cosmic FitUITests */,
+				5E63651C2E63B5130066807C /* Frameworks */,
 				5EB2E4D02DC75C8A00644BAD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -140,7 +148,7 @@
 			);
 			name = "Cosmic Fit";
 			packageProductDependencies = (
-				5EA810552DCBA9F20092DE9B /* SwissEphemeris */,
+				5E63651D2E63B5130066807C /* SwissEphemeris */,
 			);
 			productName = "Cosmic Fit";
 			productReference = 5EB2E4CF2DC75C8A00644BAD /* Cosmic Fit.app */;
@@ -225,7 +233,7 @@
 			mainGroup = 5EB2E4C62DC75C8A00644BAD;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				5EA810542DCBA9F20092DE9B /* XCRemoteSwiftPackageReference "SwissEphemeris" */,
+				5E63651B2E63B28E0066807C /* XCRemoteSwiftPackageReference "SwissEphemeris" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5EB2E4D02DC75C8A00644BAD /* Products */;
@@ -594,20 +602,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		5EA810542DCBA9F20092DE9B /* XCRemoteSwiftPackageReference "SwissEphemeris" */ = {
+		5E63651B2E63B28E0066807C /* XCRemoteSwiftPackageReference "SwissEphemeris" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/vsmithers1087/SwissEphemeris.git";
 			requirement = {
-				kind = upToNextMinorVersion;
+				kind = upToNextMajorVersion;
 				minimumVersion = 0.0.99;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		5EA810552DCBA9F20092DE9B /* SwissEphemeris */ = {
+		5E63651D2E63B5130066807C /* SwissEphemeris */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 5EA810542DCBA9F20092DE9B /* XCRemoteSwiftPackageReference "SwissEphemeris" */;
+			package = 5E63651B2E63B28E0066807C /* XCRemoteSwiftPackageReference "SwissEphemeris" */;
 			productName = SwissEphemeris;
 		};
 /* End XCSwiftPackageProductDependency section */

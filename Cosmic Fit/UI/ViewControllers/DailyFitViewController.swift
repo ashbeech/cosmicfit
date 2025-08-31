@@ -37,6 +37,9 @@ class DailyFitViewController: UIViewController {
     private var cardImageHeightConstraint: NSLayoutConstraint?
     private var originalCardFrame: CGRect = .zero
     private var isCardSticky = false
+    private var originalCardImage: UIImage? // Store original unblurred image
+    private var ciContext: CIContext? // Reuse CI context for better performance
+    private var lastBlurIntensity: Double = -1 // Cache to avoid redundant blur operations
     
     // Data
     private var dailyVibeContent: DailyVibeContent?
@@ -73,11 +76,9 @@ class DailyFitViewController: UIViewController {
     // MARK: - UI Setup
     private func setupUI() {
         view.backgroundColor = .black
-        title = "Daily Fit"
         
-        // Navigation bar configuration
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationItem.largeTitleDisplayMode = .never
+        // Hide navigation bar completely
+        navigationController?.navigationBar.isHidden = true
         
         // Setup scroll view with delegate for animation
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -118,14 +119,18 @@ class DailyFitViewController: UIViewController {
         tarotCardImageView.backgroundColor = .systemPurple // Placeholder color
         contentView.addSubview(tarotCardImageView)
         
-        // Card title label (positioned at bottom of card, initially hidden)
+        // Card title label (independent element, always visible)
         cardTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         cardTitleLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         cardTitleLabel.textColor = .white
         cardTitleLabel.textAlignment = .center
         cardTitleLabel.numberOfLines = 0
-        cardTitleLabel.alpha = 0.0 // Initially hidden
-        cardTitleLabel.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        cardTitleLabel.alpha = 0.0 // Initially invisible, fades in during scroll
+        cardTitleLabel.backgroundColor = UIColor.clear // Remove black background
+        // Remove corner radius since there's no background
+        cardTitleLabel.clipsToBounds = false
+        
+        // Add padding for better visual appearance - text will be updated in updateContent()
         contentView.addSubview(cardTitleLabel)
         
         // Scroll indicator
@@ -190,6 +195,7 @@ class DailyFitViewController: UIViewController {
             label.font = UIFont.systemFont(ofSize: 16)
             label.textColor = .white
             label.numberOfLines = 0
+            label.alpha = 0.0 // Initially invisible, fades in during scroll
             contentView.addSubview(label)
         }
         
@@ -199,26 +205,26 @@ class DailyFitViewController: UIViewController {
         debugButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         debugButton.addTarget(self, action: #selector(debugButtonTapped), for: .touchUpInside)
         debugButton.translatesAutoresizingMaskIntoConstraints = false
+        debugButton.alpha = 0.0 // Initially invisible, fades in during scroll
         contentView.addSubview(debugButton)
     }
     
     private func setupConstraints() {
         let screenHeight = UIScreen.main.bounds.height
-        let cardHeight = screenHeight
-        let contentStartY = cardHeight + 50 // Start content below the card with some spacing
         
         NSLayoutConstraint.activate([
             // Tarot card constraints (already set up in setupTarotCardHeader)
             tarotCardImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             tarotCardImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
-            // Card title label
-            cardTitleLabel.leadingAnchor.constraint(equalTo: tarotCardImageView.leadingAnchor, constant: 20),
-            cardTitleLabel.trailingAnchor.constraint(equalTo: tarotCardImageView.trailingAnchor, constant: -20),
-            cardTitleLabel.bottomAnchor.constraint(equalTo: tarotCardImageView.bottomAnchor, constant: -40),
+            // Card title label - positioned at middle of screen (1/3 up from bottom)
+            cardTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: screenHeight * 0.67), // 1/3 up from bottom
+            cardTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            cardTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            cardTitleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 44), // Minimum height for touch
             
-            // Content labels - positioned below the card
-            keywordsLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: contentStartY),
+            // Content labels - positioned close below the title
+            keywordsLabel.topAnchor.constraint(equalTo: cardTitleLabel.bottomAnchor, constant: 20), // Much closer to title
             keywordsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             keywordsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
@@ -267,8 +273,9 @@ class DailyFitViewController: UIViewController {
         // Load tarot card image
         loadTarotCardImage(for: content.tarotCard)
         
-        // Set card title
-        cardTitleLabel.text = content.tarotCard?.displayName ?? "Daily Energy"
+        // Set card title with padding for better appearance
+        let cardName = content.tarotCard?.displayName ?? "Daily Energy"
+        cardTitleLabel.text = "  \(cardName)  " // Add padding spaces
         
         // Update content labels
         keywordsLabel.text = content.tarotKeywords.isEmpty ? "" : "Keywords: \(content.tarotKeywords)"
@@ -313,58 +320,87 @@ class DailyFitViewController: UIViewController {
     
     private func loadTarotCardImage(for tarotCard: TarotCard?) {
         guard let tarotCard = tarotCard else {
-            // Set a default gradient or placeholder
+            print("⚠️ No tarot card provided for image loading")
             tarotCardImageView.backgroundColor = .systemPurple
             return
         }
         
-        // Try to load tarot card image from assets
-        let imageName = tarotCard.name.lowercased()
-            .replacingOccurrences(of: " ", with: "_")
-            .replacingOccurrences(of: "the_", with: "")
+        print("🔍 Attempting to load image: \(tarotCard.imagePath)")
         
+        // Extract just the filename from the path (removing "Cards/" prefix)
+        let imageName = tarotCard.imagePath.replacingOccurrences(of: "Cards/", with: "")
+        
+        // Use the imagePath from the TarotCard data model  
         if let image = UIImage(named: imageName) {
             tarotCardImageView.image = image
-        } else {
-            // Fallback to colored background based on card
-            let color: UIColor
-            switch tarotCard.arcana {
-            case .major:
-                color = .systemPurple
-            case .minor:
-                switch tarotCard.suit {
-                case .cups:
-                    color = .systemBlue
-                case .wands:
-                    color = .systemRed
-                case .swords:
-                    color = .systemGray
-                case .pentacles:
-                    color = .systemGreen
-                case .none:
-                    color = .systemPurple
-                }
+            originalCardImage = image // Store original for Gaussian blur effects
+            
+            // Initialize CI context for better blur performance
+            if ciContext == nil {
+                ciContext = CIContext(options: [CIContextOption.useSoftwareRenderer: false])
             }
-            tarotCardImageView.backgroundColor = color
             
-            // Add card name as overlay text if no image available
-            let label = UILabel()
-            label.text = tarotCard.displayName
-            label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-            label.textColor = .white
-            label.textAlignment = .center
-            label.numberOfLines = 0
-            label.backgroundColor = UIColor.black.withAlphaComponent(0.3)
-            label.translatesAutoresizingMaskIntoConstraints = false
+            tarotCardImageView.backgroundColor = .clear
+            tarotCardImageView.contentMode = .scaleAspectFit  // Changed from scaleAspectFill to scaleAspectFit
+            tarotCardImageView.clipsToBounds = true
+            print("✅ Successfully loaded tarot card image: \(tarotCard.imagePath) - Size: \(image.size)")
+        } else {
+            print("❌ Could not load image: \(tarotCard.imagePath)")
+            print("🔍 Check Assets.xcassets for Cards/[imagename].imageset")
             
-            tarotCardImageView.addSubview(label)
-            NSLayoutConstraint.activate([
-                label.centerXAnchor.constraint(equalTo: tarotCardImageView.centerXAnchor),
-                label.centerYAnchor.constraint(equalTo: tarotCardImageView.centerYAnchor),
-                label.leadingAnchor.constraint(greaterThanOrEqualTo: tarotCardImageView.leadingAnchor, constant: 20),
-                label.trailingAnchor.constraint(lessThanOrEqualTo: tarotCardImageView.trailingAnchor, constant: -20)
-            ])
+            // Apply fallback styling with better visual feedback
+            setupFallbackCardDisplay(for: tarotCard)
         }
+    }
+    
+    private func setupFallbackCardDisplay(for card: TarotCard) {
+        // Color-coded fallback based on card type
+        let color: UIColor
+        switch card.arcana {
+        case .major:
+            color = .systemPurple
+        case .minor:
+            switch card.suit {
+            case .cups:
+                color = .systemBlue
+            case .wands:
+                color = .systemRed
+            case .swords:
+                color = .systemGray
+            case .pentacles:
+                color = .systemGreen
+            case .none:
+                color = .systemPurple
+            }
+        }
+        
+        tarotCardImageView.backgroundColor = color
+        tarotCardImageView.image = nil
+        
+        // Create elegant text overlay
+        createCardNameOverlay(for: card)
+    }
+    
+    private func createCardNameOverlay(for card: TarotCard) {
+        // Remove any existing overlay labels
+        tarotCardImageView.subviews.forEach { $0.removeFromSuperview() }
+        
+        let label = UILabel()
+        label.text = card.displayName
+        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        label.textColor = .white
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        tarotCardImageView.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: tarotCardImageView.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: tarotCardImageView.centerYAnchor),
+            label.leadingAnchor.constraint(greaterThanOrEqualTo: tarotCardImageView.leadingAnchor, constant: 20),
+            label.trailingAnchor.constraint(lessThanOrEqualTo: tarotCardImageView.trailingAnchor, constant: -20)
+        ])
     }
     
     private func createStyledText(title: String, content: String) -> NSAttributedString {
@@ -430,7 +466,9 @@ extension DailyFitViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let scrollOffset = scrollView.contentOffset.y
         let screenHeight = view.bounds.height
-        let cardTransitionThreshold = screenHeight * 0.67 // When 2/3 of card reaches top 1/3
+        
+        // Card locks almost immediately after user starts scrolling (just enough to show it scrolls)
+        let lockThreshold = screenHeight * 0.015 // Card locks at 1.5% scroll (very early)
         
         // Hide scroll indicator once user starts scrolling
         if scrollOffset > 10 && scrollIndicatorView.alpha > 0 {
@@ -439,66 +477,156 @@ extension DailyFitViewController: UIScrollViewDelegate {
             }
         }
         
-        // Calculate blur and movement
-        let blurProgress = min(1.0, scrollOffset / cardTransitionThreshold)
-        
-        // Apply blur effect (simulate with alpha and transform)
-        let blurAlpha = 1.0 - (blurProgress * 0.7) // Reduce opacity as we scroll
-        let scaleTransform = 1.0 + (blurProgress * 0.1) // Slight scale increase for blur effect
-        
-        tarotCardImageView.alpha = blurAlpha
-        tarotCardImageView.transform = CGAffineTransform(scaleX: scaleTransform, y: scaleTransform)
-        
-        // Move card up as we scroll
-        cardImageTopConstraint?.constant = -scrollOffset
-        
-        // Show/hide card title based on scroll position
-        let titleAlpha = min(1.0, scrollOffset / 100) // Show title as we start scrolling
-        cardTitleLabel.alpha = titleAlpha * (1.0 - blurProgress) // Hide as we approach sticky position
-        
-        // Handle sticky position transition
-        if scrollOffset >= cardTransitionThreshold && !isCardSticky {
-            // Transition to sticky header
-            isCardSticky = true
-            createStickyHeader()
-        } else if scrollOffset < cardTransitionThreshold && isCardSticky {
-            // Transition back to full card
-            isCardSticky = false
-            restoreFullCard()
+        if scrollOffset <= lockThreshold {
+            // Phase 1: Card moves up with scrolling (Y position changes)
+            cardImageTopConstraint?.constant = -scrollOffset
+            //print("🎬 Phase 1: Card moving to position: \(-scrollOffset)") // Debug
+            
+            // No fade/scale effects during movement phase, BUT apply gentle blur from start
+            tarotCardImageView.alpha = 1.0
+            tarotCardImageView.transform = .identity
+            
+            // Apply very gentle blur from the very beginning of scroll
+            let initialBlurProgress = min(1.0, scrollOffset / (screenHeight * 0.6)) // Blur progress over 60% of screen
+            if scrollOffset > 0 {
+                applyGaussianBlur(intensity: initialBlurProgress * 0.3) // Very gentle initial blur (max 30% intensity)
+            } else {
+                removeGaussianBlur()
+            }
+            
+            // Fade in content from 0% until it reaches 25% of screen (content travels from 67% to 25% = 42% movement)
+            // Content starts at 67% down, reaches 25% down = 42% of screen height movement needed
+            let contentMovementDistance = screenHeight * 0.42 // Distance content needs to travel to reach 25% of screen
+            let fadeProgress = min(1.0, scrollOffset / contentMovementDistance) // 0 to 1 as content reaches 25% of screen
+            cardTitleLabel.alpha = fadeProgress
+            
+            // Fade in all content labels
+            let labels = [keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel, 
+                         patternsLabel, shapeLabel, accessoriesLabel, layeringLabel, 
+                         vibeBreakdownLabel, debugButton]
+            for label in labels {
+                label.alpha = fadeProgress
+            }
+            
+            // If we were in sticky mode, exit it
+            if isCardSticky {
+                isCardSticky = false
+                // Restore original card height if it was changed
+                cardImageHeightConstraint?.constant = screenHeight
+            }
+            
+        } else {
+            // Phase 2: Card Y position is LOCKED - only blur and fade (NO MORE MOVEMENT)
+            cardImageTopConstraint?.constant = -lockThreshold // LOCK Y position here - NO FURTHER CHANGES
+            //print("🔒 Phase 2: Card LOCKED at position: \(-lockThreshold), scaling/blurring only") // Debug
+            
+            // Calculate blur/fade progress from 5% to 60% scroll (55% range)
+            // Card fades out gradually until content reaches nearly the top of screen
+            let blurDistance = screenHeight * 0.55 // Much longer fade: 60% - 5% = 55% for complete blur/scale
+            let beyondLockScroll = scrollOffset - lockThreshold
+            let blurProgress = min(1.0, beyondLockScroll / blurDistance)
+            
+            // Apply stronger blur effect (simulate with alpha and transform)
+            let blurAlpha = 1.0 - (blurProgress * 0.9) // Very strong fade as user continues scrolling
+            let scaleTransform = 1.0 + (blurProgress * 0.25) // More pronounced scale increase for better blur simulation
+            
+            tarotCardImageView.alpha = max(0.1, blurAlpha) // Don't completely disappear
+            tarotCardImageView.transform = CGAffineTransform(scaleX: scaleTransform, y: scaleTransform)
+            
+            // Apply real Gaussian blur to the image itself
+            if blurProgress > 0.1 {
+                applyGaussianBlur(intensity: blurProgress)
+            } else {
+                removeGaussianBlur()
+            }
+            
+            // Keep content fully visible during blur phase (it should be fully faded in by now)
+            cardTitleLabel.alpha = 1.0
+            
+            // Keep all content labels fully visible
+            let labels = [keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel, 
+                         patternsLabel, shapeLabel, accessoriesLabel, layeringLabel, 
+                         vibeBreakdownLabel, debugButton]
+            for label in labels {
+                label.alpha = 1.0
+            }
+            
+            // Mark as sticky if we reach significant blur
+            if blurProgress > 0.5 && !isCardSticky {
+                isCardSticky = true
+            } else if blurProgress <= 0.5 && isCardSticky {
+                isCardSticky = false
+            }
         }
     }
     
-    private func createStickyHeader() {
-        UIView.animate(withDuration: 0.3) {
-            // Move card to top 1/3 of screen
-            let stickyHeight = self.view.bounds.height * 0.33
-            self.cardImageTopConstraint?.constant = 0
-            self.cardImageHeightConstraint?.constant = stickyHeight
+    // MARK: - Gaussian Blur Methods
+    
+    private func applyGaussianBlur(intensity: Double) {
+        guard let originalImage = originalCardImage,
+              let context = ciContext else { return }
+        
+        // Avoid redundant blur operations
+        let roundedIntensity = (intensity * 100).rounded() / 100 // Round to 2 decimal places
+        guard roundedIntensity != lastBlurIntensity else { return }
+        lastBlurIntensity = roundedIntensity
+        
+        // Create Gaussian blur with variable intensity
+        let blurRadius = intensity * 10.0 // Gentler max blur radius for smoother transition
+        
+        guard let ciImage = CIImage(image: originalImage) else { return }
+        
+        // Use background queue for blur processing to avoid main thread freezing
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            guard let self = self else { return }
             
-            // Full blur effect
-            self.tarotCardImageView.alpha = 0.3
-            self.tarotCardImageView.transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
+            let blurFilter = CIFilter(name: "CIGaussianBlur")
+            blurFilter?.setValue(ciImage, forKey: kCIInputImageKey)
+            blurFilter?.setValue(blurRadius, forKey: kCIInputRadiusKey)
             
-            // Hide card title
-            self.cardTitleLabel.alpha = 0
+            guard let outputImage = blurFilter?.outputImage else { return }
             
-            self.view.layoutIfNeeded()
+            // Use reusable context for better performance
+            guard let cgImage = context.createCGImage(outputImage, from: ciImage.extent) else { return }
+            
+            let blurredImage = UIImage(cgImage: cgImage)
+            
+            // Update UI on main thread
+            DispatchQueue.main.async {
+                self.tarotCardImageView.image = blurredImage
+            }
         }
     }
     
-    private func restoreFullCard() {
-        UIView.animate(withDuration: 0.3) {
-            // Restore full screen card
-            self.cardImageHeightConstraint?.constant = self.view.bounds.height
-            
-            // Clear blur effect
-            self.tarotCardImageView.alpha = 1.0
-            self.tarotCardImageView.transform = .identity
-            
-            // Show card title
+    private func removeGaussianBlur() {
+        guard let originalImage = originalCardImage else { return }
+        lastBlurIntensity = -1 // Reset cache
+        tarotCardImageView.image = originalImage
+    }
+    
+    // MARK: - Content Animation
+    
+    func animateContentFadeIn() {
+        // Set initial alpha to 0 for smooth fade-in
+        cardTitleLabel.alpha = 0.0
+        let labels = [keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel, 
+                     patternsLabel, shapeLabel, accessoriesLabel, layeringLabel, 
+                     vibeBreakdownLabel, debugButton]
+        for label in labels {
+            label.alpha = 0.0
+        }
+        
+        // Animate content fade-in with staggered timing for elegant effect
+        UIView.animate(withDuration: 0.4, delay: 0.1, options: [.curveEaseOut], animations: {
             self.cardTitleLabel.alpha = 1.0
-            
-            self.view.layoutIfNeeded()
+        })
+        
+        // Stagger the content labels for a cascading effect
+        for (index, label) in labels.enumerated() {
+            let delay = 0.15 + (Double(index) * 0.05) // Stagger each label by 50ms
+            UIView.animate(withDuration: 0.3, delay: delay, options: [.curveEaseOut], animations: {
+                label.alpha = 1.0
+            })
         }
     }
 }
