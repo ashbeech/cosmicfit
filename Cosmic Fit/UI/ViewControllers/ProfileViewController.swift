@@ -15,6 +15,11 @@ class ProfileViewController: UIViewController {
     private let contentView = UIView()
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
+    
+    private let dateLabel = UILabel()
+    private let timeLabel = UILabel()
+    private let locationLabel = UILabel()
+    
     private let birthDatePicker = UIDatePicker()
     private let birthTimePicker = UIDatePicker()
     private let locationTextField = UITextField()
@@ -86,7 +91,6 @@ class ProfileViewController: UIViewController {
         contentView.addSubview(subtitleLabel)
         
         // Birth Date Picker
-        let dateLabel = UILabel()
         dateLabel.text = "Birth Date:"
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(dateLabel)
@@ -99,7 +103,6 @@ class ProfileViewController: UIViewController {
         contentView.addSubview(birthDatePicker)
         
         // Birth Time Picker
-        let timeLabel = UILabel()
         timeLabel.text = "Birth Time:"
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(timeLabel)
@@ -112,7 +115,6 @@ class ProfileViewController: UIViewController {
         contentView.addSubview(birthTimePicker)
         
         // Location Text Field
-        let locationLabel = UILabel()
         locationLabel.text = "Birth Location:"
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(locationLabel)

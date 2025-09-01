@@ -192,8 +192,6 @@ class CosmicFitTabBarController: UITabBarController {
         tabBar.backgroundColor = .systemBackground
         tabBar.tintColor = .systemBlue
         tabBar.unselectedItemTintColor = .systemGray
-        
-        //navigationController?.navigationBar.isHidden = true
     }
     
     private func calculateCharts() {
@@ -539,7 +537,17 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
         
         // Determine slide direction: Blueprint (0) → Daily Fit (1) = slide left
         // Daily Fit (1) → Blueprint (0) = slide right
-        let isSlideLeft = toIndex > fromIndex
+        let isSlideLeft: Bool
+        if fromIndex == 2 && toIndex == 0 {
+            // Profile → Blueprint (wraparound) = slide right
+            isSlideLeft = false
+        } else if fromIndex == 0 && toIndex == 2 {
+            // Blueprint → Profile (wraparound) = slide left
+            isSlideLeft = true
+        } else {
+            // Normal progression: Blueprint(0) → Daily Fit(1) → Profile(2)
+            isSlideLeft = toIndex > fromIndex
+        }
         
         // Create a temporary container view that sits above the tab bar controller's content
         let containerBounds = view.bounds
