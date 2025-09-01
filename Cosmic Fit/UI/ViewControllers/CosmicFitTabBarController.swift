@@ -30,12 +30,26 @@ class CosmicFitTabBarController: UITabBarController {
     private var transitionContainer: UIView?
     private var transitionAnimator: UIViewPropertyAnimator?
     
+    // Swipe gesture properties
+    private var leftSwipeGesture: UISwipeGestureRecognizer!
+    private var rightSwipeGesture: UISwipeGestureRecognizer!
+    
+    // User profile property
+    private var userProfile: UserProfile?
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabBar()
         startWeatherFetch()
         setupTabMemoryPersistence()
+        setupSwipeGestures() // ADD THIS LINE
+        setupProfileUpdateNotifications() // ADD THIS LINE
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+        print("🧹 CosmicFitTabBarController deallocated")
     }
     
     private func setupTabMemoryPersistence() {
@@ -50,6 +64,9 @@ class CosmicFitTabBarController: UITabBarController {
                    latitude: Double,
                    longitude: Double,
                    timeZone: TimeZone) {
+        
+        // Load user profile if available
+        self.userProfile = UserProfileStorage.shared.loadUserProfile()
         
         self.chartData = chartData
         self.birthInfo = birthInfo
@@ -73,6 +90,100 @@ class CosmicFitTabBarController: UITabBarController {
         
         // Setup view controllers with generated content
         setupViewControllers()
+    }
+    
+    private func setupSwipeGestures() {
+        // Left swipe (go to next tab)
+        leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleLeftSwipe))
+        leftSwipeGesture.direction = .left
+        view.addGestureRecognizer(leftSwipeGesture)
+        
+        // Right swipe (go to previous tab)
+        rightSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleRightSwipe))
+        rightSwipeGesture.direction = .right
+        view.addGestureRecognizer(rightSwipeGesture)
+        
+        print("✅ Swipe gestures configured")
+    }
+    
+    private func setupProfileUpdateNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleProfileUpdate(_:)),
+            name: .userProfileUpdated,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleProfileDeleted),
+            name: .userProfileDeleted,
+            object: nil
+        )
+    }
+    
+    @objc private func handleLeftSwipe() {
+        guard !isTransitioning else { return }
+        
+        let currentIndex = selectedIndex
+        let nextIndex = (currentIndex + 1) % (viewControllers?.count ?? 1)
+        
+        if nextIndex != currentIndex, let targetVC = viewControllers?[nextIndex] {
+            performSmoothSlideTransition(from: currentIndex, to: nextIndex, targetViewController: targetVC)
+        }
+    }
+
+    @objc private func handleRightSwipe() {
+        guard !isTransitioning else { return }
+        
+        let currentIndex = selectedIndex
+        let totalTabs = viewControllers?.count ?? 1
+        let prevIndex = (currentIndex - 1 + totalTabs) % totalTabs
+        
+        if prevIndex != currentIndex, let targetVC = viewControllers?[prevIndex] {
+            performSmoothSlideTransition(from: currentIndex, to: prevIndex, targetViewController: targetVC)
+        }
+    }
+    
+    @objc private func handleProfileUpdate(_ notification: Notification) {
+        guard let updatedProfile = notification.object as? UserProfile else { return }
+        
+        print("🔄 Profile updated - refreshing app data")
+        
+        // Update stored profile
+        userProfile = updatedProfile
+        
+        // Update class properties with new profile data
+        self.birthDate = updatedProfile.birthDate
+        self.latitude = updatedProfile.latitude
+        self.longitude = updatedProfile.longitude
+        self.timeZone = TimeZone(identifier: updatedProfile.timeZoneIdentifier) ?? TimeZone.current
+        
+        // Update birthInfo string
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .short
+        self.birthInfo = "\(dateFormatter.string(from: updatedProfile.birthDate)) at \(updatedProfile.birthLocation) (Lat: \(String(format: "%.4f", updatedProfile.latitude)), Long: \(String(format: "%.4f", updatedProfile.longitude)))"
+        
+        // Recalculate charts with new data
+        calculateCharts()
+        
+        // Clear cached content to force regeneration
+        blueprintContent = nil
+        dailyVibeContent = nil
+        
+        // Regenerate content
+        generateContent()
+        
+        // Regenerate view controllers with new data
+        setupViewControllers()
+        
+        print("✅ App data refreshed with updated profile")
+    }
+    
+    @objc private func handleProfileDeleted() {
+        print("🗑️ Profile deleted - should return to onboarding")
+        // The ProfileViewController handles navigation back to onboarding
     }
     
     // MARK: - Private Methods
@@ -120,11 +231,11 @@ class CosmicFitTabBarController: UITabBarController {
         
         print("🎯 Content Generation Started")
         print("  • Chart ID: \(chartId)")
+        print("  • User ID: \(userProfile?.id ?? "None")")
         print("  • Blueprint cached: \(blueprintContent != nil)")
         print("  • Daily Fit cached: \(dailyVibeContent != nil)")
         
         // Generate Blueprint content (only if not already cached)
-        // Note: Blueprint should NEVER regenerate after first creation
         if blueprintContent == nil {
             print("🎯 Generating Blueprint content (one-time generation)...")
             let interpretation = CosmicFitInterpretationEngine.generateBlueprintInterpretation(
@@ -136,39 +247,54 @@ class CosmicFitTabBarController: UITabBarController {
             print("✅ Blueprint already cached, skipping regeneration")
         }
         
-        // Generate Daily Fit content (check cache first)
+        // Generate Daily Fit content (check user-specific cache first)
         if dailyVibeContent == nil {
-            if let existingContent = DailyVibeStorage.shared.loadDailyVibe(
-                for: Date(),
-                chartIdentifier: chartId
-            ) {
-                print("✅ Loaded existing daily vibe for today")
-                dailyVibeContent = existingContent
+            // Check if daily fit already exists for today under user ID
+            if let userId = userProfile?.id,
+               let existingContent = DailyVibeStorage.shared.loadDailyVibeForUser(userId: userId, for: Date()) {
+                self.dailyVibeContent = existingContent
+                print("📱 Loaded existing daily fit for user \(userId) today")
             } else {
-                print("🎯 Generating new Daily Fit content for today...")
-                
-                // Get transits for daily fit
-                let transitData = NatalChartManager.shared.calculateTransitChart(natalChart: natalChart)
-                let shortTermTransits = (transitData["groupedAspects"] as? [String: [[String: Any]]])?["Short-term Influences"] ?? []
-                let regularTransits = (transitData["groupedAspects"] as? [String: [[String: Any]]])?["Regular Influences"] ?? []
-                let longTermTransits = (transitData["groupedAspects"] as? [String: [[String: Any]]])?["Long-term Influences"] ?? []
-                let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
-                
-                dailyVibeContent = CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
-                    from: natalChart,
-                    progressedChart: progChart,
-                    transits: allTransits,
-                    weather: todayWeather
-                )
-                
-                // Save the generated content
-                if let content = dailyVibeContent {
-                    DailyVibeStorage.shared.saveDailyVibe(
-                        content,
-                        for: Date(),
-                        chartIdentifier: chartId
+                // Check legacy storage (for backwards compatibility)
+                if let existingContent = DailyVibeStorage.shared.loadDailyVibe(for: Date(), chartIdentifier: chartId) {
+                    self.dailyVibeContent = existingContent
+                    print("✅ Loaded existing daily vibe for today (legacy storage)")
+                } else {
+                    print("🎯 Generating new Daily Fit content for today...")
+                    
+                    // Get transits for daily fit (using existing logic)
+                    let transitData = NatalChartManager.shared.calculateTransitChart(natalChart: natalChart)
+                    let shortTermTransits = (transitData["groupedAspects"] as? [String: [[String: Any]]])?["Short-term Influences"] ?? []
+                    let regularTransits = (transitData["groupedAspects"] as? [String: [[String: Any]]])?["Regular Influences"] ?? []
+                    let longTermTransits = (transitData["groupedAspects"] as? [String: [[String: Any]]])?["Long-term Influences"] ?? []
+                    let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
+                    
+                    dailyVibeContent = CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
+                        from: natalChart,
+                        progressedChart: progChart,
+                        transits: allTransits,
+                        weather: todayWeather
                     )
-                    print("✅ Daily Fit generated and saved")
+                    
+                    // Save the generated content with user ID if available
+                    if let content = dailyVibeContent {
+                        if let userId = userProfile?.id {
+                            DailyVibeStorage.shared.saveDailyVibeForUser(
+                                content,
+                                userId: userId,
+                                for: Date()
+                            )
+                            print("✅ Daily Fit generated and saved for user \(userId)")
+                        } else {
+                            // Fallback to legacy storage
+                            DailyVibeStorage.shared.saveDailyVibe(
+                                content,
+                                for: Date(),
+                                chartIdentifier: chartId
+                            )
+                            print("✅ Daily Fit generated and saved (legacy storage)")
+                        }
+                    }
                 }
             }
         } else {
@@ -176,58 +302,6 @@ class CosmicFitTabBarController: UITabBarController {
         }
         
         print("🎯 Content Generation Complete")
-    }
-    
-    private func setupViewControllers() {
-        var viewControllers: [UIViewController] = []
-        
-        // Blueprint Tab
-        let blueprintVC = BlueprintViewController()
-        if let blueprintContent = blueprintContent,
-           let birthDate = birthDate {
-            
-            // Extract city and country from birthInfo
-            let (city, country) = extractLocationFromBirthInfo()
-            
-            blueprintVC.configure(
-                with: blueprintContent,
-                birthDate: birthDate,
-                birthCity: city,
-                birthCountry: country,
-                originalChartViewController: createDebugChartViewController()
-            )
-        }
-        
-        let blueprintNavController = UINavigationController(rootViewController: blueprintVC)
-        blueprintNavController.tabBarItem = UITabBarItem(
-            title: "Blueprint",
-            image: UIImage(systemName: "star.circle"),
-            selectedImage: UIImage(systemName: "star.circle.fill")
-        )
-        viewControllers.append(blueprintNavController)
-        
-        // Daily Fit Tab
-        let dailyFitVC = DailyFitViewController()
-        if let dailyVibeContent = dailyVibeContent {
-            dailyFitVC.configure(
-                with: dailyVibeContent,
-                originalChartViewController: createDebugChartViewController()
-            )
-        }
-        
-        let dailyFitNavController = UINavigationController(rootViewController: dailyFitVC)
-        dailyFitNavController.tabBarItem = UITabBarItem(
-            title: "Daily Fit",
-            image: UIImage(systemName: "calendar.circle"),
-            selectedImage: UIImage(systemName: "calendar.circle.fill")
-        )
-        viewControllers.append(dailyFitNavController)
-        
-        // Set the view controllers
-        self.viewControllers = viewControllers
-        
-        // Select Blueprint tab by default
-        selectedIndex = 0
     }
     
     private func extractLocationFromBirthInfo() -> (city: String, country: String) {
@@ -314,6 +388,70 @@ class CosmicFitTabBarController: UITabBarController {
                 self?.useDefaultWeatherLocation()
             }
         )
+    }
+    
+    private func setupViewControllers() {
+        var viewControllers: [UIViewController] = []
+        
+        // Blueprint Tab (Index 0)
+        let blueprintVC = BlueprintViewController()
+        if let blueprintContent = blueprintContent,
+           let birthDate = birthDate {
+            
+            // Extract city and country from birthInfo
+            let (city, country) = extractLocationFromBirthInfo()
+            
+            blueprintVC.configure(
+                with: blueprintContent,
+                birthDate: birthDate,
+                birthCity: city,
+                birthCountry: country,
+                originalChartViewController: createDebugChartViewController()
+            )
+        }
+        
+        let blueprintNavController = UINavigationController(rootViewController: blueprintVC)
+        blueprintNavController.tabBarItem = UITabBarItem(
+            title: "Blueprint",
+            image: UIImage(systemName: "star.circle"),
+            selectedImage: UIImage(systemName: "star.circle.fill")
+        )
+        viewControllers.append(blueprintNavController)
+        
+        // Daily Fit Tab (Index 1)
+        let dailyFitVC = DailyFitViewController()
+        if let dailyVibeContent = dailyVibeContent {
+            dailyFitVC.configure(
+                with: dailyVibeContent,
+                originalChartViewController: createDebugChartViewController()
+            )
+        }
+        
+        let dailyFitNavController = UINavigationController(rootViewController: dailyFitVC)
+        dailyFitNavController.tabBarItem = UITabBarItem(
+            title: "Daily Fit",
+            image: UIImage(systemName: "calendar.circle"),
+            selectedImage: UIImage(systemName: "calendar.circle.fill")
+        )
+        viewControllers.append(dailyFitNavController)
+        
+        // Profile Tab (Index 2) - NEW
+        let profileVC = ProfileViewController()
+        let profileNavController = UINavigationController(rootViewController: profileVC)
+        profileNavController.tabBarItem = UITabBarItem(
+            title: "Profile",
+            image: UIImage(systemName: "person.circle"),
+            selectedImage: UIImage(systemName: "person.circle.fill")
+        )
+        viewControllers.append(profileNavController)
+        
+        // Set the view controllers
+        self.viewControllers = viewControllers
+        
+        // Only set default tab if not already set (preserves current selection during updates)
+        if selectedIndex == 0 && viewControllers.count > 1 {
+            selectedIndex = 1 // Daily Fit as default
+        }
     }
     
     private func useDefaultWeatherLocation() {

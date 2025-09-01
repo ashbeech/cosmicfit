@@ -334,6 +334,21 @@ class MainViewController: UIViewController {
             DispatchQueue.main.async {
                 self.activityIndicator.stopAnimating()
                 
+                // Create and save user profile for first-time users
+                let userProfile = UserProfile(
+                    birthDate: birthDateTime,
+                    birthLocation: self.locationName,
+                    latitude: self.latitude,
+                    longitude: self.longitude,
+                    timeZone: self.timeZone
+                )
+                
+                if UserProfileStorage.shared.saveUserProfile(userProfile) {
+                    print("✅ User profile saved for first-time user")
+                } else {
+                    print("❌ Failed to save user profile")
+                }
+                
                 // Format birth info for display
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateStyle = .long
@@ -348,6 +363,10 @@ class MainViewController: UIViewController {
                                          latitude: self.latitude,
                                          longitude: self.longitude,
                                          timeZone: self.timeZone)
+                
+                // Set Daily Fit as default tab for new users after onboarding
+                tabBarController.selectedIndex = 1
+                
                 self.navigationController?.pushViewController(tabBarController, animated: true)
             }
         }

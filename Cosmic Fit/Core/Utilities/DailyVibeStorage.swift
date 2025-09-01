@@ -225,6 +225,130 @@ class DailyVibeStorage {
         let combined = "\(dateString)_\(locationString)"
         return String(combined.hash).replacingOccurrences(of: "-", with: "N")
     }
+    
+    // MARK: - User-Specific Storage Methods
+
+    /// Save daily vibe content for a specific user
+    /// - Parameters:
+    ///   - content: The daily vibe content to save
+    ///   - userId: The user's unique identifier
+    ///   - date: The date for which to save the content (defaults to today)
+    /// - Returns: Boolean indicating success
+    @discardableResult
+    func saveDailyVibeForUser(_ content: DailyVibeContent,
+                             userId: String,
+                             for date: Date = Date()) -> Bool {
+        do {
+            let encoder = JSONEncoder()
+            
+            // Create a wrapper that includes metadata
+            let wrapper = DailyVibeWrapper(
+                content: content,
+                generatedDate: date,
+                chartIdentifier: userId
+            )
+            
+            let data = try encoder.encode(wrapper)
+            let key = "DailyVibe_\(keyDateFormatter.string(from: date))_\(userId)"
+            
+            userDefaults.set(data, forKey: key)
+            
+            // Update list of saved daily vibe keys
+            updateSavedKeys(with: key)
+            
+            print("✅ Daily vibe saved for user \(userId) on \(keyDateFormatter.string(from: date))")
+            return true
+        } catch {
+            print("❌ Error saving daily vibe for user: \(error)")
+            return false
+        }
+    }
+
+    /// Load daily vibe content for a specific user
+    /// - Parameters:
+    ///   - userId: The user's unique identifier
+    ///   - date: The date for which to load content (defaults to today)
+    /// - Returns: Daily vibe content if available
+    func loadDailyVibeForUser(userId: String, for date: Date = Date()) -> DailyVibeContent? {
+        let key = "DailyVibe_\(keyDateFormatter.string(from: date))_\(userId)"
+        
+        guard let data = userDefaults.data(forKey: key) else {
+            print("📱 No daily vibe found for user \(userId) on \(keyDateFormatter.string(from: date))")
+            return nil
+        }
+        
+        do {
+            let decoder = JSONDecoder()
+            let wrapper = try decoder.decode(DailyVibeWrapper.self, from: data)
+            
+            print("✅ Daily vibe loaded for user \(userId) on \(keyDateFormatter.string(from: date))")
+            return wrapper.content
+        } catch {
+            print("❌ Error loading daily vibe for user: \(error)")
+            return nil
+        }
+    }
+
+    /// Check if daily vibe content exists for a specific user and date
+    /// - Parameters:
+    ///   - userId: The user's unique identifier
+    ///   - date: The date to check (defaults to today)
+    /// - Returns: Boolean indicating if content exists
+    func hasDailyVibeForUser(userId: String, for date: Date = Date()) -> Bool {
+        let key = "DailyVibe_\(keyDateFormatter.string(from: date))_\(userId)"
+        return userDefaults.data(forKey: key) != nil
+    }
+
+    /// Delete daily vibe content for a specific user and date
+    /// - Parameters:
+    ///   - userId: The user's unique identifier
+    ///   - date: The date for which to delete content
+    /// - Returns: Boolean indicating success
+    @discardableResult
+    func deleteDailyVibeForUser(userId: String, for date: Date) -> Bool {
+        let key = "DailyVibe_\(keyDateFormatter.string(from: date))_\(userId)"
+        userDefaults.removeObject(forKey: key)
+        
+        // Remove from saved keys list
+        removeSavedKey(key)
+        
+        print("🗑️ Daily vibe deleted for user \(userId) on \(keyDateFormatter.string(from: date))")
+        return true
+    }
+
+    /// Get all saved daily vibe dates for a specific user
+    /// - Parameter userId: The user's unique identifier
+    /// - Returns: Array of dates for which daily vibes are saved, sorted most recent first
+    func getAllDailyVibesForUser(userId: String) -> [(Date, DailyVibeContent)] {
+        let savedKeys = getSavedKeys()
+        var userVibes: [(Date, DailyVibeContent)] = []
+        
+        for key in savedKeys {
+            if key.contains(userId),
+               let dateString = extractDateFromKey(key),
+               let date = keyDateFormatter.date(from: dateString),
+               let content = loadDailyVibeForUser(userId: userId, for: date) {
+                userVibes.append((date, content))
+            }
+        }
+        
+        return userVibes.sorted { $0.0 > $1.0 } // Most recent first
+    }
+
+    /// Clean up all daily vibes for a specific user
+    /// - Parameter userId: The user's unique identifier
+    func cleanupUserDailyVibes(userId: String) {
+        let allKeys = userDefaults.dictionaryRepresentation().keys
+        let userKeys = allKeys.filter { $0.contains("DailyVibe") && $0.contains(userId) }
+        
+        for key in userKeys {
+            userDefaults.removeObject(forKey: key)
+            removeSavedKey(String(key))
+        }
+        
+        print("🧹 Cleaned up \(userKeys.count) daily vibes for user: \(userId)")
+    }
+
 }
 
 // MARK: - Storage Models

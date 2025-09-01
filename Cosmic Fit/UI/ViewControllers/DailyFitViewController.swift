@@ -50,6 +50,9 @@ class DailyFitViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         updateContent()
+        
+        // Set initial content alpha to 0 for scroll-based fade-in
+        setInitialContentAlpha()
     }
     
     override func viewDidLayoutSubviews() {
@@ -125,7 +128,7 @@ class DailyFitViewController: UIViewController {
         cardTitleLabel.textColor = .white
         cardTitleLabel.textAlignment = .center
         cardTitleLabel.numberOfLines = 0
-        cardTitleLabel.alpha = 0.0 // Initially invisible, fades in during scroll
+        cardTitleLabel.alpha = 0.0 // Initially invisible, fades in during scroll (will be set in setInitialContentAlpha)
         cardTitleLabel.backgroundColor = UIColor.clear // Remove black background
         // Remove corner radius since there's no background
         cardTitleLabel.clipsToBounds = false
@@ -494,10 +497,9 @@ extension DailyFitViewController: UIScrollViewDelegate {
                 removeGaussianBlur()
             }
             
-            // Fade in content from 0% until it reaches 25% of screen (content travels from 67% to 25% = 42% movement)
-            // Content starts at 67% down, reaches 25% down = 42% of screen height movement needed
-            let contentMovementDistance = screenHeight * 0.42 // Distance content needs to travel to reach 25% of screen
-            let fadeProgress = min(1.0, scrollOffset / contentMovementDistance) // 0 to 1 as content reaches 25% of screen
+            // Fade in content from 0% to 10% scroll (much shorter, less jarring)
+            let fadeCompleteThreshold = screenHeight * 0.10 // Content fully visible at 10% scroll
+            let fadeProgress = min(1.0, scrollOffset / fadeCompleteThreshold) // 0 to 1 from start to 10% scroll
             cardTitleLabel.alpha = fadeProgress
             
             // Fade in all content labels
@@ -606,8 +608,8 @@ extension DailyFitViewController: UIScrollViewDelegate {
     
     // MARK: - Content Animation
     
-    func animateContentFadeIn() {
-        // Set initial alpha to 0 for smooth fade-in
+    private func setInitialContentAlpha() {
+        // Ensure all content starts at 0 alpha for scroll-based fade-in
         cardTitleLabel.alpha = 0.0
         let labels = [keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel, 
                      patternsLabel, shapeLabel, accessoriesLabel, layeringLabel, 
@@ -615,18 +617,24 @@ extension DailyFitViewController: UIScrollViewDelegate {
         for label in labels {
             label.alpha = 0.0
         }
+    }
+    
+    func animateContentFadeIn() {
+        // This method is now used for tab transitions only
+        // The actual content fade-in happens during scroll in scrollViewDidScroll
         
-        // Animate content fade-in with staggered timing for elegant effect
-        UIView.animate(withDuration: 0.4, delay: 0.1, options: [.curveEaseOut], animations: {
+        // Set initial alpha to 0 for smooth fade-in
+        setInitialContentAlpha()
+        
+        // Quick fade-in for tab transitions
+        UIView.animate(withDuration: 0.3, delay: 0.05, options: [.curveEaseOut], animations: {
             self.cardTitleLabel.alpha = 1.0
-        })
-        
-        // Stagger the content labels for a cascading effect
-        for (index, label) in labels.enumerated() {
-            let delay = 0.15 + (Double(index) * 0.05) // Stagger each label by 50ms
-            UIView.animate(withDuration: 0.3, delay: delay, options: [.curveEaseOut], animations: {
+            let labels = [self.keywordsLabel, self.styleBriefLabel, self.textilesLabel, self.colorsLabel, 
+                         self.patternsLabel, self.shapeLabel, self.accessoriesLabel, self.layeringLabel, 
+                         self.vibeBreakdownLabel, self.debugButton]
+            for label in labels {
                 label.alpha = 1.0
-            })
-        }
+            }
+        })
     }
 }

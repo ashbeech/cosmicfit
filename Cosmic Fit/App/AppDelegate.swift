@@ -20,12 +20,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set up the animated launch screen as the initial view controller
         let launchScreenVC = AnimatedLaunchScreenViewController()
         
-        // Create the main view controller and navigation controller
-        let mainViewController = MainViewController()
-        let navigationController = UINavigationController(rootViewController: mainViewController)
-        
-        // Tell the launch screen which view controller to transition to
-        launchScreenVC.setMainViewController(navigationController)
+        // Check if user profile exists to determine app flow
+        if UserProfileStorage.shared.hasUserProfile() {
+            // Existing user - go directly to main app with stored data
+            if let userProfile = UserProfileStorage.shared.loadUserProfile() {
+                let tabBarController = CosmicFitTabBarController()
+                let navigationController = UINavigationController(rootViewController: tabBarController)
+                
+                // Configure with stored user data
+                let chartData = NatalChartManager.shared.calculateNatalChart(
+                    date: userProfile.birthDate,
+                    latitude: userProfile.latitude,
+                    longitude: userProfile.longitude,
+                    timeZone: TimeZone(identifier: userProfile.timeZoneIdentifier) ?? TimeZone.current
+                )
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateStyle = .long
+                dateFormatter.timeStyle = .short
+                let birthInfo = "\(dateFormatter.string(from: userProfile.birthDate)) at \(userProfile.birthLocation) (Lat: \(String(format: "%.4f", userProfile.latitude)), Long: \(String(format: "%.4f", userProfile.longitude)))"
+                
+                tabBarController.configure(with: chartData,
+                                         birthInfo: birthInfo,
+                                         birthDate: userProfile.birthDate,
+                                         latitude: userProfile.latitude,
+                                         longitude: userProfile.longitude,
+                                         timeZone: TimeZone(identifier: userProfile.timeZoneIdentifier) ?? TimeZone.current)
+                
+                // Set Daily Fit as default tab (index 1) for returning users
+                tabBarController.selectedIndex = 1
+                
+                launchScreenVC.setMainViewController(navigationController)
+                
+                print("✅ Returning user detected - launching to Daily Fit tab")
+            } else {
+                // Profile exists but corrupted - fallback to onboarding
+                setupFirstTimeUser(launchScreenVC: launchScreenVC)
+            }
+        } else {
+            // First time user - show onboarding form
+            setupFirstTimeUser(launchScreenVC: launchScreenVC)
+            print("📱 First time user detected - showing onboarding")
+        }
         
         // Set the launch screen as the root view controller
         window?.rootViewController = launchScreenVC
@@ -44,6 +80,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         lastActiveDate = Date()
         
         return true
+    }
+    
+    private func setupFirstTimeUser(launchScreenVC: AnimatedLaunchScreenViewController) {
+        let mainViewController = MainViewController()
+        let navigationController = UINavigationController(rootViewController: mainViewController)
+        launchScreenVC.setMainViewController(navigationController)
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
