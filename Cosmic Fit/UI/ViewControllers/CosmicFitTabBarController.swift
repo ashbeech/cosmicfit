@@ -193,9 +193,7 @@ class CosmicFitTabBarController: UITabBarController {
         tabBar.tintColor = .systemBlue
         tabBar.unselectedItemTintColor = .systemGray
         
-        // Set title
-        title = "Cosmic Fit"
-        navigationItem.hidesBackButton = true
+        //navigationController?.navigationBar.isHidden = true
     }
     
     private func calculateCharts() {
@@ -499,7 +497,18 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         // Log tab selection for debugging
-        print("✅ Selected tab: \(viewController.title ?? "Unknown")")
+        var tabName = "Unknown"
+        if let navController = viewController as? UINavigationController {
+            if navController.topViewController is BlueprintViewController {
+                tabName = "Blueprint"
+            } else if navController.topViewController is DailyFitViewController {
+                tabName = "Daily Fit"
+            } else if navController.topViewController is ProfileViewController {
+                tabName = "Profile"
+            }
+        }
+        
+        print("✅ Selected tab: \(tabName)")
         
         // Ensure content is loaded in the selected tab
         if let navController = viewController as? UINavigationController {
@@ -509,6 +518,9 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
             } else if navController.topViewController is DailyFitViewController {
                 // Daily Fit tab selected - content should already be loaded
                 print("🔮 Daily Fit tab active")
+            } else if navController.topViewController is ProfileViewController {
+                // Profile tab selected - content should already be loaded
+                print("👤 Profile tab active")
             }
         }
     }

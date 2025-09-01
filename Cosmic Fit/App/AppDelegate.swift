@@ -102,22 +102,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func configureAppearance() {
-        // Configure navigation bar appearance
-        if #available(iOS 13.0, *) {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .systemBackground
-            appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
-            
-            UINavigationBar.appearance().standardAppearance = appearance
-            UINavigationBar.appearance().compactAppearance = appearance
-            UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        } else {
-            UINavigationBar.appearance().barTintColor = .white
-            UINavigationBar.appearance().tintColor = .black
-            UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.black]
-            UINavigationBar.appearance().isTranslucent = false
-        }
+        // Hide navigation bars globally
+        UINavigationBar.appearance().isHidden = true
+        
+        // Configure tab bar appearance only
+        UITabBar.appearance().backgroundColor = .systemBackground
+        UITabBar.appearance().tintColor = .systemBlue
+        UITabBar.appearance().unselectedItemTintColor = .systemGray
     }
     
     private func setupDailyVibeManagement() {

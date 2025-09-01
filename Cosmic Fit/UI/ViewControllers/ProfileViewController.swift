@@ -380,11 +380,17 @@ class ProfileViewController: UIViewController {
         let mainVC = MainViewController()
         let navController = UINavigationController(rootViewController: mainVC)
         
-        // Replace the entire app's navigation stack
-        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-            sceneDelegate.window?.rootViewController = navController
-        } else if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.window?.rootViewController = navController
+        // Replace the entire app's navigation stack using AppDelegate
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.window?.rootViewController = navController
+                print("🔄 Navigated back to onboarding after profile deletion")
+            } else {
+                // Fallback: present modally if we can't access app delegate
+                self.present(navController, animated: true) {
+                    print("⚠️ Used modal presentation as fallback for profile deletion navigation")
+                }
+            }
         }
     }
     
