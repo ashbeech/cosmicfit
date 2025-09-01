@@ -61,12 +61,14 @@ class BlueprintViewController: UIViewController {
         
         // Setup Scroll View
         scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.contentInsetAdjustmentBehavior = .never  // KEY FIX: Prevent automatic safe area adjustments
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
         NSLayoutConstraint.activate([
+            // Use view.topAnchor like Daily Fit (since we have contentInsetAdjustmentBehavior = .never)
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -82,15 +84,6 @@ class BlueprintViewController: UIViewController {
         // Setup Profile Header
         setupProfileHeader()
         
-        // Title label
-        titleLabel.text = "Your Cosmic Fit Blueprint"
-        titleLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        titleLabel.textColor = .white
-        titleLabel.textAlignment = .left
-        titleLabel.numberOfLines = 0
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(titleLabel)
-        
         // Create text view for interpretation
         textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
@@ -102,6 +95,15 @@ class BlueprintViewController: UIViewController {
         textView.textContainerInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
         contentView.addSubview(textView)
         
+        // Title label
+        titleLabel.text = "Your Cosmic Fit Blueprint"
+        titleLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        titleLabel.textColor = .white
+        titleLabel.textAlignment = .left
+        titleLabel.numberOfLines = 0
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(titleLabel)
+        
         // Debug button
         debugButton.setTitle("Debug Chart", for: .normal)
         debugButton.setTitleColor(.systemBlue, for: .normal)
@@ -111,8 +113,8 @@ class BlueprintViewController: UIViewController {
         contentView.addSubview(debugButton)
         
         NSLayoutConstraint.activate([
-            // Profile header view
-            profileHeaderView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 64), // Extra padding for status bar area
+            // FIX 2: Restore proper padding for status bar (since we're using view.topAnchor)
+            profileHeaderView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 64),
             profileHeaderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             profileHeaderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
@@ -137,8 +139,6 @@ class BlueprintViewController: UIViewController {
             debugButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             debugButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24)
         ])
-        
-        // Navigation bar is hidden, share functionality can be added elsewhere if needed
     }
     
     private func setupProfileHeader() {

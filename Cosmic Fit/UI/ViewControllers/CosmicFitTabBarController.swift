@@ -525,6 +525,8 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
     
     // MARK: - Smooth Slide Transitions
     
+    // In CosmicFitTabBarController.swift, update performSmoothSlideTransition:
+
     private func performSmoothSlideTransition(from fromIndex: Int, to toIndex: Int, targetViewController: UIViewController) {
         guard let viewControllers = viewControllers,
               fromIndex < viewControllers.count,
@@ -535,21 +537,10 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
         let fromVC = viewControllers[fromIndex]
         let toVC = viewControllers[toIndex]
         
-        // Determine slide direction: Blueprint (0) → Daily Fit (1) = slide left
-        // Daily Fit (1) → Blueprint (0) = slide right
-        let isSlideLeft: Bool
-        if fromIndex == 2 && toIndex == 0 {
-            // Profile → Blueprint (wraparound) = slide right
-            isSlideLeft = false
-        } else if fromIndex == 0 && toIndex == 2 {
-            // Blueprint → Profile (wraparound) = slide left
-            isSlideLeft = true
-        } else {
-            // Normal progression: Blueprint(0) → Daily Fit(1) → Profile(2)
-            isSlideLeft = toIndex > fromIndex
-        }
+        // SIMPLIFIED: Since wraparound is disabled, direction is simply based on index comparison
+        let isSlideLeft = toIndex > fromIndex // Moving to higher index = slide left
         
-        // Create a temporary container view that sits above the tab bar controller's content
+        // Rest of the transition logic remains the same...
         let containerBounds = view.bounds
         let contentFrame = CGRect(x: 0, y: 0, width: containerBounds.width, height: containerBounds.height - tabBar.frame.height)
         
@@ -558,47 +549,36 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
         view.insertSubview(transitionContainer, belowSubview: tabBar)
         self.transitionContainer = transitionContainer
         
-        // Take snapshots of the current and target views for smooth animation
-        // Use the full original view bounds to maintain proper aspect ratio
         let fromSnapshot = fromVC.view.snapshotView(afterScreenUpdates: false) ?? UIView()
         let toSnapshot = toVC.view.snapshotView(afterScreenUpdates: true) ?? UIView()
         
-        // Set snapshots to match the original view size, not the content frame
         let originalViewBounds = fromVC.view.bounds
         fromSnapshot.frame = originalViewBounds
         toSnapshot.frame = originalViewBounds
         
-        // Position snapshots for animation
         transitionContainer.addSubview(fromSnapshot)
         transitionContainer.addSubview(toSnapshot)
         
         if isSlideLeft {
-            // Coming from right (Blueprint → Daily Fit)
             toSnapshot.transform = CGAffineTransform(translationX: originalViewBounds.width, y: 0)
         } else {
-            // Coming from left (Daily Fit → Blueprint)
             toSnapshot.transform = CGAffineTransform(translationX: -originalViewBounds.width, y: 0)
         }
         
-        // Hide the original views during transition
         fromVC.view.alpha = 0
         toVC.view.alpha = 0
         
-        // Create smooth animator
         transitionAnimator = UIViewPropertyAnimator(duration: 0.35, dampingRatio: 0.9) {
             if isSlideLeft {
-                // Slide left: current moves left, new comes from right
                 fromSnapshot.transform = CGAffineTransform(translationX: -originalViewBounds.width, y: 0)
                 toSnapshot.transform = .identity
             } else {
-                // Slide right: current moves right, new comes from left
                 fromSnapshot.transform = CGAffineTransform(translationX: originalViewBounds.width, y: 0)
                 toSnapshot.transform = .identity
             }
         }
         
         transitionAnimator?.addCompletion { [weak self] _ in
-            // Clean up transition
             self?.cleanupTransition(targetViewController: targetViewController, toViewController: toVC)
         }
         

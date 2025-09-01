@@ -43,6 +43,8 @@ class ProfileViewController: UIViewController {
     }
     
     // MARK: - UI Setup
+    // Complete fixed ProfileViewController.swift setupUI() method:
+
     private func setupUI() {
         view.backgroundColor = .systemBackground
         
@@ -51,6 +53,7 @@ class ProfileViewController: UIViewController {
         
         // Setup scroll view
         scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.contentInsetAdjustmentBehavior = .never  // KEY FIX: Prevent automatic adjustments
         view.addSubview(scrollView)
         
         // Setup content view
@@ -58,7 +61,8 @@ class ProfileViewController: UIViewController {
         scrollView.addSubview(contentView)
         
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            // FIX: Use view.topAnchor + contentInsetAdjustmentBehavior = .never (like Daily Fit)
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -73,12 +77,14 @@ class ProfileViewController: UIViewController {
         setupFormElements()
         setupKeyboardDismissal()
     }
-    
+
     private func setupFormElements() {
-        // Title
+        // Title - with proper status bar compensation
         titleLabel.text = "Profile"
         titleLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         titleLabel.textAlignment = .center
+        titleLabel.textColor = .label
+        titleLabel.numberOfLines = 0
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(titleLabel)
         
@@ -150,7 +156,8 @@ class ProfileViewController: UIViewController {
         
         // Set up constraints
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
+            // FIX: Add proper status bar compensation (64pt) to first element
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 64),
             titleLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),

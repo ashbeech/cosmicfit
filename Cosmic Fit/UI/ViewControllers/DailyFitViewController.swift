@@ -212,22 +212,23 @@ class DailyFitViewController: UIViewController {
         contentView.addSubview(debugButton)
     }
     
+    // MARK: - UI Setup Constraints (setupConstraints method)
     private func setupConstraints() {
-        let screenHeight = UIScreen.main.bounds.height
+        let screenHeight = view.bounds.height
         
         NSLayoutConstraint.activate([
             // Tarot card constraints (already set up in setupTarotCardHeader)
             tarotCardImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             tarotCardImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
-            // Card title label - positioned at middle of screen (1/3 up from bottom)
-            cardTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: screenHeight * 0.67), // 1/3 up from bottom
+            // Card title label - positioned closer to bottom of card (5/6 down from top)
+            cardTitleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: screenHeight * 0.83), // Moved closer to bottom
             cardTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             cardTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            cardTitleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 44), // Minimum height for touch
+            cardTitleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 44),
             
-            // Content labels - positioned close below the title
-            keywordsLabel.topAnchor.constraint(equalTo: cardTitleLabel.bottomAnchor, constant: 20), // Much closer to title
+            // Content labels - positioned immediately below the title (butted up against it)
+            keywordsLabel.topAnchor.constraint(equalTo: cardTitleLabel.bottomAnchor, constant: 8), // Reduced from 20 to 8
             keywordsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             keywordsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
@@ -466,12 +467,16 @@ class DailyFitViewController: UIViewController {
 // MARK: - UIScrollViewDelegate
 extension DailyFitViewController: UIScrollViewDelegate {
     
+    // MARK: - UIScrollViewDelegate (scrollViewDidScroll method)
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let scrollOffset = scrollView.contentOffset.y
         let screenHeight = view.bounds.height
         
-        // Card locks almost immediately after user starts scrolling (just enough to show it scrolls)
-        let lockThreshold = screenHeight * 0.015 // Card locks at 1.5% scroll (very early)
+        // UPDATED: Card locks much later to allow for slower progression
+        let lockThreshold = screenHeight * 0.06 // Increased from 0.015 to 0.06 (4x slower lock)
+        
+        // FIXED: Use the same starting offset as setup to prevent jumping
+        let cardStartOffset = -33.0
         
         // Hide scroll indicator once user starts scrolling
         if scrollOffset > 10 && scrollIndicatorView.alpha > 0 {
@@ -480,35 +485,37 @@ extension DailyFitViewController: UIScrollViewDelegate {
             }
         }
         
+        // FIXED: Calculate content fade consistently across both phases to prevent sudden opacity jump
+        let fadeCompleteThreshold = screenHeight * 0.20 // Content fully visible at 20% scroll
+        let fadeProgress = min(1.0, scrollOffset / fadeCompleteThreshold) // 0 to 1 from start to 20% scroll
+        
+        // UPDATED: Calculate blur effects to start 5% screen height earlier
+        let blurEarlyStart = screenHeight * 0.05 // Start blur 5% earlier
+        let adjustedScrollForBlur = scrollOffset + blurEarlyStart // Advance blur by 5% screen height
+        
         if scrollOffset <= lockThreshold {
-            // Phase 1: Card moves up with scrolling (Y position changes)
-            cardImageTopConstraint?.constant = -scrollOffset
-            //print("🎬 Phase 1: Card moving to position: \(-scrollOffset)") // Debug
+            // Phase 1: Card moves up with scrolling (Y position changes) - LONGER PHASE
+            // FIXED: Start from the correct position to prevent jumping
+            let newPosition = cardStartOffset - scrollOffset
+            cardImageTopConstraint?.constant = newPosition
             
-            // No fade/scale effects during movement phase, BUT apply gentle blur from start
-            tarotCardImageView.alpha = 1.0
-            tarotCardImageView.transform = .identity
-            
-            // Apply very gentle blur from the very beginning of scroll
-            let initialBlurProgress = min(1.0, scrollOffset / (screenHeight * 0.6)) // Blur progress over 60% of screen
+            // UPDATED: Apply blur and scale effects smoothly from the very beginning
             if scrollOffset > 0 {
-                applyGaussianBlur(intensity: initialBlurProgress * 0.3) // Very gentle initial blur (max 30% intensity)
+                // Blur calculation
+                let initialBlurProgress = min(1.0, adjustedScrollForBlur / (screenHeight * 1.2)) // Blur progress over 120% of screen
+                applyGaussianBlur(intensity: initialBlurProgress * 0.4) // Stronger initial blur
+                
+                // FIXED: Scale calculation that starts smoothly from 1.0
+                let scaleProgress = min(1.0, scrollOffset / (screenHeight * 0.8)) // Scale over shorter distance, using raw scrollOffset
+                let scaleTransform = 1.0 + (scaleProgress * 0.15) // Gentle scale increase starting from exactly 1.0
+                tarotCardImageView.transform = CGAffineTransform(scaleX: scaleTransform, y: scaleTransform)
             } else {
+                // No scroll - maintain identity
                 removeGaussianBlur()
+                tarotCardImageView.transform = .identity
             }
             
-            // Fade in content from 0% to 10% scroll (much shorter, less jarring)
-            let fadeCompleteThreshold = screenHeight * 0.10 // Content fully visible at 10% scroll
-            let fadeProgress = min(1.0, scrollOffset / fadeCompleteThreshold) // 0 to 1 from start to 10% scroll
-            cardTitleLabel.alpha = fadeProgress
-            
-            // Fade in all content labels
-            let labels = [keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel, 
-                         patternsLabel, shapeLabel, accessoriesLabel, layeringLabel, 
-                         vibeBreakdownLabel, debugButton]
-            for label in labels {
-                label.alpha = fadeProgress
-            }
+            tarotCardImageView.alpha = 1.0
             
             // If we were in sticky mode, exit it
             if isCardSticky {
@@ -519,38 +526,31 @@ extension DailyFitViewController: UIScrollViewDelegate {
             
         } else {
             // Phase 2: Card Y position is LOCKED - only blur and fade (NO MORE MOVEMENT)
-            cardImageTopConstraint?.constant = -lockThreshold // LOCK Y position here - NO FURTHER CHANGES
-            //print("🔒 Phase 2: Card LOCKED at position: \(-lockThreshold), scaling/blurring only") // Debug
+            // FIXED: Lock at the position that accounts for starting offset
+            cardImageTopConstraint?.constant = cardStartOffset - lockThreshold
             
-            // Calculate blur/fade progress from 5% to 60% scroll (55% range)
-            // Card fades out gradually until content reaches nearly the top of screen
-            let blurDistance = screenHeight * 0.55 // Much longer fade: 60% - 5% = 55% for complete blur/scale
+            // UPDATED: Calculate blur/fade progress over much longer distance for slower progression
+            let blurDistance = screenHeight * 1.1 // Much longer fade: from 6% to 116% scroll
             let beyondLockScroll = scrollOffset - lockThreshold
             let blurProgress = min(1.0, beyondLockScroll / blurDistance)
             
-            // Apply stronger blur effect (simulate with alpha and transform)
-            let blurAlpha = 1.0 - (blurProgress * 0.9) // Very strong fade as user continues scrolling
-            let scaleTransform = 1.0 + (blurProgress * 0.25) // More pronounced scale increase for better blur simulation
+            // Apply stronger blur effect with slower progression
+            let blurAlpha = 1.0 - (blurProgress * 0.9) // Very strong fade
             
-            tarotCardImageView.alpha = max(0.1, blurAlpha) // Don't completely disappear
+            // FIXED: Ensure continuous scale progression from Phase 1
+            // Calculate total scale progress from beginning of scroll
+            let totalScaleProgress = min(1.0, scrollOffset / (screenHeight * 0.8))
+            let phase2AdditionalScale = blurProgress * 0.10 // Additional scale in Phase 2
+            let scaleTransform = 1.0 + (totalScaleProgress * 0.15) + phase2AdditionalScale
+            
+            tarotCardImageView.alpha = max(0.1, blurAlpha)
             tarotCardImageView.transform = CGAffineTransform(scaleX: scaleTransform, y: scaleTransform)
             
-            // Apply real Gaussian blur to the image itself
-            if blurProgress > 0.1 {
+            // Apply real Gaussian blur with slower progression
+            if blurProgress > 0.02 { // Start even earlier in Phase 2
                 applyGaussianBlur(intensity: blurProgress)
             } else {
                 removeGaussianBlur()
-            }
-            
-            // Keep content fully visible during blur phase (it should be fully faded in by now)
-            cardTitleLabel.alpha = 1.0
-            
-            // Keep all content labels fully visible
-            let labels = [keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel, 
-                         patternsLabel, shapeLabel, accessoriesLabel, layeringLabel, 
-                         vibeBreakdownLabel, debugButton]
-            for label in labels {
-                label.alpha = 1.0
             }
             
             // Mark as sticky if we reach significant blur
@@ -560,6 +560,18 @@ extension DailyFitViewController: UIScrollViewDelegate {
                 isCardSticky = false
             }
         }
+        
+        // FIXED: Apply consistent content fade across both phases (moved outside phase logic)
+        cardTitleLabel.alpha = fadeProgress
+        
+        // Fade in all content labels consistently - no sudden jumps
+        let labels = [keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel,
+                      patternsLabel, shapeLabel, accessoriesLabel, layeringLabel,
+                      vibeBreakdownLabel, debugButton]
+        for label in labels {
+            label.alpha = fadeProgress
+        }
+        
     }
     
     // MARK: - Gaussian Blur Methods
