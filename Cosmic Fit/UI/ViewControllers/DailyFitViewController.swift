@@ -214,6 +214,7 @@ class DailyFitViewController: UIViewController {
         // CRITICAL: Add to main view (not contentView) to ensure it's behind everything
         view.insertSubview(backgroundBlurImageView, at: 0) // Insert at bottom of view hierarchy
         
+        // Fixed constraints - background should fill screen and NOT move with scroll
         NSLayoutConstraint.activate([
             backgroundBlurImageView.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundBlurImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -900,8 +901,7 @@ extension DailyFitViewController: UIScrollViewDelegate {
         
         let yOffset = scrollView.contentOffset.y
         
-        // ORIGINAL BEHAVIOR: Card moves up with parallax effect (no scaling, minimal fade)
-        let cardTranslation = yOffset * 0.3 // Original parallax factor
+        let cardTranslation = yOffset * 0.3
         
         // Apply translation ONLY to container (no scale)
         tarotCardContainerView.transform = CGAffineTransform(translationX: 0, y: -cardTranslation)
