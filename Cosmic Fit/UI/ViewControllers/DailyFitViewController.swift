@@ -894,9 +894,9 @@ extension DailyFitViewController: UIScrollViewDelegate {
 
     // MARK: - Fixed Show Revealed State
     private func showRevealedState(animated: Bool = true) {
-        let cardDuration: TimeInterval = 0.6 // Card transition duration
+        let cardDuration: TimeInterval = 0.4 // Card transition duration
         let backgroundDelay: TimeInterval = 0 // Delay before background fades in
-        let backgroundDuration: TimeInterval = 0.5 // Background fade duration
+        let backgroundDuration: TimeInterval = 0.8 // Background fade duration
         
         if animated {
             // PHASE 1: Card reveal animation (card back out, tarot card in)
@@ -928,7 +928,7 @@ extension DailyFitViewController: UIScrollViewDelegate {
                 // PHASE 2: Background fade-in with 1 second delay
                 UIView.animate(withDuration: backgroundDuration, delay: backgroundDelay, animations: {
                     // Fade in blurred background after delay
-                    self.backgroundBlurImageView.alpha = 0.8
+                    self.backgroundBlurImageView.alpha = 1.0
                     
                 }) { _ in
                     // Ensure proper layering after both animations complete

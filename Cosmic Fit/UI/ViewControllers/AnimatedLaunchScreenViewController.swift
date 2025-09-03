@@ -60,44 +60,44 @@ class AnimatedLaunchScreenViewController: UIViewController {
         
         // Setup first rune column (scrolls down) - LEFT COLUMN
         backgroundRunes1.image = runeImage
-        backgroundRunes1.contentMode = .scaleAspectFill
+        backgroundRunes1.contentMode = .scaleToFill
         backgroundRunes1.translatesAutoresizingMaskIntoConstraints = false
         backgroundRunes1.alpha = 0 // Start invisible
         backgroundContainer.addSubview(backgroundRunes1)
         
         backgroundRunes1Duplicate.image = runeImage
-        backgroundRunes1Duplicate.contentMode = .scaleAspectFill
+        backgroundRunes1Duplicate.contentMode = .scaleToFill
         backgroundRunes1Duplicate.translatesAutoresizingMaskIntoConstraints = false
         backgroundRunes1Duplicate.alpha = 0 // Start invisible
         backgroundContainer.addSubview(backgroundRunes1Duplicate)
         
         // Setup second rune column (scrolls up) - MIDDLE COLUMN
         backgroundRunes2.image = runeImage
-        backgroundRunes2.contentMode = .scaleAspectFill
+        backgroundRunes2.contentMode = .scaleToFill
         backgroundRunes2.translatesAutoresizingMaskIntoConstraints = false
         backgroundRunes2.alpha = 0 // Start invisible
         backgroundContainer.addSubview(backgroundRunes2)
         
         backgroundRunes2Duplicate.image = runeImage
-        backgroundRunes2Duplicate.contentMode = .scaleAspectFill
+        backgroundRunes2Duplicate.contentMode = .scaleToFill
         backgroundRunes2Duplicate.translatesAutoresizingMaskIntoConstraints = false
         backgroundRunes2Duplicate.alpha = 0 // Start invisible
         backgroundContainer.addSubview(backgroundRunes2Duplicate)
         
         // Setup third rune column (scrolls down) - RIGHT COLUMN
         backgroundRunes3.image = runeImage
-        backgroundRunes3.contentMode = .scaleAspectFill
+        backgroundRunes3.contentMode = .scaleToFill
         backgroundRunes3.translatesAutoresizingMaskIntoConstraints = false
         backgroundRunes3.alpha = 0 // Start invisible
         backgroundContainer.addSubview(backgroundRunes3)
         
         backgroundRunes3Duplicate.image = runeImage
-        backgroundRunes3Duplicate.contentMode = .scaleAspectFill
+        backgroundRunes3Duplicate.contentMode = .scaleToFill
         backgroundRunes3Duplicate.translatesAutoresizingMaskIntoConstraints = false
         backgroundRunes3Duplicate.alpha = 0 // Start invisible
         backgroundContainer.addSubview(backgroundRunes3Duplicate)
         
-        // Layout constraints - NO OVERLAPPING
+        // Layout constraints
         NSLayoutConstraint.activate([
             // Background container fills entire view
             backgroundContainer.topAnchor.constraint(equalTo: view.topAnchor),
@@ -105,41 +105,41 @@ class AnimatedLaunchScreenViewController: UIViewController {
             backgroundContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             backgroundContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            // First column (LEFT - exactly 1/3 width, no overlap)
+            // First column (LEFT - exactly 1/3 width)
             backgroundRunes1.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
             backgroundRunes1.leadingAnchor.constraint(equalTo: backgroundContainer.leadingAnchor),
             backgroundRunes1.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
-            backgroundRunes1.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor, multiplier: 2.0), // Double height for seamless loop
+            backgroundRunes1.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor),
             
-            // First column duplicate - positioned for seamless down scroll
-            backgroundRunes1Duplicate.topAnchor.constraint(equalTo: backgroundRunes1.bottomAnchor),
+            // First column duplicate - starts at same position (we'll use transforms to position)
+            backgroundRunes1Duplicate.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
             backgroundRunes1Duplicate.leadingAnchor.constraint(equalTo: backgroundContainer.leadingAnchor),
             backgroundRunes1Duplicate.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
-            backgroundRunes1Duplicate.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor, multiplier: 2.0),
+            backgroundRunes1Duplicate.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor),
             
-            // Second column (MIDDLE - exactly 1/3 width, starts after first column)
+            // Second column (MIDDLE - exactly 1/3 width)
             backgroundRunes2.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
             backgroundRunes2.leadingAnchor.constraint(equalTo: backgroundRunes1.trailingAnchor),
             backgroundRunes2.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
-            backgroundRunes2.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor, multiplier: 2.0), // Double height for seamless loop
+            backgroundRunes2.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor),
             
-            // Second column duplicate - positioned for seamless up scroll
-            backgroundRunes2Duplicate.bottomAnchor.constraint(equalTo: backgroundRunes2.topAnchor),
+            // Second column duplicate - starts at same position (we'll use transforms to position)
+            backgroundRunes2Duplicate.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
             backgroundRunes2Duplicate.leadingAnchor.constraint(equalTo: backgroundRunes1.trailingAnchor),
             backgroundRunes2Duplicate.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
-            backgroundRunes2Duplicate.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor, multiplier: 2.0),
+            backgroundRunes2Duplicate.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor),
             
-            // Third column (RIGHT - exactly 1/3 width, starts after second column)
+            // Third column (RIGHT - exactly 1/3 width)
             backgroundRunes3.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
             backgroundRunes3.leadingAnchor.constraint(equalTo: backgroundRunes2.trailingAnchor),
             backgroundRunes3.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
-            backgroundRunes3.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor, multiplier: 2.0), // Double height for seamless loop
+            backgroundRunes3.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor),
             
-            // Third column duplicate - positioned for seamless down scroll
-            backgroundRunes3Duplicate.topAnchor.constraint(equalTo: backgroundRunes3.bottomAnchor),
+            // Third column duplicate - starts at same position (we'll use transforms to position)
+            backgroundRunes3Duplicate.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
             backgroundRunes3Duplicate.leadingAnchor.constraint(equalTo: backgroundRunes2.trailingAnchor),
             backgroundRunes3Duplicate.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
-            backgroundRunes3Duplicate.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor, multiplier: 2.0)
+            backgroundRunes3Duplicate.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor)
         ])
     }
     
@@ -225,7 +225,7 @@ class AnimatedLaunchScreenViewController: UIViewController {
     
     private func startLogoAnimation() {
         // Part 1: Fade in over 1 second
-        UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseInOut], animations: {
+        UIView.animate(withDuration: 0.0, delay: 0.0, options: [.curveEaseInOut], animations: {
             self.logoPart1.alpha = 1.0
         }) { _ in
             // START BACKGROUND FADE-IN immediately after part 1 completes (very slowly over 4 seconds)
@@ -264,9 +264,22 @@ class AnimatedLaunchScreenViewController: UIViewController {
     }
     
     private func startBackgroundScrolling() {
+        // Need to let constraints layout first
+        view.layoutIfNeeded()
+        
         let scrollDuration: TimeInterval = 20.0 // Slow infinite scroll
         
-        // First column scrolls down (negative Y direction)
+        // Position duplicates using transforms before starting animations
+        let containerHeight = view.bounds.height
+        
+        // For down-scrolling columns, duplicate starts above
+        backgroundRunes1Duplicate.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
+        backgroundRunes3Duplicate.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
+        
+        // For up-scrolling column, duplicate starts below
+        backgroundRunes2Duplicate.transform = CGAffineTransform(translationX: 0, y: containerHeight)
+        
+        // First column scrolls down
         animateBackgroundScroll(
             imageView: backgroundRunes1,
             duplicate: backgroundRunes1Duplicate,
@@ -274,7 +287,7 @@ class AnimatedLaunchScreenViewController: UIViewController {
             duration: scrollDuration
         )
         
-        // Second column scrolls up (positive Y direction)
+        // Second column scrolls up
         animateBackgroundScroll(
             imageView: backgroundRunes2,
             duplicate: backgroundRunes2Duplicate,
@@ -282,7 +295,7 @@ class AnimatedLaunchScreenViewController: UIViewController {
             duration: scrollDuration
         )
         
-        // Third column scrolls down (negative Y direction)
+        // Third column scrolls down
         animateBackgroundScroll(
             imageView: backgroundRunes3,
             duplicate: backgroundRunes3Duplicate,
@@ -298,57 +311,69 @@ class AnimatedLaunchScreenViewController: UIViewController {
     private func animateBackgroundScroll(imageView: UIImageView, duplicate: UIImageView, direction: ScrollDirection, duration: TimeInterval) {
         let containerHeight = view.bounds.height
         
-        // Create continuous scrolling animation with proper frame positioning
-        func createScrollAnimation() {
-            UIView.animate(withDuration: duration, delay: 0, options: [.curveLinear], animations: {
+        // Create infinite scrolling animation
+        func animateLoop() {
+            UIView.animate(withDuration: duration, delay: 0, options: [.curveLinear, .repeat], animations: {
                 switch direction {
-                case .up:
-                    // Scroll up: both images move up by container height
-                    var mainFrame = imageView.frame
-                    var duplicateFrame = duplicate.frame
-                    mainFrame.origin.y -= containerHeight
-                    duplicateFrame.origin.y -= containerHeight
-                    imageView.frame = mainFrame
-                    duplicate.frame = duplicateFrame
-                    
                 case .down:
-                    // Scroll down: both images move down by container height
-                    var mainFrame = imageView.frame
-                    var duplicateFrame = duplicate.frame
-                    mainFrame.origin.y += containerHeight
-                    duplicateFrame.origin.y += containerHeight
-                    imageView.frame = mainFrame
-                    duplicate.frame = duplicateFrame
-                }
-            }) { _ in
-                // Reset positions for seamless continuation
-                switch direction {
-                case .up:
-                    // Reset: main goes to starting position, duplicate goes below
-                    var mainFrame = imageView.frame
-                    var duplicateFrame = duplicate.frame
-                    mainFrame.origin.y += containerHeight
-                    duplicateFrame.origin.y = mainFrame.origin.y + containerHeight
-                    imageView.frame = mainFrame
-                    duplicate.frame = duplicateFrame
+                    // Move both images down by 2x container height
+                    // This ensures the duplicate (starting above) reaches the original's starting position
+                    imageView.transform = CGAffineTransform(translationX: 0, y: containerHeight)
+                    duplicate.transform = CGAffineTransform(translationX: 0, y: containerHeight)
                     
-                case .down:
-                    // Reset: main goes to starting position, duplicate goes above
-                    var mainFrame = imageView.frame
-                    var duplicateFrame = duplicate.frame
-                    mainFrame.origin.y -= containerHeight
-                    duplicateFrame.origin.y = mainFrame.origin.y - containerHeight
-                    imageView.frame = mainFrame
-                    duplicate.frame = duplicateFrame
+                case .up:
+                    // Move both images up by 2x container height
+                    // This ensures the duplicate (starting below) reaches the original's starting position
+                    imageView.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
+                    duplicate.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
                 }
+            }, completion: nil)
+        }
+        
+        // Alternative approach using CABasicAnimation for smoother infinite scroll
+        func animateWithCoreAnimation() {
+            let animation = CABasicAnimation(keyPath: "transform.translation.y")
+            animation.duration = duration
+            animation.repeatCount = .infinity
+            animation.isRemovedOnCompletion = false
+            
+            switch direction {
+            case .down:
+                // Animate from current position to one screen height down
+                animation.fromValue = 0
+                animation.toValue = containerHeight
                 
-                // Continue the animation
-                createScrollAnimation()
+                // For the duplicate (which starts above), animate from -height to 0
+                let duplicateAnimation = CABasicAnimation(keyPath: "transform.translation.y")
+                duplicateAnimation.duration = duration
+                duplicateAnimation.repeatCount = .infinity
+                duplicateAnimation.isRemovedOnCompletion = false
+                duplicateAnimation.fromValue = -containerHeight
+                duplicateAnimation.toValue = 0
+                
+                imageView.layer.add(animation, forKey: "scrollAnimation")
+                duplicate.layer.add(duplicateAnimation, forKey: "scrollAnimation")
+                
+            case .up:
+                // Animate from current position to one screen height up
+                animation.fromValue = 0
+                animation.toValue = -containerHeight
+                
+                // For the duplicate (which starts below), animate from +height to 0
+                let duplicateAnimation = CABasicAnimation(keyPath: "transform.translation.y")
+                duplicateAnimation.duration = duration
+                duplicateAnimation.repeatCount = .infinity
+                duplicateAnimation.isRemovedOnCompletion = false
+                duplicateAnimation.fromValue = containerHeight
+                duplicateAnimation.toValue = 0
+                
+                imageView.layer.add(animation, forKey: "scrollAnimation")
+                duplicate.layer.add(duplicateAnimation, forKey: "scrollAnimation")
             }
         }
         
-        // Start the infinite scroll
-        createScrollAnimation()
+        // Use Core Animation for smoother infinite scroll
+        animateWithCoreAnimation()
     }
     
     // MARK: - Transition
