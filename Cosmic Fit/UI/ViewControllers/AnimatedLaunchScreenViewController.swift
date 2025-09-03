@@ -218,34 +218,34 @@ class AnimatedLaunchScreenViewController: UIViewController {
         startLogoAnimation()
         
         // Transition to main app after 5 seconds total
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             self.transitionToMainApp()
         }
     }
     
     private func startLogoAnimation() {
-        // Part 1: Fade in over 1 second
-        UIView.animate(withDuration: 0.0, delay: 0.0, options: [.curveEaseInOut], animations: {
+        // Part 1: Fade in over 0.5 seconds (halved time)
+        UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseInOut], animations: {
             self.logoPart1.alpha = 1.0
         }) { _ in
             // START BACKGROUND FADE-IN immediately after part 1 completes (very slowly over 4 seconds)
             self.startBackgroundGradualFadeIn()
-            
-            // Part 2: Fade in over 1 second
-            UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseInOut], animations: {
-                self.logoPart2.alpha = 1.0
-            }) { _ in
-                // Part 3: Fade in over 1 second
-                UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseInOut], animations: {
-                    self.logoPart3.alpha = 1.0
-                }) { _ in
-                    // Part 4: Fade in over 1 second
-                    UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseInOut], animations: {
-                        self.logoPart4.alpha = 1.0
-                    }, completion: nil)
-                }
-            }
         }
+        
+        // Part 2: Starts after part 1, fades in over 0.5 seconds (overlapping with part 3)
+        UIView.animate(withDuration: 1.0, delay: 0.25, options: [.curveEaseInOut], animations: {
+            self.logoPart2.alpha = 1.0
+        }, completion: nil)
+        
+        // Part 3: Starts while part 2 is still fading in, overlaps with part 4
+        UIView.animate(withDuration: 1.0, delay: 0.33, options: [.curveEaseInOut], animations: {
+            self.logoPart3.alpha = 1.0
+        }, completion: nil)
+        
+        // Part 4: Starts while part 3 is still fading in
+        UIView.animate(withDuration: 1.0, delay: 0.5, options: [.curveEaseInOut], animations: {
+            self.logoPart4.alpha = 1.0
+        }, completion: nil)
     }
     
     private func startBackgroundGradualFadeIn() {
@@ -253,7 +253,7 @@ class AnimatedLaunchScreenViewController: UIViewController {
         startBackgroundScrolling()
         
         // Fade in all background elements very slowly over 4 seconds
-        UIView.animate(withDuration: 4.0, delay: 0.0, options: [.curveEaseInOut], animations: {
+        UIView.animate(withDuration: 0.33, delay: 0.0, options: [.curveEaseInOut], animations: {
             self.backgroundRunes1.alpha = 1.0
             self.backgroundRunes1Duplicate.alpha = 1.0
             self.backgroundRunes2.alpha = 1.0
