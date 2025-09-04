@@ -10,6 +10,10 @@ import UIKit
 class BlueprintViewController: UIViewController {
     
     // MARK: - Properties
+    var blueprintContent: String = ""
+    var birthInfo: String = ""
+    
+    // MARK: - UI Elements
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let profileHeaderView = UIView()
@@ -18,126 +22,92 @@ class BlueprintViewController: UIViewController {
     private let locationLabel = UILabel()
     private let dividerView = UIView()
     private let titleLabel = UILabel()
-    private var textView = UITextView()
+    private let textView = UITextView()
     private let debugButton = UIButton(type: .system)
     
-    private var interpretationText: String = ""
-    private var birthDate: Date?
-    private var birthCity: String = ""
-    private var birthCountry: String = ""
-    private var originalChartViewController: NatalChartViewController?
-    
-    // MARK: - Lifecycle
+    // MARK: - View Controller Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        updateContent()
+        applyCosmicFitTheme()
+        populateContent()
     }
     
-    // MARK: - Configuration
-    func configure(with interpretationText: String,
-                   birthDate: Date?,
-                   birthCity: String,
-                   birthCountry: String,
-                   originalChartViewController: NatalChartViewController?) {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        self.interpretationText = interpretationText
-        self.birthDate = birthDate
-        self.birthCity = birthCity
-        self.birthCountry = birthCountry
-        self.originalChartViewController = originalChartViewController
-        
-        if isViewLoaded {
-            updateContent()
-        }
+        // Hide navigation bar for this view
+        navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
     // MARK: - UI Setup
     private func setupUI() {
-        view.backgroundColor = .black
-        
-        // Hide navigation bar completely
-        navigationController?.navigationBar.isHidden = true
-        
-        // Setup Scroll View
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.contentInsetAdjustmentBehavior = .never  // KEY FIX: Prevent automatic safe area adjustments
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
-        
-        NSLayoutConstraint.activate([
-            // Use view.topAnchor like Daily Fit (since we have contentInsetAdjustmentBehavior = .never)
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-        ])
-        
-        // Setup Profile Header
+        setupScrollView()
         setupProfileHeader()
+        setupContent()
+        setupConstraints()
+    }
+    
+    private func setupScrollView() {
+        CosmicFitTheme.styleScrollView(scrollView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scrollView)
         
-        // Create text view for interpretation
-        textView = UITextView()
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.isEditable = false
-        textView.font = UIFont.systemFont(ofSize: 16)
-        textView.textColor = .white
-        textView.backgroundColor = .black
-        textView.isScrollEnabled = false
-        textView.textContainerInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
-        contentView.addSubview(textView)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+    }
+    
+    private func setupContent() {
+        // Apply themed content background
+        let contentBackgroundView = UIView()
+        CosmicFitTheme.styleContentBackground(contentBackgroundView)
+        contentBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(contentBackgroundView)
         
-        // Title label
-        titleLabel.text = "Your Cosmic Fit Blueprint"
-        titleLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        titleLabel.textColor = .white
-        titleLabel.textAlignment = .left
+        // Title Label
+        titleLabel.text = "Your Cosmic Blueprint"
+        CosmicFitTheme.styleTitleLabel(titleLabel, fontSize: CosmicFitTheme.Typography.FontSizes.title1, weight: .bold)
+        titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(titleLabel)
         
-        // Debug button
+        // Text View
+        textView.isEditable = false
+        textView.isScrollEnabled = false
+        textView.backgroundColor = UIColor.clear
+        textView.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.body)
+        textView.textColor = CosmicFitTheme.Colors.cosmicBlue
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(textView)
+        
+        // Debug Button
         debugButton.setTitle("Debug Chart", for: .normal)
-        debugButton.setTitleColor(.systemBlue, for: .normal)
-        debugButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        CosmicFitTheme.styleButton(debugButton, style: .text)
         debugButton.addTarget(self, action: #selector(debugButtonTapped), for: .touchUpInside)
         debugButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(debugButton)
         
+        // Content background constraints
         NSLayoutConstraint.activate([
-            // FIX 2: Restore proper padding for status bar (since we're using view.topAnchor)
-            profileHeaderView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 64),
-            profileHeaderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            profileHeaderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            contentBackgroundView.topAnchor.constraint(equalTo: profileHeaderView.bottomAnchor, constant: 24),
+            contentBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            contentBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            contentBackgroundView.bottomAnchor.constraint(equalTo: debugButton.bottomAnchor, constant: 24)
+        ])
+        
+        // Main content constraints
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: contentBackgroundView.topAnchor, constant: 24),
+            titleLabel.leadingAnchor.constraint(equalTo: contentBackgroundView.leadingAnchor, constant: 24),
+            titleLabel.trailingAnchor.constraint(equalTo: contentBackgroundView.trailingAnchor, constant: -24),
             
-            // Divider view
-            dividerView.topAnchor.constraint(equalTo: profileHeaderView.bottomAnchor, constant: 16),
-            dividerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            dividerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            dividerView.heightAnchor.constraint(equalToConstant: 1),
-            
-            // Title label
-            titleLabel.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: 24),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            
-            // TextView fills contentView below title
             textView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
-            textView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            textView.leadingAnchor.constraint(equalTo: contentBackgroundView.leadingAnchor, constant: 24),
+            textView.trailingAnchor.constraint(equalTo: contentBackgroundView.trailingAnchor, constant: -24),
             
-            // Debug button at bottom
             debugButton.topAnchor.constraint(equalTo: textView.bottomAnchor, constant: 24),
-            debugButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            debugButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24)
+            debugButton.centerXAnchor.constraint(equalTo: contentBackgroundView.centerXAnchor)
         ])
     }
     
@@ -147,185 +117,119 @@ class BlueprintViewController: UIViewController {
         
         // Profile Label
         profileLabel.text = "PROFILE"
-        profileLabel.font = UIFont.systemFont(ofSize: 16, weight: .light)
-        profileLabel.textColor = .white
+        CosmicFitTheme.styleTitleLabel(profileLabel, fontSize: CosmicFitTheme.Typography.FontSizes.subheadline, weight: .medium)
         profileLabel.textAlignment = .left
         profileLabel.translatesAutoresizingMaskIntoConstraints = false
         profileHeaderView.addSubview(profileLabel)
         
         // Birth Info Label
-        birthInfoLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        birthInfoLabel.textColor = .white
+        CosmicFitTheme.styleBodyLabel(birthInfoLabel, fontSize: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
         birthInfoLabel.textAlignment = .left
+        birthInfoLabel.numberOfLines = 0
         birthInfoLabel.translatesAutoresizingMaskIntoConstraints = false
         profileHeaderView.addSubview(birthInfoLabel)
         
         // Location Label
-        locationLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        locationLabel.textColor = .white
+        CosmicFitTheme.styleBodyLabel(locationLabel, fontSize: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
         locationLabel.textAlignment = .left
+        locationLabel.numberOfLines = 0
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
         profileHeaderView.addSubview(locationLabel)
         
         // Divider
-        dividerView.backgroundColor = .gray
+        dividerView.backgroundColor = CosmicFitTheme.Colors.cosmicBlue.withAlphaComponent(0.3)
         dividerView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(dividerView)
+        profileHeaderView.addSubview(dividerView)
         
         NSLayoutConstraint.activate([
             profileLabel.topAnchor.constraint(equalTo: profileHeaderView.topAnchor),
-            profileLabel.leadingAnchor.constraint(equalTo: profileHeaderView.leadingAnchor),
-            profileLabel.trailingAnchor.constraint(equalTo: profileHeaderView.trailingAnchor),
+            profileLabel.leadingAnchor.constraint(equalTo: profileHeaderView.leadingAnchor, constant: 24),
+            profileLabel.trailingAnchor.constraint(equalTo: profileHeaderView.trailingAnchor, constant: -24),
             
             birthInfoLabel.topAnchor.constraint(equalTo: profileLabel.bottomAnchor, constant: 8),
-            birthInfoLabel.leadingAnchor.constraint(equalTo: profileHeaderView.leadingAnchor),
-            birthInfoLabel.trailingAnchor.constraint(equalTo: profileHeaderView.trailingAnchor),
+            birthInfoLabel.leadingAnchor.constraint(equalTo: profileHeaderView.leadingAnchor, constant: 24),
+            birthInfoLabel.trailingAnchor.constraint(equalTo: profileHeaderView.trailingAnchor, constant: -24),
             
             locationLabel.topAnchor.constraint(equalTo: birthInfoLabel.bottomAnchor, constant: 8),
-            locationLabel.leadingAnchor.constraint(equalTo: profileHeaderView.leadingAnchor),
-            locationLabel.trailingAnchor.constraint(equalTo: profileHeaderView.trailingAnchor),
-            locationLabel.bottomAnchor.constraint(equalTo: profileHeaderView.bottomAnchor)
+            locationLabel.leadingAnchor.constraint(equalTo: profileHeaderView.leadingAnchor, constant: 24),
+            locationLabel.trailingAnchor.constraint(equalTo: profileHeaderView.trailingAnchor, constant: -24),
+            
+            dividerView.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 16),
+            dividerView.leadingAnchor.constraint(equalTo: profileHeaderView.leadingAnchor, constant: 24),
+            dividerView.trailingAnchor.constraint(equalTo: profileHeaderView.trailingAnchor, constant: -24),
+            dividerView.heightAnchor.constraint(equalToConstant: 1),
+            dividerView.bottomAnchor.constraint(equalTo: profileHeaderView.bottomAnchor)
         ])
     }
     
-    private func updateContent() {
-        // Set the interpretation text
-        textView.text = interpretationText
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            // Scroll View
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            // Content View
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            
+            // Profile Header
+            profileHeaderView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            profileHeaderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            profileHeaderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+        ])
         
-        // Apply styling
-        setupTextViewStyling()
-        
-        // Update profile header
-        updateProfileHeader()
+        // Set content view height constraint to be at least scroll view height for proper scrolling
+        let contentHeightConstraint = contentView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.heightAnchor)
+        contentHeightConstraint.priority = UILayoutPriority(250)
+        contentHeightConstraint.isActive = true
     }
     
-    private func updateProfileHeader() {
-        // Format birth date if available
-        if let date = birthDate {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd.MM.yyyy"
-            let timeFormatter = DateFormatter()
-            timeFormatter.dateFormat = "hh:mma"
-            
-            let dateString = dateFormatter.string(from: date)
-            let timeString = timeFormatter.string(from: date)
-            
-            birthInfoLabel.text = "Born \(dateString), \(timeString)"
-        } else {
-            birthInfoLabel.text = "Born --.--.----, --:--"
-        }
+    // MARK: - Content Population
+    private func populateContent() {
+        // Set birth info
+        birthInfoLabel.text = birthInfo.isEmpty ? "Birth information not available" : birthInfo
         
-        // Set location
-        let city = birthCity.isEmpty ? "CITY" : birthCity.uppercased()
-        let country = birthCountry.isEmpty ? "COUNTRY" : birthCountry.uppercased()
-        locationLabel.text = "\(city), \(country)"
+        // Set location (extracted from birth info if available)
+        let locationText = extractLocationFromBirthInfo(birthInfo)
+        locationLabel.text = locationText.isEmpty ? "Location not specified" : locationText
+        
+        // Set blueprint content
+        textView.text = blueprintContent.isEmpty ? "Loading your cosmic blueprint..." : blueprintContent
     }
     
-    // MARK: - Text Styling
-    private func setupTextViewStyling() {
-        guard let text = textView.text, !text.isEmpty else {
-            print("⚠️ Cannot style empty text")
-            return
+    private func extractLocationFromBirthInfo(_ info: String) -> String {
+        // Extract location from birth info string
+        // Format is typically: "Date Time at Location (Lat: xx, Long: yy)"
+        let components = info.components(separatedBy: " at ")
+        if components.count > 1 {
+            let locationPart = components[1]
+            let locationComponents = locationPart.components(separatedBy: " (")
+            return locationComponents.first ?? ""
         }
-        
-        print("Applying styling to Blueprint text of length: \(text.count)")
-        
-        let attributedText = NSMutableAttributedString()
-        let lines = text.components(separatedBy: "\n")
-        
-        for (i, line) in lines.enumerated() {
-            let trimmedLine = line.trimmingCharacters(in: .whitespacesAndNewlines)
-            
-            if i > 0 {
-                attributedText.append(NSAttributedString(string: "\n"))
-            }
-            
-            if trimmedLine.isEmpty {
-                continue
-            }
-            
-            // SECTION HEADERS
-            if line.hasPrefix("# ") {
-                // Main title
-                let titleText = String(line.dropFirst(2))
-                let titleAttributes: [NSAttributedString.Key: Any] = [
-                    .font: UIFont.systemFont(ofSize: 28, weight: .bold),
-                    .foregroundColor: UIColor.white
-                ]
-                attributedText.append(NSAttributedString(string: titleText, attributes: titleAttributes))
-                
-            } else if line.hasPrefix("## ") {
-                // Section header
-                let headerText = String(line.dropFirst(3))
-                let headerAttributes: [NSAttributedString.Key: Any] = [
-                    .font: UIFont.systemFont(ofSize: 22, weight: .bold),
-                    .foregroundColor: UIColor.white
-                ]
-                attributedText.append(NSAttributedString(string: headerText, attributes: headerAttributes))
-                
-            } else if line.hasSuffix(":") && line.components(separatedBy: " ").count == 1 {
-                // Category headers
-                let categoryAttributes: [NSAttributedString.Key: Any] = [
-                    .font: UIFont.systemFont(ofSize: 18, weight: .semibold),
-                    .foregroundColor: UIColor.white
-                ]
-                attributedText.append(NSAttributedString(string: line, attributes: categoryAttributes))
-                
-            } else if line == "---" {
-                // Divider line - add spacing
-                let dividerAttributes: [NSAttributedString.Key: Any] = [
-                    .font: UIFont.systemFont(ofSize: 6),
-                    .foregroundColor: UIColor.gray
-                ]
-                attributedText.append(NSAttributedString(string: "　", attributes: dividerAttributes))
-                
-            } else {
-                // Regular body text
-                let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.lineSpacing = 4
-                paragraphStyle.paragraphSpacing = 8
-                
-                let bodyAttributes: [NSAttributedString.Key: Any] = [
-                    .font: UIFont.systemFont(ofSize: 16),
-                    .foregroundColor: UIColor.white,
-                    .paragraphStyle: paragraphStyle
-                ]
-                attributedText.append(NSAttributedString(string: line, attributes: bodyAttributes))
-            }
-        }
-        
-        textView.attributedText = attributedText
+        return ""
     }
     
     // MARK: - Actions
     @objc private func debugButtonTapped() {
-        guard let originalChartVC = originalChartViewController else {
-            print("❌ No original chart view controller available")
-            return
-        }
+        // This should be connected to show debug chart view
+        print("Debug button tapped in Blueprint")
         
-        navigationController?.pushViewController(originalChartVC, animated: true)
+        // You can implement navigation to debug chart here
+        // For example: navigationController?.pushViewController(debugViewController, animated: true)
     }
     
-    @objc private func shareInterpretation() {
-        // Create an image of the interpretation for sharing
-        UIGraphicsBeginImageContextWithOptions(contentView.bounds.size, false, 0.0)
-        contentView.drawHierarchy(in: contentView.bounds, afterScreenUpdates: true)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
+    // MARK: - Public Methods
+    func updateContent(blueprint: String, birthInfo: String) {
+        self.blueprintContent = blueprint
+        self.birthInfo = birthInfo
         
-        // Items to share
-        var itemsToShare: [Any] = [interpretationText]
-        if let image = image {
-            itemsToShare.append(image)
+        if isViewLoaded {
+            populateContent()
         }
-        
-        let activityViewController = UIActivityViewController(
-            activityItems: itemsToShare,
-            applicationActivities: nil
-        )
-        
-        // Present the share sheet
-        present(activityViewController, animated: true)
     }
 }

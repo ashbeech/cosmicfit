@@ -1094,16 +1094,16 @@ extension DailyFitViewController: UIScrollViewDelegate {
         let maxScreenDimension = max(view.bounds.width, view.bounds.height)
         
         // Tactile feedback animation
-        UIView.animateKeyframes(withDuration: 0.3, delay: 0, options: [.calculationModeCubic], animations: {
+        UIView.animateKeyframes(withDuration: 0.4, delay: 0, options: [.calculationModeCubic], animations: {
             // Press down slightly
-            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
-                self.tarotCardContainerView.transform = CGAffineTransform(scaleX: 0.9, y: 0.95)
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.35) {
+                self.tarotCardContainerView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
                 self.cardBackImageView.layer.shadowOpacity = 0.2
                 self.cardBackImageView.layer.shadowRadius = maxScreenDimension * 0.3
             }
             
             // Return to exact normal
-            UIView.addKeyframe(withRelativeStartTime: 0.3, relativeDuration: 0.05) {
+            UIView.addKeyframe(withRelativeStartTime: 0.4, relativeDuration: 0.05) {
                 self.tarotCardContainerView.transform = .identity // Back to exact normal
                 self.cardBackImageView.layer.shadowOpacity = 0.0
                 self.cardBackImageView.layer.shadowRadius = maxScreenDimension * 1.2
