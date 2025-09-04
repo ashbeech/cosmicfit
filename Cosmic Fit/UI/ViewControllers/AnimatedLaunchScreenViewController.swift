@@ -217,8 +217,8 @@ class AnimatedLaunchScreenViewController: UIViewController {
         
         startLogoAnimation()
         
-        // Transition to main app after 5 seconds total
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+        // Transition to main app after 2 seconds total
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.0) {
             self.transitionToMainApp()
         }
     }

@@ -601,11 +601,8 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
         // Update selected index properly
         selectedIndex = viewControllers?.firstIndex(of: targetViewController) ?? selectedIndex
         
-        // Add content fade-in animation for Daily Fit tab
-        if let navController = targetViewController as? UINavigationController,
-           let dailyFitVC = navController.topViewController as? DailyFitViewController {
-            dailyFitVC.animateContentFadeIn()
-        }
+        // REMOVED: No longer calling animateContentFadeIn() for tab transitions
+        // The content should maintain its current state when switching tabs
         
         isTransitioning = false
         
