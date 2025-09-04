@@ -155,6 +155,9 @@ class DailyFitViewController: UIViewController {
         // Setup background blur image view (behind everything) - will show blurred tarot card as background
         setupBackgroundBlur()
         
+        // ADDITIONAL: Ensure no black shows through during any state
+        view.backgroundColor = UIColor(red: 31/255, green: 25/255, blue: 61/255, alpha: 1.0) // Dark purple fallback instead of pure black
+        
         // Setup scroll view with delegate for animation (PRESERVE existing scroll system)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.delegate = self
@@ -205,13 +208,17 @@ class DailyFitViewController: UIViewController {
         // CRITICAL: Add to main view (not contentView) to ensure it's behind everything
         view.insertSubview(backgroundBlurImageView, at: 0) // Insert at bottom of view hierarchy
         
-        // Fixed constraints - background should fill screen and NOT move with scroll
+        // EXTENDED constraints - background extends beyond screen bounds to cover scroll area
+        let extraHeight: CGFloat = 200 // Extra height above and below to cover scroll transforms
+        
         NSLayoutConstraint.activate([
-            backgroundBlurImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundBlurImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: -extraHeight),
             backgroundBlurImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundBlurImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundBlurImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            backgroundBlurImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: extraHeight)
         ])
+        
+        print("Background blur image view setup with extended bounds to cover scroll area")
     }
     
     // MARK: - Final Card Reveal UI Setup
@@ -327,35 +334,32 @@ class DailyFitViewController: UIViewController {
     }
     
     private func showRevealedStateUnified(animated: Bool) {
-        // NO POSITION CHANGES - card stays static, only changes face
         
         let cardDuration: TimeInterval = 0.4
         let backgroundDuration: TimeInterval = 0.8
         
         if animated {
-            // Fade between card back and card front simultaneously
+            // Fade between card back and card front simultaneously + show content immediately
             UIView.animate(withDuration: cardDuration, animations: {
                 // Fade out unrevealed elements
-                self.cardBackImageView.alpha = 0.0  // ADDED: Fade out card back
+                self.cardBackImageView.alpha = 0.0
                 self.tapToRevealLabel.alpha = 0.0
                 
                 // Fade in revealed elements
                 self.tarotCardImageView.alpha = 1.0
                 self.cardTitleLabel.alpha = 1.0
+                
+                // IMMEDIATE: Show content text right with card flip
+                let labels = [self.keywordsLabel, self.styleBriefLabel, self.textilesLabel, self.colorsLabel,
+                              self.patternsLabel, self.shapeLabel, self.accessoriesLabel, self.layeringLabel,
+                              self.vibeBreakdownLabel, self.debugButton]
+                for label in labels {
+                    label.alpha = 1.0
+                }
             }) { _ in
                 // Clean up unrevealed elements after fade completes
                 self.cardBackImageView.isHidden = true
                 self.tapToRevealLabel.isHidden = true
-                
-                // Phase 2: Content and background reveal
-                UIView.animate(withDuration: backgroundDuration, animations: {
-                    let labels = [self.keywordsLabel, self.styleBriefLabel, self.textilesLabel, self.colorsLabel,
-                                  self.patternsLabel, self.shapeLabel, self.accessoriesLabel, self.layeringLabel,
-                                  self.vibeBreakdownLabel, self.debugButton]
-                    for label in labels {
-                        label.alpha = 1.0
-                    }
-                })
                 
                 // Enable scrolling
                 self.scrollView.isScrollEnabled = true
@@ -367,7 +371,7 @@ class DailyFitViewController: UIViewController {
                 self.scrollIndicatorView.alpha = 1.0
                 self.scrollIndicatorView.isHidden = false
                 
-                // Phase 2: Background fade
+                // Background fade
                 UIView.animate(withDuration: backgroundDuration, animations: {
                     self.backgroundBlurImageView.alpha = 1.0
                 }) { _ in
@@ -376,7 +380,7 @@ class DailyFitViewController: UIViewController {
                 }
             }
         } else {
-            // Immediate changes for non-animated transition - NO position changes
+            // Immediate changes for non-animated transition
             cardBackImageView.alpha = 0.0
             cardBackImageView.isHidden = true
             tapToRevealLabel.alpha = 0.0
@@ -387,6 +391,14 @@ class DailyFitViewController: UIViewController {
             backgroundBlurImageView.alpha = 0.8
             scrollIndicatorView.alpha = 1.0
             scrollIndicatorView.isHidden = false
+            
+            // IMMEDIATE: Show all content text
+            let labels = [keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel,
+                          patternsLabel, shapeLabel, accessoriesLabel, layeringLabel,
+                          vibeBreakdownLabel, debugButton]
+            for label in labels {
+                label.alpha = 1.0
+            }
             
             scrollView.isScrollEnabled = true
             setupContentSectionBackgrounds()
@@ -418,8 +430,17 @@ class DailyFitViewController: UIViewController {
                 self.tarotCardContainerView.transform = .identity
                 self.tarotCardImageView.alpha = 1.0
                 self.cardTitleLabel.alpha = 1.0
+                
+                // CRITICAL: Ensure content text is visible when restored
+                let labels = [self.keywordsLabel, self.styleBriefLabel, self.textilesLabel, self.colorsLabel,
+                              self.patternsLabel, self.shapeLabel, self.accessoriesLabel, self.layeringLabel,
+                              self.vibeBreakdownLabel, self.debugButton]
+                for label in labels {
+                    label.alpha = 1.0
+                }
+                
                 self.view.layoutIfNeeded()
-                print("Card reveal state restored - container visible")
+                print("Card reveal state restored - container and content visible")
             }
         } else {
             setCardState(.unrevealed, animated: false)
@@ -938,8 +959,8 @@ extension DailyFitViewController: UIScrollViewDelegate {
             scrollIndicatorView.isHidden = false
         }
         
-        // Background blur movement
-        backgroundBlurImageView.transform = CGAffineTransform(translationX: 0, y: -cardTranslation * 0.5)
+        // Background blur - reduced parallax movement since we have extended bounds
+        backgroundBlurImageView.transform = CGAffineTransform(translationX: 0, y: -cardTranslation * 0.2)
     }
     
     // MARK: - Content Animation
@@ -1076,7 +1097,7 @@ extension DailyFitViewController: UIScrollViewDelegate {
         UIView.animateKeyframes(withDuration: 0.3, delay: 0, options: [.calculationModeCubic], animations: {
             // Press down slightly
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
-                self.tarotCardContainerView.transform = CGAffineTransform(scaleX: 0.98, y: 0.98)
+                self.tarotCardContainerView.transform = CGAffineTransform(scaleX: 0.9, y: 0.95)
                 self.cardBackImageView.layer.shadowOpacity = 0.2
                 self.cardBackImageView.layer.shadowRadius = maxScreenDimension * 0.3
             }
@@ -1133,8 +1154,8 @@ extension DailyFitViewController: UIScrollViewDelegate {
         
         NSLayoutConstraint.activate([
             contentBackgroundView.topAnchor.constraint(equalTo: cardTitleLabel.topAnchor, constant: -20), // Include title with padding
-            contentBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            contentBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            contentBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
+            contentBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -0),
             
             // CRITICAL FIX: Content box ends with proper spacing above tab bar (not below it)
             // Calculate so that when scrolled to max, content box bottom is 32pt above tab bar
