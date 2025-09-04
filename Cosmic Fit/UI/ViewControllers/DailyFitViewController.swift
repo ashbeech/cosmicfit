@@ -56,7 +56,7 @@ class DailyFitViewController: UIViewController {
     private var cardTapGesture: UITapGestureRecognizer?
     
     private let tarotCardContainerView = UIView()
-    //private var cardContainerTopConstraint: NSLayoutConstraint?
+    private var cardContainerBottomConstraint: NSLayoutConstraint?
     private var cardContainerCenterYConstraint: NSLayoutConstraint?
     private var cardContainerWidthConstraint: NSLayoutConstraint?
     private var cardContainerHeightConstraint: NSLayoutConstraint?
@@ -285,9 +285,7 @@ class DailyFitViewController: UIViewController {
     }
     
     private func showUnrevealedState(animated: Bool) {
-        // Position container at center for unrevealed
-        cardContainerCenterYConstraint?.isActive = true
-        //cardContainerTopConstraint?.isActive = false
+        // NO POSITION CHANGES - card stays static in same location
         
         let changes = {
             // Show unrevealed elements IN container
@@ -315,8 +313,6 @@ class DailyFitViewController: UIViewController {
             // Ensure container is visible and not transformed
             self.tarotCardContainerView.alpha = 1.0
             self.tarotCardContainerView.transform = .identity
-            
-            self.view.layoutIfNeeded()
         }
         
         if animated {
@@ -331,29 +327,35 @@ class DailyFitViewController: UIViewController {
     }
     
     private func showRevealedStateUnified(animated: Bool) {
-        // Move container to top position for revealed state
-        //cardContainerTopConstraint?.constant = -50
-        //cardContainerTopConstraint?.isActive = true
-        cardContainerCenterYConstraint?.isActive = false
+        // NO POSITION CHANGES - card stays static, only changes face
         
         let cardDuration: TimeInterval = 0.4
         let backgroundDuration: TimeInterval = 0.8
         
         if animated {
-            
-            // Then fade between card states IN PLACE (no movement)
+            // Fade between card back and card front simultaneously
             UIView.animate(withDuration: cardDuration, animations: {
                 // Fade out unrevealed elements
-                //self.cardBackImageView.alpha = 0.0
+                self.cardBackImageView.alpha = 0.0  // ADDED: Fade out card back
                 self.tapToRevealLabel.alpha = 0.0
                 
                 // Fade in revealed elements
                 self.tarotCardImageView.alpha = 1.0
                 self.cardTitleLabel.alpha = 1.0
             }) { _ in
-                // Clean up unrevealed elements
+                // Clean up unrevealed elements after fade completes
                 self.cardBackImageView.isHidden = true
                 self.tapToRevealLabel.isHidden = true
+                
+                // Phase 2: Content and background reveal
+                UIView.animate(withDuration: backgroundDuration, animations: {
+                    let labels = [self.keywordsLabel, self.styleBriefLabel, self.textilesLabel, self.colorsLabel,
+                                  self.patternsLabel, self.shapeLabel, self.accessoriesLabel, self.layeringLabel,
+                                  self.vibeBreakdownLabel, self.debugButton]
+                    for label in labels {
+                        label.alpha = 1.0
+                    }
+                })
                 
                 // Enable scrolling
                 self.scrollView.isScrollEnabled = true
@@ -374,7 +376,7 @@ class DailyFitViewController: UIViewController {
                 }
             }
         } else {
-            // Immediate changes for non-animated transition
+            // Immediate changes for non-animated transition - NO position changes
             cardBackImageView.alpha = 0.0
             cardBackImageView.isHidden = true
             tapToRevealLabel.alpha = 0.0
@@ -432,16 +434,25 @@ class DailyFitViewController: UIViewController {
         tarotCardContainerView.backgroundColor = .clear
         contentView.addSubview(tarotCardContainerView)
         
-        // Calculate card dimensions (matching content box width)
+        // Calculate card dimensions (keeping original full width)
         let cardAspectRatio: CGFloat = 0.62
-        let cardWidth = view.bounds.width
+        let cardWidth = view.bounds.width  // Keep original full width
         let cardHeight = cardWidth / cardAspectRatio
 
         // Container is exactly card size
         cardContainerWidthConstraint = tarotCardContainerView.widthAnchor.constraint(equalToConstant: cardWidth)
         cardContainerHeightConstraint = tarotCardContainerView.heightAnchor.constraint(equalToConstant: cardHeight)
         
-        // Start with center position for unrevealed state
+        // STATIC position above content box (replacing center positioning)
+        let screenHeight = view.bounds.height
+        let tabBarHeight: CGFloat = 83
+        let contentStartFromBottom = screenHeight - tabBarHeight - 15
+        let contentBoxTop = contentStartFromBottom - 20 // Account for title label padding
+        let marginAboveContent: CGFloat = 24 // Space between card and content box
+        
+        cardContainerCenterYConstraint = tarotCardContainerView.bottomAnchor.constraint(equalTo: contentView.topAnchor, constant: contentBoxTop - marginAboveContent)
+        
+        // Activate static positioning
         cardContainerCenterYConstraint?.isActive = true
         cardContainerWidthConstraint?.isActive = true
         cardContainerHeightConstraint?.isActive = true
@@ -465,6 +476,45 @@ class DailyFitViewController: UIViewController {
             tarotCardImageView.bottomAnchor.constraint(equalTo: tarotCardContainerView.bottomAnchor)
         ])
         
+        // Card back (unrevealed state)
+        cardBackImageView.translatesAutoresizingMaskIntoConstraints = false
+        cardBackImageView.contentMode = .scaleAspectFit
+        cardBackImageView.clipsToBounds = true
+        cardBackImageView.backgroundColor = UIColor(red: 31/255, green: 25/255, blue: 61/255, alpha: 1.0)
+        cardBackImageView.layer.cornerRadius = 24
+        cardBackImageView.alpha = 1.0
+        cardBackImageView.isUserInteractionEnabled = true
+        tarotCardContainerView.addSubview(cardBackImageView)
+        
+        // Tap to reveal label
+        tapToRevealLabel.translatesAutoresizingMaskIntoConstraints = false
+        tapToRevealLabel.text = "✨ Tap to reveal your card ✨"
+        tapToRevealLabel.textAlignment = .center
+        tapToRevealLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        tapToRevealLabel.textColor = .white
+        tapToRevealLabel.numberOfLines = 2
+        tapToRevealLabel.alpha = 1.0
+        cardBackImageView.addSubview(tapToRevealLabel)
+        
+        // Add tap gesture
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cardTapped))
+        cardBackImageView.addGestureRecognizer(tapGesture)
+        
+        // CRITICAL: Card back EXACTLY overlays revealed card (1:1 same size and position)
+        NSLayoutConstraint.activate([
+            // Card back fills entire container, same as revealed card
+            cardBackImageView.topAnchor.constraint(equalTo: tarotCardContainerView.topAnchor),
+            cardBackImageView.leadingAnchor.constraint(equalTo: tarotCardContainerView.leadingAnchor),
+            cardBackImageView.trailingAnchor.constraint(equalTo: tarotCardContainerView.trailingAnchor),
+            cardBackImageView.bottomAnchor.constraint(equalTo: tarotCardContainerView.bottomAnchor),
+            
+            // Tap label centered on card back
+            tapToRevealLabel.centerXAnchor.constraint(equalTo: cardBackImageView.centerXAnchor),
+            tapToRevealLabel.centerYAnchor.constraint(equalTo: cardBackImageView.centerYAnchor),
+            tapToRevealLabel.leadingAnchor.constraint(greaterThanOrEqualTo: cardBackImageView.leadingAnchor, constant: 20),
+            tapToRevealLabel.trailingAnchor.constraint(lessThanOrEqualTo: cardBackImageView.trailingAnchor, constant: -20),
+            tapToRevealLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 44)
+        ])
     }
     
     private func setupScrollIndicator() {
@@ -703,7 +753,7 @@ class DailyFitViewController: UIViewController {
         
         let blurFilter = CIFilter(name: "CIGaussianBlur")
         blurFilter?.setValue(ciImage, forKey: kCIInputImageKey)
-        blurFilter?.setValue(25.0, forKey: kCIInputRadiusKey) // Strong blur for background
+        blurFilter?.setValue(5.0, forKey: kCIInputRadiusKey) // Strong blur for background
         
         guard let outputImage = blurFilter?.outputImage else {
             print("Failed to create blurred output image")
@@ -888,8 +938,7 @@ extension DailyFitViewController: UIScrollViewDelegate {
             scrollIndicatorView.isHidden = false
         }
         
-        // Background blur
-        
+        // Background blur movement
         backgroundBlurImageView.transform = CGAffineTransform(translationX: 0, y: -cardTranslation * 0.5)
     }
     
