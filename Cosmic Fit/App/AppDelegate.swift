@@ -14,6 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var lastActiveDate: Date?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+                
         // Create window
         window = UIWindow(frame: UIScreen.main.bounds)
         
@@ -62,6 +63,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             setupFirstTimeUser(launchScreenVC: launchScreenVC)
             print("📱 First time user detected - showing onboarding")
         }
+        
+        setupGlobalAppearance()
         
         // Set the launch screen as the root view controller
         window?.rootViewController = launchScreenVC
@@ -164,6 +167,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Optionally clean up old entries
         DailyVibeStorage.shared.cleanupOldEntries(daysToKeep: 30)
+    }
+    
+    private func setupGlobalAppearance() {
+        // Configure global appearance proxy settings
+        if #available(iOS 13.0, *) {
+            // Set window background
+            if let window = window {
+                window.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+            }
+        }
+        
+        // Configure global UI appearance
+        UINavigationBar.appearance().backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        UINavigationBar.appearance().tintColor = CosmicFitTheme.Colors.cosmicOrange
+        UITabBar.appearance().backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        UITabBar.appearance().tintColor = CosmicFitTheme.Colors.cosmicOrange
+        UITabBar.appearance().unselectedItemTintColor = CosmicFitTheme.Colors.cosmicBlue
     }
 }
 

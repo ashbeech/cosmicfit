@@ -30,6 +30,9 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Apply Cosmic Fit theme
+        applyCosmicFitTheme()
+        
         // Request early device location
         //LocationManager.shared.startLocationUpdates()
         
@@ -38,36 +41,46 @@ class MainViewController: UIViewController {
     
     // MARK: - UI Setup
     private func setupUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         
         // Hide navigation bar completely
         navigationController?.navigationBar.isHidden = true
         
-        // Set up scroll view
+        // Set up scroll view to fill entire screen
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Apply theme to scroll view
+        CosmicFitTheme.styleScrollView(scrollView)
+        
+        // Style content view with cosmic grey background
+        CosmicFitTheme.styleContentBackground(contentView)
         
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
+        // Updated constraints to fill entire screen
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-            // Note: We do NOT constrain contentView height to scrollView height to allow scrolling
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            // Ensure content view height is at least the screen height
+            contentView.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor)
         ])
         
         // Birth Date Picker
         let dateLabel = UILabel()
         dateLabel.text = "Birth Date:"
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        // Apply theme to title label
+        CosmicFitTheme.styleTitleLabel(dateLabel, fontSize: CosmicFitTheme.Typography.FontSizes.headline, weight: .semibold)
         contentView.addSubview(dateLabel)
         
         birthDatePicker.datePickerMode = .date
@@ -75,12 +88,16 @@ class MainViewController: UIViewController {
             birthDatePicker.preferredDatePickerStyle = .wheels
         }
         birthDatePicker.translatesAutoresizingMaskIntoConstraints = false
+        // Apply theme to date picker
+        CosmicFitTheme.styleDatePicker(birthDatePicker)
         contentView.addSubview(birthDatePicker)
         
         // Birth Time Picker
         let timeLabel = UILabel()
         timeLabel.text = "Birth Time:"
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        // Apply theme to title label
+        CosmicFitTheme.styleTitleLabel(timeLabel, fontSize: CosmicFitTheme.Typography.FontSizes.headline, weight: .semibold)
         contentView.addSubview(timeLabel)
         
         birthTimePicker.datePickerMode = .time
@@ -88,52 +105,58 @@ class MainViewController: UIViewController {
             birthTimePicker.preferredDatePickerStyle = .wheels
         }
         birthTimePicker.translatesAutoresizingMaskIntoConstraints = false
+        // Apply theme to date picker
+        CosmicFitTheme.styleDatePicker(birthTimePicker)
         contentView.addSubview(birthTimePicker)
         
         // Location Text Field
         let locationLabel = UILabel()
         locationLabel.text = "Birth Location:"
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
+        // Apply theme to title label
+        CosmicFitTheme.styleTitleLabel(locationLabel, fontSize: CosmicFitTheme.Typography.FontSizes.headline, weight: .semibold)
         contentView.addSubview(locationLabel)
         
         locationTextField.placeholder = "City, Country"
-        locationTextField.borderStyle = .roundedRect
         locationTextField.returnKeyType = .search
         locationTextField.delegate = self
         locationTextField.translatesAutoresizingMaskIntoConstraints = false
+        // Apply theme to text field
+        CosmicFitTheme.styleTextField(locationTextField)
         contentView.addSubview(locationTextField)
         
         // Calculate Button
         calculateButton.setTitle("Calculate Chart", for: .normal)
-        calculateButton.backgroundColor = .systemBlue
-        calculateButton.setTitleColor(.white, for: .normal)
-        calculateButton.layer.cornerRadius = 8
         calculateButton.addTarget(self, action: #selector(calculateButtonTapped), for: .touchUpInside)
         calculateButton.translatesAutoresizingMaskIntoConstraints = false
+        // Apply theme to button (primary style)
+        CosmicFitTheme.styleButton(calculateButton, style: .primary)
         contentView.addSubview(calculateButton)
         
         // Activity Indicator
         activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = CosmicFitTheme.Colors.cosmicOrange
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(activityIndicator)
         
-        // Setup Constraints
+        // Setup Constraints - adjusted for full screen usage
         NSLayoutConstraint.activate([
-            dateLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 64), // Extra padding for status bar area
+            // Start from status bar area with proper spacing
+            dateLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 40),
             dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
             birthDatePicker.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 8),
             birthDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             birthDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             
-            timeLabel.topAnchor.constraint(equalTo: birthDatePicker.bottomAnchor, constant: 20),
+            timeLabel.topAnchor.constraint(equalTo: birthDatePicker.bottomAnchor, constant: 30),
             timeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
             birthTimePicker.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 8),
             birthTimePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             birthTimePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             
-            locationLabel.topAnchor.constraint(equalTo: birthTimePicker.bottomAnchor, constant: 20),
+            locationLabel.topAnchor.constraint(equalTo: birthTimePicker.bottomAnchor, constant: 30),
             locationLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
             locationTextField.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 8),
@@ -141,12 +164,12 @@ class MainViewController: UIViewController {
             locationTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             locationTextField.heightAnchor.constraint(equalToConstant: 44),
             
-            calculateButton.topAnchor.constraint(equalTo: locationTextField.bottomAnchor, constant: 40),
+            calculateButton.topAnchor.constraint(equalTo: locationTextField.bottomAnchor, constant: 50),
             calculateButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             calculateButton.widthAnchor.constraint(equalToConstant: 250),
             calculateButton.heightAnchor.constraint(equalToConstant: 50),
-            // This bottom constraint is critical to ensure content expands beyond screen size
-            calculateButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
+            // Bottom constraint with sufficient padding from bottom
+            calculateButton.bottomAnchor.constraint(lessThanOrEqualTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: -40),
             
             activityIndicator.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
@@ -287,12 +310,12 @@ class MainViewController: UIViewController {
         let offsetSign = tzOffset >= 0 ? "+" : ""
         
         print("🔍 BIRTH DETAILS LOG 🔍")
-        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         print("📅 Date & Time: \(formattedDate)")
         print("📍 Location: \(locationName)")
-        print("🌐 Coordinates: Lat \(String(format: "%.6f", latitude)), Long \(String(format: "%.6f", longitude))")
+        print("🌍 Coordinates: Lat \(String(format: "%.6f", latitude)), Long \(String(format: "%.6f", longitude))")
         print("⏰ Time Zone: \(tzName) (GMT\(offsetSign)\(tzOffset))")
-        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     }
     
     private func calculateChart() {
@@ -374,6 +397,20 @@ class MainViewController: UIViewController {
     
     private func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        // Apply theme to alert if possible
+        if let titleString = alert.title {
+            alert.setValue(CosmicFitTheme.createAttributedText(title: titleString, content: "", titleSize: CosmicFitTheme.Typography.FontSizes.headline), forKey: "attributedTitle")
+        }
+        
+        if let messageString = alert.message {
+            let messageAttributes: [NSAttributedString.Key: Any] = [
+                .font: CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.body),
+                .foregroundColor: CosmicFitTheme.Colors.cosmicBlue
+            ]
+            alert.setValue(NSAttributedString(string: messageString, attributes: messageAttributes), forKey: "attributedMessage")
+        }
+        
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }

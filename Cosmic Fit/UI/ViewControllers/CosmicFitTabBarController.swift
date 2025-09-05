@@ -40,11 +40,29 @@ class CosmicFitTabBarController: UITabBarController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Apply Cosmic Fit theme to the main view controller
+        applyCosmicFitTheme()
+        
         setupTabBar()
         startWeatherFetch()
         setupTabMemoryPersistence()
-        setupSwipeGestures() // ADD THIS LINE
-        setupProfileUpdateNotifications() // ADD THIS LINE
+        setupSwipeGestures()
+        setupProfileUpdateNotifications()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // Apply tab selection indicator after layout is complete
+        updateTabSelectionIndicator()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        // Update tab selection indicator when layout changes
+        updateTabSelectionIndicator()
     }
     
     deinit {
@@ -188,10 +206,18 @@ class CosmicFitTabBarController: UITabBarController {
     
     // MARK: - Private Methods
     private func setupTabBar() {
-        // Configure tab bar appearance
-        tabBar.backgroundColor = .systemBackground
-        tabBar.tintColor = .systemBlue
-        tabBar.unselectedItemTintColor = .systemGray
+        // Apply Cosmic Fit theme to tab bar (uses dark cosmic grey for visual separation)
+        CosmicFitTheme.styleTabBar(tabBar)
+        
+        // Additional tab bar configuration
+        tabBar.isTranslucent = false
+        
+        print("✅ Tab bar styled with Cosmic Fit theme")
+    }
+    
+    private func updateTabSelectionIndicator() {
+        // Apply custom selection indicator from theme
+        CosmicFitTheme.applyTabSelectionIndicator(tabBar, selectedIndex: selectedIndex)
     }
     
     private func calculateCharts() {
@@ -407,6 +433,10 @@ class CosmicFitTabBarController: UITabBarController {
         }
         
         let blueprintNavController = UINavigationController(rootViewController: blueprintVC)
+        
+        // Apply dark cosmic grey theme to navigation bar for visual separation from content
+        CosmicFitTheme.styleNavigationBar(blueprintNavController.navigationBar)
+        
         blueprintNavController.tabBarItem = UITabBarItem(
             title: "Blueprint",
             image: UIImage(systemName: "star.circle"),
@@ -424,6 +454,10 @@ class CosmicFitTabBarController: UITabBarController {
         }
         
         let dailyFitNavController = UINavigationController(rootViewController: dailyFitVC)
+        
+        // Apply dark cosmic grey theme to navigation bar for visual separation from content
+        CosmicFitTheme.styleNavigationBar(dailyFitNavController.navigationBar)
+        
         dailyFitNavController.tabBarItem = UITabBarItem(
             title: "Daily Fit",
             image: UIImage(systemName: "calendar.circle"),
@@ -431,9 +465,13 @@ class CosmicFitTabBarController: UITabBarController {
         )
         viewControllers.append(dailyFitNavController)
         
-        // Profile Tab (Index 2) - NEW
+        // Profile Tab (Index 2)
         let profileVC = ProfileViewController()
         let profileNavController = UINavigationController(rootViewController: profileVC)
+        
+        // Apply dark cosmic grey theme to navigation bar for visual separation from content
+        CosmicFitTheme.styleNavigationBar(profileNavController.navigationBar)
+        
         profileNavController.tabBarItem = UITabBarItem(
             title: "Profile",
             image: UIImage(systemName: "person.circle"),
@@ -448,6 +486,13 @@ class CosmicFitTabBarController: UITabBarController {
         if selectedIndex == 0 && viewControllers.count > 1 {
             selectedIndex = 1 // Daily Fit as default
         }
+        
+        // Update tab selection indicator after setting view controllers
+        DispatchQueue.main.async { [weak self] in
+            self?.updateTabSelectionIndicator()
+        }
+        
+        print("✅ View controllers setup with dark cosmic grey navigation bars")
     }
     
     private func useDefaultWeatherLocation() {
@@ -494,6 +539,9 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
     }
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        // Update tab selection indicator when tab changes
+        updateTabSelectionIndicator()
+        
         // Log tab selection for debugging
         var tabName = "Unknown"
         if let navController = viewController as? UINavigationController {
@@ -525,8 +573,6 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
     
     // MARK: - Smooth Slide Transitions
     
-    // In CosmicFitTabBarController.swift, update performSmoothSlideTransition:
-
     private func performSmoothSlideTransition(from fromIndex: Int, to toIndex: Int, targetViewController: UIViewController) {
         guard let viewControllers = viewControllers,
               fromIndex < viewControllers.count,
@@ -546,6 +592,10 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
         
         let transitionContainer = UIView(frame: contentFrame)
         transitionContainer.clipsToBounds = true
+        
+        // Apply theme background to transition container
+        transitionContainer.backgroundColor = UIColor.systemBackground
+        
         view.insertSubview(transitionContainer, belowSubview: tabBar)
         self.transitionContainer = transitionContainer
         
@@ -601,8 +651,14 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
         // Update selected index properly
         selectedIndex = viewControllers?.firstIndex(of: targetViewController) ?? selectedIndex
         
-        // REMOVED: No longer calling animateContentFadeIn() for tab transitions
-        // The content should maintain its current state when switching tabs
+        // Update tab selection indicator after transition
+        updateTabSelectionIndicator()
+        
+        // Add content fade-in animation for Daily Fit tab
+        if let navController = targetViewController as? UINavigationController,
+           let dailyFitVC = navController.topViewController as? DailyFitViewController {
+            dailyFitVC.animateContentFadeIn()
+        }
         
         isTransitioning = false
         

@@ -38,15 +38,17 @@ class ProfileViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Apply Cosmic Fit theme
+        applyCosmicFitTheme()
+        
         setupUI()
         loadCurrentUserData()
     }
     
     // MARK: - UI Setup
-    // Complete fixed ProfileViewController.swift setupUI() method:
-
     private func setupUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor.systemBackground
         
         // Hide navigation bar
         navigationController?.navigationBar.isHidden = true
@@ -54,10 +56,18 @@ class ProfileViewController: UIViewController {
         // Setup scroll view
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.contentInsetAdjustmentBehavior = .never  // KEY FIX: Prevent automatic adjustments
+        
+        // Apply theme to scroll view
+        CosmicFitTheme.styleScrollView(scrollView)
+        
         view.addSubview(scrollView)
         
         // Setup content view
         contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Apply theme content background
+        CosmicFitTheme.styleContentBackground(contentView)
+        
         scrollView.addSubview(contentView)
         
         NSLayoutConstraint.activate([
@@ -81,24 +91,33 @@ class ProfileViewController: UIViewController {
     private func setupFormElements() {
         // Title - with proper status bar compensation
         titleLabel.text = "Profile"
-        titleLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        titleLabel.textAlignment = .center
-        titleLabel.textColor = .label
         titleLabel.numberOfLines = 0
+        titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Apply theme to title
+        CosmicFitTheme.styleTitleLabel(titleLabel, fontSize: CosmicFitTheme.Typography.FontSizes.largeTitle, weight: .bold)
+        
         contentView.addSubview(titleLabel)
         
         // Subtitle
         subtitleLabel.text = "Edit your birth information"
-        subtitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        subtitleLabel.textColor = .secondaryLabel
         subtitleLabel.textAlignment = .center
         subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Apply theme to subtitle
+        CosmicFitTheme.styleBodyLabel(subtitleLabel, fontSize: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
+        subtitleLabel.textColor = CosmicFitTheme.Colors.cosmicBlue.withAlphaComponent(0.7) // Slightly muted
+        
         contentView.addSubview(subtitleLabel)
         
         // Birth Date Picker
         dateLabel.text = "Birth Date:"
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Apply theme to form label
+        CosmicFitTheme.styleBodyLabel(dateLabel, fontSize: CosmicFitTheme.Typography.FontSizes.headline, weight: .semibold)
+        
         contentView.addSubview(dateLabel)
         
         birthDatePicker.datePickerMode = .date
@@ -106,11 +125,19 @@ class ProfileViewController: UIViewController {
             birthDatePicker.preferredDatePickerStyle = .wheels
         }
         birthDatePicker.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Apply theme to date picker
+        CosmicFitTheme.styleDatePicker(birthDatePicker)
+        
         contentView.addSubview(birthDatePicker)
         
         // Birth Time Picker
         timeLabel.text = "Birth Time:"
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Apply theme to form label
+        CosmicFitTheme.styleBodyLabel(timeLabel, fontSize: CosmicFitTheme.Typography.FontSizes.headline, weight: .semibold)
+        
         contentView.addSubview(timeLabel)
         
         birthTimePicker.datePickerMode = .time
@@ -118,40 +145,58 @@ class ProfileViewController: UIViewController {
             birthTimePicker.preferredDatePickerStyle = .wheels
         }
         birthTimePicker.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Apply theme to date picker
+        CosmicFitTheme.styleDatePicker(birthTimePicker)
+        
         contentView.addSubview(birthTimePicker)
         
         // Location Text Field
         locationLabel.text = "Birth Location:"
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Apply theme to form label
+        CosmicFitTheme.styleBodyLabel(locationLabel, fontSize: CosmicFitTheme.Typography.FontSizes.headline, weight: .semibold)
+        
         contentView.addSubview(locationLabel)
         
         locationTextField.placeholder = "City, Country"
-        locationTextField.borderStyle = .roundedRect
         locationTextField.returnKeyType = .search
         locationTextField.delegate = self
         locationTextField.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Apply theme to text field
+        CosmicFitTheme.styleTextField(locationTextField)
+        
         contentView.addSubview(locationTextField)
         
         // Update Button
         updateButton.setTitle("Update Profile", for: .normal)
-        updateButton.backgroundColor = .systemBlue
-        updateButton.setTitleColor(.white, for: .normal)
-        updateButton.layer.cornerRadius = 8
         updateButton.addTarget(self, action: #selector(updateButtonTapped), for: .touchUpInside)
         updateButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Apply theme to update button (primary style)
+        CosmicFitTheme.styleButton(updateButton, style: .primary)
+        
         contentView.addSubview(updateButton)
         
         // Delete Profile Button
         deleteProfileButton.setTitle("Delete Profile", for: .normal)
-        deleteProfileButton.backgroundColor = .systemRed
-        deleteProfileButton.setTitleColor(.white, for: .normal)
-        deleteProfileButton.layer.cornerRadius = 8
         deleteProfileButton.addTarget(self, action: #selector(deleteProfileButtonTapped), for: .touchUpInside)
         deleteProfileButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Apply theme to delete button (secondary style with red color override)
+        CosmicFitTheme.styleButton(deleteProfileButton, style: .secondary)
+        deleteProfileButton.backgroundColor = .systemRed
+        deleteProfileButton.setTitleColor(.white, for: .normal)
+        deleteProfileButton.layer.borderColor = UIColor.systemRed.cgColor
+        
         contentView.addSubview(deleteProfileButton)
         
         // Activity Indicator
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.color = CosmicFitTheme.Colors.cosmicOrange
+        activityIndicator.hidesWhenStopped = true
         view.addSubview(activityIndicator)
         
         // Set up constraints
@@ -318,6 +363,19 @@ class ProfileViewController: UIViewController {
                                     message: "This will delete all your data and require setting up your profile again.",
                                     preferredStyle: .alert)
         
+        // Apply theme to alert
+        if let titleString = alert.title {
+            alert.setValue(CosmicFitTheme.createAttributedText(title: titleString, content: "", titleSize: CosmicFitTheme.Typography.FontSizes.headline), forKey: "attributedTitle")
+        }
+        
+        if let messageString = alert.message {
+            let messageAttributes: [NSAttributedString.Key: Any] = [
+                .font: CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.body),
+                .foregroundColor: CosmicFitTheme.Colors.cosmicBlue
+            ]
+            alert.setValue(NSAttributedString(string: messageString, attributes: messageAttributes), forKey: "attributedMessage")
+        }
+        
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
             self?.deleteProfile()
         })
@@ -406,6 +464,20 @@ class ProfileViewController: UIViewController {
     // MARK: - Utility Methods
     private func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        // Apply theme to alert
+        if let titleString = alert.title {
+            alert.setValue(CosmicFitTheme.createAttributedText(title: titleString, content: "", titleSize: CosmicFitTheme.Typography.FontSizes.headline), forKey: "attributedTitle")
+        }
+        
+        if let messageString = alert.message {
+            let messageAttributes: [NSAttributedString.Key: Any] = [
+                .font: CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.body),
+                .foregroundColor: CosmicFitTheme.Colors.cosmicBlue
+            ]
+            alert.setValue(NSAttributedString(string: messageString, attributes: messageAttributes), forKey: "attributedMessage")
+        }
+        
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }

@@ -79,6 +79,10 @@ class DailyFitViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Apply Cosmic Fit theme
+        applyCosmicFitTheme()
+        
         setupUI()
         updateContent()
         
@@ -163,6 +167,10 @@ class DailyFitViewController: UIViewController {
         scrollView.delegate = self
         scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.isScrollEnabled = false // Initially disabled until card is revealed
+        
+        // Apply theme to scroll view
+        CosmicFitTheme.styleScrollView(scrollView)
+        
         view.addSubview(scrollView)
         
         // Content view
@@ -173,13 +181,10 @@ class DailyFitViewController: UIViewController {
         initialScrollViewTopConstraint = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
         initialScrollViewTopConstraint?.isActive = true
         
-        // CRITICAL FIX: Adjust scroll view bottom to account for tab bar for proper scroll end
-        let tabBarHeight: CGFloat = 83
-        
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -tabBarHeight), // Account for tab bar
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor), // Use safe area for proper tab bar handling
             
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
@@ -234,7 +239,7 @@ class DailyFitViewController: UIViewController {
         cardBackImageView.isUserInteractionEnabled = true
         
         // Glow effect for card back
-        cardBackImageView.layer.shadowColor = UIColor.blue.cgColor
+        cardBackImageView.layer.shadowColor = CosmicFitTheme.Colors.cosmicOrange.cgColor
         cardBackImageView.layer.shadowOffset = CGSize.zero
         cardBackImageView.layer.shadowRadius = 100
         cardBackImageView.layer.shadowOpacity = 0.4
@@ -245,13 +250,15 @@ class DailyFitViewController: UIViewController {
         // UNREVEALED STATE: Tap to reveal label
         tapToRevealLabel.translatesAutoresizingMaskIntoConstraints = false
         tapToRevealLabel.text = "Tap to reveal today's fit"
-        tapToRevealLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        tapToRevealLabel.textColor = .white
+        
+        // Apply theme to tap to reveal label
+        CosmicFitTheme.styleBodyLabel(tapToRevealLabel, fontSize: CosmicFitTheme.Typography.FontSizes.headline, weight: .medium)
         tapToRevealLabel.textAlignment = .center
         tapToRevealLabel.backgroundColor = UIColor.black.withAlphaComponent(0.7)
         tapToRevealLabel.layer.cornerRadius = 8
         tapToRevealLabel.clipsToBounds = true
         tapToRevealLabel.numberOfLines = 2
+        
         tarotCardContainerView.addSubview(tapToRevealLabel)
         
         // Add tap gesture to card back
@@ -485,7 +492,7 @@ class DailyFitViewController: UIViewController {
         tarotCardImageView.translatesAutoresizingMaskIntoConstraints = false
         tarotCardImageView.contentMode = .scaleAspectFit
         tarotCardImageView.clipsToBounds = true
-        tarotCardImageView.backgroundColor = .systemPurple // Placeholder
+        tarotCardImageView.backgroundColor = CosmicFitTheme.Colors.cosmicOrange // Themed placeholder
         tarotCardImageView.layer.cornerRadius = 24
         tarotCardImageView.alpha = 0.0
         tarotCardContainerView.addSubview(tarotCardImageView)
@@ -511,8 +518,11 @@ class DailyFitViewController: UIViewController {
         tapToRevealLabel.translatesAutoresizingMaskIntoConstraints = false
         tapToRevealLabel.text = "✨ Tap to reveal your card ✨"
         tapToRevealLabel.textAlignment = .center
-        tapToRevealLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        tapToRevealLabel.textColor = .white
+        
+        // Apply theme to tap to reveal label
+        CosmicFitTheme.styleBodyLabel(tapToRevealLabel, fontSize: CosmicFitTheme.Typography.FontSizes.headline, weight: .medium)
+        tapToRevealLabel.textColor = .white // Override for visibility on dark card back
+        
         tapToRevealLabel.numberOfLines = 2
         tapToRevealLabel.alpha = 1.0
         cardBackImageView.addSubview(tapToRevealLabel)
@@ -548,9 +558,12 @@ class DailyFitViewController: UIViewController {
         // Scroll arrow
         scrollArrowLabel.translatesAutoresizingMaskIntoConstraints = false
         scrollArrowLabel.text = "↑"
-        scrollArrowLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        scrollArrowLabel.textColor = .white
+        
+        // Apply theme to scroll arrow
+        CosmicFitTheme.styleBodyLabel(scrollArrowLabel, fontSize: 20, weight: .bold)
+        scrollArrowLabel.textColor = .white // Override for visibility
         scrollArrowLabel.textAlignment = .center
+        
         scrollIndicatorView.addSubview(scrollArrowLabel)
         
         NSLayoutConstraint.activate([
@@ -580,37 +593,34 @@ class DailyFitViewController: UIViewController {
     }
     
     private func setupContentLabels() {
-        // Dark text color for light content background
-        let textColor = UIColor(red: 0/255, green: 2/255, blue: 16/255, alpha: 1.0)
-        
         let labels = [keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel,
                       patternsLabel, shapeLabel, accessoriesLabel, layeringLabel,
                       vibeBreakdownLabel]
         
         for label in labels {
             label.translatesAutoresizingMaskIntoConstraints = false
-            label.font = UIFont.systemFont(ofSize: 16)
-            label.textColor = textColor // CRITICAL: Dark text on light background
+            
+            // Apply theme body label styling
+            CosmicFitTheme.styleBodyLabel(label, fontSize: CosmicFitTheme.Typography.FontSizes.body)
+            
             label.backgroundColor = .clear // No individual backgrounds
             label.numberOfLines = 0
             label.alpha = 0.0 // Initially invisible, fades in during scroll
             contentView.addSubview(label)
         }
         
-        // CRITICAL: Update card title for dark text on light background (it's now inside content box)
-        cardTitleLabel.textColor = textColor // Dark text instead of white
-        cardTitleLabel.backgroundColor = .clear // No background needed
-        
         // Debug button
         debugButton.setTitle("Debug Chart", for: .normal)
-        debugButton.setTitleColor(textColor, for: .normal) // Dark text
-        debugButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         debugButton.addTarget(self, action: #selector(debugButtonTapped), for: .touchUpInside)
         debugButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Apply theme to debug button
+        CosmicFitTheme.styleButton(debugButton, style: .secondary)
+        
         debugButton.alpha = 0.0 // Initially invisible, fades in during scroll
         contentView.addSubview(debugButton)
         
-        print("Content labels set up with dark text color for light background")
+        print("Content labels set up with Cosmic Fit theme styling")
     }
     
     // MARK: - UI Setup Constraints (setupConstraints method)
@@ -623,10 +633,12 @@ class DailyFitViewController: UIViewController {
         
         // Card title label - NOW IN CONTENT AREA, NOT IN CONTAINER
         cardTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        cardTitleLabel.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+        
+        // Apply theme to card title
+        CosmicFitTheme.styleTitleLabel(cardTitleLabel, fontSize: CosmicFitTheme.Typography.FontSizes.title1, weight: .semibold)
+        
         cardTitleLabel.textAlignment = .center
         cardTitleLabel.numberOfLines = 2
-        cardTitleLabel.textColor = UIColor(red: 0/255, green: 2/255, blue: 16/255, alpha: 1.0)
         cardTitleLabel.alpha = 0.0
         contentView.addSubview(cardTitleLabel) // Add to contentView as content header
         
@@ -691,36 +703,21 @@ class DailyFitViewController: UIViewController {
         // Set card title (now in content area as header)
         let cardName = content.tarotCard?.displayName ?? "Daily Energy"
         cardTitleLabel.text = cardName
-        cardTitleLabel.textColor = UIColor(red: 0/255, green: 2/255, blue: 16/255, alpha: 1.0)
         
-        // Update content labels
-        let darkTextColor = UIColor(red: 0/255, green: 2/255, blue: 16/255, alpha: 1.0)
-        
+        // Update content labels using theme methods
         let keywordsText = content.tarotKeywords.isEmpty ? "Intuitive guidance" : content.tarotKeywords
-        keywordsLabel.attributedText = createStyledText(title: "Keywords", content: keywordsText)
+        keywordsLabel.attributedText = createThemedStyledText(title: "Keywords", content: keywordsText)
         
-        styleBriefLabel.attributedText = createStyledText(title: "Style Brief", content: content.styleBrief)
-        textilesLabel.attributedText = createStyledText(title: "Textiles", content: content.textiles)
-        colorsLabel.attributedText = createStyledText(title: "Colors", content: content.colors)
-        patternsLabel.attributedText = createStyledText(title: "Patterns", content: content.patterns)
-        shapeLabel.attributedText = createStyledText(title: "Shape", content: content.shape)
-        accessoriesLabel.attributedText = createStyledText(title: "Accessories", content: content.accessories)
-        layeringLabel.attributedText = createStyledText(title: "Layering", content: content.layering)
-        vibeBreakdownLabel.attributedText = createVibeBreakdownText(vibeBreakdown: content.vibeBreakdown)
+        styleBriefLabel.attributedText = createThemedStyledText(title: "Style Brief", content: content.styleBrief)
+        textilesLabel.attributedText = createThemedStyledText(title: "Textiles", content: content.textiles)
+        colorsLabel.attributedText = createThemedStyledText(title: "Colors", content: content.colors)
+        patternsLabel.attributedText = createThemedStyledText(title: "Patterns", content: content.patterns)
+        shapeLabel.attributedText = createThemedStyledText(title: "Shape", content: content.shape)
+        accessoriesLabel.attributedText = createThemedStyledText(title: "Accessories", content: content.accessories)
+        layeringLabel.attributedText = createThemedStyledText(title: "Layering", content: content.layering)
+        vibeBreakdownLabel.attributedText = createThemedVibeBreakdownText(vibeBreakdown: content.vibeBreakdown)
         
-        // Ensure all text is dark color
-        let allLabels = [keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel,
-                         patternsLabel, shapeLabel, accessoriesLabel, layeringLabel,
-                         vibeBreakdownLabel]
-        
-        for label in allLabels {
-            label.textColor = darkTextColor
-            label.backgroundColor = .clear
-        }
-        
-        debugButton.setTitleColor(darkTextColor, for: .normal)
-        
-        print("Content updated - card title is content header")
+        print("Content updated with theme styling - card title is content header")
     }
     
     private func loadTarotCardImage(for tarotCard: TarotCard?) {
@@ -802,23 +799,23 @@ class DailyFitViewController: UIViewController {
     }
     
     private func setupFallbackCardDisplay(for card: TarotCard) {
-        // Color-coded fallback based on card type
+        // Color-coded fallback based on card type using theme colors
         let color: UIColor
         switch card.arcana {
         case .major:
-            color = .systemPurple
+            color = CosmicFitTheme.Colors.cosmicOrange
         case .minor:
             switch card.suit {
             case .cups:
                 color = .systemBlue
             case .wands:
-                color = .systemRed
+                color = CosmicFitTheme.Colors.cosmicOrange
             case .swords:
-                color = .systemGray
+                color = CosmicFitTheme.Colors.cosmicBlue
             case .pentacles:
                 color = .systemGreen
             case .none:
-                color = .systemPurple
+                color = CosmicFitTheme.Colors.cosmicOrange
             }
         }
         
@@ -835,8 +832,11 @@ class DailyFitViewController: UIViewController {
         
         let label = UILabel()
         label.text = card.displayName
-        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        label.textColor = .white
+        
+        // Apply theme to overlay label
+        CosmicFitTheme.styleTitleLabel(label, fontSize: CosmicFitTheme.Typography.FontSizes.title1, weight: .bold)
+        label.textColor = .white // Override for visibility on colored background
+        
         label.textAlignment = .center
         label.numberOfLines = 0
         label.backgroundColor = UIColor.black.withAlphaComponent(0.3)
@@ -851,58 +851,31 @@ class DailyFitViewController: UIViewController {
         ])
     }
     
-    // MARK: - Text Styling
+    // MARK: - Themed Text Styling
     
-    private func createStyledText(title: String, content: String) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString()
-        
-        // CRITICAL: Dark text color for light content background - EXACT specification
-        let textColor = UIColor(red: 0/255, green: 2/255, blue: 16/255, alpha: 1.0)
-        
-        // Title - dark and bold
-        let titleAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 18, weight: .semibold),
-            .foregroundColor: textColor // Dark text on light background
-        ]
-        attributedString.append(NSAttributedString(string: "\(title)\n", attributes: titleAttributes))
-        
-        // Content - dark and readable
-        let contentAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 16),
-            .foregroundColor: textColor // Dark text on light background
-        ]
-        attributedString.append(NSAttributedString(string: content, attributes: contentAttributes))
-        
-        return attributedString
+    private func createThemedStyledText(title: String, content: String) -> NSAttributedString {
+        // Use the theme's createAttributedText method for consistent styling
+        return CosmicFitTheme.createAttributedText(
+            title: title,
+            content: content,
+            titleSize: CosmicFitTheme.Typography.FontSizes.headline,
+            contentSize: CosmicFitTheme.Typography.FontSizes.body
+        )
     }
     
-    private func createVibeBreakdownText(vibeBreakdown: VibeBreakdown) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString()
-        
-        // CRITICAL: Dark text color for light content background
-        let textColor = UIColor(red: 0/255, green: 2/255, blue: 16/255, alpha: 1.0)
-        
-        // Title
-        let titleAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 18, weight: .semibold),
-            .foregroundColor: textColor
-        ]
-        attributedString.append(NSAttributedString(string: "Vibe Breakdown\n", attributes: titleAttributes))
-        
-        // Content
-        let contentAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 16),
-            .foregroundColor: textColor
-        ]
-        
+    private func createThemedVibeBreakdownText(vibeBreakdown: VibeBreakdown) -> NSAttributedString {
         let breakdown = """
         Classic: \(vibeBreakdown.classic) • Playful: \(vibeBreakdown.playful) • Romantic: \(vibeBreakdown.romantic)
         Utility: \(vibeBreakdown.utility) • Drama: \(vibeBreakdown.drama) • Edge: \(vibeBreakdown.edge)
         """
         
-        attributedString.append(NSAttributedString(string: breakdown, attributes: contentAttributes))
-        
-        return attributedString
+        // Use the theme's createAttributedText method for consistent styling
+        return CosmicFitTheme.createAttributedText(
+            title: "Vibe Breakdown",
+            content: breakdown,
+            titleSize: CosmicFitTheme.Typography.FontSizes.headline,
+            contentSize: CosmicFitTheme.Typography.FontSizes.body
+        )
     }
     
     // MARK: - Actions
@@ -1003,35 +976,6 @@ extension DailyFitViewController: UIScrollViewDelegate {
         })
     }
     
-    /*
-     private func restoreContentVisibilityState() {
-     // Restore content visibility based on current scroll position without animation
-     let currentScrollOffset = scrollView.contentOffset.y
-     
-     // Calculate what the alpha should be based on scroll position
-     let contentFadeStart: CGFloat = 100
-     let contentFadeEnd: CGFloat = 250
-     let contentProgress = min(max((currentScrollOffset - contentFadeStart) / (contentFadeEnd - contentFadeStart), 0), 1)
-     
-     // Apply the correct alpha values immediately (no animation)
-     let labels = [keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel,
-     patternsLabel, shapeLabel, accessoriesLabel, layeringLabel,
-     vibeBreakdownLabel, debugButton]
-     
-     for label in labels {
-     label.alpha = contentProgress
-     }
-     
-     // Restore card title alpha based on scroll
-     let fadeStart: CGFloat = 200
-     let fadeEnd: CGFloat = 400
-     let fadeProgress = min(max((currentScrollOffset - fadeStart) / (fadeEnd - fadeStart), 0), 1)
-     cardTitleLabel.alpha = 1.0 - fadeProgress
-     
-     print("Content visibility restored for scroll offset: \(currentScrollOffset), content alpha: \(contentProgress)")
-     }
-     */
-    
     // MARK: - Card Reveal State Management (ADD these new methods)
     
     private func showCardBackState() {
@@ -1093,17 +1037,17 @@ extension DailyFitViewController: UIScrollViewDelegate {
         // Calculate screen dimensions for glow effect
         let maxScreenDimension = max(view.bounds.width, view.bounds.height)
         
-        // Tactile feedback animation
-        UIView.animateKeyframes(withDuration: 0.4, delay: 0, options: [.calculationModeCubic], animations: {
+        // Tactile feedback animation with themed glow color
+        UIView.animateKeyframes(withDuration: 0.33, delay: 0, options: [.calculationModeCubic], animations: {
             // Press down slightly
-            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.35) {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.3) {
                 self.tarotCardContainerView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
                 self.cardBackImageView.layer.shadowOpacity = 0.2
                 self.cardBackImageView.layer.shadowRadius = maxScreenDimension * 0.3
             }
             
             // Return to exact normal
-            UIView.addKeyframe(withRelativeStartTime: 0.4, relativeDuration: 0.05) {
+            UIView.addKeyframe(withRelativeStartTime: 0.4, relativeDuration: 0.03) {
                 self.tarotCardContainerView.transform = .identity // Back to exact normal
                 self.cardBackImageView.layer.shadowOpacity = 0.0
                 self.cardBackImageView.layer.shadowRadius = maxScreenDimension * 1.2
@@ -1138,18 +1082,17 @@ extension DailyFitViewController: UIScrollViewDelegate {
             label.layoutMargins = UIEdgeInsets.zero
         }
         
-        // Create single content container
+        // Create single content container with theme background
         let contentBackgroundView = UIView()
         contentBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        contentBackgroundView.backgroundColor = UIColor(red: 204/255, green: 207/255, blue: 213/255, alpha: 1.0)
-        contentBackgroundView.layer.cornerRadius = 16
-        contentBackgroundView.clipsToBounds = true
+        
+        // Apply theme content background
+        CosmicFitTheme.styleContentBackground(contentBackgroundView)
         
         // CRITICAL: Insert BELOW text but ABOVE tarot card
         contentView.insertSubview(contentBackgroundView, aboveSubview: tarotCardImageView)
         
         // CRITICAL: Position content background to end with proper spacing above tab bar
-        //let tabBarHeight: CGFloat = 83
         let bottomMargin: CGFloat = 32 // Same as side margins
         
         NSLayoutConstraint.activate([
@@ -1171,41 +1114,6 @@ extension DailyFitViewController: UIScrollViewDelegate {
         }
         contentView.bringSubviewToFront(debugButton)
         
-        // Update text colors to dark for light background
-        updateContentColors()
-        
-        print("Content box positioned 15pt above tab bar, ends with proper spacing")
-    }
-    
-    private func updateContentColors() {
-        // Dark text color for light content background - EXACTLY as specified
-        let textColor = UIColor(red: 0/255, green: 2/255, blue: 16/255, alpha: 1.0)
-        
-        // CRITICAL: Update card title to dark color (it's now inside the light content box)
-        cardTitleLabel.textColor = textColor
-        cardTitleLabel.backgroundColor = .clear // Ensure no background conflicts
-        
-        // Update ALL content label colors to dark text
-        let contentLabels = [keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel,
-                             patternsLabel, shapeLabel, accessoriesLabel, layeringLabel,
-                             vibeBreakdownLabel]
-        
-        for label in contentLabels {
-            // CRITICAL: Set direct text color for immediate visibility
-            label.textColor = textColor
-            label.backgroundColor = .clear // Ensure labels don't have competing backgrounds
-            
-            // Also update attributed text if it exists
-            if let attributedText = label.attributedText?.mutableCopy() as? NSMutableAttributedString {
-                attributedText.addAttribute(.foregroundColor, value: textColor,
-                                            range: NSRange(location: 0, length: attributedText.length))
-                label.attributedText = attributedText
-            }
-        }
-        
-        // Debug button color
-        debugButton.setTitleColor(textColor, for: .normal)
-        
-        print("Updated all text colors to dark (#000210) for light content background")
+        print("Content box positioned with Cosmic Fit theme background")
     }
 }

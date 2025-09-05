@@ -2,7 +2,7 @@
 //  CosmicFitTheme.swift
 //  Cosmic Fit
 //
-//  Created by Ashley Davison on 04/09/2025.
+//  Enhanced theme engine for comprehensive styling across the app
 //
 
 import UIKit
@@ -15,6 +15,9 @@ struct CosmicFitTheme {
     struct Colors {
         /// Cosmic Grey - Main background color for content areas (#DEDEDE)
         static let cosmicGrey = UIColor(red: 222/255, green: 222/255, blue: 222/255, alpha: 1.0)
+        
+        /// Dark Cosmic Grey - Navigation bar background for contrast (#B8B8B8)
+        static let darkCosmicGrey = UIColor(red: 184/255, green: 184/255, blue: 184/255, alpha: 1.0)
         
         /// Cosmic Blue - Primary text color (#000210)
         static let cosmicBlue = UIColor(red: 0/255, green: 2/255, blue: 16/255, alpha: 1.0)
@@ -30,16 +33,19 @@ struct CosmicFitTheme {
         
         /// Transparent background for input fields
         static let transparentBackground = UIColor.clear
+        
+        /// Divider color
+        static let dividerColor = cosmicBlue.withAlphaComponent(0.3)
     }
     
     // MARK: - Typography
     struct Typography {
         
         /// Noctis font family for titles and headers
-        static func noctisFont(size: CGFloat, weight: UIFont.Weight = .regular) -> UIFont {
+        static func DMSerifTextFont(size: CGFloat, weight: UIFont.Weight = .regular) -> UIFont {
             // Try to load Noctis font, fallback to system font with appropriate weight
-            if let noctisFont = UIFont(name: getNoctisFontName(for: weight), size: size) {
-                return noctisFont
+            if let DMSerifTextFont = UIFont(name: getDMSerifTextFontName(for: weight), size: size) {
+                return DMSerifTextFont
             }
             
             // Fallback to system font
@@ -68,38 +74,13 @@ struct CosmicFitTheme {
             static let headline: CGFloat = 17
             static let body: CGFloat = 16
             static let callout: CGFloat = 15
-            static let subheadline: CGFloat = 14
+            static let subhead: CGFloat = 14
             static let footnote: CGFloat = 13
             static let caption1: CGFloat = 12
             static let caption2: CGFloat = 11
         }
         
-        // MARK: - Private Helper Methods
-        private static func getNoctisFontName(for weight: UIFont.Weight) -> String {
-            switch weight {
-            case .ultraLight:
-                return "Noctis-UltraLight"
-            case .thin:
-                return "Noctis-Thin"
-            case .light:
-                return "Noctis-Light"
-            case .regular:
-                return "Noctis-Regular"
-            case .medium:
-                return "Noctis-Medium"
-            case .semibold:
-                return "Noctis-SemiBold"
-            case .bold:
-                return "Noctis-Bold"
-            case .heavy:
-                return "Noctis-Heavy"
-            case .black:
-                return "Noctis-Black"
-            default:
-                return "Noctis-Regular"
-            }
-        }
-        
+        // Keep DM Sans weight mapping as-is
         private static func getDMSansFontName(for weight: UIFont.Weight) -> String {
             switch weight {
             case .ultraLight, .thin:
@@ -120,31 +101,48 @@ struct CosmicFitTheme {
                 return "DMSans-Regular"
             }
         }
+        
+        // Legacy helper kept for compatibility (not used anymore but safe if referenced)
+        private static func getDMSerifTextFontName(for weight: UIFont.Weight) -> String {
+            // Noctis removed; map all requests to DM Serif Text Regular
+            return "DMSerifText-Regular"
+        }
     }
     
     // MARK: - Styling Methods
     
     /// Apply theme to navigation bar
     static func styleNavigationBar(_ navigationBar: UINavigationBar) {
-        navigationBar.backgroundColor = Colors.cosmicGrey
+        navigationBar.backgroundColor = Colors.darkCosmicGrey
         navigationBar.titleTextAttributes = [
             .foregroundColor: Colors.cosmicBlue,
-            .font: Typography.noctisFont(size: Typography.FontSizes.headline, weight: .semibold)
+            .font: Typography.DMSerifTextFont(size: Typography.FontSizes.headline, weight: .semibold)
         ]
         navigationBar.tintColor = Colors.cosmicOrange
+        
+        if #available(iOS 13.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = Colors.darkCosmicGrey
+            appearance.titleTextAttributes = [
+                .foregroundColor: Colors.cosmicBlue,
+                .font: Typography.DMSerifTextFont(size: Typography.FontSizes.headline, weight: .semibold)
+            ]
+            navigationBar.standardAppearance = appearance
+            navigationBar.scrollEdgeAppearance = appearance
+        }
     }
     
-    /// Apply theme to tab bar
+    /// Apply theme to tab bar with proper selection indicator
     static func styleTabBar(_ tabBar: UITabBar) {
-        tabBar.backgroundColor = Colors.cosmicGrey
+        tabBar.backgroundColor = Colors.darkCosmicGrey
         tabBar.tintColor = Colors.cosmicOrange
         tabBar.unselectedItemTintColor = Colors.cosmicBlue
         
-        // Custom appearance for selected tab
         if #available(iOS 13.0, *) {
             let tabBarAppearance = UITabBarAppearance()
             tabBarAppearance.configureWithOpaqueBackground()
-            tabBarAppearance.backgroundColor = Colors.cosmicGrey
+            tabBarAppearance.backgroundColor = Colors.darkCosmicGrey
             
             // Selected tab item
             tabBarAppearance.stackedLayoutAppearance.selected.iconColor = Colors.cosmicOrange
@@ -167,6 +165,36 @@ struct CosmicFitTheme {
         }
     }
     
+    /// Apply custom selection indicator for active tab
+    static func applyTabSelectionIndicator(_ tabBar: UITabBar, selectedIndex: Int) {
+        // Remove existing selection indicators
+        tabBar.subviews.forEach { subview in
+            if subview.tag == 999 {
+                subview.removeFromSuperview()
+            }
+        }
+        
+        // Calculate tab width and position
+        let tabWidth = tabBar.frame.width / CGFloat(tabBar.items?.count ?? 1)
+        let indicatorWidth = tabWidth * 0.8
+        let indicatorHeight: CGFloat = tabBar.frame.height - 10
+        let xPosition = tabWidth * CGFloat(selectedIndex) + (tabWidth - indicatorWidth) / 2
+        
+        // Create selection indicator
+        let selectionIndicator = UIView()
+        selectionIndicator.backgroundColor = Colors.tabBarActive
+        selectionIndicator.layer.cornerRadius = 8
+        selectionIndicator.tag = 999
+        selectionIndicator.frame = CGRect(
+            x: xPosition,
+            y: 5,
+            width: indicatorWidth,
+            height: indicatorHeight
+        )
+        
+        tabBar.insertSubview(selectionIndicator, at: 0)
+    }
+    
     /// Apply theme to a content background view
     static func styleContentBackground(_ view: UIView) {
         view.backgroundColor = Colors.cosmicGrey
@@ -174,16 +202,16 @@ struct CosmicFitTheme {
         view.layer.masksToBounds = true
     }
     
-    /// Apply theme to a title label
+    /// Apply theme to a title label (headers)
     static func styleTitleLabel(_ label: UILabel, fontSize: CGFloat = Typography.FontSizes.title2, weight: UIFont.Weight = .semibold) {
-        label.font = Typography.noctisFont(size: fontSize, weight: weight)
+        label.font = Typography.DMSerifTextFont(size: fontSize, weight: weight)
         label.textColor = Colors.cosmicBlue
     }
     
     /// Apply theme to a body text label
     static func styleBodyLabel(_ label: UILabel, fontSize: CGFloat = Typography.FontSizes.body, weight: UIFont.Weight = .regular) {
         label.font = Typography.dmSansFont(size: fontSize, weight: weight)
-        label.textColor = Colors.cosmicBlue
+        label.textColor = Colors.cosmicGrey
     }
     
     /// Apply theme to a text field
@@ -214,6 +242,20 @@ struct CosmicFitTheme {
         textField.rightViewMode = .always
     }
     
+    /// Apply theme to a text view
+    static func styleTextView(_ textView: UITextView) {
+        textView.backgroundColor = Colors.transparentBackground
+        textView.font = Typography.dmSansFont(size: Typography.FontSizes.body)
+        textView.textColor = Colors.cosmicBlue
+        textView.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        textView.layer.borderColor = Colors.borderColor.cgColor
+        textView.layer.borderWidth = 1.0
+        textView.layer.cornerRadius = 8
+        textView.isEditable = false
+        textView.isScrollEnabled = true
+        textView.showsVerticalScrollIndicator = false
+    }
+    
     /// Apply theme to a button
     static func styleButton(_ button: UIButton, style: ButtonStyle = .primary) {
         switch style {
@@ -237,18 +279,32 @@ struct CosmicFitTheme {
         button.layer.masksToBounds = true
     }
     
+    /// Apply theme to date picker
+    static func styleDatePicker(_ datePicker: UIDatePicker) {
+        if #available(iOS 14.0, *) {
+            datePicker.preferredDatePickerStyle = .wheels
+        }
+        datePicker.backgroundColor = Colors.cosmicGrey
+        datePicker.setValue(Colors.cosmicBlue, forKey: "textColor")
+    }
+    
+    /// Apply theme to divider/separator views
+    static func styleDivider(_ divider: UIView) {
+        divider.backgroundColor = Colors.dividerColor
+    }
+    
     /// Create themed attributed string for mixed title/content text
     static func createAttributedText(title: String, content: String, titleSize: CGFloat = Typography.FontSizes.title3, contentSize: CGFloat = Typography.FontSizes.body) -> NSAttributedString {
         let attributedString = NSMutableAttributedString()
         
-        // Title attributes
+        // Title attributes (Noctis font)
         let titleAttributes: [NSAttributedString.Key: Any] = [
-            .font: Typography.noctisFont(size: titleSize, weight: .semibold),
+            .font: Typography.DMSerifTextFont(size: titleSize, weight: .semibold),
             .foregroundColor: Colors.cosmicBlue
         ]
         attributedString.append(NSAttributedString(string: "\(title)\n", attributes: titleAttributes))
         
-        // Content attributes
+        // Content attributes (DM Sans font)
         let contentAttributes: [NSAttributedString.Key: Any] = [
             .font: Typography.dmSansFont(size: contentSize, weight: .regular),
             .foregroundColor: Colors.cosmicBlue
@@ -263,15 +319,7 @@ struct CosmicFitTheme {
         scrollView.backgroundColor = UIColor.clear
         scrollView.showsVerticalScrollIndicator = true
         scrollView.showsHorizontalScrollIndicator = false
-    }
-    
-    /// Apply theme to date picker
-    static func styleDatePicker(_ datePicker: UIDatePicker) {
-        if #available(iOS 14.0, *) {
-            datePicker.preferredDatePickerStyle = .wheels
-        }
-        datePicker.backgroundColor = Colors.cosmicGrey
-        datePicker.setValue(Colors.cosmicBlue, forKey: "textColor")
+        scrollView.contentInsetAdjustmentBehavior = .never
     }
 }
 
