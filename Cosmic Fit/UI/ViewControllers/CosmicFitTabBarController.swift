@@ -90,6 +90,12 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
 
         print("✅ Swipe proceeding - setting isCustomTransitioning = true")
         isCustomTransitioning = true
+        
+        // Create the animator with the correct direction based on index change
+        let direction: SlideTabTransitionAnimator.SlideDirection = next > selectedIndex ? .left : .right
+        transitionAnimator = SlideTabTransitionAnimator(isPresenting: true, direction: direction)
+        print("🎬 Starting transition via swipe with direction \(direction)")
+        
         selectedIndex = next
         
         // Safety timeout - reset flag after 1 second if transition doesn't complete
