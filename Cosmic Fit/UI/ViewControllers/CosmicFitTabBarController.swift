@@ -7,8 +7,8 @@
 
 import UIKit
 
-class CosmicFitTabBarController: UITabBarController {
-    
+final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDelegate {
+
     // MARK: - Properties
     private var chartData: [String: Any] = [:]
     private var birthInfo: String = ""
@@ -26,16 +26,96 @@ class CosmicFitTabBarController: UITabBarController {
     private var chartIdentifier: String?
     
     // Transition properties
-    private var isTransitioning = false
-    private var transitionContainer: UIView?
-    private var transitionAnimator: UIViewPropertyAnimator?
-    
-    // Swipe gesture properties
-    private var leftSwipeGesture: UISwipeGestureRecognizer!
-    private var rightSwipeGesture: UISwipeGestureRecognizer!
+    private var transitionAnimator: SlideTabTransitionAnimator?
+    private var isCustomTransitioning = false
     
     // User profile property
     private var userProfile: UserProfile?
+    
+    private lazy var swipeLeft: UISwipeGestureRecognizer = {
+        let g = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        g.direction = .left
+        g.delegate = self
+        g.cancelsTouchesInView = false      // ← do not steal touches
+        g.delaysTouchesBegan = false
+        return g
+    }()
+
+    private lazy var swipeRight: UISwipeGestureRecognizer = {
+        let g = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        g.direction = .right
+        g.delegate = self
+        g.cancelsTouchesInView = false      // ← do not steal touches
+        g.delaysTouchesBegan = false
+        return g
+    }()
+
+    private func installSwipeGesturesIfNeeded() {
+        // Attach to the TAB BAR CONTROLLER’S VIEW (not the tab bar, not child VCs)
+        if !(view.gestureRecognizers?.contains(swipeLeft) ?? false) { view.addGestureRecognizer(swipeLeft) }
+        if !(view.gestureRecognizers?.contains(swipeRight) ?? false) { view.addGestureRecognizer(swipeRight) }
+    }
+    
+    private func resetTransitionState() {
+        isCustomTransitioning = false
+        print("🔄 Transition state reset")
+    }
+
+    @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        print("🏃‍♂️ Swipe gesture fired - direction: \(gesture.direction.rawValue)")
+        print("🏃‍♂️ Current state - selectedIndex: \(selectedIndex), isCustomTransitioning: \(isCustomTransitioning)")
+        
+        guard !isCustomTransitioning, presentedViewController == nil else {
+            print("❌ Swipe blocked - isCustomTransitioning: \(isCustomTransitioning), presentedViewController: \(presentedViewController != nil)")
+            return
+        }
+        guard let vcs = viewControllers, !vcs.isEmpty else {
+            print("❌ Swipe blocked - no view controllers")
+            return
+        }
+
+        let next: Int = {
+            switch gesture.direction {
+            case .left:  return min(selectedIndex + 1, vcs.count - 1)
+            case .right: return max(selectedIndex - 1, 0)
+            default:     return selectedIndex
+            }
+        }()
+        
+        print("🏃‍♂️ Calculated next index: \(next) from current: \(selectedIndex)")
+        guard next != selectedIndex else {
+            print("❌ Swipe blocked - already at target index")
+            return
+        }
+
+        print("✅ Swipe proceeding - setting isCustomTransitioning = true")
+        isCustomTransitioning = true
+        selectedIndex = next
+        
+        // Safety timeout - reset flag after 1 second if transition doesn't complete
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            if self?.isCustomTransitioning == true {
+                print("⚠️ Transition timeout - forcing reset")
+                self?.resetTransitionState()
+            }
+        }
+    }
+
+    // MARK: UIGestureRecognizerDelegate
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        // If the touch begins on the tab bar (or any control), let the tab bar handle it.
+        if touch.view is UIControl { return false }
+        let p = touch.location(in: view)
+        if tabBar.frame.contains(p) { return false }   // ← critical line
+        return true
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // Don’t block scroll views inside child controllers.
+        return true
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -47,8 +127,12 @@ class CosmicFitTabBarController: UITabBarController {
         setupTabBar()
         startWeatherFetch()
         setupTabMemoryPersistence()
-        setupSwipeGestures()
         setupProfileUpdateNotifications()
+        
+        installSwipeGesturesIfNeeded()
+        
+        // Add this line at the end:
+        delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -61,8 +145,8 @@ class CosmicFitTabBarController: UITabBarController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        // Update tab selection indicator when layout changes
-        updateTabSelectionIndicator()
+        // Add dividers after layout is complete
+        CosmicFitTheme.addTabDividers(tabBar)
     }
     
     deinit {
@@ -110,20 +194,6 @@ class CosmicFitTabBarController: UITabBarController {
         setupViewControllers()
     }
     
-    private func setupSwipeGestures() {
-        // Left swipe (go to next tab)
-        leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleLeftSwipe))
-        leftSwipeGesture.direction = .left
-        view.addGestureRecognizer(leftSwipeGesture)
-        
-        // Right swipe (go to previous tab)
-        rightSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleRightSwipe))
-        rightSwipeGesture.direction = .right
-        view.addGestureRecognizer(rightSwipeGesture)
-        
-        print("✅ Swipe gestures configured")
-    }
-    
     private func setupProfileUpdateNotifications() {
         NotificationCenter.default.addObserver(
             self,
@@ -138,29 +208,6 @@ class CosmicFitTabBarController: UITabBarController {
             name: .userProfileDeleted,
             object: nil
         )
-    }
-    
-    @objc private func handleLeftSwipe() {
-        guard !isTransitioning else { return }
-        
-        let currentIndex = selectedIndex
-        let nextIndex = (currentIndex + 1) % (viewControllers?.count ?? 1)
-        
-        if nextIndex != currentIndex, let targetVC = viewControllers?[nextIndex] {
-            performSmoothSlideTransition(from: currentIndex, to: nextIndex, targetViewController: targetVC)
-        }
-    }
-
-    @objc private func handleRightSwipe() {
-        guard !isTransitioning else { return }
-        
-        let currentIndex = selectedIndex
-        let totalTabs = viewControllers?.count ?? 1
-        let prevIndex = (currentIndex - 1 + totalTabs) % totalTabs
-        
-        if prevIndex != currentIndex, let targetVC = viewControllers?[prevIndex] {
-            performSmoothSlideTransition(from: currentIndex, to: prevIndex, targetViewController: targetVC)
-        }
     }
     
     @objc private func handleProfileUpdate(_ notification: Notification) {
@@ -206,7 +253,7 @@ class CosmicFitTabBarController: UITabBarController {
     
     // MARK: - Private Methods
     private func setupTabBar() {
-        // Apply Cosmic Fit theme to tab bar (uses dark cosmic grey for visual separation)
+        // Apply Cosmic Fit theme to tab bar (uses black background)
         CosmicFitTheme.styleTabBar(tabBar)
         
         // Additional tab bar configuration
@@ -415,11 +462,33 @@ class CosmicFitTabBarController: UITabBarController {
     private func setupViewControllers() {
         var viewControllers: [UIViewController] = []
         
-        // Blueprint Tab (Index 0)
+        // Daily Fit Tab (Index 0 - Default)
+        let dailyFitVC = DailyFitViewController()
+        if let dailyVibeContent = dailyVibeContent {
+            dailyFitVC.configure(
+                with: dailyVibeContent,
+                originalChartViewController: createDebugChartViewController()
+            )
+        }
+        
+        let dailyFitNavController = UINavigationController(rootViewController: dailyFitVC)
+        
+        // Apply dark cosmic grey theme to navigation bar for visual separation from content
+        CosmicFitTheme.styleNavigationBar(dailyFitNavController.navigationBar)
+        
+        // Text-only tab item with no image
+        dailyFitNavController.tabBarItem = UITabBarItem(
+            title: "Daily Fit",
+            image: nil,
+            selectedImage: nil
+        )
+        viewControllers.append(dailyFitNavController)
+        
+        // Cosmic Blueprint Tab (Index 1)
         let blueprintVC = BlueprintViewController()
-        if let blueprintContent = blueprintContent,
-           let birthDate = birthDate {
-            
+        if let blueprintContent = blueprintContent {
+            // Only configure if we have content (prevents empty state)
+           
             // Extract city and country from birthInfo
             let (city, country) = extractLocationFromBirthInfo()
             
@@ -437,62 +506,26 @@ class CosmicFitTabBarController: UITabBarController {
         // Apply dark cosmic grey theme to navigation bar for visual separation from content
         CosmicFitTheme.styleNavigationBar(blueprintNavController.navigationBar)
         
+        // Text-only tab item with no image
         blueprintNavController.tabBarItem = UITabBarItem(
-            title: "Blueprint",
-            image: UIImage(systemName: "star.circle"),
-            selectedImage: UIImage(systemName: "star.circle.fill")
+            title: "Cosmic Blueprint",
+            image: nil,
+            selectedImage: nil
         )
         viewControllers.append(blueprintNavController)
-        
-        // Daily Fit Tab (Index 1)
-        let dailyFitVC = DailyFitViewController()
-        if let dailyVibeContent = dailyVibeContent {
-            dailyFitVC.configure(
-                with: dailyVibeContent,
-                originalChartViewController: createDebugChartViewController()
-            )
-        }
-        
-        let dailyFitNavController = UINavigationController(rootViewController: dailyFitVC)
-        
-        // Apply dark cosmic grey theme to navigation bar for visual separation from content
-        CosmicFitTheme.styleNavigationBar(dailyFitNavController.navigationBar)
-        
-        dailyFitNavController.tabBarItem = UITabBarItem(
-            title: "Daily Fit",
-            image: UIImage(systemName: "calendar.circle"),
-            selectedImage: UIImage(systemName: "calendar.circle.fill")
-        )
-        viewControllers.append(dailyFitNavController)
-        
-        // Profile Tab (Index 2)
-        let profileVC = ProfileViewController()
-        let profileNavController = UINavigationController(rootViewController: profileVC)
-        
-        // Apply dark cosmic grey theme to navigation bar for visual separation from content
-        CosmicFitTheme.styleNavigationBar(profileNavController.navigationBar)
-        
-        profileNavController.tabBarItem = UITabBarItem(
-            title: "Profile",
-            image: UIImage(systemName: "person.circle"),
-            selectedImage: UIImage(systemName: "person.circle.fill")
-        )
-        viewControllers.append(profileNavController)
         
         // Set the view controllers
         self.viewControllers = viewControllers
         
-        // Only set default tab if not already set (preserves current selection during updates)
-        if selectedIndex == 0 && viewControllers.count > 1 {
-            selectedIndex = 1 // Daily Fit as default
-        }
+        // Set Daily Fit as default tab (index 0)
+        selectedIndex = 0
         
         // Update tab selection indicator after setting view controllers
         DispatchQueue.main.async { [weak self] in
             self?.updateTabSelectionIndicator()
         }
         
-        print("✅ View controllers setup with dark cosmic grey navigation bars")
+        print("✅ View controllers setup with 2 tabs (Daily Fit and Cosmic Blueprint)")
     }
     
     private func useDefaultWeatherLocation() {
@@ -521,28 +554,42 @@ class CosmicFitTabBarController: UITabBarController {
 extension CosmicFitTabBarController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        // Prevent tab switching during transition
-        guard !isTransitioning else { return false }
+        // Don't block selection if already transitioning via gesture
+        guard !isCustomTransitioning else {
+            print("⚠️ Custom transition in progress - allowing selection")
+            return true
+        }
         
-        // Get the target tab index
-        guard let targetIndex = viewControllers?.firstIndex(of: viewController) else { return true }
-        let currentIndex = selectedIndex
+        // Get indices for tab taps (not swipe gestures)
+        guard let fromIndex = viewControllers?.firstIndex(of: selectedViewController!),
+              let toIndex = viewControllers?.firstIndex(of: viewController),
+              fromIndex != toIndex else {
+            print("✅ Same tab selected - allowing")
+            return true
+        }
         
-        // Skip animation if selecting the same tab
-        guard targetIndex != currentIndex else { return true }
+        print("🖱️ Tab tap detected - from \(fromIndex) to \(toIndex)")
         
-        // Perform smooth slide transition using proper container transitions
-        performSmoothSlideTransition(from: currentIndex, to: targetIndex, targetViewController: viewController)
+        // Determine direction for tab taps
+        let direction: SlideTabTransitionAnimator.SlideDirection = toIndex > fromIndex ? .left : .right
         
-        // Return false to prevent default tab switching (we'll handle it manually)
-        return false
+        // Start custom transition for tab taps
+        isCustomTransitioning = true
+        transitionAnimator = SlideTabTransitionAnimator(isPresenting: true, direction: direction)
+        
+        print("🎬 Starting transition via tab tap with direction \(direction)")
+        return true
     }
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        // Update tab selection indicator when tab changes
+        print("✅ Tab selection completed - resetting transition flag")
+        // ALWAYS reset the flag, regardless of how we got here
+        isCustomTransitioning = false
+        
+        // Update tab selection indicator
         updateTabSelectionIndicator()
         
-        // Log tab selection for debugging
+        // Log the selected tab for debugging
         var tabName = "Unknown"
         if let navController = viewController as? UINavigationController {
             if navController.topViewController is BlueprintViewController {
@@ -553,115 +600,17 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
                 tabName = "Profile"
             }
         }
-        
         print("✅ Selected tab: \(tabName)")
-        
-        // Ensure content is loaded in the selected tab
-        if let navController = viewController as? UINavigationController {
-            if navController.topViewController is BlueprintViewController {
-                // Blueprint tab selected - content should already be loaded
-                print("📑 Blueprint tab active")
-            } else if navController.topViewController is DailyFitViewController {
-                // Daily Fit tab selected - content should already be loaded
-                print("🔮 Daily Fit tab active")
-            } else if navController.topViewController is ProfileViewController {
-                // Profile tab selected - content should already be loaded
-                print("👤 Profile tab active")
-            }
-        }
     }
     
-    // MARK: - Smooth Slide Transitions
-    
-    private func performSmoothSlideTransition(from fromIndex: Int, to toIndex: Int, targetViewController: UIViewController) {
-        guard let viewControllers = viewControllers,
-              fromIndex < viewControllers.count,
-              toIndex < viewControllers.count else { return }
-        
-        isTransitioning = true
-        
-        let fromVC = viewControllers[fromIndex]
-        let toVC = viewControllers[toIndex]
-        
-        // SIMPLIFIED: Since wraparound is disabled, direction is simply based on index comparison
-        let isSlideLeft = toIndex > fromIndex // Moving to higher index = slide left
-        
-        // Rest of the transition logic remains the same...
-        let containerBounds = view.bounds
-        let contentFrame = CGRect(x: 0, y: 0, width: containerBounds.width, height: containerBounds.height - tabBar.frame.height)
-        
-        let transitionContainer = UIView(frame: contentFrame)
-        transitionContainer.clipsToBounds = true
-        
-        // Apply theme background to transition container
-        transitionContainer.backgroundColor = UIColor.systemBackground
-        
-        view.insertSubview(transitionContainer, belowSubview: tabBar)
-        self.transitionContainer = transitionContainer
-        
-        let fromSnapshot = fromVC.view.snapshotView(afterScreenUpdates: false) ?? UIView()
-        let toSnapshot = toVC.view.snapshotView(afterScreenUpdates: true) ?? UIView()
-        
-        let originalViewBounds = fromVC.view.bounds
-        fromSnapshot.frame = originalViewBounds
-        toSnapshot.frame = originalViewBounds
-        
-        transitionContainer.addSubview(fromSnapshot)
-        transitionContainer.addSubview(toSnapshot)
-        
-        if isSlideLeft {
-            toSnapshot.transform = CGAffineTransform(translationX: originalViewBounds.width, y: 0)
-        } else {
-            toSnapshot.transform = CGAffineTransform(translationX: -originalViewBounds.width, y: 0)
+    func tabBarController(_ tabBarController: UITabBarController, animationControllerForTransitionFrom fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        // Return the custom animator when we have one
+        if let animator = transitionAnimator {
+            print("🎨 Using custom transition animator")
+            return animator
         }
         
-        fromVC.view.alpha = 0
-        toVC.view.alpha = 0
-        
-        transitionAnimator = UIViewPropertyAnimator(duration: 0.35, dampingRatio: 0.9) {
-            if isSlideLeft {
-                fromSnapshot.transform = CGAffineTransform(translationX: -originalViewBounds.width, y: 0)
-                toSnapshot.transform = .identity
-            } else {
-                fromSnapshot.transform = CGAffineTransform(translationX: originalViewBounds.width, y: 0)
-                toSnapshot.transform = .identity
-            }
-        }
-        
-        transitionAnimator?.addCompletion { [weak self] _ in
-            self?.cleanupTransition(targetViewController: targetViewController, toViewController: toVC)
-        }
-        
-        transitionAnimator?.startAnimation()
-    }
-    
-    private func cleanupTransition(targetViewController: UIViewController, toViewController: UIViewController) {
-        // Remove transition container
-        transitionContainer?.removeFromSuperview()
-        transitionContainer = nil
-        transitionAnimator = nil
-        
-        // Restore view alpha
-        if let viewControllers = viewControllers {
-            for vc in viewControllers {
-                vc.view.alpha = 1.0
-            }
-        }
-        
-        // Update selected index properly
-        selectedIndex = viewControllers?.firstIndex(of: targetViewController) ?? selectedIndex
-        
-        // Update tab selection indicator after transition
-        updateTabSelectionIndicator()
-        
-        // Add content fade-in animation for Daily Fit tab
-        if let navController = targetViewController as? UINavigationController,
-           let dailyFitVC = navController.topViewController as? DailyFitViewController {
-            dailyFitVC.animateContentFadeIn()
-        }
-        
-        isTransitioning = false
-        
-        print("✅ Smooth slide transition completed")
+        print("🎨 No custom animator - using default transition")
+        return nil
     }
 }

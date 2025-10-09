@@ -25,8 +25,14 @@ struct CosmicFitTheme {
         /// Cosmic Orange - Highlight/accent color (#FF8502)
         static let cosmicOrange = UIColor(red: 255/255, green: 133/255, blue: 2/255, alpha: 1.0)
         
-        /// Tab bar active background (darker version of cosmicGrey for selection indicator)
-        static let tabBarActive = UIColor(red: 180/255, green: 180/255, blue: 180/255, alpha: 1.0)
+        /// Tab bar background color - Black
+        static let tabBarBackground = UIColor.black
+        
+        /// Tab bar text/icon color - White
+        static let tabBarInactive = UIColor.white
+        
+        /// Tab bar active/selected color - Cosmic Orange
+        static let tabBarActive = cosmicOrange
         
         /// Border color for form elements
         static let borderColor = cosmicBlue
@@ -41,51 +47,47 @@ struct CosmicFitTheme {
     // MARK: - Typography
     struct Typography {
         
-        /// Noctis font family for titles and headers
-        static func DMSerifTextFont(size: CGFloat, weight: UIFont.Weight = .regular) -> UIFont {
-            // Try to load Noctis font, fallback to system font with appropriate weight
-            if let DMSerifTextFont = UIFont(name: getDMSerifTextFontName(for: weight), size: size) {
-                return DMSerifTextFont
-            }
-            
-            // Fallback to system font
-            print("⚠️ Noctis font not found, using system font fallback")
-            return UIFont.systemFont(ofSize: size, weight: weight)
-        }
-        
-        /// DM Sans font family for body text and forms
-        static func dmSansFont(size: CGFloat, weight: UIFont.Weight = .regular) -> UIFont {
-            // Try to load DM Sans font, fallback to system font
-            if let dmSansFont = UIFont(name: getDMSansFontName(for: weight), size: size) {
-                return dmSansFont
-            }
-            
-            // Fallback to system font
-            print("⚠️ DM Sans font not found, using system font fallback")
-            return UIFont.systemFont(ofSize: size, weight: weight)
-        }
-        
-        // MARK: - Font Sizes
+        /// Font sizes following iOS Human Interface Guidelines
         struct FontSizes {
-            static let largeTitle: CGFloat = 28
-            static let title1: CGFloat = 24
-            static let title2: CGFloat = 20
-            static let title3: CGFloat = 18
+            static let largeTitle: CGFloat = 34
+            static let title1: CGFloat = 28
+            static let title2: CGFloat = 22
+            static let title3: CGFloat = 20
             static let headline: CGFloat = 17
-            static let body: CGFloat = 16
-            static let callout: CGFloat = 15
-            static let subhead: CGFloat = 14
+            static let body: CGFloat = 17
+            static let callout: CGFloat = 16
+            static let subheadline: CGFloat = 15
             static let footnote: CGFloat = 13
             static let caption1: CGFloat = 12
             static let caption2: CGFloat = 11
         }
         
-        // Keep DM Sans weight mapping as-is
+        /// DM Serif Text font for titles and headers (replaces Noctis)
+        static func DMSerifTextFont(size: CGFloat, weight: UIFont.Weight = .regular) -> UIFont {
+            // DM Serif Text only comes in Regular weight
+            if let customFont = UIFont(name: "DMSerifText-Regular", size: size) {
+                return customFont
+            }
+            // Fallback to system serif font
+            return UIFont.systemFont(ofSize: size, weight: weight)
+        }
+        
+        /// DM Sans font for body text (replaces SF Pro Display)
+        static func dmSansFont(size: CGFloat, weight: UIFont.Weight = .regular) -> UIFont {
+            let fontName = getDMSansFontName(for: weight)
+            
+            if let customFont = UIFont(name: fontName, size: size) {
+                return customFont
+            }
+            
+            // Fallback to system font with appropriate weight
+            return UIFont.systemFont(ofSize: size, weight: weight)
+        }
+        
+        // Helper to get correct DM Sans font name based on weight
         private static func getDMSansFontName(for weight: UIFont.Weight) -> String {
             switch weight {
-            case .ultraLight, .thin:
-                return "DMSans-Thin"
-            case .light:
+            case .ultraLight, .thin, .light:
                 return "DMSans-Light"
             case .regular:
                 return "DMSans-Regular"
@@ -133,66 +135,91 @@ struct CosmicFitTheme {
         }
     }
     
-    /// Apply theme to tab bar with proper selection indicator
+    /// Apply theme to tab bar with black background and white text
     static func styleTabBar(_ tabBar: UITabBar) {
-        tabBar.backgroundColor = Colors.darkCosmicGrey
-        tabBar.tintColor = Colors.cosmicOrange
-        tabBar.unselectedItemTintColor = Colors.cosmicBlue
+        tabBar.backgroundColor = Colors.tabBarBackground
+        tabBar.barTintColor = Colors.tabBarBackground
+        tabBar.tintColor = Colors.tabBarActive
+        tabBar.unselectedItemTintColor = Colors.tabBarInactive
+        tabBar.isTranslucent = false
         
         if #available(iOS 13.0, *) {
             let tabBarAppearance = UITabBarAppearance()
             tabBarAppearance.configureWithOpaqueBackground()
-            tabBarAppearance.backgroundColor = Colors.darkCosmicGrey
+            tabBarAppearance.backgroundColor = Colors.tabBarBackground
             
-            // Selected tab item
-            tabBarAppearance.stackedLayoutAppearance.selected.iconColor = Colors.cosmicOrange
+            // Selected tab item - Orange text with DM Serif Text font
             tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [
-                .foregroundColor: Colors.cosmicOrange,
-                .font: Typography.dmSansFont(size: Typography.FontSizes.caption1, weight: .medium)
+                .foregroundColor: Colors.tabBarActive,
+                .font: Typography.DMSerifTextFont(size: Typography.FontSizes.body, weight: .regular)
             ]
+            tabBarAppearance.stackedLayoutAppearance.selected.iconColor = .clear // Hide icon
             
-            // Normal tab item
-            tabBarAppearance.stackedLayoutAppearance.normal.iconColor = Colors.cosmicBlue
+            // Normal tab item - White text with DM Serif Text font
             tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [
-                .foregroundColor: Colors.cosmicBlue,
-                .font: Typography.dmSansFont(size: Typography.FontSizes.caption1, weight: .regular)
+                .foregroundColor: Colors.tabBarInactive,
+                .font: Typography.DMSerifTextFont(size: Typography.FontSizes.body, weight: .regular)
             ]
+            tabBarAppearance.stackedLayoutAppearance.normal.iconColor = .clear // Hide icon
+            
+            // Increase title position to center text vertically (since no icon)
+            tabBarAppearance.stackedLayoutAppearance.normal.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: -10)
+            tabBarAppearance.stackedLayoutAppearance.selected.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: -10)
             
             tabBar.standardAppearance = tabBarAppearance
             if #available(iOS 15.0, *) {
                 tabBar.scrollEdgeAppearance = tabBarAppearance
             }
+        } else {
+            // Fallback for older iOS versions
+            tabBar.items?.forEach { item in
+                item.setTitleTextAttributes([
+                    .foregroundColor: Colors.tabBarInactive,
+                    .font: Typography.DMSerifTextFont(size: Typography.FontSizes.body, weight: .regular)
+                ], for: .normal)
+                item.setTitleTextAttributes([
+                    .foregroundColor: Colors.tabBarActive,
+                    .font: Typography.DMSerifTextFont(size: Typography.FontSizes.body, weight: .regular)
+                ], for: .selected)
+                item.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: -10)
+            }
         }
     }
     
-    /// Apply custom selection indicator for active tab
+    /// Apply custom selection indicator for active tab - REMOVED
+    /// No longer using background selection indicators per new design
     static func applyTabSelectionIndicator(_ tabBar: UITabBar, selectedIndex: Int) {
-        // Remove existing selection indicators
+        // Remove any existing selection indicators from old design
         tabBar.subviews.forEach { subview in
             if subview.tag == 999 {
                 subview.removeFromSuperview()
             }
         }
+        // New design uses color change only, no background indicator
+    }
+    
+    /// Add vertical dividers between tabs
+    static func addTabDividers(_ tabBar: UITabBar) {
+        // Remove existing dividers
+        tabBar.subviews.filter { $0.tag == 888 }.forEach { $0.removeFromSuperview() }
         
-        // Calculate tab width and position
-        let tabWidth = tabBar.frame.width / CGFloat(tabBar.items?.count ?? 1)
-        let indicatorWidth = tabWidth * 0.8
-        let indicatorHeight: CGFloat = tabBar.frame.height - 10
-        let xPosition = tabWidth * CGFloat(selectedIndex) + (tabWidth - indicatorWidth) / 2
+        guard let itemCount = tabBar.items?.count, itemCount > 1 else { return }
         
-        // Create selection indicator
-        let selectionIndicator = UIView()
-        selectionIndicator.backgroundColor = Colors.tabBarActive
-        selectionIndicator.layer.cornerRadius = 8
-        selectionIndicator.tag = 999
-        selectionIndicator.frame = CGRect(
-            x: xPosition,
-            y: 5,
-            width: indicatorWidth,
-            height: indicatorHeight
-        )
+        let tabWidth = tabBar.frame.width / CGFloat(itemCount)
         
-        tabBar.insertSubview(selectionIndicator, at: 0)
+        // Add dividers between tabs
+        for i in 1..<itemCount {
+            let divider = UIView()
+            divider.backgroundColor = UIColor.white.withAlphaComponent(0.2)
+            divider.tag = 888
+            
+            let x = tabWidth * CGFloat(i)
+            let height = tabBar.frame.height // Full height
+            let y: CGFloat = 0 // Start at top
+            
+            divider.frame = CGRect(x: x - 0.5, y: y, width: 1, height: height)
+            tabBar.addSubview(divider)
+        }
     }
     
     /// Apply theme to a content background view
@@ -297,7 +324,7 @@ struct CosmicFitTheme {
     static func createAttributedText(title: String, content: String, titleSize: CGFloat = Typography.FontSizes.title3, contentSize: CGFloat = Typography.FontSizes.body) -> NSAttributedString {
         let attributedString = NSMutableAttributedString()
         
-        // Title attributes (Noctis font)
+        // Title attributes (DM Serif Text font)
         let titleAttributes: [NSAttributedString.Key: Any] = [
             .font: Typography.DMSerifTextFont(size: titleSize, weight: .semibold),
             .foregroundColor: Colors.cosmicBlue

@@ -181,7 +181,7 @@ class BlueprintViewController: UIViewController {
         profileLabel.translatesAutoresizingMaskIntoConstraints = false
         
         // Apply theme to profile label
-        CosmicFitTheme.styleBodyLabel(profileLabel, fontSize: CosmicFitTheme.Typography.FontSizes.subhead, weight: .light)
+        CosmicFitTheme.styleBodyLabel(profileLabel, fontSize: CosmicFitTheme.Typography.FontSizes.subheadline, weight: .light)
         
         profileHeaderView.addSubview(profileLabel)
         

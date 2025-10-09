@@ -1117,3 +1117,51 @@ extension DailyFitViewController: UIScrollViewDelegate {
         print("Content box positioned with Cosmic Fit theme background")
     }
 }
+
+// MARK: - Transition Support
+extension DailyFitViewController {
+    
+    /// Prepare the view for incoming transition
+    func prepareForTransition() {
+        // Ensure view is loaded and laid out
+        view.layoutIfNeeded()
+        
+        // If card is revealed, ensure content is properly visible
+        if isCardRevealed {
+            ensureContentVisibility()
+        }
+        
+        // Make sure background is set correctly
+        view.backgroundColor = .black
+    }
+    
+    /// Finalize transition state
+    func finishTransition() {
+        // Perform any post-transition setup
+        if isCardRevealed {
+            // Ensure all content is properly visible
+            tarotCardContainerView.alpha = 1.0
+            tarotCardImageView.alpha = 1.0
+            
+            // Ensure proper layering
+            contentView.sendSubviewToBack(tarotCardContainerView)
+            view.bringSubviewToFront(scrollView)
+        }
+    }
+    
+    private func ensureContentVisibility() {
+        // Ensure all revealed content is visible with correct alpha values
+        tarotCardContainerView.alpha = 1.0
+        tarotCardImageView.alpha = 1.0
+        cardTitleLabel.alpha = 1.0
+        backgroundBlurImageView.alpha = 1.0
+        
+        let labels = [keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel,
+                      patternsLabel, shapeLabel, accessoriesLabel, layeringLabel,
+                      vibeBreakdownLabel, debugButton]
+        
+        for label in labels {
+            label.alpha = 1.0
+        }
+    }
+}
