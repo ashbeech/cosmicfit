@@ -16,6 +16,9 @@ struct CosmicFitTheme {
         /// Cosmic Grey - Main background color for content areas (#DEDEDE)
         static let cosmicGrey = UIColor(red: 222/255, green: 222/255, blue: 222/255, alpha: 1.0)
         
+        /// Darker Cosmic Grey - Sub-page background for subtle depth (#D2D2D2)
+        static let darkerCosmicGrey = UIColor(red: 210/255, green: 210/255, blue: 210/255, alpha: 1.0)
+        
         /// Dark Cosmic Grey - Navigation bar background for contrast (#B8B8B8)
         static let darkCosmicGrey = UIColor(red: 184/255, green: 184/255, blue: 184/255, alpha: 1.0)
         

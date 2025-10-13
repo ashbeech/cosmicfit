@@ -2,369 +2,607 @@
 //  BlueprintViewController.swift
 //  Cosmic Fit
 //
-//  Created for production-ready Blueprint page
+//  Redesigned with placeholder layout for new visual structure
 //
 
 import UIKit
 
-class BlueprintViewController: UIViewController {
+final class BlueprintViewController: UIViewController {
     
     // MARK: - Properties
-    private let scrollView = UIScrollView()
-    private let contentView = UIView()
-    private let contentBackgroundView = UIView()
-    private let profileHeaderView = UIView()
-    private let profileLabel = UILabel()
-    private let birthInfoLabel = UILabel()
-    private let locationLabel = UILabel()
-    private let dividerView = UIView()
-    private let titleLabel = UILabel()
-    private var textView = UITextView()
-    private let debugButton = UIButton(type: .system)
-    
-    private var interpretationText: String = ""
     private var birthDate: Date?
     private var birthCity: String = ""
     private var birthCountry: String = ""
     private var originalChartViewController: NatalChartViewController?
     
+    // MARK: - UI Components
+    private let scrollView: UIScrollView = {
+        let sv = UIScrollView()
+        sv.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        sv.showsVerticalScrollIndicator = true
+        sv.alwaysBounceVertical = true
+        return sv
+    }()
+    
+    private let contentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private let aboutYouLabel: UILabel = {
+        let label = UILabel()
+        label.text = "ABOUT YOU"
+        label.font = UIFont(name: "DMSans-Medium", size: 12) ?? UIFont.systemFont(ofSize: 12, weight: .medium)
+        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private let iconImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFit
+        iv.image = UIImage(named: "cb_icon_placeholder") // Placeholder image
+        iv.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        return iv
+    }()
+    
+    private let mainHeadingLabel: UILabel = {
+        let label = UILabel()
+        label.text = "YOUR COSMIC\nBLUEPRINT"
+        label.font = UIFont(name: "DMSerifText-Regular", size: 36) ?? UIFont.systemFont(ofSize: 36, weight: .bold)
+        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textAlignment = .center
+        label.numberOfLines = 2
+        return label
+    }()
+    
+    private let topDivider: UIView = {
+        let view = UIView()
+        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        return view
+    }()
+    
+    private let styleEssenceLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Style Essence"
+        label.font = UIFont(name: "DMSans-Regular", size: 18) ?? UIFont.systemFont(ofSize: 18, weight: .regular)
+        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private let bodyTextLabel: UILabel = {
+        let label = UILabel()
+        label.text = "You've got that intuitive elegance that feels both grounded and gently dreamy. Quality lands through texture and quiet proportion, so your presence reads luxurious without effort. There is a soft confidence in the way you move, a tactile-first approach that makes people feel both soothed and curious. Fewer, better pieces that age well are your language."
+        label.font = UIFont(name: "DMSans-Regular", size: 16) ?? UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        return label
+    }()
+    
+    private let middleDivider: UIView = {
+        let view = UIView()
+        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        return view
+    }()
+    
+    // Grid buttons
+    private let styleCoreButton = BlueprintGridButton(
+        number: "1.",
+        title: "Style Core",
+        backgroundImageName: "grid_bg_1_placeholder"
+    )
+    
+    private let fabricGuideButton = BlueprintGridButton(
+        number: "2.",
+        title: "Fabric Guide",
+        backgroundImageName: "grid_bg_2_placeholder"
+    )
+    
+    private let colourGuideButton = BlueprintGridButton(
+        number: "3.",
+        title: "Colour Guide",
+        backgroundImageName: "grid_bg_3_placeholder"
+    )
+    
+    private let dosAndDontsButton = BlueprintGridButton(
+        number: "4.",
+        title: "Do's & Don'ts",
+        backgroundImageName: "grid_bg_4_placeholder"
+    )
+    
+    private let bottomDividerContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    private let bottomDividerLeft: UIView = {
+        let view = UIView()
+        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        return view
+    }()
+    
+    private let bottomDividerRight: UIView = {
+        let view = UIView()
+        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        return view
+    }()
+    
+    private let starImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFit
+        iv.image = UIImage(named: "star_icon_placeholder") // Placeholder image
+        iv.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        return iv
+    }()
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Apply Cosmic Fit theme
-        applyCosmicFitTheme()
-        
         setupUI()
-        updateContent()
+        setupConstraints()
+        setupButtonActions()
+        
+        // Set navigation controller delegate for custom transitions
+        navigationController?.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Re-set delegate when returning to this view
+        navigationController?.delegate = self
     }
     
     // MARK: - Configuration
-    func configure(with interpretationText: String,
+    func configure(with content: String,
                    birthDate: Date?,
                    birthCity: String,
                    birthCountry: String,
                    originalChartViewController: NatalChartViewController?) {
-        
-        self.interpretationText = interpretationText
         self.birthDate = birthDate
         self.birthCity = birthCity
         self.birthCountry = birthCountry
         self.originalChartViewController = originalChartViewController
         
-        if isViewLoaded {
-            updateContent()
-        }
+        // For now, we're using placeholder text
+        // Later, this will be replaced with dynamic content generation
+        print("✅ Blueprint configured with placeholder content")
     }
     
-    // MARK: - UI Setup
+    // MARK: - Setup
     private func setupUI() {
-        view.backgroundColor = UIColor.systemBackground
-        
-        // Hide navigation bar completely
-        navigationController?.navigationBar.isHidden = true
-        
-        // Setup Scroll View
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.contentInsetAdjustmentBehavior = .never  // KEY FIX: Prevent automatic safe area adjustments
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Apply theme to scroll view
-        CosmicFitTheme.styleScrollView(scrollView)
+        view.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
         
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        // Create content background view
-        contentBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Apply theme content background
-        CosmicFitTheme.styleContentBackground(contentBackgroundView)
-        
-        contentView.addSubview(contentBackgroundView)
+        // Add all subviews to contentView
+        contentView.addSubview(aboutYouLabel)
+        contentView.addSubview(iconImageView)
+        contentView.addSubview(mainHeadingLabel)
+        contentView.addSubview(topDivider)
+        contentView.addSubview(styleEssenceLabel)
+        contentView.addSubview(bodyTextLabel)
+        contentView.addSubview(middleDivider)
+        contentView.addSubview(styleCoreButton)
+        contentView.addSubview(fabricGuideButton)
+        contentView.addSubview(colourGuideButton)
+        contentView.addSubview(dosAndDontsButton)
+        contentView.addSubview(bottomDividerContainer)
+        bottomDividerContainer.addSubview(bottomDividerLeft)
+        bottomDividerContainer.addSubview(bottomDividerRight)
+        bottomDividerContainer.addSubview(starImageView)
+    }
+    
+    private func setupConstraints() {
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        aboutYouLabel.translatesAutoresizingMaskIntoConstraints = false
+        iconImageView.translatesAutoresizingMaskIntoConstraints = false
+        mainHeadingLabel.translatesAutoresizingMaskIntoConstraints = false
+        topDivider.translatesAutoresizingMaskIntoConstraints = false
+        styleEssenceLabel.translatesAutoresizingMaskIntoConstraints = false
+        bodyTextLabel.translatesAutoresizingMaskIntoConstraints = false
+        middleDivider.translatesAutoresizingMaskIntoConstraints = false
+        styleCoreButton.translatesAutoresizingMaskIntoConstraints = false
+        fabricGuideButton.translatesAutoresizingMaskIntoConstraints = false
+        colourGuideButton.translatesAutoresizingMaskIntoConstraints = false
+        dosAndDontsButton.translatesAutoresizingMaskIntoConstraints = false
+        bottomDividerContainer.translatesAutoresizingMaskIntoConstraints = false
+        bottomDividerLeft.translatesAutoresizingMaskIntoConstraints = false
+        bottomDividerRight.translatesAutoresizingMaskIntoConstraints = false
+        starImageView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            // Use view.topAnchor like Daily Fit (since we have contentInsetAdjustmentBehavior = .never)
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            // ScrollView
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
+            // ContentView
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            
+            // About You Label (~60px from top)
+            aboutYouLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 60),
+            aboutYouLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            // CB Icon
+            iconImageView.topAnchor.constraint(equalTo: aboutYouLabel.bottomAnchor, constant: 20),
+            iconImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            iconImageView.widthAnchor.constraint(equalToConstant: 60),
+            iconImageView.heightAnchor.constraint(equalToConstant: 60),
+            
+            // Main Heading
+            mainHeadingLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 20),
+            mainHeadingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            mainHeadingLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            
+            // Top Divider (~40px spacing)
+            topDivider.topAnchor.constraint(equalTo: mainHeadingLabel.bottomAnchor, constant: 40),
+            topDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            topDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            topDivider.heightAnchor.constraint(equalToConstant: 1),
+            
+            // Style Essence Label (~40px spacing)
+            styleEssenceLabel.topAnchor.constraint(equalTo: topDivider.bottomAnchor, constant: 40),
+            styleEssenceLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            // Body Text (~40px spacing)
+            bodyTextLabel.topAnchor.constraint(equalTo: styleEssenceLabel.bottomAnchor, constant: 40),
+            bodyTextLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            bodyTextLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            
+            // Middle Divider (~40px spacing)
+            middleDivider.topAnchor.constraint(equalTo: bodyTextLabel.bottomAnchor, constant: 40),
+            middleDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            middleDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            middleDivider.heightAnchor.constraint(equalToConstant: 1),
+            
+            // Grid Buttons (2x2 layout, ~40px from divider)
+            // Row 1
+            styleCoreButton.topAnchor.constraint(equalTo: middleDivider.bottomAnchor, constant: 40),
+            styleCoreButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            styleCoreButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5, constant: -25),
+            styleCoreButton.heightAnchor.constraint(equalToConstant: 160),
+            
+            fabricGuideButton.topAnchor.constraint(equalTo: middleDivider.bottomAnchor, constant: 40),
+            fabricGuideButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            fabricGuideButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5, constant: -25),
+            fabricGuideButton.heightAnchor.constraint(equalToConstant: 160),
+            
+            // Row 2
+            colourGuideButton.topAnchor.constraint(equalTo: styleCoreButton.bottomAnchor, constant: 10),
+            colourGuideButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            colourGuideButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5, constant: -25),
+            colourGuideButton.heightAnchor.constraint(equalToConstant: 160),
+            
+            dosAndDontsButton.topAnchor.constraint(equalTo: fabricGuideButton.bottomAnchor, constant: 10),
+            dosAndDontsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            dosAndDontsButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5, constant: -25),
+            dosAndDontsButton.heightAnchor.constraint(equalToConstant: 160),
+            
+            // Bottom Divider Container (~40px spacing)
+            bottomDividerContainer.topAnchor.constraint(equalTo: colourGuideButton.bottomAnchor, constant: 40),
+            bottomDividerContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            bottomDividerContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            bottomDividerContainer.heightAnchor.constraint(equalToConstant: 30),
+            bottomDividerContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
+            
+            // Bottom Divider Lines
+            bottomDividerLeft.centerYAnchor.constraint(equalTo: bottomDividerContainer.centerYAnchor),
+            bottomDividerLeft.leadingAnchor.constraint(equalTo: bottomDividerContainer.leadingAnchor),
+            bottomDividerLeft.trailingAnchor.constraint(equalTo: starImageView.leadingAnchor, constant: -10),
+            bottomDividerLeft.heightAnchor.constraint(equalToConstant: 1),
+            
+            bottomDividerRight.centerYAnchor.constraint(equalTo: bottomDividerContainer.centerYAnchor),
+            bottomDividerRight.leadingAnchor.constraint(equalTo: starImageView.trailingAnchor, constant: 10),
+            bottomDividerRight.trailingAnchor.constraint(equalTo: bottomDividerContainer.trailingAnchor),
+            bottomDividerRight.heightAnchor.constraint(equalToConstant: 1),
+            
+            // Star Icon
+            starImageView.centerXAnchor.constraint(equalTo: bottomDividerContainer.centerXAnchor),
+            starImageView.centerYAnchor.constraint(equalTo: bottomDividerContainer.centerYAnchor),
+            starImageView.widthAnchor.constraint(equalToConstant: 24),
+            starImageView.heightAnchor.constraint(equalToConstant: 24),
         ])
+    }
+    
+    private func setupButtonActions() {
+        styleCoreButton.addTarget(self, action: #selector(styleCoreButtonTapped), for: .touchUpInside)
+        fabricGuideButton.addTarget(self, action: #selector(fabricGuideButtonTapped), for: .touchUpInside)
+        colourGuideButton.addTarget(self, action: #selector(colourGuideButtonTapped), for: .touchUpInside)
+        dosAndDontsButton.addTarget(self, action: #selector(dosAndDontsButtonTapped), for: .touchUpInside)
+    }
+    
+    // MARK: - Button Actions
+    @objc private func styleCoreButtonTapped() {
+        print("🎯 Style Core button tapped")
+        navigateToDetail(section: .styleCore)
+    }
+    
+    @objc private func fabricGuideButtonTapped() {
+        print("🎯 Fabric Guide button tapped")
+        navigateToDetail(section: .fabricGuide)
+    }
+    
+    @objc private func colourGuideButtonTapped() {
+        print("🎯 Colour Guide button tapped")
+        navigateToDetail(section: .colourGuide)
+    }
+    
+    @objc private func dosAndDontsButtonTapped() {
+        print("🎯 Do's & Don'ts button tapped")
+        navigateToDetail(section: .dosAndDonts)
+    }
+    
+    // MARK: - Navigation
+    private func navigateToDetail(section: BlueprintDetailContent.BlueprintSection) {
+        let detailVC = BlueprintDetailViewController()
+        let content = createContent(for: section)
+        detailVC.configure(with: content)
         
-        // Setup Profile Header
-        setupProfileHeader()
+        // Use overCurrentContext to keep everything visible
+        detailVC.modalPresentationStyle = .overCurrentContext
+        detailVC.transitioningDelegate = self
         
-        // Create text view for interpretation
-        textView = UITextView()
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.isEditable = false
+        present(detailVC, animated: true)
+    }
+    
+    private func createContent(for section: BlueprintDetailContent.BlueprintSection) -> BlueprintDetailContent {
+        switch section {
+        case .styleCore:
+            return BlueprintDetailContent(
+                sectionType: .styleCore,
+                title: "Style Core",
+                iconImageName: "style_core_glyph",
+                textSections: [
+                    BlueprintDetailContent.TextSection(
+                        subheading: nil,
+                        bodyText: "Placeholder content for Style Core. This will be dynamically generated based on the user's natal chart interpretation."
+                    )
+                ],
+                customComponent: nil
+            )
+            
+        case .fabricGuide:
+            return BlueprintDetailContent(
+                sectionType: .fabricGuide,
+                title: "Fabric Guide",
+                iconImageName: "fabric_guide_glyph",
+                textSections: [
+                    BlueprintDetailContent.TextSection(
+                        subheading: "Activating Textures",
+                        bodyText: "Rich natural fibers with substance, smooth surfaces with weight, fabrics with gentle movement that follow your body's natural lines. Beautiful drape, organic variation, luxurious hand feel, just enough richness to make you feel genuinely pampered."
+                    ),
+                    BlueprintDetailContent.TextSection(
+                        subheading: "Regulating Textures",
+                        bodyText: "Natural fibers with substance, soft textures with good drape, anything that feels substantial while remaining light."
+                    ),
+                    BlueprintDetailContent.TextSection(
+                        subheading: "Draining Textures",
+                        bodyText: "Anything too stiff, synthetic, or overly clingy against your skin, plus fabrics that need constant fussing. If it's fighting you or feels like it's trying too hard, it's not for you."
+                    ),
+                    BlueprintDetailContent.TextSection(
+                        subheading: "Your sweet spot",
+                        bodyText: "Materials that feel like a cozy hug, sturdy enough to support you but soft enough to live in, fancy but not precious."
+                    )
+                ],
+                customComponent: nil
+            )
+            
+        case .colourGuide:
+            let colorPalette = ColorPaletteView.createPlaceholderPalette()
+            
+            return BlueprintDetailContent(
+                sectionType: .colourGuide,
+                title: "Colour Guide",
+                iconImageName: "colour_guide_glyph",
+                textSections: [
+                    BlueprintDetailContent.TextSection(
+                        subheading: nil,
+                        bodyText: "Rich natural fibers with substance, smooth surfaces with weight, fabrics with gentle movement that follow your body's natural lines. Beautiful drape, organic variation, luxurious hand feel, just enough richness to make you feel genuinely pampered."
+                    ),
+                    BlueprintDetailContent.TextSection(
+                        subheading: "Current Colour Phase",
+                        bodyText: "You're settling deeper into your natural palette of rich, luxurious earth tones, but with this soft, dreamy edge. Think creamy caramels, deep sage greens, sophisticated warm browns, and those pearl greys that feel both solid and ethereal. You're getting braver with warmer, more expansive touches like golden undertones and dusty roses, plus little hits of adaptable colors that can roll with whatever your day brings."
+                    ),
+                    BlueprintDetailContent.TextSection(
+                        subheading: "Personal Palette",
+                        bodyText: ""
+                    )
+                ],
+                customComponent: colorPalette
+            )
+            
+        case .dosAndDonts:
+            // Create custom component with three sections
+            let dosAndDontsContainer = UIStackView()
+            dosAndDontsContainer.axis = .vertical
+            dosAndDontsContainer.spacing = 40
+            dosAndDontsContainer.alignment = .fill
+            dosAndDontsContainer.distribution = .fill
+            
+            // Lean into section
+            let leanIntoSection = DosAndDontsSectionView(
+                title: "Lean into",
+                bulletPoints: [
+                    "Your first gut reaction about how stuff feels, your body knows what works",
+                    "Investing in pieces that feel solid and well-made",
+                    "Layering for both comfort and visual interest",
+                    "Picking colors that make you feel grounded and confident",
+                    "Honouring your need for both beauty and practicality"
+                ]
+            )
+            dosAndDontsContainer.addArrangedSubview(leanIntoSection)
+            
+            // Release section
+            let releaseSection = DosAndDontsSectionView(
+                title: "Release",
+                bulletPoints: [
+                    "Trends that clash with your natural elegance",
+                    "Settling on fit for the sake of a \"good deal\"",
+                    "Overcomplicating outfits, your power is in simplicity with depth",
+                    "Ignoring your comfort needs for looks",
+                    "Rushing big style decisions"
+                ]
+            )
+            dosAndDontsContainer.addArrangedSubview(releaseSection)
+            
+            // Watch for section
+            let watchForSection = DosAndDontsSectionView(
+                title: "Watch for",
+                bulletPoints: [
+                    "Perfectionist tendencies that limit your experimenting",
+                    "Going for \"safe\" choices when your gut suggests something bolder",
+                    "Underestimating your natural magnetism and playing smaller than you are"
+                ]
+            )
+            dosAndDontsContainer.addArrangedSubview(watchForSection)
+            
+            return BlueprintDetailContent(
+                sectionType: .dosAndDonts,
+                title: "Do's & Donts",
+                iconImageName: "dos_donts_glyph",
+                textSections: [],
+                customComponent: dosAndDontsContainer
+            )
+        }
+    }
+}
+
+// MARK: - BlueprintGridButton
+final class BlueprintGridButton: UIButton {
+    
+    private let numberLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "DMSerifText-Regular", size: 32) ?? UIFont.systemFont(ofSize: 32, weight: .bold)
+        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textAlignment = .left
+        return label
+    }()
+    
+    private let buttonTitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "DMSerifText-Regular", size: 18) ?? UIFont.systemFont(ofSize: 18, weight: .semibold)
+        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textAlignment = .left
+        label.numberOfLines = 2
+        return label
+    }()
+    
+    private let backgroundPatternView: UIView = {
+        let view = UIView()
+        view.clipsToBounds = true
+        view.alpha = 0.15 // Faded effect
+        view.isUserInteractionEnabled = false // Allow touches to pass through
+        return view
+    }()
+    
+    init(number: String, title: String, backgroundImageName: String) {
+        super.init(frame: .zero)
         
-        // Apply theme to text view but override scroll setting for Blueprint
-        CosmicFitTheme.styleTextView(textView)
-        textView.isScrollEnabled = false // Override theme setting - Blueprint needs auto-sizing
-        textView.layer.borderWidth = 0.0 // Remove border for cleaner look
-        textView.textContainerInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0) // Match original spacing
+        numberLabel.text = number
+        buttonTitleLabel.text = title
         
-        contentBackgroundView.addSubview(textView)
+        // Disable user interaction on labels so button receives all touches
+        numberLabel.isUserInteractionEnabled = false
+        buttonTitleLabel.isUserInteractionEnabled = false
         
-        // Title label
-        titleLabel.text = "Your Cosmic Fit Blueprint"
-        titleLabel.textAlignment = .left
-        titleLabel.numberOfLines = 0
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        // Apply tiling pattern background
+        if let glyphImage = UIImage(named: backgroundImageName) {
+            backgroundPatternView.backgroundColor = UIColor(patternImage: glyphImage)
+        }
         
-        // Apply theme to title
-        CosmicFitTheme.styleTitleLabel(titleLabel, fontSize: CosmicFitTheme.Typography.FontSizes.largeTitle, weight: .bold)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
+        backgroundColor = .clear
+        layer.borderColor = CosmicFitTheme.Colors.cosmicBlue.cgColor
+        layer.borderWidth = 2
+        layer.cornerRadius = 12
+        clipsToBounds = true
         
-        contentBackgroundView.addSubview(titleLabel)
+        addSubview(backgroundPatternView)
+        addSubview(numberLabel)
+        addSubview(buttonTitleLabel)
         
-        // Debug button
-        debugButton.setTitle("Debug Chart", for: .normal)
-        debugButton.addTarget(self, action: #selector(debugButtonTapped), for: .touchUpInside)
-        debugButton.translatesAutoresizingMaskIntoConstraints = false
+        backgroundPatternView.translatesAutoresizingMaskIntoConstraints = false
+        numberLabel.translatesAutoresizingMaskIntoConstraints = false
+        buttonTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        // Apply theme to debug button
-        CosmicFitTheme.styleButton(debugButton, style: .secondary)
-        
-        contentBackgroundView.addSubview(debugButton)
-        
-        // Content background constraints
         NSLayoutConstraint.activate([
-            contentBackgroundView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 64),
-            contentBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
-            contentBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
-            contentBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24)
-        ])
-        
-        NSLayoutConstraint.activate([
-            // Profile header positioned within content background
-            profileHeaderView.topAnchor.constraint(equalTo: contentBackgroundView.topAnchor, constant: 24),
-            profileHeaderView.leadingAnchor.constraint(equalTo: contentBackgroundView.leadingAnchor, constant: 24),
-            profileHeaderView.trailingAnchor.constraint(equalTo: contentBackgroundView.trailingAnchor, constant: -24),
+            // Background pattern - fills from top-left, stops before title
+            backgroundPatternView.topAnchor.constraint(equalTo: topAnchor),
+            backgroundPatternView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            backgroundPatternView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            backgroundPatternView.bottomAnchor.constraint(equalTo: buttonTitleLabel.topAnchor, constant: -10),
             
-            // Divider view
-            dividerView.topAnchor.constraint(equalTo: profileHeaderView.bottomAnchor, constant: 16),
-            dividerView.leadingAnchor.constraint(equalTo: contentBackgroundView.leadingAnchor, constant: 24),
-            dividerView.trailingAnchor.constraint(equalTo: contentBackgroundView.trailingAnchor, constant: -24),
-            dividerView.heightAnchor.constraint(equalToConstant: 1),
+            // Number label (top-left with padding)
+            numberLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            numberLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             
-            // Title label
-            titleLabel.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: 24),
-            titleLabel.leadingAnchor.constraint(equalTo: contentBackgroundView.leadingAnchor, constant: 24),
-            titleLabel.trailingAnchor.constraint(equalTo: contentBackgroundView.trailingAnchor, constant: -24),
-            
-            // TextView fills contentView below title
-            textView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
-            textView.leadingAnchor.constraint(equalTo: contentBackgroundView.leadingAnchor, constant: 24),
-            textView.trailingAnchor.constraint(equalTo: contentBackgroundView.trailingAnchor, constant: -24),
-            
-            // Debug button at bottom
-            debugButton.topAnchor.constraint(equalTo: textView.bottomAnchor, constant: 24),
-            debugButton.centerXAnchor.constraint(equalTo: contentBackgroundView.centerXAnchor),
-            debugButton.bottomAnchor.constraint(equalTo: contentBackgroundView.bottomAnchor, constant: -24)
+            // Title label (bottom-left with padding)
+            buttonTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            buttonTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            buttonTitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
         ])
     }
     
-    private func setupProfileHeader() {
-        profileHeaderView.translatesAutoresizingMaskIntoConstraints = false
-        contentBackgroundView.addSubview(profileHeaderView)
-        
-        // Profile Label
-        profileLabel.text = "PROFILE"
-        profileLabel.textAlignment = .left
-        profileLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Apply theme to profile label
-        CosmicFitTheme.styleBodyLabel(profileLabel, fontSize: CosmicFitTheme.Typography.FontSizes.subheadline, weight: .light)
-        
-        profileHeaderView.addSubview(profileLabel)
-        
-        // Birth Info Label
-        birthInfoLabel.textAlignment = .left
-        birthInfoLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Apply theme to birth info label
-        CosmicFitTheme.styleBodyLabel(birthInfoLabel, fontSize: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
-        
-        profileHeaderView.addSubview(birthInfoLabel)
-        
-        // Location Label
-        locationLabel.textAlignment = .left
-        locationLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Apply theme to location label
-        CosmicFitTheme.styleBodyLabel(locationLabel, fontSize: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
-        
-        profileHeaderView.addSubview(locationLabel)
-        
-        // Divider
-        dividerView.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Apply theme to divider
-        CosmicFitTheme.styleDivider(dividerView)
-        
-        contentBackgroundView.addSubview(dividerView)
-        
-        NSLayoutConstraint.activate([
-            profileLabel.topAnchor.constraint(equalTo: profileHeaderView.topAnchor),
-            profileLabel.leadingAnchor.constraint(equalTo: profileHeaderView.leadingAnchor),
-            profileLabel.trailingAnchor.constraint(equalTo: profileHeaderView.trailingAnchor),
-            
-            birthInfoLabel.topAnchor.constraint(equalTo: profileLabel.bottomAnchor, constant: 8),
-            birthInfoLabel.leadingAnchor.constraint(equalTo: profileHeaderView.leadingAnchor),
-            birthInfoLabel.trailingAnchor.constraint(equalTo: profileHeaderView.trailingAnchor),
-            
-            locationLabel.topAnchor.constraint(equalTo: birthInfoLabel.bottomAnchor, constant: 8),
-            locationLabel.leadingAnchor.constraint(equalTo: profileHeaderView.leadingAnchor),
-            locationLabel.trailingAnchor.constraint(equalTo: profileHeaderView.trailingAnchor),
-            locationLabel.bottomAnchor.constraint(equalTo: profileHeaderView.bottomAnchor)
-        ])
-    }
-    
-    private func updateContent() {
-        // Set the interpretation text
-        textView.text = interpretationText
-        
-        // Apply styling
-        setupTextViewStyling()
-        
-        // Update profile header
-        updateProfileHeader()
-    }
-    
-    private func updateProfileHeader() {
-        // Format birth date if available
-        if let date = birthDate {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd.MM.yyyy"
-            let timeFormatter = DateFormatter()
-            timeFormatter.dateFormat = "hh:mma"
-            
-            let dateString = dateFormatter.string(from: date)
-            let timeString = timeFormatter.string(from: date)
-            
-            birthInfoLabel.text = "Born \(dateString), \(timeString)"
-        } else {
-            birthInfoLabel.text = "Born --.--.----, --:--"
-        }
-        
-        // Set location
-        let city = birthCity.isEmpty ? "CITY" : birthCity.uppercased()
-        let country = birthCountry.isEmpty ? "COUNTRY" : birthCountry.uppercased()
-        locationLabel.text = "\(city), \(country)"
-    }
-    
-    // MARK: - Text Styling
-    private func setupTextViewStyling() {
-        guard let text = textView.text, !text.isEmpty else {
-            print("⚠️ Cannot style empty text")
-            return
-        }
-        
-        print("Applying themed styling to Blueprint text of length: \(text.count)")
-        
-        let attributedText = NSMutableAttributedString()
-        let lines = text.components(separatedBy: "\n")
-        
-        for (i, line) in lines.enumerated() {
-            let trimmedLine = line.trimmingCharacters(in: .whitespacesAndNewlines)
-            
-            if i > 0 {
-                attributedText.append(NSAttributedString(string: "\n"))
-            }
-            
-            if trimmedLine.isEmpty {
-                continue
-            }
-            
-            // SECTION HEADERS
-            if line.hasPrefix("# ") {
-                // Main title
-                let titleText = String(line.dropFirst(2))
-                let titleAttributes: [NSAttributedString.Key: Any] = [
-                    .font: CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.largeTitle, weight: .bold),
-                    .foregroundColor: CosmicFitTheme.Colors.cosmicBlue
-                ]
-                attributedText.append(NSAttributedString(string: titleText, attributes: titleAttributes))
-                
-            } else if line.hasPrefix("## ") {
-                // Section header
-                let headerText = String(line.dropFirst(3))
-                let headerAttributes: [NSAttributedString.Key: Any] = [
-                    .font: CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.title2, weight: .bold),
-                    .foregroundColor: CosmicFitTheme.Colors.cosmicBlue
-                ]
-                attributedText.append(NSAttributedString(string: headerText, attributes: headerAttributes))
-                
-            } else if line.hasSuffix(":") && line.components(separatedBy: " ").count == 1 {
-                // Category headers
-                let categoryAttributes: [NSAttributedString.Key: Any] = [
-                    .font: CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.headline, weight: .semibold),
-                    .foregroundColor: CosmicFitTheme.Colors.cosmicBlue
-                ]
-                attributedText.append(NSAttributedString(string: line, attributes: categoryAttributes))
-                
-            } else if line == "---" {
-                // Divider line - add spacing
-                let dividerAttributes: [NSAttributedString.Key: Any] = [
-                    .font: CosmicFitTheme.Typography.dmSansFont(size: 6),
-                    .foregroundColor: CosmicFitTheme.Colors.dividerColor
-                ]
-                attributedText.append(NSAttributedString(string: "　", attributes: dividerAttributes))
-                
-            } else {
-                // Regular body text
-                let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.lineSpacing = 4
-                paragraphStyle.paragraphSpacing = 8
-                
-                let bodyAttributes: [NSAttributedString.Key: Any] = [
-                    .font: CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.body),
-                    .foregroundColor: CosmicFitTheme.Colors.cosmicBlue,
-                    .paragraphStyle: paragraphStyle
-                ]
-                attributedText.append(NSAttributedString(string: line, attributes: bodyAttributes))
+    override var isHighlighted: Bool {
+        didSet {
+            UIView.animate(withDuration: 0.1) {
+                self.alpha = self.isHighlighted ? 0.6 : 1.0
             }
         }
+    }
+}
+
+// MARK: - UINavigationControllerDelegate
+extension BlueprintViewController: UINavigationControllerDelegate {
+    
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
-        textView.attributedText = attributedText
+        // This handles tab transitions (Daily Fit <-> Cosmic Blueprint)
+        // For sub-pages, we use UIViewControllerTransitioningDelegate instead
+        switch operation {
+        case .push:
+            return VerticalSlideAnimator(operation: .push)
+        case .pop:
+            return VerticalSlideAnimator(operation: .pop)
+        case .none:
+            return nil
+        @unknown default:
+            return nil
+        }
+    }
+}
+
+// MARK: - UIViewControllerTransitioningDelegate
+extension BlueprintViewController: UIViewControllerTransitioningDelegate {
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return VerticalSlideAnimator(operation: .push)
     }
     
-    // MARK: - Actions
-    @objc private func debugButtonTapped() {
-        guard let originalChartVC = originalChartViewController else {
-            print("❌ No original chart view controller available")
-            return
-        }
-        
-        navigationController?.pushViewController(originalChartVC, animated: true)
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return VerticalSlideAnimator(operation: .pop)
     }
     
-    @objc private func shareInterpretation() {
-        // Create an image of the interpretation for sharing
-        UIGraphicsBeginImageContextWithOptions(contentView.bounds.size, false, 0.0)
-        contentView.drawHierarchy(in: contentView.bounds, afterScreenUpdates: true)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        // Items to share
-        var itemsToShare: [Any] = [interpretationText]
-        if let image = image {
-            itemsToShare.append(image)
-        }
-        
-        let activityViewController = UIActivityViewController(
-            activityItems: itemsToShare,
-            applicationActivities: nil
-        )
-        
-        // Present the share sheet
-        present(activityViewController, animated: true)
-    }
+    // No custom presentation controller - we handle layout in the detail VC itself
 }
