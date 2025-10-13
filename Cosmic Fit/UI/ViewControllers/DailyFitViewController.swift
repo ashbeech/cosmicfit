@@ -239,7 +239,7 @@ class DailyFitViewController: UIViewController {
         cardBackImageView.isUserInteractionEnabled = true
         
         // Glow effect for card back
-        cardBackImageView.layer.shadowColor = CosmicFitTheme.Colors.cosmicOrange.cgColor
+        cardBackImageView.layer.shadowColor = CosmicFitTheme.Colors.cosmicLilac.cgColor
         cardBackImageView.layer.shadowOffset = CGSize.zero
         cardBackImageView.layer.shadowRadius = 100
         cardBackImageView.layer.shadowOpacity = 0.4
@@ -492,7 +492,7 @@ class DailyFitViewController: UIViewController {
         tarotCardImageView.translatesAutoresizingMaskIntoConstraints = false
         tarotCardImageView.contentMode = .scaleAspectFit
         tarotCardImageView.clipsToBounds = true
-        tarotCardImageView.backgroundColor = CosmicFitTheme.Colors.cosmicOrange // Themed placeholder
+        tarotCardImageView.backgroundColor = CosmicFitTheme.Colors.cosmicLilac // Themed placeholder
         tarotCardImageView.layer.cornerRadius = 24
         tarotCardImageView.alpha = 0.0
         tarotCardContainerView.addSubview(tarotCardImageView)
@@ -803,19 +803,19 @@ class DailyFitViewController: UIViewController {
         let color: UIColor
         switch card.arcana {
         case .major:
-            color = CosmicFitTheme.Colors.cosmicOrange
+            color = CosmicFitTheme.Colors.cosmicLilac
         case .minor:
             switch card.suit {
             case .cups:
                 color = .systemBlue
             case .wands:
-                color = CosmicFitTheme.Colors.cosmicOrange
+                color = CosmicFitTheme.Colors.cosmicLilac
             case .swords:
                 color = CosmicFitTheme.Colors.cosmicBlue
             case .pentacles:
                 color = .systemGreen
             case .none:
-                color = CosmicFitTheme.Colors.cosmicOrange
+                color = CosmicFitTheme.Colors.cosmicLilac
             }
         }
         

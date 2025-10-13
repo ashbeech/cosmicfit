@@ -25,9 +25,11 @@ struct CosmicFitTheme {
         /// Cosmic Blue - Primary text color (#000210)
         static let cosmicBlue = UIColor(red: 0/255, green: 2/255, blue: 16/255, alpha: 1.0)
         
-        /// Cosmic Orange - Highlight/accent color (#FF8502)
+        /// Highlight/accent colors (#FF8502/7E69E6)
         static let cosmicOrange = UIColor(red: 255/255, green: 133/255, blue: 2/255, alpha: 1.0)
         
+        static let cosmicLilac = UIColor(red: 126/255, green: 105/255, blue: 230/255, alpha: 1.0)
+
         /// Tab bar background color - Black
         static let tabBarBackground = UIColor.black
         
@@ -35,7 +37,7 @@ struct CosmicFitTheme {
         static let tabBarInactive = UIColor.white
         
         /// Tab bar active/selected color - Cosmic Orange
-        static let tabBarActive = cosmicOrange
+        static let tabBarActive = cosmicLilac
         
         /// Border color for form elements
         static let borderColor = cosmicBlue
@@ -57,9 +59,11 @@ struct CosmicFitTheme {
             static let title2: CGFloat = 22
             static let title3: CGFloat = 20
             static let headline: CGFloat = 17
-            static let body: CGFloat = 17
+            static let body: CGFloat = 18
             static let callout: CGFloat = 16
-            static let subheadline: CGFloat = 15
+            static let subheadline: CGFloat = 22
+            static let sectionHeader: CGFloat = 22
+            static let pageTitle: CGFloat = 48
             static let footnote: CGFloat = 13
             static let caption1: CGFloat = 12
             static let caption2: CGFloat = 11
@@ -73,6 +77,15 @@ struct CosmicFitTheme {
             }
             // Fallback to system serif font
             return UIFont.systemFont(ofSize: size, weight: weight)
+        }
+        
+        /// DM Serif Text Italic font for subsection headers
+        static func DMSerifTextItalicFont(size: CGFloat) -> UIFont {
+            if let customFont = UIFont(name: "DMSerifText-Italic", size: size) {
+                return customFont
+            }
+            // Fallback to system italic
+            return UIFont.italicSystemFont(ofSize: size)
         }
         
         /// DM Sans font for body text (replaces SF Pro Display)
@@ -242,6 +255,20 @@ struct CosmicFitTheme {
     static func styleBodyLabel(_ label: UILabel, fontSize: CGFloat = Typography.FontSizes.body, weight: UIFont.Weight = .regular) {
         label.font = Typography.dmSansFont(size: fontSize, weight: weight)
         label.textColor = Colors.cosmicGrey
+    }
+    
+    /// Apply theme to a subsection header label (for Do's & Don'ts sections)
+    static func styleSubsectionLabel(_ label: UILabel, fontSize: CGFloat = Typography.FontSizes.title3, italic: Bool = true) {
+        label.font = italic ? Typography.DMSerifTextItalicFont(size: fontSize) : Typography.DMSerifTextFont(size: fontSize)
+        label.textColor = Colors.cosmicBlue
+        label.textAlignment = .left
+    }
+
+    /// Apply theme to a decorative symbol label (like stars, bullets)
+    static func styleSymbolLabel(_ label: UILabel, fontSize: CGFloat = Typography.FontSizes.title3) {
+        label.font = UIFont.systemFont(ofSize: fontSize)
+        label.textColor = Colors.cosmicBlue
+        label.textAlignment = .left
     }
     
     /// Apply theme to a text field

@@ -57,45 +57,58 @@ final class DosAndDontsSectionView: UIView {
     }
     
     private func createHeadingContainer() -> UIView {
-        let container = UIView()
-        container.translatesAutoresizingMaskIntoConstraints = false
+        // Outer container for padding
+        let outerContainer = UIView()
+        outerContainer.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Inner container for star + title
+        let innerContainer = UIView()
+        innerContainer.translatesAutoresizingMaskIntoConstraints = false
         
         // Star icon (✦)
         let starLabel = UILabel()
         starLabel.text = "✦"
-        starLabel.font = UIFont.systemFont(ofSize: 16)
-        starLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
-        starLabel.textAlignment = .left
         starLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+        CosmicFitTheme.styleSymbolLabel(starLabel, fontSize: CosmicFitTheme.Typography.FontSizes.title3)
+
         // Title (italic)
         let titleLabel = UILabel()
         titleLabel.text = sectionTitle
-        titleLabel.font = UIFont(name: "DMSerifText-Italic", size: 18) ?? UIFont.italicSystemFont(ofSize: 18)
-        titleLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
-        titleLabel.textAlignment = .left
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        CosmicFitTheme.styleSubsectionLabel(titleLabel, fontSize: CosmicFitTheme.Typography.FontSizes.title3, italic: true)
         
-        container.addSubview(starLabel)
-        container.addSubview(titleLabel)
+        innerContainer.addSubview(starLabel)
+        innerContainer.addSubview(titleLabel)
+        outerContainer.addSubview(innerContainer)
         
         NSLayoutConstraint.activate([
-            starLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            starLabel.topAnchor.constraint(equalTo: container.topAnchor),
-            starLabel.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-            starLabel.widthAnchor.constraint(equalToConstant: 20),
+            // Inner container with 10% padding (80% width, centered)
+            innerContainer.topAnchor.constraint(equalTo: outerContainer.topAnchor),
+            innerContainer.bottomAnchor.constraint(equalTo: outerContainer.bottomAnchor),
+            innerContainer.widthAnchor.constraint(equalTo: outerContainer.widthAnchor, multiplier: 0.8),
+            innerContainer.centerXAnchor.constraint(equalTo: outerContainer.centerXAnchor),
+            
+            // Star and title within inner container
+            starLabel.leadingAnchor.constraint(equalTo: innerContainer.leadingAnchor),
+            starLabel.topAnchor.constraint(equalTo: innerContainer.topAnchor),
+            starLabel.bottomAnchor.constraint(equalTo: innerContainer.bottomAnchor),
+            starLabel.widthAnchor.constraint(equalToConstant: 18),
             
             titleLabel.leadingAnchor.constraint(equalTo: starLabel.trailingAnchor, constant: 4),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: innerContainer.trailingAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: starLabel.centerYAnchor),
             
-            container.heightAnchor.constraint(equalToConstant: 24)
+            innerContainer.heightAnchor.constraint(equalToConstant: 24)
         ])
         
-        return container
+        return outerContainer
     }
     
-    private func createBulletPoint(text: String) -> UILabel {
+    private func createBulletPoint(text: String) -> UIView {
+        // Create container for padding
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        
         let label = UILabel()
         
         // Create attributed string with bullet
@@ -104,7 +117,7 @@ final class DosAndDontsSectionView: UIView {
         paragraphStyle.firstLineHeadIndent = 0
         
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont(name: "DMSans-Regular", size: 16) ?? UIFont.systemFont(ofSize: 16),
+            .font: CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .regular),
             .foregroundColor: CosmicFitTheme.Colors.cosmicBlue,
             .paragraphStyle: paragraphStyle
         ]
@@ -113,7 +126,18 @@ final class DosAndDontsSectionView: UIView {
         label.attributedText = NSAttributedString(string: bulletText, attributes: attributes)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
+        label.translatesAutoresizingMaskIntoConstraints = false
         
-        return label
+        container.addSubview(label)
+        
+        // Add 10% padding on each side (80% width, centered)
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: container.topAnchor),
+            label.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+            label.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.8),
+            label.centerXAnchor.constraint(equalTo: container.centerXAnchor)
+        ])
+        
+        return container
     }
 }

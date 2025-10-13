@@ -135,7 +135,7 @@ class MainViewController: UIViewController {
         
         // Activity Indicator
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.color = CosmicFitTheme.Colors.cosmicOrange
+        activityIndicator.color = CosmicFitTheme.Colors.cosmicLilac
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(activityIndicator)
         

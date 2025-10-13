@@ -195,7 +195,7 @@ class ProfileViewController: UIViewController {
         
         // Activity Indicator
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.color = CosmicFitTheme.Colors.cosmicOrange
+        activityIndicator.color = CosmicFitTheme.Colors.cosmicLilac
         activityIndicator.hidesWhenStopped = true
         view.addSubview(activityIndicator)
         

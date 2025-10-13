@@ -38,8 +38,12 @@ final class BlueprintDetailViewController: UIViewController {
     private var birthCountry: String = ""
     private var originalChartViewController: NatalChartViewController?
     
-    // Store tab bar height for layout
     private var tabBarHeight: CGFloat = 0
+    
+    // Interactive dismissal properties
+    private var panGestureRecognizer: UIPanGestureRecognizer!
+    private var initialTouchPoint: CGPoint = .zero
+    private var interactiveDismissalInProgress = false
     
     // MARK: - UI Components
     private let shadowContainerView: UIView = {
@@ -56,13 +60,10 @@ final class BlueprintDetailViewController: UIViewController {
         let view = UIView()
         view.backgroundColor = CosmicFitTheme.Colors.darkerCosmicGrey
         view.layer.cornerRadius = 16
-        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner] // Only round top corners
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.clipsToBounds = true
-        
-        // Add 1px border around card
         view.layer.borderWidth = 1
         view.layer.borderColor = CosmicFitTheme.Colors.cosmicBlue.cgColor
-        
         return view
     }()
     
@@ -80,18 +81,18 @@ final class BlueprintDetailViewController: UIViewController {
         return view
     }()
     
-    private let backButton: UIButton = {
+    private let closeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.tintColor = CosmicFitTheme.Colors.cosmicBlue
-        button.contentHorizontalAlignment = .left
+        button.contentHorizontalAlignment = .right
         return button
     }()
     
     private let headerLabel: UILabel = {
         let label = UILabel()
         label.text = "YOUR COSMIC BLUEPRINT"
-        label.font = UIFont(name: "DMSans-Bold", size: 14) ?? UIFont.systemFont(ofSize: 14, weight: .bold)
+        label.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold)
         label.textColor = CosmicFitTheme.Colors.cosmicBlue
         label.textAlignment = .center
         return label
@@ -158,7 +159,7 @@ final class BlueprintDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Get tab bar height from presenting view controller
+        // Get tab bar height
         if let presentingVC = presentingViewController,
            let tabBarController = presentingVC as? UITabBarController {
             tabBarHeight = tabBarController.tabBar.frame.height
@@ -170,6 +171,7 @@ final class BlueprintDetailViewController: UIViewController {
         setupUI()
         setupConstraints()
         setupActions()
+        setupGestures()
         
         if let content = content {
             populateContent(content)
@@ -179,7 +181,6 @@ final class BlueprintDetailViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        // Add shadow path to shadow container (matches card shape)
         shadowContainerView.layer.shadowPath = UIBezierPath(
             roundedRect: shadowContainerView.bounds,
             byRoundingCorners: [.topLeft, .topRight],
@@ -198,16 +199,12 @@ final class BlueprintDetailViewController: UIViewController {
     
     // MARK: - Setup
     private func setupUI() {
-        view.backgroundColor = .clear // Transparent to show Blueprint page behind
+        view.backgroundColor = .clear
         
-        // Add shadow container with gap at top
         view.addSubview(shadowContainerView)
-        
-        // Add card inside shadow container
         shadowContainerView.addSubview(cardContainerView)
         
-        // Add all content inside the card
-        cardContainerView.addSubview(backButton)
+        cardContainerView.addSubview(closeButton)
         cardContainerView.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
@@ -226,7 +223,7 @@ final class BlueprintDetailViewController: UIViewController {
     private func setupConstraints() {
         shadowContainerView.translatesAutoresizingMaskIntoConstraints = false
         cardContainerView.translatesAutoresizingMaskIntoConstraints = false
-        backButton.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
         headerLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -240,27 +237,26 @@ final class BlueprintDetailViewController: UIViewController {
         starImageView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            // Shadow Container - leaves 40px gap at top to show Blueprint page behind
-            // and leaves space at bottom for tab bar
+            // Shadow Container
             shadowContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
             shadowContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             shadowContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             shadowContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -(tabBarHeight)),
             
-            // Card Container - fills shadow container
+            // Card Container
             cardContainerView.topAnchor.constraint(equalTo: shadowContainerView.topAnchor),
             cardContainerView.leadingAnchor.constraint(equalTo: shadowContainerView.leadingAnchor),
             cardContainerView.trailingAnchor.constraint(equalTo: shadowContainerView.trailingAnchor),
             cardContainerView.bottomAnchor.constraint(equalTo: shadowContainerView.bottomAnchor),
             
-            // Back Button (inside card)
-            backButton.topAnchor.constraint(equalTo: cardContainerView.topAnchor, constant: 16),
-            backButton.leadingAnchor.constraint(equalTo: cardContainerView.leadingAnchor, constant: 20),
-            backButton.widthAnchor.constraint(equalToConstant: 44),
-            backButton.heightAnchor.constraint(equalToConstant: 44),
+            // Close Button (right side)
+            closeButton.topAnchor.constraint(equalTo: cardContainerView.topAnchor, constant: 16),
+            closeButton.trailingAnchor.constraint(equalTo: cardContainerView.trailingAnchor, constant: -20),
+            closeButton.widthAnchor.constraint(equalToConstant: 44),
+            closeButton.heightAnchor.constraint(equalToConstant: 44),
             
-            // ScrollView (inside card)
-            scrollView.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 8),
+            // ScrollView
+            scrollView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 8),
             scrollView.leadingAnchor.constraint(equalTo: cardContainerView.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: cardContainerView.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: cardContainerView.bottomAnchor),
@@ -276,7 +272,7 @@ final class BlueprintDetailViewController: UIViewController {
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             headerLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            // Icon - constrain height only, let width adjust to aspect ratio
+            // Icon
             iconImageView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
             iconImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             iconImageView.heightAnchor.constraint(equalToConstant: 60),
@@ -286,7 +282,7 @@ final class BlueprintDetailViewController: UIViewController {
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             
-            // Top Divider (will be hidden for Fabric Guide)
+            // Top Divider
             topDivider.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 40),
             topDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             topDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
@@ -324,35 +320,34 @@ final class BlueprintDetailViewController: UIViewController {
     }
     
     private func setupActions() {
-        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+    }
+    
+    private func setupGestures() {
+        panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+        panGestureRecognizer.delegate = self
+        view.addGestureRecognizer(panGestureRecognizer)
     }
     
     // MARK: - Content Population
     private func populateContent(_ content: BlueprintDetailContent) {
-        // Set icon and title
         iconImageView.image = UIImage(named: content.iconImageName)
         titleLabel.text = content.title
         
-        // Hide top divider for Fabric Guide (uses first section divider instead)
         topDivider.isHidden = (content.sectionType == .fabricGuide)
         
-        // Clear existing content
         contentStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
-        // Add text sections
         for textSection in content.textSections {
-            // Add subheading with dividers if present
             if let subheading = textSection.subheading {
                 let subheadingContainer = createSubheadingWithDividers(text: subheading)
                 contentStackView.addArrangedSubview(subheadingContainer)
             }
             
-            // Add body text
             let bodyLabel = createBodyLabel(text: textSection.bodyText)
             contentStackView.addArrangedSubview(bodyLabel)
         }
         
-        // Add custom component if present
         if let customComponent = content.customComponent {
             contentStackView.addArrangedSubview(customComponent)
         }
@@ -383,22 +378,18 @@ final class BlueprintDetailViewController: UIViewController {
         container.addSubview(label)
         
         NSLayoutConstraint.activate([
-            // Container height
             container.heightAnchor.constraint(equalToConstant: 30),
             
-            // Left divider
             leftDivider.leadingAnchor.constraint(equalTo: container.leadingAnchor),
             leftDivider.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             leftDivider.trailingAnchor.constraint(equalTo: label.leadingAnchor, constant: -12),
             leftDivider.heightAnchor.constraint(equalToConstant: 1),
             
-            // Right divider
             rightDivider.leadingAnchor.constraint(equalTo: label.trailingAnchor, constant: 12),
             rightDivider.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             rightDivider.trailingAnchor.constraint(equalTo: container.trailingAnchor),
             rightDivider.heightAnchor.constraint(equalToConstant: 1),
             
-            // Label
             label.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             label.centerYAnchor.constraint(equalTo: container.centerYAnchor),
         ])
@@ -406,19 +397,138 @@ final class BlueprintDetailViewController: UIViewController {
         return container
     }
     
-    private func createBodyLabel(text: String) -> UILabel {
+    private func createBodyLabel(text: String) -> UIView {
+        // Create container for padding
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Create the label
         let label = UILabel()
         label.text = text
-        label.font = UIFont(name: "DMSans-Regular", size: 16) ?? UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
         label.textColor = CosmicFitTheme.Colors.cosmicBlue
         label.textAlignment = .left
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        return label
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        container.addSubview(label)
+        
+        // Add 10% screen width padding on each side
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: container.topAnchor),
+            label.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+            label.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.8),
+            label.centerXAnchor.constraint(equalTo: container.centerXAnchor)
+        ])
+        
+        return container
     }
     
     // MARK: - Actions
-    @objc private func backButtonTapped() {
+    @objc private func closeButtonTapped() {
         dismiss(animated: true)
+    }
+    
+    // MARK: - Gesture Handling
+    @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: view)
+        let velocity = gesture.velocity(in: view)
+        let progress = translation.y / view.bounds.height
+        
+        switch gesture.state {
+        case .began:
+            initialTouchPoint = gesture.location(in: view)
+            interactiveDismissalInProgress = true
+            
+        case .changed:
+            // Only allow downward drags
+            guard translation.y > 0 else {
+                shadowContainerView.transform = .identity
+                return
+            }
+            
+            // Apply the drag with damping for a natural feel
+            let dampingFactor: CGFloat = 0.5
+            let dragDistance = translation.y * dampingFactor
+            shadowContainerView.transform = CGAffineTransform(translationX: 0, y: dragDistance)
+            
+        case .ended, .cancelled:
+            interactiveDismissalInProgress = false
+            
+            // Dismiss if dragged down significantly OR with high downward velocity
+            let shouldDismiss = (progress > 0.3 || velocity.y > 800) && translation.y > 0
+            
+            if shouldDismiss {
+                animateDismissal(with: velocity.y)
+            } else {
+                // Snap back to original position
+                UIView.animate(
+                    withDuration: 0.3,
+                    delay: 0,
+                    usingSpringWithDamping: 0.8,
+                    initialSpringVelocity: 0,
+                    options: [.curveEaseOut, .allowUserInteraction],
+                    animations: {
+                        self.shadowContainerView.transform = .identity
+                    }
+                )
+            }
+            
+        default:
+            break
+        }
+    }
+    
+    private func animateDismissal(with velocity: CGFloat) {
+        let screenHeight = view.bounds.height
+        let remainingDistance = screenHeight - shadowContainerView.frame.origin.y
+        
+        // Calculate duration based on velocity for natural feel
+        let minimumDuration: TimeInterval = 0.2
+        let velocityBasedDuration = TimeInterval(remainingDistance / max(velocity, 500))
+        let duration = max(minimumDuration, min(velocityBasedDuration, 0.4))
+        
+        UIView.animate(
+            withDuration: duration,
+            delay: 0,
+            options: [.curveEaseIn, .allowUserInteraction],
+            animations: {
+                self.shadowContainerView.transform = CGAffineTransform(translationX: 0, y: screenHeight)
+                self.view.backgroundColor = .clear
+            },
+            completion: { _ in
+                self.dismiss(animated: false)
+            }
+        )
+    }
+}
+
+// MARK: - UIGestureRecognizerDelegate
+extension BlueprintDetailViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // Allow pan gesture to work with scroll view
+        if let scrollView = otherGestureRecognizer.view as? UIScrollView {
+            // Only allow simultaneous recognition when scrolled to top
+            return scrollView.contentOffset.y <= 0
+        }
+        return false
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard gestureRecognizer == panGestureRecognizer else { return true }
+        
+        let velocity = panGestureRecognizer.velocity(in: view)
+        
+        // Only recognize downward swipes
+        guard velocity.y > 0 else { return false }
+        
+        // Only recognize if scroll view is at top
+        if scrollView.contentOffset.y > 0 {
+            return false
+        }
+        
+        // Require more vertical than horizontal movement (at least 2:1 ratio)
+        return abs(velocity.y) > abs(velocity.x) * 2
     }
 }

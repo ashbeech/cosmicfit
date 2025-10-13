@@ -33,7 +33,7 @@ final class BlueprintViewController: UIViewController {
     private let aboutYouLabel: UILabel = {
         let label = UILabel()
         label.text = "ABOUT YOU"
-        label.font = UIFont(name: "DMSans-Medium", size: 12) ?? UIFont.systemFont(ofSize: 12, weight: .medium)
+        label.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold)
         label.textColor = CosmicFitTheme.Colors.cosmicBlue
         label.textAlignment = .center
         return label
@@ -49,11 +49,25 @@ final class BlueprintViewController: UIViewController {
     
     private let mainHeadingLabel: UILabel = {
         let label = UILabel()
-        label.text = "YOUR COSMIC\nBLUEPRINT"
-        label.font = UIFont(name: "DMSerifText-Regular", size: 36) ?? UIFont.systemFont(ofSize: 36, weight: .bold)
         label.textColor = CosmicFitTheme.Colors.cosmicBlue
         label.textAlignment = .center
         label.numberOfLines = 2
+        
+        // Use attributed string for custom line height
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 0.73  // Reduces line height to create thin gap
+        paragraphStyle.alignment = .center
+        
+        let attributedText = NSAttributedString(
+            string: "YOUR COSMIC\nBLUEPRINT",
+            attributes: [
+                .font: CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.pageTitle),
+                .foregroundColor: CosmicFitTheme.Colors.cosmicBlue,
+                .paragraphStyle: paragraphStyle
+            ]
+        )
+        label.attributedText = attributedText
+        
         return label
     }()
     
@@ -66,7 +80,7 @@ final class BlueprintViewController: UIViewController {
     private let styleEssenceLabel: UILabel = {
         let label = UILabel()
         label.text = "Style Essence"
-        label.font = UIFont(name: "DMSans-Regular", size: 18) ?? UIFont.systemFont(ofSize: 18, weight: .regular)
+        label.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.subheadline, weight: .regular)
         label.textColor = CosmicFitTheme.Colors.cosmicBlue
         label.textAlignment = .center
         return label
@@ -75,7 +89,7 @@ final class BlueprintViewController: UIViewController {
     private let bodyTextLabel: UILabel = {
         let label = UILabel()
         label.text = "You've got that intuitive elegance that feels both grounded and gently dreamy. Quality lands through texture and quiet proportion, so your presence reads luxurious without effort. There is a soft confidence in the way you move, a tactile-first approach that makes people feel both soothed and curious. Fewer, better pieces that age well are your language."
-        label.font = UIFont(name: "DMSans-Regular", size: 16) ?? UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
         label.textColor = CosmicFitTheme.Colors.cosmicBlue
         label.textAlignment = .left
         label.numberOfLines = 0
@@ -188,7 +202,7 @@ final class BlueprintViewController: UIViewController {
         contentView.addSubview(mainHeadingLabel)
         contentView.addSubview(topDivider)
         contentView.addSubview(styleEssenceLabel)
-        contentView.addSubview(bodyTextLabel)
+        //contentView.addSubview(bodyTextLabel)
         contentView.addSubview(middleDivider)
         contentView.addSubview(styleCoreButton)
         contentView.addSubview(fabricGuideButton)
@@ -218,6 +232,12 @@ final class BlueprintViewController: UIViewController {
         bottomDividerLeft.translatesAutoresizingMaskIntoConstraints = false
         bottomDividerRight.translatesAutoresizingMaskIntoConstraints = false
         starImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Create container for body text padding
+        let bodyTextContainer = UIView()
+        bodyTextContainer.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(bodyTextContainer)
+        bodyTextContainer.addSubview(bodyTextLabel)
         
         NSLayoutConstraint.activate([
             // ScrollView
@@ -258,13 +278,19 @@ final class BlueprintViewController: UIViewController {
             styleEssenceLabel.topAnchor.constraint(equalTo: topDivider.bottomAnchor, constant: 40),
             styleEssenceLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            // Body Text (~40px spacing)
-            bodyTextLabel.topAnchor.constraint(equalTo: styleEssenceLabel.bottomAnchor, constant: 40),
-            bodyTextLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            bodyTextLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            // Body Text Container (~40px spacing)
+            bodyTextContainer.topAnchor.constraint(equalTo: styleEssenceLabel.bottomAnchor, constant: 40),
+            bodyTextContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            bodyTextContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+                        
+            // Body Text with extra padding inside container
+            bodyTextLabel.topAnchor.constraint(equalTo: bodyTextContainer.topAnchor),
+            bodyTextLabel.bottomAnchor.constraint(equalTo: bodyTextContainer.bottomAnchor),
+            bodyTextLabel.widthAnchor.constraint(equalTo: bodyTextContainer.widthAnchor, multiplier: 0.8),
+            bodyTextLabel.centerXAnchor.constraint(equalTo: bodyTextContainer.centerXAnchor),
             
             // Middle Divider (~40px spacing)
-            middleDivider.topAnchor.constraint(equalTo: bodyTextLabel.bottomAnchor, constant: 40),
+            middleDivider.topAnchor.constraint(equalTo: bodyTextContainer.bottomAnchor, constant: 40),
             middleDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             middleDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             middleDivider.heightAnchor.constraint(equalToConstant: 1),
