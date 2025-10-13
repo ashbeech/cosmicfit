@@ -105,16 +105,20 @@ final class DosAndDontsSectionView: UIView {
     }
     
     private func createBulletPoint(text: String) -> UIView {
-        // Create container for padding
-        let container = UIView()
-        container.translatesAutoresizingMaskIntoConstraints = false
+        // Outer container for horizontal centering (10% padding)
+        let outerContainer = UIView()
+        outerContainer.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Inner container for bullet alignment
+        let innerContainer = UIView()
+        innerContainer.translatesAutoresizingMaskIntoConstraints = false
         
         let label = UILabel()
         
-        // Create attributed string with bullet
+        // Create attributed string with bullet - NO hanging indent
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.headIndent = 20 // Indent for wrapped text
         paragraphStyle.firstLineHeadIndent = 0
+        paragraphStyle.headIndent = 0  // All lines align vertically
         
         let attributes: [NSAttributedString.Key: Any] = [
             .font: CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .regular),
@@ -128,16 +132,23 @@ final class DosAndDontsSectionView: UIView {
         label.lineBreakMode = .byWordWrapping
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        container.addSubview(label)
+        innerContainer.addSubview(label)
+        outerContainer.addSubview(innerContainer)
         
-        // Add 10% padding on each side (80% width, centered)
         NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: container.topAnchor),
-            label.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-            label.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.8),
-            label.centerXAnchor.constraint(equalTo: container.centerXAnchor)
+            // Inner container: 80% width, centered (10% padding on each side)
+            innerContainer.topAnchor.constraint(equalTo: outerContainer.topAnchor),
+            innerContainer.bottomAnchor.constraint(equalTo: outerContainer.bottomAnchor),
+            innerContainer.widthAnchor.constraint(equalTo: outerContainer.widthAnchor, multiplier: 0.8),
+            innerContainer.centerXAnchor.constraint(equalTo: outerContainer.centerXAnchor),
+            
+            // Label: pushed in by 24pt to align with star (20pt star width + 4pt gap)
+            label.topAnchor.constraint(equalTo: innerContainer.topAnchor),
+            label.bottomAnchor.constraint(equalTo: innerContainer.bottomAnchor),
+            label.leadingAnchor.constraint(equalTo: innerContainer.leadingAnchor, constant: 24),
+            label.trailingAnchor.constraint(equalTo: innerContainer.trailingAnchor)
         ])
         
-        return container
+        return outerContainer
     }
 }
