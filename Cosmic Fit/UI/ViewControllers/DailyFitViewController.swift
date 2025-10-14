@@ -13,6 +13,7 @@ class DailyFitViewController: UIViewController {
     // MARK: - Properties
     private let scrollView = UIScrollView()
     private let contentView = UIView()
+    private let topMaskView = UIView()
     
     // Tarot card header
     private let tarotCardImageView = UIImageView()
@@ -115,6 +116,9 @@ class DailyFitViewController: UIViewController {
             
             print("Card container and content restored on tab return")
         }
+        
+        // CRITICAL: Ensure topMaskView stays above scroll content
+        view.bringSubviewToFront(topMaskView)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -126,9 +130,12 @@ class DailyFitViewController: UIViewController {
             tarotCardContainerView.transform = .identity
             tarotCardImageView.alpha = 1.0
             
-            // Ensure proper layering
+            // Ensure proper layering - card behind content, but topMask ABOVE scrollView
             contentView.sendSubviewToBack(tarotCardContainerView)
-            view.bringSubviewToFront(scrollView)
+            // DO NOT bring scrollView to front - it would cover the topMaskView
+            
+            // Ensure topMask stays on top
+            view.bringSubviewToFront(topMaskView)
             
             view.layoutIfNeeded()
             
@@ -150,6 +157,7 @@ class DailyFitViewController: UIViewController {
     
     // MARK: - UI Setup
     private func setupUI() {
+        
         // Always start with black background
         view.backgroundColor = .black
         
@@ -179,20 +187,36 @@ class DailyFitViewController: UIViewController {
         
         let menuConstant = MenuBarView.height * 0.5
         
-        // Initial scroll view constraints (full screen) - PRESERVE existing constraint system
-        initialScrollViewTopConstraint = scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: menuConstant)
+        // ScrollView starts from very top so card can extend all the way up
+        initialScrollViewTopConstraint = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
         initialScrollViewTopConstraint?.isActive = true
-        
+
+        // Clip scrollView at menu bar level
+        scrollView.clipsToBounds = true
+
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor), // Use safe area for proper tab bar handling
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: menuConstant),
+            // ContentView starts with padding for menu bar + safe area
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: view.safeAreaInsets.top + MenuBarView.height),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
+
+        // Add cosmic grey mask above menu bar
+        topMaskView.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        topMaskView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(topMaskView)
+
+        NSLayoutConstraint.activate([
+            topMaskView.topAnchor.constraint(equalTo: view.topAnchor),
+            topMaskView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topMaskView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topMaskView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: MenuBarView.height - 10)
         ])
         
         setupTarotCardHeader()
@@ -202,6 +226,8 @@ class DailyFitViewController: UIViewController {
         
         // Check if card was already revealed today
         checkCardRevealState()
+        
+        view.bringSubviewToFront(topMaskView)
     }
     
     // MARK: - Card Reveal Setup Methods (ADD these new methods)
@@ -424,7 +450,8 @@ class DailyFitViewController: UIViewController {
         
         // Ensure proper layering
         contentView.sendSubviewToBack(tarotCardContainerView)
-        view.bringSubviewToFront(scrollView)
+        //view.bringSubviewToFront(scrollView)
+        
     }
     
     private func checkCardRevealState() {
@@ -1021,7 +1048,7 @@ extension DailyFitViewController: UIScrollViewDelegate {
         
         // Ensure proper layering - card behind content but visible
         contentView.sendSubviewToBack(tarotCardImageView) // Card goes behind content
-        view.bringSubviewToFront(scrollView) // Scroll view (with content) on top
+        //view.bringSubviewToFront(scrollView) // Scroll view (with content) on top
         
         // Force immediate layout
         view.layoutIfNeeded()
@@ -1147,7 +1174,7 @@ extension DailyFitViewController {
             
             // Ensure proper layering
             contentView.sendSubviewToBack(tarotCardContainerView)
-            view.bringSubviewToFront(scrollView)
+            //view.bringSubviewToFront(scrollView)
         }
     }
     

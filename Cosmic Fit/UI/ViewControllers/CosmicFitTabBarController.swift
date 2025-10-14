@@ -217,7 +217,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         view.addSubview(menuBarView)
         
         NSLayoutConstraint.activate([
-            menuBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            menuBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -10),
             menuBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             menuBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             menuBarView.heightAnchor.constraint(equalToConstant: MenuBarView.height),
