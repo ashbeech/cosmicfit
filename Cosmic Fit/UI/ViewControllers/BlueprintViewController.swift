@@ -32,10 +32,18 @@ final class BlueprintViewController: UIViewController {
     
     private let aboutYouLabel: UILabel = {
         let label = UILabel()
-        label.text = "ABOUT YOU"
-        label.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold)
-        label.textColor = CosmicFitTheme.Colors.darkerCosmicGrey
         label.textAlignment = .center
+        
+        let attributedText = NSAttributedString(
+            string: "ABOUT YOU",
+            attributes: [
+                .font: CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold),
+                .foregroundColor: CosmicFitTheme.Colors.darkerCosmicGrey,
+                .kern: 1.75
+            ]
+        )
+        label.attributedText = attributedText
+        
         return label
     }()
     
@@ -55,7 +63,7 @@ final class BlueprintViewController: UIViewController {
         
         // Use attributed string for custom line height
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 0.73  // Reduces line height to create thin gap
+        paragraphStyle.lineHeightMultiple = 0.75
         paragraphStyle.alignment = .center
         
         let attributedText = NSAttributedString(

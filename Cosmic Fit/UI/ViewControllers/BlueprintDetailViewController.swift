@@ -91,10 +91,17 @@ final class BlueprintDetailViewController: UIViewController {
     
     private let headerLabel: UILabel = {
         let label = UILabel()
-        label.text = "YOUR COSMIC BLUEPRINT"
-        label.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold)
-        label.textColor = CosmicFitTheme.Colors.darkerCosmicGrey
         label.textAlignment = .center
+        
+        let attributedText = NSAttributedString(
+            string: "YOUR COSMIC BLUEPRINT",
+            attributes: [
+                .font: CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold),
+                .foregroundColor: CosmicFitTheme.Colors.darkerCosmicGrey,
+                .kern: 1.75
+            ]
+        )
+        label.attributedText = attributedText
         return label
     }()
     
