@@ -513,7 +513,7 @@ final class BlueprintGridButton: UIButton {
     
     private let numberLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "DMSerifText-Regular", size: 32) ?? UIFont.systemFont(ofSize: 32, weight: .bold)
+        label.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.largeTitle, weight: .bold)
         label.textColor = CosmicFitTheme.Colors.cosmicBlue
         label.textAlignment = .left
         return label
@@ -521,7 +521,7 @@ final class BlueprintGridButton: UIButton {
     
     private let buttonTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "DMSerifText-Regular", size: 18) ?? UIFont.systemFont(ofSize: 18, weight: .semibold)
+        label.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .semibold)
         label.textColor = CosmicFitTheme.Colors.cosmicBlue
         label.textAlignment = .left
         label.numberOfLines = 2

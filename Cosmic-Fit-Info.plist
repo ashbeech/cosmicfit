@@ -11,8 +11,8 @@
 	</dict>
 	<key>UIAppFonts</key>
 	<array>
-		<string>DMSerifText-Regular.ttf</string>
-		<string>DMSerifText-Italic.ttf</string>
+		<string>PTSerif-Regular.ttf</string>
+		<string>PTSerif-Italic.ttf</string>
 		<string>DMSans-Regular.ttf</string>
 		<string>DMSans-SemiBold.ttf</string>
 		<string>DMSans-SemiBoldItalic.ttf</string>

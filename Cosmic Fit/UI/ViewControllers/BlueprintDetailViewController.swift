@@ -107,7 +107,7 @@ final class BlueprintDetailViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "DMSerifText-Regular", size: 28) ?? UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.title1, weight: .bold)
         label.textColor = CosmicFitTheme.Colors.cosmicBlue
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -368,7 +368,7 @@ final class BlueprintDetailViewController: UIViewController {
         
         let label = UILabel()
         label.text = text
-        label.font = UIFont(name: "DMSerifText-Italic", size: 16) ?? UIFont.italicSystemFont(ofSize: 16)
+        label.font = CosmicFitTheme.Typography.DMSerifTextItalicFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader)
         label.textColor = CosmicFitTheme.Colors.cosmicBlue
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false

@@ -71,17 +71,16 @@ struct CosmicFitTheme {
         
         /// DM Serif Text font for titles and headers (replaces Noctis)
         static func DMSerifTextFont(size: CGFloat, weight: UIFont.Weight = .regular) -> UIFont {
-            // DM Serif Text only comes in Regular weight
-            if let customFont = UIFont(name: "DMSerifText-Regular", size: size) {
+            if let customFont = UIFont(name: "PTSerif-Regular", size: size) {
                 return customFont
             }
             // Fallback to system serif font
             return UIFont.systemFont(ofSize: size, weight: weight)
         }
         
-        /// DM Serif Text Italic font for subsection headers
+        /// PT Serif Text Italic font for subsection headers
         static func DMSerifTextItalicFont(size: CGFloat) -> UIFont {
-            if let customFont = UIFont(name: "DMSerifText-Italic", size: size) {
+            if let customFont = UIFont(name: "PTSerif-Italic", size: size) {
                 return customFont
             }
             // Fallback to system italic
@@ -122,8 +121,8 @@ struct CosmicFitTheme {
         
         // Legacy helper kept for compatibility (not used anymore but safe if referenced)
         private static func getDMSerifTextFontName(for weight: UIFont.Weight) -> String {
-            // Noctis removed; map all requests to DM Serif Text Regular
-            return "DMSerifText-Regular"
+            // Noctis removed; map all requests to PT Serif Regular
+            return "PTSerif-Regular"
         }
     }
     
