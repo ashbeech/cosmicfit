@@ -17,6 +17,10 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     private var longitude: Double = 0
     private var timeZone: TimeZone?
     
+    // Menu bar properties
+    private var menuBarView: MenuBarView!
+    private var menuViewController: MenuViewController?
+    
     private var natalChart: NatalChartCalculator.NatalChart?
     private var progressedChart: NatalChartCalculator.NatalChart?
     private var dailyVibeContent: DailyVibeContent?
@@ -131,6 +135,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         applyCosmicFitTheme()
         
         setupTabBar()
+        setupMenuButton()  // ← ADD THIS LINE
         startWeatherFetch()
         setupTabMemoryPersistence()
         setupProfileUpdateNotifications()
@@ -198,6 +203,71 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         
         // Setup view controllers with generated content
         setupViewControllers()
+    }
+    
+    // MARK: - Menu Bar Setup
+    private func setupMenuButton() {
+        menuBarView = MenuBarView()
+        menuBarView.translatesAutoresizingMaskIntoConstraints = false
+        
+        menuBarView.onMenuTapped = { [weak self] in
+            self?.menuButtonTapped()
+        }
+        
+        view.addSubview(menuBarView)
+        
+        NSLayoutConstraint.activate([
+            menuBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            menuBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            menuBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            menuBarView.heightAnchor.constraint(equalToConstant: MenuBarView.height),
+        ])
+        
+        // Ensure menu bar stays on top
+        view.bringSubviewToFront(menuBarView)
+    }
+
+    private func updateMenuBarVisibility() {
+        // Menu bar always visible on main pages
+        menuBarView.alpha = 1
+        menuBarView.isUserInteractionEnabled = true
+    }
+
+    @objc private func menuButtonTapped() {
+        if menuViewController != nil {
+            dismissMenu()
+        } else {
+            showMenu()
+        }
+    }
+
+    // MARK: - Menu
+    private func showMenu() {
+        let menu = MenuViewController()
+        menu.modalPresentationStyle = .overFullScreen
+        menu.modalTransitionStyle = .crossDissolve
+        
+        menu.onDismiss = { [weak self] in
+            self?.menuBarView.animateMenuButton(toX: false)
+            self?.menuViewController = nil
+        }
+        
+        menuViewController = menu
+        
+        present(menu, animated: false) {
+            menu.show(animated: true)
+            self.menuBarView.animateMenuButton(toX: true)
+        }
+    }
+
+    private func dismissMenu() {
+        guard let menu = menuViewController else { return }
+        
+        menuBarView.animateMenuButton(toX: false)
+        menu.hide(animated: true) { [weak self] in
+            menu.dismiss(animated: false)
+            self?.menuViewController = nil
+        }
     }
     
     private func setupProfileUpdateNotifications() {
@@ -594,6 +664,9 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
         
         // Update tab selection indicator
         updateTabSelectionIndicator()
+        
+        // Ensure menu bar stays on top after tab switch
+        view.bringSubviewToFront(menuBarView)
         
         // Log the selected tab for debugging
         var tabName = "Unknown"

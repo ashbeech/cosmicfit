@@ -237,8 +237,8 @@ final class BlueprintDetailViewController: UIViewController {
         starImageView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            // Shadow Container
-            shadowContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
+            // Shadow Container - stops below menu bar (under safe area)
+            shadowContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: MenuBarView.height),
             shadowContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             shadowContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             shadowContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -(tabBarHeight)),

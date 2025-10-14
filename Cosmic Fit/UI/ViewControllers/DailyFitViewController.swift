@@ -177,8 +177,10 @@ class DailyFitViewController: UIViewController {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentView)
         
+        let menuConstant = MenuBarView.height * 0.5
+        
         // Initial scroll view constraints (full screen) - PRESERVE existing constraint system
-        initialScrollViewTopConstraint = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
+        initialScrollViewTopConstraint = scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: menuConstant)
         initialScrollViewTopConstraint?.isActive = true
         
         NSLayoutConstraint.activate([
@@ -186,7 +188,7 @@ class DailyFitViewController: UIViewController {
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor), // Use safe area for proper tab bar handling
             
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: menuConstant),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),

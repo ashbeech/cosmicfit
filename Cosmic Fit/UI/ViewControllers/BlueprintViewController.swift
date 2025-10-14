@@ -240,8 +240,8 @@ final class BlueprintViewController: UIViewController {
         bodyTextContainer.addSubview(bodyTextLabel)
         
         NSLayoutConstraint.activate([
-            // ScrollView
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            // ScrollView - starts below menu bar (under safe area)
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: MenuBarView.height),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
