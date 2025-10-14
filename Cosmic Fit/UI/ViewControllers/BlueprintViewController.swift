@@ -34,7 +34,7 @@ final class BlueprintViewController: UIViewController {
         let label = UILabel()
         label.text = "ABOUT YOU"
         label.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold)
-        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textColor = CosmicFitTheme.Colors.darkerCosmicGrey
         label.textAlignment = .center
         return label
     }()
@@ -164,6 +164,7 @@ final class BlueprintViewController: UIViewController {
         
         // Set navigation controller delegate for custom transitions
         navigationController?.delegate = self
+        navigationController?.navigationBar.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -254,14 +255,14 @@ final class BlueprintViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
             // About You Label (~60px from top)
-            aboutYouLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 60),
+            aboutYouLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
             aboutYouLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             // CB Icon
             iconImageView.topAnchor.constraint(equalTo: aboutYouLabel.bottomAnchor, constant: 20),
             iconImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            iconImageView.widthAnchor.constraint(equalToConstant: 60),
-            iconImageView.heightAnchor.constraint(equalToConstant: 60),
+            iconImageView.widthAnchor.constraint(equalToConstant: 40),
+            iconImageView.heightAnchor.constraint(equalToConstant: 40),
             
             // Main Heading
             mainHeadingLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 20),

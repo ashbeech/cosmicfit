@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "CosmicFitLogo@x1.png",
+      "filename" : "menu-glyph@x1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "CosmicFitLogo@x2.png",
+      "filename" : "menu-glyph@x2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "CosmicFitLogo@x3.png",
+      "filename" : "menu-glyph@x3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

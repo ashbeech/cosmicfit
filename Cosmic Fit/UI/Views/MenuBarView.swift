@@ -10,15 +10,20 @@ import UIKit
 final class MenuBarView: UIView {
     
     // MARK: - Properties
-    static let height: CGFloat = 40
+    static let height: CGFloat = 60
     var onMenuTapped: (() -> Void)?
     
     // MARK: - UI Components
     private let logoImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
-        iv.image = UIImage(named: "cb_icon_placeholder")
+        iv.image = UIImage(named: "CosmicFitLogo")
         iv.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        
+        // Invert colors using Core Animation
+        let filter = CIFilter(name: "CIColorInvert")
+        iv.layer.filters = [filter as Any]
+        
         return iv
     }()
     
@@ -52,7 +57,7 @@ final class MenuBarView: UIView {
         
         menuButton.addTarget(self, action: #selector(menuButtonTapped), for: .touchUpInside)
         
-        // Calculate content height: 40px bar - 5px top padding - 5px bottom padding = 30px content
+        // Calculate content height: 50px bar - 10px top padding - 10px bottom padding = 30px content
         let contentHeight: CGFloat = 30
         
         NSLayoutConstraint.activate([

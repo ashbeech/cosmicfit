@@ -16,8 +16,8 @@ struct CosmicFitTheme {
         /// Cosmic Grey - Main background color for content areas (#DEDEDE)
         static let cosmicGrey = UIColor(red: 222/255, green: 222/255, blue: 222/255, alpha: 1.0)
         
-        /// Darker Cosmic Grey - Sub-page background for subtle depth (#D2D2D2)
-        static let darkerCosmicGrey = UIColor(red: 210/255, green: 210/255, blue: 210/255, alpha: 1.0)
+        /// Darker Cosmic Grey - Sub-page background for subtle depth
+        static let darkerCosmicGrey = UIColor(red: 106/255, green: 106/255, blue: 115/255, alpha: 1.0)
         
         /// Dark Cosmic Grey - Navigation bar background for contrast (#B8B8B8)
         static let darkCosmicGrey = UIColor(red: 184/255, green: 184/255, blue: 184/255, alpha: 1.0)
@@ -31,7 +31,7 @@ struct CosmicFitTheme {
         static let cosmicLilac = UIColor(red: 126/255, green: 105/255, blue: 230/255, alpha: 1.0)
 
         /// Tab bar background color - Black
-        static let tabBarBackground = UIColor.black
+        static let tabBarBackground = cosmicBlue
         
         /// Tab bar text/icon color - White
         static let tabBarInactive = UIColor.white
@@ -62,7 +62,7 @@ struct CosmicFitTheme {
             static let body: CGFloat = 18
             static let callout: CGFloat = 16
             static let subheadline: CGFloat = 22
-            static let sectionHeader: CGFloat = 22
+            static let sectionHeader: CGFloat = 16
             static let pageTitle: CGFloat = 48
             static let footnote: CGFloat = 13
             static let caption1: CGFloat = 12

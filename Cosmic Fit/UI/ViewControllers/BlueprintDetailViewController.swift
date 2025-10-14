@@ -58,7 +58,7 @@ final class BlueprintDetailViewController: UIViewController {
     
     private let cardContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.darkerCosmicGrey
+        view.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
         view.layer.cornerRadius = 16
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.clipsToBounds = true
@@ -93,7 +93,7 @@ final class BlueprintDetailViewController: UIViewController {
         let label = UILabel()
         label.text = "YOUR COSMIC BLUEPRINT"
         label.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold)
-        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textColor = CosmicFitTheme.Colors.darkerCosmicGrey
         label.textAlignment = .center
         return label
     }()

@@ -31,14 +31,13 @@ final class MenuViewController: UIViewController {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.tintColor = CosmicFitTheme.Colors.cosmicBlue
-        button.contentHorizontalAlignment = .right
         return button
     }()
     
     private let logoImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
-        iv.image = UIImage(named: "cb_icon_placeholder")
+        iv.image = UIImage(named: "menu_glyph")
         iv.tintColor = CosmicFitTheme.Colors.cosmicBlue
         return iv
     }()
@@ -46,7 +45,7 @@ final class MenuViewController: UIViewController {
     private let menuStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = 24
+        stack.spacing = 32
         stack.alignment = .center
         stack.distribution = .fill
         return stack
@@ -55,7 +54,7 @@ final class MenuViewController: UIViewController {
     private let accountButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Account", for: .normal)
-        button.titleLabel?.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 24, weight: .regular)
+        button.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(size: 24, weight: .regular)
         button.setTitleColor(CosmicFitTheme.Colors.cosmicBlue, for: .normal)
         return button
     }()
@@ -63,7 +62,7 @@ final class MenuViewController: UIViewController {
     private let redeemButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Redeem Offer Code", for: .normal)
-        button.titleLabel?.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 24, weight: .regular)
+        button.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(size: 24, weight: .regular)
         button.setTitleColor(CosmicFitTheme.Colors.cosmicBlue, for: .normal)
         return button
     }()
@@ -71,7 +70,7 @@ final class MenuViewController: UIViewController {
     private let faqsButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("FAQs", for: .normal)
-        button.titleLabel?.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 24, weight: .regular)
+        button.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(size: 24, weight: .regular)
         button.setTitleColor(CosmicFitTheme.Colors.cosmicBlue, for: .normal)
         return button
     }()
@@ -79,7 +78,7 @@ final class MenuViewController: UIViewController {
     private let helpButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Help", for: .normal)
-        button.titleLabel?.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 24, weight: .regular)
+        button.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(size: 24, weight: .regular)
         button.setTitleColor(CosmicFitTheme.Colors.cosmicBlue, for: .normal)
         return button
     }()
@@ -176,26 +175,25 @@ final class MenuViewController: UIViewController {
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            // Close button (top right)
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            closeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            // Close button - aligned with menu button position
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            closeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -9),
             closeButton.widthAnchor.constraint(equalToConstant: 44),
             closeButton.heightAnchor.constraint(equalToConstant: 44),
             
             // Logo (centered near top)
-            logoImageView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 40),
+            logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
             logoImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            logoImageView.widthAnchor.constraint(equalToConstant: 120),
-            logoImageView.heightAnchor.constraint(equalToConstant: 120),
+            logoImageView.widthAnchor.constraint(equalToConstant: 100),
+            logoImageView.heightAnchor.constraint(equalToConstant: 100),
             
             // Menu stack (centered vertically)
-            menuStackView.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 60),
+            menuStackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             menuStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             menuStackView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor, constant: 40),
             menuStackView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -40),
             
             // Social icons placeholder
-            socialIconsLabel.topAnchor.constraint(greaterThanOrEqualTo: menuStackView.bottomAnchor, constant: 60),
             socialIconsLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             socialIconsLabel.bottomAnchor.constraint(equalTo: bottomDividerContainer.topAnchor, constant: -40),
             
@@ -270,22 +268,18 @@ final class MenuViewController: UIViewController {
     }
     
     @objc private func accountButtonTapped() {
-        print("📱 Account button tapped")
-        // TODO: Navigate to account
+        print("Account tapped")
     }
     
     @objc private func redeemButtonTapped() {
-        print("📱 Redeem Offer Code button tapped")
-        // TODO: Show redeem offer code flow
+        print("Redeem tapped")
     }
     
     @objc private func faqsButtonTapped() {
-        print("📱 FAQs button tapped")
-        // TODO: Navigate to FAQs
+        print("FAQs tapped")
     }
     
     @objc private func helpButtonTapped() {
-        print("📱 Help button tapped")
-        // TODO: Navigate to help
+        print("Help tapped")
     }
 }
