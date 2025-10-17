@@ -156,6 +156,7 @@ class OnboardingFormViewController: UIViewController {
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
         nameTextField.placeholder = "First Name"
         nameTextField.font = UIFont.systemFont(ofSize: 18)
+        nameTextField.textColor = .black
         nameTextField.borderStyle = .none
         nameTextField.returnKeyType = .next
         nameTextField.delegate = self
@@ -204,6 +205,7 @@ class OnboardingFormViewController: UIViewController {
         locationTextField.translatesAutoresizingMaskIntoConstraints = false
         locationTextField.placeholder = "Start typing"
         locationTextField.font = UIFont.systemFont(ofSize: 18)
+        locationTextField.textColor = .black
         locationTextField.borderStyle = .none
         locationTextField.returnKeyType = .done
         locationTextField.delegate = self
@@ -391,7 +393,7 @@ class OnboardingFormViewController: UIViewController {
             nameTextField.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             nameTextField.heightAnchor.constraint(equalToConstant: 44),
             
-            nameDivider.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 8),
+            nameDivider.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: -5),
             nameDivider.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             nameDivider.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             nameDivider.heightAnchor.constraint(equalToConstant: 1),
