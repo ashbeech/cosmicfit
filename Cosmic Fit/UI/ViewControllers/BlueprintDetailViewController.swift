@@ -421,12 +421,12 @@ final class BlueprintDetailViewController: UIViewController {
         
         container.addSubview(label)
         
-        // Add 10% screen width padding on each side
+        // Reduced padding - 10px less on each side
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: container.topAnchor),
             label.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-            label.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.8),
-            label.centerXAnchor.constraint(equalTo: container.centerXAnchor)
+            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
+            label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10)
         ])
         
         return container

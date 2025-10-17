@@ -82,11 +82,11 @@ final class DosAndDontsSectionView: UIView {
         outerContainer.addSubview(innerContainer)
         
         NSLayoutConstraint.activate([
-            // Inner container with 10% padding (80% width, centered)
+            // Inner container: reduced padding - 10px less on each side
             innerContainer.topAnchor.constraint(equalTo: outerContainer.topAnchor),
             innerContainer.bottomAnchor.constraint(equalTo: outerContainer.bottomAnchor),
-            innerContainer.widthAnchor.constraint(equalTo: outerContainer.widthAnchor, multiplier: 0.8),
-            innerContainer.centerXAnchor.constraint(equalTo: outerContainer.centerXAnchor),
+            innerContainer.leadingAnchor.constraint(equalTo: outerContainer.leadingAnchor, constant: 10),
+            innerContainer.trailingAnchor.constraint(equalTo: outerContainer.trailingAnchor, constant: -10),
             
             // Star and title within inner container
             starLabel.leadingAnchor.constraint(equalTo: innerContainer.leadingAnchor),
@@ -136,11 +136,11 @@ final class DosAndDontsSectionView: UIView {
         outerContainer.addSubview(innerContainer)
         
         NSLayoutConstraint.activate([
-            // Inner container: 80% width, centered (10% padding on each side)
+            // Inner container: reduced padding - 10px less on each side
             innerContainer.topAnchor.constraint(equalTo: outerContainer.topAnchor),
             innerContainer.bottomAnchor.constraint(equalTo: outerContainer.bottomAnchor),
-            innerContainer.widthAnchor.constraint(equalTo: outerContainer.widthAnchor, multiplier: 0.8),
-            innerContainer.centerXAnchor.constraint(equalTo: outerContainer.centerXAnchor),
+            innerContainer.leadingAnchor.constraint(equalTo: outerContainer.leadingAnchor, constant: 10),
+            innerContainer.trailingAnchor.constraint(equalTo: outerContainer.trailingAnchor, constant: -10),
             
             // Label: pushed in by 24pt to align with star (20pt star width + 4pt gap)
             label.topAnchor.constraint(equalTo: innerContainer.topAnchor),

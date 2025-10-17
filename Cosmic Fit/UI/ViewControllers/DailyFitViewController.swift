@@ -491,25 +491,28 @@ class DailyFitViewController: UIViewController {
         tarotCardContainerView.backgroundColor = .clear
         contentView.addSubview(tarotCardContainerView)
         
-        // Calculate card dimensions (keeping original full width)
+        // Calculate card dimensions with padding around it
         let cardAspectRatio: CGFloat = 0.62
-        let cardWidth = view.bounds.width  // Keep original full width
+        let horizontalPadding: CGFloat = 24 // 10px more space on each side
+        let cardWidth = view.bounds.width - (horizontalPadding * 2) // Reduce width by total padding
         let cardHeight = cardWidth / cardAspectRatio
 
-        // Container is exactly card size
+        // Container is exactly card size (now smaller)
         cardContainerWidthConstraint = tarotCardContainerView.widthAnchor.constraint(equalToConstant: cardWidth)
         cardContainerHeightConstraint = tarotCardContainerView.heightAnchor.constraint(equalToConstant: cardHeight)
         
-        // STATIC position above content box (replacing center positioning)
+        // RESTORE ORIGINAL positioning logic with smaller card size
+        // STATIC position above content box (matching original scroll behavior)
         let screenHeight = view.bounds.height
         let tabBarHeight: CGFloat = 83
-        let contentStartFromBottom = screenHeight - tabBarHeight - 15
+        let contentStartFromBottom = screenHeight - tabBarHeight - 83
         let contentBoxTop = contentStartFromBottom - 20 // Account for title label padding
         let marginAboveContent: CGFloat = 24 // Space between card and content box
         
+        // Use original bottomAnchor constraint to contentView.topAnchor for proper scroll behavior
         cardContainerCenterYConstraint = tarotCardContainerView.bottomAnchor.constraint(equalTo: contentView.topAnchor, constant: contentBoxTop - marginAboveContent)
         
-        // Activate static positioning
+        // Activate positioning constraints
         cardContainerCenterYConstraint?.isActive = true
         cardContainerWidthConstraint?.isActive = true
         cardContainerHeightConstraint?.isActive = true
@@ -518,6 +521,7 @@ class DailyFitViewController: UIViewController {
             tarotCardContainerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
         ])
         
+        // Setup the actual tarot card image view (revealed state)
         tarotCardImageView.translatesAutoresizingMaskIntoConstraints = false
         tarotCardImageView.contentMode = .scaleAspectFit
         tarotCardImageView.clipsToBounds = true
@@ -533,7 +537,7 @@ class DailyFitViewController: UIViewController {
             tarotCardImageView.bottomAnchor.constraint(equalTo: tarotCardContainerView.bottomAnchor)
         ])
         
-        // Card back (unrevealed state)
+        // Card back (unrevealed state) - same size as revealed card
         cardBackImageView.translatesAutoresizingMaskIntoConstraints = false
         cardBackImageView.contentMode = .scaleAspectFit
         cardBackImageView.clipsToBounds = true
@@ -545,7 +549,7 @@ class DailyFitViewController: UIViewController {
         
         // Tap to reveal label
         tapToRevealLabel.translatesAutoresizingMaskIntoConstraints = false
-        tapToRevealLabel.text = "✨ Tap to reveal your card ✨"
+        tapToRevealLabel.text = "Tap to turn the card" // Updated text to match the UI
         tapToRevealLabel.textAlignment = .center
         
         // Apply theme to tap to reveal label
@@ -658,7 +662,7 @@ class DailyFitViewController: UIViewController {
         let tabBarHeight: CGFloat = 83
         
         // CRITICAL: Position content box at HALF the previous distance above tab bar
-        let contentStartFromBottom = screenHeight - tabBarHeight - 15 // Half of previous 30pt = 15pt above tab bar
+        let contentStartFromBottom = screenHeight - tabBarHeight - 75 // Half of previous 30pt = 15pt above tab bar
         
         // Card title label - NOW IN CONTENT AREA, NOT IN CONTAINER
         cardTitleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -1069,7 +1073,7 @@ extension DailyFitViewController: UIScrollViewDelegate {
         // Tactile feedback animation with themed glow color
         UIView.animateKeyframes(withDuration: 0.33, delay: 0, options: [.calculationModeCubic], animations: {
             // Press down slightly
-            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.3) {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.1) {
                 self.tarotCardContainerView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
                 self.cardBackImageView.layer.shadowOpacity = 0.2
                 self.cardBackImageView.layer.shadowRadius = maxScreenDimension * 0.3

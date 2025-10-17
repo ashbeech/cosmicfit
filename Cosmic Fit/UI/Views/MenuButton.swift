@@ -13,7 +13,7 @@ final class MenuButton: UIButton {
     private var isMenuOpen = false
     
     private let dotSize: CGFloat = 4
-    private let xRadius: CGFloat = 10  // Distance from center to X corners
+    private let xRadius: CGFloat = 5  // Distance from center to X corners
     
     private let topDot: UIView = {
         let view = UIView()

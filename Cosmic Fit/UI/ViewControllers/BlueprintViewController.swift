@@ -292,11 +292,11 @@ final class BlueprintViewController: UIViewController {
             bodyTextContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             bodyTextContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
                         
-            // Body Text with extra padding inside container
+            // Body Text with reduced padding (10px less on each side)
             bodyTextLabel.topAnchor.constraint(equalTo: bodyTextContainer.topAnchor),
             bodyTextLabel.bottomAnchor.constraint(equalTo: bodyTextContainer.bottomAnchor),
-            bodyTextLabel.widthAnchor.constraint(equalTo: bodyTextContainer.widthAnchor, multiplier: 0.8),
-            bodyTextLabel.centerXAnchor.constraint(equalTo: bodyTextContainer.centerXAnchor),
+            bodyTextLabel.leadingAnchor.constraint(equalTo: bodyTextContainer.leadingAnchor, constant: 10),
+            bodyTextLabel.trailingAnchor.constraint(equalTo: bodyTextContainer.trailingAnchor, constant: -10),
             
             // Middle Divider (~40px spacing)
             middleDivider.topAnchor.constraint(equalTo: bodyTextContainer.bottomAnchor, constant: 40),
