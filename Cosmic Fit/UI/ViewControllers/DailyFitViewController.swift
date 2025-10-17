@@ -62,6 +62,8 @@ class DailyFitViewController: UIViewController {
     private var cardContainerWidthConstraint: NSLayoutConstraint?
     private var cardContainerHeightConstraint: NSLayoutConstraint?
     
+    private let scrollingRunesBackground = ScrollingRunesBackgroundView()
+    
     // Card state enum for better state management
     private enum CardState {
         case unrevealed
@@ -103,6 +105,10 @@ class DailyFitViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        if !isCardRevealed && currentCardState == .unrevealed {
+            scrollingRunesBackground.startAnimating()
+        }
+        
         // Restore card state when returning from other tabs
         checkCardRevealState()
         
@@ -143,6 +149,11 @@ class DailyFitViewController: UIViewController {
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        scrollingRunesBackground.stopAnimating()
+    }
+    
     // MARK: - Configuration
     func configure(with dailyVibeContent: DailyVibeContent,
                    originalChartViewController: NatalChartViewController?) {
@@ -159,7 +170,19 @@ class DailyFitViewController: UIViewController {
     private func setupUI() {
         
         // Always start with black background
-        view.backgroundColor = .black
+        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        
+        // ADD FULL-SCREEN SCROLLING RUNES BACKGROUND HERE - behind everything
+        scrollingRunesBackground.translatesAutoresizingMaskIntoConstraints = false
+        view.insertSubview(scrollingRunesBackground, at: 0) // Insert at bottom of view hierarchy
+        
+        // Make it fill the ENTIRE screen (same as intro screen)
+        NSLayoutConstraint.activate([
+            scrollingRunesBackground.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollingRunesBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollingRunesBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollingRunesBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
         
         // Hide navigation bar completely
         navigationController?.navigationBar.isHidden = true
@@ -185,7 +208,7 @@ class DailyFitViewController: UIViewController {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentView)
         
-        let menuConstant = MenuBarView.height * 0.5
+        //let menuConstant = MenuBarView.height * 0.5
         
         // ScrollView starts from very top so card can extend all the way up
         initialScrollViewTopConstraint = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
@@ -336,6 +359,10 @@ class DailyFitViewController: UIViewController {
             self.tapToRevealLabel.alpha = 1.0
             self.tapToRevealLabel.isHidden = false
             
+            // Show scrolling runes in background
+            self.scrollingRunesBackground.alpha = 1.0
+            self.scrollingRunesBackground.startAnimating()
+            
             // Hide revealed elements
             self.tarotCardImageView.alpha = 0.0
             self.cardTitleLabel.alpha = 0.0
@@ -372,6 +399,9 @@ class DailyFitViewController: UIViewController {
         
         let cardDuration: TimeInterval = 0.4
         let backgroundDuration: TimeInterval = 0.8
+        
+        // Stop the runes animation when revealing
+        scrollingRunesBackground.stopAnimating()
         
         if animated {
             // Fade between card back and card front simultaneously + show content immediately
@@ -534,7 +564,7 @@ class DailyFitViewController: UIViewController {
             tarotCardImageView.topAnchor.constraint(equalTo: tarotCardContainerView.topAnchor),
             tarotCardImageView.leadingAnchor.constraint(equalTo: tarotCardContainerView.leadingAnchor),
             tarotCardImageView.trailingAnchor.constraint(equalTo: tarotCardContainerView.trailingAnchor),
-            tarotCardImageView.bottomAnchor.constraint(equalTo: tarotCardContainerView.bottomAnchor)
+            tarotCardImageView.bottomAnchor.constraint(equalTo: tarotCardContainerView.bottomAnchor),
         ])
         
         // Card back (unrevealed state) - same size as revealed card
@@ -546,6 +576,9 @@ class DailyFitViewController: UIViewController {
         cardBackImageView.alpha = 1.0
         cardBackImageView.isUserInteractionEnabled = true
         tarotCardContainerView.addSubview(cardBackImageView)
+        
+        // Start the runes animation
+        scrollingRunesBackground.startAnimating()
         
         // Tap to reveal label
         tapToRevealLabel.translatesAutoresizingMaskIntoConstraints = false

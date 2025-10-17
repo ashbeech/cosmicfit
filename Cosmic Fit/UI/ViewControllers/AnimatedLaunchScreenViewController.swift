@@ -206,15 +206,6 @@ class AnimatedLaunchScreenViewController: UIViewController {
     
     // MARK: - Animations
     private func startAnimations() {
-        // NEW SEQUENCE:
-        // 1. Part 1 fades in (0-1 seconds)
-        // 2. Background starts gradual fade-in after part 1 completes (1-5 seconds, very slow)
-        // 3. Part 2 fades in (1-2 seconds)
-        // 4. Part 3 fades in (2-3 seconds)
-        // 5. Part 4 fades in (3-4 seconds)
-        // 6. Hold with everything visible and scrolling (4-5 seconds)
-        // 7. Transition to main app (5 seconds total)
-        
         startLogoAnimation()
         
         // Transition to main app after 2 seconds total
@@ -243,7 +234,7 @@ class AnimatedLaunchScreenViewController: UIViewController {
         }, completion: nil)
         
         // Part 4: Starts while part 3 is still fading in
-        UIView.animate(withDuration: 1.0, delay: 0.5, options: [.curveEaseInOut], animations: {
+        UIView.animate(withDuration: 1.0, delay: 0.44, options: [.curveEaseInOut], animations: {
             self.logoPart4.alpha = 1.0
         }, completion: nil)
     }
@@ -253,7 +244,7 @@ class AnimatedLaunchScreenViewController: UIViewController {
         startBackgroundScrolling()
         
         // Fade in all background elements very slowly over 4 seconds
-        UIView.animate(withDuration: 0.33, delay: 0.0, options: [.curveEaseInOut], animations: {
+        UIView.animate(withDuration: 0.44, delay: 0.0, options: [.curveEaseInOut], animations: {
             self.backgroundRunes1.alpha = 1.0
             self.backgroundRunes1Duplicate.alpha = 1.0
             self.backgroundRunes2.alpha = 1.0
