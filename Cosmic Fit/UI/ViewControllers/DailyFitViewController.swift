@@ -570,8 +570,8 @@ class DailyFitViewController: UIViewController {
         // Card back (unrevealed state) - same size as revealed card
         cardBackImageView.translatesAutoresizingMaskIntoConstraints = false
         cardBackImageView.contentMode = .scaleAspectFit
-        cardBackImageView.clipsToBounds = true
-        cardBackImageView.backgroundColor = UIColor(red: 31/255, green: 25/255, blue: 61/255, alpha: 1.0)
+        cardBackImageView.clipsToBounds = false // CRITICAL: Must be false for glow to show
+        //cardBackImageView.backgroundColor = UIColor(red: 31/255, green: 25/255, blue: 61/255, alpha: 1.0)
         cardBackImageView.layer.cornerRadius = 24
         cardBackImageView.alpha = 1.0
         cardBackImageView.isUserInteractionEnabled = true
@@ -1100,37 +1100,123 @@ extension DailyFitViewController: UIScrollViewDelegate {
         // Disable further taps
         cardBackImageView.isUserInteractionEnabled = false
         
-        // Calculate screen dimensions for glow effect
-        let maxScreenDimension = max(view.bounds.width, view.bounds.height)
+        // Mark as revealed and save state immediately
+        isCardRevealed = true
+        UserDefaults.standard.set(true, forKey: dailyCardRevealKey)
         
-        // Tactile feedback animation with themed glow color
-        UIView.animateKeyframes(withDuration: 0.33, delay: 0, options: [.calculationModeCubic], animations: {
-            // Press down slightly
-            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.1) {
-                self.tarotCardContainerView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-                self.cardBackImageView.layer.shadowOpacity = 0.2
-                self.cardBackImageView.layer.shadowRadius = maxScreenDimension * 0.3
-            }
-            
-            // Return to exact normal
-            UIView.addKeyframe(withRelativeStartTime: 0.4, relativeDuration: 0.03) {
-                self.tarotCardContainerView.transform = .identity // Back to exact normal
-                self.cardBackImageView.layer.shadowOpacity = 0.0
-                self.cardBackImageView.layer.shadowRadius = maxScreenDimension * 1.2
-            }
-        }) { _ in
-            // Reset shadow
-            self.cardBackImageView.layer.shadowRadius = 20
-            
-            // Mark as revealed and save state
-            self.isCardRevealed = true
-            UserDefaults.standard.set(true, forKey: self.dailyCardRevealKey)
-            
-            // Transition to revealed state (will handle position change)
-            self.setCardState(.revealed, animated: true)
-        }
+        // Perform 3D flip animation
+        perform3DCardFlip()
     }
-    
+
+    private func perform3DCardFlip() {
+        let duration: TimeInterval = 0.33
+        
+        // CRITICAL: Set up the layers properly BEFORE animation starts
+        
+        // Add perspective to the container
+        var perspective = CATransform3DIdentity
+        perspective.m34 = -1.0 / 500.0 // Perspective depth
+        tarotCardContainerView.layer.sublayerTransform = perspective
+        
+        // Configure card back (starts visible, facing forward)
+        cardBackImageView.layer.isDoubleSided = false // Won't show when rotated away
+        cardBackImageView.alpha = 1.0
+        cardBackImageView.layer.transform = CATransform3DIdentity // Facing forward (0°)
+        
+        // Configure card front (starts ALREADY at 180°, so it's facing backward initially)
+        tarotCardImageView.layer.isDoubleSided = false // Won't show when facing backward
+        tarotCardImageView.alpha = 1.0 // MUST be visible for the flip to work
+        tarotCardImageView.layer.transform = CATransform3DMakeRotation(.pi, 0, 1, 0) // Pre-rotated 180°
+        
+        // Hide tap label immediately
+        UIView.animate(withDuration: duration * 0.2) {
+            self.tapToRevealLabel.alpha = 0.0
+        }
+        
+        // Stop and fade out scrolling runes
+        scrollingRunesBackground.stopAnimating()
+        UIView.animate(withDuration: duration * 0.3) {
+            self.scrollingRunesBackground.alpha = 0.0
+        }
+        
+        // NOW perform the flip: rotate BOTH cards together by 180°
+        UIView.animate(
+            withDuration: duration,
+            delay: 0,
+            options: [.curveEaseIn],
+            animations: {
+                // Rotate card back from 0° to 180° (faces away)
+                self.cardBackImageView.layer.transform = CATransform3DMakeRotation(.pi, 0, 1, 0)
+                
+                // Rotate card front from 180° to 360° (0°, faces forward)
+                self.tarotCardImageView.layer.transform = CATransform3DMakeRotation(.pi * 2, 0, 1, 0)
+            },
+            completion: { _ in
+                // Reset transforms to clean state
+                self.tarotCardContainerView.layer.sublayerTransform = CATransform3DIdentity
+                
+                // Card front is now facing forward at 0°
+                self.tarotCardImageView.layer.transform = CATransform3DIdentity
+                self.tarotCardImageView.alpha = 1.0
+                
+                // Card back is now facing backward and can be hidden
+                self.cardBackImageView.layer.transform = CATransform3DIdentity
+                self.cardBackImageView.isHidden = true
+                self.cardBackImageView.alpha = 0.0
+                self.tapToRevealLabel.isHidden = true
+                
+                // Complete the reveal with content fade-in
+                self.completeCardReveal()
+            }
+        )
+    }
+
+    private func completeCardReveal() {
+        let contentFadeDuration: TimeInterval = 0.5
+        
+        // Fade in background blur
+        UIView.animate(withDuration: contentFadeDuration) {
+            self.backgroundBlurImageView.alpha = 1.0
+        }
+        
+        // Show card title
+        UIView.animate(withDuration: contentFadeDuration * 0.8) {
+            self.cardTitleLabel.alpha = 1.0
+        }
+        
+        // Show scroll indicator
+        UIView.animate(withDuration: contentFadeDuration * 0.6, delay: contentFadeDuration * 0.2) {
+            self.scrollIndicatorView.alpha = 1.0
+            self.scrollIndicatorView.isHidden = false
+        }
+        
+        // Fade in all content labels with stagger
+        let labels = [keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel,
+                      patternsLabel, shapeLabel, accessoriesLabel, layeringLabel,
+                      vibeBreakdownLabel, debugButton]
+        
+        for (index, label) in labels.enumerated() {
+            let delay = contentFadeDuration * 0.3 + (Double(index) * 0.05)
+            UIView.animate(withDuration: contentFadeDuration * 0.7, delay: delay) {
+                label.alpha = 1.0
+            }
+        }
+        
+        // Enable scrolling
+        scrollView.isScrollEnabled = true
+        
+        // Setup content section backgrounds
+        setupContentSectionBackgrounds()
+        
+        // Update state
+        currentCardState = .revealed
+        
+        // Ensure proper final state
+        ensureContainerVisibility()
+        
+        print("✨ 3D card flip animation completed")
+    }
+
     // MARK: - Fixed Content Section Setup (REPLACE existing setupContentSectionBackgrounds method)
     
     private func setupContentSectionBackgrounds() {
@@ -1173,6 +1259,8 @@ extension DailyFitViewController: UIScrollViewDelegate {
         
         // CRITICAL: Ensure tarot card stays BEHIND content box
         contentView.sendSubviewToBack(tarotCardImageView)
+        
+        
         
         // CRITICAL: Ensure all text stays ABOVE content background
         for label in allLabels {
