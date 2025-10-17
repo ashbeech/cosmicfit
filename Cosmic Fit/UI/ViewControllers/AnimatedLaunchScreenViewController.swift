@@ -215,12 +215,14 @@ class AnimatedLaunchScreenViewController: UIViewController {
     }
     
     private func startLogoAnimation() {
+        
+        // START BACKGROUND FADE-IN immediately
+        self.startBackgroundGradualFadeIn()
+        
         // Part 1: Fade in over 0.5 seconds (halved time)
         UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseInOut], animations: {
             self.logoPart1.alpha = 1.0
         }) { _ in
-            // START BACKGROUND FADE-IN immediately after part 1 completes (very slowly over 4 seconds)
-            self.startBackgroundGradualFadeIn()
         }
         
         // Part 2: Starts after part 1, fades in over 0.5 seconds (overlapping with part 3)
@@ -244,7 +246,7 @@ class AnimatedLaunchScreenViewController: UIViewController {
         startBackgroundScrolling()
         
         // Fade in all background elements very slowly over 4 seconds
-        UIView.animate(withDuration: 0.44, delay: 0.0, options: [.curveEaseInOut], animations: {
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseInOut], animations: {
             self.backgroundRunes1.alpha = 1.0
             self.backgroundRunes1Duplicate.alpha = 1.0
             self.backgroundRunes2.alpha = 1.0
