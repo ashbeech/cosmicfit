@@ -254,7 +254,8 @@ class DailyFitViewController: UIViewController {
     }
     
     // MARK: - Card Reveal Setup Methods (ADD these new methods)
-    
+
+    // Setup background blur image view (behind everything) - will show blurred tarot card as background
     private func setupBackgroundBlur() {
         backgroundBlurImageView.translatesAutoresizingMaskIntoConstraints = false
         backgroundBlurImageView.contentMode = .scaleAspectFill
