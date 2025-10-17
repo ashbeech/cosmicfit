@@ -10,6 +10,7 @@ import Foundation
 // MARK: - User Profile Model
 struct UserProfile: Codable {
     let id: String
+    let firstName: String
     let birthDate: Date
     let birthLocation: String
     let latitude: Double
@@ -19,8 +20,9 @@ struct UserProfile: Codable {
     let lastModified: Date
     
     // Primary initializer for new profiles
-    init(birthDate: Date, birthLocation: String, latitude: Double, longitude: Double, timeZone: TimeZone) {
+    init(firstName: String, birthDate: Date, birthLocation: String, latitude: Double, longitude: Double, timeZone: TimeZone) {
         self.id = UUID().uuidString
+        self.firstName = firstName
         self.birthDate = birthDate
         self.birthLocation = birthLocation
         self.latitude = latitude
@@ -31,8 +33,9 @@ struct UserProfile: Codable {
     }
     
     // Internal initializer for updates (preserves ID and creation date)
-    init(id: String, birthDate: Date, birthLocation: String, latitude: Double, longitude: Double, timeZoneIdentifier: String, createdAt: Date, lastModified: Date) {
+    init(id: String, firstName: String, birthDate: Date, birthLocation: String, latitude: Double, longitude: Double, timeZoneIdentifier: String, createdAt: Date, lastModified: Date) {
         self.id = id
+        self.firstName = firstName
         self.birthDate = birthDate
         self.birthLocation = birthLocation
         self.latitude = latitude
@@ -40,6 +43,14 @@ struct UserProfile: Codable {
         self.timeZoneIdentifier = timeZoneIdentifier
         self.createdAt = createdAt
         self.lastModified = lastModified
+    }
+    
+    // Validation helper
+    var isComplete: Bool {
+        return !firstName.isEmpty &&
+               !birthLocation.isEmpty &&
+               latitude != 0.0 &&
+               longitude != 0.0
     }
 }
 
@@ -49,7 +60,7 @@ class UserProfileStorage {
     // MARK: - Properties
     private let userDefaults = UserDefaults.standard
     private let userProfileKey = "CosmicFitUserProfile"
-    private let userFirstLaunchKey = "CosmicFitFirstLaunch"
+    private let hasSeenWelcomeKey = "CosmicFitHasSeenWelcome"
     
     // MARK: - Singleton
     static let shared = UserProfileStorage()
@@ -65,7 +76,6 @@ class UserProfileStorage {
             let encoder = JSONEncoder()
             let data = try encoder.encode(profile)
             userDefaults.set(data, forKey: userProfileKey)
-            userDefaults.set(false, forKey: userFirstLaunchKey) // Mark as not first launch
             print("✅ User profile saved with ID: \(profile.id)")
             return true
         } catch {
@@ -93,8 +103,17 @@ class UserProfileStorage {
         }
     }
     
-    /// Check if user profile exists
-    /// - Returns: Boolean indicating if profile exists
+    /// Check if user profile exists and is complete
+    /// - Returns: Boolean indicating if complete profile exists
+    func hasCompleteUserProfile() -> Bool {
+        guard let profile = loadUserProfile() else {
+            return false
+        }
+        return profile.isComplete
+    }
+    
+    /// Check if user profile exists (complete or incomplete)
+    /// - Returns: Boolean indicating if any profile exists
     func hasUserProfile() -> Bool {
         return userDefaults.data(forKey: userProfileKey) != nil
     }
@@ -102,7 +121,6 @@ class UserProfileStorage {
     /// Delete user profile from local storage
     func deleteUserProfile() {
         userDefaults.removeObject(forKey: userProfileKey)
-        userDefaults.set(true, forKey: userFirstLaunchKey) // Mark as first launch again
         
         // Also clean up all daily vibes for this user
         if let profile = loadUserProfile() {
@@ -112,10 +130,22 @@ class UserProfileStorage {
         print("🗑️ User profile deleted")
     }
     
-    /// Check if this is the first app launch
-    /// - Returns: Boolean indicating if this is first launch
-    func isFirstLaunch() -> Bool {
-        return userDefaults.bool(forKey: userFirstLaunchKey)
+    /// Check if user has seen the welcome intro
+    /// - Returns: Boolean indicating if welcome was shown
+    func hasSeenWelcome() -> Bool {
+        return userDefaults.bool(forKey: hasSeenWelcomeKey)
+    }
+    
+    /// Mark that user has seen the welcome intro
+    func markWelcomeSeen() {
+        userDefaults.set(true, forKey: hasSeenWelcomeKey)
+        print("✅ Welcome intro marked as seen")
+    }
+    
+    /// Reset welcome flag (for testing)
+    func resetWelcomeFlag() {
+        userDefaults.removeObject(forKey: hasSeenWelcomeKey)
+        print("🔄 Welcome flag reset")
     }
     
     // MARK: - Private Methods

@@ -21,47 +21,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set up the animated launch screen as the initial view controller
         let launchScreenVC = AnimatedLaunchScreenViewController()
         
-        // Check if user profile exists to determine app flow
-        if UserProfileStorage.shared.hasUserProfile() {
-            // Existing user - go directly to main app with stored data
-            if let userProfile = UserProfileStorage.shared.loadUserProfile() {
-                let tabBarController = CosmicFitTabBarController()
-                let navigationController = UINavigationController(rootViewController: tabBarController)
-                
-                // Configure with stored user data
-                let chartData = NatalChartManager.shared.calculateNatalChart(
-                    date: userProfile.birthDate,
-                    latitude: userProfile.latitude,
-                    longitude: userProfile.longitude,
-                    timeZone: TimeZone(identifier: userProfile.timeZoneIdentifier) ?? TimeZone.current
-                )
-                
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateStyle = .long
-                dateFormatter.timeStyle = .short
-                let birthInfo = "\(dateFormatter.string(from: userProfile.birthDate)) at \(userProfile.birthLocation) (Lat: \(String(format: "%.4f", userProfile.latitude)), Long: \(String(format: "%.4f", userProfile.longitude)))"
-                
-                tabBarController.configure(with: chartData,
-                                         birthInfo: birthInfo,
-                                         birthDate: userProfile.birthDate,
-                                         latitude: userProfile.latitude,
-                                         longitude: userProfile.longitude,
-                                         timeZone: TimeZone(identifier: userProfile.timeZoneIdentifier) ?? TimeZone.current)
-                
-                // Set Daily Fit as default tab (index 1) for returning users
-                tabBarController.selectedIndex = 1
-                
-                launchScreenVC.setMainViewController(navigationController)
-                
-                print("✅ Returning user detected - launching to Daily Fit tab")
-            } else {
-                // Profile exists but corrupted - fallback to onboarding
-                setupFirstTimeUser(launchScreenVC: launchScreenVC)
-            }
+        // Determine app flow based on user profile and welcome state
+        if UserProfileStorage.shared.hasCompleteUserProfile() {
+            // User has complete profile - go directly to main app
+            setupExistingUserFlow(launchScreenVC: launchScreenVC)
         } else {
-            // First time user - show onboarding form
-            setupFirstTimeUser(launchScreenVC: launchScreenVC)
-            print("📱 First time user detected - showing onboarding")
+            // User needs onboarding - check if they've seen welcome
+            if UserProfileStorage.shared.hasSeenWelcome() {
+                // Skip welcome, go straight to form
+                setupOnboardingFormFlow(launchScreenVC: launchScreenVC)
+            } else {
+                // Show welcome intro first
+                setupWelcomeIntroFlow(launchScreenVC: launchScreenVC)
+            }
         }
         
         setupGlobalAppearance()
@@ -85,10 +57,60 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    private func setupFirstTimeUser(launchScreenVC: AnimatedLaunchScreenViewController) {
-        let mainViewController = MainViewController()
-        let navigationController = UINavigationController(rootViewController: mainViewController)
+    private func setupExistingUserFlow(launchScreenVC: AnimatedLaunchScreenViewController) {
+        guard let userProfile = UserProfileStorage.shared.loadUserProfile() else {
+            print("❌ Profile exists but corrupted - fallback to onboarding")
+            setupOnboardingFormFlow(launchScreenVC: launchScreenVC)
+            return
+        }
+        
+        let tabBarController = CosmicFitTabBarController()
+        let navigationController = UINavigationController(rootViewController: tabBarController)
+        
+        // Configure with stored user data
+        let chartData = NatalChartManager.shared.calculateNatalChart(
+            date: userProfile.birthDate,
+            latitude: userProfile.latitude,
+            longitude: userProfile.longitude,
+            timeZone: TimeZone(identifier: userProfile.timeZoneIdentifier) ?? TimeZone.current
+        )
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .short
+        let birthInfo = "\(dateFormatter.string(from: userProfile.birthDate)) at \(userProfile.birthLocation) (Lat: \(String(format: "%.4f", userProfile.latitude)), Long: \(String(format: "%.4f", userProfile.longitude)))"
+        
+        tabBarController.configure(with: chartData,
+                                 birthInfo: birthInfo,
+                                 birthDate: userProfile.birthDate,
+                                 latitude: userProfile.latitude,
+                                 longitude: userProfile.longitude,
+                                 timeZone: TimeZone(identifier: userProfile.timeZoneIdentifier) ?? TimeZone.current)
+        
+        // Set Daily Fit as default tab (index 1) for returning users
+        tabBarController.selectedIndex = 1
+        
         launchScreenVC.setMainViewController(navigationController)
+        
+        print("✅ Returning user detected - launching to Daily Fit tab")
+    }
+    
+    private func setupWelcomeIntroFlow(launchScreenVC: AnimatedLaunchScreenViewController) {
+        let animatedWelcomeVC = AnimatedWelcomeIntroViewController()
+        let navigationController = UINavigationController(rootViewController: animatedWelcomeVC)
+        navigationController.navigationBar.isHidden = true
+        launchScreenVC.setMainViewController(navigationController)
+        
+        print("📱 First time user - showing animated welcome intro")
+    }
+    
+    private func setupOnboardingFormFlow(launchScreenVC: AnimatedLaunchScreenViewController) {
+        let onboardingFormVC = OnboardingFormViewController()
+        let navigationController = UINavigationController(rootViewController: onboardingFormVC)
+        navigationController.navigationBar.isHidden = true
+        launchScreenVC.setMainViewController(navigationController)
+        
+        print("📱 User needs profile completion - showing onboarding form")
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -104,22 +126,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         lastActiveDate = Date()
     }
     
-    private func configureAppearance() {
-        // Hide navigation bars globally
-        UINavigationBar.appearance().isHidden = true
+    // MARK: - Global Appearance Setup
+    private func setupGlobalAppearance() {
+        // Configure global appearance proxy settings
+        if #available(iOS 13.0, *) {
+            // Set window background
+            if let window = window {
+                window.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+            }
+        }
         
-        // Configure tab bar appearance only
-        UITabBar.appearance().backgroundColor = .systemBackground
-        UITabBar.appearance().tintColor = .systemBlue
-        UITabBar.appearance().unselectedItemTintColor = .systemGray
+        // Configure global UI appearance
+        UINavigationBar.appearance().backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        UINavigationBar.appearance().tintColor = CosmicFitTheme.Colors.cosmicLilac
+        UITabBar.appearance().backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        UITabBar.appearance().tintColor = CosmicFitTheme.Colors.cosmicLilac
+        UITabBar.appearance().unselectedItemTintColor = CosmicFitTheme.Colors.cosmicBlue
     }
     
+    // MARK: - App Configuration
+    private func configureAppearance() {
+        // Configure global appearance settings if needed
+        let appearance = UINavigationBar.appearance()
+        appearance.isTranslucent = false
+        appearance.backgroundColor = .black
+        appearance.barTintColor = .black
+        appearance.tintColor = .white
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+    }
+    
+    // MARK: - Daily Vibe Management
     private func setupDailyVibeManagement() {
         // Clean up old daily vibe entries on app launch
         DailyVibeStorage.shared.cleanupOldEntries(daysToKeep: 30)
         
         // Set up background task for midnight refresh if needed
         setupMidnightRefreshObserver()
+        
+        // Set up notification observers for daily vibe updates
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleDailyVibeUpdate),
+            name: Notification.Name("DailyVibeGenerated"),
+            object: nil
+        )
     }
     
     private func setupMidnightRefreshObserver() {
@@ -140,6 +190,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ) { [weak self] _ in
             self?.handleDateChange()
         }
+    }
+    
+    @objc private func handleDailyVibeUpdate() {
+        print("📅 Daily vibe content updated")
     }
     
     private func checkForDateChange() {
@@ -167,23 +221,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Optionally clean up old entries
         DailyVibeStorage.shared.cleanupOldEntries(daysToKeep: 30)
-    }
-    
-    private func setupGlobalAppearance() {
-        // Configure global appearance proxy settings
-        if #available(iOS 13.0, *) {
-            // Set window background
-            if let window = window {
-                window.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
-            }
-        }
-        
-        // Configure global UI appearance
-        UINavigationBar.appearance().backgroundColor = CosmicFitTheme.Colors.cosmicGrey
-        UINavigationBar.appearance().tintColor = CosmicFitTheme.Colors.cosmicLilac
-        UITabBar.appearance().backgroundColor = CosmicFitTheme.Colors.cosmicGrey
-        UITabBar.appearance().tintColor = CosmicFitTheme.Colors.cosmicLilac
-        UITabBar.appearance().unselectedItemTintColor = CosmicFitTheme.Colors.cosmicBlue
     }
 }
 
