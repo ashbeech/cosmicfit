@@ -173,10 +173,20 @@ class OnboardingFormViewController: UIViewController {
         
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .compact
+        datePicker.preferredDatePickerStyle = .wheels // Changed to wheels style
         datePicker.maximumDate = Date()
         if let hundredYearsAgo = Calendar.current.date(byAdding: .year, value: -100, to: Date()) {
             datePicker.minimumDate = hundredYearsAgo
+        }
+        
+        // Set default date to April 28, 1989
+        let calendar = Calendar.current
+        var defaultDateComponents = DateComponents()
+        defaultDateComponents.year = 1989
+        defaultDateComponents.month = 4
+        defaultDateComponents.day = 28
+        if let defaultDate = calendar.date(from: defaultDateComponents) {
+            datePicker.date = defaultDate
         }
         
         // Time picker
@@ -187,7 +197,15 @@ class OnboardingFormViewController: UIViewController {
         
         timePicker.translatesAutoresizingMaskIntoConstraints = false
         timePicker.datePickerMode = .time
-        timePicker.preferredDatePickerStyle = .compact
+        timePicker.preferredDatePickerStyle = .wheels // Changed to wheels style
+        
+        // Set default time to 00:00 (midnight)
+        var defaultTimeComponents = DateComponents()
+        defaultTimeComponents.hour = 0
+        defaultTimeComponents.minute = 0
+        if let defaultTime = calendar.date(from: defaultTimeComponents) {
+            timePicker.date = defaultTime
+        }
         
         // Unknown time checkbox
         unknownTimeCheckbox.translatesAutoresizingMaskIntoConstraints = false
@@ -393,7 +411,7 @@ class OnboardingFormViewController: UIViewController {
             nameTextField.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             nameTextField.heightAnchor.constraint(equalToConstant: 44),
             
-            nameDivider.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: -8),
+            nameDivider.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 2), // Reduced from 8 to 2
             nameDivider.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             nameDivider.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             nameDivider.heightAnchor.constraint(equalToConstant: 1),
@@ -440,7 +458,7 @@ class OnboardingFormViewController: UIViewController {
             dateLabel.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             dateLabel.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             
-            datePicker.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: -20),
+            datePicker.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 10),
             datePicker.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             datePicker.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             
@@ -448,7 +466,7 @@ class OnboardingFormViewController: UIViewController {
             timeLabel.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             timeLabel.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             
-            timePicker.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: -30),
+            timePicker.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 10),
             timePicker.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             timePicker.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             
@@ -485,7 +503,7 @@ class OnboardingFormViewController: UIViewController {
             locationTextField.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             locationTextField.heightAnchor.constraint(equalToConstant: 44),
             
-            locationDivider.topAnchor.constraint(equalTo: locationTextField.bottomAnchor, constant: -16),
+            locationDivider.topAnchor.constraint(equalTo: locationTextField.bottomAnchor, constant: 2), // Reduced from 8 to 2
             locationDivider.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             locationDivider.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             locationDivider.heightAnchor.constraint(equalToConstant: 1),
