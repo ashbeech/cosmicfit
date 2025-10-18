@@ -223,9 +223,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DailyVibeStorage.shared.cleanupOldEntries(daysToKeep: 30)
     }
 }
-
-// MARK: - Notification Names
-extension Notification.Name {
-    /// Posted when the daily vibe needs to be refreshed due to date change
-    static let dailyVibeNeedsRefresh = Notification.Name("dailyVibeNeedsRefresh")
-}

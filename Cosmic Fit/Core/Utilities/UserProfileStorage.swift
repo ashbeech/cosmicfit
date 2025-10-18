@@ -170,4 +170,7 @@ extension Notification.Name {
     
     /// Posted when user profile is deleted
     static let userProfileDeleted = Notification.Name("userProfileDeleted")
+    
+    /// Posted when the daily vibe needs to be refreshed due to date change
+    static let dailyVibeNeedsRefresh = Notification.Name("dailyVibeNeedsRefresh")
 }

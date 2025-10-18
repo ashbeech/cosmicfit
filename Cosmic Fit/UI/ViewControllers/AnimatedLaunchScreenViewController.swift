@@ -40,109 +40,138 @@ class AnimatedLaunchScreenViewController: UIViewController {
         startAnimations()
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
     // MARK: - UI Setup
     private func setupUI() {
-        view.backgroundColor = .black
+        // Start with complete black background
+        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
         
-        setupBackgroundElements()
+        setupBackgroundRunes()
         setupLogoElements()
     }
     
-    private func setupBackgroundElements() {
+    private func setupBackgroundRunes() {
         // Background container
         backgroundContainer.translatesAutoresizingMaskIntoConstraints = false
-        backgroundContainer.backgroundColor = .clear
+        backgroundContainer.clipsToBounds = true
         view.addSubview(backgroundContainer)
         
-        // Setup background images
-        setupBackgroundImageView(backgroundRunes1, imageName: "ScrollingRunesBackground")
-        setupBackgroundImageView(backgroundRunes2, imageName: "ScrollingRunesBackground")
-        setupBackgroundImageView(backgroundRunes3, imageName: "ScrollingRunesBackground")
+        // Get the background rune image
+        let runeImage = UIImage(named: "logo-animation-background")
         
-        // Setup duplicate images for seamless scrolling
-        setupBackgroundImageView(backgroundRunes1Duplicate, imageName: "ScrollingRunesBackground")
-        setupBackgroundImageView(backgroundRunes2Duplicate, imageName: "ScrollingRunesBackground")
-        setupBackgroundImageView(backgroundRunes3Duplicate, imageName: "ScrollingRunesBackground")
+        // Setup first rune column (scrolls down) - LEFT COLUMN
+        backgroundRunes1.image = runeImage
+        backgroundRunes1.contentMode = .scaleToFill
+        backgroundRunes1.translatesAutoresizingMaskIntoConstraints = false
+        backgroundRunes1.alpha = 0 // Start invisible
+        backgroundContainer.addSubview(backgroundRunes1)
+        
+        backgroundRunes1Duplicate.image = runeImage
+        backgroundRunes1Duplicate.contentMode = .scaleToFill
+        backgroundRunes1Duplicate.translatesAutoresizingMaskIntoConstraints = false
+        backgroundRunes1Duplicate.alpha = 0 // Start invisible
+        backgroundContainer.addSubview(backgroundRunes1Duplicate)
+        
+        // Setup second rune column (scrolls up) - MIDDLE COLUMN
+        backgroundRunes2.image = runeImage
+        backgroundRunes2.contentMode = .scaleToFill
+        backgroundRunes2.translatesAutoresizingMaskIntoConstraints = false
+        backgroundRunes2.alpha = 0 // Start invisible
+        backgroundContainer.addSubview(backgroundRunes2)
+        
+        backgroundRunes2Duplicate.image = runeImage
+        backgroundRunes2Duplicate.contentMode = .scaleToFill
+        backgroundRunes2Duplicate.translatesAutoresizingMaskIntoConstraints = false
+        backgroundRunes2Duplicate.alpha = 0 // Start invisible
+        backgroundContainer.addSubview(backgroundRunes2Duplicate)
+        
+        // Setup third rune column (scrolls down) - RIGHT COLUMN
+        backgroundRunes3.image = runeImage
+        backgroundRunes3.contentMode = .scaleToFill
+        backgroundRunes3.translatesAutoresizingMaskIntoConstraints = false
+        backgroundRunes3.alpha = 0 // Start invisible
+        backgroundContainer.addSubview(backgroundRunes3)
+        
+        backgroundRunes3Duplicate.image = runeImage
+        backgroundRunes3Duplicate.contentMode = .scaleToFill
+        backgroundRunes3Duplicate.translatesAutoresizingMaskIntoConstraints = false
+        backgroundRunes3Duplicate.alpha = 0 // Start invisible
+        backgroundContainer.addSubview(backgroundRunes3Duplicate)
         
         // Layout constraints
         NSLayoutConstraint.activate([
+            // Background container fills entire view
             backgroundContainer.topAnchor.constraint(equalTo: view.topAnchor),
             backgroundContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        
-        setupBackgroundConstraints()
-    }
-    
-    private func setupBackgroundImageView(_ imageView: UIImageView, imageName: String) {
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.alpha = 0 // Start invisible
-        imageView.image = UIImage(named: imageName)
-        backgroundContainer.addSubview(imageView)
-    }
-    
-    private func setupBackgroundConstraints() {
-        let screenWidth = view.bounds.width
-        let columnWidth = screenWidth / 3
-        
-        // First column (left)
-        NSLayoutConstraint.activate([
+            backgroundContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            // First column (LEFT - exactly 1/3 width)
             backgroundRunes1.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
             backgroundRunes1.leadingAnchor.constraint(equalTo: backgroundContainer.leadingAnchor),
-            backgroundRunes1.widthAnchor.constraint(equalToConstant: columnWidth),
-            backgroundRunes1.bottomAnchor.constraint(equalTo: backgroundContainer.bottomAnchor),
+            backgroundRunes1.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
+            backgroundRunes1.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor),
             
+            // First column duplicate - starts at same position (we'll use transforms to position)
             backgroundRunes1Duplicate.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
             backgroundRunes1Duplicate.leadingAnchor.constraint(equalTo: backgroundContainer.leadingAnchor),
-            backgroundRunes1Duplicate.widthAnchor.constraint(equalToConstant: columnWidth),
-            backgroundRunes1Duplicate.bottomAnchor.constraint(equalTo: backgroundContainer.bottomAnchor)
-        ])
-        
-        // Second column (center)
-        NSLayoutConstraint.activate([
+            backgroundRunes1Duplicate.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
+            backgroundRunes1Duplicate.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor),
+            
+            // Second column (MIDDLE - exactly 1/3 width)
             backgroundRunes2.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
             backgroundRunes2.leadingAnchor.constraint(equalTo: backgroundRunes1.trailingAnchor),
-            backgroundRunes2.widthAnchor.constraint(equalToConstant: columnWidth),
-            backgroundRunes2.bottomAnchor.constraint(equalTo: backgroundContainer.bottomAnchor),
+            backgroundRunes2.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
+            backgroundRunes2.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor),
             
+            // Second column duplicate - starts at same position (we'll use transforms to position)
             backgroundRunes2Duplicate.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
             backgroundRunes2Duplicate.leadingAnchor.constraint(equalTo: backgroundRunes1.trailingAnchor),
-            backgroundRunes2Duplicate.widthAnchor.constraint(equalToConstant: columnWidth),
-            backgroundRunes2Duplicate.bottomAnchor.constraint(equalTo: backgroundContainer.bottomAnchor)
-        ])
-        
-        // Third column (right)
-        NSLayoutConstraint.activate([
+            backgroundRunes2Duplicate.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
+            backgroundRunes2Duplicate.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor),
+            
+            // Third column (RIGHT - exactly 1/3 width)
             backgroundRunes3.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
             backgroundRunes3.leadingAnchor.constraint(equalTo: backgroundRunes2.trailingAnchor),
-            backgroundRunes3.widthAnchor.constraint(equalToConstant: columnWidth),
-            backgroundRunes3.bottomAnchor.constraint(equalTo: backgroundContainer.bottomAnchor),
+            backgroundRunes3.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
+            backgroundRunes3.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor),
             
+            // Third column duplicate - starts at same position (we'll use transforms to position)
             backgroundRunes3Duplicate.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
             backgroundRunes3Duplicate.leadingAnchor.constraint(equalTo: backgroundRunes2.trailingAnchor),
-            backgroundRunes3Duplicate.widthAnchor.constraint(equalToConstant: columnWidth),
-            backgroundRunes3Duplicate.bottomAnchor.constraint(equalTo: backgroundContainer.bottomAnchor)
+            backgroundRunes3Duplicate.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
+            backgroundRunes3Duplicate.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor)
         ])
     }
     
     private func setupLogoElements() {
-        // Logo container
+        // Logo container for centering
         logoContainer.translatesAutoresizingMaskIntoConstraints = false
-        logoContainer.backgroundColor = .clear
         view.addSubview(logoContainer)
         
         // Setup logo parts
-        setupLogoImageView(logoPart1, imageName: "CosmicFitLogo_Part1")
-        setupLogoImageView(logoPart2, imageName: "CosmicFitLogo_Part2")
-        setupLogoImageView(logoPart3, imageName: "CosmicFitLogo_Part3")
-        setupLogoImageView(logoPart4, imageName: "CosmicFitLogo_Part4")
+        logoPart1.image = UIImage(named: "logo-animation-part-1")
+        logoPart1.contentMode = .scaleAspectFit
+        logoPart1.translatesAutoresizingMaskIntoConstraints = false
+        logoPart1.alpha = 0 // Start invisible
+        logoContainer.addSubview(logoPart1)
+        
+        logoPart2.image = UIImage(named: "logo-animation-part-2")
+        logoPart2.contentMode = .scaleAspectFit
+        logoPart2.translatesAutoresizingMaskIntoConstraints = false
+        logoPart2.alpha = 0 // Start invisible
+        logoContainer.addSubview(logoPart2)
+        
+        logoPart3.image = UIImage(named: "logo-animation-part-3")
+        logoPart3.contentMode = .scaleAspectFit
+        logoPart3.translatesAutoresizingMaskIntoConstraints = false
+        logoPart3.alpha = 0 // Start invisible
+        logoContainer.addSubview(logoPart3)
+        
+        logoPart4.image = UIImage(named: "logo-animation-part-4")
+        logoPart4.contentMode = .scaleAspectFit
+        logoPart4.translatesAutoresizingMaskIntoConstraints = false
+        logoPart4.alpha = 0 // Start invisible
+        logoContainer.addSubview(logoPart4)
         
         // Layout constraints - all logo parts centered and same size
         NSLayoutConstraint.activate([
@@ -175,14 +204,6 @@ class AnimatedLaunchScreenViewController: UIViewController {
         ])
     }
     
-    private func setupLogoImageView(_ imageView: UIImageView, imageName: String) {
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        imageView.alpha = 0 // Start invisible
-        imageView.image = UIImage(named: imageName)
-        logoContainer.addSubview(imageView)
-    }
-    
     // MARK: - Animations
     private func startAnimations() {
         startLogoAnimation()
@@ -194,12 +215,14 @@ class AnimatedLaunchScreenViewController: UIViewController {
     }
     
     private func startLogoAnimation() {
+        
+        // START BACKGROUND FADE-IN immediately
+        self.startBackgroundGradualFadeIn()
+        
         // Part 1: Fade in over 0.5 seconds (halved time)
         UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseInOut], animations: {
             self.logoPart1.alpha = 1.0
         }) { _ in
-            // START BACKGROUND FADE-IN immediately after part 1 completes (very slowly over 4 seconds)
-            self.startBackgroundGradualFadeIn()
         }
         
         // Part 2: Starts after part 1, fades in over 0.5 seconds (overlapping with part 3)
@@ -223,7 +246,7 @@ class AnimatedLaunchScreenViewController: UIViewController {
         startBackgroundScrolling()
         
         // Fade in all background elements very slowly over 4 seconds
-        UIView.animate(withDuration: 0.44, delay: 0.0, options: [.curveEaseInOut], animations: {
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseInOut], animations: {
             self.backgroundRunes1.alpha = 1.0
             self.backgroundRunes1Duplicate.alpha = 1.0
             self.backgroundRunes2.alpha = 1.0
@@ -281,6 +304,25 @@ class AnimatedLaunchScreenViewController: UIViewController {
     private func animateBackgroundScroll(imageView: UIImageView, duplicate: UIImageView, direction: ScrollDirection, duration: TimeInterval) {
         let containerHeight = view.bounds.height
         
+        // Create infinite scrolling animation
+        func animateLoop() {
+            UIView.animate(withDuration: duration, delay: 0, options: [.curveLinear, .repeat], animations: {
+                switch direction {
+                case .down:
+                    // Move both images down by 2x container height
+                    // This ensures the duplicate (starting above) reaches the original's starting position
+                    imageView.transform = CGAffineTransform(translationX: 0, y: containerHeight)
+                    duplicate.transform = CGAffineTransform(translationX: 0, y: containerHeight)
+                    
+                case .up:
+                    // Move both images up by 2x container height
+                    // This ensures the duplicate (starting below) reaches the original's starting position
+                    imageView.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
+                    duplicate.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
+                }
+            }, completion: nil)
+        }
+        
         // Alternative approach using CABasicAnimation for smoother infinite scroll
         func animateWithCoreAnimation() {
             let animation = CABasicAnimation(keyPath: "transform.translation.y")
@@ -334,19 +376,18 @@ class AnimatedLaunchScreenViewController: UIViewController {
     
     private func transitionToMainApp() {
         guard let mainViewController = mainViewController else {
-            // Fallback if mainViewController isn't set - use OnboardingFormViewController instead of MainViewController
-            let onboardingFormVC = OnboardingFormViewController()
-            let navController = UINavigationController(rootViewController: onboardingFormVC)
-            navController.navigationBar.isHidden = true
-            navController.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
-            navController.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+            // Fallback if mainViewController isn't set
+            let mainVC = MainViewController()
+            let navController = UINavigationController(rootViewController: mainVC)
+            navController.modalTransitionStyle = .crossDissolve
+            navController.modalPresentationStyle = .fullScreen
             self.present(navController, animated: true)
             return
         }
         
         // Transition to the provided main view controller
-        mainViewController.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
-        mainViewController.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+        mainViewController.modalTransitionStyle = .crossDissolve
+        mainViewController.modalPresentationStyle = .fullScreen
         self.present(mainViewController, animated: true)
     }
 }
