@@ -152,148 +152,157 @@ class OnboardingFormViewController: UIViewController {
     }
     
     private func setupInputViews() {
-        // Name input
-        nameTextField.translatesAutoresizingMaskIntoConstraints = false
-        nameTextField.placeholder = "First Name"
-        nameTextField.font = UIFont.systemFont(ofSize: 18)
-        nameTextField.textColor = .black
-        nameTextField.borderStyle = .none
-        nameTextField.returnKeyType = .next
-        nameTextField.delegate = self
-        nameTextField.addTarget(self, action: #selector(nameFieldChanged), for: .editingChanged)
-        
-        nameDivider.translatesAutoresizingMaskIntoConstraints = false
-        nameDivider.backgroundColor = .black
-        
-        // Date picker
-        dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        dateLabel.text = "Date"
-        dateLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        dateLabel.textColor = .black
-        
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
-        datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .wheels
-        datePicker.maximumDate = Date()
-        // Set dark text color for the picker
-        datePicker.setValue(UIColor.black, forKey: "textColor")
-        
-        if let hundredYearsAgo = Calendar.current.date(byAdding: .year, value: -100, to: Date()) {
-            datePicker.minimumDate = hundredYearsAgo
+            // Name input
+            nameTextField.translatesAutoresizingMaskIntoConstraints = false
+            nameTextField.placeholder = "First Name"
+            nameTextField.font = UIFont.systemFont(ofSize: 18)
+            nameTextField.textColor = .black
+            nameTextField.borderStyle = .none
+            nameTextField.returnKeyType = .next
+            nameTextField.delegate = self
+            nameTextField.addTarget(self, action: #selector(nameFieldChanged), for: .editingChanged)
+            
+            nameDivider.translatesAutoresizingMaskIntoConstraints = false
+            nameDivider.backgroundColor = .black
+            
+            // Date picker
+            dateLabel.translatesAutoresizingMaskIntoConstraints = false
+            dateLabel.text = "Date"
+            dateLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+            dateLabel.textColor = .black
+            
+            datePicker.translatesAutoresizingMaskIntoConstraints = false
+            datePicker.datePickerMode = .date
+            datePicker.preferredDatePickerStyle = .wheels
+            datePicker.maximumDate = Date()
+            // Set dark text color for the picker
+            datePicker.setValue(UIColor.black, forKey: "textColor")
+            
+            if let hundredYearsAgo = Calendar.current.date(byAdding: .year, value: -100, to: Date()) {
+                datePicker.minimumDate = hundredYearsAgo
+            }
+            
+            // Set default date to April 28, 1989
+            let calendar = Calendar.current
+            var defaultDateComponents = DateComponents()
+            defaultDateComponents.year = 1989
+            defaultDateComponents.month = 4
+            defaultDateComponents.day = 28
+            if let defaultDate = calendar.date(from: defaultDateComponents) {
+                datePicker.date = defaultDate
+            }
+            
+            // Time picker
+            timeLabel.translatesAutoresizingMaskIntoConstraints = false
+            timeLabel.text = "Time"
+            timeLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+            timeLabel.textColor = .black
+            
+            timePicker.translatesAutoresizingMaskIntoConstraints = false
+            timePicker.datePickerMode = .time
+            timePicker.preferredDatePickerStyle = .wheels
+            // Set dark text color for the picker
+            timePicker.setValue(UIColor.black, forKey: "textColor")
+            
+            // Set default time to 04:30
+            var defaultTimeComponents = DateComponents()
+            defaultTimeComponents.hour = 04
+            defaultTimeComponents.minute = 30
+            if let defaultTime = calendar.date(from: defaultTimeComponents) {
+                timePicker.date = defaultTime
+            }
+            
+            // Unknown time checkbox
+            unknownTimeCheckbox.translatesAutoresizingMaskIntoConstraints = false
+            unknownTimeCheckbox.setImage(UIImage(systemName: "square"), for: .normal)
+            unknownTimeCheckbox.setImage(UIImage(systemName: "checkmark.square.fill"), for: .selected)
+            unknownTimeCheckbox.tintColor = .black
+            unknownTimeCheckbox.addTarget(self, action: #selector(unknownTimeToggled), for: .touchUpInside)
+            
+            unknownTimeLabel.translatesAutoresizingMaskIntoConstraints = false
+            unknownTimeLabel.text = "I don't know my time"
+            unknownTimeLabel.font = UIFont.systemFont(ofSize: 16)
+            unknownTimeLabel.textColor = .black
+            
+            // Location input
+            locationTextField.translatesAutoresizingMaskIntoConstraints = false
+            locationTextField.font = UIFont.systemFont(ofSize: 18)
+            locationTextField.textColor = .black
+            locationTextField.borderStyle = .none
+            locationTextField.returnKeyType = .done
+            locationTextField.delegate = self
+            locationTextField.addTarget(self, action: #selector(locationFieldChanged), for: .editingChanged)
+            
+            // Set placeholder with dark grey color
+            let placeholderAttributes: [NSAttributedString.Key: Any] = [
+                .foregroundColor: CosmicFitTheme.Colors.darkerCosmicGrey,
+                .font: UIFont.systemFont(ofSize: 18)
+            ]
+            locationTextField.attributedPlaceholder = NSAttributedString(
+                string: "London, UK",
+                attributes: placeholderAttributes
+            )
+            
+            locationDivider.translatesAutoresizingMaskIntoConstraints = false
+            locationDivider.backgroundColor = .black
         }
-        
-        // Set default date to April 28, 1989
-        let calendar = Calendar.current
-        var defaultDateComponents = DateComponents()
-        defaultDateComponents.year = 1989
-        defaultDateComponents.month = 4
-        defaultDateComponents.day = 28
-        if let defaultDate = calendar.date(from: defaultDateComponents) {
-            datePicker.date = defaultDate
-        }
-        
-        // Time picker
-        timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        timeLabel.text = "Time"
-        timeLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        timeLabel.textColor = .black
-        
-        timePicker.translatesAutoresizingMaskIntoConstraints = false
-        timePicker.datePickerMode = .time
-        timePicker.preferredDatePickerStyle = .wheels
-        // Set dark text color for the picker
-        timePicker.setValue(UIColor.black, forKey: "textColor")
-        
-        // Set default time to 00:00 (midnight)
-        var defaultTimeComponents = DateComponents()
-        defaultTimeComponents.hour = 04
-        defaultTimeComponents.minute = 30
-        if let defaultTime = calendar.date(from: defaultTimeComponents) {
-            timePicker.date = defaultTime
-        }
-        
-        // Unknown time checkbox
-        unknownTimeCheckbox.translatesAutoresizingMaskIntoConstraints = false
-        unknownTimeCheckbox.setImage(UIImage(systemName: "square"), for: .normal)
-        unknownTimeCheckbox.setImage(UIImage(systemName: "checkmark.square.fill"), for: .selected)
-        unknownTimeCheckbox.tintColor = .black
-        unknownTimeCheckbox.addTarget(self, action: #selector(unknownTimeToggled), for: .touchUpInside)
-        
-        unknownTimeLabel.translatesAutoresizingMaskIntoConstraints = false
-        unknownTimeLabel.text = "I don't know my time"
-        unknownTimeLabel.font = UIFont.systemFont(ofSize: 16)
-        unknownTimeLabel.textColor = .black
-        
-        // Location input
-        locationTextField.translatesAutoresizingMaskIntoConstraints = false
-        locationTextField.placeholder = "Start typing"
-        locationTextField.font = UIFont.systemFont(ofSize: 18)
-        locationTextField.textColor = .black
-        locationTextField.borderStyle = .none
-        locationTextField.returnKeyType = .done
-        locationTextField.delegate = self
-        locationTextField.addTarget(self, action: #selector(locationFieldChanged), for: .editingChanged)
-        
-        locationDivider.translatesAutoresizingMaskIntoConstraints = false
-        locationDivider.backgroundColor = .black
-    }
     
     private func setupConstraints() {
-        NSLayoutConstraint.activate([
-            // Scroll view
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            // Content view
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            contentView.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor, constant: -100),
-            
-            // Back button
-            backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            backButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            
-            // Question number
-            questionNumberLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 80),
-            questionNumberLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
-            
-            // Title
-            titleLabel.topAnchor.constraint(equalTo: questionNumberLabel.bottomAnchor, constant: 20),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
-            
-            // Description
-            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
-            
-            // Input container
-            inputContainerView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 0),
-            inputContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
-            inputContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
-            inputContainerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 60),
-            
-            // Action button
-            actionButton.topAnchor.constraint(equalTo: inputContainerView.bottomAnchor, constant: 40),
-            actionButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            actionButton.widthAnchor.constraint(equalToConstant: 140),
-            actionButton.heightAnchor.constraint(equalToConstant: 50),
-            
-            // Page indicator
-            pageIndicatorLabel.topAnchor.constraint(equalTo: actionButton.bottomAnchor, constant: 40),
-            pageIndicatorLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            pageIndicatorLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
-            
-            // Activity indicator
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
-    }
+            NSLayoutConstraint.activate([
+                // Scroll view
+                scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                
+                // Content view
+                contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+                contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+                contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+                contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+                contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+                contentView.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor, constant: -100),
+                
+                // Back button
+                backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+                backButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+                
+                // Question number
+                questionNumberLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 80),
+                questionNumberLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
+                
+                // Title
+                titleLabel.topAnchor.constraint(equalTo: questionNumberLabel.bottomAnchor, constant: 20),
+                titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
+                titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
+                
+                // Description
+                descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+                descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
+                descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
+                
+                // Input container
+                inputContainerView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 0),
+                inputContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
+                inputContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
+                inputContainerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 60),
+                
+                // Action button
+                actionButton.topAnchor.constraint(equalTo: inputContainerView.bottomAnchor, constant: 20),
+                actionButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+                actionButton.widthAnchor.constraint(equalToConstant: 140),
+                actionButton.heightAnchor.constraint(equalToConstant: 50),
+                
+                // Page indicator
+                pageIndicatorLabel.topAnchor.constraint(equalTo: actionButton.bottomAnchor, constant: 40),
+                pageIndicatorLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+                pageIndicatorLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
+                
+                // Activity indicator
+                activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            ])
+        }
     
     private func setupKeyboardHandling() {
         NotificationCenter.default.addObserver(
@@ -503,35 +512,35 @@ class OnboardingFormViewController: UIViewController {
     }
     
     private func setupLocationPage() {
-        titleLabel.text = "And lastly, where were you born?"
-        descriptionLabel.text = ""
-        actionButton.setTitle("Done", for: .normal)
-        
-        // Add location input to container
-        inputContainerView.addSubview(locationTextField)
-        inputContainerView.addSubview(locationDivider)
-        
-        NSLayoutConstraint.activate([
-            locationTextField.topAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: 20),
-            locationTextField.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
-            locationTextField.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
-            locationTextField.heightAnchor.constraint(equalToConstant: 44),
+            titleLabel.text = "And lastly, where were you born?"
+            descriptionLabel.text = ""
+            actionButton.setTitle("Done", for: .normal)
             
-            locationDivider.topAnchor.constraint(equalTo: locationTextField.bottomAnchor, constant: 2),
-            locationDivider.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
-            locationDivider.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
-            locationDivider.heightAnchor.constraint(equalToConstant: 1),
-            locationDivider.bottomAnchor.constraint(equalTo: inputContainerView.bottomAnchor)
-        ])
-        
-        // Focus on text field
-        DispatchQueue.main.async {
-            self.locationTextField.becomeFirstResponder()
+            // Add location input to container
+            inputContainerView.addSubview(locationTextField)
+            inputContainerView.addSubview(locationDivider)
+            
+            NSLayoutConstraint.activate([
+                locationTextField.topAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: 10),
+                locationTextField.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
+                locationTextField.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+                locationTextField.heightAnchor.constraint(equalToConstant: 44),
+                
+                locationDivider.topAnchor.constraint(equalTo: locationTextField.bottomAnchor, constant: -8),
+                locationDivider.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
+                locationDivider.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+                locationDivider.heightAnchor.constraint(equalToConstant: 1),
+                locationDivider.bottomAnchor.constraint(lessThanOrEqualTo: inputContainerView.bottomAnchor, constant: -10)
+            ])
+            
+            // Focus on text field
+            DispatchQueue.main.async {
+                self.locationTextField.becomeFirstResponder()
+            }
+            
+            // Initial validation
+            validateCurrentPage()
         }
-        
-        // Initial validation
-        validateCurrentPage()
-    }
     
     // MARK: - Actions
     @objc private func backButtonTapped() {
