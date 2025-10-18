@@ -304,25 +304,6 @@ class AnimatedLaunchScreenViewController: UIViewController {
     private func animateBackgroundScroll(imageView: UIImageView, duplicate: UIImageView, direction: ScrollDirection, duration: TimeInterval) {
         let containerHeight = view.bounds.height
         
-        // Create infinite scrolling animation
-        func animateLoop() {
-            UIView.animate(withDuration: duration, delay: 0, options: [.curveLinear, .repeat], animations: {
-                switch direction {
-                case .down:
-                    // Move both images down by 2x container height
-                    // This ensures the duplicate (starting above) reaches the original's starting position
-                    imageView.transform = CGAffineTransform(translationX: 0, y: containerHeight)
-                    duplicate.transform = CGAffineTransform(translationX: 0, y: containerHeight)
-                    
-                case .up:
-                    // Move both images up by 2x container height
-                    // This ensures the duplicate (starting below) reaches the original's starting position
-                    imageView.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
-                    duplicate.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
-                }
-            }, completion: nil)
-        }
-        
         // Alternative approach using CABasicAnimation for smoother infinite scroll
         func animateWithCoreAnimation() {
             let animation = CABasicAnimation(keyPath: "transform.translation.y")
@@ -376,12 +357,9 @@ class AnimatedLaunchScreenViewController: UIViewController {
     
     private func transitionToMainApp() {
         guard let mainViewController = mainViewController else {
-            // Fallback if mainViewController isn't set
-            let mainVC = MainViewController()
-            let navController = UINavigationController(rootViewController: mainVC)
-            navController.modalTransitionStyle = .crossDissolve
-            navController.modalPresentationStyle = .fullScreen
-            self.present(navController, animated: true)
+            // This should never happen - AppDelegate always sets mainViewController
+            print("❌ CRITICAL: No main view controller set in AnimatedLaunchScreenViewController")
+            assertionFailure("AnimatedLaunchScreenViewController.mainViewController must be set by AppDelegate before animation completes")
             return
         }
         

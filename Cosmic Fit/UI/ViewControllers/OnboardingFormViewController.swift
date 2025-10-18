@@ -173,8 +173,11 @@ class OnboardingFormViewController: UIViewController {
         
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .wheels // Changed to wheels style
+        datePicker.preferredDatePickerStyle = .wheels
         datePicker.maximumDate = Date()
+        // Set dark text color for the picker
+        datePicker.setValue(UIColor.black, forKey: "textColor")
+        
         if let hundredYearsAgo = Calendar.current.date(byAdding: .year, value: -100, to: Date()) {
             datePicker.minimumDate = hundredYearsAgo
         }
@@ -197,12 +200,14 @@ class OnboardingFormViewController: UIViewController {
         
         timePicker.translatesAutoresizingMaskIntoConstraints = false
         timePicker.datePickerMode = .time
-        timePicker.preferredDatePickerStyle = .wheels // Changed to wheels style
+        timePicker.preferredDatePickerStyle = .wheels
+        // Set dark text color for the picker
+        timePicker.setValue(UIColor.black, forKey: "textColor")
         
         // Set default time to 00:00 (midnight)
         var defaultTimeComponents = DateComponents()
-        defaultTimeComponents.hour = 0
-        defaultTimeComponents.minute = 0
+        defaultTimeComponents.hour = 04
+        defaultTimeComponents.minute = 30
         if let defaultTime = calendar.date(from: defaultTimeComponents) {
             timePicker.date = defaultTime
         }
@@ -268,13 +273,13 @@ class OnboardingFormViewController: UIViewController {
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
             
             // Input container
-            inputContainerView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 60),
+            inputContainerView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 0),
             inputContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
             inputContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
             inputContainerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 60),
             
             // Action button
-            actionButton.topAnchor.constraint(equalTo: inputContainerView.bottomAnchor, constant: 60),
+            actionButton.topAnchor.constraint(equalTo: inputContainerView.bottomAnchor, constant: 40),
             actionButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             actionButton.widthAnchor.constraint(equalToConstant: 140),
             actionButton.heightAnchor.constraint(equalToConstant: 50),
@@ -406,12 +411,12 @@ class OnboardingFormViewController: UIViewController {
         inputContainerView.addSubview(nameDivider)
         
         NSLayoutConstraint.activate([
-            nameTextField.topAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: 10),
+            nameTextField.topAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: 20),
             nameTextField.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             nameTextField.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             nameTextField.heightAnchor.constraint(equalToConstant: 44),
             
-            nameDivider.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 2), // Reduced from 8 to 2
+            nameDivider.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: -8),
             nameDivider.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             nameDivider.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             nameDivider.heightAnchor.constraint(equalToConstant: 1),
@@ -453,24 +458,33 @@ class OnboardingFormViewController: UIViewController {
         inputContainerView.addSubview(unknownTimeCheckbox)
         inputContainerView.addSubview(unknownTimeLabel)
         
+        // INLINE LAYOUT: Date label and picker on same horizontal line
+        // Time label and picker on same horizontal line
         NSLayoutConstraint.activate([
-            dateLabel.topAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: 20),
+            // Date row - label and picker inline
+            dateLabel.topAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: 0),
             dateLabel.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
-            dateLabel.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+            dateLabel.widthAnchor.constraint(equalToConstant: 60),
+            dateLabel.centerYAnchor.constraint(equalTo: datePicker.centerYAnchor),
             
-            datePicker.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 10),
-            datePicker.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
+            datePicker.topAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: 10),
+            datePicker.leadingAnchor.constraint(equalTo: dateLabel.trailingAnchor, constant: 10),
             datePicker.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+            datePicker.heightAnchor.constraint(equalToConstant: 120),
             
-            timeLabel.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 30),
+            // Time row - label and picker inline
+            timeLabel.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 0),
             timeLabel.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
-            timeLabel.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+            timeLabel.widthAnchor.constraint(equalToConstant: 60),
+            timeLabel.centerYAnchor.constraint(equalTo: timePicker.centerYAnchor),
             
-            timePicker.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 10),
-            timePicker.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
+            timePicker.topAnchor.constraint(equalTo: datePicker.bottomAnchor, constant: 0),
+            timePicker.leadingAnchor.constraint(equalTo: timeLabel.trailingAnchor, constant: 10),
             timePicker.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+            timePicker.heightAnchor.constraint(equalToConstant: 120),
             
-            unknownTimeCheckbox.topAnchor.constraint(equalTo: timePicker.bottomAnchor, constant: 20),
+            // Unknown time checkbox
+            unknownTimeCheckbox.topAnchor.constraint(equalTo: timePicker.bottomAnchor, constant: 0),
             unknownTimeCheckbox.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             unknownTimeCheckbox.widthAnchor.constraint(equalToConstant: 24),
             unknownTimeCheckbox.heightAnchor.constraint(equalToConstant: 24),
@@ -503,7 +517,7 @@ class OnboardingFormViewController: UIViewController {
             locationTextField.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             locationTextField.heightAnchor.constraint(equalToConstant: 44),
             
-            locationDivider.topAnchor.constraint(equalTo: locationTextField.bottomAnchor, constant: 2), // Reduced from 8 to 2
+            locationDivider.topAnchor.constraint(equalTo: locationTextField.bottomAnchor, constant: 2),
             locationDivider.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             locationDivider.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             locationDivider.heightAnchor.constraint(equalToConstant: 1),
@@ -562,32 +576,12 @@ class OnboardingFormViewController: UIViewController {
         updateTimePickerState()
     }
     
-    @objc private func dismissKeyboard() {
-        view.endEditing(true)
+    private func updateTimePickerState() {
+        timePicker.isEnabled = !hasUnknownTime
+        timePicker.alpha = hasUnknownTime ? 0.4 : 1.0
     }
     
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-        let keyboardHeight = keyboardFrame.cgRectValue.height
-        
-        scrollView.contentInset.bottom = keyboardHeight
-        if #available(iOS 13.0, *) {
-            scrollView.verticalScrollIndicatorInsets.bottom = keyboardHeight
-        } else {
-            scrollView.scrollIndicatorInsets.bottom = keyboardHeight
-        }
-    }
-    
-    @objc private func keyboardWillHide(notification: NSNotification) {
-        scrollView.contentInset.bottom = 0
-        if #available(iOS 13.0, *) {
-            scrollView.verticalScrollIndicatorInsets.bottom = 0
-        } else {
-            scrollView.scrollIndicatorInsets.bottom = 0
-        }
-    }
-    
-    // MARK: - Helper Methods
+    // MARK: - Page Transitions
     private func fadeToPage(_ page: Int) {
         UIView.animate(withDuration: 0.3, animations: {
             self.view.alpha = 0.0
@@ -599,157 +593,160 @@ class OnboardingFormViewController: UIViewController {
         }
     }
     
-    private func updateTimePickerState() {
-        timePicker.isEnabled = !hasUnknownTime
-        timePicker.alpha = hasUnknownTime ? 0.5 : 1.0
-        timeLabel.alpha = hasUnknownTime ? 0.5 : 1.0
-    }
-    
+    // MARK: - Data Storage
     private func storeBirthData() {
         birthDate = datePicker.date
-        if !hasUnknownTime {
-            birthTime = timePicker.date
-            
-            // Combine date and time
-            let calendar = Calendar.current
-            let dateComponents = calendar.dateComponents([.year, .month, .day], from: birthDate)
-            let timeComponents = calendar.dateComponents([.hour, .minute], from: birthTime)
-            
-            var combinedComponents = DateComponents()
-            combinedComponents.year = dateComponents.year
-            combinedComponents.month = dateComponents.month
-            combinedComponents.day = dateComponents.day
-            combinedComponents.hour = timeComponents.hour
-            combinedComponents.minute = timeComponents.minute
-            
-            if let combinedDate = calendar.date(from: combinedComponents) {
-                birthDate = combinedDate
-            }
-        } else {
-            // Default to 12:00 PM if time is unknown
-            let calendar = Calendar.current
-            let dateComponents = calendar.dateComponents([.year, .month, .day], from: birthDate)
-            
-            var combinedComponents = DateComponents()
-            combinedComponents.year = dateComponents.year
-            combinedComponents.month = dateComponents.month
-            combinedComponents.day = dateComponents.day
-            combinedComponents.hour = 12
-            combinedComponents.minute = 0
-            
-            if let combinedDate = calendar.date(from: combinedComponents) {
-                birthDate = combinedDate
-            }
-        }
+        birthTime = timePicker.date
+        
+        print("Birth Date: \(birthDate)")
+        print("Birth Time: \(birthTime)")
+        print("Unknown Time: \(hasUnknownTime)")
     }
     
+    // MARK: - Location Processing
     private func processLocationAndComplete() {
-        let locationString = locationTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        birthLocation = locationString
+        birthLocation = locationTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         
-        // Start location geocoding
         activityIndicator.startAnimating()
         actionButton.isEnabled = false
         
-        geocoder.geocodeAddressString(locationString) { [weak self] placemarks, error in
-            DispatchQueue.main.async {
-                self?.activityIndicator.stopAnimating()
-                self?.actionButton.isEnabled = true
-                
-                if let error = error {
-                    self?.showAlert(title: "Location Error", message: "Could not find this location. Please check the spelling and try again.")
-                    print("Geocoding error: \(error)")
-                    return
-                }
-                
-                guard let placemark = placemarks?.first,
-                      let location = placemark.location else {
-                    self?.showAlert(title: "Location Error", message: "Could not find coordinates for this location. Please try a different location.")
-                    return
-                }
-                
-                self?.latitude = location.coordinate.latitude
-                self?.longitude = location.coordinate.longitude
-                
-                // Get timezone for the location
-                let timeZone = TimeZone(identifier: placemark.timeZone?.identifier ?? TimeZone.current.identifier) ?? TimeZone.current
-                self?.timeZone = timeZone
-                
-                // Create and save user profile
-                self?.saveUserProfile()
+        geocodeLocation(birthLocation) { [weak self] success in
+            guard let self = self else { return }
+            
+            self.activityIndicator.stopAnimating()
+            self.actionButton.isEnabled = true
+            
+            if success {
+                self.saveProfileAndComplete()
+            } else {
+                self.showAlert(title: "Location Error", message: "Could not find this location. Please try a different format (e.g., 'London, UK').")
             }
         }
     }
     
-    private func saveUserProfile() {
-        let userProfile = UserProfile(
+    private func geocodeLocation(_ location: String, completion: @escaping (Bool) -> Void) {
+        geocoder.geocodeAddressString(location) { [weak self] placemarks, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                print("Geocoding error: \(error.localizedDescription)")
+                completion(false)
+                return
+            }
+            
+            guard let placemark = placemarks?.first,
+                  let location = placemark.location else {
+                completion(false)
+                return
+            }
+            
+            self.latitude = location.coordinate.latitude
+            self.longitude = location.coordinate.longitude
+            self.timeZone = placemark.timeZone ?? TimeZone.current
+            
+            print("Geocoded: \(self.latitude), \(self.longitude)")
+            completion(true)
+        }
+    }
+    
+    private func saveProfileAndComplete() {
+        // Combine birth date and time
+        let calendar = Calendar.current
+        let dateComponents = calendar.dateComponents([.year, .month, .day], from: birthDate)
+        let timeComponents = calendar.dateComponents([.hour, .minute], from: birthTime)
+        
+        var combinedComponents = DateComponents()
+        combinedComponents.year = dateComponents.year
+        combinedComponents.month = dateComponents.month
+        combinedComponents.day = dateComponents.day
+        combinedComponents.hour = hasUnknownTime ? 12 : timeComponents.hour
+        combinedComponents.minute = hasUnknownTime ? 0 : timeComponents.minute
+        combinedComponents.timeZone = timeZone
+        
+        guard let finalBirthDateTime = calendar.date(from: combinedComponents) else {
+            showAlert(title: "Error", message: "Could not process birth date and time.")
+            return
+        }
+        
+        // Create user profile
+        let profile = UserProfile(
+            id: UUID().uuidString,
             firstName: firstName,
-            birthDate: birthDate,
+            birthDate: finalBirthDateTime,
             birthLocation: birthLocation,
             latitude: latitude,
             longitude: longitude,
-            timeZone: timeZone
+            timeZoneIdentifier: timeZone.identifier,
+            createdAt: Date(),
+            lastModified: Date()
         )
         
-        if UserProfileStorage.shared.saveUserProfile(userProfile) {
-            print("✅ User profile saved successfully")
-            
-            // Calculate chart and transition to main app
-            let chartData = NatalChartManager.shared.calculateNatalChart(
-                date: birthDate,
-                latitude: latitude,
-                longitude: longitude,
-                timeZone: timeZone
-            )
-            
-            // Format birth info for display
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateStyle = .long
-            dateFormatter.timeStyle = .short
-            let birthInfo = "\(dateFormatter.string(from: birthDate)) at \(birthLocation) (Lat: \(String(format: "%.4f", latitude)), Long: \(String(format: "%.4f", longitude)))"
-            
-            // Create and present the main app - FIX: Use proper window transition
-            let tabBarController = CosmicFitTabBarController()
-            tabBarController.configure(
-                with: chartData,
-                birthInfo: birthInfo,
-                birthDate: birthDate,
-                latitude: latitude,
-                longitude: longitude,
-                timeZone: timeZone
-            )
-            
-            // CRITICAL FIX: Use window scene instead of modal presentation
-            DispatchQueue.main.async {
-                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                   let window = windowScene.windows.first {
-                    
-                    // Create navigation controller for tab bar
-                    let navigationController = UINavigationController(rootViewController: tabBarController)
-                    navigationController.navigationBar.isHidden = true
-                    
-                    // Smooth transition to main app
-                    UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve) {
-                        window.rootViewController = navigationController
-                    } completion: { _ in
-                        print("✅ Successfully transitioned to main app")
-                    }
-                } else {
-                    print("❌ Could not find window for transition")
-                    // Fallback to modal presentation
-                    tabBarController.modalPresentationStyle = .fullScreen
-                    self.present(tabBarController, animated: true)
-                }
-            }
+        // Save profile
+        if UserProfileStorage.shared.saveUserProfile(profile) {
+            print("✅ Profile saved successfully")
+            navigateToMainApp(with: profile)
         } else {
-            showAlert(title: "Save Error", message: "Could not save your profile. Please try again.")
+            showAlert(title: "Error", message: "Could not save your profile. Please try again.")
         }
     }
     
+    private func navigateToMainApp(with profile: UserProfile) {
+        // Calculate natal chart
+        let chartData = NatalChartManager.shared.calculateNatalChart(
+            date: profile.birthDate,
+            latitude: profile.latitude,
+            longitude: profile.longitude,
+            timeZone: TimeZone(identifier: profile.timeZoneIdentifier) ?? TimeZone.current
+        )
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .short
+        let birthInfo = "\(dateFormatter.string(from: profile.birthDate)) at \(profile.birthLocation) (Lat: \(String(format: "%.4f", profile.latitude)), Long: \(String(format: "%.4f", profile.longitude)))"
+        
+        let tabBarController = CosmicFitTabBarController()
+        tabBarController.configure(with: chartData,
+                                 birthInfo: birthInfo,
+                                 birthDate: profile.birthDate,
+                                 latitude: profile.latitude,
+                                 longitude: profile.longitude,
+                                 timeZone: TimeZone(identifier: profile.timeZoneIdentifier) ?? TimeZone.current)
+        
+        let navigationController = UINavigationController(rootViewController: tabBarController)
+        
+        // Replace the entire app's navigation stack using AppDelegate
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+               let window = appDelegate.window {
+                UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve) {
+                    window.rootViewController = navigationController
+                }
+            }
+        }
+    }
+    
+    // MARK: - Helpers
     private func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.height, right: 0)
+        scrollView.contentInset = contentInsets
+        scrollView.scrollIndicatorInsets = contentInsets
+    }
+    
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        scrollView.contentInset = .zero
+        scrollView.scrollIndicatorInsets = .zero
     }
 }
 
@@ -757,9 +754,15 @@ class OnboardingFormViewController: UIViewController {
 extension OnboardingFormViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == nameTextField {
-            actionButtonTapped()
+            textField.resignFirstResponder()
+            if isNameValid {
+                actionButtonTapped()
+            }
         } else if textField == locationTextField {
-            actionButtonTapped()
+            textField.resignFirstResponder()
+            if isLocationValid {
+                actionButtonTapped()
+            }
         }
         return true
     }

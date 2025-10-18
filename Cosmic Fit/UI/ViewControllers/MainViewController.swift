@@ -5,6 +5,8 @@
 //  Original onboarding controller - now fallback only
 //
 
+/*
+
 import UIKit
 import CoreLocation
 
@@ -157,3 +159,4 @@ extension MainViewController: UITextFieldDelegate {
         return true
     }
 }
+*/
