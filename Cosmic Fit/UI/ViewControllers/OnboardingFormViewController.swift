@@ -393,7 +393,7 @@ class OnboardingFormViewController: UIViewController {
             nameTextField.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             nameTextField.heightAnchor.constraint(equalToConstant: 44),
             
-            nameDivider.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: -5),
+            nameDivider.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: -8),
             nameDivider.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             nameDivider.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             nameDivider.heightAnchor.constraint(equalToConstant: 1),
@@ -440,7 +440,7 @@ class OnboardingFormViewController: UIViewController {
             dateLabel.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             dateLabel.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             
-            datePicker.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 10),
+            datePicker.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: -20),
             datePicker.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             datePicker.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             
@@ -448,7 +448,7 @@ class OnboardingFormViewController: UIViewController {
             timeLabel.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             timeLabel.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             
-            timePicker.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 10),
+            timePicker.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: -30),
             timePicker.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             timePicker.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             
@@ -485,7 +485,7 @@ class OnboardingFormViewController: UIViewController {
             locationTextField.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             locationTextField.heightAnchor.constraint(equalToConstant: 44),
             
-            locationDivider.topAnchor.constraint(equalTo: locationTextField.bottomAnchor, constant: 8),
+            locationDivider.topAnchor.constraint(equalTo: locationTextField.bottomAnchor, constant: -16),
             locationDivider.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
             locationDivider.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
             locationDivider.heightAnchor.constraint(equalToConstant: 1),
