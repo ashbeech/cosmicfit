@@ -156,8 +156,8 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        // Add dividers after layout is complete
-        CosmicFitTheme.addTabDividers(tabBar)
+        // Recalculate position if bounds change (rotation, etc.)
+        updateCardPosition()
     }
     
     deinit {

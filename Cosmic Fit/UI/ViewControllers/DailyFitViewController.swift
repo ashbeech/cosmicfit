@@ -58,6 +58,8 @@ class DailyFitViewController: UIViewController {
     
     private let scrollingRunesBackground = ScrollingRunesBackgroundView()
     
+    private var hasPerformedInitialLayout = false
+    
     // Card state enum for better state management
     private enum CardState {
         case unrevealed
@@ -89,10 +91,6 @@ class DailyFitViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if !isCardRevealed && currentCardState == .unrevealed {
-            scrollingRunesBackground.startAnimating()
-        }
         
         // Restore card state when returning from other tabs
         checkCardRevealState()
@@ -203,7 +201,7 @@ class DailyFitViewController: UIViewController {
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
             // ContentView starts with padding for menu bar + safe area
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: view.safeAreaInsets.top),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: view.safeAreaInsets.top + 83),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
@@ -449,16 +447,21 @@ class DailyFitViewController: UIViewController {
         cardContainerWidthConstraint = tarotCardContainerView.widthAnchor.constraint(equalToConstant: cardWidth)
         cardContainerHeightConstraint = tarotCardContainerView.heightAnchor.constraint(equalToConstant: cardHeight)
         
-        // RESTORE ORIGINAL positioning logic with smaller card size
-        // STATIC position above content box (matching original scroll behavior)
-        let screenHeight = view.bounds.height
-        let tabBarHeight: CGFloat = 83
-        let contentStartFromBottom = screenHeight - tabBarHeight
-        let contentBoxTop = contentStartFromBottom - 20 // Account for title label padding
-        let marginAboveContent: CGFloat = 40 // Space between card and content box
+        // IMPROVED POSITIONING - Calculate actual available space between menu bar and tab bar
+        let menuBarBottom = calculateMenuBarBottom()
+        let tabBarTop = calculateTabBarTop()
+        let availableHeight = tabBarTop - menuBarBottom
+        let centerY = menuBarBottom + (availableHeight / 2) - 10
         
-        // Use original bottomAnchor constraint to contentView.topAnchor for proper scroll behavior
-        cardContainerCenterYConstraint = tarotCardContainerView.bottomAnchor.constraint(equalTo: contentView.topAnchor, constant: contentBoxTop - marginAboveContent)
+        // Position card so its center is at the calculated center point
+        let cardCenterYFromContentTop = centerY - view.safeAreaInsets.top
+        let cardBottomFromContentTop = cardCenterYFromContentTop + (cardHeight / 2)
+        
+        // Use original bottomAnchor constraint for proper scroll behavior
+        cardContainerCenterYConstraint = tarotCardContainerView.bottomAnchor.constraint(
+            equalTo: contentView.topAnchor,
+            constant: cardBottomFromContentTop
+        )
         
         // Activate positioning constraints
         cardContainerCenterYConstraint?.isActive = true
@@ -529,6 +532,75 @@ class DailyFitViewController: UIViewController {
             tapToRevealLabel.trailingAnchor.constraint(lessThanOrEqualTo: cardBackImageView.trailingAnchor, constant: -20),
             tapToRevealLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 44)
         ])
+    }
+    
+    private func calculateMenuBarBottom() -> CGFloat {
+        // Menu bar positioning from CosmicFitTabBarController:
+        // menuBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -10)
+        return view.safeAreaInsets.top + MenuBarView.height - 10
+    }
+
+    private func calculateTabBarTop() -> CGFloat {
+        // Get actual tab bar height dynamically
+        let actualTabBarHeight = getActualTabBarHeight()
+        
+        // Tab bar top is at: total height - bottom safe area - tab bar height
+        return view.bounds.height - view.safeAreaInsets.bottom - actualTabBarHeight
+    }
+
+    private func getActualTabBarHeight() -> CGFloat {
+        // Try to get the actual tab bar height from the tab bar controller
+        if let tabBarController = tabBarController {
+            // If the tab bar has been laid out, use its actual frame
+            if tabBarController.tabBar.frame.height > 0 {
+                return tabBarController.tabBar.frame.height
+            }
+        }
+        
+        // Fallback calculation based on safe area
+        // Modern iPhones: 49pt tab bar + 34pt home indicator = 83pt total
+        // Older iPhones: 49pt tab bar + 0pt = 49pt total
+        let hasHomeIndicator = view.safeAreaInsets.bottom > 0
+        return hasHomeIndicator ? 83 : 49
+    }
+
+    private func updateTarotCardPositioning() {
+        // Recalculate positioning after layout changes (rotation, device changes)
+        guard let constraint = cardContainerCenterYConstraint,
+              let heightConstraint = cardContainerHeightConstraint else { return }
+        
+        let menuBarBottom = calculateMenuBarBottom()
+        let tabBarTop = calculateTabBarTop()
+        let availableHeight = tabBarTop - menuBarBottom
+        let centerY = menuBarBottom + (availableHeight / 2)
+        
+        // Update the constraint constant
+        let cardHeight = heightConstraint.constant
+        let cardCenterYFromContentTop = centerY - view.safeAreaInsets.top
+        let cardBottomFromContentTop = cardCenterYFromContentTop + (cardHeight / 2)
+        
+        constraint.constant = cardBottomFromContentTop
+    }
+
+    // MARK: - Add this to your existing viewDidLayoutSubviews method:
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        // Update tarot card positioning after layout changes
+        updateTarotCardPositioning()
+        
+        // CRITICAL: Only start runes animation after the first layout is complete
+        if !hasPerformedInitialLayout {
+            hasPerformedInitialLayout = true
+            
+            // Start runes animation if in unrevealed state
+            if !isCardRevealed && currentCardState == .unrevealed {
+                // Force layout completion, then start animation
+                view.layoutIfNeeded()
+                scrollingRunesBackground.startAnimating()
+                print("🎯 Initial layout completed - starting runes animation")
+            }
+        }
     }
     
     private func setupScrollIndicator() {
