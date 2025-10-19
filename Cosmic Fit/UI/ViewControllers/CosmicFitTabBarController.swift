@@ -135,7 +135,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         applyCosmicFitTheme()
         
         setupTabBar()
-        setupMenuButton()  // ← ADD THIS LINE
+        setupMenuButton()
         startWeatherFetch()
         setupTabMemoryPersistence()
         setupProfileUpdateNotifications()
@@ -546,20 +546,15 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
                 originalChartViewController: createDebugChartViewController()
             )
         }
-        
-        let dailyFitNavController = UINavigationController(rootViewController: dailyFitVC)
-        
-        // Apply dark cosmic grey theme to navigation bar for visual separation from content
-        CosmicFitTheme.styleNavigationBar(dailyFitNavController.navigationBar)
-        
-        // Text-only tab item with no image
-        dailyFitNavController.tabBarItem = UITabBarItem(
+
+        // Text-only tab item with no image - NO navigation controller wrapper
+        dailyFitVC.tabBarItem = UITabBarItem(
             title: "Daily Fit",
             image: nil,
             selectedImage: nil
         )
-        viewControllers.append(dailyFitNavController)
-        
+        viewControllers.append(dailyFitVC)
+
         // Cosmic Blueprint Tab (Index 1)
         let blueprintVC = BlueprintViewController()
         if let blueprintContent = blueprintContent {
@@ -576,19 +571,14 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
                 originalChartViewController: createDebugChartViewController()
             )
         }
-        
-        let blueprintNavController = UINavigationController(rootViewController: blueprintVC)
-        
-        // Apply dark cosmic grey theme to navigation bar for visual separation from content
-        CosmicFitTheme.styleNavigationBar(blueprintNavController.navigationBar)
-        
-        // Text-only tab item with no image
-        blueprintNavController.tabBarItem = UITabBarItem(
+
+        // Text-only tab item with no image - NO navigation controller wrapper
+        blueprintVC.tabBarItem = UITabBarItem(
             title: "Cosmic Blueprint",
             image: nil,
             selectedImage: nil
         )
-        viewControllers.append(blueprintNavController)
+        viewControllers.append(blueprintVC)
         
         // Set the view controllers
         self.viewControllers = viewControllers
@@ -670,14 +660,12 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
         
         // Log the selected tab for debugging
         var tabName = "Unknown"
-        if let navController = viewController as? UINavigationController {
-            if navController.topViewController is BlueprintViewController {
-                tabName = "Blueprint"
-            } else if navController.topViewController is DailyFitViewController {
-                tabName = "Daily Fit"
-            } else if navController.topViewController is ProfileViewController {
-                tabName = "Profile"
-            }
+        if viewController is BlueprintViewController {
+            tabName = "Blueprint"
+        } else if viewController is DailyFitViewController {
+            tabName = "Daily Fit"
+        } else if viewController is ProfileViewController {
+            tabName = "Profile"
         }
         print("✅ Selected tab: \(tabName)")
     }

@@ -62,6 +62,15 @@ class OnboardingFormViewController: UIViewController {
     private let totalPages = 3
     private var geocoder = CLGeocoder()
     
+    // MARK: - Placeholder Animation Properties
+    private var placeholderTimer: Timer?
+    private var currentPlaceholderIndex = 0
+    private let placeholders = ["London, UK", "Paris, France", "Athens, Greece"]
+    private let placeholderAttributes: [NSAttributedString.Key: Any] = [
+        .foregroundColor: CosmicFitTheme.Colors.darkerCosmicGrey,
+        .font: UIFont.systemFont(ofSize: 18)
+    ]
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,6 +78,15 @@ class OnboardingFormViewController: UIViewController {
         setupConstraints()
         setupKeyboardHandling()
         updatePageContent()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopPlaceholderAnimation()
+    }
+    
+    deinit {
+        stopPlaceholderAnimation()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -224,28 +242,70 @@ class OnboardingFormViewController: UIViewController {
             unknownTimeLabel.font = UIFont.systemFont(ofSize: 16)
             unknownTimeLabel.textColor = .black
             
-            // Location input
-            locationTextField.translatesAutoresizingMaskIntoConstraints = false
-            locationTextField.font = UIFont.systemFont(ofSize: 18)
-            locationTextField.textColor = .black
-            locationTextField.borderStyle = .none
-            locationTextField.returnKeyType = .done
-            locationTextField.delegate = self
-            locationTextField.addTarget(self, action: #selector(locationFieldChanged), for: .editingChanged)
-            
-            // Set placeholder with dark grey color
-            let placeholderAttributes: [NSAttributedString.Key: Any] = [
-                .foregroundColor: CosmicFitTheme.Colors.darkerCosmicGrey,
-                .font: UIFont.systemFont(ofSize: 18)
-            ]
-            locationTextField.attributedPlaceholder = NSAttributedString(
-                string: "London, UK",
-                attributes: placeholderAttributes
+        // Location input
+        locationTextField.translatesAutoresizingMaskIntoConstraints = false
+        locationTextField.font = UIFont.systemFont(ofSize: 18)
+        locationTextField.textColor = .black
+        locationTextField.borderStyle = .none
+        locationTextField.returnKeyType = .done
+        locationTextField.delegate = self
+        locationTextField.addTarget(self, action: #selector(locationFieldChanged), for: .editingChanged)
+        
+        // Set initial placeholder
+        locationTextField.attributedPlaceholder = NSAttributedString(
+            string: placeholders[0],
+            attributes: placeholderAttributes
+        )
+        
+        locationDivider.translatesAutoresizingMaskIntoConstraints = false
+        locationDivider.backgroundColor = .black
+        }
+    
+    // MARK: - Placeholder Animation
+    private func startPlaceholderAnimation() {
+        // Stop any existing timer
+        stopPlaceholderAnimation()
+        
+        // Only animate if text field is empty
+        guard locationTextField.text?.isEmpty ?? true else { return }
+        
+        // Start the cycling timer
+        placeholderTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
+            self?.cyclePlaceholder()
+        }
+    }
+    
+    private func stopPlaceholderAnimation() {
+        placeholderTimer?.invalidate()
+        placeholderTimer = nil
+    }
+    
+    private func cyclePlaceholder() {
+        // Only cycle if text field is empty
+        guard locationTextField.text?.isEmpty ?? true else {
+            stopPlaceholderAnimation()
+            return
+        }
+        
+        // Move to next placeholder
+        currentPlaceholderIndex = (currentPlaceholderIndex + 1) % placeholders.count
+        
+        // Fade out current placeholder
+        UIView.animate(withDuration: 0.3, animations: {
+            self.locationTextField.alpha = 0.0
+        }) { _ in
+            // Change placeholder text
+            self.locationTextField.attributedPlaceholder = NSAttributedString(
+                string: self.placeholders[self.currentPlaceholderIndex],
+                attributes: self.placeholderAttributes
             )
             
-            locationDivider.translatesAutoresizingMaskIntoConstraints = false
-            locationDivider.backgroundColor = .black
+            // Fade back in
+            UIView.animate(withDuration: 0.3) {
+                self.locationTextField.alpha = 1.0
+            }
         }
+    }
     
     private func setupConstraints() {
             NSLayoutConstraint.activate([
@@ -382,6 +442,14 @@ class OnboardingFormViewController: UIViewController {
     @objc private func locationFieldChanged() {
         checkLocationValid()
         updateButtonState()
+        
+        // Stop placeholder animation if user has typed something
+        if !(locationTextField.text?.isEmpty ?? true) {
+            stopPlaceholderAnimation()
+        } else {
+            // Restart animation if field becomes empty
+            startPlaceholderAnimation()
+        }
     }
     
     // MARK: - Page Content Updates
@@ -533,6 +601,16 @@ class OnboardingFormViewController: UIViewController {
                 locationDivider.bottomAnchor.constraint(lessThanOrEqualTo: inputContainerView.bottomAnchor, constant: -10)
             ])
             
+            // Reset placeholder animation state
+            currentPlaceholderIndex = 0
+            locationTextField.attributedPlaceholder = NSAttributedString(
+                string: placeholders[0],
+                attributes: placeholderAttributes
+            )
+            
+            // Start placeholder animation
+            startPlaceholderAnimation()
+            
             // Focus on text field
             DispatchQueue.main.async {
                 self.locationTextField.becomeFirstResponder()
@@ -592,6 +670,11 @@ class OnboardingFormViewController: UIViewController {
     
     // MARK: - Page Transitions
     private func fadeToPage(_ page: Int) {
+        // Stop placeholder animation when leaving page 3
+        if currentPage == 3 {
+            stopPlaceholderAnimation()
+        }
+        
         UIView.animate(withDuration: 0.3, animations: {
             self.view.alpha = 0.0
         }) { _ in
@@ -727,7 +810,7 @@ class OnboardingFormViewController: UIViewController {
         DispatchQueue.main.async {
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate,
                let window = appDelegate.window {
-                UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve) {
+                UIView.transition(with: window, duration: 0.1, options: .transitionCrossDissolve) {
                     window.rootViewController = navigationController
                 }
             }

@@ -245,7 +245,7 @@ final class BlueprintDetailViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             // Shadow Container - stops below menu bar (under safe area)
-            shadowContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: MenuBarView.height),
+            shadowContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: MenuBarView.height + 10),
             shadowContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             shadowContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             shadowContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -(tabBarHeight)),

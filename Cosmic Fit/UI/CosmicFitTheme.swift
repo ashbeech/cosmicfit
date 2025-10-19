@@ -392,10 +392,11 @@ extension UIViewController {
     /// Apply the global Cosmic Fit theme to this view controller
     func applyCosmicFitTheme() {
         view.backgroundColor = UIColor.systemBackground
-        
+        /*
         // Apply to navigation bar if present
         if let navigationBar = navigationController?.navigationBar {
             CosmicFitTheme.styleNavigationBar(navigationBar)
         }
+         */
     }
 }

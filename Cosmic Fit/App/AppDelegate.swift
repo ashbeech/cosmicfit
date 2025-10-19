@@ -46,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //DebugInitializer.setupDebugEnhancements()
         
         // Configure appearance
-        configureAppearance()
+        //configureAppearance()
         
         // Set up daily vibe management
         setupDailyVibeManagement()
@@ -136,9 +136,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
+        // Not sure what these do
         // Configure global UI appearance
-        UINavigationBar.appearance().backgroundColor = CosmicFitTheme.Colors.cosmicGrey
-        UINavigationBar.appearance().tintColor = CosmicFitTheme.Colors.cosmicLilac
+        //UINavigationBar.appearance().backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        //UINavigationBar.appearance().tintColor = CosmicFitTheme.Colors.cosmicLilac
         UITabBar.appearance().backgroundColor = CosmicFitTheme.Colors.cosmicGrey
         UITabBar.appearance().tintColor = CosmicFitTheme.Colors.cosmicLilac
         UITabBar.appearance().unselectedItemTintColor = CosmicFitTheme.Colors.cosmicBlue

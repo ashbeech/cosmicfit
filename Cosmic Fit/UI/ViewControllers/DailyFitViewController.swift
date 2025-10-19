@@ -167,7 +167,7 @@ class DailyFitViewController: UIViewController {
         ])
         
         // Hide navigation bar completely
-        navigationController?.navigationBar.isHidden = true
+        //navigationController?.navigationBar.isHidden = true
         
         // Setup background blur image view (behind everything) - will show blurred tarot card as background
         setupBackgroundBlur()
@@ -203,7 +203,7 @@ class DailyFitViewController: UIViewController {
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
             // ContentView starts with padding for menu bar + safe area
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: view.safeAreaInsets.top + MenuBarView.height),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: view.safeAreaInsets.top),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
@@ -453,7 +453,7 @@ class DailyFitViewController: UIViewController {
         // STATIC position above content box (matching original scroll behavior)
         let screenHeight = view.bounds.height
         let tabBarHeight: CGFloat = 83
-        let contentStartFromBottom = screenHeight - tabBarHeight - 83
+        let contentStartFromBottom = screenHeight - tabBarHeight
         let contentBoxTop = contentStartFromBottom - 20 // Account for title label padding
         let marginAboveContent: CGFloat = 24 // Space between card and content box
         
