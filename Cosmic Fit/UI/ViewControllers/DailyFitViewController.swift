@@ -441,7 +441,7 @@ class DailyFitViewController: UIViewController {
         
         // Calculate card dimensions with padding around it
         let cardAspectRatio: CGFloat = 0.62
-        let horizontalPadding: CGFloat = 24 // 10px more space on each side
+        let horizontalPadding: CGFloat = 33
         let cardWidth = view.bounds.width - (horizontalPadding * 2) // Reduce width by total padding
         let cardHeight = cardWidth / cardAspectRatio
 
@@ -455,7 +455,7 @@ class DailyFitViewController: UIViewController {
         let tabBarHeight: CGFloat = 83
         let contentStartFromBottom = screenHeight - tabBarHeight
         let contentBoxTop = contentStartFromBottom - 20 // Account for title label padding
-        let marginAboveContent: CGFloat = 24 // Space between card and content box
+        let marginAboveContent: CGFloat = 40 // Space between card and content box
         
         // Use original bottomAnchor constraint to contentView.topAnchor for proper scroll behavior
         cardContainerCenterYConstraint = tarotCardContainerView.bottomAnchor.constraint(equalTo: contentView.topAnchor, constant: contentBoxTop - marginAboveContent)
@@ -488,7 +488,7 @@ class DailyFitViewController: UIViewController {
         // Card back (unrevealed state) - same size as revealed card
         cardBackImageView.translatesAutoresizingMaskIntoConstraints = false
         cardBackImageView.contentMode = .scaleAspectFit
-        cardBackImageView.clipsToBounds = false // CRITICAL: Must be false for glow to show
+        cardBackImageView.clipsToBounds = false
         cardBackImageView.layer.cornerRadius = 24
         cardBackImageView.alpha = 1.0
         cardBackImageView.isUserInteractionEnabled = true

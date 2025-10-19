@@ -65,7 +65,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         let tabBarController = CosmicFitTabBarController()
-        let navigationController = UINavigationController(rootViewController: tabBarController)
         
         // Configure with stored user data
         let chartData = NatalChartManager.shared.calculateNatalChart(
@@ -90,7 +89,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set Daily Fit as default tab (index 1) for returning users
         tabBarController.selectedIndex = 1
         
-        launchScreenVC.setMainViewController(navigationController)
+        launchScreenVC.setMainViewController(tabBarController)
         
         print("✅ Returning user detected - launching to Daily Fit tab")
     }

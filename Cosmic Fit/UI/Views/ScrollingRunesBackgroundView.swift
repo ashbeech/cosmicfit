@@ -204,8 +204,7 @@ class ScrollingRunesBackgroundView: UIView {
     
     private func animateBackgroundScroll(imageView: UIImageView, duplicate: UIImageView, direction: ScrollDirection, duration: TimeInterval) {
         
-        let tabBarHeight: CGFloat = 83
-        let containerHeight = bounds.height - tabBarHeight
+        let containerHeight = bounds.height
         
         // CRITICAL: Reset any existing transforms to ensure clean starting state
         imageView.layer.removeAllAnimations()

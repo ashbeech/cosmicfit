@@ -804,14 +804,12 @@ class OnboardingFormViewController: UIViewController {
                                  longitude: profile.longitude,
                                  timeZone: TimeZone(identifier: profile.timeZoneIdentifier) ?? TimeZone.current)
         
-        let navigationController = UINavigationController(rootViewController: tabBarController)
-        
         // Replace the entire app's navigation stack using AppDelegate
         DispatchQueue.main.async {
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate,
                let window = appDelegate.window {
                 UIView.transition(with: window, duration: 0.1, options: .transitionCrossDissolve) {
-                    window.rootViewController = navigationController
+                    window.rootViewController = tabBarController
                 }
             }
         }
