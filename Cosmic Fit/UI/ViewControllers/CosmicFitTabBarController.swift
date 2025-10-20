@@ -20,8 +20,8 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     // Menu bar properties
     private var menuBarView: MenuBarView!
     private var menuViewController: MenuViewController?
-    // Detail content container - sits below tab bar
     private var detailContentContainer: UIView!
+    private var dimmingView: UIView?
     
     private var natalChart: NatalChartCalculator.NatalChart?
     private var progressedChart: NatalChartCalculator.NatalChart?
@@ -135,14 +135,13 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         
         // Apply Cosmic Fit theme to the main view controller
         applyCosmicFitTheme()
-        setupMenuButton()
+        setupMenuButton()  // MUST come first - creates menuBarView
+        setupDetailContentContainer()  // NOW can reference menuBarView
         startWeatherFetch()
         setupTabMemoryPersistence()
         setupProfileUpdateNotifications()
         installSwipeGesturesIfNeeded()
         setupTabBar()
-
-        // Add this line at the end:
         delegate = self
     }
     
@@ -203,6 +202,122 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         
         // Setup view controllers with generated content
         setupViewControllers()
+    }
+    
+    private func setupDetailContentContainer() {
+        detailContentContainer = UIView()
+        detailContentContainer.translatesAutoresizingMaskIntoConstraints = false
+        detailContentContainer.backgroundColor = .clear
+        detailContentContainer.isHidden = true
+        detailContentContainer.isUserInteractionEnabled = true
+        
+        view.addSubview(detailContentContainer)
+        
+        NSLayoutConstraint.activate([
+            // Start 10px below the menu bar
+            detailContentContainer.topAnchor.constraint(equalTo: menuBarView.bottomAnchor, constant: 10),
+            detailContentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            detailContentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            detailContentContainer.bottomAnchor.constraint(equalTo: tabBar.topAnchor)
+        ])
+    }
+    
+    func presentDetailViewController(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
+        // Create and add dimming view - positioned to not cover menu bar area
+        let dimming = UIView()
+        dimming.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        dimming.alpha = 0
+        dimming.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Add to the main view, not the selected VC view
+        view.insertSubview(dimming, belowSubview: detailContentContainer)
+        NSLayoutConstraint.activate([
+            // Extend right up to the bottom of menu bar (no gap)
+            dimming.topAnchor.constraint(equalTo: menuBarView.bottomAnchor),
+            dimming.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            dimming.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            dimming.bottomAnchor.constraint(equalTo: tabBar.topAnchor)
+        ])
+        self.dimmingView = dimming
+        
+        // Add detail VC as child
+        addChild(viewController)
+        viewController.view.frame = detailContentContainer.bounds
+        viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        detailContentContainer.addSubview(viewController.view)
+        detailContentContainer.isHidden = false
+        viewController.didMove(toParent: self)
+        
+        // Ensure proper z-ordering
+        view.bringSubviewToFront(dimmingView!)
+        view.bringSubviewToFront(detailContentContainer)
+        view.bringSubviewToFront(tabBar)
+        view.bringSubviewToFront(menuBarView)
+        
+        if animated {
+            // Start position: below the visible area
+            let containerHeight = detailContentContainer.bounds.height
+            viewController.view.transform = CGAffineTransform(translationX: 0, y: containerHeight)
+            
+            UIView.animate(
+                withDuration: 0.35,
+                delay: 0,
+                options: [.curveEaseOut],
+                animations: {
+                    viewController.view.transform = .identity
+                    dimming.alpha = 1.0
+                },
+                completion: { _ in
+                    completion?()
+                }
+            )
+        } else {
+            dimming.alpha = 1.0
+            completion?()
+        }
+    }
+
+    func dismissDetailViewController(animated: Bool, completion: (() -> Void)? = nil) {
+        guard let detailVC = children.first(where: { $0 is BlueprintDetailViewController }) else {
+            completion?()
+            return
+        }
+        
+        if animated {
+            let containerHeight = detailContentContainer.bounds.height
+            
+            UIView.animate(
+                withDuration: 0.35,
+                delay: 0,
+                options: [.curveEaseIn],
+                animations: {
+                    detailVC.view.transform = CGAffineTransform(translationX: 0, y: containerHeight)
+                    self.dimmingView?.alpha = 0
+                },
+                completion: { _ in
+                    detailVC.view.transform = .identity
+                    detailVC.willMove(toParent: nil)
+                    detailVC.view.removeFromSuperview()
+                    detailVC.removeFromParent()
+                    self.detailContentContainer.isHidden = true
+                    
+                    self.dimmingView?.removeFromSuperview()
+                    self.dimmingView = nil
+                    
+                    completion?()
+                }
+            )
+        } else {
+            detailVC.willMove(toParent: nil)
+            detailVC.view.removeFromSuperview()
+            detailVC.removeFromParent()
+            detailContentContainer.isHidden = true
+            
+            dimmingView?.removeFromSuperview()
+            dimmingView = nil
+            
+            completion?()
+        }
     }
     
     // MARK: - Menu Bar Setup

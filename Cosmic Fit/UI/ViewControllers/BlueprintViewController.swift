@@ -249,6 +249,7 @@ final class BlueprintViewController: UIViewController {
         bodyTextContainer.addSubview(bodyTextLabel)
         
         NSLayoutConstraint.activate([
+            // ScrollView - starts below menu bar (menu bar is -10 from safe area, so 40-10=30)
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: MenuBarView.height - 10),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -382,15 +383,17 @@ final class BlueprintViewController: UIViewController {
     
     // MARK: - Navigation
     private func navigateToDetail(section: BlueprintDetailContent.BlueprintSection) {
+        guard let tabBarController = tabBarController as? CosmicFitTabBarController else {
+            print("❌ Cannot find CosmicFitTabBarController")
+            return
+        }
+        
         let detailVC = BlueprintDetailViewController()
         let content = createContent(for: section)
         detailVC.configure(with: content)
         
-        // Use overCurrentContext to keep everything visible
-        detailVC.modalPresentationStyle = .overCurrentContext
-        detailVC.transitioningDelegate = self
-        
-        present(detailVC, animated: true)
+        // Use the tab bar controller's child VC presentation
+        tabBarController.presentDetailViewController(detailVC, animated: true)
     }
     
     private func createContent(for section: BlueprintDetailContent.BlueprintSection) -> BlueprintDetailContent {
@@ -624,17 +627,5 @@ extension BlueprintViewController: UINavigationControllerDelegate {
         @unknown default:
             return nil
         }
-    }
-}
-
-// MARK: - UIViewControllerTransitioningDelegate
-extension BlueprintViewController: UIViewControllerTransitioningDelegate {
-    
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return VerticalSlideAnimator(operation: .push)
-    }
-    
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return VerticalSlideAnimator(operation: .pop)
     }
 }

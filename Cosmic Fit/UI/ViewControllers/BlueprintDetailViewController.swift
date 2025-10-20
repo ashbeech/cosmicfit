@@ -244,11 +244,11 @@ final class BlueprintDetailViewController: UIViewController {
         starImageView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            // Shadow Container - stops below menu bar (under safe area)
-            shadowContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: MenuBarView.height + 10),
+            // Shadow Container - starts at the very top of the detail container view
+            shadowContainerView.topAnchor.constraint(equalTo: view.topAnchor),
             shadowContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             shadowContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            shadowContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -(tabBarHeight)),
+            shadowContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             // Card Container
             cardContainerView.topAnchor.constraint(equalTo: shadowContainerView.topAnchor),
@@ -434,7 +434,18 @@ final class BlueprintDetailViewController: UIViewController {
     
     // MARK: - Actions
     @objc private func closeButtonTapped() {
-        dismiss(animated: true)
+        // Find the tab bar controller through the parent chain
+        var currentParent: UIViewController? = parent
+        while currentParent != nil {
+            if let tabBarController = currentParent as? CosmicFitTabBarController {
+                tabBarController.dismissDetailViewController(animated: true)
+                return
+            }
+            currentParent = currentParent?.parent
+        }
+        
+        // Fallback
+        print("⚠️ Could not find CosmicFitTabBarController to dismiss")
     }
     
     // MARK: - Gesture Handling
@@ -488,8 +499,24 @@ final class BlueprintDetailViewController: UIViewController {
     }
     
     private func animateDismissal(with velocity: CGFloat) {
-        let screenHeight = view.bounds.height
-        let remainingDistance = screenHeight - shadowContainerView.frame.origin.y
+        // Find the tab bar controller
+        var currentParent: UIViewController? = parent
+        var tabBarController: CosmicFitTabBarController?
+        while currentParent != nil {
+            if let tbc = currentParent as? CosmicFitTabBarController {
+                tabBarController = tbc
+                break
+            }
+            currentParent = currentParent?.parent
+        }
+        
+        guard let tbc = tabBarController else {
+            print("⚠️ Could not find CosmicFitTabBarController for dismissal")
+            return
+        }
+        
+        let containerHeight = view.bounds.height
+        let remainingDistance = containerHeight - shadowContainerView.frame.origin.y
         
         // Calculate duration based on velocity for natural feel
         let minimumDuration: TimeInterval = 0.2
@@ -501,11 +528,14 @@ final class BlueprintDetailViewController: UIViewController {
             delay: 0,
             options: [.curveEaseIn, .allowUserInteraction],
             animations: {
-                self.shadowContainerView.transform = CGAffineTransform(translationX: 0, y: screenHeight)
-                self.view.backgroundColor = .clear
+                self.shadowContainerView.transform = CGAffineTransform(translationX: 0, y: containerHeight)
+                // Also fade out the dimming view
+                if let dimmingView = tbc.view.subviews.first(where: { $0.backgroundColor == UIColor.black.withAlphaComponent(0.4) }) {
+                    dimmingView.alpha = 0
+                }
             },
             completion: { _ in
-                self.dismiss(animated: false)
+                tbc.dismissDetailViewController(animated: false)
             }
         )
     }
