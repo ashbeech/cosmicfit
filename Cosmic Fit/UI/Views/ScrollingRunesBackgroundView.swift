@@ -3,7 +3,7 @@
 //  Cosmic Fit
 //
 //  Reusable full-screen view with 3 scrolling rune columns
-//  Exactly matches AnimatedLaunchScreenViewController implementation
+//  Unified implementation for both launch screen and Daily Fit page
 //
 
 import UIKit
@@ -22,6 +22,7 @@ class ScrollingRunesBackgroundView: UIView {
     // MARK: - Properties
     private var isAnimating = false
     private let scrollDuration: TimeInterval = 20.0
+    private var heightConstraints: [NSLayoutConstraint] = []
     
     // MARK: - Initialization
     override init(frame: CGRect) {
@@ -44,105 +45,93 @@ class ScrollingRunesBackgroundView: UIView {
             return
         }
         
-        // Setup first column (scrolls down) - LEFT
-        runeColumn1.image = runeImage
-        runeColumn1.contentMode = .scaleToFill
-        runeColumn1.translatesAutoresizingMaskIntoConstraints = false
-        runeColumn1.alpha = 0 // Start invisible
-        addSubview(runeColumn1)
+        // Setup all columns with identical configuration
+        setupColumn(runeColumn1, duplicate: runeColumn1Duplicate, image: runeImage)
+        setupColumn(runeColumn2, duplicate: runeColumn2Duplicate, image: runeImage)
+        setupColumn(runeColumn3, duplicate: runeColumn3Duplicate, image: runeImage)
         
-        runeColumn1Duplicate.image = runeImage
-        runeColumn1Duplicate.contentMode = .scaleToFill
-        runeColumn1Duplicate.translatesAutoresizingMaskIntoConstraints = false
-        runeColumn1Duplicate.alpha = 0 // Start invisible
-        addSubview(runeColumn1Duplicate)
+        // Layout constraints - 3 equal columns, but DON'T set height yet
+        let allImageViews = [runeColumn1, runeColumn1Duplicate, runeColumn2,
+                             runeColumn2Duplicate, runeColumn3, runeColumn3Duplicate]
         
-        // Setup second column (scrolls up) - MIDDLE
-        runeColumn2.image = runeImage
-        runeColumn2.contentMode = .scaleToFill
-        runeColumn2.translatesAutoresizingMaskIntoConstraints = false
-        runeColumn2.alpha = 0 // Start invisible
-        addSubview(runeColumn2)
-        
-        runeColumn2Duplicate.image = runeImage
-        runeColumn2Duplicate.contentMode = .scaleToFill
-        runeColumn2Duplicate.translatesAutoresizingMaskIntoConstraints = false
-        runeColumn2Duplicate.alpha = 0 // Start invisible
-        addSubview(runeColumn2Duplicate)
-        
-        // Setup third column (scrolls down) - RIGHT
-        runeColumn3.image = runeImage
-        runeColumn3.contentMode = .scaleToFill
-        runeColumn3.translatesAutoresizingMaskIntoConstraints = false
-        runeColumn3.alpha = 0 // Start invisible
-        addSubview(runeColumn3)
-        
-        runeColumn3Duplicate.image = runeImage
-        runeColumn3Duplicate.contentMode = .scaleToFill
-        runeColumn3Duplicate.translatesAutoresizingMaskIntoConstraints = false
-        runeColumn3Duplicate.alpha = 0 // Start invisible
-        addSubview(runeColumn3Duplicate)
-        
-        // Layout constraints - exactly matching intro screen
         NSLayoutConstraint.activate([
-            // First column (LEFT - exactly 1/3 width)
+            // First column (LEFT)
             runeColumn1.topAnchor.constraint(equalTo: topAnchor),
             runeColumn1.leadingAnchor.constraint(equalTo: leadingAnchor),
             runeColumn1.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
-            runeColumn1.heightAnchor.constraint(equalTo: heightAnchor),
             
-            // First column duplicate
             runeColumn1Duplicate.topAnchor.constraint(equalTo: topAnchor),
             runeColumn1Duplicate.leadingAnchor.constraint(equalTo: leadingAnchor),
             runeColumn1Duplicate.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
-            runeColumn1Duplicate.heightAnchor.constraint(equalTo: heightAnchor),
             
-            // Second column (MIDDLE - exactly 1/3 width)
+            // Second column (MIDDLE)
             runeColumn2.topAnchor.constraint(equalTo: topAnchor),
             runeColumn2.leadingAnchor.constraint(equalTo: runeColumn1.trailingAnchor),
             runeColumn2.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
-            runeColumn2.heightAnchor.constraint(equalTo: heightAnchor),
             
-            // Second column duplicate
             runeColumn2Duplicate.topAnchor.constraint(equalTo: topAnchor),
             runeColumn2Duplicate.leadingAnchor.constraint(equalTo: runeColumn1.trailingAnchor),
             runeColumn2Duplicate.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
-            runeColumn2Duplicate.heightAnchor.constraint(equalTo: heightAnchor),
             
-            // Third column (RIGHT - exactly 1/3 width)
+            // Third column (RIGHT)
             runeColumn3.topAnchor.constraint(equalTo: topAnchor),
             runeColumn3.leadingAnchor.constraint(equalTo: runeColumn2.trailingAnchor),
             runeColumn3.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
-            runeColumn3.heightAnchor.constraint(equalTo: heightAnchor),
             
-            // Third column duplicate
             runeColumn3Duplicate.topAnchor.constraint(equalTo: topAnchor),
             runeColumn3Duplicate.leadingAnchor.constraint(equalTo: runeColumn2.trailingAnchor),
-            runeColumn3Duplicate.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
-            runeColumn3Duplicate.heightAnchor.constraint(equalTo: heightAnchor)
+            runeColumn3Duplicate.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0)
         ])
+        
+        // Store height constraints to update later
+        for imageView in allImageViews {
+            let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 0)
+            heightConstraint.isActive = true
+            heightConstraints.append(heightConstraint)
+        }
+    }
+    
+    private func setupColumn(_ imageView: UIImageView, duplicate: UIImageView, image: UIImage) {
+        imageView.image = image
+        imageView.contentMode = .scaleToFill
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.alpha = 0 // Start invisible
+        addSubview(imageView)
+        
+        duplicate.image = image
+        duplicate.contentMode = .scaleToFill
+        duplicate.translatesAutoresizingMaskIntoConstraints = false
+        duplicate.alpha = 0 // Start invisible
+        addSubview(duplicate)
     }
     
     // MARK: - Public Methods
-    func startAnimating() {
+    func startAnimating(visibleHeight: CGFloat? = nil) {
         guard !isAnimating else { return }
         isAnimating = true
         
-        // Need to let constraints layout first
+        // Ensure layout is complete
         layoutIfNeeded()
         
-        let containerHeight = bounds.height
+        // Use provided height if available, otherwise use bounds
+        let containerHeight = visibleHeight ?? bounds.height
         
-        // Position duplicates using transforms before starting animations
-        // For down-scrolling columns, duplicate starts above
+        // UPDATE: Set the image view heights to match the container height
+        for constraint in heightConstraints {
+            constraint.constant = containerHeight
+        }
+        layoutIfNeeded()
+        
+        // Reset all transforms to start fresh
+        runeColumn1.transform = .identity
         runeColumn1Duplicate.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
+        runeColumn2.transform = .identity
+        runeColumn2Duplicate.transform = CGAffineTransform(translationX: 0, y: containerHeight)
+        runeColumn3.transform = .identity
         runeColumn3Duplicate.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
         
-        // For up-scrolling column, duplicate starts below
-        runeColumn2Duplicate.transform = CGAffineTransform(translationX: 0, y: containerHeight)
-        
-        // Fade in all runes
-        UIView.animate(withDuration: 0.33) {
+        // Fade in
+        UIView.animate(withDuration: 0.5) {
             self.runeColumn1.alpha = 1.0
             self.runeColumn1Duplicate.alpha = 1.0
             self.runeColumn2.alpha = 1.0
@@ -151,27 +140,10 @@ class ScrollingRunesBackgroundView: UIView {
             self.runeColumn3Duplicate.alpha = 1.0
         }
         
-        // Start infinite scrolling animations - matching intro implementation
-        animateBackgroundScroll(
-            imageView: runeColumn1,
-            duplicate: runeColumn1Duplicate,
-            direction: .down,
-            duration: scrollDuration
-        )
-        
-        animateBackgroundScroll(
-            imageView: runeColumn2,
-            duplicate: runeColumn2Duplicate,
-            direction: .up,
-            duration: scrollDuration
-        )
-        
-        animateBackgroundScroll(
-            imageView: runeColumn3,
-            duplicate: runeColumn3Duplicate,
-            direction: .down,
-            duration: scrollDuration
-        )
+        // Start scrolling animations
+        animateScroll(imageView: runeColumn1, duplicate: runeColumn1Duplicate, direction: .down, containerHeight: containerHeight)
+        animateScroll(imageView: runeColumn2, duplicate: runeColumn2Duplicate, direction: .up, containerHeight: containerHeight)
+        animateScroll(imageView: runeColumn3, duplicate: runeColumn3Duplicate, direction: .down, containerHeight: containerHeight)
     }
     
     func stopAnimating() {
@@ -186,7 +158,7 @@ class ScrollingRunesBackgroundView: UIView {
         runeColumn3.layer.removeAllAnimations()
         runeColumn3Duplicate.layer.removeAllAnimations()
         
-        // Fade out all runes
+        // Fade out
         UIView.animate(withDuration: 0.33) {
             self.runeColumn1.alpha = 0
             self.runeColumn1Duplicate.alpha = 0
@@ -197,32 +169,24 @@ class ScrollingRunesBackgroundView: UIView {
         }
     }
     
-    // MARK: - Private Animation Methods (Exactly matching AnimatedLaunchScreenViewController)
+    // MARK: - Private Animation
     private enum ScrollDirection {
         case up, down
     }
     
-    private func animateBackgroundScroll(imageView: UIImageView, duplicate: UIImageView, direction: ScrollDirection, duration: TimeInterval) {
-        
-        let tabBarHeight: CGFloat = 83
-        let containerHeight = bounds.height - tabBarHeight
-        
-        // CRITICAL: Reset any existing transforms to ensure clean starting state
-        imageView.layer.removeAllAnimations()
-        duplicate.layer.removeAllAnimations()
-        
-        // Use Core Animation for smoother infinite scroll - EXACTLY as in intro
+    private func animateScroll(imageView: UIImageView, duplicate: UIImageView, direction: ScrollDirection, containerHeight: CGFloat) {
+        // Create seamless looping animations using CABasicAnimation
         let animation = CABasicAnimation(keyPath: "transform.translation.y")
-        animation.duration = duration
-        animation.repeatCount = .infinity  // TRUE INFINITE LOOP
+        animation.duration = scrollDuration
+        animation.repeatCount = .infinity
         animation.isRemovedOnCompletion = false
-        animation.timingFunction = CAMediaTimingFunction(name: .linear) // CRITICAL: Linear timing for seamless loop
+        animation.timingFunction = CAMediaTimingFunction(name: .linear)
         
         let duplicateAnimation = CABasicAnimation(keyPath: "transform.translation.y")
-        duplicateAnimation.duration = duration
-        duplicateAnimation.repeatCount = .infinity  // TRUE INFINITE LOOP
+        duplicateAnimation.duration = scrollDuration
+        duplicateAnimation.repeatCount = .infinity
         duplicateAnimation.isRemovedOnCompletion = false
-        duplicateAnimation.timingFunction = CAMediaTimingFunction(name: .linear) // CRITICAL: Linear timing for seamless loop
+        duplicateAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
         
         switch direction {
         case .down:
@@ -230,24 +194,21 @@ class ScrollingRunesBackgroundView: UIView {
             animation.fromValue = 0
             animation.toValue = containerHeight
             
-            // Duplicate: animate from -height to 0
+            // Duplicate: starts at -height, animates to 0
             duplicateAnimation.fromValue = -containerHeight
             duplicateAnimation.toValue = 0
-            
-            imageView.layer.add(animation, forKey: "scrollAnimation")
-            duplicate.layer.add(duplicateAnimation, forKey: "scrollAnimation")
             
         case .up:
             // Main view: animate from 0 to -height
             animation.fromValue = 0
             animation.toValue = -containerHeight
             
-            // Duplicate: animate from +height to 0
+            // Duplicate: starts at +height, animates to 0
             duplicateAnimation.fromValue = containerHeight
             duplicateAnimation.toValue = 0
-            
-            imageView.layer.add(animation, forKey: "scrollAnimation")
-            duplicate.layer.add(duplicateAnimation, forKey: "scrollAnimation")
         }
+        
+        imageView.layer.add(animation, forKey: "scrollAnimation")
+        duplicate.layer.add(duplicateAnimation, forKey: "scrollAnimation")
     }
 }

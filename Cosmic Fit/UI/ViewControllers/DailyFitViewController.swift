@@ -15,6 +15,9 @@ class DailyFitViewController: UIViewController {
     private let contentView = UIView()
     private let topMaskView = UIView()
     
+    private var contentBackgroundView: UIView?
+    private var contentBackgroundTopConstraint: NSLayoutConstraint?
+    
     // Tarot card header
     private let tarotCardImageView = UIImageView()
     private let cardTitleLabel = UILabel()
@@ -112,6 +115,17 @@ class DailyFitViewController: UIViewController {
         view.bringSubviewToFront(topMaskView)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // Calculate visible height (excluding tab bar)
+        let tabBarHeight = tabBarController?.tabBar.frame.height ?? 0
+        let visibleHeight = view.bounds.height - tabBarHeight
+        
+        scrollingRunesBackground.startAnimating(visibleHeight: visibleHeight)
+        
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         scrollingRunesBackground.stopAnimating()
@@ -158,7 +172,7 @@ class DailyFitViewController: UIViewController {
         scrollingRunesBackground.translatesAutoresizingMaskIntoConstraints = false
         view.insertSubview(scrollingRunesBackground, at: 0) // Insert at bottom of view hierarchy
         
-        // Make it fill the ENTIRE screen (same as intro screen)
+        // Make it fill from top to just above tab bar
         NSLayoutConstraint.activate([
             scrollingRunesBackground.topAnchor.constraint(equalTo: view.topAnchor),
             scrollingRunesBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -449,20 +463,20 @@ class DailyFitViewController: UIViewController {
         cardContainerWidthConstraint = tarotCardContainerView.widthAnchor.constraint(equalToConstant: cardWidth)
         cardContainerHeightConstraint = tarotCardContainerView.heightAnchor.constraint(equalToConstant: cardHeight)
         
-        // IMPROVED POSITIONING - Calculate actual available space between menu bar and tab bar
+        // Calculate the center point between menu bar and tab bar (in view coordinates)
         let menuBarBottom = calculateMenuBarBottom()
         let tabBarTop = calculateTabBarTop()
         let availableHeight = tabBarTop - menuBarBottom
-        let centerY = menuBarBottom + (availableHeight / 2) - 10
-        
-        // Position card so its center is at the calculated center point
-        let cardCenterYFromContentTop = centerY - view.safeAreaInsets.top
-        let cardBottomFromContentTop = cardCenterYFromContentTop + (cardHeight / 2)
-        
-        // Use original bottomAnchor constraint for proper scroll behavior
-        cardContainerCenterYConstraint = tarotCardContainerView.bottomAnchor.constraint(
+        let centerYInView = menuBarBottom + (availableHeight / 2)
+
+        // Convert to contentView coordinates
+        let contentViewOffset = view.safeAreaInsets.top + 83
+        let cardCenterYFromContentTop = centerYInView - contentViewOffset + 10  // Add 25px offset to nudge down
+
+        // Position the card's center
+        cardContainerCenterYConstraint = tarotCardContainerView.centerYAnchor.constraint(
             equalTo: contentView.topAnchor,
-            constant: cardBottomFromContentTop
+            constant: cardCenterYFromContentTop
         )
         
         // Activate positioning constraints
@@ -566,30 +580,9 @@ class DailyFitViewController: UIViewController {
         return hasHomeIndicator ? 83 : 49
     }
 
-    private func updateTarotCardPositioning() {
-        // Recalculate positioning after layout changes (rotation, device changes)
-        guard let constraint = cardContainerCenterYConstraint,
-              let heightConstraint = cardContainerHeightConstraint else { return }
-        
-        let menuBarBottom = calculateMenuBarBottom()
-        let tabBarTop = calculateTabBarTop()
-        let availableHeight = tabBarTop - menuBarBottom
-        let centerY = menuBarBottom + (availableHeight / 2)
-        
-        // Update the constraint constant
-        let cardHeight = heightConstraint.constant
-        let cardCenterYFromContentTop = centerY - view.safeAreaInsets.top
-        let cardBottomFromContentTop = cardCenterYFromContentTop + (cardHeight / 2)
-        
-        constraint.constant = cardBottomFromContentTop
-    }
-
     // MARK: - Add this to your existing viewDidLayoutSubviews method:
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        // Update tarot card positioning after layout changes
-        updateTarotCardPositioning()
     }
     
     private func setupScrollIndicator() {
@@ -1056,7 +1049,8 @@ class DailyFitViewController: UIViewController {
     // MARK: - Content Section Setup
     
     private func setupContentSectionBackgrounds() {
-        // Create ONE solid content block that INCLUDES the title and all content
+        // Remove any existing background
+        contentBackgroundView?.removeFromSuperview()
         
         // Remove any existing backgrounds from labels
         let allLabels = [cardTitleLabel, keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel,
@@ -1071,38 +1065,69 @@ class DailyFitViewController: UIViewController {
         }
         
         // Create single content container with theme background
-        let contentBackgroundView = UIView()
-        contentBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        let backgroundView = UIView()
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundView.alpha = 0  // Start invisible
         
         // Apply theme content background
-        CosmicFitTheme.styleContentBackground(contentBackgroundView)
+        CosmicFitTheme.styleContentBackground(backgroundView)
+        contentView.insertSubview(backgroundView, aboveSubview: tarotCardImageView)
         
-        // CRITICAL: Insert BELOW text but ABOVE tarot card
-        contentView.insertSubview(contentBackgroundView, aboveSubview: tarotCardImageView)
+        self.contentBackgroundView = backgroundView
         
-        // CRITICAL: Position content background to end with proper spacing above tab bar
-        let bottomMargin: CGFloat = 32 // Same as side margins
+        let bottomMargin: CGFloat = 32
+        
+        // Calculate starting position (behind tab bar)
+        let tabBarHeight = tabBarController?.tabBar.frame.height ?? 83
+        let screenHeight = view.bounds.height
+        let startingYPosition = screenHeight - tabBarHeight + 100  // Extra offset to be fully hidden
+        
+        // Start position constraint (behind tab bar)
+        contentBackgroundTopConstraint = backgroundView.topAnchor.constraint(
+            equalTo: contentView.topAnchor,
+            constant: startingYPosition
+        )
+        contentBackgroundTopConstraint?.isActive = true
         
         NSLayoutConstraint.activate([
-            contentBackgroundView.topAnchor.constraint(equalTo: cardTitleLabel.topAnchor, constant: -20), // Include title with padding
-            contentBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
-            contentBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -0),
-            
-            // CRITICAL FIX: Content box ends with proper spacing above tab bar (not below it)
-            // Calculate so that when scrolled to max, content box bottom is 32pt above tab bar
-            contentBackgroundView.bottomAnchor.constraint(equalTo: debugButton.bottomAnchor, constant: bottomMargin)
+            backgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            backgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            backgroundView.bottomAnchor.constraint(equalTo: debugButton.bottomAnchor, constant: bottomMargin)
         ])
         
-        // CRITICAL: Ensure tarot card stays BEHIND content box
-        contentView.sendSubviewToBack(tarotCardImageView)
+        // Force layout
+        view.layoutIfNeeded()
         
-        // CRITICAL: Ensure all text stays ABOVE content background
-        for label in allLabels {
-            contentView.bringSubviewToFront(label)
-        }
-        contentView.bringSubviewToFront(debugButton)
+        // Animate to final position
+        let finalYPosition = cardTitleLabel.frame.origin.y - bottomMargin
         
-        print("Content box positioned with Cosmic Fit theme background")
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0.2,  // Slight delay after card flip
+            usingSpringWithDamping: 0.85,
+            initialSpringVelocity: 0,
+            options: [.curveEaseOut],
+            animations: {
+                // Fade in
+                backgroundView.alpha = 1.0
+                
+                // Slide up to final position
+                self.contentBackgroundTopConstraint?.constant = finalYPosition
+                self.view.layoutIfNeeded()
+            },
+            completion: { _ in
+                // Ensure proper z-ordering after animation
+                self.contentView.sendSubviewToBack(self.tarotCardImageView)
+                
+                // Ensure all text stays ABOVE content background
+                for label in allLabels {
+                    self.contentView.bringSubviewToFront(label)
+                }
+                self.contentView.bringSubviewToFront(self.debugButton)
+                
+                print("✨ Content box slide-up animation completed")
+            }
+        )
     }
     
     // MARK: - Actions
