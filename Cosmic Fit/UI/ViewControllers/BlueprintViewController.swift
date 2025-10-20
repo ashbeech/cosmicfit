@@ -637,6 +637,4 @@ extension BlueprintViewController: UIViewControllerTransitioningDelegate {
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return VerticalSlideAnimator(operation: .pop)
     }
-    
-    // No custom presentation controller - we handle layout in the detail VC itself
 }

@@ -128,23 +128,18 @@ class ScrollingRunesBackgroundView: UIView {
         guard !isAnimating else { return }
         isAnimating = true
         
-        // Force layout to ensure all subviews have correct bounds
-        superview?.layoutIfNeeded()
+        // Need to let constraints layout first
         layoutIfNeeded()
         
         let containerHeight = bounds.height
-        print("🎬 Starting runes animation with container height: \(containerHeight)")
-        
-        // If bounds are still not ready (should be rare), use a fallback
-        let safeContainerHeight = containerHeight > 0 ? containerHeight : 800
         
         // Position duplicates using transforms before starting animations
         // For down-scrolling columns, duplicate starts above
-        runeColumn1Duplicate.transform = CGAffineTransform(translationX: 0, y: -safeContainerHeight)
-        runeColumn3Duplicate.transform = CGAffineTransform(translationX: 0, y: -safeContainerHeight)
+        runeColumn1Duplicate.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
+        runeColumn3Duplicate.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
         
         // For up-scrolling column, duplicate starts below
-        runeColumn2Duplicate.transform = CGAffineTransform(translationX: 0, y: safeContainerHeight)
+        runeColumn2Duplicate.transform = CGAffineTransform(translationX: 0, y: containerHeight)
         
         // Fade in all runes
         UIView.animate(withDuration: 0.33) {
@@ -156,29 +151,26 @@ class ScrollingRunesBackgroundView: UIView {
             self.runeColumn3Duplicate.alpha = 1.0
         }
         
-        // Start infinite scrolling animations
+        // Start infinite scrolling animations - matching intro implementation
         animateBackgroundScroll(
             imageView: runeColumn1,
             duplicate: runeColumn1Duplicate,
             direction: .down,
-            duration: scrollDuration,
-            containerHeight: safeContainerHeight
+            duration: scrollDuration
         )
         
         animateBackgroundScroll(
             imageView: runeColumn2,
             duplicate: runeColumn2Duplicate,
             direction: .up,
-            duration: scrollDuration,
-            containerHeight: safeContainerHeight
+            duration: scrollDuration
         )
         
         animateBackgroundScroll(
             imageView: runeColumn3,
             duplicate: runeColumn3Duplicate,
             direction: .down,
-            duration: scrollDuration,
-            containerHeight: safeContainerHeight
+            duration: scrollDuration
         )
     }
     
@@ -210,7 +202,10 @@ class ScrollingRunesBackgroundView: UIView {
         case up, down
     }
     
-    private func animateBackgroundScroll(imageView: UIImageView, duplicate: UIImageView, direction: ScrollDirection, duration: TimeInterval, containerHeight: CGFloat) {
+    private func animateBackgroundScroll(imageView: UIImageView, duplicate: UIImageView, direction: ScrollDirection, duration: TimeInterval) {
+        
+        let tabBarHeight: CGFloat = 83
+        let containerHeight = bounds.height - tabBarHeight
         
         // CRITICAL: Reset any existing transforms to ensure clean starting state
         imageView.layer.removeAllAnimations()

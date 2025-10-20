@@ -58,8 +58,6 @@ class DailyFitViewController: UIViewController {
     
     private let scrollingRunesBackground = ScrollingRunesBackgroundView()
     
-    private var hasPerformedInitialLayout = false
-    
     // Card state enum for better state management
     private enum CardState {
         case unrevealed
@@ -91,6 +89,10 @@ class DailyFitViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        if !isCardRevealed && currentCardState == .unrevealed {
+            scrollingRunesBackground.startAnimating()
+        }
         
         // Restore card state when returning from other tabs
         checkCardRevealState()
@@ -588,19 +590,6 @@ class DailyFitViewController: UIViewController {
         
         // Update tarot card positioning after layout changes
         updateTarotCardPositioning()
-        
-        // CRITICAL: Only start runes animation after the first layout is complete
-        if !hasPerformedInitialLayout {
-            hasPerformedInitialLayout = true
-            
-            // Start runes animation if in unrevealed state
-            if !isCardRevealed && currentCardState == .unrevealed {
-                // Force layout completion, then start animation
-                view.layoutIfNeeded()
-                scrollingRunesBackground.startAnimating()
-                print("🎯 Initial layout completed - starting runes animation")
-            }
-        }
     }
     
     private func setupScrollIndicator() {

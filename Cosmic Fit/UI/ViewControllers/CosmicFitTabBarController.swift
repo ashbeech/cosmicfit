@@ -20,6 +20,8 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     // Menu bar properties
     private var menuBarView: MenuBarView!
     private var menuViewController: MenuViewController?
+    // Detail content container - sits below tab bar
+    private var detailContentContainer: UIView!
     
     private var natalChart: NatalChartCalculator.NatalChart?
     private var progressedChart: NatalChartCalculator.NatalChart?
@@ -133,15 +135,13 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         
         // Apply Cosmic Fit theme to the main view controller
         applyCosmicFitTheme()
-        
-        setupTabBar()
         setupMenuButton()
         startWeatherFetch()
         setupTabMemoryPersistence()
         setupProfileUpdateNotifications()
-        
         installSwipeGesturesIfNeeded()
-        
+        setupTabBar()
+
         // Add this line at the end:
         delegate = self
     }
@@ -156,8 +156,8 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        // Recalculate position if bounds change (rotation, etc.)
-        updateCardPosition()
+        // Add dividers after layout is complete
+        CosmicFitTheme.addTabDividers(tabBar)
     }
     
     deinit {
