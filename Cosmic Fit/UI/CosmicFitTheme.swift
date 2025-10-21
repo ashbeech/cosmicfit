@@ -250,7 +250,7 @@ struct CosmicFitTheme {
         label.textColor = Colors.cosmicBlue
     }
     
-    /// Apply theme to a body text label
+    /// text over tarot card
     static func styleBodyLabel(_ label: UILabel, fontSize: CGFloat = Typography.FontSizes.body, weight: UIFont.Weight = .regular) {
         label.font = Typography.dmSansFont(size: fontSize, weight: weight)
         label.textColor = Colors.cosmicGrey

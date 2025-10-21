@@ -142,6 +142,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         setupProfileUpdateNotifications()
         installSwipeGesturesIfNeeded()
         setupTabBar()
+        hideProfileTabBarItem()  // Add this line
         delegate = self
     }
     
@@ -278,7 +279,10 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     }
 
     func dismissDetailViewController(animated: Bool, completion: (() -> Void)? = nil) {
-        guard let detailVC = children.first(where: { $0 is BlueprintDetailViewController }) else {
+        // Find any detail view controller (not just BlueprintDetailViewController)
+        guard let detailVC = children.first(where: {
+            $0 is BlueprintDetailViewController || $0 is GenericDetailViewController
+        }) else {
             completion?()
             return
         }
@@ -367,6 +371,16 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
             self?.menuViewController = nil
         }
         
+        // Handle navigation to profile
+        menu.onNavigateToProfile = { [weak self] in
+            self?.navigateToProfile()
+        }
+        
+        // Handle navigation to FAQ
+        menu.onNavigateToFAQ = { [weak self] in
+            self?.showFAQPage()
+        }
+        
         menuViewController = menu
         
         present(menu, animated: false) {
@@ -374,7 +388,24 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
             self.menuBarView.animateMenuButton(toX: true)
         }
     }
+    
+    // MARK: - Profile Navigation
+    private func navigateToProfile() {
+        print("🔄 Presenting Profile as detail view")
+        
+        let profileVC = ProfileViewController()
+        let detailVC = GenericDetailViewController(contentViewController: profileVC)
+        presentDetailViewController(detailVC, animated: true)
+    }
 
+    func showFAQPage() {
+        print("🔄 Presenting FAQ as detail view")
+        
+        let faqVC = FAQViewController()
+        let detailVC = GenericDetailViewController(contentViewController: faqVC)
+        presentDetailViewController(detailVC, animated: true)
+    }
+    
     private func dismissMenu() {
         guard let menu = menuViewController else { return }
         
@@ -451,6 +482,20 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         tabBar.isTranslucent = false
         
         print("✅ Tab bar styled with Cosmic Fit theme")
+    }
+    
+    private func hideProfileTabBarItem() {
+        // Hide the profile tab from the visual tab bar
+        guard let items = tabBar.items, items.count > 2 else { return }
+        
+        // Make profile tab invisible in tab bar
+        items[2].isEnabled = false
+        items[2].title = ""
+        
+        // Adjust tab bar to only show first 2 tabs visually
+        if let view = tabBar.subviews.first(where: { $0 is UIControl }) {
+            // This ensures the tab bar only displays 2 tabs visually
+        }
     }
     
     private func updateTabSelectionIndicator() {
@@ -653,7 +698,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     private func setupViewControllers() {
         var viewControllers: [UIViewController] = []
         
-        // Daily Fit Tab (Index 0 - Default)
+        // Daily Fit Tab (Index 0)
         let dailyFitVC = DailyFitViewController()
         if let dailyVibeContent = dailyVibeContent {
             dailyFitVC.configure(

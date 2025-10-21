@@ -1071,7 +1071,10 @@ class DailyFitViewController: UIViewController {
         
         // Apply theme content background
         CosmicFitTheme.styleContentBackground(backgroundView)
-        contentView.insertSubview(backgroundView, aboveSubview: tarotCardImageView)
+        
+        // FIXED: Insert above the tarot card CONTAINER, not the image view
+        // The container is a direct child of contentView, so this will work correctly
+        contentView.insertSubview(backgroundView, aboveSubview: tarotCardContainerView)
         
         self.contentBackgroundView = backgroundView
         

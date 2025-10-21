@@ -22,20 +22,23 @@ class FAQViewController: UIViewController {
     
     // MARK: - UI Setup
     private func setupUI() {
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
         
         // Setup scroll view
         scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsVerticalScrollIndicator = true
+        CosmicFitTheme.styleScrollView(scrollView)
+        
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 60), // Space for close button
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
@@ -46,8 +49,10 @@ class FAQViewController: UIViewController {
         
         // Title
         titleLabel.text = "Frequently Asked Questions"
-        CosmicFitTheme.styleTitleLabel(titleLabel, fontSize: CosmicFitTheme.Typography.FontSizes.title1, weight: .bold)
+        titleLabel.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.title1, weight: .bold)
+        titleLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
         titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 0
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(titleLabel)
         
@@ -69,27 +74,7 @@ class FAQViewController: UIViewController {
             ),
             (
                 question: "How does the Daily Fit work?",
-                answer: "Each day, we pull a tarot card that reflects today's cosmic energy and combine it with current planetary transits, your natal chart, and even your local weather to create specific outfit guidance tailored to you and this moment."
-            ),
-            (
-                question: "What is my Cosmic Blueprint?",
-                answer: "Your Cosmic Blueprint is your personal style DNA decoded from your birth chart. It reveals your core style essence, your relationship with different aesthetics, and how your style preferences evolve through life. Think of it as your fashion birth chart."
-            ),
-            (
-                question: "Do I need to know astrology to use this app?",
-                answer: "Not at all! We translate all the astrological complexity into clear, actionable style advice. You don't need to know your houses from your aspects—just follow the guidance and notice how it resonates."
-            ),
-            (
-                question: "Why do you need my exact birth time and location?",
-                answer: "Your rising sign (ascendant) changes approximately every two hours, and house placements shift with location. These details significantly affect your style blueprint, so accuracy matters for personalized results."
-            ),
-            (
-                question: "What if I don't know my exact birth time?",
-                answer: "If you don't have your exact birth time, you can still use Cosmic Fit, but some aspects of your reading (particularly those related to your rising sign and houses) will be less precise. Try to get as close as possible—even a rough estimate helps."
-            ),
-            (
-                question: "How often should I check my Daily Fit?",
-                answer: "Check it each morning to set your style intention for the day. The card reveal is designed as a daily ritual—tap to turn the card and discover today's cosmic fashion forecast."
+                answer: "Each day, we calculate where the planets are right now (transits) and how they interact with your birth chart. These cosmic conversations create specific energetic themes that translate into style guidance—colors, textures, silhouettes, and mood."
             ),
             (
                 question: "Why does the Daily Fit consider weather?",
@@ -124,27 +109,7 @@ class FAQViewController: UIViewController {
                 answer: "Generic horoscopes give the same advice to millions of people. Cosmic Fit analyzes YOUR specific birth chart, considers YOUR current transits, and gives YOU personalized fashion guidance. It's the difference between a form letter and a personal stylist."
             ),
             (
-                question: "What should I do if the Daily Fit guidance doesn't resonate?",
-                answer: "First, sit with it for a moment—sometimes the resistance itself is interesting. But if it truly doesn't fit, trust your intuition. The app is a tool, not a rulebook. Take what serves you, leave what doesn't."
-            ),
-            (
-                question: "Can I see past Daily Fits?",
-                answer: "Currently, each Daily Fit is designed for that specific day's energy. The card resets at midnight. We're considering adding a history feature, but for now, focus on the present—that's where style lives."
-            ),
-            (
-                question: "Why do you emphasize 'feel' over 'look'?",
-                answer: "Because the best outfits aren't the ones that photograph well—they're the ones that make you feel like yourself, amplified. Cosmic energy operates through sensation. We're teaching you to dress by intuition, not just by rules."
-            ),
-            (
-                question: "What if I want to dress opposite of what's recommended?",
-                answer: "Do it! Resistance is information. Maybe you're craving energetic balance, not amplification. Maybe you're not ready for that energy shift. Fashion rebellion is valid. Just notice what you're resisting and why."
-            ),
-            (
-                question: "How do I update my birth information if I made a mistake?",
-                answer: "Go to Account in the menu to edit your birth details. Keep in mind this will regenerate your entire Cosmic Blueprint, so make sure the corrections are accurate before saving."
-            ),
-            (
-                question: "Is my birth information private?",
+                question: "Is my birth data private?",
                 answer: "Yes. Your birth data is stored locally on your device and used solely to calculate your chart. We don't share, sell, or use your personal information for anything beyond giving you cosmic style guidance."
             ),
             (
@@ -183,7 +148,6 @@ class FAQViewController: UIViewController {
             
             previousView = faqView
             
-            // Add bottom constraint for last item
             if index == faqs.count - 1 {
                 NSLayoutConstraint.activate([
                     faqView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50)
@@ -198,14 +162,16 @@ class FAQViewController: UIViewController {
         
         let questionLabel = UILabel()
         questionLabel.text = question
-        CosmicFitTheme.styleTitleLabel(questionLabel, fontSize: CosmicFitTheme.Typography.FontSizes.headline, weight: .bold)
+        questionLabel.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.headline, weight: .bold)
+        questionLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
         questionLabel.numberOfLines = 0
         questionLabel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(questionLabel)
         
         let answerLabel = UILabel()
         answerLabel.text = answer
-        CosmicFitTheme.styleBodyLabel(answerLabel, fontSize: CosmicFitTheme.Typography.FontSizes.body)
+        answerLabel.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
+        answerLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
         answerLabel.numberOfLines = 0
         answerLabel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(answerLabel)

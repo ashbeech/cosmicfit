@@ -57,13 +57,7 @@ class ProfileViewController: UIViewController {
     
     // MARK: - UI Setup
     private func setupUI() {
-        title = "Profile"
         view.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
-        
-        // Apply navigation bar theme
-        if let navigationBar = navigationController?.navigationBar {
-            CosmicFitTheme.styleNavigationBar(navigationBar)
-        }
         
         // Scroll view
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -209,13 +203,13 @@ class ProfileViewController: UIViewController {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             // Scroll view
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 60), // Space for close button
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             // Content view
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
@@ -503,6 +497,10 @@ class ProfileViewController: UIViewController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
+    }
+    
+    @objc private func closeButtonTapped() {
+        dismiss(animated: true)
     }
 }
 

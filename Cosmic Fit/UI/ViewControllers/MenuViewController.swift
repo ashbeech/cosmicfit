@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import MessageUI
 
-final class MenuViewController: UIViewController {
+final class MenuViewController: UIViewController, MFMailComposeViewControllerDelegate {
     
     // MARK: - Properties
     var onDismiss: (() -> Void)?
+    var onNavigateToProfile: (() -> Void)?
+    var onNavigateToFAQ: (() -> Void)?
     
     // MARK: - UI Components
     private let blurEffectView: UIVisualEffectView = {
@@ -59,14 +62,6 @@ final class MenuViewController: UIViewController {
         return button
     }()
     
-    private let redeemButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Redeem Offer Code", for: .normal)
-        button.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(size: 24, weight: .regular)
-        button.setTitleColor(CosmicFitTheme.Colors.cosmicBlue, for: .normal)
-        return button
-    }()
-    
     private let faqsButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("FAQs", for: .normal)
@@ -83,13 +78,29 @@ final class MenuViewController: UIViewController {
         return button
     }()
     
-    private let socialIconsLabel: UILabel = {
-        let label = UILabel()
-        label.text = "SOCIAL ICONS GO HERE"
-        label.font = CosmicFitTheme.Typography.dmSansFont(size: 14, weight: .medium)
-        label.textColor = CosmicFitTheme.Colors.cosmicBlue
-        label.textAlignment = .center
-        return label
+    private let socialIconsStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = 24
+        stack.alignment = .center
+        stack.distribution = .fillEqually
+        return stack
+    }()
+    
+    private let tiktokButton: UIButton = {
+        let button = UIButton(type: .system)
+        let config = UIImage.SymbolConfiguration(pointSize: 28, weight: .regular)
+        button.setImage(UIImage(systemName: "music.note", withConfiguration: config), for: .normal)
+        button.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        return button
+    }()
+    
+    private let instagramButton: UIButton = {
+        let button = UIButton(type: .system)
+        let config = UIImage.SymbolConfiguration(pointSize: 28, weight: .regular)
+        button.setImage(UIImage(systemName: "camera", withConfiguration: config), for: .normal)
+        button.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        return button
     }()
     
     private let bottomDividerContainer: UIView = {
@@ -136,18 +147,21 @@ final class MenuViewController: UIViewController {
         contentView.addSubview(closeButton)
         contentView.addSubview(logoImageView)
         contentView.addSubview(menuStackView)
-        contentView.addSubview(socialIconsLabel)
+        contentView.addSubview(socialIconsStackView)
         contentView.addSubview(bottomDividerContainer)
         
         bottomDividerContainer.addSubview(bottomDividerLeft)
         bottomDividerContainer.addSubview(bottomDividerRight)
         bottomDividerContainer.addSubview(starImageView)
         
-        // Add menu buttons to stack
+        // Add menu buttons to stack (only Account, FAQs, Help)
         menuStackView.addArrangedSubview(accountButton)
-        menuStackView.addArrangedSubview(redeemButton)
         menuStackView.addArrangedSubview(faqsButton)
         menuStackView.addArrangedSubview(helpButton)
+        
+        // Add social icons to stack
+        socialIconsStackView.addArrangedSubview(tiktokButton)
+        socialIconsStackView.addArrangedSubview(instagramButton)
     }
     
     private func setupConstraints() {
@@ -156,7 +170,7 @@ final class MenuViewController: UIViewController {
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         menuStackView.translatesAutoresizingMaskIntoConstraints = false
-        socialIconsLabel.translatesAutoresizingMaskIntoConstraints = false
+        socialIconsStackView.translatesAutoresizingMaskIntoConstraints = false
         bottomDividerContainer.translatesAutoresizingMaskIntoConstraints = false
         bottomDividerLeft.translatesAutoresizingMaskIntoConstraints = false
         bottomDividerRight.translatesAutoresizingMaskIntoConstraints = false
@@ -193,9 +207,9 @@ final class MenuViewController: UIViewController {
             menuStackView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor, constant: 40),
             menuStackView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -40),
             
-            // Social icons placeholder
-            socialIconsLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            socialIconsLabel.bottomAnchor.constraint(equalTo: bottomDividerContainer.topAnchor, constant: -40),
+            // Social icons
+            socialIconsStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            socialIconsStackView.bottomAnchor.constraint(equalTo: bottomDividerContainer.topAnchor, constant: -40),
             
             // Bottom divider (above safe area)
             bottomDividerContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
@@ -225,9 +239,10 @@ final class MenuViewController: UIViewController {
     private func setupActions() {
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         accountButton.addTarget(self, action: #selector(accountButtonTapped), for: .touchUpInside)
-        redeemButton.addTarget(self, action: #selector(redeemButtonTapped), for: .touchUpInside)
         faqsButton.addTarget(self, action: #selector(faqsButtonTapped), for: .touchUpInside)
         helpButton.addTarget(self, action: #selector(helpButtonTapped), for: .touchUpInside)
+        tiktokButton.addTarget(self, action: #selector(tiktokButtonTapped), for: .touchUpInside)
+        instagramButton.addTarget(self, action: #selector(instagramButtonTapped), for: .touchUpInside)
     }
     
     // MARK: - Animation
@@ -268,18 +283,98 @@ final class MenuViewController: UIViewController {
     }
     
     @objc private func accountButtonTapped() {
-        print("Account tapped")
-    }
-    
-    @objc private func redeemButtonTapped() {
-        print("Redeem tapped")
+        print("✅ Account tapped - navigating to Profile")
+        
+        // Dismiss menu first
+        hide(animated: true) { [weak self] in
+            self?.dismiss(animated: false) {
+                // Trigger navigation to profile after menu is dismissed
+                self?.onNavigateToProfile?()
+            }
+        }
     }
     
     @objc private func faqsButtonTapped() {
-        print("FAQs tapped")
+        print("✅ FAQs tapped - navigating to FAQ page")
+        
+        // Get reference to presenting VC before dismissing
+        guard let presentingVC = self.presentingViewController else {
+            print("❌ No presenting view controller")
+            return
+        }
+        
+        // Dismiss menu first
+        hide(animated: true) { [weak self] in
+            self?.dismiss(animated: false) {
+                // Trigger FAQ navigation
+                self?.onNavigateToFAQ?()
+            }
+        }
     }
     
     @objc private func helpButtonTapped() {
-        print("Help tapped")
+        print("✅ Help tapped - opening email client")
+        
+        if MFMailComposeViewController.canSendMail() {
+            let mailComposer = MFMailComposeViewController()
+            mailComposer.mailComposeDelegate = self
+            mailComposer.setToRecipients(["help@cosmicfit.app"])
+            mailComposer.setSubject("Cosmic Fit Help Request")
+            
+            present(mailComposer, animated: true)
+        } else {
+            // Fallback to mailto URL if mail composer isn't available
+            if let mailURL = URL(string: "mailto:help@cosmicfit.app") {
+                UIApplication.shared.open(mailURL)
+            } else {
+                // Show alert if neither method works
+                let alert = UIAlertController(
+                    title: "Email Not Available",
+                    message: "Please email us at help@cosmicfit.app",
+                    preferredStyle: .alert
+                )
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                present(alert, animated: true)
+            }
+        }
+    }
+    
+    @objc private func tiktokButtonTapped() {
+        print("✅ TikTok tapped - opening @cosmicfitapp")
+        
+        let username = "cosmicfitapp"
+        
+        // Try to open TikTok app first
+        if let tiktokAppURL = URL(string: "tiktok://user?username=\(username)"),
+           UIApplication.shared.canOpenURL(tiktokAppURL) {
+            UIApplication.shared.open(tiktokAppURL)
+        } else {
+            // Fallback to web URL
+            if let webURL = URL(string: "https://www.tiktok.com/@\(username)") {
+                UIApplication.shared.open(webURL)
+            }
+        }
+    }
+    
+    @objc private func instagramButtonTapped() {
+        print("✅ Instagram tapped - opening @cosmicfitapp")
+        
+        let username = "cosmicfitapp"
+        
+        // Try to open Instagram app first
+        if let instagramAppURL = URL(string: "instagram://user?username=\(username)"),
+           UIApplication.shared.canOpenURL(instagramAppURL) {
+            UIApplication.shared.open(instagramAppURL)
+        } else {
+            // Fallback to web URL
+            if let webURL = URL(string: "https://www.instagram.com/\(username)") {
+                UIApplication.shared.open(webURL)
+            }
+        }
+    }
+    
+    // MARK: - MFMailComposeViewControllerDelegate
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
     }
 }
