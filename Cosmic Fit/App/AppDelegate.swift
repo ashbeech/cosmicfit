@@ -66,6 +66,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let tabBarController = CosmicFitTabBarController()
         
+        // CRITICAL: Set background to match launch screen
+        tabBarController.view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        
         // Configure with stored user data
         let chartData = NatalChartManager.shared.calculateNatalChart(
             date: userProfile.birthDate,
@@ -89,6 +92,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set Daily Fit as default tab (index 1) for returning users
         tabBarController.selectedIndex = 1
         
+        // CRITICAL: Force view to load immediately to prevent delay
+        _ = tabBarController.view
+        
         launchScreenVC.setMainViewController(tabBarController)
         
         print("✅ Returning user detected - launching to Daily Fit tab")
@@ -98,6 +104,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let animatedWelcomeVC = AnimatedWelcomeIntroViewController()
         let navigationController = UINavigationController(rootViewController: animatedWelcomeVC)
         navigationController.navigationBar.isHidden = true
+        
+        // CRITICAL: Set navigation controller background to match launch screen
+        navigationController.view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        
+        // CRITICAL: Force view to load immediately to prevent delay
+        _ = animatedWelcomeVC.view
+        
         launchScreenVC.setMainViewController(navigationController)
         
         print("📱 First time user - showing animated welcome intro")
@@ -107,6 +120,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let onboardingFormVC = OnboardingFormViewController()
         let navigationController = UINavigationController(rootViewController: onboardingFormVC)
         navigationController.navigationBar.isHidden = true
+        
+        // CRITICAL: Set navigation controller background to match launch screen
+        navigationController.view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        
+        // CRITICAL: Force view to load immediately to prevent delay
+        _ = onboardingFormVC.view
+        
         launchScreenVC.setMainViewController(navigationController)
         
         print("📱 User needs profile completion - showing onboarding form")
@@ -129,9 +149,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func setupGlobalAppearance() {
         // Configure global appearance proxy settings
         if #available(iOS 13.0, *) {
-            // Set window background
+            // CRITICAL: Set window background to black to match launch screen
             if let window = window {
-                window.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+                window.backgroundColor = CosmicFitTheme.Colors.cosmicBlue  // BLACK instead of cosmicGrey
             }
         }
         

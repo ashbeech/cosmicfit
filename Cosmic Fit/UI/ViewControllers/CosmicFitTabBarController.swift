@@ -735,6 +735,11 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
 extension CosmicFitTabBarController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        // CRITICAL: Dismiss any open detail pages before tab switch
+        if !detailContentContainer.isHidden {
+            dismissDetailViewController(animated: false)
+        }
+        
         // Don't block selection if already transitioning via gesture
         guard !isCustomTransitioning else {
             print("⚠️ Custom transition in progress - allowing selection")
