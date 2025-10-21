@@ -47,12 +47,25 @@ class FAQViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
         
-        // Title
-        titleLabel.text = "Frequently Asked Questions"
-        titleLabel.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.title1, weight: .bold)
+        // Title - matching Blueprint page style
         titleLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
+        
+        // Use attributed string for custom line height like Blueprint
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 0.85
+        paragraphStyle.alignment = .center
+        
+        let attributedText = NSAttributedString(
+            string: "FREQUENTLY ASKED\nQUESTIONS",
+            attributes: [
+                .font: CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.pageTitle),
+                .foregroundColor: CosmicFitTheme.Colors.cosmicBlue,
+                .paragraphStyle: paragraphStyle
+            ]
+        )
+        titleLabel.attributedText = attributedText
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(titleLabel)
         
@@ -70,63 +83,59 @@ class FAQViewController: UIViewController {
         let faqs: [(question: String, answer: String)] = [
             (
                 question: "What is Cosmic Fit?",
-                answer: "Cosmic Fit translates your astrological birth chart into personalized style guidance. We analyze the planetary positions at your birth to understand your authentic style essence, then give you daily fashion recommendations based on current cosmic energy."
+                answer: "Cosmic Fit translates your astrological birth chart into personalized style guidance. By analyzing the unique planetary positions at the moment of your birth, we uncover your energetic signature and help you express it through clothing choices that feel authentic and empowering."
             ),
             (
-                question: "How does the Daily Fit work?",
-                answer: "Each day, we calculate where the planets are right now (transits) and how they interact with your birth chart. These cosmic conversations create specific energetic themes that translate into style guidance—colors, textures, silhouettes, and mood."
+                question: "How does the birth chart connect to style?",
+                answer: "Your natal chart reveals your core energy patterns—how you show up in the world, what makes you feel confident, and where you naturally shine. We translate those cosmic themes into tangible style elements: fabrics, colors, silhouettes, and styling approaches that align with your innate energy."
             ),
             (
-                question: "Why does the Daily Fit consider weather?",
-                answer: "Real style exists in the physical world. Cosmic energy is beautiful, but it needs to meet you where you are—literally. We factor in your local weather so the guidance is actually wearable, not just conceptual."
+                question: "What's the \"Daily Fit\"?",
+                answer: "Each day, the planets move into new positions, creating fresh energetic weather. Your Daily Fit is a personalized outfit interpretation based on how today's cosmic climate interacts with your birth chart. Think of it as styling advice that honors both who you are and what the day calls for."
             ),
             (
-                question: "Can my Cosmic Blueprint change?",
-                answer: "Your natal chart (birth blueprint) stays constant—it's your foundation. However, progressed planets show how you evolve over time, which is why we show both your core essence and your current phase in the Blueprint."
+                question: "Do I need to know astrology to use this?",
+                answer: "Not at all. We handle the astrology—you focus on getting dressed. If you're curious, the app offers deeper explanations, but you can also simply enjoy the style guidance without needing to understand planetary transits or house placements."
             ),
             (
-                question: "What are transits and why do they matter?",
-                answer: "Transits are where planets are right now, creating temporary energy shifts that influence your mood, energy, and yes—your style needs. Today's Mars-Venus aspect might make you crave bolder colors than usual, even if your blueprint skews minimalist."
+                question: "How accurate is the birth time requirement?",
+                answer: "Birth time affects your Rising sign and house placements, which influence how you present yourself to the world. The more accurate your birth time, the more precise your interpretation. Even an approximate time (within an hour or two) can still yield meaningful insights, though exact timing is ideal."
             ),
             (
-                question: "How do the tarot cards connect to fashion?",
-                answer: "Each tarot card carries archetypal energy that translates beautifully into aesthetic language. The Tower's transformation becomes dramatic silhouettes. The Hermit's introspection becomes cocooning layers. We've mapped the entire deck to style guidance."
+                question: "Can I change my birth information later?",
+                answer: "Yes. Go to your Profile page to update your birth details. Keep in mind that changing your birth time or location will affect your chart and may shift your style recommendations."
             ),
             (
-                question: "What are the vibe percentages (Classic, Playful, Edge, etc.)?",
-                answer: "These show the energetic breakdown of today's recommendations. High Drama + High Edge might mean leather and structure. High Romantic + High Playful suggests soft colors and flowing shapes. It's cosmic mood boarding."
+                question: "Is this just for women?",
+                answer: "Not at all. Cosmic Fit is for anyone interested in aligning their personal style with their energetic blueprint, regardless of gender. The guidance adapts to your unique chart and can be interpreted across any style spectrum."
             ),
             (
-                question: "Why does my Daily Fit sometimes contradict my Blueprint?",
-                answer: "That's the magic! Your Blueprint is who you are at your core. Your Daily Fit is responding to today's energy. Sometimes growth means dressing outside your comfort zone. Sometimes cosmic weather calls for a different vibe. Trust both."
+                question: "What if I don't like the outfit suggestion?",
+                answer: "Your Daily Fit is meant to inspire, not dictate. Think of it as a creative prompt. You might take just one element—a color, a texture, an accessory choice—and build from there. The goal is alignment with your energy, not rigid adherence to a specific look."
             ),
             (
-                question: "Can I use Cosmic Fit if I don't believe in astrology?",
-                answer: "Absolutely. Think of it as a creative framework for exploring your style. Even if you're skeptical about planets, you might find the daily prompts help you break out of fashion ruts and try new combinations."
+                question: "How often does my Daily Fit change?",
+                answer: "Your Daily Fit updates every day based on the current planetary transits and how they interact with your natal chart. Each morning brings fresh cosmic energy and fresh styling guidance."
             ),
             (
-                question: "How is this different from just reading my horoscope?",
-                answer: "Generic horoscopes give the same advice to millions of people. Cosmic Fit analyzes YOUR specific birth chart, considers YOUR current transits, and gives YOU personalized fashion guidance. It's the difference between a form letter and a personal stylist."
+                question: "Can I see past Daily Fits?",
+                answer: "Currently, the app focuses on today's guidance. We're exploring ways to offer a history view in future updates, so you can revisit past interpretations and track patterns in your cosmic style evolution."
             ),
             (
-                question: "Is my birth data private?",
-                answer: "Yes. Your birth data is stored locally on your device and used solely to calculate your chart. We don't share, sell, or use your personal information for anything beyond giving you cosmic style guidance."
+                question: "What's the difference between the Daily Fit and my Cosmic Blueprint?",
+                answer: "Your Cosmic Blueprint is your foundational style DNA—timeless guidance based on your birth chart. It doesn't change. Your Daily Fit is how that foundation responds to the current cosmic weather. One is your core; the other is your daily expression of it."
             ),
             (
-                question: "Can I use Cosmic Fit for special occasions?",
-                answer: "Definitely! The Blueprint section includes special occasion guidance. You can also check your Daily Fit on the morning of an event—cosmic timing matters, and dressing in flow with that day's energy adds another layer of intentionality."
+                question: "How do I interpret the \"vibe breakdown\" percentages?",
+                answer: "The vibe breakdown shows how different style energies (like Classic, Playful, Romantic) blend in today's outfit suggestion. Higher percentages mean that energy is more prominent. It's a quick snapshot of the outfit's overall feel."
             ),
             (
-                question: "What if multiple style elements seem contradictory?",
-                answer: "Contradiction is where interesting style lives! 'Protective but fluid' might mean a soft trench coat. 'Bold yet refined' could be a statement minimalist piece. The tension between elements creates your unique look."
+                question: "Can I share my readings with friends?",
+                answer: "Not directly within the app yet, but you can always screenshot your Daily Fit or Blueprint and share it however you like. Just remember: their chart is different, so their cosmic style will be too."
             ),
             (
-                question: "How much should I invest in following these recommendations?",
-                answer: "You don't need to buy anything new. Cosmic Fit works with your existing wardrobe—we're helping you see what you already own through a new lens and combine pieces in ways aligned with your energy."
-            ),
-            (
-                question: "Does Cosmic Fit replace working with a personal stylist?",
-                answer: "We're complementary, not competitive. A human stylist brings expertise, shopping knowledge, and hands-on help. Cosmic Fit adds the energetic and intuitive layer. Use both if you can—they enhance each other."
+                question: "Does Cosmic Fit replace a personal stylist?",
+                answer: "Not exactly—it's a different tool. A human stylist brings expertise, shopping knowledge, and hands-on help. Cosmic Fit adds the energetic and intuitive layer. Use both if you can—they enhance each other."
             ),
             (
                 question: "Can I share my Daily Fit with friends?",
@@ -160,19 +169,22 @@ class FAQViewController: UIViewController {
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
         
+        // Question - using DMSerifText like Blueprint headings
         let questionLabel = UILabel()
         questionLabel.text = question
-        questionLabel.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.headline, weight: .bold)
+        questionLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.title3, weight: .bold)
         questionLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
         questionLabel.numberOfLines = 0
         questionLabel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(questionLabel)
         
+        // Answer - using DMSerifText like Blueprint body text
         let answerLabel = UILabel()
         answerLabel.text = answer
-        answerLabel.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
+        answerLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
         answerLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
         answerLabel.numberOfLines = 0
+        answerLabel.lineBreakMode = .byWordWrapping
         answerLabel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(answerLabel)
         

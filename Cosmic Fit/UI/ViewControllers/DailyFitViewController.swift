@@ -83,11 +83,11 @@ class DailyFitViewController: UIViewController {
         // Apply Cosmic Fit theme
         applyCosmicFitTheme()
         
+        // CRITICAL: Set initial alpha BEFORE setupUI checks reveal state
+        setInitialContentAlpha()
+        
         setupUI()
         updateContent()
-        
-        // Set initial content alpha to 0 for scroll-based fade-in
-        setInitialContentAlpha()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -1071,10 +1071,7 @@ class DailyFitViewController: UIViewController {
         
         // Apply theme content background
         CosmicFitTheme.styleContentBackground(backgroundView)
-        
-        // FIXED: Insert above the tarot card CONTAINER, not the image view
-        // The container is a direct child of contentView, so this will work correctly
-        contentView.insertSubview(backgroundView, aboveSubview: tarotCardContainerView)
+        contentView.insertSubview(backgroundView, aboveSubview: tarotCardImageView)
         
         self.contentBackgroundView = backgroundView
         
