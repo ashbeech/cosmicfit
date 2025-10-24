@@ -115,6 +115,7 @@ class TarotCardSelector {
         
         // Store selected card using new recency tracker
         if let profileId = profileHash {
+            print("**** USING NEW TarotRecencyTracker IN STORAGE METHOD ****")
             TarotRecencyTracker.shared.storeCardSelection(
                 bestCard.name,
                 profileHash: profileId,
@@ -122,6 +123,7 @@ class TarotCardSelector {
             )
         } else {
             // Fallback to old method for backwards compatibility
+            print("**** FALLING BACK TO OLD STORAGE METHOD ****")
             storeLastSelectedCard(bestCard.name)
         }
         

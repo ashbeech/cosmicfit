@@ -492,10 +492,12 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         items[2].isEnabled = false
         items[2].title = ""
         
+        /*
         // Adjust tab bar to only show first 2 tabs visually
         if let view = tabBar.subviews.first(where: { $0 is UIControl }) {
             // This ensures the tab bar only displays 2 tabs visually
         }
+         */
     }
     
     private func updateTabSelectionIndicator() {

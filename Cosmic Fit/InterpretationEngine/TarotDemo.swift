@@ -6,6 +6,7 @@
 //  Demonstration script for Tarot card selection system
 //
 
+/*
 import Foundation
 
 /// Demonstration class to showcase the Tarot card selection system
@@ -257,3 +258,4 @@ extension TarotDemo {
         }
     }
 }
+*/
