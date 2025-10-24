@@ -573,17 +573,16 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
                 } else {
                     print("🎯 Generating new Daily Fit content for today...")
                     
-                    // Get transits for daily fit
+                    // Get transits for daily fit (using existing logic)
                     let transitData = NatalChartManager.shared.calculateTransitChart(natalChart: natalChart)
                     let shortTermTransits = (transitData["groupedAspects"] as? [String: [[String: Any]]])?["Short-term Influences"] ?? []
                     let regularTransits = (transitData["groupedAspects"] as? [String: [[String: Any]]])?["Regular Influences"] ?? []
                     let longTermTransits = (transitData["groupedAspects"] as? [String: [[String: Any]]])?["Long-term Influences"] ?? []
                     let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
                     
-                    // Determine profile hash for seeding
+                    // Generate profile hash for daily seed
                     let profileHashForSeed = userProfile?.id ?? chartId
                     
-                    // Generate with profileHash for daily seeding
                     dailyVibeContent = CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
                         from: natalChart,
                         progressedChart: progChart,
@@ -593,7 +592,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
                         date: Date()
                     )
                     
-                    // Save the generated content
+                    // Save the generated content with user ID if available
                     if let content = dailyVibeContent {
                         if let userId = userProfile?.id {
                             DailyVibeStorage.shared.saveDailyVibeForUser(
@@ -603,6 +602,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
                             )
                             print("✅ Daily Fit generated and saved for user \(userId)")
                         } else {
+                            // Fallback to legacy storage
                             DailyVibeStorage.shared.saveDailyVibe(
                                 content,
                                 for: Date(),

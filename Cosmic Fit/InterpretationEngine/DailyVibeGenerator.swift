@@ -82,23 +82,24 @@ class DailyVibeGenerator {
         print("🎲 Generated daily seed: \(dailySeed)")
          */
 
-
-        // Tokens
+        // Get all semantic tokens from interpretation engine
         let allTokens = SemanticTokenGenerator.generateDailyFitTokens(
             natal: natalChart,
             progressed: progressedChart,
             transits: transits,
             weather: weather
         )
-
+        
+        // Debug: Analyze token composition
         debugAnalyzeTokens(allTokens)
-
-        // Style brief and breakdowns
+        
+        // Generate all Daily System sections from tokens
         let styleBrief = generateMariaStyleBrief(from: allTokens)
         let vibeBreakdown = VibeBreakdownGenerator.generateVibeBreakdown(from: allTokens)
+        
         debugVibeBreakdownAnalysis(breakdown: vibeBreakdown, tokens: allTokens)
-
-        // Tarot selection with daily seed
+        
+        // Generate Tarot card selection with daily seed for variety
         let selectedTarotCard = TarotCardSelector.selectCard(
             for: allTokens,
             theme: nil,
@@ -106,8 +107,8 @@ class DailyVibeGenerator {
             seed: dailySeed
         )
         let tarotKeywords = generateTarotKeywords(from: selectedTarotCard, tokens: allTokens)
-
-        // Remaining sections (unchanged)
+        
+        // Generate comprehensive sections
         let textiles = generateTextilesSection(from: allTokens)
         let colors = generateColorsSection(from: allTokens)
         let colorScores = ColorScoring.calculateColorScores(from: allTokens)
@@ -116,7 +117,7 @@ class DailyVibeGenerator {
         let accessories = generateAccessoriesSection(from: allTokens)
         let (layering, layeringScore) = generateLayeringSection(from: allTokens, weather: weather)
         let angularCurvyScore = StructuralAxes.calculateAngularCurvyScore(from: allTokens)
-
+        
         print("\n✨ COMPREHENSIVE DAILY SYSTEM GENERATED:")
         print("  Style Brief: \"\(styleBrief.prefix(50))...\"")
         print("  Dominant Energy: \(getDominantEnergyName(from: vibeBreakdown))")
@@ -128,7 +129,8 @@ class DailyVibeGenerator {
         }
         print("\n🎯 DAILY VIBE GENERATOR - COMPLETE")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
-
+        
+        // Return complete DailyVibeContent with all sections populated
         var dailyContent = DailyVibeContent()
         dailyContent.tarotCard = selectedTarotCard
         dailyContent.tarotKeywords = tarotKeywords
@@ -145,7 +147,7 @@ class DailyVibeGenerator {
         dailyContent.angularCurvyScore = angularCurvyScore
         dailyContent.temperature = weather?.temperature
         dailyContent.weatherCondition = weather?.condition
-
+        
         return dailyContent
     }
     

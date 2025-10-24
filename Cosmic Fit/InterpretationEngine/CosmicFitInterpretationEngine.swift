@@ -406,11 +406,13 @@ class CosmicFitInterpretationEngine {
 
 extension CosmicFitInterpretationEngine {
     
+    /*
     /// Convenience method for view controllers to generate blueprint with current debug settings
     static func generateBlueprintForViewController(from chart: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> InterpretationResult {
         return generateBlueprintInterpretation(from: chart, currentAge: currentAge)
-    }
+    }*/
     
+    /*
     /// Convenience method for view controllers to generate daily vibe with current debug settings
     static func generateDailyVibeForViewController(
         from natalChart: NatalChartCalculator.NatalChart,
@@ -428,7 +430,8 @@ extension CosmicFitInterpretationEngine {
             profileHash: profileHash
         )
     }
-    
+    */
+    /*
     /// Convenience method for view controllers to generate full interpretation with current debug settings
     static func generateFullInterpretationForViewController(
         from natalChart: NatalChartCalculator.NatalChart,
@@ -446,6 +449,7 @@ extension CosmicFitInterpretationEngine {
             profileHash: profileHash
         )
     }
+     */
 }
 
 // MARK: - Custom Style Guidance Methods
