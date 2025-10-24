@@ -19,28 +19,25 @@ extension NatalChartManager {
         return interpretation.stitchedParagraph
     }
     
-    /// Generate a daily vibe interpretation
-    /// - Parameters:
-    ///   - natalChart: The base natal chart
-    ///   - progressedChart: The current progressed chart (can be the same as natal chart if needed)
-    ///   - transits: Array of transit aspects
-    ///   - weather: Optional current weather conditions
-    /// - Returns: A daily vibe content object
+    /// Generate daily vibe interpretation
     func generateDailyVibeInterpretation(
         for natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
         transits: [[String: Any]],
-        weather: TodayWeather?) -> DailyVibeContent {
-            
-            // Use the CosmicFitInterpretationEngine to generate daily vibe content
-            return CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
-                from: natalChart,
-                progressedChart: progressedChart,
-                transits: transits,
-                weather: weather
-            )
-        }
+        weather: TodayWeather?,
+        profileHash: String
+    ) -> DailyVibeContent {
+        
+        return CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
+            from: natalChart,
+            progressedChart: progressedChart,
+            transits: transits,
+            weather: weather,
+            profileHash: profileHash
+        )
+    }
     
+    /*
     /// Generate a complete interpretation including both blueprint and daily vibe
     /// - Parameters:
     ///   - natalChart: The base natal chart
@@ -58,9 +55,10 @@ extension NatalChartManager {
                 from: natalChart,
                 progressedChart: progressedChart,
                 transits: transits,
-                weather: weather
+                weather: weather,
             )
         }
+     */
     
     /// Generate a custom style guidance for a specific situation
     /// - Parameters:

@@ -23,70 +23,132 @@ class TarotCardSelector {
     ///   - tokens: StyleTokens from SemanticTokenGenerator
     ///   - theme: Optional CompositeTheme name for additional context
     ///   - vibeBreakdown: Optional VibeBreakdown for energy alignment
+    ///   - seed: Optional daily seed for deterministic variation
     /// - Returns: The best matching TarotCard or nil if no good match
     static func selectCard(
         for tokens: [StyleToken],
         theme: String? = nil,
-        vibeBreakdown: VibeBreakdown? = nil
+        vibeBreakdown: VibeBreakdown? = nil,
+        seed: Int? = nil
     ) -> TarotCard? {
-        
+
         print("\n🔮 TAROT CARD SELECTION 🔮")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-        
-        // Load deck if needed
+
         loadTarotDeckIfNeeded()
-        
         guard !tarotDeck.isEmpty else {
             print("❌ Failed to load Tarot deck")
             return nil
         }
-        
+
         print("📊 Input Analysis:")
         print("  • Tokens: \(tokens.count)")
-        if let theme = theme {
-            print("  • Theme: \(theme)")
-        }
-        if let vibeBreakdown = vibeBreakdown {
-            print("  • Dominant Energy: \(vibeBreakdown.dominantEnergy ?? "Unknown")")
-        }
-        
-        // Get last selected card to avoid repetition
+        if let theme = theme { print("  • Theme: \(theme)") }
+        if let vibeBreakdown = vibeBreakdown { print("  • Dominant Energy: \(vibeBreakdown.dominantEnergy ?? "Unknown")") }
+        if let seed = seed { print("  • Daily Seed: \(seed)") }
+
+        // Last selected (legacy single-card memory; we'll improve this separately)
         let lastSelectedCard = getLastSelectedCard()
-        
-        // Calculate scores for all cards
-        let scoredCards = calculateCardScores(tokens: tokens, theme: theme, vibeBreakdown: vibeBreakdown, lastSelectedCard: lastSelectedCard)
-        
-        // Debug: Show top scoring cards
-        let topCards = scoredCards.prefix(5)
-        print("\n🏆 Top 5 Scoring Cards:")
-        for (index, (card, score)) in topCards.enumerated() {
-            print("  \(index + 1). \(card.displayName) - Score: \(String(format: "%.2f", score)) (\(card.category))")
+
+        // Apply seeded shuffle to deck ordering for this day/profile
+        var deckToScore = tarotDeck
+        if let dailySeed = seed {
+            deckToScore = tarotDeck.shuffled(seed: dailySeed)
+            print("  • Applied daily shuffle (seed: \(dailySeed))")
         }
-        
-        // Select the best card
-        guard let bestCard = scoredCards.first?.0, scoredCards.first?.1 ?? 0 > 0 else {
+
+        // Score cards
+        let scoredCards = calculateCardScores(
+            tokens: tokens,
+            theme: theme,
+            vibeBreakdown: vibeBreakdown,
+            lastSelectedCard: lastSelectedCard,
+            deck: deckToScore
+        )
+
+        // Seed-based tie handling for near-equal scores
+        let finalScoredCards = applySeedTieBreaking(scoredCards: scoredCards, seed: seed)
+
+        // Debug top 5
+        let topCards = finalScoredCards.prefix(5)
+        print("\n🏆 Top 5 Scoring Cards:")
+        for (i, entry) in topCards.enumerated() {
+            let (card, score) = entry
+            print("  \(i + 1). \(card.displayName) - Score: \(String(format: "%.2f", score)) (\(card.category))")
+        }
+
+        guard let best = finalScoredCards.first, best.1 > 0 else {
             print("❌ No suitable card found (all scores were 0)")
             return getFallbackCard(for: vibeBreakdown)
         }
-        
-        let bestScore = scoredCards.first?.1 ?? 0
+
+        let bestCard = best.0
+        let bestScore = best.1
+
         print("\n✨ Selected Card: \(bestCard.displayName)")
         print("  • Category: \(bestCard.category)")
         print("  • Score: \(String(format: "%.2f", bestScore))")
         print("  • Keywords: \(bestCard.keywords.prefix(5).joined(separator: ", "))")
-        if let dominantEnergy = bestCard.dominantEnergy {
-            print("  • Dominant Energy: \(dominantEnergy)")
-        }
-        
-        // Show match analysis
+        if let dominantEnergy = bestCard.dominantEnergy { print("  • Dominant Energy: \(dominantEnergy)") }
+
         analyzeCardMatch(card: bestCard, tokens: tokens, vibeBreakdown: vibeBreakdown)
-        
-        // Store selected card to avoid repetition
+
+        // Persist last pick (existing behaviour)
         storeLastSelectedCard(bestCard.name)
-        
+
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
-        
         return bestCard
+    }
+    
+    // MARK: - Seed-Based Tie Breaking
+
+    /// Apply seed-based tie-breaking for cards with similar scores
+    private static func applySeedTieBreaking(
+        scoredCards: [(TarotCard, Double)],
+        seed: Int?
+    ) -> [(TarotCard, Double)] {
+
+        guard let dailySeed = seed, !scoredCards.isEmpty else { return scoredCards }
+
+        // Cards within 10% of the current group head are considered a tie group.
+        let similarityThreshold: Double = 0.10
+
+        var result: [(TarotCard, Double)] = []
+        var currentGroup: [(TarotCard, Double)] = []
+
+        for (card, score) in scoredCards {
+            if currentGroup.isEmpty {
+                currentGroup.append((card, score))
+            } else {
+                let groupScore = currentGroup.first!.1
+                let scoreDifference = abs(score - groupScore) / max(groupScore, 0.001)
+
+                if scoreDifference <= similarityThreshold {
+                    // Within threshold - add to current group
+                    currentGroup.append((card, score))
+                } else {
+                    // Outside threshold - process current group and start new one
+                    if currentGroup.count > 1 {
+                        // Multiple cards tied - shuffle them by seed
+                        let shuffledGroup = currentGroup.shuffled(seed: dailySeed + currentGroup.count)
+                        result.append(contentsOf: shuffledGroup)
+                    } else {
+                        result.append(contentsOf: currentGroup)
+                    }
+                    currentGroup = [(card, score)]
+                }
+            }
+        }
+
+        // Process final group
+        if currentGroup.count > 1 {
+            let shuffledGroup = currentGroup.shuffled(seed: dailySeed + currentGroup.count)
+            result.append(contentsOf: shuffledGroup)
+        } else {
+            result.append(contentsOf: currentGroup)
+        }
+
+        return result
     }
     
     /// Get top N card suggestions for testing/comparison
@@ -94,19 +156,35 @@ class TarotCardSelector {
     ///   - tokens: StyleTokens from SemanticTokenGenerator
     ///   - theme: Optional CompositeTheme name
     ///   - vibeBreakdown: Optional VibeBreakdown
+    ///   - seed: Optional daily seed for deterministic variation
     ///   - count: Number of top cards to return (default: 3)
     /// - Returns: Array of TarotCards sorted by score
     static func getTopCardSuggestions(
         for tokens: [StyleToken],
         theme: String? = nil,
         vibeBreakdown: VibeBreakdown? = nil,
+        seed: Int? = nil,
         count: Int = 3
     ) -> [TarotCard] {
-        
+
         loadTarotDeckIfNeeded()
-        
-        let scoredCards = calculateCardScores(tokens: tokens, theme: theme, vibeBreakdown: vibeBreakdown, lastSelectedCard: nil)
-        return Array(scoredCards.prefix(count).map { $0.0 })
+
+        var deckToScore = tarotDeck
+        if let dailySeed = seed {
+            deckToScore = tarotDeck.shuffled(seed: dailySeed)
+        }
+
+        let scoredCards = calculateCardScores(
+            tokens: tokens,
+            theme: theme,
+            vibeBreakdown: vibeBreakdown,
+            lastSelectedCard: nil,
+            deck: deckToScore
+        )
+
+        let finalScoredCards = applySeedTieBreaking(scoredCards: scoredCards, seed: seed)
+
+        return Array(finalScoredCards.prefix(count).map { $0.0 })
     }
     
     // MARK: - Private Methods
@@ -203,21 +281,28 @@ class TarotCardSelector {
     ///   - theme: Optional theme for bonus scoring
     ///   - vibeBreakdown: Optional energy breakdown for alignment
     ///   - lastSelectedCard: Last selected card name to avoid repetition
+    ///   - deck: The deck of cards to score (may be pre-shuffled)
     /// - Returns: Array of (TarotCard, Score) tuples sorted by score descending
     private static func calculateCardScores(
         tokens: [StyleToken],
         theme: String?,
         vibeBreakdown: VibeBreakdown?,
-        lastSelectedCard: String?
+        lastSelectedCard: String?,
+        deck: [TarotCard]
     ) -> [(TarotCard, Double)] {
-        
+
         var cardScores: [(TarotCard, Double)] = []
-        
-        for card in tarotDeck {
-            let score = card.calculateMatchScore(for: tokens, theme: theme, vibeBreakdown: vibeBreakdown, lastSelectedCardName: lastSelectedCard)
+
+        for card in deck {
+            let score = card.calculateMatchScore(
+                for: tokens,
+                theme: theme,
+                vibeBreakdown: vibeBreakdown,
+                lastSelectedCardName: lastSelectedCard
+            )
             cardScores.append((card, score))
         }
-        
+
         // Sort by score descending, then by priority for tie-breaking
         return cardScores.sorted { (first, second) in
             if first.1 == second.1 {

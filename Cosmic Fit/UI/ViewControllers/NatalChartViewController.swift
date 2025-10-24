@@ -378,11 +378,13 @@ final class NatalChartViewController: UIViewController {
         let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
         
         // Generate daily vibe content
-        let dailyVibeContent = NatalChartManager.shared.generateDailyVibeInterpretation(
-            for: natalChart,
+        let dailyVibeContent = CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
+            from: natalChart,
             progressedChart: progChart,
             transits: allTransits,
-            weather: todayWeather
+            weather: todayWeather,
+            profileHash: chartId,
+            date: Date()
         )
         
         // Save the generated content
@@ -425,7 +427,9 @@ final class NatalChartViewController: UIViewController {
             from: natalChart,
             progressedChart: progChart,
             transits: allTransits,
-            weather: todayWeather
+            weather: todayWeather,
+            profileHash: chartId,
+            date: Date()
         )
         
         // Save the generated content
@@ -585,7 +589,9 @@ final class NatalChartViewController: UIViewController {
             from: natalChart,
             progressedChart: progChart,
             transits: allTransits,
-            weather: todayWeather
+            weather: todayWeather,
+            profileHash: chartId,
+            date: Date()
         )
         
         // Save the generated content

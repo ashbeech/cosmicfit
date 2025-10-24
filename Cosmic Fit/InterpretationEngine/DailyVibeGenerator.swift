@@ -16,6 +16,8 @@ class DailyVibeGenerator {
     ///   - transits: Array of transit aspects to natal chart
     ///   - weather: Optional current weather conditions
     ///   - moonPhase: Current lunar phase (0-360)
+    ///   - profileHash: User profile identifier for daily seed generation (can be empty)
+    ///   - date: Date for which to generate the vibe (defaults to today)
     ///   - weights: Weighting model to use for calculations
     /// - Returns: A DailyVibeContent with Style Brief text in Maria's voice
     static func generateDailyVibe(
@@ -24,8 +26,11 @@ class DailyVibeGenerator {
         transits: [[String: Any]],
         weather: TodayWeather?,
         moonPhase: Double,
-        weights: WeightingModel.Type = WeightingModel.self) -> DailyVibeContent {
-        
+        profileHash: String = "",
+        date: Date = Date(),
+        weights: WeightingModel.Type = WeightingModel.self
+    ) -> DailyVibeContent {
+
         print("\n🎯 DAILY VIBE GENERATOR - STYLE BRIEF FOCUS 🎯")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         print("🔄 STREAMLINED APPROACH:")
@@ -34,36 +39,75 @@ class DailyVibeGenerator {
         print("  • Process: Token analysis → Maria's actionable guidance")
         print("  • Output: Simplified DailyVibeContent with Style Brief")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+
+        // Debug inputs
+        debugLogInputs(
+            natal: natalChart,
+            progressed: progressedChart,
+            transits: transits,
+            weather: weather,
+            moonPhase: moonPhase
+        )
+
+        // Build a stable seed. Prefer provided profileHash; otherwise fall back to Sun sign.
+        let dailySeed: Int = {
+            if !profileHash.isEmpty {
+                return DailySeedGenerator.generateDailySeed(profileHash: profileHash, for: date)
+            } else {
+                // Fallback: derive from Sun sign + ascendant if no profileHash provided
+                let sunSign = natalChart.planets.first(where: { $0.name == "Sun" })?.zodiacSign ?? 0
+                let ascendantSign = CoordinateTransformations.decimalDegreesToZodiac(natalChart.ascendant).sign
+                let fallbackId = "sun_\(sunSign)_asc_\(ascendantSign)"
+                return DailySeedGenerator.generateDailySeed(profileHash: fallbackId, for: date)
+            }
+        }()
+        print("🎲 Generated daily seed: \(dailySeed)")
         
-        // Debug: Log input parameters
-        debugLogInputs(natal: natalChart, progressed: progressedChart, transits: transits, weather: weather, moonPhase: moonPhase)
-        
-        // Get all semantic tokens from interpretation engine
+        /*
+        // Build a stable seed. Prefer provided profileHash; otherwise derive from natal chart content.
+        let dailySeed: Int = {
+            if !profileHash.isEmpty {
+                return DailySeedGenerator.generateDailySeed(profileHash: profileHash, for: date)
+            } else {
+                // Derive a deterministic fingerprint from the natal chart planets that we know exist.
+                // Using planet name + zodiacSign keeps it stable and privacy-safe.
+                let planetFingerprint = natalChart.planets
+                    .map { "\($0.name):\($0.zodiacSign)" }
+                    .sorted()
+                    .joined(separator: "|")
+                let fallbackId = "pf_\(planetFingerprint)"
+                return DailySeedGenerator.generateDailySeed(profileHash: fallbackId, for: date)
+            }
+        }()
+        print("🎲 Generated daily seed: \(dailySeed)")
+         */
+
+
+        // Tokens
         let allTokens = SemanticTokenGenerator.generateDailyFitTokens(
             natal: natalChart,
             progressed: progressedChart,
             transits: transits,
             weather: weather
         )
-        
-        // Debug: Analyze token composition
+
         debugAnalyzeTokens(allTokens)
-        
-        // Generate all Daily System sections from tokens
+
+        // Style brief and breakdowns
         let styleBrief = generateMariaStyleBrief(from: allTokens)
         let vibeBreakdown = VibeBreakdownGenerator.generateVibeBreakdown(from: allTokens)
-        
         debugVibeBreakdownAnalysis(breakdown: vibeBreakdown, tokens: allTokens)
-        
-        // Generate Tarot card selection with keywords
+
+        // Tarot selection with daily seed
         let selectedTarotCard = TarotCardSelector.selectCard(
             for: allTokens,
             theme: nil,
-            vibeBreakdown: vibeBreakdown
+            vibeBreakdown: vibeBreakdown,
+            seed: dailySeed
         )
         let tarotKeywords = generateTarotKeywords(from: selectedTarotCard, tokens: allTokens)
-        
-        // Generate comprehensive sections
+
+        // Remaining sections (unchanged)
         let textiles = generateTextilesSection(from: allTokens)
         let colors = generateColorsSection(from: allTokens)
         let colorScores = ColorScoring.calculateColorScores(from: allTokens)
@@ -72,7 +116,7 @@ class DailyVibeGenerator {
         let accessories = generateAccessoriesSection(from: allTokens)
         let (layering, layeringScore) = generateLayeringSection(from: allTokens, weather: weather)
         let angularCurvyScore = StructuralAxes.calculateAngularCurvyScore(from: allTokens)
-        
+
         print("\n✨ COMPREHENSIVE DAILY SYSTEM GENERATED:")
         print("  Style Brief: \"\(styleBrief.prefix(50))...\"")
         print("  Dominant Energy: \(getDominantEnergyName(from: vibeBreakdown))")
@@ -84,8 +128,7 @@ class DailyVibeGenerator {
         }
         print("\n🎯 DAILY VIBE GENERATOR - COMPLETE")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
-        
-        // Return complete DailyVibeContent with all sections populated
+
         var dailyContent = DailyVibeContent()
         dailyContent.tarotCard = selectedTarotCard
         dailyContent.tarotKeywords = tarotKeywords
@@ -102,7 +145,7 @@ class DailyVibeGenerator {
         dailyContent.angularCurvyScore = angularCurvyScore
         dailyContent.temperature = weather?.temperature
         dailyContent.weatherCondition = weather?.condition
-        
+
         return dailyContent
     }
     

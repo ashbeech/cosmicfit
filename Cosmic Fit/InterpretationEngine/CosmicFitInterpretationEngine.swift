@@ -131,18 +131,23 @@ class CosmicFitInterpretationEngine {
         )
     }
     
-    /// Generate a daily vibe interpretation with unified debug/production support
+    /// Generate a daily vibe interpretation with daily seeding for variety
     /// - Parameters:
     ///   - natalChart: The base natal chart
     ///   - progressedChart: The current progressed chart
     ///   - transits: Array of transit aspects
     ///   - weather: Optional current weather conditions
+    ///   - profileHash: Stable user/profile identifier for daily seed generation
+    ///   - date: Target date (defaults to today)
     /// - Returns: A daily vibe content object with formatted sections
     static func generateDailyVibeInterpretation(
         from natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
         transits: [[String: Any]],
-        weather: TodayWeather?) -> DailyVibeContent {
+        weather: TodayWeather?,
+        profileHash: String,
+        date: Date = Date()
+    ) -> DailyVibeContent {
         
         // Unified debug/production logging
         DebugConfiguration.debugLog {
@@ -159,52 +164,39 @@ class CosmicFitInterpretationEngine {
             for (planet, count) in planetCounts.sorted(by: { $0.key < $1.key }) {
                 print("  - \(planet): \(count) aspects")
             }
-            
-            if let weather = weather {
-                print("\n🌤️ WEATHER INTEGRATION:")
-                print("Conditions: \(weather.condition)")
-                print("Temperature: \(weather.temperature)°C")
-                print("Humidity: \(weather.humidity)%")
-                print("Wind: \(weather.windKph) km/h")
-            }
         }
         
         // Production logging
         if !DebugConfiguration.isDebugEnabled {
-            print("\n☀️ GENERATING DAILY COSMIC VIBE ☀️")
-            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            print("\n🎯 DAILY VIBE GENERATOR")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         }
-            
-            // Calculate current lunar phase
-            let currentDate = Date()
-            let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
-            let lunarPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: currentJulianDay)
-
-            // Declare weights model
-            let weights = WeightingModel.self
-
-            // Use the existing DailyVibeGenerator implementation
-            let dailyVibeContent = DailyVibeGenerator.generateDailyVibe(
-                natalChart: natalChart,
-                progressedChart: progressedChart,
-                transits: transits,
-                weather: weather,
-                moonPhase: lunarPhase,
-                weights: weights
-            )
-
+        
+        // Calculate moon phase using existing helper
+        let moonPhase = calculateCurrentMoonPhase()
+        
+        // Generate daily vibe with seeding
+        let dailyVibe = DailyVibeGenerator.generateDailyVibe(
+            natalChart: natalChart,
+            progressedChart: progressedChart,
+            transits: transits,
+            weather: weather,
+            moonPhase: moonPhase,
+            profileHash: profileHash,
+            date: date
+        )
         
         DebugConfiguration.debugLog {
-            print("\n✅ Daily Vibe generation completed successfully!")
-            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+            print("✅ Daily vibe generated successfully with seed")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
         }
-
-        // Production logging
+        
         if !DebugConfiguration.isDebugEnabled {
-            print("✅ Daily Vibe generated successfully!")
+            print("✅ Daily vibe generated successfully")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
         }
-
-        return dailyVibeContent
+        
+        return dailyVibe
     }
     
     /// Generate a combined interpretation including both blueprint and daily vibe
@@ -213,50 +205,71 @@ class CosmicFitInterpretationEngine {
     ///   - progressedChart: The current progressed chart
     ///   - transits: Array of transit aspects
     ///   - weather: Optional current weather conditions
-    /// - Returns: A combined interpretation string
+    ///   - profileHash: Stable user/profile identifier for daily seed generation
+    ///   - date: Target date (defaults to today)
+    /// - Returns: A combined interpretation string with blueprint and daily vibe
     static func generateFullInterpretation(
         from natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
         transits: [[String: Any]],
-        weather: TodayWeather?) -> String {
+        weather: TodayWeather?,
+        profileHash: String,
+        date: Date = Date()
+    ) -> String {
 
+        print("\n📋 GENERATING FULL INTERPRETATION (Blueprint + Daily Vibe)")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        
+        // Generate blueprint (natal chart based, no seeding needed)
         let blueprint = generateBlueprintInterpretation(from: natalChart)
 
+        // Generate daily vibe WITH profileHash for proper seeding
         let dailyVibe = generateDailyVibeInterpretation(
             from: natalChart,
             progressedChart: progressedChart,
             transits: transits,
-            weather: weather
+            weather: weather,
+            profileHash: profileHash,
+            date: date
         )
 
+        // Format the date for display
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
-        let dateString = dateFormatter.string(from: Date())
+        dateFormatter.timeZone = TimeZone.current
+        dateFormatter.locale = Locale(identifier: "en_GB")
+        let dateString = dateFormatter.string(from: date)
 
-        return """
+        // Combine both interpretations into formatted output
+        let fullInterpretation = """
         YOUR COSMIC BLUEPRINT
         ====================
-
+        
         \(blueprint.stitchedParagraph)
-
-
+        
+        
         TODAY'S COSMIC VIBE (\(dateString))
         ====================
-
+        
         \(dailyVibe.styleBrief)
-
+        
         TEXTILES: \(dailyVibe.textiles)
-
+        
         COLORS: \(dailyVibe.colors)
-
+        
         PATTERNS: \(dailyVibe.patterns)
-
+        
         SHAPE: \(dailyVibe.shape)
-
+        
         ACCESSORIES: \(dailyVibe.accessories)
-
+        
         \(dailyVibe.styleBrief)
         """
+        
+        print("✅ Full interpretation generated successfully")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+        
+        return fullInterpretation
     }
     
     // MARK: - Specialized Section Generation Methods
@@ -403,13 +416,16 @@ extension CosmicFitInterpretationEngine {
         from natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
         transits: [[String: Any]],
-        weather: TodayWeather?) -> DailyVibeContent {
+        weather: TodayWeather?,
+        profileHash: String
+    ) -> DailyVibeContent {
         
         return generateDailyVibeInterpretation(
             from: natalChart,
             progressedChart: progressedChart,
             transits: transits,
-            weather: weather
+            weather: weather,
+            profileHash: profileHash
         )
     }
     
@@ -418,13 +434,16 @@ extension CosmicFitInterpretationEngine {
         from natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
         transits: [[String: Any]],
-        weather: TodayWeather?) -> String {
+        weather: TodayWeather?,
+        profileHash: String
+    ) -> String {
         
         return generateFullInterpretation(
             from: natalChart,
             progressedChart: progressedChart,
             transits: transits,
-            weather: weather
+            weather: weather,
+            profileHash: profileHash
         )
     }
 }
