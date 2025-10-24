@@ -561,7 +561,18 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
                 for: Date()
                ) {
                 self.dailyVibeContent = existingContent
-                print("📱 Loaded existing daily fit for user \(userId) today")
+                
+                // PART 5: Update recency tracking for today's cached card
+                if let cachedCard = existingContent.tarotCard {
+                    TarotRecencyTracker.shared.storeCardSelection(
+                        cachedCard.name,
+                        profileHash: userId,
+                        date: Date()
+                    )
+                    print("📱 Loaded existing daily fit for user \(userId) today and updated recency tracking")
+                } else {
+                    print("📱 Loaded existing daily fit for user \(userId) today")
+                }
             } else {
                 // Check legacy storage (for backwards compatibility)
                 if let existingContent = DailyVibeStorage.shared.loadDailyVibe(
@@ -569,6 +580,16 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
                     chartIdentifier: chartId
                 ) {
                     self.dailyVibeContent = existingContent
+                    
+                    // Update recency tracking if we have a profile
+                    if let userId = userProfile?.id, let cachedCard = existingContent.tarotCard {
+                        TarotRecencyTracker.shared.storeCardSelection(
+                            cachedCard.name,
+                            profileHash: userId,
+                            date: Date()
+                        )
+                    }
+                    
                     print("✅ Loaded existing daily vibe for today (legacy storage)")
                 } else {
                     print("🎯 Generating new Daily Fit content for today...")

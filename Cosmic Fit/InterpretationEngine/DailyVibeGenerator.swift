@@ -104,7 +104,8 @@ class DailyVibeGenerator {
             for: allTokens,
             theme: nil,
             vibeBreakdown: vibeBreakdown,
-            seed: dailySeed
+            seed: dailySeed,
+            profileHash: profileHash
         )
         let tarotKeywords = generateTarotKeywords(from: selectedTarotCard, tokens: allTokens)
         

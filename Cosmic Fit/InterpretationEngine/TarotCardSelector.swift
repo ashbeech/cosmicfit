@@ -23,13 +23,15 @@ class TarotCardSelector {
     ///   - tokens: StyleTokens from SemanticTokenGenerator
     ///   - theme: Optional CompositeTheme name for additional context
     ///   - vibeBreakdown: Optional VibeBreakdown for energy alignment
-    ///   - seed: Optional daily seed for deterministic variation (uses current date if nil)
+    ///   - seed: Optional daily seed for deterministic variation
+    ///   - profileHash: User profile identifier for recency tracking
     /// - Returns: The best matching TarotCard or nil if no good match
     static func selectCard(
         for tokens: [StyleToken],
         theme: String? = nil,
         vibeBreakdown: VibeBreakdown? = nil,
-        seed: Int? = nil
+        seed: Int? = nil,
+        profileHash: String? = nil
     ) -> TarotCard? {
         
         print("\n🔮 TAROT CARD SELECTION 🔮")
@@ -54,15 +56,22 @@ class TarotCardSelector {
         if let seed = seed {
             print("  • Daily Seed: \(seed)")
         }
-        
-        // Get last selected card to avoid repetition
-        let lastSelectedCard = getLastSelectedCard()
+        if let profileId = profileHash {
+            print("  • Profile Hash: \(profileId.prefix(8))...")
+            
+            // Migrate old storage if needed
+            TarotRecencyTracker.shared.migrateOldStorage(profileHash: profileId)
+            
+            // Show recent history
+            TarotRecencyTracker.shared.debugShowHistory(profileHash: profileId)
+            
+            // Clean up old entries
+            TarotRecencyTracker.shared.cleanupOldEntries(profileHash: profileId)
+        }
         
         // Apply daily seed variation if provided
         var deckToScore = tarotDeck
         if let dailySeed = seed {
-            // Deterministic shuffle based on daily seed
-            // This ensures different ordering each day but stable within the same day
             deckToScore = tarotDeck.shuffled(seed: dailySeed)
             print("  • Applied daily shuffle (seed: \(dailySeed))")
         }
@@ -72,7 +81,7 @@ class TarotCardSelector {
             tokens: tokens,
             theme: theme,
             vibeBreakdown: vibeBreakdown,
-            lastSelectedCard: lastSelectedCard,
+            profileHash: profileHash,
             deck: deckToScore
         )
         
@@ -104,8 +113,17 @@ class TarotCardSelector {
         // Show match analysis
         analyzeCardMatch(card: bestCard, tokens: tokens, vibeBreakdown: vibeBreakdown)
         
-        // Store selected card to avoid repetition
-        storeLastSelectedCard(bestCard.name)
+        // Store selected card using new recency tracker
+        if let profileId = profileHash {
+            TarotRecencyTracker.shared.storeCardSelection(
+                bestCard.name,
+                profileHash: profileId,
+                date: Date()
+            )
+        } else {
+            // Fallback to old method for backwards compatibility
+            storeLastSelectedCard(bestCard.name)
+        }
         
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
         
@@ -178,6 +196,7 @@ class TarotCardSelector {
     ///   - theme: Optional CompositeTheme name
     ///   - vibeBreakdown: Optional VibeBreakdown
     ///   - seed: Optional daily seed for deterministic variation
+    ///   - profileHash: User profile identifier for recency tracking
     ///   - count: Number of top cards to return (default: 3)
     /// - Returns: Array of TarotCards sorted by score
     static func getTopCardSuggestions(
@@ -185,6 +204,7 @@ class TarotCardSelector {
         theme: String? = nil,
         vibeBreakdown: VibeBreakdown? = nil,
         seed: Int? = nil,
+        profileHash: String? = nil,
         count: Int = 3
     ) -> [TarotCard] {
         
@@ -199,7 +219,7 @@ class TarotCardSelector {
             tokens: tokens,
             theme: theme,
             vibeBreakdown: vibeBreakdown,
-            lastSelectedCard: nil,
+            profileHash: profileHash,
             deck: deckToScore
         )
         
@@ -301,14 +321,14 @@ class TarotCardSelector {
     ///   - tokens: StyleTokens to match against
     ///   - theme: Optional theme for bonus scoring
     ///   - vibeBreakdown: Optional energy breakdown for alignment
-    ///   - lastSelectedCard: Last selected card name to avoid repetition
+    ///   - profileHash: User profile identifier for recency tracking
     ///   - deck: The deck of cards to score (may be pre-shuffled)
     /// - Returns: Array of (TarotCard, Score) tuples sorted by score descending
     private static func calculateCardScores(
         tokens: [StyleToken],
         theme: String?,
         vibeBreakdown: VibeBreakdown?,
-        lastSelectedCard: String?,
+        profileHash: String?,
         deck: [TarotCard]
     ) -> [(TarotCard, Double)] {
         
@@ -319,7 +339,7 @@ class TarotCardSelector {
                 for: tokens,
                 theme: theme,
                 vibeBreakdown: vibeBreakdown,
-                lastSelectedCardName: lastSelectedCard
+                profileHash: profileHash
             )
             cardScores.append((card, score))
         }
@@ -642,6 +662,7 @@ class TarotCardSelector {
     /// Store the selected card name to avoid repetition
     /// - Parameter cardName: Name of the selected card
     private static func storeLastSelectedCard(_ cardName: String) {
+        //UserDefaults.standard.set(cardName, forKey: "LastTarot::\(profileHash)::\(yyyyMMdd)")
         UserDefaults.standard.set(cardName, forKey: "LastSelectedTarotCard")
     }
     

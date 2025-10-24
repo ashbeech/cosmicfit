@@ -79,71 +79,78 @@ struct TarotCard: Codable, Identifiable {
         return energyAffinity.max(by: { $0.value < $1.value })?.key
     }
     
-    /// Calculate match score against style tokens
+    /// Calculate match score for this card based on tokens and theme
+    /// - Parameters:
+    ///   - tokens: Array of StyleTokens to match against
+    ///   - theme: Optional theme name for bonus matching
+    ///   - vibeBreakdown: Optional VibeBreakdown for energy alignment
+    ///   - profileHash: User profile identifier for recency tracking
+    /// - Returns: Total match score (higher is better)
     func calculateMatchScore(
         for tokens: [StyleToken],
-        theme: String? = nil,
-        vibeBreakdown: VibeBreakdown? = nil,
-        lastSelectedCardName: String? = nil
+        theme: String?,
+        vibeBreakdown: VibeBreakdown?,
+        profileHash: String?
     ) -> Double {
-        var score = 0.0
         
-        // 1. Enhanced keyword matching with token override system
-        let tokenNames = Set(tokens.map { $0.name.lowercased() })
-        let keywordMatches = keywords.filter { tokenNames.contains($0.lowercased()) }
+        var score: Double = 0.0
         
-        for match in keywordMatches {
-            // Find the matching token to get its weight
-            if let matchingToken = tokens.first(where: { $0.name.lowercased() == match.lowercased() }) {
+        // 1. Token keyword matching (primary scoring mechanism)
+        for token in tokens {
+            // Check if any of this card's keywords match the token name
+            let tokenLower = token.name.lowercased()
+            let matchingKeywords = keywords.filter { $0.lowercased().contains(tokenLower) || tokenLower.contains($0.lowercased()) }
+            
+            if !matchingKeywords.isEmpty {
                 // Apply weight dampening to prevent over-indexing on high-weight tokens
-                let effectiveWeight = pow(matchingToken.weight, 0.9)
-                
-                // Use blended affinity scoring for more nuanced token matching
-                let blendedAffinity = TokenEnergyOverrides.calculateBlendedAffinity(
-                    for: matchingToken.name, 
-                    with: self
-                )
-                
-                // Combine traditional scoring with blended affinity
-                let traditionalScore = effectiveWeight * 2.0
-                let blendedScore = effectiveWeight * blendedAffinity * 3.0 // Higher multiplier for nuanced matching
-                
-                score += max(traditionalScore, blendedScore) // Use the better of the two approaches
-            } else {
-                score += 1.0 // Fallback if token not found
+                let effectiveWeight = pow(token.weight, 0.9)
+                score += effectiveWeight * 2.0
             }
         }
         
-        // 2. Theme matching (moderate importance)
-        if let theme = theme {
-            let themeMatches = themes.filter { $0.lowercased().contains(theme.lowercased()) || 
-                                             theme.lowercased().contains($0.lowercased()) }
-            score += Double(themeMatches.count) * 1.5
+        // 2. Theme matching (contextual bonus)
+        if let themeName = theme {
+            let themeLower = themeName.lowercased()
+            for cardTheme in themes {
+                if cardTheme.lowercased().contains(themeLower) || themeLower.contains(cardTheme.lowercased()) {
+                    score += 1.5
+                }
+            }
         }
         
-        // 3. Energy affinity matching (contextual bonus)
-        if let vibeBreakdown = vibeBreakdown {
-            let energyScores = [
-                ("classic", vibeBreakdown.classic),
-                ("playful", vibeBreakdown.playful),
-                ("romantic", vibeBreakdown.romantic),
-                ("utility", vibeBreakdown.utility),
-                ("drama", vibeBreakdown.drama),
-                ("edge", vibeBreakdown.edge)
+        // 3. Energy affinity alignment (secondary influence)
+        if let vibe = vibeBreakdown {
+            let energyMap: [(String, Int)] = [
+                ("classic", vibe.classic),
+                ("playful", vibe.playful),
+                ("romantic", vibe.romantic),
+                ("utility", vibe.utility),
+                ("drama", vibe.drama),
+                ("edge", vibe.edge)
             ]
             
-            for (energyName, energyPoints) in energyScores {
-                let affinity = energyAffinity[energyName] ?? 0.0
-                score += Double(energyPoints) * affinity * 0.3 // Energy alignment bonus
+            for (energyName, energyPoints) in energyMap {
+                if let affinity = energyAffinity[energyName], energyPoints > 0 {
+                    score += Double(energyPoints) * affinity * 0.3
+                }
             }
         }
         
         // 4. Priority bonus for tie-breaking
         score += priority * 0.5
         
-        // 5. Redundancy penalty - discourage repeating recent cards
-        if let lastCard = lastSelectedCardName, name.lowercased() == lastCard.lowercased() {
-            score *= 0.7 // 30% penalty for repeat selection
+        // 5. NEW: Apply decay penalty based on recent selections
+        if let profileId = profileHash {
+            let decayMultiplier = TarotRecencyTracker.shared.calculateDecayPenalty(
+                for: name,
+                profileHash: profileId
+            )
+            
+            if decayMultiplier < 1.0 {
+                let penaltyPercent = (1.0 - decayMultiplier) * 100
+                print("  ⚠️ Applying \(String(format: "%.0f", penaltyPercent))% decay penalty to '\(name)'")
+                score *= decayMultiplier
+            }
         }
         
         return score

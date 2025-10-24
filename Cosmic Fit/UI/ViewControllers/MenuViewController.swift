@@ -297,8 +297,7 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
     @objc private func faqsButtonTapped() {
         print("✅ FAQs tapped - navigating to FAQ page")
         
-        // Get reference to presenting VC before dismissing
-        guard let presentingVC = self.presentingViewController else {
+        guard self.presentingViewController != nil else {
             print("❌ No presenting view controller")
             return
         }
