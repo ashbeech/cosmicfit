@@ -1137,7 +1137,71 @@ class DailyFitViewController: UIViewController {
             return
         }
         
-        navigationController?.pushViewController(originalChartVC, animated: true)
+        // Print debug information to console
+        print("\n🔮 DEBUG CHART BUTTON TAPPED 🔮")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        
+        // Print daily vibe content info
+        if let dailyVibe = dailyVibeContent {
+            print("📊 DAILY VIBE DATA:")
+            print("• Keywords: \(dailyVibe.tarotKeywords)")
+            print("• Style Brief: \(dailyVibe.styleBrief.prefix(100))...")
+            
+            if let tarotCard = dailyVibe.tarotCard {
+                print("• Card: \(tarotCard.displayName)")
+                print("• Card Description: \(tarotCard.description)")
+            } else {
+                print("• Card: None selected")
+            }
+            
+            print("\n🎨 VIBE BREAKDOWN:")
+            let vibeBreakdown = dailyVibe.vibeBreakdown
+            print("• Classic: \(vibeBreakdown.classic)")
+            print("• Playful: \(vibeBreakdown.playful)")
+            print("• Romantic: \(vibeBreakdown.romantic)")
+            print("• Utility: \(vibeBreakdown.utility)")
+            print("• Drama: \(vibeBreakdown.drama)")
+            print("• Edge: \(vibeBreakdown.edge)")
+            
+            print("\n🌈 COLOR SCORES:")
+            let colorScores = dailyVibe.colorScores
+            print("• Darkness: \(colorScores.darkness)/10")
+            print("• Vibrancy: \(colorScores.vibrancy)/10")
+            print("• Contrast: \(colorScores.contrast)/10")
+            
+            print("\n📐 STRUCTURAL AXES:")
+            print("• Angular/Curvy: \(dailyVibe.angularCurvyScore.score)/10")
+            print("• Layering: \(dailyVibe.layeringScore)/10")
+            
+            if let temp = dailyVibe.temperature, let condition = dailyVibe.weatherCondition {
+                print("\n🌤 WEATHER CONTEXT:")
+                print("• Temperature: \(String(format: "%.1f", temp))°C")
+                print("• Condition: \(condition)")
+            }
+        }
+        
+        print("\n🌟 Navigating to Full Natal Chart with Debug Menu...")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+        
+        // Find the tab bar controller in the view hierarchy
+        var currentParent: UIViewController? = parent
+        while currentParent != nil {
+            if let tabBarController = currentParent as? CosmicFitTabBarController {
+                // Wrap the chart view controller in a GenericDetailViewController
+                let detailVC = GenericDetailViewController(contentViewController: originalChartVC)
+                
+                // Present using the tab bar's presentation system
+                tabBarController.presentDetailViewController(detailVC, animated: true)
+                return
+            }
+            currentParent = currentParent?.parent
+        }
+        
+        // Fallback: if no tab bar controller found, present modally
+        print("⚠️ No tab bar controller found - presenting modally")
+        let navController = UINavigationController(rootViewController: originalChartVC)
+        navController.modalPresentationStyle = .fullScreen
+        present(navController, animated: true)
     }
 }
 

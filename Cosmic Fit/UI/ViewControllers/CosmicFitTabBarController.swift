@@ -693,6 +693,9 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
             timeZone: timeZone ?? TimeZone.current
         )
         
+        // CRITICAL: Add debug menu options to enable debug functionality
+        debugChartVC.addDebugMenuOptions()
+        
         return debugChartVC
     }
     
