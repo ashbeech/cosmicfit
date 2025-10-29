@@ -55,31 +55,31 @@ class TransitWeightCalculator {
         let adjustedWeight = baseWeight * contextMultiplier * fashionRelevanceScore
         let finalWeight = adjustedWeight + sensitivityBonus
         
-        // Apply minimum threshold - transits below 0.5 are considered background noise
-        return finalWeight >= 0.5 ? finalWeight : 0.0
+        // CRITICAL FIX: Lower threshold to 0.3 instead of 0.5 to capture more transits
+        return finalWeight >= 0.3 ? finalWeight : 0.0
     }
     
     /// Get weight multiplier based on aspect type and orb
     private static func getAspectWeight(aspectType: String, orb: Double) -> Double {
-        // Professional fashion-focused aspect weights (strengthened for daily variety)
+        // ENHANCED: Increased all base weights for better daily variation
         var baseWeight: Double
         switch aspectType {
         case "Conjunction":
-            baseWeight = 2.5  // Increased for fashion impact
+            baseWeight = 3.0  // Increased from 2.5
         case "Opposition":
-            baseWeight = 2.0  // Increased for daily tension/balance
+            baseWeight = 2.5  // Increased from 2.0
         case "Square":
-            baseWeight = 2.0  // Increased for dynamic styling challenges
+            baseWeight = 2.5  // Increased from 2.0
         case "Trine":
-            baseWeight = 1.5  // Increased for harmonious daily flow
+            baseWeight = 2.0  // Increased from 1.5
         case "Sextile":
-            baseWeight = 1.2  // Increased for styling opportunities
+            baseWeight = 1.5  // Increased from 1.2
         case "Quincunx", "Inconjunct":
-            baseWeight = 0.8  // Increased for adjustment styling
+            baseWeight = 1.0  // Increased from 0.8
         case "Semisextile", "Semisquare", "Sesquisquare", "Quintile", "BiQuintile":
-            baseWeight = 0.5  // Increased for subtle daily accents
+            baseWeight = 0.7  // Increased from 0.5
         default:
-            baseWeight = 0.2  // Increased background influence
+            baseWeight = 0.3  // Increased from 0.2
         }
         
         // Adjust for orb tightness
@@ -102,62 +102,48 @@ class TransitWeightCalculator {
     /// Get power score for transit planet
     private static func getTransitPlanetPower(transitPlanet: String) -> Double {
         switch transitPlanet {
-        case "Pluto":
-            return 1.0  // Maximum transformative power
-        case "Neptune":
-            return 0.9  // Dreams, ideals, dissolution
-        case "Uranus":
-            return 0.9  // Revolution, innovation, liberation
-        case "Saturn":
-            return 0.8  // Structure, discipline, limitation
-        case "Jupiter":
-            return 0.7  // Expansion, opportunity, abundance
-        case "Mars":
-            return 0.6  // Action, energy, conflict
-        case "Venus":
-            return 0.6  // Harmony, beauty, relationships
-        case "Sun":
-            return 0.5  // Identity, vitality, purpose
-        case "Mercury":
-            return 0.4  // Communication, thought, movement
-        case "Moon":
-            return 0.4  // Emotion, instinct, daily rhythms
-        case "Chiron":
-            return 0.3  // Healing, teaching, wound-wisdom
-        case "North Node", "South Node":
-            return 0.2  // Karmic direction, evolutionary pressure
-        default:
-            return 0.1  // Minor asteroids or other points
+        case "Pluto": return 1.5
+        case "Neptune": return 1.3
+        case "Uranus": return 1.3
+        case "Saturn": return 1.4
+        case "Jupiter": return 1.2
+        case "Mars": return 1.1
+        case "Venus": return 1.0
+        case "Mercury": return 0.9
+        case "Sun": return 0.9
+        case "Moon": return 1.0  // Moon is important for daily changes
+        default: return 0.5
         }
     }
     
-    /// Calculate fashion relevance score for planet combinations
-    internal static func getFashionRelevanceScore(
+    /// Get fashion relevance score for transit-natal combination
+    private static func getFashionRelevanceScore(
         transitPlanet: String,
         natalPlanet: String,
         aspectType: String
     ) -> Double {
         
-        // HIGH FASHION RELEVANCE COMBINATIONS
-        if (transitPlanet == "Venus" && ["Venus", "Moon", "Sun", "Ascendant"].contains(natalPlanet)) ||
-           (transitPlanet == "Mars" && ["Venus", "Mars", "Ascendant"].contains(natalPlanet)) ||
+        // HIGH FASHION RELEVANCE - Primary style indicators
+        if (transitPlanet == "Venus" && ["Moon", "Sun", "Ascendant", "Venus"].contains(natalPlanet)) ||
+           (transitPlanet == "Mars" && ["Venus", "Sun", "Ascendant", "Mars"].contains(natalPlanet)) ||
+           (transitPlanet == "Moon" && ["Venus", "Sun", "Ascendant", "Moon"].contains(natalPlanet)) ||
            (transitPlanet == "Neptune" && ["Venus", "Moon"].contains(natalPlanet)) ||
            (transitPlanet == "Uranus" && ["Venus", "Sun", "Ascendant"].contains(natalPlanet)) {
-            return 1.2  // Boost for highly fashion-relevant combinations
+            return 1.5  // INCREASED from 1.2
         }
         
         // MEDIUM FASHION RELEVANCE
         if (transitPlanet == "Jupiter" && ["Venus", "Sun"].contains(natalPlanet)) ||
            (transitPlanet == "Saturn" && ["Venus", "Mars", "Ascendant"].contains(natalPlanet)) ||
            (transitPlanet == "Pluto" && ["Venus", "Moon", "Sun"].contains(natalPlanet)) {
-            return 1.0  // Standard relevance
+            return 1.2  // INCREASED from 1.0
         }
         
         // MODERATE FASHION RELEVANCE
         if (transitPlanet == "Sun" && ["Venus", "Moon"].contains(natalPlanet)) ||
            (transitPlanet == "Moon" && ["Venus", "Sun"].contains(natalPlanet)) ||
            (transitPlanet == "Mercury" && ["Venus", "Ascendant"].contains(natalPlanet)) {
-            return 0.8  // Moderate relevance
+            return 1.0  // INCREASED from 0.8
         }
         
         // CHECK FOR STYLE-LESS COMBINATIONS
@@ -166,8 +152,8 @@ class TransitWeightCalculator {
             return 0.3  // Reduced relevance for non-style planets
         }
         
-        // DEFAULT FASHION RELEVANCE
-        return 0.6  // Default moderate relevance
+        // DEFAULT FASHION RELEVANCE - INCREASED
+        return 0.7  // INCREASED from 0.6
     }
     
     /// Determine if a transit meets the significance threshold
@@ -187,17 +173,18 @@ class TransitWeightCalculator {
             hitsSensitivePoint: PlanetPowerEvaluator.isSensitiveTarget(natalPlanet: natalPlanet)
         )
         
-        // Threshold for transit significance
-        return weight >= 0.5
+        // CRITICAL FIX: Lowered threshold from 0.5 to 0.3
+        return weight >= 0.3
     }
     
     /// Generate style influence category based on transit weight
     static func getStyleInfluenceCategory(weight: Double) -> StyleInfluenceCategory {
-        if weight >= 2.0 {
+        // CRITICAL FIX: Lowered thresholds to capture more transits
+        if weight >= 1.5 {  // Reduced from 2.0
             return .major
-        } else if weight >= 1.0 {
+        } else if weight >= 0.8 {  // Reduced from 1.0
             return .significant
-        } else if weight >= 0.5 {
+        } else if weight >= 0.4 {  // Reduced from 0.5
             return .moderate
         } else {
             return .minimal
@@ -205,16 +192,17 @@ class TransitWeightCalculator {
     }
     
     /// Get recommended token weight scaling based on influence category
+    /// CRITICAL FIX: Significantly increased all multipliers for better token generation
     static func getTokenWeightScale(for category: StyleInfluenceCategory) -> Double {
         switch category {
         case .major:
-            return 1.0  // Full weight
+            return 1.5  // INCREASED from 1.0 (50% boost)
         case .significant:
-            return 0.7  // Significant influence
+            return 1.2  // INCREASED from 0.7 (71% boost)
         case .moderate:
-            return 0.4  // Moderate influence
+            return 0.8  // INCREASED from 0.4 (100% boost)
         case .minimal:
-            return 0.1  // Background influence
+            return 0.3  // INCREASED from 0.1 (200% boost)
         }
     }
     
@@ -252,9 +240,8 @@ class TransitWeightCalculator {
 
 /// Categories of style influence strength
 enum StyleInfluenceCategory {
-    case major      // Weight >= 2.0: Dominant influence on style
-    case significant // Weight >= 1.0: Notable style shift
-    case moderate   // Weight >= 0.5: Subtle style adjustment
-    case minimal    // Weight < 0.5: Background influence only
+    case major      // Weight >= 1.5: Dominant influence on style (reduced from 2.0)
+    case significant // Weight >= 0.8: Notable style shift (reduced from 1.0)
+    case moderate   // Weight >= 0.4: Subtle style adjustment (reduced from 0.5)
+    case minimal    // Weight < 0.4: Background influence only
 }
-

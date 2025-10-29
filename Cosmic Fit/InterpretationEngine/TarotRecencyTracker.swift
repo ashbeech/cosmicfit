@@ -2,7 +2,7 @@
 //  TarotRecencyTracker.swift
 //  Cosmic Fit
 //
-//  Created for tracking recent Tarot card selections with decay penalties
+//  FINAL HYBRID VERSION - Hard-block recency with en_US_POSIX locale
 //
 
 import Foundation
@@ -13,9 +13,8 @@ class TarotRecencyTracker {
     // MARK: - Constants
     
     private static let RECENCY_WINDOW_DAYS = 7
-    private static let YESTERDAY_PENALTY_BASE = 0.12
-    private static let PENALTY_FLOOR = 0.55
-    private static let STORAGE_KEY_PREFIX = "LastTarot"
+    private static let COOLDOWN_DAYS = 3  // Hard-block period
+    private static let STORAGE_KEY_PREFIX = "tarot.recency"
     
     // MARK: - Singleton
     
@@ -29,8 +28,8 @@ class TarotRecencyTracker {
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
+        formatter.locale = Locale(identifier: "en_US_POSIX")  // CRITICAL: Consistent date formatting
         formatter.timeZone = TimeZone.current
-        formatter.locale = Locale(identifier: "en_GB")
         return formatter
     }()
     
@@ -48,7 +47,32 @@ class TarotRecencyTracker {
         // Update the list of dates for this profile
         updateProfileDateList(profileHash: profileHash, date: date)
         
-        print("💾 Stored Tarot selection: \(cardName) for profile \(profileHash) on \(dateFormatter.string(from: date))")
+        // CRITICAL: Force synchronization to ensure persistence
+        userDefaults.synchronize()
+        
+        // ENHANCED: Log exact stored key/value for verification
+        let storedValue = userDefaults.string(forKey: key) ?? "nil"
+        print("💾 STORED: key='\(key)' value='\(storedValue)'")
+    }
+    
+    /// Get cards within the cooldown period (3 days) - for hard-blocking
+    /// - Parameters:
+    ///   - profileHash: User profile identifier
+    ///   - referenceDate: Date to calculate from (defaults to today)
+    /// - Returns: Set of card names within cooldown period
+    func getCooldownCards(profileHash: String, referenceDate: Date = Date()) -> Set<String> {
+        let recentSelections = getRecentSelections(profileHash: profileHash, referenceDate: referenceDate)
+        
+        let cooldownCards = Set(recentSelections
+            .filter { $0.daysAgo <= Self.COOLDOWN_DAYS }
+            .map { $0.cardName })
+        
+        print("🚫 COOLDOWN CARDS (3-day block): \(cooldownCards.count) cards")
+        for cardName in cooldownCards {
+            print("   • \(cardName)")
+        }
+        
+        return cooldownCards
     }
     
     /// Get recent card selections for a profile
@@ -62,6 +86,8 @@ class TarotRecencyTracker {
         
         // Get dates for this profile
         let profileDates = getProfileDates(profileHash: profileHash)
+        
+        print("🔍 RECENCY CHECK: Found \(profileDates.count) stored dates for profile \(profileHash)")
         
         for date in profileDates {
             // Calculate days difference
@@ -78,6 +104,7 @@ class TarotRecencyTracker {
             let key = storageKey(profileHash: profileHash, date: date)
             if let cardName = userDefaults.string(forKey: key) {
                 recentSelections.append((cardName, daysDifference))
+                print("🔍   • Found: '\(cardName)' from \(daysDifference) days ago (key: '\(key)')")
             }
         }
         
@@ -85,53 +112,23 @@ class TarotRecencyTracker {
         return recentSelections.sorted { $0.1 < $1.1 }
     }
     
-    /// Calculate decay penalty multiplier for a card based on recency
-    /// - Parameters:
-    ///   - cardName: Name of the card to check
-    ///   - profileHash: User profile identifier
-    ///   - referenceDate: Date to calculate recency from (defaults to today)
-    /// - Returns: Penalty multiplier (0.0-1.0) to apply to card's score
-    func calculateDecayPenalty(
-        for cardName: String,
-        profileHash: String,
-        referenceDate: Date = Date()
-    ) -> Double {
-        
-        let recentSelections = getRecentSelections(profileHash: profileHash, referenceDate: referenceDate)
-        
-        // Find if this card was selected recently
-        guard let match = recentSelections.first(where: { $0.cardName.lowercased() == cardName.lowercased() }) else {
-            // Card not in recent history, no penalty
-            return 1.0
-        }
-        
-        let daysSince = match.daysAgo
-        
-        // Apply decay formula: score *= max(0.55, 1.0 - 0.12 * (8 - daysSince))
-        // Yesterday (1 day): 1.0 - 0.12 * 7 = 0.16 (84% penalty)
-        // 2 days ago: 1.0 - 0.12 * 6 = 0.28 (72% penalty)
-        // 3 days ago: 1.0 - 0.12 * 5 = 0.40 (60% penalty)
-        // 7 days ago: 1.0 - 0.12 * 1 = 0.88 (12% penalty)
-        
-        let rawMultiplier = 1.0 - (Self.YESTERDAY_PENALTY_BASE * Double(8 - daysSince))
-        let multiplier = max(Self.PENALTY_FLOOR, rawMultiplier)
-        
-        print("🔄 Decay penalty for '\(cardName)': \(daysSince) days ago → \(String(format: "%.2f", multiplier))x multiplier (\(String(format: "%.0f", (1.0 - multiplier) * 100))% penalty)")
-        
-        return multiplier
-    }
-    
-    /// Get the card selected yesterday for a profile (for backwards compatibility)
+    /// Get the card selected yesterday for a profile
     /// - Parameter profileHash: User profile identifier
     /// - Returns: Card name if one was selected yesterday, nil otherwise
-    func getYesterdaySelection(profileHash: String) -> String? {
+    func getYesterdayCard(profileHash: String) -> String? {
         let calendar = Calendar.current
         guard let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) else {
             return nil
         }
         
         let key = storageKey(profileHash: profileHash, date: yesterday)
-        return userDefaults.string(forKey: key)
+        let card = userDefaults.string(forKey: key)
+        
+        if let card = card {
+            print("📅 Yesterday's card: '\(card)'")
+        }
+        
+        return card
     }
     
     /// Clean up old entries beyond the recency window
@@ -160,6 +157,7 @@ class TarotRecencyTracker {
         // Update profile date list
         if removedCount > 0 {
             saveProfileDates(profileHash: profileHash, dates: remainingDates)
+            userDefaults.synchronize()
             print("🧹 Cleaned up \(removedCount) old Tarot entries for profile \(profileHash)")
         }
     }
@@ -178,6 +176,7 @@ class TarotRecencyTracker {
         let dateListKey = profileDateListKey(profileHash: profileHash)
         userDefaults.removeObject(forKey: dateListKey)
         
+        userDefaults.synchronize()
         print("🗑️ Cleared all Tarot recency data for profile \(profileHash)")
     }
     
@@ -191,17 +190,31 @@ class TarotRecencyTracker {
         
         if recentSelections.isEmpty {
             print("  No recent selections found")
+            
+            // Debug: Check if any keys exist at all
+            let allKeys = Array(userDefaults.dictionaryRepresentation().keys)
+            let relevantKeys = allKeys.filter { $0.contains(profileHash) && $0.contains("tarot.recency") }
+            
+            if !relevantKeys.isEmpty {
+                print("  ⚠️ Found \(relevantKeys.count) storage keys for this profile:")
+                for key in relevantKeys.prefix(3) {
+                    if let value = userDefaults.string(forKey: key) {
+                        print("     - \(key): \(value)")
+                    }
+                }
+            } else {
+                print("  ℹ️ No storage keys found matching this profile")
+            }
         } else {
             for (cardName, daysAgo) in recentSelections {
-                let penalty = calculateDecayPenalty(for: cardName, profileHash: profileHash)
-                let penaltyPercent = (1.0 - penalty) * 100
+                let cooldownStatus = daysAgo <= Self.COOLDOWN_DAYS ? " [BLOCKED]" : ""
                 
                 if daysAgo == 0 {
-                    print("  • TODAY: \(cardName)")
+                    print("  • TODAY: \(cardName)\(cooldownStatus)")
                 } else if daysAgo == 1 {
-                    print("  • Yesterday: \(cardName) (penalty: \(String(format: "%.0f", penaltyPercent))%)")
+                    print("  • Yesterday: \(cardName)\(cooldownStatus)")
                 } else {
-                    print("  • \(daysAgo) days ago: \(cardName) (penalty: \(String(format: "%.0f", penaltyPercent))%)")
+                    print("  • \(daysAgo) days ago: \(cardName)\(cooldownStatus)")
                 }
             }
         }
@@ -212,14 +225,15 @@ class TarotRecencyTracker {
     // MARK: - Private Methods
     
     /// Generate storage key for a specific profile and date
+    /// Format: "tarot.recency.{profileHash}.{yyyy-MM-dd}"
     private func storageKey(profileHash: String, date: Date) -> String {
         let dateString = dateFormatter.string(from: date)
-        return "\(Self.STORAGE_KEY_PREFIX)::\(profileHash)::\(dateString)"
+        return "\(Self.STORAGE_KEY_PREFIX).\(profileHash).\(dateString)"
     }
     
     /// Generate key for profile date list
     private func profileDateListKey(profileHash: String) -> String {
-        return "\(Self.STORAGE_KEY_PREFIX)::Dates::\(profileHash)"
+        return "\(Self.STORAGE_KEY_PREFIX).dates.\(profileHash)"
     }
     
     /// Get list of dates for a profile
@@ -237,6 +251,7 @@ class TarotRecencyTracker {
         let key = profileDateListKey(profileHash: profileHash)
         let dateStrings = dates.map { dateFormatter.string(from: $0) }
         userDefaults.set(dateStrings, forKey: key)
+        userDefaults.synchronize()
     }
     
     /// Update the date list for a profile to include a new date
@@ -272,6 +287,29 @@ extension TarotRecencyTracker {
             
             // Remove old key
             userDefaults.removeObject(forKey: "LastSelectedTarotCard")
+            userDefaults.synchronize()
+        }
+        
+        // Also migrate any old "LastTarot::" prefixed keys
+        let allKeys = Array(userDefaults.dictionaryRepresentation().keys)
+        let oldFormatKeys = allKeys.filter { $0.hasPrefix("LastTarot::") && $0.contains(profileHash) }
+        
+        for oldKey in oldFormatKeys {
+            if let cardName = userDefaults.string(forKey: oldKey) {
+                // Extract date from old key format if possible
+                let components = oldKey.components(separatedBy: "::")
+                if components.count >= 3, let date = dateFormatter.date(from: components[2]) {
+                    storeCardSelection(cardName, profileHash: profileHash, date: date)
+                    print("🔄 Migrated old format key '\(oldKey)' to new format")
+                }
+            }
+            
+            // Remove old key
+            userDefaults.removeObject(forKey: oldKey)
+        }
+        
+        if !oldFormatKeys.isEmpty {
+            userDefaults.synchronize()
         }
     }
 }

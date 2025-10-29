@@ -67,7 +67,6 @@ struct SeededRandomGenerator: RandomNumberGenerator {
 
     init(seed: Int) {
         self.state = UInt64(bitPattern: Int64(seed))
-        // mix bits
         self.state &*= 6364136223846793005
         self.state &+= 1442695040888963407
     }

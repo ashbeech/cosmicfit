@@ -1624,71 +1624,105 @@ class SemanticTokenGenerator {
     
     /// Generate enhanced weather tokens for meaningful daily variation
     static func generateWeatherTokens(weather: TodayWeather?) -> [StyleToken] {
-        guard let weather = weather else { 
-            // Return minimal fallback tokens to prevent 0% weather influence
-            return [
-                StyleToken(name: "adaptable", type: "structure", weight: 0.4, originType: .weather),
-                StyleToken(name: "versatile", type: "expression", weight: 0.3, originType: .weather)
-            ]
-        }
-        
-        var tokens: [StyleToken] = []
-        
-        // Base weight for weather influence (reduced to prevent excessive stacking)
-        let baseWeatherWeight = WeightingModel.DailyFit.weatherWeight * 1.5
-        let tempWeight = calculateTemperatureWeight(temp: weather.temperature)
-        
-        // TEMPERATURE INFLUENCE - Enhanced for daily variation
-        if weather.temperature > 25 { // Hot weather
-            tokens.append(StyleToken(name: "breathable", type: "fabric", weight: tempWeight * baseWeatherWeight * 1.5, originType: .weather))
-            tokens.append(StyleToken(name: "lightweight", type: "structure", weight: tempWeight * baseWeatherWeight * 1.2, originType: .weather))
-            tokens.append(StyleToken(name: "flowing", type: "structure", weight: tempWeight * baseWeatherWeight, originType: .weather))
-            tokens.append(StyleToken(name: "cooling", type: "mood", weight: tempWeight * baseWeatherWeight * 0.8, originType: .weather))
-            
-        } else if weather.temperature < 10 { // Cold weather
-            tokens.append(StyleToken(name: "insulating", type: "fabric", weight: tempWeight * baseWeatherWeight * 1.5, originType: .weather))
-            tokens.append(StyleToken(name: "layerable", type: "structure", weight: tempWeight * baseWeatherWeight * 1.3, originType: .weather))
-            tokens.append(StyleToken(name: "warming", type: "mood", weight: tempWeight * baseWeatherWeight, originType: .weather))
-            tokens.append(StyleToken(name: "cozy", type: "texture", weight: tempWeight * baseWeatherWeight, originType: .weather))
-            
-        } else { // Moderate temperature
-            tokens.append(StyleToken(name: "comfortable", type: "mood", weight: tempWeight * baseWeatherWeight * 0.8, originType: .weather))
-            tokens.append(StyleToken(name: "balanced", type: "structure", weight: tempWeight * baseWeatherWeight * 0.6, originType: .weather))
-        }
-        
-        // CONDITION INFLUENCE - Enhanced for daily mood variation
-        let condition = weather.condition.lowercased()
-        let conditionWeight = baseWeatherWeight * 1.2
-        
-        if condition.contains("clear") || condition.contains("sunny") {
-            tokens.append(StyleToken(name: "radiant", type: "mood", weight: conditionWeight, originType: .weather))
-            tokens.append(StyleToken(name: "confident", type: "expression", weight: conditionWeight * 0.8, originType: .weather))
-            
-        } else if condition.contains("cloudy") || condition.contains("overcast") {
-            tokens.append(StyleToken(name: "subdued", type: "mood", weight: conditionWeight, originType: .weather))
-            tokens.append(StyleToken(name: "introspective", type: "expression", weight: conditionWeight * 0.7, originType: .weather))
-            
-        } else if condition.contains("rain") || condition.contains("shower") {
-            tokens.append(StyleToken(name: "protective", type: "structure", weight: conditionWeight * 1.3, originType: .weather))
-            tokens.append(StyleToken(name: "waterproof", type: "fabric", weight: conditionWeight * 1.5, originType: .weather))
-            tokens.append(StyleToken(name: "contemplative", type: "mood", weight: conditionWeight * 0.8, originType: .weather))
-            
-        } else if condition.contains("storm") || condition.contains("thunder") {
-            tokens.append(StyleToken(name: "dramatic", type: "expression", weight: conditionWeight * 1.4, originType: .weather))
-            tokens.append(StyleToken(name: "powerful", type: "mood", weight: conditionWeight * 1.2, originType: .weather))
-            tokens.append(StyleToken(name: "secure", type: "structure", weight: conditionWeight * 1.1, originType: .weather))
-        }
-        
-        // WIND INFLUENCE
-        if weather.windKph > 20 {
-            let windWeight = (weather.windKph / 50.0) * baseWeatherWeight
-            tokens.append(StyleToken(name: "wind-resistant", type: "fabric", weight: windWeight * 1.3, originType: .weather))
-            tokens.append(StyleToken(name: "structured", type: "structure", weight: windWeight * 1.1, originType: .weather))
-            tokens.append(StyleToken(name: "dynamic", type: "expression", weight: windWeight * 0.9, originType: .weather))
-        }
-        
-        return tokens
-    }
+         guard let weather = weather else {
+             // Fallback tokens when no weather data
+             return [
+                 StyleToken(name: "adaptable", type: "structure", weight: 0.40, originType: .weather),
+                 StyleToken(name: "versatile", type: "structure", weight: 0.30, originType: .weather)
+             ]
+         }
+         
+         var tokens: [StyleToken] = []
+         
+         // ENHANCED: Base weather weight increased from 0.25 to 0.5
+         let baseWeight: Double = 0.5
+         
+         // 1. TEMPERATURE-BASED TOKENS (always generated)
+         if weather.temperature > 20 {
+             // Warm weather
+             tokens.append(StyleToken(name: "breathable", type: "textile", weight: baseWeight * 1.4, originType: .weather))
+             tokens.append(StyleToken(name: "light", type: "color_quality", weight: baseWeight * 1.2, originType: .weather))
+             tokens.append(StyleToken(name: "airy", type: "texture", weight: baseWeight * 1.0, originType: .weather))
+         } else if weather.temperature > 10 {
+             // Mild weather
+             tokens.append(StyleToken(name: "layerable", type: "structure", weight: baseWeight * 1.3, originType: .weather))
+             tokens.append(StyleToken(name: "versatile", type: "structure", weight: baseWeight * 1.1, originType: .weather))
+             tokens.append(StyleToken(name: "adaptable", type: "approach", weight: baseWeight * 0.9, originType: .weather))
+         } else {
+             // Cold weather
+             tokens.append(StyleToken(name: "insulating", type: "textile", weight: baseWeight * 1.5, originType: .weather))
+             tokens.append(StyleToken(name: "cosy", type: "mood", weight: baseWeight * 1.3, originType: .weather))
+             tokens.append(StyleToken(name: "protective", type: "accessory", weight: baseWeight * 1.1, originType: .weather))
+         }
+         
+         // 2. CONDITION-SPECIFIC TOKENS (conditional but weighted higher)
+         switch weather.condition.lowercased() {
+         case _ where weather.condition.lowercased().contains("rain"):
+             tokens.append(StyleToken(name: "water-resistant", type: "textile", weight: baseWeight * 1.8, originType: .weather))
+             tokens.append(StyleToken(name: "practical", type: "approach", weight: baseWeight * 1.4, originType: .weather))
+             tokens.append(StyleToken(name: "protected", type: "mood", weight: baseWeight * 1.0, originType: .weather))
+             
+         case _ where weather.condition.lowercased().contains("snow"):
+             tokens.append(StyleToken(name: "insulated", type: "textile", weight: baseWeight * 1.9, originType: .weather))
+             tokens.append(StyleToken(name: "grippy", type: "texture", weight: baseWeight * 1.3, originType: .weather))
+             tokens.append(StyleToken(name: "snug", type: "mood", weight: baseWeight * 1.1, originType: .weather))
+             
+         case _ where weather.condition.lowercased().contains("wind"):
+             tokens.append(StyleToken(name: "wind-resistant", type: "textile", weight: baseWeight * 1.7, originType: .weather))
+             tokens.append(StyleToken(name: "secure", type: "structure", weight: baseWeight * 1.3, originType: .weather))
+             tokens.append(StyleToken(name: "streamlined", type: "expression", weight: baseWeight * 1.0, originType: .weather))
+             
+         case _ where weather.condition.lowercased().contains("cloud"):
+             tokens.append(StyleToken(name: "muted", type: "color_quality", weight: baseWeight * 1.2, originType: .weather))
+             tokens.append(StyleToken(name: "soft", type: "texture", weight: baseWeight * 1.0, originType: .weather))
+             tokens.append(StyleToken(name: "comfortable", type: "mood", weight: baseWeight * 0.9, originType: .weather))
+             
+         case _ where weather.condition.lowercased().contains("clear") || weather.condition.lowercased().contains("sunny"):
+             tokens.append(StyleToken(name: "radiant", type: "mood", weight: baseWeight * 1.3, originType: .weather))
+             tokens.append(StyleToken(name: "bright", type: "color_quality", weight: baseWeight * 1.2, originType: .weather))
+             tokens.append(StyleToken(name: "confident", type: "expression", weight: baseWeight * 1.0, originType: .weather))
+             
+         default:
+             // Generic weather-responsive tokens
+             tokens.append(StyleToken(name: "adaptable", type: "structure", weight: baseWeight * 1.1, originType: .weather))
+             tokens.append(StyleToken(name: "practical", type: "approach", weight: baseWeight * 0.9, originType: .weather))
+         }
+         
+         // 3. HUMIDITY-BASED TOKENS (NEW - if humidity data available)
+         if weather.humidity > 70 {
+             tokens.append(StyleToken(name: "moisture-wicking", type: "textile", weight: baseWeight * 1.2, originType: .weather))
+         } else if weather.humidity < 30 {
+             tokens.append(StyleToken(name: "static-free", type: "textile", weight: baseWeight * 0.8, originType: .weather))
+         }
+         
+         // 4. UV/SUN PROTECTION (NEW - if UV index available or very sunny)
+         if weather.condition.lowercased().contains("sunny") && weather.temperature > 15 {
+             tokens.append(StyleToken(name: "sun-protective", type: "accessory", weight: baseWeight * 1.0, originType: .weather))
+         }
+         
+         // VALIDATION: Ensure we always have at least 4 weather tokens
+         if tokens.count < 4 {
+             // Add generic practical tokens to reach minimum
+             let neededCount = 4 - tokens.count
+             let genericTokens = [
+                 StyleToken(name: "practical", type: "approach", weight: baseWeight * 0.8, originType: .weather),
+                 StyleToken(name: "functional", type: "structure", weight: baseWeight * 0.7, originType: .weather),
+                 StyleToken(name: "weather-appropriate", type: "mood", weight: baseWeight * 0.6, originType: .weather)
+             ]
+             
+             for i in 0..<min(neededCount, genericTokens.count) {
+                 tokens.append(genericTokens[i])
+             }
+         }
+         
+         print("🌤️ ENHANCED WEATHER TOKENS GENERATED: \(tokens.count) tokens")
+         print("   • Temperature: \(weather.temperature)°C")
+         print("   • Condition: \(weather.condition)")
+         print("   • Humidity: \(weather.humidity)%")
+         print("   • Total Weather Weight: \(String(format: "%.2f", tokens.map { $0.weight }.reduce(0, +)))")
+         
+         return tokens
+     }
     
     private static func calculateTemperatureWeight(temp: Double) -> Double {
         // Sophisticated temperature weight calculation
