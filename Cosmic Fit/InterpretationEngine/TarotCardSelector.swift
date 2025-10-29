@@ -268,7 +268,8 @@ class TarotCardSelector {
             let score = card.calculateMatchScore(
                 for: tokens,
                 theme: theme,
-                vibeBreakdown: vibeBreakdown
+                vibeBreakdown: vibeBreakdown,
+                profileHash: profileHash
             )
             scoredCards.append((card, score))
         }
