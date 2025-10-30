@@ -915,6 +915,24 @@ class SemanticTokenGenerator {
             return tokens
         }
     
+    // MARK: - Aspect Grouping Helper
+
+    /// Groups aspect types into harmonious, challenging, or special categories for consistent token generation
+    private static func getAspectCategory(_ aspectType: String) -> String {
+        switch aspectType {
+        case "Conjunction", "Trine", "Sextile":
+            return "harmonious"
+        case "Square", "Opposition":
+            return "challenging"
+        case "Quincunx":
+            return "adjustment"
+        case "Sesquiquadrate", "Semi-square":
+            return "friction"
+        default:
+            return "neutral"
+        }
+    }
+    
     // MARK: - Individual Planet Transit Token Generators
     
     private static func generateSunTransitTokens(natalPlanet: String, aspectType: String, baseWeight: Double, aspectSource: String) -> [StyleToken] {
@@ -979,6 +997,7 @@ class SemanticTokenGenerator {
         return tokens
     }
     
+    /*
     private static func generateVenusTransitTokens(natalPlanet: String, aspectType: String, baseWeight: Double, aspectSource: String) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
@@ -996,7 +1015,247 @@ class SemanticTokenGenerator {
         
         return tokens
     }
+     */
     
+    private static func generateVenusTransitTokens(natalPlanet: String, aspectType: String, baseWeight: Double, aspectSource: String) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        let aspectCategory = getAspectCategory(aspectType)
+        
+        // Differentiate by natal planet being aspected
+        switch natalPlanet {
+        case "Sun":
+            // Venus-Sun: radiant beauty, confident style, self-love
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "confident", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "glamorous", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "indulgent", type: "texture", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "excessive", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "showy", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "refined", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "evolving", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "expressive", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "bold", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "beautiful", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Moon":
+            // Venus-Moon: emotional comfort in beauty, nurturing aesthetics
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "comfortable", type: "texture", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "nurturing", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "soft", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "moody", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "indulgent", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "emotional", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "gentle", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "sensitive", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "fluctuating", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "responsive", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "harmonious", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Venus":
+            // Venus-Venus: peak style alignment, double beauty energy, self-love
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "harmonious", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "balanced", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "luxurious", type: "texture", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "overindulgent", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "excessive", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "lavish", type: "texture", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "aesthetic", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "refined", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "artful", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "creative", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "beautiful", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Mars":
+            // Venus-Mars: passionate style, bold sensuality, desire-driven fashion
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "seductive", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "magnetic", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "bold", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "provocative", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "intense", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "dramatic", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "alluring", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "passionate", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "daring", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "edgy", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "passionate", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Mercury":
+            // Venus-Mercury: articulated style, communicative beauty, fashion intelligence
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "articulate", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "clever", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "precise", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "overthought", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "fussy", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "complicated", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "thoughtful", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "detailed", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "expressive", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "communicative", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "pleasant", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Jupiter":
+            // Venus-Jupiter: abundant beauty, generous style, lavish aesthetics
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "lavish", type: "texture", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "abundant", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "generous", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "extravagant", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "excessive", type: "texture", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "overindulgent", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "optimistic", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "expansive", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "bold", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "ambitious", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "indulgent", type: "texture", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Saturn":
+            // Venus-Saturn: refined elegance, classic style, timeless beauty
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "refined", type: "texture", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "classic", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "sophisticated", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "austere", type: "texture", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "restricted", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "severe", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "timeless", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "elegant", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "understated", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "minimalist", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "conservative", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Uranus":
+            // Venus-Uranus: experimental beauty, avant-garde style, eccentric fashion
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "experimental", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "avant-garde", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "eclectic", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "chaotic", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "unpredictable", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "jarring", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "innovative", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "unique", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "unconventional", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "surprising", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "unconventional", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Neptune":
+            // Venus-Neptune: romantic beauty, ethereal style, dreamy aesthetics
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "romantic", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "ethereal", type: "texture", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "enchanting", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "unrealistic", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "impractical", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "elusive", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "dreamy", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "soft", type: "texture", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "wistful", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "flowing", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "dreamy", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Pluto":
+            // Venus-Pluto: transformative beauty, intense magnetism, power dressing
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "transformative", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "magnetic", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "powerful", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "obsessive", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "intense", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "extreme", type: "structure", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "evolving", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "deep", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "compelling", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "penetrating", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "intense", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        default:
+            // Fallback for Ascendant, Midheaven, asteroids
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "harmonious", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "beautiful", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "dramatic", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "indulgent", type: "texture", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "refined", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "expressive", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "pleasing", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+            }
+        }
+        
+        return tokens
+    }
+    
+    /*
     private static func generateMarsTransitTokens(natalPlanet: String, aspectType: String, baseWeight: Double, aspectSource: String) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
@@ -1014,7 +1273,163 @@ class SemanticTokenGenerator {
         
         return tokens
     }
+     */
     
+    private static func generateMarsTransitTokens(natalPlanet: String, aspectType: String, baseWeight: Double, aspectSource: String) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        let aspectCategory = getAspectCategory(aspectType)
+        
+        // Differentiate by natal planet being aspected
+        switch natalPlanet {
+        case "Sun":
+            // Mars-Sun: amplified vitality, assertive identity
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "assertive", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "dynamic", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "confident", type: "structure", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "combative", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "aggressive", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "forceful", type: "structure", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "active", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "direct", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "restless", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "pushy", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "energetic", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Moon":
+            // Mars-Moon: emotional directness, reactive feelings
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "passionate", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "direct", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "active", type: "structure", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "irritable", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "reactive", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "volatile", type: "structure", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "emotional", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "responsive", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "impatient", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "tense", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "responsive", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Venus":
+            // Mars-Venus: passionate attraction, desire dynamics
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "seductive", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "magnetic", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "bold", type: "structure", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "provocative", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "tense", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "conflicted", type: "structure", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "alluring", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "attractive", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "intense", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "edgy", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "passionate", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Mercury":
+            // Mars-Mercury: sharp communication, quick thinking
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "sharp", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "quick", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "incisive", type: "structure", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "argumentative", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "impatient", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "harsh", type: "structure", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "active", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "direct", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "restless", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "blunt", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "direct", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Jupiter":
+            // Mars-Jupiter: bold action, amplified energy
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "adventurous", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "bold", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "energetic", type: "structure", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "impulsive", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "reckless", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "scattered", type: "structure", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "active", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "enthusiastic", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "driven", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "excessive", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "dynamic", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Saturn":
+            // Mars-Saturn: controlled action, strategic energy
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "persistent", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "strategic", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "controlled", type: "structure", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "frustrated", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "blocked", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "inhibited", type: "structure", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "disciplined", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "focused", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "tense", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "constrained", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "measured", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        default:
+            // Fallback for Ascendant, Midheaven, asteroids
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "dynamic", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "energetic", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "aggressive", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "intense", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "active", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "restless", type: "mood", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "assertive", type: "expression", weight: baseWeight, planetarySource: "Mars", aspectSource: aspectSource, originType: .transit))
+            }
+        }
+        
+        return tokens
+    }
+    
+    /*
     private static func generateJupiterTransitTokens(natalPlanet: String, aspectType: String, baseWeight: Double, aspectSource: String) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
@@ -1031,8 +1446,163 @@ class SemanticTokenGenerator {
         }
         
         return tokens
+    }*/
+    
+    private static func generateJupiterTransitTokens(natalPlanet: String, aspectType: String, baseWeight: Double, aspectSource: String) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        let aspectCategory = getAspectCategory(aspectType)
+        
+        // Differentiate by natal planet being aspected
+        switch natalPlanet {
+        case "Sun":
+            // Jupiter-Sun: confidence, radiance, magnanimity
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "confident", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "magnanimous", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "overconfident", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "ostentatious", type: "texture", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "excessive", type: "structure", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "adaptable", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "adjusting", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "restless", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "striving", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "expansive", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Moon":
+            // Jupiter-Moon: emotional abundance, nurturing expansion
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "nurturing", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "abundant", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "comfortable", type: "texture", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "restless", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "indulgent", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "fluctuating", type: "structure", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "seeking", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "exploring", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "unsettled", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "changeable", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "emotional", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Venus":
+            // Jupiter-Venus: lavish beauty, indulgent aesthetics
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "lavish", type: "texture", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "indulgent", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "luxurious", type: "structure", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "extravagant", type: "structure", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "excessive", type: "texture", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "dramatic", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "experimental", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "evolving", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "bold", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "daring", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "abundant", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Mars":
+            // Jupiter-Mars: bold action, amplified energy
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "bold", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "energetic", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "adventurous", type: "structure", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "impulsive", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "reckless", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "scattered", type: "structure", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "active", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "seeking", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "driven", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "pushy", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "dynamic", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Mercury":
+            // Jupiter-Mercury: expansive thinking, philosophical expression
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "expressive", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "philosophical", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "versatile", type: "structure", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "scattered", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "verbose", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "unfocused", type: "structure", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "curious", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "exploratory", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "restless", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "talkative", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "communicative", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Saturn":
+            // Jupiter-Saturn: disciplined growth, structured expansion
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "balanced", type: "structure", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "mature", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "wise", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "conflicted", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "frustrated", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "restrictive", type: "structure", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "negotiating", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "calibrating", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "tense", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "pressured", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "measured", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        default:
+            // Fallback for Ascendant, Midheaven, asteroids
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "generous", type: "structure", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "optimistic", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "excessive", type: "structure", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "dramatic", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "seeking", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "unsettled", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "expansive", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+            }
+        }
+        
+        return tokens
     }
     
+    /*
     private static func generateSaturnTransitTokens(natalPlanet: String, aspectType: String, baseWeight: Double, aspectSource: String) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
@@ -1050,7 +1620,163 @@ class SemanticTokenGenerator {
         
         return tokens
     }
+     */
     
+    private static func generateSaturnTransitTokens(natalPlanet: String, aspectType: String, baseWeight: Double, aspectSource: String) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        let aspectCategory = getAspectCategory(aspectType)
+        
+        // Differentiate by natal planet being aspected
+        switch natalPlanet {
+        case "Sun":
+            // Saturn-Sun: mature identity, disciplined self-expression
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "structured", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "disciplined", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "authoritative", type: "structure", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "restricted", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "pressured", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "limited", type: "structure", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "mature", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "careful", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "tense", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "constrained", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "serious", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Moon":
+            // Saturn-Moon: emotional maturity, protective reserve
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "reserved", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "protective", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "controlled", type: "structure", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "melancholic", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "withdrawn", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "repressed", type: "structure", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "cautious", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "measured", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "subdued", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "guarded", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "cautious", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Venus":
+            // Saturn-Venus: refined beauty, classic aesthetics
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "refined", type: "texture", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "classic", type: "structure", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "sophisticated", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "austere", type: "texture", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "cold", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "severe", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "timeless", type: "structure", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "elegant", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "understated", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "minimal", type: "structure", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "conservative", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Mars":
+            // Saturn-Mars: controlled action, strategic energy
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "strategic", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "controlled", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "persistent", type: "structure", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "frustrated", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "blocked", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "inhibited", type: "structure", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "disciplined", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "focused", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "tense", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "restrained", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "measured", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Mercury":
+            // Saturn-Mercury: methodical thinking, serious communication
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "methodical", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "focused", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "precise", type: "structure", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "rigid", type: "structure", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "pessimistic", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "critical", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "practical", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "realistic", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "cautious", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "deliberate", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "serious", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Jupiter":
+            // Saturn-Jupiter: disciplined growth, mature wisdom
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "wise", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "mature", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "balanced", type: "structure", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "conflicted", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "frustrated", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "restrictive", type: "structure", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "practical", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "measured", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "tense", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "limited", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "measured", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        default:
+            // Fallback for Ascendant, Midheaven, asteroids
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "structured", type: "structure", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "disciplined", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "restrictive", type: "structure", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "serious", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "cautious", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "constrained", type: "mood", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "conservative", type: "expression", weight: baseWeight, planetarySource: "Saturn", aspectSource: aspectSource, originType: .transit))
+            }
+        }
+        
+        return tokens
+    }
+    
+    /*
     private static func generateUranusTransitTokens(natalPlanet: String, aspectType: String, baseWeight: Double, aspectSource: String) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
@@ -1068,7 +1794,163 @@ class SemanticTokenGenerator {
         
         return tokens
     }
+     */
     
+    private static func generateUranusTransitTokens(natalPlanet: String, aspectType: String, baseWeight: Double, aspectSource: String) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        let aspectCategory = getAspectCategory(aspectType)
+        
+        // Differentiate by natal planet being aspected
+        switch natalPlanet {
+        case "Sun":
+            // Uranus-Sun: authentic individuality, breakthrough identity
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "innovative", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "unique", type: "structure", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "liberated", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "rebellious", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "disruptive", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "erratic", type: "structure", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "evolving", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "experimenting", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "restless", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "edgy", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "independent", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Moon":
+            // Uranus-Moon: emotional freedom, changeable feelings
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "spontaneous", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "changeable", type: "structure", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "free", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "restless", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "unpredictable", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "unstable", type: "structure", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "adaptable", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "flexible", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "nervous", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "variable", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "unconventional", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Venus":
+            // Uranus-Venus: experimental aesthetics, eccentric beauty
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "experimental", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "eclectic", type: "structure", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "avant-garde", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "chaotic", type: "structure", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "inconsistent", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "jarring", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "evolving", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "innovative", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "unpredictable", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "surprising", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "unconventional", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Mars":
+            // Uranus-Mars: sudden action, electric energy
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "electric", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "dynamic", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "innovative", type: "structure", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "impulsive", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "aggressive", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "volatile", type: "structure", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "active", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "spontaneous", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "tense", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "abrupt", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "energetic", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Mercury":
+            // Uranus-Mercury: brilliant insights, original thinking
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "brilliant", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "original", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "inventive", type: "structure", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "scattered", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "nervous", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "chaotic", type: "structure", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "curious", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "experimental", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "restless", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "erratic", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "quick", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Saturn":
+            // Uranus-Saturn: innovation meets structure, breakthrough vs. limitation
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "reformative", type: "structure", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "progressive", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "systematic", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "tense", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "conflicted", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "disruptive", type: "structure", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "negotiating", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "adapting", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "pressured", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "resistant", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "structured", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        default:
+            // Fallback for Ascendant, Midheaven, asteroids
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "unconventional", type: "structure", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "innovative", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "rebellious", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "disruptive", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "experimental", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "unpredictable", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "unique", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            }
+        }
+        
+        return tokens
+    }
+    
+    /*
     private static func generateNeptuneTransitTokens(natalPlanet: String, aspectType: String, baseWeight: Double, aspectSource: String) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
@@ -1086,7 +1968,163 @@ class SemanticTokenGenerator {
         
         return tokens
     }
+     */
     
+    private static func generateNeptuneTransitTokens(natalPlanet: String, aspectType: String, baseWeight: Double, aspectSource: String) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        let aspectCategory = getAspectCategory(aspectType)
+        
+        // Differentiate by natal planet being aspected
+        switch natalPlanet {
+        case "Sun":
+            // Neptune-Sun: visionary identity, spiritual radiance
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "visionary", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "dreamy", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "ethereal", type: "color_quality", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "uncertain", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "elusive", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "unclear", type: "structure", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "searching", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "subtle", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "wavering", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "soft", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "mystical", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Moon":
+            // Neptune-Moon: intuitive depths, emotional fluidity
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "intuitive", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "fluid", type: "structure", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "empathetic", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "oversensitive", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "escapist", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "dissolving", type: "structure", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "receptive", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "adapting", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "uncertain", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "drifting", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "sensitive", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Venus":
+            // Neptune-Venus: romantic idealism, transcendent beauty
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "romantic", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "ethereal", type: "texture", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "enchanting", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "unrealistic", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "impractical", type: "structure", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "illusory", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "idealising", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "refining", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "wistful", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "elusive", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "dreamy", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Mars":
+            // Neptune-Mars: inspired action, spiritual warrior
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "inspired", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "compassionate", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "flowing", type: "structure", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "passive", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "directionless", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "dissipated", type: "structure", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "gentle", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "yielding", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "uncertain", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "hesitant", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "subtle", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Mercury":
+            // Neptune-Mercury: imaginative thinking, poetic expression
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "imaginative", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "poetic", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "symbolic", type: "structure", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "confused", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "unclear", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "deceptive", type: "structure", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "impressionable", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "abstract", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "vague", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "wandering", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "creative", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        case "Saturn":
+            // Neptune-Saturn: structured spirituality, grounded dreams
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "grounded", type: "structure", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "practical", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "manifesting", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "fearful", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "blocked", type: "structure", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "disillusioned", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "careful", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "cautious", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "doubtful", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "restrained", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "refined", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            }
+            
+        default:
+            // Fallback for Ascendant, Midheaven, asteroids
+            switch aspectCategory {
+            case "harmonious":
+                tokens.append(StyleToken(name: "ethereal", type: "texture", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "dreamy", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "challenging":
+                tokens.append(StyleToken(name: "confused", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "elusive", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "adjustment":
+                tokens.append(StyleToken(name: "subtle", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            case "friction":
+                tokens.append(StyleToken(name: "uncertain", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            default:
+                tokens.append(StyleToken(name: "mystical", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+            }
+        }
+        
+        return tokens
+    }
+    
+    /*
     private static func generatePlutoTransitTokens(natalPlanet: String, aspectType: String, baseWeight: Double, aspectSource: String) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
@@ -1100,6 +2138,79 @@ class SemanticTokenGenerator {
             tokens.append(StyleToken(name: "extreme", type: "expression", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
         default:
             tokens.append(StyleToken(name: "magnetic", type: "expression", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+        }
+        
+        return tokens
+    }
+    */
+    
+    private static func generatePlutoTransitTokens(
+        natalPlanet: String,
+        aspectType: String,
+        baseWeight: Double,
+        aspectSource: String
+    ) -> [StyleToken] {
+        var tokens: [StyleToken] = []
+        
+        // Base Pluto quality
+        let plutoQuality: String
+        switch aspectType {
+        case "Conjunction", "Trine", "Sextile":
+            plutoQuality = "empowered"
+        case "Square", "Opposition":
+            plutoQuality = "intense"
+        default:
+            plutoQuality = "deep"
+        }
+        
+        // Differentiate by natal planet being aspected
+        switch natalPlanet {
+        case "Sun":
+            // Pluto-Sun: transformation of identity, power, authority
+            tokens.append(StyleToken(name: "commanding", type: "expression", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "magnetic", type: "mood", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "authoritative", type: "structure", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            
+        case "Moon":
+            // Pluto-Moon: emotional depth, psychological transformation
+            tokens.append(StyleToken(name: plutoQuality, type: "mood", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "penetrating", type: "expression", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "cathartic", type: "texture", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            
+        case "Venus":
+            // Pluto-Venus: intense attraction, transformative beauty
+            tokens.append(StyleToken(name: "seductive", type: "expression", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "alluring", type: "mood", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "provocative", type: "color_quality", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            
+        case "Mars":
+            // Pluto-Mars: willpower, intensity, drive
+            tokens.append(StyleToken(name: "forceful", type: "structure", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "relentless", type: "mood", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "penetrating", type: "expression", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            
+        case "Mercury":
+            // Pluto-Mercury: investigative, probing communication
+            tokens.append(StyleToken(name: "incisive", type: "communication", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "probing", type: "expression", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "strategic", type: "mood", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            
+        case "Jupiter":
+            // Pluto-Jupiter: transformation of beliefs, power expansion
+            tokens.append(StyleToken(name: "ambitious", type: "expression", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "triumphant", type: "mood", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "bold", type: "structure", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            
+        case "Saturn":
+            // Pluto-Saturn: structural transformation, endurance
+            tokens.append(StyleToken(name: "formidable", type: "structure", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "enduring", type: "texture", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "resilient", type: "mood", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            
+        default:
+            // Fallback for Ascendant, Midheaven, asteroids
+            tokens.append(StyleToken(name: "transformative", type: "expression", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: plutoQuality, type: "mood", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
         }
         
         return tokens
