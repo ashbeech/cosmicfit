@@ -1653,6 +1653,10 @@ struct InterpretationTextLibrary {
                 "Patterns that honour introspection and the power of restraint.",
             ],
             
+            "patterns_core_bold": [
+                "Confident, high-contrast rhythms that read clearly from a distance."
+            ],
+            
             // Balanced variant - moderate visibility
             "patterns_core_balanced": [
                 "Patterns that balance expression with refinement.",
@@ -1747,6 +1751,10 @@ struct InterpretationTextLibrary {
                 "Layer intuitively, letting pieces find their place organically.",
                 "Build your look through feeling rather than formula.",
                 "Let layering emerge naturally, responding to comfort and instinct.",
+            ],
+            
+            "layering_core_balanced": [
+                "A considered mid-weight stack — practical and adaptable without visual clutter."
             ],
             
             // Adaptable variant - moderate strategy
