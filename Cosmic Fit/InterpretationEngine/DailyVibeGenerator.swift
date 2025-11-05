@@ -99,25 +99,35 @@ class DailyVibeGenerator {
         
         debugVibeBreakdownAnalysis(breakdown: vibeBreakdown, tokens: allTokens)
         
+        // ✨ DERIVED AXES: Evaluate axes from all tokens
+        let derivedAxes = DerivedAxesEvaluator.evaluate(tokens: allTokens)
+        
         // Generate Tarot card selection with daily seed for variety
         let selectedTarotCard = TarotCardSelector.selectCard(
             for: allTokens,
             theme: nil,
             vibeBreakdown: vibeBreakdown,
+            derivedAxes: derivedAxes,
             seed: dailySeed,
             profileHash: profileHash
         )
         let tarotKeywords = generateTarotKeywords(from: selectedTarotCard, tokens: allTokens)
         
         // Generate comprehensive sections
-        let textiles = generateTextilesSection(from: allTokens)
-        let colors = generateColorsSection(from: allTokens)
+        let textiles = generateTextilesSection(from: allTokens, axes: derivedAxes)
+        let colors = generateColorsSection(from: allTokens, axes: derivedAxes)
         let colorScores = ColorScoring.calculateColorScores(from: allTokens)
-        let patterns = generatePatternsSection(from: allTokens)
-        let shape = generateShapeSection(from: allTokens)
-        let accessories = generateAccessoriesSection(from: allTokens)
-        let (layering, layeringScore) = generateLayeringSection(from: allTokens, weather: weather)
+        let patterns = generatePatternsSection(from: allTokens, axes: derivedAxes)
+        let shape = generateShapeSection(from: allTokens, axes: derivedAxes)
+        let accessories = generateAccessoriesSection(from: allTokens, axes: derivedAxes)
+        let (layering, layeringScore) = generateLayeringSection(from: allTokens, axes: derivedAxes, weather: weather)
         let angularCurvyScore = StructuralAxes.calculateAngularCurvyScore(from: allTokens)
+        
+        print("\n📐 DERIVED AXES COMPUTED:")
+        print("  Action: \(String(format: "%.1f", derivedAxes.action))/10")
+        print("  Tempo: \(String(format: "%.1f", derivedAxes.tempo))/10")
+        print("  Strategy: \(String(format: "%.1f", derivedAxes.strategy))/10")
+        print("  Visibility: \(String(format: "%.1f", derivedAxes.visibility))/10")
         
         print("\n✨ COMPREHENSIVE DAILY SYSTEM GENERATED:")
         print("  Style Brief: \"\(styleBrief.prefix(50))...\"")
@@ -136,6 +146,7 @@ class DailyVibeGenerator {
         dailyContent.tarotCard = selectedTarotCard
         dailyContent.tarotKeywords = tarotKeywords
         dailyContent.styleBrief = styleBrief
+        dailyContent.derivedAxes = derivedAxes
         dailyContent.textiles = textiles
         dailyContent.colors = colors
         dailyContent.colorScores = colorScores
@@ -871,6 +882,8 @@ struct DailyVibeContent: Codable {
     // Angular vs Curvy structural axis (1-10)
     var angularCurvyScore: AngularCurvyScore = AngularCurvyScore(score: 5)
     
+    var derivedAxes: DerivedAxes = DerivedAxes(action: 5.0, tempo: 5.0, strategy: 5.0, visibility: 5.0)
+    
     // MARK: - Environmental Context
     
     // Weather information (optional)
@@ -982,6 +995,14 @@ struct DailyVibeContent: Codable {
         // Structural Axes
         output += "📏 ANGULAR vs CURVY\n"
         output += "Score: \(angularCurvyScore.score)/10 (\(angularCurvyScore.description))\n"
+        
+        // Derived Axes
+        output += "📐 DERIVED AXES\n"
+        output += "Action: \(String(format: "%.1f", derivedAxes.action))/10 • "
+        output += "Tempo: \(String(format: "%.1f", derivedAxes.tempo))/10\n"
+        output += "Strategy: \(String(format: "%.1f", derivedAxes.strategy))/10 • "
+        output += "Visibility: \(String(format: "%.1f", derivedAxes.visibility))/10\n"
+        
         
         return output
     }
@@ -1103,7 +1124,7 @@ extension DailyVibeGenerator {
     }
     
     /// Generate textiles section (up to 2 sentences)
-    private static func generateTextilesSection(from tokens: [StyleToken]) -> String {
+    private static func generateTextilesSection(from tokens: [StyleToken], axes: DerivedAxes) -> String {
         let textileTokens = tokens.filter { $0.type == "textile" }.sorted { $0.weight > $1.weight }
         let textureTokens = tokens.filter { $0.type == "texture" }.sorted { $0.weight > $1.weight }
         
@@ -1130,7 +1151,7 @@ extension DailyVibeGenerator {
     }
     
     /// Generate colors section with palette description
-    private static func generateColorsSection(from tokens: [StyleToken]) -> String {
+    private static func generateColorsSection(from tokens: [StyleToken], axes: DerivedAxes) -> String {
         let colorTokens = tokens.filter { $0.type == "color" || $0.type == "color_quality" }.sorted { $0.weight > $1.weight }
         
         var palette: [String] = []
@@ -1154,7 +1175,7 @@ extension DailyVibeGenerator {
     }
     
     /// Generate patterns section (up to 2 sentences)
-    private static func generatePatternsSection(from tokens: [StyleToken]) -> String {
+    private static func generatePatternsSection(from tokens: [StyleToken], axes: DerivedAxes) -> String {
         let patternTokens = tokens.filter { $0.type == "pattern" }.sorted { $0.weight > $1.weight }
         
         if patternTokens.isEmpty {
@@ -1187,7 +1208,7 @@ extension DailyVibeGenerator {
     }
     
     /// Generate shape section (up to 2 sentences)
-    private static func generateShapeSection(from tokens: [StyleToken]) -> String {
+    private static func generateShapeSection(from tokens: [StyleToken], axes: DerivedAxes) -> String {
         let structureTokens = tokens.filter { $0.type == "structure" }.sorted { $0.weight > $1.weight }
         
         var shapes: [String] = []
@@ -1205,7 +1226,7 @@ extension DailyVibeGenerator {
     }
     
     /// Generate accessories section (up to 2 sentences)
-    private static func generateAccessoriesSection(from tokens: [StyleToken]) -> String {
+    private static func generateAccessoriesSection(from tokens: [StyleToken], axes: DerivedAxes) -> String {
         let accessoryTokens = tokens.filter { $0.type == "accessory" }.sorted { $0.weight > $1.weight }
         
         if accessoryTokens.isEmpty {
@@ -1223,7 +1244,7 @@ extension DailyVibeGenerator {
     }
     
     /// Generate layering section with score (up to 2 sentences)
-    private static func generateLayeringSection(from tokens: [StyleToken], weather: TodayWeather?) -> (String, Int) {
+    private static func generateLayeringSection(from tokens: [StyleToken], axes: DerivedAxes, weather: TodayWeather?) -> (String, Int) {
         var score = 5 // Default middle score
         
         // Weather influence on layering score

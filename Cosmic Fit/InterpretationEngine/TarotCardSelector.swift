@@ -29,6 +29,7 @@ class TarotCardSelector {
         for tokens: [StyleToken],
         theme: String? = nil,
         vibeBreakdown: VibeBreakdown? = nil,
+        derivedAxes: DerivedAxes,
         seed: Int? = nil,
         profileHash: String? = nil
     ) -> TarotCard? {
@@ -68,6 +69,12 @@ class TarotCardSelector {
             TarotRecencyTracker.shared.cleanupOldEntries(profileHash: profileId)
         }
         
+        print("  • Derived Axes:")
+        print("      Action: \(String(format: "%.1f", derivedAxes.action))/10")
+        print("      Tempo: \(String(format: "%.1f", derivedAxes.tempo))/10")
+        print("      Strategy: \(String(format: "%.1f", derivedAxes.strategy))/10")
+        print("      Visibility: \(String(format: "%.1f", derivedAxes.visibility))/10")
+        
         // Apply daily seed variation if provided
         var deckToScore = tarotDeck
         if let dailySeed = seed {
@@ -80,6 +87,7 @@ class TarotCardSelector {
             tokens: tokens,
             theme: theme,
             vibeBreakdown: vibeBreakdown,
+            derivedAxes: derivedAxes,
             profileHash: profileHash,
             deck: deckToScore
         )
@@ -116,8 +124,8 @@ class TarotCardSelector {
         }
         
         // Show match analysis
-        analyzeCardMatch(card: bestCard, tokens: tokens, vibeBreakdown: vibeBreakdown)
-        
+        analyzeCardMatch(card: bestCard, tokens: tokens, vibeBreakdown: vibeBreakdown, derivedAxes: derivedAxes)
+
         // Store selected card using recency tracker
         if let profileId = profileHash {
             TarotRecencyTracker.shared.storeCardSelection(
@@ -258,6 +266,7 @@ class TarotCardSelector {
         tokens: [StyleToken],
         theme: String?,
         vibeBreakdown: VibeBreakdown?,
+        derivedAxes: DerivedAxes,
         profileHash: String?,
         deck: [TarotCard]
     ) -> [(TarotCard, Double)] {
@@ -269,6 +278,7 @@ class TarotCardSelector {
                 for: tokens,
                 theme: theme,
                 vibeBreakdown: vibeBreakdown,
+                derivedAxes: derivedAxes,
                 profileHash: profileHash
             )
             scoredCards.append((card, score))
@@ -284,7 +294,8 @@ class TarotCardSelector {
     private static func analyzeCardMatch(
         card: TarotCard,
         tokens: [StyleToken],
-        vibeBreakdown: VibeBreakdown?
+        vibeBreakdown: VibeBreakdown?,
+        derivedAxes: DerivedAxes
     ) {
         print("\n🔍 Match Analysis:")
         
@@ -324,6 +335,35 @@ class TarotCardSelector {
                 print(" \(energy)(\(String(format: "%.1f", affinity)))", terminator: "")
             }
             print()
+        }
+        
+        if let cardAxes = card.axesAffinity {
+            print("  • Axes Affinity:")
+            print("      Card axes (0-100 scale):")
+            print("        Action: \(String(format: "%.0f", cardAxes["action"] ?? 50))")
+            print("        Tempo: \(String(format: "%.0f", cardAxes["tempo"] ?? 50))")
+            print("        Strategy: \(String(format: "%.0f", cardAxes["strategy"] ?? 50))")
+            print("        Visibility: \(String(format: "%.0f", cardAxes["visibility"] ?? 50))")
+            print("      Derived axes (1-10 scale):")
+            print("        Action: \(String(format: "%.1f", derivedAxes.action))")
+            print("        Tempo: \(String(format: "%.1f", derivedAxes.tempo))")
+            print("        Strategy: \(String(format: "%.1f", derivedAxes.strategy))")
+            print("        Visibility: \(String(format: "%.1f", derivedAxes.visibility))")
+        } else {
+            print("  • No axes affinity data for this card")
+        }
+        
+        // Show energy alignment
+        if let vibe = vibeBreakdown {
+            let alignedEnergies = card.energyAffinity.filter { $0.value >= 0.6 }
+                .map { energy, affinity in
+                    let points = getEnergyPoints(from: vibe, for: energy)
+                    return "\(energy)(\(points)pts, \(String(format: "%.1f", affinity)))"
+                }
+            
+            if !alignedEnergies.isEmpty {
+                print("  • Energy Alignment: \(alignedEnergies.joined(separator: ", "))")
+            }
         }
     }
     

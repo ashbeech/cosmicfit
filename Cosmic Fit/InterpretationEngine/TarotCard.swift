@@ -18,6 +18,7 @@ struct TarotCard: Codable, Identifiable {
     let keywords: [String]         // Semantic tokens that match this card
     let themes: [String]           // CompositeTheme matches
     let energyAffinity: [String: Double]  // Affinity scores for vibe breakdown energies
+    let axesAffinity: [String: Double]?
     let description: String        // Brief interpretation/meaning
     let reversedKeywords: [String] // For future reversal support
     let symbolism: [String]        // Key symbolic elements
@@ -36,7 +37,7 @@ struct TarotCard: Codable, Identifiable {
         case pentacles = "Pentacles"
     }
     
-        // MARK: - Computed Properties
+    // MARK: - Computed Properties
 
     /// Stable identifier for Identifiable conformance
     var id: String {
@@ -90,6 +91,7 @@ struct TarotCard: Codable, Identifiable {
         for tokens: [StyleToken],
         theme: String? = nil,
         vibeBreakdown: VibeBreakdown? = nil,
+        derivedAxes: DerivedAxes,
         profileHash: String? = nil
     ) -> Double {
         
@@ -170,12 +172,85 @@ struct TarotCard: Codable, Identifiable {
             score += energyScore
         }
         
-        // 4. Priority bonus for tie-breaking
+        //TODO: derivedAxes doesn't need to be back compatible
+        // 4. Derived Axes affinity scoring
+        if let axes = axesAffinity {
+            let axesScore = calculateAxesSimilarity(cardAxes: axes, derivedAxes: derivedAxes)
+            score += axesScore * DerivedAxesConfiguration.TarotAffinity.scoringWeight
+            
+            if DerivedAxesConfiguration.Debug.logTarotMatching {
+                print("    🎯 Axes Similarity for \(name): \(String(format: "%.2f", axesScore)) (weighted: \(String(format: "%.2f", axesScore * DerivedAxesConfiguration.TarotAffinity.scoringWeight)))")
+            }
+        }
+        
+        // 5. Priority bonus for tie-breaking
         score += priority * 0.5
         
-        // REMOVED: Step 5 (decay penalty) - now handled by hard-block cooldown in TarotCardSelector
+        /*
+        // 6. Apply decay penalty based on recent selections
+        if let profileId = profileHash {
+            let decayMultiplier = TarotRecencyTracker.shared.calculateDecayPenalty(
+                for: name,
+                profileHash: profileId
+            )
+            
+            if decayMultiplier < 1.0 {
+                let penaltyPercent = (1.0 - decayMultiplier) * 100
+                if DerivedAxesConfiguration.Debug.logTarotMatching {
+                    print("    ⚠️ Applying \(String(format: "%.0f", penaltyPercent))% decay penalty to '\(name)'")
+                }
+                score *= decayMultiplier
+            }
+        }*/
+        
+        // REMOVED: Step 6 (decay penalty) - now handled by hard-block cooldown in TarotCardSelector
         
         return score
+    }
+    
+    // MARK: - Axes Similarity Calculation (NEW)
+    
+    /// Calculate similarity between card's axes affinity and derived axes
+    /// - Parameters:
+    ///   - cardAxes: Card's axes affinity (from JSON, scaled 0-100)
+    ///   - derivedAxes: Computed derived axes (scaled 1-10)
+    /// - Returns: Similarity score (0-1 range, higher is better)
+    private func calculateAxesSimilarity(cardAxes: [String: Double], derivedAxes: DerivedAxes) -> Double {
+        // Normalize card axes from 0-100 scale to 1-10 scale
+        let normalizedCardAxes = DerivedAxes(
+            action: (cardAxes["action"] ?? 50.0) / 10.0,
+            tempo: (cardAxes["tempo"] ?? 50.0) / 10.0,
+            strategy: (cardAxes["strategy"] ?? 50.0) / 10.0,
+            visibility: (cardAxes["visibility"] ?? 50.0) / 10.0
+        )
+        
+        // Calculate Euclidean distance
+        let actionDiff = derivedAxes.action - normalizedCardAxes.action
+        let tempoDiff = derivedAxes.tempo - normalizedCardAxes.tempo
+        let strategyDiff = derivedAxes.strategy - normalizedCardAxes.strategy
+        let visibilityDiff = derivedAxes.visibility - normalizedCardAxes.visibility
+        
+        let distance = sqrt(
+            pow(actionDiff, 2) +
+            pow(tempoDiff, 2) +
+            pow(strategyDiff, 2) +
+            pow(visibilityDiff, 2)
+        )
+        
+        // Convert distance to similarity score (closer = higher score)
+        // Maximum possible distance is ~18 (sqrt(4 * 9^2))
+        let maxDistance = DerivedAxesConfiguration.TarotAffinity.maxDistance
+        let similarity = max(0.0, 1.0 - (distance / maxDistance))
+        
+        if DerivedAxesConfiguration.Debug.logTarotMatching {
+            print("      Action: \(String(format: "%.1f", derivedAxes.action)) vs \(String(format: "%.1f", normalizedCardAxes.action)) (diff: \(String(format: "%.1f", actionDiff)))")
+            print("      Tempo: \(String(format: "%.1f", derivedAxes.tempo)) vs \(String(format: "%.1f", normalizedCardAxes.tempo)) (diff: \(String(format: "%.1f", tempoDiff)))")
+            print("      Strategy: \(String(format: "%.1f", derivedAxes.strategy)) vs \(String(format: "%.1f", normalizedCardAxes.strategy)) (diff: \(String(format: "%.1f", strategyDiff)))")
+            print("      Visibility: \(String(format: "%.1f", derivedAxes.visibility)) vs \(String(format: "%.1f", normalizedCardAxes.visibility)) (diff: \(String(format: "%.1f", visibilityDiff)))")
+            print("      Distance: \(String(format: "%.2f", distance)), Similarity: \(String(format: "%.2f", similarity))")
+        }
+        
+        return similarity
     }
     
     /// Generate a contextual interpretation based on the day's energy

@@ -1546,6 +1546,198 @@ struct InterpretationTextLibrary {
         }
     }
     
+    // MARK: - Axis-Aware Copy Variants - Shape Copy (Action vs Strategy axis)
+    
+    struct Shape {
+        static let shapeDescriptions: [String: [String]] = [
+            // Kinetic variant - high action, lower strategy
+            "shape_core_kinetic": [
+                "Streamlined forms with directional lines that mirror your momentum.",
+                "Dynamic silhouettes that move with intention and forward energy.",
+                "Shapes that channel drive into purposeful motion.",
+            ],
+            
+            // Grounded variant - high strategy, lower action
+            "shape_core_grounded": [
+                "Architectural shapes that anchor your energy with quiet control.",
+                "Structured silhouettes that ground presence through disciplined form.",
+                "Shapes that speak to planning, precision, and thoughtful composition.",
+            ],
+            
+            // Balanced variant - action and strategy in equilibrium
+            "shape_core_balanced": [
+                "Silhouettes that bridge structure and flow naturally.",
+                "Forms that honour both momentum and intention in balanced measure.",
+                "Shapes that move between precision and fluidity with ease.",
+            ],
+            
+            // Default fallback
+            "shape_core": [
+                "Trust your instincts with silhouettes that honour today's energy and movement.",
+            ]
+        ]
+    }
+    
+    // MARK: - Textiles Copy (Tempo axis)
+    
+    struct Textiles {
+        static let textileDescriptions: [String: [String]] = [
+            // Fast variant - high tempo
+            "textiles_core_fast": [
+                "Crisp weaves, light-handle fabrics that keep energy moving.",
+                "Fabrics with snap and vitality—textures that match a quick pace.",
+                "Choose materials that flow with rapid rhythm and bright momentum.",
+            ],
+            
+            // Slow variant - low tempo
+            "textiles_core_slow": [
+                "Soft, fluid fabrics that slow the day's rhythm.",
+                "Textiles with weight and warmth that invite pause and reflection.",
+                "Materials that ground tempo in tactile comfort and unhurried grace.",
+            ],
+            
+            // Balanced variant - moderate tempo
+            "textiles_core_balanced": [
+                "Fabrics that adapt to your natural pace—neither rushed nor languid.",
+                "Textiles with versatile hand that honour shifting rhythms.",
+                "Materials balanced between structure and ease, movement and rest.",
+            ],
+            
+            // Default fallback
+            "textiles_core": [
+                "Choose fabrics that feel right against your skin and move with your rhythm.",
+            ]
+        ]
+    }
+    
+    // MARK: - Patterns Copy (Visibility axis)
+    
+    struct Patterns {
+        static let patternDescriptions: [String: [String]] = [
+            // Prominent variant - high visibility
+            "patterns_core_prominent": [
+                "Bold patterns that command attention and express confident presence.",
+                "Visual statements that make your energy visible—graphic, striking, unapologetic.",
+                "Patterns that amplify rather than whisper, designed to be seen.",
+            ],
+            
+            // Subtle variant - low visibility
+            "patterns_core_subtle": [
+                "Quiet patterns that reveal themselves slowly—understated elegance.",
+                "Visual rhythms that speak in whispers, not shouts.",
+                "Patterns that honour introspection and the power of restraint.",
+            ],
+            
+            // Balanced variant - moderate visibility
+            "patterns_core_balanced": [
+                "Patterns that balance expression with refinement.",
+                "Visual interest that neither dominates nor disappears.",
+                "Patterns scaled to your comfort between visibility and privacy.",
+            ],
+            
+            // Default fallback
+            "patterns_core": [
+                "Select patterns that speak to your mood—whether minimal or expressive.",
+            ]
+        ]
+    }
+    
+    // MARK: - Colours Copy (Visibility axis)
+    
+    struct Colors {
+        static let colorDescriptions: [String: [String]] = [
+            // Bold variant - high visibility
+            "colors_core_bold": [
+                "Today's palette demands presence—rich tones that project confidence.",
+                "Colours that announce rather than suggest, bold choices that match your visibility.",
+                "Your colour story today is about being seen, not blending in.",
+            ],
+            
+            // Subtle variant - low visibility
+            "colors_core_subtle": [
+                "A palette of quiet restraint—tones that honour privacy and introspection.",
+                "Colours that create sanctuary rather than spectacle.",
+                "Today's hues speak in muted tones, offering elegance through understatement.",
+            ],
+            
+            // Balanced variant - moderate visibility
+            "colors_core_balanced": [
+                "Today's palette leans balanced with tones that reflect your inner rhythm.",
+                "Colours that neither shout nor hide—a harmonious middle ground.",
+                "Your colour choices today bridge boldness and subtlety naturally.",
+            ],
+            
+            // Default fallback
+            "colors_core": [
+                "Let today's palette reflect your inner landscape with tones that resonate.",
+            ]
+        ]
+    }
+    
+    // MARK: - Accessories Copy (Strategy axis)
+    
+    struct Accessories {
+        static let accessoryDescriptions: [String: [String]] = [
+            // Structured variant - high strategy
+            "accessories_core_structured": [
+                "Accessories with purpose and precision—each piece earns its place.",
+                "Structured additions that complete the composition with disciplined intent.",
+                "Choose accessories that speak to planning: functional, refined, deliberate.",
+            ],
+            
+            // Fluid variant - low strategy
+            "accessories_core_fluid": [
+                "Accessories chosen by instinct rather than plan—fluid and intuitive.",
+                "Pieces that feel right without overthinking: organic additions to your presence.",
+                "Let accessories emerge naturally, responding to feeling rather than formula.",
+            ],
+            
+            // Balanced variant - moderate strategy
+            "accessories_core_balanced": [
+                "Accessories that blend intention with spontaneity.",
+                "Pieces chosen with awareness but not rigidity.",
+                "Strike balance between thoughtful curation and intuitive addition.",
+            ],
+            
+            // Default fallback
+            "accessories_core": [
+                "Accessories that add texture and intention to complete your expression.",
+            ]
+        ]
+    }
+    
+    // MARK: - Layering Copy (Strategy axis)
+    
+    struct Layering {
+        static let layeringDescriptions: [String: [String]] = [
+            // Structured variant - high strategy
+            "layering_core_structured": [
+                "Layer with architectural intention—each piece serving clear purpose.",
+                "Build your look through disciplined addition, structure upon structure.",
+                "Approach layering as composition: organised, purposeful, controlled.",
+            ],
+            
+            // Fluid variant - low strategy
+            "layering_core_fluid": [
+                "Layer intuitively, letting pieces find their place organically.",
+                "Build your look through feeling rather than formula.",
+                "Let layering emerge naturally, responding to comfort and instinct.",
+            ],
+            
+            // Adaptable variant - moderate strategy
+            "layering_core_adaptable": [
+                "Layer with flexibility—structured enough to function, fluid enough to adapt.",
+                "Build your look with both intention and openness to shift.",
+                "Approach layering as responsive composition, neither rigid nor random.",
+            ],
+            
+            // Default fallback
+            "layering_core": [
+                "Layer with awareness, adapting to both temperature and energy.",
+            ]
+        ]
+    }
+    
     // MARK: - Moon Phase Text Content
     
     struct MoonPhase {
