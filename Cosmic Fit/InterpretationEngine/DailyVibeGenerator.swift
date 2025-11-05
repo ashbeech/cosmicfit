@@ -1125,169 +1125,164 @@ extension DailyVibeGenerator {
     
     /// Generate textiles section (up to 2 sentences)
     private static func generateTextilesSection(from tokens: [StyleToken], axes: DerivedAxes) -> String {
-        let textileTokens = tokens.filter { $0.type == "textile" }.sorted { $0.weight > $1.weight }
-        let textureTokens = tokens.filter { $0.type == "texture" }.sorted { $0.weight > $1.weight }
-        
-        var qualities: [String] = []
-        
-        // Get top textile qualities
-        for token in textileTokens.prefix(3) {
-            qualities.append(token.name)
+        let variant: String
+        if axes.tempo >= DerivedAxesConfiguration.CopySelection.tempoThreshold {
+            variant = "fast"  // High tempo
+        } else if axes.tempo <= (10.0 - DerivedAxesConfiguration.CopySelection.tempoThreshold) {
+            variant = "slow"  // Low tempo
+        } else {
+            variant = "balanced"  // Moderate tempo
         }
         
-        // Add texture qualities
-        for token in textureTokens.prefix(2) {
-            if !qualities.contains(token.name) {
-                qualities.append(token.name)
-            }
+        if DerivedAxesConfiguration.Debug.logCopySelection {
+            print("  🔹 Textiles: Tempo=\(String(format: "%.1f", axes.tempo)) → \(variant)")
         }
         
-        if qualities.isEmpty {
-            return "Choose fabrics that feel right against your skin and move with your energy."
-        }
-        
-        let qualitiesText = qualities.prefix(4).joined(separator: ", ")
-        return "Focus on \(qualitiesText) textiles that support today's energy. Let fabric weight and surface feel guide your comfort and confidence."
+        return selectAxisAwareCopy(section: "textiles", variant: variant, tokens: tokens, axes: axes)
     }
     
     /// Generate colors section with palette description
     private static func generateColorsSection(from tokens: [StyleToken], axes: DerivedAxes) -> String {
-        let colorTokens = tokens.filter { $0.type == "color" || $0.type == "color_quality" }.sorted { $0.weight > $1.weight }
-        
-        var palette: [String] = []
-        var mood = "balanced"
-        
-        // Extract color qualities and mood
-        for token in colorTokens.prefix(3) {
-            if token.type == "color_quality" {
-                mood = token.name
-            } else {
-                palette.append(token.name)
-            }
+        let variant: String
+        if axes.visibility >= DerivedAxesConfiguration.CopySelection.visibilityThreshold {
+            variant = "bold"  // High visibility
+        } else if axes.visibility <= (10.0 - DerivedAxesConfiguration.CopySelection.visibilityThreshold) {
+            variant = "subtle"  // Low visibility
+        } else {
+            variant = "balanced"  // Moderate visibility
         }
         
-        if palette.isEmpty {
-            palette = ["natural", "harmonious"]
+        if DerivedAxesConfiguration.Debug.logCopySelection {
+            print("  🔹 Colours: Visibility=\(String(format: "%.1f", axes.visibility)) → \(variant)")
         }
         
-        let paletteText = palette.prefix(3).joined(separator: ", ")
-        return "Today's palette leans \(mood) with \(paletteText) tones that reflect your inner rhythm."
+        return selectAxisAwareCopy(section: "colors", variant: variant, tokens: tokens, axes: axes)
     }
     
     /// Generate patterns section (up to 2 sentences)
     private static func generatePatternsSection(from tokens: [StyleToken], axes: DerivedAxes) -> String {
-        let patternTokens = tokens.filter { $0.type == "pattern" }.sorted { $0.weight > $1.weight }
-        
-        if patternTokens.isEmpty {
-            return "Choose patterns that speak to your mood—whether that's clean minimalism or playful expression."
+        let variant: String
+        if axes.visibility >= DerivedAxesConfiguration.CopySelection.visibilityThreshold {
+            variant = "prominent"  // High visibility
+        } else if axes.visibility <= (10.0 - DerivedAxesConfiguration.CopySelection.visibilityThreshold) {
+            variant = "subtle"  // Low visibility
+        } else {
+            variant = "balanced"  // Moderate visibility
         }
         
-        let topPattern = patternTokens[0].name
-        var description = ""
-        
-        switch topPattern {
-        case "geometric":
-            description = "Geometric patterns with clean lines resonate with today's energy."
-        case "organic":
-            description = "Organic, natural patterns that flow with intuitive rhythm."
-        case "abstract":
-            description = "Abstract patterns that invite curiosity and conversation."
-        case "flowing":
-            description = "Flowing, curved patterns that move with graceful energy."
-        case "angular":
-            description = "Angular patterns with sharp precision and directional power."
-        case "scattered":
-            description = "Scattered, playful patterns that dance with spontaneous energy."
-        case "symmetrical":
-            description = "Symmetrical patterns that create grounding through balance."
-        default:
-            description = "\(topPattern.capitalized) patterns that align with your natural expression."
+        if DerivedAxesConfiguration.Debug.logCopySelection {
+            print("  🔹 Patterns: Visibility=\(String(format: "%.1f", axes.visibility)) → \(variant)")
         }
         
-        return "\(description) Look for visual rhythms that complement rather than compete with your presence."
+        return selectAxisAwareCopy(section: "patterns", variant: variant, tokens: tokens, axes: axes)
     }
     
     /// Generate shape section (up to 2 sentences)
     private static func generateShapeSection(from tokens: [StyleToken], axes: DerivedAxes) -> String {
-        let structureTokens = tokens.filter { $0.type == "structure" }.sorted { $0.weight > $1.weight }
+        let gap = axes.action - axes.strategy
+        let threshold = DerivedAxesConfiguration.CopySelection.actionStrategyGap
         
-        var shapes: [String] = []
-        
-        for token in structureTokens.prefix(3) {
-            shapes.append(token.name)
+        let variant: String
+        if gap > threshold {
+            variant = "kinetic"  // High action, lower strategy
+        } else if gap < -threshold {
+            variant = "grounded"  // High strategy, lower action
+        } else {
+            variant = "balanced"  // Balanced action/strategy
         }
         
-        if shapes.isEmpty {
-            return "Choose silhouettes that honor your body's natural lines and today's energy flow."
+        if DerivedAxesConfiguration.Debug.logCopySelection {
+            print("  🔹 Shape: Action=\(String(format: "%.1f", axes.action)), Strategy=\(String(format: "%.1f", axes.strategy)), Gap=\(String(format: "%.1f", gap)) → \(variant)")
         }
         
-        let shapesText = shapes.joined(separator: ", ")
-        return "Today's silhouettes lean toward \(shapesText) forms that create the right spatial relationship with your energy. Trust proportions that feel authentic to your inner rhythm."
+        return selectAxisAwareCopy(section: "shape", variant: variant, tokens: tokens, axes: axes)
     }
     
     /// Generate accessories section (up to 2 sentences)
     private static func generateAccessoriesSection(from tokens: [StyleToken], axes: DerivedAxes) -> String {
-        let accessoryTokens = tokens.filter { $0.type == "accessory" }.sorted { $0.weight > $1.weight }
-        
-        if accessoryTokens.isEmpty {
-            return "Choose accessories that add meaning rather than distraction—pieces that ground or uplift your energy."
+        let variant: String
+        if axes.strategy >= DerivedAxesConfiguration.CopySelection.strategyThreshold {
+            variant = "structured"  // High strategy
+        } else if axes.strategy <= (10.0 - DerivedAxesConfiguration.CopySelection.strategyThreshold) {
+            variant = "fluid"  // Low strategy
+        } else {
+            variant = "balanced"  // Moderate strategy
         }
         
-        var recommendations: [String] = []
-        
-        for token in accessoryTokens.prefix(3) {
-            recommendations.append(token.name)
+        if DerivedAxesConfiguration.Debug.logCopySelection {
+            print("  🔹 Accessories: Strategy=\(String(format: "%.1f", axes.strategy)) → \(variant)")
         }
         
-        let recText = recommendations.joined(separator: ", ")
-        return "Accessories with \(recText) energy will complete today's look. Choose pieces that feel like extensions of your inner state rather than afterthoughts."
+        return selectAxisAwareCopy(section: "accessories", variant: variant, tokens: tokens, axes: axes)
     }
     
     /// Generate layering section with score (up to 2 sentences)
     private static func generateLayeringSection(from tokens: [StyleToken], axes: DerivedAxes, weather: TodayWeather?) -> (String, Int) {
-        var score = 5 // Default middle score
+        // Calculate layering score (existing logic)
+        var layeringScore = 5
         
-        // Weather influence on layering score
         if let weather = weather {
-            if weather.temperature < 10 {
-                score += 3 // Cold weather increases layering
-            } else if weather.temperature < 20 {
-                score += 1
-            } else if weather.temperature > 25 {
-                score -= 2 // Warm weather decreases layering
+            if weather.temperature < 10.0 {
+                layeringScore = 8
+            } else if weather.temperature < 20.0 {
+                layeringScore = 6
+            } else {
+                layeringScore = 3
             }
         }
         
-        // Astrological influences
-        let earthTokens = tokens.filter { $0.signSource != nil && ["Taurus", "Virgo", "Capricorn"].contains($0.signSource!) }
-        let waterTokens = tokens.filter { $0.signSource != nil && ["Cancer", "Scorpio", "Pisces"].contains($0.signSource!) }
-        let airTokens = tokens.filter { $0.signSource != nil && ["Gemini", "Libra", "Aquarius"].contains($0.signSource!) }
-        let fireTokens = tokens.filter { $0.signSource != nil && ["Aries", "Leo", "Sagittarius"].contains($0.signSource!) }
-        
-        // Earth signs like layering for comfort and structure
-        score += min(2, earthTokens.count / 3)
-        
-        // Water signs like layering for emotional comfort
-        score += min(1, waterTokens.count / 4)
-        
-        // Fire signs prefer less layering for freedom of movement
-        score -= min(2, fireTokens.count / 3)
-        
-        // Air signs are adaptable but generally prefer lighter layering
-        score -= min(1, airTokens.count / 4)
-        
-        // Constrain score to 1-10 range
-        score = max(1, min(10, score))
-        
-        let guidance: String
-        if score <= 3 {
-            guidance = "Keep layering minimal and lightweight for freedom of movement. Choose pieces that can be easily adjusted as your energy shifts."
-        } else if score <= 6 {
-            guidance = "Moderate layering offers adaptability without overwhelm. Think strategic pieces that can transition with your day's rhythm."
+        let variant: String
+        if axes.strategy >= DerivedAxesConfiguration.CopySelection.strategyThreshold {
+            variant = "structured"  // High strategy - organised layering
+        } else if axes.strategy <= (10.0 - DerivedAxesConfiguration.CopySelection.strategyThreshold) {
+            variant = "fluid"  // Low strategy - intuitive layering
         } else {
-            guidance = "Embrace thoughtful layering that creates depth and comfort. Multiple layers can provide both practical warmth and emotional grounding."
+            variant = "adaptable"  // Moderate strategy
         }
         
-        return (guidance, score)
+        if DerivedAxesConfiguration.Debug.logCopySelection {
+            print("  🔹 Layering: Strategy=\(String(format: "%.1f", axes.strategy)), Score=\(layeringScore) → \(variant)")
+        }
+        
+        let layeringText = selectAxisAwareCopy(section: "layering", variant: variant, tokens: tokens, axes: axes)
+        return (layeringText, layeringScore)
+    }
+    
+    private static func selectAxisAwareCopy(section: String, variant: String, tokens: [StyleToken], axes: DerivedAxes) -> String {
+        let key = "\(section)_core_\(variant)"
+        
+        // Try to get axis-aware variant
+        if let text = InterpretationTextLibrary.getText(forKey: key, tokens: tokens) {
+            return text
+        }
+        
+        // Fallback to default section copy
+        if let text = InterpretationTextLibrary.getText(forKey: "\(section)_core", tokens: tokens) {
+            return text
+        }
+        
+        // Ultimate fallback - return sensible default based on section
+        return getDefaultCopy(for: section)
+    }
+    
+    /// Get default copy when library lookups fail
+    /// ADD this helper method
+    private static func getDefaultCopy(for section: String) -> String {
+        switch section {
+        case "shape":
+            return "Trust your instincts with silhouettes that honour today's energy and movement."
+        case "textiles":
+            return "Choose fabrics that feel right against your skin and move with your rhythm."
+        case "patterns":
+            return "Select patterns that speak to your mood—whether minimal or expressive."
+        case "colors", "colours":
+            return "Let today's palette reflect your inner landscape with tones that resonate."
+        case "accessories":
+            return "Accessories that add texture and intention to complete your expression."
+        case "layering":
+            return "Layer with awareness, adapting to both temperature and energy."
+        default:
+            return "Trust your instincts; dress to express today's flow."
+        }
     }
 }

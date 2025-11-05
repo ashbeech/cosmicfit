@@ -1546,6 +1546,31 @@ struct InterpretationTextLibrary {
         }
     }
     
+    // MARK: - getText Helper (if not already present)
+    
+    /// Get text from the library by key
+    /// - Parameters:
+    ///   - key: The text key to look up
+    ///   - tokens: Optional tokens for dynamic text selection
+    /// - Returns: The text if found, nil otherwise
+    static func getText(forKey key: String, tokens: [StyleToken]? = nil) -> String? {
+        // This is a simplified implementation - adapt to your existing getText method
+        let allDescriptions = Shape.shapeDescriptions
+            .merging(Textiles.textileDescriptions) { _, new in new }
+            .merging(Patterns.patternDescriptions) { _, new in new }
+            .merging(Colors.colorDescriptions) { _, new in new }
+            .merging(Accessories.accessoryDescriptions) { _, new in new }
+            .merging(Layering.layeringDescriptions) { _, new in new }
+        
+        if let variants = allDescriptions[key], !variants.isEmpty {
+            // If you have token-based selection logic, apply it here
+            // Otherwise, return the first variant
+            return variants.first
+        }
+        
+        return nil
+    }
+    
     // MARK: - Axis-Aware Copy Variants - Shape Copy (Action vs Strategy axis)
     
     struct Shape {
