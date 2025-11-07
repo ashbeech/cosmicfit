@@ -8,6 +8,18 @@
 
 import Foundation
 
+// MARK: - Energy Enum
+
+/// Represents the six style energies
+public enum Energy: String, CaseIterable, Codable {
+    case classic
+    case playful
+    case romantic
+    case utility
+    case drama
+    case edge
+}
+
 // MARK: - Vibe Breakdown Structure
 
 struct VibeBreakdown: Codable {
@@ -41,6 +53,49 @@ struct VibeBreakdown: Codable {
     func debugDescription() -> String {
         return "Classic: \(classic), Playful: \(playful), Romantic: \(romantic), Utility: \(utility), Drama: \(drama), Edge: \(edge) [Total: \(totalPoints)]"
     }
+    
+    // MARK: - Phase 2: Helper Methods (Unambiguous Enum-Based API)
+    
+    /// Get the dominant energy (highest scoring) - returns Energy enum
+    var dominantEnergy: Energy {
+        let scored: [(Energy, Int)] = Energy.allCases.map { ($0, value(for: $0)) }
+        return scored.max(by: { $0.1 < $1.1 })?.0 ?? .classic
+    }
+    
+    /// Get the dominant energy name as String (convenience)
+    var dominantEnergyName: String {
+        return dominantEnergy.rawValue
+    }
+    
+    /// Get the secondary energy (second highest scoring) - returns Energy enum
+    var secondaryEnergy: Energy {
+        let scored: [(Energy, Int)] = Energy.allCases.map { ($0, value(for: $0)) }
+        let sorted = scored.sorted(by: { $0.1 > $1.1 })
+        return sorted.count > 1 ? sorted[1].0 : .classic
+    }
+    
+    /// Get the secondary energy name as String (convenience)
+    var secondaryEnergyName: String {
+        return secondaryEnergy.rawValue
+    }
+    
+    /// Get the value for a specific energy (enum-based - primary API)
+    func value(for energy: Energy) -> Int {
+        switch energy {
+        case .classic: return classic
+        case .playful: return playful
+        case .romantic: return romantic
+        case .utility: return utility
+        case .drama: return drama
+        case .edge: return edge
+        }
+    }
+    
+    /// Get the value for a specific energy by name (String-based - bridging)
+    func value(for name: String) -> Int {
+        guard let energy = Energy(rawValue: name.lowercased()) else { return 0 }
+        return value(for: energy)
+    }
 }
 
 // MARK: - Vibe Breakdown Generator
@@ -63,7 +118,7 @@ class VibeBreakdownGenerator {
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         print("🎯 TARGET vs ACTUAL:")
         print("  Natal:      \(String(format: "%5.1f", distribution["natal"] ?? 0))% (target: ≤45%)")
-        print("  Transit:    \(String(format: "%5.1f", distribution["transit"] ?? 0))% (target: 20%)")
+        print("  Transit:    \(String(format: "%5.1f", distribution["transit"] ?? 0))% (target: \(Int(EngineConfig.transitTargetShare * 100))%)")
         print("  Moon Phase: \(String(format: "%5.1f", distribution["phase"] ?? 0))% (target: ≤15%)")
         print("  Weather:    \(String(format: "%5.1f", distribution["weather"] ?? 0))% (target: 10%)")
         print("  Day of Week:\(String(format: "%5.1f", distribution["dayOfWeek"] ?? 0))% (target: ≤10%)")
@@ -224,6 +279,8 @@ class VibeBreakdownGenerator {
                 scalingFactor = 1.0
             case .currentSun:
                 scalingFactor = 1.0
+            case .axis:
+                scalingFactor = 1.0  // Axis tokens use full weight (no scaling)
             }
             
             if let aspectSource = token.aspectSource,

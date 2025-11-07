@@ -23,7 +23,7 @@ extension NatalChartManager {
     func generateDailyVibeInterpretation(
         for natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
-        transits: [[String: Any]],
+        transits: [NatalChartCalculator.TransitAspect],  // P0 FIX: Typed transits!
         weather: TodayWeather?,
         profileHash: String
     ) -> DailyVibeContent {
@@ -42,13 +42,13 @@ extension NatalChartManager {
     /// - Parameters:
     ///   - natalChart: The base natal chart
     ///   - progressedChart: The current progressed chart
-    ///   - transits: Array of transit aspects
+    ///   - transits: Array of typed transit aspects (P0 FIX!)
     ///   - weather: Optional current weather conditions
     /// - Returns: A string containing the full interpretation
     func generateFullInterpretation(
         for natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
-        transits: [[String: Any]],
+        transits: [NatalChartCalculator.TransitAspect],  // P0 FIX: Typed transits!
         weather: TodayWeather?) -> String {
             
             return CosmicFitInterpretationEngine.generateFullInterpretation(

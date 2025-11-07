@@ -137,9 +137,16 @@ class NatalChartManager {
         return SavedChartStorage.shared.deleteChart(name: name)
     }
     
+    /// Calculate typed transit aspects (PREFERRED - no dictionary conversion)
+    /// - Parameter natalChart: The base natal chart
+    /// - Returns: Array of typed TransitAspect structs
+    func calculateTypedTransits(natalChart: NatalChartCalculator.NatalChart) -> [NatalChartCalculator.TransitAspect] {
+        return NatalChartCalculator.calculateTransits(natalChart: natalChart)
+    }
+    
     /// Calculate a transit chart (current planetary positions relative to natal chart)
     /// - Parameter natalChart: The base natal chart
-    /// - Returns: Transit chart data
+    /// - Returns: Transit chart data (DEPRECATED - use calculateTypedTransits instead)
     func calculateTransitChart(natalChart: NatalChartCalculator.NatalChart) -> [String: Any] {
         var transitData: [String: Any] = [:]
         

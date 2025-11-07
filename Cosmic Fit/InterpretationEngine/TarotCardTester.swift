@@ -147,8 +147,9 @@ class TarotCardTester {
             let selectedCard = TarotCardSelector.selectCard(for: tokens, vibeBreakdown: vibeBreakdown)
             
             if let card = selectedCard {
-                let dominantEnergy = vibeBreakdown.dominantEnergy ?? ""
-                let cardAffinity = card.energyAffinity[dominantEnergy] ?? 0.0
+                let dominantEnergy: Energy = vibeBreakdown.dominantEnergy
+                let dominantEnergyName = dominantEnergy.rawValue
+                let cardAffinity = card.energyAffinity[dominantEnergyName] ?? 0.0
                 let passed = cardAffinity >= 0.5 // Card should have decent affinity for dominant energy
                 
                 results.append(TestResult(
@@ -387,7 +388,7 @@ class TarotCardTester {
             score: score,
             selectedCard: selectedCard?.displayName,
             expectedCard: expectedCardName,
-            details: "Score: \(String(format: "%.2f", score)), Dominant Energy: \(vibeBreakdown.dominantEnergy ?? "None")"
+            details: "Score: \(String(format: "%.2f", score)), Dominant Energy: \(vibeBreakdown.dominantEnergyName)"
         )
     }
     

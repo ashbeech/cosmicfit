@@ -293,17 +293,17 @@ class SemanticTokenGenerator {
     }
     
     static func generateTransitTokens(
-        transits: [[String: Any]],
+        transits: [NatalChartCalculator.TransitAspect],  // P0 FIX: Typed transits!
         natal: NatalChartCalculator.NatalChart) -> [StyleToken] {
             
             var tokens: [StyleToken] = []
             
             for transit in transits {
-                // Extract transit data
-                let transitPlanet = transit["transitPlanet"] as? String ?? ""
-                let natalPlanet = transit["natalPlanet"] as? String ?? ""
-                let aspectType = transit["aspectType"] as? String ?? ""
-                let orb = transit["orb"] as? Double ?? 1.0
+                // Extract transit data (P0 FIX: use typed struct properties)
+                let transitPlanet = transit.transitPlanet
+                let natalPlanet = transit.natalPlanet
+                let aspectType = transit.aspectType
+                let orb = transit.orb
                 let isSensitivePoint = PlanetPowerEvaluator.isSensitiveTarget(natalPlanet: natalPlanet)
                 
                 // Get natal planet power score
@@ -494,46 +494,144 @@ class SemanticTokenGenerator {
         return tokens
     }
     
-    /// Convenience method to generate all Daily Fit tokens in one call
+    /// Generate all tokens for Daily Fit with Phase 1 enhancements
+    /// - Parameters:
+    ///   - natal: Natal chart
+    ///   - progressed: Progressed chart
+    ///   - transits: Array of transit dictionaries
+    ///   - weather: Optional weather data
+    ///   - lunarPhase: Current lunar phase (0-1 where 0=new moon, 0.5=full moon)
+    /// - Returns: Combined token array with transit capping, axis tokens, and deduplication
     static func generateDailyFitTokens(
         natal: NatalChartCalculator.NatalChart,
         progressed: NatalChartCalculator.NatalChart,
-        transits: [[String: Any]],
-        weather: TodayWeather?) -> [StyleToken] {
+        transits: [NatalChartCalculator.TransitAspect],  // P0 FIX: Typed transits!
+        weather: TodayWeather?,
+        lunarPhase: Double = 0.0  // PHASE 1: NEW PARAMETER
+    ) -> [StyleToken] {
         
-        var allTokens: [StyleToken] = []
+        if EngineConfig.enablePhase1Logging {
+            print("\n🎯 PHASE 1: ENHANCED TOKEN GENERATION WITH AXIS SOURCE")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        }
         
-        DebugLogger.info("🌟 GENERATING COMPLETE DAILY FIT TOKEN SET 🌟")
+        // PHASE 1 STEP 1: Build AstroFeatures FIRST (before any token generation)
+        let astroFeatures = AstroFeaturesBuilder.buildFeatures(
+            natalChart: natal,
+            progressedChart: progressed,
+            transits: transits,
+            lunarPhase: lunarPhase,
+            weather: weather
+        )
         
-        // Generate LIMITED natal tokens for Daily Fit (not full Blueprint tokens)
+        if EngineConfig.enablePhase1Logging {
+            print("📊 AstroFeatures extracted:")
+            print(astroFeatures.debugDescription())
+        }
+        
+        // PHASE 1 STEP 2: Generate non-transit tokens first
+        var nonTransitTokens: [StyleToken] = []
+        
+        // Generate LIMITED natal tokens for Daily Fit
         let baseTokens = generateDailyFitNatalTokens(natal: natal)
         DebugLogger.tokenSet("BASE STYLE TOKENS (LIMITED FOR DAILY FIT)", baseTokens)
-        allTokens.append(contentsOf: baseTokens)
+        nonTransitTokens.append(contentsOf: baseTokens)
         
-        // Generate current Sun sign background energy tokens (REDUCED)
+        // Generate current Sun sign background energy tokens
         let currentSunTokens = generateCurrentSunSignTokens()
         DebugLogger.tokenSet("CURRENT SUN SIGN BACKGROUND (REDUCED)", currentSunTokens)
-        allTokens.append(contentsOf: currentSunTokens)
+        nonTransitTokens.append(contentsOf: currentSunTokens)
         
-            // Generate LIMITED emotional vibe tokens
-            let emotionalTokens = generateLimitedEmotionalVibeTokens(natal: natal, progressed: progressed)
-            DebugLogger.tokenSet("EMOTIONAL VIBE TOKENS (LIMITED)", emotionalTokens)
-            allTokens.append(contentsOf: emotionalTokens)
+        // Generate LIMITED emotional vibe tokens
+        let emotionalTokens = generateLimitedEmotionalVibeTokens(natal: natal, progressed: progressed)
+        DebugLogger.tokenSet("EMOTIONAL VIBE TOKENS (LIMITED)", emotionalTokens)
+        nonTransitTokens.append(contentsOf: emotionalTokens)
         
-        // Generate transit tokens
-        let transitTokens = generateTransitTokens(transits: transits, natal: natal)
-        DebugLogger.tokenSet("TRANSIT TOKENS", transitTokens)
-        allTokens.append(contentsOf: transitTokens)
-        
-        // Generate weather tokens (REDUCED)
+        // Generate weather tokens
         let weatherTokens = generateWeatherTokens(weather: weather)
         DebugLogger.tokenSet("WEATHER TOKENS (PRACTICAL ONLY)", weatherTokens)
-        allTokens.append(contentsOf: weatherTokens)
+        nonTransitTokens.append(contentsOf: weatherTokens)
         
-        // Generate daily signature tokens (REDUCED SEASONAL)
+        // Generate daily signature tokens
         let dailyTokens = generateDailySignature()
-        DebugLogger.tokenSet("DAILY SIGNATURE TOKENS", dailyTokens)
-        allTokens.append(contentsOf: dailyTokens)
+        DebugLogger.tokenSet("DAILY SIGNATURE TOKENS (REDUCED SEASONAL)", dailyTokens)
+        nonTransitTokens.append(contentsOf: dailyTokens)
+        
+        // PHASE 1 STEP 3: Generate transit tokens
+        var transitTokens = generateTransitTokens(transits: transits, natal: natal)
+        DebugLogger.tokenSet("TRANSIT TOKENS (PRE-CAP)", transitTokens)
+        
+        // PHASE 1 STEP 4: Cap transit tokens to 35% maximum
+        if EngineConfig.enablePhase1Logging {
+            print("\n🔒 APPLYING TRANSIT CAP")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        }
+        
+        transitTokens = TransitCapper.capTransitTokens(
+            transitTokens,
+            relativeTo: nonTransitTokens
+        )
+        
+        let transitShare = TransitCapper.calculateTransitShare(
+            transitTokens: transitTokens,
+            otherTokens: nonTransitTokens
+        )
+        
+        if EngineConfig.enablePhase1Logging {
+            print("✅ Transit share after cap: \(String(format: "%.1f%%", transitShare))")
+        }
+        
+        DebugLogger.tokenSet("TRANSIT TOKENS (POST-CAP)", transitTokens)
+        
+        // PHASE 1 STEP 5: Calculate existing token weight for axis generation
+        let existingTokenWeight = (nonTransitTokens + transitTokens).reduce(0.0) { $0 + $1.weight }
+        
+        // PHASE 1 STEP 6: Generate axis tokens from features
+        if EngineConfig.enablePhase1Logging {
+            print("\n🧭 GENERATING AXIS TOKENS")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        }
+        
+        let axisTokens = AxisTokenGenerator.generateAxisTokens(
+            from: astroFeatures,
+            existingTokenWeight: existingTokenWeight,
+            targetAxisShare: EngineConfig.axisShareDefault
+        )
+        
+        DebugLogger.tokenSet("AXIS TOKENS", axisTokens)
+        
+        // PHASE 1 STEP 7: Combine all tokens
+        var allTokens = nonTransitTokens + transitTokens + axisTokens
+        
+        if EngineConfig.enablePhase1Logging {
+            print("\n📊 TOKEN POOL BEFORE MERGING:")
+            print("  Total tokens: \(allTokens.count)")
+            print("  Total weight: \(String(format: "%.2f", allTokens.reduce(0) { $0 + $1.weight }))")
+        }
+        
+        // PHASE 1 STEP 8: Merge duplicate tokens by name
+        if EngineConfig.enablePhase1Logging {
+            print("\n🔀 MERGING DUPLICATE TOKENS")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        }
+        
+        allTokens = TokenMerger.mergeTokensByName(allTokens)
+        
+        if EngineConfig.enablePhase1Logging {
+            print("\n📊 TOKEN POOL AFTER MERGING:")
+            print("  Total tokens: \(allTokens.count)")
+            print("  Total weight: \(String(format: "%.2f", allTokens.reduce(0) { $0 + $1.weight }))")
+            
+            // Calculate final distribution
+            let finalTransitWeight = allTokens.filter { $0.originType == .transit }.reduce(0.0) { $0 + $1.weight }
+            let finalAxisWeight = allTokens.filter { $0.originType == .axis }.reduce(0.0) { $0 + $1.weight }
+            let finalTotalWeight = allTokens.reduce(0.0) { $0 + $1.weight }
+            
+            print("\n✅ FINAL DISTRIBUTION:")
+            print("  Transit: \(String(format: "%.1f%%", (finalTransitWeight / finalTotalWeight) * 100))")
+            print("  Axis: \(String(format: "%.1f%%", (finalAxisWeight / finalTotalWeight) * 100))")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+        }
         
         DebugLogger.info("✅ Complete Daily Fit token set generated: \(allTokens.count) tokens")
         

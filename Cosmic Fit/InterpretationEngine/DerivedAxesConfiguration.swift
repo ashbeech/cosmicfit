@@ -56,7 +56,7 @@ struct DerivedAxesConfiguration {
     
     struct TarotAffinity {
         /// Weight multiplier for axis affinity scoring in tarot selection
-        static let scoringWeight = 5.0
+        static let scoringWeight = 12.0
         
         /// Maximum distance for axis similarity (used in distance calculation)
         static let maxDistance = 20.0
@@ -66,12 +66,12 @@ struct DerivedAxesConfiguration {
     
     struct Debug {
         /// Log detailed axis evaluation to console
-        static let logEvaluation = false
+        static let logEvaluation = true
         
         /// Log copy selection decisions to console
-        static let logCopySelection = false
+        static let logCopySelection = true
         
         /// Log tarot axis matching to console
-        static let logTarotMatching = false
+        static let logTarotMatching = true
     }
 }

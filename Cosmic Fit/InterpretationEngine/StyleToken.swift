@@ -16,6 +16,7 @@ enum OriginType: String, CaseIterable {
     case phase
     case weather
     case currentSun
+    case axis  // PHASE 1: Derived axes tokens
 }
 
 struct StyleToken {
@@ -169,6 +170,8 @@ struct StyleToken {
             } else {
                 return "Current Season"
             }
+        case .axis:
+            return "Derived Kinetic Dimension"
         }
     }
     

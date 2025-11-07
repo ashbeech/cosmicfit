@@ -383,7 +383,7 @@ struct NatalChartCalculator {
     
     // MARK: - Transit Calculations -------------------------------------------
     
-    struct TransitAspect {
+    struct TransitAspect: Codable, Equatable {
         let transitPlanet: String
         let transitPlanetSymbol: String
         let natalPlanet: String
@@ -398,7 +398,7 @@ struct NatalChartCalculator {
         let category: TransitCategory
     }
     
-    enum TransitCategory: String {
+    enum TransitCategory: String, Codable {
         case shortTerm = "Short-term Influences"
         case regular = "Regular Influences"
         case longTerm = "Long-term Influences"

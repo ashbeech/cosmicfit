@@ -8,6 +8,16 @@
 
 import Foundation
 
+// MARK: - Phase 2: Card Axes Structure
+
+/// Represents a card's axis values (normalized to 0-100 scale)
+struct CardAxes {
+    let action: Double       // 0-100
+    let tempo: Double        // 0-100
+    let strategy: Double     // 0-100
+    let visibility: Double   // 0-100
+}
+
 /// Data model representing a Tarot card with semantic matching capabilities
 struct TarotCard: Codable, Identifiable {
     let name: String               // e.g., "The Chariot", "Three of Cups"
@@ -78,6 +88,55 @@ struct TarotCard: Codable, Identifiable {
     /// Get the card's dominant energy
     var dominantEnergy: String? {
         return energyAffinity.max(by: { $0.value < $1.value })?.key
+    }
+    
+    // MARK: - Phase 2: Helper Properties
+    
+    /// Get axes as a struct for Phase 2 scoring
+    var axes: CardAxes {
+        let action = axesAffinity?["action"] ?? 50.0
+        let tempo = axesAffinity?["tempo"] ?? 50.0
+        let strategy = axesAffinity?["strategy"] ?? 50.0
+        let visibility = axesAffinity?["visibility"] ?? 50.0
+        return CardAxes(action: action, tempo: tempo, strategy: strategy, visibility: visibility)
+    }
+    
+    /// Whether this card is a court card (Page, Knight, Queen, King)
+    var isCourtCard: Bool {
+        guard let number = number else { return false }
+        return number >= 11 && number <= 14  // 11=Page, 12=Knight, 13=Queen, 14=King
+    }
+    
+    /// The rank of the card (Ace, Two, ..., Ten, Page, Knight, Queen, King)
+    /// For Major Arcana, returns nil
+    var rank: String? {
+        guard arcana == .minor, let number = number else { return nil }
+        
+        switch number {
+        case 1: return "Ace"
+        case 2: return "Two"
+        case 3: return "Three"
+        case 4: return "Four"
+        case 5: return "Five"
+        case 6: return "Six"
+        case 7: return "Seven"
+        case 8: return "Eight"
+        case 9: return "Nine"
+        case 10: return "Ten"
+        case 11: return "Page"
+        case 12: return "Knight"
+        case 13: return "Queen"
+        case 14: return "King"
+        default: return nil
+        }
+    }
+    
+    /// Get suit as a string (for Phase 2 comparisons)
+    var suitString: String {
+        if arcana == .major {
+            return "Major Arcana"
+        }
+        return suit?.rawValue ?? "Unknown"
     }
     
     /// Calculate match score for this card based on tokens and theme
@@ -255,9 +314,8 @@ struct TarotCard: Codable, Identifiable {
     
     /// Generate a contextual interpretation based on the day's energy
     func generateInterpretation(for vibeBreakdown: VibeBreakdown, tokens: [StyleToken]) -> String {
-        guard let dominantEnergy = vibeBreakdown.dominantEnergy else {
-            return description
-        }
+        // Use the enum-based dominantEnergy (non-optional)
+        let dominantEnergy = vibeBreakdown.dominantEnergy
         
         // Create energy-specific interpretations
         let energyContext = getEnergyContext(for: dominantEnergy, breakdown: vibeBreakdown)
@@ -268,22 +326,20 @@ struct TarotCard: Codable, Identifiable {
     
     // MARK: - Helper Methods
     
-    private func getEnergyContext(for energy: String, breakdown: VibeBreakdown) -> String {
-        switch energy.lowercased() {
-        case "classic":
+    private func getEnergyContext(for energy: Energy, breakdown: VibeBreakdown) -> String {
+        switch energy {
+        case .classic:
             return "grounding yourself in timeless wisdom"
-        case "playful":
+        case .playful:
             return "embracing spontaneity and creative expression"
-        case "romantic":
+        case .romantic:
             return "connecting with beauty and emotional flow"
-        case "utility":
+        case .utility:
             return "focusing on practical action and purposeful choices"
-        case "drama":
+        case .drama:
             return "stepping boldly into your power"
-        case "edge":
+        case .edge:
             return "breaking new ground and embracing innovation"
-        default:
-            return "finding balance in today's energy"
         }
     }
     
@@ -296,19 +352,4 @@ struct TarotCard: Codable, Identifiable {
 }
 
 // MARK: - VibeBreakdown Extension
-
-extension VibeBreakdown {
-    /// Get the dominant energy name for tarot matching
-    var dominantEnergy: String? {
-        let energies = [
-            ("classic", classic),
-            ("playful", playful),
-            ("romantic", romantic),
-            ("utility", utility),
-            ("drama", drama),
-            ("edge", edge)
-        ]
-        
-        return energies.max(by: { $0.1 < $1.1 })?.0
-    }
-}
+// (Removed duplicate dominantEnergy - now defined in VibeBreakdown.swift with Energy enum)

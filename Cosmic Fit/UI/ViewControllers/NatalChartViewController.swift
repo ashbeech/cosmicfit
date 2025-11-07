@@ -374,8 +374,8 @@ final class NatalChartViewController: UIViewController {
         // Generate new content for today
         print("🆕 Generating new daily vibe for today")
         
-        // Collect transits
-        let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
+        // P0 FIX: Get typed transits directly (not from dictionaries)
+        let allTransits = NatalChartManager.shared.calculateTypedTransits(natalChart: natalChart)
         
         // Generate daily vibe content
         let dailyVibeContent = CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
@@ -419,8 +419,8 @@ final class NatalChartViewController: UIViewController {
         // Generate new content for today with debug
         print("🆕 Generating new daily vibe for today with debug information")
         
-        // Collect transits
-        let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
+        // P0 FIX: Get typed transits directly (not from dictionaries)
+        let allTransits = NatalChartManager.shared.calculateTypedTransits(natalChart: natalChart)
         
         // Generate daily vibe content with debug
         let dailyVibeContent = CosmicFitInterpretationEngine.generateDailyVibeInterpretation(
@@ -580,8 +580,8 @@ final class NatalChartViewController: UIViewController {
             return
         }
         
-        // Collect transits
-        let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
+        // P0 FIX: Get typed transits directly (not from dictionaries)
+        let allTransits = NatalChartManager.shared.calculateTypedTransits(natalChart: natalChart)
         
         // Generate daily vibe content with debug
         print("Generating Daily Vibe with detailed debugging...")

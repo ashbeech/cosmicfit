@@ -596,12 +596,8 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
                 } else {
                     print("🎯 Generating new Daily Fit content for today...")
                     
-                    // Get transits for daily fit (using existing logic)
-                    let transitData = NatalChartManager.shared.calculateTransitChart(natalChart: natalChart)
-                    let shortTermTransits = (transitData["groupedAspects"] as? [String: [[String: Any]]])?["Short-term Influences"] ?? []
-                    let regularTransits = (transitData["groupedAspects"] as? [String: [[String: Any]]])?["Regular Influences"] ?? []
-                    let longTermTransits = (transitData["groupedAspects"] as? [String: [[String: Any]]])?["Long-term Influences"] ?? []
-                    let allTransits = [shortTermTransits, regularTransits, longTermTransits].flatMap { $0 }
+                    // P0 FIX: Get typed transits directly (no dictionary conversion!)
+                    let allTransits = NatalChartManager.shared.calculateTypedTransits(natalChart: natalChart)
                     
                     // Generate profile hash for daily seed
                     let profileHashForSeed = userProfile?.id ?? chartId

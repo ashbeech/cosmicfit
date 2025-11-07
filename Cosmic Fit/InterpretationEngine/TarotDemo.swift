@@ -142,7 +142,7 @@ class TarotDemo {
     ) {
         print("📊 Scenario Input:")
         print("  • Tokens: \(tokens.map { $0.name }.joined(separator: ", "))")
-        print("  • Dominant Energy: \(vibeBreakdown.dominantEnergy ?? "Unknown")")
+        print("  • Dominant Energy: \(vibeBreakdown.dominantEnergyName)")
         print("  • Expected: \(expectedCardTypes.joined(separator: ", "))")
         
         if let selectedCard = TarotCardSelector.selectCard(for: tokens, vibeBreakdown: vibeBreakdown) {
@@ -158,10 +158,10 @@ class TarotDemo {
             }
             
             // Show energy affinity
-            if let dominantEnergy = vibeBreakdown.dominantEnergy {
-                let affinity = selectedCard.energyAffinity[dominantEnergy] ?? 0.0
-                print("  • \(dominantEnergy.capitalized) Energy Affinity: \(String(format: "%.2f", affinity))")
-            }
+            let dominantEnergy: Energy = vibeBreakdown.dominantEnergy
+            let dominantEnergyName = dominantEnergy.rawValue
+            let affinity = selectedCard.energyAffinity[dominantEnergyName] ?? 0.0
+            print("  • \(dominantEnergyName.capitalized) Energy Affinity: \(String(format: "%.2f", affinity))")
             
             print("  • Score: \(String(format: "%.2f", selectedCard.calculateMatchScore(for: tokens, vibeBreakdown: vibeBreakdown)))")
         } else {

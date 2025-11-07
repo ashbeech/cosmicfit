@@ -215,7 +215,7 @@ struct DebugLogger {
     }
     
     /// Log daily vibe generation start
-    static func dailyVibeGenerationStart(natal: NatalChartCalculator.NatalChart, progressed: NatalChartCalculator.NatalChart, transits: [[String: Any]]) {
+    static func dailyVibeGenerationStart(natal: NatalChartCalculator.NatalChart, progressed: NatalChartCalculator.NatalChart, transits: [NatalChartCalculator.TransitAspect]) {
         guard currentLogLevel.priority <= LogLevel.info.priority else { return }
         
         print("\n☀️ GENERATING DAILY COSMIC VIBE ☀️")

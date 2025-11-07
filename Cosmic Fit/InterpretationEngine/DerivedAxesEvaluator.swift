@@ -65,21 +65,23 @@ final class DerivedAxesEvaluator {
     
     /// Evaluate Action axis: Movement, drive, direction
     /// Driven by: Mars, Jupiter, Fire element tokens
+    /// Evaluate Action axis: Movement, drive, direction
+    /// Driven by: Mars, Jupiter, Fire element tokens
     private static func evaluateActionAxis(tokens: [StyleToken]) -> Double {
-        var score: Double = 5.0 // Start at midpoint
+        var rawScore: Double = 0.0
         
         // Mars tokens - primary driver of action
         let marsTokens = tokens.filter { $0.planetarySource == "Mars" }
         for token in marsTokens {
             let weight = token.weight * DerivedAxesConfiguration.Evaluation.strongTokenMultiplier
-            score += weight
+            rawScore += weight
         }
         
         // Jupiter tokens - expansion and momentum
         let jupiterTokens = tokens.filter { $0.planetarySource == "Jupiter" }
         for token in jupiterTokens {
             let weight = token.weight * DerivedAxesConfiguration.Evaluation.moderateTokenMultiplier
-            score += weight * 0.7
+            rawScore += weight * 0.7
         }
         
         // Fire element tokens
@@ -88,7 +90,7 @@ final class DerivedAxesEvaluator {
             return ["Aries", "Leo", "Sagittarius"].contains(signSource)
         }
         for token in fireTokens {
-            score += token.weight * 0.5
+            rawScore += token.weight * 0.5
         }
         
         // Action-related keywords
@@ -100,26 +102,27 @@ final class DerivedAxesEvaluator {
             }
         }
         for token in actionTokens {
-            score += token.weight * 0.4
+            rawScore += token.weight * 0.4
         }
         
-        return min(10.0, max(1.0, score))
+        // Normalize: Scale raw score (typically 0-20) to 1-10 range
+        // Use a scaling factor that maps typical ranges sensibly
+        let scaledScore = 5.0 + (rawScore * 0.5) // Base 5 + scaled contribution
+        
+        return min(10.0, max(1.0, scaledScore))
     }
     
     /// Evaluate Tempo axis: Speed, emotional temperature
     /// Driven by: Lunar phase, aspect density, Air element
     private static func evaluateTempoAxis(tokens: [StyleToken]) -> Double {
-        var score: Double = 5.0 // Start at midpoint
+        var rawScore: Double = 0.0
         
         // Moon phase tokens affect tempo
         let moonPhaseTokens = tokens.filter { $0.originType == .phase }
         for token in moonPhaseTokens {
-            // Full Moon increases tempo, New Moon decreases it
-            if token.aspectSource?.localizedCaseInsensitiveContains("Full Moon") == true {
-                score += token.weight * 1.2
-            } else if token.aspectSource?.localizedCaseInsensitiveContains("New Moon") == true {
-                score -= token.weight * 0.8
-            }
+            // New moon = slower tempo (negative), Full moon = faster tempo (positive)
+            let multiplier = token.name.lowercased().contains("new") ? -0.6 : 0.6
+            rawScore += token.weight * multiplier
         }
         
         // Air element tokens increase tempo
@@ -128,49 +131,50 @@ final class DerivedAxesEvaluator {
             return ["Gemini", "Libra", "Aquarius"].contains(signSource)
         }
         for token in airTokens {
-            score += token.weight * 0.8
+            rawScore += token.weight * 0.7
         }
         
-        // Aspect density - more aspects = higher tempo
-        let aspectTokens = tokens.filter { $0.aspectSource != nil }
-        let aspectDensity = Double(aspectTokens.count) / max(1.0, Double(tokens.count))
-        score += aspectDensity * 3.0
-        
         // Tempo-related keywords
-        let tempoKeywords = ["speed", "quick", "fast", "slow", "pace", "flow", "intensity",
-                            "rapid", "swift", "hurried", "leisurely", "rushed"]
+        let tempoKeywords = ["quick", "fast", "rapid", "swift", "slow", "languid", "measured"]
         let tempoTokens = tokens.filter { token in
             tempoKeywords.contains { keyword in
                 token.name.localizedCaseInsensitiveContains(keyword)
             }
         }
         for token in tempoTokens {
-            // Fast words increase tempo, slow words decrease it
-            let slowWords = ["slow", "leisurely", "calm"]
-            let multiplier = slowWords.contains { token.name.localizedCaseInsensitiveContains($0) } ? -0.6 : 0.6
-            score += token.weight * multiplier
+            // Fast = positive, slow = negative
+            let multiplier = token.name.lowercased().contains("slow") ? -0.5 : 0.5
+            rawScore += token.weight * multiplier
         }
         
-        return min(10.0, max(1.0, score))
+        // Aspect density (more transit tokens = higher tempo)
+        let transitTokens = tokens.filter { $0.originType == .transit }
+        let densityBonus = Double(transitTokens.count) * 0.05 // Small bonus for density
+        rawScore += densityBonus
+        
+        // Normalize: Scale raw score (typically -5 to +15) to 1-10 range
+        let scaledScore = 5.0 + (rawScore * 0.4) // Base 5 + scaled contribution
+        
+        return min(10.0, max(1.0, scaledScore))
     }
     
     /// Evaluate Strategy axis: Structure, discipline
     /// Driven by: Saturn, Mercury, Earth element tokens
     private static func evaluateStrategyAxis(tokens: [StyleToken]) -> Double {
-        var score: Double = 5.0 // Start at midpoint
+        var rawScore: Double = 0.0
         
         // Saturn tokens - primary driver of strategy
         let saturnTokens = tokens.filter { $0.planetarySource == "Saturn" }
         for token in saturnTokens {
             let weight = token.weight * DerivedAxesConfiguration.Evaluation.strongTokenMultiplier
-            score += weight
+            rawScore += weight
         }
         
         // Mercury tokens - planning and precision
         let mercuryTokens = tokens.filter { $0.planetarySource == "Mercury" }
         for token in mercuryTokens {
             let weight = token.weight * DerivedAxesConfiguration.Evaluation.moderateTokenMultiplier
-            score += weight * 0.8
+            rawScore += weight * 0.8
         }
         
         // Earth element tokens
@@ -179,7 +183,7 @@ final class DerivedAxesEvaluator {
             return ["Taurus", "Virgo", "Capricorn"].contains(signSource)
         }
         for token in earthTokens {
-            score += token.weight * 0.6
+            rawScore += token.weight * 0.6
         }
         
         // Strategy-related keywords
@@ -192,70 +196,67 @@ final class DerivedAxesEvaluator {
             }
         }
         for token in strategyTokens {
-            score += token.weight * 0.5
+            rawScore += token.weight * 0.5
         }
         
-        return min(10.0, max(1.0, score))
+        // Normalize: Scale raw score (typically 0-20) to 1-10 range
+        let scaledScore = 5.0 + (rawScore * 0.5) // Base 5 + scaled contribution
+        
+        return min(10.0, max(1.0, scaledScore))
     }
     
     /// Evaluate Visibility axis: Outward vs inward energy
     /// Driven by: Sun, MC (Midheaven), Jupiter, Leo energy
     private static func evaluateVisibilityAxis(tokens: [StyleToken]) -> Double {
-        var score: Double = 5.0 // Start at midpoint
+        var rawScore: Double = 0.0
         
         // Sun tokens - core visibility driver
         let sunTokens = tokens.filter { $0.planetarySource == "Sun" }
         for token in sunTokens {
             let weight = token.weight * DerivedAxesConfiguration.Evaluation.strongTokenMultiplier
-            score += weight
+            rawScore += weight
         }
         
         // Jupiter tokens - expansion and presence
         let jupiterTokens = tokens.filter { $0.planetarySource == "Jupiter" }
         for token in jupiterTokens {
             let weight = token.weight * DerivedAxesConfiguration.Evaluation.moderateTokenMultiplier
-            score += weight * 0.9
+            rawScore += weight * 0.9
         }
         
         // Leo energy (Sun-ruled sign)
         let leoTokens = tokens.filter { $0.signSource == "Leo" }
         for token in leoTokens {
-            score += token.weight * 0.7
-        }
-        
-        // MC (Midheaven) tokens if present
-        let mcTokens = tokens.filter { token in
-            token.aspectSource?.localizedCaseInsensitiveContains("MC") == true ||
-            token.aspectSource?.localizedCaseInsensitiveContains("Midheaven") == true
-        }
-        for token in mcTokens {
-            score += token.weight * 1.0
+            rawScore += token.weight * 0.8
         }
         
         // Visibility-related keywords
-        let visibilityKeywords = ["presence", "exposure", "confidence", "bold", "visible",
-                                 "prominent", "standout", "noticeable", "dramatic", "striking",
-                                 "radiant", "magnetic", "commanding"]
+        let visibilityKeywords = ["visible", "prominent", "bold", "radiant", "luminous", "expressive",
+                                 "statement", "attention", "striking", "commanding"]
         let visibilityTokens = tokens.filter { token in
             visibilityKeywords.contains { keyword in
                 token.name.localizedCaseInsensitiveContains(keyword)
             }
         }
         for token in visibilityTokens {
-            score += token.weight * 0.5
+            rawScore += token.weight * 0.6
         }
         
-        // Introversion keywords decrease visibility
-        let introversionKeywords = ["subtle", "quiet", "reserved", "understated", "muted", "private"]
-        let introversionTokens = tokens.filter { token in
-            introversionKeywords.contains { keyword in
-                token.name.localizedCaseInsensitiveContains(keyword)
+        // House 1 and 10 tokens (Ascendant/MC - public visibility)
+        let visibilityHouses = tokens.filter { token in
+            // Check if token is from house 1 or 10
+            if let aspectSource = token.aspectSource {
+                return aspectSource.contains("house 1") || aspectSource.contains("house 10")
             }
+            return false
         }
-        for token in introversionTokens {
-            score -= token.weight * 0.4
+        for token in visibilityHouses {
+            rawScore += token.weight * 0.7
         }
         
-        return min(10.0, max(1.0, score))
+        // Normalize: Scale raw score (typically 0-20) to 1-10 range
+        let scaledScore = 5.0 + (rawScore * 0.5) // Base 5 + scaled contribution
+        
+        return min(10.0, max(1.0, scaledScore))
     }
 }

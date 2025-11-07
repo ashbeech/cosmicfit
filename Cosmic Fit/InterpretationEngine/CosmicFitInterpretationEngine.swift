@@ -135,7 +135,7 @@ class CosmicFitInterpretationEngine {
     /// - Parameters:
     ///   - natalChart: The base natal chart
     ///   - progressedChart: The current progressed chart
-    ///   - transits: Array of transit aspects
+    ///   - transits: Array of typed transit aspects (P0 FIX!)
     ///   - weather: Optional current weather conditions
     ///   - profileHash: Stable user/profile identifier for daily seed generation
     ///   - date: Target date (defaults to today)
@@ -143,7 +143,7 @@ class CosmicFitInterpretationEngine {
     static func generateDailyVibeInterpretation(
         from natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
-        transits: [[String: Any]],
+        transits: [NatalChartCalculator.TransitAspect],  // P0 FIX: Typed transits!
         weather: TodayWeather?,
         profileHash: String,
         date: Date = Date()
@@ -153,11 +153,9 @@ class CosmicFitInterpretationEngine {
         DebugConfiguration.debugLog {
             DebugLogger.dailyVibeGenerationStart(natal: natalChart, progressed: progressedChart, transits: transits)
             
-            // Log transit information
+            // Log transit information (P0 FIX: use typed struct properties)
             let planetCounts = transits.reduce(into: [String: Int]()) { counts, transit in
-                if let planet = transit["transitPlanet"] as? String {
-                    counts[planet, default: 0] += 1
-                }
+                counts[transit.transitPlanet, default: 0] += 1
             }
             
             print("Transit distribution:")
@@ -203,7 +201,7 @@ class CosmicFitInterpretationEngine {
     /// - Parameters:
     ///   - natalChart: The base natal chart
     ///   - progressedChart: The current progressed chart
-    ///   - transits: Array of transit aspects
+    ///   - transits: Array of typed transit aspects (P0 FIX!)
     ///   - weather: Optional current weather conditions
     ///   - profileHash: Stable user/profile identifier for daily seed generation
     ///   - date: Target date (defaults to today)
@@ -211,7 +209,7 @@ class CosmicFitInterpretationEngine {
     static func generateFullInterpretation(
         from natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
-        transits: [[String: Any]],
+        transits: [NatalChartCalculator.TransitAspect],  // P0 FIX: Typed transits!
         weather: TodayWeather?,
         profileHash: String,
         date: Date = Date()

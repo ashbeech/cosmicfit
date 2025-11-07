@@ -13,7 +13,7 @@ class DailyVibeGenerator {
     /// - Parameters:
     ///   - natalChart: The natal chart for base style resonance
     ///   - progressedChart: The progressed chart for emotional vibe
-    ///   - transits: Array of transit aspects to natal chart
+    ///   - transits: Array of typed transit aspects (P0 FIX: no more dictionaries!)
     ///   - weather: Optional current weather conditions
     ///   - moonPhase: Current lunar phase (0-360)
     ///   - profileHash: User profile identifier for daily seed generation (can be empty)
@@ -23,7 +23,7 @@ class DailyVibeGenerator {
     static func generateDailyVibe(
         natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
-        transits: [[String: Any]],
+        transits: [NatalChartCalculator.TransitAspect],  // P0 FIX: Typed transits!
         weather: TodayWeather?,
         moonPhase: Double,
         profileHash: String = "",
@@ -83,11 +83,14 @@ class DailyVibeGenerator {
          */
 
         // Get all semantic tokens from interpretation engine
+        // PHASE 1: Normalize lunar phase from 0-360 to 0-1 for axis calculation
+        let normalizedLunarPhase = moonPhase / 360.0
         let allTokens = SemanticTokenGenerator.generateDailyFitTokens(
             natal: natalChart,
             progressed: progressedChart,
             transits: transits,
-            weather: weather
+            weather: weather,
+            lunarPhase: normalizedLunarPhase  // PHASE 1: NEW PARAMETER
         )
         
         // Debug: Analyze token composition
@@ -168,7 +171,7 @@ class DailyVibeGenerator {
     private static func debugLogInputs(
         natal: NatalChartCalculator.NatalChart,
         progressed: NatalChartCalculator.NatalChart,
-        transits: [[String: Any]],
+        transits: [NatalChartCalculator.TransitAspect],  // P0 FIX: Typed transits!
         weather: TodayWeather?,
         moonPhase: Double) {
         
@@ -184,22 +187,16 @@ class DailyVibeGenerator {
             print("  🌟 Transits:")
             print("    • Total Transit Aspects: \(transits.count)")
             
-            // Count transits by planet with detailed orb information
+            // Count transits by planet with detailed orb information (P0 FIX: use typed struct)
             var planetCounts: [String: Int] = [:]
             var detailedTransits: [String] = []
             
             for transit in transits {
-                if let planet = transit["transitPlanet"] as? String {
-                    planetCounts[planet, default: 0] += 1
-                    
-                    // Collect detailed information for debug
-                    if let natalPlanet = transit["natalPlanet"] as? String,
-                       let aspectType = transit["aspectType"] as? String,
-                       let orb = transit["orb"] as? Double {
-                        let orbStr = String(format: "%.2f", orb)
-                        detailedTransits.append("      \(planet) \(aspectType) \(natalPlanet) (orb: \(orbStr)°)")
-                    }
-                }
+                planetCounts[transit.transitPlanet, default: 0] += 1
+                
+                // Collect detailed information for debug
+                let orbStr = String(format: "%.2f", transit.orb)
+                detailedTransits.append("      \(transit.transitPlanet) \(transit.aspectType) \(transit.natalPlanet) (orb: \(orbStr)°)")
             }
             
             for (planet, count) in planetCounts.sorted(by: { $0.key < $1.key }) {
