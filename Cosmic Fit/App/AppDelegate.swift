@@ -14,6 +14,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var lastActiveDate: Date?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        // CRITICAL: Request location permission as the very first thing
+        // This ensures location is available immediately for Daily Fit calculations
+        requestLocationPermissionEarly()
                 
         // Create window
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -136,6 +140,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Check if the date has changed since the app was last active
         checkForDateChange()
         
+        // Refresh location when app becomes active to ensure accuracy
+        // This ensures location is current for Daily Fit calculations
+        refreshLocationIfNeeded()
+        
         // Update last active date
         lastActiveDate = Date()
     }
@@ -241,5 +249,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Optionally clean up old entries
         DailyVibeStorage.shared.cleanupOldEntries(daysToKeep: 30)
+    }
+    
+    // MARK: - Early Location Request
+    /// Request location permission and start location updates as early as possible
+    /// This ensures location is available immediately when Daily Fit needs it
+    private func requestLocationPermissionEarly() {
+        print("📍 Requesting location permission early in app launch...")
+        
+        // Request location permission immediately
+        // This will show the permission prompt as soon as possible
+        LocationManager.shared.requestLocation(
+            onSuccess: { coordinate in
+                print("✅ Early location obtained: \(coordinate.latitude), \(coordinate.longitude)")
+                // Location is now available for Daily Fit calculations
+            },
+            onError: { error in
+                print("⚠️ Early location request failed: \(error.localizedDescription)")
+                // Location will be requested again when needed, but we tried early
+            }
+        )
+    }
+    
+    /// Refresh location when app becomes active if we don't have a recent location
+    private func refreshLocationIfNeeded() {
+        // Only refresh if we don't have a recent location (within 30 minutes)
+        guard !LocationManager.shared.hasRecentLocation else {
+            print("📍 Location is recent, no refresh needed")
+            return
+        }
+        
+        print("📍 Refreshing location on app activation...")
+        LocationManager.shared.requestLocation(
+            onSuccess: { coordinate in
+                print("✅ Location refreshed on app activation: \(coordinate.latitude), \(coordinate.longitude)")
+            },
+            onError: { error in
+                print("⚠️ Location refresh failed: \(error.localizedDescription)")
+            }
+        )
     }
 }
