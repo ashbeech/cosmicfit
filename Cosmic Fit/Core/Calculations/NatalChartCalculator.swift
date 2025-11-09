@@ -53,10 +53,36 @@ struct NatalChartCalculator {
         // Ensure Swiss Ephemeris path is set
         AsteroidCalculator.bootstrap()
         
-        // 1) Convert to UTC & Julian Day -----------------------------------
-        let utcDate   = JulianDateCalculator.localToUTC(date: birthDate,
-                                                        timezone: timeZone)
-        let jd        = JulianDateCalculator.calculateJulianDate(from: utcDate)
+        // The birthDate already represents the correct absolute moment
+        // No timezone conversion needed - just calculate Julian Day directly
+        let jd = JulianDateCalculator.calculateJulianDate(from: birthDate)
+        
+        #if DEBUG
+        let localFormatter = DateFormatter()
+        localFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss ZZZZZ"
+        localFormatter.timeZone = timeZone
+        
+        // Extract UTC components explicitly using UTC timezone
+        var utcCalendar = Calendar(identifier: .gregorian)
+        utcCalendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        let utcComponents = utcCalendar.dateComponents(
+            [.year, .month, .day, .hour, .minute, .second],
+            from: birthDate
+        )
+        
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("🔭 NATAL CHART CALCULATION")
+        print("📅 birthDate (absolute): \(birthDate)")
+        print("🌍 Local Time: \(localFormatter.string(from: birthDate))")
+        if let year = utcComponents.year, let month = utcComponents.month, let day = utcComponents.day,
+           let hour = utcComponents.hour, let minute = utcComponents.minute, let second = utcComponents.second {
+            print("🔄 UTC Components: \(year)-\(String(format: "%02d", month))-\(String(format: "%02d", day)) \(String(format: "%02d", hour)):\(String(format: "%02d", minute)):\(String(format: "%02d", second))")
+        }
+        print("📍 Coordinates: \(latitude), \(longitude)")
+        print("🌟 Julian Day: \(jd)")
+        print("☀️  DST: \(timeZone.isDaylightSavingTime(for: birthDate) ? "Active" : "Inactive")")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        #endif
         
         // 2) Angles ---------------------------------------------------------
         let ascendant  = AstronomicalCalculator.calculateAscendant(julianDay: jd,
@@ -190,9 +216,9 @@ struct NatalChartCalculator {
         // 1) Add precise age in days to birth date to get progressed date
         let progressedDate = birthDate.addingTimeInterval(preciseAge * 24 * 60 * 60)
         
-        // 2) Convert progressed date to Julian Day
-        let progressedUTC = JulianDateCalculator.localToUTC(date: progressedDate, timezone: timeZone)
-        let progressedJD = JulianDateCalculator.calculateJulianDate(from: progressedUTC)
+        // FIX #2: Calculate Julian Day directly from progressed date
+        // The progressedDate already represents the correct absolute moment
+        let progressedJD = JulianDateCalculator.calculateJulianDate(from: progressedDate)
         
         // 3) Calculate progressed planet positions
         var planets: [PlanetPosition] = []

@@ -32,8 +32,10 @@ struct JulianDateCalculator {
     }
     
     // Calculate Julian Date from Date object
+    // Extracts UTC components from the Date (which represents an absolute moment in time)
     static func calculateJulianDate(from date: Date) -> Double {
-        let calendar = Calendar(identifier: .gregorian)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!  // Explicitly use UTC
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
         
         guard let year = components.year,
@@ -50,6 +52,10 @@ struct JulianDateCalculator {
     }
     
     // Convert local time to UTC
+    // DEPRECATED: This function is no longer needed. Swift Dates already represent absolute moments in time.
+    // When creating a Date from DateComponents with a timezone, the Date already contains the correct UTC time.
+    // This function incorrectly subtracts the timezone offset, causing double conversion errors.
+    @available(*, deprecated, message: "This function causes double timezone conversion errors. Use Date directly with calculateJulianDate(from:) instead.")
     static func localToUTC(date: Date, timezone: TimeZone) -> Date {
         let secondsFromGMT = timezone.secondsFromGMT(for: date)
         return date.addingTimeInterval(Double(-secondsFromGMT))

@@ -736,29 +736,67 @@ class OnboardingFormViewController: UIViewController {
             self.longitude = location.coordinate.longitude
             self.timeZone = placemark.timeZone ?? TimeZone.current
             
+            // CRITICAL: Set picker timezones to birth location timezone
+            // This ensures all time inputs are interpreted in the birth location context
+            self.datePicker.timeZone = self.timeZone
+            self.timePicker.timeZone = self.timeZone
+            
             print("Geocoded: \(self.latitude), \(self.longitude)")
+            print("Timezone: \(self.timeZone.identifier)")
+            
+            #if DEBUG
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            print("🌍 GEOCODING COMPLETE")
+            print("📍 Location: \(location)")
+            print("🕐 Timezone: \(self.timeZone.identifier)")
+            print("✅ Pickers configured with birth location timezone")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            #endif
+            
             completion(true)
         }
     }
     
     private func saveProfileAndComplete() {
-        // Combine birth date and time
-        let calendar = Calendar.current
-        let dateComponents = calendar.dateComponents([.year, .month, .day], from: birthDate)
-        let timeComponents = calendar.dateComponents([.hour, .minute], from: birthTime)
+        // Extract component values from stored dates
+        // The stored birthDate and birthTime represent what the user selected
+        // We extract the numeric values (year, month, day, hour, minute) that the user saw
+        let deviceCalendar = Calendar.current
+        let dateComponents = deviceCalendar.dateComponents([.year, .month, .day], from: birthDate)
+        let timeComponents = deviceCalendar.dateComponents([.hour, .minute], from: birthTime)
         
+        // Create DateComponents with birth location timezone
+        // This ensures the user's selected time is interpreted in the birth location context
         var combinedComponents = DateComponents()
+        combinedComponents.calendar = Calendar(identifier: .gregorian)
+        combinedComponents.timeZone = timeZone  // Birth location timezone from geocoding
+        combinedComponents.era = 1
         combinedComponents.year = dateComponents.year
         combinedComponents.month = dateComponents.month
         combinedComponents.day = dateComponents.day
         combinedComponents.hour = hasUnknownTime ? 12 : timeComponents.hour
         combinedComponents.minute = hasUnknownTime ? 0 : timeComponents.minute
-        combinedComponents.timeZone = timeZone
+        combinedComponents.second = 0
         
-        guard let finalBirthDateTime = calendar.date(from: combinedComponents) else {
+        // Create final birth date using Calendar with birth location timezone
+        // CRITICAL: This Calendar must have the same timezone for proper DST evaluation
+        var birthLocationCalendar = Calendar(identifier: .gregorian)
+        birthLocationCalendar.timeZone = timeZone
+        
+        guard let finalBirthDateTime = birthLocationCalendar.date(from: combinedComponents) else {
             showAlert(title: "Error", message: "Could not process birth date and time.")
             return
         }
+        
+        // STEP 4: Verification logging (DEBUG only)
+        #if DEBUG
+        verifyBirthDateCreation(
+            date: finalBirthDateTime,
+            timezone: timeZone,
+            location: birthLocation,
+            components: combinedComponents
+        )
+        #endif
         
         // Create user profile
         let profile = UserProfile(
@@ -816,6 +854,50 @@ class OnboardingFormViewController: UIViewController {
     }
     
     // MARK: - Helpers
+    
+    #if DEBUG
+    /// Comprehensive verification logging for birth date creation
+    private func verifyBirthDateCreation(
+        date: Date,
+        timezone: TimeZone,
+        location: String,
+        components: DateComponents
+    ) {
+        let localFormatter = DateFormatter()
+        localFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss ZZZZZ"
+        localFormatter.timeZone = timezone
+        
+        let utcFormatter = DateFormatter()
+        utcFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        utcFormatter.timeZone = TimeZone(identifier: "UTC")
+        
+        let offsetSeconds = timezone.secondsFromGMT(for: date)
+        let offsetHours = Double(offsetSeconds) / 3600.0
+        let isDST = timezone.isDaylightSavingTime(for: date)
+        
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("📅 BIRTH DATE CREATION VERIFICATION")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("📆 Components: \(components.year!)-\(String(format: "%02d", components.month!))-\(String(format: "%02d", components.day!)) \(components.hour!):\(String(format: "%02d", components.minute!)):\(components.second!)")
+        print("🌍 Local Time: \(localFormatter.string(from: date))")
+        print("🔄 UTC Time: \(utcFormatter.string(from: date))")
+        print("⏱️  Offset: UTC\(offsetHours >= 0 ? "+" : "")\(String(format: "%.1f", offsetHours)) hours")
+        print("☀️  DST: \(isDST ? "Active (summer time)" : "Inactive (standard time)")")
+        print("✅ Date pickers were in \(timezone.identifier) timezone")
+        
+        // Check for potential DST edge cases
+        if let transitionInfo = timezone.nextDaylightSavingTimeTransition(after: date) {
+            let transitionFormatter = DateFormatter()
+            transitionFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+            transitionFormatter.timeZone = timezone
+            let transitionTime = transitionFormatter.string(from: transitionInfo)
+            print("⚠️  Next DST Transition: \(transitionTime)")
+        }
+        
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    }
+    #endif
+    
     private func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))

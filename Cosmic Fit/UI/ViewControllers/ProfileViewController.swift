@@ -301,17 +301,39 @@ class ProfileViewController: UIViewController {
             return
         }
         
-        // Populate form with existing data
-        nameTextField.text = profile.firstName
+        // Load timezone first
+        timeZone = TimeZone(identifier: profile.timeZoneIdentifier) ?? TimeZone.current
+        
+        // CRITICAL: Set picker timezones BEFORE setting dates
+        // This ensures the pickers display times in the birth location timezone
+        birthDatePicker.timeZone = timeZone
+        birthTimePicker.timeZone = timeZone
+        
+        // Now set the dates - pickers will display them in birth location timezone
         birthDatePicker.date = profile.birthDate
         birthTimePicker.date = profile.birthDate
+        
+        // Populate form with existing data
+        nameTextField.text = profile.firstName
         locationTextField.text = profile.birthLocation
         latitude = profile.latitude
         longitude = profile.longitude
         locationName = profile.birthLocation
-        timeZone = TimeZone(identifier: profile.timeZoneIdentifier) ?? TimeZone.current
         
-        print("✅ Profile form populated with existing data")
+        #if DEBUG
+        let localFormatter = DateFormatter()
+        localFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss ZZZZZ"
+        localFormatter.timeZone = timeZone
+        
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("📂 PROFILE LOADED")
+        print("📍 Location: \(profile.birthLocation)")
+        print("🕐 Timezone: \(timeZone.identifier)")
+        print("📅 Birth Date: \(profile.birthDate)")
+        print("🌍 Displayed in pickers as: \(localFormatter.string(from: profile.birthDate))")
+        print("✅ Pickers configured with birth location timezone")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        #endif
     }
     
     // MARK: - Keyboard Handling
@@ -387,6 +409,20 @@ class ProfileViewController: UIViewController {
                     let timeZone = TimeZone(identifier: placemark.timeZone?.identifier ?? TimeZone.current.identifier) ?? TimeZone.current
                     self?.timeZone = timeZone
                     
+                    // CRITICAL: Update picker timezones when location changes
+                    // This ensures the pickers display times in the new location's timezone
+                    self?.birthDatePicker.timeZone = timeZone
+                    self?.birthTimePicker.timeZone = timeZone
+                    
+                    #if DEBUG
+                    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+                    print("🔄 LOCATION UPDATED")
+                    print("📍 New Location: \(self?.locationName ?? "")")
+                    print("🕐 New Timezone: \(timeZone.identifier)")
+                    print("✅ Pickers reconfigured with new timezone")
+                    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+                    #endif
+                    
                     // Now update the profile
                     self?.updateProfile()
                 }
@@ -421,24 +457,55 @@ class ProfileViewController: UIViewController {
             return
         }
         
-        // Combine date and time from the pickers
-        let calendar = Calendar.current
-        let dateComponents = calendar.dateComponents([.year, .month, .day], from: birthDatePicker.date)
-        let timeComponents = calendar.dateComponents([.hour, .minute], from: birthTimePicker.date)
+        // Get dates from pickers
+        // Pickers are in birth location timezone, so these dates are correct
+        let birthDate = birthDatePicker.date
+        let birthTime = birthTimePicker.date
         
+        // Create calendar in birth location timezone
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+        
+        // Extract components (in birth location timezone)
+        let dateComponents = calendar.dateComponents([.year, .month, .day], from: birthDate)
+        let timeComponents = calendar.dateComponents([.hour, .minute], from: birthTime)
+        
+        // Combine components
         var combinedComponents = DateComponents()
+        combinedComponents.calendar = calendar
+        combinedComponents.timeZone = timeZone
+        combinedComponents.era = 1
         combinedComponents.year = dateComponents.year
         combinedComponents.month = dateComponents.month
         combinedComponents.day = dateComponents.day
         combinedComponents.hour = timeComponents.hour
         combinedComponents.minute = timeComponents.minute
+        combinedComponents.second = 0
         
+        // Create final date
         guard let birthDateTime = calendar.date(from: combinedComponents) else {
             activityIndicator.stopAnimating()
             updateButton.isEnabled = true
             showAlert(title: "Date Error", message: "Could not process the birth date and time")
             return
         }
+        
+        // STEP 4: Verification logging (DEBUG only)
+        #if DEBUG
+        let localFormatter = DateFormatter()
+        localFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss ZZZZZ"
+        localFormatter.timeZone = timeZone
+        
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("🔄 PROFILE UPDATE VERIFICATION")
+        print("📍 Location: \(locationName)")
+        print("🕐 Timezone: \(timeZone.identifier)")
+        print("📆 Components: \(dateComponents.year!)-\(String(format: "%02d", dateComponents.month!))-\(String(format: "%02d", dateComponents.day!)) \(timeComponents.hour!):\(String(format: "%02d", timeComponents.minute!))")
+        print("🌍 Local Time: \(localFormatter.string(from: birthDateTime))")
+        print("🔄 UTC: \(birthDateTime)")
+        print("☀️  DST: \(timeZone.isDaylightSavingTime(for: birthDateTime) ? "Active" : "Inactive")")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        #endif
         
         // Create updated profile (manually create with preserved ID)
         let updatedProfile = UserProfile(
@@ -453,20 +520,23 @@ class ProfileViewController: UIViewController {
             lastModified: Date()
         )
         
-        // Save updated profile
+        // STEP 5: Save and notify
         if UserProfileStorage.shared.saveUserProfile(updatedProfile) {
             currentUserProfile = updatedProfile
             
-            // Notify other parts of app that profile was updated
-            NotificationCenter.default.post(name: .userProfileUpdated, object: updatedProfile)
+            NotificationCenter.default.post(
+                name: .userProfileUpdated,
+                object: updatedProfile
+            )
             
             activityIndicator.stopAnimating()
             updateButton.isEnabled = true
-            showAlert(title: "Profile Updated", message: "Your birth information has been updated successfully. The app will refresh with your new data.")
+            
+            showAlert(title: "Success", message: "Profile updated successfully")
         } else {
             activityIndicator.stopAnimating()
             updateButton.isEnabled = true
-            showAlert(title: "Update Failed", message: "Could not update your profile. Please try again.")
+            showAlert(title: "Error", message: "Could not save profile changes")
         }
     }
     
