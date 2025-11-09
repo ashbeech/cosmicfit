@@ -55,6 +55,20 @@ class ProfileViewController: UIViewController {
         navigationController?.navigationBar.isHidden = false
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // Ensure the view is always fully interactive when visible
+        view.isUserInteractionEnabled = true
+        scrollView.isUserInteractionEnabled = true
+        
+        // Ensure the close button in the parent GenericDetailViewController is accessible
+        // This helps prevent any potential blocking of the close button
+        if let parentVC = parent {
+            parentVC.view.isUserInteractionEnabled = true
+        }
+    }
+    
     // MARK: - UI Setup
     private func setupUI() {
         view.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
@@ -529,14 +543,24 @@ class ProfileViewController: UIViewController {
                 object: updatedProfile
             )
             
+            // Stop activity indicator
             activityIndicator.stopAnimating()
-            updateButton.isEnabled = true
             
-            showAlert(title: "Success", message: "Profile updated successfully")
+            // CRITICAL: Ensure the view is fully interactive after update
+            view.isUserInteractionEnabled = true
+            
+            // Show success state on button (will auto-reset after 2 seconds)
+            showSuccessStateAndDismiss()
+            
+            print("✅ Profile updated successfully - button will reset in 2 seconds")
         } else {
             activityIndicator.stopAnimating()
             updateButton.isEnabled = true
-            showAlert(title: "Error", message: "Could not save profile changes")
+            
+            // CRITICAL: Ensure the view is fully interactive after error
+            view.isUserInteractionEnabled = true
+            
+            showAlert(title: "Update Failed", message: "Could not update your profile. Please try again.")
         }
     }
     
@@ -546,13 +570,17 @@ class ProfileViewController: UIViewController {
         // Post notification
         NotificationCenter.default.post(name: .userProfileDeleted, object: nil)
         
-        // Navigate back to onboarding - skip welcome since they've seen it
-        let onboardingFormVC = OnboardingFormViewController()
-        let navController = UINavigationController(rootViewController: onboardingFormVC)
-        navController.navigationBar.isHidden = true
+        // First, dismiss the profile edit page
+        dismissProfileEditPage()
         
-        // Replace the entire app's navigation stack using AppDelegate
-        DispatchQueue.main.async {
+        // Then navigate back to onboarding - skip welcome since they've seen it
+        // Use a slight delay to allow the dismiss animation to complete
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            let onboardingFormVC = OnboardingFormViewController()
+            let navController = UINavigationController(rootViewController: onboardingFormVC)
+            navController.navigationBar.isHidden = true
+            
+            // Replace the entire app's navigation stack using AppDelegate
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate,
                let window = appDelegate.window {
                 UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve) {
@@ -571,6 +599,98 @@ class ProfileViewController: UIViewController {
     
     @objc private func closeButtonTapped() {
         dismiss(animated: true)
+    }
+    
+    // MARK: - Success State Animation
+    private func showSuccessStateAndDismiss() {
+        // Disable the button to prevent multiple taps during animation
+        updateButton.isEnabled = false
+        
+        // Store the original button configuration to restore later
+        let originalTitle = updateButton.title(for: .normal)
+        let originalBackgroundColor = updateButton.backgroundColor
+        
+        // Animate the button to green with checkmark (NO SCALE ANIMATION)
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations: {
+            // Change to green background
+            self.updateButton.backgroundColor = .systemGreen
+            
+            // Clear the title text
+            self.updateButton.setTitle("", for: .normal)
+            
+            // NO SCALE TRANSFORM - REMOVED
+        }) { _ in
+            // After the color change, add the checkmark icon
+            self.addCheckmarkToButton()
+            
+            // Wait 2 seconds to let the user see the success state
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                // Dismiss the profile edit page after successful update
+                self.dismissProfileEditPage()
+            }
+        }
+    }
+    
+    private func addCheckmarkToButton() {
+        // Create checkmark image configuration
+        let config = UIImage.SymbolConfiguration(pointSize: 24, weight: .bold)
+        let checkmarkImage = UIImage(systemName: "checkmark", withConfiguration: config)
+        
+        // Set the checkmark as the button image
+        updateButton.setImage(checkmarkImage, for: .normal)
+        updateButton.tintColor = .white
+        
+        // Center the image in the button
+        updateButton.imageView?.contentMode = .scaleAspectFit
+        
+        // Ensure image is centered (remove any existing insets)
+        updateButton.contentHorizontalAlignment = .center
+        updateButton.contentVerticalAlignment = .center
+        
+        // Animate the checkmark appearance
+        updateButton.imageView?.alpha = 0
+        UIView.animate(withDuration: 0.3) {
+            self.updateButton.imageView?.alpha = 1
+        }
+    }
+    
+    private func dismissProfileEditPage() {
+        // ProfileViewController is a child of GenericDetailViewController
+        // GenericDetailViewController is a child of CosmicFitTabBarController
+        // So we need to find the GenericDetailViewController (direct parent) and dismiss it
+        
+        // Method 1: Direct parent should be GenericDetailViewController
+        if let genericDetailVC = self.parent as? GenericDetailViewController {
+            genericDetailVC.dismissSelf()
+            return
+        }
+        
+        // Method 2: Find GenericDetailViewController in parent chain
+        var currentParent: UIViewController? = self.parent
+        while currentParent != nil {
+            if let genericDetailVC = currentParent as? GenericDetailViewController {
+                genericDetailVC.dismissSelf()
+                return
+            }
+            currentParent = currentParent?.parent
+        }
+        
+        // Method 3: Find CosmicFitTabBarController (parent of GenericDetailViewController)
+        currentParent = self.parent?.parent
+        while currentParent != nil {
+            if let tabBarController = currentParent as? CosmicFitTabBarController {
+                tabBarController.dismissDetailViewController(animated: true)
+                return
+            }
+            currentParent = currentParent?.parent
+        }
+        
+        // Final fallback: Try standard dismiss
+        if let presentingVC = self.presentingViewController {
+            presentingVC.dismiss(animated: true)
+        } else {
+            print("⚠️ Could not find appropriate view controller to dismiss profile edit page")
+        }
     }
 }
 
