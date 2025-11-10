@@ -15,11 +15,6 @@ class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate
     private var initialTouchPoint: CGPoint = .zero
     private var interactiveDismissalInProgress = false
     
-    // Expose content view controller type for checking
-    var isProfileViewController: Bool {
-        return contentViewController is ProfileViewController
-    }
-    
     // MARK: - Initialization
     init(contentViewController: UIViewController) {
         self.contentViewController = contentViewController

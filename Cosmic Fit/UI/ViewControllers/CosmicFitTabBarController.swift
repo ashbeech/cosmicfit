@@ -391,29 +391,11 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     
     // MARK: - Profile Navigation
     private func navigateToProfile() {
-        // Check if Profile Edit page is already open
-        if isProfileEditPageOpen() {
-            print("ℹ️ Profile Edit page is already open - just closing menu")
-            // Menu is already being dismissed by MenuViewController, so we do nothing
-            return
-        }
-        
         print("🔄 Presenting Profile as detail view")
         
         let profileVC = ProfileViewController()
         let detailVC = GenericDetailViewController(contentViewController: profileVC)
         presentDetailViewController(detailVC, animated: true)
-    }
-    
-    /// Check if Profile Edit page is currently open
-    private func isProfileEditPageOpen() -> Bool {
-        // Check if there's a GenericDetailViewController in the children
-        // GenericDetailViewController contains ProfileViewController as its contentViewController
-        if let genericDetailVC = children.first(where: { $0 is GenericDetailViewController }) as? GenericDetailViewController {
-            // Check if this GenericDetailViewController contains a ProfileViewController
-            return genericDetailVC.isProfileViewController
-        }
-        return false
     }
 
     func showFAQPage() {

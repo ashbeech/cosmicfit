@@ -570,17 +570,13 @@ class ProfileViewController: UIViewController {
         // Post notification
         NotificationCenter.default.post(name: .userProfileDeleted, object: nil)
         
-        // First, dismiss the profile edit page
-        dismissProfileEditPage()
+        // Navigate back to onboarding - skip welcome since they've seen it
+        let onboardingFormVC = OnboardingFormViewController()
+        let navController = UINavigationController(rootViewController: onboardingFormVC)
+        navController.navigationBar.isHidden = true
         
-        // Then navigate back to onboarding - skip welcome since they've seen it
-        // Use a slight delay to allow the dismiss animation to complete
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-            let onboardingFormVC = OnboardingFormViewController()
-            let navController = UINavigationController(rootViewController: onboardingFormVC)
-            navController.navigationBar.isHidden = true
-            
-            // Replace the entire app's navigation stack using AppDelegate
+        // Replace the entire app's navigation stack using AppDelegate
+        DispatchQueue.main.async {
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate,
                let window = appDelegate.window {
                 UIView.transition(with: window, duration: 0.5, options: .transitionCrossDissolve) {
@@ -625,8 +621,11 @@ class ProfileViewController: UIViewController {
             
             // Wait 2 seconds to let the user see the success state
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                // Dismiss the profile edit page after successful update
-                self.dismissProfileEditPage()
+                // Reset button to original state
+                self.resetButtonToOriginalState(
+                    title: originalTitle ?? "Update Profile",
+                    backgroundColor: originalBackgroundColor ?? CosmicFitTheme.Colors.cosmicOrange
+                )
             }
         }
     }
@@ -654,42 +653,24 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    private func dismissProfileEditPage() {
-        // ProfileViewController is a child of GenericDetailViewController
-        // GenericDetailViewController is a child of CosmicFitTabBarController
-        // So we need to find the GenericDetailViewController (direct parent) and dismiss it
-        
-        // Method 1: Direct parent should be GenericDetailViewController
-        if let genericDetailVC = self.parent as? GenericDetailViewController {
-            genericDetailVC.dismissSelf()
-            return
-        }
-        
-        // Method 2: Find GenericDetailViewController in parent chain
-        var currentParent: UIViewController? = self.parent
-        while currentParent != nil {
-            if let genericDetailVC = currentParent as? GenericDetailViewController {
-                genericDetailVC.dismissSelf()
-                return
-            }
-            currentParent = currentParent?.parent
-        }
-        
-        // Method 3: Find CosmicFitTabBarController (parent of GenericDetailViewController)
-        currentParent = self.parent?.parent
-        while currentParent != nil {
-            if let tabBarController = currentParent as? CosmicFitTabBarController {
-                tabBarController.dismissDetailViewController(animated: true)
-                return
-            }
-            currentParent = currentParent?.parent
-        }
-        
-        // Final fallback: Try standard dismiss
-        if let presentingVC = self.presentingViewController {
-            presentingVC.dismiss(animated: true)
-        } else {
-            print("⚠️ Could not find appropriate view controller to dismiss profile edit page")
+    private func resetButtonToOriginalState(title: String, backgroundColor: UIColor) {
+        // Animate back to original state (NO SCALE ANIMATION)
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations: {
+            // Restore original background color
+            self.updateButton.backgroundColor = backgroundColor
+            
+            // Remove the checkmark image
+            self.updateButton.setImage(nil, for: .normal)
+            
+            // Restore the original title
+            self.updateButton.setTitle(title, for: .normal)
+            
+            // NO SCALE TRANSFORM - REMOVED
+        }) { _ in
+            // Re-enable the button so it can be used again
+            self.updateButton.isEnabled = true
+            
+            print("✅ Update button reset to original state and re-enabled")
         }
     }
 }
