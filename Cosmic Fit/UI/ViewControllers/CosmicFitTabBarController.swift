@@ -292,27 +292,44 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     }
 
     func dismissDetailViewController(animated: Bool, completion: (() -> Void)? = nil) {
+        print("🔍 dismissDetailViewController called with animated: \(animated)")
+        
+        // Find any detail view controller (not just BlueprintDetailViewController)
         let detailVC = children.first(where: {
             $0 is BlueprintDetailViewController || $0 is GenericDetailViewController
         })
         
+        print("🔍 Found detail VC: \(detailVC != nil ? String(describing: type(of: detailVC!)) : "nil")")
+        print("🔍 Current children count: \(children.count)")
+        print("🔍 Current children types: \(children.map { String(describing: type(of: $0)) })")
+        
         guard let detailVC = detailVC else {
+            print("⚠️ No detail VC found - calling completion")
             completion?()
             return
         }
         
+        print("🔍 Starting dismissal animation for: \(String(describing: type(of: detailVC)))")
+        
         if animated {
             let containerHeight = detailContentContainer.bounds.height
+            print("🔍 Container height: \(containerHeight)")
+            print("🔍 Detail VC view frame: \(detailVC.view.frame)")
+            print("🔍 Detail content container isHidden: \(detailContentContainer.isHidden)")
+            print("🔍 Dimming view exists: \(dimmingView != nil)")
             
             UIView.animate(
                 withDuration: 0.35,
                 delay: 0,
                 options: [.curveEaseIn],
                 animations: {
+                    print("🔍 Animation block - applying transform")
                     detailVC.view.transform = CGAffineTransform(translationX: 0, y: containerHeight)
                     self.dimmingView?.alpha = 0
+                    print("🔍 Transform applied: \(detailVC.view.transform)")
                 },
-                completion: { _ in
+                completion: { finished in
+                    print("🔍 Animation completed with finished: \(finished)")
                     detailVC.view.transform = .identity
                     detailVC.willMove(toParent: nil)
                     detailVC.view.removeFromSuperview()
@@ -322,10 +339,13 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
                     self.dimmingView?.removeFromSuperview()
                     self.dimmingView = nil
                     
+                    print("🔍 Detail VC removed from parent")
+                    print("🔍 Detail content container isHidden after removal: \(self.detailContentContainer.isHidden)")
                     completion?()
                 }
             )
         } else {
+            print("🔍 Non-animated dismissal")
             detailVC.willMove(toParent: nil)
             detailVC.view.removeFromSuperview()
             detailVC.removeFromParent()
@@ -334,6 +354,8 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
             dimmingView?.removeFromSuperview()
             dimmingView = nil
             
+            print("🔍 Detail VC removed from parent (non-animated)")
+            print("🔍 Detail content container isHidden after removal: \(detailContentContainer.isHidden)")
             completion?()
         }
     }
@@ -409,8 +431,11 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         if let existingDetail = children.first(where: { $0 is GenericDetailViewController }),
            let genericDetail = existingDetail as? GenericDetailViewController,
            genericDetail.contentViewController is ProfileViewController {
+            print("⚠️ Profile already open - ignoring")
             return
         }
+        
+        print("🔄 Presenting Profile as detail view")
         
         let profileVC = ProfileViewController()
         let detailVC = GenericDetailViewController(contentViewController: profileVC)
@@ -418,6 +443,8 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     }
 
     func showFAQPage() {
+        print("🔄 Presenting FAQ as detail view")
+        
         let faqVC = FAQViewController()
         let detailVC = GenericDetailViewController(contentViewController: faqVC)
         presentDetailViewController(detailVC, animated: true)
@@ -434,6 +461,8 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     }
     
     private func setupProfileUpdateNotifications() {
+        print("🔍 Setting up profile update notifications...")
+        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(handleProfileUpdate(_:)),
@@ -448,16 +477,21 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
             object: nil
         )
         
+        // Add this observer with debugging
+        print("🔍 Adding dismiss observer...")
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(handleProfileDismissRequest),
             name: .dismissProfileRequested,
             object: nil
         )
+        print("🔍 Dismiss observer added successfully")
     }
     
     @objc private func handleProfileUpdate(_ notification: Notification) {
         guard let updatedProfile = notification.object as? UserProfile else { return }
+        
+        print("🔄 Profile updated - refreshing app data")
         
         // Update stored profile
         userProfile = updatedProfile
@@ -486,14 +520,27 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         
         // Regenerate view controllers with new data
         setupViewControllers()
+        
+        print("✅ App data refreshed with updated profile")
     }
     
     @objc private func handleProfileDeleted() {
+        print("🗑️ Profile deleted - should return to onboarding")
         // The ProfileViewController handles navigation back to onboarding
     }
     
     @objc private func handleProfileDismissRequest() {
+        print("🔍 CosmicFitTabBarController received dismiss request")
+        print("🔍 About to call dismissDetailViewController")
+        print("🔍 Current thread: \(Thread.isMainThread ? "Main" : "Background")")
+        print("🔍 Detail content container exists: \(detailContentContainer != nil)")
+        if let container = detailContentContainer {
+            print("🔍 Detail content container isHidden: \(container.isHidden)")
+            print("🔍 Detail content container frame: \(container.frame)")
+            print("🔍 Detail content container superview: \(container.superview != nil ? String(describing: type(of: container.superview!)) : "nil")")
+        }
         dismissDetailViewController(animated: true)
+        print("🔍 dismissDetailViewController called")
     }
     
     // MARK: - Private Methods
@@ -752,6 +799,9 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     }
     
     private func setupViewControllers() {
+        // PRESERVE current tab selection
+        let currentSelectedIndex = selectedIndex
+        
         var viewControllers: [UIViewController] = []
         
         // Daily Fit Tab (Index 0)
@@ -799,15 +849,19 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         // Set the view controllers
         self.viewControllers = viewControllers
         
-        // Set Daily Fit as default tab (index 0)
-        selectedIndex = 0
+        // RESTORE the previous tab selection instead of forcing Daily Fit
+        if currentSelectedIndex < viewControllers.count {
+            selectedIndex = currentSelectedIndex
+        } else {
+            selectedIndex = 0 // Fallback to Daily Fit only if current index is invalid
+        }
         
         // Update tab selection indicator after setting view controllers
         DispatchQueue.main.async { [weak self] in
             self?.updateTabSelectionIndicator()
         }
         
-        print("✅ View controllers setup with 2 tabs (Daily Fit and Cosmic Blueprint)")
+        print("✅ View controllers setup with 2 tabs (preserved selection: \(selectedIndex))")
     }
     
     private func useDefaultWeatherLocation() {

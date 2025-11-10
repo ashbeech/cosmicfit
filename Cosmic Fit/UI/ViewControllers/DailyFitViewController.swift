@@ -1042,6 +1042,8 @@ class DailyFitViewController: UIViewController {
         
         // Ensure proper final state
         ensureContainerVisibility()
+        
+        print("✨ 3D card flip animation completed")
     }
 
     // MARK: - Content Section Setup
@@ -1122,6 +1124,8 @@ class DailyFitViewController: UIViewController {
                     self.contentView.bringSubviewToFront(label)
                 }
                 self.contentView.bringSubviewToFront(self.debugButton)
+                
+                print("✨ Content box slide-up animation completed")
             }
         )
     }

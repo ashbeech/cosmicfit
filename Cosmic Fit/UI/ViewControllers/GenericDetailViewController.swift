@@ -30,6 +30,14 @@ class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate
         super.viewDidLoad()
         setupUI()
         setupGesture()
+        
+        // Set up the dismiss callback if content is ProfileViewController
+        if let profileVC = contentViewController as? ProfileViewController {
+            profileVC.onDismissRequested = { [weak self] in
+                print("🔍 GenericDetailViewController received dismiss request")
+                self?.closeButtonTapped()
+            }
+        }
     }
     
     // MARK: - UI Components
@@ -121,6 +129,7 @@ class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate
     }
     
     func dismissSelf() {
+        print("YEEESSSS!!!")
         var currentParent: UIViewController? = parent
         while currentParent != nil {
             if let tabBarController = currentParent as? CosmicFitTabBarController {
@@ -129,6 +138,8 @@ class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate
             }
             currentParent = currentParent?.parent
         }
+        
+        print("⚠️ Could not find CosmicFitTabBarController to dismiss")
     }
     
     // MARK: - Gesture Handling

@@ -29,6 +29,9 @@ class ProfileViewController: UIViewController {
     private let deleteProfileButton = UIButton(type: .system)
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     
+    // Callback for dismissal request
+    var onDismissRequested: (() -> Void)?
+    
     // MARK: - Properties
     private var currentUserProfile: UserProfile?
     private var geocoder = CLGeocoder()
@@ -334,6 +337,21 @@ class ProfileViewController: UIViewController {
         latitude = profile.latitude
         longitude = profile.longitude
         locationName = profile.birthLocation
+        
+        #if DEBUG
+        let localFormatter = DateFormatter()
+        localFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss ZZZZZ"
+        localFormatter.timeZone = timeZone
+        
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("📂 PROFILE LOADED")
+        print("📍 Location: \(profile.birthLocation)")
+        print("🕐 Timezone: \(timeZone.identifier)")
+        print("📅 Birth Date: \(profile.birthDate)")
+        print("🌍 Displayed in pickers as: \(localFormatter.string(from: profile.birthDate))")
+        print("✅ Pickers configured with birth location timezone")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        #endif
     }
     
     // MARK: - Keyboard Handling
@@ -409,10 +427,19 @@ class ProfileViewController: UIViewController {
                     let timeZone = TimeZone(identifier: placemark.timeZone?.identifier ?? TimeZone.current.identifier) ?? TimeZone.current
                     self?.timeZone = timeZone
                     
-                    // Update picker timezones when location changes
+                    // CRITICAL: Update picker timezones when location changes
                     // This ensures the pickers display times in the new location's timezone
                     self?.birthDatePicker.timeZone = timeZone
                     self?.birthTimePicker.timeZone = timeZone
+                    
+                    #if DEBUG
+                    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+                    print("🔄 LOCATION UPDATED")
+                    print("📍 New Location: \(self?.locationName ?? "")")
+                    print("🕐 New Timezone: \(timeZone.identifier)")
+                    print("✅ Pickers reconfigured with new timezone")
+                    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+                    #endif
                     
                     // Now update the profile
                     self?.updateProfile()
@@ -439,7 +466,6 @@ class ProfileViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    // MARK: - Profile Management
     private func updateProfile() {
         guard let currentProfile = currentUserProfile else {
             activityIndicator.stopAnimating()
@@ -448,8 +474,7 @@ class ProfileViewController: UIViewController {
             return
         }
         
-        // Get dates from pickers
-        // Pickers are in birth location timezone, so these dates are correct
+        // Get dates from pickers (in birth location timezone)
         let birthDate = birthDatePicker.date
         let birthTime = birthTimePicker.date
         
@@ -457,7 +482,7 @@ class ProfileViewController: UIViewController {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timeZone
         
-        // Extract components (in birth location timezone)
+        // Extract components
         let dateComponents = calendar.dateComponents([.year, .month, .day], from: birthDate)
         let timeComponents = calendar.dateComponents([.hour, .minute], from: birthTime)
         
@@ -494,28 +519,24 @@ class ProfileViewController: UIViewController {
             lastModified: Date()
         )
         
-        // Save and notify
-        if UserProfileStorage.shared.saveUserProfile(updatedProfile) {
-            currentUserProfile = updatedProfile
-            
-            activityIndicator.stopAnimating()
-            view.isUserInteractionEnabled = true
-            
-            // Show success state and dismiss first
-            showSuccessStateAndDismiss()
-            
-            // Post notification after dismissal starts
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                NotificationCenter.default.post(
-                    name: .userProfileUpdated,
-                    object: updatedProfile
-                )
+        // Stop loading and show success animation with immediate dismissal
+        activityIndicator.stopAnimating()
+        view.isUserInteractionEnabled = true
+        showSuccessStateAndDismiss()
+        
+        // Save profile after dismissal completes to avoid UI conflicts
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if UserProfileStorage.shared.saveUserProfile(updatedProfile) {
+                self.currentUserProfile = updatedProfile
+                
+                // Notify app to refresh with updated profile data
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    NotificationCenter.default.post(
+                        name: .userProfileUpdated,
+                        object: updatedProfile
+                    )
+                }
             }
-        } else {
-            activityIndicator.stopAnimating()
-            updateButton.isEnabled = true
-            view.isUserInteractionEnabled = true
-            showAlert(title: "Update Failed", message: "Could not update your profile. Please try again.")
         }
     }
     
@@ -548,32 +569,36 @@ class ProfileViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    // Request dismissal via notification
+    // Request dismissal via notification (for debugging)
     private func requestDismissal() {
+        print("🔍 ProfileViewController posting dismiss notification...")
+        print("🔍 Notification name: dismissProfileRequested")
+        print("🔍 Current thread: \(Thread.isMainThread ? "Main" : "Background")")
+        
         NotificationCenter.default.post(name: .dismissProfileRequested, object: nil)
+        
+        print("🔍 Notification posted successfully")
     }
     
     // MARK: - Success State Animation
     private func showSuccessStateAndDismiss() {
+        // Disable the button to prevent multiple taps during animation
         updateButton.isEnabled = false
         
+        // Store the original button configuration to restore later
         let originalTitle = updateButton.title(for: .normal)
         let originalBackgroundColor = updateButton.backgroundColor
         
+        // Show success animation
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations: {
             self.updateButton.backgroundColor = .systemGreen
             self.updateButton.setTitle("", for: .normal)
         }) { _ in
             self.addCheckmarkToButton()
-            self.requestDismissal()
             
-            // Reset button state after delay
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                self.resetButtonToOriginalState(
-                    title: originalTitle ?? "Update Profile",
-                    backgroundColor: originalBackgroundColor ?? CosmicFitTheme.Colors.cosmicOrange
-                )
-            }
+            // DISMISS WITHOUT SAVING (temporary test)
+            print("DISMISSING WITHOUT SAVING (TEST)!!!")
+            self.requestDismissal()
         }
     }
     
