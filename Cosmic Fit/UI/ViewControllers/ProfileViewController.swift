@@ -64,9 +64,10 @@ class ProfileViewController: UIViewController {
         
         // Ensure the close button in the parent GenericDetailViewController is accessible
         // This helps prevent any potential blocking of the close button
+        /*
         if let parentVC = parent {
             parentVC.view.isUserInteractionEnabled = true
-        }
+        }*/
     }
     
     // MARK: - UI Setup
@@ -333,21 +334,6 @@ class ProfileViewController: UIViewController {
         latitude = profile.latitude
         longitude = profile.longitude
         locationName = profile.birthLocation
-        
-        #if DEBUG
-        let localFormatter = DateFormatter()
-        localFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss ZZZZZ"
-        localFormatter.timeZone = timeZone
-        
-        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-        print("📂 PROFILE LOADED")
-        print("📍 Location: \(profile.birthLocation)")
-        print("🕐 Timezone: \(timeZone.identifier)")
-        print("📅 Birth Date: \(profile.birthDate)")
-        print("🌍 Displayed in pickers as: \(localFormatter.string(from: profile.birthDate))")
-        print("✅ Pickers configured with birth location timezone")
-        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-        #endif
     }
     
     // MARK: - Keyboard Handling
@@ -423,19 +409,10 @@ class ProfileViewController: UIViewController {
                     let timeZone = TimeZone(identifier: placemark.timeZone?.identifier ?? TimeZone.current.identifier) ?? TimeZone.current
                     self?.timeZone = timeZone
                     
-                    // CRITICAL: Update picker timezones when location changes
+                    // Update picker timezones when location changes
                     // This ensures the pickers display times in the new location's timezone
                     self?.birthDatePicker.timeZone = timeZone
                     self?.birthTimePicker.timeZone = timeZone
-                    
-                    #if DEBUG
-                    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-                    print("🔄 LOCATION UPDATED")
-                    print("📍 New Location: \(self?.locationName ?? "")")
-                    print("🕐 New Timezone: \(timeZone.identifier)")
-                    print("✅ Pickers reconfigured with new timezone")
-                    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-                    #endif
                     
                     // Now update the profile
                     self?.updateProfile()
@@ -504,24 +481,7 @@ class ProfileViewController: UIViewController {
             return
         }
         
-        // STEP 4: Verification logging (DEBUG only)
-        #if DEBUG
-        let localFormatter = DateFormatter()
-        localFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss ZZZZZ"
-        localFormatter.timeZone = timeZone
-        
-        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-        print("🔄 PROFILE UPDATE VERIFICATION")
-        print("📍 Location: \(locationName)")
-        print("🕐 Timezone: \(timeZone.identifier)")
-        print("📆 Components: \(dateComponents.year!)-\(String(format: "%02d", dateComponents.month!))-\(String(format: "%02d", dateComponents.day!)) \(timeComponents.hour!):\(String(format: "%02d", timeComponents.minute!))")
-        print("🌍 Local Time: \(localFormatter.string(from: birthDateTime))")
-        print("🔄 UTC: \(birthDateTime)")
-        print("☀️  DST: \(timeZone.isDaylightSavingTime(for: birthDateTime) ? "Active" : "Inactive")")
-        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-        #endif
-        
-        // Create updated profile (manually create with preserved ID)
+        // Create updated profile
         let updatedProfile = UserProfile(
             id: currentProfile.id,
             firstName: nameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "",
@@ -534,32 +494,27 @@ class ProfileViewController: UIViewController {
             lastModified: Date()
         )
         
-        // STEP 5: Save and notify
+        // Save and notify
         if UserProfileStorage.shared.saveUserProfile(updatedProfile) {
             currentUserProfile = updatedProfile
             
-            NotificationCenter.default.post(
-                name: .userProfileUpdated,
-                object: updatedProfile
-            )
-            
-            // Stop activity indicator
             activityIndicator.stopAnimating()
-            
-            // CRITICAL: Ensure the view is fully interactive after update
             view.isUserInteractionEnabled = true
             
-            // Show success state on button (will auto-reset after 2 seconds)
+            // Show success state and dismiss first
             showSuccessStateAndDismiss()
             
-            print("✅ Profile updated successfully - button will reset in 2 seconds")
+            // Post notification after dismissal starts
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                NotificationCenter.default.post(
+                    name: .userProfileUpdated,
+                    object: updatedProfile
+                )
+            }
         } else {
             activityIndicator.stopAnimating()
             updateButton.isEnabled = true
-            
-            // CRITICAL: Ensure the view is fully interactive after error
             view.isUserInteractionEnabled = true
-            
             showAlert(title: "Update Failed", message: "Could not update your profile. Please try again.")
         }
     }
@@ -593,35 +548,27 @@ class ProfileViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    @objc private func closeButtonTapped() {
-        dismiss(animated: true)
+    // Request dismissal via notification
+    private func requestDismissal() {
+        NotificationCenter.default.post(name: .dismissProfileRequested, object: nil)
     }
     
     // MARK: - Success State Animation
     private func showSuccessStateAndDismiss() {
-        // Disable the button to prevent multiple taps during animation
         updateButton.isEnabled = false
         
-        // Store the original button configuration to restore later
         let originalTitle = updateButton.title(for: .normal)
         let originalBackgroundColor = updateButton.backgroundColor
         
-        // Animate the button to green with checkmark (NO SCALE ANIMATION)
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations: {
-            // Change to green background
             self.updateButton.backgroundColor = .systemGreen
-            
-            // Clear the title text
             self.updateButton.setTitle("", for: .normal)
-            
-            // NO SCALE TRANSFORM - REMOVED
         }) { _ in
-            // After the color change, add the checkmark icon
             self.addCheckmarkToButton()
+            self.requestDismissal()
             
-            // Wait 2 seconds to let the user see the success state
+            // Reset button state after delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                // Reset button to original state
                 self.resetButtonToOriginalState(
                     title: originalTitle ?? "Update Profile",
                     backgroundColor: originalBackgroundColor ?? CosmicFitTheme.Colors.cosmicOrange

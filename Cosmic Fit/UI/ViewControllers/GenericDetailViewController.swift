@@ -129,8 +129,6 @@ class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate
             }
             currentParent = currentParent?.parent
         }
-        
-        print("⚠️ Could not find CosmicFitTabBarController to dismiss")
     }
     
     // MARK: - Gesture Handling

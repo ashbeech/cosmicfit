@@ -173,4 +173,7 @@ extension Notification.Name {
     
     /// Posted when the daily vibe needs to be refreshed due to date change
     static let dailyVibeNeedsRefresh = Notification.Name("dailyVibeNeedsRefresh")
+    
+    /// Posted when profile view controller requests dismissal
+    static let dismissProfileRequested = Notification.Name("dismissProfileRequested")
 }

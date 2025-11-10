@@ -292,10 +292,11 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     }
 
     func dismissDetailViewController(animated: Bool, completion: (() -> Void)? = nil) {
-        // Find any detail view controller (not just BlueprintDetailViewController)
-        guard let detailVC = children.first(where: {
+        let detailVC = children.first(where: {
             $0 is BlueprintDetailViewController || $0 is GenericDetailViewController
-        }) else {
+        })
+        
+        guard let detailVC = detailVC else {
             completion?()
             return
         }
@@ -408,11 +409,8 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         if let existingDetail = children.first(where: { $0 is GenericDetailViewController }),
            let genericDetail = existingDetail as? GenericDetailViewController,
            genericDetail.contentViewController is ProfileViewController {
-            print("⚠️ Profile already open - ignoring")
             return
         }
-        
-        print("🔄 Presenting Profile as detail view")
         
         let profileVC = ProfileViewController()
         let detailVC = GenericDetailViewController(contentViewController: profileVC)
@@ -420,8 +418,6 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     }
 
     func showFAQPage() {
-        print("🔄 Presenting FAQ as detail view")
-        
         let faqVC = FAQViewController()
         let detailVC = GenericDetailViewController(contentViewController: faqVC)
         presentDetailViewController(detailVC, animated: true)
@@ -451,12 +447,17 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
             name: .userProfileDeleted,
             object: nil
         )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleProfileDismissRequest),
+            name: .dismissProfileRequested,
+            object: nil
+        )
     }
     
     @objc private func handleProfileUpdate(_ notification: Notification) {
         guard let updatedProfile = notification.object as? UserProfile else { return }
-        
-        print("🔄 Profile updated - refreshing app data")
         
         // Update stored profile
         userProfile = updatedProfile
@@ -485,13 +486,14 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         
         // Regenerate view controllers with new data
         setupViewControllers()
-        
-        print("✅ App data refreshed with updated profile")
     }
     
     @objc private func handleProfileDeleted() {
-        print("🗑️ Profile deleted - should return to onboarding")
         // The ProfileViewController handles navigation back to onboarding
+    }
+    
+    @objc private func handleProfileDismissRequest() {
+        dismissDetailViewController(animated: true)
     }
     
     // MARK: - Private Methods
