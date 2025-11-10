@@ -10,7 +10,7 @@ import UIKit
 class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
-    private let contentViewController: UIViewController
+    let contentViewController: UIViewController
     private var panGestureRecognizer: UIPanGestureRecognizer!
     private var initialTouchPoint: CGPoint = .zero
     private var interactiveDismissalInProgress = false

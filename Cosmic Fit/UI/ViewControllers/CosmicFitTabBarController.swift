@@ -224,6 +224,19 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     }
     
     func presentDetailViewController(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
+        // Check if a detail view is already open
+        if let existingDetailVC = children.first(where: { 
+            $0 is BlueprintDetailViewController || $0 is GenericDetailViewController 
+        }) {
+            print("⚠️ Detail view already open - dismissing existing before presenting new one")
+            
+            // Dismiss existing, then present new one
+            dismissDetailViewController(animated: false) { [weak self] in
+                self?.presentDetailViewController(viewController, animated: animated, completion: completion)
+            }
+            return
+        }
+        
         // Create and add dimming view - positioned to not cover menu bar area
         let dimming = UIView()
         dimming.backgroundColor = UIColor.black.withAlphaComponent(0.4)
@@ -391,6 +404,14 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     
     // MARK: - Profile Navigation
     private func navigateToProfile() {
+        // Check if profile is already open
+        if let existingDetail = children.first(where: { $0 is GenericDetailViewController }),
+           let genericDetail = existingDetail as? GenericDetailViewController,
+           genericDetail.contentViewController is ProfileViewController {
+            print("⚠️ Profile already open - ignoring")
+            return
+        }
+        
         print("🔄 Presenting Profile as detail view")
         
         let profileVC = ProfileViewController()

@@ -736,10 +736,9 @@ class OnboardingFormViewController: UIViewController {
             self.longitude = location.coordinate.longitude
             self.timeZone = placemark.timeZone ?? TimeZone.current
             
-            // CRITICAL: Set picker timezones to birth location timezone
-            // This ensures all time inputs are interpreted in the birth location context
-            self.datePicker.timeZone = self.timeZone
-            self.timePicker.timeZone = self.timeZone
+            // Keep pickers in device timezone to preserve user's selected values
+            // We'll extract the numeric values the user saw and interpret them
+            // in the birth location timezone context when saving
             
             print("Geocoded: \(self.latitude), \(self.longitude)")
             print("Timezone: \(self.timeZone.identifier)")
@@ -749,7 +748,7 @@ class OnboardingFormViewController: UIViewController {
             print("🌍 GEOCODING COMPLETE")
             print("📍 Location: \(location)")
             print("🕐 Timezone: \(self.timeZone.identifier)")
-            print("✅ Pickers configured with birth location timezone")
+            print("✅ Pickers remain in device timezone to preserve user's selected values")
             print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
             #endif
             
@@ -758,18 +757,21 @@ class OnboardingFormViewController: UIViewController {
     }
     
     private func saveProfileAndComplete() {
-        // Extract component values from stored dates
-        // The stored birthDate and birthTime represent what the user selected
-        // We extract the numeric values (year, month, day, hour, minute) that the user saw
+        // Extract the numeric values the user saw (in device timezone)
+        // The user selected these values while the pickers were in device timezone
         let deviceCalendar = Calendar.current
         let dateComponents = deviceCalendar.dateComponents([.year, .month, .day], from: birthDate)
         let timeComponents = deviceCalendar.dateComponents([.hour, .minute], from: birthTime)
         
-        // Create DateComponents with birth location timezone
-        // This ensures the user's selected time is interpreted in the birth location context
+        // Create birth location calendar
+        var birthLocationCalendar = Calendar(identifier: .gregorian)
+        birthLocationCalendar.timeZone = timeZone
+        
+        // Combine the visual values with birth location timezone context
+        // This interprets the numeric values (e.g., 04:30) in the birth location's timezone
         var combinedComponents = DateComponents()
-        combinedComponents.calendar = Calendar(identifier: .gregorian)
-        combinedComponents.timeZone = timeZone  // Birth location timezone from geocoding
+        combinedComponents.calendar = birthLocationCalendar
+        combinedComponents.timeZone = timeZone
         combinedComponents.era = 1
         combinedComponents.year = dateComponents.year
         combinedComponents.month = dateComponents.month
@@ -778,11 +780,8 @@ class OnboardingFormViewController: UIViewController {
         combinedComponents.minute = hasUnknownTime ? 0 : timeComponents.minute
         combinedComponents.second = 0
         
-        // Create final birth date using Calendar with birth location timezone
-        // CRITICAL: This Calendar must have the same timezone for proper DST evaluation
-        var birthLocationCalendar = Calendar(identifier: .gregorian)
-        birthLocationCalendar.timeZone = timeZone
-        
+        // Create final date using birth location calendar
+        // This ensures the time (e.g., 04:30) is stored as 04:30 in the birth location timezone
         guard let finalBirthDateTime = birthLocationCalendar.date(from: combinedComponents) else {
             showAlert(title: "Error", message: "Could not process birth date and time.")
             return
