@@ -49,15 +49,15 @@ struct WeightingModel {
 }*/
 
 struct DistributionTargets {
-    static let maxNatalInfluence: Double = 55.0       // Professional standard: 45-55%
-    static let minNatalInfluence: Double = 45.0       // Ensure natal dominance
-    static let targetTransitInfluence: Double = 17.0  // Professional standard: 15-20% (strengthened target)
-    static let minTransitInfluence: Double = 15.0     // Minimum for meaningful daily variety
-    static let maxMoonPhaseInfluence: Double = 12.0   // Reduced for balanced influence
-    static let maxDayOfWeekInfluence: Double = 8.0    // Reduced for subtle daily signature
-    static let targetWeatherInfluence: Double = 8.0   // Professional standard: 8-12%
-    static let minProgressedInfluence: Double = 15.0  // Professional minimum
-    static let maxProgressedInfluence: Double = 20.0  // Professional maximum
+    static let maxNatalInfluence: Double = 45.0       // Reduced to allow more variation
+    static let minNatalInfluence: Double = 25.0       // Allow more variation in natal influence
+    static let targetTransitInfluence: Double = 35.0  // Increased significantly for meaningful daily shifts
+    static let minTransitInfluence: Double = 20.0     // Minimum for variety
+    static let maxMoonPhaseInfluence: Double = 15.0   // Balanced
+    static let maxDayOfWeekInfluence: Double = 8.0    // Subtle
+    static let targetWeatherInfluence: Double = 10.0  // Increased
+    static let minProgressedInfluence: Double = 10.0  // Reduced
+    static let maxProgressedInfluence: Double = 25.0  // Reduced
     
     static func getScalingFactors(currentDistribution: [String: Double]) -> [String: Double] {
         var factors: [String: Double] = [:]

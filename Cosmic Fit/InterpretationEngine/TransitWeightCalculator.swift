@@ -236,6 +236,48 @@ class TransitWeightCalculator {
             return min(totalWeight, averageWeight * 2.5)
         }
     }
+    
+    /// Apply planet speed weighting to prevent slow-moving planet dominance
+    /// Fast planets (Moon, Mercury) get boosted for daily variation
+    /// Slow planets (Saturn, Uranus, Neptune, Pluto) get reduced to prevent static dominance
+    /// - Parameters:
+    ///   - weight: Original transit weight
+    ///   - transitPlanet: Name of the planet making the transit
+    ///   - isDaily: Whether this is for daily interpretation (default: true)
+    /// - Returns: Weight adjusted for planet speed
+    static func applyPlanetSpeedWeighting(
+        weight: Double,
+        transitPlanet: String,
+        isDaily: Bool = true
+    ) -> Double {
+        
+        guard isDaily else { return weight }
+        
+        switch transitPlanet {
+        // FAST PLANETS (daily drivers) - Boost for daily variation
+        case "Moon":
+            return weight * 2.5  // Moon changes signs every 2.5 days
+        case "Mercury":
+            return weight * 1.8  // Mercury moves quickly
+        case "Venus", "Mars":
+            return weight * 1.5  // Venus/Mars moderate speed
+        case "Sun":
+            return weight * 1.2  // Sun daily movement
+            
+        // SLOW PLANETS (reduce daily dominance) - Prevent static dominance
+        case "Saturn":
+            return weight * 0.3  // Saturn aspects last months
+        case "Uranus", "Neptune", "Pluto":
+            return weight * 0.2  // Outer planets last years
+        case "Jupiter":
+            return weight * 0.5  // Jupiter moderate slow
+        case "Chiron":
+            return weight * 0.4  // Chiron slow
+            
+        default:
+            return weight
+        }
+    }
 }
 
 /// Categories of style influence strength

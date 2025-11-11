@@ -20,15 +20,24 @@ final class TokenMerger {
     // MARK: - Token Merging
     
     /// Merge tokens with duplicate names, combining weights
-    /// Prioritizes .axis origin type when merging
+    /// Prioritizes .axis and .transit origin types when merging
+    /// Preserves transit token nuance by including source info in grouping key
     /// - Parameter tokens: Array of tokens to merge
     /// - Returns: Array of merged tokens with no duplicates
     static func mergeTokensByName(_ tokens: [StyleToken]) -> [StyleToken] {
         var tokensByName: [String: [StyleToken]] = [:]
         
-        // Group tokens by name
+        // Group tokens by name + origin type for transit preservation
+        // This preserves meaningful differences between transit tokens from different sources
         for token in tokens {
-            let key = token.name.lowercased()
+            var key = token.name.lowercased()
+            
+            // Preserve transit token uniqueness by including source info
+            if token.originType == .transit {
+                let sourceInfo = token.planetarySource ?? token.aspectSource ?? "unknown"
+                key += "_\(token.originType.rawValue)_\(sourceInfo.lowercased())"
+            }
+            
             if tokensByName[key] == nil {
                 tokensByName[key] = []
             }
@@ -37,16 +46,17 @@ final class TokenMerger {
         
         var mergedTokens: [StyleToken] = []
         
-        for (name, duplicates) in tokensByName {
+        for (key, duplicates) in tokensByName {
             if duplicates.count == 1 {
                 // No duplicates - add as-is
                 mergedTokens.append(duplicates[0])
             } else {
-                // Merge duplicates
+                // Merge duplicates using priority-based weighted merging
                 let merged = mergeDuplicateTokens(duplicates)
                 mergedTokens.append(merged)
                 
                 if EngineConfig.enableMergeDebug {
+                    let name = duplicates[0].name
                     print("  🔀 Merged \(duplicates.count) tokens named '\(name)' → weight: \(String(format: "%.2f", merged.weight))")
                 }
             }
@@ -89,6 +99,7 @@ final class TokenMerger {
     }
     
     /// Merge an array of duplicate tokens into a single token
+    /// Uses priority-based selection to preserve transit and axis tokens for daily variation
     /// - Parameter duplicates: Array of tokens with the same name
     /// - Returns: A single merged token
     private static func mergeDuplicateTokens(_ duplicates: [StyleToken]) -> StyleToken {
@@ -96,24 +107,53 @@ final class TokenMerger {
             fatalError("Cannot merge empty array of tokens")
         }
         
-        // Prioritize axis tokens for origin preservation
-        let axisTokens = duplicates.filter { $0.originType == .axis }
-        let preferredToken = axisTokens.first ?? duplicates[0]
+        // Calculate total weight
+        let totalWeight = duplicates.reduce(0.0) { $0 + $1.weight }
         
-        // Sum all weights
-        let combinedWeight = duplicates.reduce(0.0) { $0 + $1.weight }
+        // Prioritize tokens by origin type for daily variation
+        // Transit tokens get highest priority, then axis, then phase
+        let priorityToken = duplicates.max { a, b in
+            let aPriority = getPriorityScore(a)
+            let bPriority = getPriorityScore(b)
+            return aPriority < bPriority
+        } ?? duplicates[0]
         
-        // Create merged token preserving preferred origin
+        // Use weighted average with slight reduction to prevent weight explosion
+        // But preserve more weight for transit/axis tokens to maintain daily variation
+        let finalWeight: Double
+        if priorityToken.originType == .transit || priorityToken.originType == .axis {
+            finalWeight = totalWeight * 0.9  // Preserve more weight for daily variation sources
+        } else {
+            finalWeight = totalWeight * 0.8  // Slight reduction for other sources
+        }
+        
+        // Create merged token preserving priority origin
         return StyleToken(
-            name: preferredToken.name,
-            type: preferredToken.type,
-            weight: combinedWeight,
-            planetarySource: preferredToken.planetarySource,
-            signSource: preferredToken.signSource,
-            houseSource: preferredToken.houseSource,
-            aspectSource: preferredToken.aspectSource,
-            originType: preferredToken.originType
+            name: priorityToken.name,
+            type: priorityToken.type,
+            weight: finalWeight,
+            planetarySource: priorityToken.planetarySource,
+            signSource: priorityToken.signSource,
+            houseSource: priorityToken.houseSource,
+            aspectSource: priorityToken.aspectSource,
+            originType: priorityToken.originType
         )
+    }
+    
+    /// Get priority score for token origin type
+    /// Higher scores indicate tokens that should be preserved for daily variation
+    /// - Parameter token: Token to score
+    /// - Returns: Priority score (higher = more important for daily variation)
+    private static func getPriorityScore(_ token: StyleToken) -> Double {
+        switch token.originType {
+        case .transit: return 10.0  // Highest priority - daily variation drivers
+        case .axis: return 9.0      // High priority - structural variation
+        case .phase: return 8.0     // Moderate-high - moon phase variation
+        case .weather: return 7.0   // Moderate - environmental variation
+        case .progressed: return 5.0 // Lower - slower changes
+        case .natal: return 3.0     // Low - static baseline
+        case .currentSun: return 1.0 // Lowest - seasonal baseline
+        }
     }
 }
 

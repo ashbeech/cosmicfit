@@ -103,7 +103,10 @@ class DailyVibeGenerator {
         debugVibeBreakdownAnalysis(breakdown: vibeBreakdown, tokens: allTokens)
         
         // ✨ DERIVED AXES: Evaluate axes from all tokens
-        let derivedAxes = DerivedAxesEvaluator.evaluate(tokens: allTokens)
+        var derivedAxes = DerivedAxesEvaluator.evaluate(tokens: allTokens)
+        
+        // Add daily volatility to axes for meaningful variation
+        derivedAxes = AxisTokenGenerator.addDailyVariation(to: derivedAxes, seed: dailySeed)
         
         // Generate Tarot card selection with daily seed for variety
         let selectedTarotCard = TarotCardSelector.selectCard(

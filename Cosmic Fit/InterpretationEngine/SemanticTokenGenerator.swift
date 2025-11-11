@@ -336,20 +336,30 @@ class SemanticTokenGenerator {
                 // Apply WeightingModel transit weight with daily variation enhancements
                 var adjustedTransitWeight: Double = transitWeight * WeightingModel.DailyFit.transitWeight
                 
-                // Special boost for daily drivers (Moon and fast-moving planets)
+                // Enhanced boost for daily drivers (Moon and fast-moving planets)
+                // Moon gets significant boost based on orb tightness for daily variation
                 if transitPlanet == "Moon" {
                     if orb < 0.5 {
-                        adjustedTransitWeight *= 2.0  // Major boost for exact Moon aspects
+                        adjustedTransitWeight *= 4.0  // Quadruple boost for exact Moon aspects
                     } else if orb < 1.0 {
-                        adjustedTransitWeight *= 1.6  // Good boost for close Moon aspects
+                        adjustedTransitWeight *= 3.0  // Triple boost for tight Moon aspects
+                    } else if orb < 2.0 {
+                        adjustedTransitWeight *= 2.0  // Double boost for moderate Moon aspects
                     } else {
-                        adjustedTransitWeight *= 1.3  // Moderate boost for wider Moon aspects
+                        adjustedTransitWeight *= 1.5  // Moderate boost for wider Moon aspects
                     }
                 } else if transitPlanet == "Mercury" && orb < 1.5 {
                     adjustedTransitWeight *= 1.4  // Boost Mercury for daily mental shifts
                 } else if (transitPlanet == "Venus" || transitPlanet == "Mars") && orb < 2.0 {
                     adjustedTransitWeight *= 1.2  // Moderate boost for personal planets
                 }
+                
+                // Apply planet speed weighting to prevent slow-moving planet dominance
+                // Fast planets (Moon, Mercury) get boosted, slow planets (Saturn, outer planets) get reduced
+                adjustedTransitWeight = TransitWeightCalculator.applyPlanetSpeedWeighting(
+                    weight: adjustedTransitWeight,
+                    transitPlanet: transitPlanet
+                )
                 
                 let finalAdjustedTransitWeight = adjustedTransitWeight
                 

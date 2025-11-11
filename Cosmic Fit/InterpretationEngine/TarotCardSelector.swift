@@ -122,8 +122,20 @@ class TarotCardSelector {
             return (card, totalScore, breakdown)
         }
         
+        // Add axis-based randomization for close scores to increase variety
+        let randomizedScored: [(TarotCard, Double, ScoreBreakdown)]
+        if let seed = seed {
+            randomizedScored = addAxisBasedRandomization(
+                scoredCards: scored,
+                axes: derivedAxes,
+                seed: seed
+            )
+        } else {
+            randomizedScored = scored
+        }
+        
         // Sort by score descending
-        let sortedScored = scored.sorted { $0.1 > $1.1 }
+        let sortedScored = randomizedScored.sorted { $0.1 > $1.1 }
         
         // Log top 5 candidates
         print("   Top 5 candidates:")
@@ -133,7 +145,9 @@ class TarotCardSelector {
         }
         
         // STAGE 3: TIE-BREAK BY AXIS SIMILARITY
-        let epsilon = 2.0  // Scores within 2 points are considered tied
+        // Reduced threshold to allow more card variety
+        let similarityThreshold = 0.05  // Reduced from previous thresholds
+        let epsilon = 1.5  // Reduced from 2.0 for more variety
         let maxScore = sortedScored[0].1
         let topCards = sortedScored.filter { abs($0.1 - maxScore) < epsilon }
         
@@ -143,8 +157,19 @@ class TarotCardSelector {
         let winner: TarotCard
         if topCards.count > 1 {
             // Multiple cards tied, pick highest axis similarity
-            winner = topCards.max { $0.2.axisSimilarity < $1.2.axisSimilarity }!.0
-            print("   Winner by axis similarity: \(winner.displayName)")
+            // If axis similarity is very close (within threshold), add small randomization
+            let topSimilarity = topCards.map { $0.2.axisSimilarity }.max() ?? 0.0
+            let veryCloseCards = topCards.filter { abs($0.2.axisSimilarity - topSimilarity) < similarityThreshold }
+            
+            if veryCloseCards.count > 1, let seed = seed {
+                // Use seed-based selection for very close matches
+                let selectedIndex = abs(seed) % veryCloseCards.count
+                winner = veryCloseCards[selectedIndex].0
+                print("   Winner by randomized selection from \(veryCloseCards.count) very close matches: \(winner.displayName)")
+            } else {
+                winner = topCards.max { $0.2.axisSimilarity < $1.2.axisSimilarity }!.0
+                print("   Winner by axis similarity: \(winner.displayName)")
+            }
         } else {
             // Clear winner
             winner = sortedScored[0].0
@@ -653,6 +678,37 @@ class TarotCardSelector {
     // MARK: - Helper removed (now redundant)
     // The getEnergyPoints helper has been replaced by VibeBreakdown.value(for:) enum-based method
     
+    /// Add axis-based randomization for close scores to break ties
+    /// Adds small axis-dependent variation to scores for cards with similar axis alignments
+    /// - Parameters:
+    ///   - scoredCards: Array of (TarotCard, Score, ScoreBreakdown) tuples
+    ///   - axes: Derived axes for the day (1-10 scale)
+    ///   - seed: Daily seed for deterministic variation
+    /// - Returns: Array with axis-based variation applied to scores
+    private static func addAxisBasedRandomization(
+        scoredCards: [(TarotCard, Double, ScoreBreakdown)],
+        axes: DerivedAxes,
+        seed: Int
+    ) -> [(TarotCard, Double, ScoreBreakdown)] {
+        
+        return scoredCards.map { (card, score, breakdown) in
+            // Calculate axis-dependent variation based on how closely card axes match day axes
+            // Card axes are 0-100, day axes are 1-10
+            // Use simple scaling: multiply day axes by 10 to approximate 0-100 range
+            // The small multiplier (0.001) means exact scaling doesn't matter much
+            let axisVariation = (
+                abs(card.axes.action - axes.action * 10.0) * 0.001 +
+                abs(card.axes.tempo - axes.tempo * 10.0) * 0.001 +
+                abs(card.axes.strategy - axes.strategy * 10.0) * 0.001 +
+                abs(card.axes.visibility - axes.visibility * 10.0) * 0.001
+            ) * sin(Double(seed) * 0.1)
+            
+            // Add small variation to break ties (positive or negative)
+            let adjustedScore = score + axisVariation
+            
+            return (card, adjustedScore, breakdown)
+        }
+    }
     
     /// Get a fallback card when no good match is found
     private static func getFallbackCard(for vibeBreakdown: VibeBreakdown?) -> TarotCard? {

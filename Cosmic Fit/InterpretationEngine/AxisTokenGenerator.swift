@@ -170,6 +170,35 @@ final class AxisTokenGenerator {
         )
     }
     
+    /// Add controlled daily variation to axes based on daily seed
+    /// Creates deterministic but varying daily offsets for meaningful variation
+    /// - Parameters:
+    ///   - axes: Original derived axes
+    ///   - seed: Daily seed for deterministic variation
+    /// - Returns: Derived axes with daily variation applied
+    static func addDailyVariation(to axes: DerivedAxes, seed: Int) -> DerivedAxes {
+        // Generate deterministic but varying daily offsets using sine waves
+        // Different frequencies for each axis create independent variation patterns
+        let seedDouble = Double(seed)
+        
+        let actionOffset = sin(seedDouble * 0.0731) * 1.2  // ±1.2 point swing
+        let tempoOffset = sin(seedDouble * 0.1047) * 1.5   // ±1.5 point swing
+        let strategyOffset = sin(seedDouble * 0.0613) * 1.0 // ±1.0 point swing
+        let visibilityOffset = sin(seedDouble * 0.0891) * 1.3 // ±1.3 point swing
+        
+        return DerivedAxes(
+            action: clamp(axes.action + actionOffset, min: 1.0, max: 10.0),
+            tempo: clamp(axes.tempo + tempoOffset, min: 1.0, max: 10.0),
+            strategy: clamp(axes.strategy + strategyOffset, min: 1.0, max: 10.0),
+            visibility: clamp(axes.visibility + visibilityOffset, min: 1.0, max: 10.0)
+        )
+    }
+    
+    /// Clamp value to min-max range
+    private static func clamp(_ value: Double, min: Double, max: Double) -> Double {
+        return Swift.max(min, Swift.min(max, value))
+    }
+    
     /// Calculate action axis from features
     private static func calculateActionFromFeatures(_ features: AstroFeatures) -> Double {
         // High angular momentum + many transits = high action
