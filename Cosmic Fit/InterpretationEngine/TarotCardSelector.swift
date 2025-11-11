@@ -102,19 +102,23 @@ class TarotCardSelector {
         let recentSelections = TarotRecencyTracker.shared.getRecentSelections(profileHash: profileHash ?? "")
         
         let scored = passedFilter.map { (card, axisSimilarity) -> (TarotCard, Double, ScoreBreakdown) in
-            // Calculate components
-            let axisScore = axisSimilarity * 60.0  // 60% weight
-            let vibeScore = calculateVibeAlignment(card: card, vibes: vibeBreakdown) * 25.0  // 25% weight
-            let boostScore = calculateSuitBoost(card: card, dayAxes: derivedAxes)  // ~0-3 points
+            // Use multi-factor scoring with target distribution: 60%/25%/15%
+            let scores = calculateMultiFactorScore(
+                card: card,
+                axes: derivedAxes,
+                vibeBreakdown: vibeBreakdown,
+                tokens: tokens
+            )
+            
             let recencyPenalty = calculateRecencyPenalty(card: card, recentSelections: recentSelections)
             
-            let totalScore = axisScore + vibeScore + boostScore - recencyPenalty
+            let totalScore = scores.total - recencyPenalty
             
             let breakdown = ScoreBreakdown(
                 axisSimilarity: axisSimilarity,
-                axisScore: axisScore,
-                vibeScore: vibeScore,
-                boostScore: boostScore,
+                axisScore: scores.axis,
+                vibeScore: scores.vibe,
+                boostScore: scores.boost,
                 recencyPenalty: recencyPenalty,
                 totalScore: totalScore
             )
@@ -186,6 +190,24 @@ class TarotCardSelector {
                 date: Date()
             )
         }
+        
+        // Log selection process for monitoring and analysis
+        let topCandidatesForMonitoring = sortedScored.prefix(10).map { card, score, breakdown in
+            (card, score, breakdown.axisScore, breakdown.vibeScore, breakdown.boostScore)
+        }
+        TarotSelectionMonitor.logSelectionProcess(
+            selectedCard: winner,
+            topCandidates: topCandidatesForMonitoring,
+            axes: derivedAxes,
+            vibeBreakdown: vibeBreakdown,
+            date: Date()
+        )
+        
+        // Track selection pattern
+        TarotSelectionMonitor.trackSelectionPattern(
+            card: winner,
+            profileId: profileHash ?? "unknown"
+        )
         
         // Show match analysis
         analyzeCardMatch(card: winner, tokens: tokens, vibeBreakdown: vibeBreakdown, derivedAxes: derivedAxes)
@@ -342,6 +364,42 @@ class TarotCardSelector {
         
         let sorted = scored.sorted { $0.1 > $1.1 }
         return sorted.first?.0
+    }
+    
+    // MARK: - Phase 2: Multi-Factor Scoring
+    
+    /// Calculate multi-factor score with target distribution: 60% axis, 25% vibe, 15% token boost
+    /// Multipliers calibrated to account for actual score ranges to achieve target distribution
+    /// - Parameters:
+    ///   - card: The tarot card to score
+    ///   - axes: Derived axes for the day
+    ///   - vibeBreakdown: Vibe breakdown for energy alignment
+    ///   - tokens: Style tokens for keyword matching
+    /// - Returns: Tuple with total score and component scores
+    private static func calculateMultiFactorScore(
+        card: TarotCard,
+        axes: DerivedAxes,
+        vibeBreakdown: VibeBreakdown?,
+        tokens: [StyleToken]
+    ) -> (total: Double, axis: Double, vibe: Double, boost: Double) {
+        
+        // 1. Axis similarity (target: 60% of total score)
+        // Multiplier 0.58 calibrated to account for actual score ranges
+        let axisSimilarity = calculateAxisSimilarity(card: card, dayAxes: axes)
+        let axisScore = axisSimilarity * 0.58
+        
+        // 2. Vibe alignment (target: 25% of total score)
+        let vibeAlignment = calculateEnhancedVibeAlignment(card: card, vibes: vibeBreakdown)
+        let vibeScore = vibeAlignment * 0.25
+        
+        // 3. Token boost (target: 15% of total score)
+        // Multiplier 0.17 calibrated to account for actual score ranges
+        let tokenBoost = calculateTokenBoosts(card: card, tokens: tokens, dayAxes: axes)
+        let boostScore = tokenBoost * 0.17
+        
+        let totalScore = axisScore + vibeScore + boostScore
+        
+        return (total: totalScore, axis: axisScore, vibe: vibeScore, boost: boostScore)
     }
     
     // MARK: - Phase 2: Axis Similarity Calculation
@@ -533,6 +591,112 @@ class TarotCardSelector {
         let secondaryAlignment = secondaryValue * cardSecondaryStrength * 0.3
         
         return dominantAlignment + secondaryAlignment
+    }
+    
+    /// Enhanced vibe alignment with better differentiation and diversity bonus
+    /// Returns 0.0-1.0 score with diversity bonus for multi-energy alignment
+    private static func calculateEnhancedVibeAlignment(
+        card: TarotCard,
+        vibes: VibeBreakdown?
+    ) -> Double {
+        guard let vibes = vibes else { return 0.5 }
+        
+        // Calculate energy scores for all vibes
+        let energyScores: [String: Double] = [
+            "romantic": Double(vibes.romantic) * getCardVibeAffinity(card, energy: "romantic"),
+            "classic": Double(vibes.classic) * getCardVibeAffinity(card, energy: "classic"),
+            "playful": Double(vibes.playful) * getCardVibeAffinity(card, energy: "playful"),
+            "utility": Double(vibes.utility) * getCardVibeAffinity(card, energy: "utility"),
+            "drama": Double(vibes.drama) * getCardVibeAffinity(card, energy: "drama"),
+            "edge": Double(vibes.edge) * getCardVibeAffinity(card, energy: "edge")
+        ]
+        
+        let totalEnergyScore = energyScores.values.reduce(0, +) / 21.0 // Normalize by max vibe value
+        
+        // Add vibe diversity bonus (cards that align with multiple energies score higher)
+        let activeEnergies = energyScores.filter { $0.value > 0.5 }.count
+        let diversityBonus = min(Double(activeEnergies) * 0.05, 0.15) // Max 15% bonus
+        
+        return min(1.0, totalEnergyScore + diversityBonus)
+    }
+    
+    /// Get card's affinity for specific vibe energy (0.0-2.0 scale)
+    private static func getCardVibeAffinity(_ card: TarotCard, energy: String) -> Double {
+        switch (card.displayName, energy) {
+        // Major Arcana affinities
+        case ("The Emperor", "classic"): return 2.0
+        case ("The Emperor", "utility"): return 1.8
+        case ("The Emperor", "drama"): return 0.8
+        case ("The Magician", "classic"): return 1.5
+        case ("The Magician", "drama"): return 1.2
+        case ("The Magician", "edge"): return 1.0
+        case ("The High Priestess", "romantic"): return 1.8
+        case ("The High Priestess", "classic"): return 1.5
+        case ("The Fool", "playful"): return 2.0
+        case ("The Fool", "edge"): return 1.3
+            
+        // Court Cards affinities
+        case (let name, "classic") where name.contains("King"): return 1.8
+        case (let name, "utility") where name.contains("King"): return 1.5
+        case (let name, "playful") where name.contains("Page"): return 1.8
+        case (let name, "romantic") where name.contains("Queen"): return 1.6
+        case (let name, "edge") where name.contains("Knight"): return 1.4
+            
+        // Suit-based affinities
+        case (let name, "utility") where name.contains("Pentacles"): return 1.5
+        case (let name, "drama") where name.contains("Swords"): return 1.3
+        case (let name, "romantic") where name.contains("Cups"): return 1.4
+        case (let name, "playful") where name.contains("Wands"): return 1.2
+            
+        default:
+            // Use card's energyAffinity dictionary as fallback
+            return card.energyAffinity[energy.lowercased()] ?? 0.8 // Default moderate affinity
+        }
+    }
+    
+    /// Calculate token boosts combining suit boost and token keyword matching
+    /// Returns 0.0-1.0 score for normalization
+    private static func calculateTokenBoosts(
+        card: TarotCard,
+        tokens: [StyleToken],
+        dayAxes: DerivedAxes
+    ) -> Double {
+        // 1. Suit boost (0-3 points, normalized to 0-1)
+        let suitBoost = calculateSuitBoost(card: card, dayAxes: dayAxes) / 3.0
+        
+        // 2. Token keyword matching (0-1 scale)
+        let tokenMatchScore = calculateTokenKeywordMatch(card: card, tokens: tokens)
+        
+        // Combine: 60% suit boost, 40% token matching
+        return (suitBoost * 0.6) + (tokenMatchScore * 0.4)
+    }
+    
+    /// Calculate how well card keywords match style tokens
+    /// Returns 0.0-1.0 score
+    private static func calculateTokenKeywordMatch(
+        card: TarotCard,
+        tokens: [StyleToken]
+    ) -> Double {
+        guard !tokens.isEmpty else { return 0.5 }
+        
+        let cardKeywords = Set(card.keywords.map { $0.lowercased() })
+        let tokenNames = Set(tokens.map { $0.name.lowercased() })
+        
+        // Count matching keywords (weighted by token weight)
+        var matchScore: Double = 0.0
+        var totalWeight: Double = 0.0
+        
+        for token in tokens {
+            let tokenName = token.name.lowercased()
+            totalWeight += token.weight
+            
+            if cardKeywords.contains(tokenName) {
+                matchScore += token.weight
+            }
+        }
+        
+        // Normalize by total weight
+        return totalWeight > 0 ? matchScore / totalWeight : 0.0
     }
     
     // MARK: - Phase 2: Recency Penalty

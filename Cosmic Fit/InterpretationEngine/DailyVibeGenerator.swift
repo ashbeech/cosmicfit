@@ -103,10 +103,23 @@ class DailyVibeGenerator {
         debugVibeBreakdownAnalysis(breakdown: vibeBreakdown, tokens: allTokens)
         
         // ✨ DERIVED AXES: Evaluate axes from all tokens
-        var derivedAxes = DerivedAxesEvaluator.evaluate(tokens: allTokens)
+        let originalAxes = DerivedAxesEvaluator.evaluate(tokens: allTokens)
+        var derivedAxes = originalAxes
         
-        // Add daily volatility to axes for meaningful variation
-        derivedAxes = AxisTokenGenerator.addDailyVariation(to: derivedAxes, seed: dailySeed)
+        // Apply enhanced volatility modulation based on multiple factors
+        // This replaces simple sine wave volatility with astrologically-informed modulation
+        derivedAxes = AxisVolatilityEngine.generateDailyAxisModulation(
+            baseAxes: originalAxes,
+            tokens: allTokens,
+            transitCount: transits.count,
+            moonPhase: normalizedLunarPhase,
+            dailySeed: dailySeed
+        )
+        
+        // Debug logging
+        print("🎛️ AXIS MODULATION:")
+        print("  Base:      A:\(String(format: "%.1f", originalAxes.action)) T:\(String(format: "%.1f", originalAxes.tempo)) S:\(String(format: "%.1f", originalAxes.strategy)) V:\(String(format: "%.1f", originalAxes.visibility))")
+        print("  Modulated: A:\(String(format: "%.1f", derivedAxes.action)) T:\(String(format: "%.1f", derivedAxes.tempo)) S:\(String(format: "%.1f", derivedAxes.strategy)) V:\(String(format: "%.1f", derivedAxes.visibility))")
         
         // Generate Tarot card selection with daily seed for variety
         let selectedTarotCard = TarotCardSelector.selectCard(
