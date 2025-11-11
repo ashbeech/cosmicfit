@@ -97,7 +97,7 @@ class DailyVibeGenerator {
         debugAnalyzeTokens(allTokens)
         
         // Generate all Daily System sections from tokens
-        let styleBrief = generateMariaStyleBrief(from: allTokens)
+        //let styleBrief = generateMariaStyleBrief(from: allTokens)
         let vibeBreakdown = VibeBreakdownGenerator.generateVibeBreakdown(from: allTokens)
         
         debugVibeBreakdownAnalysis(breakdown: vibeBreakdown, tokens: allTokens)
@@ -114,8 +114,10 @@ class DailyVibeGenerator {
             seed: dailySeed,
             profileHash: profileHash
         )
-        let tarotKeywords = generateTarotKeywords(from: selectedTarotCard, tokens: allTokens)
         
+        //let tarotKeywords = generateTarotKeywords(from: selectedTarotCard, tokens: allTokens)
+        
+        /*
         // Generate comprehensive sections
         let textiles = generateTextilesSection(from: allTokens, axes: derivedAxes)
         let colors = generateColorsSection(from: allTokens, axes: derivedAxes)
@@ -125,7 +127,7 @@ class DailyVibeGenerator {
         let accessories = generateAccessoriesSection(from: allTokens, axes: derivedAxes)
         let (layering, layeringScore) = generateLayeringSection(from: allTokens, axes: derivedAxes, weather: weather)
         let angularCurvyScore = StructuralAxes.calculateAngularCurvyScore(from: allTokens)
-        
+        */
         print("\n📐 DERIVED AXES COMPUTED:")
         print("  Action: \(String(format: "%.1f", derivedAxes.action))/10")
         print("  Tempo: \(String(format: "%.1f", derivedAxes.tempo))/10")
@@ -133,11 +135,11 @@ class DailyVibeGenerator {
         print("  Visibility: \(String(format: "%.1f", derivedAxes.visibility))/10")
         
         print("\n✨ COMPREHENSIVE DAILY SYSTEM GENERATED:")
-        print("  Style Brief: \"\(styleBrief.prefix(50))...\"")
+        //print("  Style Brief: \"\(styleBrief.prefix(50))...\"")
         print("  Dominant Energy: \(getDominantEnergyName(from: vibeBreakdown))")
-        print("  Color Scores: D:\(colorScores.darkness) V:\(colorScores.vibrancy) C:\(colorScores.contrast)")
-        print("  Angular/Curvy: \(angularCurvyScore.score)/10")
-        print("  Layering Score: \(layeringScore)/10")
+        //print("  Color Scores: D:\(colorScores.darkness) V:\(colorScores.vibrancy) C:\(colorScores.contrast)")
+        //print("  Angular/Curvy: \(angularCurvyScore.score)/10")
+        //print("  Layering Score: \(layeringScore)/10")
         if let tarotCard = selectedTarotCard {
             print("  Tarot Card: \(tarotCard.displayName)")
         }
@@ -147,21 +149,21 @@ class DailyVibeGenerator {
         // Return complete DailyVibeContent with all sections populated
         var dailyContent = DailyVibeContent()
         dailyContent.tarotCard = selectedTarotCard
-        dailyContent.tarotKeywords = tarotKeywords
-        dailyContent.styleBrief = styleBrief
-        dailyContent.derivedAxes = derivedAxes
-        dailyContent.textiles = textiles
-        dailyContent.colors = colors
-        dailyContent.colorScores = colorScores
-        dailyContent.patterns = patterns
-        dailyContent.shape = shape
-        dailyContent.accessories = accessories
-        dailyContent.layering = layering
-        dailyContent.layeringScore = layeringScore
+        //dailyContent.tarotKeywords = tarotKeywords
+        //dailyContent.styleBrief = styleBrief
+        //dailyContent.derivedAxes = derivedAxes
+        //dailyContent.textiles = textiles
+        //dailyContent.colors = colors
+        //dailyContent.colorScores = colorScores
+        //dailyContent.patterns = patterns
+        //dailyContent.shape = shape
+        //dailyContent.accessories = accessories
+        //dailyContent.layering = layering
+        //dailyContent.layeringScore = layeringScore
         dailyContent.vibeBreakdown = vibeBreakdown
-        dailyContent.angularCurvyScore = angularCurvyScore
-        dailyContent.temperature = weather?.temperature
-        dailyContent.weatherCondition = weather?.condition
+        //dailyContent.angularCurvyScore = angularCurvyScore
+        //dailyContent.temperature = weather?.temperature
+        //dailyContent.weatherCondition = weather?.condition
         
         return dailyContent
     }
@@ -844,32 +846,32 @@ struct DailyVibeContent: Codable {
     
     // Tarot Card Pull - represents day's overall energy
     var tarotCard: TarotCard? = nil
-    var tarotKeywords: String = "" // 3 keywords separated by commas
+    //var tarotKeywords: String = "" // 3 keywords separated by commas
     
     // Style Brief - 3-4 sentences in Maria's voice
-    var styleBrief: String = ""
+    //var styleBrief: String = ""
     
     // MARK: - Style Sections
     
     // Textiles Section - visual qualities and fabric feels (up to 2 sentences)
-    var textiles: String = ""
+    //var textiles: String = ""
     
     // Colors Section - tonal mood, palette, and scores
-    var colors: String = ""
-    var colorScores: ColorScores = ColorScores(darkness: 5, vibrancy: 5, contrast: 5)
+    //var colors: String = ""
+    //var colorScores: ColorScores = ColorScores(darkness: 5, vibrancy: 5, contrast: 5)
     
     // Patterns Section - descriptive vocabulary for visual rhythm (up to 2 sentences)
-    var patterns: String = ""
+    //var patterns: String = ""
     
     // Shape Section - silhouettes and spatial flow (up to 2 sentences)
-    var shape: String = ""
+    //var shape: String = ""
     
     // Accessories Section - 2-3 recommendations with texture/emotional function (up to 2 sentences)
-    var accessories: String = ""
+    //var accessories: String = ""
     
     // Layering Section - score out of 10 with weight/adaptability guidance (up to 2 sentences)
-    var layering: String = ""
-    var layeringScore: Int = 5
+    //var layering: String = ""
+    //var layeringScore: Int = 5
     
     // MARK: - Vibe Breakdown & Structural Axes
     
@@ -877,18 +879,18 @@ struct DailyVibeContent: Codable {
     var vibeBreakdown: VibeBreakdown = VibeBreakdown(classic: 0, playful: 0, romantic: 0, utility: 0, drama: 0, edge: 0)
     
     // Angular vs Curvy structural axis (1-10)
-    var angularCurvyScore: AngularCurvyScore = AngularCurvyScore(score: 5)
+    //var angularCurvyScore: AngularCurvyScore = AngularCurvyScore(score: 5)
     
     var derivedAxes: DerivedAxes = DerivedAxes(action: 5.0, tempo: 5.0, strategy: 5.0, visibility: 5.0)
     
     // MARK: - Environmental Context
     
     // Weather information (optional)
-    var temperature: Double? = nil
-    var weatherCondition: String? = nil
+    //var temperature: Double? = nil
+    //var weatherCondition: String? = nil
     
     // MARK: - Legacy Properties (for transition compatibility)
-    
+    /*
     @available(*, deprecated, message: "Use colorScores.brightness instead")
     var brightness: Int {
         return 10 - colorScores.darkness // Inverse for backward compatibility
@@ -898,17 +900,19 @@ struct DailyVibeContent: Codable {
     var vibrancy: Int {
         return colorScores.vibrancy
     }
+     */
     
     @available(*, deprecated, message: "Use styleBrief instead")
     var takeaway: String = ""
     
     // MARK: - Computed Properties
-    
+    /*
     // Validation method
     var isValid: Bool {
         return vibeBreakdown.isValid && !styleBrief.isEmpty
     }
-    
+     */
+        
     // Get dominant energy for UI highlighting
     var dominantEnergy: String {
         let energies = [
@@ -933,13 +937,16 @@ struct DailyVibeContent: Codable {
         if let tarotCard = tarotCard {
             output += "🔮 TAROT CARD PULL\n"
             output += "\(tarotCard.displayName)\n"
+            /*
             if !tarotKeywords.isEmpty {
                 output += "\(tarotKeywords)\n\n"
             } else {
                 output += "\n"
             }
+             */
         }
         
+        /*
         // Style Brief
         output += "✨ STYLE BRIEF\n"
         output += "\(styleBrief)\n\n"
@@ -983,16 +990,16 @@ struct DailyVibeContent: Codable {
             output += "Score: \(layeringScore)/10\n"
             output += "\(layering)\n\n"
         }
-        
+        */
         // Vibe Breakdown
         output += "⚡ VIBE BREAKDOWN\n"
         output += "Classic: \(vibeBreakdown.classic), Playful: \(vibeBreakdown.playful), Romantic: \(vibeBreakdown.romantic)\n"
         output += "Utility: \(vibeBreakdown.utility), Drama: \(vibeBreakdown.drama), Edge: \(vibeBreakdown.edge)\n\n"
-        
+        /*
         // Structural Axes
         output += "📏 ANGULAR vs CURVY\n"
         output += "Score: \(angularCurvyScore.score)/10 (\(angularCurvyScore.description))\n"
-        
+        */
         // Derived Axes
         output += "📐 DERIVED AXES\n"
         output += "Action: \(String(format: "%.1f", derivedAxes.action))/10 • "

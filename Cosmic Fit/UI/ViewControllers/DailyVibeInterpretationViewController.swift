@@ -459,21 +459,22 @@ class DailyVibeInterpretationViewController: UIViewController {
         if let content = vibeContent {
             // Force layout before drawing to ensure views have correct sizes
             view.layoutIfNeeded()
-            drawBrightnessSlider(value: 10 - content.colorScores.darkness) // Brightness is inverse of darkness
-            drawVibrancySlider(value: content.colorScores.vibrancy)
+            //drawBrightnessSlider(value: 10 - content.colorScores.darkness) // Brightness is inverse of darkness
+            //drawVibrancySlider(value: content.colorScores.vibrancy)
         }
     }
     
     // MARK: - Update UI with Content
     private func updateUI(with content: DailyVibeContent) {
         // Update Style Brief
-        styleBriefLabel.text = content.styleBrief
+        //styleBriefLabel.text = content.styleBrief
         
         // Update date
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEEE d MMMM yyyy"
         dateLabel.text = dateFormatter.string(from: Date())
         
+        /*
         // Weather
         if let temp = content.temperature,
            let condition = content.weatherCondition {       // <-- ‘condition’ now used!
@@ -493,7 +494,9 @@ class DailyVibeInterpretationViewController: UIViewController {
         } else {
             weatherInfoLabel.text = ""
         }
+         */
         
+        /*
         // Populate content sections
         textilesContentLabel.text   = content.textiles
         colorsContentLabel.text     = content.colors
@@ -503,10 +506,11 @@ class DailyVibeInterpretationViewController: UIViewController {
         
         // Take‑away
         takeawayLabel.text = content.styleBrief
+         */
         
         // Redraw sliders
-        drawBrightnessSlider(value: 10 - content.colorScores.darkness) // Brightness is inverse of darkness
-        drawVibrancySlider(value: content.colorScores.vibrancy)
+        //drawBrightnessSlider(value: 10 - content.colorScores.darkness) // Brightness is inverse of darkness
+        //drawVibrancySlider(value: content.colorScores.vibrancy)
     }
     
     // MARK: - Actions
@@ -519,7 +523,7 @@ class DailyVibeInterpretationViewController: UIViewController {
         
         // Items to share
         var itemsToShare: [Any] = []
-        
+        /*
         if let content = vibeContent {
             // Create formatted text for sharing
             var shareText = "TODAY'S COSMIC VIBE\n\n"
@@ -535,6 +539,7 @@ class DailyVibeInterpretationViewController: UIViewController {
             
             itemsToShare.append(shareText)
         }
+         */
         
         if let image = image {
             itemsToShare.append(image)

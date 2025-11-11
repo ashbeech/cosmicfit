@@ -238,6 +238,10 @@ class CosmicFitInterpretationEngine {
         dateFormatter.locale = Locale(identifier: "en_GB")
         let dateString = dateFormatter.string(from: date)
 
+        // TEMP:
+        let fullInterpretation = ""
+        
+        /*
         // Combine both interpretations into formatted output
         let fullInterpretation = """
         YOUR COSMIC BLUEPRINT
@@ -266,7 +270,9 @@ class CosmicFitInterpretationEngine {
         
         print("✅ Full interpretation generated successfully")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
-        
+         */
+        print("No Full interpretation at this time")
+         
         return fullInterpretation
     }
     

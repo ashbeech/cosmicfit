@@ -55,8 +55,8 @@ class TransitWeightCalculator {
         let adjustedWeight = baseWeight * contextMultiplier * fashionRelevanceScore
         let finalWeight = adjustedWeight + sensitivityBonus
         
-        // CRITICAL FIX: Lower threshold to 0.3 instead of 0.5 to capture more transits
-        return finalWeight >= 0.3 ? finalWeight : 0.0
+        // Lower threshold should capture more transits
+        return finalWeight >= 0.15 ? finalWeight : 0.0
     }
     
     /// Get weight multiplier based on aspect type and orb

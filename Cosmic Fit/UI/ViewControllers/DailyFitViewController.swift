@@ -740,7 +740,7 @@ class DailyFitViewController: UIViewController {
         // Set card title (now in content area as header)
         let cardName = content.tarotCard?.displayName ?? "Daily Energy"
         cardTitleLabel.text = cardName
-        
+        /*
         // Update content labels using theme methods
         let keywordsText = content.tarotKeywords.isEmpty ? "Intuitive guidance" : content.tarotKeywords
         keywordsLabel.attributedText = createThemedStyledText(title: "Keywords", content: keywordsText)
@@ -752,6 +752,7 @@ class DailyFitViewController: UIViewController {
         shapeLabel.attributedText = createThemedStyledText(title: "Shape", content: content.shape)
         accessoriesLabel.attributedText = createThemedStyledText(title: "Accessories", content: content.accessories)
         layeringLabel.attributedText = createThemedStyledText(title: "Layering", content: content.layering)
+        */
         vibeBreakdownLabel.attributedText = createThemedVibeBreakdownText(vibeBreakdown: content.vibeBreakdown)
         
         print("Content updated with theme styling - card title is content header")
@@ -1144,8 +1145,8 @@ class DailyFitViewController: UIViewController {
         // Print daily vibe content info
         if let dailyVibe = dailyVibeContent {
             print("📊 DAILY VIBE DATA:")
-            print("• Keywords: \(dailyVibe.tarotKeywords)")
-            print("• Style Brief: \(dailyVibe.styleBrief.prefix(100))...")
+            //print("• Keywords: \(dailyVibe.tarotKeywords)")
+            //print("• Style Brief: \(dailyVibe.styleBrief.prefix(100))...")
             
             if let tarotCard = dailyVibe.tarotCard {
                 print("• Card: \(tarotCard.displayName)")
@@ -1163,6 +1164,7 @@ class DailyFitViewController: UIViewController {
             print("• Drama: \(vibeBreakdown.drama)")
             print("• Edge: \(vibeBreakdown.edge)")
             
+            /*
             print("\n🌈 COLOR SCORES:")
             let colorScores = dailyVibe.colorScores
             print("• Darkness: \(colorScores.darkness)/10")
@@ -1178,6 +1180,7 @@ class DailyFitViewController: UIViewController {
                 print("• Temperature: \(String(format: "%.1f", temp))°C")
                 print("• Condition: \(condition)")
             }
+             */
         }
         
         print("\n🌟 Navigating to Full Natal Chart with Debug Menu...")
