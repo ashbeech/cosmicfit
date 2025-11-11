@@ -424,20 +424,19 @@ class ProfileViewController: UIViewController {
                     self?.longitude = location.coordinate.longitude
                     
                     // Get timezone for the location
-                    let timeZone = TimeZone(identifier: placemark.timeZone?.identifier ?? TimeZone.current.identifier) ?? TimeZone.current
-                    self?.timeZone = timeZone
+                    let newTimeZone = TimeZone(identifier: placemark.timeZone?.identifier ?? TimeZone.current.identifier) ?? TimeZone.current
                     
-                    // CRITICAL: Update picker timezones when location changes
-                    // This ensures the pickers display times in the new location's timezone
-                    self?.birthDatePicker.timeZone = timeZone
-                    self?.birthTimePicker.timeZone = timeZone
+                    // Update ONLY the stored timezone for calculations
+                    // DO NOT change picker timezones to avoid animation
+                    self?.timeZone = newTimeZone
                     
                     #if DEBUG
                     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
                     print("🔄 LOCATION UPDATED")
                     print("📍 New Location: \(self?.locationName ?? "")")
-                    print("🕐 New Timezone: \(timeZone.identifier)")
-                    print("✅ Pickers reconfigured with new timezone")
+                    print("🕐 New Timezone: \(newTimeZone.identifier)")
+                    print("⏰ Time preserved: Pickers remain unchanged, timezone updated for calculations")
+                    print("✅ No picker animation - smooth UX")
                     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
                     #endif
                     
@@ -474,17 +473,22 @@ class ProfileViewController: UIViewController {
             return
         }
         
-        // Get dates from pickers (in birth location timezone)
+        // Get dates from pickers
         let birthDate = birthDatePicker.date
         let birthTime = birthTimePicker.date
         
-        // Create calendar in birth location timezone
+        // CRITICAL FIX: Extract components using the picker's CURRENT timezone
+        // This gets the actual numeric values the user sees (e.g., 04:30)
+        var pickerCalendar = Calendar(identifier: .gregorian)
+        pickerCalendar.timeZone = birthDatePicker.timeZone ?? timeZone
+        let dateComponents = pickerCalendar.dateComponents([.year, .month, .day], from: birthDate)
+        
+        pickerCalendar.timeZone = birthTimePicker.timeZone ?? timeZone
+        let timeComponents = pickerCalendar.dateComponents([.hour, .minute], from: birthTime)
+        
+        // Create calendar in birth location timezone for final date creation
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timeZone
-        
-        // Extract components
-        let dateComponents = calendar.dateComponents([.year, .month, .day], from: birthDate)
-        let timeComponents = calendar.dateComponents([.hour, .minute], from: birthTime)
         
         // Combine components
         var combinedComponents = DateComponents()

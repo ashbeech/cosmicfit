@@ -154,8 +154,10 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
         bottomDividerContainer.addSubview(bottomDividerRight)
         bottomDividerContainer.addSubview(starImageView)
         
-        // Add menu buttons to stack (only Account, FAQs, Help)
-        menuStackView.addArrangedSubview(accountButton)
+        // Add menu buttons to stack (only FAQs, Help)
+        // TODO: Account button temporarily disabled for post-launch implementation
+        // Complex profile editing needs thorough testing and bug fixes before release
+        // menuStackView.addArrangedSubview(accountButton)
         menuStackView.addArrangedSubview(faqsButton)
         menuStackView.addArrangedSubview(helpButton)
         
@@ -238,7 +240,8 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
     
     private func setupActions() {
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
-        accountButton.addTarget(self, action: #selector(accountButtonTapped), for: .touchUpInside)
+        // TODO: Account button action disabled for post-launch implementation
+        // accountButton.addTarget(self, action: #selector(accountButtonTapped), for: .touchUpInside)
         faqsButton.addTarget(self, action: #selector(faqsButtonTapped), for: .touchUpInside)
         helpButton.addTarget(self, action: #selector(helpButtonTapped), for: .touchUpInside)
         tiktokButton.addTarget(self, action: #selector(tiktokButtonTapped), for: .touchUpInside)
