@@ -151,7 +151,7 @@ class TarotCardSelector {
         // STAGE 3: TIE-BREAK BY AXIS SIMILARITY
         // Reduced threshold to allow more card variety
         let similarityThreshold = 0.05  // Reduced from previous thresholds
-        let epsilon = 1.5  // Reduced from 2.0 for more variety
+        let epsilon = 0.15  // ⚠️ CHANGED from 1.5 - only group truly close scores
         let maxScore = sortedScored[0].1
         let topCards = sortedScored.filter { abs($0.1 - maxScore) < epsilon }
         
