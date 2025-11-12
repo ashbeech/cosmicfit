@@ -1376,34 +1376,21 @@ class DailyFitViewController: UIViewController {
         let horizontalMargin: CGFloat = 32
         let sectionSpacing: CGFloat = 24
         
-        // Calculate starting position for content
-        // Content should start below the tarot card
-        // Card is centered, so calculate where card ends
+        // Use original positioning logic that properly accounts for tab bar
         let screenHeight = view.bounds.height
-        let menuBarBottom = calculateMenuBarBottom()
-        let tabBarTop = calculateTabBarTop()
-        let availableHeight = tabBarTop - menuBarBottom
-        let cardCenterYInView = menuBarBottom + (availableHeight / 2)
+        let tabBarHeight: CGFloat = 83
         
-        // Get card height
-        let cardAspectRatio: CGFloat = 0.62
-        let horizontalPadding: CGFloat = 33
-        let cardWidth = view.bounds.width - (horizontalPadding * 2)
-        let cardHeight = cardWidth / cardAspectRatio
-        
-        // Card bottom is at center + half height
-        let cardBottomInView = cardCenterYInView + (cardHeight / 2)
-        
-        // Convert to contentView coordinates
-        let contentViewOffset = view.safeAreaInsets.top + 83
-        let contentStartFromTop = cardBottomInView - contentViewOffset + sectionSpacing
+        // Position content to start well above tab bar (original logic)
+        // This positions content 75 points up from the bottom of the screen minus tab bar
+        // Which gives approximately 10-15 points above the tab bar as expected
+        let contentStartFromBottom = screenHeight - tabBarHeight - 75
         
         // Layout constraints with proper vertical flow
         var constraints: [NSLayoutConstraint] = []
         
-        // Header Section - positioned below card
+        // Header Section - positioned using original bottom-up calculation
         constraints.append(contentsOf: [
-            dailyFitLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: contentStartFromTop),
+            dailyFitLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: contentStartFromBottom),
             dailyFitLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
             dailyFitLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
             
