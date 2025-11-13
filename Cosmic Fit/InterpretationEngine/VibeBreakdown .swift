@@ -472,33 +472,136 @@ class VibeBreakdownGenerator {
         return 0.0
     }
     
+    /// Get sun sign energy preference multipliers
+    /// ADJUSTED RANGE: 0.85-1.5× (reduced from 0.7-2.2× for better transit visibility)
+    /// This allows strong transits to overcome natal bias while preserving personality
+    /// - Parameter sunSign: The user's natal sun sign
+    /// - Returns: Dictionary of energy multipliers for the sun sign
     private static func getSunSignEnergyPreference(sunSign: String) -> [String: Double] {
         switch sunSign {
         case "Taurus":
-            return ["classic": 1.8, "romantic": 1.4, "utility": 1.3, "playful": 0.8, "drama": 0.7]  // Traditional earth emphasis
+            // Earth sign: Stable, sensual, values beauty and comfort
+            return [
+                "classic": 1.5,      // Was 1.8 - Strong preference for timeless structure
+                "romantic": 1.3,     // Was 1.4 - Venus-ruled sensuality
+                "utility": 1.2,      // Was 1.3 - Earth practicality
+                "playful": 0.9,      // Was 0.8 - More reserved expression
+                "drama": 0.85        // Was 0.7 - Avoids volatility
+            ]
+            
         case "Scorpio":
-            return ["drama": 2.0, "edge": 1.3, "utility": 1.2, "romantic": 0.8, "playful": 0.7, "classic": 1.0]  // Drama dominance with power elements
+            // Water sign: Intense, transformative, powerful
+            return [
+                "drama": 1.5,        // Was 2.0 - Emotional intensity and power
+                "edge": 1.3,         // Was 1.3 - Transformative and deep
+                "utility": 1.1,      // Was 1.2 - Strategic and purposeful
+                "romantic": 0.9,     // Was 0.8 - Deep but private emotions
+                "playful": 0.85,     // Was 0.7 - Serious and intense
+                "classic": 1.0       // Was 1.0 - Neutral on tradition
+            ]
+            
         case "Cancer":
-            return ["romantic": 1.6, "utility": 1.3, "classic": 1.2, "drama": 0.9, "playful": 1.0]  // Emotional comfort focus
+            // Water sign: Nurturing, emotional, protective
+            return [
+                "romantic": 1.4,     // Was 1.6 - Emotional and caring
+                "utility": 1.2,      // Was 1.3 - Practical nurturance
+                "classic": 1.1,      // Was 1.2 - Traditional family values
+                "drama": 0.95,       // Was 0.9 - Emotional but not theatrical
+                "playful": 1.0       // Was 1.0 - Neutral
+            ]
+            
         case "Leo":
-            return ["drama": 2.1, "playful": 1.5, "classic": 0.8, "utility": 0.8, "romantic": 1.0]  // Theatrical emphasis
+            // Fire sign: Radiant, expressive, dramatic
+            return [
+                "drama": 1.5,        // Was 2.1 - Theatrical and expressive
+                "playful": 1.3,      // Was 1.5 - Creative and joyful
+                "romantic": 1.0,     // Was 1.0 - Generous in love
+                "classic": 0.9,      // Was 0.8 - Bold over traditional
+                "utility": 0.9       // Was 0.8 - Style over function
+            ]
+            
         case "Virgo":
-            return ["classic": 2.0, "utility": 1.8, "romantic": 0.8, "drama": 0.7, "playful": 0.9]  // Maximum classic and utility
+            // Earth sign: Analytical, refined, practical
+            return [
+                "classic": 1.5,      // Was 2.0 - Refined and polished
+                "utility": 1.4,      // Was 1.8 - Maximum practicality
+                "playful": 0.95,     // Was 0.9 - More serious nature
+                "romantic": 0.9,     // Was 0.8 - Reserved emotionally
+                "drama": 0.85        // Was 0.7 - Avoids excess
+            ]
+            
         case "Libra":
-            return ["romantic": 1.7, "classic": 1.5, "playful": 1.2, "edge": 0.8, "drama": 0.9]  // Beauty and harmony focus
+            // Air sign: Harmonious, aesthetic, balanced
+            return [
+                "romantic": 1.4,     // Was 1.7 - Venus-ruled beauty and harmony
+                "classic": 1.3,      // Was 1.5 - Refined elegance
+                "playful": 1.2,      // Was 1.2 - Social and charming
+                "edge": 0.9,         // Was 0.8 - Prefers balance over rebellion
+                "drama": 0.95        // Was 0.9 - Diplomatic over dramatic
+            ]
+            
         case "Aries":
-            return ["drama": 1.8, "playful": 1.4, "edge": 1.3, "classic": 0.8, "utility": 1.0]  // Dynamic energy
+            // Fire sign: Dynamic, bold, pioneering
+            return [
+                "drama": 1.4,        // Was 1.8 - Bold and assertive
+                "playful": 1.3,      // Was 1.4 - Spontaneous and fun
+                "edge": 1.2,         // Was 1.3 - Innovative and brave
+                "utility": 1.0,      // Was 1.0 - Neutral
+                "classic": 0.9       // Was 0.8 - Prefers new over traditional
+            ]
+            
         case "Gemini":
-            return ["playful": 1.9, "edge": 1.3, "classic": 0.7, "utility": 1.0, "romantic": 1.0]  // Communication and versatility
+            // Air sign: Versatile, communicative, curious
+            return [
+                "playful": 1.5,      // Was 1.9 - Quick wit and variety
+                "edge": 1.2,         // Was 1.3 - Innovative and experimental
+                "utility": 1.0,      // Was 1.0 - Adaptable
+                "romantic": 1.0,     // Was 1.0 - Neutral
+                "classic": 0.85      // Was 0.7 - Resists routine
+            ]
+            
         case "Sagittarius":
-            return ["playful": 1.7, "drama": 1.3, "edge": 1.2, "classic": 0.8, "utility": 1.0]  // Adventure and expansion
+            // Fire sign: Adventurous, optimistic, philosophical
+            return [
+                "playful": 1.4,      // Was 1.7 - Adventurous and fun-loving
+                "drama": 1.2,        // Was 1.3 - Bold and expressive
+                "edge": 1.2,         // Was 1.2 - Exploratory and unconventional
+                "utility": 1.0,      // Was 1.0 - Neutral
+                "classic": 0.9       // Was 0.8 - Freedom over tradition
+            ]
+            
         case "Capricorn":
-            return ["classic": 2.2, "utility": 1.6, "drama": 1.0, "playful": 0.7, "romantic": 0.9]  // Maximum traditional structure
+            // Earth sign: Structured, ambitious, disciplined
+            return [
+                "classic": 1.5,      // Was 2.2 - Maximum traditional structure
+                "utility": 1.4,      // Was 1.6 - Practical and purposeful
+                "drama": 1.0,        // Was 1.0 - Controlled intensity
+                "romantic": 0.95,    // Was 0.9 - Reserved emotionally
+                "playful": 0.85      // Was 0.7 - Serious and goal-focused
+            ]
+            
         case "Aquarius":
-            return ["edge": 2.0, "playful": 1.3, "classic": 0.7, "romantic": 0.8, "utility": 1.1]  // Innovation dominance
+            // Air sign: Innovative, humanitarian, unconventional
+            return [
+                "edge": 1.5,         // Was 2.0 - Revolutionary and unique
+                "playful": 1.2,      // Was 1.3 - Experimental and social
+                "utility": 1.1,      // Was 1.1 - Practical innovation
+                "romantic": 0.9,     // Was 0.8 - Detached emotionally
+                "classic": 0.85      // Was 0.7 - Rebels against tradition
+            ]
+            
         case "Pisces":
-            return ["romantic": 1.8, "edge": 1.2, "playful": 1.1, "classic": 0.8, "drama": 1.0]  // Flowing and ethereal
+            // Water sign: Intuitive, empathetic, dreamy
+            return [
+                "romantic": 1.5,     // Was 1.8 - Flowing and ethereal
+                "edge": 1.2,         // Was 1.2 - Mystical and artistic
+                "playful": 1.1,      // Was 1.1 - Imaginative and whimsical
+                "drama": 1.0,        // Was 1.0 - Emotional but gentle
+                "classic": 0.9       // Was 0.8 - Fluid over structured
+            ]
+            
         default:
+            // Fallback for unknown signs (shouldn't happen)
             return [:]
         }
     }

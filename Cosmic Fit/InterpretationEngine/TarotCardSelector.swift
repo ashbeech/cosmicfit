@@ -72,37 +72,74 @@ class TarotCardSelector {
             TarotRecencyTracker.shared.cleanupOldEntries(profileHash: profileId)
         }
         
-        // STAGE 1: FILTER BY AXIS SIMILARITY FLOOR
-        let floor = calculateAxisFloor(for: derivedAxes)
-        print("🚪 Stage 1: Axis Similarity Filter (floor: \(String(format: "%.2f", floor)))")
+        // STAGE 1: VIBE-ADAPTIVE AXIS FILTERING
+        // CRITICAL: Cards with strong vibe alignment get relaxed axis requirements
+        // This allows romantic/emotional cards (which often have lower axes) to pass through
+        print("🚪 Stage 1: Vibe-Adaptive Axis Filter")
         
-        let passedFilter = tarotDeck.compactMap { card -> (TarotCard, Double)? in
-            let similarity = calculateAxisSimilarity(card: card, dayAxes: derivedAxes)
-            if similarity >= floor {
-                return (card, similarity)
+        let baseAxisFloor = EngineConfig.axisFloorBase
+        let passedFilter: [(TarotCard, Double)]
+        
+        if EngineConfig.enableVibeAdaptiveFiltering, let vibes = vibeBreakdown {
+            passedFilter = tarotDeck.compactMap { card -> (TarotCard, Double)? in
+                let axisSimilarity = calculateAxisSimilarity(card: card, dayAxes: derivedAxes)
+                let vibeAlignment = calculateEnhancedVibeAlignment(card: card, vibes: vibes)
+                
+                // Calculate adaptive axis floor based on vibe alignment
+                // Strong vibe match → much lower axis requirement
+                // Medium vibe match → slightly lower axis requirement
+                // Weak vibe match → standard axis requirement
+                let adaptiveFloor: Double
+                if vibeAlignment >= EngineConfig.vibeAdaptiveStrongThreshold {
+                    // Strong vibe: reduce floor significantly
+                    adaptiveFloor = max(EngineConfig.axisFloorMinimum, 
+                                       baseAxisFloor - EngineConfig.vibeAdaptiveStrongReduction)
+                } else if vibeAlignment >= EngineConfig.vibeAdaptiveMediumThreshold {
+                    // Medium vibe: reduce floor moderately
+                    adaptiveFloor = max(EngineConfig.axisFloorMinimum, 
+                                       baseAxisFloor - EngineConfig.vibeAdaptiveMediumReduction)
+                } else {
+                    // Weak vibe: use standard floor
+                    adaptiveFloor = baseAxisFloor
+                }
+                
+                if axisSimilarity >= adaptiveFloor {
+                    #if DEBUG
+                    if adaptiveFloor < baseAxisFloor {
+                        print("      🎭 \(card.displayName): vibe \(String(format: "%.2f", vibeAlignment)) → floor \(String(format: "%.2f", adaptiveFloor))")
+                    }
+                    #endif
+                    return (card, axisSimilarity)
+                }
+                return nil
             }
-            return nil
+            
+            print("   Cards passed adaptive filter: \(passedFilter.count)/\(tarotDeck.count)")
+            
+        } else {
+            // No vibe breakdown or adaptive filtering disabled: use standard axis filter
+            passedFilter = tarotDeck.compactMap { card in
+                let similarity = calculateAxisSimilarity(card: card, dayAxes: derivedAxes)
+                return similarity >= baseAxisFloor ? (card, similarity) : nil
+            }
+            
+            print("   Cards passed standard axis filter: \(passedFilter.count)/\(tarotDeck.count)")
         }
         
-        print("   Cards passed filter: \(passedFilter.count)/\(tarotDeck.count)")
-        
-        // Fallback if filter too strict
+        // Fallback if filter too strict (eliminated all cards)
         guard !passedFilter.isEmpty else {
-            print("   ⚠️ WARNING: No cards passed filter, using fallback")
-            return selectCardFallback(
-                vibes: vibeBreakdown,
-                profileHash: profileHash
-            )
+            print("   ⚠️ WARNING: Adaptive filter eliminated all cards, using fallback selection")
+            return selectCardFallback(vibes: vibeBreakdown, profileHash: profileHash)
         }
         
-        // STAGE 2: SCORE WITH AXES + VIBES + BOOSTS
-        print("🎯 Stage 2: Multi-Factor Scoring")
+        // STAGE 2: SCORE WITH VIBE (50%) + AXES (35%) + BOOSTS (15%)
+        print("🎯 Stage 2: Multi-Factor Scoring (Vibe: 50%, Axes: 35%, Boost: 15%)")
         
         // Fetch recency data ONCE for all cards (avoid N duplicate queries)
         let recentSelections = TarotRecencyTracker.shared.getRecentSelections(profileHash: profileHash ?? "")
         
         let scored = passedFilter.map { (card, axisSimilarity) -> (TarotCard, Double, ScoreBreakdown) in
-            // Use multi-factor scoring with target distribution: 60%/25%/15%
+            // Use multi-factor scoring with NEW distribution
             let scores = calculateMultiFactorScore(
                 card: card,
                 axes: derivedAxes,
@@ -141,44 +178,86 @@ class TarotCardSelector {
         // Sort by score descending
         let sortedScored = randomizedScored.sorted { $0.1 > $1.1 }
         
-        // Log top 5 candidates
+        // Log top 5 candidates with NEW weight breakdown
         print("   Top 5 candidates:")
         for (index, (card, score, breakdown)) in sortedScored.prefix(5).enumerated() {
-            print("   \(index + 1). \(card.displayName) - Total: \(String(format: "%.1f", score))")
-            print("      Axis: \(String(format: "%.1f", breakdown.axisScore)) | Vibe: \(String(format: "%.1f", breakdown.vibeScore)) | Boost: \(String(format: "%.1f", breakdown.boostScore)) | Recency: -\(String(format: "%.1f", breakdown.recencyPenalty))")
+            print("   \(index + 1). \(card.displayName) - Total: \(String(format: "%.2f", score))")
+            print("      Vibe: \(String(format: "%.2f", breakdown.vibeScore)) (50%) | " +
+                  "Axis: \(String(format: "%.2f", breakdown.axisScore)) (35%) | " +
+                  "Boost: \(String(format: "%.2f", breakdown.boostScore)) (15%) | " +
+                  "Recency: -\(String(format: "%.2f", breakdown.recencyPenalty))")
         }
         
-        // STAGE 3: TIE-BREAK BY AXIS SIMILARITY
-        // Reduced threshold to allow more card variety
-        let similarityThreshold = 0.05  // Reduced from previous thresholds
-        let epsilon = 0.15  // ⚠️ CHANGED from 1.5 - only group truly close scores
-        let maxScore = sortedScored[0].1
-        let topCards = sortedScored.filter { abs($0.1 - maxScore) < epsilon }
+        // STAGE 3: VIBE-FIRST TIE-BREAKING
+        // When scores are close, prioritize: vibe → dominant energy match → axes
+        print("🏆 Stage 3: Vibe-First Tie-Breaking")
         
-        print("🏆 Stage 3: Tie-Breaking")
-        print("   Cards within epsilon (\(epsilon)): \(topCards.count)")
+        let epsilon = EngineConfig.tarotTieBreakEpsilon
+        let maxScore = sortedScored[0].1
         
         let winner: TarotCard
-        if topCards.count > 1 {
-            // Multiple cards tied, pick highest axis similarity
-            // If axis similarity is very close (within threshold), add small randomization
-            let topSimilarity = topCards.map { $0.2.axisSimilarity }.max() ?? 0.0
-            let veryCloseCards = topCards.filter { abs($0.2.axisSimilarity - topSimilarity) < similarityThreshold }
-            
-            if veryCloseCards.count > 1, let seed = seed {
-                // Use seed-based selection for very close matches
-                let selectedIndex = abs(seed) % veryCloseCards.count
-                winner = veryCloseCards[selectedIndex].0
-                print("   Winner by randomized selection from \(veryCloseCards.count) very close matches: \(winner.displayName)")
-            } else {
-                winner = topCards.max { $0.2.axisSimilarity < $1.2.axisSimilarity }!.0
-                print("   Winner by axis similarity: \(winner.displayName)")
+        
+        if EngineConfig.enableVibeFirstTieBreaking && vibeBreakdown != nil {
+            // Sort with vibe-first priority
+            let vibeRanked = sortedScored.sorted { a, b in
+                let (cardA, totalA, breakdownA) = a
+                let (cardB, totalB, breakdownB) = b
+                
+                // 1. If total scores differ significantly, use total score
+                if abs(totalA - totalB) > epsilon {
+                    return totalA > totalB
+                }
+                
+                // 2. Scores within epsilon: prefer higher vibe score
+                if abs(breakdownA.vibeScore - breakdownB.vibeScore) > 0.05 {
+                    return breakdownA.vibeScore > breakdownB.vibeScore
+                }
+                
+                // 3. Still tied on vibe: prefer card with better dominant energy match
+                let domMatchA = calculateDominantEnergyMatch(card: cardA, vibes: vibeBreakdown)
+                let domMatchB = calculateDominantEnergyMatch(card: cardB, vibes: vibeBreakdown)
+                if abs(domMatchA - domMatchB) > 0.1 {
+                    return domMatchA > domMatchB
+                }
+                
+                // 4. Last resort: use axis score
+                return breakdownA.axisScore > breakdownB.axisScore
             }
+            
+            let topCards = vibeRanked.filter { abs($0.1 - maxScore) < epsilon }
+            print("   Cards within epsilon (\(epsilon)): \(topCards.count)")
+            
+            if topCards.count > 1 {
+                print("   Tie-break sequence: vibe → dominant energy → axes")
+                #if DEBUG
+                for (index, (card, _, breakdown)) in topCards.prefix(3).enumerated() {
+                    let domMatch = calculateDominantEnergyMatch(card: card, vibes: vibeBreakdown)
+                    print("      \(index + 1). \(card.displayName): vibe \(String(format: "%.2f", breakdown.vibeScore)), dom \(String(format: "%.2f", domMatch)), axis \(String(format: "%.2f", breakdown.axisScore))")
+                }
+                #endif
+            }
+            
+            winner = vibeRanked.first?.0 ?? sortedScored.first!.0
+            
         } else {
-            // Clear winner
-            winner = sortedScored[0].0
-            print("   Clear winner: \(winner.displayName)")
+            // Fallback: use standard selection (highest score)
+            let topCards = sortedScored.filter { abs($0.1 - maxScore) < epsilon }
+            print("   Cards within epsilon (\(epsilon)): \(topCards.count)")
+            
+            if topCards.count > 1 {
+                // Add small randomization based on axis similarity as before
+                let randomizedTop = addAxisBasedRandomization(
+                    scoredCards: Array(topCards),
+                    axes: derivedAxes,
+                    seed: seed ?? 0
+                )
+                winner = randomizedTop.sorted { $0.1 > $1.1 }.first?.0 ?? topCards.first!.0
+            } else {
+                winner = topCards.first?.0 ?? sortedScored.first!.0
+            }
         }
+        
+        print("   Winner: \(winner.displayName)")
         
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
@@ -366,14 +445,14 @@ class TarotCardSelector {
         return sorted.first?.0
     }
     
-    // MARK: - Phase 2: Multi-Factor Scoring
+    // MARK: - Phase 2: Multi-Factor Scoring (CORRECTED WEIGHTS)
     
-    /// Calculate multi-factor score with target distribution: 60% axis, 25% vibe, 15% token boost
-    /// Multipliers calibrated to account for actual score ranges to achieve target distribution
+    /// Calculate multi-factor score with CORRECTED distribution: 35% axis, 50% vibe, 15% token boost
+    /// NEW APPROACH: Vibe-driven selection with axes as secondary consideration
     /// - Parameters:
     ///   - card: The tarot card to score
     ///   - axes: Derived axes for the day
-    ///   - vibeBreakdown: Vibe breakdown for energy alignment
+    ///   - vibeBreakdown: Vibe breakdown for energy alignment (NOW PRIMARY DRIVER)
     ///   - tokens: Style tokens for keyword matching
     /// - Returns: Tuple with total score and component scores
     private static func calculateMultiFactorScore(
@@ -383,21 +462,26 @@ class TarotCardSelector {
         tokens: [StyleToken]
     ) -> (total: Double, axis: Double, vibe: Double, boost: Double) {
         
-        // 1. Axis similarity (target: 60% of total score)
-        // Multiplier 0.58 calibrated to account for actual score ranges
+        // 1. Axis similarity (NOW 35% of total score - secondary consideration)
         let axisSimilarity = calculateAxisSimilarity(card: card, dayAxes: axes)
-        let axisScore = axisSimilarity * 0.58
+        let axisScore = axisSimilarity * EngineConfig.tarotAxisWeight
         
-        // 2. Vibe alignment (target: 25% of total score)
+        // 2. Vibe alignment (NOW 50% of total score - PRIMARY DRIVER)
         let vibeAlignment = calculateEnhancedVibeAlignment(card: card, vibes: vibeBreakdown)
-        let vibeScore = vibeAlignment * 0.25
+        let vibeScore = vibeAlignment * EngineConfig.tarotVibeWeight
         
-        // 3. Token boost (target: 15% of total score)
-        // Multiplier 0.17 calibrated to account for actual score ranges
+        // 3. Token boost (15% of total score - unchanged)
         let tokenBoost = calculateTokenBoosts(card: card, tokens: tokens, dayAxes: axes)
-        let boostScore = tokenBoost * 0.17
+        let boostScore = tokenBoost * EngineConfig.tarotTokenBoostWeight
         
         let totalScore = axisScore + vibeScore + boostScore
+        
+        #if DEBUG
+        // Log pre-normalization values for debugging saturation
+        if vibeAlignment > 0.8 {
+            print("      ⚠️ High vibe alignment: \(String(format: "%.2f", vibeAlignment)) for \(card.displayName)")
+        }
+        #endif
         
         return (total: totalScore, axis: axisScore, vibe: vibeScore, boost: boostScore)
     }
@@ -593,31 +677,72 @@ class TarotCardSelector {
         return dominantAlignment + secondaryAlignment
     }
     
-    /// Enhanced vibe alignment with better differentiation and diversity bonus
-    /// Returns 0.0-1.0 score with diversity bonus for multi-energy alignment
+    /// Enhanced vibe alignment with DOMINANT ENERGY EMPHASIS
+    /// Returns 0.0-1.0 score with heavy weighting toward dominant energy match
+    /// Uses 60/25/15 split for dominant/secondary/tertiary energy alignment
     private static func calculateEnhancedVibeAlignment(
         card: TarotCard,
         vibes: VibeBreakdown?
     ) -> Double {
         guard let vibes = vibes else { return 0.5 }
         
-        // Calculate energy scores for all vibes
-        let energyScores: [String: Double] = [
-            "romantic": Double(vibes.romantic) * getCardVibeAffinity(card, energy: "romantic"),
-            "classic": Double(vibes.classic) * getCardVibeAffinity(card, energy: "classic"),
-            "playful": Double(vibes.playful) * getCardVibeAffinity(card, energy: "playful"),
-            "utility": Double(vibes.utility) * getCardVibeAffinity(card, energy: "utility"),
-            "drama": Double(vibes.drama) * getCardVibeAffinity(card, energy: "drama"),
-            "edge": Double(vibes.edge) * getCardVibeAffinity(card, energy: "edge")
-        ]
+        // Get all six energies with their values, sorted by strength
+        let energyScores: [(Energy, Int)] = Energy.allCases.map { ($0, vibes.value(for: $0)) }
+        let sortedEnergies = energyScores.sorted { $0.1 > $1.1 }
         
-        let totalEnergyScore = energyScores.values.reduce(0, +) / 21.0 // Normalize by max vibe value
+        // Extract dominant, secondary, and tertiary
+        let dominant = sortedEnergies[0]
+        let secondary = sortedEnergies.count > 1 ? sortedEnergies[1] : dominant
+        let tertiary = sortedEnergies.count > 2 ? sortedEnergies[2] : secondary
         
-        // Add vibe diversity bonus (cards that align with multiple energies score higher)
-        let activeEnergies = energyScores.filter { $0.value > 0.5 }.count
-        let diversityBonus = min(Double(activeEnergies) * 0.05, 0.15) // Max 15% bonus
+        // Normalize to 0-1 scale (divide by 21 to get share of total energy)
+        let dominantValue = Double(dominant.1) / 21.0
+        let secondaryValue = Double(secondary.1) / 21.0
+        let tertiaryValue = Double(tertiary.1) / 21.0
         
-        return min(1.0, totalEnergyScore + diversityBonus)
+        // Get card's affinity for these energies
+        let cardDominantAffinity = card.energyAffinity[dominant.0.rawValue.lowercased()] ?? 0.0
+        let cardSecondaryAffinity = card.energyAffinity[secondary.0.rawValue.lowercased()] ?? 0.0
+        let cardTertiaryAffinity = card.energyAffinity[tertiary.0.rawValue.lowercased()] ?? 0.0
+        
+        // CRITICAL: Weight heavily toward dominant energy (60% of vibe score)
+        // This ensures romantic days get romantic cards, not structural cards
+        let dominantAlignment = dominantValue * cardDominantAffinity * 0.60
+        let secondaryAlignment = secondaryValue * cardSecondaryAffinity * 0.25
+        let tertiaryAlignment = tertiaryValue * cardTertiaryAffinity * 0.15
+        
+        var totalAlignment = dominantAlignment + secondaryAlignment + tertiaryAlignment
+        
+        // Apply dominant energy multiplier if card has strong affinity (>=0.7)
+        // This gives a significant boost to cards that truly match the day's energy
+        if cardDominantAffinity >= 0.7 {
+            let preMultiplier = totalAlignment
+            totalAlignment *= EngineConfig.dominantEnergyMultiplier
+            
+            #if DEBUG
+            print("      ✨ Dominant energy boost for \(card.displayName): \(String(format: "%.2f", preMultiplier)) → \(String(format: "%.2f", totalAlignment))")
+            #endif
+        }
+        
+        // Clamp to 0-1 range (may saturate for perfect matches - this is intentional)
+        return min(1.0, max(0.0, totalAlignment))
+    }
+    
+    // MARK: - Phase 2: Dominant Energy Match Helper
+    
+    /// Calculate how well a card matches the dominant energy
+    /// Used for tie-breaking when multiple cards have similar total scores
+    /// - Parameters:
+    ///   - card: The tarot card to evaluate
+    ///   - vibes: The vibe breakdown containing dominant energy
+    /// - Returns: Card's affinity for the dominant energy (0.0-1.0)
+    private static func calculateDominantEnergyMatch(
+        card: TarotCard,
+        vibes: VibeBreakdown?
+    ) -> Double {
+        guard let vibes = vibes else { return 0.0 }
+        let dominant: Energy = vibes.dominantEnergy
+        return card.energyAffinity[dominant.rawValue.lowercased()] ?? 0.0
     }
     
     /// Get card's affinity for specific vibe energy (0.0-2.0 scale)
