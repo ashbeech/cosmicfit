@@ -70,11 +70,28 @@ struct CosmicFitTheme {
         }
         
         /// DM Serif Text font for titles and headers (replaces Noctis)
+        /// Supports weight parameter: regular uses PTSerif-Regular, bold weights use system serif font with weight
         static func DMSerifTextFont(size: CGFloat, weight: UIFont.Weight = .regular) -> UIFont {
-            if let customFont = UIFont(name: "PTSerif-Regular", size: size) {
-                return customFont
+            // For regular weight, use PTSerif-Regular
+            if weight == .regular {
+                if let customFont = UIFont(name: "PTSerif-Regular", size: size) {
+                    return customFont
+                }
             }
-            // Fallback to system serif font
+            
+            // For bold weights (semibold, bold, heavy, black), use system serif font with weight
+            // This provides bold appearance when PT Serif Bold is not available
+            // Create a serif font descriptor and apply the weight
+            let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body)
+            if let serifDescriptor = descriptor.withDesign(.serif) {
+                // Create font with serif design and apply weight trait
+                var traits = (serifDescriptor.fontAttributes[.traits] as? [UIFontDescriptor.TraitKey: Any]) ?? [:]
+                traits[.weight] = weight
+                let boldSerifDescriptor = serifDescriptor.addingAttributes([.traits: traits])
+                return UIFont(descriptor: boldSerifDescriptor, size: size)
+            }
+            
+            // Fallback to system font with requested weight (will use system serif if available)
             return UIFont.systemFont(ofSize: size, weight: weight)
         }
         

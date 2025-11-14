@@ -36,22 +36,21 @@ class DailyFitViewController: UIViewController {
     
     // Style Breakdown Section
     private let colorPaletteContainer = UIView()
-    private let colorHeaderLabel = UILabel()
+    private var colorHeaderDivider: UIView?
     
     // Pill Sliders Section
     private let pillSlidersContainer = UIView()
     
     // Tone Slider Section
-    private let effortLevelLabel = UILabel()
     private let toneHeaderLabel = UILabel()
     private let toneSliderContainer = UIView()
     
     // Vibe Breakdown Section
-    private let vibeHeaderLabel = UILabel()
-    private let vibeContainer = UIView()
+    private var vibeHeaderDivider: UIView?
+    private let vibeContainer = VibeBreakdownBarsView()
     
     // Silhouette Section
-    private let silhouetteHeaderLabel = UILabel()
+    private var silhouetteHeaderDivider: UIView?
     private let silhouetteContainer = UIView()
     
     // Bottom Section
@@ -391,9 +390,9 @@ class DailyFitViewController: UIViewController {
             // Hide all new content views
             let allContentViews: [UIView?] = [
                 self.dailyFitLabel, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
-                self.styleBriefLabel, self.colorPaletteContainer, self.colorHeaderLabel,
-                self.pillSlidersContainer, self.effortLevelLabel, self.toneHeaderLabel, self.toneSliderContainer,
-                self.vibeHeaderLabel, self.vibeContainer, self.silhouetteHeaderLabel, self.silhouetteContainer,
+                self.styleBriefLabel, self.colorPaletteContainer, self.colorHeaderDivider,
+                self.pillSlidersContainer, self.toneHeaderLabel, self.toneSliderContainer,
+                self.vibeHeaderDivider, self.vibeContainer, self.silhouetteHeaderDivider, self.silhouetteContainer,
                 self.takeawayLabel, self.topDivider, self.styleBreakdownDivider, self.bottomDivider, self.finalStarDivider,
                 self.debugButton
             ]
@@ -439,9 +438,9 @@ class DailyFitViewController: UIViewController {
             // Show all new content views
             let allContentViews: [UIView?] = [
                 self.dailyFitLabel, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
-                self.styleBriefLabel, self.colorPaletteContainer, self.colorHeaderLabel,
-                self.pillSlidersContainer, self.effortLevelLabel, self.toneHeaderLabel, self.toneSliderContainer,
-                self.vibeHeaderLabel, self.vibeContainer, self.silhouetteHeaderLabel, self.silhouetteContainer,
+                self.styleBriefLabel, self.colorPaletteContainer, self.colorHeaderDivider,
+                self.pillSlidersContainer, self.toneHeaderLabel, self.toneSliderContainer,
+                self.vibeHeaderDivider, self.vibeContainer, self.silhouetteHeaderDivider, self.silhouetteContainer,
                 self.takeawayLabel, self.topDivider, self.styleBreakdownDivider, self.bottomDivider, self.finalStarDivider,
                 self.debugButton
             ]
@@ -771,6 +770,31 @@ class DailyFitViewController: UIViewController {
         return container
     }
     
+    private func createLargeHeaderLabel(_ text: String) -> UIView {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        
+        let label = UILabel()
+        label.text = text
+        CosmicFitTheme.styleTitleLabel(label, fontSize: 24, weight: .bold)
+        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        container.addSubview(label)
+        
+        NSLayoutConstraint.activate([
+            container.heightAnchor.constraint(equalToConstant: 40),
+            
+            label.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            label.leadingAnchor.constraint(greaterThanOrEqualTo: container.leadingAnchor),
+            label.trailingAnchor.constraint(lessThanOrEqualTo: container.trailingAnchor)
+        ])
+        
+        return container
+    }
+    
     // MARK: - Style Brief Section
     private func setupStyleBriefSection() {
         // First divider (simple line)
@@ -792,20 +816,19 @@ class DailyFitViewController: UIViewController {
     
     // MARK: - Style Breakdown Section
     private func setupStyleBreakdownSection() {
-        // Style Breakdown ornamental divider
-        styleBreakdownDivider = createOrnamentalDividerWithText("Style Breakdown")
+        // Style Breakdown header (large, bold, no lines)
+        styleBreakdownDivider = createLargeHeaderLabel("Style Breakdown")
         styleBreakdownDivider?.alpha = 0.0
         if let divider = styleBreakdownDivider {
             contentView.addSubview(divider)
         }
         
-        // Color section header
-        colorHeaderLabel.text = "Colour"
-        CosmicFitTheme.styleSubsectionLabel(colorHeaderLabel, fontSize: CosmicFitTheme.Typography.FontSizes.sectionHeader, italic: true)
-        colorHeaderLabel.textAlignment = .center
-        colorHeaderLabel.translatesAutoresizingMaskIntoConstraints = false
-        colorHeaderLabel.alpha = 0.0
-        contentView.addSubview(colorHeaderLabel)
+        // Color section ornamental divider
+        colorHeaderDivider = createOrnamentalDividerWithText("Colour")
+        colorHeaderDivider?.alpha = 0.0
+        if let divider = colorHeaderDivider {
+            contentView.addSubview(divider)
+        }
         
         // Color palette (placeholder)
         colorPaletteContainer.translatesAutoresizingMaskIntoConstraints = false
@@ -895,7 +918,8 @@ class DailyFitViewController: UIViewController {
         // Title
         let titleLabel = UILabel()
         titleLabel.text = title
-        CosmicFitTheme.styleBodyLabel(titleLabel, fontSize: 12, weight: .medium)
+        CosmicFitTheme.styleBodyLabel(titleLabel, fontSize: 14, weight: .semibold)
+        titleLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
         titleLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
         titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -937,17 +961,10 @@ class DailyFitViewController: UIViewController {
     
     // MARK: - Tone Slider Section
     private func setupToneSlider() {
-        // Effort Level header
-        effortLevelLabel.text = "Effort Level"
-        CosmicFitTheme.styleBodyLabel(effortLevelLabel, fontSize: 14, weight: .medium)
-        effortLevelLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
-        effortLevelLabel.translatesAutoresizingMaskIntoConstraints = false
-        effortLevelLabel.alpha = 0.0
-        contentView.addSubview(effortLevelLabel)
-        
         // Tone section header
         toneHeaderLabel.text = "Tone"
-        CosmicFitTheme.styleBodyLabel(toneHeaderLabel, fontSize: 14, weight: .medium)
+        CosmicFitTheme.styleBodyLabel(toneHeaderLabel, fontSize: 14, weight: .semibold)
+        toneHeaderLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
         toneHeaderLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
         toneHeaderLabel.translatesAutoresizingMaskIntoConstraints = false
         toneHeaderLabel.alpha = 0.0
@@ -978,14 +995,16 @@ class DailyFitViewController: UIViewController {
         // Cool/Warm labels
         let coolLabel = UILabel()
         coolLabel.text = "Cool"
-        CosmicFitTheme.styleBodyLabel(coolLabel, fontSize: 12, weight: .regular)
+        CosmicFitTheme.styleBodyLabel(coolLabel, fontSize: 14, weight: .semibold)
+        coolLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
         coolLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
         coolLabel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(coolLabel)
         
         let warmLabel = UILabel()
         warmLabel.text = "Warm"
-        CosmicFitTheme.styleBodyLabel(warmLabel, fontSize: 12, weight: .regular)
+        CosmicFitTheme.styleBodyLabel(warmLabel, fontSize: 14, weight: .semibold)
+        warmLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
         warmLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
         warmLabel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(warmLabel)
@@ -1052,105 +1071,27 @@ class DailyFitViewController: UIViewController {
     
     // MARK: - Vibe Breakdown Section
     private func setupVibeBreakdownSection() {
-        // Vibe header
-        vibeHeaderLabel.text = "Vibe"
-        CosmicFitTheme.styleSubsectionLabel(vibeHeaderLabel, fontSize: CosmicFitTheme.Typography.FontSizes.sectionHeader, italic: true)
-        vibeHeaderLabel.textAlignment = .center
-        vibeHeaderLabel.translatesAutoresizingMaskIntoConstraints = false
-        vibeHeaderLabel.alpha = 0.0
-        contentView.addSubview(vibeHeaderLabel)
+        // Vibe ornamental divider
+        vibeHeaderDivider = createOrnamentalDividerWithText("Vibe")
+        vibeHeaderDivider?.alpha = 0.0
+        if let divider = vibeHeaderDivider {
+            contentView.addSubview(divider)
+        }
         
-        // Vibe progress bars container
+        // Vibe breakdown bars component
         vibeContainer.translatesAutoresizingMaskIntoConstraints = false
         vibeContainer.alpha = 0.0
         contentView.addSubview(vibeContainer)
-        
-        let vibeData = [
-            ("Classic", 0.4),    // About 40% filled
-            ("Edgy", 0.7),       // About 70% filled
-            ("Romantic", 0.9)    // About 90% filled
-        ]
-        
-        var lastBar: UIView?
-        
-        for (name, progress) in vibeData {
-            let bar = createVibeProgressBar(name: name, progress: progress)
-            bar.translatesAutoresizingMaskIntoConstraints = false
-            vibeContainer.addSubview(bar)
-            
-            NSLayoutConstraint.activate([
-                bar.leadingAnchor.constraint(equalTo: vibeContainer.leadingAnchor),
-                bar.trailingAnchor.constraint(equalTo: vibeContainer.trailingAnchor),
-                bar.heightAnchor.constraint(equalToConstant: 30)
-            ])
-            
-            if let last = lastBar {
-                bar.topAnchor.constraint(equalTo: last.bottomAnchor, constant: 12).isActive = true
-            } else {
-                bar.topAnchor.constraint(equalTo: vibeContainer.topAnchor).isActive = true
-            }
-            
-            lastBar = bar
-        }
-        
-        if let lastBar = lastBar {
-            vibeContainer.bottomAnchor.constraint(equalTo: lastBar.bottomAnchor).isActive = true
-        }
-    }
-    
-    private func createVibeProgressBar(name: String, progress: Double) -> UIView {
-        let container = UIView()
-        
-        // Name label
-        let nameLabel = UILabel()
-        nameLabel.text = name
-        CosmicFitTheme.styleBodyLabel(nameLabel, fontSize: 14, weight: .medium)
-        nameLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(nameLabel)
-        
-        // Progress track
-        let track = UIView()
-        track.backgroundColor = UIColor.lightGray
-        track.layer.cornerRadius = 6
-        track.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(track)
-        
-        // Progress fill
-        let fill = UIView()
-        fill.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
-        fill.layer.cornerRadius = 6
-        fill.translatesAutoresizingMaskIntoConstraints = false
-        track.addSubview(fill)
-        
-        NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            nameLabel.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            nameLabel.widthAnchor.constraint(equalToConstant: 80),
-            
-            track.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 16),
-            track.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            track.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            track.heightAnchor.constraint(equalToConstant: 12),
-            
-            fill.leadingAnchor.constraint(equalTo: track.leadingAnchor),
-            fill.topAnchor.constraint(equalTo: track.topAnchor),
-            fill.bottomAnchor.constraint(equalTo: track.bottomAnchor),
-            fill.widthAnchor.constraint(equalTo: track.widthAnchor, multiplier: progress)
-        ])
-        
-        return container
     }
     
     // MARK: - Silhouette Sliders Section
     private func setupSilhouetteSection() {
-        // Silhouette header
-        silhouetteHeaderLabel.text = "Silhouette"
-        CosmicFitTheme.styleSubsectionLabel(silhouetteHeaderLabel, fontSize: CosmicFitTheme.Typography.FontSizes.sectionHeader, italic: true)
-        silhouetteHeaderLabel.textAlignment = .center
-        silhouetteHeaderLabel.translatesAutoresizingMaskIntoConstraints = false
-        silhouetteHeaderLabel.alpha = 0.0
-        contentView.addSubview(silhouetteHeaderLabel)
+        // Silhouette ornamental divider
+        silhouetteHeaderDivider = createOrnamentalDividerWithText("Silhouette")
+        silhouetteHeaderDivider?.alpha = 0.0
+        if let divider = silhouetteHeaderDivider {
+            contentView.addSubview(divider)
+        }
         
         // Create three slider rows
         let sliderData = [
@@ -1196,7 +1137,8 @@ class DailyFitViewController: UIViewController {
         // Left label
         let leftLbl = UILabel()
         leftLbl.text = leftLabel
-        CosmicFitTheme.styleBodyLabel(leftLbl, fontSize: 12, weight: .regular)
+        CosmicFitTheme.styleBodyLabel(leftLbl, fontSize: 14, weight: .semibold)
+        leftLbl.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
         leftLbl.textColor = CosmicFitTheme.Colors.cosmicBlue
         leftLbl.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(leftLbl)
@@ -1204,7 +1146,8 @@ class DailyFitViewController: UIViewController {
         // Right label
         let rightLbl = UILabel()
         rightLbl.text = rightLabel
-        CosmicFitTheme.styleBodyLabel(rightLbl, fontSize: 12, weight: .regular)
+        CosmicFitTheme.styleBodyLabel(rightLbl, fontSize: 14, weight: .semibold)
+        rightLbl.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
         rightLbl.textColor = CosmicFitTheme.Colors.cosmicBlue
         rightLbl.textAlignment = .right
         rightLbl.translatesAutoresizingMaskIntoConstraints = false
@@ -1359,9 +1302,9 @@ class DailyFitViewController: UIViewController {
         // All new content starts invisible and fades in after card reveal
         let allContentViews: [UIView?] = [
             dailyFitLabel, tarotSymbolLabel, tarotTitleLabel, dateLabel,
-            styleBriefLabel, colorPaletteContainer, colorHeaderLabel,
-            pillSlidersContainer, effortLevelLabel, toneHeaderLabel, toneSliderContainer,
-            vibeHeaderLabel, vibeContainer, silhouetteHeaderLabel, silhouetteContainer,
+            styleBriefLabel, colorPaletteContainer, colorHeaderDivider,
+            pillSlidersContainer, toneHeaderLabel, toneSliderContainer,
+            vibeHeaderDivider, vibeContainer, silhouetteHeaderDivider, silhouetteContainer,
             takeawayLabel, topDivider, styleBreakdownDivider, bottomDivider, finalStarDivider,
             debugButton
         ]
@@ -1436,20 +1379,23 @@ class DailyFitViewController: UIViewController {
             constraints.append(contentsOf: [
                 styleBreakdownDivider.topAnchor.constraint(equalTo: styleBriefLabel.bottomAnchor, constant: sectionSpacing),
                 styleBreakdownDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                styleBreakdownDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
+                styleBreakdownDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
+            ])
+        }
+        
+        // Color Section
+        if let colorHeaderDivider = colorHeaderDivider {
+            constraints.append(contentsOf: [
+                colorHeaderDivider.topAnchor.constraint(equalTo: styleBreakdownDivider?.bottomAnchor ?? styleBriefLabel.bottomAnchor, constant: sectionSpacing),
+                colorHeaderDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                colorHeaderDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
                 
-                colorHeaderLabel.topAnchor.constraint(equalTo: styleBreakdownDivider.bottomAnchor, constant: sectionSpacing),
-                colorHeaderLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-                
-                colorPaletteContainer.topAnchor.constraint(equalTo: colorHeaderLabel.bottomAnchor, constant: 12),
+                colorPaletteContainer.topAnchor.constraint(equalTo: colorHeaderDivider.bottomAnchor, constant: 12),
                 colorPaletteContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
             ])
         } else {
             constraints.append(contentsOf: [
-                colorHeaderLabel.topAnchor.constraint(equalTo: styleBriefLabel.bottomAnchor, constant: sectionSpacing * 2),
-                colorHeaderLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-                
-                colorPaletteContainer.topAnchor.constraint(equalTo: colorHeaderLabel.bottomAnchor, constant: 12),
+                colorPaletteContainer.topAnchor.constraint(equalTo: styleBreakdownDivider?.bottomAnchor ?? styleBriefLabel.bottomAnchor, constant: sectionSpacing * 2),
                 colorPaletteContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
             ])
         }
@@ -1462,11 +1408,7 @@ class DailyFitViewController: UIViewController {
         
         // Tone Slider Section
         constraints.append(contentsOf: [
-            effortLevelLabel.topAnchor.constraint(equalTo: pillSlidersContainer.bottomAnchor, constant: sectionSpacing),
-            effortLevelLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-            effortLevelLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
-            
-            toneHeaderLabel.topAnchor.constraint(equalTo: effortLevelLabel.bottomAnchor, constant: 8),
+            toneHeaderLabel.topAnchor.constraint(equalTo: pillSlidersContainer.bottomAnchor, constant: sectionSpacing),
             toneHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
             toneHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
             
@@ -1476,24 +1418,30 @@ class DailyFitViewController: UIViewController {
         ])
         
         // Vibe Breakdown Section
-        constraints.append(contentsOf: [
-            vibeHeaderLabel.topAnchor.constraint(equalTo: toneSliderContainer.bottomAnchor, constant: sectionSpacing),
-            vibeHeaderLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            
-            vibeContainer.topAnchor.constraint(equalTo: vibeHeaderLabel.bottomAnchor, constant: 12),
-            vibeContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-            vibeContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
-        ])
+        if let vibeHeaderDivider = vibeHeaderDivider {
+            constraints.append(contentsOf: [
+                vibeHeaderDivider.topAnchor.constraint(equalTo: toneSliderContainer.bottomAnchor, constant: sectionSpacing),
+                vibeHeaderDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                vibeHeaderDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
+                
+                vibeContainer.topAnchor.constraint(equalTo: vibeHeaderDivider.bottomAnchor, constant: 12),
+                vibeContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                vibeContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
+            ])
+        }
         
         // Silhouette Section
-        constraints.append(contentsOf: [
-            silhouetteHeaderLabel.topAnchor.constraint(equalTo: vibeContainer.bottomAnchor, constant: sectionSpacing),
-            silhouetteHeaderLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            
-            silhouetteContainer.topAnchor.constraint(equalTo: silhouetteHeaderLabel.bottomAnchor, constant: 12),
-            silhouetteContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-            silhouetteContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
-        ])
+        if let silhouetteHeaderDivider = silhouetteHeaderDivider {
+            constraints.append(contentsOf: [
+                silhouetteHeaderDivider.topAnchor.constraint(equalTo: vibeContainer.bottomAnchor, constant: sectionSpacing),
+                silhouetteHeaderDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                silhouetteHeaderDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
+                
+                silhouetteContainer.topAnchor.constraint(equalTo: silhouetteHeaderDivider.bottomAnchor, constant: 12),
+                silhouetteContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                silhouetteContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
+            ])
+        }
         
         // Bottom Section
         if let bottomDivider = bottomDivider {
@@ -1561,8 +1509,8 @@ class DailyFitViewController: UIViewController {
         // TODO: Update style brief with actual content when available
         // styleBriefLabel.text = content.styleBrief
         
-        // TODO: Update vibe breakdown progress bars with actual data
-        // Update vibe progress bars based on content.vibeBreakdown
+        // UPDATE: Configure vibe breakdown bars with actual data
+        vibeContainer.configure(with: content.vibeBreakdown)
         
         print("Content updated with new layout structure")
     }
@@ -1831,11 +1779,11 @@ class DailyFitViewController: UIViewController {
         let allContentViews: [UIView?] = [
             dailyFitLabel, tarotSymbolLabel, tarotTitleLabel, dateLabel,
             topDivider, styleBriefLabel,
-            styleBreakdownDivider, colorHeaderLabel, colorPaletteContainer,
+            styleBreakdownDivider, colorHeaderDivider, colorPaletteContainer,
             pillSlidersContainer,
-            effortLevelLabel, toneHeaderLabel, toneSliderContainer,
-            vibeHeaderLabel, vibeContainer,
-            silhouetteHeaderLabel, silhouetteContainer,
+            toneHeaderLabel, toneSliderContainer,
+            vibeHeaderDivider, vibeContainer,
+            silhouetteHeaderDivider, silhouetteContainer,
             bottomDivider, takeawayLabel, finalStarDivider,
             debugButton
         ]
@@ -1871,8 +1819,8 @@ class DailyFitViewController: UIViewController {
         // Remove any existing backgrounds from labels
         let allLabels: [UILabel?] = [
             dailyFitLabel, tarotSymbolLabel, tarotTitleLabel, dateLabel,
-            styleBriefLabel, colorHeaderLabel, effortLevelLabel, toneHeaderLabel,
-            vibeHeaderLabel, silhouetteHeaderLabel, takeawayLabel
+            styleBriefLabel, toneHeaderLabel,
+            takeawayLabel
         ]
         
         for label in allLabels.compactMap({ $0 }) {
@@ -1944,9 +1892,9 @@ class DailyFitViewController: UIViewController {
                 // Bring all new content views to front
                 let allContentViews: [UIView?] = [
                     self.dailyFitLabel, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
-                    self.styleBriefLabel, self.colorPaletteContainer, self.colorHeaderLabel,
-                    self.pillSlidersContainer, self.effortLevelLabel, self.toneHeaderLabel, self.toneSliderContainer,
-                    self.vibeHeaderLabel, self.vibeContainer, self.silhouetteHeaderLabel, self.silhouetteContainer,
+                    self.styleBriefLabel, self.colorPaletteContainer, self.colorHeaderDivider,
+                    self.pillSlidersContainer, self.toneHeaderLabel, self.toneSliderContainer,
+                    self.vibeHeaderDivider, self.vibeContainer, self.silhouetteHeaderDivider, self.silhouetteContainer,
                     self.takeawayLabel, self.topDivider, self.styleBreakdownDivider, self.bottomDivider, self.finalStarDivider
                 ]
                 for view in allContentViews.compactMap({ $0 }) {
