@@ -2,7 +2,7 @@
 //  ColorPaletteView.swift
 //  Cosmic Fit
 //
-//  Custom component for displaying color palette grid
+//  Custom component for displaying color palette grid (used by Blueprint)
 //
 
 import UIKit
@@ -46,32 +46,27 @@ final class ColorPaletteView: UIView {
         addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         
-        // Calculate and set height based on content
-        let rows = colors.count
-        let cellSize = calculateCellSize()
-        let totalHeight = (cellSize * CGFloat(rows)) + (cellSpacing * CGFloat(rows - 1))
-        
-        NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: totalHeight)
-        ])
+        collectionView.delegate = self
+        collectionView.dataSource = self
     }
     
+    // MARK: - Layout
     private func calculateCellSize() -> CGFloat {
-        // Get screen width minus padding (20px on each side)
-        let screenWidth = UIScreen.main.bounds.width - 40
         let totalSpacing = cellSpacing * CGFloat(columns - 1)
-        let cellWidth = (screenWidth - totalSpacing) / CGFloat(columns)
-        return cellWidth
+        let availableWidth = bounds.width - totalSpacing
+        return availableWidth / CGFloat(columns)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        collectionView.collectionViewLayout.invalidateLayout()
     }
 }
 
@@ -87,7 +82,10 @@ extension ColorPaletteView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ColorCell.reuseIdentifier, for: indexPath) as? ColorCell else {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: ColorCell.reuseIdentifier,
+            for: indexPath
+        ) as? ColorCell else {
             return UICollectionViewCell()
         }
         
@@ -148,10 +146,9 @@ final class ColorCell: UICollectionViewCell {
 // MARK: - Placeholder Color Palette Generator
 extension ColorPaletteView {
     
-    /// Creates a placeholder color palette matching the design in the image
+    /// Creates a placeholder color palette matching the design
+    /// Used by Blueprint page for Colour Guide section
     static func createPlaceholderPalette() -> ColorPaletteView {
-        // This is a placeholder palette matching the colors in the design
-        // Later this will be generated dynamically from user's chart data
         let palette: [[UIColor]] = [
             // Row 1 - Warm peachy tones
             [

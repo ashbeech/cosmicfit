@@ -180,6 +180,7 @@ class DailyVibeGenerator {
         //dailyContent.angularCurvyScore = angularCurvyScore
         //dailyContent.temperature = weather?.temperature
         //dailyContent.weatherCondition = weather?.condition
+        dailyContent.styleTokens = allTokens
         
         return dailyContent
     }
@@ -898,6 +899,11 @@ struct DailyVibeContent: Codable {
     //var angularCurvyScore: AngularCurvyScore = AngularCurvyScore(score: 5)
     
     var derivedAxes: DerivedAxes = DerivedAxes(action: 5.0, tempo: 5.0, strategy: 5.0, visibility: 5.0)
+    
+    // MARK: - Style Tokens
+    
+    // Store tokens for UI access (color palette, etc.)
+    var styleTokens: [StyleToken] = []
     
     // MARK: - Environmental Context
     

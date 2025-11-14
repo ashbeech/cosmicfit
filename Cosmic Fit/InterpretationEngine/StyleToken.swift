@@ -9,7 +9,7 @@
 import Foundation
 
 // Origin type for better source-based filtering
-enum OriginType: String, CaseIterable {
+enum OriginType: String, CaseIterable, Codable {
     case natal
     case progressed
     case transit
@@ -19,7 +19,7 @@ enum OriginType: String, CaseIterable {
     case axis  // PHASE 1: Derived axes tokens
 }
 
-struct StyleToken {
+struct StyleToken: Codable {
     let name: String         // e.g., "earthy", "bold", "fluid"
     let type: String         // e.g., "fabric", "mood", "color", "texture"
     let weight: Double       // numerical weight based on source importance

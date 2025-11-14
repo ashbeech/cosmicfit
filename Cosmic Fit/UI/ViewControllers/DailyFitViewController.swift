@@ -35,7 +35,7 @@ class DailyFitViewController: UIViewController {
     private let styleBriefLabel = UILabel()
     
     // Style Breakdown Section
-    private let colorPaletteContainer = UIView()
+    private let colorPaletteContainer = DailyColorPaletteView()
     private var colorHeaderDivider: UIView?
     
     // Pill Sliders Section
@@ -830,58 +830,10 @@ class DailyFitViewController: UIViewController {
             contentView.addSubview(divider)
         }
         
-        // Color palette (placeholder)
+        // Color palette component
         colorPaletteContainer.translatesAutoresizingMaskIntoConstraints = false
         colorPaletteContainer.alpha = 0.0
         contentView.addSubview(colorPaletteContainer)
-        
-        let colorPalette = createPlaceholderColorPalette()
-        colorPalette.translatesAutoresizingMaskIntoConstraints = false
-        colorPaletteContainer.addSubview(colorPalette)
-        
-        NSLayoutConstraint.activate([
-            colorPalette.centerXAnchor.constraint(equalTo: colorPaletteContainer.centerXAnchor),
-            colorPalette.centerYAnchor.constraint(equalTo: colorPaletteContainer.centerYAnchor),
-            colorPaletteContainer.widthAnchor.constraint(equalToConstant: 170),
-            colorPaletteContainer.heightAnchor.constraint(equalToConstant: 110)
-        ])
-    }
-    
-    private func createPlaceholderColorPalette() -> UIView {
-        let container = UIView()
-        
-        // Create 4 color swatches in 2x2 grid
-        let colors = [
-            UIColor(red: 128/255, green: 47/255, blue: 47/255, alpha: 1.0), // Dark red
-            UIColor(red: 75/255, green: 101/255, blue: 132/255, alpha: 1.0), // Blue
-            UIColor(red: 44/255, green: 62/255, blue: 80/255, alpha: 1.0), // Dark blue
-            UIColor(red: 88/255, green: 101/255, blue: 114/255, alpha: 1.0) // Gray blue
-        ]
-        
-        for (index, color) in colors.enumerated() {
-            let swatch = UIView()
-            swatch.backgroundColor = color
-            swatch.layer.cornerRadius = 4
-            swatch.translatesAutoresizingMaskIntoConstraints = false
-            container.addSubview(swatch)
-            
-            let row = index / 2
-            let col = index % 2
-            
-            NSLayoutConstraint.activate([
-                swatch.widthAnchor.constraint(equalToConstant: 80),
-                swatch.heightAnchor.constraint(equalToConstant: 50),
-                swatch.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: CGFloat(col) * 90),
-                swatch.topAnchor.constraint(equalTo: container.topAnchor, constant: CGFloat(row) * 60)
-            ])
-        }
-        
-        NSLayoutConstraint.activate([
-            container.widthAnchor.constraint(equalToConstant: 170),
-            container.heightAnchor.constraint(equalToConstant: 110)
-        ])
-        
-        return container
     }
     
     // MARK: - Pill Sliders Section
@@ -1391,12 +1343,14 @@ class DailyFitViewController: UIViewController {
                 colorHeaderDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
                 
                 colorPaletteContainer.topAnchor.constraint(equalTo: colorHeaderDivider.bottomAnchor, constant: 12),
-                colorPaletteContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+                colorPaletteContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                colorPaletteContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
             ])
         } else {
             constraints.append(contentsOf: [
                 colorPaletteContainer.topAnchor.constraint(equalTo: styleBreakdownDivider?.bottomAnchor ?? styleBriefLabel.bottomAnchor, constant: sectionSpacing * 2),
-                colorPaletteContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+                colorPaletteContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                colorPaletteContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
             ])
         }
         
@@ -1512,7 +1466,19 @@ class DailyFitViewController: UIViewController {
         // UPDATE: Configure vibe breakdown bars with actual data
         vibeContainer.configure(with: content.vibeBreakdown)
         
+        // Configure color palette with actual tokens from IE
+        if let tokens = extractTokensFromContent(content) {
+            colorPaletteContainer.configure(with: tokens)
+        }
+        
         print("Content updated with new layout structure")
+    }
+    
+    // MARK: - Helper Method for Token Extraction
+    
+    /// Extract StyleTokens from DailyVibeContent
+    private func extractTokensFromContent(_ content: DailyVibeContent) -> [StyleToken]? {
+        return content.styleTokens.isEmpty ? nil : content.styleTokens
     }
     
     private func loadTarotCardImage(for tarotCard: TarotCard?) {
