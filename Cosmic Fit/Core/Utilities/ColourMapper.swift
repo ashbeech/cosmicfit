@@ -1,63 +1,63 @@
 //
-//  ColorMapper.swift
+//  ColourMapper.swift
 //  Cosmic Fit
 //
-//  Maps astrological color names to UIColor objects
+//  Maps astrological colour names to UIColor objects
 //
 
 import UIKit
 
-/// Maps semantic color names from astrology tokens to UIColor representations
-class ColorMapper {
+/// Maps semantic colour names from astrology tokens to UIColor representations
+class ColourMapper {
     
     // MARK: - Public Methods
     
-    /// Convert a color name string to UIColor
-    /// - Parameter colorName: Semantic color name (e.g., "burgundy", "teal", "rust")
-    /// - Returns: UIColor representation, or nil if color not found
-    static func color(for colorName: String) -> UIColor? {
-        let normalizedName = colorName.lowercased().trimmingCharacters(in: .whitespaces)
-        return colorPalette[normalizedName]
+    /// Convert a colour name string to UIColor
+    /// - Parameter colourName: Semantic colour name (e.g., "burgundy", "teal", "rust")
+    /// - Returns: UIColor representation, or nil if colour not found
+    static func colour(for colourName: String) -> UIColor? {
+        let normalizedName = colourName.lowercased().trimmingCharacters(in: .whitespaces)
+        return colourPalette[normalizedName]
     }
     
-    /// Get top N colors from StyleTokens, sorted by weight
+    /// Get top N colours from StyleTokens, sorted by weight
     /// - Parameters:
     ///   - tokens: Array of StyleTokens from IE
-    ///   - count: Number of top colors to return (default: 3)
-    /// - Returns: Array of (colorName, UIColor, weight) tuples
-    static func getTopColors(from tokens: [StyleToken], count: Int = 3) -> [(String, UIColor, Double)] {
-        // Filter to only color tokens
-        let colorTokens = tokens.filter { $0.type == "color" }
+    ///   - count: Number of top colours to return (default: 3)
+    /// - Returns: Array of (colourName, UIColor, weight) tuples
+    static func getTopColours(from tokens: [StyleToken], count: Int = 3) -> [(String, UIColor, Double)] {
+        // Filter to only colour tokens
+        let colourTokens = tokens.filter { $0.type == "colour" }
         
         // Sort by weight descending
-        let sorted = colorTokens.sorted { $0.weight > $1.weight }
+        let sorted = colourTokens.sorted { $0.weight > $1.weight }
         
         // Take top N and convert to UIColors
         var results: [(String, UIColor, Double)] = []
         
         for token in sorted.prefix(count) {
-            if let uiColor = color(for: token.name) {
-                results.append((token.name, uiColor, token.weight))
+            if let uiColour = colour(for: token.name) {
+                results.append((token.name, uiColour, token.weight))
             }
         }
         
         return results
     }
     
-    /// Get all colors from StyleTokens, sorted by weight
+    /// Get all colours from StyleTokens, sorted by weight
     /// - Parameter tokens: Array of StyleTokens from IE
     /// - Returns: Array of UIColors sorted by prominence
-    static func getAllColors(from tokens: [StyleToken]) -> [UIColor] {
-        let colorTokens = tokens.filter { $0.type == "color" }
-        let sorted = colorTokens.sorted { $0.weight > $1.weight }
+    static func getAllColours(from tokens: [StyleToken]) -> [UIColor] {
+        let colourTokens = tokens.filter { $0.type == "colour" }
+        let sorted = colourTokens.sorted { $0.weight > $1.weight }
         
-        return sorted.compactMap { color(for: $0.name) }
+        return sorted.compactMap { colour(for: $0.name) }
     }
     
-    // MARK: - Color Palette Dictionary
+    // MARK: - Colour Palette Dictionary
     
     /// Comprehensive mapping of astrological color names to UIColors
-    private static let colorPalette: [String: UIColor] = [
+    private static let colourPalette: [String: UIColor] = [
         // Reds & Burgundy
         "red": UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0),
         "burgundy": UIColor(red: 0.5, green: 0.13, blue: 0.13, alpha: 1.0),
@@ -138,7 +138,7 @@ class ColorMapper {
         "rose": UIColor(red: 1.0, green: 0.0, blue: 0.5, alpha: 1.0),
         "pearl": UIColor(red: 0.92, green: 0.88, blue: 0.88, alpha: 1.0),
         
-        // Additional common color names from tokens
+        // Additional common colour names from tokens
         "dark": UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0),
     ]
 }

@@ -147,7 +147,7 @@ class TokenEnergyOverrides {
         
         // Playful tokens
         if ["bright", "vibrant", "dynamic", "energetic", "fun", "expressive", 
-            "creative", "colorful", "light", "airy", "versatile", "quick", 
+            "creative", "colourful", "light", "airy", "versatile", "quick", 
             "adaptable", "communicative", "cheerful", "playful", "lively", "spirited"].contains(tokenName) {
             return ["playful": 1.0]
         }

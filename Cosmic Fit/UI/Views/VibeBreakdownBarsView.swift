@@ -149,7 +149,7 @@ private final class VibeBarRow: UIView {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         CosmicFitTheme.styleBodyLabel(nameLabel, fontSize: 14, weight: .semibold)
         nameLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
-        nameLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
+        nameLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
         addSubview(nameLabel)
         
         // Configure track (background bar)
@@ -161,7 +161,7 @@ private final class VibeBarRow: UIView {
         
         // Configure fill (progress bar)
         fillView.translatesAutoresizingMaskIntoConstraints = false
-        fillView.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        fillView.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         fillView.layer.cornerRadius = 6
         fillView.clipsToBounds = true
         trackView.addSubview(fillView)

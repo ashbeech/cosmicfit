@@ -52,19 +52,19 @@ class SystemValidationTests {
         )
         
         // Analyze Venus vs seasonal influence
-        let venusColorTokens = blueprintTokens.filter {
+        let venusColourTokens = blueprintTokens.filter {
             $0.planetarySource == "Venus" &&
-            ($0.type == "color" || $0.type == "color_quality")
+            ($0.type == "colour" || $0.type == "colour_quality")
         }
         
-        let maxVenusWeight = venusColorTokens.max(by: { $0.weight < $1.weight })?.weight ?? 0
+        let maxVenusWeight = venusColourTokens.max(by: { $0.weight < $1.weight })?.weight ?? 0
         
-        DebugLogger.info("  • Venus color tokens found: \(venusColorTokens.count)")
+        DebugLogger.info("  • Venus colour tokens found: \(venusColourTokens.count)")
         DebugLogger.info("  • Max Venus weight: \(String(format: "%.2f", maxVenusWeight))")
-        DebugLogger.info("  • Venus tokens: \(venusColorTokens.map { $0.name })")
+        DebugLogger.info("  • Venus tokens: \(venusColourTokens.map { $0.name })")
         
         // Success criteria: Venus tokens should have significant weight
-        let success = maxVenusWeight > 2.0 && venusColorTokens.count > 0
+        let success = maxVenusWeight > 2.0 && venusColourTokens.count > 0
         DebugLogger.info("  • Test Result: \(success ? "✅ PASS" : "❌ FAIL")")
         
         return success

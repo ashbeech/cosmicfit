@@ -53,12 +53,12 @@ class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate
 
     private let cardContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         view.layer.cornerRadius = 16
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.clipsToBounds = true
         view.layer.borderWidth = 1
-        view.layer.borderColor = CosmicFitTheme.Colors.cosmicBlue.cgColor
+        view.layer.borderColor = CosmicFitTheme.Colours.cosmicBlue.cgColor
         return view
     }()
 
@@ -89,7 +89,7 @@ class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate
         // Add content view controller
         addChild(contentViewController)
         contentViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        contentViewController.view.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        contentViewController.view.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         cardContainerView.addSubview(contentViewController.view)
         contentViewController.didMove(toParent: self)
         
@@ -103,7 +103,7 @@ class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate
         // Add close button
         let closeButton = UIButton(type: .system)
         closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
-        closeButton.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        closeButton.tintColor = CosmicFitTheme.Colours.cosmicBlue
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         

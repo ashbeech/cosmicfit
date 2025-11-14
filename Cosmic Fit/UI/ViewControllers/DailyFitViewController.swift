@@ -35,8 +35,8 @@ class DailyFitViewController: UIViewController {
     private let styleBriefLabel = UILabel()
     
     // Style Breakdown Section
-    private let colorPaletteContainer = DailyColorPaletteView()
-    private var colorHeaderDivider: UIView?
+    private let colourPaletteContainer = DailyColourPaletteView()
+    private var colourHeaderDivider: UIView?
     
     // Pill Sliders Section
     private let pillSlidersContainer = UIView()
@@ -195,7 +195,7 @@ class DailyFitViewController: UIViewController {
     private func setupUI() {
         
         // Always start with black background
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         
         // ADD FULL-SCREEN SCROLLING RUNES BACKGROUND HERE - behind everything
         scrollingRunesBackground.translatesAutoresizingMaskIntoConstraints = false
@@ -254,7 +254,7 @@ class DailyFitViewController: UIViewController {
         ])
 
         // Add cosmic grey mask above menu bar
-        topMaskView.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        topMaskView.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         topMaskView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(topMaskView)
 
@@ -314,7 +314,7 @@ class DailyFitViewController: UIViewController {
         cardBackImageView.isUserInteractionEnabled = true
         
         // Glow effect for card back
-        cardBackImageView.layer.shadowColor = CosmicFitTheme.Colors.cosmicLilac.cgColor
+        cardBackImageView.layer.shadowColor = CosmicFitTheme.Colours.cosmicLilac.cgColor
         cardBackImageView.layer.shadowOffset = CGSize.zero
         cardBackImageView.layer.shadowRadius = 100
         cardBackImageView.layer.shadowOpacity = 0.4
@@ -390,7 +390,7 @@ class DailyFitViewController: UIViewController {
             // Hide all new content views
             let allContentViews: [UIView?] = [
                 self.dailyFitLabel, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
-                self.styleBriefLabel, self.colorPaletteContainer, self.colorHeaderDivider,
+                self.styleBriefLabel, self.colourPaletteContainer, self.colourHeaderDivider,
                 self.pillSlidersContainer, self.toneHeaderLabel, self.toneSliderContainer,
                 self.vibeHeaderDivider, self.vibeContainer, self.silhouetteHeaderDivider, self.silhouetteContainer,
                 self.takeawayLabel, self.topDivider, self.styleBreakdownDivider, self.bottomDivider, self.finalStarDivider,
@@ -438,7 +438,7 @@ class DailyFitViewController: UIViewController {
             // Show all new content views
             let allContentViews: [UIView?] = [
                 self.dailyFitLabel, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
-                self.styleBriefLabel, self.colorPaletteContainer, self.colorHeaderDivider,
+                self.styleBriefLabel, self.colourPaletteContainer, self.colourHeaderDivider,
                 self.pillSlidersContainer, self.toneHeaderLabel, self.toneSliderContainer,
                 self.vibeHeaderDivider, self.vibeContainer, self.silhouetteHeaderDivider, self.silhouetteContainer,
                 self.takeawayLabel, self.topDivider, self.styleBreakdownDivider, self.bottomDivider, self.finalStarDivider,
@@ -527,7 +527,7 @@ class DailyFitViewController: UIViewController {
         tarotCardImageView.translatesAutoresizingMaskIntoConstraints = false
         tarotCardImageView.contentMode = .scaleAspectFit
         tarotCardImageView.clipsToBounds = true
-        tarotCardImageView.backgroundColor = CosmicFitTheme.Colors.cosmicLilac // Themed placeholder
+        tarotCardImageView.backgroundColor = CosmicFitTheme.Colours.cosmicLilac // Themed placeholder
         tarotCardImageView.layer.cornerRadius = 24
         tarotCardImageView.alpha = 0.0
         tarotCardContainerView.addSubview(tarotCardImageView)
@@ -712,7 +712,7 @@ class DailyFitViewController: UIViewController {
         dateFormatter.locale = Locale(identifier: "en_GB")
         dateLabel.text = dateFormatter.string(from: Date())
         CosmicFitTheme.styleBodyLabel(dateLabel, fontSize: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
-        dateLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
+        dateLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
         dateLabel.textAlignment = .center
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.alpha = 0.0
@@ -743,7 +743,7 @@ class DailyFitViewController: UIViewController {
         label.text = text
         CosmicFitTheme.styleSubsectionLabel(label, fontSize: CosmicFitTheme.Typography.FontSizes.sectionHeader, italic: true)
         label.textAlignment = .center
-        label.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        label.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         label.translatesAutoresizingMaskIntoConstraints = false
         
         container.addSubview(leftDivider)
@@ -777,7 +777,7 @@ class DailyFitViewController: UIViewController {
         let label = UILabel()
         label.text = text
         CosmicFitTheme.styleTitleLabel(label, fontSize: 24, weight: .bold)
-        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -807,7 +807,7 @@ class DailyFitViewController: UIViewController {
         // Style brief text block
         styleBriefLabel.text = "You know that tidy-but-slightly-off feeling, like when you expect the bus to be late but it's actually right on time? Keep your look polished but slip in one detail that breaks the rules. A blazer with sneakers, sharp trousers with a mischievous print, or a neat shirt layered over something that shouldn't work but does. The mood is about order with a wink."
         CosmicFitTheme.styleBodyLabel(styleBriefLabel, fontSize: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
-        styleBriefLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
+        styleBriefLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
         styleBriefLabel.numberOfLines = 0
         styleBriefLabel.translatesAutoresizingMaskIntoConstraints = false
         styleBriefLabel.alpha = 0.0
@@ -823,17 +823,17 @@ class DailyFitViewController: UIViewController {
             contentView.addSubview(divider)
         }
         
-        // Color section ornamental divider
-        colorHeaderDivider = createOrnamentalDividerWithText("Colour")
-        colorHeaderDivider?.alpha = 0.0
-        if let divider = colorHeaderDivider {
+        // Colour section ornamental divider
+        colourHeaderDivider = createOrnamentalDividerWithText("Colour")
+        colourHeaderDivider?.alpha = 0.0
+        if let divider = colourHeaderDivider {
             contentView.addSubview(divider)
         }
         
-        // Color palette component
-        colorPaletteContainer.translatesAutoresizingMaskIntoConstraints = false
-        colorPaletteContainer.alpha = 0.0
-        contentView.addSubview(colorPaletteContainer)
+        // Colour palette component
+        colourPaletteContainer.translatesAutoresizingMaskIntoConstraints = false
+        colourPaletteContainer.alpha = 0.0
+        contentView.addSubview(colourPaletteContainer)
     }
     
     // MARK: - Pill Sliders Section
@@ -872,7 +872,7 @@ class DailyFitViewController: UIViewController {
         titleLabel.text = title
         CosmicFitTheme.styleBodyLabel(titleLabel, fontSize: 14, weight: .semibold)
         titleLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
-        titleLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
+        titleLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
         titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(titleLabel)
@@ -888,7 +888,7 @@ class DailyFitViewController: UIViewController {
         // Create 5 pills
         for i in 0..<5 {
             let pill = UIView()
-            pill.backgroundColor = i < filledPills ? CosmicFitTheme.Colors.cosmicBlue : UIColor.lightGray
+            pill.backgroundColor = i < filledPills ? CosmicFitTheme.Colours.cosmicBlue : UIColor.lightGray
             pill.layer.cornerRadius = 6
             pill.translatesAutoresizingMaskIntoConstraints = false
             pillsStack.addArrangedSubview(pill)
@@ -917,7 +917,7 @@ class DailyFitViewController: UIViewController {
         toneHeaderLabel.text = "Tone"
         CosmicFitTheme.styleBodyLabel(toneHeaderLabel, fontSize: 14, weight: .semibold)
         toneHeaderLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
-        toneHeaderLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
+        toneHeaderLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
         toneHeaderLabel.translatesAutoresizingMaskIntoConstraints = false
         toneHeaderLabel.alpha = 0.0
         contentView.addSubview(toneHeaderLabel)
@@ -949,7 +949,7 @@ class DailyFitViewController: UIViewController {
         coolLabel.text = "Cool"
         CosmicFitTheme.styleBodyLabel(coolLabel, fontSize: 14, weight: .semibold)
         coolLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
-        coolLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
+        coolLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
         coolLabel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(coolLabel)
         
@@ -957,7 +957,7 @@ class DailyFitViewController: UIViewController {
         warmLabel.text = "Warm"
         CosmicFitTheme.styleBodyLabel(warmLabel, fontSize: 14, weight: .semibold)
         warmLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
-        warmLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
+        warmLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
         warmLabel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(warmLabel)
         
@@ -983,7 +983,7 @@ class DailyFitViewController: UIViewController {
         let indicator = UILabel()
         indicator.text = "♦"
         indicator.font = UIFont.systemFont(ofSize: 16)
-        indicator.textColor = CosmicFitTheme.Colors.cosmicBlue
+        indicator.textColor = CosmicFitTheme.Colours.cosmicBlue
         indicator.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(indicator)
         
@@ -1091,7 +1091,7 @@ class DailyFitViewController: UIViewController {
         leftLbl.text = leftLabel
         CosmicFitTheme.styleBodyLabel(leftLbl, fontSize: 14, weight: .semibold)
         leftLbl.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
-        leftLbl.textColor = CosmicFitTheme.Colors.cosmicBlue
+        leftLbl.textColor = CosmicFitTheme.Colours.cosmicBlue
         leftLbl.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(leftLbl)
         
@@ -1100,7 +1100,7 @@ class DailyFitViewController: UIViewController {
         rightLbl.text = rightLabel
         CosmicFitTheme.styleBodyLabel(rightLbl, fontSize: 14, weight: .semibold)
         rightLbl.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
-        rightLbl.textColor = CosmicFitTheme.Colors.cosmicBlue
+        rightLbl.textColor = CosmicFitTheme.Colours.cosmicBlue
         rightLbl.textAlignment = .right
         rightLbl.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(rightLbl)
@@ -1127,7 +1127,7 @@ class DailyFitViewController: UIViewController {
         let indicator = UILabel()
         indicator.text = "♦"
         indicator.font = UIFont.systemFont(ofSize: 14)
-        indicator.textColor = CosmicFitTheme.Colors.cosmicBlue
+        indicator.textColor = CosmicFitTheme.Colours.cosmicBlue
         indicator.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(indicator)
         
@@ -1206,9 +1206,9 @@ class DailyFitViewController: UIViewController {
         let star = UILabel()
         star.text = "✦"
         star.font = UIFont.systemFont(ofSize: 20)
-        star.textColor = CosmicFitTheme.Colors.cosmicBlue
+        star.textColor = CosmicFitTheme.Colours.cosmicBlue
         star.textAlignment = .center
-        star.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        star.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         star.translatesAutoresizingMaskIntoConstraints = false
         
         container.addSubview(leftDivider)
@@ -1254,7 +1254,7 @@ class DailyFitViewController: UIViewController {
         // All new content starts invisible and fades in after card reveal
         let allContentViews: [UIView?] = [
             dailyFitLabel, tarotSymbolLabel, tarotTitleLabel, dateLabel,
-            styleBriefLabel, colorPaletteContainer, colorHeaderDivider,
+            styleBriefLabel, colourPaletteContainer, colourHeaderDivider,
             pillSlidersContainer, toneHeaderLabel, toneSliderContainer,
             vibeHeaderDivider, vibeContainer, silhouetteHeaderDivider, silhouetteContainer,
             takeawayLabel, topDivider, styleBreakdownDivider, bottomDivider, finalStarDivider,
@@ -1335,28 +1335,28 @@ class DailyFitViewController: UIViewController {
             ])
         }
         
-        // Color Section
-        if let colorHeaderDivider = colorHeaderDivider {
+        // Colour Section
+        if let colourHeaderDivider = colourHeaderDivider {
             constraints.append(contentsOf: [
-                colorHeaderDivider.topAnchor.constraint(equalTo: styleBreakdownDivider?.bottomAnchor ?? styleBriefLabel.bottomAnchor, constant: sectionSpacing),
-                colorHeaderDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                colorHeaderDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
+                colourHeaderDivider.topAnchor.constraint(equalTo: styleBreakdownDivider?.bottomAnchor ?? styleBriefLabel.bottomAnchor, constant: sectionSpacing),
+                colourHeaderDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                colourHeaderDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
                 
-                colorPaletteContainer.topAnchor.constraint(equalTo: colorHeaderDivider.bottomAnchor, constant: 12),
-                colorPaletteContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                colorPaletteContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
+                colourPaletteContainer.topAnchor.constraint(equalTo: colourHeaderDivider.bottomAnchor, constant: 12),
+                colourPaletteContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                colourPaletteContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
             ])
         } else {
             constraints.append(contentsOf: [
-                colorPaletteContainer.topAnchor.constraint(equalTo: styleBreakdownDivider?.bottomAnchor ?? styleBriefLabel.bottomAnchor, constant: sectionSpacing * 2),
-                colorPaletteContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                colorPaletteContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
+                colourPaletteContainer.topAnchor.constraint(equalTo: styleBreakdownDivider?.bottomAnchor ?? styleBriefLabel.bottomAnchor, constant: sectionSpacing * 2),
+                colourPaletteContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                colourPaletteContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
             ])
         }
         
         // Pill Sliders Section
         constraints.append(contentsOf: [
-            pillSlidersContainer.topAnchor.constraint(equalTo: colorPaletteContainer.bottomAnchor, constant: sectionSpacing),
+            pillSlidersContainer.topAnchor.constraint(equalTo: colourPaletteContainer.bottomAnchor, constant: sectionSpacing),
             pillSlidersContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
         ])
         
@@ -1466,9 +1466,9 @@ class DailyFitViewController: UIViewController {
         // UPDATE: Configure vibe breakdown bars with actual data
         vibeContainer.configure(with: content.vibeBreakdown)
         
-        // Configure color palette with actual tokens from IE
+        // Configure colour palette with actual tokens from IE
         if let tokens = extractTokensFromContent(content) {
-            colorPaletteContainer.configure(with: tokens)
+            colourPaletteContainer.configure(with: tokens)
         }
         
         print("Content updated with new layout structure")
@@ -1549,27 +1549,27 @@ class DailyFitViewController: UIViewController {
     }
     
     private func setupFallbackCardDisplay(for card: TarotCard) {
-        // Color-coded fallback based on card type using theme colors
-        let color: UIColor
+        // Colour-coded fallback based on card type using theme colours
+        let colour: UIColor
         switch card.arcana {
         case .major:
-            color = CosmicFitTheme.Colors.cosmicLilac
+            colour = CosmicFitTheme.Colours.cosmicLilac
         case .minor:
             switch card.suit {
             case .cups:
-                color = .systemBlue
+                colour = .systemBlue
             case .wands:
-                color = CosmicFitTheme.Colors.cosmicLilac
+                colour = CosmicFitTheme.Colours.cosmicLilac
             case .swords:
-                color = CosmicFitTheme.Colors.cosmicBlue
+                colour = CosmicFitTheme.Colours.cosmicBlue
             case .pentacles:
-                color = .systemGreen
+                colour = .systemGreen
             case .none:
-                color = CosmicFitTheme.Colors.cosmicLilac
+                colour = CosmicFitTheme.Colours.cosmicLilac
             }
         }
         
-        tarotCardImageView.backgroundColor = color
+        tarotCardImageView.backgroundColor = colour
         tarotCardImageView.image = nil
         
         // Create elegant text overlay
@@ -1585,7 +1585,7 @@ class DailyFitViewController: UIViewController {
         
         // Apply theme to overlay label
         CosmicFitTheme.styleTitleLabel(label, fontSize: CosmicFitTheme.Typography.FontSizes.title1, weight: .bold)
-        label.textColor = .white // Override for visibility on colored background
+        label.textColor = .white // Override for visibility on coloured background
         
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -1632,7 +1632,7 @@ class DailyFitViewController: UIViewController {
     /*
     private func setInitialContentAlpha() {
         // Initial alpha for content labels
-        let labels = [keywordsLabel, styleBriefLabel, textilesLabel, colorsLabel,
+        let labels = [keywordsLabel, styleBriefLabel, textilesLabel, coloursLabel,
                       patternsLabel, shapeLabel, accessoriesLabel, layeringLabel,
                       vibeBreakdownLabel, debugButton]
         
@@ -1745,7 +1745,7 @@ class DailyFitViewController: UIViewController {
         let allContentViews: [UIView?] = [
             dailyFitLabel, tarotSymbolLabel, tarotTitleLabel, dateLabel,
             topDivider, styleBriefLabel,
-            styleBreakdownDivider, colorHeaderDivider, colorPaletteContainer,
+            styleBreakdownDivider, colourHeaderDivider, colourPaletteContainer,
             pillSlidersContainer,
             toneHeaderLabel, toneSliderContainer,
             vibeHeaderDivider, vibeContainer,
@@ -1858,7 +1858,7 @@ class DailyFitViewController: UIViewController {
                 // Bring all new content views to front
                 let allContentViews: [UIView?] = [
                     self.dailyFitLabel, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
-                    self.styleBriefLabel, self.colorPaletteContainer, self.colorHeaderDivider,
+                    self.styleBriefLabel, self.colourPaletteContainer, self.colourHeaderDivider,
                     self.pillSlidersContainer, self.toneHeaderLabel, self.toneSliderContainer,
                     self.vibeHeaderDivider, self.vibeContainer, self.silhouetteHeaderDivider, self.silhouetteContainer,
                     self.takeawayLabel, self.topDivider, self.styleBreakdownDivider, self.bottomDivider, self.finalStarDivider
@@ -1907,11 +1907,11 @@ class DailyFitViewController: UIViewController {
             print("• Edge: \(vibeBreakdown.edge)")
             
             /*
-            print("\n🌈 COLOR SCORES:")
-            let colorScores = dailyVibe.colorScores
-            print("• Darkness: \(colorScores.darkness)/10")
-            print("• Vibrancy: \(colorScores.vibrancy)/10")
-            print("• Contrast: \(colorScores.contrast)/10")
+            print("\n🌈 COLOUR SCORES:")
+            let colorScores = dailyVibe.colourScores
+            print("• Darkness: \(colourScores.darkness)/10")
+            print("• Vibrancy: \(colourScores.vibrancy)/10")
+            print("• Contrast: \(colourScores.contrast)/10")
             
             print("\n📐 STRUCTURAL AXES:")
             print("• Angular/Curvy: \(dailyVibe.angularCurvyScore.score)/10")

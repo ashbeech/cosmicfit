@@ -25,7 +25,7 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
     
     private let contentView: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicGrey.withAlphaComponent(0.95)
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicGrey.withAlphaComponent(0.95)
         view.alpha = 0
         return view
     }()
@@ -33,7 +33,7 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
     private let closeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
-        button.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        button.tintColor = CosmicFitTheme.Colours.cosmicBlue
         return button
     }()
     
@@ -41,7 +41,7 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.image = UIImage(named: "menu_glyph")
-        iv.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
         return iv
     }()
     
@@ -58,7 +58,7 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
         let button = UIButton(type: .system)
         button.setTitle("Account", for: .normal)
         button.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(size: 24, weight: .regular)
-        button.setTitleColor(CosmicFitTheme.Colors.cosmicBlue, for: .normal)
+        button.setTitleColor(CosmicFitTheme.Colours.cosmicBlue, for: .normal)
         return button
     }()
     
@@ -66,7 +66,7 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
         let button = UIButton(type: .system)
         button.setTitle("FAQs", for: .normal)
         button.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(size: 24, weight: .regular)
-        button.setTitleColor(CosmicFitTheme.Colors.cosmicBlue, for: .normal)
+        button.setTitleColor(CosmicFitTheme.Colours.cosmicBlue, for: .normal)
         return button
     }()
     
@@ -74,7 +74,7 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
         let button = UIButton(type: .system)
         button.setTitle("Help", for: .normal)
         button.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(size: 24, weight: .regular)
-        button.setTitleColor(CosmicFitTheme.Colors.cosmicBlue, for: .normal)
+        button.setTitleColor(CosmicFitTheme.Colours.cosmicBlue, for: .normal)
         return button
     }()
     
@@ -91,7 +91,7 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
         let button = UIButton(type: .system)
         let config = UIImage.SymbolConfiguration(pointSize: 28, weight: .regular)
         button.setImage(UIImage(systemName: "music.note", withConfiguration: config), for: .normal)
-        button.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        button.tintColor = CosmicFitTheme.Colours.cosmicBlue
         return button
     }()
     
@@ -99,7 +99,7 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
         let button = UIButton(type: .system)
         let config = UIImage.SymbolConfiguration(pointSize: 28, weight: .regular)
         button.setImage(UIImage(systemName: "camera", withConfiguration: config), for: .normal)
-        button.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        button.tintColor = CosmicFitTheme.Colours.cosmicBlue
         return button
     }()
     
@@ -111,13 +111,13 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
     
     private let bottomDividerLeft: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         return view
     }()
     
     private let bottomDividerRight: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         return view
     }()
     
@@ -125,7 +125,7 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.image = UIImage(named: "star_icon_placeholder")
-        iv.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
         return iv
     }()
     

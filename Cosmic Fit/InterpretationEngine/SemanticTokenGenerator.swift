@@ -3,14 +3,14 @@
 //  Cosmic Fit
 //
 //  Created by Ashley Davison on 12/05/2025.
-//  Enhanced with source tracking, improved weighting, and color handling
+//  Enhanced with source tracking, improved weighting, and colour handling
 //  Refactored to use InterpretationTextLibrary
 
 /**
  * INTEGRATION CHECKLIST - NEW INFLUENCE HIERARCHY SYSTEM
  *
  * ✅ 1. Seasonal aesthetic tokens removed from generateDailySignature()
- * ✅ 2. Current Sun sign tokens filtered to remove color_quality
+ * ✅ 2. Current Sun sign tokens filtered to remove colour_quality
  * ✅ 3. Venus/Mars/Moon weights enhanced in generateBlueprintTokens()
  * ✅ 4. Weather tokens reduced to practical only
  * ✅ 5. Hard weather filtering system implemented (WeatherFabricFilter)
@@ -103,7 +103,7 @@ class SemanticTokenGenerator {
             let enhancedTokens = planetTokens.map { token in
                 var enhancedWeight = token.weight
                 
-                if planet.name == "Venus" && (token.type == "color" || token.type == "color_quality") {
+                if planet.name == "Venus" && (token.type == "colour" || token.type == "colour_quality") {
                     enhancedWeight *= 2.0 // Enhanced for Venus fashion authority
                 } else if planet.name == "Mars" && (token.type == "structure" || token.type == "expression") {
                     enhancedWeight *= 1.3 // Mars energy expression enhancement
@@ -150,12 +150,12 @@ class SemanticTokenGenerator {
         let aspectTokens = generateAspectTokens(chart: natal, baseWeight: WeightingModel.natalWeight * 0.8) // Reduced by 20%
         tokens.append(contentsOf: aspectTokens)
         
-        // Add Color Season tokens for consistent fashion guidance (Partner's Feature)
-        let colorSeason = ColorSeasonAnalyzer.determineColorSeason(chart: natal)
-        let seasonalTokens = ColorSeasonAnalyzer.getSeasonalPalette(season: colorSeason)
+        // Add Colour Season tokens for consistent fashion guidance (Partner's Feature)
+        let colourSeason = ColourSeasonAnalyzer.determineColourSeason(chart: natal)
+        let seasonalTokens = ColourSeasonAnalyzer.getSeasonalPalette(season: colourSeason)
         tokens.append(contentsOf: seasonalTokens)
         
-        DebugLogger.info("🎨 COLOR SEASON ANALYSIS: \(colorSeason.rawValue) with \(seasonalTokens.count) palette tokens")
+        DebugLogger.info("🎨 COLOUR SEASON ANALYSIS: \(colourSeason.rawValue) with \(seasonalTokens.count) palette tokens")
         
         // Add expanded textile tokens for Daily System
         let textileTokens = generateExpandedTextileTokens(chart: natal)
@@ -841,27 +841,27 @@ class SemanticTokenGenerator {
         case 0...12.5: // New Moon
             tokens.append(StyleToken(name: "minimal", type: "structure", weight: 1.5 * basePhaseWeight, aspectSource: "New Moon", originType: .phase))
             tokens.append(StyleToken(name: "introspective", type: "mood", weight: 1.3 * basePhaseWeight, aspectSource: "New Moon", originType: .phase))
-            tokens.append(StyleToken(name: "dark", type: "color", weight: 1.0 * basePhaseWeight, aspectSource: "New Moon", originType: .phase))
+            tokens.append(StyleToken(name: "dark", type: "colour", weight: 1.0 * basePhaseWeight, aspectSource: "New Moon", originType: .phase))
         case 12.5...37.5: // Waxing Crescent
             tokens.append(StyleToken(name: "emerging", type: "expression", weight: 1.2 * basePhaseWeight, aspectSource: "Waxing Crescent", originType: .phase))
             tokens.append(StyleToken(name: "hopeful", type: "mood", weight: 1.0 * basePhaseWeight, aspectSource: "Waxing Crescent", originType: .phase))
-            tokens.append(StyleToken(name: "subtle", type: "color_quality", weight: 0.8 * basePhaseWeight, aspectSource: "Waxing Crescent", originType: .phase))
+            tokens.append(StyleToken(name: "subtle", type: "colour_quality", weight: 0.8 * basePhaseWeight, aspectSource: "Waxing Crescent", originType: .phase))
         case 37.5...62.5: // First Quarter
             tokens.append(StyleToken(name: "decisive", type: "expression", weight: 1.4 * basePhaseWeight, aspectSource: "First Quarter", originType: .phase))
-            tokens.append(StyleToken(name: "bold", type: "color_quality", weight: 1.2 * basePhaseWeight, aspectSource: "First Quarter", originType: .phase))
+            tokens.append(StyleToken(name: "bold", type: "colour_quality", weight: 1.2 * basePhaseWeight, aspectSource: "First Quarter", originType: .phase))
             tokens.append(StyleToken(name: "structured", type: "structure", weight: 1.0 * basePhaseWeight, aspectSource: "First Quarter", originType: .phase))
         case 62.5...87.5: // Waxing Gibbous
             tokens.append(StyleToken(name: "refined", type: "expression", weight: 1.3 * basePhaseWeight, aspectSource: "Waxing Gibbous", originType: .phase))
             tokens.append(StyleToken(name: "perfecting", type: "mood", weight: 1.1 * basePhaseWeight, aspectSource: "Waxing Gibbous", originType: .phase))
             tokens.append(StyleToken(name: "polished", type: "texture", weight: 0.9 * basePhaseWeight, aspectSource: "Waxing Gibbous", originType: .phase))
         case 87.5...100, 0...12.5: // Full Moon (including overlap)
-            tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: 1.8 * basePhaseWeight, aspectSource: "Full Moon", originType: .phase))
+            tokens.append(StyleToken(name: "radiant", type: "colour_quality", weight: 1.8 * basePhaseWeight, aspectSource: "Full Moon", originType: .phase))
             tokens.append(StyleToken(name: "expressive", type: "expression", weight: 1.6 * basePhaseWeight, aspectSource: "Full Moon", originType: .phase))
             tokens.append(StyleToken(name: "luminous", type: "texture", weight: 1.4 * basePhaseWeight, aspectSource: "Full Moon", originType: .phase))
         default: // Waning phases
             tokens.append(StyleToken(name: "wise", type: "mood", weight: 1.2 * basePhaseWeight, aspectSource: "Waning Moon", originType: .phase))
             tokens.append(StyleToken(name: "reflective", type: "expression", weight: 1.0 * basePhaseWeight, aspectSource: "Waning Moon", originType: .phase))
-            tokens.append(StyleToken(name: "muted", type: "color_quality", weight: 0.8 * basePhaseWeight, aspectSource: "Waning Moon", originType: .phase))
+            tokens.append(StyleToken(name: "muted", type: "colour_quality", weight: 0.8 * basePhaseWeight, aspectSource: "Waning Moon", originType: .phase))
         }
         
         return tokens
@@ -934,16 +934,16 @@ class SemanticTokenGenerator {
         // REDUCED weight for background energy
         let backgroundWeight = WeightingModel.currentSunSignBackgroundWeight * 0.6 // Further reduced
         
-        // Generate ONLY energy/mood tokens, no color_quality tokens
+        // Generate ONLY energy/mood tokens, no colour_quality tokens
         let sunSignTokens = tokenizeForCurrentSunSign(
             sign: currentSunSign,
             signName: currentSunSignName,
             weight: backgroundWeight
         )
         
-        // Filter out any color_quality tokens to prevent seasonal aesthetic override
+        // Filter out any colour_quality tokens to prevent seasonal aesthetic override
         let filteredTokens = sunSignTokens.filter { token in
-            token.type != "color_quality" && token.type != "color"
+            token.type != "colour_quality" && token.type != "colour"
         }
         
         tokens.append(contentsOf: filteredTokens)
@@ -1048,7 +1048,7 @@ class SemanticTokenGenerator {
         
         switch aspectType {
         case "Conjunction", "Trine":
-            tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "radiant", type: "colour_quality", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
             tokens.append(StyleToken(name: "confident", type: "expression", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
             tokens.append(StyleToken(name: "creative", type: "mood", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
             tokens.append(StyleToken(name: "authoritative", type: "structure", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
@@ -1057,7 +1057,7 @@ class SemanticTokenGenerator {
             tokens.append(StyleToken(name: "dramatic", type: "structure", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
             tokens.append(StyleToken(name: "challenging", type: "mood", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
         default:
-            tokens.append(StyleToken(name: "warm", type: "color_quality", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "warm", type: "colour_quality", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
             tokens.append(StyleToken(name: "expressive", type: "expression", weight: baseWeight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
         }
         
@@ -1136,7 +1136,7 @@ class SemanticTokenGenerator {
             // Venus-Sun: radiant beauty, confident style, self-love
             switch aspectCategory {
             case "harmonious":
-                tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "radiant", type: "colour_quality", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
                 tokens.append(StyleToken(name: "confident", type: "expression", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
                 tokens.append(StyleToken(name: "glamorous", type: "mood", weight: baseWeight, planetarySource: "Venus", aspectSource: aspectSource, originType: .transit))
             case "challenging":
@@ -1568,7 +1568,7 @@ class SemanticTokenGenerator {
             switch aspectCategory {
             case "harmonious":
                 tokens.append(StyleToken(name: "confident", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
-                tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "radiant", type: "colour_quality", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
                 tokens.append(StyleToken(name: "magnanimous", type: "mood", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
             case "challenging":
                 tokens.append(StyleToken(name: "overconfident", type: "expression", weight: baseWeight, planetarySource: "Jupiter", aspectSource: aspectSource, originType: .transit))
@@ -1892,7 +1892,7 @@ class SemanticTokenGenerator {
         case "Conjunction", "Trine":
             tokens.append(StyleToken(name: "innovative", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
             tokens.append(StyleToken(name: "unconventional", type: "structure", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
-            tokens.append(StyleToken(name: "electric", type: "color_quality", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "electric", type: "colour_quality", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
         case "Square", "Opposition":
             tokens.append(StyleToken(name: "rebellious", type: "expression", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
             tokens.append(StyleToken(name: "disruptive", type: "mood", weight: baseWeight, planetarySource: "Uranus", aspectSource: aspectSource, originType: .transit))
@@ -2091,7 +2091,7 @@ class SemanticTokenGenerator {
             case "harmonious":
                 tokens.append(StyleToken(name: "visionary", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
                 tokens.append(StyleToken(name: "dreamy", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
-                tokens.append(StyleToken(name: "ethereal", type: "color_quality", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "ethereal", type: "colour_quality", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
             case "challenging":
                 tokens.append(StyleToken(name: "uncertain", type: "mood", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
                 tokens.append(StyleToken(name: "elusive", type: "expression", weight: baseWeight, planetarySource: "Neptune", aspectSource: aspectSource, originType: .transit))
@@ -2289,7 +2289,7 @@ class SemanticTokenGenerator {
             // Pluto-Venus: intense attraction, transformative beauty
             tokens.append(StyleToken(name: "seductive", type: "expression", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
             tokens.append(StyleToken(name: "alluring", type: "mood", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
-            tokens.append(StyleToken(name: "provocative", type: "color_quality", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
+            tokens.append(StyleToken(name: "provocative", type: "colour_quality", weight: baseWeight, planetarySource: "Pluto", aspectSource: aspectSource, originType: .transit))
             
         case "Mars":
             // Pluto-Mars: willpower, intensity, drive
@@ -2374,10 +2374,10 @@ class SemanticTokenGenerator {
         return ["Moon", "Mercury", "Venus", "Sun", "Mars"].contains(planet)
     }
     
-    // MARK: - Color Frequency Token Generation
+    // MARK: - Colour Frequency Token Generation
     
-    /// Generate tokens for Color Frequency section using WeightingModel weights
-    static func generateColorFrequencyTokens(
+    /// Generate tokens for Colour Frequency section using WeightingModel weights
+    static func generateColourFrequencyTokens(
         natal: NatalChartCalculator.NatalChart,
         progressed: NatalChartCalculator.NatalChart,
         currentAge: Int = 30) -> [StyleToken] {
@@ -2390,7 +2390,7 @@ class SemanticTokenGenerator {
             let normalizedProgressedWeight = WeightingModel.progressedWeight / totalWeight
             
             // Generate natal tokens with normalized weight
-            let natalTokens = generateNatalColorTokens(natal, currentAge: currentAge)
+            let natalTokens = generateNatalColourTokens(natal, currentAge: currentAge)
             for token in natalTokens {
                 let adjustedToken = StyleToken(
                     name: token.name,
@@ -2406,15 +2406,15 @@ class SemanticTokenGenerator {
             }
             
             // Generate progressed tokens with normalized weight
-            let progressedTokens = generateProgressedColorTokens(progressed)
+            let progressedTokens = generateProgressedColourTokens(progressed)
             for token in progressedTokens {
-                // Skip tokens that introduce new colors - only keep modulating tokens
-                if token.type == "color" {
+                // Skip tokens that introduce new colours - only keep modulating tokens
+                if token.type == "colour" {
                     continue
                 }
                 
                 // Keep only tokens that modulate finish, tone, and pairing logic
-                if ["texture", "color_quality", "structure"].contains(token.type) {
+                if ["texture", "colour_quality", "structure"].contains(token.type) {
                     let adjustedToken = StyleToken(
                         name: token.name,
                         type: token.type,
@@ -2508,7 +2508,7 @@ class SemanticTokenGenerator {
             // Generate progressed tokens with normalized weight using Placidus house system
             let progressedTokens = generateProgressedTokensForWardrobeStoryline(progressed)
             for token in progressedTokens {
-                if ["texture", "color_quality", "structure", "mood", "expression"].contains(token.type) {
+                if ["texture", "colour_quality", "structure", "mood", "expression"].contains(token.type) {
                     let adjustedToken = StyleToken(
                         name: token.name,
                         type: token.type,
@@ -2570,7 +2570,7 @@ class SemanticTokenGenerator {
                     isProgressed: true)
                 
                 for token in flavorTokens {
-                    if ["texture", "color_quality", "structure"].contains(token.type) {
+                    if ["texture", "colour_quality", "structure"].contains(token.type) {
                         let modulatingToken = StyleToken(
                             name: token.name,
                             type: token.type,
@@ -2698,11 +2698,11 @@ class SemanticTokenGenerator {
             return tokens
         }
     
-    /// Generate specialized color tokens from natal chart
-    private static func generateNatalColorTokens(_ chart: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> [StyleToken] {
+    /// Generate specialized colour tokens from natal chart
+    private static func generateNatalColourTokens(_ chart: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
-        // Process planets with focus on color attributes
+        // Process planets with focus on colour attributes
         for planet in chart.planets {
             let baseWeight: Double = 2.0
             var priorityMultiplier: Double = 1.0
@@ -2718,42 +2718,42 @@ class SemanticTokenGenerator {
             
             let weight = baseWeight * priorityMultiplier
             
-            let colorTokens = generateColorTokensForPlanetInSign(
+            let colourTokens = generateColourTokensForPlanetInSign(
                 planet: planet.name,
                 sign: planet.zodiacSign,
                 weight: weight,
                 isRetrograde: planet.isRetrograde)
             
-            let ageWeightedTokens = colorTokens.map { $0.applyingAgeWeight(currentAge: currentAge) }
+            let ageWeightedTokens = colourTokens.map { $0.applyingAgeWeight(currentAge: currentAge) }
             tokens.append(contentsOf: ageWeightedTokens)
         }
         
-        // Process ascendant for color tokens
+        // Process ascendant for colour tokens
         let ascendantSign = CoordinateTransformations.decimalDegreesToZodiac(chart.ascendant).sign
         let ascSignName = CoordinateTransformations.getZodiacSignName(sign: ascendantSign)
         
-        let ascendantColorTokens = generateColorTokensForAscendant(
+        let ascendantColourTokens = generateColourTokensForAscendant(
             sign: ascendantSign,
             signName: ascSignName,
             weight: 2.5)
         
-        let ageWeightedAscTokens = ascendantColorTokens.map { $0.applyingAgeWeight(currentAge: currentAge) }
+        let ageWeightedAscTokens = ascendantColourTokens.map { $0.applyingAgeWeight(currentAge: currentAge) }
         tokens.append(contentsOf: ageWeightedAscTokens)
         
-        let elementalTokens = generateElementalColorTokens(chart: chart)
+        let elementalTokens = generateElementalColourTokens(chart: chart)
         tokens.append(contentsOf: elementalTokens)
         
-        let aspectColorTokens = generateAspectColorTokens(chart: chart)
-        tokens.append(contentsOf: aspectColorTokens)
+        let aspectColourTokens = generateAspectColourTokens(chart: chart)
+        tokens.append(contentsOf: aspectColourTokens)
         
-        tokens.append(contentsOf: generateColorNuanceFromAspects(chart: chart))
-        tokens.append(contentsOf: generateColorTokensFromDignities(chart: chart))
+        tokens.append(contentsOf: generateColourNuanceFromAspects(chart: chart))
+        tokens.append(contentsOf: generateColourTokensFromDignities(chart: chart))
         
         return tokens
     }
     
-    /// Generate color tokens from progressed chart
-    private static func generateProgressedColorTokens(_ chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
+    /// Generate colour tokens from progressed chart
+    private static func generateProgressedColourTokens(_ chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
         let relevantPlanets = ["Moon", "Venus", "Sun"]
@@ -2771,18 +2771,18 @@ class SemanticTokenGenerator {
             
             let weight = baseWeight * priorityMultiplier
             
-            let colorTokens = generateColorTokensForPlanetInSign(
+            let colourTokens = generateColourTokensForPlanetInSign(
                 planet: planet.name,
                 sign: planet.zodiacSign,
                 weight: weight,
                 isProgressed: true)
             
-            tokens.append(contentsOf: colorTokens)
+            tokens.append(contentsOf: colourTokens)
         }
         
         tokens.append(StyleToken(
             name: "evolving",
-            type: "color_quality",
+            type: "colour_quality",
             weight: 1.5,
             planetarySource: "Progressed Chart",
             aspectSource: "Current Progression"
@@ -2790,7 +2790,7 @@ class SemanticTokenGenerator {
         
         tokens.append(StyleToken(
             name: "transitional",
-            type: "color_quality",
+            type: "colour_quality",
             weight: 1.3,
             planetarySource: "Progressed Chart",
             aspectSource: "Current Progression"
@@ -2860,7 +2860,7 @@ class SemanticTokenGenerator {
          if weather.temperature > 20 {
              // Warm weather
              tokens.append(StyleToken(name: "breathable", type: "textile", weight: baseWeight * 1.4, originType: .weather))
-             tokens.append(StyleToken(name: "light", type: "color_quality", weight: baseWeight * 1.2, originType: .weather))
+             tokens.append(StyleToken(name: "light", type: "colour_quality", weight: baseWeight * 1.2, originType: .weather))
              tokens.append(StyleToken(name: "airy", type: "texture", weight: baseWeight * 1.0, originType: .weather))
          } else if weather.temperature > 10 {
              // Mild weather
@@ -2892,13 +2892,13 @@ class SemanticTokenGenerator {
              tokens.append(StyleToken(name: "streamlined", type: "expression", weight: baseWeight * 1.0, originType: .weather))
              
          case _ where weather.condition.lowercased().contains("cloud"):
-             tokens.append(StyleToken(name: "muted", type: "color_quality", weight: baseWeight * 1.2, originType: .weather))
+             tokens.append(StyleToken(name: "muted", type: "colour_quality", weight: baseWeight * 1.2, originType: .weather))
              tokens.append(StyleToken(name: "soft", type: "texture", weight: baseWeight * 1.0, originType: .weather))
              tokens.append(StyleToken(name: "comfortable", type: "mood", weight: baseWeight * 0.9, originType: .weather))
              
          case _ where weather.condition.lowercased().contains("clear") || weather.condition.lowercased().contains("sunny"):
              tokens.append(StyleToken(name: "radiant", type: "mood", weight: baseWeight * 1.3, originType: .weather))
-             tokens.append(StyleToken(name: "bright", type: "color_quality", weight: baseWeight * 1.2, originType: .weather))
+             tokens.append(StyleToken(name: "bright", type: "colour_quality", weight: baseWeight * 1.2, originType: .weather))
              tokens.append(StyleToken(name: "confident", type: "expression", weight: baseWeight * 1.0, originType: .weather))
              
          default:
@@ -3178,10 +3178,10 @@ class SemanticTokenGenerator {
         }
     }
     
-    // MARK: - Color Season System (Partner's Feature Request)
+    // MARK: - Colour Season System (Partner's Feature Request)
     
-    /// Professional color season analysis based on astrological chart
-    enum ColorSeason: String, CaseIterable {
+    /// Professional colour season analysis based on astrological chart
+    enum ColourSeason: String, CaseIterable {
         case brightSpring = "Bright Spring"
         case lightSpring = "Light Spring" 
         case warmSpring = "Warm Spring"
@@ -3196,11 +3196,11 @@ class SemanticTokenGenerator {
         case deepWinter = "Deep Winter"
     }
     
-    /// Color Season Analyzer for professional fashion guidance
-    struct ColorSeasonAnalyzer {
+    /// Colour Season Analyzer for professional fashion guidance
+    struct ColourSeasonAnalyzer {
         
-        /// Determine color season based on astrological chart factors
-        static func determineColorSeason(chart: NatalChartCalculator.NatalChart) -> ColorSeason {
+        /// Determine colour season based on astrological chart factors
+        static func determineColourSeason(chart: NatalChartCalculator.NatalChart) -> ColourSeason {
             // Analyze elemental balance for warmth/coolness
             let fireCount = countFirePlacements(chart: chart)
             let earthCount = countEarthPlacements(chart: chart)
@@ -3216,7 +3216,7 @@ class SemanticTokenGenerator {
             // Determine lightness (light vs deep)
             let isLightExpression = hasLightExpression(chart: chart)
             
-            // Professional color season determination (fixed redundant cases)
+            // Professional colour season determination (fixed redundant cases)
             switch (isWarmUndertone, venusIntensity, isLightExpression) {
             case (true, .bright, true): return .brightSpring
             case (true, .muted, true): return .lightSpring
@@ -3232,16 +3232,16 @@ class SemanticTokenGenerator {
             }
         }
         
-        /// Get seasonal color palette for consistent fashion guidance
-        static func getSeasonalPalette(season: ColorSeason) -> [StyleToken] {
-            let baseColors = seasonalColorMappings[season] ?? []
-            return baseColors.map { (colorName, intensity) in
+        /// Get seasonal colour palette for consistent fashion guidance
+        static func getSeasonalPalette(season: ColourSeason) -> [StyleToken] {
+            let baseColours = seasonalColourMappings[season] ?? []
+            return baseColours.map { (colourName, intensity) in
                 StyleToken(
-                    name: colorName,
-                    type: "color",
+                    name: colourName,
+                    type: "colour",
                     weight: intensity,
-                    planetarySource: "ColorSeason",
-                    aspectSource: "Color Season: \(season.rawValue)",
+                    planetarySource: "ColourSeason",
+                    aspectSource: "Colour Season: \(season.rawValue)",
                     originType: .natal
                 )
             }
@@ -3262,7 +3262,7 @@ class SemanticTokenGenerator {
             case bright, muted, deep
         }
         
-        private static let seasonalColorMappings: [ColorSeason: [(String, Double)]] = [
+        private static let seasonalColourMappings: [ColourSeason: [(String, Double)]] = [
             .deepAutumn: [("rust", 2.0), ("olive", 1.8), ("burgundy", 1.9), ("golden_brown", 1.7), ("deep_orange", 1.6)],
             .brightWinter: [("royal_blue", 2.0), ("emerald", 1.9), ("magenta", 1.8), ("black", 2.0), ("white", 1.7)],
             .warmSpring: [("coral", 1.8), ("golden_yellow", 1.9), ("warm_green", 1.6), ("peach", 1.7), ("camel", 1.5)],
@@ -3312,29 +3312,29 @@ class SemanticTokenGenerator {
         }
     }
     
-    // MARK: - Traditional Astrological Color Correspondences
+    // MARK: - Traditional Astrological Colour Correspondences
     
-    /// Traditional astrological color mappings per professional standards
-    struct TraditionalColors {
-        static let signColors: [String: [(String, String)]] = [
-            "Aries": [("red", "color"), ("bright_orange", "color"), ("bold_contrast", "color_quality")],
-            "Taurus": [("sage_green", "color"), ("rose", "color"), ("warm_brown", "color"), ("cream", "color")],
-            "Gemini": [("yellow", "color"), ("bright_patterns", "color_quality"), ("mixed_combinations", "color_quality")],
-            "Cancer": [("white", "color"), ("silver", "color"), ("pearl", "color"), ("nautical_themes", "color_quality")],
-            "Leo": [("gold", "color"), ("orange", "color"), ("red", "color"), ("purple", "color"), ("crimson", "color"), ("royal", "color_quality")],
-            "Virgo": [("navy", "color"), ("wheat", "color"), ("brown", "color"), ("precisely_tailored", "color_quality")],
-            "Libra": [("rose_pink", "color"), ("pastels", "color"), ("harmonious_combinations", "color_quality"), ("balanced_proportions", "color_quality")],
-            "Scorpio": [("black", "color"), ("burgundy", "color"), ("deep_colors", "color_quality"), ("power_silhouettes", "color_quality")],
-            "Sagittarius": [("purple", "color"), ("royal_blue", "color"), ("international_influences", "color_quality"), ("travel_ready", "color_quality")],
-            "Capricorn": [("charcoal", "color"), ("brown", "color"), ("black", "color"), ("classic_business", "color_quality")],
-            "Aquarius": [("electric_blue", "color"), ("unexpected_combinations", "color_quality"), ("technical_fabrics", "color_quality")],
-            "Pisces": [("sea_colors", "color_quality"), ("flowing_fabrics", "color_quality"), ("ethereal_elements", "color_quality")]
+    /// Traditional astrological colour mappings per professional standards
+    struct TraditionalColours {
+        static let signColours: [String: [(String, String)]] = [
+            "Aries": [("red", "colour"), ("bright_orange", "colour"), ("bold_contrast", "colour_quality")],
+            "Taurus": [("sage_green", "colour"), ("rose", "colour"), ("warm_brown", "colour"), ("cream", "colour")],
+            "Gemini": [("yellow", "colour"), ("bright_patterns", "colour_quality"), ("mixed_combinations", "colour_quality")],
+            "Cancer": [("white", "colour"), ("silver", "colour"), ("pearl", "colour"), ("nautical_themes", "colour_quality")],
+            "Leo": [("gold", "colour"), ("orange", "colour"), ("red", "colour"), ("purple", "colour"), ("crimson", "colour"), ("royal", "colour_quality")],
+            "Virgo": [("navy", "colour"), ("wheat", "colour"), ("brown", "colour"), ("precisely_tailored", "colour_quality")],
+            "Libra": [("rose_pink", "colour"), ("pastels", "colour"), ("harmonious_combinations", "colour_quality"), ("balanced_proportions", "colour_quality")],
+            "Scorpio": [("black", "colour"), ("burgundy", "colour"), ("deep_colours", "colour_quality"), ("power_silhouettes", "colour_quality")],
+            "Sagittarius": [("purple", "colour"), ("royal_blue", "colour"), ("international_influences", "colour_quality"), ("travel_ready", "colour_quality")],
+            "Capricorn": [("charcoal", "colour"), ("brown", "colour"), ("black", "colour"), ("classic_business", "colour_quality")],
+            "Aquarius": [("electric_blue", "colour"), ("unexpected_combinations", "colour_quality"), ("technical_fabrics", "colour_quality")],
+            "Pisces": [("sea_colours", "colour_quality"), ("flowing_fabrics", "colour_quality"), ("ethereal_elements", "colour_quality")]
         ]
     }
     
     /// Enhanced traditional token generation with professional astrological accuracy
     private static func generateTraditionalSignTokens(signName: String) -> [(String, String)] {
-        return TraditionalColors.signColors[signName] ?? [("neutral", "color")]
+        return TraditionalColours.signColours[signName] ?? [("neutral", "colour")]
     }
     
     /// Get chart ruler (ruling planet of Ascendant) for dominant personal expression
@@ -3379,7 +3379,7 @@ class SemanticTokenGenerator {
         case venusUnderwhelming
         case dailyVariationExcessive
         case natalInfluenceTooLow
-        case traditionalColorMismatch
+        case traditionalColourMismatch
         case aspectMeaningMissing
     }
     
@@ -3416,11 +3416,11 @@ class SemanticTokenGenerator {
             return warnings
         }
         
-        /// Validate traditional sign-color alignment
+        /// Validate traditional sign-colour alignment
         static func validateTraditionalAlignment(tokens: [StyleToken]) -> Bool {
-            // Check that traditional color mappings are being used
+            // Check that traditional colour mappings are being used
             let taurusTokens = tokens.filter { $0.signSource == "Taurus" }
-            let hasTraditionalTaurusColors = taurusTokens.contains { token in
+            let hasTraditionalTaurusColours = taurusTokens.contains { token in
                 ["sage_green", "rose", "warm_brown", "cream"].contains(token.name)
             }
             
@@ -3429,38 +3429,38 @@ class SemanticTokenGenerator {
                 ["black", "burgundy", "leather", "power", "magnetic"].contains(token.name)
             }
             
-            return hasTraditionalTaurusColors && hasTraditionalScorpioElements
+            return hasTraditionalTaurusColours && hasTraditionalScorpioElements
         }
     }
 
     private static func getCurrentSunSignBackgroundTokens(sunSign: String) -> [(String, String)] {
         switch sunSign {
         case "Aries":
-            return [("energetic", "mood"), ("bold", "color_quality"), ("dynamic", "expression"), ("fiery", "texture")]
+            return [("energetic", "mood"), ("bold", "colour_quality"), ("dynamic", "expression"), ("fiery", "texture")]
         case "Taurus":
-            return [("grounded", "mood"), ("luxurious", "texture"), ("sage_green", "color"), ("quality", "structure")]
+            return [("grounded", "mood"), ("luxurious", "texture"), ("sage_green", "colour"), ("quality", "structure")]
         case "Gemini":
-            return [("versatile", "expression"), ("bright", "color_quality"), ("communicative", "mood"), ("airy", "texture")]
+            return [("versatile", "expression"), ("bright", "colour_quality"), ("communicative", "mood"), ("airy", "texture")]
         case "Cancer":
-            return [("nurturing", "mood"), ("protective", "structure"), ("pearl", "color"), ("flowing", "texture")]
+            return [("nurturing", "mood"), ("protective", "structure"), ("pearl", "colour"), ("flowing", "texture")]
         case "Leo":
-            return [("radiant", "color_quality"), ("bold", "expression"), ("warm", "texture"), ("dramatic", "mood")]
+            return [("radiant", "colour_quality"), ("bold", "expression"), ("warm", "texture"), ("dramatic", "mood")]
         case "Virgo":
-            return [("precise", "structure"), ("refined", "texture"), ("practical", "mood"), ("earthy", "color_quality")]
+            return [("precise", "structure"), ("refined", "texture"), ("practical", "mood"), ("earthy", "colour_quality")]
         case "Libra":
-            return [("harmonious", "mood"), ("elegant", "expression"), ("balanced", "structure"), ("beautiful", "color_quality")]
+            return [("harmonious", "mood"), ("elegant", "expression"), ("balanced", "structure"), ("beautiful", "colour_quality")]
         case "Scorpio":
-            return [("magnetic", "mood"), ("leather", "texture"), ("black", "color"), ("power", "structure")]
+            return [("magnetic", "mood"), ("leather", "texture"), ("black", "colour"), ("power", "structure")]
         case "Sagittarius":
-            return [("adventurous", "mood"), ("expansive", "expression"), ("optimistic", "color_quality"), ("free", "structure")]
+            return [("adventurous", "mood"), ("expansive", "expression"), ("optimistic", "colour_quality"), ("free", "structure")]
         case "Capricorn":
             return [("structured", "structure"), ("authoritative", "mood"), ("disciplined", "expression"), ("enduring", "texture")]
         case "Aquarius":
-            return [("innovative", "expression"), ("unique", "structure"), ("electric", "color_quality"), ("progressive", "mood")]
+            return [("innovative", "expression"), ("unique", "structure"), ("electric", "colour_quality"), ("progressive", "mood")]
         case "Pisces":
-            return [("dreamy", "mood"), ("fluid", "texture"), ("intuitive", "expression"), ("ethereal", "color_quality")]
+            return [("dreamy", "mood"), ("fluid", "texture"), ("intuitive", "expression"), ("ethereal", "colour_quality")]
         default:
-            return [("balanced", "mood"), ("harmonious", "expression"), ("neutral", "color_quality"), ("adaptable", "structure")]
+            return [("balanced", "mood"), ("harmonious", "expression"), ("neutral", "colour_quality"), ("adaptable", "structure")]
         }
     }
     
@@ -3499,7 +3499,7 @@ class SemanticTokenGenerator {
         case 2: // Values house - emphasize texture and substance
             if tokenType == "expression" { return (tokenName, "texture") }
         case 6: // Service house - emphasize practical structure
-            if tokenType == "color_quality" { return ("practical-\(tokenName)", "structure") }
+            if tokenType == "colour_quality" { return ("practical-\(tokenName)", "structure") }
         case 10: // Career house - emphasize professional expression
             if tokenType == "mood" { return ("professional-\(tokenName)", "expression") }
         default:
@@ -3535,7 +3535,7 @@ class SemanticTokenGenerator {
             switch tokenType {
             case "expression": return 1.2
             case "structure": return 1.1
-            case "color_quality": return 1.0
+            case "colour_quality": return 1.0
             default: return 0.9
             }
         case 2, 6: // Practical houses
@@ -3694,18 +3694,18 @@ class SemanticTokenGenerator {
         }
     }
     
-    private static func generateMoonPhaseColorTokens(moonPhase: Double, weight: Double) -> [StyleToken] {
+    private static func generateMoonPhaseColourTokens(moonPhase: Double, weight: Double) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
         let phase = MoonPhaseInterpreter.Phase.fromDegrees(moonPhase)
-        let colorPalette = MoonPhaseInterpreter.colorPaletteForPhase(phase: phase)
+        let colourPalette = MoonPhaseInterpreter.colourPaletteForPhase(phase: phase)
         
-        for (index, color) in colorPalette.enumerated() {
-            let colorWeight = weight * (1.5 - (Double(index) * 0.2))
+        for (index, colour) in colourPalette.enumerated() {
+            let colourWeight = weight * (1.5 - (Double(index) * 0.2))
             tokens.append(StyleToken(
-                name: color,
-                type: "color",
-                weight: colorWeight,
+                name: colour,
+                type: "colour",
+                weight: colourWeight,
                 aspectSource: "Moon Phase: \(phase.description)",
                 originType: .phase
             ))
@@ -3725,7 +3725,7 @@ class SemanticTokenGenerator {
             
             switch transitPlanet {
             case "Sun":
-                tokens.append(StyleToken(name: "radiant", type: "color_quality", weight: weight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
+                tokens.append(StyleToken(name: "radiant", type: "colour_quality", weight: weight, planetarySource: "Sun", aspectSource: aspectSource, originType: .transit))
             case "Moon":
                 tokens.append(StyleToken(name: "flowing", type: "structure", weight: weight, planetarySource: "Moon", aspectSource: aspectSource, originType: .transit))
             case "Venus":
@@ -3793,27 +3793,27 @@ class SemanticTokenGenerator {
         return parts.count >= 3 ? parts[2] : nil
     }
     
-    private static func generateColorTokensForPlanetInSign(planet: String, sign: Int, weight: Double, isRetrograde: Bool = false, isProgressed: Bool = false) -> [StyleToken] {
+    private static func generateColourTokensForPlanetInSign(planet: String, sign: Int, weight: Double, isRetrograde: Bool = false, isProgressed: Bool = false) -> [StyleToken] {
         return []
     }
     
-    private static func generateColorTokensForAscendant(sign: Int, signName: String, weight: Double) -> [StyleToken] {
+    private static func generateColourTokensForAscendant(sign: Int, signName: String, weight: Double) -> [StyleToken] {
         return []
     }
     
-    private static func generateElementalColorTokens(chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
+    private static func generateElementalColourTokens(chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
         return []
     }
     
-    private static func generateAspectColorTokens(chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
+    private static func generateAspectColourTokens(chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
         return []
     }
     
-    private static func generateColorNuanceFromAspects(chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
+    private static func generateColourNuanceFromAspects(chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
         return []
     }
     
-    private static func generateColorTokensFromDignities(chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
+    private static func generateColourTokensFromDignities(chart: NatalChartCalculator.NatalChart) -> [StyleToken] {
         return []
     }
     

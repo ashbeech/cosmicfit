@@ -22,7 +22,7 @@ class FAQViewController: UIViewController {
     
     // MARK: - UI Setup
     private func setupUI() {
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         
         // Setup scroll view
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -48,7 +48,7 @@ class FAQViewController: UIViewController {
         ])
         
         // Title - matching Blueprint page style
-        titleLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
+        titleLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         
@@ -61,7 +61,7 @@ class FAQViewController: UIViewController {
             string: "FREQUENTLY ASKED\nQUESTIONS",
             attributes: [
                 .font: CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.pageTitle),
-                .foregroundColor: CosmicFitTheme.Colors.cosmicBlue,
+                .foregroundColor: CosmicFitTheme.Colours.cosmicBlue,
                 .paragraphStyle: paragraphStyle
             ]
         )
@@ -87,7 +87,7 @@ class FAQViewController: UIViewController {
             ),
             (
                 question: "How does the birth chart connect to style?",
-                answer: "Your natal chart reveals your core energy patterns—how you show up in the world, what makes you feel confident, and where you naturally shine. We translate those cosmic themes into tangible style elements: fabrics, colors, silhouettes, and styling approaches that align with your innate energy."
+                answer: "Your natal chart reveals your core energy patterns—how you show up in the world, what makes you feel confident, and where you naturally shine. We translate those cosmic themes into tangible style elements: fabrics, colours, silhouettes, and styling approaches that align with your innate energy."
             ),
             (
                 question: "What's the \"Daily Fit\"?",
@@ -111,7 +111,7 @@ class FAQViewController: UIViewController {
             ),
             (
                 question: "What if I don't like the outfit suggestion?",
-                answer: "Your Daily Fit is meant to inspire, not dictate. Think of it as a creative prompt. You might take just one element—a color, a texture, an accessory choice—and build from there. The goal is alignment with your energy, not rigid adherence to a specific look."
+                answer: "Your Daily Fit is meant to inspire, not dictate. Think of it as a creative prompt. You might take just one element—a colour, a texture, an accessory choice—and build from there. The goal is alignment with your energy, not rigid adherence to a specific look."
             ),
             (
                 question: "How often does my Daily Fit change?",
@@ -173,7 +173,7 @@ class FAQViewController: UIViewController {
         let questionLabel = UILabel()
         questionLabel.text = question
         questionLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.title3, weight: .bold)
-        questionLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
+        questionLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
         questionLabel.numberOfLines = 0
         questionLabel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(questionLabel)
@@ -182,7 +182,7 @@ class FAQViewController: UIViewController {
         let answerLabel = UILabel()
         answerLabel.text = answer
         answerLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
-        answerLabel.textColor = CosmicFitTheme.Colors.cosmicBlue
+        answerLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
         answerLabel.numberOfLines = 0
         answerLabel.lineBreakMode = .byWordWrapping
         answerLabel.translatesAutoresizingMaskIntoConstraints = false

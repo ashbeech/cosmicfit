@@ -31,7 +31,7 @@ struct InterpretationTextLibrary {
             static let dreamsDressing = "You dress like someone who remembers dreams and honors them through "
             static let versionsDressing = "You dress like someone who remembers every version of yourself and honors them through "
             
-            static let dressingMedium = "texture, color, and the way fabric falls. This blueprint reflects a wardrobe built on "
+            static let dressingMedium = "texture, colour, and the way fabric falls. This blueprint reflects a wardrobe built on "
             static let defaultClosing = "intuition, integrity, and evolution."
         }
         
@@ -277,17 +277,17 @@ struct InterpretationTextLibrary {
             ]
         }
         
-        // MARK: - Color Recommendations Text
-        struct ColorRecommendations {
-            static let elementalColors = [
+        // MARK: - Colour Recommendations Text
+        struct ColourRecommendations {
+            static let elementalColours = [
                 "earthy": ["olive", "terracotta", "moss", "ochre", "walnut", "sand", "umber"],
                 "watery": ["navy ink", "teal", "indigo", "slate blue", "stormy gray", "deep aqua"],
                 "airy": ["pale blue", "silver gray", "cloud white", "light lavender", "sky"],
                 "fiery": ["oxblood", "rust", "amber", "burnt orange", "burgundy", "ruby"]
             ]
             
-            static let defaultColors = ["stone", "navy", "charcoal", "cream"]
-            static let defaultPowerColors = ["deep indigo", "matte silver", "burgundy"]
+            static let defaultColours = ["stone", "navy", "charcoal", "cream"]
+            static let defaultPowerColours = ["deep indigo", "matte silver", "burgundy"]
             static let defaultCurrentPhase = ["muted sage", "faded black", "soft cream"]
         }
         
@@ -341,40 +341,40 @@ struct InterpretationTextLibrary {
             struct Sun {
                 static let descriptions = [
                     "Aries": [
-                        ("bold", "mood"), ("dynamic", "structure"), ("bright red", "color"), ("vibrant", "color_quality")
+                        ("bold", "mood"), ("dynamic", "structure"), ("bright red", "colour"), ("vibrant", "colour_quality")
                     ],
                     "Taurus": [
-                        ("luxurious", "texture"), ("sage green", "color"), ("rose", "color"), ("tactile", "color_quality")
+                        ("luxurious", "texture"), ("sage green", "colour"), ("rose", "colour"), ("tactile", "colour_quality")
                     ],
                     "Gemini": [
-                        ("playful", "mood"), ("versatile", "structure"), ("yellow", "color"), ("bright", "color_quality")
+                        ("playful", "mood"), ("versatile", "structure"), ("yellow", "colour"), ("bright", "colour_quality")
                     ],
                     "Cancer": [
-                        ("protective", "structure"), ("flowing", "texture"), ("pearl", "color"), ("nautical", "color_quality")
+                        ("protective", "structure"), ("flowing", "texture"), ("pearl", "colour"), ("nautical", "colour_quality")
                     ],
                     "Leo": [
-                        ("radiant", "mood"), ("expressive", "structure"), ("gold", "color"), ("warm", "color_quality")
+                        ("radiant", "mood"), ("expressive", "structure"), ("gold", "colour"), ("warm", "colour_quality")
                     ],
                     "Virgo": [
-                        ("refined", "mood"), ("practical", "structure"), ("wheat", "color"), ("precise", "color_quality")
+                        ("refined", "mood"), ("practical", "structure"), ("wheat", "colour"), ("precise", "colour_quality")
                     ],
                     "Libra": [
-                        ("balanced", "structure"), ("harmonious", "color"), ("rose pink", "color"), ("elegant", "color_quality")
+                        ("balanced", "structure"), ("harmonious", "colour"), ("rose pink", "colour"), ("elegant", "colour_quality")
                     ],
                     "Scorpio": [
-                        ("magnetic", "mood"), ("leather", "texture"), ("black", "color"), ("powerful", "color_quality")
+                        ("magnetic", "mood"), ("leather", "texture"), ("black", "colour"), ("powerful", "colour_quality")
                     ],
                     "Sagittarius": [
-                        ("expansive", "structure"), ("adventurous", "mood"), ("royal blue", "color"), ("vibrant", "color_quality")
+                        ("expansive", "structure"), ("adventurous", "mood"), ("royal blue", "colour"), ("vibrant", "colour_quality")
                     ],
                     "Capricorn": [
-                        ("structured", "structure"), ("enduring", "texture"), ("charcoal", "color"), ("classic", "color_quality")
+                        ("structured", "structure"), ("enduring", "texture"), ("charcoal", "colour"), ("classic", "colour_quality")
                     ],
                     "Aquarius": [
-                        ("innovative", "structure"), ("distinctive", "mood"), ("electric blue", "color"), ("unique", "color_quality")
+                        ("innovative", "structure"), ("distinctive", "mood"), ("electric blue", "colour"), ("unique", "colour_quality")
                     ],
                     "Pisces": [
-                        ("fluid", "structure"), ("dreamy", "mood"), ("seafoam", "color"), ("flowing", "color_quality")
+                        ("fluid", "structure"), ("dreamy", "mood"), ("seafoam", "colour"), ("flowing", "colour_quality")
                     ]
                 ]
             }
@@ -383,40 +383,40 @@ struct InterpretationTextLibrary {
             struct Moon {
                 static let descriptions = [
                     "Aries": [
-                        ("energetic", "mood"), ("impulsive", "texture"), ("coral red", "color"), ("warm", "color_quality")
+                        ("energetic", "mood"), ("impulsive", "texture"), ("coral red", "colour"), ("warm", "colour_quality")
                     ],
                     "Taurus": [
-                        ("quality", "texture"), ("grounded", "mood"), ("warm brown", "color"), ("enduring", "color_quality")
+                        ("quality", "texture"), ("grounded", "mood"), ("warm brown", "colour"), ("enduring", "colour_quality")
                     ],
                     "Gemini": [
-                        ("adaptable", "structure"), ("communicative", "mood"), ("pale yellow", "color"), ("bright", "color_quality")
+                        ("adaptable", "structure"), ("communicative", "mood"), ("pale yellow", "colour"), ("bright", "colour_quality")
                     ],
                     "Cancer": [
-                        ("nurturing", "texture"), ("emotional", "mood"), ("pearl", "color"), ("luminous", "color_quality")
+                        ("nurturing", "texture"), ("emotional", "mood"), ("pearl", "colour"), ("luminous", "colour_quality")
                     ],
                     "Leo": [
-                        ("warm", "color"), ("dramatic", "structure"), ("amber", "color"), ("radiant", "color_quality")
+                        ("warm", "colour"), ("dramatic", "structure"), ("amber", "colour"), ("radiant", "colour_quality")
                     ],
                     "Virgo": [
-                        ("detailed", "structure"), ("thoughtful", "mood"), ("taupe", "color"), ("precise", "color_quality")
+                        ("detailed", "structure"), ("thoughtful", "mood"), ("taupe", "colour"), ("precise", "colour_quality")
                     ],
                     "Libra": [
-                        ("elegant", "structure"), ("social", "mood"), ("lavender", "color"), ("harmonious", "color_quality")
+                        ("elegant", "structure"), ("social", "mood"), ("lavender", "colour"), ("harmonious", "colour_quality")
                     ],
                     "Scorpio": [
-                        ("structured", "color"), ("leather", "texture"), ("burgundy", "color"), ("intense", "color_quality")
+                        ("structured", "colour"), ("leather", "texture"), ("burgundy", "colour"), ("intense", "colour_quality")
                     ],
                     "Sagittarius": [
-                        ("optimistic", "mood"), ("free-spirited", "structure"), ("indigo", "color"), ("deep", "color_quality")
+                        ("optimistic", "mood"), ("free-spirited", "structure"), ("indigo", "colour"), ("deep", "colour_quality")
                     ],
                     "Capricorn": [
-                        ("grounded", "mood"), ("reserved", "structure"), ("slate gray", "color"), ("solid", "color_quality")
+                        ("grounded", "mood"), ("reserved", "structure"), ("slate gray", "colour"), ("solid", "colour_quality")
                     ],
                     "Aquarius": [
-                        ("unique", "structure"), ("independent", "mood"), ("turquoise", "color"), ("innovative", "color_quality")
+                        ("unique", "structure"), ("independent", "mood"), ("turquoise", "colour"), ("innovative", "colour_quality")
                     ],
                     "Pisces": [
-                        ("soft", "texture"), ("intuitive", "mood"), ("seafoam", "color"), ("dreamy", "color_quality")
+                        ("soft", "texture"), ("intuitive", "mood"), ("seafoam", "colour"), ("dreamy", "colour_quality")
                     ]
                 ]
             }
@@ -425,40 +425,40 @@ struct InterpretationTextLibrary {
             struct Venus {
                 static let descriptions = [
                     "Aries": [
-                        ("spontaneous", "structure"), ("bold", "color"), ("coral", "color"), ("dynamic", "color_quality")
+                        ("spontaneous", "structure"), ("bold", "colour"), ("coral", "colour"), ("dynamic", "colour_quality")
                     ],
                     "Taurus": [
-                        ("indulgent", "texture"), ("sensual", "mood"), ("cream", "color"), ("luxurious", "color_quality")
+                        ("indulgent", "texture"), ("sensual", "mood"), ("cream", "colour"), ("luxurious", "colour_quality")
                     ],
                     "Gemini": [
-                        ("eclectic", "structure"), ("playful", "color"), ("peach", "color"), ("varied", "color_quality")
+                        ("eclectic", "structure"), ("playful", "colour"), ("peach", "colour"), ("varied", "colour_quality")
                     ],
                     "Cancer": [
-                        ("nostalgic", "mood"), ("nurturing", "texture"), ("cream", "color"), ("soft", "color_quality")
+                        ("nostalgic", "mood"), ("nurturing", "texture"), ("cream", "colour"), ("soft", "colour_quality")
                     ],
                     "Leo": [
-                        ("glamorous", "structure"), ("vibrant", "color"), ("warm gold", "color"), ("radiant", "color_quality")
+                        ("glamorous", "structure"), ("vibrant", "colour"), ("warm gold", "colour"), ("radiant", "colour_quality")
                     ],
                     "Virgo": [
-                        ("subtle", "color"), ("refined", "structure"), ("sage", "color"), ("precise", "color_quality")
+                        ("subtle", "colour"), ("refined", "structure"), ("sage", "colour"), ("precise", "colour_quality")
                     ],
                     "Libra": [
-                        ("harmonious", "structure"), ("balanced", "color"), ("rose quartz", "color"), ("elegant", "color_quality")
+                        ("harmonious", "structure"), ("balanced", "colour"), ("rose quartz", "colour"), ("elegant", "colour_quality")
                     ],
                     "Scorpio": [
-                        ("magnetic", "mood"), ("power", "structure"), ("black", "color"), ("controlled", "color_quality")
+                        ("magnetic", "mood"), ("power", "structure"), ("black", "colour"), ("controlled", "colour_quality")
                     ],
                     "Sagittarius": [
-                        ("exuberant", "mood"), ("expansive", "color"), ("teal", "color"), ("vivid", "color_quality")
+                        ("exuberant", "mood"), ("expansive", "colour"), ("teal", "colour"), ("vivid", "colour_quality")
                     ],
                     "Capricorn": [
-                        ("elegant", "structure"), ("classic", "texture"), ("merlot", "color"), ("timeless", "color_quality")
+                        ("elegant", "structure"), ("classic", "texture"), ("merlot", "colour"), ("timeless", "colour_quality")
                     ],
                     "Aquarius": [
-                        ("unconventional", "structure"), ("futuristic", "texture"), ("periwinkle", "color"), ("innovative", "color_quality")
+                        ("unconventional", "structure"), ("futuristic", "texture"), ("periwinkle", "colour"), ("innovative", "colour_quality")
                     ],
                     "Pisces": [
-                        ("romantic", "mood"), ("dreamy", "texture"), ("lilac", "color"), ("ethereal", "color_quality")
+                        ("romantic", "mood"), ("dreamy", "texture"), ("lilac", "colour"), ("ethereal", "colour_quality")
                     ]
                 ]
             }
@@ -467,40 +467,40 @@ struct InterpretationTextLibrary {
             struct Mars {
                 static let descriptions = [
                     "Aries": [
-                        ("assertive", "structure"), ("energetic", "texture"), ("crimson", "color"), ("bold", "color_quality")
+                        ("assertive", "structure"), ("energetic", "texture"), ("crimson", "colour"), ("bold", "colour_quality")
                     ],
                     "Taurus": [
-                        ("enduring", "texture"), ("substantial", "structure"), ("rust", "color"), ("earthy", "color_quality")
+                        ("enduring", "texture"), ("substantial", "structure"), ("rust", "colour"), ("earthy", "colour_quality")
                     ],
                     "Gemini": [
-                        ("versatile", "structure"), ("quick", "texture"), ("bright yellow", "color"), ("dynamic", "color_quality")
+                        ("versatile", "structure"), ("quick", "texture"), ("bright yellow", "colour"), ("dynamic", "colour_quality")
                     ],
                     "Cancer": [
-                        ("protective", "structure"), ("soft", "texture"), ("white", "color"), ("gentle", "color_quality")
+                        ("protective", "structure"), ("soft", "texture"), ("white", "colour"), ("gentle", "colour_quality")
                     ],
                     "Leo": [
-                        ("confident", "structure"), ("bold", "color"), ("copper", "color"), ("radiant", "color_quality")
+                        ("confident", "structure"), ("bold", "colour"), ("copper", "colour"), ("radiant", "colour_quality")
                     ],
                     "Virgo": [
-                        ("precise", "structure"), ("detailed", "texture"), ("brick red", "color"), ("structured", "color_quality")
+                        ("precise", "structure"), ("detailed", "texture"), ("brick red", "colour"), ("structured", "colour_quality")
                     ],
                     "Libra": [
-                        ("balanced", "structure"), ("harmonious", "mood"), ("rose", "color"), ("balanced", "color_quality")
+                        ("balanced", "structure"), ("harmonious", "mood"), ("rose", "colour"), ("balanced", "colour_quality")
                     ],
                     "Scorpio": [
-                        ("deep", "color"), ("power", "structure"), ("black", "color"), ("magnetic", "color_quality")
+                        ("deep", "colour"), ("power", "structure"), ("black", "colour"), ("magnetic", "colour_quality")
                     ],
                     "Sagittarius": [
-                        ("adventurous", "structure"), ("expansive", "texture"), ("purple", "color"), ("dynamic", "color_quality")
+                        ("adventurous", "structure"), ("expansive", "texture"), ("purple", "colour"), ("dynamic", "colour_quality")
                     ],
                     "Capricorn": [
-                        ("disciplined", "structure"), ("enduring", "texture"), ("dark brown", "color"), ("structured", "color_quality")
+                        ("disciplined", "structure"), ("enduring", "texture"), ("dark brown", "colour"), ("structured", "colour_quality")
                     ],
                     "Aquarius": [
-                        ("innovative", "structure"), ("progressive", "mood"), ("electric blue", "color"), ("unique", "color_quality")
+                        ("innovative", "structure"), ("progressive", "mood"), ("electric blue", "colour"), ("unique", "colour_quality")
                     ],
                     "Pisces": [
-                        ("fluid", "texture"), ("adaptive", "structure"), ("sea blue", "color"), ("flowing", "color_quality")
+                        ("fluid", "texture"), ("adaptive", "structure"), ("sea blue", "colour"), ("flowing", "colour_quality")
                     ]
                 ]
             }
@@ -509,40 +509,40 @@ struct InterpretationTextLibrary {
             struct Mercury {
                 static let descriptions = [
                     "Aries": [
-                        ("direct", "communication"), ("quick", "pace"), ("clear red", "color"), ("crisp", "color_quality")
+                        ("direct", "communication"), ("quick", "pace"), ("clear red", "colour"), ("crisp", "colour_quality")
                     ],
                     "Taurus": [
-                        ("deliberate", "communication"), ("practical", "approach"), ("olive", "color"), ("textured", "color_quality")
+                        ("deliberate", "communication"), ("practical", "approach"), ("olive", "colour"), ("textured", "colour_quality")
                     ],
                     "Gemini": [
-                        ("versatile", "communication"), ("curious", "approach"), ("yellow", "color"), ("varied", "color_quality")
+                        ("versatile", "communication"), ("curious", "approach"), ("yellow", "colour"), ("varied", "colour_quality")
                     ],
                     "Cancer": [
-                        ("intuitive", "communication"), ("receptive", "approach"), ("silver gray", "color"), ("nuanced", "color_quality")
+                        ("intuitive", "communication"), ("receptive", "approach"), ("silver gray", "colour"), ("nuanced", "colour_quality")
                     ],
                     "Leo": [
-                        ("expressive", "communication"), ("confident", "approach"), ("golden yellow", "color"), ("distinct", "color_quality")
+                        ("expressive", "communication"), ("confident", "approach"), ("golden yellow", "colour"), ("distinct", "colour_quality")
                     ],
                     "Virgo": [
-                        ("precise", "communication"), ("analytical", "approach"), ("wheat", "color"), ("precise", "color_quality")
+                        ("precise", "communication"), ("analytical", "approach"), ("wheat", "colour"), ("precise", "colour_quality")
                     ],
                     "Libra": [
-                        ("balanced", "communication"), ("diplomatic", "approach"), ("pastel pink", "color"), ("balanced", "color_quality")
+                        ("balanced", "communication"), ("diplomatic", "approach"), ("pastel pink", "colour"), ("balanced", "colour_quality")
                     ],
                     "Scorpio": [
-                        ("penetrating", "communication"), ("strategic", "approach"), ("deep burgundy", "color"), ("intense", "color_quality")
+                        ("penetrating", "communication"), ("strategic", "approach"), ("deep burgundy", "colour"), ("intense", "colour_quality")
                     ],
                     "Sagittarius": [
-                        ("expansive", "communication"), ("optimistic", "approach"), ("blue", "color"), ("clear", "color_quality")
+                        ("expansive", "communication"), ("optimistic", "approach"), ("blue", "colour"), ("clear", "colour_quality")
                     ],
                     "Capricorn": [
-                        ("structured", "communication"), ("disciplined", "approach"), ("charcoal", "color"), ("defined", "color_quality")
+                        ("structured", "communication"), ("disciplined", "approach"), ("charcoal", "colour"), ("defined", "colour_quality")
                     ],
                     "Aquarius": [
-                        ("innovative", "communication"), ("objective", "approach"), ("electric blue", "color"), ("unique", "color_quality")
+                        ("innovative", "communication"), ("objective", "approach"), ("electric blue", "colour"), ("unique", "colour_quality")
                     ],
                     "Pisces": [
-                        ("intuitive", "communication"), ("imaginative", "approach"), ("sea green", "color"), ("blended", "color_quality")
+                        ("intuitive", "communication"), ("imaginative", "approach"), ("sea green", "colour"), ("blended", "colour_quality")
                     ]
                 ]
             }
@@ -550,59 +550,59 @@ struct InterpretationTextLibrary {
             // MARK: - Outer Planets
             struct OuterPlanets {
                 static let neptune = [
-                    ("opalescent blue", "color"), ("mermaid teal", "color"), ("misty lavender", "color"),
-                    ("ethereal", "color_quality"), ("dreamlike", "color_quality")
+                    ("opalescent blue", "colour"), ("mermaid teal", "colour"), ("misty lavender", "colour"),
+                    ("ethereal", "colour_quality"), ("dreamlike", "colour_quality")
                 ]
                 
                 static let pluto = [
-                    ("abyssal black", "color"), ("plutonium purple", "color"),
-                    ("transformative", "color_quality"), ("intense", "color_quality")
+                    ("abyssal black", "colour"), ("plutonium purple", "colour"),
+                    ("transformative", "colour_quality"), ("intense", "colour_quality")
                 ]
                 
                 static let jupiter = [
-                    ("royal purple", "color"), ("abundant indigo", "color"),
-                    ("expansive", "color_quality"), ("abundant", "color_quality")
+                    ("royal purple", "colour"), ("abundant indigo", "colour"),
+                    ("expansive", "colour_quality"), ("abundant", "colour_quality")
                 ]
                 
                 static let saturn = [
-                    ("structured charcoal", "color"), ("leaden grey", "color"),
-                    ("disciplined", "color_quality"), ("enduring", "color_quality")
+                    ("structured charcoal", "colour"), ("leaden grey", "colour"),
+                    ("disciplined", "colour_quality"), ("enduring", "colour_quality")
                 ]
                 
                 static let uranus = [
-                    ("electric blue", "color"), ("neon turquoise", "color"),
-                    ("unexpected", "color_quality"), ("innovative", "color_quality")
+                    ("electric blue", "colour"), ("neon turquoise", "colour"),
+                    ("unexpected", "colour_quality"), ("innovative", "colour_quality")
                 ]
             }
             
             // MARK: - Elemental Fallbacks
             struct ElementalFallbacks {
                 static let fire = [
-                    ("fiery", "mood"), ("warm bronze", "color"), ("vibrant", "color_quality")
+                    ("fiery", "mood"), ("warm bronze", "colour"), ("vibrant", "colour_quality")
                 ]
                 
                 static let earth = [
-                    ("earthy", "mood"), ("rich brown", "color"), ("grounded", "color_quality")
+                    ("earthy", "mood"), ("rich brown", "colour"), ("grounded", "colour_quality")
                 ]
                 
                 static let air = [
-                    ("airy", "mood"), ("clear azure", "color"), ("light", "color_quality")
+                    ("airy", "mood"), ("clear azure", "colour"), ("light", "colour_quality")
                 ]
                 
                 static let water = [
-                    ("watery", "mood"), ("oceanic teal", "color"), ("fluid", "color_quality")
+                    ("watery", "mood"), ("oceanic teal", "colour"), ("fluid", "colour_quality")
                 ]
             }
             
             // MARK: - Retrograde Modifications
             struct Retrograde {
                 static let general = [
-                    ("muted", "color_quality"), ("contemplative", "color_quality"), ("vintage", "color_quality")
+                    ("muted", "colour_quality"), ("contemplative", "colour_quality"), ("vintage", "colour_quality")
                 ]
                 
-                static let venus = [("faded rose", "color")]
-                static let mars = [("smoldering brick", "color")]
-                static let mercury = [("misty grey", "color")]
+                static let venus = [("faded rose", "colour")]
+                static let mars = [("smoldering brick", "colour")]
+                static let mercury = [("misty grey", "colour")]
             }
         }
         
@@ -610,40 +610,40 @@ struct InterpretationTextLibrary {
         struct Ascendant {
             static let descriptions = [
                 "Aries": [
-                    ("bold", "expression"), ("direct", "structure"), ("vibrant crimson", "color"), ("dynamic", "color_quality")
+                    ("bold", "expression"), ("direct", "structure"), ("vibrant crimson", "colour"), ("dynamic", "colour_quality")
                 ],
                 "Taurus": [
-                    ("stable", "structure"), ("sensual", "texture"), ("rich moss green", "color"), ("substantial", "color_quality")
+                    ("stable", "structure"), ("sensual", "texture"), ("rich moss green", "colour"), ("substantial", "colour_quality")
                 ],
                 "Gemini": [
-                    ("versatile", "structure"), ("communicative", "expression"), ("bright lemon yellow", "color"), ("versatile", "color_quality")
+                    ("versatile", "structure"), ("communicative", "expression"), ("bright lemon yellow", "colour"), ("versatile", "colour_quality")
                 ],
                 "Cancer": [
-                    ("protective", "structure"), ("nurturing", "expression"), ("luminous silver", "color"), ("reflective", "color_quality")
+                    ("protective", "structure"), ("nurturing", "expression"), ("luminous silver", "colour"), ("reflective", "colour_quality")
                 ],
                 "Leo": [
-                    ("expressive", "structure"), ("radiant", "expression"), ("regal gold", "color"), ("commanding", "color_quality")
+                    ("expressive", "structure"), ("radiant", "expression"), ("regal gold", "colour"), ("commanding", "colour_quality")
                 ],
                 "Virgo": [
-                    ("precise", "structure"), ("refined", "texture"), ("warm taupe", "color"), ("refined", "color_quality")
+                    ("precise", "structure"), ("refined", "texture"), ("warm taupe", "colour"), ("refined", "colour_quality")
                 ],
                 "Libra": [
-                    ("balanced", "structure"), ("harmonious", "expression"), ("delicate blush pink", "color"), ("elegant", "color_quality")
+                    ("balanced", "structure"), ("harmonious", "expression"), ("delicate blush pink", "colour"), ("elegant", "colour_quality")
                 ],
                 "Scorpio": [
-                    ("intense", "expression"), ("transformative", "structure"), ("deep oxblood", "color"), ("magnetic", "color_quality")
+                    ("intense", "expression"), ("transformative", "structure"), ("deep oxblood", "colour"), ("magnetic", "colour_quality")
                 ],
                 "Sagittarius": [
-                    ("expansive", "structure"), ("adventurous", "expression"), ("rich indigo", "color"), ("expansive", "color_quality")
+                    ("expansive", "structure"), ("adventurous", "expression"), ("rich indigo", "colour"), ("expansive", "colour_quality")
                 ],
                 "Capricorn": [
-                    ("structured", "structure"), ("disciplined", "expression"), ("polished graphite", "color"), ("authoritative", "color_quality")
+                    ("structured", "structure"), ("disciplined", "expression"), ("polished graphite", "colour"), ("authoritative", "colour_quality")
                 ],
                 "Aquarius": [
-                    ("innovative", "structure"), ("unique", "expression"), ("electric cerulean", "color"), ("futuristic", "color_quality")
+                    ("innovative", "structure"), ("unique", "expression"), ("electric cerulean", "colour"), ("futuristic", "colour_quality")
                 ],
                 "Pisces": [
-                    ("fluid", "structure"), ("intuitive", "expression"), ("iridescent aqua", "color"), ("dreamy", "color_quality")
+                    ("fluid", "structure"), ("intuitive", "expression"), ("iridescent aqua", "colour"), ("dreamy", "colour_quality")
                 ]
             ]
         }
@@ -652,40 +652,40 @@ struct InterpretationTextLibrary {
         struct Houses {
             static let descriptions = [
                 1: [
-                    ("visible", "expression"), ("defining", "structure"), ("vibrant", "color_quality")
+                    ("visible", "expression"), ("defining", "structure"), ("vibrant", "colour_quality")
                 ],
                 2: [
-                    ("tactile", "texture"), ("substantial", "structure"), ("rich", "color_quality")
+                    ("tactile", "texture"), ("substantial", "structure"), ("rich", "colour_quality")
                 ],
                 3: [
-                    ("communicative", "expression"), ("adaptable", "structure"), ("varied", "color_quality")
+                    ("communicative", "expression"), ("adaptable", "structure"), ("varied", "colour_quality")
                 ],
                 4: [
-                    ("comforting", "texture"), ("grounded", "structure"), ("soft", "color_quality")
+                    ("comforting", "texture"), ("grounded", "structure"), ("soft", "colour_quality")
                 ],
                 5: [
-                    ("playful", "expression"), ("expressive", "structure"), ("vibrant", "color_quality")
+                    ("playful", "expression"), ("expressive", "structure"), ("vibrant", "colour_quality")
                 ],
                 6: [
-                    ("practical", "structure"), ("functional", "texture"), ("precise", "color_quality")
+                    ("practical", "structure"), ("functional", "texture"), ("precise", "colour_quality")
                 ],
                 7: [
-                    ("balanced", "structure"), ("harmonious", "expression"), ("harmonious", "color_quality")
+                    ("balanced", "structure"), ("harmonious", "expression"), ("harmonious", "colour_quality")
                 ],
                 8: [
-                    ("intense", "expression"), ("transformative", "structure"), ("deep", "color_quality")
+                    ("intense", "expression"), ("transformative", "structure"), ("deep", "colour_quality")
                 ],
                 9: [
-                    ("expansive", "structure"), ("cultural", "expression"), ("rich", "color_quality")
+                    ("expansive", "structure"), ("cultural", "expression"), ("rich", "colour_quality")
                 ],
                 10: [
-                    ("authoritative", "structure"), ("polished", "texture"), ("structured", "color_quality")
+                    ("authoritative", "structure"), ("polished", "texture"), ("structured", "colour_quality")
                 ],
                 11: [
-                    ("unconventional", "structure"), ("innovative", "expression"), ("unique", "color_quality")
+                    ("unconventional", "structure"), ("innovative", "expression"), ("unique", "colour_quality")
                 ],
                 12: [
-                    ("mystical", "expression"), ("fluid", "structure"), ("dreamy", "color_quality")
+                    ("mystical", "expression"), ("fluid", "structure"), ("dreamy", "colour_quality")
                 ]
             ]
         }
@@ -694,265 +694,265 @@ struct InterpretationTextLibrary {
         struct ElementalBalance {
             static let descriptions = [
                 "fire": [
-                    ("blazing vermilion", "color"), ("warm amber", "color"), ("burnished copper", "color"),
-                    ("vibrant", "color_quality"), ("energetic", "color_quality")
+                    ("blazing vermilion", "colour"), ("warm amber", "colour"), ("burnished copper", "colour"),
+                    ("vibrant", "colour_quality"), ("energetic", "colour_quality")
                 ],
                 "earth": [
-                    ("rich olive", "color"), ("warm terracotta", "color"), ("deep moss", "color"),
-                    ("grounded", "color_quality"), ("tactile", "color_quality")
+                    ("rich olive", "colour"), ("warm terracotta", "colour"), ("deep moss", "colour"),
+                    ("grounded", "colour_quality"), ("tactile", "colour_quality")
                 ],
                 "air": [
-                    ("clear azure", "color"), ("luminous silver", "color"), ("pale citrine", "color"),
-                    ("light", "color_quality"), ("bright", "color_quality")
+                    ("clear azure", "colour"), ("luminous silver", "colour"), ("pale citrine", "colour"),
+                    ("light", "colour_quality"), ("bright", "colour_quality")
                 ],
                 "water": [
-                    ("deep sapphire", "color"), ("oceanic teal", "color"), ("misty aquamarine", "color"),
-                    ("fluid", "color_quality"), ("reflective", "color_quality")
+                    ("deep sapphire", "colour"), ("oceanic teal", "colour"), ("misty aquamarine", "colour"),
+                    ("fluid", "colour_quality"), ("reflective", "colour_quality")
                 ]
             ]
             
             static let lack = [
-                "fire": [("reserved", "mood"), ("muted", "color_quality")],
-                "earth": [("ethereal", "texture"), ("light", "color_quality")],
-                "air": [("instinctive", "approach"), ("rich", "color_quality")],
-                "water": [("structured", "approach"), ("defined", "color_quality")]
+                "fire": [("reserved", "mood"), ("muted", "colour_quality")],
+                "earth": [("ethereal", "texture"), ("light", "colour_quality")],
+                "air": [("instinctive", "approach"), ("rich", "colour_quality")],
+                "water": [("structured", "approach"), ("defined", "colour_quality")]
             ]
             
             static let balanced = [
-                ("balanced", "element"), ("harmonious", "color_quality")
+                ("balanced", "element"), ("harmonious", "colour_quality")
             ]
         }
         
-        // MARK: - Aspect Color Descriptions
-        struct AspectColors {
+        // MARK: - Aspect Colour Descriptions
+        struct AspectColours {
             static let conjunction = [
-                "VenusMoon": [("iridescent pearl", "color"), ("luminous", "color_quality")],
-                "VenusSun": [("radiant gold", "color"), ("warm champagne", "color")],
-                "MoonNeptune": [("moonlit aqua", "color"), ("dream blue", "color")],
-                "VenusNeptune": [("opalescent lavender", "color"), ("ethereal", "color_quality")],
-                "MarsVenus": [("passionate crimson", "color"), ("dynamic", "color_quality")]
+                "VenusMoon": [("iridescent pearl", "colour"), ("luminous", "colour_quality")],
+                "VenusSun": [("radiant gold", "colour"), ("warm champagne", "colour")],
+                "MoonNeptune": [("moonlit aqua", "colour"), ("dream blue", "colour")],
+                "VenusNeptune": [("opalescent lavender", "colour"), ("ethereal", "colour_quality")],
+                "MarsVenus": [("passionate crimson", "colour"), ("dynamic", "colour_quality")]
             ]
             
             static let trine = [
-                "VenusNeptune": [("oceanic teal", "color"), ("flowing", "color_quality")],
-                "MoonVenus": [("luminous mother of pearl", "color"), ("harmonious", "color_quality")],
-                "SunVenus": [("warm amber", "color"), ("honeyed", "color_quality")]
+                "VenusNeptune": [("oceanic teal", "colour"), ("flowing", "colour_quality")],
+                "MoonVenus": [("luminous mother of pearl", "colour"), ("harmonious", "colour_quality")],
+                "SunVenus": [("warm amber", "colour"), ("honeyed", "colour_quality")]
             ]
             
             static let square = [
-                "VenusMars": [("dynamic burgundy", "color"), ("contrasting", "color_quality")],
-                "MoonVenus": [("complex slate blue", "color"), ("dualistic", "color_quality")]
+                "VenusMars": [("dynamic burgundy", "colour"), ("contrasting", "colour_quality")],
+                "MoonVenus": [("complex slate blue", "colour"), ("dualistic", "colour_quality")]
             ]
             
             static let opposition = [
-                "VenusNeptune": [("mysterious indigo", "color"), ("counterbalanced", "color_quality")],
-                "SunMoon": [("balanced silver-gold", "color"), ("complementary", "color_quality")]
+                "VenusNeptune": [("mysterious indigo", "colour"), ("counterbalanced", "colour_quality")],
+                "SunMoon": [("balanced silver-gold", "colour"), ("complementary", "colour_quality")]
             ]
             
             static let minor = [
-                ("subtle", "color_quality")
+                ("subtle", "colour_quality")
             ]
         }
         
-        // MARK: - Color Nuance
-        struct ColorNuance {
+        // MARK: - Colour Nuance
+        struct ColourNuance {
             static let conjunction = [
                 "Sun": [
-                    ("luminous gold", "color"),
-                    ("warm", "color_quality"),
-                    ("harmonious", "color_quality")
+                    ("luminous gold", "colour"),
+                    ("warm", "colour_quality"),
+                    ("harmonious", "colour_quality")
                 ],
                 "Moon": [
-                    ("pearl luminescence", "color"),
-                    ("luminous", "color_quality")
+                    ("pearl luminescence", "colour"),
+                    ("luminous", "colour_quality")
                 ],
                 "Mars": [
-                    ("passionate rose-red", "color"),
-                    ("vibrant", "color_quality")
+                    ("passionate rose-red", "colour"),
+                    ("vibrant", "colour_quality")
                 ],
                 "Neptune": [
-                    ("ethereal aquamarine", "color"),
-                    ("dreamy", "color_quality")
+                    ("ethereal aquamarine", "colour"),
+                    ("dreamy", "colour_quality")
                 ]
             ]
             
             static let trine = [
                 "Neptune": [
-                    ("oceanic teal", "color"),
-                    ("flowing", "color_quality")
+                    ("oceanic teal", "colour"),
+                    ("flowing", "colour_quality")
                 ],
                 "Moon": [
-                    ("moonlit rose", "color"),
-                    ("nurturing", "color_quality")
+                    ("moonlit rose", "colour"),
+                    ("nurturing", "colour_quality")
                 ],
                 "Sun": [
-                    ("warm amber", "color"),
-                    ("honeyed", "color_quality")
+                    ("warm amber", "colour"),
+                    ("honeyed", "colour_quality")
                 ]
             ]
             
             static let square = [
                 "Mars": [
-                    ("dynamic burgundy", "color"),
-                    ("contrasting", "color_quality")
+                    ("dynamic burgundy", "colour"),
+                    ("contrasting", "colour_quality")
                 ],
                 "Moon": [
-                    ("complex slate blue", "color"),
-                    ("dualistic", "color_quality")
+                    ("complex slate blue", "colour"),
+                    ("dualistic", "colour_quality")
                 ]
             ]
             
             static let opposition = [
                 "Neptune": [
-                    ("mysterious indigo", "color"),
-                    ("counterbalanced", "color_quality")
+                    ("mysterious indigo", "colour"),
+                    ("counterbalanced", "colour_quality")
                 ],
                 "Sun": [
-                    ("balanced silver-gold", "color"),
-                    ("complementary", "color_quality")
+                    ("balanced silver-gold", "colour"),
+                    ("complementary", "colour_quality")
                 ]
             ]
             
             static let sextile = [
                 "Moon": [
                     ("supportive", "mood"),
-                    ("gentle", "color_quality")
+                    ("gentle", "colour_quality")
                 ],
                 "Mars": [
                     ("active", "mood"),
-                    ("dynamic", "color_quality")
+                    ("dynamic", "colour_quality")
                 ]
             ]
             
             static let minor = [
-                ("subtle", "color_quality"),
-                ("nuanced", "color_quality")
+                ("subtle", "colour_quality"),
+                ("nuanced", "colour_quality")
             ]
         }
         
-        // MARK: - Dignity Colors
-        struct DignityColors {
+        // MARK: - Dignity Colours
+        struct DignityColours {
             static let domicile = [
                 "Sun": [
-                    ("pure gold", "color"),
-                    ("radiant", "color_quality")
+                    ("pure gold", "colour"),
+                    ("radiant", "colour_quality")
                 ],
                 "Moon": [
-                    ("pure silver", "color"),
-                    ("luminous", "color_quality")
+                    ("pure silver", "colour"),
+                    ("luminous", "colour_quality")
                 ],
                 "Mercury": [
-                    ("quicksilver", "color"),
-                    ("brilliant", "color_quality")
+                    ("quicksilver", "colour"),
+                    ("brilliant", "colour_quality")
                 ],
                 "Venus": [
-                    ("purest rose", "color"),
-                    ("exquisite", "color_quality")
+                    ("purest rose", "colour"),
+                    ("exquisite", "colour_quality")
                 ],
                 "Mars": [
-                    ("perfect crimson", "color"),
-                    ("intense", "color_quality")
+                    ("perfect crimson", "colour"),
+                    ("intense", "colour_quality")
                 ],
                 "Jupiter": [
-                    ("regal purple", "color"),
-                    ("expansive", "color_quality")
+                    ("regal purple", "colour"),
+                    ("expansive", "colour_quality")
                 ],
                 "Saturn": [
-                    ("perfect obsidian", "color"),
-                    ("enduring", "color_quality")
+                    ("perfect obsidian", "colour"),
+                    ("enduring", "colour_quality")
                 ]
             ]
             
             static let exaltation = [
                 "Sun": [
-                    ("exalted amber", "color"),
-                    ("noble", "color_quality")
+                    ("exalted amber", "colour"),
+                    ("noble", "colour_quality")
                 ],
                 "Moon": [
-                    ("exalted pearl", "color"),
-                    ("sublime", "color_quality")
+                    ("exalted pearl", "colour"),
+                    ("sublime", "colour_quality")
                 ],
                 "Mercury": [
-                    ("elevated citrine", "color"),
-                    ("refined", "color_quality")
+                    ("elevated citrine", "colour"),
+                    ("refined", "colour_quality")
                 ],
                 "Venus": [
-                    ("exalted jade", "color"),
-                    ("harmonious", "color_quality")
+                    ("exalted jade", "colour"),
+                    ("harmonious", "colour_quality")
                 ],
                 "Mars": [
-                    ("elevated garnet", "color"),
-                    ("powerful", "color_quality")
+                    ("elevated garnet", "colour"),
+                    ("powerful", "colour_quality")
                 ],
                 "Jupiter": [
-                    ("exalted sapphire", "color"),
-                    ("abundant", "color_quality")
+                    ("exalted sapphire", "colour"),
+                    ("abundant", "colour_quality")
                 ],
                 "Saturn": [
-                    ("elevated graphite", "color"),
-                    ("disciplined", "color_quality")
+                    ("elevated graphite", "colour"),
+                    ("disciplined", "colour_quality")
                 ]
             ]
             
             static let fall = [
                 "Sun": [
-                    ("muted amber", "color"),
-                    ("subdued", "color_quality")
+                    ("muted amber", "colour"),
+                    ("subdued", "colour_quality")
                 ],
                 "Moon": [
-                    ("clouded silver", "color"),
-                    ("diffused", "color_quality")
+                    ("clouded silver", "colour"),
+                    ("diffused", "colour_quality")
                 ],
                 "Mercury": [
-                    ("misty grey", "color"),
-                    ("complex", "color_quality")
+                    ("misty grey", "colour"),
+                    ("complex", "colour_quality")
                 ],
                 "Venus": [
-                    ("muted rose", "color"),
-                    ("subtle", "color_quality")
+                    ("muted rose", "colour"),
+                    ("subtle", "colour_quality")
                 ],
                 "Mars": [
-                    ("subdued terracotta", "color"),
-                    ("tempered", "color_quality")
+                    ("subdued terracotta", "colour"),
+                    ("tempered", "colour_quality")
                 ],
                 "Jupiter": [
-                    ("muted indigo", "color"),
-                    ("restrained", "color_quality")
+                    ("muted indigo", "colour"),
+                    ("restrained", "colour_quality")
                 ],
                 "Saturn": [
-                    ("subtle charcoal", "color"),
-                    ("introspective", "color_quality")
+                    ("subtle charcoal", "colour"),
+                    ("introspective", "colour_quality")
                 ]
             ]
             
             static let detriment = [
                 "Sun": [
-                    ("complex ochre", "color"),
-                    ("nuanced", "color_quality")
+                    ("complex ochre", "colour"),
+                    ("nuanced", "colour_quality")
                 ],
                 "Moon": [
-                    ("shadowed pearl", "color"),
-                    ("reflective", "color_quality")
+                    ("shadowed pearl", "colour"),
+                    ("reflective", "colour_quality")
                 ],
                 "Mercury": [
-                    ("complex pewter", "color"),
-                    ("contemplative", "color_quality")
+                    ("complex pewter", "colour"),
+                    ("contemplative", "colour_quality")
                 ],
                 "Venus": [
-                    ("complex mauve", "color"),
-                    ("interesting", "color_quality")
+                    ("complex mauve", "colour"),
+                    ("interesting", "colour_quality")
                 ],
                 "Mars": [
-                    ("complex rust", "color"),
-                    ("challenging", "color_quality")
+                    ("complex rust", "colour"),
+                    ("challenging", "colour_quality")
                 ],
                 "Jupiter": [
-                    ("complex slate", "color"),
-                    ("transformative", "color_quality")
+                    ("complex slate", "colour"),
+                    ("transformative", "colour_quality")
                 ],
                 "Saturn": [
-                    ("complex rust", "color"),
-                    ("evolving", "color_quality")
+                    ("complex rust", "colour"),
+                    ("evolving", "colour_quality")
                 ]
             ]
         }
@@ -963,17 +963,17 @@ struct InterpretationTextLibrary {
                 "Moon": [
                     ("intensified", "mood"),
                     ("emotional", "texture"),
-                    ("luminous", "color_quality")
+                    ("luminous", "colour_quality")
                 ],
                 "Venus": [
                     ("intensified", "mood"),
-                    ("harmonious", "color"),
-                    ("balanced", "color_quality")
+                    ("harmonious", "colour"),
+                    ("balanced", "colour_quality")
                 ],
                 "Mars": [
                     ("intensified", "mood"),
                     ("energetic", "structure"),
-                    ("vibrant", "color_quality")
+                    ("vibrant", "colour_quality")
                 ]
             ]
             
@@ -981,17 +981,17 @@ struct InterpretationTextLibrary {
                 "Moon": [
                     ("contrasting", "structure"),
                     ("reflective", "mood"),
-                    ("contrasting", "color_quality")
+                    ("contrasting", "colour_quality")
                 ],
                 "Venus": [
                     ("contrasting", "structure"),
-                    ("balanced", "color"),
-                    ("harmonizing", "color_quality")
+                    ("balanced", "colour"),
+                    ("harmonizing", "colour_quality")
                 ],
                 "Mars": [
                     ("contrasting", "structure"),
                     ("dynamic", "texture"),
-                    ("bold", "color_quality")
+                    ("bold", "colour_quality")
                 ]
             ]
             
@@ -999,17 +999,17 @@ struct InterpretationTextLibrary {
                 "Moon": [
                     ("flowing", "structure"),
                     ("intuitive", "mood"),
-                    ("flowing", "color_quality")
+                    ("flowing", "colour_quality")
                 ],
                 "Venus": [
                     ("flowing", "structure"),
                     ("attractive", "texture"),
-                    ("harmonious", "color_quality")
+                    ("harmonious", "colour_quality")
                 ],
                 "Mars": [
                     ("flowing", "structure"),
                     ("confident", "mood"),
-                    ("energetic", "color_quality")
+                    ("energetic", "colour_quality")
                 ]
             ]
             
@@ -1017,17 +1017,17 @@ struct InterpretationTextLibrary {
                 "Moon": [
                     ("structured", "structure"),
                     ("challenging", "texture"),
-                    ("dynamic", "color_quality")
+                    ("dynamic", "colour_quality")
                 ],
                 "Venus": [
                     ("structured", "structure"),
-                    ("creative", "color"),
-                    ("expressive", "color_quality")
+                    ("creative", "colour"),
+                    ("expressive", "colour_quality")
                 ],
                 "Mars": [
                     ("structured", "structure"),
                     ("bold", "structure"),
-                    ("intense", "color_quality")
+                    ("intense", "colour_quality")
                 ]
             ]
             
@@ -1035,28 +1035,28 @@ struct InterpretationTextLibrary {
                 "Moon": [
                     ("harmonious", "structure"),
                     ("supportive", "mood"),
-                    ("gentle", "color_quality")
+                    ("gentle", "colour_quality")
                 ],
                 "Venus": [
                     ("harmonious", "structure"),
                     ("pleasant", "texture"),
-                    ("balanced", "color_quality")
+                    ("balanced", "colour_quality")
                 ],
                 "Mars": [
                     ("harmonious", "structure"),
                     ("active", "mood"),
-                    ("dynamic", "color_quality")
+                    ("dynamic", "colour_quality")
                 ]
             ]
             
             static let minor = [
                 ("subtle", "texture"),
-                ("nuanced", "color_quality")
+                ("nuanced", "colour_quality")
             ]
             
             static let general = [
                 ("shifting", "mood"),
-                ("evolving", "color_quality")
+                ("evolving", "colour_quality")
             ]
         }
         
@@ -1218,9 +1218,9 @@ struct InterpretationTextLibrary {
             ]
         }
         
-        // MARK: - Colors Text
-        struct Colors {
-            static let colorCollections = [
+        // MARK: - Colours Text
+        struct Colours {
+            static let colourCollections = [
                 "earthy": ["olive", "terracotta", "moss", "ochre", "walnut", "sand", "umber"],
                 "watery": ["navy ink", "teal", "indigo", "slate blue", "stormy gray", "deep aqua"],
                 "airy": ["pale blue", "silver gray", "cloud white", "light lavender", "sky"],
@@ -1232,7 +1232,7 @@ struct InterpretationTextLibrary {
                 "default": ["navy", "charcoal", "ivory", "taupe", "black", "gray"]
             ]
             
-            static let dailyColors = [
+            static let dailyColours = [
                 "washed indigo", "burnt sienna", "faded moss", "rich mahogany",
                 "pale chamomile", "misty lavender", "storm grey", "warm terracotta",
                 "dusty sage", "deep bordeaux", "weathered denim", "soft ochre",
@@ -1269,10 +1269,10 @@ struct InterpretationTextLibrary {
                     "Uneven dye effects (stonewash, acid, mineral)%@. Let these patterns connect with subtlety."
                 ],
                 "expressiveEclectic": [
-                    "Bold geometrics, unexpected color combinations%@. Statement prints that tell a story or reference art—each with a clear point of view.",
-                    "Today favors bold geometrics, unexpected color combinations%@. Statement prints that tell a story or reference art.",
-                    "Consider bold geometrics, unexpected color combinations%@. These create impact without overwhelming.",
-                    "Bold geometrics, unexpected color combinations%@. Let these patterns speak with intention."
+                    "Bold geometrics, unexpected colour combinations%@. Statement prints that tell a story or reference art—each with a clear point of view.",
+                    "Today favors bold geometrics, unexpected colour combinations%@. Statement prints that tell a story or reference art.",
+                    "Consider bold geometrics, unexpected colour combinations%@. These create impact without overwhelming.",
+                    "Bold geometrics, unexpected colour combinations%@. Let these patterns speak with intention."
                 ],
                 "structuredMinimal": [
                     "Architectural lines, subtle grids%@. Patterns with mathematical order—rather than organic flow.",
@@ -1281,10 +1281,10 @@ struct InterpretationTextLibrary {
                     "Architectural lines, subtle grids%@. Let these patterns bring order with elegance."
                 ],
                 "fluidExpressive": [
-                    "Watercolor effects, organic forms%@. Patterns that move and flow—with a sense of natural rhythm.",
-                    "Today favors watercolor effects, organic forms%@. Patterns that move and flow.",
-                    "Consider watercolor effects, organic forms%@. These create movement without constraint.",
-                    "Watercolor effects, organic forms%@. Let these patterns flow with your movements."
+                    "Watercolour effects, organic forms%@. Patterns that move and flow—with a sense of natural rhythm.",
+                    "Today favors watercolour effects, organic forms%@. Patterns that move and flow.",
+                    "Consider watercolour effects, organic forms%@. These create movement without constraint.",
+                    "Watercolour effects, organic forms%@. Let these patterns flow with your movements."
                 ],
                 "subtle": [
                     "Barely-there textures, monochromatic tone-on-tone%@. Patterns that reveal themselves—only upon closer inspection.",
@@ -1484,18 +1484,18 @@ struct InterpretationTextLibrary {
         // MARK: - Daily Signature Text
         struct DailySignature {
             static let dayOfWeekTokens = [
-                1: [("illuminated", "texture"), ("radiant", "color_quality"), ("amber gold", "color")], // Sunday
-                2: [("reflective", "mood"), ("intuitive", "structure"), ("pearl silver", "color")], // Monday
-                3: [("energetic", "mood"), ("dynamic", "structure"), ("ruby red", "color")], // Tuesday
-                4: [("communicative", "mood"), ("versatile", "structure"), ("quicksilver", "color")], // Wednesday
-                5: [("expansive", "mood"), ("abundant", "structure"), ("royal blue", "color")], // Thursday
-                6: [("harmonious", "mood"), ("balanced", "structure"), ("emerald", "color")], // Friday
-                7: [("structured", "mood"), ("enduring", "structure"), ("obsidian", "color")] // Saturday
+                1: [("illuminated", "texture"), ("radiant", "colour_quality"), ("amber gold", "colour")], // Sunday
+                2: [("reflective", "mood"), ("intuitive", "structure"), ("pearl silver", "colour")], // Monday
+                3: [("energetic", "mood"), ("dynamic", "structure"), ("ruby red", "colour")], // Tuesday
+                4: [("communicative", "mood"), ("versatile", "structure"), ("quicksilver", "colour")], // Wednesday
+                5: [("expansive", "mood"), ("abundant", "structure"), ("royal blue", "colour")], // Thursday
+                6: [("harmonious", "mood"), ("balanced", "structure"), ("emerald", "colour")], // Friday
+                7: [("structured", "mood"), ("enduring", "structure"), ("obsidian", "colour")] // Saturday
             ]
             
             static let seasonalTokens = [
                 "spring": [("emerging", "structure"), ("fresh", "texture")],
-                "summer": [("expansive", "structure"), ("vibrant", "color_quality")],
+                "summer": [("expansive", "structure"), ("vibrant", "colour_quality")],
                 "autumn": [("layered", "structure"), ("transitional", "texture")],
                 "winter": [("protective", "structure"), ("insulating", "texture")]
             ]
@@ -1533,7 +1533,7 @@ struct InterpretationTextLibrary {
                 "woven jacquard", "structured canvas", "draped georgette"
             ]
             
-            static let dailyColorOptions = [
+            static let dailyColourOptions = [
                 "washed indigo", "burnt sienna", "faded moss", "rich mahogany",
                 "pale chamomile", "misty lavender", "storm grey", "warm terracotta",
                 "dusty sage", "deep bordeaux", "weathered denim", "soft ochre",
@@ -1558,7 +1558,7 @@ struct InterpretationTextLibrary {
         let allDescriptions = Shape.shapeDescriptions
             .merging(Textiles.textileDescriptions) { _, new in new }
             .merging(Patterns.patternDescriptions) { _, new in new }
-            .merging(Colors.colorDescriptions) { _, new in new }
+            .merging(Colours.colourDescriptions) { _, new in new }
             .merging(Accessories.accessoryDescriptions) { _, new in new }
             .merging(Layering.layeringDescriptions) { _, new in new }
         
@@ -1673,31 +1673,31 @@ struct InterpretationTextLibrary {
     
     // MARK: - Colours Copy (Visibility axis)
     
-    struct Colors {
-        static let colorDescriptions: [String: [String]] = [
+    struct Colours {
+        static let colourDescriptions: [String: [String]] = [
             // Bold variant - high visibility
-            "colors_core_bold": [
+            "colours_core_bold": [
                 "Today's palette demands presence—rich tones that project confidence.",
                 "Colours that announce rather than suggest, bold choices that match your visibility.",
                 "Your colour story today is about being seen, not blending in.",
             ],
             
             // Subtle variant - low visibility
-            "colors_core_subtle": [
+            "colours_core_subtle": [
                 "A palette of quiet restraint—tones that honour privacy and introspection.",
                 "Colours that create sanctuary rather than spectacle.",
                 "Today's hues speak in muted tones, offering elegance through understatement.",
             ],
             
             // Balanced variant - moderate visibility
-            "colors_core_balanced": [
+            "colours_core_balanced": [
                 "Today's palette leans balanced with tones that reflect your inner rhythm.",
                 "Colours that neither shout nor hide—a harmonious middle ground.",
                 "Your colour choices today bridge boldness and subtlety naturally.",
             ],
             
             // Default fallback
-            "colors_core": [
+            "colours_core": [
                 "Let today's palette reflect your inner landscape with tones that resonate.",
             ]
         ]
@@ -1792,11 +1792,11 @@ struct InterpretationTextLibrary {
         // MARK: - Blueprint Tokens
         struct BlueprintTokens {
             static let newMoon = [
-                ("seeded", "mood"), ("potential", "structure"), ("minimal", "color")
+                ("seeded", "mood"), ("potential", "structure"), ("minimal", "colour")
             ]
             
             static let fullMoon = [
-                ("illuminated", "mood"), ("expressive", "structure"), ("vibrant", "color")
+                ("illuminated", "mood"), ("expressive", "structure"), ("vibrant", "colour")
             ]
             
             static let quarters = [
@@ -1815,7 +1815,7 @@ struct InterpretationTextLibrary {
         // MARK: - Daily Vibe Tokens
         struct DailyVibeTokens {
             static let newMoon = [
-                ("inward", "mood"), ("seeded", "structure"), ("minimal", "color"), ("quiet", "texture")
+                ("inward", "mood"), ("seeded", "structure"), ("minimal", "colour"), ("quiet", "texture")
             ]
             
             static let waxingCrescent = [
@@ -1823,7 +1823,7 @@ struct InterpretationTextLibrary {
             ]
             
             static let firstQuarter = [
-                ("decisive", "mood"), ("structured", "structure"), ("dynamic", "color")
+                ("decisive", "mood"), ("structured", "structure"), ("dynamic", "colour")
             ]
             
             static let waxingGibbous = [
@@ -1831,11 +1831,11 @@ struct InterpretationTextLibrary {
             ]
             
             static let fullMoon = [
-                ("illuminated", "mood"), ("expressive", "structure"), ("vibrant", "color"), ("visible", "texture")
+                ("illuminated", "mood"), ("expressive", "structure"), ("vibrant", "colour"), ("visible", "texture")
             ]
             
             static let waningGibbous = [
-                ("substantial", "structure"), ("sharing", "mood"), ("rich", "color")
+                ("substantial", "structure"), ("sharing", "mood"), ("rich", "colour")
             ]
             
             static let lastQuarter = [
@@ -1843,12 +1843,12 @@ struct InterpretationTextLibrary {
             ]
             
             static let waningCrescent = [
-                ("reflective", "mood"), ("subtle", "color"), ("dissolving", "structure")
+                ("reflective", "mood"), ("subtle", "colour"), ("dissolving", "structure")
             ]
         }
         
-        // MARK: - Color Palettes
-        struct ColorPalettes {
+        // MARK: - Colour Palettes
+        struct ColourPalettes {
             static let palettes = [
                 "newMoon": ["black", "charcoal", "deep navy", "indigo", "dark plum"],
                 "waxingCrescent": ["silver", "pearl", "pale blue", "light gray", "ivory"],

@@ -71,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tabBarController = CosmicFitTabBarController()
         
         // CRITICAL: Set background to match launch screen
-        tabBarController.view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        tabBarController.view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         
         // Configure with stored user data
         let chartData = NatalChartManager.shared.calculateNatalChart(
@@ -110,7 +110,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationController.navigationBar.isHidden = true
         
         // CRITICAL: Set navigation controller background to match launch screen
-        navigationController.view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        navigationController.view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         
         // CRITICAL: Force view to load immediately to prevent delay
         _ = animatedWelcomeVC.view
@@ -126,7 +126,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationController.navigationBar.isHidden = true
         
         // CRITICAL: Set navigation controller background to match launch screen
-        navigationController.view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        navigationController.view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         
         // CRITICAL: Force view to load immediately to prevent delay
         _ = onboardingFormVC.view
@@ -159,17 +159,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if #available(iOS 13.0, *) {
             // CRITICAL: Set window background to black to match launch screen
             if let window = window {
-                window.backgroundColor = CosmicFitTheme.Colors.cosmicBlue  // BLACK instead of cosmicGrey
+                window.backgroundColor = CosmicFitTheme.Colours.cosmicBlue  // BLACK instead of cosmicGrey
             }
         }
         
         // Not sure what these do
         // Configure global UI appearance
-        //UINavigationBar.appearance().backgroundColor = CosmicFitTheme.Colors.cosmicGrey
-        //UINavigationBar.appearance().tintColor = CosmicFitTheme.Colors.cosmicLilac
-        UITabBar.appearance().backgroundColor = CosmicFitTheme.Colors.cosmicGrey
-        UITabBar.appearance().tintColor = CosmicFitTheme.Colors.cosmicLilac
-        UITabBar.appearance().unselectedItemTintColor = CosmicFitTheme.Colors.cosmicBlue
+        //UINavigationBar.appearance().backgroundColor = CosmicFitTheme.Colours.cosmicGrey
+        //UINavigationBar.appearance().tintColor = CosmicFitTheme.Colours.cosmicLilac
+        UITabBar.appearance().backgroundColor = CosmicFitTheme.Colours.cosmicGrey
+        UITabBar.appearance().tintColor = CosmicFitTheme.Colours.cosmicLilac
+        UITabBar.appearance().unselectedItemTintColor = CosmicFitTheme.Colours.cosmicBlue
     }
     
     // MARK: - App Configuration

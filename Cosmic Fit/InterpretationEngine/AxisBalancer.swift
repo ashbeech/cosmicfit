@@ -112,7 +112,7 @@ class AxisBalancer {
         let strategyOffset = sin(seedDouble * 0.0613) * 0.6 // ±0.6 point swing
         let visibilityOffset = sin(seedDouble * 0.0891) * 0.9 // ±0.9 point swing
         
-        var volatile = DerivedAxes(
+        let volatile = DerivedAxes(
             action: axes.action + actionOffset,
             tempo: axes.tempo + tempoOffset,
             strategy: axes.strategy + strategyOffset,

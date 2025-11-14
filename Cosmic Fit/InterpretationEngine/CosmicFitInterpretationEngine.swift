@@ -55,28 +55,28 @@ class CosmicFitInterpretationEngine {
             }
         }
         
-        // Generate color frequency tokens for nuanced colors
+        // Generate colour frequency tokens for nuanced colours
         DebugConfiguration.debugLog {
             print("\n🎨 GENERATING COLOR FREQUENCY TOKENS 🎨")
         }
         
-        let colorFrequencyTokens = SemanticTokenGenerator.generateColorFrequencyTokens(
+        let colourFrequencyTokens = SemanticTokenGenerator.generateColourFrequencyTokens(
             natal: chart,
-            progressed: chart, // Use natal as progressed for blueprint (100% natal for blueprint colors)
+            progressed: chart, // Use natal as progressed for blueprint (100% natal for blueprint colours)
             currentAge: currentAge
         )
         
         DebugConfiguration.debugLog {
-            print("Generated \(colorFrequencyTokens.count) color frequency tokens")
+            print("Generated \(colourFrequencyTokens.count) colour frequency tokens")
         }
 
-        // Combine base tokens with color frequency tokens
+        // Combine base tokens with colour frequency tokens
         DebugConfiguration.debugLog {
             print("\n🔄 COMBINING ALL TOKENS 🔄")
         }
         
         var allTokens = baseTokens
-        allTokens.append(contentsOf: colorFrequencyTokens)
+        allTokens.append(contentsOf: colourFrequencyTokens)
         
         DebugConfiguration.debugLog {
             print("Total combined tokens: \(allTokens.count)")
@@ -257,7 +257,7 @@ class CosmicFitInterpretationEngine {
         
         TEXTILES: \(dailyVibe.textiles)
         
-        COLORS: \(dailyVibe.colors)
+        COLORS: \(dailyVibe.colours)
         
         PATTERNS: \(dailyVibe.patterns)
         
@@ -278,18 +278,18 @@ class CosmicFitInterpretationEngine {
     
     // MARK: - Specialized Section Generation Methods
     
-    /// Generate color frequency interpretation (70% natal, 30% progressed)
-    static func generateColorFrequencyInterpretation(
+    /// Generate colour frequency interpretation (70% natal, 30% progressed)
+    static func generateColourFrequencyInterpretation(
         from natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
         currentAge: Int = 30) -> String {
 
-        let tokens = SemanticTokenGenerator.generateColorFrequencyTokens(
+        let tokens = SemanticTokenGenerator.generateColourFrequencyTokens(
             natal: natalChart,
             progressed: progressedChart,
             currentAge: currentAge)
 
-        return ParagraphAssembler.generateColorRecommendations(from: tokens)
+        return ParagraphAssembler.generateColourRecommendations(from: tokens)
     }
     
     /// Generate wardrobe storyline interpretation (60% progressed with Placidus, 40% natal)
@@ -508,13 +508,13 @@ extension CosmicFitInterpretationEngine {
             } else if hasFluid {
                 return "While maintaining professional standards, incorporate your natural fluidity through softer tailoring and layers that move with intention. Avoid overly rigid pieces that feel inauthentic to your energy."
             } else if hasBold {
-                return "Channel your bold energy through confident color choices and strong silhouettes, while keeping details professional. A well-cut blazer in a rich color can satisfy both your expressive nature and workplace expectations."
+                return "Channel your bold energy through confident colour choices and strong silhouettes, while keeping details professional. A well-cut blazer in a rich colour can satisfy both your expressive nature and workplace expectations."
             } else {
-                return "Choose pieces that feel authentically you while respecting professional norms. Quality basics in colors that energize you will serve as a strong foundation."
+                return "Choose pieces that feel authentically you while respecting professional norms. Quality basics in colours that energize you will serve as a strong foundation."
             }
         } else if query.contains("date") || query.contains("romantic") || query.contains("dinner") {
             if hasExpressive {
-                return "This is your moment to let your expressive nature shine. Choose pieces with interesting textures, colors, or details that invite conversation and reflect your personality."
+                return "This is your moment to let your expressive nature shine. Choose pieces with interesting textures, colours, or details that invite conversation and reflect your personality."
             } else if hasSubtle {
                 return "Your subtle magnetism is your strength. Choose pieces with refined details—perhaps an interesting neckline or luxurious fabric—that draw people in without being obvious."
             } else if hasComfortable {
@@ -534,7 +534,7 @@ extension CosmicFitInterpretationEngine {
             }
         } else if query.contains("party") || query.contains("celebration") || query.contains("event") {
             if hasBold {
-                return "This is your time to shine! Choose pieces that make a statement—rich colors, interesting textures, or striking silhouettes that reflect your dynamic energy."
+                return "This is your time to shine! Choose pieces that make a statement—rich colours, interesting textures, or striking silhouettes that reflect your dynamic energy."
             } else if hasSubtle {
                 return "Your understated elegance is perfect for special events. Choose pieces with luxurious fabrics or refined details that create impact through quality rather than flash."
             } else if hasExpressive {

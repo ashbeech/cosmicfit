@@ -60,9 +60,9 @@ struct ParagraphAssembler {
         blueprint += "# Fashion Dos & Don'ts\n\n"
         blueprint += generateFashionGuidance(from: tokens) + "\n\n"
         
-        // Color guidance - 70% natal, 30% progressed (handled by token weighting)
+        // Colour guidance - 70% natal, 30% progressed (handled by token weighting)
         blueprint += "# Elemental Colours\n\n"
-        blueprint += generateColorRecommendations(from: tokens) + "\n\n"
+        blueprint += generateColourRecommendations(from: tokens) + "\n\n"
         
         // Wardrobe storyline - 60% progressed with Placidus, 40% natal (handled by token weighting)
         blueprint += "# Wardrobe Storyline\n\n"
@@ -235,7 +235,7 @@ struct ParagraphAssembler {
             essence += "You dress like someone who remembers every version of yourself and honors them through "
         }
         
-        essence += "texture, color, and the way fabric falls. "
+        essence += "texture, colour, and the way fabric falls. "
         
         // Closing statement
         essence += "This blueprint reflects a wardrobe built on "
@@ -1001,143 +1001,143 @@ struct ParagraphAssembler {
         return guidance
     }
     
-    // MARK: - Color Recommendations (70% natal, 30% progressed)
+    // MARK: - Colour Recommendations (70% natal, 30% progressed)
     
-    /// Generates color recommendations - tokens weighted: 70% natal, 30% progressed
-    static func generateColorRecommendations(from tokens: [StyleToken]) -> String {
-        // Extract color tokens specifically - prioritize specific color names over general qualities
-        let colorTokens = tokens.filter { $0.type == "color" }
+    /// Generates colour recommendations - tokens weighted: 70% natal, 30% progressed
+    static func generateColourRecommendations(from tokens: [StyleToken]) -> String {
+        // Extract colour tokens specifically - prioritize specific colour names over general qualities
+        let colourTokens = tokens.filter { $0.type == "colour" }
         
         // Organize tokens by category based on their sources and names
-        var elementalColors: [String] = []
-        var currentPhaseColors: [String] = []
-        var powerColors: [String] = []
+        var elementalColours: [String] = []
+        var currentPhaseColours: [String] = []
+        var powerColours: [String] = []
         
-        // Extract specific color names from color tokens
-        var specificColorNames: [String] = []
-        let topColorTokens = colorTokens.sorted { $0.weight > $1.weight }.prefix(8)
+        // Extract specific colour names from colour tokens
+        var specificColourNames: [String] = []
+        let topColourTokens = colourTokens.sorted { $0.weight > $1.weight }.prefix(8)
         
-        for token in topColorTokens {
-            // Add specific color names (these are the nuanced colors like "iridescent aqua", "warm terracotta")
+        for token in topColourTokens {
+            // Add specific colour names (these are the nuanced colours like "iridescent aqua", "warm terracotta")
             if !["white", "black", "red", "blue", "green", "yellow", "orange", "purple", "brown", "gray"].contains(token.name) {
-                specificColorNames.append(token.name)
+                specificColourNames.append(token.name)
             }
         }
         
-        // If we have specific color names from the nuanced color system, use those
-        if !specificColorNames.isEmpty {
-            elementalColors.append(contentsOf: Array(Set(specificColorNames)))
+        // If we have specific colour names from the nuanced colour system, use those
+        if !specificColourNames.isEmpty {
+            elementalColours.append(contentsOf: Array(Set(specificColourNames)))
         } else {
-            // Fallback to token analysis for elemental colors
+            // Fallback to token analysis for elemental colours
             if tokens.contains(where: { $0.name == "earthy" }) {
-                elementalColors.append(contentsOf: ["olive", "terracotta", "moss", "ochre", "walnut", "sand", "umber"])
+                elementalColours.append(contentsOf: ["olive", "terracotta", "moss", "ochre", "walnut", "sand", "umber"])
             }
             
             if tokens.contains(where: { $0.name == "watery" }) {
-                elementalColors.append(contentsOf: ["navy ink", "teal", "indigo", "slate blue", "stormy gray", "deep aqua"])
+                elementalColours.append(contentsOf: ["navy ink", "teal", "indigo", "slate blue", "stormy gray", "deep aqua"])
             }
             
             if tokens.contains(where: { $0.name == "airy" }) {
-                elementalColors.append(contentsOf: ["pale blue", "silver gray", "cloud white", "light lavender", "sky"])
+                elementalColours.append(contentsOf: ["pale blue", "silver gray", "cloud white", "light lavender", "sky"])
             }
             
             if tokens.contains(where: { $0.name == "fiery" }) {
-                elementalColors.append(contentsOf: ["oxblood", "rust", "amber", "burnt orange", "burgundy", "ruby"])
+                elementalColours.append(contentsOf: ["oxblood", "rust", "amber", "burnt orange", "burgundy", "ruby"])
             }
         }
         
-        // Current phase colors based on progressed planets (30% influence)
+        // Current phase colours based on progressed planets (30% influence)
         let hasProgressedVenus = tokens.contains { $0.planetarySource?.contains("Progressed Venus") == true }
         let hasProgressedMars = tokens.contains { $0.planetarySource?.contains("Progressed Mars") == true }
         let hasProgressedMoon = tokens.contains { $0.planetarySource?.contains("Progressed Moon") == true }
         
         if hasProgressedVenus {
-            currentPhaseColors.append("dusty rose")
+            currentPhaseColours.append("dusty rose")
         }
         
         if hasProgressedMars {
-            currentPhaseColors.append("burnt sienna")
+            currentPhaseColours.append("burnt sienna")
         }
         
         if hasProgressedMoon {
-            currentPhaseColors.append("silver gray")
+            currentPhaseColours.append("silver gray")
         }
         
-        // Look for moon phase tokens to add current phase colors
+        // Look for moon phase tokens to add current phase colours
         let moonPhaseTokens = tokens.filter { $0.aspectSource?.contains("Moon Phase") == true }
         for token in moonPhaseTokens {
-            if token.type == "color" {
-                currentPhaseColors.append(token.name)
+            if token.type == "colour" {
+                currentPhaseColours.append(token.name)
             }
         }
         
-        // If no progressed planets and no moon phase colors, add some generic current phase colors
-        if currentPhaseColors.isEmpty {
-            currentPhaseColors = ["muted sage", "faded black", "soft cream"]
+        // If no progressed planets and no moon phase colours, add some generic current phase colours
+        if currentPhaseColours.isEmpty {
+            currentPhaseColours = ["muted sage", "faded black", "soft cream"]
         }
         
-        // Generate power colors based on token analysis
+        // Generate power colours based on token analysis
         if tokens.contains(where: { $0.name == "bold" && $0.weight > 2.5 }) {
-            powerColors.append("deep oxblood")
-            powerColors.append("electric blue")
+            powerColours.append("deep oxblood")
+            powerColours.append("electric blue")
         }
         
         if tokens.contains(where: { $0.name == "grounded" && $0.weight > 2.5 }) {
-            powerColors.append("forest green")
-            powerColors.append("charcoal")
+            powerColours.append("forest green")
+            powerColours.append("charcoal")
         }
         
         if tokens.contains(where: { $0.name == "magnetic" && $0.weight > 2.5 }) {
-            powerColors.append("royal purple")
-            powerColors.append("midnight blue")
+            powerColours.append("royal purple")
+            powerColours.append("midnight blue")
         }
         
         if tokens.contains(where: { $0.name == "transformative" && $0.weight > 2.5 }) {
-            powerColors.append("deep burgundy")
-            powerColors.append("metallic bronze")
+            powerColours.append("deep burgundy")
+            powerColours.append("metallic bronze")
         }
         
-        // Check for specific power color tokens from the color system
-        let powerColorTokens = colorTokens.filter {
+        // Check for specific power colour tokens from the colour system
+        let powerColourTokens = colourTokens.filter {
             $0.name.contains("royal") || $0.name.contains("deep") || $0.name.contains("electric") ||
             $0.name.contains("rich") || $0.name.contains("intense") || $0.name.contains("bold")
         }
-        for token in powerColorTokens.prefix(3) {
-            powerColors.append(token.name)
+        for token in powerColourTokens.prefix(3) {
+            powerColours.append(token.name)
         }
         
         // Default options if no strong preferences
-        if elementalColors.isEmpty {
-            elementalColors = ["stone", "navy", "charcoal", "cream"]
+        if elementalColours.isEmpty {
+            elementalColours = ["stone", "navy", "charcoal", "cream"]
         }
         
-        if powerColors.isEmpty {
-            powerColors = ["deep indigo", "matte silver", "burgundy"]
+        if powerColours.isEmpty {
+            powerColours = ["deep indigo", "matte silver", "burgundy"]
         }
         
         // Remove duplicates and limit selections
-        elementalColors = Array(Set(elementalColors))
-        currentPhaseColors = Array(Set(currentPhaseColors))
-        powerColors = Array(Set(powerColors))
+        elementalColours = Array(Set(elementalColours))
+        currentPhaseColours = Array(Set(currentPhaseColours))
+        powerColours = Array(Set(powerColours))
         
         // Limit to reasonable numbers
-        elementalColors = Array(elementalColors.prefix(5))
-        currentPhaseColors = Array(currentPhaseColors.prefix(4))
-        powerColors = Array(powerColors.prefix(3))
+        elementalColours = Array(elementalColours.prefix(5))
+        currentPhaseColours = Array(currentPhaseColours.prefix(4))
+        powerColours = Array(powerColours.prefix(3))
         
-        // Format color recommendations
-        var colors = ""
+        // Format colour recommendations
+        var colours = ""
         
-        colors += "## Elemental Colours:\n\n"
-        colors += elementalColors.joined(separator: ", ") + ".\n\n"
+        colours += "## Elemental Colours:\n\n"
+        colours += elementalColours.joined(separator: ", ") + ".\n\n"
         
-        colors += "## Current Phase Colours:\n\n"
-        colors += currentPhaseColors.joined(separator: ", ") + ".\n\n"
+        colours += "## Current Phase Colours:\n\n"
+        colours += currentPhaseColours.joined(separator: ", ") + ".\n\n"
         
-        colors += "## Power Colours:\n\n"
-        colors += powerColors.joined(separator: ", ") + "."
+        colours += "## Power Colours:\n\n"
+        colours += powerColours.joined(separator: ", ") + "."
         
-        return colors
+        return colours
     }
     
     // MARK: - Wardrobe Storyline (60% progressed with Placidus, 40% natal)
@@ -1277,7 +1277,7 @@ struct ParagraphAssembler {
         
         let mariaTranslations: [String: [String]] = [
             // Sun translations
-            "radiant_color_quality": ["Go for colors that make you glow", "Choose shades that light you up", "Pick colors that make you shine"],
+            "radiant_colour_quality": ["Go for colours that make you glow", "Choose shades that light you up", "Pick colours that make you shine"],
             "confident_expression": ["Own your look today", "Wear something that makes you feel powerful", "Choose pieces that show your strength"],
             "creative_mood": ["Try something artistic", "Play with unexpected combinations", "Let your imagination guide your choices"],
             "dramatic_structure": ["Make a statement with your silhouette", "Choose pieces with strong lines", "Go bold with your proportions"],
@@ -1288,7 +1288,7 @@ struct ParagraphAssembler {
             // Moon translations
             "flowing_structure": ["Choose pieces that move with you", "Go for soft, flowing silhouettes", "Pick clothes that feel like a gentle hug"],
             "nurturing_mood": ["Wear something that makes you feel safe", "Choose comforting textures", "Pick pieces that feel like home"],
-            "emotional_expression": ["Let your feelings guide your outfit", "Choose colors that match your mood", "Wear something that tells your story"],
+            "emotional_expression": ["Let your feelings guide your outfit", "Choose colours that match your mood", "Wear something that tells your story"],
             "comfortable_expression": ["Prioritize how everything feels on your body", "Choose pieces that let you be yourself", "Go for effortless, natural looks"],
             "protective_structure": ["Choose pieces that make you feel secure", "Go for structured comfort", "Pick outfits that give you confidence"],
             "responsive_expression": ["Trust your instincts about what feels right", "Choose pieces that adapt to your energy", "Go with your gut feeling"],
@@ -1318,7 +1318,7 @@ struct ParagraphAssembler {
             
             // Jupiter translations
             "expansive_structure": ["Think bigger than usual", "Choose pieces with generous proportions", "Go for statement-making silhouettes"],
-            "optimistic_mood": ["Pick colors that lift your spirits", "Choose pieces that make you smile", "Go for looks that spread good vibes"],
+            "optimistic_mood": ["Pick colours that lift your spirits", "Choose pieces that make you smile", "Go for looks that spread good vibes"],
             "excessive_mood": ["Maybe tone it down just a little", "Choose one statement piece instead of many", "Focus on quality over quantity"],
             "generous_structure": ["Go for flowing, abundant silhouettes", "Choose pieces with plenty of movement", "Pick looks that feel expansive"],
             "abundant_expression": ["Layer on the richness", "Choose pieces that feel luxurious", "Go for looks that celebrate abundance"],
@@ -1333,7 +1333,7 @@ struct ParagraphAssembler {
             
             // Uranus translations
             "innovative_expression": ["Try something completely new", "Mix unexpected elements", "Choose pieces that surprise people"],
-            "electric_color_quality": ["Go for colors that energize you", "Choose vibrant, attention-grabbing shades", "Pick colors that make you feel alive"],
+            "electric_colour_quality": ["Go for colours that energize you", "Choose vibrant, attention-grabbing shades", "Pick colours that make you feel alive"],
             "rebellious_expression": ["Break a few style rules today", "Choose something unconventional", "Go against what's expected"],
             "unconventional_structure": ["Try silhouettes you've never worn", "Choose pieces with unusual proportions", "Go for looks that challenge expectations"],
             "disruptive_mood": ["Make choices that shake things up", "Choose pieces that challenge the norm", "Go for looks that start conversations"],

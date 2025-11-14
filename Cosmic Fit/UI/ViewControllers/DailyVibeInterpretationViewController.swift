@@ -29,8 +29,8 @@ class DailyVibeInterpretationViewController: UIViewController {
     private let textilesHeaderLabel = UILabel()
     private let textilesContentLabel = UILabel()
     
-    private let colorsHeaderLabel = UILabel()
-    private let colorsContentLabel = UILabel()
+    private let coloursHeaderLabel = UILabel()
+    private let coloursContentLabel = UILabel()
     
     private let brightnessHeaderLabel = UILabel()
     private let brightnessSliderView = UIView()
@@ -212,12 +212,12 @@ class DailyVibeInterpretationViewController: UIViewController {
         setupSectionHeader(textilesHeaderLabel, title: "Textiles", topAnchor: middleDividerView.bottomAnchor)
         setupSectionContent(textilesContentLabel, topAnchor: textilesHeaderLabel.bottomAnchor)
         
-        // Colors Section
-        setupSectionHeader(colorsHeaderLabel, title: "Colors", topAnchor: textilesContentLabel.bottomAnchor)
-        setupSectionContent(colorsContentLabel, topAnchor: colorsHeaderLabel.bottomAnchor)
+        // Colours Section
+        setupSectionHeader(coloursHeaderLabel, title: "Colours", topAnchor: textilesContentLabel.bottomAnchor)
+        setupSectionContent(coloursContentLabel, topAnchor: coloursHeaderLabel.bottomAnchor)
         
         // Brightness Section
-        setupSectionHeader(brightnessHeaderLabel, title: "Brightness", topAnchor: colorsContentLabel.bottomAnchor)
+        setupSectionHeader(brightnessHeaderLabel, title: "Brightness", topAnchor: coloursContentLabel.bottomAnchor)
         setupBrightnessSlider(topAnchor: brightnessHeaderLabel.bottomAnchor)
         
         // Vibrancy Section
@@ -459,8 +459,8 @@ class DailyVibeInterpretationViewController: UIViewController {
         if let content = vibeContent {
             // Force layout before drawing to ensure views have correct sizes
             view.layoutIfNeeded()
-            //drawBrightnessSlider(value: 10 - content.colorScores.darkness) // Brightness is inverse of darkness
-            //drawVibrancySlider(value: content.colorScores.vibrancy)
+            //drawBrightnessSlider(value: 10 - content.colourScores.darkness) // Brightness is inverse of darkness
+            //drawVibrancySlider(value: content.colourScores.vibrancy)
         }
     }
     
@@ -499,7 +499,7 @@ class DailyVibeInterpretationViewController: UIViewController {
         /*
         // Populate content sections
         textilesContentLabel.text   = content.textiles
-        colorsContentLabel.text     = content.colors
+        coloursContentLabel.text     = content.colours
         patternsContentLabel.text   = content.patterns
         shapeContentLabel.text      = content.shape
         accessoriesContentLabel.text = content.accessories
@@ -509,8 +509,8 @@ class DailyVibeInterpretationViewController: UIViewController {
          */
         
         // Redraw sliders
-        //drawBrightnessSlider(value: 10 - content.colorScores.darkness) // Brightness is inverse of darkness
-        //drawVibrancySlider(value: content.colorScores.vibrancy)
+        //drawBrightnessSlider(value: 10 - content.colourScores.darkness) // Brightness is inverse of darkness
+        //drawVibrancySlider(value: content.colourScores.vibrancy)
     }
     
     // MARK: - Actions
@@ -530,7 +530,7 @@ class DailyVibeInterpretationViewController: UIViewController {
             shareText += "\(content.styleBrief)\n\n"
             shareText += "---\n\n"
             shareText += "TEXTILES\n\(content.textiles)\n\n"
-            shareText += "COLORS\n\(content.colors)\n\n"
+            shareText += "COLOURS\n\(content.colours)\n\n"
             shareText += "PATTERNS\n\(content.patterns)\n\n"
             shareText += "SHAPE\n\(content.shape)\n\n"
             shareText += "ACCESSORIES\n\(content.accessories)\n\n"

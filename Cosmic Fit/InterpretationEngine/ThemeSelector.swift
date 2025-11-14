@@ -43,7 +43,7 @@ struct ThemeSelector {
         ),
         CompositeTheme(
             name: "Expressive Restraint",
-            required: ["minimalist", "colorful"],
+            required: ["minimalist", "colourful"],
             optional: ["structured", "bold", "balanced"],
             minimumScore: 4.5
         ),

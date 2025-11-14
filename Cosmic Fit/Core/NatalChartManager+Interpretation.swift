@@ -115,7 +115,7 @@ extension NatalChartManager {
             }
         } else if query.contains("date") || query.contains("romantic") {
             if hasBold {
-                return "Express your natural confidence through one bold element that draws attention - perhaps color, texture, or an interesting silhouette. Balance this with more subtle complementary pieces."
+                return "Express your natural confidence through one bold element that draws attention - perhaps colour, texture, or an interesting silhouette. Balance this with more subtle complementary pieces."
             } else if hasSubtle {
                 return "Your subtle style shines in intimate settings. Focus on textures that invite closeness and details that reveal themselves only upon closer inspection. Quality and thoughtfulness will speak louder than obvious statements."
             } else {

@@ -14,12 +14,12 @@ class StarView: UIView {
     private var points: Int = 4 // Number of points on the star
     
     // MARK: - Initialization
-    init(frame: CGRect, size: CGFloat, points: Int, color: UIColor) {
+    init(frame: CGRect, size: CGFloat, points: Int, colour: UIColor) {
         self.starSize = size
         self.points = points
         super.init(frame: frame)
         
-        setupStar(color: color)
+        setupStar(colour: colour)
     }
     
     required init?(coder: NSCoder) {
@@ -27,8 +27,8 @@ class StarView: UIView {
     }
     
     // MARK: - Setup
-    private func setupStar(color: UIColor) {
-        starLayer.fillColor = color.cgColor
+    private func setupStar(colour: UIColor) {
+        starLayer.fillColor = colour.cgColor
         starLayer.path = createStarPath().cgPath
         layer.addSublayer(starLayer)
         

@@ -17,21 +17,21 @@ final class MenuButton: UIButton {
     
     private let topDot: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         view.layer.cornerRadius = 2
         return view
     }()
     
     private let middleDot: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         view.layer.cornerRadius = 2
         return view
     }()
     
     private let bottomDot: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         view.layer.cornerRadius = 2
         return view
     }()
@@ -39,7 +39,7 @@ final class MenuButton: UIButton {
     // Hidden 4th dot behind center that appears during animation
     private let hiddenDot: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         view.layer.cornerRadius = 2
         view.alpha = 0  // Start hidden
         return view

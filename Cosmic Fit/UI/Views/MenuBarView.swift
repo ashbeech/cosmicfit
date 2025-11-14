@@ -18,10 +18,10 @@ final class MenuBarView: UIView {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.image = UIImage(named: "CosmicFitLogo")
-        iv.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
         
-        // Invert colors using Core Animation
-        let filter = CIFilter(name: "CIColorInvert")
+        // Invert colours using Core Animation
+        let filter = CIFilter(name: "CIColourInvert")
         iv.layer.filters = [filter as Any]
         
         return iv
@@ -41,7 +41,7 @@ final class MenuBarView: UIView {
     }
     
     private func setupUI() {
-        backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         
         // Add subtle bottom border
         layer.shadowColor = UIColor.black.cgColor

@@ -111,29 +111,29 @@ class TokenPrefixMatrix {
         "detailed": "Precision matters"
     ]
     
-    // MARK: - Color Quality Tokens
+    // MARK: - Colour Quality Tokens
     
-    private static let colorQualityTokens: [String: String] = [
-        "vibrant": "Color that pops",
+    private static let colourQualityTokens: [String: String] = [
+        "vibrant": "Colour that pops",
         "grounded": "Earth-connected tones",
         "bright": "Light it up",
-        "gentle": "Soft color story",
+        "gentle": "Soft colour story",
         "warm": "Heat in your palette",
-        "precise": "Exact color choices",
+        "precise": "Exact colour choices",
         "elegant": "Sophisticated spectrum",
-        "intense": "Deep color power",
-        "unique": "Your color signature",
-        "flowing": "Colors that move",
+        "intense": "Deep colour power",
+        "unique": "Your colour signature",
+        "flowing": "Colours that move",
         "rich": "Luxury in hue",
         "luminous": "Light from within",
-        "mysterious": "Colors with secrets",
-        "clear": "Pure color energy",
+        "mysterious": "Colours with secrets",
+        "clear": "Pure colour energy",
         "abundant": "More is more"
     ]
     
-    // MARK: - Specific Color Tokens
+    // MARK: - Specific Colour Tokens
     
-    private static let specificColorTokens: [String: String] = [
+    private static let specificColourTokens: [String: String] = [
         "bright red": "Fire energy",
         "forest green": "Earth magic",
         "electric blue": "Lightning mood",
@@ -261,13 +261,13 @@ class TokenPrefixMatrix {
             return prefix
         }
         
-        // Check color quality tokens
-        if let prefix = colorQualityTokens[token.name] {
+        // Check colour quality tokens
+        if let prefix = colourQualityTokens[token.name] {
             return prefix
         }
         
-        // Check specific color tokens
-        if let prefix = specificColorTokens[token.name] {
+        // Check specific colour tokens
+        if let prefix = specificColourTokens[token.name] {
             return prefix
         }
         
@@ -323,8 +323,8 @@ class TokenPrefixMatrix {
         
         // Check all other token types
         let allTokenMaps = [
-            moodTokens, structureTokens, textureTokens, colorQualityTokens,
-            specificColorTokens, expressionTokens, planetaryDayTokens,
+            moodTokens, structureTokens, textureTokens, colourQualityTokens,
+            specificColourTokens, expressionTokens, planetaryDayTokens,
             seasonalTokens, moonPhaseTokens, aspectTokens, elementalTokens
         ]
         

@@ -2,15 +2,15 @@
 //  ColorPaletteView.swift
 //  Cosmic Fit
 //
-//  Custom component for displaying color palette grid (used by Blueprint)
+//  Custom component for displaying colour palette grid (used by Blueprint)
 //
 
 import UIKit
 
-final class ColorPaletteView: UIView {
+final class ColourPaletteView: UIView {
     
     // MARK: - Properties
-    private var colors: [[UIColor]] = []
+    private var colours: [[UIColor]] = []
     private let columns: Int = 5
     private let cellSpacing: CGFloat = 2
     
@@ -24,13 +24,13 @@ final class ColorPaletteView: UIView {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .clear
         cv.isScrollEnabled = false
-        cv.register(ColorCell.self, forCellWithReuseIdentifier: ColorCell.reuseIdentifier)
+        cv.register(ColourCell.self, forCellWithReuseIdentifier: ColourCell.reuseIdentifier)
         return cv
     }()
     
     // MARK: - Initialization
-    init(colors: [[UIColor]]) {
-        self.colors = colors
+    init(colours: [[UIColor]]) {
+        self.colours = colours
         super.init(frame: .zero)
         setupUI()
     }
@@ -71,33 +71,33 @@ final class ColorPaletteView: UIView {
 }
 
 // MARK: - UICollectionViewDataSource
-extension ColorPaletteView: UICollectionViewDataSource {
+extension ColourPaletteView: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return colors.count
+        return colours.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return colors[section].count
+        return colours[section].count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: ColorCell.reuseIdentifier,
+            withReuseIdentifier: ColourCell.reuseIdentifier,
             for: indexPath
-        ) as? ColorCell else {
+        ) as? ColourCell else {
             return UICollectionViewCell()
         }
         
-        let color = colors[indexPath.section][indexPath.item]
-        cell.configure(with: color)
+        let colour = colours[indexPath.section][indexPath.item]
+        cell.configure(with: colour)
         
         return cell
     }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-extension ColorPaletteView: UICollectionViewDelegateFlowLayout {
+extension ColourPaletteView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let size = calculateCellSize()
@@ -105,12 +105,12 @@ extension ColorPaletteView: UICollectionViewDelegateFlowLayout {
     }
 }
 
-// MARK: - ColorCell
-final class ColorCell: UICollectionViewCell {
+// MARK: - ColourCell
+final class ColourCell: UICollectionViewCell {
     
-    static let reuseIdentifier = "ColorCell"
+    static let reuseIdentifier = "ColourCell"
     
-    private let colorView: UIView = {
+    private let colourView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 4
         view.clipsToBounds = true
@@ -127,28 +127,28 @@ final class ColorCell: UICollectionViewCell {
     }
     
     private func setupUI() {
-        contentView.addSubview(colorView)
-        colorView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(colourView)
+        colourView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            colorView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            colorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            colorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            colorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            colourView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            colourView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            colourView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            colourView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
     }
     
-    func configure(with color: UIColor) {
-        colorView.backgroundColor = color
+    func configure(with colour: UIColor) {
+        colourView.backgroundColor = colour
     }
 }
 
-// MARK: - Placeholder Color Palette Generator
-extension ColorPaletteView {
+// MARK: - Placeholder Colour Palette Generator
+extension ColourPaletteView {
     
-    /// Creates a placeholder color palette matching the design
+    /// Creates a placeholder colour palette matching the design
     /// Used by Blueprint page for Colour Guide section
-    static func createPlaceholderPalette() -> ColorPaletteView {
+    static func createPlaceholderPalette() -> ColourPaletteView {
         let palette: [[UIColor]] = [
             // Row 1 - Warm peachy tones
             [
@@ -208,6 +208,6 @@ extension ColorPaletteView {
             ],
         ]
         
-        return ColorPaletteView(colors: palette)
+        return ColourPaletteView(colours: palette)
     }
 }

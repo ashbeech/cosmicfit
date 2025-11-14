@@ -618,7 +618,7 @@ class VibeBreakdownGenerator {
     
     private static let playfulTokens: Set<String> = [
         "bright", "vibrant", "dynamic", "energetic", "fun", "expressive",
-        "creative", "colorful", "light", "airy", "versatile", "quick",
+        "creative", "colourful", "light", "airy", "versatile", "quick",
         "adaptable", "communicative", "cheerful", "bright yellow",
         "neon turquoise", "electric blue", "playful", "lively", "spirited"
     ]
@@ -692,8 +692,8 @@ class VibeBreakdownGenerator {
         // Expression type tokens boost playful
         if token.type == "expression" { bonus += 1.0 }
         
-        // Bright color qualities
-        if token.type == "color_quality" &&
+        // Bright colour qualities
+        if token.type == "colour_quality" &&
             ["bright", "vibrant", "electric"].contains(where: { token.name.contains($0) }) {
             bonus += 1.5
         }

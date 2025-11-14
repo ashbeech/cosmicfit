@@ -75,7 +75,7 @@ class ProfileViewController: UIViewController {
     
     // MARK: - UI Setup
     private func setupUI() {
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         
         // Scroll view
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -202,7 +202,7 @@ class ProfileViewController: UIViewController {
         deleteProfileButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         deleteProfileButton.translatesAutoresizingMaskIntoConstraints = false
         
-        // Apply theme to destructive button - use secondary style with red color
+        // Apply theme to destructive button - use secondary style with red colour
         CosmicFitTheme.styleButton(deleteProfileButton, style: .secondary)
         deleteProfileButton.backgroundColor = .systemRed
         deleteProfileButton.setTitleColor(.white, for: .normal)
@@ -591,7 +591,7 @@ class ProfileViewController: UIViewController {
         
         // Store the original button configuration to restore later
         let originalTitle = updateButton.title(for: .normal)
-        let originalBackgroundColor = updateButton.backgroundColor
+        let originalbackgroundColor = updateButton.backgroundColor
         
         // Show success animation
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations: {
@@ -632,7 +632,7 @@ class ProfileViewController: UIViewController {
     private func resetButtonToOriginalState(title: String, backgroundColor: UIColor) {
         // Animate back to original state (NO SCALE ANIMATION)
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations: {
-            // Restore original background color
+            // Restore original background colour
             self.updateButton.backgroundColor = backgroundColor
             
             // Remove the checkmark image

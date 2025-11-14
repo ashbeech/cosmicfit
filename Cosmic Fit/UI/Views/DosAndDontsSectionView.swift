@@ -122,7 +122,7 @@ final class DosAndDontsSectionView: UIView {
         
         let attributes: [NSAttributedString.Key: Any] = [
             .font: CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .regular),
-            .foregroundColor: CosmicFitTheme.Colors.cosmicBlue,
+            .foregroundColor: CosmicFitTheme.Colours.cosmicBlue,
             .paragraphStyle: paragraphStyle
         ]
         

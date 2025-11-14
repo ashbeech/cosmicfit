@@ -58,12 +58,12 @@ final class BlueprintDetailViewController: UIViewController {
     
     private let cardContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         view.layer.cornerRadius = 16
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.clipsToBounds = true
         view.layer.borderWidth = 1
-        view.layer.borderColor = CosmicFitTheme.Colors.cosmicBlue.cgColor
+        view.layer.borderColor = CosmicFitTheme.Colours.cosmicBlue.cgColor
         return view
     }()
     
@@ -84,7 +84,7 @@ final class BlueprintDetailViewController: UIViewController {
     private let closeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
-        button.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        button.tintColor = CosmicFitTheme.Colours.cosmicBlue
         button.contentHorizontalAlignment = .right
         return button
     }()
@@ -97,7 +97,7 @@ final class BlueprintDetailViewController: UIViewController {
             string: "YOUR COSMIC BLUEPRINT",
             attributes: [
                 .font: CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold),
-                .foregroundColor: CosmicFitTheme.Colors.darkerCosmicGrey,
+                .foregroundColor: CosmicFitTheme.Colours.darkerCosmicGrey,
                 .kern: 1.75
             ]
         )
@@ -108,14 +108,14 @@ final class BlueprintDetailViewController: UIViewController {
     private let iconImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
-        iv.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
         return iv
     }()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.title1, weight: .bold)
-        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -123,7 +123,7 @@ final class BlueprintDetailViewController: UIViewController {
     
     private let topDivider: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         return view
     }()
     
@@ -144,13 +144,13 @@ final class BlueprintDetailViewController: UIViewController {
     
     private let bottomDividerLeft: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         return view
     }()
     
     private let bottomDividerRight: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         return view
     }()
     
@@ -158,7 +158,7 @@ final class BlueprintDetailViewController: UIViewController {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.image = UIImage(named: "star_icon_placeholder")
-        iv.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
         return iv
     }()
     
@@ -366,17 +366,17 @@ final class BlueprintDetailViewController: UIViewController {
         container.translatesAutoresizingMaskIntoConstraints = false
         
         let leftDivider = UIView()
-        leftDivider.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        leftDivider.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         leftDivider.translatesAutoresizingMaskIntoConstraints = false
         
         let rightDivider = UIView()
-        rightDivider.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        rightDivider.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         rightDivider.translatesAutoresizingMaskIntoConstraints = false
         
         let label = UILabel()
         label.text = text
         label.font = CosmicFitTheme.Typography.DMSerifTextItalicFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader)
-        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -413,7 +413,7 @@ final class BlueprintDetailViewController: UIViewController {
         let label = UILabel()
         label.text = text
         label.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
-        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .left
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping

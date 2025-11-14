@@ -43,7 +43,7 @@ class AnimatedLaunchScreenViewController: UIViewController {
     // MARK: - UI Setup
     private func setupUI() {
         // Start with complete black background
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         
         setupBackgroundRunes()
         setupLogoElements()

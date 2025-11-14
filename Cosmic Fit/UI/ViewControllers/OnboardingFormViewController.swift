@@ -67,7 +67,7 @@ class OnboardingFormViewController: UIViewController {
     private var currentPlaceholderIndex = 0
     private let placeholders = ["London, UK", "Paris, France", "Athens, Greece"]
     private let placeholderAttributes: [NSAttributedString.Key: Any] = [
-        .foregroundColor: CosmicFitTheme.Colors.darkerCosmicGrey,
+        .foregroundColor: CosmicFitTheme.Colours.darkerCosmicGrey,
         .font: UIFont.systemFont(ofSize: 18)
     ]
     
@@ -193,7 +193,7 @@ class OnboardingFormViewController: UIViewController {
             datePicker.datePickerMode = .date
             datePicker.preferredDatePickerStyle = .wheels
             datePicker.maximumDate = Date()
-            // Set dark text color for the picker
+            // Set dark text colour for the picker
             datePicker.setValue(UIColor.black, forKey: "textColor")
             
             if let hundredYearsAgo = Calendar.current.date(byAdding: .year, value: -100, to: Date()) {
@@ -219,7 +219,7 @@ class OnboardingFormViewController: UIViewController {
             timePicker.translatesAutoresizingMaskIntoConstraints = false
             timePicker.datePickerMode = .time
             timePicker.preferredDatePickerStyle = .wheels
-            // Set dark text color for the picker
+            // Set dark text colour for the picker
             timePicker.setValue(UIColor.black, forKey: "textColor")
             
             // Set default time to 04:30

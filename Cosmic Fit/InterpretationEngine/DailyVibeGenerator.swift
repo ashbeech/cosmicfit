@@ -136,8 +136,8 @@ class DailyVibeGenerator {
         /*
         // Generate comprehensive sections
         let textiles = generateTextilesSection(from: allTokens, axes: derivedAxes)
-        let colors = generateColorsSection(from: allTokens, axes: derivedAxes)
-        let colorScores = ColorScoring.calculateColorScores(from: allTokens)
+        let colours = generateColoursSection(from: allTokens, axes: derivedAxes)
+        let colourScores = ColorScoring.calculateColourScores(from: allTokens)
         let patterns = generatePatternsSection(from: allTokens, axes: derivedAxes)
         let shape = generateShapeSection(from: allTokens, axes: derivedAxes)
         let accessories = generateAccessoriesSection(from: allTokens, axes: derivedAxes)
@@ -153,7 +153,7 @@ class DailyVibeGenerator {
         print("\n✨ COMPREHENSIVE DAILY SYSTEM GENERATED:")
         //print("  Style Brief: \"\(styleBrief.prefix(50))...\"")
         print("  Dominant Energy: \(getDominantEnergyName(from: vibeBreakdown))")
-        //print("  Color Scores: D:\(colorScores.darkness) V:\(colorScores.vibrancy) C:\(colorScores.contrast)")
+        //print("  Color Scores: D:\(colourScores.darkness) V:\(colourScores.vibrancy) C:\(colourScores.contrast)")
         //print("  Angular/Curvy: \(angularCurvyScore.score)/10")
         //print("  Layering Score: \(layeringScore)/10")
         if let tarotCard = selectedTarotCard {
@@ -169,8 +169,8 @@ class DailyVibeGenerator {
         //dailyContent.styleBrief = styleBrief
         //dailyContent.derivedAxes = derivedAxes
         //dailyContent.textiles = textiles
-        //dailyContent.colors = colors
-        //dailyContent.colorScores = colorScores
+        //dailyContent.colours = colours
+        //dailyContent.colourScores = colourScores
         //dailyContent.patterns = patterns
         //dailyContent.shape = shape
         //dailyContent.accessories = accessories
@@ -434,15 +434,15 @@ class DailyVibeGenerator {
                 guard let sign = $0.signSource else { return false }
                 return ["Gemini", "Libra", "Aquarius"].contains(sign)
             }.count
-            let brightColors = tokens.filter { token in
-                token.type == "color_quality" &&
+            let brightColours = tokens.filter { token in
+                token.type == "colour_quality" &&
                 ["bright", "vibrant", "electric"].contains { keyword in
                     token.name.lowercased().contains(keyword)
                 }
             }.count
             print("    - Mercury tokens: \(mercuryTokens) (+1.0 each)")
             print("    - Air sign tokens: \(airSigns) (+0.5 each)")
-            print("    - Bright color tokens: \(brightColors) (+1.5 each)")
+            print("    - Bright colour tokens: \(brightColours) (+1.5 each)")
             
         default:
             print("    - No specific bonus factors tracked")
@@ -819,7 +819,7 @@ class DailyVibeGenerator {
         if !primaryElement.isEmpty {
             switch primaryElement {
             case "fire":
-                guidance += " Let bold colors and dynamic shapes fuel your confidence."
+                guidance += " Let bold colours and dynamic shapes fuel your confidence."
             case "earth":
                 guidance += " Ground yourself in natural textures and dependable pieces that feel substantial."
             case "air":
@@ -873,9 +873,9 @@ struct DailyVibeContent: Codable {
     // Textiles Section - visual qualities and fabric feels (up to 2 sentences)
     //var textiles: String = ""
     
-    // Colors Section - tonal mood, palette, and scores
-    //var colors: String = ""
-    //var colorScores: ColorScores = ColorScores(darkness: 5, vibrancy: 5, contrast: 5)
+    // Colours Section - tonal mood, palette, and scores
+    //var colours: String = ""
+    //var colourScores: ColourScores = ColourScores(darkness: 5, vibrancy: 5, contrast: 5)
     
     // Patterns Section - descriptive vocabulary for visual rhythm (up to 2 sentences)
     //var patterns: String = ""
@@ -902,7 +902,7 @@ struct DailyVibeContent: Codable {
     
     // MARK: - Style Tokens
     
-    // Store tokens for UI access (color palette, etc.)
+    // Store tokens for UI access (colour palette, etc.)
     var styleTokens: [StyleToken] = []
     
     // MARK: - Environmental Context
@@ -913,14 +913,14 @@ struct DailyVibeContent: Codable {
     
     // MARK: - Legacy Properties (for transition compatibility)
     /*
-    @available(*, deprecated, message: "Use colorScores.brightness instead")
+    @available(*, deprecated, message: "Use colourScores.brightness instead")
     var brightness: Int {
-        return 10 - colorScores.darkness // Inverse for backward compatibility
+        return 10 - colourScores.darkness // Inverse for backward compatibility
     }
     
-    @available(*, deprecated, message: "Use colorScores.vibrancy instead")
+    @available(*, deprecated, message: "Use colourScores.vibrancy instead")
     var vibrancy: Int {
-        return colorScores.vibrancy
+        return colourScores.vibrancy
     }
      */
     
@@ -979,13 +979,13 @@ struct DailyVibeContent: Codable {
             output += "\(textiles)\n\n"
         }
         
-        // Colors
-        if !colors.isEmpty {
-            output += "🎨 COLORS\n"
-            output += "\(colors)\n"
-            output += "Darkness: \(colorScores.darkness)/10 (\(colorScores.darknessDescription))\n"
-            output += "Vibrancy: \(colorScores.vibrancy)/10 (\(colorScores.vibrancyDescription))\n"
-            output += "Contrast: \(colorScores.contrast)/10 (\(colorScores.contrastDescription))\n\n"
+        // Colours
+        if !colours.isEmpty {
+            output += "🎨 COLOURS\n"
+            output += "\(colours)\n"
+            output += "Darkness: \(colourScores.darkness)/10 (\(colourScores.darknessDescription))\n"
+            output += "Vibrancy: \(colourScores.vibrancy)/10 (\(colourScores.vibrancyDescription))\n"
+            output += "Contrast: \(colourScores.contrast)/10 (\(colourScores.contrastDescription))\n\n"
         }
         
         // Patterns
@@ -1167,8 +1167,8 @@ extension DailyVibeGenerator {
         return selectAxisAwareCopy(section: "textiles", variant: variant, tokens: tokens, axes: axes)
     }
     
-    /// Generate colors section with palette description
-    private static func generateColorsSection(from tokens: [StyleToken], axes: DerivedAxes) -> String {
+    /// Generate colours section with palette description
+    private static func generateColoursSection(from tokens: [StyleToken], axes: DerivedAxes) -> String {
         let variant: String
         if axes.visibility >= DerivedAxesConfiguration.CopySelection.visibilityThreshold {
             variant = "bold"  // High visibility
@@ -1182,7 +1182,7 @@ extension DailyVibeGenerator {
             print("  🔹 Colours: Visibility=\(String(format: "%.1f", axes.visibility)) → \(variant)")
         }
         
-        return selectAxisAwareCopy(section: "colors", variant: variant, tokens: tokens, axes: axes)
+        return selectAxisAwareCopy(section: "colours", variant: variant, tokens: tokens, axes: axes)
     }
     
     /// Generate patterns section (up to 2 sentences)
@@ -1301,7 +1301,7 @@ extension DailyVibeGenerator {
             return "Choose fabrics that feel right against your skin and move with your rhythm."
         case "patterns":
             return "Select patterns that speak to your mood—whether minimal or expressive."
-        case "colors", "colours":
+        case "colours":
             return "Let today's palette reflect your inner landscape with tones that resonate."
         case "accessories":
             return "Accessories that add texture and intention to complete your expression."

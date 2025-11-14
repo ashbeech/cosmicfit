@@ -18,7 +18,7 @@ final class BlueprintViewController: UIViewController {
     // MARK: - UI Components
     private let scrollView: UIScrollView = {
         let sv = UIScrollView()
-        sv.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        sv.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         sv.showsVerticalScrollIndicator = true
         sv.alwaysBounceVertical = true
         return sv
@@ -38,7 +38,7 @@ final class BlueprintViewController: UIViewController {
             string: "ABOUT YOU",
             attributes: [
                 .font: CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold),
-                .foregroundColor: CosmicFitTheme.Colors.darkerCosmicGrey,
+                .foregroundColor: CosmicFitTheme.Colours.darkerCosmicGrey,
                 .kern: 1.75
             ]
         )
@@ -51,13 +51,13 @@ final class BlueprintViewController: UIViewController {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.image = UIImage(named: "cb_icon_placeholder") // Placeholder image
-        iv.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
         return iv
     }()
     
     private let mainHeadingLabel: UILabel = {
         let label = UILabel()
-        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .center
         label.numberOfLines = 2
         
@@ -70,7 +70,7 @@ final class BlueprintViewController: UIViewController {
             string: "YOUR COSMIC\nBLUEPRINT",
             attributes: [
                 .font: CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.pageTitle),
-                .foregroundColor: CosmicFitTheme.Colors.cosmicBlue,
+                .foregroundColor: CosmicFitTheme.Colours.cosmicBlue,
                 .paragraphStyle: paragraphStyle
             ]
         )
@@ -81,7 +81,7 @@ final class BlueprintViewController: UIViewController {
     
     private let topDivider: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         return view
     }()
     
@@ -89,7 +89,7 @@ final class BlueprintViewController: UIViewController {
         let label = UILabel()
         label.text = "Style Essence"
         label.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.subheadline, weight: .regular)
-        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .center
         return label
     }()
@@ -98,7 +98,7 @@ final class BlueprintViewController: UIViewController {
         let label = UILabel()
         label.text = "You've got that intuitive elegance that feels both grounded and gently dreamy. Quality lands through texture and quiet proportion, so your presence reads luxurious without effort. There is a soft confidence in the way you move, a tactile-first approach that makes people feel both soothed and curious. Fewer, better pieces that age well are your language."
         label.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
-        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .left
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
@@ -107,7 +107,7 @@ final class BlueprintViewController: UIViewController {
     
     private let middleDivider: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         return view
     }()
     
@@ -144,13 +144,13 @@ final class BlueprintViewController: UIViewController {
     
     private let bottomDividerLeft: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         return view
     }()
     
     private let bottomDividerRight: UIView = {
         let view = UIView()
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicBlue
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         return view
     }()
     
@@ -158,7 +158,7 @@ final class BlueprintViewController: UIViewController {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.image = UIImage(named: "star_icon_placeholder") // Placeholder image
-        iv.tintColor = CosmicFitTheme.Colors.cosmicBlue
+        iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
         return iv
     }()
     
@@ -200,7 +200,7 @@ final class BlueprintViewController: UIViewController {
     
     // MARK: - Setup
     private func setupUI() {
-        view.backgroundColor = CosmicFitTheme.Colors.cosmicGrey
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -439,7 +439,7 @@ final class BlueprintViewController: UIViewController {
             )
             
         case .colourGuide:
-            let colorPalette = ColorPaletteView.createPlaceholderPalette()
+            let colourPalette = ColourPaletteView.createPlaceholderPalette()
             
             return BlueprintDetailContent(
                 sectionType: .colourGuide,
@@ -452,14 +452,14 @@ final class BlueprintViewController: UIViewController {
                     ),
                     BlueprintDetailContent.TextSection(
                         subheading: "Current Colour Phase",
-                        bodyText: "You're settling deeper into your natural palette of rich, luxurious earth tones, but with this soft, dreamy edge. Think creamy caramels, deep sage greens, sophisticated warm browns, and those pearl greys that feel both solid and ethereal. You're getting braver with warmer, more expansive touches like golden undertones and dusty roses, plus little hits of adaptable colors that can roll with whatever your day brings."
+                        bodyText: "You're settling deeper into your natural palette of rich, luxurious earth tones, but with this soft, dreamy edge. Think creamy caramels, deep sage greens, sophisticated warm browns, and those pearl greys that feel both solid and ethereal. You're getting braver with warmer, more expansive touches like golden undertones and dusty roses, plus little hits of adaptable colours that can roll with whatever your day brings."
                     ),
                     BlueprintDetailContent.TextSection(
                         subheading: "Personal Palette",
                         bodyText: ""
                     )
                 ],
-                customComponent: colorPalette
+                customComponent: colourPalette
             )
             
         case .dosAndDonts:
@@ -477,7 +477,7 @@ final class BlueprintViewController: UIViewController {
                     "Your first gut reaction about how stuff feels, your body knows what works",
                     "Investing in pieces that feel solid and well-made",
                     "Layering for both comfort and visual interest",
-                    "Picking colors that make you feel grounded and confident",
+                    "Picking colours that make you feel grounded and confident",
                     "Honouring your need for both beauty and practicality"
                 ]
             )
@@ -524,7 +524,7 @@ final class BlueprintGridButton: UIButton {
     private let numberLabel: UILabel = {
         let label = UILabel()
         label.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.largeTitle, weight: .bold)
-        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .left
         return label
     }()
@@ -532,7 +532,7 @@ final class BlueprintGridButton: UIButton {
     private let buttonTitleLabel: UILabel = {
         let label = UILabel()
         label.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .semibold)
-        label.textColor = CosmicFitTheme.Colors.cosmicBlue
+        label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .left
         label.numberOfLines = 2
         return label
@@ -570,7 +570,7 @@ final class BlueprintGridButton: UIButton {
     
     private func setupUI() {
         backgroundColor = .clear
-        layer.borderColor = CosmicFitTheme.Colors.cosmicBlue.cgColor
+        layer.borderColor = CosmicFitTheme.Colours.cosmicBlue.cgColor
         layer.borderWidth = 2
         layer.cornerRadius = 12
         clipsToBounds = true

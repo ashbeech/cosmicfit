@@ -21,7 +21,7 @@ enum OriginType: String, CaseIterable, Codable {
 
 struct StyleToken: Codable {
     let name: String         // e.g., "earthy", "bold", "fluid"
-    let type: String         // e.g., "fabric", "mood", "color", "texture"
+    let type: String         // e.g., "fabric", "mood", "colour", "texture"
     let weight: Double       // numerical weight based on source importance
     
     // Origin tracking for Blueprint generation

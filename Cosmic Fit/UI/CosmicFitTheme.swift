@@ -11,9 +11,9 @@ import UIKit
 /// Provides centralized theming for all UI elements across the app
 struct CosmicFitTheme {
     
-    // MARK: - Colors
-    struct Colors {
-        /// Cosmic Grey - Main background color for content areas (#DEDEDE)
+    // MARK: - Colours
+    struct Colours {
+        /// Cosmic Grey - Main background colour for content areas (#DEDEDE)
         static let cosmicGrey = UIColor(red: 222/255, green: 222/255, blue: 222/255, alpha: 1.0)
         
         /// Darker Cosmic Grey - Sub-page background for subtle depth
@@ -22,30 +22,30 @@ struct CosmicFitTheme {
         /// Dark Cosmic Grey - Navigation bar background for contrast (#B8B8B8)
         static let darkCosmicGrey = UIColor(red: 184/255, green: 184/255, blue: 184/255, alpha: 1.0)
         
-        /// Cosmic Blue - Primary text color (#000210)
+        /// Cosmic Blue - Primary text colour (#000210)
         static let cosmicBlue = UIColor(red: 0/255, green: 2/255, blue: 16/255, alpha: 1.0)
         
-        /// Highlight/accent colors (#FF8502/7E69E6)
+        /// Highlight/accent colours (#FF8502/7E69E6)
         static let cosmicOrange = UIColor(red: 255/255, green: 133/255, blue: 2/255, alpha: 1.0)
         
         static let cosmicLilac = UIColor(red: 126/255, green: 105/255, blue: 230/255, alpha: 1.0)
 
-        /// Tab bar background color - Black
+        /// Tab bar background colour - Black
         static let tabBarBackground = cosmicBlue
         
-        /// Tab bar text/icon color - White
+        /// Tab bar text/icon colour - White
         static let tabBarInactive = UIColor.white
         
-        /// Tab bar active/selected color - Cosmic Orange
+        /// Tab bar active/selected colour - Cosmic Orange
         static let tabBarActive = cosmicLilac
         
-        /// Border color for form elements
+        /// Border colour for form elements
         static let borderColor = cosmicBlue
         
         /// Transparent background for input fields
         static let transparentBackground = UIColor.clear
         
-        /// Divider color
+        /// Divider colour
         static let dividerColor = cosmicBlue.withAlphaComponent(0.3)
     }
     
@@ -147,19 +147,19 @@ struct CosmicFitTheme {
     
     /// Apply theme to navigation bar
     static func styleNavigationBar(_ navigationBar: UINavigationBar) {
-        navigationBar.backgroundColor = Colors.darkCosmicGrey
+        navigationBar.backgroundColor = Colours.darkCosmicGrey
         navigationBar.titleTextAttributes = [
-            .foregroundColor: Colors.cosmicBlue,
+            .foregroundColor: Colours.cosmicBlue,
             .font: Typography.DMSerifTextFont(size: Typography.FontSizes.headline, weight: .semibold)
         ]
-        navigationBar.tintColor = Colors.cosmicOrange
+        navigationBar.tintColor = Colours.cosmicOrange
         
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = Colors.darkCosmicGrey
+            appearance.backgroundColor = Colours.darkCosmicGrey
             appearance.titleTextAttributes = [
-                .foregroundColor: Colors.cosmicBlue,
+                .foregroundColor: Colours.cosmicBlue,
                 .font: Typography.DMSerifTextFont(size: Typography.FontSizes.headline, weight: .semibold)
             ]
             navigationBar.standardAppearance = appearance
@@ -169,27 +169,27 @@ struct CosmicFitTheme {
     
     /// Apply theme to tab bar with black background and white text
     static func styleTabBar(_ tabBar: UITabBar) {
-        tabBar.backgroundColor = Colors.tabBarBackground
-        tabBar.barTintColor = Colors.tabBarBackground
-        tabBar.tintColor = Colors.tabBarActive
-        tabBar.unselectedItemTintColor = Colors.tabBarInactive
+        tabBar.backgroundColor = Colours.tabBarBackground
+        tabBar.barTintColor = Colours.tabBarBackground
+        tabBar.tintColor = Colours.tabBarActive
+        tabBar.unselectedItemTintColor = Colours.tabBarInactive
         tabBar.isTranslucent = false
         
         if #available(iOS 13.0, *) {
             let tabBarAppearance = UITabBarAppearance()
             tabBarAppearance.configureWithOpaqueBackground()
-            tabBarAppearance.backgroundColor = Colors.tabBarBackground
+            tabBarAppearance.backgroundColor = Colours.tabBarBackground
             
             // Selected tab item - Orange text with DM Serif Text font
             tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [
-                .foregroundColor: Colors.tabBarActive,
+                .foregroundColor: Colours.tabBarActive,
                 .font: Typography.DMSerifTextFont(size: Typography.FontSizes.body, weight: .regular)
             ]
             tabBarAppearance.stackedLayoutAppearance.selected.iconColor = .clear // Hide icon
             
             // Normal tab item - White text with DM Serif Text font
             tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [
-                .foregroundColor: Colors.tabBarInactive,
+                .foregroundColor: Colours.tabBarInactive,
                 .font: Typography.DMSerifTextFont(size: Typography.FontSizes.body, weight: .regular)
             ]
             tabBarAppearance.stackedLayoutAppearance.normal.iconColor = .clear // Hide icon
@@ -206,11 +206,11 @@ struct CosmicFitTheme {
             // Fallback for older iOS versions
             tabBar.items?.forEach { item in
                 item.setTitleTextAttributes([
-                    .foregroundColor: Colors.tabBarInactive,
+                    .foregroundColor: Colours.tabBarInactive,
                     .font: Typography.DMSerifTextFont(size: Typography.FontSizes.body, weight: .regular)
                 ], for: .normal)
                 item.setTitleTextAttributes([
-                    .foregroundColor: Colors.tabBarActive,
+                    .foregroundColor: Colours.tabBarActive,
                     .font: Typography.DMSerifTextFont(size: Typography.FontSizes.body, weight: .regular)
                 ], for: .selected)
                 item.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: -10)
@@ -227,7 +227,7 @@ struct CosmicFitTheme {
                 subview.removeFromSuperview()
             }
         }
-        // New design uses color change only, no background indicator
+        // New design uses colour change only, no background indicator
     }
     
     /// Add vertical dividers between tabs
@@ -256,7 +256,7 @@ struct CosmicFitTheme {
     
     /// Apply theme to a content background view
     static func styleContentBackground(_ view: UIView) {
-        view.backgroundColor = Colors.cosmicGrey
+        view.backgroundColor = Colours.cosmicGrey
         view.layer.cornerRadius = 12
         view.layer.masksToBounds = true
     }
@@ -264,35 +264,35 @@ struct CosmicFitTheme {
     /// Apply theme to a title label (headers)
     static func styleTitleLabel(_ label: UILabel, fontSize: CGFloat = Typography.FontSizes.title2, weight: UIFont.Weight = .semibold) {
         label.font = Typography.DMSerifTextFont(size: fontSize, weight: weight)
-        label.textColor = Colors.cosmicBlue
+        label.textColor = Colours.cosmicBlue
     }
     
     /// text over tarot card
     static func styleBodyLabel(_ label: UILabel, fontSize: CGFloat = Typography.FontSizes.body, weight: UIFont.Weight = .regular) {
         label.font = Typography.dmSansFont(size: fontSize, weight: weight)
-        label.textColor = Colors.cosmicGrey
+        label.textColor = Colours.cosmicGrey
     }
     
     /// Apply theme to a subsection header label (for Do's & Don'ts sections)
     static func styleSubsectionLabel(_ label: UILabel, fontSize: CGFloat = Typography.FontSizes.title3, italic: Bool = true) {
         label.font = italic ? Typography.DMSerifTextItalicFont(size: fontSize) : Typography.DMSerifTextFont(size: fontSize)
-        label.textColor = Colors.cosmicBlue
+        label.textColor = Colours.cosmicBlue
         label.textAlignment = .left
     }
 
     /// Apply theme to a decorative symbol label (like stars, bullets)
     static func styleSymbolLabel(_ label: UILabel, fontSize: CGFloat = Typography.FontSizes.title3) {
         label.font = UIFont.systemFont(ofSize: fontSize)
-        label.textColor = Colors.cosmicBlue
+        label.textColor = Colours.cosmicBlue
         label.textAlignment = .left
     }
     
     /// Apply theme to a text field
     static func styleTextField(_ textField: UITextField) {
-        textField.backgroundColor = Colors.transparentBackground
+        textField.backgroundColor = Colours.transparentBackground
         textField.font = Typography.dmSansFont(size: Typography.FontSizes.body)
-        textField.textColor = Colors.cosmicBlue
-        textField.layer.borderColor = Colors.borderColor.cgColor
+        textField.textColor = Colours.cosmicBlue
+        textField.layer.borderColor = Colours.borderColor.cgColor
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 8
         
@@ -301,7 +301,7 @@ struct CosmicFitTheme {
             textField.attributedPlaceholder = NSAttributedString(
                 string: placeholder,
                 attributes: [
-                    .foregroundColor: Colors.cosmicBlue.withAlphaComponent(0.6),
+                    .foregroundColor: Colours.cosmicBlue.withAlphaComponent(0.6),
                     .font: Typography.dmSansFont(size: Typography.FontSizes.body)
                 ]
             )
@@ -317,11 +317,11 @@ struct CosmicFitTheme {
     
     /// Apply theme to a text view
     static func styleTextView(_ textView: UITextView) {
-        textView.backgroundColor = Colors.transparentBackground
+        textView.backgroundColor = Colours.transparentBackground
         textView.font = Typography.dmSansFont(size: Typography.FontSizes.body)
-        textView.textColor = Colors.cosmicBlue
+        textView.textColor = Colours.cosmicBlue
         textView.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
-        textView.layer.borderColor = Colors.borderColor.cgColor
+        textView.layer.borderColor = Colours.borderColor.cgColor
         textView.layer.borderWidth = 1.0
         textView.layer.cornerRadius = 8
         textView.isEditable = false
@@ -333,18 +333,18 @@ struct CosmicFitTheme {
     static func styleButton(_ button: UIButton, style: ButtonStyle = .primary) {
         switch style {
         case .primary:
-            button.backgroundColor = Colors.cosmicOrange
+            button.backgroundColor = Colours.cosmicOrange
             button.setTitleColor(.white, for: .normal)
             button.titleLabel?.font = Typography.dmSansFont(size: Typography.FontSizes.headline, weight: .semibold)
         case .secondary:
-            button.backgroundColor = Colors.cosmicGrey
-            button.setTitleColor(Colors.cosmicBlue, for: .normal)
+            button.backgroundColor = Colours.cosmicGrey
+            button.setTitleColor(Colours.cosmicBlue, for: .normal)
             button.titleLabel?.font = Typography.dmSansFont(size: Typography.FontSizes.headline, weight: .medium)
-            button.layer.borderColor = Colors.cosmicBlue.cgColor
+            button.layer.borderColor = Colours.cosmicBlue.cgColor
             button.layer.borderWidth = 1.0
         case .text:
             button.backgroundColor = UIColor.clear
-            button.setTitleColor(Colors.cosmicOrange, for: .normal)
+            button.setTitleColor(Colours.cosmicOrange, for: .normal)
             button.titleLabel?.font = Typography.dmSansFont(size: Typography.FontSizes.body, weight: .medium)
         }
         
@@ -357,13 +357,13 @@ struct CosmicFitTheme {
         if #available(iOS 14.0, *) {
             datePicker.preferredDatePickerStyle = .wheels
         }
-        datePicker.backgroundColor = Colors.cosmicGrey
-        datePicker.setValue(Colors.cosmicBlue, forKey: "textColor")
+        datePicker.backgroundColor = Colours.cosmicGrey
+        datePicker.setValue(Colours.cosmicBlue, forKey: "textColor")
     }
     
     /// Apply theme to divider/separator views
     static func styleDivider(_ divider: UIView) {
-        divider.backgroundColor = Colors.dividerColor
+        divider.backgroundColor = Colours.dividerColor
     }
     
     /// Create themed attributed string for mixed title/content text
@@ -373,14 +373,14 @@ struct CosmicFitTheme {
         // Title attributes (DM Serif Text font)
         let titleAttributes: [NSAttributedString.Key: Any] = [
             .font: Typography.DMSerifTextFont(size: titleSize, weight: .semibold),
-            .foregroundColor: Colors.cosmicBlue
+            .foregroundColor: Colours.cosmicBlue
         ]
         attributedString.append(NSAttributedString(string: "\(title)\n", attributes: titleAttributes))
         
         // Content attributes (DM Sans font)
         let contentAttributes: [NSAttributedString.Key: Any] = [
             .font: Typography.dmSansFont(size: contentSize, weight: .regular),
-            .foregroundColor: Colors.cosmicBlue
+            .foregroundColor: Colours.cosmicBlue
         ]
         attributedString.append(NSAttributedString(string: content, attributes: contentAttributes))
         

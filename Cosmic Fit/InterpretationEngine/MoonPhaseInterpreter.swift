@@ -112,7 +112,7 @@ struct MoonPhaseInterpreter {
             ))
             tokens.append(StyleToken(
                 name: "minimal",
-                type: "color",
+                type: "colour",
                 weight: baseWeight - 0.3,
                 planetarySource: "Moon Phase",
                 aspectSource: "New Moon"
@@ -135,7 +135,7 @@ struct MoonPhaseInterpreter {
             ))
             tokens.append(StyleToken(
                 name: "vibrant",
-                type: "color",
+                type: "colour",
                 weight: baseWeight - 0.3,
                 planetarySource: "Moon Phase",
                 aspectSource: "Full Moon"
@@ -195,7 +195,7 @@ struct MoonPhaseInterpreter {
             ))
             tokens.append(StyleToken(
                 name: "minimal",
-                type: "color",
+                type: "colour",
                 weight: baseWeight - 0.3,
                 planetarySource: "Moon Phase",
                 aspectSource: "New Moon"
@@ -248,7 +248,7 @@ struct MoonPhaseInterpreter {
             ))
             tokens.append(StyleToken(
                 name: "dynamic",
-                type: "color",
+                type: "colour",
                 weight: baseWeight - 0.3,
                 planetarySource: "Moon Phase",
                 aspectSource: "First Quarter"
@@ -294,7 +294,7 @@ struct MoonPhaseInterpreter {
             ))
             tokens.append(StyleToken(
                 name: "vibrant",
-                type: "color",
+                type: "colour",
                 weight: baseWeight - 0.3,
                 planetarySource: "Moon Phase",
                 aspectSource: "Full Moon"
@@ -324,7 +324,7 @@ struct MoonPhaseInterpreter {
             ))
             tokens.append(StyleToken(
                 name: "rich",
-                type: "color",
+                type: "colour",
                 weight: baseWeight - 0.3,
                 planetarySource: "Moon Phase",
                 aspectSource: "Waning Gibbous"
@@ -363,7 +363,7 @@ struct MoonPhaseInterpreter {
             ))
             tokens.append(StyleToken(
                 name: "subtle",
-                type: "color",
+                type: "colour",
                 weight: baseWeight - 0.2,
                 planetarySource: "Moon Phase",
                 aspectSource: "Waning Crescent"
@@ -380,8 +380,8 @@ struct MoonPhaseInterpreter {
         return tokens
     }
     
-    // Get color palette suggestions based on moon phase
-    static func colorPaletteForPhase(phase: Phase) -> [String] {
+    // Get colour palette suggestions based on moon phase
+    static func colourPaletteForPhase(phase: Phase) -> [String] {
         switch phase {
         case .newMoon:
             return ["black", "charcoal", "deep navy", "indigo", "dark plum"]
