@@ -1,5 +1,5 @@
 //
-//  ColorPaletteView.swift
+//  ColourPaletteView.swift
 //  Cosmic Fit
 //
 //  Custom component for displaying colour palette grid (used by Blueprint)

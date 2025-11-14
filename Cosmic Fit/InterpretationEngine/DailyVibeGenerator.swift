@@ -137,7 +137,7 @@ class DailyVibeGenerator {
         // Generate comprehensive sections
         let textiles = generateTextilesSection(from: allTokens, axes: derivedAxes)
         let colours = generateColoursSection(from: allTokens, axes: derivedAxes)
-        let colourScores = ColorScoring.calculateColourScores(from: allTokens)
+        let colourScores = ColourScoring.calculateColourScores(from: allTokens)
         let patterns = generatePatternsSection(from: allTokens, axes: derivedAxes)
         let shape = generateShapeSection(from: allTokens, axes: derivedAxes)
         let accessories = generateAccessoriesSection(from: allTokens, axes: derivedAxes)
@@ -153,7 +153,7 @@ class DailyVibeGenerator {
         print("\n✨ COMPREHENSIVE DAILY SYSTEM GENERATED:")
         //print("  Style Brief: \"\(styleBrief.prefix(50))...\"")
         print("  Dominant Energy: \(getDominantEnergyName(from: vibeBreakdown))")
-        //print("  Color Scores: D:\(colourScores.darkness) V:\(colourScores.vibrancy) C:\(colourScores.contrast)")
+        //print("  Colour Scores: D:\(colourScores.darkness) V:\(colourScores.vibrancy) C:\(colourScores.contrast)")
         //print("  Angular/Curvy: \(angularCurvyScore.score)/10")
         //print("  Layering Score: \(layeringScore)/10")
         if let tarotCard = selectedTarotCard {

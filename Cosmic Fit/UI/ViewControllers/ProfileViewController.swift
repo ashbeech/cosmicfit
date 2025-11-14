@@ -590,8 +590,8 @@ class ProfileViewController: UIViewController {
         updateButton.isEnabled = false
         
         // Store the original button configuration to restore later
-        let originalTitle = updateButton.title(for: .normal)
-        let originalbackgroundColor = updateButton.backgroundColor
+        //let originalTitle = updateButton.title(for: .normal)
+        //let originalbackgroundColor = updateButton.backgroundColor
         
         // Show success animation
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations: {

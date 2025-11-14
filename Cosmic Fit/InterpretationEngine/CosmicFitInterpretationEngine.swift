@@ -57,7 +57,7 @@ class CosmicFitInterpretationEngine {
         
         // Generate colour frequency tokens for nuanced colours
         DebugConfiguration.debugLog {
-            print("\n🎨 GENERATING COLOR FREQUENCY TOKENS 🎨")
+            print("\n🎨 GENERATING COLOUR FREQUENCY TOKENS 🎨")
         }
         
         let colourFrequencyTokens = SemanticTokenGenerator.generateColourFrequencyTokens(
@@ -257,7 +257,7 @@ class CosmicFitInterpretationEngine {
         
         TEXTILES: \(dailyVibe.textiles)
         
-        COLORS: \(dailyVibe.colours)
+        COLOURS: \(dailyVibe.colours)
         
         PATTERNS: \(dailyVibe.patterns)
         

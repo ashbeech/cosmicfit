@@ -1908,7 +1908,7 @@ class DailyFitViewController: UIViewController {
             
             /*
             print("\n🌈 COLOUR SCORES:")
-            let colorScores = dailyVibe.colourScores
+            let colourScores = dailyVibe.colourScores
             print("• Darkness: \(colourScores.darkness)/10")
             print("• Vibrancy: \(colourScores.vibrancy)/10")
             print("• Contrast: \(colourScores.contrast)/10")
