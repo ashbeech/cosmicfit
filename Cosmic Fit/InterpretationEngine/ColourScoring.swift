@@ -1,26 +1,26 @@
 //
-//  ColorScoring.swift
+//  ColourScoring.swift
 //  Cosmic Fit
 //
-//  Created for Daily System color scoring implementation
+//  Created for Daily System colour scoring implementation
 //
 
 import Foundation
 
-/// Handles color scoring algorithms for the Daily System format
-class ColorScoring {
+/// Handles colour scoring algorithms for the Daily System format
+class ColourScoring {
     
-    // MARK: - Public Color Scoring Methods
+    // MARK: - Public Colour Scoring Methods
     
-    /// Calculate color scores based on astrological chart influences
+    /// Calculate colour scores based on astrological chart influences
     /// - Parameter tokens: Array of style tokens
-    /// - Returns: ColorScores with darkness, vibrancy, and contrast ratings (1-10)
-    static func calculateColorScores(from tokens: [StyleToken]) -> ColorScores {
+    /// - Returns: ColourScores with darkness, vibrancy, and contrast ratings (1-10)
+    static func calculateColourScores(from tokens: [StyleToken]) -> ColourScores {
         let darkness = calculateDarknessScore(tokens: tokens)
         let vibrancy = calculateVibrancyScore(tokens: tokens)
         let contrast = calculateContrastScore(tokens: tokens)
         
-        return ColorScores(
+        return ColourScores(
             darkness: max(1, min(10, darkness)),
             vibrancy: max(1, min(10, vibrancy)),
             contrast: max(1, min(10, contrast))
@@ -263,8 +263,8 @@ class ColorScoring {
     }
 }
 
-/// Structure to hold color scoring results
-struct ColorScores: Codable {
+/// Structure to hold colour scoring results
+struct ColourScores: Codable {
     let darkness: Int      // 1-10 scale
     let vibrancy: Int      // 1-10 scale  
     let contrast: Int      // 1-10 scale
