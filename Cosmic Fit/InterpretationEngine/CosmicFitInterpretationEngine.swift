@@ -170,16 +170,23 @@ class CosmicFitInterpretationEngine {
             print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         }
         
+        // Generate Blueprint to extract colour tokens for Daily Fit palette
+        print("🎨 Generating Blueprint for colour palette source...")
+        let blueprint = generateBlueprintInterpretation(from: natalChart)
+        let blueprintColours = blueprint.tokensUsed.filter { $0.type == "colour" }
+        print("✅ Extracted \(blueprintColours.count) colour tokens from Blueprint")
+        
         // Calculate moon phase using existing helper
         let moonPhase = calculateCurrentMoonPhase()
         
-        // Generate daily vibe with seeding
+        // Generate daily vibe with seeding and Blueprint colours
         let dailyVibe = DailyVibeGenerator.generateDailyVibe(
             natalChart: natalChart,
             progressedChart: progressedChart,
             transits: transits,
             weather: weather,
             moonPhase: moonPhase,
+            blueprintColours: blueprintColours,
             profileHash: profileHash,
             date: date
         )

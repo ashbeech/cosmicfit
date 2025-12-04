@@ -3263,10 +3263,10 @@ class SemanticTokenGenerator {
         }
         
         private static let seasonalColourMappings: [ColourSeason: [(String, Double)]] = [
-            .deepAutumn: [("rust", 2.0), ("olive", 1.8), ("burgundy", 1.9), ("golden_brown", 1.7), ("deep_orange", 1.6)],
-            .brightWinter: [("royal_blue", 2.0), ("emerald", 1.9), ("magenta", 1.8), ("black", 2.0), ("white", 1.7)],
-            .warmSpring: [("coral", 1.8), ("golden_yellow", 1.9), ("warm_green", 1.6), ("peach", 1.7), ("camel", 1.5)],
-            .coolSummer: [("lavender", 1.6), ("soft_blue", 1.7), ("rose", 1.5), ("mint", 1.4), ("pearl_gray", 1.6)]
+            .deepAutumn: [("rust", 2.0), ("olive", 1.8), ("burgundy", 1.9), ("golden brown", 1.7), ("deep orange", 1.6)],
+            .brightWinter: [("royal blue", 2.0), ("emerald", 1.9), ("magenta", 1.8), ("black", 2.0), ("white", 1.7)],
+            .warmSpring: [("coral", 1.8), ("golden yellow", 1.9), ("warm green", 1.6), ("peach", 1.7), ("camel", 1.5)],
+            .coolSummer: [("lavender", 1.6), ("soft blue", 1.7), ("rose", 1.5), ("mint", 1.4), ("pearl gray", 1.6)]
             // Add more seasonal mappings as needed
         ]
         
@@ -3317,18 +3317,18 @@ class SemanticTokenGenerator {
     /// Traditional astrological colour mappings per professional standards
     struct TraditionalColours {
         static let signColours: [String: [(String, String)]] = [
-            "Aries": [("red", "colour"), ("bright_orange", "colour"), ("bold_contrast", "colour_quality")],
-            "Taurus": [("sage_green", "colour"), ("rose", "colour"), ("warm_brown", "colour"), ("cream", "colour")],
-            "Gemini": [("yellow", "colour"), ("bright_patterns", "colour_quality"), ("mixed_combinations", "colour_quality")],
-            "Cancer": [("white", "colour"), ("silver", "colour"), ("pearl", "colour"), ("nautical_themes", "colour_quality")],
+            "Aries": [("red", "colour"), ("bright orange", "colour"), ("bold contrast", "colour_quality")],
+            "Taurus": [("sage green", "colour"), ("rose", "colour"), ("warm brown", "colour"), ("cream", "colour")],
+            "Gemini": [("yellow", "colour"), ("bright patterns", "colour_quality"), ("mixed combinations", "colour_quality")],
+            "Cancer": [("white", "colour"), ("silver", "colour"), ("pearl", "colour"), ("nautical themes", "colour_quality")],
             "Leo": [("gold", "colour"), ("orange", "colour"), ("red", "colour"), ("purple", "colour"), ("crimson", "colour"), ("royal", "colour_quality")],
-            "Virgo": [("navy", "colour"), ("wheat", "colour"), ("brown", "colour"), ("precisely_tailored", "colour_quality")],
-            "Libra": [("rose_pink", "colour"), ("pastels", "colour"), ("harmonious_combinations", "colour_quality"), ("balanced_proportions", "colour_quality")],
-            "Scorpio": [("black", "colour"), ("burgundy", "colour"), ("deep_colours", "colour_quality"), ("power_silhouettes", "colour_quality")],
-            "Sagittarius": [("purple", "colour"), ("royal_blue", "colour"), ("international_influences", "colour_quality"), ("travel_ready", "colour_quality")],
-            "Capricorn": [("charcoal", "colour"), ("brown", "colour"), ("black", "colour"), ("classic_business", "colour_quality")],
-            "Aquarius": [("electric_blue", "colour"), ("unexpected_combinations", "colour_quality"), ("technical_fabrics", "colour_quality")],
-            "Pisces": [("sea_colours", "colour_quality"), ("flowing_fabrics", "colour_quality"), ("ethereal_elements", "colour_quality")]
+            "Virgo": [("navy", "colour"), ("wheat", "colour"), ("brown", "colour"), ("precisely tailored", "colour_quality")],
+            "Libra": [("rose pink", "colour"), ("pastels", "colour"), ("harmonious combinations", "colour_quality"), ("balanced proportions", "colour_quality")],
+            "Scorpio": [("black", "colour"), ("burgundy", "colour"), ("deep colours", "colour_quality"), ("power silhouettes", "colour_quality")],
+            "Sagittarius": [("purple", "colour"), ("royal blue", "colour"), ("international influences", "colour_quality"), ("travel ready", "colour_quality")],
+            "Capricorn": [("charcoal", "colour"), ("brown", "colour"), ("black", "colour"), ("classic business", "colour_quality")],
+            "Aquarius": [("electric blue", "colour"), ("unexpected combinations", "colour_quality"), ("technical fabrics", "colour_quality")],
+            "Pisces": [("sea colours", "colour_quality"), ("flowing fabrics", "colour_quality"), ("ethereal elements", "colour_quality")]
         ]
     }
     
@@ -3421,7 +3421,7 @@ class SemanticTokenGenerator {
             // Check that traditional colour mappings are being used
             let taurusTokens = tokens.filter { $0.signSource == "Taurus" }
             let hasTraditionalTaurusColours = taurusTokens.contains { token in
-                ["sage_green", "rose", "warm_brown", "cream"].contains(token.name)
+                ["sage green", "rose", "warm brown", "cream"].contains(token.name)
             }
             
             let scorpioTokens = tokens.filter { $0.signSource == "Scorpio" }
@@ -3438,7 +3438,7 @@ class SemanticTokenGenerator {
         case "Aries":
             return [("energetic", "mood"), ("bold", "colour_quality"), ("dynamic", "expression"), ("fiery", "texture")]
         case "Taurus":
-            return [("grounded", "mood"), ("luxurious", "texture"), ("sage_green", "colour"), ("quality", "structure")]
+            return [("grounded", "mood"), ("luxurious", "texture"), ("sage green", "colour"), ("quality", "structure")]
         case "Gemini":
             return [("versatile", "expression"), ("bright", "colour_quality"), ("communicative", "mood"), ("airy", "texture")]
         case "Cancer":

@@ -805,7 +805,7 @@ class TarotCardSelector {
         guard !tokens.isEmpty else { return 0.5 }
         
         let cardKeywords = Set(card.keywords.map { $0.lowercased() })
-        let tokenNames = Set(tokens.map { $0.name.lowercased() })
+        //let tokenNames = Set(tokens.map { $0.name.lowercased() })
         
         // Count matching keywords (weighted by token weight)
         var matchScore: Double = 0.0

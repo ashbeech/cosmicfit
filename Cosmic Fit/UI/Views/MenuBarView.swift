@@ -21,7 +21,7 @@ final class MenuBarView: UIView {
         iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
         
         // Invert colours using Core Animation
-        let filter = CIFilter(name: "CIColourInvert")
+        let filter = CIFilter(name: "CIColorInvert")
         iv.layer.filters = [filter as Any]
         
         return iv

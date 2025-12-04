@@ -356,6 +356,7 @@ class AnimatedLaunchScreenViewController: UIViewController {
     }
     
     private func transitionToMainApp() {
+        
         guard let mainViewController = mainViewController else {
             // This should never happen - AppDelegate always sets mainViewController
             print("❌ CRITICAL: No main view controller set in AnimatedLaunchScreenViewController")

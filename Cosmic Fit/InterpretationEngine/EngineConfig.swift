@@ -18,9 +18,6 @@ struct EngineConfig {
     /// Increased to allow daily energy to breathe and create meaningful variation
     static let transitCap: Double = 0.65
     
-    /// Target transit share for distribution scaling (40% for meaningful daily shifts)
-    static let transitTargetShare: Double = 0.40
-    
     // MARK: - Axis Token Generation
     
     /// Minimum axis token share (5%)

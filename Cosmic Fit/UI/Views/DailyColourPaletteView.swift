@@ -18,7 +18,6 @@ final class DailyColourPaletteView: UIView {
     private let gradientBar = UIView()
     
     private var allColours: [UIColor] = []
-    private var gradientLayer: CAGradientLayer?
     
     // MARK: - Initialization
     
@@ -36,42 +35,22 @@ final class DailyColourPaletteView: UIView {
     /// Configure the palette with style tokens from the IE
     /// - Parameter tokens: Array of StyleTokens containing colour information
     func configure(with tokens: [StyleToken]) {
-        // Filter out any invalid tokens (defensive programming)
-        let validTokens = tokens.filter { token in
-            // Ensure the token is actually a StyleToken and not NSNull or corrupted
-            return type(of: token) == StyleToken.self
-        }
-        
-        guard !validTokens.isEmpty else {
-            print("⚠️ DailyColourPaletteView: No valid tokens to display")
-            resetToDefaults()
-            return
-        }
-        
         // Get top 3 colours
-        let topColours = ColourMapper.getTopColours(from: validTokens, count: 3)
+        let topColours = ColourMapper.getTopColours(from: tokens, count: 3)
         
         // Apply colours to views
         if topColours.count >= 1 {
             colour1View.backgroundColor = topColours[0].1
-        } else {
-            colour1View.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         }
-        
         if topColours.count >= 2 {
             colour2View.backgroundColor = topColours[1].1
-        } else {
-            colour2View.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         }
-        
         if topColours.count >= 3 {
             colour3View.backgroundColor = topColours[2].1
-        } else {
-            colour3View.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         }
         
         // Get all colours for gradient
-        allColours = ColourMapper.getAllColours(from: validTokens)
+        allColours = ColourMapper.getAllColours(from: tokens)
         
         // Create gradient bar
         updateGradientBar()
@@ -130,43 +109,30 @@ final class DailyColourPaletteView: UIView {
     }
     
     private func updateGradientBar() {
-        // Remove existing gradient layer
-        gradientLayer?.removeFromSuperlayer()
-        gradientLayer = nil
+        // Remove existing gradient layers
+        gradientBar.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
         
-        guard !allColours.isEmpty else {
-            // Default gradient if no colours
-            gradientBar.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
-            return
-        }
+        guard !allColours.isEmpty else { return }
         
         // Create gradient from all colours
-        let gradient = CAGradientLayer()
-        gradient.colors = allColours.map { $0.cgColor }
-        gradient.startPoint = CGPoint(x: 0.0, y: 0.5)
-        gradient.endPoint = CGPoint(x: 1.0, y: 0.5)
-        gradient.cornerRadius = 6
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = allColours.map { $0.cgColor }
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+        gradientLayer.cornerRadius = 6
         
         // Set frame (will be updated in layoutSubviews)
-        gradient.frame = gradientBar.bounds
+        gradientLayer.frame = gradientBar.bounds
         
-        gradientBar.layer.insertSublayer(gradient, at: 0)
-        gradientLayer = gradient
-    }
-    
-    private func resetToDefaults() {
-        colour1View.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
-        colour2View.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
-        colour3View.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
-        gradientBar.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
+        gradientBar.layer.addSublayer(gradientLayer)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
         // Update gradient layer frame when view bounds change
-        if let gradient = gradientLayer {
-            gradient.frame = gradientBar.bounds
+        if let gradientLayer = gradientBar.layer.sublayers?.first as? CAGradientLayer {
+            gradientLayer.frame = gradientBar.bounds
         }
     }
 }
