@@ -4,6 +4,18 @@
 //
 //  Created by Ashley Davison on 12/05/2025.
 //
+//  ⚠️ LEGACY SYSTEM - NOT CURRENTLY USED ⚠️
+//
+//  ARCHITECTURAL DECISION (Dec 2025):
+//  The theme matching system has been replaced with template selection.
+//  This file contains the original pattern matching logic for style archetypes
+//  but is no longer actively used in the app.
+//
+//  OLD APPROACH: Token patterns → Theme matching → Theme name
+//  NEW APPROACH: Token patterns → Template selection → Pre-written content
+//
+//  Kept for reference during transition period.
+//
 
 import Foundation
 

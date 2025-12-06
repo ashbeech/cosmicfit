@@ -3,7 +3,7 @@
 //  Cosmic Fit
 //
 //  Created by Ashley Davison on 12/05/2025.
-//  Updated with origin tracking for Blueprint and age-dependent weighting
+//  Updated with origin tracking for Style Guide and age-dependent weighting
 //  Enhanced with Current Sun Sign background energy support
 
 import Foundation
@@ -19,12 +19,30 @@ enum OriginType: String, CaseIterable, Codable {
     case axis  // PHASE 1: Derived axes tokens
 }
 
+// MARK: - Tier 2 Related Enums (Currently Unused)
+// NOTE: These properties support a Tier 2 token system that is implemented but not active.
+// Current architecture uses pre-written templates instead of dynamic token generation.
+// Properties kept for future flexibility. See Tier2TokenLibrary.swift for full implementation.
+
+// Token tier for distinguishing foundational vs applied tokens
+enum TokenTier: String, Codable {
+    case tier1_energetic  // Foundational energy tokens (e.g., "fluid", "bold") - CURRENTLY USED
+    case tier2_applied    // Applied style tokens (e.g., "bias_cut", "matte_finish") - NOT CURRENTLY USED
+}
+
+// Effort level for style variations (e.g., High Priestess low/medium/high effort)
+enum EffortLevel: String, Codable {
+    case low
+    case medium
+    case high
+}
+
 struct StyleToken: Codable {
-    let name: String         // e.g., "earthy", "bold", "fluid"
-    let type: String         // e.g., "fabric", "mood", "colour", "texture"
+    let name: String         // e.g., "earthy", "bold", "fluid" (Tier 1) OR "bias_cut", "matte_finish" (Tier 2)
+    let type: String         // e.g., "fabric", "mood", "colour", "texture" (Tier 1) OR "silhouette", "surface_finish" (Tier 2)
     let weight: Double       // numerical weight based on source importance
     
-    // Origin tracking for Blueprint generation
+    // Origin tracking for Style Guide generation
     let planetarySource: String?  // e.g., "Sun", "Venus", "Moon", "CurrentSun"
     let signSource: String?       // e.g., "Aries", "Taurus", "Leo"
     let houseSource: Int?         // House number 1-12
@@ -33,7 +51,14 @@ struct StyleToken: Codable {
     // Origin type for improved filtering and processing
     let originType: OriginType    // e.g., .natal, .progressed, .transit, .currentSun
     
-    // Convenience initializer with default values
+    // Tier 2 specific properties
+    let tier: TokenTier           // .tier1_energetic or .tier2_applied
+    let sourceEnergyTokens: [String]?  // For Tier 2: which Tier 1 tokens generated this (e.g., ["fluid", "soft"])
+    let oppositeOf: String?       // For push-pull detection (e.g., "matte_finish" opposite of "shiny")
+    let effortLevel: EffortLevel? // For style variations (e.g., High Priestess low/medium/high)
+    let tags: [String]?           // Additional searchable metadata
+    
+    // Convenience initializer with default values (backward compatible for Tier 1)
     init(name: String,
          type: String,
          weight: Double = 1.0,
@@ -41,7 +66,12 @@ struct StyleToken: Codable {
          signSource: String? = nil,
          houseSource: Int? = nil,
          aspectSource: String? = nil,
-         originType: OriginType = .natal) {
+         originType: OriginType = .natal,
+         tier: TokenTier = .tier1_energetic,
+         sourceEnergyTokens: [String]? = nil,
+         oppositeOf: String? = nil,
+         effortLevel: EffortLevel? = nil,
+         tags: [String]? = nil) {
         
         self.name = name
         self.type = type
@@ -51,6 +81,11 @@ struct StyleToken: Codable {
         self.houseSource = houseSource
         self.aspectSource = aspectSource
         self.originType = originType
+        self.tier = tier
+        self.sourceEnergyTokens = sourceEnergyTokens
+        self.oppositeOf = oppositeOf
+        self.effortLevel = effortLevel
+        self.tags = tags
     }
     
     // Helper for debugging and validation
@@ -120,7 +155,12 @@ struct StyleToken: Codable {
             signSource: self.signSource,
             houseSource: self.houseSource,
             aspectSource: self.aspectSource,
-            originType: self.originType
+            originType: self.originType,
+            tier: self.tier,
+            sourceEnergyTokens: self.sourceEnergyTokens,
+            oppositeOf: self.oppositeOf,
+            effortLevel: self.effortLevel,
+            tags: self.tags
         )
     }
     
@@ -185,7 +225,48 @@ struct StyleToken: Codable {
             signSource: self.signSource,
             houseSource: self.houseSource,
             aspectSource: self.aspectSource,
-            originType: self.originType
+            originType: self.originType,
+            tier: self.tier,
+            sourceEnergyTokens: self.sourceEnergyTokens,
+            oppositeOf: self.oppositeOf,
+            effortLevel: self.effortLevel,
+            tags: self.tags
         )
+    }
+    
+    // MARK: - Tier 2 Helpers
+    
+    /// Check if this is a Tier 1 energetic token
+    var isTier1: Bool {
+        return tier == .tier1_energetic
+    }
+    
+    /// Check if this is a Tier 2 applied token
+    var isTier2: Bool {
+        return tier == .tier2_applied
+    }
+    
+    /// Get a description that includes tier information
+    func detailedDescription() -> String {
+        var desc = description()
+        desc += " [Tier: \(tier.rawValue)]"
+        
+        if let sourceEnergies = sourceEnergyTokens {
+            desc += " (from: \(sourceEnergies.joined(separator: ", ")))"
+        }
+        
+        if let opposite = oppositeOf {
+            desc += " (opposite: \(opposite))"
+        }
+        
+        if let effort = effortLevel {
+            desc += " (effort: \(effort.rawValue))"
+        }
+        
+        if let tokenTags = tags {
+            desc += " [tags: \(tokenTags.joined(separator: ", "))]"
+        }
+        
+        return desc
     }
 }

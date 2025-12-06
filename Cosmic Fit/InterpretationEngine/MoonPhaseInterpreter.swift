@@ -89,8 +89,8 @@ struct MoonPhaseInterpreter {
          return Int(round(illumination * 100.0))
      }
     
-    // Generate tokens for Blueprint relevance
-    static func tokensForBlueprintRelevance(phase: Phase) -> [StyleToken] {
+    // Generate tokens for Style Guide relevance
+    static func tokensForStyleGuideRelevance(phase: Phase) -> [StyleToken] {
         var tokens: [StyleToken] = []
         let baseWeight = 1.2
         

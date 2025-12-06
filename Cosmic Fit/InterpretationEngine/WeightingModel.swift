@@ -8,19 +8,19 @@
 
 struct WeightingModel {
     // Professional astrological standards: natal chart dominance (45-55%)
-    static let natalWeight: Double = 0.73  // Significantly increased to achieve 45-55% natal target
-    static let currentSunSignBackgroundWeight: Double = 0.2  // Reduced to minimal seasonal background
+    static let natalWeight: Double = 0.6  // Significantly increased to achieve 45-55% natal target
+    static let currentSunSignBackgroundWeight: Double = 0.33  // Reduced to minimal seasonal background
     
     // Professional standard: 15-20% transit influence with meaningful daily variety
     struct DailyFit {
         static let transitWeight: Double = 0.55   // Significantly reduced to achieve 15-20% transit influence
-        static let weatherWeight: Double = 0.3   // Reduced for modulation role only
-        static let moonPhaseWeight: Double = 0.33  // Reduced to achieve proper daily variation
+        // ⚠️ weatherWeight REMOVED: Weather is now contextual only, not used in token distribution
+        static let moonPhaseWeight: Double = 0.95  // ADJUSTED: Increased from 0.33 to achieve ~10% moon phase influence
         static let dailySignatureWeight: Double = 0.1  // Minimal day-of-week energy
     }
     
     // Professional range: 15-20% progressed influence  
-    static let progressedWeight: Double = 0.5  // Maintained for 15-20% progressed influence
+    static let progressedWeight: Double = 20  // Maintained for 15-20% progressed influence
 
 }
 
@@ -55,7 +55,7 @@ struct DistributionTargets {
     static let minTransitInfluence: Double = 20.0
     static let maxMoonPhaseInfluence: Double = 20.0
     static let maxDayOfWeekInfluence: Double = 10.0
-    static let targetWeatherInfluence: Double = 5.0
+    // ⚠️ targetWeatherInfluence REMOVED: Weather no longer used in distribution
     static let minProgressedInfluence: Double = 20.0
     static let maxProgressedInfluence: Double = 25.0
     
@@ -95,28 +95,7 @@ struct DistributionTargets {
             }
         }
         
-        if let weatherPercent = currentDistribution["weather"] {
-            // Smooth scaling without harsh thresholds
-            let targetFactor = targetWeatherInfluence / max(weatherPercent, 0.1)
-            
-            // Gradual scaling curve instead of cliff
-            if weatherPercent < 2.0 {
-                // Very low weather influence gets moderate boost
-                factors["weather"] = min(targetFactor, 3.0)
-            } else if weatherPercent < 6.0 {
-                // Low weather influence gets smaller boost
-                factors["weather"] = min(targetFactor, 2.0)
-            } else if weatherPercent > 12.0 {
-                // High weather influence gets reduced
-                factors["weather"] = max(targetFactor, 0.6)
-            } else {
-                // Target range gets minimal adjustment
-                factors["weather"] = min(max(targetFactor, 0.8), 1.2)
-            }
-        } else {
-            // Maximum boost if no weather tokens at all
-            factors["weather"] = 3.0  // Reduced from 5.0
-        }
+        // ⚠️ WEATHER SCALING REMOVED: Weather no longer used in token distribution
         
         // Boost moon phase influence if too low
         if let phasePercent = currentDistribution["phase"] {

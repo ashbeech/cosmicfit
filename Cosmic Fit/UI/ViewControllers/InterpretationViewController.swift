@@ -3,7 +3,7 @@
 //  Cosmic Fit
 //
 //  Created by Ashley Davison on 06/05/2025.
-//  Updated to better display the Blueprint format
+//  Updated to better display the Style Guide format
 
 import UIKit
 
@@ -24,7 +24,7 @@ class InterpretationViewController: UIViewController {
     private var interpretationText: String = ""
     private var interpretationTitle: String = "Cosmic Fit Interpretation"
     private var themeName: String = ""
-    private var isBlueprintView: Bool = false
+    private var isStyleGuideView: Bool = false
     
     // Birth information properties
     private var birthDate: Date?
@@ -50,7 +50,7 @@ class InterpretationViewController: UIViewController {
     func configure(with interpretationText: String,
                    title: String = "Cosmic Fit Interpretation",
                    themeName: String = "",
-                   isBlueprint: Bool = false,
+                   isStyleGuide: Bool = false,
                    birthDate: Date? = nil,
                    birthCity: String = "",
                    birthCountry: String = "") {
@@ -58,7 +58,7 @@ class InterpretationViewController: UIViewController {
         self.interpretationText = interpretationText
         self.interpretationTitle = title
         self.themeName = themeName
-        self.isBlueprintView = isBlueprint
+        self.isStyleGuideView = isStyleGuide
         self.birthDate = birthDate
         self.birthCity = birthCity
         self.birthCountry = birthCountry
@@ -74,7 +74,7 @@ class InterpretationViewController: UIViewController {
     
     // MARK: - UI Setup
     private func setupUI() {
-        view.backgroundColor = .black // Change to black for blueprint style
+        view.backgroundColor = .black // Change to black for style guide style
         title = ""
         
         // Setup Scroll View
@@ -240,9 +240,9 @@ class InterpretationViewController: UIViewController {
         let country = self.birthCountry.isEmpty ? "COUNTRY" : self.birthCountry.uppercased()
         locationLabel.text = "\(city), \(country)"
         
-        // Show/hide the profile header based on whether this is a blueprint view
-        profileHeaderView.isHidden = !isBlueprintView
-        dividerView.isHidden = !isBlueprintView
+        // Show/hide the profile header based on whether this is a style guide view
+        profileHeaderView.isHidden = !isStyleGuideView
+        dividerView.isHidden = !isStyleGuideView
     }
     
     // MARK: - Text Styling
@@ -279,7 +279,7 @@ class InterpretationViewController: UIViewController {
             
             // SECTION HEADERS (e.g., "Essence", "Core", "Expression")
             if line.hasPrefix("# ") {
-                // Main title (e.g., "Your Cosmic Blueprint")
+                // Main title (e.g., "Your Cosmic Style Guide")
                 let titleText = String(line.dropFirst(2))
                 let titleAttributes: [NSAttributedString.Key: Any] = [
                     .font: UIFont.systemFont(ofSize: 28, weight: .bold),

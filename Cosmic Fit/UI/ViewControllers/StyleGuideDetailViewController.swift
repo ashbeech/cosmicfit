@@ -1,15 +1,15 @@
 //
-//  BlueprintDetailViewController.swift
+//  StyleGuideDetailViewController.swift
 //  Cosmic Fit
 //
-//  Reusable template for all Blueprint detail pages (Style Core, Fabric Guide, Colour Guide, Do's & Don'ts)
+//  Reusable template for all Style Guide detail pages (Style Core, Fabric Guide, Colour Guide, Do's & Don'ts)
 //
 
 import UIKit
 
 // MARK: - Content Configuration
-struct BlueprintDetailContent {
-    let sectionType: BlueprintSection
+struct StyleGuideDetailContent {
+    let sectionType: StyleGuideSection
     let title: String
     let iconImageName: String
     let textSections: [TextSection]
@@ -20,7 +20,7 @@ struct BlueprintDetailContent {
         let bodyText: String
     }
     
-    enum BlueprintSection {
+    enum StyleGuideSection {
         case styleCore
         case fabricGuide
         case colourGuide
@@ -28,11 +28,11 @@ struct BlueprintDetailContent {
     }
 }
 
-// MARK: - BlueprintDetailViewController
-final class BlueprintDetailViewController: UIViewController {
+// MARK: - StyleGuideDetailViewController
+final class StyleGuideDetailViewController: UIViewController {
     
     // MARK: - Properties
-    private var content: BlueprintDetailContent?
+    private var content: StyleGuideDetailContent?
     private var birthDate: Date?
     private var birthCity: String = ""
     private var birthCountry: String = ""
@@ -94,7 +94,7 @@ final class BlueprintDetailViewController: UIViewController {
         label.textAlignment = .center
         
         let attributedText = NSAttributedString(
-            string: "YOUR COSMIC BLUEPRINT",
+            string: "YOUR COSMIC STYLE GUIDE",
             attributes: [
                 .font: CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold),
                 .foregroundColor: CosmicFitTheme.Colours.darkerCosmicGrey,
@@ -196,7 +196,7 @@ final class BlueprintDetailViewController: UIViewController {
     }
     
     // MARK: - Configuration
-    func configure(with content: BlueprintDetailContent) {
+    func configure(with content: StyleGuideDetailContent) {
         self.content = content
         
         if isViewLoaded {
@@ -337,7 +337,7 @@ final class BlueprintDetailViewController: UIViewController {
     }
     
     // MARK: - Content Population
-    private func populateContent(_ content: BlueprintDetailContent) {
+    private func populateContent(_ content: StyleGuideDetailContent) {
         iconImageView.image = UIImage(named: content.iconImageName)
         titleLabel.text = content.title
         
@@ -542,7 +542,7 @@ final class BlueprintDetailViewController: UIViewController {
 }
 
 // MARK: - UIGestureRecognizerDelegate
-extension BlueprintDetailViewController: UIGestureRecognizerDelegate {
+extension StyleGuideDetailViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         // Allow pan gesture to work with scroll view
         if let scrollView = otherGestureRecognizer.view as? UIScrollView {

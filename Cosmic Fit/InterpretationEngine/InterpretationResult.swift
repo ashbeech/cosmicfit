@@ -12,16 +12,16 @@ struct InterpretationResult {
     let stitchedParagraph: String
     let tokensUsed: [StyleToken]
     
-    // Additional optional properties for blueprint vs daily vibe
-    let isBlueprintReport: Bool
+    // Additional optional properties for style guide vs daily vibe
+    let isStyleGuideReport: Bool
     let reportDate: Date
     
     init(themeName: String, stitchedParagraph: String, tokensUsed: [StyleToken],
-         isBlueprintReport: Bool = false, reportDate: Date = Date()) {
+         isStyleGuideReport: Bool = false, reportDate: Date = Date()) {
         self.themeName = themeName
         self.stitchedParagraph = stitchedParagraph
         self.tokensUsed = tokensUsed
-        self.isBlueprintReport = isBlueprintReport
+        self.isStyleGuideReport = isStyleGuideReport
         self.reportDate = reportDate
     }
 }

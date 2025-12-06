@@ -11,7 +11,7 @@
  *
  * ✅ 1. Seasonal aesthetic tokens removed from generateDailySignature()
  * ✅ 2. Current Sun sign tokens filtered to remove colour_quality
- * ✅ 3. Venus/Mars/Moon weights enhanced in generateBlueprintTokens()
+ * ✅ 3. Venus/Mars/Moon weights enhanced in generateStyleGuideTokens()
  * ✅ 4. Weather tokens reduced to practical only
  * ✅ 5. Hard weather filtering system implemented (WeatherFabricFilter)
  * ✅ 6. WeightingModel updated with new hierarchy weights
@@ -33,10 +33,10 @@ import Foundation
 
 class SemanticTokenGenerator {
     
-    // MARK: - Blueprint Specific Token Generation
+    // MARK: - Style Guide Specific Token Generation
     
-    /// Generate Blueprint tokens with enhanced but balanced Venus/Mars/Moon priority
-    static func generateBlueprintTokens(natal: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> [StyleToken] {
+    /// Generate Style Guide tokens with enhanced but balanced Venus/Mars/Moon priority
+    static func generateStyleGuideTokens(natal: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> [StyleToken] {
         var tokens: [StyleToken] = []
         
         // Get chart ruler for dominant influence
@@ -179,6 +179,28 @@ class SemanticTokenGenerator {
         DebugLogger.info("  • Mars: \(marsTokens.count) tokens, max weight: \(String(format: "%.2f", marsTokens.max(by: { $0.weight < $1.weight })?.weight ?? 0))")
         DebugLogger.info("  • Moon: \(moonTokens.count) tokens, max weight: \(String(format: "%.2f", moonTokens.max(by: { $0.weight < $1.weight })?.weight ?? 0))")
         
+        // ════════════════════════════════════════════════════════════════════════════════
+        // NOTE: Tier 2 Token Generation (REMOVED)
+        // ────────────────────────────────────────────────────────────────────────────────
+        // Previously, this function generated "Tier 2 Applied Style Tokens" that mapped
+        // energetic tokens to specific fashion descriptors (e.g., "fluid" → "bias_cut").
+        //
+        // ARCHITECTURAL DECISION (Dec 2025):
+        // Both Style Guide and Daily Fit now use PRE-WRITTEN TEMPLATES selected based on
+        // Tier 1 token patterns, rather than dynamic generation from Tier 2 tokens.
+        //
+        // STYLE GUIDE: Pre-written paragraphs selected via pattern matching on Tier 1
+        // DAILY FIT: Static paragraphs attached to Tarot cards (78 cards × 3 versions)
+        //
+        // Tier 1 tokens are sufficient for:
+        // • Vibe Breakdown generation (6 energies)
+        // • Tarot card selection
+        // • Color palette selection (DailyColourPaletteGenerator)
+        // • Template selection (pattern matching)
+        //
+        // See Tier2TokenLibrary.swift for the unused implementation (kept for reference).
+        // ════════════════════════════════════════════════════════════════════════════════
+        
         return tokens
     }
     
@@ -283,7 +305,7 @@ class SemanticTokenGenerator {
         
         // Log the limited token generation
         DebugLogger.info("📉 DAILY FIT LIMITED NATAL TOKENS:")
-        DebugLogger.info("  • Total natal tokens: \(tokens.count) (limited from full Blueprint)")
+        DebugLogger.info("  • Total natal tokens: \(tokens.count) (limited from full Style Guide)")
         DebugLogger.info("  • Venus tokens: \(tokens.filter { $0.planetarySource == "Venus" }.count)")
         DebugLogger.info("  • Mars tokens: \(tokens.filter { $0.planetarySource == "Mars" }.count)")
         DebugLogger.info("  • Moon tokens: \(tokens.filter { $0.planetarySource == "Moon" }.count)")
@@ -557,10 +579,11 @@ class SemanticTokenGenerator {
         DebugLogger.tokenSet("EMOTIONAL VIBE TOKENS (LIMITED)", emotionalTokens)
         nonTransitTokens.append(contentsOf: emotionalTokens)
         
-        // Generate weather tokens
-        let weatherTokens = generateWeatherTokens(weather: weather)
-        DebugLogger.tokenSet("WEATHER TOKENS (PRACTICAL ONLY)", weatherTokens)
-        nonTransitTokens.append(contentsOf: weatherTokens)
+        // ⚠️ WEATHER TOKENS REMOVED FROM DISTRIBUTION
+        // Weather is now contextual only (for language/recommendations), not token-based
+        // let weatherTokens = generateWeatherTokens(weather: weather)
+        // DebugLogger.tokenSet("WEATHER TOKENS (PRACTICAL ONLY)", weatherTokens)
+        // nonTransitTokens.append(contentsOf: weatherTokens)
         
         // Generate daily signature tokens
         let dailyTokens = generateDailySignature()
@@ -869,7 +892,7 @@ class SemanticTokenGenerator {
     
     /// Generate base style resonance tokens using natal chart
     private static func generateBaseStyleTokens(natal: NatalChartCalculator.NatalChart) -> [StyleToken] {
-        return generateBlueprintTokens(natal: natal)
+        return generateStyleGuideTokens(natal: natal)
     }
   
     /*
@@ -885,7 +908,7 @@ class SemanticTokenGenerator {
             DebugLogger.info("🌟 GENERATING COMPLETE DAILY FIT TOKEN SET 🌟")
             
             // Generate base style tokens
-            let baseTokens = generateBlueprintTokens(natal: natal)
+            let baseTokens = generateStyleGuideTokens(natal: natal)
             DebugLogger.tokenSet("BASE STYLE TOKENS", baseTokens)
             allTokens.append(contentsOf: baseTokens)
             
@@ -2490,7 +2513,7 @@ class SemanticTokenGenerator {
             let normalizedProgressedWeight = WeightingModel.progressedWeight / totalWeight
             
             // Generate natal tokens with normalized weight using Whole Sign
-            let natalTokens = generateBlueprintTokens(natal: natal, currentAge: currentAge)
+            let natalTokens = generateStyleGuideTokens(natal: natal, currentAge: currentAge)
             for token in natalTokens {
                 let adjustedToken = StyleToken(
                     name: token.name,
@@ -2544,7 +2567,7 @@ class SemanticTokenGenerator {
         let styleProgressedWeight = normalizedProgressedWeight * 0.1 / normalizedProgressedWeight
         
         // Generate natal tokens with heavy weighting
-        let natalTokens = generateBlueprintTokens(natal: natal, currentAge: currentAge)
+        let natalTokens = generateStyleGuideTokens(natal: natal, currentAge: currentAge)
         for token in natalTokens {
             let adjustedToken = StyleToken(
                 name: token.name,
@@ -2842,6 +2865,10 @@ class SemanticTokenGenerator {
     // MARK: - Weather Token Generation
     
     /// Generate enhanced weather tokens for meaningful daily variation
+    /// ⚠️ DEPRECATED: Weather tokens removed from distribution system
+    /// This function is preserved for potential future use as contextual data only
+    /// (e.g., for language generation: "Given it's cold, consider layering...")
+    @available(*, deprecated, message: "Weather is now contextual only, not used in token distribution")
     static func generateWeatherTokens(weather: TodayWeather?) -> [StyleToken] {
          guard let weather = weather else {
              // Fallback tokens when no weather data

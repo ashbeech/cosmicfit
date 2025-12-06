@@ -45,14 +45,14 @@ class SystemValidationTests {
             lunarPhase: 0.0
         )
         
-        // Generate blueprint tokens (which should show Venus dominance)
-        let blueprintTokens = SemanticTokenGenerator.generateBlueprintTokens(
+        // Generate style guide tokens (which should show Venus dominance)
+        let styleGuideTokens = SemanticTokenGenerator.generateStyleGuideTokens(
             natal: mockChart,
             currentAge: 30
         )
         
         // Analyze Venus vs seasonal influence
-        let venusColourTokens = blueprintTokens.filter {
+        let venusColourTokens = styleGuideTokens.filter {
             $0.planetarySource == "Venus" &&
             ($0.type == "colour" || $0.type == "colour_quality")
         }
@@ -142,7 +142,7 @@ class SystemValidationTests {
         let mockChart = createMockNatalChart()
         
         // Generate tokens with enhanced weights
-        let tokens = SemanticTokenGenerator.generateBlueprintTokens(
+        let tokens = SemanticTokenGenerator.generateStyleGuideTokens(
             natal: mockChart,
             currentAge: 30
         )

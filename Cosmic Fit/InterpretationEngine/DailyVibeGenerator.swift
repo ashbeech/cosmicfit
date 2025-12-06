@@ -16,7 +16,7 @@ class DailyVibeGenerator {
     ///   - transits: Array of typed transit aspects (P0 FIX: no more dictionaries!)
     ///   - weather: Optional current weather conditions
     ///   - moonPhase: Current lunar phase (0-360)
-    ///   - blueprintColours: User's Blueprint colour tokens (for palette selection)
+    ///   - styleGuideColours: User's Style Guide colour tokens (for palette selection)
     ///   - profileHash: User profile identifier for daily seed generation (can be empty)
     ///   - date: Date for which to generate the vibe (defaults to today)
     ///   - weights: Weighting model to use for calculations
@@ -27,7 +27,7 @@ class DailyVibeGenerator {
         transits: [NatalChartCalculator.TransitAspect],  // P0 FIX: Typed transits!
         weather: TodayWeather?,
         moonPhase: Double,
-        blueprintColours: [StyleToken] = [],
+        styleGuideColours: [StyleToken] = [],
         profileHash: String = "",
         date: Date = Date(),
         weights: WeightingModel.Type = WeightingModel.self
@@ -152,9 +152,9 @@ class DailyVibeGenerator {
         print("  Strategy: \(String(format: "%.1f", derivedAxes.strategy))/10")
         print("  Visibility: \(String(format: "%.1f", derivedAxes.visibility))/10")
         
-        // ✨ SELECT DAILY COLOUR PALETTE from Blueprint
+        // ✨ SELECT DAILY COLOUR PALETTE from Style Guide
         let dailyPaletteColours = DailyColourPaletteGenerator.selectDailyColours(
-            from: blueprintColours,
+            from: styleGuideColours,
             vibeBreakdown: vibeBreakdown,
             transits: transits,
             derivedAxes: derivedAxes
@@ -191,7 +191,7 @@ class DailyVibeGenerator {
         //dailyContent.temperature = weather?.temperature
         //dailyContent.weatherCondition = weather?.condition
         dailyContent.styleTokens = allTokens
-        dailyContent.paletteColours = dailyPaletteColours // ✨ NEW: Curated daily palette from Blueprint
+        dailyContent.paletteColours = dailyPaletteColours // ✨ NEW: Curated daily palette from Style Guide
         
         return dailyContent
     }
@@ -916,7 +916,7 @@ struct DailyVibeContent: Codable {
     // Store tokens for UI access (colour palette, etc.)
     var styleTokens: [StyleToken] = []
     
-    // Daily colour palette - curated 3 colours from Blueprint for today
+    // Daily colour palette - curated 3 colours from Style Guide for today
     var paletteColours: [StyleToken] = []
     
     // MARK: - Environmental Context

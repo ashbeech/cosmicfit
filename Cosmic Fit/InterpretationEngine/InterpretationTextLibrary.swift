@@ -4,15 +4,26 @@
 //
 //  Created for separating text content from logic
 //
+//  ⚠️ LEGACY SYSTEM - NOT CURRENTLY USED ⚠️
+//
+//  ARCHITECTURAL DECISION (Dec 2025):
+//  This library was used by ParagraphAssembler for dynamic sentence generation.
+//  The app now uses pre-written template selection instead of sentence assembly.
+//
+//  OLD APPROACH: Text snippets → Dynamic assembly → Generated paragraphs
+//  NEW APPROACH: Complete templates → Pattern matching → Selected paragraphs
+//
+//  Kept for reference during transition period.
+//
 
 import Foundation
 
 /// Centralized library for all interpretation text content
 struct InterpretationTextLibrary {
     
-    // MARK: - Blueprint Text Content
+    // MARK: - Style Guide Text Content
     
-    struct Blueprint {
+    struct StyleGuide {
         
         // MARK: - Essence Section Text
         struct Essence {
@@ -31,7 +42,7 @@ struct InterpretationTextLibrary {
             static let dreamsDressing = "You dress like someone who remembers dreams and honors them through "
             static let versionsDressing = "You dress like someone who remembers every version of yourself and honors them through "
             
-            static let dressingMedium = "texture, colour, and the way fabric falls. This blueprint reflects a wardrobe built on "
+            static let dressingMedium = "texture, colour, and the way fabric falls. This style guide reflects a wardrobe built on "
             static let defaultClosing = "intuition, integrity, and evolution."
         }
         
@@ -1789,8 +1800,8 @@ struct InterpretationTextLibrary {
             ]
         }
         
-        // MARK: - Blueprint Tokens
-        struct BlueprintTokens {
+        // MARK: - Style Guide Tokens
+        struct StyleGuideTokens {
             static let newMoon = [
                 ("seeded", "mood"), ("potential", "structure"), ("minimal", "colour")
             ]

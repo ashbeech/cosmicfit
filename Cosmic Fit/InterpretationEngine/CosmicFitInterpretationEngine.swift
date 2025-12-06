@@ -11,16 +11,16 @@ class CosmicFitInterpretationEngine {
     
     // MARK: - Public Methods
     
-    /// Generate a complete natal chart interpretation (Cosmic Blueprint)
+    /// Generate a complete natal chart interpretation (Cosmic Style Guide)
     /// - Parameter chart: The natal chart to interpret
     /// - Parameter currentAge: User's current age for age-dependent weighting
-    /// - Returns: An interpretation result with the cosmic blueprint
-    static func generateBlueprintInterpretation(from chart: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> InterpretationResult {
+    /// - Returns: An interpretation result with the cosmic style guide
+    static func generateStyleGuideInterpretation(from chart: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> InterpretationResult {
         
         // Unified debug/production logging
         DebugConfiguration.debugLog {
-            DebugLogger.info("Starting Blueprint interpretation generation with debug")
-            print("\n🧩 GENERATING COSMIC FIT BLUEPRINT 🧩")
+            DebugLogger.info("Starting Style Guide interpretation generation with debug")
+            print("\n🧩 GENERATING COSMIC FIT STYLE GUIDE 🧩")
             print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
             print("📊 Chart Data Analysis:")
             print("Sun Sign: \(CoordinateTransformations.getZodiacSignName(sign: chart.planets.first(where: { $0.name == "Sun" })?.zodiacSign ?? 0))")
@@ -30,16 +30,16 @@ class CosmicFitInterpretationEngine {
         
         // Production logging
         if !DebugConfiguration.isDebugEnabled {
-            print("\n🧩 GENERATING COSMIC FIT BLUEPRINT 🧩")
+            print("\n🧩 GENERATING COSMIC FIT STYLE GUIDE 🧩")
             print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         }
 
-        // Generate base tokens from natal chart with Whole Sign houses for Blueprint
+        // Generate base tokens from natal chart with Whole Sign houses for Style Guide
         DebugConfiguration.debugLog {
             print("\n🪙 GENERATING BASE TOKENS 🪙")
         }
         
-        let baseTokens = SemanticTokenGenerator.generateBlueprintTokens(natal: chart, currentAge: currentAge)
+        let baseTokens = SemanticTokenGenerator.generateStyleGuideTokens(natal: chart, currentAge: currentAge)
         
         DebugConfiguration.debugLog {
             print("Generated \(baseTokens.count) base tokens")
@@ -62,7 +62,7 @@ class CosmicFitInterpretationEngine {
         
         let colourFrequencyTokens = SemanticTokenGenerator.generateColourFrequencyTokens(
             natal: chart,
-            progressed: chart, // Use natal as progressed for blueprint (100% natal for blueprint colours)
+            progressed: chart, // Use natal as progressed for style guide (100% natal for style guide colours)
             currentAge: currentAge
         )
         
@@ -97,36 +97,48 @@ class CosmicFitInterpretationEngine {
         }
         
         DebugConfiguration.debugLog {
-            print("\n📝 GENERATING BLUEPRINT TEXT 📝")
+            print("\n📝 STYLE GUIDE TEXT (PLACEHOLDER) 📝")
+            print("⚠️  Legacy ParagraphAssembler not used - template system to be implemented")
         }
 
-        // Generate the blueprint text using unified assembler
-        let blueprintText = ParagraphAssembler.generateBlueprintInterpretation(
-            tokens: allTokens,
-            birthInfo: birthInfoText
-        )
+        // ARCHITECTURAL NOTE: Style Guide now uses pre-written template selection
+        // TODO: Implement template selection based on token patterns
+        let styleGuideText = """
+        STYLE GUIDE PLACEHOLDER
+        
+        This will be replaced with pre-written template selection based on token patterns.
+        
+        Token Analysis Available:
+        - \(allTokens.count) total tokens generated
+        - Top tokens: \(allTokens.sorted { $0.weight > $1.weight }.prefix(5).map { $0.name }.joined(separator: ", "))
+        
+        Next Steps:
+        1. Analyze token patterns
+        2. Match to pre-written templates
+        3. Assemble selected templates into Style Guide sections
+        """
 
-        // Select theme
-        let themeName = ThemeSelector.scoreThemes(tokens: allTokens)
+        // Theme name placeholder (template system will handle categorization)
+        let themeName = "Template-Based Style Guide"
         
         DebugConfiguration.debugLog {
-            print("\n✅ Blueprint generation completed successfully!")
+            print("\n✅ Style Guide generation completed successfully!")
             print("Theme: \(themeName)")
             print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
         }
 
         // Production logging
         if !DebugConfiguration.isDebugEnabled {
-            print("✅ Blueprint generated successfully!")
+            print("✅ Style Guide generated successfully!")
             print("Theme: \(themeName)")
             print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
         }
 
         return InterpretationResult(
             themeName: themeName,
-            stitchedParagraph: blueprintText,
+            stitchedParagraph: styleGuideText,
             tokensUsed: allTokens,
-            isBlueprintReport: true,
+            isStyleGuideReport: true,
             reportDate: Date()
         )
     }
@@ -170,23 +182,23 @@ class CosmicFitInterpretationEngine {
             print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         }
         
-        // Generate Blueprint to extract colour tokens for Daily Fit palette
-        print("🎨 Generating Blueprint for colour palette source...")
-        let blueprint = generateBlueprintInterpretation(from: natalChart)
-        let blueprintColours = blueprint.tokensUsed.filter { $0.type == "colour" }
-        print("✅ Extracted \(blueprintColours.count) colour tokens from Blueprint")
+        // Generate Style Guide to extract colour tokens for Daily Fit palette
+        print("🎨 Generating Style Guide for colour palette source...")
+        let styleGuide = generateStyleGuideInterpretation(from: natalChart)
+        let styleGuideColours = styleGuide.tokensUsed.filter { $0.type == "colour" }
+        print("✅ Extracted \(styleGuideColours.count) colour tokens from Style Guide")
         
         // Calculate moon phase using existing helper
         let moonPhase = calculateCurrentMoonPhase()
         
-        // Generate daily vibe with seeding and Blueprint colours
+        // Generate daily vibe with seeding and Style Guide colours
         let dailyVibe = DailyVibeGenerator.generateDailyVibe(
             natalChart: natalChart,
             progressedChart: progressedChart,
             transits: transits,
             weather: weather,
             moonPhase: moonPhase,
-            blueprintColours: blueprintColours,
+            styleGuideColours: styleGuideColours,
             profileHash: profileHash,
             date: date
         )
@@ -204,7 +216,8 @@ class CosmicFitInterpretationEngine {
         return dailyVibe
     }
     
-    /// Generate a combined interpretation including both blueprint and daily vibe
+    /*
+    /// Generate a combined interpretation including both style guide and daily vibe
     /// - Parameters:
     ///   - natalChart: The base natal chart
     ///   - progressedChart: The current progressed chart
@@ -212,7 +225,7 @@ class CosmicFitInterpretationEngine {
     ///   - weather: Optional current weather conditions
     ///   - profileHash: Stable user/profile identifier for daily seed generation
     ///   - date: Target date (defaults to today)
-    /// - Returns: A combined interpretation string with blueprint and daily vibe
+    /// - Returns: A combined interpretation string with style guide and daily vibe
     static func generateFullInterpretation(
         from natalChart: NatalChartCalculator.NatalChart,
         progressedChart: NatalChartCalculator.NatalChart,
@@ -222,11 +235,11 @@ class CosmicFitInterpretationEngine {
         date: Date = Date()
     ) -> String {
 
-        print("\n📋 GENERATING FULL INTERPRETATION (Blueprint + Daily Vibe)")
+        print("\n📋 GENERATING FULL INTERPRETATION (Style Guide + Daily Vibe)")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
-        // Generate blueprint (natal chart based, no seeding needed)
-        let blueprint = generateBlueprintInterpretation(from: natalChart)
+        // Generate style guide (natal chart based, no seeding needed)
+        let styleGuide = generateStyleGuideInterpretation(from: natalChart)
 
         // Generate daily vibe WITH profileHash for proper seeding
         let dailyVibe = generateDailyVibeInterpretation(
@@ -251,10 +264,10 @@ class CosmicFitInterpretationEngine {
         /*
         // Combine both interpretations into formatted output
         let fullInterpretation = """
-        YOUR COSMIC BLUEPRINT
+        YOUR COSMIC STYLE GUIDE
         ====================
         
-        \(blueprint.stitchedParagraph)
+        \(styleGuide.stitchedParagraph)
         
         
         TODAY'S COSMIC VIBE (\(dateString))
@@ -282,82 +295,16 @@ class CosmicFitInterpretationEngine {
          
         return fullInterpretation
     }
+     */
     
-    // MARK: - Specialized Section Generation Methods
+    // MARK: - Specialized Section Generation Methods (LEGACY - REMOVED)
     
-    /// Generate colour frequency interpretation (70% natal, 30% progressed)
-    static func generateColourFrequencyInterpretation(
-        from natalChart: NatalChartCalculator.NatalChart,
-        progressedChart: NatalChartCalculator.NatalChart,
-        currentAge: Int = 30) -> String {
-
-        let tokens = SemanticTokenGenerator.generateColourFrequencyTokens(
-            natal: natalChart,
-            progressed: progressedChart,
-            currentAge: currentAge)
-
-        return ParagraphAssembler.generateColourRecommendations(from: tokens)
-    }
-    
-    /// Generate wardrobe storyline interpretation (60% progressed with Placidus, 40% natal)
-    static func generateWardrobeStorylineInterpretation(
-        from natalChart: NatalChartCalculator.NatalChart,
-        progressedChart: NatalChartCalculator.NatalChart,
-        currentAge: Int = 30) -> String {
-
-        let tokens = SemanticTokenGenerator.generateWardrobeStorylineTokens(
-            natal: natalChart,
-            progressed: progressedChart,
-            currentAge: currentAge)
-
-        return ParagraphAssembler.generateWardrobeStoryline(from: tokens)
-    }
-    
-    /// Generate style pulse interpretation (90% natal, 10% progressed flavor)
-    static func generateStylePulseInterpretation(
-        from natalChart: NatalChartCalculator.NatalChart,
-        progressedChart: NatalChartCalculator.NatalChart,
-        currentAge: Int = 30) -> String {
-
-        let tokens = SemanticTokenGenerator.generateStylePulseTokens(
-            natal: natalChart,
-            progressed: progressedChart,
-            currentAge: currentAge)
-
-        return ParagraphAssembler.generateStylePulse(from: tokens)
-    }
-    
-    /// Generate fashion guidance interpretation (100% natal)
-    static func generateFashionGuidanceInterpretation(
-        from natalChart: NatalChartCalculator.NatalChart,
-        currentAge: Int = 30) -> String {
-
-        let tokens = SemanticTokenGenerator.generateBlueprintTokens(natal: natalChart, currentAge: currentAge)
-
-        return ParagraphAssembler.generateFashionGuidance(from: tokens)
-    }
-    
-    /// Generate fabric recommendations interpretation (100% natal)
-    static func generateFabricRecommendationsInterpretation(
-        from natalChart: NatalChartCalculator.NatalChart,
-        currentAge: Int = 30,
-        weather: TodayWeather? = nil) -> String {
-        
-        let tokens = SemanticTokenGenerator.generateBlueprintTokens(natal: natalChart, currentAge: currentAge)
-        
-        // FOR BLUEPRINT: Don't pass weather - this is pure chart analysis
-        return ParagraphAssembler.generateFabricRecommendations(from: tokens, weather: nil)
-    }
-    
-    /// Generate style tensions interpretation (natal aspects)
-    static func generateStyleTensionsInterpretation(
-        from natalChart: NatalChartCalculator.NatalChart,
-        currentAge: Int = 30) -> String {
-
-        let tokens = SemanticTokenGenerator.generateBlueprintTokens(natal: natalChart, currentAge: currentAge)
-
-        return ParagraphAssembler.generateStyleTensionsSection(from: tokens)
-    }
+    // NOTE: These methods have been removed as part of the transition to template-based architecture.
+    // Previous implementations used ParagraphAssembler for dynamic generation.
+    // New approach: Pre-written templates selected based on token patterns.
+    //
+    // If you need these methods for backwards compatibility, they should return
+    // placeholders or be replaced with template selection logic.
     
     /// Run system validation tests - call this method from your test device
     /// Returns true if all critical tests pass
@@ -384,10 +331,10 @@ class CosmicFitInterpretationEngine {
         let mockChart = SystemValidationTests.createMockNatalChart()
         
         // Test enhanced Venus/Mars/Moon weights
-        let blueprintTokens = SemanticTokenGenerator.generateBlueprintTokens(natal: mockChart, currentAge: 30)
-        let venusTokens = blueprintTokens.filter { $0.planetarySource == "Venus" }
-        let marsTokens = blueprintTokens.filter { $0.planetarySource == "Mars" }
-        let moonTokens = blueprintTokens.filter { $0.planetarySource == "Moon" }
+        let styleGuideTokens = SemanticTokenGenerator.generateStyleGuideTokens(natal: mockChart, currentAge: 30)
+        let venusTokens = styleGuideTokens.filter { $0.planetarySource == "Venus" }
+        let marsTokens = styleGuideTokens.filter { $0.planetarySource == "Mars" }
+        let moonTokens = styleGuideTokens.filter { $0.planetarySource == "Moon" }
         
         print("✅ Enhanced weights active:")
         print("  • Venus tokens: \(venusTokens.count)")
@@ -399,10 +346,7 @@ class CosmicFitInterpretationEngine {
         let testFiltering = WeatherFabricFilter.requiresWeatherOverride(weather: mockWeather)
         print("✅ Hard weather filtering: \(testFiltering ? "Active" : "Inactive") for test conditions")
         
-        // Test method signature compatibility
-        let testTokens: [StyleToken] = []
-        let _ = ParagraphAssembler.generateFabricRecommendations(from: testTokens, weather: mockWeather)
-        print("✅ ParagraphAssembler weather parameter integration: Working")
+        print("ℹ️  ParagraphAssembler: Legacy system (not tested - template-based architecture now used)")
         
         // Run validation tests
         let validationPassed = SystemValidationTests.runAllValidationTests()
@@ -418,9 +362,9 @@ class CosmicFitInterpretationEngine {
 extension CosmicFitInterpretationEngine {
     
     /*
-    /// Convenience method for view controllers to generate blueprint with current debug settings
-    static func generateBlueprintForViewController(from chart: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> InterpretationResult {
-        return generateBlueprintInterpretation(from: chart, currentAge: currentAge)
+    /// Convenience method for view controllers to generate style guide with current debug settings
+    static func generateStyleGuideForViewController(from chart: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> InterpretationResult {
+        return generateStyleGuideInterpretation(from: chart, currentAge: currentAge)
     }*/
     
     /*
@@ -479,18 +423,15 @@ extension CosmicFitInterpretationEngine {
         currentAge: Int = 30) -> String {
             
         // Generate tokens from natal chart
-        let tokens = SemanticTokenGenerator.generateBlueprintTokens(natal: natalChart, currentAge: currentAge)
+        let tokens = SemanticTokenGenerator.generateStyleGuideTokens(natal: natalChart, currentAge: currentAge)
         
-        // Score tokens against themes to find the best-fit theme
-        let themeName = ThemeSelector.scoreThemes(tokens: tokens)
+        // NOTE: Theme system being replaced with template selection
+        let themeName = "Your Cosmic Style"
         
-        // Generate custom guidance based on the query and theme
+        // Generate custom guidance based on the query and token patterns
         var guidance = "Custom Style Guidance: \(query)\n\n"
         
-        // Add theme-specific recommendations
-        guidance += "Based on your Cosmic Blueprint theme of \"\(themeName)\", here are styling recommendations for \(query):\n\n"
-        
-        // Add situation-specific guidance
+        // Add situation-specific guidance based on token analysis
         let situationGuidance = generateSituationGuidance(query: query, tokens: tokens, themeName: themeName)
         guidance += situationGuidance
         
@@ -551,7 +492,7 @@ extension CosmicFitInterpretationEngine {
             }
         } else {
             // Default guidance for unspecified situations
-            return "Based on your cosmic blueprint, focus on pieces that align with your natural energy patterns. Choose clothes that support rather than fight your authentic self-expression."
+            return "Based on your cosmic style guide, focus on pieces that align with your natural energy patterns. Choose clothes that support rather than fight your authentic self-expression."
         }
     }
 }
@@ -560,10 +501,10 @@ extension CosmicFitInterpretationEngine {
 
 extension CosmicFitInterpretationEngine {
     
-    /// Debug wrapper for blueprint generation (maintains compatibility during transition)
-    static func generateBlueprintInterpretationWithDebug(from chart: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> InterpretationResult {
+    /// Debug wrapper for style guide generation (maintains compatibility during transition)
+    static func generateStyleGuideInterpretationWithDebug(from chart: NatalChartCalculator.NatalChart, currentAge: Int = 30) -> InterpretationResult {
         // This now just calls the unified method - no separate implementation needed
-        return generateBlueprintInterpretation(from: chart, currentAge: currentAge)
+        return generateStyleGuideInterpretation(from: chart, currentAge: currentAge)
     }
 }
 

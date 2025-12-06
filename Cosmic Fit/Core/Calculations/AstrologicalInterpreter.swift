@@ -345,7 +345,7 @@ struct AstrologicalInterpreter {
         let ascSign = CoordinateTransformations.decimalDegreesToZodiac(chart.ascendant).sign
         
         guard let sun = sunPlanet, let moon = moonPlanet else {
-            return "This chart shows your unique astrological blueprint, with each placement reflecting different aspects of your personality and life experience."
+            return "This chart shows your unique astrological style guide, with each placement reflecting different aspects of your personality and life experience."
         }
         
         let sunSignName = CoordinateTransformations.getZodiacSignName(sign: sun.zodiacSign)

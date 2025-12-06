@@ -3,7 +3,7 @@
 //  Cosmic Fit
 //
 //  Created by Ashley Davison on 11/05/2025.
-//  Updated with Blueprint specification implementation
+//  Updated with Style Guide specification implementation
 
 import Foundation
 import CoreLocation
@@ -11,11 +11,11 @@ import CoreLocation
 // Extension to integrate the Cosmic Fit Interpretation Engine
 extension NatalChartManager {
     
-    /// Generate a cosmic blueprint interpretation based on natal chart
+    /// Generate a cosmic style guide interpretation based on natal chart
     /// - Parameter chart: The natal chart to interpret
-    /// - Returns: A string containing the blueprint interpretation
-    func generateBlueprintInterpretation(for chart: NatalChartCalculator.NatalChart) -> String {
-        let interpretation = CosmicFitInterpretationEngine.generateBlueprintInterpretation(from: chart)
+    /// - Returns: A string containing the style guide interpretation
+    func generateStyleGuideInterpretation(for chart: NatalChartCalculator.NatalChart) -> String {
+        let interpretation = CosmicFitInterpretationEngine.generateStyleGuideInterpretation(from: chart)
         return interpretation.stitchedParagraph
     }
     
@@ -38,7 +38,7 @@ extension NatalChartManager {
     }
     
     /*
-    /// Generate a complete interpretation including both blueprint and daily vibe
+    /// Generate a complete interpretation including both style guide and daily vibe
     /// - Parameters:
     ///   - natalChart: The base natal chart
     ///   - progressedChart: The current progressed chart
@@ -69,23 +69,11 @@ extension NatalChartManager {
         for natalChart: NatalChartCalculator.NatalChart,
         query: String) -> String {
             
-            // Generate tokens from natal chart
-            let tokens = SemanticTokenGenerator.generateBlueprintTokens(natal: natalChart)
-            
-            // Score tokens against themes to find the best-fit theme
-            let themeName = ThemeSelector.scoreThemes(tokens: tokens)
-            
-            // Generate custom guidance based on the query and theme
-            var guidance = "Custom Style Guidance: \(query)\n\n"
-            
-            // Add theme-specific recommendations
-            guidance += "Based on your Cosmic Blueprint theme of \"\(themeName)\", here are styling recommendations for \(query):\n\n"
-            
-            // Add situation-specific guidance
-            let situationGuidance = generateSituationGuidance(query: query, tokens: tokens, themeName: themeName)
-            guidance += situationGuidance
-            
-            return guidance
+            // Delegate to main engine (which now uses template-based approach)
+            return CosmicFitInterpretationEngine.generateCustomStyleGuidance(
+                for: natalChart,
+                query: query
+            )
         }
     
     // MARK: - Helper Methods
@@ -131,7 +119,7 @@ extension NatalChartManager {
             }
         } else {
             // Generic guidance
-            return "Consider this occasion as an opportunity to express your authentic style essence. Select pieces that align with your Blueprint theme of \"\(themeName)\", focusing on your natural affinities while adapting appropriately to the specific context."
+            return "Consider this occasion as an opportunity to express your authentic style essence. Select pieces that align with your Style Guide theme of \"\(themeName)\", focusing on your natural affinities while adapting appropriately to the specific context."
         }
     }
 }

@@ -1466,7 +1466,7 @@ class DailyFitViewController: UIViewController {
         // UPDATE: Configure vibe breakdown bars with actual data
         vibeContainer.configure(with: content.vibeBreakdown)
         
-        // Configure colour palette with curated Blueprint-derived colours
+        // Configure colour palette with curated Style Guide-derived colours
         // Use paletteColours if available (curated selection), fallback to styleTokens if needed
         if !content.paletteColours.isEmpty {
             colourPaletteContainer.configure(with: content.paletteColours)

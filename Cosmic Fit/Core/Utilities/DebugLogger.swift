@@ -201,8 +201,8 @@ struct DebugLogger {
     
     // MARK: - Interpretation Engine Specific Logging
     
-    /// Log blueprint generation start
-    static func blueprintGenerationStart(_ tokens: [StyleToken]) {
+    /// Log style guide generation start
+    static func styleGuideGenerationStart(_ tokens: [StyleToken]) {
         guard currentLogLevel.priority <= LogLevel.info.priority else { return }
         
         print("\n🧩 GENERATING COSMIC FIT BLUEPRINT 🧩")
@@ -210,7 +210,7 @@ struct DebugLogger {
         
         if enableTokenDebugLogging {
             tokenSet("BLUEPRINT TOKENS", tokens)
-            logTokenAnalysisForBlueprint(tokens)
+            logTokenAnalysisForStyleGuide(tokens)
         }
     }
     
@@ -231,11 +231,11 @@ struct DebugLogger {
         }
     }
     
-    /// Log token analysis for blueprint
-    private static func logTokenAnalysisForBlueprint(_ tokens: [StyleToken]) {
+    /// Log token analysis for style guide
+    private static func logTokenAnalysisForStyleGuide(_ tokens: [StyleToken]) {
         guard enableTokenDebugLogging else { return }
         
-        info("Analyzing token set for Blueprint generation")
+        info("Analyzing token set for Style Guide generation")
         
         // Count tokens by source
         var planetaryCounts: [String: Int] = [:]

@@ -116,50 +116,32 @@ class VibeBreakdownGenerator {
 
         print("\n📊 TOKEN INFLUENCE DISTRIBUTION ANALYSIS 📊")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-        print("🎯 TARGET vs ACTUAL:")
         print("  Natal:      \(String(format: "%5.1f", distribution["natal"] ?? 0))%")
         print("  Transit:    \(String(format: "%5.1f", distribution["transit"] ?? 0))%")
         print("  Moon Phase: \(String(format: "%5.1f", distribution["phase"] ?? 0))%")
-        print("  Weather:    \(String(format: "%5.1f", distribution["weather"] ?? 0))%")
-        print("  Day of Week:\(String(format: "%5.1f", distribution["dayOfWeek"] ?? 0))%")
         print("  Progressed: \(String(format: "%5.1f", distribution["progressed"] ?? 0))%")
+        print("  Day of Week:\(String(format: "%5.1f", distribution["dayOfWeek"] ?? 0))%")
         print("  Current Sun:\(String(format: "%5.1f", distribution["currentSun"] ?? 0))%")
-
-        if (distribution["natal"] ?? 0) > 45 {
-            print("⚠️  NATAL INFLUENCE EXCEEDS TARGET: \(String(format: "%.1f", distribution["natal"] ?? 0))% > 45%")
-        }
-        if (distribution["transit"] ?? 0) < 15 {
-            print("⚠️  TRANSIT INFLUENCE TOO LOW: \(String(format: "%.1f", distribution["transit"] ?? 0))% < 15%")
-        }
-        if (distribution["phase"] ?? 0) > 15 {
-            print("⚠️  MOON PHASE INFLUENCE EXCEEDS TARGET: \(String(format: "%.1f", distribution["phase"] ?? 0))% > 15%")
-        }
-        if (distribution["weather"] ?? 0) < 8 {
-            print("⚠️  WEATHER INFLUENCE TOO LOW: \(String(format: "%.1f", distribution["weather"] ?? 0))% < 8%")
-        }
+        print("  ⚠️  Weather: REMOVED (contextual use only)")
 
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
 
         analyzeTokenGeneration(from: tokens)
         
-        // ACTIVATE distribution scaling for optimal daily variation
-        let scaledTokens = applyDistributionScaling(to: tokens)
-
-        let postScalingDistribution = calculateInfluenceDistribution(from: scaledTokens)
-        print("📈 POST-SCALING DISTRIBUTION:")
-        print("  Natal:      \(String(format: "%5.1f", postScalingDistribution["natal"] ?? 0))%")
-        print("  Transit:    \(String(format: "%5.1f", postScalingDistribution["transit"] ?? 0))%")
-        print("  Moon Phase: \(String(format: "%5.1f", postScalingDistribution["phase"] ?? 0))%")
-        print("  Weather:    \(String(format: "%5.1f", postScalingDistribution["weather"] ?? 0))%")
-        print("  Day of Week:\(String(format: "%5.1f", postScalingDistribution["dayOfWeek"] ?? 0))%")
+        // ⚠️ DISTRIBUTION SCALING DISABLED FOR TESTING
+        // Let raw token weights speak for themselves - the IE already applies sophisticated weighting
+        // let scaledTokens = applyDistributionScaling(to: tokens)
+        let scaledTokens = tokens  // Use raw tokens without scaling
         
-        // Calculate total daily variation
-        let totalDailyVariation = (postScalingDistribution["transit"] ?? 0) + 
-                                 (postScalingDistribution["weather"] ?? 0) + 
-                                 (postScalingDistribution["phase"] ?? 0) +
-                                 (postScalingDistribution["dayOfWeek"] ?? 0)
+        print("⚠️  POST-SCALING DISABLED - Using raw token weights from IE")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
-        print("📊 DAILY VARIATION ACHIEVED: \(String(format: "%.1f", totalDailyVariation))% (target: 20-25%)")
+        // Calculate total daily variation from raw distribution (weather removed)
+        let totalDailyVariation = (distribution["transit"] ?? 0) + 
+                                 (distribution["phase"] ?? 0) +
+                                 (distribution["dayOfWeek"] ?? 0)
+        
+        print("📊 RAW DAILY VARIATION: \(String(format: "%.1f", totalDailyVariation))% (transit + phase + day)")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         print("📊 Input: \(scaledTokens.count) tokens")
 
@@ -196,7 +178,7 @@ class VibeBreakdownGenerator {
         let totalWeight = tokens.map { $0.weight }.reduce(0, +)
         
         guard totalWeight > 0 else {
-            return ["natal": 0, "transit": 0, "phase": 0, "weather": 0, "dayOfWeek": 0, "currentSun": 0, "progressed": 0]
+            return ["natal": 0, "transit": 0, "phase": 0, "dayOfWeek": 0, "currentSun": 0, "progressed": 0]
         }
         
         var distribution: [String: Double] = [:]
@@ -204,7 +186,7 @@ class VibeBreakdownGenerator {
         let natalInfluence = tokens.filter { $0.originType == .natal }.map { $0.weight }.reduce(0, +)
         let transitInfluence = tokens.filter { $0.originType == .transit }.map { $0.weight }.reduce(0, +)
         let phaseInfluence = tokens.filter { $0.originType == .phase }.map { $0.weight }.reduce(0, +)
-        let weatherInfluence = tokens.filter { $0.originType == .weather }.map { $0.weight }.reduce(0, +)
+        // ⚠️ WEATHER REMOVED: No longer tracking weather token influence
         let progressedInfluence = tokens.filter { $0.originType == .progressed }.map { $0.weight }.reduce(0, +)
         let currentSunInfluence = tokens.filter { $0.originType == .currentSun }.map { $0.weight }.reduce(0, +)
         
@@ -217,7 +199,7 @@ class VibeBreakdownGenerator {
         distribution["natal"] = (natalInfluence / totalWeight) * 100
         distribution["transit"] = (transitInfluence / totalWeight) * 100
         distribution["phase"] = (phaseInfluence / totalWeight) * 100
-        distribution["weather"] = (weatherInfluence / totalWeight) * 100
+        // ⚠️ WEATHER REMOVED from distribution
         distribution["progressed"] = (progressedInfluence / totalWeight) * 100
         distribution["currentSun"] = (currentSunInfluence / totalWeight) * 100
         distribution["dayOfWeek"] = (dayOfWeekInfluence / totalWeight) * 100
@@ -340,8 +322,8 @@ class VibeBreakdownGenerator {
             "edge": 0.0
         ]
         
-        // Enhanced weather detection for utility prioritization
-        let hasWeatherTokens = tokens.contains { $0.originType == .weather }
+        // ⚠️ WEATHER DETECTION REMOVED: Weather no longer influences token scoring
+        // Keeping wind/rain token detection for potential natal-based weather-aware tokens
         let hasHighWindTokens = tokens.contains { $0.name.contains("wind-resistant") || $0.name.contains("secure") }
         let hasRainTokens = tokens.contains { $0.name.contains("waterproof") || $0.name.contains("water-resistant") }
         
@@ -373,7 +355,7 @@ class VibeBreakdownGenerator {
             
             // Utility Energy Mapping - FIXED TO PREVENT OVER-WEIGHTING
             if utilityTokens.contains(tokenName) {
-                let bonus = getUtilityBonus(token: token, hasWeatherTokens: hasWeatherTokens, hasHighWindTokens: hasHighWindTokens, hasRainTokens: hasRainTokens)
+                let bonus = getUtilityBonus(token: token, hasHighWindTokens: hasHighWindTokens, hasRainTokens: hasRainTokens)
                 let sunSignBoost = getSunSignPersonalityBoost(token: token, sunSign: sunSign, energy: "utility")
                 scores["utility"]! += (baseWeight * 2.0) + bonus + sunSignBoost // Reduced from 3.0 to 2.0
             }
@@ -401,10 +383,7 @@ class VibeBreakdownGenerator {
             scores[energy]! *= multiplier
         }
         
-        // FIXED: Moderate weather-based utility boost (not extreme)
-        if hasHighWindTokens || hasRainTokens {
-            scores["utility"]! *= 1.3  // Reduced from 2.0 to 1.3
-        }
+        // ⚠️ WEATHER-BASED UTILITY BOOST REMOVED: Weather no longer influences distribution
         
         return scores
     }
@@ -729,21 +708,20 @@ class VibeBreakdownGenerator {
         return bonus
     }
     
-    private static func getUtilityBonus(token: StyleToken, hasWeatherTokens: Bool, hasHighWindTokens: Bool, hasRainTokens: Bool) -> Double {
+    private static func getUtilityBonus(token: StyleToken, hasHighWindTokens: Bool, hasRainTokens: Bool) -> Double {
         var bonus = 0.0
         
-        // Weather origin tokens get moderate utility boost
-        if token.originType == .weather { bonus += 1.5 } // Reduced from 3.0
+        // ⚠️ WEATHER ORIGIN REMOVED: No longer tracking weather tokens
         
         // Saturn planetary source (practical structure)
         if token.planetarySource == "Saturn" { bonus += 1.0 } // Reduced from 2.0
         
-        // High weight weather-resistant tokens
+        // High weight practical tokens (removed weather-specific check)
         if token.weight > 3.0 && ["wind-resistant", "waterproof", "protective", "secure"].contains(token.name) {
             bonus += 1.5 // Reduced from 3.0
         }
         
-        // Specific weather condition bonuses - REDUCED
+        // Specific condition bonuses for natal-based tokens (if they happen to match)
         if hasHighWindTokens && ["wind-resistant", "secure", "stable", "structured"].contains(token.name) {
             bonus += 1.0 // Reduced from 2.5
         }
@@ -762,20 +740,7 @@ class VibeBreakdownGenerator {
         return bonus
     }
     
-    /// Weather-based utility multiplier
-    private static func getWeatherUtilityMultiplier(token: StyleToken, hasWeatherTokens: Bool) -> Double {
-        if !hasWeatherTokens { return 1.0 }
-        
-        // Weather tokens get significant multiplier
-        if token.originType == .weather { return 2.5 }
-        
-        // Weather-responsive tokens get moderate multiplier
-        if ["practical", "protective", "structured", "reliable"].contains(token.name) {
-            return 1.8
-        }
-        
-        return 1.0
-    }
+    // ⚠️ getWeatherUtilityMultiplier REMOVED: Weather no longer influences distribution
     
     private static func getDramaBonus(token: StyleToken) -> Double {
         var bonus = 0.0

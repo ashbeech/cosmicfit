@@ -1,5 +1,5 @@
 //
-//  BlueprintViewController.swift
+//  StyleGuideViewController.swift
 //  Cosmic Fit
 //
 //  Redesigned with placeholder layout for new visual structure
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class BlueprintViewController: UIViewController {
+final class StyleGuideViewController: UIViewController {
     
     // MARK: - Properties
     private var birthDate: Date?
@@ -67,7 +67,7 @@ final class BlueprintViewController: UIViewController {
         paragraphStyle.alignment = .center
         
         let attributedText = NSAttributedString(
-            string: "YOUR COSMIC\nBLUEPRINT",
+            string: "YOUR COSMIC\nSTYLE GUIDE",
             attributes: [
                 .font: CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.pageTitle),
                 .foregroundColor: CosmicFitTheme.Colours.cosmicBlue,
@@ -112,25 +112,25 @@ final class BlueprintViewController: UIViewController {
     }()
     
     // Grid buttons
-    private let styleCoreButton = BlueprintGridButton(
+    private let styleCoreButton = StyleGuideGridButton(
         number: "1.",
         title: "Style Core",
         backgroundImageName: "grid_bg_1_placeholder"
     )
     
-    private let fabricGuideButton = BlueprintGridButton(
+    private let fabricGuideButton = StyleGuideGridButton(
         number: "2.",
         title: "Fabric Guide",
         backgroundImageName: "grid_bg_2_placeholder"
     )
     
-    private let colourGuideButton = BlueprintGridButton(
+    private let colourGuideButton = StyleGuideGridButton(
         number: "3.",
         title: "Colour Guide",
         backgroundImageName: "grid_bg_3_placeholder"
     )
     
-    private let dosAndDontsButton = BlueprintGridButton(
+    private let dosAndDontsButton = StyleGuideGridButton(
         number: "4.",
         title: "Do's & Don'ts",
         backgroundImageName: "grid_bg_4_placeholder"
@@ -195,7 +195,7 @@ final class BlueprintViewController: UIViewController {
         
         // For now, we're using placeholder text
         // Later, this will be replaced with dynamic content generation
-        print("✅ Blueprint configured with placeholder content")
+        print("✅ Style Guide configured with placeholder content")
     }
     
     // MARK: - Setup
@@ -382,13 +382,13 @@ final class BlueprintViewController: UIViewController {
     }
     
     // MARK: - Navigation
-    private func navigateToDetail(section: BlueprintDetailContent.BlueprintSection) {
+    private func navigateToDetail(section: StyleGuideDetailContent.StyleGuideSection) {
         guard let tabBarController = tabBarController as? CosmicFitTabBarController else {
             print("❌ Cannot find CosmicFitTabBarController")
             return
         }
         
-        let detailVC = BlueprintDetailViewController()
+        let detailVC = StyleGuideDetailViewController()
         let content = createContent(for: section)
         detailVC.configure(with: content)
         
@@ -396,15 +396,15 @@ final class BlueprintViewController: UIViewController {
         tabBarController.presentDetailViewController(detailVC, animated: true)
     }
     
-    private func createContent(for section: BlueprintDetailContent.BlueprintSection) -> BlueprintDetailContent {
+    private func createContent(for section: StyleGuideDetailContent.StyleGuideSection) -> StyleGuideDetailContent {
         switch section {
         case .styleCore:
-            return BlueprintDetailContent(
+            return StyleGuideDetailContent(
                 sectionType: .styleCore,
                 title: "Style Core",
                 iconImageName: "style_core_glyph",
                 textSections: [
-                    BlueprintDetailContent.TextSection(
+                    StyleGuideDetailContent.TextSection(
                         subheading: nil,
                         bodyText: "Placeholder content for Style Core. This will be dynamically generated based on the user's natal chart interpretation."
                     )
@@ -413,24 +413,24 @@ final class BlueprintViewController: UIViewController {
             )
             
         case .fabricGuide:
-            return BlueprintDetailContent(
+            return StyleGuideDetailContent(
                 sectionType: .fabricGuide,
                 title: "Fabric Guide",
                 iconImageName: "fabric_guide_glyph",
                 textSections: [
-                    BlueprintDetailContent.TextSection(
+                    StyleGuideDetailContent.TextSection(
                         subheading: "Activating Textures",
                         bodyText: "Rich natural fibers with substance, smooth surfaces with weight, fabrics with gentle movement that follow your body's natural lines. Beautiful drape, organic variation, luxurious hand feel, just enough richness to make you feel genuinely pampered."
                     ),
-                    BlueprintDetailContent.TextSection(
+                    StyleGuideDetailContent.TextSection(
                         subheading: "Regulating Textures",
                         bodyText: "Natural fibers with substance, soft textures with good drape, anything that feels substantial while remaining light."
                     ),
-                    BlueprintDetailContent.TextSection(
+                    StyleGuideDetailContent.TextSection(
                         subheading: "Draining Textures",
                         bodyText: "Anything too stiff, synthetic, or overly clingy against your skin, plus fabrics that need constant fussing. If it's fighting you or feels like it's trying too hard, it's not for you."
                     ),
-                    BlueprintDetailContent.TextSection(
+                    StyleGuideDetailContent.TextSection(
                         subheading: "Your sweet spot",
                         bodyText: "Materials that feel like a cozy hug, sturdy enough to support you but soft enough to live in, fancy but not precious."
                     )
@@ -441,20 +441,20 @@ final class BlueprintViewController: UIViewController {
         case .colourGuide:
             let colourPalette = ColourPaletteView.createPlaceholderPalette()
             
-            return BlueprintDetailContent(
+            return StyleGuideDetailContent(
                 sectionType: .colourGuide,
                 title: "Colour Guide",
                 iconImageName: "colour_guide_glyph",
                 textSections: [
-                    BlueprintDetailContent.TextSection(
+                    StyleGuideDetailContent.TextSection(
                         subheading: nil,
                         bodyText: "Rich natural fibers with substance, smooth surfaces with weight, fabrics with gentle movement that follow your body's natural lines. Beautiful drape, organic variation, luxurious hand feel, just enough richness to make you feel genuinely pampered."
                     ),
-                    BlueprintDetailContent.TextSection(
+                    StyleGuideDetailContent.TextSection(
                         subheading: "Current Colour Phase",
                         bodyText: "You're settling deeper into your natural palette of rich, luxurious earth tones, but with this soft, dreamy edge. Think creamy caramels, deep sage greens, sophisticated warm browns, and those pearl greys that feel both solid and ethereal. You're getting braver with warmer, more expansive touches like golden undertones and dusty roses, plus little hits of adaptable colours that can roll with whatever your day brings."
                     ),
-                    BlueprintDetailContent.TextSection(
+                    StyleGuideDetailContent.TextSection(
                         subheading: "Personal Palette",
                         bodyText: ""
                     )
@@ -507,7 +507,7 @@ final class BlueprintViewController: UIViewController {
             )
             dosAndDontsContainer.addArrangedSubview(watchForSection)
             
-            return BlueprintDetailContent(
+            return StyleGuideDetailContent(
                 sectionType: .dosAndDonts,
                 title: "Do's & Donts",
                 iconImageName: "dos_donts_glyph",
@@ -518,8 +518,8 @@ final class BlueprintViewController: UIViewController {
     }
 }
 
-// MARK: - BlueprintGridButton
-final class BlueprintGridButton: UIButton {
+// MARK: - StyleGuideGridButton
+final class StyleGuideGridButton: UIButton {
     
     private let numberLabel: UILabel = {
         let label = UILabel()
@@ -611,11 +611,11 @@ final class BlueprintGridButton: UIButton {
 }
 
 // MARK: - UINavigationControllerDelegate
-extension BlueprintViewController: UINavigationControllerDelegate {
+extension StyleGuideViewController: UINavigationControllerDelegate {
     
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
-        // This handles tab transitions (Daily Fit <-> Cosmic Blueprint)
+        // This handles tab transitions (Daily Fit <-> Cosmic Style Guide)
         // For sub-pages, we use UIViewControllerTransitioningDelegate instead
         switch operation {
         case .push:

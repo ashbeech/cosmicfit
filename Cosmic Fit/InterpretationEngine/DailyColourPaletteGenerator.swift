@@ -2,7 +2,7 @@
 //  DailyColourPaletteGenerator.swift
 //  Cosmic Fit
 //
-//  Generates Daily Fit colour palette by selecting from Blueprint colours
+//  Generates Daily Fit colour palette by selecting from Style Guide colours
 //  based on dominant vibe and transit influences
 //
 
@@ -12,15 +12,15 @@ class DailyColourPaletteGenerator {
     
     // MARK: - Main Selection Method
     
-    /// Select 3 colours from Blueprint for today's Daily Fit palette
+    /// Select 3 colours from Style Guide for today's Daily Fit palette
     /// - Parameters:
-    ///   - blueprintColours: All colour tokens from user's Blueprint
+    ///   - styleGuideColours: All colour tokens from user's Style Guide
     ///   - vibeBreakdown: Today's vibe breakdown (determines colour mood)
     ///   - transits: Today's transit aspects (modulates colour selection)
     ///   - derivedAxes: Today's derived axes (influences colour energy)
     /// - Returns: Array of 3 StyleTokens representing today's colour palette
     static func selectDailyColours(
-        from blueprintColours: [StyleToken],
+        from styleGuideColours: [StyleToken],
         vibeBreakdown: VibeBreakdown,
         transits: [NatalChartCalculator.TransitAspect],
         derivedAxes: DerivedAxes
@@ -28,21 +28,21 @@ class DailyColourPaletteGenerator {
         
         print("\n🎨 DAILY COLOUR PALETTE SELECTION 🎨")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-        print("📊 Blueprint colours available: \(blueprintColours.count)")
+        print("📊 Style Guide colours available: \(styleGuideColours.count)")
         print("🎭 Dominant vibe: \(vibeBreakdown.dominantEnergyName) (\(vibeBreakdown.value(for: vibeBreakdown.dominantEnergy))/10)")
         print("🎭 Secondary vibe: \(vibeBreakdown.secondaryEnergyName) (\(vibeBreakdown.value(for: vibeBreakdown.secondaryEnergy))/10)")
         
         // Filter to only colour tokens
-        let colourTokens = blueprintColours.filter { $0.type == "colour" }
+        let colourTokens = styleGuideColours.filter { $0.type == "colour" }
         
         guard !colourTokens.isEmpty else {
-            print("⚠️  No colour tokens in Blueprint - returning empty palette")
+            print("⚠️  No colour tokens in Style Guide - returning empty palette")
             return []
         }
         
-        print("🎨 Blueprint colour tokens: \(colourTokens.count)")
+        print("🎨 Style Guide colour tokens: \(colourTokens.count)")
         
-        // Score each Blueprint colour for today's context
+        // Score each Style Guide colour for today's context
         var scoredColours: [(token: StyleToken, score: Double)] = []
         
         for colourToken in colourTokens {
@@ -73,7 +73,7 @@ class DailyColourPaletteGenerator {
     
     // MARK: - Colour Scoring
     
-    /// Score a Blueprint colour for today's relevance
+    /// Score a Style Guide colour for today's relevance
     private static func scoreColourForToday(
         colourToken: StyleToken,
         vibeBreakdown: VibeBreakdown,
@@ -81,7 +81,7 @@ class DailyColourPaletteGenerator {
         derivedAxes: DerivedAxes
     ) -> Double {
         
-        var score = colourToken.weight // Start with Blueprint weight (natally important colours)
+        var score = colourToken.weight // Start with Style Guide weight (natally important colours)
         
         // 1. VIBE ALIGNMENT BONUS (most important)
         let vibeAlignment = getVibeAlignment(for: colourToken.name)

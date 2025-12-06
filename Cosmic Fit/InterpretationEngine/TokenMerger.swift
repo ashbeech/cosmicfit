@@ -15,6 +15,7 @@ final class TokenMerger {
     
     /// Soft cap for individual token weights to prevent extreme influence
     /// Weights above this are gently compressed using square root normalization
+    /// ⚠️ CURRENTLY DISABLED: Allowing full weight expression for kinetic signals
     private static let perLabelSoftCap: Double = 3.0
     
     // MARK: - Token Merging
@@ -62,10 +63,12 @@ final class TokenMerger {
             }
         }
         
-        // Apply soft cap to prevent extreme weights from dominating
-        let normalized = applySoftCap(to: mergedTokens)
+        // ⚠️ SOFT CAP DISABLED: Allow kinetic signals and strong tokens to express full weight
+        // Previously: let normalized = applySoftCap(to: mergedTokens)
+        // This was compressing tokens above 3.0 weight using sqrt, which was dampening
+        // important axis signals (e.g., "flowing" was 17.42 → 7.23)
         
-        return normalized
+        return mergedTokens
     }
     
     // MARK: - Private Methods
@@ -74,6 +77,7 @@ final class TokenMerger {
     /// Uses sqrt compression for weights above threshold to preserve ranking but tame extremes
     /// - Parameter tokens: Tokens to normalize
     /// - Returns: Tokens with soft-capped weights
+    @available(*, deprecated, message: "Soft cap disabled to allow kinetic signals to express full weight")
     private static func applySoftCap(to tokens: [StyleToken]) -> [StyleToken] {
         return tokens.map { token in
             guard token.weight > perLabelSoftCap else { return token }

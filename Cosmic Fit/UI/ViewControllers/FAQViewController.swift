@@ -47,12 +47,12 @@ class FAQViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
         
-        // Title - matching Blueprint page style
+        // Title - matching Style Guide page style
         titleLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         
-        // Use attributed string for custom line height like Blueprint
+        // Use attributed string for custom line height like Style Guide
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 0.85
         paragraphStyle.alignment = .center
@@ -107,7 +107,7 @@ class FAQViewController: UIViewController {
             ),
             (
                 question: "Is this just for women?",
-                answer: "Not at all. Cosmic Fit is for anyone interested in aligning their personal style with their energetic blueprint, regardless of gender. The guidance adapts to your unique chart and can be interpreted across any style spectrum."
+                answer: "Not at all. Cosmic Fit is for anyone interested in aligning their personal style with their energetic style guide, regardless of gender. The guidance adapts to your unique chart and can be interpreted across any style spectrum."
             ),
             (
                 question: "What if I don't like the outfit suggestion?",
@@ -122,8 +122,8 @@ class FAQViewController: UIViewController {
                 answer: "Currently, the app focuses on today's guidance. We're exploring ways to offer a history view in future updates, so you can revisit past interpretations and track patterns in your cosmic style evolution."
             ),
             (
-                question: "What's the difference between the Daily Fit and my Cosmic Blueprint?",
-                answer: "Your Cosmic Blueprint is your foundational style DNA—timeless guidance based on your birth chart. It doesn't change. Your Daily Fit is how that foundation responds to the current cosmic weather. One is your core; the other is your daily expression of it."
+                question: "What's the difference between the Daily Fit and my Cosmic Style Guide?",
+                answer: "Your Cosmic Style Guide is your foundational style DNA—timeless guidance based on your birth chart. It doesn't change. Your Daily Fit is how that foundation responds to the current cosmic weather. One is your core; the other is your daily expression of it."
             ),
             (
                 question: "How do I interpret the \"vibe breakdown\" percentages?",
@@ -131,7 +131,7 @@ class FAQViewController: UIViewController {
             ),
             (
                 question: "Can I share my readings with friends?",
-                answer: "Not directly within the app yet, but you can always screenshot your Daily Fit or Blueprint and share it however you like. Just remember: their chart is different, so their cosmic style will be too."
+                answer: "Not directly within the app yet, but you can always screenshot your Daily Fit or Style Guide and share it however you like. Just remember: their chart is different, so their cosmic style will be too."
             ),
             (
                 question: "Does Cosmic Fit replace a personal stylist?",
@@ -169,7 +169,7 @@ class FAQViewController: UIViewController {
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
         
-        // Question - using DMSerifText like Blueprint headings
+        // Question - using DMSerifText like Style Guide headings
         let questionLabel = UILabel()
         questionLabel.text = question
         questionLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.title3, weight: .bold)
@@ -178,7 +178,7 @@ class FAQViewController: UIViewController {
         questionLabel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(questionLabel)
         
-        // Answer - using DMSerifText like Blueprint body text
+        // Answer - using DMSerifText like Style Guide body text
         let answerLabel = UILabel()
         answerLabel.text = answer
         answerLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)

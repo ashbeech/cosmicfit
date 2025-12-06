@@ -26,7 +26,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     private var natalChart: NatalChartCalculator.NatalChart?
     private var progressedChart: NatalChartCalculator.NatalChart?
     private var dailyVibeContent: DailyVibeContent?
-    private var blueprintContent: String?
+    private var styleGuideContent: String?
     
     private var todayWeather: TodayWeather?
     private var chartIdentifier: String?
@@ -226,7 +226,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     func presentDetailViewController(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
         // Check if a detail view is already open
         if let existingDetailVC = children.first(where: { 
-            $0 is BlueprintDetailViewController || $0 is GenericDetailViewController 
+            $0 is StyleGuideDetailViewController || $0 is GenericDetailViewController 
         }) {
             print("⚠️ Detail view already open - dismissing existing before presenting new one")
             
@@ -294,9 +294,9 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     func dismissDetailViewController(animated: Bool, completion: (() -> Void)? = nil) {
         print("🔍 dismissDetailViewController called with animated: \(animated)")
         
-        // Find any detail view controller (not just BlueprintDetailViewController)
+        // Find any detail view controller (not just StyleGuideDetailViewController)
         let detailVC = children.first(where: {
-            $0 is BlueprintDetailViewController || $0 is GenericDetailViewController
+            $0 is StyleGuideDetailViewController || $0 is GenericDetailViewController
         })
         
         print("🔍 Found detail VC: \(detailVC != nil ? String(describing: type(of: detailVC!)) : "nil")")
@@ -512,7 +512,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         calculateCharts()
         
         // Clear cached content to force regeneration
-        blueprintContent = nil
+        styleGuideContent = nil
         dailyVibeContent = nil
         
         // Regenerate content
@@ -609,19 +609,19 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         print("🎯 Content Generation Started")
         print("  • Chart ID: \(chartId)")
         print("  • User ID: \(userProfile?.id ?? "None")")
-        print("  • Blueprint cached: \(blueprintContent != nil)")
+        print("  • Style Guide cached: \(styleGuideContent != nil)")
         print("  • Daily Fit cached: \(dailyVibeContent != nil)")
         
-        // Generate Blueprint content (only if not already cached)
-        if blueprintContent == nil {
-            print("🎯 Generating Blueprint content (one-time generation)...")
-            let interpretation = CosmicFitInterpretationEngine.generateBlueprintInterpretation(
+        // Generate Style Guide content (only if not already cached)
+        if styleGuideContent == nil {
+            print("🎯 Generating Style Guide content (one-time generation)...")
+            let interpretation = CosmicFitInterpretationEngine.generateStyleGuideInterpretation(
                 from: natalChart
             )
-            blueprintContent = interpretation.stitchedParagraph
-            print("✅ Blueprint generated (\(interpretation.stitchedParagraph.count) characters)")
+            styleGuideContent = interpretation.stitchedParagraph
+            print("✅ Style Guide generated (\(interpretation.stitchedParagraph.count) characters)")
         } else {
-            print("✅ Blueprint already cached, skipping regeneration")
+            print("✅ Style Guide already cached, skipping regeneration")
         }
         
         // Generate Daily Fit content (check user-specific cache first)
@@ -821,16 +821,16 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         )
         viewControllers.append(dailyFitVC)
 
-        // Cosmic Blueprint Tab (Index 1)
-        let blueprintVC = BlueprintViewController()
-        if let blueprintContent = blueprintContent {
+        // Cosmic Style Guide Tab (Index 1)
+        let styleGuideVC = StyleGuideViewController()
+        if let styleGuideContent = styleGuideContent {
             // Only configure if we have content (prevents empty state)
            
             // Extract city and country from birthInfo
             let (city, country) = extractLocationFromBirthInfo()
             
-            blueprintVC.configure(
-                with: blueprintContent,
+            styleGuideVC.configure(
+                with: styleGuideContent,
                 birthDate: birthDate,
                 birthCity: city,
                 birthCountry: country,
@@ -839,12 +839,12 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         }
 
         // Text-only tab item with no image - NO navigation controller wrapper
-        blueprintVC.tabBarItem = UITabBarItem(
-            title: "Cosmic Blueprint",
+        styleGuideVC.tabBarItem = UITabBarItem(
+            title: "Cosmic Style Guide",
             image: nil,
             selectedImage: nil
         )
-        viewControllers.append(blueprintVC)
+        viewControllers.append(styleGuideVC)
         
         // Set the view controllers
         self.viewControllers = viewControllers
@@ -935,8 +935,8 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
         
         // Log the selected tab for debugging
         var tabName = "Unknown"
-        if viewController is BlueprintViewController {
-            tabName = "Blueprint"
+        if viewController is StyleGuideViewController {
+            tabName = "Style Guide"
         } else if viewController is DailyFitViewController {
             tabName = "Daily Fit"
         } else if viewController is ProfileViewController {

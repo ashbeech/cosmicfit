@@ -2,7 +2,7 @@
 //  ColourPaletteView.swift
 //  Cosmic Fit
 //
-//  Custom component for displaying colour palette grid (used by Blueprint)
+//  Custom component for displaying colour palette grid (used by Style Guide)
 //
 
 import UIKit
@@ -147,7 +147,7 @@ final class ColourCell: UICollectionViewCell {
 extension ColourPaletteView {
     
     /// Creates a placeholder colour palette matching the design
-    /// Used by Blueprint page for Colour Guide section
+    /// Used by Style Guide page for Colour Guide section
     static func createPlaceholderPalette() -> ColourPaletteView {
         let palette: [[UIColor]] = [
             // Row 1 - Warm peachy tones

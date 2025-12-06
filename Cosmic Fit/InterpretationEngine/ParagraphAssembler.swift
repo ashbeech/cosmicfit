@@ -2,79 +2,94 @@
 //  ParagraphAssembler.swift
 //  Cosmic Fit
 //
+//  ⚠️ LEGACY SYSTEM - BEING REPLACED ⚠️
+//
+//  ARCHITECTURAL DECISION (Dec 2025):
+//  This file contains the original dynamic paragraph generation system for the
+//  Style Guide. This approach is being REPLACED with a pre-written template system.
+//
+//  OLD APPROACH (this file):
+//  Tier 1 tokens → Dynamic sentence assembly → Generated paragraphs
+//
+//  NEW APPROACH (to be implemented):
+//  Tier 1 tokens → Pattern matching → Select pre-written template paragraphs
+//
+//  This file is kept for reference during the transition but will eventually be
+//  deprecated once the new template selection system is implemented.
+//
 
 import Foundation
 
 struct ParagraphAssembler {
     
-    // MARK: - Blueprint Structure Generation
+    // MARK: - Style Guide Structure Generation
     
-    /// Generate complete blueprint interpretation for Cosmic Fit profile
+    /// Generate complete style guide interpretation for Cosmic Fit profile
     /// - Parameters:
     ///   - tokens: Array of weighted style tokens from the natal chart
     ///   - birthInfo: Optional birth date/time/location string for header
-    /// - Returns: A fully formatted blueprint interpretation
-    static func generateBlueprintInterpretation(tokens: [StyleToken], birthInfo: String? = nil) -> String {
+    /// - Returns: A fully formatted style guide interpretation
+    static func generateStyleGuideInterpretation(tokens: [StyleToken], birthInfo: String? = nil) -> String {
         // Log tokens for validation
         logTokensForValidation(tokens)
         
-        // Build the complete blueprint with all sections
-        var blueprint = ""
+        // Build the complete style guide with all sections
+        var styleGuide = ""
         
         // Upper sections - all using Whole Sign system
-        blueprint += "## Style Essence\n\n"
-        blueprint += generateEssenceSection(from: tokens) + "\n\n"
+        styleGuide += "## Style Essence\n\n"
+        styleGuide += generateEssenceSection(from: tokens) + "\n\n"
         
-        blueprint += "## Celestial Style ID\n\n"
-        blueprint += generateCoreSection(from: tokens) + "\n\n"
+        styleGuide += "## Celestial Style ID\n\n"
+        styleGuide += generateCoreSection(from: tokens) + "\n\n"
         
-        blueprint += "## Expression\n\n"
-        blueprint += generateExpressionSection(from: tokens) + "\n\n"
+        styleGuide += "## Expression\n\n"
+        styleGuide += generateExpressionSection(from: tokens) + "\n\n"
         
-        blueprint += "## Magnetism\n\n"
-        blueprint += generateMagnetismSection(from: tokens) + "\n\n"
+        styleGuide += "## Magnetism\n\n"
+        styleGuide += generateMagnetismSection(from: tokens) + "\n\n"
         
-        blueprint += "## Emotional Dressing\n\n"
-        blueprint += generateEmotionalDressingSection(from: tokens) + "\n\n"
+        styleGuide += "## Emotional Dressing\n\n"
+        styleGuide += generateEmotionalDressingSection(from: tokens) + "\n\n"
         
-        blueprint += "## Planetary Frequency\n\n"
-        blueprint += generatePlanetaryFrequencySection(from: tokens) + "\n\n"
+        styleGuide += "## Planetary Frequency\n\n"
+        styleGuide += generatePlanetaryFrequencySection(from: tokens) + "\n\n"
         
         // Add Style Tensions section - new addition
-        blueprint += "## Style Tensions\n\n"
-        blueprint += generateStyleTensionsSection(from: tokens) + "\n\n"
+        styleGuide += "## Style Tensions\n\n"
+        styleGuide += generateStyleTensionsSection(from: tokens) + "\n\n"
         
-        blueprint += "---\n\n"
+        styleGuide += "---\n\n"
         
         // Fabric guide - using Whole Sign system
-        blueprint += "# Energetic Fabric Guide\n\n"
-        blueprint += generateFabricRecommendations(from: tokens) + "\n\n"
+        styleGuide += "# Energetic Fabric Guide\n\n"
+        styleGuide += generateFabricRecommendations(from: tokens) + "\n\n"
         
         // Style pulse - 90% natal, 10% progressed flavor (handled by token weighting)
-        blueprint += "# Style Pulse\n\n"
-        blueprint += generateStylePulse(from: tokens) + "\n\n"
+        styleGuide += "# Style Pulse\n\n"
+        styleGuide += generateStylePulse(from: tokens) + "\n\n"
         
-        blueprint += "---\n\n"
+        styleGuide += "---\n\n"
         
         // Fashion guidance - using Whole Sign system
-        blueprint += "# Fashion Dos & Don'ts\n\n"
-        blueprint += generateFashionGuidance(from: tokens) + "\n\n"
+        styleGuide += "# Fashion Dos & Don'ts\n\n"
+        styleGuide += generateFashionGuidance(from: tokens) + "\n\n"
         
         // Colour guidance - 70% natal, 30% progressed (handled by token weighting)
-        blueprint += "# Elemental Colours\n\n"
-        blueprint += generateColourRecommendations(from: tokens) + "\n\n"
+        styleGuide += "# Elemental Colours\n\n"
+        styleGuide += generateColourRecommendations(from: tokens) + "\n\n"
         
         // Wardrobe storyline - 60% progressed with Placidus, 40% natal (handled by token weighting)
-        blueprint += "# Wardrobe Storyline\n\n"
-        blueprint += generateWardrobeStoryline(from: tokens)
+        styleGuide += "# Wardrobe Storyline\n\n"
+        styleGuide += generateWardrobeStoryline(from: tokens)
         
-        return blueprint
+        return styleGuide
     }
     
     // MARK: - Debug Helper
     
     private static func logTokensForValidation(_ tokens: [StyleToken]) {
-        print("\n🪙 TOKEN VALIDATION FOR BLUEPRINT 🪙")
+        print("\n🪙 TOKEN VALIDATION FOR STYLE GUIDE 🪙")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
         // Group by type
@@ -173,7 +188,7 @@ struct ParagraphAssembler {
         return result
     }
     
-    // MARK: - Upper Blueprint Sections (100% Natal, Whole Sign)
+    // MARK: - Upper Style Guide Sections (100% Natal, Whole Sign)
     
     /// Generates the Essence paragraph based on Sun, Venus, and Ascendant signs using Whole Sign
     static func generateEssenceSection(from tokens: [StyleToken]) -> String {
@@ -238,7 +253,7 @@ struct ParagraphAssembler {
         essence += "texture, colour, and the way fabric falls. "
         
         // Closing statement
-        essence += "This blueprint reflects a wardrobe built on "
+        essence += "This style guide reflects a wardrobe built on "
         
         // Add the three themes as closing qualities
         if themes.count >= 3 {

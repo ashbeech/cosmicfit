@@ -477,8 +477,8 @@ final class NatalChartViewController: UIViewController {
         }
     }
     
-    /// Override the Blueprint interpretation generation to use the debug version
-    @objc func showBlueprintInterpretationWithDebug() {
+    /// Override the Style Guide interpretation generation to use the debug version
+    @objc func showStyleGuideInterpretationWithDebug() {
         guard let natalChart = natalChart else {
             showAlert(message: "Chart data is not available. Please try again.")
             return
@@ -490,12 +490,12 @@ final class NatalChartViewController: UIViewController {
         print("\n🔍 STARTING DETAILED DEBUG BLUEPRINT GENERATION 🔍")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
-        // Generate the blueprint interpretation with detailed debugging
-        let interpretation = CosmicFitInterpretationEngine.generateBlueprintInterpretationWithDebug(
+        // Generate the style guide interpretation with detailed debugging
+        let interpretation = CosmicFitInterpretationEngine.generateStyleGuideInterpretationWithDebug(
             from: natalChart
         )
         
-        print("Generated Blueprint interpretation with \(interpretation.stitchedParagraph.count) characters")
+        print("Generated Style Guide interpretation with \(interpretation.stitchedParagraph.count) characters")
         
         // Extract location information from birthInfo if possible
         var city = ""
@@ -535,13 +535,13 @@ final class NatalChartViewController: UIViewController {
             }
         }
         
-        // Create and push the view controller with proper formatting for Blueprint
+        // Create and push the view controller with proper formatting for Style Guide
         let vc = InterpretationViewController()
         vc.configure(
             with: interpretation.stitchedParagraph,
-            title: "Your Cosmic Fit Blueprint",
+            title: "Your Cosmic Fit Style Guide",
             themeName: interpretation.themeName,
-            isBlueprint: true,
+            isStyleGuide: true,
             birthDate: birthDate,  // Pass the actual birth date
             birthCity: city,       // Pass the extracted city (without time or "AT" prefix)
             birthCountry: country  // Pass the extracted country
@@ -552,7 +552,7 @@ final class NatalChartViewController: UIViewController {
         
         // Navigate to interpretation view
         if let navController = self.navigationController {
-            print("Pushing Blueprint interpretation view controller")
+            print("Pushing Style Guide interpretation view controller")
             navController.pushViewController(vc, animated: true)
         } else {
             print("ERROR: No navigation controller available")
@@ -643,12 +643,12 @@ final class NatalChartViewController: UIViewController {
             preferredStyle: .actionSheet
         )
         
-        // Debug Blueprint option
+        // Debug Style Guide option
         alert.addAction(UIAlertAction(
-            title: "Debug Blueprint Generation",
+            title: "Debug Style Guide Generation",
             style: .default,
             handler: { [weak self] _ in
-                self?.showBlueprintInterpretationWithDebug()
+                self?.showStyleGuideInterpretationWithDebug()
             }
         ))
         
@@ -803,7 +803,7 @@ final class NatalChartViewController: UIViewController {
         }
     }
     
-    @objc private func showBlueprintInterpretation() {
+    @objc private func showStyleGuideInterpretation() {
         guard let natalChart = natalChart else {
             showAlert(message: "Chart data is not available. Please try again.")
             return
@@ -812,14 +812,14 @@ final class NatalChartViewController: UIViewController {
         // Show loading indicator
         activityIndicator.startAnimating()
         
-        print("Generating Blueprint interpretation")
+        print("Generating Style Guide interpretation")
         
-        // Generate the blueprint interpretation (based only on natal chart)
-        let interpretation = CosmicFitInterpretationEngine.generateBlueprintInterpretation(
+        // Generate the style guide interpretation (based only on natal chart)
+        let interpretation = CosmicFitInterpretationEngine.generateStyleGuideInterpretation(
             from: natalChart
         )
         
-        print("Generated Blueprint interpretation with \(interpretation.stitchedParagraph.count) characters")
+        print("Generated Style Guide interpretation with \(interpretation.stitchedParagraph.count) characters")
         
         // Extract location information from birthInfo if possible
         var city = ""
@@ -859,13 +859,13 @@ final class NatalChartViewController: UIViewController {
             }
         }
         
-        // Create and push the view controller with proper formatting for Blueprint
+        // Create and push the view controller with proper formatting for Style Guide
         let vc = InterpretationViewController()
         vc.configure(
             with: interpretation.stitchedParagraph,
-            title: "Your Cosmic Fit Blueprint",
+            title: "Your Cosmic Fit Style Guide",
             themeName: interpretation.themeName,
-            isBlueprint: true,
+            isStyleGuide: true,
             birthDate: birthDate,  // Pass the actual birth date
             birthCity: city,       // Pass the extracted city (without time or "AT" prefix)
             birthCountry: country  // Pass the extracted country
@@ -876,7 +876,7 @@ final class NatalChartViewController: UIViewController {
         
         // Navigate to interpretation view
         if let navController = self.navigationController {
-            print("Pushing Blueprint interpretation view controller")
+            print("Pushing Style Guide interpretation view controller")
             navController.pushViewController(vc, animated: true)
         } else {
             print("ERROR: No navigation controller available")
