@@ -7,18 +7,21 @@ Cosmic Fit combines astronomical precision with fashion intelligence, generating
 ## 🌟 Features
 
 ### Cosmic Style Guide
+
 - **Personality-rooted style profiles** derived from natal chart analysis
 - **Whole Sign house system** for authentic astrological interpretation
 - **Age-weighted influences** that evolve as you mature
 - **Comprehensive style guidance** including essence, expression, and fabric recommendations
 
 ### Daily Fit
+
 - **Real-time style guidance** based on current astrological transits
 - **Weather-integrated recommendations** for practical styling
 - **Lunar phase considerations** for energetic alignment
 - **Progressive chart integration** for emotional styling nuances
 
 ### Technical Highlights
+
 - **Swiss Ephemeris integration** for astronomical precision
 - **VSOP87 planetary calculations** for accurate positioning
 - **Semantic token architecture** for modular interpretation building
@@ -29,20 +32,26 @@ Cosmic Fit combines astronomical precision with fashion intelligence, generating
 ### Core Engine Components
 
 #### `CosmicFitInterpretationEngine`
+
 Central orchestrator exposing public methods:
+
 - `generateStyleGuideInterpretation(from:currentAge:)` - Returns `InterpretationResult` with placeholder for template system
 - `generateDailyVibeInterpretation(from:progressedChart:transits:weather:profileHash:date:)` - Fully functional Daily Fit generation
 - `generateCustomStyleGuidance(for:query:currentAge:)` - Situation-specific style recommendations
 
 #### `SemanticTokenGenerator`
+
 Core logic hub converting chart data into weighted `StyleToken`s:
+
 - **Style Guide tokens**: 100% natal chart analysis using Whole Sign system
 - **Daily tokens**: Transit analysis with sophisticated weighting
 - **Color frequency tokens**: 70% natal, 30% progressed for color guidance
 - **Emotional vibe tokens**: Progressed Moon integration for mood styling
 
 #### `StyleToken`
+
 Fundamental unit representing weighted style attributes (Tier 1: Energetic Foundation):
+
 ```swift
 struct StyleToken {
     let name: String           // e.g., "earthy", "vibrant", "structured"
@@ -57,6 +66,7 @@ struct StyleToken {
 ```
 
 **Token Usage:**
+
 - **Vibe Breakdown Generation**: Tier 1 tokens → 6 energies (classic, playful, romantic, utility, drama, edge)
 - **Color Palette Selection**: Tier 1 color tokens scored against today's vibes
 - **Template Selection**: Tier 1 patterns matched to appropriate pre-written content
@@ -64,7 +74,9 @@ struct StyleToken {
 **Note:** A Tier 2 "Applied Style" token system exists (see `Tier2TokenLibrary.swift`) but is not currently active. Current architecture uses template selection instead of dynamic generation.
 
 #### `TransitWeightCalculator`
+
 Sophisticated transit influence scoring based on:
+
 - **Aspect strength**: Conjunction > Square > Trine > Sextile
 - **Orb tightness**: Closer aspects carry more weight
 - **Planetary power**: Pluto > Saturn > Jupiter > Mars > Venus > Sun > Mercury > Moon
@@ -72,7 +84,9 @@ Sophisticated transit influence scoring based on:
 - **Fashion relevance**: Venus, Moon, Ascendant emphasis
 
 #### `PlanetPowerEvaluator`
+
 Natal planet strength assessment:
+
 - Base planetary power ratings
 - Dignity bonuses (domicile, exaltation)
 - Angular house presence
@@ -88,12 +102,14 @@ Both Style Guide and Daily Fit now use **pre-written template selection** rather
 Pre-written paragraph templates selected via Tier 1 token pattern matching:
 
 1. **Style Core** - Foundational style identity and wardrobe philosophy
+
    - Formality baseline (elevated casual, polished minimal, etc.)
    - Aesthetic approach (monochromatic, eclectic, maximalist, etc.)
    - Styling methodology (uniform dressing, intuitive, planned, etc.)
    - Body relationship and comfort preferences
 
 2. **Fabric Guide** - Material and texture recommendations
+
    - Fabric behavior preferences (holds shape, cascades, ripples, etc.)
    - Tactile qualities (smooth hand, cooling sensation, grit, etc.)
    - Fabric weight guidance (substantial, airy, dense, etc.)
@@ -101,6 +117,7 @@ Pre-written paragraph templates selected via Tier 1 token pattern matching:
    - Specific fabric types (silk, linen, cotton, cashmere, etc.)
 
 3. **Colour Guide** - Personal color palette with visual palette component
+
    - Base colors (foundation palette for everyday)
    - Accent colors (flexibility and variety)
    - Statement colors (impact moments)
@@ -115,12 +132,14 @@ Pre-written paragraph templates selected via Tier 1 token pattern matching:
    - Anti-recommendations (opposites to avoid)
 
 **DAILY FIT:**
+
 - Static paragraphs attached to each Tarot card (78 cards × 3 versions = 234 total)
 - Version selection based on day's energy characteristics
 - Tarot card selected from Vibe Breakdown
 - Additional elements: Vibe Breakdown bars, Colour Palette (3 colors), Derived Axes
 
 **Token Flow:**
+
 ```
 STYLE GUIDE (Static, per-user):
   Natal Chart → Tier 1 Tokens → Pattern Analysis → Template Selection
@@ -147,21 +166,27 @@ DAILY FIT (Dynamic, changes daily):
 ```
 
 #### `ParagraphAssembler` (LEGACY - Being Replaced)
+
 Original dynamic paragraph generation system:
+
 - Transforms semantic tokens into generated sentences
 - Being replaced with template selection approach
 - Kept for reference during transition
 
 #### `ThemeSelector` (LEGACY - Being Replaced)
+
 Original theme matching system:
+
 - Pattern matching for style archetypes
 - Being replaced with simpler template selection
 - Composite themes replaced with direct template matching
 
 #### `VibeBreakdownGenerator`
+
 Converts Tier 1 tokens into 6 core style energies for Daily Fit:
 
 **The 6 Style Energies:**
+
 1. **Classic** - Timeless, refined, traditional
 2. **Playful** - Fun, experimental, youthful
 3. **Romantic** - Soft, flowing, feminine
@@ -170,11 +195,13 @@ Converts Tier 1 tokens into 6 core style energies for Daily Fit:
 6. **Edge** - Modern, unconventional, rebellious
 
 **21-Point Distribution:**
+
 - Each energy scored 0-10 points
 - Total always equals 21 points
 - Distribution reflects today's dominant energies
 
 **Process:**
+
 ```swift
 Tier 1 Tokens → Pattern Analysis → Energy Scoring → 21-Point Distribution
               ↓
@@ -184,15 +211,18 @@ Tier 1 Tokens → Pattern Analysis → Energy Scoring → 21-Point Distribution
 ```
 
 #### `DailyColourPaletteGenerator`
+
 Selects 3 colors from Style Guide for today's Daily Fit:
 
 **Selection Criteria:**
+
 1. **Vibe Alignment** - Colors matching today's dominant energy (primary factor)
 2. **Planetary Transit Amplification** - Boost colors if their planetary source has strong transits
 3. **Derived Axes Influence** - Consider Action/Tempo/Strategy/Visibility scores
 4. **Diversity Check** - Ensure palette has variety (avoid 3 similar colors)
 
 **Process:**
+
 ```swift
 Style Guide Colors (Tier 1) + Today's Vibe Breakdown + Transits
                       ↓
@@ -204,14 +234,17 @@ Style Guide Colors (Tier 1) + Today's Vibe Breakdown + Transits
 ```
 
 #### `TarotCardLibrary`
+
 Manages 78 Tarot cards and their associated paragraphs:
 
 **Structure:**
+
 - 78 Tarot cards, each with unique energy signature
 - 3 paragraph versions per card (234 total paragraphs)
 - Version selection based on day's characteristics
 
 **Matching Process:**
+
 ```swift
 Vibe Breakdown (6 energies) → Calculate similarity to each Tarot's energy signature
                              ↓
@@ -225,19 +258,25 @@ Vibe Breakdown (6 energies) → Calculate similarity to each Tarot's energy sign
 ### Astronomical Calculations
 
 #### `VSOP87Parser`
+
 Handles precise planetary position calculations:
+
 - **Bureau des Longitudes VSOP87D format** parsing
 - **Fallback orbital elements** for reduced accuracy scenarios
 - **Multi-century precision** for historical and future dates
 
 #### `SwissEphemerisBootstrap`
+
 Manages Swiss Ephemeris initialization:
+
 - **High-precision ephemeris data** integration
 - **seas_18.se1 file** management
 - **Memory-efficient** resource handling
 
 #### `JulianDateCalculator`
+
 Core astronomical date conversions:
+
 - **Gregorian to Julian** date transformation
 - **UTC coordination** for global accuracy
 - **Sidereal time calculations** for house systems
@@ -245,27 +284,35 @@ Core astronomical date conversions:
 ### User Interface
 
 #### `MainViewController`
+
 Entry point for birth data collection:
+
 - Location geocoding
 - Date/time input validation
 - Chart generation initiation
 
 #### `NatalChartViewController`
+
 Data orchestration hub:
+
 - Natal and progressed chart calculation
 - Weather API integration
 - Transit compilation
 - Interpretation routing
 
 #### `InterpretationViewController`
+
 Cosmic Style Guide display:
+
 - **Markdown-style formatting** for structured text
 - Header with birth location and date
 - Export and sharing capabilities
 - **Responsive typography** for readability
 
 #### `DailyVibeInterpretationViewController`
+
 Daily Fit experience:
+
 - **Interactive sliders** for brightness and vibrancy
 - Weather integration with emoji indicators
 - Segmented guidance (textiles, colors, patterns, shapes)
@@ -274,12 +321,14 @@ Daily Fit experience:
 ## 🔧 Key Architectural Principles
 
 ### Astrological Integrity
+
 - **Natal chart defines essence** - Always the foundational layer
 - **Progressed chart modulates tone** - Never overrides natal patterns
 - **Ascendant influence fades with maturity** - Age-weighted calculations
 - **Transit importance varies** - Dynamic weighting based on multiple factors
 
 ### Token-Driven Analysis
+
 - **Semantic token foundation** - Chart data converted to weighted style attributes (Tier 1)
 - **Pattern recognition** - Token combinations analyzed for style profiles
 - **Template selection** - Pre-written content matched to token patterns
@@ -287,6 +336,7 @@ Daily Fit experience:
 - **Origin tracking** - Full traceability from recommendations back to natal chart
 
 ### Technical Excellence
+
 - **Astronomical precision** - Swiss Ephemeris and VSOP87 integration
 - **Performance optimization** - Efficient calculations and caching
 - **Memory management** - Resource-conscious design
@@ -295,12 +345,14 @@ Daily Fit experience:
 ## 🔄 Daily Refresh System
 
 ### Automatic Updates
+
 - **Midnight detection** across time zones
 - **App lifecycle integration** for seamless updates
 - **Cached storage** for offline accessibility
 - **Background refresh** when returning to foreground
 
 ### Weather Integration
+
 ```swift
 struct TodayWeather {
     let condition: String
@@ -313,13 +365,16 @@ struct TodayWeather {
 ## 🧪 Development Tools
 
 ### Debug Configuration
+
 Controlled via `DebugConfiguration.isDebugEnabled` flag:
+
 - **Token validation** - Detailed weight analysis and categorization
 - **Vibe breakdown** - Energy distribution tracking
 - **Transit calculation** - Aspect scoring verification
 - **Performance monitoring** - Timing and optimization metrics
 
 ### Logging Infrastructure
+
 ```swift
 class DebugLogger {
     static func info(_ message: String)
@@ -331,6 +386,7 @@ class DebugLogger {
 ```
 
 ### System Validation
+
 ```swift
 // Built-in validation suite
 CosmicFitInterpretationEngine.runSystemValidation()  // Returns true if all tests pass
@@ -362,12 +418,14 @@ Extend `VibeBreakdownGenerator` to refine how tokens map to the 6 core energies 
 ### Dependencies
 
 #### Internal
+
 - `NatalChartCalculator` - Chart computation engine
 - `JulianDateCalculator` - Astronomical date handling
 - `AstronomicalCalculator` - Celestial mechanics
 - `TodayWeather` - Weather data integration
 
 #### External
+
 - **Swiss Ephemeris** (CSwissEphemeris SPM)
 - **CoreLocation** - Geocoding and location services
 - **UIKit** - iOS user interface framework
@@ -375,12 +433,14 @@ Extend `VibeBreakdownGenerator` to refine how tokens map to the 6 core energies 
 ## 📊 Performance Characteristics
 
 ### Calculation Efficiency
+
 - **Cached chart data** prevents redundant calculations
 - **Optimized token generation** with early filtering
 - **Lazy loading** of astronomical data files
 - **Memory pooling** for frequent operations
 
 ### User Experience
+
 - **Sub-second interpretation generation** for most queries
 - **Smooth UI transitions** with activity indicators
 - **Offline capability** with cached daily content
@@ -389,6 +449,7 @@ Extend `VibeBreakdownGenerator` to refine how tokens map to the 6 core energies 
 ## 📈 Implementation Status
 
 ### ✅ Fully Implemented & Working
+
 - **Tier 1 Token Generation** - Complete natal, progressed, and transit analysis (~200-300 tokens per chart)
 - **Vibe Breakdown System** - 6 energies with 21-point distribution
 - **Tarot Card Selection** - Pattern matching from vibe to card
@@ -402,23 +463,29 @@ Extend `VibeBreakdownGenerator` to refine how tokens map to the 6 core energies 
 - **Storage System** - Daily content caching and persistence
 
 ### 🚧 Pending Implementation
+
 **Style Guide Content:**
+
 - Pattern matching system for template selection
 - Pre-written template library (Style Core, Fabric Guide, Colour Guide, Do's & Don'ts)
 - Template assembly and display logic
 
 **Daily Fit Content:**
+
 - 234 pre-written paragraphs (78 Tarot cards × 3 versions)
 - Paragraph version selection logic based on day characteristics
 - Integration into Daily Fit display
 
 **Both Systems:**
+
 - Content delivery through template selection is the only missing piece
 - All underlying data generation (tokens, vibes, colors, axes) is complete
 - UI frameworks are ready to receive content
 
 ### 🔮 Architecture Benefits
+
 **Current Approach:**
+
 - **Consistent Quality** - Pre-written content ensures polished, on-brand copy
 - **Performance** - Template selection is fast (no generation overhead)
 - **Maintainability** - Copy can be refined without code changes
@@ -436,6 +503,7 @@ The engine serves as a **dynamic foundation** for extending stylistic intelligen
 ## 📝 Version History
 
 **December 2025 - Template-Based Architecture**
+
 - Transitioned from dynamic paragraph generation to template selection
 - Implemented Vibe Breakdown system (6 energies, 21 points)
 - Integrated Tarot card matching for Daily Fit
@@ -446,4 +514,4 @@ The engine serves as a **dynamic foundation** for extending stylistic intelligen
 
 ---
 
-*Cosmic Fit represents the intersection of ancient wisdom and modern technology, delivering personalized style guidance that honors both astronomical precision and individual expression.*
+_Cosmic Fit represents the intersection of ancient wisdom and modern technology, delivering personalized style guidance that honors both astronomical precision and individual expression._

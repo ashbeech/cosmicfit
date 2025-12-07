@@ -88,13 +88,6 @@ class CosmicFitInterpretationEngine {
                 print("\(index + 1). \(token.name): \(String(format: "%.2f", token.weight))")
             }
         }
-
-        // Generate birth info text
-        var birthInfoText: String? = nil
-        if let sunPlanet = chart.planets.first(where: { $0.name == "Sun" }) {
-            let sunSignName = CoordinateTransformations.getZodiacSignName(sign: sunPlanet.zodiacSign)
-            birthInfoText = "Natal Chart: \(sunSignName) Energy"
-        }
         
         DebugConfiguration.debugLog {
             print("\n📝 STYLE GUIDE TEXT (PLACEHOLDER) 📝")

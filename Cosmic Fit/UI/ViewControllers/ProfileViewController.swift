@@ -24,7 +24,7 @@ class ProfileViewController: UIViewController {
     private let nameTextField = UITextField()
     private let birthDatePicker = UIDatePicker()
     private let birthTimePicker = UIDatePicker()
-    private let locationTextField = UITextField()
+    private let locationAutocompleteView = LocationAutocompleteView()
     private let updateButton = UIButton(type: .system)
     private let deleteProfileButton = UIButton(type: .system)
     private let activityIndicator = UIActivityIndicatorView(style: .large)
@@ -177,15 +177,18 @@ class ProfileViewController: UIViewController {
         
         contentView.addSubview(locationLabel)
         
-        locationTextField.translatesAutoresizingMaskIntoConstraints = false
+        // Location autocomplete view
+        locationAutocompleteView.translatesAutoresizingMaskIntoConstraints = false
+        locationAutocompleteView.delegate = self
         
-        // Apply theme to text field
-        CosmicFitTheme.styleTextField(locationTextField)
+        // Apply theme to the text field inside autocomplete view
+        CosmicFitTheme.styleTextField(locationAutocompleteView.textField)
+        locationAutocompleteView.setPlaceholder("Start typing your birth location")
         
-        locationTextField.placeholder = "Enter birth city/location"
-        locationTextField.returnKeyType = .done
-        locationTextField.delegate = self
-        contentView.addSubview(locationTextField)
+        contentView.addSubview(locationAutocompleteView)
+        
+        // Set up suggestions overlay so it appears above other elements
+        locationAutocompleteView.setupSuggestionsOverlay(in: contentView)
         
         // Update button
         updateButton.setTitle("Update Profile", for: .normal)
@@ -276,13 +279,12 @@ class ProfileViewController: UIViewController {
             locationLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
             locationLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
             
-            locationTextField.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 10),
-            locationTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            locationTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            locationTextField.heightAnchor.constraint(equalToConstant: 44),
+                locationAutocompleteView.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 10),
+            locationAutocompleteView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
+            locationAutocompleteView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
             
             // Buttons
-            updateButton.topAnchor.constraint(equalTo: locationTextField.bottomAnchor, constant: 40),
+            updateButton.topAnchor.constraint(equalTo: locationAutocompleteView.bottomAnchor, constant: 40),
             updateButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             updateButton.widthAnchor.constraint(equalToConstant: 250),
             updateButton.heightAnchor.constraint(equalToConstant: 50),
@@ -333,7 +335,7 @@ class ProfileViewController: UIViewController {
         
         // Populate form with existing data
         nameTextField.text = profile.firstName
-        locationTextField.text = profile.birthLocation
+        locationAutocompleteView.setText(profile.birthLocation)
         latitude = profile.latitude
         longitude = profile.longitude
         locationName = profile.birthLocation
@@ -388,66 +390,15 @@ class ProfileViewController: UIViewController {
             return
         }
         
-        guard let locationString = locationTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
-              !locationString.isEmpty else {
-            showAlert(title: "Location Required", message: "Please enter your birth location.")
+        let locationString = locationAutocompleteView.getText().trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !locationString.isEmpty, latitude != 0.0, longitude != 0.0 else {
+            showAlert(title: "Location Required", message: "Please select a valid birth location from the suggestions.")
             return
         }
         
+        // Location is already validated from the autocomplete, proceed with update
         locationName = locationString
-        
-        // Start activity indicator
-        activityIndicator.startAnimating()
-        updateButton.isEnabled = false
-        
-        // Geocode the location if it's different from current
-        if locationName != currentUserProfile?.birthLocation {
-            geocoder.geocodeAddressString(locationName) { [weak self] placemarks, error in
-                DispatchQueue.main.async {
-                    if let error = error {
-                        self?.activityIndicator.stopAnimating()
-                        self?.updateButton.isEnabled = true
-                        self?.showAlert(title: "Location Error", message: "Could not find this location. Please check the spelling and try again.")
-                        print("Geocoding error: \(error)")
-                        return
-                    }
-                    
-                    guard let placemark = placemarks?.first,
-                          let location = placemark.location else {
-                        self?.activityIndicator.stopAnimating()
-                        self?.updateButton.isEnabled = true
-                        self?.showAlert(title: "Location Error", message: "Could not find coordinates for this location. Please try a different location.")
-                        return
-                    }
-                    
-                    self?.latitude = location.coordinate.latitude
-                    self?.longitude = location.coordinate.longitude
-                    
-                    // Get timezone for the location
-                    let newTimeZone = TimeZone(identifier: placemark.timeZone?.identifier ?? TimeZone.current.identifier) ?? TimeZone.current
-                    
-                    // Update ONLY the stored timezone for calculations
-                    // DO NOT change picker timezones to avoid animation
-                    self?.timeZone = newTimeZone
-                    
-                    #if DEBUG
-                    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-                    print("🔄 LOCATION UPDATED")
-                    print("📍 New Location: \(self?.locationName ?? "")")
-                    print("🕐 New Timezone: \(newTimeZone.identifier)")
-                    print("⏰ Time preserved: Pickers remain unchanged, timezone updated for calculations")
-                    print("✅ No picker animation - smooth UX")
-                    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-                    #endif
-                    
-                    // Now update the profile
-                    self?.updateProfile()
-                }
-            }
-        } else {
-            // Location hasn't changed, proceed with update
-            updateProfile()
-        }
+        updateProfile()
     }
     
     @objc private func deleteButtonTapped() {
@@ -651,14 +602,30 @@ class ProfileViewController: UIViewController {
     }
 }
 
+// MARK: - LocationAutocompleteDelegate
+extension ProfileViewController: LocationAutocompleteDelegate {
+    func locationAutocompleteDidSelectLocation(name: String, latitude: Double, longitude: Double, timeZone: TimeZone) {
+        // Update with validated location
+        self.locationName = name
+        self.latitude = latitude
+        self.longitude = longitude
+        self.timeZone = timeZone
+        
+        print("✅ Location selected: \(name)")
+        print("📍 Coordinates: \(latitude), \(longitude)")
+        print("🕐 Timezone: \(timeZone.identifier)")
+    }
+    
+    func locationAutocompleteDidUpdateText(_ text: String) {
+        // Can add validation feedback here if needed
+    }
+}
+
 // MARK: - UITextFieldDelegate
 extension ProfileViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == nameTextField {
-            locationTextField.becomeFirstResponder()
-        } else if textField == locationTextField {
             textField.resignFirstResponder()
-            updateButtonTapped()
         }
         return true
     }

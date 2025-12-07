@@ -167,14 +167,26 @@ private final class VibeBarRow: UIView {
         trackView.addSubview(fillView)
         
         // Layout constraints
+        // Note: Using priority < .required to avoid conflicts with temporary layout constraints
+        // during initial view setup when the view has a zero-size frame
+        
+        let labelWidthConstraint = nameLabel.widthAnchor.constraint(equalToConstant: 80)
+        labelWidthConstraint.priority = .defaultHigh // Lower than .required to avoid conflicts
+        
+        let spacingConstraint = trackView.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 16)
+        spacingConstraint.priority = .defaultHigh // Lower than .required to avoid conflicts
+        
+        let heightConstraint = heightAnchor.constraint(equalToConstant: 30)
+        heightConstraint.priority = .defaultHigh // Lower than .required to avoid conflicts
+        
         NSLayoutConstraint.activate([
             // Name label on the left
             nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            nameLabel.widthAnchor.constraint(equalToConstant: 80),
+            labelWidthConstraint,
             
             // Track spans from name label to trailing edge
-            trackView.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 16),
+            spacingConstraint,
             trackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             trackView.centerYAnchor.constraint(equalTo: centerYAnchor),
             trackView.heightAnchor.constraint(equalToConstant: 12),
@@ -186,7 +198,7 @@ private final class VibeBarRow: UIView {
             // Width constraint is set dynamically in configure()
             
             // Container height
-            heightAnchor.constraint(equalToConstant: 30)
+            heightConstraint
         ])
     }
 }

@@ -47,7 +47,7 @@ final class TokenMerger {
         
         var mergedTokens: [StyleToken] = []
         
-        for (key, duplicates) in tokensByName {
+        for (_, duplicates) in tokensByName {
             if duplicates.count == 1 {
                 // No duplicates - add as-is
                 mergedTokens.append(duplicates[0])

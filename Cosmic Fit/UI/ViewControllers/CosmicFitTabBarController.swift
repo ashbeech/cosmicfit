@@ -225,7 +225,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     
     func presentDetailViewController(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
         // Check if a detail view is already open
-        if let existingDetailVC = children.first(where: { 
+        if children.contains(where: { 
             $0 is StyleGuideDetailViewController || $0 is GenericDetailViewController 
         }) {
             print("⚠️ Detail view already open - dismissing existing before presenting new one")

@@ -24,7 +24,7 @@ class OnboardingFormViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let backButton = UIButton(type: .system)
-    private let pageNumberLabel = UILabel()
+    //private let pageNumberLabel = UILabel()
     private let questionNumberLabel = UILabel()
     private let titleLabel = UILabel()
     private let descriptionLabel = UILabel()
@@ -44,8 +44,7 @@ class OnboardingFormViewController: UIViewController {
     private let unknownTimeCheckbox = UIButton(type: .system)
     private let unknownTimeLabel = UILabel()
     
-    private let locationTextField = UITextField()
-    private let locationDivider = UIView()
+    private let locationAutocompleteView = LocationAutocompleteView()
     
     // MARK: - Properties
     private var currentPage: Int = 1 {
@@ -242,23 +241,10 @@ class OnboardingFormViewController: UIViewController {
             unknownTimeLabel.font = UIFont.systemFont(ofSize: 16)
             unknownTimeLabel.textColor = .black
             
-        // Location input
-        locationTextField.translatesAutoresizingMaskIntoConstraints = false
-        locationTextField.font = UIFont.systemFont(ofSize: 18)
-        locationTextField.textColor = .black
-        locationTextField.borderStyle = .none
-        locationTextField.returnKeyType = .done
-        locationTextField.delegate = self
-        locationTextField.addTarget(self, action: #selector(locationFieldChanged), for: .editingChanged)
-        
-        // Set initial placeholder
-        locationTextField.attributedPlaceholder = NSAttributedString(
-            string: placeholders[0],
-            attributes: placeholderAttributes
-        )
-        
-        locationDivider.translatesAutoresizingMaskIntoConstraints = false
-        locationDivider.backgroundColor = .black
+        // Location autocomplete view
+        locationAutocompleteView.translatesAutoresizingMaskIntoConstraints = false
+        locationAutocompleteView.delegate = self
+        locationAutocompleteView.setPlaceholder(placeholders[0])
         }
     
     // MARK: - Placeholder Animation
@@ -267,7 +253,7 @@ class OnboardingFormViewController: UIViewController {
         stopPlaceholderAnimation()
         
         // Only animate if text field is empty
-        guard locationTextField.text?.isEmpty ?? true else { return }
+        guard locationAutocompleteView.getText().isEmpty else { return }
         
         // Start the cycling timer
         placeholderTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
@@ -282,7 +268,7 @@ class OnboardingFormViewController: UIViewController {
     
     private func cyclePlaceholder() {
         // Only cycle if text field is empty
-        guard locationTextField.text?.isEmpty ?? true else {
+        guard locationAutocompleteView.getText().isEmpty else {
             stopPlaceholderAnimation()
             return
         }
@@ -290,19 +276,19 @@ class OnboardingFormViewController: UIViewController {
         // Move to next placeholder
         currentPlaceholderIndex = (currentPlaceholderIndex + 1) % placeholders.count
         
-        // Fade out current placeholder
+        // Fade out current placeholder text ONLY (not the entire view)
         UIView.animate(withDuration: 0.3, animations: {
-            self.locationTextField.alpha = 0.0
+            self.locationAutocompleteView.textField.alpha = 0.0
         }) { _ in
             // Change placeholder text
-            self.locationTextField.attributedPlaceholder = NSAttributedString(
-                string: self.placeholders[self.currentPlaceholderIndex],
-                attributes: self.placeholderAttributes
+            self.locationAutocompleteView.setPlaceholder(
+                self.placeholders[self.currentPlaceholderIndex],
+                animated: true
             )
             
             // Fade back in
             UIView.animate(withDuration: 0.3) {
-                self.locationTextField.alpha = 1.0
+                self.locationAutocompleteView.textField.alpha = 1.0
             }
         }
     }
@@ -429,8 +415,8 @@ class OnboardingFormViewController: UIViewController {
     }
     
     private func checkLocationValid() {
-        let location = locationTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        isLocationValid = !location.isEmpty && location.count >= 3
+        let location = locationAutocompleteView.getText().trimmingCharacters(in: .whitespacesAndNewlines)
+        isLocationValid = !location.isEmpty && location.count >= 3 && latitude != 0.0 && longitude != 0.0
     }
     
     // MARK: - Text Field Change Handlers
@@ -439,18 +425,6 @@ class OnboardingFormViewController: UIViewController {
         updateButtonState()
     }
     
-    @objc private func locationFieldChanged() {
-        checkLocationValid()
-        updateButtonState()
-        
-        // Stop placeholder animation if user has typed something
-        if !(locationTextField.text?.isEmpty ?? true) {
-            stopPlaceholderAnimation()
-        } else {
-            // Restart animation if field becomes empty
-            startPlaceholderAnimation()
-        }
-    }
     
     // MARK: - Page Content Updates
     private func updatePageContent() {
@@ -580,40 +554,32 @@ class OnboardingFormViewController: UIViewController {
     }
     
     private func setupLocationPage() {
-            titleLabel.text = "And lastly, where were you born?"
-            descriptionLabel.text = ""
+            titleLabel.text = "Lastly, where were you born?"
+            descriptionLabel.text = "" // Empty like page 2 for consistent positioning
             actionButton.setTitle("Done", for: .normal)
             
-            // Add location input to container
-            inputContainerView.addSubview(locationTextField)
-            inputContainerView.addSubview(locationDivider)
+            // Add location autocomplete to container
+            inputContainerView.addSubview(locationAutocompleteView)
             
             NSLayoutConstraint.activate([
-                locationTextField.topAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: 10),
-                locationTextField.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
-                locationTextField.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
-                locationTextField.heightAnchor.constraint(equalToConstant: 44),
+                locationAutocompleteView.topAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: 20),
+                locationAutocompleteView.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
+                locationAutocompleteView.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+                //locationAutocompleteView.bottomAnchor.constraint(equalTo: inputContainerView.bottomAnchor)
                 
-                locationDivider.topAnchor.constraint(equalTo: locationTextField.bottomAnchor, constant: -8),
-                locationDivider.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
-                locationDivider.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
-                locationDivider.heightAnchor.constraint(equalToConstant: 1),
-                locationDivider.bottomAnchor.constraint(lessThanOrEqualTo: inputContainerView.bottomAnchor, constant: -10)
+                //nameTextField.heightAnchor.constraint(equalToConstant: 44),
             ])
+            
+            // Set up suggestions overlay in the content view so it can appear above other elements
+            locationAutocompleteView.setupSuggestionsOverlay(in: contentView)
             
             // Reset placeholder animation state
             currentPlaceholderIndex = 0
-            locationTextField.attributedPlaceholder = NSAttributedString(
-                string: placeholders[0],
-                attributes: placeholderAttributes
-            )
+            locationAutocompleteView.setPlaceholder(placeholders[0])
             
-            // Start placeholder animation
-            startPlaceholderAnimation()
-            
-            // Focus on text field
-            DispatchQueue.main.async {
-                self.locationTextField.becomeFirstResponder()
+            // Start placeholder animation immediately
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.startPlaceholderAnimation()
             }
             
             // Initial validation
@@ -675,12 +641,16 @@ class OnboardingFormViewController: UIViewController {
             stopPlaceholderAnimation()
         }
         
-        UIView.animate(withDuration: 0.3, animations: {
-            self.view.alpha = 0.0
+        // Fade out content only (not entire view)
+        UIView.animate(withDuration: 0.2, animations: {
+            self.contentView.alpha = 0.0
         }) { _ in
+            // Update page content while invisible
             self.currentPage = page
-            UIView.animate(withDuration: 0.3) {
-                self.view.alpha = 1.0
+            
+            // Fade back in
+            UIView.animate(withDuration: 0.2) {
+                self.contentView.alpha = 1.0
             }
         }
     }
@@ -697,63 +667,8 @@ class OnboardingFormViewController: UIViewController {
     
     // MARK: - Location Processing
     private func processLocationAndComplete() {
-        birthLocation = locationTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        
-        activityIndicator.startAnimating()
-        actionButton.isEnabled = false
-        
-        geocodeLocation(birthLocation) { [weak self] success in
-            guard let self = self else { return }
-            
-            self.activityIndicator.stopAnimating()
-            self.actionButton.isEnabled = true
-            
-            if success {
-                self.saveProfileAndComplete()
-            } else {
-                self.showAlert(title: "Location Error", message: "Could not find this location. Please try a different format (e.g., 'London, UK').")
-            }
-        }
-    }
-    
-    private func geocodeLocation(_ location: String, completion: @escaping (Bool) -> Void) {
-        geocoder.geocodeAddressString(location) { [weak self] placemarks, error in
-            guard let self = self else { return }
-            
-            if let error = error {
-                print("Geocoding error: \(error.localizedDescription)")
-                completion(false)
-                return
-            }
-            
-            guard let placemark = placemarks?.first,
-                  let location = placemark.location else {
-                completion(false)
-                return
-            }
-            
-            self.latitude = location.coordinate.latitude
-            self.longitude = location.coordinate.longitude
-            self.timeZone = placemark.timeZone ?? TimeZone.current
-            
-            // Keep pickers in device timezone to preserve user's selected values
-            // We'll extract the numeric values the user saw and interpret them
-            // in the birth location timezone context when saving
-            
-            print("Geocoded: \(self.latitude), \(self.longitude)")
-            print("Timezone: \(self.timeZone.identifier)")
-            
-            #if DEBUG
-            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-            print("🌍 GEOCODING COMPLETE")
-            print("📍 Location: \(location)")
-            print("🕐 Timezone: \(self.timeZone.identifier)")
-            print("✅ Pickers remain in device timezone to preserve user's selected values")
-            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-            #endif
-            
-            completion(true)
-        }
+        // Location is already validated from the search, so proceed directly to save
+        saveProfileAndComplete()
     }
     
     private func saveProfileAndComplete() {
@@ -921,17 +836,48 @@ class OnboardingFormViewController: UIViewController {
     }
 }
 
+// MARK: - LocationAutocompleteDelegate
+extension OnboardingFormViewController: LocationAutocompleteDelegate {
+    func locationAutocompleteDidSelectLocation(name: String, latitude: Double, longitude: Double, timeZone: TimeZone) {
+        // Update with validated location
+        self.birthLocation = name
+        self.latitude = latitude
+        self.longitude = longitude
+        self.timeZone = timeZone
+        
+        // Stop placeholder animation since we have a location
+        stopPlaceholderAnimation()
+        
+        // Mark as valid and update button
+        isLocationValid = true
+        updateButtonState()
+        
+        print("✅ Location selected: \(name)")
+        print("📍 Coordinates: \(latitude), \(longitude)")
+        print("🕐 Timezone: \(timeZone.identifier)")
+    }
+    
+    func locationAutocompleteDidUpdateText(_ text: String) {
+        // Update validation as user types
+        checkLocationValid()
+        updateButtonState()
+        
+        // Stop placeholder animation if user has typed something
+        if !text.isEmpty {
+            stopPlaceholderAnimation()
+        } else if currentPage == 3 {
+            // Restart animation if field becomes empty
+            startPlaceholderAnimation()
+        }
+    }
+}
+
 // MARK: - UITextFieldDelegate
 extension OnboardingFormViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == nameTextField {
             textField.resignFirstResponder()
             if isNameValid {
-                actionButtonTapped()
-            }
-        } else if textField == locationTextField {
-            textField.resignFirstResponder()
-            if isLocationValid {
                 actionButtonTapped()
             }
         }

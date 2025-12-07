@@ -455,13 +455,13 @@ class DailyVibeInterpretationViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        // Redraw sliders after layout to ensure correct positioning
-        if let content = vibeContent {
-            // Force layout before drawing to ensure views have correct sizes
-            view.layoutIfNeeded()
-            //drawBrightnessSlider(value: 10 - content.colourScores.darkness) // Brightness is inverse of darkness
-            //drawVibrancySlider(value: content.colourScores.vibrancy)
-        }
+        // NOTE: Slider drawing functionality has been removed
+        // If re-enabling sliders, uncomment the code below:
+        // if let content = vibeContent {
+        //     view.layoutIfNeeded()
+        //     drawBrightnessSlider(value: 10 - content.colourScores.darkness)
+        //     drawVibrancySlider(value: content.colourScores.vibrancy)
+        // }
     }
     
     // MARK: - Update UI with Content
