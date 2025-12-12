@@ -31,8 +31,9 @@ class DailyFitViewController: UIViewController {
     private let tarotTitleLabel = UILabel()
     private let dateLabel = UILabel()
     
-    // Style Brief Section
-    private let styleBriefLabel = UILabel()
+    // Style Edit Section
+    private var styleEditHeaderLabel: UIView?
+    private let styleEditLabel = UILabel()
     
     // Style Breakdown Section
     private let colourPaletteContainer = DailyColourPaletteView()
@@ -390,10 +391,11 @@ class DailyFitViewController: UIViewController {
             // Hide all new content views
             let allContentViews: [UIView?] = [
                 self.dailyFitLabel, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
-                self.styleBriefLabel, self.colourPaletteContainer, self.colourHeaderDivider,
+                self.topDivider, self.styleEditHeaderLabel, self.styleEditLabel,
+                self.styleBreakdownDivider, self.colourHeaderDivider, self.colourPaletteContainer,
                 self.pillSlidersContainer, self.toneHeaderLabel, self.toneSliderContainer,
                 self.vibeHeaderDivider, self.vibeContainer, self.silhouetteHeaderDivider, self.silhouetteContainer,
-                self.takeawayLabel, self.topDivider, self.styleBreakdownDivider, self.bottomDivider, self.finalStarDivider,
+                self.bottomDivider, self.takeawayLabel, self.finalStarDivider,
                 self.debugButton
             ]
             allContentViews.compactMap { $0 }.forEach { $0.alpha = 0.0 }
@@ -438,10 +440,11 @@ class DailyFitViewController: UIViewController {
             // Show all new content views
             let allContentViews: [UIView?] = [
                 self.dailyFitLabel, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
-                self.styleBriefLabel, self.colourPaletteContainer, self.colourHeaderDivider,
+                self.topDivider, self.styleEditHeaderLabel, self.styleEditLabel,
+                self.styleBreakdownDivider, self.colourHeaderDivider, self.colourPaletteContainer,
                 self.pillSlidersContainer, self.toneHeaderLabel, self.toneSliderContainer,
                 self.vibeHeaderDivider, self.vibeContainer, self.silhouetteHeaderDivider, self.silhouetteContainer,
-                self.takeawayLabel, self.topDivider, self.styleBreakdownDivider, self.bottomDivider, self.finalStarDivider,
+                self.bottomDivider, self.takeawayLabel, self.finalStarDivider,
                 self.debugButton
             ]
             allContentViews.compactMap { $0 }.forEach { $0.alpha = 1.0 }
@@ -804,20 +807,27 @@ class DailyFitViewController: UIViewController {
             contentView.addSubview(divider)
         }
         
-        // Style brief text block
-        styleBriefLabel.text = "You know that tidy-but-slightly-off feeling, like when you expect the bus to be late but it's actually right on time? Keep your look polished but slip in one detail that breaks the rules. A blazer with sneakers, sharp trousers with a mischievous print, or a neat shirt layered over something that shouldn't work but does. The mood is about order with a wink."
-        CosmicFitTheme.styleBodyLabel(styleBriefLabel, fontSize: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
-        styleBriefLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
-        styleBriefLabel.numberOfLines = 0
-        styleBriefLabel.translatesAutoresizingMaskIntoConstraints = false
-        styleBriefLabel.alpha = 0.0
-        contentView.addSubview(styleBriefLabel)
+        // Style Edit header (large, bold, centered)
+        styleEditHeaderLabel = createLargeHeaderLabel("Style Edit")
+        styleEditHeaderLabel?.alpha = 0.0
+        if let header = styleEditHeaderLabel {
+            contentView.addSubview(header)
+        }
+        
+        // Style edit text block
+        styleEditLabel.text = "You know that tidy-but-slightly-off feeling, like when you expect the bus to be late but it's actually right on time? Keep your look polished but slip in one detail that breaks the rules. A blazer with sneakers, sharp trousers with a mischievous print, or a neat shirt layered over something that shouldn't work but does. The mood is about order with a wink."
+        CosmicFitTheme.styleBodyLabel(styleEditLabel, fontSize: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
+        styleEditLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
+        styleEditLabel.numberOfLines = 0
+        styleEditLabel.translatesAutoresizingMaskIntoConstraints = false
+        styleEditLabel.alpha = 0.0
+        contentView.addSubview(styleEditLabel)
     }
     
-    // MARK: - Style Breakdown Section
+    // MARK: - Outfit Breakdown Section
     private func setupStyleBreakdownSection() {
-        // Style Breakdown header (large, bold, no lines)
-        styleBreakdownDivider = createLargeHeaderLabel("Style Breakdown")
+        // Outfit Breakdown header (large, bold, no lines)
+        styleBreakdownDivider = createLargeHeaderLabel("Outfit Breakdown")
         styleBreakdownDivider?.alpha = 0.0
         if let divider = styleBreakdownDivider {
             contentView.addSubview(divider)
@@ -1254,10 +1264,11 @@ class DailyFitViewController: UIViewController {
         // All new content starts invisible and fades in after card reveal
         let allContentViews: [UIView?] = [
             dailyFitLabel, tarotSymbolLabel, tarotTitleLabel, dateLabel,
-            styleBriefLabel, colourPaletteContainer, colourHeaderDivider,
+            topDivider, styleEditHeaderLabel, styleEditLabel,
+            styleBreakdownDivider, colourHeaderDivider, colourPaletteContainer,
             pillSlidersContainer, toneHeaderLabel, toneSliderContainer,
             vibeHeaderDivider, vibeContainer, silhouetteHeaderDivider, silhouetteContainer,
-            takeawayLabel, topDivider, styleBreakdownDivider, bottomDivider, finalStarDivider,
+            bottomDivider, takeawayLabel, finalStarDivider,
             debugButton
         ]
         
@@ -1311,25 +1322,41 @@ class DailyFitViewController: UIViewController {
             ])
         }
         
-        // Style Brief Section
-        if let topDivider = topDivider {
-            constraints.append(contentsOf: [
-                styleBriefLabel.topAnchor.constraint(equalTo: topDivider.bottomAnchor, constant: sectionSpacing),
-                styleBriefLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                styleBriefLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
-            ])
-        } else {
-            constraints.append(contentsOf: [
-                styleBriefLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: sectionSpacing * 2),
-                styleBriefLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                styleBriefLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
-            ])
+        // Style Edit Section
+        if let styleEditHeader = styleEditHeaderLabel {
+            if let topDivider = topDivider {
+                // Layout with top divider: Date → Top Divider → Style Edit Header → Style Edit
+                constraints.append(contentsOf: [
+                    styleEditHeader.topAnchor.constraint(equalTo: topDivider.bottomAnchor, constant: sectionSpacing * 1.33),
+                    styleEditHeader.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                    styleEditHeader.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
+                ])
+                
+                constraints.append(contentsOf: [
+                    styleEditLabel.topAnchor.constraint(equalTo: styleEditHeader.bottomAnchor, constant: sectionSpacing),
+                    styleEditLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                    styleEditLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
+                ])
+            } else {
+                // Layout without top divider: Date → Style Edit Header → Style Edit
+                constraints.append(contentsOf: [
+                    styleEditHeader.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: sectionSpacing * 2.33),
+                    styleEditHeader.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                    styleEditHeader.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
+                ])
+                
+                constraints.append(contentsOf: [
+                    styleEditLabel.topAnchor.constraint(equalTo: styleEditHeader.bottomAnchor, constant: sectionSpacing),
+                    styleEditLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                    styleEditLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
+                ])
+            }
         }
         
-        // Style Breakdown Section
+        // Outfit Breakdown Section
         if let styleBreakdownDivider = styleBreakdownDivider {
             constraints.append(contentsOf: [
-                styleBreakdownDivider.topAnchor.constraint(equalTo: styleBriefLabel.bottomAnchor, constant: sectionSpacing),
+                styleBreakdownDivider.topAnchor.constraint(equalTo: styleEditLabel.bottomAnchor, constant: sectionSpacing * 1.33),
                 styleBreakdownDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
                 styleBreakdownDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
             ])
@@ -1338,7 +1365,7 @@ class DailyFitViewController: UIViewController {
         // Colour Section
         if let colourHeaderDivider = colourHeaderDivider {
             constraints.append(contentsOf: [
-                colourHeaderDivider.topAnchor.constraint(equalTo: styleBreakdownDivider?.bottomAnchor ?? styleBriefLabel.bottomAnchor, constant: sectionSpacing),
+                colourHeaderDivider.topAnchor.constraint(equalTo: styleBreakdownDivider?.bottomAnchor ?? styleEditLabel.bottomAnchor, constant: sectionSpacing),
                 colourHeaderDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
                 colourHeaderDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
                 
@@ -1348,7 +1375,7 @@ class DailyFitViewController: UIViewController {
             ])
         } else {
             constraints.append(contentsOf: [
-                colourPaletteContainer.topAnchor.constraint(equalTo: styleBreakdownDivider?.bottomAnchor ?? styleBriefLabel.bottomAnchor, constant: sectionSpacing * 2),
+                colourPaletteContainer.topAnchor.constraint(equalTo: styleBreakdownDivider?.bottomAnchor ?? styleEditLabel.bottomAnchor, constant: sectionSpacing * 2),
                 colourPaletteContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
                 colourPaletteContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
             ])
@@ -1460,8 +1487,8 @@ class DailyFitViewController: UIViewController {
         dateFormatter.locale = Locale(identifier: "en_GB")
         dateLabel.text = dateFormatter.string(from: Date())
         
-        // TODO: Update style brief with actual content when available
-        // styleBriefLabel.text = content.styleBrief
+        // Update styleEdit with dynamically selected variant
+        styleEditLabel.text = content.styleEdit
         
         // UPDATE: Configure vibe breakdown bars with actual data
         vibeContainer.configure(with: content.vibeBreakdown)
@@ -1636,7 +1663,7 @@ class DailyFitViewController: UIViewController {
     /*
     private func setInitialContentAlpha() {
         // Initial alpha for content labels
-        let labels = [keywordsLabel, styleBriefLabel, textilesLabel, coloursLabel,
+        let labels = [keywordsLabel, styleEditLabel, textilesLabel, coloursLabel,
                       patternsLabel, shapeLabel, accessoriesLabel, layeringLabel,
                       vibeBreakdownLabel, debugButton]
         
@@ -1748,7 +1775,7 @@ class DailyFitViewController: UIViewController {
         // Fade in all new content views with stagger
         let allContentViews: [UIView?] = [
             dailyFitLabel, tarotSymbolLabel, tarotTitleLabel, dateLabel,
-            topDivider, styleBriefLabel,
+            topDivider, styleEditHeaderLabel, styleEditLabel,
             styleBreakdownDivider, colourHeaderDivider, colourPaletteContainer,
             pillSlidersContainer,
             toneHeaderLabel, toneSliderContainer,
@@ -1789,7 +1816,7 @@ class DailyFitViewController: UIViewController {
         // Remove any existing backgrounds from labels
         let allLabels: [UILabel?] = [
             dailyFitLabel, tarotSymbolLabel, tarotTitleLabel, dateLabel,
-            styleBriefLabel, toneHeaderLabel,
+            styleEditLabel, toneHeaderLabel,
             takeawayLabel
         ]
         
@@ -1862,10 +1889,11 @@ class DailyFitViewController: UIViewController {
                 // Bring all new content views to front
                 let allContentViews: [UIView?] = [
                     self.dailyFitLabel, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
-                    self.styleBriefLabel, self.colourPaletteContainer, self.colourHeaderDivider,
+                    self.topDivider, self.styleEditHeaderLabel, self.styleEditLabel,
+                    self.styleBreakdownDivider, self.colourHeaderDivider, self.colourPaletteContainer,
                     self.pillSlidersContainer, self.toneHeaderLabel, self.toneSliderContainer,
                     self.vibeHeaderDivider, self.vibeContainer, self.silhouetteHeaderDivider, self.silhouetteContainer,
-                    self.takeawayLabel, self.topDivider, self.styleBreakdownDivider, self.bottomDivider, self.finalStarDivider
+                    self.bottomDivider, self.takeawayLabel, self.finalStarDivider
                 ]
                 for view in allContentViews.compactMap({ $0 }) {
                     self.contentView.bringSubviewToFront(view)
@@ -1892,7 +1920,7 @@ class DailyFitViewController: UIViewController {
         if let dailyVibe = dailyVibeContent {
             print("📊 DAILY VIBE DATA:")
             //print("• Keywords: \(dailyVibe.tarotKeywords)")
-            //print("• Style Brief: \(dailyVibe.styleBrief.prefix(100))...")
+            //print("• Style Edit: \(dailyVibe.styleEdit.prefix(100))...")
             
             if let tarotCard = dailyVibe.tarotCard {
                 print("• Card: \(tarotCard.displayName)")

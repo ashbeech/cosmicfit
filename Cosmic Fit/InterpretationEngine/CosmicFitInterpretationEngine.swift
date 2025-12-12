@@ -266,7 +266,7 @@ class CosmicFitInterpretationEngine {
         TODAY'S COSMIC VIBE (\(dateString))
         ====================
         
-        \(dailyVibe.styleBrief)
+        \(dailyVibe.styleEdit)
         
         TEXTILES: \(dailyVibe.textiles)
         
@@ -278,7 +278,7 @@ class CosmicFitInterpretationEngine {
         
         ACCESSORIES: \(dailyVibe.accessories)
         
-        \(dailyVibe.styleBrief)
+        \(dailyVibe.styleEdit)
         """
         
         print("✅ Full interpretation generated successfully")

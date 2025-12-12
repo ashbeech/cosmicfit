@@ -18,6 +18,15 @@ struct CardAxes {
     let visibility: Double   // 0-100
 }
 
+/// Represents a single styleEdit variant for a Tarot card
+struct StyleEditVariant: Codable {
+    let variant: String
+    let title: String
+    let description: String
+    let energyEmphasis: [String: Double]
+    let axesEmphasis: [String: Int]
+}
+
 /// Data model representing a Tarot card with semantic matching capabilities
 struct TarotCard: Codable, Identifiable {
     let name: String               // e.g., "The Chariot", "Three of Cups"
@@ -29,9 +38,10 @@ struct TarotCard: Codable, Identifiable {
     let themes: [String]           // CompositeTheme matches
     let energyAffinity: [String: Double]  // Affinity scores for vibe breakdown energies
     let axesAffinity: [String: Double]?
-    let description: String        // Brief interpretation/meaning
+    let description: String        // Brief interpretation/meaning (legacy - kept for backward compatibility)
     let reversedKeywords: [String] // For future reversal support
     let symbolism: [String]        // Key symbolic elements
+    let styleEdits: [StyleEditVariant]?  // Multiple styleEdit variants with intelligent selection
     
     // MARK: - Enums
     
@@ -353,3 +363,136 @@ struct TarotCard: Codable, Identifiable {
 
 // MARK: - VibeBreakdown Extension
 // (Removed duplicate dominantEnergy - now defined in VibeBreakdown.swift with Energy enum)
+
+// MARK: - Style Edit Selector
+
+/// Intelligent selection of styleEdit variants using cosine similarity
+class StyleEditSelector {
+    
+    // MARK: - Selection Logic
+    
+    /// Select the best styleEdit variant for a Tarot card based on the daily vibe
+    /// - Parameters:
+    ///   - card: The selected Tarot card
+    ///   - vibeBreakdown: The daily vibe breakdown (energies)
+    ///   - derivedAxes: The daily derived axes
+    /// - Returns: The most suitable styleEdit variant
+    static func selectBestVariant(
+        for card: TarotCard,
+        given vibeBreakdown: VibeBreakdown,
+        derivedAxes: DerivedAxes
+    ) -> StyleEditVariant? {
+        
+        guard let variants = card.styleEdits, !variants.isEmpty else {
+            return nil
+        }
+        
+        // Calculate similarity scores for each variant
+        var bestVariant: StyleEditVariant?
+        var highestScore: Double = -1.0
+        
+        for variant in variants {
+            let score = calculateSimilarity(
+                variantEnergy: variant.energyEmphasis,
+                variantAxes: variant.axesEmphasis,
+                vibeEnergy: extractEnergyFromVibe(vibeBreakdown),
+                vibeAxes: extractAxesFromDerivedAxes(derivedAxes)
+            )
+            
+            if score > highestScore {
+                highestScore = score
+                bestVariant = variant
+            }
+        }
+        
+        return bestVariant
+    }
+    
+    // MARK: - Cosine Similarity Calculation
+    
+    /// Calculate cosine similarity between variant emphasis and daily vibe
+    private static func calculateSimilarity(
+        variantEnergy: [String: Double],
+        variantAxes: [String: Int],
+        vibeEnergy: [String: Double],
+        vibeAxes: [String: Double]
+    ) -> Double {
+        
+        // Calculate energy similarity (weighted 60%)
+        let energySimilarity = cosineSimilarity(
+            vector1: variantEnergy,
+            vector2: vibeEnergy
+        )
+        
+        // Calculate axes similarity (weighted 40%)
+        // Convert axes to Double for comparison
+        let variantAxesDouble = variantAxes.mapValues { Double($0) / 100.0 }
+        let axesSimilarity = cosineSimilarity(
+            vector1: variantAxesDouble,
+            vector2: vibeAxes
+        )
+        
+        // Weighted combination
+        return (energySimilarity * 0.6) + (axesSimilarity * 0.4)
+    }
+    
+    /// Cosine similarity between two vectors
+    private static func cosineSimilarity(
+        vector1: [String: Double],
+        vector2: [String: Double]
+    ) -> Double {
+        
+        // Get all keys
+        let allKeys = Set(vector1.keys).union(Set(vector2.keys))
+        
+        var dotProduct: Double = 0.0
+        var magnitude1: Double = 0.0
+        var magnitude2: Double = 0.0
+        
+        for key in allKeys {
+            let v1 = vector1[key] ?? 0.0
+            let v2 = vector2[key] ?? 0.0
+            
+            dotProduct += v1 * v2
+            magnitude1 += v1 * v1
+            magnitude2 += v2 * v2
+        }
+        
+        magnitude1 = sqrt(magnitude1)
+        magnitude2 = sqrt(magnitude2)
+        
+        if magnitude1 == 0 || magnitude2 == 0 {
+            return 0.0
+        }
+        
+        return dotProduct / (magnitude1 * magnitude2)
+    }
+    
+    // MARK: - Helper Methods
+    
+    /// Extract energy values from VibeBreakdown as normalized doubles
+    private static func extractEnergyFromVibe(_ vibe: VibeBreakdown) -> [String: Double] {
+        // VibeBreakdown stores energies as Int (0-100 point scale)
+        // Normalize to 0-1 range for comparison
+        return [
+            "classic": Double(vibe.classic) / 100.0,
+            "playful": Double(vibe.playful) / 100.0,
+            "romantic": Double(vibe.romantic) / 100.0,
+            "utility": Double(vibe.utility) / 100.0,
+            "drama": Double(vibe.drama) / 100.0,
+            "edge": Double(vibe.edge) / 100.0
+        ]
+    }
+    
+    /// Extract axes values from DerivedAxes as normalized doubles
+    private static func extractAxesFromDerivedAxes(_ derivedAxes: DerivedAxes) -> [String: Double] {
+        // DerivedAxes are stored on a 1-10 scale
+        // Normalize to 0-1 range for comparison
+        return [
+            "action": (derivedAxes.action - 1.0) / 9.0,      // Scale 1-10 to 0-1
+            "tempo": (derivedAxes.tempo - 1.0) / 9.0,
+            "visibility": (derivedAxes.visibility - 1.0) / 9.0,
+            "strategy": (derivedAxes.strategy - 1.0) / 9.0
+        ]
+    }
+}

@@ -21,8 +21,8 @@ class DailyVibeInterpretationViewController: UIViewController {
     private let topDividerView = UIView()
 
     // Style Brief
-    private let styleBriefHeaderLabel = UILabel()
-    private let styleBriefLabel = UILabel()
+    private let styleEditHeaderLabel = UILabel()
+    private let styleEditLabel = UILabel()
     private let middleDividerView = UIView()
     
     // Content section views
@@ -172,19 +172,19 @@ class DailyVibeInterpretationViewController: UIViewController {
     }
     
     private func setupStyleBrief() {
-        // Style Brief Header
-        styleBriefHeaderLabel.text = "Style Brief"
-        styleBriefHeaderLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        styleBriefHeaderLabel.textColor = .label
-        styleBriefHeaderLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(styleBriefHeaderLabel)
+        // Style Edit Header
+        styleEditHeaderLabel.text = "Style Edit"
+        styleEditHeaderLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        styleEditHeaderLabel.textColor = .label
+        styleEditHeaderLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(styleEditHeaderLabel)
         
-        // Style Brief Label
-        styleBriefLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        styleBriefLabel.textColor = .label
-        styleBriefLabel.numberOfLines = 0
-        styleBriefLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(styleBriefLabel)
+        // Style Edit Label
+        styleEditLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        styleEditLabel.textColor = .label
+        styleEditLabel.numberOfLines = 0
+        styleEditLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(styleEditLabel)
         
         // Middle Divider
         middleDividerView.backgroundColor = .separator
@@ -192,15 +192,15 @@ class DailyVibeInterpretationViewController: UIViewController {
         contentView.addSubview(middleDividerView)
         
         NSLayoutConstraint.activate([
-            styleBriefHeaderLabel.topAnchor.constraint(equalTo: topDividerView.bottomAnchor, constant: 24),
-            styleBriefHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            styleBriefHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            styleEditHeaderLabel.topAnchor.constraint(equalTo: topDividerView.bottomAnchor, constant: 24),
+            styleEditHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            styleEditHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
-            styleBriefLabel.topAnchor.constraint(equalTo: styleBriefHeaderLabel.bottomAnchor, constant: 8),
-            styleBriefLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            styleBriefLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
+            styleEditLabel.topAnchor.constraint(equalTo: styleEditHeaderLabel.bottomAnchor, constant: 8),
+            styleEditLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            styleEditLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
-            middleDividerView.topAnchor.constraint(equalTo: styleBriefLabel.bottomAnchor, constant: 24),
+            middleDividerView.topAnchor.constraint(equalTo: styleEditLabel.bottomAnchor, constant: 24),
             middleDividerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             middleDividerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             middleDividerView.heightAnchor.constraint(equalToConstant: 1)
@@ -466,8 +466,8 @@ class DailyVibeInterpretationViewController: UIViewController {
     
     // MARK: - Update UI with Content
     private func updateUI(with content: DailyVibeContent) {
-        // Update Style Brief
-        //styleBriefLabel.text = content.styleBrief
+        // Update Style Edit with dynamically selected variant
+        styleEditLabel.text = content.styleEdit
         
         // Update date
         let dateFormatter = DateFormatter()
@@ -505,7 +505,7 @@ class DailyVibeInterpretationViewController: UIViewController {
         accessoriesContentLabel.text = content.accessories
         
         // Take‑away
-        takeawayLabel.text = content.styleBrief
+        takeawayLabel.text = content.styleEdit
          */
         
         // Redraw sliders
@@ -527,7 +527,7 @@ class DailyVibeInterpretationViewController: UIViewController {
         if let content = vibeContent {
             // Create formatted text for sharing
             var shareText = "TODAY'S COSMIC VIBE\n\n"
-            shareText += "\(content.styleBrief)\n\n"
+            shareText += "\(content.styleEdit)\n\n"
             shareText += "---\n\n"
             shareText += "TEXTILES\n\(content.textiles)\n\n"
             shareText += "COLOURS\n\(content.colours)\n\n"
@@ -535,7 +535,7 @@ class DailyVibeInterpretationViewController: UIViewController {
             shareText += "SHAPE\n\(content.shape)\n\n"
             shareText += "ACCESSORIES\n\(content.accessories)\n\n"
             shareText += "---\n\n"
-            shareText += "\(content.styleBrief)"
+            shareText += "\(content.styleEdit)"
             
             itemsToShare.append(shareText)
         }

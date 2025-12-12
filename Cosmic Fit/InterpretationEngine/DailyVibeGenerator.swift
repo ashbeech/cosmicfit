@@ -99,7 +99,7 @@ class DailyVibeGenerator {
         debugAnalyzeTokens(allTokens)
         
         // Generate all Daily System sections from tokens
-        //let styleBrief = generateMariaStyleBrief(from: allTokens)
+        //let styleEdit = generateMariaStyleEdit(from: allTokens)
         let vibeBreakdown = VibeBreakdownGenerator.generateVibeBreakdown(from: allTokens)
         
         debugVibeBreakdownAnalysis(breakdown: vibeBreakdown, tokens: allTokens)
@@ -133,6 +133,12 @@ class DailyVibeGenerator {
             profileHash: profileHash
         )
         
+        // Select the best styleEdit variant using cosine similarity
+        let selectedStyleEdit: StyleEditVariant? = {
+            guard let tarotCard = selectedTarotCard else { return nil }
+            return StyleEditSelector.selectBestVariant(for: tarotCard, given: vibeBreakdown, derivedAxes: derivedAxes)
+        }()
+        
         //let tarotKeywords = generateTarotKeywords(from: selectedTarotCard, tokens: allTokens)
         
         /*
@@ -161,13 +167,16 @@ class DailyVibeGenerator {
         )
         
         print("\n✨ COMPREHENSIVE DAILY SYSTEM GENERATED:")
-        //print("  Style Brief: \"\(styleBrief.prefix(50))...\"")
+        //print("  Style Edit: \"\(styleEdit.prefix(50))...\"")
         print("  Dominant Energy: \(getDominantEnergyName(from: vibeBreakdown))")
         //print("  Colour Scores: D:\(colourScores.darkness) V:\(colourScores.vibrancy) C:\(colourScores.contrast)")
         //print("  Angular/Curvy: \(angularCurvyScore.score)/10")
         //print("  Layering Score: \(layeringScore)/10")
         if let tarotCard = selectedTarotCard {
             print("  Tarot Card: \(tarotCard.displayName)")
+            if let styleEdit = selectedStyleEdit {
+                print("  Style Edit Variant: \(styleEdit.variant). \(styleEdit.title)")
+            }
         }
         print("\n🎯 DAILY VIBE GENERATOR - COMPLETE")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
@@ -175,8 +184,10 @@ class DailyVibeGenerator {
         // Return complete DailyVibeContent with all sections populated
         var dailyContent = DailyVibeContent()
         dailyContent.tarotCard = selectedTarotCard
+        dailyContent.styleEditVariant = selectedStyleEdit
+        dailyContent.styleEdit = selectedStyleEdit?.description ?? ""
         //dailyContent.tarotKeywords = tarotKeywords
-        //dailyContent.styleBrief = styleBrief
+        //dailyContent.styleEdit = styleEdit
         //dailyContent.derivedAxes = derivedAxes
         //dailyContent.textiles = textiles
         //dailyContent.colours = colours
@@ -876,8 +887,9 @@ struct DailyVibeContent: Codable {
     var tarotCard: TarotCard? = nil
     //var tarotKeywords: String = "" // 3 keywords separated by commas
     
-    // Style Brief - 3-4 sentences in Maria's voice
-    //var styleBrief: String = ""
+    // Style Edit - intelligently selected variant based on vibe
+    var styleEdit: String = ""
+    var styleEditVariant: StyleEditVariant? = nil  // Full variant data
     
     // MARK: - Style Sections
     
@@ -938,14 +950,14 @@ struct DailyVibeContent: Codable {
     }
      */
     
-    @available(*, deprecated, message: "Use styleBrief instead")
+    @available(*, deprecated, message: "Use styleEdit instead")
     var takeaway: String = ""
     
     // MARK: - Computed Properties
     /*
     // Validation method
     var isValid: Bool {
-        return vibeBreakdown.isValid && !styleBrief.isEmpty
+        return vibeBreakdown.isValid
     }
      */
         
@@ -985,7 +997,7 @@ struct DailyVibeContent: Codable {
         /*
         // Style Brief
         output += "✨ STYLE BRIEF\n"
-        output += "\(styleBrief)\n\n"
+        output += "\(styleEdit)\n\n"
         
         // Textiles
         if !textiles.isEmpty {
