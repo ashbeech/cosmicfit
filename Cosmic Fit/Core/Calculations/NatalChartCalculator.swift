@@ -2,6 +2,19 @@
 //  NatalChartCalculator.swift
 //  Cosmic Fit
 //
+//  FOUNDATION LAYER CONTRACT
+//  ─────────────────────────────────────────────────────────────────────
+//  This file is part of the Foundation Layer (Core/Calculations/).
+//  The Foundation Layer has ZERO dependencies on the InterpretationEngine
+//  or any downstream consumer. Data flows one way only: outward.
+//
+//  `NatalChart` (defined below) is the sole handoff point between the
+//  Foundation Layer and all downstream consumers. The interpretation
+//  engine consumes NatalChart and nothing else from this layer.
+//
+//  DO NOT add imports from InterpretationEngine/ or UI/ here.
+//  See BLUEPRINT_REBUILD_SPEC_v2.3.md for architectural context.
+//  ─────────────────────────────────────────────────────────────────────
 
 import Foundation
 import CoreLocation
@@ -19,6 +32,9 @@ struct NatalChartCalculator {
         let isRetrograde: Bool
     }
     
+    /// The canonical API contract between the Foundation Layer and all downstream consumers.
+    /// This struct is the sole handoff point. The interpretation engine consumes NatalChart
+    /// and nothing else from this layer.
     struct NatalChart {
         let planets: [PlanetPosition]
         let ascendant: Double

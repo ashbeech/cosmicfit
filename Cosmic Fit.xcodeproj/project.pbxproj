@@ -28,6 +28,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5EAR00102E6400000066807C /* CompositeTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeTheme.swift; sourceTree = "<group>"; };
+		5EAR00112E6400000066807C /* InterpretationTextLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpretationTextLibrary.swift; sourceTree = "<group>"; };
+		5EAR00122E6400000066807C /* ParagraphAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParagraphAssembler.swift; sourceTree = "<group>"; };
+		5EAR00132E6400000066807C /* ThemeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSelector.swift; sourceTree = "<group>"; };
+		5EAR00142E6400000066807C /* Tier2TokenLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tier2TokenLibrary.swift; sourceTree = "<group>"; };
+		5EAR00152E6400000066807C /* TokenEnergyOverrides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenEnergyOverrides.swift; sourceTree = "<group>"; };
+		5EAR00162E6400000066807C /* TokenPrefixMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenPrefixMatrix.swift; sourceTree = "<group>"; };
+		5EAR00172E6400000066807C /* extracted_planet_sign_token_tables.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = extracted_planet_sign_token_tables.json; sourceTree = "<group>"; };
 		5EB2E4CF2DC75C8A00644BAD /* Cosmic Fit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cosmic Fit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EB2E4DC2DC75C8D00644BAD /* Cosmic FitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Cosmic FitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EB2E4E62DC75C8D00644BAD /* Cosmic FitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Cosmic FitUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,10 +115,26 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5EAR00012E6400000066807C /* _archive */ = {
+			isa = PBXGroup;
+			children = (
+				5EAR00102E6400000066807C /* CompositeTheme.swift */,
+				5EAR00112E6400000066807C /* InterpretationTextLibrary.swift */,
+				5EAR00122E6400000066807C /* ParagraphAssembler.swift */,
+				5EAR00132E6400000066807C /* ThemeSelector.swift */,
+				5EAR00142E6400000066807C /* Tier2TokenLibrary.swift */,
+				5EAR00152E6400000066807C /* TokenEnergyOverrides.swift */,
+				5EAR00162E6400000066807C /* TokenPrefixMatrix.swift */,
+				5EAR00172E6400000066807C /* extracted_planet_sign_token_tables.json */,
+			);
+			path = _archive;
+			sourceTree = "<group>";
+		};
 		5EB2E4C62DC75C8A00644BAD = {
 			isa = PBXGroup;
 			children = (
 				5EB2E4D12DC75C8A00644BAD /* Cosmic Fit */,
+				5EAR00012E6400000066807C /* _archive */,
 				5EB2E4DF2DC75C8D00644BAD /* Cosmic FitTests */,
 				5EB2E4E92DC75C8D00644BAD /* Cosmic FitUITests */,
 				5E63651C2E63B5130066807C /* Frameworks */,

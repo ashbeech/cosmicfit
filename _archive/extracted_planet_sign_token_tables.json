@@ -1,0 +1,102 @@
+{
+  "source": "InterpretationTextLibrary.swift – TokenGeneration.PlanetInSign",
+  "extracted_for": "WP4 (Astrological Meaning Dataset) starting point",
+  "note": "Each entry is an array of [name, type] tuples. These are the old thin 4-tuple mappings that WP4 will expand into full section-specific structures.",
+
+  "Sun": {
+    "Aries": [["bold", "mood"], ["dynamic", "structure"], ["bright red", "colour"], ["vibrant", "colour_quality"]],
+    "Taurus": [["luxurious", "texture"], ["sage green", "colour"], ["rose", "colour"], ["tactile", "colour_quality"]],
+    "Gemini": [["playful", "mood"], ["versatile", "structure"], ["yellow", "colour"], ["bright", "colour_quality"]],
+    "Cancer": [["protective", "structure"], ["flowing", "texture"], ["pearl", "colour"], ["nautical", "colour_quality"]],
+    "Leo": [["radiant", "mood"], ["expressive", "structure"], ["gold", "colour"], ["warm", "colour_quality"]],
+    "Virgo": [["refined", "mood"], ["practical", "structure"], ["wheat", "colour"], ["precise", "colour_quality"]],
+    "Libra": [["balanced", "structure"], ["harmonious", "colour"], ["rose pink", "colour"], ["elegant", "colour_quality"]],
+    "Scorpio": [["magnetic", "mood"], ["leather", "texture"], ["black", "colour"], ["powerful", "colour_quality"]],
+    "Sagittarius": [["expansive", "structure"], ["adventurous", "mood"], ["royal blue", "colour"], ["vibrant", "colour_quality"]],
+    "Capricorn": [["structured", "structure"], ["enduring", "texture"], ["charcoal", "colour"], ["classic", "colour_quality"]],
+    "Aquarius": [["innovative", "structure"], ["distinctive", "mood"], ["electric blue", "colour"], ["unique", "colour_quality"]],
+    "Pisces": [["fluid", "structure"], ["dreamy", "mood"], ["seafoam", "colour"], ["flowing", "colour_quality"]]
+  },
+
+  "Moon": {
+    "Aries": [["energetic", "mood"], ["impulsive", "texture"], ["coral red", "colour"], ["warm", "colour_quality"]],
+    "Taurus": [["quality", "texture"], ["grounded", "mood"], ["warm brown", "colour"], ["enduring", "colour_quality"]],
+    "Gemini": [["adaptable", "structure"], ["communicative", "mood"], ["pale yellow", "colour"], ["bright", "colour_quality"]],
+    "Cancer": [["nurturing", "texture"], ["emotional", "mood"], ["pearl", "colour"], ["luminous", "colour_quality"]],
+    "Leo": [["warm", "colour"], ["dramatic", "structure"], ["amber", "colour"], ["radiant", "colour_quality"]],
+    "Virgo": [["detailed", "structure"], ["thoughtful", "mood"], ["taupe", "colour"], ["precise", "colour_quality"]],
+    "Libra": [["elegant", "structure"], ["social", "mood"], ["lavender", "colour"], ["harmonious", "colour_quality"]],
+    "Scorpio": [["structured", "colour"], ["leather", "texture"], ["burgundy", "colour"], ["intense", "colour_quality"]],
+    "Sagittarius": [["optimistic", "mood"], ["free-spirited", "structure"], ["indigo", "colour"], ["deep", "colour_quality"]],
+    "Capricorn": [["grounded", "mood"], ["reserved", "structure"], ["slate gray", "colour"], ["solid", "colour_quality"]],
+    "Aquarius": [["unique", "structure"], ["independent", "mood"], ["turquoise", "colour"], ["innovative", "colour_quality"]],
+    "Pisces": [["soft", "texture"], ["intuitive", "mood"], ["seafoam", "colour"], ["dreamy", "colour_quality"]]
+  },
+
+  "Venus": {
+    "Aries": [["spontaneous", "structure"], ["bold", "colour"], ["coral", "colour"], ["dynamic", "colour_quality"]],
+    "Taurus": [["indulgent", "texture"], ["sensual", "mood"], ["cream", "colour"], ["luxurious", "colour_quality"]],
+    "Gemini": [["eclectic", "structure"], ["playful", "colour"], ["peach", "colour"], ["varied", "colour_quality"]],
+    "Cancer": [["nostalgic", "mood"], ["nurturing", "texture"], ["cream", "colour"], ["soft", "colour_quality"]],
+    "Leo": [["glamorous", "structure"], ["vibrant", "colour"], ["warm gold", "colour"], ["radiant", "colour_quality"]],
+    "Virgo": [["subtle", "colour"], ["refined", "structure"], ["sage", "colour"], ["precise", "colour_quality"]],
+    "Libra": [["harmonious", "structure"], ["balanced", "colour"], ["rose quartz", "colour"], ["elegant", "colour_quality"]],
+    "Scorpio": [["magnetic", "mood"], ["power", "structure"], ["black", "colour"], ["controlled", "colour_quality"]],
+    "Sagittarius": [["exuberant", "mood"], ["expansive", "colour"], ["teal", "colour"], ["vivid", "colour_quality"]],
+    "Capricorn": [["elegant", "structure"], ["classic", "texture"], ["merlot", "colour"], ["timeless", "colour_quality"]],
+    "Aquarius": [["unconventional", "structure"], ["futuristic", "texture"], ["periwinkle", "colour"], ["innovative", "colour_quality"]],
+    "Pisces": [["romantic", "mood"], ["dreamy", "texture"], ["lilac", "colour"], ["ethereal", "colour_quality"]]
+  },
+
+  "Mars": {
+    "Aries": [["assertive", "structure"], ["energetic", "texture"], ["crimson", "colour"], ["bold", "colour_quality"]],
+    "Taurus": [["enduring", "texture"], ["substantial", "structure"], ["rust", "colour"], ["earthy", "colour_quality"]],
+    "Gemini": [["versatile", "structure"], ["quick", "texture"], ["bright yellow", "colour"], ["dynamic", "colour_quality"]],
+    "Cancer": [["protective", "structure"], ["soft", "texture"], ["white", "colour"], ["gentle", "colour_quality"]],
+    "Leo": [["confident", "structure"], ["bold", "colour"], ["copper", "colour"], ["radiant", "colour_quality"]],
+    "Virgo": [["precise", "structure"], ["detailed", "texture"], ["brick red", "colour"], ["structured", "colour_quality"]],
+    "Libra": [["balanced", "structure"], ["harmonious", "mood"], ["rose", "colour"], ["balanced", "colour_quality"]],
+    "Scorpio": [["deep", "colour"], ["power", "structure"], ["black", "colour"], ["magnetic", "colour_quality"]],
+    "Sagittarius": [["adventurous", "structure"], ["expansive", "texture"], ["purple", "colour"], ["dynamic", "colour_quality"]],
+    "Capricorn": [["disciplined", "structure"], ["enduring", "texture"], ["dark brown", "colour"], ["structured", "colour_quality"]],
+    "Aquarius": [["innovative", "structure"], ["progressive", "mood"], ["electric blue", "colour"], ["unique", "colour_quality"]],
+    "Pisces": [["fluid", "texture"], ["adaptive", "structure"], ["sea blue", "colour"], ["flowing", "colour_quality"]]
+  },
+
+  "Mercury": {
+    "Aries": [["direct", "communication"], ["quick", "pace"], ["clear red", "colour"], ["crisp", "colour_quality"]],
+    "Taurus": [["deliberate", "communication"], ["practical", "approach"], ["olive", "colour"], ["textured", "colour_quality"]],
+    "Gemini": [["versatile", "communication"], ["curious", "approach"], ["yellow", "colour"], ["varied", "colour_quality"]],
+    "Cancer": [["intuitive", "communication"], ["receptive", "approach"], ["silver gray", "colour"], ["nuanced", "colour_quality"]],
+    "Leo": [["expressive", "communication"], ["confident", "approach"], ["golden yellow", "colour"], ["distinct", "colour_quality"]],
+    "Virgo": [["precise", "communication"], ["analytical", "approach"], ["wheat", "colour"], ["precise", "colour_quality"]],
+    "Libra": [["balanced", "communication"], ["diplomatic", "approach"], ["pastel pink", "colour"], ["balanced", "colour_quality"]],
+    "Scorpio": [["penetrating", "communication"], ["strategic", "approach"], ["deep burgundy", "colour"], ["intense", "colour_quality"]],
+    "Sagittarius": [["expansive", "communication"], ["optimistic", "approach"], ["blue", "colour"], ["clear", "colour_quality"]],
+    "Capricorn": [["structured", "communication"], ["disciplined", "approach"], ["charcoal", "colour"], ["defined", "colour_quality"]],
+    "Aquarius": [["innovative", "communication"], ["objective", "approach"], ["electric blue", "colour"], ["unique", "colour_quality"]],
+    "Pisces": [["intuitive", "communication"], ["imaginative", "approach"], ["sea green", "colour"], ["blended", "colour_quality"]]
+  },
+
+  "OuterPlanets": {
+    "Neptune": [["opalescent blue", "colour"], ["mermaid teal", "colour"], ["misty lavender", "colour"], ["ethereal", "colour_quality"], ["dreamlike", "colour_quality"]],
+    "Pluto": [["abyssal black", "colour"], ["plutonium purple", "colour"], ["transformative", "colour_quality"], ["intense", "colour_quality"]],
+    "Jupiter": [["royal purple", "colour"], ["abundant indigo", "colour"], ["expansive", "colour_quality"], ["abundant", "colour_quality"]],
+    "Saturn": [["structured charcoal", "colour"], ["leaden grey", "colour"], ["disciplined", "colour_quality"], ["enduring", "colour_quality"]],
+    "Uranus": [["electric blue", "colour"], ["neon turquoise", "colour"], ["unexpected", "colour_quality"], ["innovative", "colour_quality"]]
+  },
+
+  "ElementalFallbacks": {
+    "fire": [["fiery", "mood"], ["warm bronze", "colour"], ["vibrant", "colour_quality"]],
+    "earth": [["earthy", "mood"], ["rich brown", "colour"], ["grounded", "colour_quality"]],
+    "air": [["airy", "mood"], ["clear azure", "colour"], ["light", "colour_quality"]],
+    "water": [["watery", "mood"], ["oceanic teal", "colour"], ["fluid", "colour_quality"]]
+  },
+
+  "Retrograde": {
+    "general": [["muted", "colour_quality"], ["contemplative", "colour_quality"], ["vintage", "colour_quality"]],
+    "venus": [["faded rose", "colour"]],
+    "mars": [["smoldering brick", "colour"]],
+    "mercury": [["misty grey", "colour"]]
+  }
+}
