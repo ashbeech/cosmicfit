@@ -500,9 +500,241 @@ The engine serves as a **dynamic foundation** for extending stylistic intelligen
 
 ---
 
-## 📝 Version History
+## Cosmic Blueprint Rebuild (v2.3)
 
-**December 2025 - Template-Based Architecture**
+The Cosmic Blueprint is the app's core personalised style output. It is generated offline from pre-computed data so the app works without an internet connection. The rebuild replaces the old template-selection system with a deterministic engine backed by a rich astrological dataset and AI-generated narrative paragraphs.
+
+### How it fits together
+
+```
+astrological_style_dataset.json          (WP4 — the meaning layer)
+        │
+        ├──► Swift runtime engine (WP3)
+        │      ChartAnalyser
+        │      BlueprintTokenGenerator
+        │      DeterministicResolver       ──► deterministic Blueprint fields
+        │      ArchetypeKeyGenerator       ──► cluster key for narrative lookup
+        │
+        └──► backfill_narratives.py        (one-time Gemini API run)
+               │
+               ▼
+        blueprint_narrative_cache.json     (AI-generated paragraphs)
+               │
+               ▼
+        NarrativeCacheLoader.swift         ──► narrative Blueprint fields
+```
+
+At runtime, the Swift engine reads the dataset to resolve structured fields (palette, textures, metals, stones, code directives, patterns) and looks up pre-generated narrative paragraphs from the cache. No API calls happen on-device.
+
+### Files
+
+| File | Purpose |
+|------|---------|
+| `astrological_style_dataset.json` | Complete astrological-to-style mapping dataset (132 planet-sign entries, 30 aspects, 48 house placements, 7 element balances, 162-colour library) |
+| `generate_dataset.py` | Generates the dataset programmatically from hardcoded astrological mappings. Run this whenever you edit the dataset source. |
+| `validate_dataset.py` | Validates the dataset against the WP3 schema contract and cross-references colours. |
+| `backfill_narratives.py` | One-time script that calls the Gemini API to generate narrative paragraphs for every archetype cluster. |
+| `review_tool.py` | Local web UI for reviewing, approving, and flagging generated paragraphs. |
+| `blueprint_narrative_cache.json` | Output of the backfill — all AI-generated paragraphs keyed by archetype cluster. Bundled into the app at `Cosmic Fit/Resources/`. |
+| `review_notes.json` | Auto-saved review state from the review tool. The backfill script reads this on re-run to skip approved paragraphs and regenerate flagged ones. |
+| `_reference/blueprint_examples.md` | Voice reference — two complete example Blueprints plus 234 tarot-style paragraphs that define the target writing style. |
+| `BLUEPRINT_REBUILD_SPEC_v2.3.md` | Full architecture specification for the rebuild. |
+
+### Setup
+
+```bash
+cd /Users/ash/dev/mobile_apps/cosmicfit
+
+# Create and activate the virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+Copy `.env.example` to `.env` and add your Gemini API key:
+
+```
+GEMINI_API_KEY=your_key_here
+```
+
+### Generating the dataset
+
+If you edit `generate_dataset.py` (the astrological mappings, colours, textures, etc.), regenerate and validate the JSON:
+
+```bash
+source .venv/bin/activate
+python3 generate_dataset.py
+python3 validate_dataset.py
+```
+
+`generate_dataset.py` writes `astrological_style_dataset.json`. `validate_dataset.py` checks it against the WP3 contract (correct keys, cardinalities, colour cross-references) and prints a PASS/FAIL report.
+
+### Running the narrative backfill
+
+The backfill script generates AI paragraphs by calling the Gemini API. Each archetype cluster gets 16 paragraphs (one per Blueprint section). The script saves progress after every paragraph, so it is safe to interrupt and resume.
+
+**Cluster modes:**
+
+| Mode | Clusters | Paragraphs | API calls |
+|------|----------|------------|-----------|
+| `representative` | 192 | 3,072 | 3,072 |
+| `full` | 576 | 9,216 | 9,216 |
+
+**Test a small batch first:**
+
+```bash
+source .venv/bin/activate
+python3 backfill_narratives.py \
+  --dataset astrological_style_dataset.json \
+  --output blueprint_narrative_cache.json \
+  --clusters representative \
+  --limit 3
+```
+
+`--limit N` caps the run at N clusters. Use this to test output quality before committing to a full run.
+
+**Resume after interruption:**
+
+```bash
+python3 backfill_narratives.py \
+  --dataset astrological_style_dataset.json \
+  --output blueprint_narrative_cache.json \
+  --clusters representative \
+  --resume
+```
+
+`--resume` skips clusters that already have content, so you can stop and restart without losing progress.
+
+**Dry run (no API calls):**
+
+```bash
+python3 backfill_narratives.py \
+  --dataset astrological_style_dataset.json \
+  --output blueprint_narrative_cache.json \
+  --clusters full \
+  --dry-run
+```
+
+Prints the cluster list and paragraph count without making any API calls.
+
+**All flags:**
+
+| Flag | Description |
+|------|-------------|
+| `--dataset` | Path to `astrological_style_dataset.json` (required) |
+| `--output` | Path to `blueprint_narrative_cache.json` (required) |
+| `--clusters` | `representative` (192 clusters) or `full` (576 clusters). Default: `representative` |
+| `--limit N` | Generate at most N clusters. 0 or omitted means all. |
+| `--resume` | Skip clusters that already exist in the output file. |
+| `--dry-run` | Print the plan without making API calls. |
+| `--model` | Override the Gemini model name (default: `gemini-2.0-flash`, or set `GEMINI_MODEL` in `.env`). |
+| `--api-key` | Override the API key (default: reads `GEMINI_API_KEY` from `.env` or environment). |
+
+### Reviewing generated paragraphs
+
+The review tool is a local web UI for inspecting and approving the AI output.
+
+```bash
+source .venv/bin/activate
+python3 review_tool.py --cache blueprint_narrative_cache.json --port 8420
+```
+
+Then open `http://localhost:8420` in your browser.
+
+**What it shows:**
+
+- Left sidebar: every archetype cluster, with a progress badge (e.g. `12/16` approved).
+- Main panel: all 16 narrative sections for the selected cluster. Each section shows the paragraph text, automated validation results (word count, banned-word check, hedging check, second-person check, British spelling flags), and review controls.
+- Top bar: global stats and a Pause Pipeline button.
+
+**Keyboard shortcuts:**
+
+| Key | Action |
+|-----|--------|
+| `a` | Approve the focused paragraph |
+| `r` | Mark as needs revision |
+| `x` | Reject |
+| `j` / `↓` | Focus next section |
+| `k` / `↑` | Focus previous section |
+| `]` | Next cluster |
+| `[` | Previous cluster |
+
+**Live updates:** The review tool polls the cache file every 3 seconds, so you can run the backfill in one terminal and watch paragraphs appear in the review tool in real time.
+
+**How review notes feed back into the backfill:**
+
+Every approve/revise/reject action is auto-saved to `review_notes.json`. When you re-run the backfill with `--resume`:
+
+- `approved` paragraphs are preserved (not regenerated).
+- `needs_revision` paragraphs are regenerated with your reviewer note appended to the prompt as extra guidance.
+- `rejected` paragraphs are regenerated from scratch.
+- Paragraphs with no review entry are preserved as-is.
+
+The **Pause Pipeline** button writes a `pause_signal.json` file. The backfill script checks for this before each API call and halts if paused. Click **Resume Pipeline** to remove the signal and allow the backfill to continue.
+
+### Typical workflow
+
+1. **Edit the dataset** — change astrological mappings in `generate_dataset.py`, then run `python3 generate_dataset.py && python3 validate_dataset.py`.
+2. **Test the backfill** — run with `--limit 3` to generate a small batch. Open the review tool and inspect the output quality.
+3. **Iterate on quality** — flag bad paragraphs in the review tool, re-run with `--resume` to regenerate them with your notes as guidance.
+4. **Run the full backfill** — once satisfied, run with `--clusters representative` (or `full`) without `--limit`.
+5. **Review all output** — work through the review tool until all paragraphs are approved.
+6. **Bundle into the app** — copy the final `blueprint_narrative_cache.json` to `Cosmic Fit/Resources/blueprint_narrative_cache.json`.
+
+### Archetype cluster keys
+
+Each cluster key has the format:
+
+```
+venus_<sign>__moon_<sign>__<element>_dominant
+```
+
+For example: `venus_scorpio__moon_capricorn__fire_dominant`
+
+- **Venus sign** drives primary aesthetic preference.
+- **Moon sign** drives comfort and emotional style.
+- **Dominant element** (fire, earth, air, water) shapes overall energy.
+
+In representative mode, the 12 Moon signs are collapsed into 4 element representatives (Aries for fire, Taurus for earth, Gemini for air, Cancer for water), giving 12 Venus x 4 Moon x 4 elements = 192 clusters. Full mode uses all 12 Moon signs for 576 clusters.
+
+### Blueprint sections (16 per cluster)
+
+Each archetype cluster entry contains 16 narrative paragraphs, one per `BlueprintSection`:
+
+| Section key | Display name | Content |
+|-------------|-------------|---------|
+| `style_core` | Style Core | Foundational style identity |
+| `textures_good` | Textures — Good | Recommended fabrics and materials |
+| `textures_bad` | Textures — Bad | Fabrics to avoid |
+| `textures_sweet_spot` | Textures — Sweet Spot | The ideal tactile experience |
+| `palette_narrative` | Palette | Core colour story |
+| `occasions_work` | Occasions — Work | Professional dressing guidance |
+| `occasions_intimate` | Occasions — Intimate | Close-range and evening style |
+| `occasions_daily` | Occasions — Daily | Everyday wardrobe approach |
+| `hardware_metals` | Hardware — Metals | Metal and finish preferences |
+| `hardware_stones` | Hardware — Stones | Gemstone recommendations |
+| `hardware_tip` | Hardware — Tip | Accessory hardware rule |
+| `accessory_1` | Accessory 1 | Accessory guidance paragraph 1 |
+| `accessory_2` | Accessory 2 | Accessory guidance paragraph 2 |
+| `accessory_3` | Accessory 3 | Accessory guidance paragraph 3 |
+| `pattern_narrative` | Pattern | Pattern and print guidance |
+| `pattern_tip` | Pattern — Tip | Pattern application rule |
+
+---
+
+## Version History
+
+**April 2026 — Blueprint Rebuild v2.3**
+
+- Replaced template-selection system with deterministic token engine (WP3)
+- Built complete astrological-to-style dataset with 132 planet-sign entries (WP4)
+- Added AI narrative backfill pipeline with Gemini API
+- Added local review tool for paragraph quality control
+- Frozen `CosmicBlueprint` Swift model contract (WP2)
+
+**December 2025 — Template-Based Architecture**
 
 - Transitioned from dynamic paragraph generation to template selection
 - Implemented Vibe Breakdown system (6 energies, 21 points)
@@ -514,4 +746,4 @@ The engine serves as a **dynamic foundation** for extending stylistic intelligen
 
 ---
 
-_Cosmic Fit represents the intersection of ancient wisdom and modern technology, delivering personalized style guidance that honors both astronomical precision and individual expression._
+_Cosmic Fit represents the intersection of ancient wisdom and modern technology, delivering personalised style guidance that honours both astronomical precision and individual expression._
