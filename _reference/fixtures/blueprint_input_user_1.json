@@ -1,0 +1,73 @@
+{
+  "userInfo": {
+    "birthDate": "1984-12-11T00:00:00Z",
+    "birthLocation": "London, UK",
+    "generationDate": "2026-04-10T00:00:00Z"
+  },
+  "styleCore": {
+    "narrativeText": "Your presence is a study in precision and discipline. It is a look of sharp edges and clear boundaries. You lead with clean structure and a composed intensity. You do not just walk into a room; you occupy it with a focused authority that feels immediately powerful.\n\nYour impact comes from restraint rather than volume. Your style acts as a protective shield for your most personal ideas. Your look is a streamlined identity that prioritises self-control and clear, architectural standards."
+  },
+  "textures": {
+    "goodText": "You need materials that feel like armour. If a fabric feels sharp and engineered, it is probably for you. Crisp poplin, raw denim, and structured wool hold their shape regardless of what you are doing. These textures reflect how disciplined you are. You require surfaces that are smooth, cold, and incredibly durable to match your internal focus.",
+    "badText": "Anything fluffy or overly romantic is a mismatch for your energy. Avoid flimsy jerseys or cheap lace that lacks structure. If a fabric feels like it is trying to be cute or soft, it will clash with how controlled you are. You are far too precise for a messy or wrinkled silhouette.",
+    "sweetSpotText": "The stiff and the sharp. You want clothes that feel like a uniform. If a piece does not encourage you to stand with more alignment the moment you put it on, it is not doing its job."
+  },
+  "palette": {
+    "coreColours": [
+      { "name": "midnight", "hexValue": "#191970", "role": "core" },
+      { "name": "shadow", "hexValue": "#36454F", "role": "core" },
+      { "name": "ink", "hexValue": "#1B1B1B", "role": "core" }
+    ],
+    "accentColours": [
+      { "name": "deep oxblood", "hexValue": "#4A0000", "role": "accent" },
+      { "name": "cold forest green", "hexValue": "#2C5F2D", "role": "accent" }
+    ],
+    "narrativeText": "Your core colours are midnight, shadow, and ink. These deepest blacks and charcoal greys create a monochromatic shield. This allows your focus and sharp features to take centre stage. The drama comes from the cut of the garment rather than the pigment.\n\nYou can handle small hits of scholarly tones like a deep oxblood or a cold forest green. Keep these accents dark and muted. If a colour is bright enough to be described as cheerful, it is not for you. You are building a landscape of shadow and light where precision is the main goal."
+  },
+  "occasions": {
+    "workText": "Sharp tailoring and starched lines are your signature. You want to look like the most competent person in the building. A heavy overcoat or a structured layer is essential for your authority.",
+    "intimateText": "When you relax, keep it sleek and streamlined. You look capable, not soft. A dark silk separate or a slim knit provides mystery without losing control. Aim for intense, focused attention.",
+    "dailyText": "Even off-duty, things need to feel deliberate and put together. High-quality dark denim and a structured jacket are essential tools. You move like someone with a clear destination. Everything has a purpose and nothing looks accidental."
+  },
+  "hardware": {
+    "metalsText": "You need cold power. Look for polished silver, surgical steel, or blackened titanium. Yellow gold often looks too warm for your icy mix. You want hardware that looks industrial or ancient. Sharp edges and high-shine surfaces that feel clinical are your best match.",
+    "stonesText": "Choose stones that look like they hold secrets. Black onyx and obsidian are perfect. You want stones that are dark at first glance but show their complexity when you look closer.",
+    "tipText": "Precision is your law. One sharp piece: like a steel watch or a geometric signet ring: is all you need. Accessories work as hardware: functional, weighty, and intentional.",
+    "recommendedMetals": ["polished silver", "surgical steel", "blackened titanium"],
+    "recommendedStones": ["black onyx", "obsidian"]
+  },
+  "code": {
+    "leanInto": [
+      "Checking the silhouette first. If the lines are not sharp and the shoulders are not defined, walk away.",
+      "Buying for the ten-year test. If it still feels powerful in a decade, it belongs in your collection.",
+      "Sticking to the deepest blacks available. Avoid any black that pulls warm or looks washed out.",
+      "Using your style as a private foundation for your most creative and visionary thoughts."
+    ],
+    "avoid": [
+      "Bohemian or relaxed trends that lack a clear, disciplined shape.",
+      "Any black that pulls warm, looks washed out, or lacks depth.",
+      "Patterns or busy prints that distract from your focused intensity.",
+      "Settle only for an exact fit. If the tailoring is slightly off, the impact is gone."
+    ],
+    "consider": [
+      "Using monochromatic sets to maintain your protective, disciplined shield.",
+      "Selecting accessories that act as functional hardware rather than decoration.",
+      "The impact of a single, precise piece over a cluttered look."
+    ]
+  },
+  "accessory": {
+    "paragraphs": [
+      "One significant piece carries more weight than five minor ones. Whether it is a heavy steel watch or a structured leather case, let that item be the anchor. This creates a focal point that allows the rest of your look to stay quiet.",
+      "Accessories are where you introduce your most rigid lines. While your clothes provide the shell, your accessories are the steel reinforcements. A belt with a heavy silver buckle acts as the final word on your discipline.",
+      "Consider the click and the weight. The sound of a heavy watch being buckled is part of your daily ritual. You are not just decorating your body. You are setting the tone for the day ahead."
+    ]
+  },
+  "pattern": {
+    "narrativeText": "Patterns are often a distraction. If you use them, they need to be as disciplined as you are. You do not do whimsical. You do structural.",
+    "tipText": "Keep it monochromatic. If you are wearing a pattern, make sure the colours stay within the same dark family. A black-on-charcoal pinstripe is your peak. It provides detail while keeping your silhouette intact.",
+    "recommendedPatterns": ["pinstripe", "houndstooth in dark tones", "architectural checks"],
+    "avoidPatterns": ["organic or curvy patterns", "florals", "soft gradients", "patterns with too much white space"]
+  },
+  "generatedAt": "2026-04-10T00:00:00Z",
+  "engineVersion": "1.0.0"
+}

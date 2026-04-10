@@ -1,0 +1,75 @@
+{
+  "userInfo": {
+    "birthDate": "1989-04-28T00:00:00Z",
+    "birthLocation": "Unknown",
+    "generationDate": "2026-04-10T00:00:00Z"
+  },
+  "styleCore": {
+    "narrativeText": "Your presence works best when you treat your wardrobe as a public language. While you value the heavy and the settled, you use those qualities to set a standard for the people around you. You move through a room with the composure of someone who is teaching others how to appreciate quality. Your style works best when it feels like a long-term social legacy. This kind of intentional curation looks like a gift you are giving to your community."
+  },
+  "textures": {
+    "goodText": "Go for fabrics with actual weight and integrity. Heavy gauge silks that feel cool and substantial provide the right anchor. Organic wools offer a proper architectural frame. Leather that is buttery and gains character with age belongs in your collection. They ground you, make you feel secure, and still look polished.",
+    "badText": "Flimsy or disposable fabrics just do not suit you. If a material is scratchy or overly synthetic, it is a hard pass. Static-prone polyesters or stiff cottons that fight your natural movement are a distraction. If you have to spend your whole day messing with a garment to make it sit right, it is draining your energy.",
+    "sweetSpotText": "Your absolute peak is a blend of the sturdy and the soft. Choose items that look high quality at a glance but feel like a secret luxury when touched. If it does not feel like a treat for your skin, it does not belong in your wardrobe."
+  },
+  "palette": {
+    "coreColours": [
+      { "name": "deep sage green", "hexValue": "#4A6741", "role": "core" },
+      { "name": "sophisticated caramel", "hexValue": "#A0722D", "role": "core" },
+      { "name": "slate grey", "hexValue": "#708090", "role": "core" },
+      { "name": "creamy neutral", "hexValue": "#F5F0E1", "role": "core" }
+    ],
+    "accentColours": [
+      { "name": "oxidised gold", "hexValue": "#B08D57", "role": "accent" },
+      { "name": "dusty rose", "hexValue": "#C4A4A7", "role": "accent" },
+      { "name": "deep burnt saffron", "hexValue": "#CC7722", "role": "accent" }
+    ],
+    "narrativeText": "Your core colours are found in the natural world. Look for deep sage greens, sophisticated caramels, slate greys, and creamy neutrals. These tones provide a stable base for your personality to shine through. Accents work best when they feel weathered, muted, or mineral-toned.\n\nFlashes of considered tones like oxidised gold, dusty rose, or a deep burnt saffron add depth. Keep these accents as a highlight rather than the main story. They show that you are adventurous under the surface. It is about creating a look that stays timeless. Aim for colours that feel organic and permanent."
+  },
+  "occasions": {
+    "workText": "Lean into your architectural side. Use clean lines and structured shapes to settle into the room. A properly made coat or a weighted layer that holds its shape is your best tool. You look best when you appear as the person who is definitely in charge.",
+    "intimateText": "Soften the edges when the sun goes down. Keep that solid base but introduce pieces with drape and mystery. Aim for quiet magnetism and close-range impact. Heavy silk or soft knits that move with you invite people to get a bit closer.",
+    "dailyText": "Even casual looks need to look intentional. Ditch the mess for high-quality basics that allow you to move freely. You can do relaxed, but it should never look sloppy. Think of your daily look as the visionary on a day off: elevated and completely unbothered."
+  },
+  "hardware": {
+    "metalsText": "Your energy requires hardware with actual presence. Look for brushed gold, matte silver, or hammered bronze. Choose pieces that feel like they have some history. Heavy chains and matte surfaces that soak up the light are your best options.",
+    "stonesText": "Skip the perfectly clear gems. You suit stones that look like they were pulled directly from the earth. Raw emeralds, smoky quartz, and malachite work best. These natural inclusions make the pieces feel alive and connected to you.",
+    "tipText": "One substantial anchor piece is always more powerful than a bunch of delicate items. Pick a signature like a heavy ring or a bold pendant and let it be the focal point.",
+    "recommendedMetals": ["brushed gold", "matte silver", "hammered bronze"],
+    "recommendedStones": ["raw emerald", "smoky quartz", "malachite"]
+  },
+  "code": {
+    "leanInto": [
+      "Trusting your body's first tactile reaction. If the fabric feels right against your skin, it is usually a win.",
+      "Investing in the highest quality version of a piece you can afford.",
+      "Using your style to communicate your values without saying a single word.",
+      "Sticking to the three-year test: only buy things you can see yourself loving in 2029."
+    ],
+    "avoid": [
+      "Buying something just because it is a bargain. A deal is only a deal if the item is perfect.",
+      "Chasing trends that clash with your natural composure. If it feels like a costume, it will look like one.",
+      "Keeping your best pieces hidden. Your style works best when it is seen and shared.",
+      "Flimsy or disposable fabrics that lack actual integrity."
+    ],
+    "consider": [
+      "How your style acts as a conversation starter in your daily environment.",
+      "The way your physical home space influences your creative output.",
+      "Making sure your outfit is actually comfortable. If you are constantly tugging at your clothes, you lose your edge."
+    ]
+  },
+  "accessory": {
+    "paragraphs": [
+      "One significant piece carries more weight than five minor ones. Whether it is a heavy watch or a perfectly made bag, let that item be the anchor. This creates a focal point that allows the rest of your look to stay quiet.",
+      "Accessories are where you introduce your most rigid lines. While your clothes might flow, your accessories should provide the structure. A stiff bag or a firm leather strap acts as the frame for your more fluid choices.",
+      "Think about the sound and scent of your accessories. The weight of a heavy buckle or the specific smell of high-quality leather adds to the vibe. Style is a total sensory environment."
+    ]
+  },
+  "pattern": {
+    "narrativeText": "You do not really do busy prints. Anything too frantic fights your energy and looks forced. Your patterns need to feel like they have a pulse: organic, slightly blurred, or naturally occurring.",
+    "tipText": "Use pattern as a texture. A tonal jacquard weave or a subtle embossed print is your secret weapon. It adds depth without screaming for attention.",
+    "recommendedPatterns": ["large-scale soft-focus prints", "marble textures", "shadow checks", "large windowpane check"],
+    "avoidPatterns": ["tiny repetitive prints", "polka dots", "neon patterns", "synthetic-looking prints"]
+  },
+  "generatedAt": "2026-04-10T00:00:00Z",
+  "engineVersion": "1.0.0"
+}
