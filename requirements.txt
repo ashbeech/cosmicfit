@@ -1,0 +1,8 @@
+# WP3 Python tool dependencies
+# Install: pip install -r requirements.txt
+
+# Backfill script (backfill_narratives.py)
+google-generativeai>=0.8.0
+
+# Review tool (review_tool.py)
+flask>=3.0.0

@@ -526,6 +526,224 @@ astrological_style_dataset.json          (WP4 — the meaning layer)
 
 At runtime, the Swift engine reads the dataset to resolve structured fields (palette, textures, metals, stones, code directives, patterns) and looks up pre-generated narrative paragraphs from the cache. No API calls happen on-device.
 
+### Plain-English Blueprint explainer
+
+This section is written for non-developers who want to understand, in ordinary language, how a Blueprint is made.
+
+#### The short version
+
+The Blueprint is built from two ingredients:
+
+1. A hand-authored astrology-to-style dataset.
+2. A bank of AI-written paragraphs for broad archetypes.
+
+When a real user enters their birth date, birth time, and birth location, the app calculates their natal chart, maps that chart onto the dataset, and then combines:
+
+- deterministic style logic from the dataset
+- general archetype paragraphs from the AI cache
+- chart-specific house and sect overlays added at runtime
+
+So the final Blueprint is not "free-written" from scratch by AI on the phone. It is a controlled assembly of:
+
+- pre-defined astrology meanings
+- deterministic weighting rules
+- pre-generated narrative copy
+- chart-specific overlays
+
+#### Diagram: how the Blueprint data is created
+
+```text
+Human-authored astrology rules
+    in generate_dataset.py
+        |
+        |  planet-sign meanings
+        |  aspect meanings
+        |  house placement meanings
+        |  element balance meanings
+        |  colour library
+        v
+astrological_style_dataset.json
+        |
+        |  used in two ways
+        |------------------------------.
+        |                              |
+        v                              v
+Swift runtime engine              backfill_narratives.py
+        |                              |
+        |                              |  asks AI to write general
+        |                              |  archetype paragraphs
+        |                              |  without assuming houses/sect
+        |                              v
+        |                       blueprint_narrative_cache.json
+        |                              |
+        '--------------.               |
+                       |               |
+                       v               v
+                  BlueprintComposer combines both
+                              |
+                              v
+                    Final CosmicBlueprint
+```
+
+#### What is inside the dataset
+
+The dataset is generated programmatically from `generate_dataset.py`, not typed by hand as one giant JSON file. That Python file acts like the source-of-truth workbook for the Blueprint system and produces `astrological_style_dataset.json`.
+
+In plain English, it contains:
+
+- `planet_sign`: what a placement like Venus in Libra or Moon in Capricorn means for style, textures, colours, metals, stones, patterns, silhouette language, and "lean into / avoid / consider" guidance
+- `aspects`: what important natal aspects add or subtract from the core style signal
+- `house_placements`: what it means when Venus or Moon land in a given whole-sign house, including narrative modifiers and local biases for code/hardware outputs
+- `element_balance`: what overall fire / earth / air / water emphasis does to tone and palette
+- `colour_library`: named colours and their associations, so colour recommendations stay controlled and consistent
+
+#### How the AI paragraph dataset is created
+
+The AI paragraph cache is a second layer, separate from the main astrology dataset.
+
+It is created like this:
+
+1. The system groups people into broad narrative archetypes based on three stable chart features:
+   - Venus sign
+   - Moon sign
+   - dominant element balance
+2. `backfill_narratives.py` sends those archetypes to Gemini and asks for 16 Blueprint paragraphs per archetype.
+3. The results are saved into `blueprint_narrative_cache.json`.
+4. A human can review and approve those paragraphs in `review_tool.py`.
+
+Important: these paragraphs are intentionally general. They are not supposed to include chart-specific house placements or day/night sect in the AI output itself. That detail is added later at runtime for the real user.
+
+#### Diagram: how one user's chart maps to the data
+
+```text
+Birth date + birth time + birth location
+                |
+                v
+        Natal chart calculation
+                |
+                v
+           ChartAnalyser
+                |
+                |  works out:
+                |  - planet signs
+                |  - Ascendant sign
+                |  - whole-sign houses
+                |  - chart ruler
+                |  - dignities
+                |  - natal aspects
+                |  - sect (day or night)
+                |  - dominant houses
+                v
+      BlueprintTokenGenerator
+                |
+                |  base weighting:
+                |  - planet importance
+                |  - dignity
+                |  - chart ruler boost
+                |  - aspect strength
+                |
+                |  extra combo weighting:
+                |  - whole-sign house modifier
+                |  - sect modifier
+                v
+        DeterministicResolver
+                |
+                |  produces structured outputs
+                |  such as:
+                |  - colours
+                |  - textures
+                |  - metals / stones
+                |  - code guidance
+                v
+      ArchetypeKeyGenerator + narrative cache lookup
+                |
+                v
+      HouseSectOverlayGenerator
+                |
+                |  appends chart-specific paragraph detail
+                v
+         Final CosmicBlueprint
+```
+
+#### Where whole-sign houses come in
+
+Whole-sign houses enter during chart analysis.
+
+The rule is simple:
+
+- the sign rising on the Ascendant becomes house 1
+- the next sign becomes house 2
+- and so on around the chart
+
+This gives every planet a whole-sign house placement. Those house placements then affect the Blueprint in two main ways:
+
+- they influence some deterministic weighting through house modifiers
+- they provide chart-specific narrative overlays, especially through Venus house, Moon house, and dominant house emphasis
+
+In other words, houses do not replace the core archetype. They personalise it.
+
+#### Where sect comes in
+
+Sect is the day/night condition of the chart.
+
+In plain English:
+
+- a day chart and a night chart do not emphasise planets in quite the same way
+- some planets become slightly more at home or more effective in one sect than the other
+
+In the Blueprint pipeline, sect affects:
+
+- combo weighting in the token-generation stage
+- the final overlay tone appended to certain narrative paragraphs
+
+So sect helps tilt the final result toward a more day-chart or night-chart expression without rewriting the entire Blueprint from scratch.
+
+#### The most important distinction: AI writing vs deterministic output
+
+There are two different jobs happening in the Blueprint system:
+
+- AI writing creates the base paragraph library
+- deterministic logic personalises the final result for a real user
+
+That means:
+
+- the AI cache provides the general voice and archetype prose
+- the deterministic runtime decides the specific output for this person's chart
+- whole-sign houses and sect mostly act at runtime, not in the one-time backfill
+
+#### What is expected to be deterministic
+
+For the same:
+
+- birth data
+- dataset JSON
+- narrative cache JSON
+- engine version
+
+the Blueprint should come out the same every time.
+
+That is the expectation for:
+
+- structured outputs such as palette, code guidance, hardware, and pattern recommendations
+- narrative lookup selection
+- house/sect overlay generation
+
+Important guardrail: house and sect are allowed to influence some runtime outputs, but they are not allowed to leak everywhere. In particular, the pattern path is intentionally kept on the token-derived route so pattern recommendations remain stable and do not pick up house/sect drift.
+
+No live AI call happens when the user generates their Blueprint in the app.
+
+#### What the user is really getting
+
+In plain English, the user is getting:
+
+- a natal chart calculated from their real birth data
+- a style interpretation built from a curated astrology-to-style dataset
+- a deterministic weighted resolution of that chart into concrete style guidance
+- a matching set of pre-written narrative paragraphs
+- final chart-specific narrative details added from houses and sect
+
+So the Blueprint is best understood as a guided translation system, not a chatbot answer.
+
 ### Files
 
 | File | Purpose |
