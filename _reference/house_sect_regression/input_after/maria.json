@@ -1,0 +1,129 @@
+{
+  "accessory" : {
+    "paragraphs" : [
+      "Ditch the fiddly layers and wear one heavy-gauge piece that actually matters. Your tolerance for fuss is zero, so skip the fragile chains in favour of a single, architectural anchor in brushed silver grey or an oxidised, industrial metal. Whether it is a weighted, modular cuff or a dense, recycled rubber strap, this item needs to feel substantial against your skin and survive the friction of your day. Let a solitary, intentional object do all the talking.",
+      "Treat your accessories as industrial reinforcements rather than decorative afterthoughts. Think heavy-gauge silver chains, oxidised carabiner clasps, and matte neoprene utility belts that snap shut with a decisive click. You lack the patience for delicate jewellery or fussy additions; you require tactical pieces that keep pace with your physical momentum. Anchor your look with modular bags in dense, recycled technical fabrics to ground your electric blue and silver grey colour story while maintaining a strict architectural shape. Your hardware is your personal scaffolding, built exclusively for the vanguard.",
+      "Demand absolute tactile precision from your hardware. The cold, physical weight of a brushed silver-grey cuff grounds your high-speed energy the second it hits your skin. You have exactly zero patience for fiddly closures or delicate chains that tangle when you actually move. Swap fragile trinkets for the matte resistance of a recycled neoprene strap and the instant, satisfying snap of a heavy-gauge magnetic lock. Let the sharp, mineral-toned scent of wet asphalt and ozone trail behind you. Your accessories are not polite decorations, they are the architectural anchors keeping your electric momentum bolted to the earth."
+    ]
+  },
+  "code" : {
+    "avoid" : [
+      "anything below your standard",
+      "cheap fast fashion",
+      "anything that does not feel good against skin",
+      "harsh synthetic fabrics",
+      "frivolous",
+      "undisciplined"
+    ],
+    "consider" : [
+      "treat dressing as creative self-expression",
+      "let joy drive your wardrobe choices",
+      "a leather bag that patinas beautifully over years",
+      "heritage denim worn to personal perfection"
+    ],
+    "leanInto" : [
+      "embody the standard",
+      "timeless pieces as life investments",
+      "invest in fewer, better pieces",
+      "touch before you buy, texture is everything",
+      "natural fibres over synthetics",
+      "warm neutrals as your foundation"
+    ]
+  },
+  "engineVersion" : "1.0.0",
+  "generatedAt" : "2026-04-11T10:14:52Z",
+  "hardware" : {
+    "metalsText" : "Treat your hardware like tactile, functional architecture. Skip the delicate chains and anchor your frame with heavy-gauge surgical steel, brushed aluminium, and oxidised silver. You demand matte, industrial finishes that feel incredibly dense and cold to the touch. Because you have zero patience for fussy fastenings, your zips and closures must be ruthlessly efficient, using rapid-release tactical buckles and oversized snaps that make a loud, satisfying click. Your metals are not mere decoration; they are high-functioning, streamlined machinery.",
+    "recommendedMetals" : [
+      "warm bronze",
+      "yellow gold",
+      "platinum",
+      "polished silver",
+      "rose gold"
+    ],
+    "recommendedStones" : [
+      "jade",
+      "emerald",
+      "sapphire",
+      "garnet",
+      "onyx",
+      "rose quartz",
+      "lapis lazuli"
+    ],
+    "stonesText" : "Demand stones that look like they were mined from a futuristic dystopia. Forget delicate, fussy cuts that snag on your clothes; you require heavy, mineral-toned hardware that acts as a structural shield while staying firmly out of your way. Look for raw hematite, oxidised metal set with uncut electric-blue sapphires, and industrial pyrite that feels cold, dense, and fiercely tactile against your skin. The finish must be aggressively matte or jarringly high-shine, offering zero apologies for its absolute lack of tradition. Lab-grown gems set in heavy-gauge brushed steel give you a sharp, progressive edge, ensuring your accessories are grounded and always ready for impact.",
+    "tipText" : "Ditch the delicate chains and fiddly clasps entirely. Your hardware must function like industrial machinery, entirely stripped of unnecessary fuss. Seek out heavy-gauge zips, slick magnetic closures, and brushed silver carabiners that snap shut with a satisfying, tactile clunk. Anchor an electric blue neoprene layer with a single, weighted oxidised cuff or a hammered steel ring that slides on without slowing your stride. Treat your metalwork as architectural armour, never mere decoration."
+  },
+  "occasions" : {
+    "dailyText" : "Your daily uniform demands zero friction and total visual impact. Build your off-duty armour from dense, recycled technical fabrics and architectural neoprene that hold their shape while letting you sprint away from a boring conversation. You have absolutely no patience for fussy fastenings, so anchor the look with heavy-gauge metallic knits, streamlined slip-on boots, and crisp, mineral-toned poplin flashed with electric blue. A weighted silver-grey jacket provides a necessary grounding layer, feeling intensely tactile against the skin while looking ruthlessly industrial. You are dressing for a high-tech future only you can see, but making it perfectly practical for the morning coffee run.\n\nYour comfort instinct gravitates toward emotional comfort visible in how you present, your feelings wear you. Your style energy concentrates in identity and creativity, so dressing is a core creative practice — lean into that.",
+    "intimateText" : "Intimacy does not mean you must soften your frame into a predictable puddle of lace. Slip into a heavy-gauge metallic knit or a silver grey slip cut from dense, recycled technical fabric that moves exactly as you do. You have absolutely no patience for fussy closures or dragging hemlines. Keep the silhouette architectural, fluid, and fiercely streamlined. Anchor the evening with a hammered silver cuff or an electric blue neoprene bodice that feels deliberately tactile against bare skin. Seduction, for you, is a highly intellectual operation.",
+    "workText" : "The traditional office uniform bores you to tears, so you rewrite the programme completely. You demand clothing that moves as fast as you do, with absolutely zero fuss to slow you down. Anchor your weekday rotation in dense, tactile fabrics that hold an architectural silhouette without restricting your frame. Swap the standard wool blazer for a structured neoprene jacket or a weighted overshirt cut from recycled technical poplin. Inject sudden, intentional flashes of electric blue or high-shine silver grey to disrupt the corporate monotony. You are not dressing for the job you want, but for the future you are inventing."
+  },
+  "palette" : {
+    "accentColours" : [
+      {
+        "hexValue" : "#228B22",
+        "name" : "forest green",
+        "role" : "accent"
+      },
+      {
+        "hexValue" : "#C19A6B",
+        "name" : "warm camel",
+        "role" : "accent"
+      }
+    ],
+    "coreColours" : [
+      {
+        "hexValue" : "#0A0A0A",
+        "name" : "jet black",
+        "role" : "core"
+      },
+      {
+        "hexValue" : "#708090",
+        "name" : "slate",
+        "role" : "core"
+      },
+      {
+        "hexValue" : "#000080",
+        "name" : "dark navy",
+        "role" : "core"
+      },
+      {
+        "hexValue" : "#FFFDD0",
+        "name" : "cream",
+        "role" : "core"
+      }
+    ],
+    "narrativeText" : "Ground your wardrobe in the crisp, mineral-toned chill of silver grey. Treat this industrial neutral as a heavy-gauge, architectural canvas for sudden, unapologetic shocks of electric blue. You have absolutely zero patience for fussy prints or sweet, forgettable pastels, so you require bold block solids rendered in high-shine technical fabrics, metallic knits, and dense neoprene. These saturated colours anchor your progressive edge in something fiercely tactile, allowing you to dress in seconds and move faster than everyone else in the room. This is a deliberate, high-voltage palette built for an intellectual insurgent."
+  },
+  "pattern" : {
+    "avoidPatterns" : [
+      "aggressive graphics",
+      "neon prints",
+      "overly busy patterns",
+      "novelty prints"
+    ],
+    "narrativeText" : "Your wardrobe has zero tolerance for fussy prints or whimsical florals. You demand patterns that read as progressive and architectural, hitting the eye with immediate, unfiltered impact. Think digital distortion mapped onto dense neoprene, or sharp silver grey and electric blue grids woven directly into a heavy-gauge metallic knit. Because surface-level stamping feels cheap to your grounded sensibilities, the design must be anchored physically in the tactile reality of the garment rather than just painted on top. You do not wear patterns to look pretty, you wear them as a visual shock to the system.",
+    "recommendedPatterns" : [
+      "pinstripe",
+      "houndstooth",
+      "classic check",
+      "subtle herringbone",
+      "organic textures",
+      "tonal knits"
+    ],
+    "tipText" : "Ditch the traditional florals and demand a digital grid. Your patterns must look engineered rather than grown, built directly into the structure of your garments. Opt for sharp, architectural geometries woven straight into heavy-gauge knits or densely constructed neoprene. Think an electric blue glitch motif slashing across a matte silver grey base. You have zero patience for fussy prints that require overthinking or slow you down. Anchor the look with heavy hardware and let a single, uncompromising graphic do all the talking."
+  },
+  "styleCore" : {
+    "narrativeText" : "Your presence is an exercise in grounded, high-speed rebellion. You project an intellectually driven identity that has absolutely no time for fussy hemlines or fragile drapery. Instead, you anchor your wardrobe in dense, tactile quality, building streamlined silhouettes out of crisp neoprene, heavy-gauge metallic knits, and recycled technical fabrics. Slashes of electric blue and cold silver grey cut through the room, turning your outfit into a bold, wearable manifesto. You do not just get dressed; you engineer the uniform for a highly fashionable resistance.\n\nYour natural sense of beauty shows up most powerfully in your creative self-expression — creative joy in dressing, bold romantic expression, date-night dressing as art. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort."
+  },
+  "textures" : {
+    "badText" : "Step away from anything flimsy, fragile, or hopelessly romantic. You have absolutely zero patience for fussy garments that require constant adjustment just to hold a silhouette. Forget cheap polyester lace, static-cling chiffon, and any textile that snags the moment you brush past a doorframe. Your demand for tactile quality and sudden movement actively rejects overly delicate silks or heavy-gauge, scratchy heritage wools that drag you down. If a material feels like a costume from a bygone era or lacks architectural substance, leave it behind. You are built for forward motion, not for standing still in a delicate museum piece.",
+    "goodText" : "Dress in progressive materials that feel distinctly futuristic but remain grounded in tactile reality. You require dense neoprene that holds a crisp, architectural silhouette without ever restricting your physical stride. Reach for high-shine technical fabrics, recycled materials, and heavy-gauge metallic knits in core colours like electric blue or silver grey. These textiles refuse to be fussy or fragile, offering an engineered, sensory experience that matches your absolute impatience with the ordinary. Let the traditionalists keep their delicate vintage; you are building a modular wardrobe for tomorrow.",
+    "sweetSpotText" : "The sweet spot is where high-concept technicality meets heavy-gauge wearability. You require dense neoprene that holds an architectural silhouette without trapping your frame in a stiff, fussy cage. Anchor your wardrobe with recycled technical fabrics and brushed metallic knits in silver grey that feel physically grounded to the touch but look engineered for the future. You have zero patience for delicate materials that demand babysitting or slow your momentum. If a shock of electric blue does not offer absolute freedom of movement while acting as a tactile shield, it belongs to someone else. You dress in progressive, friction-free armour."
+  },
+  "userInfo" : {
+    "birthDate" : "1989-04-28T00:00:00Z",
+    "birthLocation" : "Unknown",
+    "generationDate" : "2026-04-11T10:14:52Z"
+  }
+}

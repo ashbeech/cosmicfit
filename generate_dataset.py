@@ -2431,14 +2431,212 @@ house_contexts = {
     12: "inner world, retreat, imagination",
 }
 
+HOUSE_EXPANDED_DATA = {
+    "venus": {
+        1: {
+            "keywords": ["identity-driven", "personal", "immediate", "visible"],
+            "code_consider_bias": ["let your aesthetic be the first thing people notice", "invest in pieces that feel unmistakably you"],
+            "occasion_bias": ["daily"],
+            "lean_into_bias": ["statement outerwear", "signature accessories"],
+            "hardware_bias": {"metals": ["gold", "rose gold"], "stones": ["diamond", "clear quartz"]}
+        },
+        2: {
+            "keywords": ["investment", "quality-focused", "tactile", "enduring"],
+            "code_consider_bias": ["prioritize quality over quantity in every purchase", "build a wardrobe of pieces that hold value"],
+            "occasion_bias": ["daily"],
+            "lean_into_bias": ["investment knits", "heritage leather goods"],
+            "hardware_bias": {"metals": ["gold", "rose gold"], "stones": ["emerald", "jade"]}
+        },
+        3: {
+            "keywords": ["social", "approachable", "versatile", "communicative"],
+            "code_consider_bias": ["dress to invite conversation", "keep outfits adaptable for spontaneous plans"],
+            "occasion_bias": ["daily"],
+            "lean_into_bias": ["conversation-starting accessories", "layerable separates"],
+        },
+        4: {
+            "keywords": ["nostalgic", "comfort-driven", "heirloom", "private"],
+            "code_consider_bias": ["honour comfort as a core style value", "seek pieces with sentimental or heirloom quality"],
+            "occasion_bias": ["intimate"],
+            "lean_into_bias": ["vintage-inspired silhouettes", "hand-me-down styling"],
+        },
+        5: {
+            "keywords": ["creative", "playful", "romantic", "expressive"],
+            "code_consider_bias": ["treat dressing as creative self-expression", "let joy drive your wardrobe choices"],
+            "occasion_bias": ["intimate"],
+            "lean_into_bias": ["bold colour pairings", "romantic details"],
+            "hardware_bias": {"metals": ["gold", "copper"], "stones": ["ruby", "carnelian"]}
+        },
+        6: {
+            "keywords": ["functional", "elegant", "routine", "refined"],
+            "code_consider_bias": ["build daily uniforms that feel beautiful", "choose pieces that perform across your routine"],
+            "occasion_bias": ["work", "daily"],
+            "lean_into_bias": ["polished workwear", "functional elegance"],
+        },
+        7: {
+            "keywords": ["harmonious", "partnership", "balanced", "social"],
+            "code_consider_bias": ["dress for harmony in shared contexts", "balance personal style with social awareness"],
+            "occasion_bias": ["intimate"],
+            "lean_into_bias": ["complementary pairings", "elegant date-night looks"],
+            "hardware_bias": {"metals": ["silver", "platinum"], "stones": ["rose quartz", "pearl"]}
+        },
+        8: {
+            "keywords": ["strategic", "transformative", "magnetic", "hidden"],
+            "code_consider_bias": ["invest in fewer transformative pieces", "let allure build through restraint"],
+            "occasion_bias": ["intimate"],
+            "lean_into_bias": ["investment statement pieces", "dark luxe textures"],
+            "hardware_bias": {"metals": ["gunmetal", "antiqued silver"], "stones": ["garnet", "black onyx"]}
+        },
+        9: {
+            "keywords": ["global", "cultural", "eclectic", "adventurous"],
+            "code_consider_bias": ["draw inspiration from global aesthetics", "let travel broaden your wardrobe vocabulary"],
+            "occasion_bias": ["daily"],
+            "lean_into_bias": ["cultural textiles", "globally sourced accessories"],
+        },
+        10: {
+            "keywords": ["polished", "public-facing", "reputational", "aspirational"],
+            "code_consider_bias": ["prioritize polished finishes over distressed pieces", "treat fit precision as a non-negotiable"],
+            "occasion_bias": ["work", "public"],
+            "lean_into_bias": ["tailored", "elevated"],
+            "hardware_bias": {"metals": ["silver", "steel"], "stones": ["onyx"]}
+        },
+        11: {
+            "keywords": ["progressive", "community", "forward-thinking", "social"],
+            "code_consider_bias": ["experiment with progressive silhouettes", "let your style signal your values"],
+            "occasion_bias": ["daily"],
+            "lean_into_bias": ["avant-garde details", "ethical fashion"],
+        },
+        12: {
+            "keywords": ["private", "dreamy", "ethereal", "introspective"],
+            "code_consider_bias": ["dress for how it makes you feel, not how it looks to others", "seek beauty in softness and simplicity"],
+            "occasion_bias": ["intimate"],
+            "lean_into_bias": ["flowing silhouettes", "soft draping"],
+            "hardware_bias": {"metals": ["silver", "white gold"], "stones": ["moonstone", "amethyst"]}
+        },
+    },
+    "moon": {
+        1: {
+            "keywords": ["emotionally visible", "instinctive", "reactive", "personal"],
+            "code_consider_bias": ["choose pieces that match your emotional state", "let comfort be visible in your presentation"],
+            "occasion_bias": ["daily"],
+            "lean_into_bias": ["soft-structured layers", "comfort-first tops"],
+        },
+        2: {
+            "keywords": ["security-driven", "tactile", "anchoring", "sensory"],
+            "code_consider_bias": ["invest in fabrics that feel like emotional anchors", "choose textures that ground you"],
+            "occasion_bias": ["daily"],
+            "lean_into_bias": ["heavyweight knits", "tactile natural fibres"],
+        },
+        3: {
+            "keywords": ["communicative", "approachable", "soft", "expressive"],
+            "code_consider_bias": ["dress to feel emotionally approachable", "keep comfort in pieces that move with you"],
+            "occasion_bias": ["daily"],
+            "lean_into_bias": ["soft layering", "relaxed separates"],
+        },
+        4: {
+            "keywords": ["nostalgic", "heirloom", "deeply comforting", "private"],
+            "code_consider_bias": ["seek fabrics with nostalgic or heirloom quality", "let comfort be your non-negotiable foundation"],
+            "occasion_bias": ["intimate"],
+            "lean_into_bias": ["heirloom knits", "vintage-soft textures"],
+        },
+        5: {
+            "keywords": ["playful", "joyful", "creatively comforting", "expressive"],
+            "code_consider_bias": ["let playfulness guide your comfort choices", "choose pieces that spark emotional joy"],
+            "occasion_bias": ["daily"],
+            "lean_into_bias": ["playful comfort layers", "creative knitwear"],
+        },
+        6: {
+            "keywords": ["functional", "nurturing", "routine", "wellness"],
+            "code_consider_bias": ["build routines around comfortable daily uniforms", "choose functional fabrics that nurture"],
+            "occasion_bias": ["work", "daily"],
+            "lean_into_bias": ["functional softness", "care-routine fabrics"],
+        },
+        7: {
+            "keywords": ["harmonious", "partnership", "emotionally balanced", "social"],
+            "code_consider_bias": ["dress for emotional harmony in shared spaces", "balance comfort with social grace"],
+            "occasion_bias": ["intimate"],
+            "lean_into_bias": ["soft social dressing", "emotionally balanced layers"],
+        },
+        8: {
+            "keywords": ["protective", "layered", "transformative", "hidden"],
+            "code_consider_bias": ["use layers as emotional protection", "let comfort be hidden beneath structure"],
+            "occasion_bias": ["intimate"],
+            "lean_into_bias": ["protective layering", "transformative comfort"],
+        },
+        9: {
+            "keywords": ["expansive", "travel-ready", "culturally soft", "philosophical"],
+            "code_consider_bias": ["seek comfort in pieces that travel well", "let global softness expand your wardrobe"],
+            "occasion_bias": ["daily"],
+            "lean_into_bias": ["travel-friendly comfort", "global-inspired softness"],
+        },
+        10: {
+            "keywords": ["composed", "professional", "calm", "public"],
+            "code_consider_bias": ["maintain emotional composure through polished comfort", "choose professional pieces that still feel soft"],
+            "occasion_bias": ["work"],
+            "lean_into_bias": ["polished comfort", "composed professional layers"],
+        },
+        11: {
+            "keywords": ["community", "belonging", "group-aware", "progressive"],
+            "code_consider_bias": ["dress for emotional belonging in groups", "let comfort signal community"],
+            "occasion_bias": ["daily"],
+            "lean_into_bias": ["community-conscious comfort", "group-friendly softness"],
+        },
+        12: {
+            "keywords": ["private", "retreating", "deeply soft", "solitary"],
+            "code_consider_bias": ["save your softest pieces for private moments", "let solitary comfort be a form of self-care"],
+            "occasion_bias": ["intimate"],
+            "lean_into_bias": ["ultra-soft loungewear", "private retreat fabrics"],
+        },
+    },
+    "sun": {
+        1: {"keywords": ["identity", "visible", "direct", "personal"], "code_consider_bias": ["express identity through signature style", "make your first impression count"], "occasion_bias": ["daily"], "lean_into_bias": ["identity-driven dressing", "signature pieces"]},
+        2: {"keywords": ["investment", "quality", "self-worth", "enduring"], "code_consider_bias": ["invest in quality that reflects your self-worth", "choose enduring over trendy"], "occasion_bias": ["daily"], "lean_into_bias": ["investment wardrobe", "quality basics"]},
+        3: {"keywords": ["communicative", "social", "versatile", "expressive"], "code_consider_bias": ["let style communicate your personality", "keep versatile options ready"], "occasion_bias": ["daily"], "lean_into_bias": ["expressive everyday", "social versatility"]},
+        4: {"keywords": ["rooted", "heritage", "nostalgic", "foundational"], "code_consider_bias": ["honour your roots through style choices", "build on foundational pieces"], "occasion_bias": ["intimate"], "lean_into_bias": ["heritage-inspired", "foundational wardrobe"]},
+        5: {"keywords": ["creative", "bold", "joyful", "expressive"], "code_consider_bias": ["lead with creative boldness", "let joy fuel your self-expression"], "occasion_bias": ["daily"], "lean_into_bias": ["bold self-expression", "creative confidence"]},
+        6: {"keywords": ["disciplined", "functional", "daily", "purposeful"], "code_consider_bias": ["build discipline into daily dressing", "choose purposeful workwear"], "occasion_bias": ["work"], "lean_into_bias": ["purposeful daily wear", "disciplined elegance"]},
+        7: {"keywords": ["refined", "social", "balanced", "partnership"], "code_consider_bias": ["refine style through social awareness", "balance personal and shared taste"], "occasion_bias": ["intimate"], "lean_into_bias": ["socially refined", "balanced presentation"]},
+        8: {"keywords": ["transformative", "powerful", "strategic", "deep"], "code_consider_bias": ["use style transformation as self-knowledge", "invest in powerful statement pieces"], "occasion_bias": ["intimate"], "lean_into_bias": ["power dressing", "transformative pieces"]},
+        9: {"keywords": ["philosophical", "expansive", "global", "adventurous"], "code_consider_bias": ["expand your style vocabulary globally", "dress with philosophical intention"], "occasion_bias": ["daily"], "lean_into_bias": ["globally inspired", "adventurous dressing"]},
+        10: {"keywords": ["authoritative", "visible", "career", "public"], "code_consider_bias": ["dress with visible authority", "align wardrobe with career ambitions"], "occasion_bias": ["work", "public"], "lean_into_bias": ["authoritative dressing", "career-aligned style"]},
+        11: {"keywords": ["progressive", "communal", "forward", "group"], "code_consider_bias": ["let style reflect progressive values", "dress for community connection"], "occasion_bias": ["daily"], "lean_into_bias": ["progressive style", "community-conscious"]},
+        12: {"keywords": ["private", "inner", "spiritual", "contemplative"], "code_consider_bias": ["dress for inner truth, not external approval", "find beauty in contemplative simplicity"], "occasion_bias": ["intimate"], "lean_into_bias": ["contemplative dressing", "private simplicity"]},
+    },
+    "mars": {
+        1: {"keywords": ["assertive", "bold", "direct", "impactful"], "code_consider_bias": ["lead with bold first impressions", "choose impact over subtlety"], "occasion_bias": ["daily"], "lean_into_bias": ["assertive silhouettes", "impact dressing"]},
+        2: {"keywords": ["decisive", "quality-aggressive", "forceful", "investing"], "code_consider_bias": ["be decisive about quality investments", "pursue the best aggressively"], "occasion_bias": ["daily"], "lean_into_bias": ["decisive purchasing", "aggressive quality"]},
+        3: {"keywords": ["sharp", "communicative", "bold-social", "direct"], "code_consider_bias": ["sharpen your social presence through style", "communicate boldly through dressing"], "occasion_bias": ["daily"], "lean_into_bias": ["sharp social style", "bold communication"]},
+        4: {"keywords": ["protective", "fierce", "grounded", "defensive"], "code_consider_bias": ["protect your comfort zone fiercely", "ground your style in strength"], "occasion_bias": ["intimate"], "lean_into_bias": ["protective comfort", "fierce foundations"]},
+        5: {"keywords": ["competitive", "daring", "creative", "bold-romantic"], "code_consider_bias": ["take creative style risks confidently", "dare to stand out"], "occasion_bias": ["intimate"], "lean_into_bias": ["daring expression", "competitive creativity"]},
+        6: {"keywords": ["driven", "performance", "functional", "aggressive"], "code_consider_bias": ["choose performance-driven daily wear", "let functionality be fierce"], "occasion_bias": ["work"], "lean_into_bias": ["performance workwear", "driven functionality"]},
+        7: {"keywords": ["assertive-social", "competitive", "bold-paired", "dynamic"], "code_consider_bias": ["assert yourself through bold pairings", "let competition sharpen your style"], "occasion_bias": ["intimate"], "lean_into_bias": ["bold partnership dressing", "competitive pairing"]},
+        8: {"keywords": ["powerful", "strategic", "dark", "magnetic"], "code_consider_bias": ["use strategic restraint for maximum impact", "invest in powerful dark pieces"], "occasion_bias": ["intimate"], "lean_into_bias": ["strategic power", "dark authority"]},
+        9: {"keywords": ["adventurous", "daring-global", "exploratory", "bold-travel"], "code_consider_bias": ["dress for adventure without hesitation", "explore bold global styles"], "occasion_bias": ["daily"], "lean_into_bias": ["adventurous boldness", "global daring"]},
+        10: {"keywords": ["ambitious", "authoritative", "competitive-public", "driven"], "code_consider_bias": ["dress with ambitious authority", "let career ambition sharpen your image"], "occasion_bias": ["work", "public"], "lean_into_bias": ["ambitious power", "competitive authority"]},
+        11: {"keywords": ["galvanising", "activist", "bold-community", "progressive"], "code_consider_bias": ["let your style galvanise your community", "dress with activist intention"], "occasion_bias": ["daily"], "lean_into_bias": ["activist style", "community boldness"]},
+        12: {"keywords": ["hidden-strength", "private-power", "fierce-solitary", "internal"], "code_consider_bias": ["keep your strongest pieces for private power", "let inner strength guide quiet choices"], "occasion_bias": ["intimate"], "lean_into_bias": ["private power", "hidden strength"]},
+    },
+}
+
 for planet in ["venus", "moon", "sun", "mars"]:
     for house in range(1, 13):
         ctx = house_contexts[house]
         ordinal = {1: "st", 2: "nd", 3: "rd"}.get(house, "th")
-        HOUSE_PLACEMENTS[f"{planet}_house_{house}"] = {
+        entry = {
             "context": f"{planet.title()} in the {house}{ordinal} house: {ctx}",
-            "modifier": HOUSE_MODIFIERS_PER_PLANET[planet][house]
+            "modifier": HOUSE_MODIFIERS_PER_PLANET[planet][house],
         }
+        expanded = HOUSE_EXPANDED_DATA.get(planet, {}).get(house, {})
+        if "keywords" in expanded:
+            entry["keywords"] = expanded["keywords"]
+        if "code_consider_bias" in expanded:
+            entry["code_consider_bias"] = expanded["code_consider_bias"]
+        if "occasion_bias" in expanded:
+            entry["occasion_bias"] = expanded["occasion_bias"]
+        if "lean_into_bias" in expanded:
+            entry["lean_into_bias"] = expanded["lean_into_bias"]
+        if "hardware_bias" in expanded:
+            entry["hardware_bias"] = expanded["hardware_bias"]
+        HOUSE_PLACEMENTS[f"{planet}_house_{house}"] = entry
 
 # ═══════════════════════════════════════════════════════════════
 # ELEMENT / MODALITY BALANCE (7 entries)

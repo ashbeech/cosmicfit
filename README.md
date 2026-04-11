@@ -571,9 +571,24 @@ python3 validate_dataset.py
 
 `generate_dataset.py` writes `astrological_style_dataset.json`. `validate_dataset.py` checks it against the WP3 contract (correct keys, cardinalities, colour cross-references) and prints a PASS/FAIL report.
 
+For post-rollout strict schema enforcement (Phase 4d), run:
+
+```bash
+source .venv/bin/activate && python3 validate_dataset.py astrological_style_dataset.json --strict-house-schema
+```
+
+This fails if any house placement is missing:
+
+- `keywords`
+- `code_consider_bias`
+- `occasion_bias`
+- `lean_into_bias`
+
 ### Running the narrative backfill
 
 The backfill script generates AI paragraphs by calling the Gemini API. Each archetype cluster gets 16 paragraphs (one per Blueprint section). The script saves progress after every paragraph, so it is safe to interrupt and resume.
+
+Important: the backfill output is intentionally archetype-level, not chart-specific. House and sect influences are applied later by the runtime Blueprint pipeline through resolver weighting and narrative overlays, so `blueprint_narrative_cache.json` should remain general-purpose.
 
 **Cluster modes:**
 
@@ -585,8 +600,7 @@ The backfill script generates AI paragraphs by calling the Gemini API. Each arch
 **Test a small batch first:**
 
 ```bash
-source .venv/bin/activate
-python3 backfill_narratives.py \
+source .venv/bin/activate && python3 backfill_narratives.py \
   --dataset astrological_style_dataset.json \
   --output blueprint_narrative_cache.json \
   --clusters representative \
@@ -598,7 +612,7 @@ python3 backfill_narratives.py \
 **Resume after interruption:**
 
 ```bash
-python3 backfill_narratives.py \
+source .venv/bin/activate && python3 backfill_narratives.py \
   --dataset astrological_style_dataset.json \
   --output blueprint_narrative_cache.json \
   --clusters representative \
@@ -607,10 +621,37 @@ python3 backfill_narratives.py \
 
 `--resume` skips clusters that already have content, so you can stop and restart without losing progress.
 
+### House/Sect regression snapshots
+
+Golden regression snapshots and scorecard tooling live in `_reference/house_sect_regression/`.
+
+Build snapshot bundles from before/after Blueprint JSON:
+
+```bash
+source .venv/bin/activate && python3 generate_house_sect_regression.py \
+  --fixture ash \
+  --before _reference/fixtures/blueprint_input_user_1.json \
+  --after _reference/house_sect_regression/input_after/ash.json
+```
+
+Auto-generate `input_after/*.json` from runtime fixtures:
+
+```bash
+source .venv/bin/activate && python3 export_input_after_fixtures.py
+```
+
+Generate the human review scorecard from snapshot bundles:
+
+```bash
+source .venv/bin/activate && python3 review_house_sect_regression.py \
+  --snapshots-dir _reference/house_sect_regression \
+  --output _reference/house_sect_regression/REPORT.md
+```
+
 **Dry run (no API calls):**
 
 ```bash
-python3 backfill_narratives.py \
+source .venv/bin/activate && python3 backfill_narratives.py \
   --dataset astrological_style_dataset.json \
   --output blueprint_narrative_cache.json \
   --clusters full \
@@ -661,7 +702,7 @@ Then open `http://localhost:8420` in your browser.
 | `]` | Next cluster |
 | `[` | Previous cluster |
 
-**Live updates:** The review tool polls the cache file every 3 seconds, so you can run the backfill in one terminal and watch paragraphs appear in the review tool in real time.
+**Live updates:** The backfill writes `blueprint_narrative_cache.json` after every paragraph, and the review tool polls for changes every 2 seconds. You can run the backfill in one terminal and watch new paragraphs appear in the browser without manually refreshing the page.
 
 **How review notes feed back into the backfill:**
 
