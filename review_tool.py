@@ -152,61 +152,69 @@ TEMPLATE = """<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cosmic Fit — Narrative Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
-    --bg: #1a1a2e; --surface: #16213e; --card: #0f3460;
-    --accent: #e94560; --text: #eaeaea; --dim: #888;
-    --green: #4caf50; --yellow: #ff9800; --red: #f44336;
+    --bg: #DEDEDE; --surface: #fff; --card: #f4f4f5;
+    --accent: #0D0E1F; --accent-lilac: #7E69E6;
+    --text: #000210; --dim: #6A6A73; --border: rgba(0,2,16,0.12);
+    --green: #2e7d32; --yellow: #e6a100; --red: #c62828;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font: 14px/1.6 'DM Sans', system-ui, sans-serif; display: flex; height: 100vh; }
+body { background: var(--bg); color: var(--text); font: 14px/1.6 'PT Serif', Georgia, serif; display: flex; height: 100vh; }
 
-.sidebar { width: 280px; background: var(--surface); overflow-y: auto; flex-shrink: 0; border-right: 1px solid #333; }
-.sidebar h2 { padding: 16px; font-size: 16px; border-bottom: 1px solid #333; }
-.cluster-item { padding: 10px 16px; cursor: pointer; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+.sidebar { width: 280px; background: var(--surface); overflow-y: auto; flex-shrink: 0; border-right: 1px solid var(--border); }
+.sidebar h1 { padding: 16px 16px 0px 16px; font-family: 'DM Serif Text', Georgia, serif; color: var(--text); }
+.sidebar h2 { padding: 0px 16px 16px 16px; font-size: 16px; font-family: 'DM Serif Text', Georgia, serif; border-bottom: 1px solid var(--border); color: var(--text); }
+.cluster-item { padding: 10px 16px; cursor: pointer; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; transition: background 0.15s; }
 .cluster-item:hover { background: var(--card); }
 .cluster-item.active { background: var(--card); border-left: 3px solid var(--accent); }
-.badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #333; }
-.badge.complete { background: var(--green); color: #000; }
+.badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--bg); color: var(--dim); font-weight: 600; }
+.badge.complete { background: var(--green); color: #fff; }
 
 .main { flex: 1; overflow-y: auto; padding: 24px; }
-.top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding: 16px; background: var(--surface); border-radius: 8px; }
+.top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding: 16px; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); }
 .stats { display: flex; gap: 24px; font-size: 13px; }
-.stat-label { color: var(--dim); }
-.stat-value { font-weight: bold; font-size: 18px; }
+.stat-label { color: var(--dim); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+.stat-value { font-weight: 700; font-size: 18px; font-family: 'DM Serif Text', Georgia, serif; }
 
-.section-card { background: var(--surface); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.section-card { background: var(--surface); border-radius: 8px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.section-name { font-size: 15px; font-weight: 600; }
-.section-text { padding: 12px; background: var(--bg); border-radius: 6px; font-size: 14px; line-height: 1.7; white-space: pre-wrap; margin-bottom: 12px; }
+.section-name { font-size: 15px; font-weight: 600; font-family: 'DM Serif Text', Georgia, serif; }
+.section-text { padding: 12px; background: var(--card); border-radius: 6px; font-size: 14px; line-height: 1.7; white-space: pre-wrap; margin-bottom: 12px; border: 1px solid var(--border); }
 .validation { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-.val-tag { font-size: 11px; padding: 3px 10px; border-radius: 4px; background: #333; }
-.val-tag.pass { background: rgba(76,175,80,0.2); color: var(--green); }
-.val-tag.fail { background: rgba(244,67,54,0.2); color: var(--red); }
-.val-tag.warn { background: rgba(255,152,0,0.2); color: var(--yellow); }
+.val-tag { font-size: 11px; padding: 3px 10px; border-radius: 4px; background: var(--bg); font-weight: 500; }
+.val-tag.pass { background: rgba(46,125,50,0.1); color: var(--green); }
+.val-tag.fail { background: rgba(198,40,40,0.1); color: var(--red); }
+.val-tag.warn { background: rgba(230,161,0,0.1); color: var(--yellow); }
 
 .controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.btn { padding: 6px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; }
-.btn-approve { background: var(--green); color: #000; }
-.btn-revise { background: var(--yellow); color: #000; }
+.btn { padding: 6px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; font-family: 'PT Serif', Georgia, serif; transition: opacity 0.15s; }
+.btn:hover { opacity: 0.85; }
+.btn-approve { background: var(--green); color: #fff; }
+.btn-revise { background: var(--yellow); color: #fff; }
 .btn-reject { background: var(--red); color: #fff; }
 .btn-pause { background: var(--accent); color: #fff; }
-.btn-resume { background: var(--green); color: #000; }
-.note-input { flex: 1; padding: 6px 10px; border: 1px solid #444; border-radius: 4px; background: var(--bg); color: var(--text); font-size: 12px; min-width: 200px; }
+.btn-resume { background: var(--green); color: #fff; }
+.note-input { flex: 1; padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--card); color: var(--text); font-size: 12px; font-family: 'PT Serif', Georgia, serif; min-width: 200px; }
+.note-input:focus { outline: none; border-color: var(--accent-lilac); box-shadow: 0 0 0 2px rgba(126,105,230,0.2); }
 
-.status-badge { font-size: 11px; padding: 2px 8px; border-radius: 4px; }
-.status-approved { background: var(--green); color: #000; }
-.status-needs_revision { background: var(--yellow); color: #000; }
+.status-badge { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+.status-approved { background: var(--green); color: #fff; }
+.status-needs_revision { background: var(--yellow); color: #fff; }
 .status-rejected { background: var(--red); color: #fff; }
 
-.keyboard-help { position: fixed; bottom: 12px; right: 12px; font-size: 11px; color: var(--dim); background: var(--surface); padding: 8px 12px; border-radius: 6px; }
-kbd { background: #333; padding: 1px 6px; border-radius: 3px; font-size: 11px; }
+.keyboard-help { position: fixed; bottom: 12px; right: 12px; font-size: 11px; color: var(--dim); background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); }
+kbd { background: var(--bg); padding: 1px 6px; border-radius: 3px; font-size: 11px; border: 1px solid var(--border); }
 </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <h2>Archetype Clusters</h2>
+    <h1><span style="color:var(--accent)">Cosmic Fit</span></h1>
+    <h2>Blueprint Paragraph Review Tool</h2>
+
     <div id="cluster-list"></div>
 </div>
 
@@ -369,7 +377,7 @@ async function setStatus(skey, status) {
 
 async function saveNote(skey, note) {
     if (!reviewNotes[currentCluster]) reviewNotes[currentCluster] = {};
-    if (!reviewNotes[currentCluster][skey]) return;
+    if (!reviewNotes[currentCluster][skey]) reviewNotes[currentCluster][skey] = {status: '', note: '', reviewed_at: ''};
     reviewNotes[currentCluster][skey].note = note;
     await fetch('/api/review', {
         method: 'POST',

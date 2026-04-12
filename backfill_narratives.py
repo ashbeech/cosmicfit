@@ -133,6 +133,57 @@ BANNED_WORDS = [
 
 HEDGING_PHRASES = ["you might", "perhaps", "maybe", "possibly"]
 
+# ─── Placeholder Vocabulary ────────────────────────────────────────────
+
+GROUP_A_SECTIONS = {
+    "style_core",
+    "occasions_work", "occasions_intimate", "occasions_daily",
+    "accessory_1", "accessory_2", "accessory_3",
+}
+
+GROUP_B_SECTIONS = {
+    "palette_narrative",
+    "pattern_narrative", "pattern_tip",
+    "hardware_metals", "hardware_stones", "hardware_tip",
+    "textures_good", "textures_bad", "textures_sweet_spot",
+}
+
+ALLOWED_PLACEHOLDERS = {
+    *[f"core_colour_{i}" for i in range(1, 5)],
+    *[f"accent_colour_{i}" for i in range(1, 3)],
+    *[f"recommended_pattern_{i}" for i in range(1, 5)],
+    *[f"avoid_pattern_{i}" for i in range(1, 3)],
+    *[f"metal_{i}" for i in range(1, 4)],
+    *[f"stone_{i}" for i in range(1, 4)],
+    *[f"texture_good_{i}" for i in range(1, 5)],
+    *[f"texture_bad_{i}" for i in range(1, 4)],
+    *[f"sweet_spot_keyword_{i}" for i in range(1, 3)],
+}
+
+SECTION_ALLOWED_PLACEHOLDERS: dict[str, set[str]] = {
+    "palette_narrative": {f"core_colour_{i}" for i in range(1, 5)} | {f"accent_colour_{i}" for i in range(1, 3)},
+    "pattern_narrative": {f"recommended_pattern_{i}" for i in range(1, 5)} | {f"avoid_pattern_{i}" for i in range(1, 3)},
+    "pattern_tip": {f"recommended_pattern_{i}" for i in range(1, 5)} | {f"avoid_pattern_{i}" for i in range(1, 3)},
+    "hardware_metals": {f"metal_{i}" for i in range(1, 4)},
+    "hardware_stones": {f"stone_{i}" for i in range(1, 4)},
+    "hardware_tip": {f"metal_{i}" for i in range(1, 4)} | {f"stone_{i}" for i in range(1, 4)},
+    "textures_good": {f"texture_good_{i}" for i in range(1, 5)},
+    "textures_bad": {f"texture_bad_{i}" for i in range(1, 4)},
+    "textures_sweet_spot": {f"sweet_spot_keyword_{i}" for i in range(1, 3)} | {f"texture_good_{i}" for i in range(1, 5)},
+}
+
+SECTION_PLACEHOLDER_REQUIREMENTS: dict[str, list[tuple[str, int]]] = {
+    "palette_narrative": [("any", 3)],
+    "textures_good": [("texture_good_", 2)],
+    "textures_bad": [("texture_bad_", 2)],
+    "textures_sweet_spot": [("sweet_spot_keyword_", 1)],
+    "hardware_metals": [("metal_", 2)],
+    "hardware_stones": [("stone_", 2)],
+    "hardware_tip": [("any", 1)],
+    "pattern_narrative": [("recommended_pattern_", 2), ("avoid_pattern_", 1)],
+    "pattern_tip": [("any", 1)],
+}
+
 ZODIAC_SIGNS = [
     "aries", "taurus", "gemini", "cancer", "leo", "virgo",
     "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces",
@@ -152,24 +203,40 @@ SIGN_ELEMENTS = {
 SYSTEM_PROMPT = """You are a fashion-insider style writer for Cosmic Fit, an astrological fashion guidance app.
 
 WRITING VOICE:
-- Direct second-person address: "You", "Your" — not suggestions, declarations
-- Confident, slightly irreverent tone — fashion-insider, not generic lifestyle
-- Sensory and tactile language: how fabrics feel, how garments move, how hardware sounds
-- Short punchy sentences mixed with longer flowing ones
-- Occasional humour and cultural references
+- Write like a stylish, culturally switched-on woman in her thirties who actually knows clothes
+- Sound socially believable, observant, and human — not like ad copy, a trend report, or a sci-fi moodboard
+- Direct second-person address: "You", "Your" — confident, but not barked orders in every sentence
+- Fashion-literate and tactile: mention fabrics, construction, silhouette, movement, hardware, and finish when they genuinely fit
+- Let the voice feel lived-in and knowing, like someone with taste talking to a friend, not a brand manifesto
+- Short punchy sentences are welcome, but vary the rhythm; not every line should try to sound quotable
+- Occasional humour and cultural texture are welcome when natural
 - British English spelling (colour, centre, programme)
 - No hedging: never use "you might", "perhaps", "maybe", "possibly"
 - No astrology jargon in the output — the advice stands alone without explaining the chart
 
 PARAGRAPH STRUCTURE:
 - 3-6 sentences per paragraph
-- Open with a direct statement or imperative
-- Middle sentences provide specific, concrete style directives (fabric names, silhouette shapes, colour families)
-- Close with a punchy one-liner or a reframe connecting back to identity
+- Open with an observation, a judgement, or a clear point of view — not always an imperative
+- Middle sentences should give specific, concrete style guidance (fabric names, silhouette shapes, colour families, styling logic)
+- Close with a line that feels grounded and memorable, not like a slogan
 - Never explain astrology — the advice IS the translation
 
-VOCABULARY TO USE FREELY:
-silhouette, drape, hemline, frame, layer, texture, tactile, crisp, dense, fluid, structured, architectural, streamlined, polish, editorial, grounded, anchor, shield, intentional, modular, elevated, matte, high-shine, heritage, deconstructed, raw hem, pin-tuck, pleat, poplin, heavy-gauge, knit, weighted, brushed, hammered, oxidised, mineral-toned, sun-drenched, buttery
+STYLE RULES:
+- Prefer concrete judgement over abstract fashion poetry
+- Use elevated fashion language sparingly and only when it earns its place
+- Vary sentence openings; do not keep starting with commands like "Demand", "Ditch", "Forget", "Treat", "Anchor"
+- Avoid repeated crutch phrases such as "you require", "zero patience", "for the future", "editorial polish", "protective shield"
+- Do not recycle the same colours, fabrics, or motifs in every paragraph unless they are truly essential to this archetype
+- Keep the writing grounded in how a person would actually dress, shop, move, and be perceived
+- One vivid image is enough; do not stack metaphors until the paragraph turns into campaign copy
+
+DO NOT SOUND LIKE:
+- a luxury brand campaign
+- a futurist manifesto
+- a generic AI stylist
+- a list of aesthetic keywords stitched into sentences
+- someone trying to sound fashionable rather than someone who actually is
+- every paragraph at maximum intensity
 
 BANNED WORDS (never use these):
 delve, tapestry, resonate, elevate, curate, embark, multifaceted, realm, robust, leverage, utilize, harness, holistic, synergy, paradigm, landscape (metaphorical), nuanced, myriad
@@ -183,81 +250,275 @@ CONSTRAINTS:
 # ─── Section-Specific Prompts ──────────────────────────────────────────
 
 SECTION_PROMPTS = {
-    "style_core": "Write a Style Core paragraph that defines this person's overall style presence, identity, and the feeling they project when they walk into a room.",
-    "textures_good": "Write a paragraph about the textures and fabrics that work well for this person — what they should reach for and why those materials suit their energy.",
-    "textures_bad": "Write a paragraph about the textures and fabrics this person should avoid — what clashes with their energy and why.",
-    "textures_sweet_spot": "Write a short paragraph about this person's ideal texture sweet spot — the specific quality that makes a garment perfect for them.",
-    "palette_narrative": "Write a paragraph describing this person's ideal colour palette — their core colours, accent possibilities, and the overall mood of their palette.",
-    "occasions_work": "Write a paragraph about how this person should dress for work/professional settings.",
-    "occasions_intimate": "Write a paragraph about how this person should dress for intimate or evening settings.",
-    "occasions_daily": "Write a paragraph about how this person should dress for daily, off-duty life.",
-    "hardware_metals": "Write a paragraph about the metals and hardware finishes that suit this person.",
-    "hardware_stones": "Write a paragraph about the stones and gems that suit this person.",
-    "hardware_tip": "Write a short practical tip about how this person should approach accessories and hardware.",
-    "accessory_1": "Write the first of three accessory paragraphs: the philosophy of one anchor piece vs many small ones.",
-    "accessory_2": "Write the second accessory paragraph: how accessories provide structure or reinforce the style identity.",
-    "accessory_3": "Write the third accessory paragraph: the sensory experience of accessories (sound, weight, texture, scent).",
-    "pattern_narrative": "Write a paragraph about this person's relationship with patterns — what works, what does not, and why.",
-    "pattern_tip": "Write a short practical tip about how this person should use patterns.",
+    # ── Group A: general prose, no placeholders ──
+    "style_core": (
+        "Write a Style Core paragraph that defines this person's overall style presence, identity, and the feeling they project when they walk into a room. "
+        "Do NOT mention specific colour names, pattern names, metal names, stone names, or texture names. Keep advice general and directional."
+    ),
+    "occasions_work": (
+        "Write a paragraph about how this person should dress for work/professional settings. "
+        "Do NOT mention specific colour names, pattern names, metal names, stone names, or texture names. Keep advice general and directional."
+    ),
+    "occasions_intimate": (
+        "Write a paragraph about how this person should dress for intimate or evening settings. "
+        "Do NOT mention specific colour names, pattern names, metal names, stone names, or texture names. Keep advice general and directional."
+    ),
+    "occasions_daily": (
+        "Write a paragraph about how this person should dress for daily, off-duty life. "
+        "Do NOT mention specific colour names, pattern names, metal names, stone names, or texture names. Keep advice general and directional."
+    ),
+    "accessory_1": (
+        "Write the first of three accessory paragraphs: the philosophy of one anchor piece vs many small ones. "
+        "Keep the prose general and sensory. You may use category-level examples such as belts, bags, straps, watches, rings, clasps, and leather, "
+        "but do not use placeholders and do not reference specific metals, stones, or colours by name."
+    ),
+    "accessory_2": (
+        "Write the second accessory paragraph: how accessories provide structure or reinforce the style identity. "
+        "Keep the prose general and sensory. You may use category-level examples such as belts, bags, straps, watches, rings, clasps, and leather, "
+        "but do not use placeholders and do not reference specific metals, stones, or colours by name."
+    ),
+    "accessory_3": (
+        "Write the third accessory paragraph: the sensory experience of accessories (sound, weight, texture, scent). "
+        "Keep the prose general and sensory. You may use category-level examples such as belts, bags, straps, watches, rings, clasps, and leather, "
+        "but do not use placeholders and do not reference specific metals, stones, or colours by name."
+    ),
+    # ── Group B: templated with placeholders ──
+    "palette_narrative": (
+        "Write a paragraph describing this person's ideal colour palette — their core colours, accent possibilities, and the overall mood of their palette. "
+        "Use these placeholders for colours: {core_colour_1}, {core_colour_2}, {core_colour_3}, {core_colour_4}, {accent_colour_1}, {accent_colour_2}. "
+        "Do NOT invent colour names outside these placeholders. You do not need to use every placeholder, but use at least three."
+    ),
+    "textures_good": (
+        "Write a paragraph about the textures and fabrics that work well for this person — what they should reach for and why those materials suit their energy. "
+        "Use these placeholders for textures: {texture_good_1}, {texture_good_2}, {texture_good_3}, {texture_good_4}. "
+        "Do NOT invent specific fabric or texture names outside these placeholders. Use at least two."
+    ),
+    "textures_bad": (
+        "Write a paragraph about the textures and fabrics this person should avoid — what clashes with their energy and why. "
+        "Use these placeholders for textures to avoid: {texture_bad_1}, {texture_bad_2}, {texture_bad_3}. "
+        "Do NOT invent specific fabric or texture names outside these placeholders. Use at least two."
+    ),
+    "textures_sweet_spot": (
+        "Write a short paragraph about this person's ideal texture sweet spot — the specific quality that makes a garment perfect for them. "
+        "Use these placeholders for sweet-spot keywords: {sweet_spot_keyword_1}, {sweet_spot_keyword_2}. "
+        "You may also reference {texture_good_1} or {texture_good_2} if relevant. Do NOT invent specific texture names outside these placeholders."
+    ),
+    "hardware_metals": (
+        "Write a paragraph about the metals and hardware finishes that suit this person. "
+        "Use these placeholders for metals: {metal_1}, {metal_2}, {metal_3}. "
+        "Do NOT invent specific metal names outside these placeholders. Use at least two."
+    ),
+    "hardware_stones": (
+        "Write a paragraph about the stones and gems that suit this person. "
+        "Use these placeholders for stones: {stone_1}, {stone_2}, {stone_3}. "
+        "Do NOT invent specific stone or gem names outside these placeholders. Use at least two."
+    ),
+    "hardware_tip": (
+        "Write a short practical tip about how this person should approach accessories and hardware. "
+        "You may reference {metal_1} or {stone_1} if it strengthens the tip. Do NOT invent specific metal or stone names outside placeholders."
+    ),
+    "pattern_narrative": (
+        "Write a paragraph about this person's relationship with patterns — what works, what does not, and why. "
+        "Use these placeholders for patterns: {recommended_pattern_1}, {recommended_pattern_2}, {recommended_pattern_3}, {recommended_pattern_4}, "
+        "{avoid_pattern_1}, {avoid_pattern_2}. "
+        "Do NOT invent specific pattern names outside these placeholders. Use at least two recommended and one avoid."
+    ),
+    "pattern_tip": (
+        "Write a short practical tip about how this person should use patterns. "
+        "You may reference {recommended_pattern_1} or {recommended_pattern_2} if it strengthens the tip. "
+        "Do NOT invent specific pattern names outside placeholders."
+    ),
 }
 
 SECTION_EXAMPLES = {
     "style_core": [
         "Your presence is a study in precision and discipline. It is a look of sharp edges and clear boundaries. You lead with clean structure and a composed intensity. You do not just walk into a room; you occupy it with a focused authority that feels immediately powerful.",
         "Your presence works best when you treat your wardrobe as a public language. While you value the heavy and the settled, you use those qualities to set a standard for the people around you. You move through a room with the composure of someone who is teaching others how to appreciate quality. Your style works best when it feels like a long-term social legacy.",
+        "Your presence works best when it looks bright, centred, and completely polished. It is an aesthetic of radiant precision. While you have a natural ability to take up space, you do it through the quality of your craft rather than shouting for attention. Your style works best when it is clean, high-end, and perfectly maintained.",
     ],
     "textures_good": [
-        "You need materials that feel like armour. If a fabric feels sharp and engineered, it is probably for you. Crisp poplin, raw denim, and structured wool hold their shape regardless of what you are doing. These textures reflect how disciplined you are. You require surfaces that are smooth, cold, and incredibly durable to match your internal focus.",
-        "Go for fabrics with actual weight and integrity. Heavy gauge silks that feel cool and substantial provide the right anchor. Organic wools offer a proper architectural frame. Leather that is buttery and gains character with age belongs in your collection. They ground you, make you feel secure, and still look polished.",
+        "You need materials that feel like armour. If a fabric feels sharp and engineered, it is probably for you. {texture_good_1} and {texture_good_2} hold their shape regardless of what you are doing. These textures reflect how disciplined you are. Reach for {texture_good_3} when you need surfaces that are smooth, cold, and incredibly durable.",
+        "Go for fabrics with actual weight and integrity. {texture_good_1} provides the right anchor, while {texture_good_2} offers a proper architectural frame. {texture_good_3} that gains character with age belongs in your collection. They ground you, make you feel secure, and still look polished.",
+        "You need a mix of the intellectual and the indestructible. Go for {texture_good_1} that does not wrinkle, {texture_good_2} with a dry feel, and {texture_good_3}. Because you are constantly moving, you need fabrics that snap back into shape.",
     ],
     "textures_bad": [
-        "Anything fluffy or overly romantic is a mismatch for your energy. Avoid flimsy jerseys or cheap lace that lacks structure. If a fabric feels like it is trying to be cute or soft, it will clash with how controlled you are. You are far too precise for a messy or wrinkled silhouette.",
+        "Anything fluffy or overly romantic is a mismatch for your energy. Avoid {texture_bad_1} or {texture_bad_2} that lacks structure. If a fabric feels like it is trying to be cute or soft, it will clash with how controlled you are. You are far too precise for a messy or wrinkled silhouette.",
+        "Flimsy or disposable fabrics just do not suit you. If a material is scratchy or overly synthetic, it is a hard pass. {texture_bad_1} and {texture_bad_2} fight your natural movement and are a distraction. If you have to spend your whole day messing with a garment to make it sit right, it is draining your energy.",
+        "Anything that looks tired or worn out is a hard pass. {texture_bad_1} that pills or loses its shape will make you feel off-beat. Avoid {texture_bad_2} that swamps your frame. If you have to spend your whole day messing with a garment because it sags or bags, it is draining your energy.",
     ],
     "textures_sweet_spot": [
-        "The stiff and the sharp. You want clothes that feel like a uniform. If a piece does not encourage you to stand with more alignment the moment you put it on, it is not doing its job.",
+        "The {sweet_spot_keyword_1} and the {sweet_spot_keyword_2}. You want clothes that feel like a uniform. If a piece does not encourage you to stand with more alignment the moment you put it on, it is not doing its job.",
+        "Your absolute peak is a blend of {sweet_spot_keyword_1} and {sweet_spot_keyword_2}. Choose items that look high quality at a glance but feel like a secret luxury when touched. If it does not feel like a treat for your skin, it does not belong in your wardrobe.",
+        "The {sweet_spot_keyword_1} combined with {sweet_spot_keyword_2}. You want a jacket with a sharp, disciplined shoulder but a fabric that moves as fast as you do. If a piece does not deliver both qualities, it does not belong in your wardrobe.",
     ],
     "palette_narrative": [
-        "Your core colours are midnight, shadow, and ink. These deepest blacks and charcoal greys create a monochromatic shield. This allows your focus and sharp features to take centre stage. The drama comes from the cut of the garment rather than the pigment.",
+        "Your core colours are {core_colour_1}, {core_colour_2}, and {core_colour_3}. These create a monochromatic shield that allows your focus and sharp features to take centre stage. Introduce {accent_colour_1} in small doses when you want a controlled flash of difference. The drama comes from the cut of the garment rather than the pigment.",
+        "Your palette is rooted in {core_colour_1} and {core_colour_2}, with {core_colour_3} anchoring the base. These tones provide a stable foundation for your personality to shine through. {accent_colour_1} and {accent_colour_2} add seasonal flexibility without breaking the story.",
+        "Your palette is built on agile neutrals punctuated by strategic high-contrast. Your base is {core_colour_1}, {core_colour_2}, and {core_colour_3}. These provide the solid structure you need. Use {accent_colour_1} in small, intentional places to keep the look moving.",
     ],
     "occasions_work": [
-        "Sharp tailoring and starched lines are your signature. You want to look like the most competent person in the building. A heavy overcoat or a structured layer is essential for your authority.",
+        "Sharp tailoring and clean lines are your signature. You want to look like the most competent person in the building. Authority comes from discipline, proportion, and a silhouette that never looks accidental.",
+        "Lean into your architectural side. Use structure, restraint, and deliberate shape to settle into the room. You look best when you appear as the person who is definitely in charge without needing to overstate it.",
+        "Go for polish with enough flexibility to move through the day. Your work look should feel authoritative but adaptable, like the person who already understands the brief and can still think on their feet.",
     ],
     "occasions_intimate": [
-        "When you relax, keep it sleek and streamlined. You look capable, not soft. A dark silk separate or a slim knit provides mystery without losing control. Aim for intense, focused attention.",
+        "When you relax, keep it sleek and streamlined. You look capable, not vague. Aim for a mood that feels close-range, intentional, and quietly magnetic rather than overly softened.",
+        "Soften the edges when the sun goes down. Keep the base composed, but let the overall impression feel more fluid, mysterious, and easy to read at close distance.",
+        "This is where you introduce details that reward a second glance. You want a look that invites conversation without trying too hard, with enough intrigue to feel memorable and enough control to stay elegant.",
     ],
     "occasions_daily": [
-        "Even off-duty, things need to feel deliberate and put together. High-quality dark denim and a structured jacket are essential tools. You move like someone with a clear destination. Everything has a purpose and nothing looks accidental.",
+        "Even off-duty, things need to feel deliberate and put together. You move like someone with a clear destination, so the overall impression should stay clean, purposeful, and free of clutter.",
+        "Even casual looks need to look intentional. You can do relaxed, but it should never read as sloppy or half-finished. Aim for ease with a backbone.",
+        "Lean into a daily look that feels prepared, mobile, and considered. You need to look like you are going somewhere important, even if you are only stepping out briefly. Every element should serve a purpose and hold the line.",
     ],
     "hardware_metals": [
-        "You need cold power. Look for polished silver, surgical steel, or blackened titanium. Yellow gold often looks too warm for your icy mix. You want hardware that looks industrial or ancient. Sharp edges and high-shine surfaces that feel clinical are your best match.",
+        "You need cold power. {metal_1} is your foundation — it reads as sharp and intentional. Layer in {metal_2} for variety, and consider {metal_3} when you want something with a bit more weight. You want hardware that looks industrial or ancient.",
+        "Your energy requires hardware with actual presence. {metal_1} provides the right anchor, while {metal_2} gives you warmth when you need it. Choose pieces in {metal_3} that feel like they have some history.",
+        "Your hardware should be clinical and modern. {metal_1} is your default. {metal_2} works for evening and special occasions. You want details that look like they belong on a high-end instrument.",
     ],
     "hardware_stones": [
-        "Choose stones that look like they hold secrets. Black onyx and obsidian are perfect. You want stones that are dark at first glance but show their complexity when you look closer.",
+        "Choose stones that look like they hold secrets. {stone_1} is perfect for you. {stone_2} adds depth without being flashy. You want stones that are dark at first glance but show their complexity when you look closer.",
+        "Skip the perfectly clear gems. You suit stones that look like they were pulled directly from the earth. {stone_1} and {stone_2} work best. {stone_3} adds a natural richness. These inclusions make the pieces feel alive and connected to you.",
+        "Choose stones that suggest mental focus and clarity. {stone_1} and {stone_2} work best. You suit gems that have flashes of light or hidden depth, echoing your ability to see multiple sides of a situation at once.",
     ],
     "hardware_tip": [
-        "Precision is your law. One sharp piece: like a steel watch or a geometric signet ring: is all you need. Accessories work as hardware: functional, weighty, and intentional.",
+        "Precision is your law. One sharp piece in {metal_1} — like a watch or a geometric signet ring — is all you need. Accessories work as hardware: functional, weighty, and intentional.",
+        "One substantial anchor piece is always more powerful than a bunch of delicate items. Pick a signature in {metal_1} and let it be the focal point.",
+        "The hardware should feel like a tool for a sharp mind. A watch in {metal_1} with a complex dial or a ring set with {stone_1} suits your energy. Precision over ornament always wins.",
     ],
     "accessory_1": [
-        "One significant piece carries more weight than five minor ones. Whether it is a heavy steel watch or a structured leather case, let that item be the anchor. This creates a focal point that allows the rest of your look to stay quiet.",
+        "One significant piece carries more weight than five minor ones. Whether it is a heavy watch or a structured leather case, let that item be the anchor. This creates a focal point that allows the rest of your look to stay quiet.",
+        "One significant piece carries more weight than five minor ones. Whether it is a heavy watch or a perfectly made bag, let that item be the anchor. This creates a focal point that allows the rest of your look to stay quiet.",
+        "One high-status accessory acts as your anchor. Because your clothes are often versatile and modular, you need one serious piece to signal your authority. This one piece finishes the look and gives you the confidence to move through any door.",
     ],
     "accessory_2": [
-        "Accessories are where you introduce your most rigid lines. While your clothes provide the shell, your accessories are the steel reinforcements. A belt with a heavy silver buckle acts as the final word on your discipline.",
+        "Accessories are where you introduce your most rigid lines. While your clothes provide the shell, your accessories are the reinforcements. A belt with a heavy buckle acts as the final word on your discipline.",
+        "While your clothes might flow, your accessories should provide the structure. A stiff bag or a firm leather strap acts as the frame for your more fluid choices.",
+        "Accessories are where you show off your attention to detail. While your clothes might be simple, your accessories should be flawless. A well-kept leather bag or a pair of polished shoes acts as the final proof of your high standards.",
     ],
     "accessory_3": [
         "Consider the click and the weight. The sound of a heavy watch being buckled is part of your daily ritual. You are not just decorating your body. You are setting the tone for the day ahead.",
+        "Think about the sound and scent of your accessories. The weight of a heavy buckle or the specific smell of high-quality leather adds to the vibe. Style is a total sensory environment.",
+        "Think about the light and the finish. The way a buckle catches the sun or the specific shine on a pair of leather loafers adds to the vibe. Style is about the total polished package.",
     ],
     "pattern_narrative": [
-        "Patterns are often a distraction. If you use them, they need to be as disciplined as you are. You do not do whimsical. You do structural.",
+        "Patterns are often a distraction. If you use them, they need to be as disciplined as you are. {recommended_pattern_1} and {recommended_pattern_2} work because they mirror your precision. Avoid {avoid_pattern_1} — it fights your energy.",
+        "You do not really do busy prints. Anything too frantic fights your energy and looks forced. Stick to {recommended_pattern_1} and {recommended_pattern_2}. Stay well away from {avoid_pattern_1} and {avoid_pattern_2}.",
+        "You do not really do loud prints. Anything too chaotic fights your need for order and looks messy. Your patterns need to be small-scale, like {recommended_pattern_1} or {recommended_pattern_2}. Avoid {avoid_pattern_1} at all costs.",
     ],
     "pattern_tip": [
-        "Keep it monochromatic. If you are wearing a pattern, make sure the colours stay within the same dark family. A black-on-charcoal pinstripe is your peak. It provides detail while keeping your silhouette intact.",
+        "Keep it monochromatic. If you are wearing a {recommended_pattern_1}, make sure the colours stay within the same dark family. It provides detail while keeping your silhouette intact.",
+        "Use {recommended_pattern_1} as a texture. A tonal version adds depth without screaming for attention. It is your secret weapon for looking interesting without trying too hard.",
+        "Use {recommended_pattern_1} as a way to add a bit of texture to a monochrome look. Keeping the pattern limited to one area of your outfit helps you maintain focus and clarity.",
     ],
 }
 
 
 # ─── Validation ────────────────────────────────────────────────────────
 
-def validate_paragraph(text: str) -> dict:
+STYLE_WARNING_PATTERNS = {
+    "stock_opener": re.compile(r"^(Demand|Ditch|Forget|Treat|Anchor|Reach|Swap|Build|Keep|Wear)\b", re.IGNORECASE),
+    "stock_phrase": re.compile(
+        r"\b(you require|zero patience|for the future|editorial polish|protective shield|high-voltage|move as fast as|"
+        r"architectural edge|demand materials|ditch the|treat your)\b",
+        re.IGNORECASE,
+    ),
+}
+
+TRACKED_MOTIF_WORDS = {
+    "architectural", "editorial", "future", "futuristic", "technical", "neoprene",
+    "heavy-gauge", "electric", "silver", "grey", "modular", "shield", "armour",
+    "high-shine", "progressive"
+}
+
+VOICE_STOPWORDS = {
+    "your", "you", "with", "that", "this", "they", "them", "from", "into", "because",
+    "while", "where", "when", "have", "need", "look", "like", "their", "there", "these",
+    "those", "will", "just", "than", "then", "what", "which", "about", "over", "under",
+    "after", "before", "make", "more", "most", "less", "only", "really", "very",
+}
+
+
+def build_cluster_repetition_hints(existing_sections: dict[str, str]) -> list[str]:
+    counts: dict[str, int] = {}
+    for text in existing_sections.values():
+        for token in re.findall(r"[a-z]+(?:-[a-z]+)?", text.lower()):
+            if len(token) < 5 or token in VOICE_STOPWORDS:
+                continue
+            counts[token] = counts.get(token, 0) + 1
+    repeated = [token for token, count in counts.items() if count >= 2]
+    tracked_first = [token for token in repeated if token in TRACKED_MOTIF_WORDS]
+    remainder = sorted(token for token in repeated if token not in TRACKED_MOTIF_WORDS)
+    return (tracked_first + remainder)[:8]
+
+
+def style_warnings(text: str, existing_cluster_texts: list[str] | None = None) -> list[str]:
+    warnings: list[str] = []
+    lower = text.lower()
+
+    if STYLE_WARNING_PATTERNS["stock_opener"].search(text.strip()):
+        warnings.append("Opens with an imperative command; voice may feel too barked.")
+
+    stock_hits = STYLE_WARNING_PATTERNS["stock_phrase"].findall(text)
+    if len(stock_hits) >= 2:
+        warnings.append("Contains multiple stock prompt phrases; may sound templated.")
+
+    motif_hits = {word for word in TRACKED_MOTIF_WORDS if word in lower}
+    if len(motif_hits) >= 5:
+        warnings.append("High motif density; may read like keyword-stacked fashion copy.")
+
+    if existing_cluster_texts:
+        existing_lower = " ".join(existing_cluster_texts).lower()
+        repeated_cluster_words = sorted(
+            word for word in TRACKED_MOTIF_WORDS
+            if existing_lower.count(word) >= 2 and word in lower
+        )
+        if len(repeated_cluster_words) >= 3:
+            warnings.append(
+                "Repeats motifs already used heavily in this cluster: "
+                + ", ".join(repeated_cluster_words[:5])
+            )
+
+    return warnings
+
+def validate_template_placeholders(text: str, section_key: str) -> list[str]:
+    """Validates placeholder usage for Group A / Group B section rules."""
+    warnings: list[str] = []
+    found_tokens = re.findall(r"\{([a-z_0-9]+)\}", text)
+
+    if section_key in GROUP_A_SECTIONS:
+        if found_tokens:
+            warnings.append(
+                f"Group A section contains placeholders (should have none): "
+                + ", ".join(f"{{{t}}}" for t in found_tokens[:5])
+            )
+    elif section_key in GROUP_B_SECTIONS:
+        if not found_tokens:
+            warnings.append("Group B section contains zero placeholders (should have at least one).")
+        allowed = SECTION_ALLOWED_PLACEHOLDERS.get(section_key, ALLOWED_PLACEHOLDERS)
+        invalid = [t for t in found_tokens if t not in allowed]
+        if invalid:
+            warnings.append(
+                f"Invalid placeholders for {section_key}: "
+                + ", ".join(f"{{{t}}}" for t in invalid[:5])
+            )
+        unique_valid = {t for t in found_tokens if t in allowed}
+        for family, minimum in SECTION_PLACEHOLDER_REQUIREMENTS.get(section_key, []):
+            if family == "any":
+                count = len(unique_valid)
+                label = "allowed placeholders"
+            else:
+                count = len([t for t in unique_valid if t.startswith(family)])
+                label = f"`{family}*` placeholders"
+            if count < minimum:
+                warnings.append(
+                    f"{section_key} requires at least {minimum} distinct {label}; found {count}."
+                )
+
+    return warnings
+
+
+def validate_paragraph(text: str, existing_cluster_texts: list[str] | None = None, section_key: str | None = None) -> dict:
     """Validates a paragraph against the quality rules from the spec."""
     words = text.split()
     word_count = len(words)
@@ -272,6 +533,11 @@ def validate_paragraph(text: str) -> dict:
 
     has_second_person = any(marker in text for marker in ["You", "Your", "you", "your"])
     has_declarative = not text.strip().endswith("?")
+    style_flags = style_warnings(text, existing_cluster_texts)
+
+    placeholder_warnings: list[str] = []
+    if section_key:
+        placeholder_warnings = validate_template_placeholders(text, section_key)
 
     return {
         "word_count": word_count,
@@ -280,12 +546,15 @@ def validate_paragraph(text: str) -> dict:
         "hedging_phrases": found_hedging,
         "has_second_person": has_second_person,
         "has_declarative": has_declarative,
+        "style_warnings": style_flags,
+        "placeholder_warnings": placeholder_warnings,
         "passed": (
             50 <= word_count <= 150
             and len(found_banned) == 0
             and len(found_hedging) == 0
             and has_second_person
             and has_declarative
+            and len(placeholder_warnings) == 0
         ),
     }
 
@@ -383,17 +652,33 @@ def generate_paragraph(
     section_key: str,
     cluster_key: str,
     archetype_desc: str,
+    existing_sections: dict[str, str],
     revision_note: str | None = None,
 ) -> str:
     """Makes a single Gemini API call for one section of one cluster."""
     section_prompt = SECTION_PROMPTS.get(section_key, f"Write a paragraph for the {section_key} section.")
     examples = SECTION_EXAMPLES.get(section_key, [])
+    repetition_hints = build_cluster_repetition_hints(existing_sections)
 
     user_prompt_parts = [
         f"Archetype configuration:\n{archetype_desc}",
         f"\nSection: {SECTION_DISPLAY.get(section_key, section_key)}",
         f"\nTask: {section_prompt}",
+        "\nVoice target: stylish, natural, specific, and socially believable. "
+        "This should feel like a very switched-on fashion astrologer talking like a real person, "
+        "not a luxury campaign or a futurist monologue.",
+        "\nImportant voice guardrails:",
+        "- Do not overuse commands or slogan-y openings.",
+        "- Do not stack the same fashion buzzwords over and over.",
+        "- Keep the paragraph grounded in real clothing judgement and human behaviour.",
+        "- If using vivid imagery, use one strong image and move on.",
     ]
+
+    if repetition_hints:
+        user_prompt_parts.append(
+            "\nWords and motifs already used elsewhere in this cluster. Avoid leaning on them again unless truly necessary: "
+            + ", ".join(repetition_hints)
+        )
 
     if examples:
         user_prompt_parts.append("\nExample paragraphs in the target voice:")
@@ -537,12 +822,17 @@ def main():
                 continue
 
             revision_note = None
-            if status == "needs_revision":
-                revision_note = section_review.get("note", "")
+            if status in ("needs_revision", "rejected"):
+                revision_note = section_review.get("note", "") or None
 
             # Generate
+            existing_sections = {
+                key: value
+                for key, value in cache[cluster_key].items()
+                if key != section_key and value
+            }
             text = generate_paragraph(
-                model, section_key, cluster_key, archetype_desc, revision_note
+                model, section_key, cluster_key, archetype_desc, existing_sections, revision_note
             )
 
             if not text:
@@ -551,11 +841,11 @@ def main():
                 continue
 
             # Validate
-            vr = validate_paragraph(text)
+            vr = validate_paragraph(text, list(existing_sections.values()), section_key=section_key)
             status_icon = "✓" if vr["passed"] else "⚠"
             print(f"    {status_icon} {section_key} ({vr['word_count']}w)")
 
-            if not vr["passed"]:
+            if not vr["passed"] or vr["style_warnings"] or vr["placeholder_warnings"]:
                 validation_failures += 1
                 if vr["banned_words"]:
                     print(f"      Banned: {', '.join(vr['banned_words'])}")
@@ -563,6 +853,10 @@ def main():
                     print(f"      Hedging: {', '.join(vr['hedging_phrases'])}")
                 if not vr["length_ok"]:
                     print(f"      Length: {vr['word_count']} words (need 50-150)")
+                for warning in vr["style_warnings"]:
+                    print(f"      Voice: {warning}")
+                for warning in vr["placeholder_warnings"]:
+                    print(f"      Placeholder: {warning}")
 
             cache[cluster_key][section_key] = text
             total_generated += 1
