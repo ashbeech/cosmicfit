@@ -21,6 +21,9 @@ struct DeterministicResolverResult {
     let consider: [String]
     let recommendedPatterns: [String]
     let avoidPatterns: [String]
+    let recommendedTextures: [String]
+    let avoidTextures: [String]
+    let sweetSpotKeywords: [String]
 }
 
 struct DeterministicResolver {
@@ -46,6 +49,9 @@ struct DeterministicResolver {
         let patterns = resolvePatterns(
             tokens: tokens, analysis: analysis, dataset: dataset
         )
+        let textures = resolveTextures(
+            tokens: tokens, contributingCombos: contributingCombos, dataset: dataset
+        )
 
         return DeterministicResolverResult(
             coreColours: palette.core,
@@ -56,7 +62,10 @@ struct DeterministicResolver {
             avoid: code.avoid,
             consider: code.consider,
             recommendedPatterns: patterns.recommended,
-            avoidPatterns: patterns.avoid
+            avoidPatterns: patterns.avoid,
+            recommendedTextures: textures.recommended,
+            avoidTextures: textures.avoid,
+            sweetSpotKeywords: textures.sweetSpot
         )
     }
 
@@ -350,6 +359,59 @@ struct DeterministicResolver {
             sources.append((key: ascKey, weight: Double(planetWeightRank("Ascendant"))))
         }
         return sources.sorted { $0.weight > $1.weight }
+    }
+
+    // MARK: - Texture Resolution (§3c)
+
+    private struct TextureResult {
+        let recommended: [String]
+        let avoid: [String]
+        let sweetSpot: [String]
+    }
+
+    private static func resolveTextures(
+        tokens: [BlueprintToken],
+        contributingCombos: [(key: String, aggregateWeight: Double)],
+        dataset: AstrologicalStyleDataset
+    ) -> TextureResult {
+        let textureTokens = tokens
+            .filter { $0.category == .texture }
+            .sorted { tieBreakSort($0, $1) }
+
+        let recommended = stableUnique(
+            textureTokens
+                .filter { $0.weight >= 0.3 }
+                .map(\.name)
+        ).prefix(4)
+
+        var avoidItems: [(String, Double)] = []
+        let topCombos = Array(contributingCombos.prefix(3))
+        for combo in topCombos {
+            guard let entry = dataset.planetSign[combo.key] else { continue }
+            for tex in entry.textures.bad {
+                avoidItems.append((tex, combo.aggregateWeight))
+            }
+            for tex in entry.opposites.textures {
+                avoidItems.append((tex, combo.aggregateWeight * 0.8))
+            }
+        }
+        let avoidDeduped = deduplicateAndSort(avoidItems, minCount: 2, maxCount: 3)
+
+        let structureTokens = tokens
+            .filter { $0.category == .structure }
+            .sorted { tieBreakSort($0, $1) }
+
+        let sweetSpot = stableUnique(
+            structureTokens
+                .filter { $0.weight >= 0.5 }
+                .map(\.name)
+        ).prefix(2)
+
+        return TextureResult(
+            recommended: ensureMinimum(Array(recommended), min: 2),
+            avoid: ensureMinimum(avoidDeduped, min: 2),
+            sweetSpot: ensureMinimum(Array(sweetSpot), min: 1)
+        )
     }
 
     // MARK: - Colour Utilities

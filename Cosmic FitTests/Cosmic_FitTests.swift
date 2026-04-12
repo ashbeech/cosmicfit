@@ -1048,18 +1048,36 @@ struct HardeningEdgeCaseTests {
         #expect(fixtures.count == 4)
     }
 
+    @Test("Fixture export helper rejects empty narrative cache")
+    func loadNarrativeCacheRejectsEmptyCache() throws {
+        let tempDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
+        let cacheURL = tempDir.appendingPathComponent("blueprint_narrative_cache.json")
+        try "{}".data(using: .utf8)!.write(to: cacheURL, options: .atomic)
+
+        let loader = loadNarrativeCache(from: cacheURL)
+        #expect(loader == nil)
+    }
+
     private func loadDataset() -> AstrologicalStyleDataset? {
         let testFile = URL(fileURLWithPath: #filePath)
         let repoRoot = testFile.deletingLastPathComponent().deletingLastPathComponent()
         return BlueprintTokenGenerator.loadDataset(from: repoRoot.appendingPathComponent("astrological_style_dataset.json"))
     }
 
-    private func loadNarrativeCache() -> NarrativeCacheLoader? {
-        let testFile = URL(fileURLWithPath: #filePath)
-        let repoRoot = testFile.deletingLastPathComponent().deletingLastPathComponent()
-        let cacheURL = repoRoot.appendingPathComponent("blueprint_narrative_cache.json")
+    private func loadNarrativeCache(from overrideURL: URL? = nil) -> NarrativeCacheLoader? {
+        let cacheURL: URL
+        if let overrideURL {
+            cacheURL = overrideURL
+        } else {
+            let testFile = URL(fileURLWithPath: #filePath)
+            let repoRoot = testFile.deletingLastPathComponent().deletingLastPathComponent()
+            cacheURL = repoRoot.appendingPathComponent("blueprint_narrative_cache.json")
+        }
         let loader = NarrativeCacheLoader()
-        return loader.loadFromURL(cacheURL) ? loader : nil
+        guard loader.loadFromURL(cacheURL), loader.clusterCount > 0 else { return nil }
+        return loader
     }
 
     private func defaultOutputDir() -> URL {
@@ -1159,6 +1177,205 @@ struct HardeningEdgeCaseTests {
             fatalError("Invalid ISO date literal: \(value)")
         }
         return date
+    }
+}
+
+// MARK: - NarrativeTemplateRenderer Tests
+
+struct NarrativeTemplateRendererTests {
+
+    @Test("Placeholder substitution works for all categories")
+    func placeholderSubstitutionAllCategories() {
+        let template = "Wear {core_colour_1} and {accent_colour_1}. Use {metal_1} hardware with {stone_1}. Try {recommended_pattern_1}. Reach for {texture_good_1}. Avoid {texture_bad_1}. Aim for {sweet_spot_keyword_1}."
+        let context: [String: String] = [
+            "core_colour_1": "midnight",
+            "accent_colour_1": "dusty rose",
+            "metal_1": "silver",
+            "stone_1": "onyx",
+            "recommended_pattern_1": "pinstripe",
+            "texture_good_1": "raw denim",
+            "texture_bad_1": "cheap polyester",
+            "sweet_spot_keyword_1": "structure",
+        ]
+        let result = NarrativeTemplateRenderer.render(template: template, context: context)
+
+        #expect(result.contains("midnight"))
+        #expect(result.contains("dusty rose"))
+        #expect(result.contains("silver"))
+        #expect(result.contains("onyx"))
+        #expect(result.contains("pinstripe"))
+        #expect(result.contains("raw denim"))
+        #expect(result.contains("cheap polyester"))
+        #expect(result.contains("structure"))
+        #expect(!result.contains("{"))
+        #expect(!result.contains("}"))
+    }
+
+    @Test("Unknown placeholders degrade gracefully")
+    func unknownPlaceholderDegradation() {
+        let template = "This has a {totally_made_up} token."
+        let result = NarrativeTemplateRenderer.render(template: template, context: [:])
+
+        #expect(!result.contains("{totally_made_up}"))
+        #expect(!result.contains("{"))
+    }
+
+    @Test("Empty context replaces known placeholders with fallback")
+    func emptyContextProducesCleanOutput() {
+        let template = "Your colour is {core_colour_1} with {core_colour_2}."
+        let result = NarrativeTemplateRenderer.render(template: template, context: [:])
+
+        #expect(!result.contains("{"))
+        #expect(!result.contains("}"))
+        #expect(result.contains("a complementary choice"))
+    }
+
+    @Test("Template with no placeholders passes through unchanged")
+    func noPlaceholderPassthrough() {
+        let template = "This is plain prose with no slots."
+        let result = NarrativeTemplateRenderer.render(template: template, context: ["core_colour_1": "midnight"])
+
+        #expect(result == template)
+    }
+
+    @Test("buildContext maps all resolver fields correctly")
+    func buildContextMapping() {
+        let resolved = DeterministicResolverResult(
+            coreColours: [
+                BlueprintColour(name: "midnight", hexValue: "#191970", role: .core),
+                BlueprintColour(name: "slate", hexValue: "#708090", role: .core),
+            ],
+            accentColours: [
+                BlueprintColour(name: "dusty rose", hexValue: "#DCAE96", role: .accent),
+            ],
+            recommendedMetals: ["silver", "steel"],
+            recommendedStones: ["onyx", "obsidian"],
+            leanInto: [],
+            avoid: [],
+            consider: [],
+            recommendedPatterns: ["pinstripe", "herringbone"],
+            avoidPatterns: ["paisley"],
+            recommendedTextures: ["raw denim", "structured wool"],
+            avoidTextures: ["cheap polyester"],
+            sweetSpotKeywords: ["structure"]
+        )
+
+        let ctx = NarrativeTemplateRenderer.buildContext(resolved: resolved)
+
+        #expect(ctx["core_colour_1"] == "midnight")
+        #expect(ctx["core_colour_2"] == "slate")
+        #expect(ctx["accent_colour_1"] == "dusty rose")
+        #expect(ctx["metal_1"] == "silver")
+        #expect(ctx["metal_2"] == "steel")
+        #expect(ctx["stone_1"] == "onyx")
+        #expect(ctx["stone_2"] == "obsidian")
+        #expect(ctx["recommended_pattern_1"] == "pinstripe")
+        #expect(ctx["recommended_pattern_2"] == "herringbone")
+        #expect(ctx["avoid_pattern_1"] == "paisley")
+        #expect(ctx["texture_good_1"] == "raw denim")
+        #expect(ctx["texture_good_2"] == "structured wool")
+        #expect(ctx["texture_bad_1"] == "cheap polyester")
+        #expect(ctx["sweet_spot_keyword_1"] == "structure")
+    }
+
+    @Test("Group B sections are in the groupBSections set")
+    func groupBSectionSet() {
+        #expect(NarrativeTemplateRenderer.groupBSections.contains("palette_narrative"))
+        #expect(NarrativeTemplateRenderer.groupBSections.contains("hardware_metals"))
+        #expect(NarrativeTemplateRenderer.groupBSections.contains("textures_good"))
+        #expect(NarrativeTemplateRenderer.groupBSections.contains("pattern_narrative"))
+        #expect(!NarrativeTemplateRenderer.groupBSections.contains("style_core"))
+        #expect(!NarrativeTemplateRenderer.groupBSections.contains("occasions_work"))
+        #expect(!NarrativeTemplateRenderer.groupBSections.contains("accessory_1"))
+    }
+}
+
+// MARK: - BlueprintComposer Template Integration Tests
+
+struct BlueprintComposerTemplateTests {
+
+    @Test("Group A sections pass through without placeholder rendering")
+    func groupAPassthrough() {
+        let resolved = makeMinimalResolved()
+        var narratives: NarrativeClusterEntry = [:]
+        for section in BlueprintArchetypeKey.BlueprintSection.allCases {
+            narratives[section.rawValue] = "Plain prose for \(section.rawValue)"
+        }
+        narratives["style_core"] = "Your style is bold and {core_colour_1} would be replaced if this were Group B."
+        narratives["occasions_work"] = "Dress sharp. {metal_1} is irrelevant here."
+        narratives["accessory_1"] = "One piece matters. {stone_1} should not render."
+
+        let bp = BlueprintComposer.assemble(
+            birthDate: Date(), birthLocation: "London", resolved: resolved, narratives: narratives
+        )
+
+        #expect(bp.styleCore.narrativeText.contains("{core_colour_1}"))
+        #expect(bp.occasions.workText.contains("{metal_1}"))
+        #expect(bp.accessory.paragraphs[0].contains("{stone_1}"))
+    }
+
+    @Test("Group B sections get placeholders rendered")
+    func groupBRendering() {
+        let resolved = makeMinimalResolved()
+        var narratives: NarrativeClusterEntry = [:]
+        for section in BlueprintArchetypeKey.BlueprintSection.allCases {
+            narratives[section.rawValue] = "Test for \(section.rawValue)"
+        }
+        narratives["palette_narrative"] = "Your palette leads with {core_colour_1} and {accent_colour_1}."
+        narratives["hardware_metals"] = "Reach for {metal_1} hardware."
+        narratives["textures_good"] = "Your best texture is {texture_good_1}."
+
+        let bp = BlueprintComposer.assemble(
+            birthDate: Date(), birthLocation: "London", resolved: resolved, narratives: narratives
+        )
+
+        #expect(bp.palette.narrativeText.contains("midnight"))
+        #expect(!bp.palette.narrativeText.contains("{core_colour_1}"))
+        #expect(bp.hardware.metalsText.contains("silver"))
+        #expect(!bp.hardware.metalsText.contains("{metal_1}"))
+        #expect(bp.textures.goodText.contains("raw denim"))
+        #expect(!bp.textures.goodText.contains("{texture_good_1}"))
+    }
+
+    @Test("TexturesSection includes deterministic fields")
+    func texturesSectionDeterministicFields() {
+        let resolved = makeMinimalResolved()
+        var narratives: NarrativeClusterEntry = [:]
+        for section in BlueprintArchetypeKey.BlueprintSection.allCases {
+            narratives[section.rawValue] = "Test for \(section.rawValue)"
+        }
+
+        let bp = BlueprintComposer.assemble(
+            birthDate: Date(), birthLocation: "London", resolved: resolved, narratives: narratives
+        )
+
+        #expect(bp.textures.recommendedTextures == ["raw denim", "structured wool"])
+        #expect(bp.textures.avoidTextures == ["cheap polyester", "flimsy lace"])
+        #expect(bp.textures.sweetSpotKeywords == ["structure"])
+    }
+
+    private func makeMinimalResolved() -> DeterministicResolverResult {
+        DeterministicResolverResult(
+            coreColours: [
+                BlueprintColour(name: "midnight", hexValue: "#191970", role: .core),
+                BlueprintColour(name: "slate", hexValue: "#708090", role: .core),
+                BlueprintColour(name: "charcoal", hexValue: "#36454F", role: .core),
+            ],
+            accentColours: [
+                BlueprintColour(name: "dusty rose", hexValue: "#DCAE96", role: .accent),
+                BlueprintColour(name: "sage", hexValue: "#9CAF88", role: .accent),
+            ],
+            recommendedMetals: ["silver", "steel"],
+            recommendedStones: ["onyx", "obsidian"],
+            leanInto: ["structured", "minimal"],
+            avoid: ["fussy", "ornate"],
+            consider: ["layered"],
+            recommendedPatterns: ["pinstripe", "herringbone"],
+            avoidPatterns: ["paisley"],
+            recommendedTextures: ["raw denim", "structured wool"],
+            avoidTextures: ["cheap polyester", "flimsy lace"],
+            sweetSpotKeywords: ["structure"]
+        )
     }
 }
 

@@ -61,6 +61,38 @@ struct TexturesSection: Codable, Equatable {
     let badText: String                       // AI — key: "textures_bad"
     /// AI-generated paragraph describing the ideal texture balance.
     let sweetSpotText: String                 // AI — key: "textures_sweet_spot"
+    /// Deterministic list of recommended textures (top 4).
+    let recommendedTextures: [String]         // D
+    /// Deterministic list of textures to avoid (top 3).
+    let avoidTextures: [String]              // D
+    /// Deterministic sweet-spot keywords (top 2).
+    let sweetSpotKeywords: [String]          // D
+
+    init(goodText: String, badText: String, sweetSpotText: String,
+         recommendedTextures: [String] = [], avoidTextures: [String] = [],
+         sweetSpotKeywords: [String] = []) {
+        self.goodText = goodText
+        self.badText = badText
+        self.sweetSpotText = sweetSpotText
+        self.recommendedTextures = recommendedTextures
+        self.avoidTextures = avoidTextures
+        self.sweetSpotKeywords = sweetSpotKeywords
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        goodText = try container.decode(String.self, forKey: .goodText)
+        badText = try container.decode(String.self, forKey: .badText)
+        sweetSpotText = try container.decode(String.self, forKey: .sweetSpotText)
+        recommendedTextures = try container.decodeIfPresent([String].self, forKey: .recommendedTextures) ?? []
+        avoidTextures = try container.decodeIfPresent([String].self, forKey: .avoidTextures) ?? []
+        sweetSpotKeywords = try container.decodeIfPresent([String].self, forKey: .sweetSpotKeywords) ?? []
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case goodText, badText, sweetSpotText
+        case recommendedTextures, avoidTextures, sweetSpotKeywords
+    }
 }
 
 // MARK: - Palette

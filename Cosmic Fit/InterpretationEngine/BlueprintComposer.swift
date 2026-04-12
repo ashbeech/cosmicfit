@@ -70,6 +70,14 @@ struct BlueprintComposer {
             narrativesMut["occasions_daily"] = (narrativesMut["occasions_daily"] ?? "") + "\n\n" + append
         }
 
+        let templateContext = NarrativeTemplateRenderer.buildContext(resolved: resolved)
+        for sectionKey in NarrativeTemplateRenderer.groupBSections {
+            guard let raw = narrativesMut[sectionKey], !raw.isEmpty else { continue }
+            narrativesMut[sectionKey] = NarrativeTemplateRenderer.render(
+                template: raw, context: templateContext
+            )
+        }
+
         let now = Date()
 
         return CosmicBlueprint(
@@ -84,7 +92,10 @@ struct BlueprintComposer {
             textures: TexturesSection(
                 goodText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.texturesGood.rawValue] ?? "",
                 badText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.texturesBad.rawValue] ?? "",
-                sweetSpotText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.texturesSweetSpot.rawValue] ?? ""
+                sweetSpotText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.texturesSweetSpot.rawValue] ?? "",
+                recommendedTextures: resolved.recommendedTextures,
+                avoidTextures: resolved.avoidTextures,
+                sweetSpotKeywords: resolved.sweetSpotKeywords
             ),
             palette: PaletteSection(
                 coreColours: resolved.coreColours,
@@ -135,6 +146,15 @@ struct BlueprintComposer {
         resolved: DeterministicResolverResult,
         narratives: NarrativeClusterEntry
     ) -> CosmicBlueprint {
+        var narrativesMut = narratives
+        let templateContext = NarrativeTemplateRenderer.buildContext(resolved: resolved)
+        for sectionKey in NarrativeTemplateRenderer.groupBSections {
+            guard let raw = narrativesMut[sectionKey], !raw.isEmpty else { continue }
+            narrativesMut[sectionKey] = NarrativeTemplateRenderer.render(
+                template: raw, context: templateContext
+            )
+        }
+
         let now = Date()
 
         return CosmicBlueprint(
@@ -144,27 +164,30 @@ struct BlueprintComposer {
                 generationDate: now
             ),
             styleCore: StyleCoreSection(
-                narrativeText: narratives["style_core"] ?? ""
+                narrativeText: narrativesMut["style_core"] ?? ""
             ),
             textures: TexturesSection(
-                goodText: narratives["textures_good"] ?? "",
-                badText: narratives["textures_bad"] ?? "",
-                sweetSpotText: narratives["textures_sweet_spot"] ?? ""
+                goodText: narrativesMut["textures_good"] ?? "",
+                badText: narrativesMut["textures_bad"] ?? "",
+                sweetSpotText: narrativesMut["textures_sweet_spot"] ?? "",
+                recommendedTextures: resolved.recommendedTextures,
+                avoidTextures: resolved.avoidTextures,
+                sweetSpotKeywords: resolved.sweetSpotKeywords
             ),
             palette: PaletteSection(
                 coreColours: resolved.coreColours,
                 accentColours: resolved.accentColours,
-                narrativeText: narratives["palette_narrative"] ?? ""
+                narrativeText: narrativesMut["palette_narrative"] ?? ""
             ),
             occasions: OccasionsSection(
-                workText: narratives["occasions_work"] ?? "",
-                intimateText: narratives["occasions_intimate"] ?? "",
-                dailyText: narratives["occasions_daily"] ?? ""
+                workText: narrativesMut["occasions_work"] ?? "",
+                intimateText: narrativesMut["occasions_intimate"] ?? "",
+                dailyText: narrativesMut["occasions_daily"] ?? ""
             ),
             hardware: HardwareSection(
-                metalsText: narratives["hardware_metals"] ?? "",
-                stonesText: narratives["hardware_stones"] ?? "",
-                tipText: narratives["hardware_tip"] ?? "",
+                metalsText: narrativesMut["hardware_metals"] ?? "",
+                stonesText: narrativesMut["hardware_stones"] ?? "",
+                tipText: narrativesMut["hardware_tip"] ?? "",
                 recommendedMetals: resolved.recommendedMetals,
                 recommendedStones: resolved.recommendedStones
             ),
@@ -175,14 +198,14 @@ struct BlueprintComposer {
             ),
             accessory: AccessorySection(
                 paragraphs: [
-                    narratives["accessory_1"] ?? "",
-                    narratives["accessory_2"] ?? "",
-                    narratives["accessory_3"] ?? ""
+                    narrativesMut["accessory_1"] ?? "",
+                    narrativesMut["accessory_2"] ?? "",
+                    narrativesMut["accessory_3"] ?? ""
                 ]
             ),
             pattern: PatternSection(
-                narrativeText: narratives["pattern_narrative"] ?? "",
-                tipText: narratives["pattern_tip"] ?? "",
+                narrativeText: narrativesMut["pattern_narrative"] ?? "",
+                tipText: narrativesMut["pattern_tip"] ?? "",
                 recommendedPatterns: resolved.recommendedPatterns,
                 avoidPatterns: resolved.avoidPatterns
             ),

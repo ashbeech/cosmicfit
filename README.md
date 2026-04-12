@@ -514,17 +514,18 @@ astrological_style_dataset.json          (WP4 — the meaning layer)
         │      BlueprintTokenGenerator
         │      DeterministicResolver       ──► deterministic Blueprint fields
         │      ArchetypeKeyGenerator       ──► cluster key for narrative lookup
+        │      NarrativeTemplateRenderer   ──► fills {placeholders} in Group B sections
         │
         └──► backfill_narratives.py        (one-time Gemini API run)
                │
                ▼
-        blueprint_narrative_cache.json     (AI-generated paragraphs)
+        blueprint_narrative_cache.json     (AI-generated paragraph templates)
                │
                ▼
         NarrativeCacheLoader.swift         ──► narrative Blueprint fields
 ```
 
-At runtime, the Swift engine reads the dataset to resolve structured fields (palette, textures, metals, stones, code directives, patterns) and looks up pre-generated narrative paragraphs from the cache. No API calls happen on-device.
+At runtime, the Swift engine reads the dataset to resolve structured fields (palette, textures, metals, stones, code directives, patterns) and looks up pre-generated narrative paragraphs from the cache. Factual sections (Group B) contain named placeholders like `{core_colour_1}` that are filled with the user's actual resolved values by `NarrativeTemplateRenderer` before final assembly. No API calls happen on-device.
 
 ### Plain-English Blueprint explainer
 
@@ -535,19 +536,19 @@ This section is written for non-developers who want to understand, in ordinary l
 The Blueprint is built from two ingredients:
 
 1. A hand-authored astrology-to-style dataset.
-2. A bank of AI-written paragraphs for broad archetypes.
+2. A bank of AI-written paragraph templates for broad archetypes.
 
 When a real user enters their birth date, birth time, and birth location, the app calculates their natal chart, maps that chart onto the dataset, and then combines:
 
 - deterministic style logic from the dataset
-- general archetype paragraphs from the AI cache
+- archetype paragraph templates from the AI cache (with placeholders for factual sections filled at runtime from the user's resolved data)
 - chart-specific house and sect overlays added at runtime
 
 So the final Blueprint is not "free-written" from scratch by AI on the phone. It is a controlled assembly of:
 
 - pre-defined astrology meanings
 - deterministic weighting rules
-- pre-generated narrative copy
+- pre-generated narrative templates with runtime placeholder substitution
 - chart-specific overlays
 
 #### Diagram: how the Blueprint data is created
@@ -744,6 +745,33 @@ In plain English, the user is getting:
 
 So the Blueprint is best understood as a guided translation system, not a chatbot answer.
 
+### Placeholder template pipeline
+
+The narrative cache contains two kinds of sections:
+
+**Group A (general prose, no placeholders):**
+`style_core`, `occasions_work`, `occasions_intimate`, `occasions_daily`, `accessory_1`, `accessory_2`, `accessory_3`
+
+These sections contain fully baked prose with no user-specific references to colours, patterns, metals, stones, or textures. They pass through to the final Blueprint unmodified.
+
+**Group B (templated with placeholders):**
+`palette_narrative`, `pattern_narrative`, `pattern_tip`, `hardware_metals`, `hardware_stones`, `hardware_tip`, `textures_good`, `textures_bad`, `textures_sweet_spot`
+
+These sections contain named placeholders that are filled at runtime with the user's actual resolved deterministic values by `NarrativeTemplateRenderer`.
+
+**Placeholder vocabulary:**
+
+| Category | Placeholders |
+|----------|-------------|
+| Palette | `{core_colour_1}` .. `{core_colour_4}`, `{accent_colour_1}` .. `{accent_colour_2}` |
+| Pattern | `{recommended_pattern_1}` .. `{recommended_pattern_4}`, `{avoid_pattern_1}` .. `{avoid_pattern_2}` |
+| Hardware | `{metal_1}` .. `{metal_3}`, `{stone_1}` .. `{stone_3}` |
+| Textures | `{texture_good_1}` .. `{texture_good_4}`, `{texture_bad_1}` .. `{texture_bad_3}`, `{sweet_spot_keyword_1}` .. `{sweet_spot_keyword_2}` |
+
+If a placeholder has no resolved value (e.g. the user only has 2 core colours but the template uses `{core_colour_3}`), the renderer substitutes a safe fallback. Unrecognised `{...}` tokens log a warning but do not crash.
+
+**Important:** The narrative cache must be regenerated after any changes to the placeholder vocabulary or section group assignments. Run the backfill script to regenerate.
+
 ### Files
 
 | File | Purpose |
@@ -751,9 +779,9 @@ So the Blueprint is best understood as a guided translation system, not a chatbo
 | `astrological_style_dataset.json` | Complete astrological-to-style mapping dataset (132 planet-sign entries, 30 aspects, 48 house placements, 7 element balances, 162-colour library) |
 | `generate_dataset.py` | Generates the dataset programmatically from hardcoded astrological mappings. Run this whenever you edit the dataset source. |
 | `validate_dataset.py` | Validates the dataset against the WP3 schema contract and cross-references colours. |
-| `backfill_narratives.py` | One-time script that calls the Gemini API to generate narrative paragraphs for every archetype cluster. |
-| `review_tool.py` | Local web UI for reviewing, approving, and flagging generated paragraphs. |
-| `blueprint_narrative_cache.json` | Output of the backfill — all AI-generated paragraphs keyed by archetype cluster. Bundled into the app at `Cosmic Fit/Resources/`. |
+| `backfill_narratives.py` | One-time script that calls the Gemini API to generate narrative paragraph templates for every archetype cluster. Group B sections contain `{placeholder}` tokens filled at runtime. |
+| `review_tool.py` | Local web UI for reviewing, approving, and flagging generated paragraphs. Displays templates with placeholders as-is so reviewers see the template structure. |
+| `blueprint_narrative_cache.json` | Output of the backfill — all AI-generated paragraph templates keyed by archetype cluster. Bundled into the app at `Cosmic Fit/Resources/`. Must be regenerated after placeholder vocabulary changes. |
 | `review_notes.json` | Auto-saved review state from the review tool. The backfill script reads this on re-run to skip approved paragraphs and regenerate flagged ones. |
 | `_reference/blueprint_examples.md` | Voice reference — two complete example Blueprints plus 234 tarot-style paragraphs that define the target writing style. |
 | `BLUEPRINT_REBUILD_SPEC_v2.3.md` | Full architecture specification for the rebuild. |
@@ -857,6 +885,8 @@ Auto-generate `input_after/*.json` from runtime fixtures:
 ```bash
 source .venv/bin/activate && python3 export_input_after_fixtures.py
 ```
+
+This exporter now fails fast if `blueprint_narrative_cache.json` is still `{}`. Run a limited or full backfill first so the runtime fixtures include real narrative content.
 
 Generate the human review scorecard from snapshot bundles:
 
@@ -984,6 +1014,14 @@ Each archetype cluster entry contains 16 narrative paragraphs, one per `Blueprin
 ---
 
 ## Version History
+
+**April 2026 — Placeholder Template Pipeline**
+
+- Converted Group B narrative sections to placeholder-based templates filled at runtime
+- Added deterministic texture resolution (recommendedTextures, avoidTextures, sweetSpotKeywords)
+- Built NarrativeTemplateRenderer for runtime placeholder substitution
+- Updated backfill prompts with Group A/B constraints and placeholder validation
+- Narrative cache must be regenerated after this change
 
 **April 2026 — Blueprint Rebuild v2.3**
 
