@@ -136,7 +136,7 @@ HEDGING_PHRASES = ["you might", "perhaps", "maybe", "possibly"]
 # ─── Retry / Timeout ──────────────────────────────────────────────────
 
 MAX_RETRIES = 3
-REQUEST_TIMEOUT = 30
+REQUEST_TIMEOUT = 60
 RETRY_BACKOFF = [2, 4, 8]
 MAX_RATE_LIMIT_WAITS = 10
 MAX_429_WAIT_SEC = 300
