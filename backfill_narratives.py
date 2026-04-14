@@ -133,6 +133,20 @@ BANNED_WORDS = [
 
 HEDGING_PHRASES = ["you might", "perhaps", "maybe", "possibly"]
 
+# ─── Retry / Timeout ──────────────────────────────────────────────────
+
+MAX_RETRIES = 3
+REQUEST_TIMEOUT = 30
+RETRY_BACKOFF = [2, 4, 8]
+MAX_RATE_LIMIT_WAITS = 10
+MAX_429_WAIT_SEC = 300
+RATE_LIMIT_BUFFER_SEC = 5
+
+
+class QuotaExhaustedError(Exception):
+    """Raised when the Gemini API quota is exhausted and the run should stop."""
+
+
 # ─── Placeholder Vocabulary ────────────────────────────────────────────
 
 GROUP_A_SECTIONS = {
@@ -645,6 +659,18 @@ def describe_archetype(cluster_key: str, dataset: dict) -> str:
     return "\n".join(lines)
 
 
+def _is_rate_limited(err: Exception) -> bool:
+    """Check if the error is a 429 / RESOURCE_EXHAUSTED rate limit."""
+    msg = str(err)
+    return "429" in msg or "RESOURCE_EXHAUSTED" in msg
+
+
+def _parse_retry_delay(err: Exception) -> int:
+    """Extract server-suggested retry delay from error message, or 0."""
+    match = re.search(r"retryDelay.*?(\d+)s", str(err))
+    return int(match.group(1)) if match else 0
+
+
 # ─── Gemini API Call ───────────────────────────────────────────────────
 
 def generate_paragraph(
@@ -690,16 +716,53 @@ def generate_paragraph(
 
     user_prompt = "\n".join(user_prompt_parts)
 
-    try:
-        response = model.generate_content(
-            [
-                {"role": "user", "parts": [user_prompt]},
-            ]
-        )
-        return response.text.strip()
-    except Exception as e:
-        print(f"    ERROR generating {section_key}: {e}")
-        return ""
+    rate_limit_waits = 0
+    attempt = 0
+
+    while attempt < MAX_RETRIES:
+        attempt += 1
+        try:
+            print(f"      {section_key} (attempt {attempt}/{MAX_RETRIES})...", end="", flush=True)
+            response = model.generate_content(
+                [{"role": "user", "parts": [user_prompt]}],
+                request_options={"timeout": REQUEST_TIMEOUT, "retry": None},
+            )
+            print(" ok")
+            return response.text.strip()
+
+        except Exception as e:
+            msg = str(e)
+            print(f" error: {msg}")
+
+            if _is_rate_limited(e):
+                if "limit: 0" in msg:
+                    print(f"    Model unavailable on current API tier (limit: 0)")
+                    raise QuotaExhaustedError(msg)
+
+                retry_sec = _parse_retry_delay(e)
+                if (
+                    retry_sec > 0
+                    and retry_sec <= MAX_429_WAIT_SEC
+                    and rate_limit_waits < MAX_RATE_LIMIT_WAITS
+                ):
+                    wait_sec = retry_sec + RATE_LIMIT_BUFFER_SEC
+                    rate_limit_waits += 1
+                    attempt -= 1
+                    print(f"      Rate limited — waiting {wait_sec}s "
+                          f"(wait {rate_limit_waits}/{MAX_RATE_LIMIT_WAITS})...")
+                    time.sleep(wait_sec)
+                    continue
+
+                print(f"    Quota exhausted — no parseable retry delay or max waits reached")
+                raise QuotaExhaustedError(msg)
+
+            if attempt < MAX_RETRIES:
+                backoff = RETRY_BACKOFF[attempt - 1]
+                print(f"      retrying in {backoff}s...")
+                time.sleep(backoff)
+
+    print(f"    FAILED after {MAX_RETRIES} attempts: {section_key}")
+    return ""
 
 
 # ─── Pause Signal ──────────────────────────────────────────────────────
@@ -831,9 +894,19 @@ def main():
                 for key, value in cache[cluster_key].items()
                 if key != section_key and value
             }
-            text = generate_paragraph(
-                model, section_key, cluster_key, archetype_desc, existing_sections, revision_note
-            )
+            try:
+                text = generate_paragraph(
+                    model, section_key, cluster_key, archetype_desc, existing_sections, revision_note
+                )
+            except QuotaExhaustedError as e:
+                print(f"\n{'='*60}")
+                print(f"QUOTA EXHAUSTED — saving progress and stopping.")
+                print(f"  {e}")
+                print(f"  Re-run with --resume to continue later.")
+                print(f"{'='*60}")
+                with open(args.output, "w") as f:
+                    json.dump(cache, f, indent=2, ensure_ascii=False)
+                sys.exit(1)
 
             if not text:
                 total_failed += 1
