@@ -100,6 +100,7 @@ struct BlueprintComposer {
             palette: PaletteSection(
                 coreColours: resolved.coreColours,
                 accentColours: resolved.accentColours,
+                swatchFamilies: resolved.swatchFamilies,
                 narrativeText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.paletteNarrative.rawValue] ?? ""
             ),
             occasions: OccasionsSection(
@@ -177,6 +178,7 @@ struct BlueprintComposer {
             palette: PaletteSection(
                 coreColours: resolved.coreColours,
                 accentColours: resolved.accentColours,
+                swatchFamilies: resolved.swatchFamilies,
                 narrativeText: narrativesMut["palette_narrative"] ?? ""
             ),
             occasions: OccasionsSection(

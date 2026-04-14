@@ -14,6 +14,7 @@ import Foundation
 struct DeterministicResolverResult {
     let coreColours: [BlueprintColour]
     let accentColours: [BlueprintColour]
+    let swatchFamilies: [SwatchFamily]
     let recommendedMetals: [String]
     let recommendedStones: [String]
     let leanInto: [String]
@@ -53,9 +54,14 @@ struct DeterministicResolver {
             tokens: tokens, contributingCombos: contributingCombos, dataset: dataset
         )
 
+        let swatchFamilies = PaletteSwatchGenerator.generateFamilies(
+            core: palette.core, accent: palette.accent
+        )
+
         return DeterministicResolverResult(
             coreColours: palette.core,
             accentColours: palette.accent,
+            swatchFamilies: swatchFamilies,
             recommendedMetals: hardware.metals,
             recommendedStones: hardware.stones,
             leanInto: code.leanInto,

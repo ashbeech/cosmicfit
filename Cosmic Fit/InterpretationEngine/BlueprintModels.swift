@@ -102,8 +102,32 @@ struct PaletteSection: Codable, Equatable {
     let coreColours: [BlueprintColour]        // D
     /// Deterministic accent colours (typically 2–3).
     let accentColours: [BlueprintColour]      // D
+    /// Grouped tonal families derived from the anchor colours above.
+    /// Each family contains the anchor plus lighter/deeper tonal variants.
+    /// Display-only — anchor names are used for narrative placeholders.
+    let swatchFamilies: [SwatchFamily]        // D
     /// AI-generated narrative about the user's palette.
     let narrativeText: String                 // AI — key: "palette_narrative"
+
+    init(coreColours: [BlueprintColour], accentColours: [BlueprintColour],
+         swatchFamilies: [SwatchFamily] = [], narrativeText: String) {
+        self.coreColours = coreColours
+        self.accentColours = accentColours
+        self.swatchFamilies = swatchFamilies
+        self.narrativeText = narrativeText
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        coreColours = try container.decode([BlueprintColour].self, forKey: .coreColours)
+        accentColours = try container.decode([BlueprintColour].self, forKey: .accentColours)
+        swatchFamilies = try container.decodeIfPresent([SwatchFamily].self, forKey: .swatchFamilies) ?? []
+        narrativeText = try container.decode(String.self, forKey: .narrativeText)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case coreColours, accentColours, swatchFamilies, narrativeText
+    }
 }
 
 struct BlueprintColour: Codable, Equatable {
@@ -116,6 +140,20 @@ enum ColourRole: String, Codable, CaseIterable {
     case core
     case accent
     case statement
+}
+
+/// A tonal family grouped around one anchor colour.
+struct SwatchFamily: Codable, Equatable {
+    let anchorName: String
+    let anchorHex: String
+    let role: ColourRole
+    let tones: [SwatchTone]
+}
+
+/// A single derived tone within a swatch family.
+struct SwatchTone: Codable, Equatable {
+    let name: String
+    let hex: String
 }
 
 // MARK: - Occasions

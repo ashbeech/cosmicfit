@@ -40,7 +40,7 @@ VENUS_ENTRIES = {
         "colours": {
             "primary": [
                 {"name": "coral", "hex": "#FF6F61"},
-                {"name": "bright red", "hex": "#CC0000"}
+                {"name": "fire red", "hex": "#B22222"}
             ],
             "accent": [
                 {"name": "warm white", "hex": "#FAF0E6"},
@@ -79,13 +79,14 @@ VENUS_ENTRIES = {
         },
         "colours": {
             "primary": [
-                {"name": "cream", "hex": "#FFFDD0"},
-                {"name": "forest green", "hex": "#228B22"},
-                {"name": "warm camel", "hex": "#C19A6B"}
+                {"name": "buttery cream", "hex": "#FFFDD0"},
+                {"name": "deep sage green", "hex": "#4A6741"},
+                {"name": "sophisticated caramel", "hex": "#A0722D"}
             ],
             "accent": [
+                {"name": "oxidised gold", "hex": "#B08D57"},
                 {"name": "dusty rose", "hex": "#DCAE96"},
-                {"name": "chocolate", "hex": "#3B2F2F"}
+                {"name": "deep burnt saffron", "hex": "#CC7722"}
             ],
             "avoid": ["neon shades", "harsh electric tones"]
         },
@@ -121,11 +122,12 @@ VENUS_ENTRIES = {
         "colours": {
             "primary": [
                 {"name": "lemon yellow", "hex": "#FFF44F"},
-                {"name": "sky blue", "hex": "#87CEEB"}
+                {"name": "sky blue", "hex": "#87CEEB"},
+                {"name": "crisp white", "hex": "#F8F8FF"}
             ],
             "accent": [
                 {"name": "peach", "hex": "#FFDAB9"},
-                {"name": "lavender", "hex": "#E6E6FA"}
+                {"name": "soft lavender", "hex": "#E6E6FA"}
             ],
             "avoid": ["all-black monotone", "dark sombre palettes"]
         },
@@ -166,7 +168,8 @@ VENUS_ENTRIES = {
             ],
             "accent": [
                 {"name": "sea glass", "hex": "#B2D8D8"},
-                {"name": "pale blue", "hex": "#AEC6CF"}
+                {"name": "pale blue", "hex": "#AEC6CF"},
+                {"name": "seashell pink", "hex": "#FFF5EE"}
             ],
             "avoid": ["harsh neons", "aggressive blacks", "jarring contrasts"]
         },
@@ -203,7 +206,7 @@ VENUS_ENTRIES = {
             "primary": [
                 {"name": "gold", "hex": "#FFD700"},
                 {"name": "rich amber", "hex": "#FFBF00"},
-                {"name": "burnt orange", "hex": "#CC5500"}
+                {"name": "burnished copper", "hex": "#B87333"}
             ],
             "accent": [
                 {"name": "deep red", "hex": "#8B0000"},
@@ -242,13 +245,14 @@ VENUS_ENTRIES = {
         },
         "colours": {
             "primary": [
-                {"name": "sage green", "hex": "#9CAF88"},
+                {"name": "soft sage", "hex": "#9CAF88"},
                 {"name": "warm taupe", "hex": "#8B8589"},
-                {"name": "ivory", "hex": "#FFFFF0"}
+                {"name": "warm ivory", "hex": "#FFFFF0"}
             ],
             "accent": [
                 {"name": "soft navy", "hex": "#3B5998"},
-                {"name": "wheat", "hex": "#F5DEB3"}
+                {"name": "sand", "hex": "#C2B280"},
+                {"name": "honey", "hex": "#EB9605"}
             ],
             "avoid": ["loud clashing colours", "garish prints", "neon tones"]
         },
@@ -289,6 +293,7 @@ VENUS_ENTRIES = {
             ],
             "accent": [
                 {"name": "champagne", "hex": "#F7E7CE"},
+                {"name": "dusty rose", "hex": "#DCAE96"},
                 {"name": "light copper", "hex": "#D4956A"}
             ],
             "avoid": ["harsh primaries", "aggressive neons", "stark black-and-white contrast"]
@@ -325,12 +330,13 @@ VENUS_ENTRIES = {
         "colours": {
             "primary": [
                 {"name": "midnight", "hex": "#191970"},
-                {"name": "oxblood", "hex": "#4A0000"},
-                {"name": "deep black", "hex": "#0A0A0A"}
+                {"name": "shadow", "hex": "#36454F"},
+                {"name": "ink", "hex": "#1B1B1B"}
             ],
             "accent": [
-                {"name": "dark plum", "hex": "#580F41"},
-                {"name": "garnet red", "hex": "#733635"}
+                {"name": "deep oxblood", "hex": "#4A0000"},
+                {"name": "cold forest green", "hex": "#2C5F2D"},
+                {"name": "dark plum", "hex": "#580F41"}
             ],
             "avoid": ["candy pastels", "cheerful brights", "anything see-through"]
         },
@@ -366,11 +372,12 @@ VENUS_ENTRIES = {
         "colours": {
             "primary": [
                 {"name": "cobalt blue", "hex": "#0047AB"},
-                {"name": "burnt sienna", "hex": "#E97451"}
+                {"name": "burnt sienna", "hex": "#E97451"},
+                {"name": "warm ochre", "hex": "#CC7722"}
             ],
             "accent": [
                 {"name": "deep teal", "hex": "#008080"},
-                {"name": "warm ochre", "hex": "#CC7722"}
+                {"name": "worn leather", "hex": "#7B5B3A"}
             ],
             "avoid": ["corporate grey", "lifeless beige", "overly safe palettes"]
         },
@@ -405,12 +412,13 @@ VENUS_ENTRIES = {
         },
         "colours": {
             "primary": [
-                {"name": "charcoal", "hex": "#36454F"},
-                {"name": "navy", "hex": "#000080"},
+                {"name": "deep charcoal", "hex": "#333333"},
+                {"name": "cool navy", "hex": "#003153"},
                 {"name": "dark camel", "hex": "#A0785A"}
             ],
             "accent": [
                 {"name": "burgundy", "hex": "#800020"},
+                {"name": "bone white", "hex": "#F9F6F0"},
                 {"name": "slate blue", "hex": "#6A5ACD"}
             ],
             "avoid": ["trend-driven neons", "childish brights", "flimsy pastels"]
@@ -447,11 +455,13 @@ VENUS_ENTRIES = {
         "colours": {
             "primary": [
                 {"name": "electric blue", "hex": "#7DF9FF"},
-                {"name": "silver grey", "hex": "#C0C0C0"}
+                {"name": "silver grey", "hex": "#C0C0C0"},
+                {"name": "crisp white", "hex": "#F8F8FF"}
             ],
             "accent": [
                 {"name": "ultraviolet", "hex": "#6B0099"},
-                {"name": "neon lime", "hex": "#CCFF00"}
+                {"name": "neon lime", "hex": "#CCFF00"},
+                {"name": "icy blue", "hex": "#D6ECEF"}
             ],
             "avoid": ["traditional heritage palettes", "conventional earth tones", "expected combinations"]
         },
@@ -492,7 +502,8 @@ VENUS_ENTRIES = {
             ],
             "accent": [
                 {"name": "silver shimmer", "hex": "#D8D8D8"},
-                {"name": "blush rose", "hex": "#FFB7C5"}
+                {"name": "blush rose", "hex": "#FFB7C5"},
+                {"name": "pale violet", "hex": "#DDA0DD"}
             ],
             "avoid": ["harsh industrial tones", "aggressive blacks", "sterile whites"]
         },
@@ -532,7 +543,7 @@ MOON_ENTRIES = {
         },
         "colours": {
             "primary": [{"name": "fire red", "hex": "#B22222"}, {"name": "warm terracotta", "hex": "#E2725B"}],
-            "accent": [{"name": "ivory", "hex": "#FFFFF0"}],
+            "accent": [{"name": "warm ivory", "hex": "#FFFFF0"}],
             "avoid": ["cold greys", "depressing neutrals"]
         },
         "metals": ["rose gold", "polished copper"],
@@ -553,8 +564,8 @@ MOON_ENTRIES = {
             "sweet_spot_keywords": ["touch", "weight", "security"]
         },
         "colours": {
-            "primary": [{"name": "warm brown", "hex": "#8B6914"}, {"name": "moss green", "hex": "#8A9A5B"}],
-            "accent": [{"name": "cream", "hex": "#FFFDD0"}, {"name": "dusky pink", "hex": "#CC8899"}],
+            "primary": [{"name": "worn leather", "hex": "#7B5B3A"}, {"name": "moss green", "hex": "#8A9A5B"}],
+            "accent": [{"name": "buttery cream", "hex": "#FFFDD0"}, {"name": "dusky pink", "hex": "#CC8899"}],
             "avoid": ["jarring neons", "cold clinical palettes"]
         },
         "metals": ["yellow gold", "warm bronze"],
@@ -575,7 +586,7 @@ MOON_ENTRIES = {
             "sweet_spot_keywords": ["versatility", "lightness", "change"]
         },
         "colours": {
-            "primary": [{"name": "pale yellow", "hex": "#FFFF99"}, {"name": "light grey", "hex": "#D3D3D3"}],
+            "primary": [{"name": "pale yellow", "hex": "#FFFF99"}, {"name": "soft grey", "hex": "#B0B0B0"}],
             "accent": [{"name": "mint", "hex": "#98FF98"}, {"name": "peach", "hex": "#FFDAB9"}],
             "avoid": ["heavy dark monotone"]
         },
@@ -620,7 +631,7 @@ MOON_ENTRIES = {
         },
         "colours": {
             "primary": [{"name": "warm gold", "hex": "#DAA520"}, {"name": "sunset orange", "hex": "#FF6347"}],
-            "accent": [{"name": "champagne", "hex": "#F7E7CE"}],
+            "accent": [{"name": "champagne gold", "hex": "#F7E7CE"}],
             "avoid": ["drab earth tones", "invisible neutrals"]
         },
         "metals": ["yellow gold", "gilded bronze"],
@@ -641,8 +652,8 @@ MOON_ENTRIES = {
             "sweet_spot_keywords": ["order", "cleanliness", "smoothness"]
         },
         "colours": {
-            "primary": [{"name": "soft grey", "hex": "#B0B0B0"}, {"name": "sage", "hex": "#9CAF88"}],
-            "accent": [{"name": "wheat", "hex": "#F5DEB3"}],
+            "primary": [{"name": "soft grey", "hex": "#B0B0B0"}, {"name": "soft sage", "hex": "#9CAF88"}],
+            "accent": [{"name": "sand", "hex": "#C2B280"}],
             "avoid": ["messy tie-dye", "chaotic colour combinations"]
         },
         "metals": ["brushed silver", "matte white gold"],
@@ -685,7 +696,7 @@ MOON_ENTRIES = {
             "sweet_spot_keywords": ["protection", "density", "control"]
         },
         "colours": {
-            "primary": [{"name": "deep burgundy", "hex": "#800020"}, {"name": "black", "hex": "#0A0A0A"}],
+            "primary": [{"name": "deep burgundy", "hex": "#800020"}, {"name": "ink", "hex": "#1B1B1B"}],
             "accent": [{"name": "dark teal", "hex": "#004953"}],
             "avoid": ["pastel pinks", "cheerful yellows"]
         },
@@ -729,8 +740,8 @@ MOON_ENTRIES = {
             "sweet_spot_keywords": ["backbone", "structure", "reliability"]
         },
         "colours": {
-            "primary": [{"name": "slate", "hex": "#708090"}, {"name": "charcoal", "hex": "#36454F"}],
-            "accent": [{"name": "dark navy", "hex": "#000080"}],
+            "primary": [{"name": "slate", "hex": "#708090"}, {"name": "deep charcoal", "hex": "#333333"}],
+            "accent": [{"name": "cool navy", "hex": "#003153"}],
             "avoid": ["frivolous pastels", "whimsical brights"]
         },
         "metals": ["polished silver", "platinum"],
@@ -807,7 +818,7 @@ SUN_ENTRIES = {
     "sun_taurus": {
         "style_philosophy": "luxurious, grounded, sensory-driven identity",
         "textures": {"good": ["cashmere", "suede", "heavy cotton", "buttery leather", "brushed wool"], "bad": ["cheap polyester", "scratchy acrylic"], "sweet_spot_keywords": ["quality", "touch", "substance"]},
-        "colours": {"primary": [{"name": "sage green", "hex": "#9CAF88"}, {"name": "warm brown", "hex": "#8B6914"}], "accent": [{"name": "blush", "hex": "#DE5D83"}], "avoid": ["jarring neons"]},
+        "colours": {"primary": [{"name": "deep sage green", "hex": "#4A6741"}, {"name": "sophisticated caramel", "hex": "#A0722D"}], "accent": [{"name": "dusty rose", "hex": "#DCAE96"}], "avoid": ["jarring neons"]},
         "metals": ["yellow gold", "warm bronze"], "stones": ["emerald", "lapis lazuli", "jade"],
         "patterns": {"recommended": ["organic texture", "herringbone", "tonal weave"], "avoid": ["chaotic graphics", "aggressive prints"]},
         "silhouette_keywords": ["relaxed structure", "body-conscious", "grounded"],
@@ -819,7 +830,7 @@ SUN_ENTRIES = {
     "sun_gemini": {
         "style_philosophy": "versatile, intellectually playful, dual-natured",
         "textures": {"good": ["lightweight blends", "crisp shirting", "jersey", "reversible fabrics"], "bad": ["heavy monotone wool", "stiff formal"], "sweet_spot_keywords": ["adaptability", "conversation", "variety"]},
-        "colours": {"primary": [{"name": "lemon yellow", "hex": "#FFF44F"}, {"name": "sky blue", "hex": "#87CEEB"}], "accent": [{"name": "tangerine", "hex": "#FF9966"}], "avoid": ["single-colour monotone"]},
+        "colours": {"primary": [{"name": "lemon yellow", "hex": "#FFF44F"}, {"name": "sky blue", "hex": "#87CEEB"}], "accent": [{"name": "tangerine", "hex": "#FF9966"}, {"name": "crisp white", "hex": "#F8F8FF"}], "avoid": ["single-colour monotone"]},
         "metals": ["mixed metals", "white gold"], "stones": ["citrine", "aquamarine", "agate"],
         "patterns": {"recommended": ["mixed prints", "colour blocking", "conversational motifs"], "avoid": ["single uniform patterns"]},
         "silhouette_keywords": ["layered", "modular", "transformable"],
@@ -855,7 +866,7 @@ SUN_ENTRIES = {
     "sun_virgo": {
         "style_philosophy": "refined, meticulous, quietly perfect",
         "textures": {"good": ["fine-gauge knit", "polished cotton", "crisp linen", "smooth silk"], "bad": ["wrinkled fabrics", "pilling knits"], "sweet_spot_keywords": ["precision", "cleanliness", "detail"]},
-        "colours": {"primary": [{"name": "warm taupe", "hex": "#8B8589"}, {"name": "sage green", "hex": "#9CAF88"}], "accent": [{"name": "soft navy", "hex": "#3B5998"}], "avoid": ["loud clashing tones"]},
+        "colours": {"primary": [{"name": "warm taupe", "hex": "#8B8589"}, {"name": "soft sage", "hex": "#9CAF88"}], "accent": [{"name": "soft navy", "hex": "#3B5998"}], "avoid": ["loud clashing tones"]},
         "metals": ["brushed silver", "white gold"], "stones": ["peridot", "sapphire", "amazonite"],
         "patterns": {"recommended": ["micro-pattern", "fine stripe", "tonal texture"], "avoid": ["chaotic prints", "oversized logos"]},
         "silhouette_keywords": ["precise", "clean", "tailored"],
@@ -879,7 +890,7 @@ SUN_ENTRIES = {
     "sun_scorpio": {
         "style_philosophy": "intense, magnetic, strategically powerful",
         "textures": {"good": ["structured leather", "dense knit", "heavy silk", "matte jersey"], "bad": ["frilly chiffon", "cute prints", "flimsy fabrics"], "sweet_spot_keywords": ["power", "control", "intensity"]},
-        "colours": {"primary": [{"name": "deep black", "hex": "#0A0A0A"}, {"name": "oxblood", "hex": "#4A0000"}], "accent": [{"name": "dark plum", "hex": "#580F41"}], "avoid": ["candy pastels", "cheerful brights"]},
+        "colours": {"primary": [{"name": "ink", "hex": "#1B1B1B"}, {"name": "deep oxblood", "hex": "#4A0000"}], "accent": [{"name": "dark plum", "hex": "#580F41"}], "avoid": ["candy pastels", "cheerful brights"]},
         "metals": ["gunmetal", "blackened silver"], "stones": ["obsidian", "garnet", "black tourmaline"],
         "patterns": {"recommended": ["dark-on-dark jacquard", "subtle texture", "monochrome depth"], "avoid": ["cheerful florals", "whimsical prints"]},
         "silhouette_keywords": ["fitted", "controlled", "sharp"],
@@ -903,7 +914,7 @@ SUN_ENTRIES = {
     "sun_capricorn": {
         "style_philosophy": "authoritative, structured, timeless discipline",
         "textures": {"good": ["structured wool", "pressed cotton", "quality leather", "heavy crepe"], "bad": ["cheap stretch", "flimsy synthetic", "disposable fabrics"], "sweet_spot_keywords": ["authority", "longevity", "backbone"]},
-        "colours": {"primary": [{"name": "charcoal", "hex": "#36454F"}, {"name": "navy", "hex": "#000080"}], "accent": [{"name": "burgundy", "hex": "#800020"}], "avoid": ["childish brights", "trend neons"]},
+        "colours": {"primary": [{"name": "deep charcoal", "hex": "#333333"}, {"name": "cool navy", "hex": "#003153"}], "accent": [{"name": "burgundy", "hex": "#800020"}], "avoid": ["childish brights", "trend neons"]},
         "metals": ["polished silver", "platinum"], "stones": ["garnet", "onyx", "sapphire"],
         "patterns": {"recommended": ["pinstripe", "houndstooth", "glen check"], "avoid": ["novelty prints", "cartoon patterns"]},
         "silhouette_keywords": ["tailored", "elongated", "commanding"],
@@ -965,7 +976,7 @@ MARS_ENTRIES = {
         {"textures": ["delicate lace", "flimsy fabrics"], "colours": ["pastel softness"], "silhouettes": ["meek and shapeless"], "mood": ["passive", "timid", "hesitant"]}),
     "mars_taurus": make_mars_entry("taurus", "persistent, slow-burn strength, grounded force",
         ["heavy cotton", "dense denim", "thick knit"], ["flimsy synthetics"], ["endurance", "weight", "permanence"],
-        [{"name": "rust", "hex": "#B7410E"}, {"name": "deep olive", "hex": "#556B2F"}], [{"name": "warm brown", "hex": "#8B6914"}], ["cold sterile tones"],
+        [{"name": "rust", "hex": "#B7410E"}, {"name": "deep olive", "hex": "#556B2F"}], [{"name": "worn leather", "hex": "#7B5B3A"}], ["cold sterile tones"],
         ["warm bronze", "antique brass"], ["bloodstone", "tiger eye"],
         ["earth-tone blocks", "textured solids"], ["busy chaotic prints"],
         ["solid", "grounded", "substantial"],
@@ -1001,7 +1012,7 @@ MARS_ENTRIES = {
         {"textures": ["dull matte fabrics"], "colours": ["drab neutrals"], "silhouettes": ["deliberately small and meek"], "mood": ["meek", "dimmed", "invisible"]}),
     "mars_virgo": make_mars_entry("virgo", "precise, methodical, quietly powerful",
         ["fine tailoring fabric", "pressed cotton", "structured crepe"], ["sloppy fabrics"], ["precision", "method", "efficiency"],
-        [{"name": "brick red", "hex": "#CB4154"}, {"name": "warm taupe", "hex": "#8B8589"}], [{"name": "navy", "hex": "#000080"}], ["chaotic colours"],
+        [{"name": "brick red", "hex": "#CB4154"}, {"name": "warm taupe", "hex": "#8B8589"}], [{"name": "soft navy", "hex": "#3B5998"}], ["chaotic colours"],
         ["brushed silver", "matte steel"], ["sapphire", "clear quartz"],
         ["micro-check", "fine pinstripe"], ["oversized logos"],
         ["precise", "clean", "efficient"],
@@ -1019,7 +1030,7 @@ MARS_ENTRIES = {
         {"textures": ["harsh industrial fabric"], "colours": ["harsh aggressive tones"], "silhouettes": ["blunt aggressive shapes"], "mood": ["blunt", "harsh", "aggressive"]}),
     "mars_scorpio": make_mars_entry("scorpio", "intense, strategic, covert power",
         ["heavy leather", "dense knit", "bonded fabric", "matte stretch"], ["transparent fabrics", "flimsy materials"], ["intensity", "stealth", "power"],
-        [{"name": "deep black", "hex": "#0A0A0A"}, {"name": "blood red", "hex": "#660000"}], [{"name": "dark plum", "hex": "#580F41"}], ["light pastels"],
+        [{"name": "ink", "hex": "#1B1B1B"}, {"name": "blood red", "hex": "#660000"}], [{"name": "dark plum", "hex": "#580F41"}], ["light pastels"],
         ["blackened steel", "gunmetal"], ["obsidian", "black onyx", "garnet"],
         ["dark-on-dark texture", "subtle power motifs"], ["cheerful prints"],
         ["controlled", "lethal precision", "strategic"],
@@ -1037,7 +1048,7 @@ MARS_ENTRIES = {
         {"textures": ["restrictive formal fabrics"], "colours": ["corporate restriction"], "silhouettes": ["constricting formal"], "mood": ["confined", "restricted", "static"]}),
     "mars_capricorn": make_mars_entry("capricorn", "disciplined, enduring, strategic authority",
         ["heavy structured wool", "quality leather", "dense twill"], ["cheap disposable fabric"], ["discipline", "endurance", "authority"],
-        [{"name": "dark brown", "hex": "#3B2F2F"}, {"name": "charcoal", "hex": "#36454F"}], [{"name": "dark red", "hex": "#8B0000"}], ["frivolous bright colours"],
+        [{"name": "bitter chocolate", "hex": "#3B1F1F"}, {"name": "deep charcoal", "hex": "#333333"}], [{"name": "dark red", "hex": "#8B0000"}], ["frivolous bright colours"],
         ["polished silver", "steel"], ["garnet", "onyx", "hematite"],
         ["herringbone", "glen check", "classic stripe"], ["novelty patterns"],
         ["authoritative", "structured", "impenetrable"],
@@ -1080,7 +1091,7 @@ ASC_ENTRIES = {
         {"textures": ["heavy formal fabrics"], "colours": ["subdued neutrals"], "silhouettes": ["indecisive layers"], "mood": ["timid", "indecisive", "hesitant"]}),
     "ascendant_taurus": make_asc_entry("taurus", "first impressions of quality, calm, sensory richness",
         ["cashmere", "quality leather", "heavy cotton"], ["cheap synthetics"], ["quality", "calm", "substance"],
-        [{"name": "forest green", "hex": "#228B22"}, {"name": "cream", "hex": "#FFFDD0"}], [{"name": "warm camel", "hex": "#C19A6B"}], ["cheap-looking fabrics"],
+        [{"name": "deep sage green", "hex": "#4A6741"}, {"name": "buttery cream", "hex": "#FFFDD0"}], [{"name": "sophisticated caramel", "hex": "#A0722D"}], ["cheap-looking fabrics"],
         ["yellow gold", "warm bronze"], ["emerald", "jade"],
         ["tonal texture", "subtle plaid"], ["loud graphics"], ["relaxed structure", "grounded", "quality"],
         {"work": "calmly authoritative", "intimate": "sensuously inviting", "daily": "effortlessly luxurious"},
@@ -1088,7 +1099,7 @@ ASC_ENTRIES = {
         {"textures": ["cheap synthetics"], "colours": ["cheap-looking tones"], "silhouettes": ["flimsy insubstantial"], "mood": ["cheap", "rushed", "disposable"]}),
     "ascendant_gemini": make_asc_entry("gemini", "first impressions of intelligence, wit, adaptability",
         ["lightweight blend", "crisp shirting", "mixed media"], ["heavy monotone wool"], ["conversation", "wit", "lightness"],
-        [{"name": "sky blue", "hex": "#87CEEB"}, {"name": "lemon yellow", "hex": "#FFF44F"}], [{"name": "mint", "hex": "#98FF98"}], ["dour monotone"],
+        [{"name": "sky blue", "hex": "#87CEEB"}, {"name": "lemon yellow", "hex": "#FFF44F"}], [{"name": "mint", "hex": "#98FF98"}, {"name": "crisp white", "hex": "#F8F8FF"}], ["dour monotone"],
         ["mixed metals", "sterling silver"], ["citrine", "aquamarine"],
         ["mixed prints", "conversational motifs"], ["heavy single pattern"], ["quick", "varied", "interesting"],
         {"work": "engaging and approachable", "intimate": "sparkly and surprising", "daily": "never boring"},
@@ -1112,7 +1123,7 @@ ASC_ENTRIES = {
         {"textures": ["dull cheap fabrics"], "colours": ["drab invisible tones"], "silhouettes": ["deliberately small", "invisible cuts"], "mood": ["invisible", "meek", "unnoticed"]}),
     "ascendant_virgo": make_asc_entry("virgo", "first impressions of precision, intelligence, quiet authority",
         ["fine-gauge knit", "pressed cotton", "structured crepe"], ["wrinkled messy fabrics"], ["precision", "polish", "intelligence"],
-        [{"name": "warm taupe", "hex": "#8B8589"}, {"name": "sage green", "hex": "#9CAF88"}], [{"name": "soft navy", "hex": "#3B5998"}], ["loud flashy tones"],
+        [{"name": "warm taupe", "hex": "#8B8589"}, {"name": "soft sage", "hex": "#9CAF88"}], [{"name": "soft navy", "hex": "#3B5998"}], ["loud flashy tones"],
         ["brushed silver", "white gold"], ["peridot", "sapphire"],
         ["fine check", "subtle stripe"], ["loud logos"], ["clean", "precise", "polished"],
         {"work": "the most put-together person in the room", "intimate": "understated elegance", "daily": "polished even in casual"},
@@ -1128,7 +1139,7 @@ ASC_ENTRIES = {
         {"textures": ["rough harsh fabrics"], "colours": ["aggressive dark palettes"], "silhouettes": ["aggressively angular"], "mood": ["aggressive", "harsh", "discordant"]}),
     "ascendant_scorpio": make_asc_entry("scorpio", "first impressions of intensity, mystery, magnetic power",
         ["structured leather", "dense knit", "heavy silk"], ["frilly cute fabrics"], ["intensity", "mystery", "control"],
-        [{"name": "deep black", "hex": "#0A0A0A"}, {"name": "oxblood", "hex": "#4A0000"}], [{"name": "dark plum", "hex": "#580F41"}], ["cheerful bright tones"],
+        [{"name": "ink", "hex": "#1B1B1B"}, {"name": "deep oxblood", "hex": "#4A0000"}], [{"name": "dark plum", "hex": "#580F41"}], ["cheerful bright tones"],
         ["gunmetal", "blackened silver"], ["obsidian", "garnet"],
         ["dark-on-dark texture", "monochrome depth"], ["happy prints"], ["fitted", "sharp", "magnetic"],
         {"work": "intimidating quiet power", "intimate": "dangerous allure", "daily": "mysterious and controlled"},
@@ -1144,7 +1155,7 @@ ASC_ENTRIES = {
         {"textures": ["stiff formal suiting"], "colours": ["corporate grey monotone"], "silhouettes": ["rigid corporate structure"], "mood": ["closed", "rigid", "parochial"]}),
     "ascendant_capricorn": make_asc_entry("capricorn", "first impressions of authority, maturity, quiet power",
         ["structured wool", "quality suiting", "heavy cotton"], ["cheap casual fabrics"], ["authority", "maturity", "seriousness"],
-        [{"name": "charcoal", "hex": "#36454F"}, {"name": "navy", "hex": "#000080"}], [{"name": "dark camel", "hex": "#A0785A"}], ["childish or unserious colours"],
+        [{"name": "deep charcoal", "hex": "#333333"}, {"name": "cool navy", "hex": "#003153"}], [{"name": "dark camel", "hex": "#A0785A"}], ["childish or unserious colours"],
         ["polished silver", "platinum"], ["garnet", "onyx"],
         ["pinstripe", "houndstooth"], ["novelty prints"], ["structured", "elongated", "commanding"],
         {"work": "instant authority", "intimate": "quietly impressive", "daily": "mature even in casual"},
@@ -1191,7 +1202,7 @@ saturn_data = [
      ["discipline is your edge", "structured foundations"], ["impulsive choices"], ["military-inspired details"],
      {"textures": ["flimsy fabrics"], "colours": ["frivolous brights"], "silhouettes": ["unstructured casual"], "mood": ["impulsive", "chaotic", "undisciplined"]}),
     ("taurus", "enduring quality, permanent foundations", ["heavy wool", "heritage tweed", "quality leather"], ["disposable fashion"], ["permanence", "heritage"],
-     [{"name": "dark brown", "hex": "#3B2F2F"}], [{"name": "forest green", "hex": "#228B22"}], ["trendy fast colours"], ["antique gold", "bronze"], ["sapphire", "jet"],
+     [{"name": "bitter chocolate", "hex": "#3B1F1F"}], [{"name": "deep sage green", "hex": "#4A6741"}], ["trendy fast colours"], ["antique gold", "bronze"], ["sapphire", "jet"],
      ["heritage check", "traditional stripe"], ["novelty prints"], ["solid", "enduring"], {"work": "timeless authority", "intimate": "heritage luxury", "daily": "built to last"},
      ["buy for the decade not the season", "heritage as identity"], ["disposable trend pieces"], ["heirloom-quality purchases"],
      {"textures": ["disposable fashion"], "colours": ["trendy fast colours"], "silhouettes": ["trend-driven shapes"], "mood": ["trendy", "disposable", "temporary"]}),
@@ -1211,7 +1222,7 @@ saturn_data = [
      ["glamour with restraint", "quality over sparkle"], ["cheap ostentatious display"], ["investment glamour pieces"],
      {"textures": ["cheap sparkly fabrics"], "colours": ["cheap glitter tones"], "silhouettes": ["flashy without substance"], "mood": ["flashy", "cheap", "ostentatious"]}),
     ("virgo", "exacting precision, mastery of detail", ["pressed fine cotton", "structured silk", "precise tailoring"], ["any imperfect fabric"], ["mastery", "precision"],
-     [{"name": "stone grey", "hex": "#928E85"}], [{"name": "sage", "hex": "#9CAF88"}], ["messy uncontrolled tones"], ["brushed silver", "platinum"], ["sapphire", "peridot"],
+     [{"name": "stone grey", "hex": "#928E85"}], [{"name": "soft sage", "hex": "#9CAF88"}], ["messy uncontrolled tones"], ["brushed silver", "platinum"], ["sapphire", "peridot"],
      ["micro-pattern", "precise detail"], ["messy abstract"], ["immaculate", "precise"], {"work": "standard of excellence", "intimate": "meticulous elegance", "daily": "precision as habit"},
      ["perfectionism as style", "flawless execution over creativity"], ["any visible imperfection"], ["regular wardrobe maintenance rituals"],
      {"textures": ["any imperfect fabric"], "colours": ["messy uncontrolled tones"], "silhouettes": ["careless fit"], "mood": ["imprecise", "messy", "careless"]}),
@@ -1221,7 +1232,7 @@ saturn_data = [
      ["beauty requires discipline", "proportional balance always"], ["ugliness as a style statement"], ["colour harmony as a daily practice"],
      {"textures": ["rough ugly fabrics"], "colours": ["ugly discordant tones"], "silhouettes": ["deliberately ugly shapes"], "mood": ["ugly", "discordant", "unbalanced"]}),
     ("scorpio", "deep discipline, controlled intensity", ["bonded fabric", "structured leather", "dense wool"], ["transparent fabrics"], ["control", "depth"],
-     [{"name": "ink black", "hex": "#1C1C1C"}], [{"name": "dark burgundy", "hex": "#4A0000"}], ["light revealing tones"], ["blackened steel", "titanium"], ["obsidian", "onyx"],
+     [{"name": "ink", "hex": "#1B1B1B"}], [{"name": "dark burgundy", "hex": "#4A0000"}], ["light revealing tones"], ["blackened steel", "titanium"], ["obsidian", "onyx"],
      ["dark texture", "subtle power motifs"], ["light cheerful prints"], ["controlled", "concealing"], {"work": "formidable presence", "intimate": "deep controlled power", "daily": "disciplined darkness"},
      ["control is the ultimate power", "dark structured layers"], ["revealing or transparent choices"], ["strategic wardrobe as life armour"],
      {"textures": ["transparent fabrics"], "colours": ["light revealing tones"], "silhouettes": ["exposed and revealing"], "mood": ["exposed", "revealed", "uncontrolled"]}),
@@ -1231,7 +1242,7 @@ saturn_data = [
      ["freedom within structure", "durable adventure-ready pieces"], ["impractical or fragile choices"], ["a structured travel wardrobe"],
      {"textures": ["impractical delicate fabrics"], "colours": ["impractical tones"], "silhouettes": ["fragile impractical"], "mood": ["fragile", "impractical", "naive"]}),
     ("capricorn", "ultimate authority, peak discipline, timeless power", ["finest wool", "structured cashmere", "premium leather"], ["anything cheap"], ["authority", "permanence"],
-     [{"name": "jet black", "hex": "#0A0A0A"}, {"name": "slate", "hex": "#708090"}], [{"name": "dark navy", "hex": "#000080"}], ["any frivolous colour"], ["platinum", "polished silver"], ["onyx", "garnet", "sapphire"],
+     [{"name": "jet black", "hex": "#0A0A0A"}, {"name": "slate", "hex": "#708090"}], [{"name": "cool navy", "hex": "#003153"}], ["any frivolous colour"], ["platinum", "polished silver"], ["onyx", "garnet", "sapphire"],
      ["pinstripe", "houndstooth", "classic check"], ["anything novelty"], ["commanding", "impeccable"], {"work": "the standard others aspire to", "intimate": "quiet powerful luxury", "daily": "never off-duty"},
      ["embody the standard", "timeless pieces as life investments"], ["anything below your standard"], ["a personal uniform system"],
      {"textures": ["anything cheap"], "colours": ["any frivolous colour"], "silhouettes": ["sloppy casual"], "mood": ["frivolous", "undisciplined", "common"]}),
@@ -1293,7 +1304,7 @@ jupiter_entries_raw = {
         ["rich cashmere", "heavy silk charmeuse", "double-faced wool"],
         ["scratchy acrylic knits", "paper-thin cotton", "shiny cheap satin"],
         [{"name": "rich emerald", "hex": "#046307"}],
-        [{"name": "cream", "hex": "#FFFDD0"}],
+        [{"name": "buttery cream", "hex": "#FFFDD0"}],
         ["garish neons", "cold sterile white"],
         ["yellow gold", "bronze"], ["emerald", "jade"],
         ["lush botanical", "oversized florals"], ["busy cluttered prints", "cheap-looking logos"],
@@ -1326,7 +1337,7 @@ jupiter_entries_raw = {
         ["softness", "comfort", "heritage warmth"],
         ["soft quality knits", "heritage wool", "washed linen"],
         ["stiff starched fabrics", "cold synthetics against skin", "scratchy formal blends"],
-        [{"name": "cream", "hex": "#FFFDD0"}],
+        [{"name": "buttery cream", "hex": "#FFFDD0"}],
         [{"name": "pearl white", "hex": "#F0EAD6"}],
         ["harsh black", "cold industrial tones"],
         ["silver", "white gold"], ["pearl", "moonstone"],
@@ -1501,8 +1512,8 @@ mercury_entries_raw = {
         ["substance", "deliberation", "patina"],
         ["heavy cotton oxford", "dense linen blend", "substantial ponte"],
         ["paper-thin disposable fabrics", "flimsy trend pieces that fall apart"],
-        [{"name": "olive", "hex": "#808000"}],
-        [{"name": "warm camel", "hex": "#C19A6B"}],
+        [{"name": "muted olive", "hex": "#6B6B3D"}],
+        [{"name": "sophisticated caramel", "hex": "#A0722D"}],
         ["cheap-looking bright colours", "anything that reads as rushed or careless"],
         ["warm bronze"], ["emerald"],
         ["textured solids", "woven geometric"], ["flashy novelty prints", "gimmicky fast-fashion graphics"],
@@ -1569,8 +1580,8 @@ mercury_entries_raw = {
         ["precision", "finish", "alignment"],
         ["pressed cotton broadcloth", "fine-gauge merino", "precision-knit jersey"],
         ["wrinkle-prone cheap linen", "pilling blend knits", "sloppy oversized sweaters"],
-        [{"name": "wheat", "hex": "#F5DEB3"}],
-        [{"name": "sage green", "hex": "#9CAF88"}],
+        [{"name": "sand", "hex": "#C2B280"}],
+        [{"name": "soft sage", "hex": "#9CAF88"}],
         ["sloppy tie-dye", "chaotic multi-colour clash"],
         ["brushed silver"], ["peridot", "sapphire"],
         ["micro-houndstooth", "fine pinstripe", "precise grid"], ["loud oversized prints", "sloppy abstract splatter"],
@@ -1637,8 +1648,8 @@ mercury_entries_raw = {
         ["authority", "precision", "maintenance"],
         ["fine worsted suiting", "pressed cotton broadcloth", "quality gabardine"],
         ["wrinkled casual linen", "sloppy oversized knits", "juvenile graphic tees"],
-        [{"name": "charcoal", "hex": "#36454F"}],
-        [{"name": "navy", "hex": "#000080"}],
+        [{"name": "deep charcoal", "hex": "#333333"}],
+        [{"name": "cool navy", "hex": "#003153"}],
         ["juvenile brights", "unprofessional neons"],
         ["silver"], ["garnet"],
         ["classic regimental stripe", "subtle power check"], ["novelty prints", "juvenile graphics"],
@@ -1920,7 +1931,7 @@ neptune_entries_raw = {
         ["cloud-weight cashmere", "dream-finish silk charmeuse", "brushed alpaca"],
         ["scratchy cheap knits", "synthetic imitation luxury", "plasticky faux-silk"],
         [{"name": "misty green", "hex": "#8FBC8F"}],
-        [{"name": "cream", "hex": "#FFFDD0"}],
+        [{"name": "buttery cream", "hex": "#FFFDD0"}],
         ["harsh synthetic colours", "cheap-feeling brights", "cold clinical tones"],
         ["rose gold"], ["jade", "opal"],
         ["impressionist botanical", "soft-focus floral"], ["hard-edged graphic", "stark geometric"],
@@ -1988,7 +1999,7 @@ neptune_entries_raw = {
         ["organic fine cotton", "sustainable silk", "mindfully sourced merino"],
         ["mass-produced synthetics", "chemically treated fabrics", "careless construction"],
         [{"name": "sage mist", "hex": "#9DC183"}],
-        [{"name": "ivory", "hex": "#FFFFF0"}],
+        [{"name": "warm ivory", "hex": "#FFFFF0"}],
         ["garish synthetic colours", "carelessly dyed fabrics"],
         ["brushed silver"], ["peridot"],
         ["organic abstract", "nature-inspired minimalism"], ["chaotic loud prints", "careless random patterns"],
@@ -2681,10 +2692,11 @@ ELEMENT_BALANCE = {
 }
 
 # ═══════════════════════════════════════════════════════════════
-# COLOUR LIBRARY (80 named colours)
+# COLOUR LIBRARY (editorial-grade named colours)
 # ═══════════════════════════════════════════════════════════════
 
 COLOUR_LIBRARY = {
+    # ── Reds & Warm Accents ──
     "bright red": {"hex": "#CC0000", "associations": ["aries", "mars", "fire"]},
     "fire red": {"hex": "#B22222", "associations": ["aries", "mars"]},
     "crimson": {"hex": "#DC143C", "associations": ["mars", "aries", "scorpio"]},
@@ -2693,24 +2705,46 @@ COLOUR_LIBRARY = {
     "tangerine": {"hex": "#FF9966", "associations": ["aries", "leo", "fire"]},
     "burnt orange": {"hex": "#CC5500", "associations": ["leo", "fire", "sun"]},
     "warm amber": {"hex": "#FFBF00", "associations": ["leo", "sun", "jupiter"]},
+    "warm terracotta": {"hex": "#E2725B", "associations": ["moon_aries", "fire", "leo"]},
+    "soft marigold": {"hex": "#E8A317", "associations": ["leo", "venus_virgo", "sun"]},
+    "deep burnt saffron": {"hex": "#CC7722", "associations": ["taurus", "venus_taurus", "earth"]},
+
+    # ── Golds & Yellows ──
     "gold": {"hex": "#FFD700", "associations": ["leo", "sun", "jupiter"]},
     "warm gold": {"hex": "#DAA520", "associations": ["leo", "sun"]},
     "dark gold": {"hex": "#B8860B", "associations": ["leo", "saturn"]},
     "molten gold": {"hex": "#B8860B", "associations": ["pluto", "leo"]},
+    "soft gold": {"hex": "#DAA520", "associations": ["mars_libra", "libra", "leo"]},
+    "oxidised gold": {"hex": "#B08D57", "associations": ["taurus", "venus_taurus", "saturn"]},
+    "honey": {"hex": "#EB9605", "associations": ["leo", "venus_virgo", "sun"]},
     "lemon yellow": {"hex": "#FFF44F", "associations": ["gemini", "mercury", "air"]},
     "pale yellow": {"hex": "#FFFF99", "associations": ["gemini", "mercury"]},
     "golden yellow": {"hex": "#FFD700", "associations": ["leo", "mercury"]},
+    "bright yellow": {"hex": "#FFD700", "associations": ["mars_gemini", "gemini"]},
+    "electric gold": {"hex": "#FFD700", "associations": ["uranus_leo", "leo"]},
+    "royal gold": {"hex": "#FFD700", "associations": ["jupiter_aries", "leo"]},
+    "champagne gold": {"hex": "#F7E7CE", "associations": ["neptune_leo", "leo"]},
+    "rich amber": {"hex": "#FFBF00", "associations": ["leo", "venus_leo"]},
+
+    # ── Whites & Creams ──
+    "buttery cream": {"hex": "#FFFDD0", "associations": ["taurus", "venus_taurus", "earth"]},
     "cream": {"hex": "#FFFDD0", "associations": ["taurus", "venus_taurus", "earth"]},
+    "warm ivory": {"hex": "#FFFFF0", "associations": ["virgo", "venus_virgo"]},
     "ivory": {"hex": "#FFFFF0", "associations": ["virgo", "venus_virgo"]},
-    "warm white": {"hex": "#FAF0E6", "associations": ["aries", "venus_aries"]},
+    "warm white": {"hex": "#FAF0E6", "associations": ["aries", "venus_aries", "leo"]},
+    "crisp white": {"hex": "#F8F8FF", "associations": ["gemini", "virgo", "air"]},
+    "bone white": {"hex": "#F9F6F0", "associations": ["capricorn", "saturn", "virgo"]},
     "stark white": {"hex": "#FFFFFF", "associations": ["aries", "sun_aries"]},
     "pearl white": {"hex": "#F0EAD6", "associations": ["cancer", "moon", "pearl"]},
     "soft white": {"hex": "#FAFAFA", "associations": ["cancer", "moon"]},
     "shell white": {"hex": "#FFF5EE", "associations": ["cancer", "mars_cancer"]},
+    "sand": {"hex": "#C2B280", "associations": ["virgo", "venus_virgo", "earth", "leo"]},
     "champagne": {"hex": "#F7E7CE", "associations": ["libra", "venus_libra"]},
+
+    # ── Pinks & Roses ──
     "blush": {"hex": "#DE5D83", "associations": ["cancer", "venus_cancer"]},
     "blush rose": {"hex": "#FFB7C5", "associations": ["pisces", "venus_pisces"]},
-    "dusty rose": {"hex": "#DCAE96", "associations": ["libra", "moon_libra"]},
+    "dusty rose": {"hex": "#DCAE96", "associations": ["libra", "moon_libra", "taurus"]},
     "dusky pink": {"hex": "#CC8899", "associations": ["taurus", "moon_taurus"]},
     "rose pink": {"hex": "#FF66B2", "associations": ["libra", "venus_libra"]},
     "seashell pink": {"hex": "#FFF5EE", "associations": ["cancer", "moon_cancer"]},
@@ -2718,7 +2752,11 @@ COLOUR_LIBRARY = {
     "dream pink": {"hex": "#FFB7C5", "associations": ["neptune", "libra"]},
     "holographic pink": {"hex": "#FF69B4", "associations": ["uranus", "libra"]},
     "dark rose": {"hex": "#B5495B", "associations": ["pluto", "libra"]},
+    "crushed berry": {"hex": "#6D2B50", "associations": ["scorpio", "pluto", "mars"]},
     "rose gold tone": {"hex": "#B76E79", "associations": ["jupiter", "libra"]},
+    "rose": {"hex": "#FF007F", "associations": ["mars_libra", "libra"]},
+
+    # ── Purples & Mauves ──
     "soft mauve": {"hex": "#E0B0FF", "associations": ["libra", "venus_libra"]},
     "lavender": {"hex": "#E6E6FA", "associations": ["gemini", "neptune", "air"]},
     "soft lavender": {"hex": "#E6E6FA", "associations": ["libra", "moon_libra"]},
@@ -2731,68 +2769,112 @@ COLOUR_LIBRARY = {
     "deep violet": {"hex": "#5B0A91", "associations": ["pluto", "pisces"]},
     "void purple": {"hex": "#36013F", "associations": ["pluto", "aquarius"]},
     "electric violet": {"hex": "#8B00FF", "associations": ["uranus", "aquarius"]},
+    "pale violet": {"hex": "#DDA0DD", "associations": ["neptune_pisces", "pisces"]},
+
+    # ── Blues ──
     "sky blue": {"hex": "#87CEEB", "associations": ["gemini", "air"]},
     "powder blue": {"hex": "#B0E0E6", "associations": ["libra", "venus_libra"]},
     "pale blue": {"hex": "#AEC6CF", "associations": ["cancer", "moon_cancer"]},
+    "icy blue": {"hex": "#D6ECEF", "associations": ["aquarius", "gemini", "air"]},
     "pale aqua": {"hex": "#ADE8F4", "associations": ["pisces", "venus_pisces"]},
     "cobalt blue": {"hex": "#0047AB", "associations": ["sagittarius", "venus_sagittarius"]},
     "electric blue": {"hex": "#7DF9FF", "associations": ["aquarius", "uranus"]},
     "neon blue": {"hex": "#1B03A3", "associations": ["mars_aquarius", "uranus"]},
     "deep blue": {"hex": "#00008B", "associations": ["sagittarius", "jupiter", "mars_cancer"]},
+    "dusk blue": {"hex": "#1B3A5C", "associations": ["scorpio", "capricorn", "saturn"]},
+    "cool navy": {"hex": "#003153", "associations": ["gemini", "capricorn", "saturn"]},
     "soft navy": {"hex": "#3B5998", "associations": ["virgo", "venus_virgo"]},
     "navy": {"hex": "#000080", "associations": ["capricorn", "saturn"]},
     "dark navy": {"hex": "#000080", "associations": ["capricorn", "moon_capricorn"]},
+    "deep navy": {"hex": "#000080", "associations": ["capricorn", "saturn_sagittarius"]},
     "midnight": {"hex": "#191970", "associations": ["scorpio", "capricorn", "saturn"]},
     "midnight blue": {"hex": "#191970", "associations": ["neptune", "capricorn"]},
     "slate blue": {"hex": "#6A5ACD", "associations": ["capricorn", "saturn_cancer"]},
+    "aurora blue": {"hex": "#0077B6", "associations": ["neptune_aquarius", "aquarius"]},
+    "sea blue": {"hex": "#006994", "associations": ["mars_pisces", "pisces"]},
+    "ocean blue": {"hex": "#006994", "associations": ["jupiter_pisces", "pisces"]},
+
+    # ── Teals & Greens ──
     "deep teal": {"hex": "#008080", "associations": ["sagittarius", "venus_sagittarius"]},
     "dark teal": {"hex": "#004953", "associations": ["scorpio", "moon_scorpio"]},
     "turquoise": {"hex": "#40E0D0", "associations": ["sagittarius", "moon_sagittarius"]},
     "neon teal": {"hex": "#00B5AD", "associations": ["jupiter", "aquarius"]},
     "electric teal": {"hex": "#00FFEF", "associations": ["uranus", "sagittarius"]},
+    "bright teal": {"hex": "#008080", "associations": ["jupiter_gemini", "gemini"]},
+    "teal": {"hex": "#008080", "associations": ["sagittarius", "venus_sagittarius"]},
     "seafoam": {"hex": "#93E9BE", "associations": ["pisces", "venus_pisces", "water"]},
     "sea glass": {"hex": "#B2D8D8", "associations": ["cancer", "venus_cancer"]},
     "mint": {"hex": "#98FF98", "associations": ["gemini", "moon_gemini"]},
     "neon lime": {"hex": "#CCFF00", "associations": ["aquarius", "venus_aquarius"]},
     "sage green": {"hex": "#9CAF88", "associations": ["taurus", "venus", "earth", "virgo"]},
+    "soft sage": {"hex": "#9CAF88", "associations": ["virgo", "venus_virgo", "earth"]},
+    "deep sage green": {"hex": "#4A6741", "associations": ["taurus", "venus_taurus", "earth"]},
     "sage": {"hex": "#9CAF88", "associations": ["virgo", "moon_virgo"]},
+    "sage mist": {"hex": "#9DC183", "associations": ["neptune_virgo", "virgo"]},
+    "muted olive": {"hex": "#6B6B3D", "associations": ["virgo", "earth", "taurus"]},
     "moss green": {"hex": "#8A9A5B", "associations": ["taurus", "moon_taurus"]},
+    "cold forest green": {"hex": "#2C5F2D", "associations": ["scorpio", "taurus", "earth"]},
     "forest green": {"hex": "#228B22", "associations": ["taurus", "venus_taurus"]},
     "deep olive": {"hex": "#556B2F", "associations": ["mars_taurus", "earth"]},
     "olive": {"hex": "#808000", "associations": ["mercury_taurus", "earth"]},
+    "olive green": {"hex": "#808000", "associations": ["jupiter_virgo", "virgo"]},
+    "rich emerald": {"hex": "#046307", "associations": ["jupiter_taurus", "taurus"]},
+    "misty green": {"hex": "#8FBC8F", "associations": ["neptune_taurus", "taurus"]},
+    "aurora green": {"hex": "#01796F", "associations": ["uranus_pisces", "pisces"]},
+    "sea green": {"hex": "#2E8B57", "associations": ["mercury_pisces", "pisces"]},
+    "electric green": {"hex": "#00FF00", "associations": ["mars_aquarius", "aquarius"]},
+
+    # ── Browns, Camels & Earth Tones ──
+    "sophisticated caramel": {"hex": "#A0722D", "associations": ["taurus", "venus_taurus", "earth"]},
     "warm camel": {"hex": "#C19A6B", "associations": ["taurus", "venus_taurus"]},
     "dark camel": {"hex": "#A0785A", "associations": ["capricorn", "venus_capricorn"]},
     "warm brown": {"hex": "#8B6914", "associations": ["taurus", "earth"]},
+    "worn leather": {"hex": "#7B5B3A", "associations": ["taurus", "mars_taurus", "earth"]},
     "dark brown": {"hex": "#3B2F2F", "associations": ["capricorn", "mars_capricorn", "saturn"]},
+    "bitter chocolate": {"hex": "#3B1F1F", "associations": ["venus_taurus", "earth", "saturn"]},
     "chocolate": {"hex": "#3B2F2F", "associations": ["venus_taurus", "earth"]},
     "warm ochre": {"hex": "#CC7722", "associations": ["sagittarius", "venus_sagittarius"]},
     "burnt sienna": {"hex": "#E97451", "associations": ["sagittarius", "venus_sagittarius"]},
     "warm sienna": {"hex": "#A0522D", "associations": ["sagittarius", "moon_sagittarius"]},
-    "warm terracotta": {"hex": "#E2725B", "associations": ["moon_aries", "fire"]},
+    "burnished copper": {"hex": "#B87333", "associations": ["leo", "mars_leo", "fire"]},
     "rust": {"hex": "#B7410E", "associations": ["mars_taurus", "earth"]},
     "copper": {"hex": "#B87333", "associations": ["mars_leo", "leo"]},
     "copper tone": {"hex": "#B87333", "associations": ["uranus", "taurus"]},
     "light copper": {"hex": "#D4956A", "associations": ["libra", "venus_libra"]},
+    "deep earth": {"hex": "#3B2F2F", "associations": ["pluto_taurus", "earth"]},
     "warm taupe": {"hex": "#8B8589", "associations": ["virgo", "earth"]},
+    "peach": {"hex": "#FFDAB9", "associations": ["gemini", "venus_gemini"]},
+
+    # ── Greys & Neutrals ──
     "light grey": {"hex": "#D3D3D3", "associations": ["gemini", "moon_gemini"]},
     "soft grey": {"hex": "#B0B0B0", "associations": ["moon_virgo", "virgo"]},
     "warm grey": {"hex": "#808069", "associations": ["saturn", "cancer"]},
+    "stormy grey": {"hex": "#5F6B6D", "associations": ["scorpio", "saturn", "capricorn"]},
     "silver grey": {"hex": "#C0C0C0", "associations": ["aquarius", "venus_aquarius"]},
     "cool silver": {"hex": "#AAA9AD", "associations": ["aquarius", "moon_aquarius"]},
     "steel grey": {"hex": "#71797E", "associations": ["saturn_gemini", "saturn"]},
-    "slate": {"hex": "#708090", "associations": ["moon_capricorn", "saturn"]},
+    "slate": {"hex": "#708090", "associations": ["moon_capricorn", "saturn", "taurus"]},
+    "deep charcoal": {"hex": "#333333", "associations": ["capricorn", "saturn", "scorpio"]},
     "stone grey": {"hex": "#928E85", "associations": ["saturn_virgo", "earth"]},
     "mineral grey": {"hex": "#928E85", "associations": ["uranus_virgo", "virgo"]},
     "dark steel": {"hex": "#4A4A4A", "associations": ["uranus_capricorn", "saturn"]},
     "obsidian grey": {"hex": "#3D3D3D", "associations": ["pluto_virgo", "pluto"]},
     "charcoal": {"hex": "#36454F", "associations": ["capricorn", "saturn", "earth"]},
     "dark charcoal": {"hex": "#333333", "associations": ["jupiter_capricorn", "saturn"]},
+    "misty grey": {"hex": "#B0B7BF", "associations": ["mars_pisces", "pisces"]},
+
+    # ── Blacks ──
+    "shadow": {"hex": "#36454F", "associations": ["scorpio", "venus_scorpio", "saturn"]},
+    "ink": {"hex": "#1B1B1B", "associations": ["scorpio", "venus_scorpio", "pluto"]},
     "deep black": {"hex": "#0A0A0A", "associations": ["scorpio", "venus_scorpio", "pluto"]},
     "black": {"hex": "#0A0A0A", "associations": ["scorpio", "moon_scorpio"]},
     "jet black": {"hex": "#0A0A0A", "associations": ["saturn_capricorn", "saturn"]},
     "ink black": {"hex": "#1C1C1C", "associations": ["saturn_scorpio", "pluto"]},
     "abyss black": {"hex": "#050505", "associations": ["pluto_scorpio", "pluto"]},
     "power black": {"hex": "#1C1C1C", "associations": ["pluto_capricorn", "pluto"]},
+
+    # ── Dark Reds & Burgundies ──
+    "deep oxblood": {"hex": "#4A0000", "associations": ["scorpio", "venus_scorpio", "pluto", "mars"]},
     "oxblood": {"hex": "#4A0000", "associations": ["scorpio", "pluto", "mars"]},
     "blood red": {"hex": "#660000", "associations": ["mars_scorpio", "scorpio"]},
     "burgundy": {"hex": "#800020", "associations": ["capricorn", "venus_capricorn"]},
@@ -2806,47 +2888,31 @@ COLOUR_LIBRARY = {
     "brick red": {"hex": "#CB4154", "associations": ["mars_virgo", "earth"]},
     "misty red": {"hex": "#B5495B", "associations": ["neptune_aries", "aries"]},
     "electric red": {"hex": "#FF003C", "associations": ["uranus_aries", "aries"]},
+    "clear red": {"hex": "#CC0000", "associations": ["mercury_aries", "aries"]},
+    "royal red": {"hex": "#B22222", "associations": ["jupiter_aries", "aries"]},
+
+    # ── Silvers ──
     "silver shimmer": {"hex": "#D8D8D8", "associations": ["pisces", "venus_pisces"]},
     "soft silver": {"hex": "#C0C0C0", "associations": ["cancer", "sun_cancer"]},
     "silver": {"hex": "#C0C0C0", "associations": ["moon", "cancer", "water"]},
+
+    # ── Deep Blues & Indigos ──
     "indigo": {"hex": "#4B0082", "associations": ["moon_sagittarius", "sagittarius"]},
     "deep indigo": {"hex": "#130A4F", "associations": ["pluto_sagittarius", "sagittarius"]},
     "ocean indigo": {"hex": "#4B0082", "associations": ["neptune_sagittarius", "sagittarius"]},
-    "sea blue": {"hex": "#006994", "associations": ["mars_pisces", "pisces"]},
-    "ocean blue": {"hex": "#006994", "associations": ["jupiter_pisces", "pisces"]},
+    "deep electric": {"hex": "#1B03A3", "associations": ["uranus_scorpio", "scorpio"]},
+
+    # ── Ocean Tones ──
     "ocean pearl": {"hex": "#E8E0D5", "associations": ["neptune_cancer", "cancer"]},
-    "aurora green": {"hex": "#01796F", "associations": ["uranus_pisces", "pisces"]},
-    "aurora blue": {"hex": "#0077B6", "associations": ["neptune_aquarius", "aquarius"]},
     "deep sea": {"hex": "#003545", "associations": ["pluto_cancer", "cancer"]},
-    "deep earth": {"hex": "#3B2F2F", "associations": ["pluto_taurus", "earth"]},
-    "sea green": {"hex": "#2E8B57", "associations": ["mercury_pisces", "pisces"]},
-    "sage mist": {"hex": "#9DC183", "associations": ["neptune_virgo", "virgo"]},
-    "misty green": {"hex": "#8FBC8F", "associations": ["neptune_taurus", "taurus"]},
     "iridescent white": {"hex": "#F0F8FF", "associations": ["uranus_cancer", "cancer"]},
+
+    # ── Warm Accent Singles ──
     "sunset orange": {"hex": "#FF6347", "associations": ["moon_leo", "leo"]},
-    "champagne gold": {"hex": "#F7E7CE", "associations": ["neptune_leo", "leo"]},
     "wheat": {"hex": "#F5DEB3", "associations": ["virgo", "venus_virgo"]},
     "neon yellow": {"hex": "#CCFF00", "associations": ["uranus_gemini", "gemini"]},
-    "electric green": {"hex": "#00FF00", "associations": ["mars_aquarius", "aquarius"]},
-    "rich emerald": {"hex": "#046307", "associations": ["jupiter_taurus", "taurus"]},
-    "olive green": {"hex": "#808000", "associations": ["jupiter_virgo", "virgo"]},
-    "royal red": {"hex": "#B22222", "associations": ["jupiter_aries", "aries"]},
-    "bright teal": {"hex": "#008080", "associations": ["jupiter_gemini", "gemini"]},
-    "pale violet": {"hex": "#DDA0DD", "associations": ["neptune_pisces", "pisces"]},
-    "rose": {"hex": "#FF007F", "associations": ["mars_libra", "libra"]},
-    "soft gold": {"hex": "#DAA520", "associations": ["mars_libra", "libra"]},
-    "bright yellow": {"hex": "#FFD700", "associations": ["mars_gemini", "gemini"]},
-    "clear red": {"hex": "#CC0000", "associations": ["mercury_aries", "aries"]},
-    "deep electric": {"hex": "#1B03A3", "associations": ["uranus_scorpio", "scorpio"]},
-    "deep navy": {"hex": "#000080", "associations": ["capricorn", "saturn_sagittarius"]},
-    "electric gold": {"hex": "#FFD700", "associations": ["uranus_leo", "leo"]},
     "lemon": {"hex": "#FFF44F", "associations": ["mercury_gemini", "gemini"]},
-    "misty grey": {"hex": "#B0B7BF", "associations": ["mars_pisces", "pisces"]},
-    "peach": {"hex": "#FFDAB9", "associations": ["gemini", "venus_gemini"]},
     "pearl": {"hex": "#F0EAD6", "associations": ["cancer", "moon"]},
-    "rich amber": {"hex": "#FFBF00", "associations": ["leo", "venus_leo"]},
-    "royal gold": {"hex": "#FFD700", "associations": ["jupiter_aries", "leo"]},
-    "teal": {"hex": "#008080", "associations": ["sagittarius", "venus_sagittarius"]},
 }
 
 # ═══════════════════════════════════════════════════════════════
@@ -2887,7 +2953,7 @@ if __name__ == "__main__":
     print(f"aspects:          {asp_count} entries (expected ~30)")
     print(f"house_placements: {hp_count} entries (expected 48)")
     print(f"element_balance:  {eb_count} entries (expected 7)")
-    print(f"colour_library:   {cl_count} entries (expected 60-80)")
+    print(f"colour_library:   {cl_count} entries (expected 180+)")
 
     if ps_count != 132:
         print(f"\nWARNING: Expected 132 planet_sign entries, got {ps_count}")

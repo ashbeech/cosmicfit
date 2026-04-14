@@ -28,8 +28,8 @@
             "hex": "#FF6F61"
           },
           {
-            "name": "bright red",
-            "hex": "#CC0000"
+            "name": "fire red",
+            "hex": "#B22222"
           }
         ],
         "accent": [
@@ -145,26 +145,30 @@
       "colours": {
         "primary": [
           {
-            "name": "cream",
+            "name": "buttery cream",
             "hex": "#FFFDD0"
           },
           {
-            "name": "forest green",
-            "hex": "#228B22"
+            "name": "deep sage green",
+            "hex": "#4A6741"
           },
           {
-            "name": "warm camel",
-            "hex": "#C19A6B"
+            "name": "sophisticated caramel",
+            "hex": "#A0722D"
           }
         ],
         "accent": [
+          {
+            "name": "oxidised gold",
+            "hex": "#B08D57"
+          },
           {
             "name": "dusty rose",
             "hex": "#DCAE96"
           },
           {
-            "name": "chocolate",
-            "hex": "#3B2F2F"
+            "name": "deep burnt saffron",
+            "hex": "#CC7722"
           }
         ],
         "avoid": [
@@ -275,6 +279,10 @@
           {
             "name": "sky blue",
             "hex": "#87CEEB"
+          },
+          {
+            "name": "crisp white",
+            "hex": "#F8F8FF"
           }
         ],
         "accent": [
@@ -283,7 +291,7 @@
             "hex": "#FFDAB9"
           },
           {
-            "name": "lavender",
+            "name": "soft lavender",
             "hex": "#E6E6FA"
           }
         ],
@@ -409,6 +417,10 @@
           {
             "name": "pale blue",
             "hex": "#AEC6CF"
+          },
+          {
+            "name": "seashell pink",
+            "hex": "#FFF5EE"
           }
         ],
         "avoid": [
@@ -522,8 +534,8 @@
             "hex": "#FFBF00"
           },
           {
-            "name": "burnt orange",
-            "hex": "#CC5500"
+            "name": "burnished copper",
+            "hex": "#B87333"
           }
         ],
         "accent": [
@@ -640,7 +652,7 @@
       "colours": {
         "primary": [
           {
-            "name": "sage green",
+            "name": "soft sage",
             "hex": "#9CAF88"
           },
           {
@@ -648,7 +660,7 @@
             "hex": "#8B8589"
           },
           {
-            "name": "ivory",
+            "name": "warm ivory",
             "hex": "#FFFFF0"
           }
         ],
@@ -658,8 +670,12 @@
             "hex": "#3B5998"
           },
           {
-            "name": "wheat",
-            "hex": "#F5DEB3"
+            "name": "sand",
+            "hex": "#C2B280"
+          },
+          {
+            "name": "honey",
+            "hex": "#EB9605"
           }
         ],
         "avoid": [
@@ -783,6 +799,10 @@
             "hex": "#F7E7CE"
           },
           {
+            "name": "dusty rose",
+            "hex": "#DCAE96"
+          },
+          {
             "name": "light copper",
             "hex": "#D4956A"
           }
@@ -894,22 +914,26 @@
             "hex": "#191970"
           },
           {
-            "name": "oxblood",
-            "hex": "#4A0000"
+            "name": "shadow",
+            "hex": "#36454F"
           },
           {
-            "name": "deep black",
-            "hex": "#0A0A0A"
+            "name": "ink",
+            "hex": "#1B1B1B"
           }
         ],
         "accent": [
           {
-            "name": "dark plum",
-            "hex": "#580F41"
+            "name": "deep oxblood",
+            "hex": "#4A0000"
           },
           {
-            "name": "garnet red",
-            "hex": "#733635"
+            "name": "cold forest green",
+            "hex": "#2C5F2D"
+          },
+          {
+            "name": "dark plum",
+            "hex": "#580F41"
           }
         ],
         "avoid": [
@@ -1022,6 +1046,10 @@
           {
             "name": "burnt sienna",
             "hex": "#E97451"
+          },
+          {
+            "name": "warm ochre",
+            "hex": "#CC7722"
           }
         ],
         "accent": [
@@ -1030,8 +1058,8 @@
             "hex": "#008080"
           },
           {
-            "name": "warm ochre",
-            "hex": "#CC7722"
+            "name": "worn leather",
+            "hex": "#7B5B3A"
           }
         ],
         "avoid": [
@@ -1137,12 +1165,12 @@
       "colours": {
         "primary": [
           {
-            "name": "charcoal",
-            "hex": "#36454F"
+            "name": "deep charcoal",
+            "hex": "#333333"
           },
           {
-            "name": "navy",
-            "hex": "#000080"
+            "name": "cool navy",
+            "hex": "#003153"
           },
           {
             "name": "dark camel",
@@ -1153,6 +1181,10 @@
           {
             "name": "burgundy",
             "hex": "#800020"
+          },
+          {
+            "name": "bone white",
+            "hex": "#F9F6F0"
           },
           {
             "name": "slate blue",
@@ -1268,6 +1300,10 @@
           {
             "name": "silver grey",
             "hex": "#C0C0C0"
+          },
+          {
+            "name": "crisp white",
+            "hex": "#F8F8FF"
           }
         ],
         "accent": [
@@ -1278,6 +1314,10 @@
           {
             "name": "neon lime",
             "hex": "#CCFF00"
+          },
+          {
+            "name": "icy blue",
+            "hex": "#D6ECEF"
           }
         ],
         "avoid": [
@@ -1403,6 +1443,10 @@
           {
             "name": "blush rose",
             "hex": "#FFB7C5"
+          },
+          {
+            "name": "pale violet",
+            "hex": "#DDA0DD"
           }
         ],
         "avoid": [
@@ -1518,7 +1562,7 @@
         ],
         "accent": [
           {
-            "name": "ivory",
+            "name": "warm ivory",
             "hex": "#FFFFF0"
           }
         ],
@@ -1613,8 +1657,8 @@
       "colours": {
         "primary": [
           {
-            "name": "warm brown",
-            "hex": "#8B6914"
+            "name": "worn leather",
+            "hex": "#7B5B3A"
           },
           {
             "name": "moss green",
@@ -1623,7 +1667,7 @@
         ],
         "accent": [
           {
-            "name": "cream",
+            "name": "buttery cream",
             "hex": "#FFFDD0"
           },
           {
@@ -1726,8 +1770,8 @@
             "hex": "#FFFF99"
           },
           {
-            "name": "light grey",
-            "hex": "#D3D3D3"
+            "name": "soft grey",
+            "hex": "#B0B0B0"
           }
         ],
         "accent": [
@@ -1949,7 +1993,7 @@
         ],
         "accent": [
           {
-            "name": "champagne",
+            "name": "champagne gold",
             "hex": "#F7E7CE"
           }
         ],
@@ -2048,14 +2092,14 @@
             "hex": "#B0B0B0"
           },
           {
-            "name": "sage",
+            "name": "soft sage",
             "hex": "#9CAF88"
           }
         ],
         "accent": [
           {
-            "name": "wheat",
-            "hex": "#F5DEB3"
+            "name": "sand",
+            "hex": "#C2B280"
           }
         ],
         "avoid": [
@@ -2256,8 +2300,8 @@
             "hex": "#800020"
           },
           {
-            "name": "black",
-            "hex": "#0A0A0A"
+            "name": "ink",
+            "hex": "#1B1B1B"
           }
         ],
         "accent": [
@@ -2467,14 +2511,14 @@
             "hex": "#708090"
           },
           {
-            "name": "charcoal",
-            "hex": "#36454F"
+            "name": "deep charcoal",
+            "hex": "#333333"
           }
         ],
         "accent": [
           {
-            "name": "dark navy",
-            "hex": "#000080"
+            "name": "cool navy",
+            "hex": "#003153"
           }
         ],
         "avoid": [
@@ -2877,18 +2921,18 @@
       "colours": {
         "primary": [
           {
-            "name": "sage green",
-            "hex": "#9CAF88"
+            "name": "deep sage green",
+            "hex": "#4A6741"
           },
           {
-            "name": "warm brown",
-            "hex": "#8B6914"
+            "name": "sophisticated caramel",
+            "hex": "#A0722D"
           }
         ],
         "accent": [
           {
-            "name": "blush",
-            "hex": "#DE5D83"
+            "name": "dusty rose",
+            "hex": "#DCAE96"
           }
         ],
         "avoid": [
@@ -2990,6 +3034,10 @@
           {
             "name": "tangerine",
             "hex": "#FF9966"
+          },
+          {
+            "name": "crisp white",
+            "hex": "#F8F8FF"
           }
         ],
         "avoid": [
@@ -3285,7 +3333,7 @@
             "hex": "#8B8589"
           },
           {
-            "name": "sage green",
+            "name": "soft sage",
             "hex": "#9CAF88"
           }
         ],
@@ -3486,11 +3534,11 @@
       "colours": {
         "primary": [
           {
-            "name": "deep black",
-            "hex": "#0A0A0A"
+            "name": "ink",
+            "hex": "#1B1B1B"
           },
           {
-            "name": "oxblood",
+            "name": "deep oxblood",
             "hex": "#4A0000"
           }
         ],
@@ -3694,12 +3742,12 @@
       "colours": {
         "primary": [
           {
-            "name": "charcoal",
-            "hex": "#36454F"
+            "name": "deep charcoal",
+            "hex": "#333333"
           },
           {
-            "name": "navy",
-            "hex": "#000080"
+            "name": "cool navy",
+            "hex": "#003153"
           }
         ],
         "accent": [
@@ -4105,8 +4153,8 @@
         ],
         "accent": [
           {
-            "name": "warm brown",
-            "hex": "#8B6914"
+            "name": "worn leather",
+            "hex": "#7B5B3A"
           }
         ],
         "avoid": [
@@ -4475,8 +4523,8 @@
         ],
         "accent": [
           {
-            "name": "navy",
-            "hex": "#000080"
+            "name": "soft navy",
+            "hex": "#3B5998"
           }
         ],
         "avoid": [
@@ -4651,8 +4699,8 @@
       "colours": {
         "primary": [
           {
-            "name": "deep black",
-            "hex": "#0A0A0A"
+            "name": "ink",
+            "hex": "#1B1B1B"
           },
           {
             "name": "blood red",
@@ -4837,12 +4885,12 @@
       "colours": {
         "primary": [
           {
-            "name": "dark brown",
-            "hex": "#3B2F2F"
+            "name": "bitter chocolate",
+            "hex": "#3B1F1F"
           },
           {
-            "name": "charcoal",
-            "hex": "#36454F"
+            "name": "deep charcoal",
+            "hex": "#333333"
           }
         ],
         "accent": [
@@ -5204,18 +5252,18 @@
       "colours": {
         "primary": [
           {
-            "name": "forest green",
-            "hex": "#228B22"
+            "name": "deep sage green",
+            "hex": "#4A6741"
           },
           {
-            "name": "cream",
+            "name": "buttery cream",
             "hex": "#FFFDD0"
           }
         ],
         "accent": [
           {
-            "name": "warm camel",
-            "hex": "#C19A6B"
+            "name": "sophisticated caramel",
+            "hex": "#A0722D"
           }
         ],
         "avoid": [
@@ -5308,6 +5356,10 @@
           {
             "name": "mint",
             "hex": "#98FF98"
+          },
+          {
+            "name": "crisp white",
+            "hex": "#F8F8FF"
           }
         ],
         "avoid": [
@@ -5578,7 +5630,7 @@
             "hex": "#8B8589"
           },
           {
-            "name": "sage green",
+            "name": "soft sage",
             "hex": "#9CAF88"
           }
         ],
@@ -5758,11 +5810,11 @@
       "colours": {
         "primary": [
           {
-            "name": "deep black",
-            "hex": "#0A0A0A"
+            "name": "ink",
+            "hex": "#1B1B1B"
           },
           {
-            "name": "oxblood",
+            "name": "deep oxblood",
             "hex": "#4A0000"
           }
         ],
@@ -5943,12 +5995,12 @@
       "colours": {
         "primary": [
           {
-            "name": "charcoal",
-            "hex": "#36454F"
+            "name": "deep charcoal",
+            "hex": "#333333"
           },
           {
-            "name": "navy",
-            "hex": "#000080"
+            "name": "cool navy",
+            "hex": "#003153"
           }
         ],
         "accent": [
@@ -6304,14 +6356,14 @@
       "colours": {
         "primary": [
           {
-            "name": "dark brown",
-            "hex": "#3B2F2F"
+            "name": "bitter chocolate",
+            "hex": "#3B1F1F"
           }
         ],
         "accent": [
           {
-            "name": "forest green",
-            "hex": "#228B22"
+            "name": "deep sage green",
+            "hex": "#4A6741"
           }
         ],
         "avoid": [
@@ -6653,7 +6705,7 @@
         ],
         "accent": [
           {
-            "name": "sage",
+            "name": "soft sage",
             "hex": "#9CAF88"
           }
         ],
@@ -6818,8 +6870,8 @@
       "colours": {
         "primary": [
           {
-            "name": "ink black",
-            "hex": "#1C1C1C"
+            "name": "ink",
+            "hex": "#1B1B1B"
           }
         ],
         "accent": [
@@ -6999,8 +7051,8 @@
         ],
         "accent": [
           {
-            "name": "dark navy",
-            "hex": "#000080"
+            "name": "cool navy",
+            "hex": "#003153"
           }
         ],
         "avoid": [
@@ -7362,7 +7414,7 @@
         ],
         "accent": [
           {
-            "name": "cream",
+            "name": "buttery cream",
             "hex": "#FFFDD0"
           }
         ],
@@ -7555,7 +7607,7 @@
       "colours": {
         "primary": [
           {
-            "name": "cream",
+            "name": "buttery cream",
             "hex": "#FFFDD0"
           }
         ],
@@ -8553,14 +8605,14 @@
       "colours": {
         "primary": [
           {
-            "name": "olive",
-            "hex": "#808000"
+            "name": "muted olive",
+            "hex": "#6B6B3D"
           }
         ],
         "accent": [
           {
-            "name": "warm camel",
-            "hex": "#C19A6B"
+            "name": "sophisticated caramel",
+            "hex": "#A0722D"
           }
         ],
         "avoid": [
@@ -8949,13 +9001,13 @@
       "colours": {
         "primary": [
           {
-            "name": "wheat",
-            "hex": "#F5DEB3"
+            "name": "sand",
+            "hex": "#C2B280"
           }
         ],
         "accent": [
           {
-            "name": "sage green",
+            "name": "soft sage",
             "hex": "#9CAF88"
           }
         ],
@@ -9340,14 +9392,14 @@
       "colours": {
         "primary": [
           {
-            "name": "charcoal",
-            "hex": "#36454F"
+            "name": "deep charcoal",
+            "hex": "#333333"
           }
         ],
         "accent": [
           {
-            "name": "navy",
-            "hex": "#000080"
+            "name": "cool navy",
+            "hex": "#003153"
           }
         ],
         "avoid": [
@@ -10914,7 +10966,7 @@
         ],
         "accent": [
           {
-            "name": "cream",
+            "name": "buttery cream",
             "hex": "#FFFDD0"
           }
         ],
@@ -11310,7 +11362,7 @@
         ],
         "accent": [
           {
-            "name": "ivory",
+            "name": "warm ivory",
             "hex": "#FFFFF0"
           }
         ],
@@ -14562,6 +14614,30 @@
         "jupiter"
       ]
     },
+    "warm terracotta": {
+      "hex": "#E2725B",
+      "associations": [
+        "moon_aries",
+        "fire",
+        "leo"
+      ]
+    },
+    "soft marigold": {
+      "hex": "#E8A317",
+      "associations": [
+        "leo",
+        "venus_virgo",
+        "sun"
+      ]
+    },
+    "deep burnt saffron": {
+      "hex": "#CC7722",
+      "associations": [
+        "taurus",
+        "venus_taurus",
+        "earth"
+      ]
+    },
     "gold": {
       "hex": "#FFD700",
       "associations": [
@@ -14591,6 +14667,30 @@
         "leo"
       ]
     },
+    "soft gold": {
+      "hex": "#DAA520",
+      "associations": [
+        "mars_libra",
+        "libra",
+        "leo"
+      ]
+    },
+    "oxidised gold": {
+      "hex": "#B08D57",
+      "associations": [
+        "taurus",
+        "venus_taurus",
+        "saturn"
+      ]
+    },
+    "honey": {
+      "hex": "#EB9605",
+      "associations": [
+        "leo",
+        "venus_virgo",
+        "sun"
+      ]
+    },
     "lemon yellow": {
       "hex": "#FFF44F",
       "associations": [
@@ -14613,12 +14713,62 @@
         "mercury"
       ]
     },
+    "bright yellow": {
+      "hex": "#FFD700",
+      "associations": [
+        "mars_gemini",
+        "gemini"
+      ]
+    },
+    "electric gold": {
+      "hex": "#FFD700",
+      "associations": [
+        "uranus_leo",
+        "leo"
+      ]
+    },
+    "royal gold": {
+      "hex": "#FFD700",
+      "associations": [
+        "jupiter_aries",
+        "leo"
+      ]
+    },
+    "champagne gold": {
+      "hex": "#F7E7CE",
+      "associations": [
+        "neptune_leo",
+        "leo"
+      ]
+    },
+    "rich amber": {
+      "hex": "#FFBF00",
+      "associations": [
+        "leo",
+        "venus_leo"
+      ]
+    },
+    "buttery cream": {
+      "hex": "#FFFDD0",
+      "associations": [
+        "taurus",
+        "venus_taurus",
+        "earth"
+      ]
+    },
     "cream": {
       "hex": "#FFFDD0",
       "associations": [
         "taurus",
         "venus_taurus",
         "earth"
+      ]
+    },
+    "warm ivory": {
+      "hex": "#FFFFF0",
+      "associations": [
+        "virgo",
+        "venus_virgo"
       ]
     },
     "ivory": {
@@ -14632,7 +14782,24 @@
       "hex": "#FAF0E6",
       "associations": [
         "aries",
-        "venus_aries"
+        "venus_aries",
+        "leo"
+      ]
+    },
+    "crisp white": {
+      "hex": "#F8F8FF",
+      "associations": [
+        "gemini",
+        "virgo",
+        "air"
+      ]
+    },
+    "bone white": {
+      "hex": "#F9F6F0",
+      "associations": [
+        "capricorn",
+        "saturn",
+        "virgo"
       ]
     },
     "stark white": {
@@ -14664,6 +14831,15 @@
         "mars_cancer"
       ]
     },
+    "sand": {
+      "hex": "#C2B280",
+      "associations": [
+        "virgo",
+        "venus_virgo",
+        "earth",
+        "leo"
+      ]
+    },
     "champagne": {
       "hex": "#F7E7CE",
       "associations": [
@@ -14689,7 +14865,8 @@
       "hex": "#DCAE96",
       "associations": [
         "libra",
-        "moon_libra"
+        "moon_libra",
+        "taurus"
       ]
     },
     "dusky pink": {
@@ -14741,10 +14918,25 @@
         "libra"
       ]
     },
+    "crushed berry": {
+      "hex": "#6D2B50",
+      "associations": [
+        "scorpio",
+        "pluto",
+        "mars"
+      ]
+    },
     "rose gold tone": {
       "hex": "#B76E79",
       "associations": [
         "jupiter",
+        "libra"
+      ]
+    },
+    "rose": {
+      "hex": "#FF007F",
+      "associations": [
+        "mars_libra",
         "libra"
       ]
     },
@@ -14833,6 +15025,13 @@
         "aquarius"
       ]
     },
+    "pale violet": {
+      "hex": "#DDA0DD",
+      "associations": [
+        "neptune_pisces",
+        "pisces"
+      ]
+    },
     "sky blue": {
       "hex": "#87CEEB",
       "associations": [
@@ -14852,6 +15051,14 @@
       "associations": [
         "cancer",
         "moon_cancer"
+      ]
+    },
+    "icy blue": {
+      "hex": "#D6ECEF",
+      "associations": [
+        "aquarius",
+        "gemini",
+        "air"
       ]
     },
     "pale aqua": {
@@ -14890,6 +15097,22 @@
         "mars_cancer"
       ]
     },
+    "dusk blue": {
+      "hex": "#1B3A5C",
+      "associations": [
+        "scorpio",
+        "capricorn",
+        "saturn"
+      ]
+    },
+    "cool navy": {
+      "hex": "#003153",
+      "associations": [
+        "gemini",
+        "capricorn",
+        "saturn"
+      ]
+    },
     "soft navy": {
       "hex": "#3B5998",
       "associations": [
@@ -14909,6 +15132,13 @@
       "associations": [
         "capricorn",
         "moon_capricorn"
+      ]
+    },
+    "deep navy": {
+      "hex": "#000080",
+      "associations": [
+        "capricorn",
+        "saturn_sagittarius"
       ]
     },
     "midnight": {
@@ -14931,6 +15161,27 @@
       "associations": [
         "capricorn",
         "saturn_cancer"
+      ]
+    },
+    "aurora blue": {
+      "hex": "#0077B6",
+      "associations": [
+        "neptune_aquarius",
+        "aquarius"
+      ]
+    },
+    "sea blue": {
+      "hex": "#006994",
+      "associations": [
+        "mars_pisces",
+        "pisces"
+      ]
+    },
+    "ocean blue": {
+      "hex": "#006994",
+      "associations": [
+        "jupiter_pisces",
+        "pisces"
       ]
     },
     "deep teal": {
@@ -14966,6 +15217,20 @@
       "associations": [
         "uranus",
         "sagittarius"
+      ]
+    },
+    "bright teal": {
+      "hex": "#008080",
+      "associations": [
+        "jupiter_gemini",
+        "gemini"
+      ]
+    },
+    "teal": {
+      "hex": "#008080",
+      "associations": [
+        "sagittarius",
+        "venus_sagittarius"
       ]
     },
     "seafoam": {
@@ -15006,6 +15271,22 @@
         "virgo"
       ]
     },
+    "soft sage": {
+      "hex": "#9CAF88",
+      "associations": [
+        "virgo",
+        "venus_virgo",
+        "earth"
+      ]
+    },
+    "deep sage green": {
+      "hex": "#4A6741",
+      "associations": [
+        "taurus",
+        "venus_taurus",
+        "earth"
+      ]
+    },
     "sage": {
       "hex": "#9CAF88",
       "associations": [
@@ -15013,11 +15294,34 @@
         "moon_virgo"
       ]
     },
+    "sage mist": {
+      "hex": "#9DC183",
+      "associations": [
+        "neptune_virgo",
+        "virgo"
+      ]
+    },
+    "muted olive": {
+      "hex": "#6B6B3D",
+      "associations": [
+        "virgo",
+        "earth",
+        "taurus"
+      ]
+    },
     "moss green": {
       "hex": "#8A9A5B",
       "associations": [
         "taurus",
         "moon_taurus"
+      ]
+    },
+    "cold forest green": {
+      "hex": "#2C5F2D",
+      "associations": [
+        "scorpio",
+        "taurus",
+        "earth"
       ]
     },
     "forest green": {
@@ -15038,6 +15342,56 @@
       "hex": "#808000",
       "associations": [
         "mercury_taurus",
+        "earth"
+      ]
+    },
+    "olive green": {
+      "hex": "#808000",
+      "associations": [
+        "jupiter_virgo",
+        "virgo"
+      ]
+    },
+    "rich emerald": {
+      "hex": "#046307",
+      "associations": [
+        "jupiter_taurus",
+        "taurus"
+      ]
+    },
+    "misty green": {
+      "hex": "#8FBC8F",
+      "associations": [
+        "neptune_taurus",
+        "taurus"
+      ]
+    },
+    "aurora green": {
+      "hex": "#01796F",
+      "associations": [
+        "uranus_pisces",
+        "pisces"
+      ]
+    },
+    "sea green": {
+      "hex": "#2E8B57",
+      "associations": [
+        "mercury_pisces",
+        "pisces"
+      ]
+    },
+    "electric green": {
+      "hex": "#00FF00",
+      "associations": [
+        "mars_aquarius",
+        "aquarius"
+      ]
+    },
+    "sophisticated caramel": {
+      "hex": "#A0722D",
+      "associations": [
+        "taurus",
+        "venus_taurus",
         "earth"
       ]
     },
@@ -15062,11 +15416,27 @@
         "earth"
       ]
     },
+    "worn leather": {
+      "hex": "#7B5B3A",
+      "associations": [
+        "taurus",
+        "mars_taurus",
+        "earth"
+      ]
+    },
     "dark brown": {
       "hex": "#3B2F2F",
       "associations": [
         "capricorn",
         "mars_capricorn",
+        "saturn"
+      ]
+    },
+    "bitter chocolate": {
+      "hex": "#3B1F1F",
+      "associations": [
+        "venus_taurus",
+        "earth",
         "saturn"
       ]
     },
@@ -15098,10 +15468,11 @@
         "moon_sagittarius"
       ]
     },
-    "warm terracotta": {
-      "hex": "#E2725B",
+    "burnished copper": {
+      "hex": "#B87333",
       "associations": [
-        "moon_aries",
+        "leo",
+        "mars_leo",
         "fire"
       ]
     },
@@ -15133,11 +15504,25 @@
         "venus_libra"
       ]
     },
+    "deep earth": {
+      "hex": "#3B2F2F",
+      "associations": [
+        "pluto_taurus",
+        "earth"
+      ]
+    },
     "warm taupe": {
       "hex": "#8B8589",
       "associations": [
         "virgo",
         "earth"
+      ]
+    },
+    "peach": {
+      "hex": "#FFDAB9",
+      "associations": [
+        "gemini",
+        "venus_gemini"
       ]
     },
     "light grey": {
@@ -15159,6 +15544,14 @@
       "associations": [
         "saturn",
         "cancer"
+      ]
+    },
+    "stormy grey": {
+      "hex": "#5F6B6D",
+      "associations": [
+        "scorpio",
+        "saturn",
+        "capricorn"
       ]
     },
     "silver grey": {
@@ -15186,7 +15579,16 @@
       "hex": "#708090",
       "associations": [
         "moon_capricorn",
-        "saturn"
+        "saturn",
+        "taurus"
+      ]
+    },
+    "deep charcoal": {
+      "hex": "#333333",
+      "associations": [
+        "capricorn",
+        "saturn",
+        "scorpio"
       ]
     },
     "stone grey": {
@@ -15232,6 +15634,29 @@
         "saturn"
       ]
     },
+    "misty grey": {
+      "hex": "#B0B7BF",
+      "associations": [
+        "mars_pisces",
+        "pisces"
+      ]
+    },
+    "shadow": {
+      "hex": "#36454F",
+      "associations": [
+        "scorpio",
+        "venus_scorpio",
+        "saturn"
+      ]
+    },
+    "ink": {
+      "hex": "#1B1B1B",
+      "associations": [
+        "scorpio",
+        "venus_scorpio",
+        "pluto"
+      ]
+    },
     "deep black": {
       "hex": "#0A0A0A",
       "associations": [
@@ -15273,6 +15698,15 @@
       "associations": [
         "pluto_capricorn",
         "pluto"
+      ]
+    },
+    "deep oxblood": {
+      "hex": "#4A0000",
+      "associations": [
+        "scorpio",
+        "venus_scorpio",
+        "pluto",
+        "mars"
       ]
     },
     "oxblood": {
@@ -15367,6 +15801,20 @@
         "aries"
       ]
     },
+    "clear red": {
+      "hex": "#CC0000",
+      "associations": [
+        "mercury_aries",
+        "aries"
+      ]
+    },
+    "royal red": {
+      "hex": "#B22222",
+      "associations": [
+        "jupiter_aries",
+        "aries"
+      ]
+    },
     "silver shimmer": {
       "hex": "#D8D8D8",
       "associations": [
@@ -15410,18 +15858,11 @@
         "sagittarius"
       ]
     },
-    "sea blue": {
-      "hex": "#006994",
+    "deep electric": {
+      "hex": "#1B03A3",
       "associations": [
-        "mars_pisces",
-        "pisces"
-      ]
-    },
-    "ocean blue": {
-      "hex": "#006994",
-      "associations": [
-        "jupiter_pisces",
-        "pisces"
+        "uranus_scorpio",
+        "scorpio"
       ]
     },
     "ocean pearl": {
@@ -15431,53 +15872,11 @@
         "cancer"
       ]
     },
-    "aurora green": {
-      "hex": "#01796F",
-      "associations": [
-        "uranus_pisces",
-        "pisces"
-      ]
-    },
-    "aurora blue": {
-      "hex": "#0077B6",
-      "associations": [
-        "neptune_aquarius",
-        "aquarius"
-      ]
-    },
     "deep sea": {
       "hex": "#003545",
       "associations": [
         "pluto_cancer",
         "cancer"
-      ]
-    },
-    "deep earth": {
-      "hex": "#3B2F2F",
-      "associations": [
-        "pluto_taurus",
-        "earth"
-      ]
-    },
-    "sea green": {
-      "hex": "#2E8B57",
-      "associations": [
-        "mercury_pisces",
-        "pisces"
-      ]
-    },
-    "sage mist": {
-      "hex": "#9DC183",
-      "associations": [
-        "neptune_virgo",
-        "virgo"
-      ]
-    },
-    "misty green": {
-      "hex": "#8FBC8F",
-      "associations": [
-        "neptune_taurus",
-        "taurus"
       ]
     },
     "iridescent white": {
@@ -15491,13 +15890,6 @@
       "hex": "#FF6347",
       "associations": [
         "moon_leo",
-        "leo"
-      ]
-    },
-    "champagne gold": {
-      "hex": "#F7E7CE",
-      "associations": [
-        "neptune_leo",
         "leo"
       ]
     },
@@ -15515,97 +15907,6 @@
         "gemini"
       ]
     },
-    "electric green": {
-      "hex": "#00FF00",
-      "associations": [
-        "mars_aquarius",
-        "aquarius"
-      ]
-    },
-    "rich emerald": {
-      "hex": "#046307",
-      "associations": [
-        "jupiter_taurus",
-        "taurus"
-      ]
-    },
-    "olive green": {
-      "hex": "#808000",
-      "associations": [
-        "jupiter_virgo",
-        "virgo"
-      ]
-    },
-    "royal red": {
-      "hex": "#B22222",
-      "associations": [
-        "jupiter_aries",
-        "aries"
-      ]
-    },
-    "bright teal": {
-      "hex": "#008080",
-      "associations": [
-        "jupiter_gemini",
-        "gemini"
-      ]
-    },
-    "pale violet": {
-      "hex": "#DDA0DD",
-      "associations": [
-        "neptune_pisces",
-        "pisces"
-      ]
-    },
-    "rose": {
-      "hex": "#FF007F",
-      "associations": [
-        "mars_libra",
-        "libra"
-      ]
-    },
-    "soft gold": {
-      "hex": "#DAA520",
-      "associations": [
-        "mars_libra",
-        "libra"
-      ]
-    },
-    "bright yellow": {
-      "hex": "#FFD700",
-      "associations": [
-        "mars_gemini",
-        "gemini"
-      ]
-    },
-    "clear red": {
-      "hex": "#CC0000",
-      "associations": [
-        "mercury_aries",
-        "aries"
-      ]
-    },
-    "deep electric": {
-      "hex": "#1B03A3",
-      "associations": [
-        "uranus_scorpio",
-        "scorpio"
-      ]
-    },
-    "deep navy": {
-      "hex": "#000080",
-      "associations": [
-        "capricorn",
-        "saturn_sagittarius"
-      ]
-    },
-    "electric gold": {
-      "hex": "#FFD700",
-      "associations": [
-        "uranus_leo",
-        "leo"
-      ]
-    },
     "lemon": {
       "hex": "#FFF44F",
       "associations": [
@@ -15613,46 +15914,11 @@
         "gemini"
       ]
     },
-    "misty grey": {
-      "hex": "#B0B7BF",
-      "associations": [
-        "mars_pisces",
-        "pisces"
-      ]
-    },
-    "peach": {
-      "hex": "#FFDAB9",
-      "associations": [
-        "gemini",
-        "venus_gemini"
-      ]
-    },
     "pearl": {
       "hex": "#F0EAD6",
       "associations": [
         "cancer",
         "moon"
-      ]
-    },
-    "rich amber": {
-      "hex": "#FFBF00",
-      "associations": [
-        "leo",
-        "venus_leo"
-      ]
-    },
-    "royal gold": {
-      "hex": "#FFD700",
-      "associations": [
-        "jupiter_aries",
-        "leo"
-      ]
-    },
-    "teal": {
-      "hex": "#008080",
-      "associations": [
-        "sagittarius",
-        "venus_sagittarius"
       ]
     }
   }

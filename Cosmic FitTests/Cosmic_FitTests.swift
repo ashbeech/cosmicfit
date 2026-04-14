@@ -1248,6 +1248,7 @@ struct NarrativeTemplateRendererTests {
             accentColours: [
                 BlueprintColour(name: "dusty rose", hexValue: "#DCAE96", role: .accent),
             ],
+            swatchFamilies: [],
             recommendedMetals: ["silver", "steel"],
             recommendedStones: ["onyx", "obsidian"],
             leanInto: [],
@@ -1365,6 +1366,7 @@ struct BlueprintComposerTemplateTests {
                 BlueprintColour(name: "dusty rose", hexValue: "#DCAE96", role: .accent),
                 BlueprintColour(name: "sage", hexValue: "#9CAF88", role: .accent),
             ],
+            swatchFamilies: [],
             recommendedMetals: ["silver", "steel"],
             recommendedStones: ["onyx", "obsidian"],
             leanInto: ["structured", "minimal"],
