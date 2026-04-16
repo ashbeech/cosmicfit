@@ -168,7 +168,8 @@ final class AuthGateViewController: UIViewController {
                 let otpVC = OTPVerifyViewController(email: email)
                 navigationController?.pushViewController(otpVC, animated: true)
             } catch {
-                showError("Could not send code. Please try again.")
+                print("❌ sendOTP error: \(error)")
+                showError("Could not send code: \(error.localizedDescription)")
             }
             sendCodeButton.isEnabled = true
             activityIndicator.stopAnimating()

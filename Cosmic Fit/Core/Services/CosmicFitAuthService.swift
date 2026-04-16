@@ -65,10 +65,17 @@ final class CosmicFitAuthService {
     // MARK: - OTP flow
 
     func sendOTP(email: String) async throws {
-        let _: SendOTPResponse = try await supabase.functions.invoke(
-            "send-otp",
-            options: .init(body: ["email": email])
-        )
+        do {
+            let _: SendOTPResponse = try await supabase.functions.invoke(
+                "send-otp",
+                options: .init(body: ["email": email])
+            )
+            print("✅ sendOTP succeeded")
+        } catch {
+            print("❌ sendOTP failed: \(error)")
+            print("❌ sendOTP error type: \(type(of: error))")
+            throw error
+        }
     }
 
     func verifyOTP(email: String, code: String) async throws {
