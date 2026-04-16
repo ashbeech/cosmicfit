@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5E63651E2E63B5130066807C /* SwissEphemeris in Frameworks */ = {isa = PBXBuildFile; productRef = 5E63651D2E63B5130066807C /* SwissEphemeris */; };
+		CF0001032E80A0000066807C /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = CF0001022E80A0000066807C /* Supabase */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +40,8 @@
 		5EB2E4CF2DC75C8A00644BAD /* Cosmic Fit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cosmic Fit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EB2E4DC2DC75C8D00644BAD /* Cosmic FitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Cosmic FitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EB2E4E62DC75C8D00644BAD /* Cosmic FitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Cosmic FitUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF0001042E80A0000066807C /* Dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Dev.xcconfig; sourceTree = "<group>"; };
+		CF0001052E80A0000066807C /* Prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Prod.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
@@ -88,6 +91,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5E63651E2E63B5130066807C /* SwissEphemeris in Frameworks */,
+				CF0001032E80A0000066807C /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +137,7 @@
 		5EB2E4C62DC75C8A00644BAD = {
 			isa = PBXGroup;
 			children = (
+				CF0001062E80A0000066807C /* Config */,
 				5EB2E4D12DC75C8A00644BAD /* Cosmic Fit */,
 				5EAR00012E6400000066807C /* _archive */,
 				5EB2E4DF2DC75C8D00644BAD /* Cosmic FitTests */,
@@ -150,6 +155,16 @@
 				5EB2E4E62DC75C8D00644BAD /* Cosmic FitUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		CF0001062E80A0000066807C /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				CF0001042E80A0000066807C /* Dev.xcconfig */,
+				CF0001052E80A0000066807C /* Prod.xcconfig */,
+			);
+			name = Config;
+			path = "Cosmic Fit/Config";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,6 +188,7 @@
 			name = "Cosmic Fit";
 			packageProductDependencies = (
 				5E63651D2E63B5130066807C /* SwissEphemeris */,
+				CF0001022E80A0000066807C /* Supabase */,
 			);
 			productName = "Cosmic Fit";
 			productReference = 5EB2E4CF2DC75C8A00644BAD /* Cosmic Fit.app */;
@@ -258,6 +274,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				5E63651B2E63B28E0066807C /* XCRemoteSwiftPackageReference "SwissEphemeris" */,
+				CF0001012E80A0000066807C /* XCRemoteSwiftPackageReference "supabase-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5EB2E4D02DC75C8A00644BAD /* Products */;
@@ -456,6 +473,7 @@
 		};
 		5EB2E4F12DC75C8D00644BAD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CF0001042E80A0000066807C /* Dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -470,7 +488,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is used to set the birth location for the natal chart calculation.";
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -488,6 +506,7 @@
 		};
 		5EB2E4F22DC75C8D00644BAD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CF0001052E80A0000066807C /* Prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -502,7 +521,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is used to set the birth location for the natal chart calculation.";
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -640,6 +659,14 @@
 				minimumVersion = 0.0.99;
 			};
 		};
+		CF0001012E80A0000066807C /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -647,6 +674,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5E63651B2E63B28E0066807C /* XCRemoteSwiftPackageReference "SwissEphemeris" */;
 			productName = SwissEphemeris;
+		};
+		CF0001022E80A0000066807C /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CF0001012E80A0000066807C /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

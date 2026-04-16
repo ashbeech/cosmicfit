@@ -65,17 +65,29 @@ def load_local_env_file() -> None:
                 os.environ[key] = value
 
 
-def resolve_api_key(cli_value: str | None) -> str:
-    """Resolves the Gemini API key from CLI args or environment."""
-    if cli_value:
-        return cli_value
+def resolve_api_keys(cli_value: str | None) -> list[str]:
+    """Resolves one or more Gemini API keys for rotation.
 
-    env_value = os.environ.get("GEMINI_API_KEY", "").strip()
-    if env_value:
-        return env_value
+    Priority: --api-key flag > GEMINI_API_KEY_1..N > GEMINI_API_KEY.
+    """
+    if cli_value:
+        return [cli_value]
+
+    keys: list[str] = []
+    for i in range(1, 100):
+        val = os.environ.get(f"GEMINI_API_KEY_{i}", "").strip()
+        if not val:
+            break
+        keys.append(val)
+    if keys:
+        return keys
+
+    legacy = os.environ.get("GEMINI_API_KEY", "").strip()
+    if legacy:
+        return [legacy]
 
     print("ERROR: Gemini API key not found.")
-    print("Set GEMINI_API_KEY in a local .env file or pass --api-key.")
+    print("Set GEMINI_API_KEY_1..N or GEMINI_API_KEY in .env, or pass --api-key.")
     sys.exit(1)
 
 
@@ -89,6 +101,15 @@ def resolve_model_name(cli_value: str | None) -> str:
         return env_value
 
     return "gemini-2.0-flash"
+
+
+def _configure_model(api_key: str, model_name: str):
+    """Configure genai with the given key and return a fresh GenerativeModel."""
+    genai.configure(api_key=api_key)
+    return genai.GenerativeModel(
+        model_name=model_name,
+        system_instruction=SYSTEM_PROMPT,
+    )
 
 
 load_local_env_file()
@@ -136,11 +157,33 @@ HEDGING_PHRASES = ["you might", "perhaps", "maybe", "possibly"]
 # ─── Retry / Timeout ──────────────────────────────────────────────────
 
 MAX_RETRIES = 3
-REQUEST_TIMEOUT = 120
+DEFAULT_REQUEST_TIMEOUT = 240
 RETRY_BACKOFF = [2, 4, 8]
 MAX_RATE_LIMIT_WAITS = 10
 MAX_429_WAIT_SEC = 300
 RATE_LIMIT_BUFFER_SEC = 5
+
+
+def resolve_request_timeout() -> float:
+    """Seconds for each Gemini RPC (client-side deadline)."""
+    raw = os.environ.get("GEMINI_REQUEST_TIMEOUT", "").strip()
+    if not raw:
+        return float(DEFAULT_REQUEST_TIMEOUT)
+    try:
+        value = float(raw)
+    except ValueError:
+        print(f"WARNING: Invalid GEMINI_REQUEST_TIMEOUT={raw!r}, using default {DEFAULT_REQUEST_TIMEOUT}s")
+        return float(DEFAULT_REQUEST_TIMEOUT)
+    if value < 30:
+        print(f"WARNING: GEMINI_REQUEST_TIMEOUT={value}s is very low; clamping to 30s")
+        return 30.0
+    if value > 600:
+        print(f"WARNING: GEMINI_REQUEST_TIMEOUT={value}s is very high; clamping to 600s")
+        return 600.0
+    return value
+
+
+REQUEST_TIMEOUT = resolve_request_timeout()
 
 
 class QuotaExhaustedError(Exception):
@@ -666,9 +709,19 @@ def _is_rate_limited(err: Exception) -> bool:
 
 
 def _parse_retry_delay(err: Exception) -> int:
-    """Extract server-suggested retry delay from error message, or 0."""
-    match = re.search(r"retryDelay.*?(\d+)s", str(err))
-    return int(match.group(1)) if match else 0
+    """Extract server-suggested retry delay from error message, or 0.
+
+    Handles both JSON-style ``retryDelay: "30s"`` and protobuf-style
+    ``retry_delay { seconds: 13677 }``.
+    """
+    msg = str(err)
+    match = re.search(r"retryDelay.*?(\d+)s", msg)
+    if match:
+        return int(match.group(1))
+    match = re.search(r"retry_delay\s*\{[^}]*seconds:\s*(\d+)", msg)
+    if match:
+        return int(match.group(1))
+    return 0
 
 
 # ─── Gemini API Call ───────────────────────────────────────────────────
@@ -802,8 +855,11 @@ def main():
     parser.add_argument("--model",
                         help="Gemini model name (overrides .env / environment; default: gemini-2.0-flash)")
     args = parser.parse_args()
-    api_key = resolve_api_key(args.api_key)
+    api_keys = resolve_api_keys(args.api_key)
     model_name = resolve_model_name(args.model)
+    key_index = 0
+    print(f"Loaded {len(api_keys)} API key(s)")
+    print(f"RPC timeout: {REQUEST_TIMEOUT}s per generate_content call")
 
     # Load dataset
     with open(args.dataset) as f:
@@ -844,12 +900,9 @@ def main():
             print(f"  {key}")
         return
 
-    # Configure Gemini
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel(
-        model_name=model_name,
-        system_instruction=SYSTEM_PROMPT,
-    )
+    # Configure Gemini with the first key
+    model = _configure_model(api_keys[key_index], model_name)
+    print(f"Using API key {key_index + 1}/{len(api_keys)}")
 
     # Backfill loop
     total_generated = 0
@@ -888,25 +941,32 @@ def main():
             if status in ("needs_revision", "rejected"):
                 revision_note = section_review.get("note", "") or None
 
-            # Generate
+            # Generate (with key rotation on quota exhaustion)
             existing_sections = {
                 key: value
                 for key, value in cache[cluster_key].items()
                 if key != section_key and value
             }
-            try:
-                text = generate_paragraph(
-                    model, section_key, cluster_key, archetype_desc, existing_sections, revision_note
-                )
-            except QuotaExhaustedError as e:
-                print(f"\n{'='*60}")
-                print(f"QUOTA EXHAUSTED — saving progress and stopping.")
-                print(f"  {e}")
-                print(f"  Re-run with --resume to continue later.")
-                print(f"{'='*60}")
-                with open(args.output, "w") as f:
-                    json.dump(cache, f, indent=2, ensure_ascii=False)
-                sys.exit(1)
+            text = ""
+            while True:
+                try:
+                    text = generate_paragraph(
+                        model, section_key, cluster_key, archetype_desc, existing_sections, revision_note
+                    )
+                    break
+                except QuotaExhaustedError:
+                    key_index += 1
+                    if key_index >= len(api_keys):
+                        print(f"\n{'='*60}")
+                        print(f"ALL API KEYS EXHAUSTED — saving progress and stopping.")
+                        print(f"  Re-run with --resume to continue later.")
+                        print(f"{'='*60}")
+                        with open(args.output, "w") as f:
+                            json.dump(cache, f, indent=2, ensure_ascii=False)
+                        sys.exit(1)
+                    print(f"\n    Key {key_index}/{len(api_keys)} quota exhausted "
+                          f"— rotating to key {key_index + 1}/{len(api_keys)}")
+                    model = _configure_model(api_keys[key_index], model_name)
 
             if not text:
                 total_failed += 1

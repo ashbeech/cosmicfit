@@ -22,9 +22,13 @@ struct StyleGuideDetailContent {
     
     enum StyleGuideSection {
         case styleCore
-        case fabricGuide
-        case colourGuide
-        case dosAndDonts
+        case textures
+        case palette
+        case occasions
+        case hardware
+        case code
+        case accessory
+        case pattern
     }
 }
 
@@ -44,6 +48,9 @@ final class StyleGuideDetailViewController: UIViewController {
     private var panGestureRecognizer: UIPanGestureRecognizer!
     private var initialTouchPoint: CGPoint = .zero
     private var interactiveDismissalInProgress = false
+    
+    private var contentStackTopToTitle: NSLayoutConstraint!
+    private var contentStackTopToDivider: NSLayoutConstraint!
     
     // MARK: - UI Components
     private let shadowContainerView: UIView = {
@@ -295,8 +302,6 @@ final class StyleGuideDetailViewController: UIViewController {
             topDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             topDivider.heightAnchor.constraint(equalToConstant: 1),
             
-            // Content Stack View - use topDivider as anchor (works even when hidden)
-            contentStackView.topAnchor.constraint(equalTo: topDivider.bottomAnchor, constant: 40),
             contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             
@@ -324,6 +329,10 @@ final class StyleGuideDetailViewController: UIViewController {
             starImageView.widthAnchor.constraint(equalToConstant: 24),
             starImageView.heightAnchor.constraint(equalToConstant: 24),
         ])
+        
+        contentStackTopToDivider = contentStackView.topAnchor.constraint(equalTo: topDivider.bottomAnchor, constant: 40)
+        contentStackTopToTitle = contentStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 40)
+        contentStackTopToDivider.isActive = true
     }
     
     private func setupActions() {
@@ -341,7 +350,10 @@ final class StyleGuideDetailViewController: UIViewController {
         iconImageView.image = UIImage(named: content.iconImageName)
         titleLabel.text = content.title
         
-        topDivider.isHidden = (content.sectionType == .fabricGuide)
+        let firstSectionHasSubheading = content.textSections.first?.subheading != nil
+        topDivider.isHidden = firstSectionHasSubheading
+        contentStackTopToDivider.isActive = !firstSectionHasSubheading
+        contentStackTopToTitle.isActive = firstSectionHasSubheading
         
         contentStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         

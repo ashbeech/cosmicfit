@@ -129,20 +129,23 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         return true
     }
     
+    // Track whether user manually navigated away from Blueprint
+    private var userHasManuallyNavigated = false
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Apply Cosmic Fit theme to the main view controller
         applyCosmicFitTheme()
-        setupMenuButton()  // MUST come first - creates menuBarView
-        setupDetailContentContainer()  // NOW can reference menuBarView
+        setupMenuButton()
+        setupDetailContentContainer()
         startWeatherFetch()
         setupTabMemoryPersistence()
         setupProfileUpdateNotifications()
+        setupAuthStateNotifications()
         installSwipeGesturesIfNeeded()
         setupTabBar()
-        hideProfileTabBarItem()  // Add this line
+        hideProfileTabBarItem()
         delegate = self
     }
     
@@ -530,17 +533,38 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     }
     
     @objc private func handleProfileDismissRequest() {
-        print("🔍 CosmicFitTabBarController received dismiss request")
-        print("🔍 About to call dismissDetailViewController")
-        print("🔍 Current thread: \(Thread.isMainThread ? "Main" : "Background")")
-        print("🔍 Detail content container exists: \(detailContentContainer != nil)")
-        if let container = detailContentContainer {
-            print("🔍 Detail content container isHidden: \(container.isHidden)")
-            print("🔍 Detail content container frame: \(container.frame)")
-            print("🔍 Detail content container superview: \(container.superview != nil ? String(describing: type(of: container.superview!)) : "nil")")
-        }
         dismissDetailViewController(animated: true)
-        print("🔍 dismissDetailViewController called")
+    }
+    
+    // MARK: - Auth State
+    
+    private func setupAuthStateNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleAuthStateChanged(_:)),
+            name: .cosmicFitAuthStateChanged,
+            object: nil
+        )
+    }
+    
+    @objc private func handleAuthStateChanged(_ notification: Notification) {
+        let isAuthenticated = notification.userInfo?["isAuthenticated"] as? Bool ?? false
+        
+        if isAuthenticated {
+            print("🔓 Auth state: authenticated — swapping auth gate for Daily Fit")
+            setupViewControllers()
+            
+            // Deferred tab swap: if user hasn't manually navigated away from Blueprint, switch to Daily Fit
+            if !userHasManuallyNavigated && selectedIndex == 1 {
+                selectedIndex = 0
+                updateTabSelectionIndicator()
+            }
+        } else {
+            print("🔒 Auth state: signed out — swapping Daily Fit for auth gate")
+            setupViewControllers()
+            selectedIndex = 1
+            updateTabSelectionIndicator()
+        }
     }
     
     // MARK: - Private Methods
@@ -736,34 +760,40 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     }
     
     private func setupViewControllers() {
-        // PRESERVE current tab selection
         let currentSelectedIndex = selectedIndex
         
         var viewControllers: [UIViewController] = []
         
-        // Daily Fit Tab (Index 0)
-        let dailyFitVC = DailyFitViewController()
-        if let dailyVibeContent = dailyVibeContent {
-            dailyFitVC.configure(
-                with: dailyVibeContent,
-                originalChartViewController: createDebugChartViewController()
+        // Index 0: Daily Fit (authenticated) or Auth Gate (unauthenticated)
+        if CosmicFitAuthService.shared.isAuthenticated {
+            let dailyFitVC = DailyFitViewController()
+            if let dailyVibeContent = dailyVibeContent {
+                dailyFitVC.configure(
+                    with: dailyVibeContent,
+                    originalChartViewController: createDebugChartViewController()
+                )
+            }
+            dailyFitVC.tabBarItem = UITabBarItem(
+                title: "Daily Fit",
+                image: nil,
+                selectedImage: nil
             )
+            viewControllers.append(dailyFitVC)
+        } else {
+            let authGateVC = AuthGateViewController()
+            let authNav = UINavigationController(rootViewController: authGateVC)
+            authNav.navigationBar.isHidden = true
+            authNav.tabBarItem = UITabBarItem(
+                title: "Daily Fit",
+                image: nil,
+                selectedImage: nil
+            )
+            viewControllers.append(authNav)
         }
 
-        // Text-only tab item with no image - NO navigation controller wrapper
-        dailyFitVC.tabBarItem = UITabBarItem(
-            title: "Daily Fit",
-            image: nil,
-            selectedImage: nil
-        )
-        viewControllers.append(dailyFitVC)
-
-        // Cosmic Style Guide Tab (Index 1)
+        // Index 1: Style Guide (Blueprint)
         let styleGuideVC = StyleGuideViewController()
         if let styleGuideContent = styleGuideContent {
-            // Only configure if we have content (prevents empty state)
-           
-            // Extract city and country from birthInfo
             let (city, country) = extractLocationFromBirthInfo()
             
             styleGuideVC.configure(
@@ -775,30 +805,26 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
             )
         }
 
-        // Text-only tab item with no image - NO navigation controller wrapper
         styleGuideVC.tabBarItem = UITabBarItem(
-            title: "Cosmic Style Guide",
+            title: "Style Guide",
             image: nil,
             selectedImage: nil
         )
         viewControllers.append(styleGuideVC)
         
-        // Set the view controllers
         self.viewControllers = viewControllers
         
-        // RESTORE the previous tab selection instead of forcing Daily Fit
         if currentSelectedIndex < viewControllers.count {
             selectedIndex = currentSelectedIndex
         } else {
-            selectedIndex = 0 // Fallback to Daily Fit only if current index is invalid
+            selectedIndex = 0
         }
         
-        // Update tab selection indicator after setting view controllers
         DispatchQueue.main.async { [weak self] in
             self?.updateTabSelectionIndicator()
         }
         
-        print("✅ View controllers setup with 2 tabs (preserved selection: \(selectedIndex))")
+        print("✅ View controllers setup — auth: \(CosmicFitAuthService.shared.isAuthenticated), selection: \(selectedIndex)")
     }
     
     private func useDefaultWeatherLocation() {
@@ -860,17 +886,12 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
     }
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        print("✅ Tab selection completed - resetting transition flag")
-        // ALWAYS reset the flag, regardless of how we got here
         isCustomTransitioning = false
+        userHasManuallyNavigated = true
         
-        // Update tab selection indicator
         updateTabSelectionIndicator()
-        
-        // Ensure menu bar stays on top after tab switch
         view.bringSubviewToFront(menuBarView)
         
-        // Log the selected tab for debugging
         var tabName = "Unknown"
         if viewController is StyleGuideViewController {
             tabName = "Style Guide"
@@ -878,6 +899,9 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
             tabName = "Daily Fit"
         } else if viewController is ProfileViewController {
             tabName = "Profile"
+        } else if let nav = viewController as? UINavigationController,
+                  nav.viewControllers.first is AuthGateViewController {
+            tabName = "Auth Gate"
         }
         print("✅ Selected tab: \(tabName)")
     }

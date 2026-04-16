@@ -287,12 +287,16 @@ async function refreshData(firstLoad) {
 function renderClusterList() {
     const el = document.getElementById('cluster-list');
     el.innerHTML = clusters.map(key => {
+        const entry = cache[key] || {};
+        const populated = SECTIONS.filter(s => entry[s] && entry[s].trim()).length;
         const approved = SECTIONS.filter(s => (reviewNotes[key]||{})[s]?.status === 'approved').length;
         const cls = key === currentCluster ? ' active' : '';
         const bcls = approved === 16 ? ' complete' : '';
+        const popLabel = populated < 16 ? `${populated}/16` : '';
+        const approvedLabel = approved > 0 ? ` · ${approved} ✓` : '';
         return `<div class="cluster-item${cls}" onclick="selectCluster('${key}')">`
             + `<span style="font-size:12px">${key.replaceAll('__', ' · ')}</span>`
-            + `<span class="badge${bcls}">${approved}/16</span></div>`;
+            + `<span class="badge${bcls}">${popLabel}${approvedLabel}</span></div>`;
     }).join('');
 }
 
