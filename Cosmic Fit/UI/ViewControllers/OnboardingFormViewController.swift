@@ -756,7 +756,9 @@ class OnboardingFormViewController: UIViewController {
                                  longitude: profile.longitude,
                                  timeZone: TimeZone(identifier: profile.timeZoneIdentifier) ?? TimeZone.current)
         
-        // Replace the entire app's navigation stack using AppDelegate
+        // New users land on Blueprint (Style Guide, index 1)
+        tabBarController.selectedIndex = 1
+        
         DispatchQueue.main.async {
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate,
                let window = appDelegate.window {

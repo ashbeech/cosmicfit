@@ -61,21 +61,43 @@ class UserProfileStorage {
     private let userDefaults = UserDefaults.standard
     private let userProfileKey = "CosmicFitUserProfile"
     private let hasSeenWelcomeKey = "CosmicFitHasSeenWelcome"
+    private let migrationDoneKey = "CosmicFitProfileMigratedToFile"
+    
+    private var profileFileURL: URL {
+        let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        return docs.appendingPathComponent("cosmic_fit_profile.json")
+    }
     
     // MARK: - Singleton
     static let shared = UserProfileStorage()
     private init() {}
     
+    // MARK: - Migration
+    
+    func migrateFromUserDefaultsIfNeeded() {
+        guard !userDefaults.bool(forKey: migrationDoneKey) else { return }
+        
+        if let data = userDefaults.data(forKey: userProfileKey) {
+            do {
+                try data.write(to: profileFileURL, options: .atomic)
+                userDefaults.removeObject(forKey: userProfileKey)
+                print("✅ Profile migrated from UserDefaults to Documents")
+            } catch {
+                print("⚠️ Profile migration failed: \(error.localizedDescription)")
+                return
+            }
+        }
+        userDefaults.set(true, forKey: migrationDoneKey)
+    }
+    
     // MARK: - Public Methods
     
-    /// Save user profile to local storage
-    /// - Parameter profile: The user profile to save
-    /// - Returns: Boolean indicating success
+    @discardableResult
     func saveUserProfile(_ profile: UserProfile) -> Bool {
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(profile)
-            userDefaults.set(data, forKey: userProfileKey)
+            try data.write(to: profileFileURL, options: .atomic)
             print("✅ User profile saved with ID: \(profile.id)")
             return true
         } catch {
@@ -84,27 +106,32 @@ class UserProfileStorage {
         }
     }
     
-    /// Load user profile from local storage
-    /// - Returns: User profile if available
     func loadUserProfile() -> UserProfile? {
-        guard let data = userDefaults.data(forKey: userProfileKey) else {
-            print("📱 No user profile found")
-            return nil
+        // File-based path (primary)
+        if FileManager.default.fileExists(atPath: profileFileURL.path) {
+            do {
+                let data = try Data(contentsOf: profileFileURL)
+                let decoder = JSONDecoder()
+                let profile = try decoder.decode(UserProfile.self, from: data)
+                return profile
+            } catch {
+                print("❌ Error loading profile from file: \(error)")
+            }
         }
         
-        do {
-            let decoder = JSONDecoder()
-            let profile = try decoder.decode(UserProfile.self, from: data)
-            print("✅ User profile loaded with ID: \(profile.id)")
-            return profile
-        } catch {
-            print("❌ Error loading user profile: \(error)")
-            return nil
+        // UserDefaults fallback (pre-migration)
+        if let data = userDefaults.data(forKey: userProfileKey) {
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(UserProfile.self, from: data)
+            } catch {
+                print("❌ Error loading profile from UserDefaults: \(error)")
+            }
         }
+        
+        return nil
     }
     
-    /// Check if user profile exists and is complete
-    /// - Returns: Boolean indicating if complete profile exists
     func hasCompleteUserProfile() -> Bool {
         guard let profile = loadUserProfile() else {
             return false
@@ -112,45 +139,38 @@ class UserProfileStorage {
         return profile.isComplete
     }
     
-    /// Check if user profile exists (complete or incomplete)
-    /// - Returns: Boolean indicating if any profile exists
     func hasUserProfile() -> Bool {
-        return userDefaults.data(forKey: userProfileKey) != nil
+        return FileManager.default.fileExists(atPath: profileFileURL.path)
+            || userDefaults.data(forKey: userProfileKey) != nil
     }
     
-    /// Delete user profile from local storage
     func deleteUserProfile() {
+        let existingProfile = loadUserProfile()
+        
+        try? FileManager.default.removeItem(at: profileFileURL)
         userDefaults.removeObject(forKey: userProfileKey)
         
-        // Also clean up all daily vibes for this user
-        if let profile = loadUserProfile() {
+        if let profile = existingProfile {
             cleanupUserDailyVibes(userId: profile.id)
         }
         
         print("🗑️ User profile deleted")
     }
     
-    /// Check if user has seen the welcome intro
-    /// - Returns: Boolean indicating if welcome was shown
     func hasSeenWelcome() -> Bool {
         return userDefaults.bool(forKey: hasSeenWelcomeKey)
     }
     
-    /// Mark that user has seen the welcome intro
     func markWelcomeSeen() {
         userDefaults.set(true, forKey: hasSeenWelcomeKey)
-        print("✅ Welcome intro marked as seen")
     }
     
-    /// Reset welcome flag (for testing)
     func resetWelcomeFlag() {
         userDefaults.removeObject(forKey: hasSeenWelcomeKey)
-        print("🔄 Welcome flag reset")
     }
     
     // MARK: - Private Methods
     
-    /// Clean up all daily vibes for a specific user
     private func cleanupUserDailyVibes(userId: String) {
         let allKeys = userDefaults.dictionaryRepresentation().keys
         let userKeys = allKeys.filter { $0.contains("DailyVibe") && $0.contains(userId) }

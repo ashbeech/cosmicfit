@@ -1,3 +1,7 @@
 .env
 .env.local
 !.env.example
+
+# Supabase xcconfig credentials (secrets)
+Cosmic Fit/Config/Dev.xcconfig
+Cosmic Fit/Config/Prod.xcconfig

@@ -1,0 +1,11 @@
+// Dev.xcconfig.example — Template for Supabase credentials.
+//
+// 1. Copy this file to Dev.xcconfig (same directory).
+// 2. Fill in your Supabase project URL and anon/publishable key.
+// 3. Dev.xcconfig is gitignored so your secrets stay local.
+//
+// The double-slash trick (https:/$()/...) prevents Xcode from
+// stripping the "://" during build-variable substitution.
+
+SUPABASE_URL = https:/$()/YOUR_PROJECT_REF.supabase.co
+SUPABASE_PUBLISHABLE_KEY = your_supabase_anon_key_here

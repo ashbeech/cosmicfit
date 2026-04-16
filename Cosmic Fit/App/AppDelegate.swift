@@ -15,50 +15,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        // CRITICAL: Request location permission as the very first thing
-        // This ensures location is available immediately for Daily Fit calculations
         requestLocationPermissionEarly()
+        
+        // Auth bootstrap: init service, listen, check session async
+        _ = CosmicFitAuthService.shared
+        CosmicFitAuthService.shared.listenForAuthChanges()
+        Task { await CosmicFitAuthService.shared.checkSession() }
+        
+        // Migrate profile from UserDefaults to Documents-dir JSON
+        UserProfileStorage.shared.migrateFromUserDefaultsIfNeeded()
                 
-        // Create window
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        // Set up the animated launch screen as the initial view controller
         let launchScreenVC = AnimatedLaunchScreenViewController()
         
-        // Determine app flow based on user profile and welcome state
         if UserProfileStorage.shared.hasCompleteUserProfile() {
-            // User has complete profile - go directly to main app
             setupExistingUserFlow(launchScreenVC: launchScreenVC)
         } else {
-            // User needs onboarding - check if they've seen welcome
             if UserProfileStorage.shared.hasSeenWelcome() {
-                // Skip welcome, go straight to form
                 setupOnboardingFormFlow(launchScreenVC: launchScreenVC)
             } else {
-                // Show welcome intro first
                 setupWelcomeIntroFlow(launchScreenVC: launchScreenVC)
             }
         }
         
         setupGlobalAppearance()
         
-        // Set the launch screen as the root view controller
         window?.rootViewController = launchScreenVC
         window?.makeKeyAndVisible()
         
-        // Initialize debug enhancements
-        //DebugInitializer.setupDebugEnhancements()
-        
-        // Configure appearance
-        //configureAppearance()
-        
-        // Set up daily vibe management
         setupDailyVibeManagement()
         
-        // Store current date for comparison when app becomes active
         lastActiveDate = Date()
         
         return true
+    }
+    
+    // MARK: - Deep Link Handling
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+        return AuthDeepLinkRouter.shared.handle(url: url)
     }
     
     private func setupExistingUserFlow(launchScreenVC: AnimatedLaunchScreenViewController) {
@@ -93,15 +89,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                  longitude: userProfile.longitude,
                                  timeZone: TimeZone(identifier: userProfile.timeZoneIdentifier) ?? TimeZone.current)
         
-        // Set Daily Fit as default tab (index 1) for returning users
+        // Always land on Blueprint (Style Guide, index 1) first.
+        // Auth resolves async; tab controller handles deferred swap to Daily Fit.
         tabBarController.selectedIndex = 1
         
-        // CRITICAL: Force view to load immediately to prevent delay
         _ = tabBarController.view
         
         launchScreenVC.setMainViewController(tabBarController)
         
-        print("✅ Returning user detected - launching to Daily Fit tab")
+        print("✅ Returning user detected — landing on Blueprint tab (auth resolving async)")
     }
     
     private func setupWelcomeIntroFlow(launchScreenVC: AnimatedLaunchScreenViewController) {

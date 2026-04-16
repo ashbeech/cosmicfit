@@ -26,6 +26,7 @@ class ProfileViewController: UIViewController {
     private let birthTimePicker = UIDatePicker()
     private let locationAutocompleteView = LocationAutocompleteView()
     private let updateButton = UIButton(type: .system)
+    private let signOutButton = UIButton(type: .system)
     private let deleteProfileButton = UIButton(type: .system)
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     
@@ -200,16 +201,21 @@ class ProfileViewController: UIViewController {
         
         contentView.addSubview(updateButton)
         
+        // Sign Out button (only visible when authenticated)
+        signOutButton.setTitle("Sign Out", for: .normal)
+        signOutButton.addTarget(self, action: #selector(signOutButtonTapped), for: .touchUpInside)
+        signOutButton.translatesAutoresizingMaskIntoConstraints = false
+        CosmicFitTheme.styleButton(signOutButton, style: .secondary)
+        signOutButton.isHidden = !CosmicFitAuthService.shared.isAuthenticated
+        contentView.addSubview(signOutButton)
+        
         // Delete button
         deleteProfileButton.setTitle("Delete Profile", for: .normal)
         deleteProfileButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         deleteProfileButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Apply theme to destructive button - use secondary style with red colour
         CosmicFitTheme.styleButton(deleteProfileButton, style: .secondary)
         deleteProfileButton.backgroundColor = .systemRed
         deleteProfileButton.setTitleColor(.white, for: .normal)
-        
         contentView.addSubview(deleteProfileButton)
         
         // Activity indicator
@@ -289,7 +295,12 @@ class ProfileViewController: UIViewController {
             updateButton.widthAnchor.constraint(equalToConstant: 250),
             updateButton.heightAnchor.constraint(equalToConstant: 50),
             
-            deleteProfileButton.topAnchor.constraint(equalTo: updateButton.bottomAnchor, constant: 20),
+            signOutButton.topAnchor.constraint(equalTo: updateButton.bottomAnchor, constant: 20),
+            signOutButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            signOutButton.widthAnchor.constraint(equalToConstant: 250),
+            signOutButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            deleteProfileButton.topAnchor.constraint(equalTo: signOutButton.bottomAnchor, constant: 20),
             deleteProfileButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             deleteProfileButton.widthAnchor.constraint(equalToConstant: 250),
             deleteProfileButton.heightAnchor.constraint(equalToConstant: 50),
@@ -401,6 +412,21 @@ class ProfileViewController: UIViewController {
         updateProfile()
     }
     
+    @objc private func signOutButtonTapped() {
+        let alert = UIAlertController(
+            title: "Sign Out",
+            message: "You will need to sign in again to access your Daily Fit.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Sign Out", style: .destructive) { _ in
+            Task {
+                try? await CosmicFitAuthService.shared.signOut()
+            }
+        })
+        present(alert, animated: true)
+    }
+    
     @objc private func deleteButtonTapped() {
         let alert = UIAlertController(
             title: "Delete Profile",
@@ -479,17 +505,22 @@ class ProfileViewController: UIViewController {
         view.isUserInteractionEnabled = true
         showSuccessStateAndDismiss()
         
-        // Save profile after dismissal completes to avoid UI conflicts
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             if UserProfileStorage.shared.saveUserProfile(updatedProfile) {
                 self.currentUserProfile = updatedProfile
                 
-                // Notify app to refresh with updated profile data
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     NotificationCenter.default.post(
                         name: .userProfileUpdated,
                         object: updatedProfile
                     )
+                }
+                
+                // Sync to Supabase if authenticated
+                if CosmicFitAuthService.shared.isAuthenticated {
+                    Task {
+                        try? await SupabaseSyncService.shared.syncProfileToSupabase(updatedProfile)
+                    }
                 }
             }
         }

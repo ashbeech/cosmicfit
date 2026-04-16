@@ -66,6 +66,17 @@ class DailyFitViewController: UIViewController {
     // Debug button (kept for debugging)
     private let debugButton = UIButton(type: .system)
     
+    // Calendar button (added to view hierarchy in setupContentSectionBackgrounds)
+    private lazy var calendarButton: UIButton = {
+        let button = UIButton(type: .system)
+        let config = UIImage.SymbolConfiguration(pointSize: 24, weight: .regular)
+        button.setImage(UIImage(systemName: "calendar", withConfiguration: config), for: .normal)
+        button.tintColor = CosmicFitTheme.Colours.cosmicBlue
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(calendarButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
     // Animation properties
     private var initialScrollViewTopConstraint: NSLayoutConstraint?
     private var originalCardImage: UIImage? // Store original unblurred image
@@ -1900,9 +1911,26 @@ class DailyFitViewController: UIViewController {
                 }
                 self.contentView.bringSubviewToFront(self.debugButton)
                 
+                // Lifecycle-aware: add calendar button only after contentBackgroundView exists
+                self.calendarButton.removeFromSuperview()
+                self.contentView.addSubview(self.calendarButton)
+                NSLayoutConstraint.activate([
+                    self.calendarButton.topAnchor.constraint(equalTo: backgroundView.topAnchor, constant: 12),
+                    self.calendarButton.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -16),
+                    self.calendarButton.widthAnchor.constraint(equalToConstant: 32),
+                    self.calendarButton.heightAnchor.constraint(equalToConstant: 32),
+                ])
+                self.contentView.bringSubviewToFront(self.calendarButton)
+                
                 print("✨ Content box slide-up animation completed")
             }
         )
+    }
+    
+    @objc private func calendarButtonTapped() {
+        let paymentVC = PaymentPlaceholderViewController()
+        paymentVC.modalPresentationStyle = .pageSheet
+        present(paymentVC, animated: true)
     }
     
     // MARK: - Actions
