@@ -14,9 +14,25 @@ All changes to shared test fixtures under `docs/fixtures/`.
 - `palette.accentColours.length` is now **exactly 4** (was 2 / 3). The
   shape checklist has been updated accordingly.
 - Every `BlueprintColour` now carries a `provenance` object (see
-  `BlueprintModels.ColourProvenance`). For both fixtures, provenance is
-  `.chartDerived` on all 8 anchors — zero cross-pool escalation, zero
-  library fallback. This is the §8.3 pass target.
+  `BlueprintModels.ColourProvenance`). Both fixtures are free of
+  `.libraryFallback` in either band (§8.3 hard gate: zero).
+- **Ash (`_user_1`)**: all 8 anchors are `.chartDerived` on their own
+  pool at the 15° hue-gap — no escalation needed.
+- **Maria (`_user_2`)**: 6 of 8 anchors are `.chartDerived`. The last
+  two accent slots,
+  `accentColours[2]` (`teal`, comboKey `mars_gemini`, rank 5) and
+  `accentColours[3]` (`midnight blue`, comboKey `neptune_capricorn`, rank 8),
+  fall through to pass 3 and are populated via `.crossPoolEscalation`
+  from the primary pool with reason `"accent band underflow after
+  own-pool pass"`. This is the designed resolver behaviour (spec §6.4);
+  the token-supply diagnostic's per-pool distinct-hue count (5 @ 15°)
+  did not predict it because the diagnostic measures each pool
+  independently and does not model cumulative cross-band hue
+  interference — see spec §8.3.1. Tightening the diagnostic to model
+  cumulative hue constraints is a follow-up ticket, not a Phase A
+  blocker. Reviewer decision: accept the two cross-pool accents; a
+  dataset-expansion follow-up for Capricorn-cluster accent diversity is
+  optional.
 - `palette.coreColours` and `palette.accentColours` are rank-sorted
   ascending by `provenance.contributorRank`; the narrative-exposed
   top-2 accents are therefore the highest-signal accents for each user.
