@@ -1,5 +1,13 @@
 import Foundation
 
+extension Notification.Name {
+    /// Posted on the main queue after a `CosmicBlueprint` is successfully
+    /// persisted via `BlueprintStorage.shared.save(_:)`. Observers (e.g.
+    /// the Style Guide palette path) can use this to refresh from the
+    /// latest blueprint without polling.
+    static let blueprintDidUpdate = Notification.Name("cosmicFitBlueprintDidUpdate")
+}
+
 final class BlueprintStorage {
     static let shared = BlueprintStorage()
     private init() {}
@@ -17,6 +25,9 @@ final class BlueprintStorage {
             let data = try encoder.encode(blueprint)
             try data.write(to: fileURL, options: .atomic)
             print("✅ Blueprint saved to Documents")
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .blueprintDidUpdate, object: nil)
+            }
         } catch {
             print("❌ Blueprint save failed: \(error.localizedDescription)")
         }

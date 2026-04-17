@@ -435,15 +435,19 @@ final class StyleGuideViewController: UIViewController {
 
     /// Attempts to build a live `PaletteGrid` from the current user's
     /// persisted `CosmicBlueprint`. Returns nil when no valid blueprint is
-    /// available (not yet generated, decode failure, empty palette, etc.).
+    /// available (not yet generated, decode failure, empty palette, etc.),
+    /// signalling the caller to fall back to `ColourPaletteView.placeholder()`.
     private func buildLivePaletteGrid() -> PaletteGrid? {
         guard let blueprint = BlueprintStorage.shared.load() else {
+            print("[Palette] No persisted blueprint — using placeholder grid")
             return nil
         }
         let section = blueprint.palette
         guard !section.coreColours.isEmpty else {
+            print("[Palette] Blueprint loaded but palette has no core colours — using placeholder grid")
             return nil
         }
+        print("[Palette] Live blueprint loaded — \(section.coreColours.count) core, \(section.accentColours.count) accent")
         return PaletteGridViewModel.build(from: section)
     }
 
