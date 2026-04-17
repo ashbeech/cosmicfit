@@ -23,6 +23,31 @@ Foundation only — no dependencies on any other codebase file.
 
 ---
 
+## 1a. Active Programme — Palette Rework (2026)
+
+The Palette Rework programme is an additive, explicitly scoped set of changes
+to `BlueprintToken`, `BlueprintColour`, and `DeterministicResolver.resolvePalette`.
+It preserves WP2 determinism and adds fields for astrological provenance.
+
+Three companion hand-off specs define the work:
+
+- **Phase 0** — [`repo_rename_spec_v1.md`](repo_rename_spec_v1.md) — rename this
+  directory from `_reference/` to `docs/`. Mechanical sweep; no engine work.
+- **Phase A** — [`palette_engine_rework_spec_v1.md`](palette_engine_rework_spec_v1.md)
+  — token-layer + resolver rework for astrological fit. Adds `sourceColourRole`
+  on `BlueprintToken` and `provenance` on `BlueprintColour`. Grows `accentColours`
+  from 2 to 4. Full narrative cache regeneration.
+- **Phase B** — [`palette_grid_spec_v1.md`](palette_grid_spec_v1.md) — 5×8
+  Personal Palette Grid UI component in `Cosmic Fit/UI/Views/Palette/`. Consumes
+  Phase A output; does not touch the engine.
+
+Dependency chain: **0 → A → B**. Each spec declares its prerequisites explicitly
+and must not be started early.
+
+After Phase 0 merges, all three specs live at `docs/*.md`.
+
+---
+
 ## 2. Keys That Must Not Change
 
 ### `BlueprintSection` raw values (16 canonical JSON keys)

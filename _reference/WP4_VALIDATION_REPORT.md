@@ -4,6 +4,14 @@
 > **Artifact:** `astrological_style_dataset.json` (298 KB)
 > **Validated against:** `_reference/fixtures/dataset_schema_checklist.md`, WP3 consumer code
 
+> **Related programme (2026):** the Palette Rework programme may require minor
+> additive dataset changes (see [`palette_engine_rework_spec_v1.md`](palette_engine_rework_spec_v1.md)
+> §6.5 and §8). Specifically, it may introduce an optional `fallback_palette_pool`
+> key used only when chart-derived selection underflows. Existing validations in
+> this report remain valid; new checks will be added if Phase A ships with the
+> dataset change. See also [`repo_rename_spec_v1.md`](repo_rename_spec_v1.md)
+> and [`palette_grid_spec_v1.md`](palette_grid_spec_v1.md).
+
 ---
 
 ## Validation Results
