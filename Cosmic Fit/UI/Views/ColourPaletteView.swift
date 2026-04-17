@@ -7,9 +7,8 @@
 //
 //  Rendering rules (locked, §4 / §8):
 //   • 5 columns × 8 rows (4 core + 4 accent), fixed.
-//   • 1× row-height band separator between core (rows 1–4) and accent
-//     (rows 5–8) bands — implemented as the first accent section's top
-//     inset.
+//   • Core (rows 1–4) and accent (rows 5–8) render as one continuous grid
+//     with standard row spacing; no extra inter-band spacer.
 //   • Cells are square, corner radius 4 pt, inter-cell spacing 2 pt.
 //   • No cell labels (§4.2), no tap (§4.4), scroll disabled (parent
 //     scroll view owns vertical scroll).
@@ -52,11 +51,11 @@ final class ColourPaletteView: UIView {
 
     /// Height reserved for a band title ("Core Colours" / "Accent Colours")
     /// above the first row of each band. Always present in production.
-    private let bandTitleHeight: CGFloat = 28
+    private let bandTitleHeight: CGFloat = 30
 
     /// Height reserved for a development anchor-name label above each row
     /// when `showsDevelopmentAnchorNames` is true.
-    private let devAnchorLabelHeight: CGFloat = 18
+    private let devAnchorLabelHeight: CGFloat = 20
 
     // MARK: - State
 
@@ -184,15 +183,10 @@ final class ColourPaletteView: UIView {
             height += CGFloat(totalVisibleRows) * devAnchorLabelHeight
         }
 
-        // Intra-band spacing.
-        height += CGFloat(max(coreVisibleRows - 1, 0)) * cellSpacing
-        height += CGFloat(max(accentVisibleRows - 1, 0)) * cellSpacing
-
-        // Band gap: 1× row height between bands, only if both bands have
-        // visible content.
-        if coreVisibleRows > 0 && accentVisibleRows > 0 {
-            height += cellSize
-        }
+        // Row spacing between consecutive visible rows. Since the grid now
+        // renders as a continuous stack (no special inter-band spacer), the
+        // number of vertical row gaps is always (visibleRows - 1).
+        height += CGFloat(max(totalVisibleRows - 1, 0)) * cellSpacing
 
         return CGSize(width: width, height: height)
     }
@@ -243,11 +237,6 @@ final class ColourPaletteView: UIView {
             }
         }
         return accentBandStartRow
-    }
-
-    private var hasAnyVisibleCoreRow: Bool {
-        guard let grid = grid else { return false }
-        return (0..<accentBandStartRow).contains { isRowVisible(grid.rows[$0], in: grid) }
     }
 
     /// Whether this section is the first visible row of its band.
@@ -388,12 +377,6 @@ extension ColourPaletteView: UICollectionViewDelegateFlowLayout {
         let row = grid.rows[section]
         guard isRowVisible(row, in: grid) else { return .zero }
 
-        let cellSize = calculateCellSize(width: collectionView.bounds.width)
-
-        if section == firstVisibleAccentSection && hasAnyVisibleCoreRow {
-            return UIEdgeInsets(top: cellSize, left: 0, bottom: 0, right: 0)
-        }
-
         if section == 0 {
             return .zero
         }
@@ -430,8 +413,10 @@ private final class PaletteSectionHeaderView: UICollectionReusableView {
 
     private let bandTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 13, weight: .medium)
-        label.textColor = .label
+        label.font = CosmicFitTheme.Typography.DMSerifTextItalicFont(
+            size: CosmicFitTheme.Typography.FontSizes.sectionHeader
+        )
+        label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .left
         label.numberOfLines = 1
         return label
@@ -439,8 +424,11 @@ private final class PaletteSectionHeaderView: UICollectionReusableView {
 
     private let anchorNameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 10, weight: .semibold)
-        label.textColor = .label
+        label.font = CosmicFitTheme.Typography.DMSerifTextFont(
+            size: CosmicFitTheme.Typography.FontSizes.footnote,
+            weight: .regular
+        )
+        label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .left
         label.numberOfLines = 1
         return label

@@ -357,14 +357,27 @@ final class StyleGuideDetailViewController: UIViewController {
         
         contentStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
-        for textSection in content.textSections {
+        for (index, textSection) in content.textSections.enumerated() {
             if let subheading = textSection.subheading {
                 let subheadingContainer = createSubheadingWithDividers(text: subheading)
                 contentStackView.addArrangedSubview(subheadingContainer)
+
+                // Palette page uses a subheading-only marker ("Personal Palette")
+                // immediately before the custom swatch component. Keep this
+                // transition tight so the grid starts close to the divider,
+                // matching the page's normal rhythm.
+                let isLastTextSection = index == (content.textSections.count - 1)
+                let bodyIsEmpty = textSection.bodyText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                if isLastTextSection && bodyIsEmpty && content.customComponent != nil {
+                    contentStackView.setCustomSpacing(14, after: subheadingContainer)
+                }
             }
-            
-            let bodyLabel = createBodyLabel(text: textSection.bodyText)
-            contentStackView.addArrangedSubview(bodyLabel)
+
+            let trimmedBody = textSection.bodyText.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !trimmedBody.isEmpty {
+                let bodyLabel = createBodyLabel(text: textSection.bodyText)
+                contentStackView.addArrangedSubview(bodyLabel)
+            }
         }
         
         if let customComponent = content.customComponent {
