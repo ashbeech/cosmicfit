@@ -21,6 +21,13 @@ struct AstrologicalStyleDataset: Codable {
     let housePlacements: [String: HousePlacementEntry]
     let elementBalance: [String: ElementBalanceEntry]
     let colourLibrary: [String: ColourLibraryEntry]
+    /// Optional for backward compatibility with legacy datasets that shipped
+    /// before the Option A migration (Phase A spec v1.1 rev 3, §6.5).
+    /// Production datasets MUST ship a non-empty pool — enforced by
+    /// `validate_dataset.py` and the `datasetShipsFallbackPool` Swift test.
+    /// If missing at resolve time, `applyLibraryFallback` logs a warning and
+    /// skips padding rather than crashing.
+    let fallbackPalettePool: [FallbackPaletteEntry]?
 
     enum CodingKeys: String, CodingKey {
         case planetSign = "planet_sign"
@@ -28,6 +35,7 @@ struct AstrologicalStyleDataset: Codable {
         case housePlacements = "house_placements"
         case elementBalance = "element_balance"
         case colourLibrary = "colour_library"
+        case fallbackPalettePool = "fallback_palette_pool"
     }
 }
 
@@ -151,6 +159,15 @@ struct ElementBalanceEntry: Codable {
 struct ColourLibraryEntry: Codable {
     let hex: String
     let associations: [String]
+}
+
+/// Entry in `astrological_style_dataset.json -> fallback_palette_pool`.
+/// Array order within the pool defines padding priority at resolve time.
+/// See Phase A spec §6.5 (Option A, v1.1 rev 3).
+struct FallbackPaletteEntry: Codable, Equatable {
+    let name: String
+    let hex: String
+    let role: ColourRole
 }
 
 // MARK: - Token Generator

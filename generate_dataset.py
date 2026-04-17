@@ -3846,6 +3846,27 @@ COLOUR_LIBRARY = {
 }
 
 # ═══════════════════════════════════════════════════════════════
+# FALLBACK PALETTE POOL (Phase A spec §6.5, Option A)
+# ═══════════════════════════════════════════════════════════════
+#
+# Emergency neutral pool. Read by DeterministicResolver.applyLibraryFallback
+# when both the chart-derived band and cross-pool escalation fail to fill a
+# band to its minimum. Array order = padding priority. The diagnostic
+# confirms this path is not reached for any fixture or tested synthetic
+# chart, but the pool ships in the dataset so colour data has a single
+# source of truth.
+FALLBACK_PALETTE_POOL = [
+    {"name": "charcoal",   "hex": "#36454F", "role": "core"},
+    {"name": "slate",      "hex": "#708090", "role": "core"},
+    {"name": "ivory",      "hex": "#FFFFF0", "role": "core"},
+    {"name": "midnight",   "hex": "#191970", "role": "core"},
+    {"name": "dusty rose", "hex": "#DCAE96", "role": "accent"},
+    {"name": "sage",       "hex": "#9CAF88", "role": "accent"},
+    {"name": "amber",      "hex": "#FFBF00", "role": "accent"},
+    {"name": "deep teal",  "hex": "#014D4E", "role": "accent"},
+]
+
+# ═══════════════════════════════════════════════════════════════
 # ASSEMBLY
 # ═══════════════════════════════════════════════════════════════
 
@@ -3864,7 +3885,8 @@ def build_dataset():
         "aspects": ASPECTS,
         "house_placements": HOUSE_PLACEMENTS,
         "element_balance": ELEMENT_BALANCE,
-        "colour_library": COLOUR_LIBRARY
+        "colour_library": COLOUR_LIBRARY,
+        "fallback_palette_pool": FALLBACK_PALETTE_POOL,
     }
     return dataset
 

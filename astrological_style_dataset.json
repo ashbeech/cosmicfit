@@ -16104,5 +16104,15 @@
         "moon"
       ]
     }
-  }
+  },
+  "fallback_palette_pool": [
+    { "name": "charcoal",   "hex": "#36454F", "role": "core" },
+    { "name": "slate",      "hex": "#708090", "role": "core" },
+    { "name": "ivory",      "hex": "#FFFFF0", "role": "core" },
+    { "name": "midnight",   "hex": "#191970", "role": "core" },
+    { "name": "dusty rose", "hex": "#DCAE96", "role": "accent" },
+    { "name": "sage",       "hex": "#9CAF88", "role": "accent" },
+    { "name": "amber",      "hex": "#FFBF00", "role": "accent" },
+    { "name": "deep teal",  "hex": "#014D4E", "role": "accent" }
+  ]
 }

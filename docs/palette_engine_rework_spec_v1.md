@@ -39,6 +39,17 @@
 
 **Impact:** `PaletteRework_Tests.swift` `provenanceAllChartDerived` must be renamed / relaxed to `provenanceNoLibraryFallback` with the new core / accent chart-derived-floor checks (at least 3/4 core and 2/4 accent are `.chartDerived`). No resolver, models, or token-generator code changes.
 
+### v1.1 revision 3 — Library fallback migrated to Option A
+
+Per user decision, the library fallback pool (§6.5) migrates from in-code constant (`fallbackPaletteDefaults` in `DeterministicResolver.swift`) to dataset-side key (`fallback_palette_pool` in `astrological_style_dataset.json`). **Behaviour-neutral** — the fallback path is never reached in any tested chart (2/2 fixtures and 11/11 synthetics remain clean per the diagnostic), so no user-visible output changes. Motivation: keep all colour-related data in a single source of truth (the dataset), consistent with `colour_library` and the `planet_sign` colour entries. The previous in-code option shipped in v1.1 rev 1–2 as the smaller change; v1.1 rev 3 closes the "colour data lives in code" gap for architectural consistency.
+
+**Code changes:**
+- Swift: new `FallbackPaletteEntry` type next to `ColourLibraryEntry`; `AstrologicalStyleDataset.fallbackPalettePool: [FallbackPaletteEntry]?` added (optional for decode-tolerance against legacy datasets); `applyLibraryFallback` now accepts the pool as a parameter; `resolvePalette` accepts the full `AstrologicalStyleDataset` and threads `dataset.fallbackPalettePool ?? []` through; `fallbackPaletteDefaults` constant deleted. Provenance reason string changes from `"padded from fallbackPaletteDefaults"` to `"padded from fallback_palette_pool"`.
+- Python: `validate_dataset.py` extended to require `fallback_palette_pool` (≥4 entries, ≥1 core and ≥1 accent, per-entry shape check, unique names, `#RRGGBB` hex format). `generate_dataset.py` emits the new key from a `FALLBACK_PALETTE_POOL` constant.
+- Diagnostic: regenerated for bookkeeping; fixture JSON output remains byte-identical to the v1.1 rev 2 commit. New Swift test `datasetShipsFallbackPool` asserts the pool's presence at the Swift layer.
+
+**Escalation trigger (applied during this migration):** if the regenerated fixture JSONs differ byte-for-byte from the v1.1 rev 2 commit, or if the diagnostic reports any chart regressing from clean to non-clean, stop and escalate — Option A is meant to be behaviour-neutral and any diff indicates a real bug.
+
 ---
 
 ---
@@ -386,14 +397,13 @@ If `core` ended up with < 3 entries, pull additional anchors from the *accent* p
 
 Replaces the current `applyFallbackIfNeeded` (line 473+). Only fires if passes 1–3 still leave core < 3 or accent < 4.
 
-**Library fallback source:** rather than the ad-hoc `defaults` array in the current implementation (charcoal, slate, etc.), introduce a **named curated pool** in the dataset. Two options:
+**Library fallback source — Option A (chosen, v1.1 rev 3):**
+`fallback_palette_pool` lives as a **top-level optional array** in `astrological_style_dataset.json`, alongside `colour_library` / `planet_sign` etc. Entries are ordered `{name, hex, role}` objects; array order defines padding priority. Schema validated by `validate_dataset.py` (≥4 entries, ≥1 core and ≥1 accent, unique names, `#RRGGBB` hex). The resolver reads it via `dataset.fallbackPalettePool` and passes it into `applyLibraryFallback` as a parameter. Swift decodes via the `FallbackPaletteEntry` type; the pool is modelled as `Optional<[FallbackPaletteEntry]>` so legacy datasets without the key decode cleanly — a resolve-time warning is emitted and padding is skipped when the pool is absent (production datasets ship the key, enforced by the validator and the `datasetShipsFallbackPool` Swift test).
 
-- **Option A (preferred):** add a new top-level key `fallback_palette_pool` to `astrological_style_dataset.json` containing an ordered list of `{name, hex}` entries chosen for graceful universal applicability. The resolver pulls from this named pool.
-- **Option B:** keep the in-code `defaults` list but expose it as a named constant (`fallbackPaletteDefaults`) clearly labelled as the fallback source.
+**Option B (previous, v1.1 revs 1–2, migrated away from):**
+In-code named constant (`fallbackPaletteDefaults` in `DeterministicResolver.swift`). Migrated away from in v1.1 rev 3 for data-source-of-truth consistency — see the §0 rev 3 changelog entry for motivation and code-change summary.
 
-Option A is cleaner because it moves the data out of code; Option B is smaller blast radius. Dev's choice; record rationale in PR.
-
-Each fallback anchor carries `provenance: .libraryFallback(reason: "...")`.
+Each fallback anchor carries `provenance: .libraryFallback(reason: "... — padded from fallback_palette_pool")`.
 
 ### 6.6 Updated fallback function signatures
 

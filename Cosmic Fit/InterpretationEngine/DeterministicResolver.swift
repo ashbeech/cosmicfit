@@ -39,7 +39,7 @@ struct DeterministicResolver {
     ) -> DeterministicResolverResult {
         let palette = resolvePalette(
             tokens: tokens,
-            colourLibrary: dataset.colourLibrary,
+            dataset: dataset,
             contributingCombos: contributingCombos
         )
         let hardware = resolveHardware(
@@ -101,9 +101,10 @@ struct DeterministicResolver {
 
     private static func resolvePalette(
         tokens: [BlueprintToken],
-        colourLibrary: [String: ColourLibraryEntry],
+        dataset: AstrologicalStyleDataset,
         contributingCombos: [(key: String, aggregateWeight: Double)]
     ) -> PaletteResult {
+        let colourLibrary = dataset.colourLibrary
         let colourTokens = tokens
             .filter { $0.category == .colour }
             .sorted { tieBreakSort($0, $1) }
@@ -148,10 +149,10 @@ struct DeterministicResolver {
             selectedHues: &selectedHues
         )
 
-        // Pass 4 — library fallback (Option B: in-code named constant pool).
+        // Pass 4 — library fallback (Option A: dataset-sourced pool).
         selected = applyLibraryFallback(
             selected: selected,
-            colourLibrary: colourLibrary,
+            fallbackPool: dataset.fallbackPalettePool ?? [],
             selectedHues: &selectedHues
         )
 
@@ -327,37 +328,38 @@ struct DeterministicResolver {
         return borrowed
     }
 
-    // MARK: - Pass 4 — Library Fallback (§6.5, Option B)
+    // MARK: - Pass 4 — Library Fallback (§6.5, Option A)
 
-    /// Named in-code fallback pool. Option B from §6.5: keeping the curated
-    /// defaults in code avoids a dataset schema change, and the diagnostic
-    /// (§8) confirms the fallback path is not reached for any fixture or
-    /// synthetic chart. If future regressions reveal recurring fallback use
-    /// we should migrate to Option A (dataset-side `fallback_palette_pool`).
-    private static let fallbackPaletteDefaults: [(name: String, hex: String, role: ColourRole)] = [
-        ("charcoal", "#36454F", .core),
-        ("slate", "#708090", .core),
-        ("ivory", "#FFFFF0", .core),
-        ("midnight", "#191970", .core),
-        ("dusty rose", "#DCAE96", .accent),
-        ("sage", "#9CAF88", .accent),
-        ("amber", "#FFBF00", .accent),
-        ("deep teal", "#014D4E", .accent),
-    ]
-
+    /// Dataset-sourced fallback pool. Option A from §6.5 (v1.1 rev 3): the
+    /// curated defaults live in `astrological_style_dataset.json` under the
+    /// top-level `fallback_palette_pool` key, not in Swift, so colour data
+    /// stays in a single source of truth. Array order defines padding
+    /// priority. The diagnostic (§8) confirms this path is not reached for
+    /// any fixture or tested synthetic chart, so the pool is effectively a
+    /// safety net rather than a hot path.
     private static func applyLibraryFallback(
         selected: [BlueprintColour],
-        colourLibrary: [String: ColourLibraryEntry],
+        fallbackPool: [FallbackPaletteEntry],
         selectedHues: inout [Double]
     ) -> [BlueprintColour] {
         var result = selected
         let usedNames = Set(result.map(\.name))
 
+        if fallbackPool.isEmpty {
+            // Dataset did not ship a `fallback_palette_pool`. The resolver
+            // cannot pad from anywhere, so bands may underflow their
+            // minimums. Log once per resolve so the regression is visible
+            // in test output — production datasets are required to ship
+            // the pool (see `validate_dataset.py`).
+            print("[Resolver] Warning: astrological_style_dataset.json has no fallback_palette_pool; library fallback unavailable.")
+            return result
+        }
+
         func padBand(role: ColourRole, minimum: Int, reasonContext: String) {
             var count = result.filter { $0.role == role }.count
             guard count < minimum else { return }
 
-            for candidate in fallbackPaletteDefaults where candidate.role == role {
+            for candidate in fallbackPool where candidate.role == role {
                 if count >= minimum { break }
                 if usedNames.contains(candidate.name) { continue }
                 let hue = hueFromHex(candidate.hex)
@@ -369,7 +371,7 @@ struct DeterministicResolver {
                     hexValue: candidate.hex,
                     role: role,
                     provenance: .libraryFallback(
-                        reason: "\(reasonContext) — padded from fallbackPaletteDefaults"
+                        reason: "\(reasonContext) — padded from fallback_palette_pool"
                     )
                 ))
                 selectedHues.append(hue)

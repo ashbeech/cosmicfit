@@ -333,6 +333,29 @@ struct PaletteReworkTests {
         }
     }
 
+    // MARK: - §6.5 (v1.1 rev 3): Dataset ships fallback_palette_pool
+
+    /// Guards the Option A migration — the library fallback pool must live
+    /// in `astrological_style_dataset.json` under `fallback_palette_pool`,
+    /// not in Swift. If a future refactor accidentally drops the key (or
+    /// ships it empty), the resolver degrades to a no-op pad and bands may
+    /// underflow. This test catches that regression at the Swift layer;
+    /// `validate_dataset.py` mirrors the assertion at the schema layer.
+    @Test("Dataset ships a non-empty fallback_palette_pool with ≥1 core and ≥1 accent")
+    func datasetShipsFallbackPool() {
+        guard let dataset = Self.loadDataset() else {
+            Issue.record("Failed to load astrological_style_dataset.json")
+            return
+        }
+        let pool = dataset.fallbackPalettePool ?? []
+        #expect(pool.count >= 4,
+                "fallback_palette_pool too small: \(pool.count) entries (minimum 4)")
+        #expect(pool.contains(where: { $0.role == .core }),
+                "fallback_palette_pool missing at least one core entry")
+        #expect(pool.contains(where: { $0.role == .accent }),
+                "fallback_palette_pool missing at least one accent entry")
+    }
+
     // MARK: - Hue Math (duplicated to keep the resolver utilities private)
 
     private func hueFromHex(_ hex: String) -> Double {

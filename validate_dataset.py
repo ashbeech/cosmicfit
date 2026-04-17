@@ -16,6 +16,7 @@ Checks:
   7. Cross-reference: every colour name in planet_sign entries exists in colour_library
   8. Opposites field completeness
   9. Key naming conventions match WP3 expectations
+ 10. fallback_palette_pool: ≥4 entries with name/hex/role; ≥1 core and ≥1 accent
 """
 
 import argparse
@@ -222,11 +223,20 @@ def validate(dataset: dict, strict_house_schema: bool) -> bool:
     report = ValidationReport()
 
     # ─── Top-level sections ───
+    # Object-typed sections: required, must be JSON objects.
     for section in ["planet_sign", "aspects", "house_placements", "element_balance", "colour_library"]:
         if section not in dataset:
             report.error(f"Missing top-level section: {section}")
         elif not isinstance(dataset[section], dict):
             report.error(f"Top-level section '{section}' must be an object")
+
+    # Array-typed sections: required, must be JSON arrays.
+    # Added in Phase A spec v1.1 rev 3 §6.5 (Option A).
+    for section in ["fallback_palette_pool"]:
+        if section not in dataset:
+            report.error(f"Missing top-level section: {section}")
+        elif not isinstance(dataset[section], list):
+            report.error(f"Top-level section '{section}' must be an array")
 
     if report.errors:
         return report.print_report()
@@ -236,6 +246,7 @@ def validate(dataset: dict, strict_house_schema: bool) -> bool:
     hp = dataset["house_placements"]
     eb = dataset["element_balance"]
     cl = dataset["colour_library"]
+    fpp = dataset["fallback_palette_pool"]
 
     # ─── planet_sign: cardinality ───
     expected_ps_keys = set()
@@ -306,6 +317,47 @@ def validate(dataset: dict, strict_house_schema: bool) -> bool:
 
     for key, entry in cl.items():
         validate_colour_entry(key, entry, report)
+
+    # ─── fallback_palette_pool (Phase A spec §6.5, Option A) ───
+    report.log(f"fallback_palette_pool: {len(fpp)} entries")
+    if len(fpp) < 4:
+        report.error(
+            f"fallback_palette_pool: only {len(fpp)} entries "
+            "(minimum 4 — at least 1 core and 1 accent, prefer ≥2 each)"
+        )
+    else:
+        core_count = sum(1 for e in fpp if isinstance(e, dict) and e.get("role") == "core")
+        accent_count = sum(1 for e in fpp if isinstance(e, dict) and e.get("role") == "accent")
+        if core_count < 1 or accent_count < 1:
+            report.error(
+                f"fallback_palette_pool: needs ≥1 core and ≥1 accent "
+                f"(got {core_count} core, {accent_count} accent)"
+            )
+        seen_names = set()
+        for i, entry in enumerate(fpp):
+            if not isinstance(entry, dict):
+                report.error(f"fallback_palette_pool[{i}]: entry must be an object")
+                continue
+            missing_keys = [k for k in ("name", "hex", "role") if k not in entry]
+            if missing_keys:
+                report.error(
+                    f"fallback_palette_pool[{i}]: missing required keys {missing_keys}"
+                )
+                continue
+            name = entry.get("name", "")
+            if name in seen_names:
+                report.error(f"fallback_palette_pool[{i}]: duplicate name '{name}'")
+            seen_names.add(name)
+            if entry.get("role") not in ("core", "accent"):
+                report.error(
+                    f"fallback_palette_pool[{i}]: role must be 'core' or 'accent', "
+                    f"got '{entry.get('role')}'"
+                )
+            hex_val = entry.get("hex", "")
+            if not (isinstance(hex_val, str) and HEX_PATTERN.match(hex_val)):
+                report.error(
+                    f"fallback_palette_pool[{i}]: hex must be '#RRGGBB', got '{hex_val}'"
+                )
 
     # ─── Cross-reference: colours in planet_sign → colour_library ───
     cl_lower = {k.lower(): k for k in cl.keys()}
