@@ -37,7 +37,11 @@ struct DeterministicResolver {
         dataset: AstrologicalStyleDataset,
         contributingCombos: [(key: String, aggregateWeight: Double)]
     ) -> DeterministicResolverResult {
-        let palette = resolvePalette(tokens: tokens, colourLibrary: dataset.colourLibrary)
+        let palette = resolvePalette(
+            tokens: tokens,
+            colourLibrary: dataset.colourLibrary,
+            contributingCombos: contributingCombos
+        )
         let hardware = resolveHardware(
             contributingCombos: contributingCombos, dataset: dataset, analysis: analysis
         )
@@ -75,61 +79,391 @@ struct DeterministicResolver {
         )
     }
 
-    // MARK: - Palette Resolution (§3c)
+    // MARK: - Palette Resolution (Phase A §6 — multi-pass selector)
 
     private struct PaletteResult {
         let core: [BlueprintColour]
         let accent: [BlueprintColour]
     }
 
+    /// Band targets. Core wants 4 but a minimum of 3 is acceptable; accent
+    /// wants exactly 4 after Phase A. Cross-pool and library fallback passes
+    /// fire only when the own-pool + hue-gap ladder passes underflow.
+    private static let coreDesired = 4
+    private static let accentDesired = 4
+    private static let coreMinimum = 3
+    private static let accentMinimum = 4
+
+    /// Hue-gap ladder — own-pool only. Cross-pool and library fallback
+    /// passes use the tightest rung (15°) to stay coherent with chart-derived
+    /// picks; see §6.1.
+    private static let hueGapLadder: [Double] = [15.0, 12.0, 10.0]
+
     private static func resolvePalette(
         tokens: [BlueprintToken],
-        colourLibrary: [String: ColourLibraryEntry]
+        colourLibrary: [String: ColourLibraryEntry],
+        contributingCombos: [(key: String, aggregateWeight: Double)]
     ) -> PaletteResult {
         let colourTokens = tokens
             .filter { $0.category == .colour }
             .sorted { tieBreakSort($0, $1) }
 
+        let primaryPool = colourTokens.filter { $0.sourceColourRole == .primary }
+        let accentPool = colourTokens.filter { $0.sourceColourRole == .accent }
+
+        let comboRankIndex = indexComboRanks(contributingCombos)
+
         var selected: [BlueprintColour] = []
         var selectedHues: [Double] = []
 
-        for token in colourTokens {
-            guard selected.count < 6 else { break }
-
-            let hex: String
-            if let libEntry = colourLibrary[token.name] {
-                hex = libEntry.hex
-            } else {
-                hex = findClosestColourHex(name: token.name, library: colourLibrary) ?? "#808080"
-            }
-
-            let hue = hueFromHex(hex)
-
-            let tooClose = selectedHues.contains { existingHue in
-                hueDistance(hue, existingHue) < 15.0
-            }
-            if tooClose { continue }
-
-            let role: ColourRole = selected.count < 4 ? .core : .accent
-            selected.append(BlueprintColour(
-                name: token.name,
-                hexValue: hex,
-                role: role,
-                provenance: .libraryFallback(reason: "pre-resolver-rework legacy path")
-            ))
-            selectedHues.append(hue)
-        }
-
-        selected = applyFallbackIfNeeded(
-            selected: selected,
-            minCore: 3, minAccent: 2,
+        // Pass 1 — fill core band from the primary-sourced pool.
+        selected += selectAnchors(
+            from: primaryPool,
+            desiredCount: coreDesired,
+            role: .core,
+            sourceRole: .primary,
             colourLibrary: colourLibrary,
-            existingHues: selectedHues
+            comboRankIndex: comboRankIndex,
+            selectedHues: &selectedHues
         )
 
-        let core = selected.filter { $0.role == .core }
-        let accent = selected.filter { $0.role == .accent }
+        // Pass 2 — fill accent band from the accent-sourced pool.
+        selected += selectAnchors(
+            from: accentPool,
+            desiredCount: accentDesired,
+            role: .accent,
+            sourceRole: .accent,
+            colourLibrary: colourLibrary,
+            comboRankIndex: comboRankIndex,
+            selectedHues: &selectedHues
+        )
+
+        // Pass 3 — cross-pool escalation when either band missed its minimum.
+        selected = applyCrossPoolEscalation(
+            selected: selected,
+            primaryPool: primaryPool,
+            accentPool: accentPool,
+            colourLibrary: colourLibrary,
+            comboRankIndex: comboRankIndex,
+            selectedHues: &selectedHues
+        )
+
+        // Pass 4 — library fallback (Option B: in-code named constant pool).
+        selected = applyLibraryFallback(
+            selected: selected,
+            colourLibrary: colourLibrary,
+            selectedHues: &selectedHues
+        )
+
+        // Rank-sort (§9.2): ascending by contributorRank; cross-pool and
+        // library-fallback entries sort to the end.
+        let core = selected
+            .filter { $0.role == .core }
+            .sorted(by: provenanceRankSort)
+        let accent = selected
+            .filter { $0.role == .accent }
+            .sorted(by: provenanceRankSort)
+
+        logPaletteProvenance(core: core, accent: accent)
         return PaletteResult(core: core, accent: accent)
+    }
+
+    // MARK: - Pass 1 & 2 — Own-Pool Selection with Hue-Gap Ladder
+
+    private static func selectAnchors(
+        from pool: [BlueprintToken],
+        desiredCount: Int,
+        role: ColourRole,
+        sourceRole: DatasetColourRole,
+        colourLibrary: [String: ColourLibraryEntry],
+        comboRankIndex: [String: Int],
+        selectedHues: inout [Double]
+    ) -> [BlueprintColour] {
+        var picked: [BlueprintColour] = []
+        var usedTokens: Set<String> = []
+        var ladderIndex = 0
+
+        while picked.count < desiredCount, ladderIndex < hueGapLadder.count {
+            let currentGap = hueGapLadder[ladderIndex]
+            var madeProgress = false
+
+            for token in pool where !usedTokens.contains(token.name) {
+                let hex = resolveHex(name: token.name, library: colourLibrary)
+                let hue = hueFromHex(hex)
+                let tooClose = selectedHues.contains { existing in
+                    hueDistance(hue, existing) < currentGap
+                }
+                if tooClose { continue }
+
+                let comboKey = makeComboKey(
+                    planet: token.planetarySource,
+                    sign: token.signSource
+                )
+                let rank = comboRankIndex[comboKey] ?? Int.max / 2
+
+                picked.append(BlueprintColour(
+                    name: token.name,
+                    hexValue: hex,
+                    role: role,
+                    provenance: .chartDerived(
+                        comboKey: comboKey,
+                        contributorRank: rank,
+                        sourceRole: sourceRole,
+                        hueGapApplied: currentGap
+                    )
+                ))
+                selectedHues.append(hue)
+                usedTokens.insert(token.name)
+                madeProgress = true
+
+                if picked.count == desiredCount { break }
+            }
+
+            if !madeProgress {
+                ladderIndex += 1
+            }
+        }
+
+        return picked
+    }
+
+    // MARK: - Pass 3 — Cross-Pool Escalation
+
+    /// If either band is short of its minimum after pass 1 / pass 2, pull
+    /// additional anchors from the opposite dataset pool. Selected entries
+    /// carry `.crossPoolEscalation` provenance noting the original role and
+    /// the reason. Uses the tightest hue-gap (15°) so cross-pool picks stay
+    /// chart-coherent.
+    private static func applyCrossPoolEscalation(
+        selected: [BlueprintColour],
+        primaryPool: [BlueprintToken],
+        accentPool: [BlueprintToken],
+        colourLibrary: [String: ColourLibraryEntry],
+        comboRankIndex: [String: Int],
+        selectedHues: inout [Double]
+    ) -> [BlueprintColour] {
+        var result = selected
+
+        let coreCount = result.filter { $0.role == .core }.count
+        if coreCount < coreMinimum {
+            let deficit = coreMinimum - coreCount
+            let added = borrowFromOppositePool(
+                pool: accentPool,
+                usedNames: Set(result.map(\.name)),
+                deficit: deficit,
+                intoRole: .core,
+                originalRole: .accent,
+                reason: "core band underflow after own-pool pass",
+                colourLibrary: colourLibrary,
+                comboRankIndex: comboRankIndex,
+                selectedHues: &selectedHues
+            )
+            result += added
+        }
+
+        let accentCount = result.filter { $0.role == .accent }.count
+        if accentCount < accentMinimum {
+            let deficit = accentMinimum - accentCount
+            let added = borrowFromOppositePool(
+                pool: primaryPool,
+                usedNames: Set(result.map(\.name)),
+                deficit: deficit,
+                intoRole: .accent,
+                originalRole: .primary,
+                reason: "accent band underflow after own-pool pass",
+                colourLibrary: colourLibrary,
+                comboRankIndex: comboRankIndex,
+                selectedHues: &selectedHues
+            )
+            result += added
+        }
+
+        return result
+    }
+
+    private static func borrowFromOppositePool(
+        pool: [BlueprintToken],
+        usedNames: Set<String>,
+        deficit: Int,
+        intoRole: ColourRole,
+        originalRole: DatasetColourRole,
+        reason: String,
+        colourLibrary: [String: ColourLibraryEntry],
+        comboRankIndex: [String: Int],
+        selectedHues: inout [Double]
+    ) -> [BlueprintColour] {
+        var borrowed: [BlueprintColour] = []
+        var blocked = usedNames
+
+        for token in pool where !blocked.contains(token.name) {
+            if borrowed.count >= deficit { break }
+            let hex = resolveHex(name: token.name, library: colourLibrary)
+            let hue = hueFromHex(hex)
+            let tooClose = selectedHues.contains { hueDistance($0, hue) < 15.0 }
+            if tooClose { continue }
+
+            let comboKey = makeComboKey(
+                planet: token.planetarySource,
+                sign: token.signSource
+            )
+            let rank = comboRankIndex[comboKey] ?? Int.max / 2
+
+            borrowed.append(BlueprintColour(
+                name: token.name,
+                hexValue: hex,
+                role: intoRole,
+                provenance: .crossPoolEscalation(
+                    comboKey: comboKey,
+                    contributorRank: rank,
+                    originalRole: originalRole,
+                    hueGapApplied: 15.0,
+                    reason: reason
+                )
+            ))
+            selectedHues.append(hue)
+            blocked.insert(token.name)
+        }
+
+        return borrowed
+    }
+
+    // MARK: - Pass 4 — Library Fallback (§6.5, Option B)
+
+    /// Named in-code fallback pool. Option B from §6.5: keeping the curated
+    /// defaults in code avoids a dataset schema change, and the diagnostic
+    /// (§8) confirms the fallback path is not reached for any fixture or
+    /// synthetic chart. If future regressions reveal recurring fallback use
+    /// we should migrate to Option A (dataset-side `fallback_palette_pool`).
+    private static let fallbackPaletteDefaults: [(name: String, hex: String, role: ColourRole)] = [
+        ("charcoal", "#36454F", .core),
+        ("slate", "#708090", .core),
+        ("ivory", "#FFFFF0", .core),
+        ("midnight", "#191970", .core),
+        ("dusty rose", "#DCAE96", .accent),
+        ("sage", "#9CAF88", .accent),
+        ("amber", "#FFBF00", .accent),
+        ("deep teal", "#014D4E", .accent),
+    ]
+
+    private static func applyLibraryFallback(
+        selected: [BlueprintColour],
+        colourLibrary: [String: ColourLibraryEntry],
+        selectedHues: inout [Double]
+    ) -> [BlueprintColour] {
+        var result = selected
+        let usedNames = Set(result.map(\.name))
+
+        func padBand(role: ColourRole, minimum: Int, reasonContext: String) {
+            var count = result.filter { $0.role == role }.count
+            guard count < minimum else { return }
+
+            for candidate in fallbackPaletteDefaults where candidate.role == role {
+                if count >= minimum { break }
+                if usedNames.contains(candidate.name) { continue }
+                let hue = hueFromHex(candidate.hex)
+                let tooClose = selectedHues.contains { hueDistance($0, hue) < 15.0 }
+                if tooClose { continue }
+
+                result.append(BlueprintColour(
+                    name: candidate.name,
+                    hexValue: candidate.hex,
+                    role: role,
+                    provenance: .libraryFallback(
+                        reason: "\(reasonContext) — padded from fallbackPaletteDefaults"
+                    )
+                ))
+                selectedHues.append(hue)
+                count += 1
+            }
+        }
+
+        padBand(role: .core, minimum: coreMinimum,
+                reasonContext: "core band below minimum after escalation")
+        padBand(role: .accent, minimum: accentMinimum,
+                reasonContext: "accent band below minimum after escalation")
+
+        return result
+    }
+
+    // MARK: - Rank-Sorting (§9.2)
+
+    /// Ascending by contributorRank. Library-fallback provenance is treated
+    /// as `Int.max` so fallback entries always sort to the end. Cross-pool
+    /// escalation keeps its real rank so the highest-signal borrowed
+    /// anchors still win tie-break against padding material.
+    private static func provenanceRankSort(
+        _ a: BlueprintColour,
+        _ b: BlueprintColour
+    ) -> Bool {
+        let ra = provenanceRank(a.provenance)
+        let rb = provenanceRank(b.provenance)
+        if ra != rb { return ra < rb }
+        return a.name < b.name
+    }
+
+    private static func provenanceRank(_ provenance: ColourProvenance) -> Int {
+        switch provenance {
+        case let .chartDerived(_, rank, _, _):       return rank
+        case let .crossPoolEscalation(_, rank, _, _, _): return rank
+        case .libraryFallback:                       return Int.max
+        }
+    }
+
+    private static func indexComboRanks(
+        _ contributingCombos: [(key: String, aggregateWeight: Double)]
+    ) -> [String: Int] {
+        var out: [String: Int] = [:]
+        for (offset, entry) in contributingCombos.enumerated() {
+            out[entry.key] = offset
+        }
+        return out
+    }
+
+    private static func makeComboKey(planet: String?, sign: String?) -> String {
+        let p = (planet ?? "unknown").lowercased()
+        let s = (sign ?? "unknown").lowercased()
+        return "\(p)_\(s)"
+    }
+
+    private static func resolveHex(
+        name: String,
+        library: [String: ColourLibraryEntry]
+    ) -> String {
+        if let libEntry = library[name] { return libEntry.hex }
+        return findClosestColourHex(name: name, library: library) ?? "#808080"
+    }
+
+    private static func logPaletteProvenance(
+        core: [BlueprintColour],
+        accent: [BlueprintColour]
+    ) {
+        #if DEBUG
+        func summarise(_ anchors: [BlueprintColour]) -> String {
+            var chart = 0, cross = 0, fallback = 0
+            var ranks: [Int] = []
+            var maxGap: Double = 0
+            for anchor in anchors {
+                switch anchor.provenance {
+                case let .chartDerived(_, rank, _, gap):
+                    chart += 1; ranks.append(rank); maxGap = max(maxGap, gap)
+                case let .crossPoolEscalation(_, rank, _, gap, _):
+                    cross += 1; ranks.append(rank); maxGap = max(maxGap, gap)
+                case .libraryFallback:
+                    fallback += 1
+                }
+            }
+            let rankRange: String
+            if let lo = ranks.min(), let hi = ranks.max() {
+                rankRange = "ranks \(lo)–\(hi)"
+            } else {
+                rankRange = "no ranks"
+            }
+            let gapNote = maxGap > 0 ? String(format: "hue-gap %.0f°", maxGap) : "n/a"
+            return "\(chart) chart-derived (\(rankRange), \(gapNote)); "
+                + "\(cross) cross-pool; \(fallback) fallback"
+        }
+        print("[Palette] core: \(summarise(core)); accent: \(summarise(accent)).")
+        #endif
     }
 
     // MARK: - Hardware Resolution (§3c)
@@ -471,68 +805,6 @@ struct DeterministicResolver {
             }
         }
         return library.values.first?.hex
-    }
-
-    // MARK: - Fallback Logic (§3c)
-
-    private static func applyFallbackIfNeeded(
-        selected: [BlueprintColour],
-        minCore: Int, minAccent: Int,
-        colourLibrary: [String: ColourLibraryEntry],
-        existingHues: [Double]
-    ) -> [BlueprintColour] {
-        var result = selected
-        let coreCount = result.filter { $0.role == .core }.count
-        let accentCount = result.filter { $0.role == .accent }.count
-
-        var hues = existingHues
-
-        if coreCount < minCore {
-            let defaults: [(String, String)] = [
-                ("charcoal", "#36454F"),
-                ("slate", "#708090"),
-                ("ivory", "#FFFFF0"),
-                ("midnight", "#191970")
-            ]
-            for (name, hex) in defaults where coreCount + result.count < minCore + accentCount {
-                let hue = hueFromHex(hex)
-                let tooClose = hues.contains { hueDistance($0, hue) < 15.0 }
-                if !tooClose {
-                    result.append(BlueprintColour(
-                        name: name,
-                        hexValue: hex,
-                        role: .core,
-                        provenance: .libraryFallback(reason: "pre-resolver-rework legacy path")
-                    ))
-                    hues.append(hue)
-                }
-                if result.filter({ $0.role == .core }).count >= minCore { break }
-            }
-        }
-
-        if accentCount < minAccent {
-            let defaults: [(String, String)] = [
-                ("dusty rose", "#DCAE96"),
-                ("sage", "#9CAF88"),
-                ("amber", "#FFBF00")
-            ]
-            for (name, hex) in defaults {
-                let hue = hueFromHex(hex)
-                let tooClose = hues.contains { hueDistance($0, hue) < 15.0 }
-                if !tooClose {
-                    result.append(BlueprintColour(
-                        name: name,
-                        hexValue: hex,
-                        role: .accent,
-                        provenance: .libraryFallback(reason: "pre-resolver-rework legacy path")
-                    ))
-                    hues.append(hue)
-                }
-                if result.filter({ $0.role == .accent }).count >= minAccent { break }
-            }
-        }
-
-        return result
     }
 
     // MARK: - Sort & Deduplicate Helpers
