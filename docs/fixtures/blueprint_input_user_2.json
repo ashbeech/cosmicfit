@@ -1,75 +1,350 @@
 {
-  "userInfo": {
-    "birthDate": "1989-04-28T00:00:00Z",
-    "birthLocation": "Unknown",
-    "generationDate": "2026-04-10T00:00:00Z"
-  },
-  "styleCore": {
-    "narrativeText": "Your presence works best when you treat your wardrobe as a public language. While you value the heavy and the settled, you use those qualities to set a standard for the people around you. You move through a room with the composure of someone who is teaching others how to appreciate quality. Your style works best when it feels like a long-term social legacy. This kind of intentional curation looks like a gift you are giving to your community."
-  },
-  "textures": {
-    "goodText": "Go for fabrics with actual weight and integrity. Heavy gauge silks that feel cool and substantial provide the right anchor. Organic wools offer a proper architectural frame. Leather that is buttery and gains character with age belongs in your collection. They ground you, make you feel secure, and still look polished.",
-    "badText": "Flimsy or disposable fabrics just do not suit you. If a material is scratchy or overly synthetic, it is a hard pass. Static-prone polyesters or stiff cottons that fight your natural movement are a distraction. If you have to spend your whole day messing with a garment to make it sit right, it is draining your energy.",
-    "sweetSpotText": "Your absolute peak is a blend of the sturdy and the soft. Choose items that look high quality at a glance but feel like a secret luxury when touched. If it does not feel like a treat for your skin, it does not belong in your wardrobe."
-  },
-  "palette": {
-    "coreColours": [
-      { "name": "deep sage green", "hexValue": "#4A6741", "role": "core" },
-      { "name": "sophisticated caramel", "hexValue": "#A0722D", "role": "core" },
-      { "name": "slate grey", "hexValue": "#708090", "role": "core" },
-      { "name": "creamy neutral", "hexValue": "#F5F0E1", "role": "core" }
-    ],
-    "accentColours": [
-      { "name": "oxidised gold", "hexValue": "#B08D57", "role": "accent" },
-      { "name": "dusty rose", "hexValue": "#C4A4A7", "role": "accent" },
-      { "name": "deep burnt saffron", "hexValue": "#CC7722", "role": "accent" }
-    ],
-    "narrativeText": "Your core colours are found in the natural world. Look for deep sage greens, sophisticated caramels, slate greys, and creamy neutrals. These tones provide a stable base for your personality to shine through. Accents work best when they feel weathered, muted, or mineral-toned.\n\nFlashes of considered tones like oxidised gold, dusty rose, or a deep burnt saffron add depth. Keep these accents as a highlight rather than the main story. They show that you are adventurous under the surface. It is about creating a look that stays timeless. Aim for colours that feel organic and permanent."
-  },
-  "occasions": {
-    "workText": "Lean into your architectural side. Use clean lines and structured shapes to settle into the room. A properly made coat or a weighted layer that holds its shape is your best tool. You look best when you appear as the person who is definitely in charge.",
-    "intimateText": "Soften the edges when the sun goes down. Keep that solid base but introduce pieces with drape and mystery. Aim for quiet magnetism and close-range impact. Heavy silk or soft knits that move with you invite people to get a bit closer.",
-    "dailyText": "Even casual looks need to look intentional. Ditch the mess for high-quality basics that allow you to move freely. You can do relaxed, but it should never look sloppy. Think of your daily look as the visionary on a day off: elevated and completely unbothered."
-  },
-  "hardware": {
-    "metalsText": "Your energy requires hardware with actual presence. Look for brushed gold, matte silver, or hammered bronze. Choose pieces that feel like they have some history. Heavy chains and matte surfaces that soak up the light are your best options.",
-    "stonesText": "Skip the perfectly clear gems. You suit stones that look like they were pulled directly from the earth. Raw emeralds, smoky quartz, and malachite work best. These natural inclusions make the pieces feel alive and connected to you.",
-    "tipText": "One substantial anchor piece is always more powerful than a bunch of delicate items. Pick a signature like a heavy ring or a bold pendant and let it be the focal point.",
-    "recommendedMetals": ["brushed gold", "matte silver", "hammered bronze"],
-    "recommendedStones": ["raw emerald", "smoky quartz", "malachite"]
-  },
-  "code": {
-    "leanInto": [
-      "Trusting your body's first tactile reaction. If the fabric feels right against your skin, it is usually a win.",
-      "Investing in the highest quality version of a piece you can afford.",
-      "Using your style to communicate your values without saying a single word.",
-      "Sticking to the three-year test: only buy things you can see yourself loving in 2029."
-    ],
-    "avoid": [
-      "Buying something just because it is a bargain. A deal is only a deal if the item is perfect.",
-      "Chasing trends that clash with your natural composure. If it feels like a costume, it will look like one.",
-      "Keeping your best pieces hidden. Your style works best when it is seen and shared.",
-      "Flimsy or disposable fabrics that lack actual integrity."
-    ],
-    "consider": [
-      "How your style acts as a conversation starter in your daily environment.",
-      "The way your physical home space influences your creative output.",
-      "Making sure your outfit is actually comfortable. If you are constantly tugging at your clothes, you lose your edge."
+  "accessory" : {
+    "paragraphs" : [
+      "Fussy layers of delicate trinkets will never suit your temperament. You operate on a strict principle of one undeniable anchor piece doing all the heavy lifting. Instead of cluttering your silhouette, you rely on a single item of serious substance to finish a look. A flawlessly constructed leather bag or a watch with a reassuringly heavy strap provides all the necessary punctuation. You appreciate the tangible reality of an object made to last, like the satisfying click of a solid belt clasp or the smooth finish of premium hide. One significant object communicates a quiet, expensive discipline. It draws the eye and grounds your wardrobe, allowing the rest of your clothing to remain clean, deliberate, and entirely free of distraction.",
+      "Accessories operate as the physical boundaries that keep your softer layers firmly in check. The satisfying weight of a heavy belt buckle or the rigid lines of a stiff leather bag introduces a necessary tension to your wardrobe. These pieces contrast with luxurious drape through sheer, unyielding solidity. A thick strap that feels substantial in the hand or a watch clasp that snaps shut with a decisive click provides a very specific kind of sensory comfort. It is less about surface decoration and entirely about the quiet satisfaction of putting your outfit into strict, beautiful order.",
+      "True luxury registers in the hands long before it hits the mirror. The solid, decisive click of a heavy belt buckle or the rich scent of properly tanned leather provides you with a deeply satisfying sense of order. You rely on pieces that feel substantial the second you pick them up, like a watch with reassuring heft or a thick bag strap that softens to your shape over time. Flimsy, hollow hardware is an immediate dealbreaker. When you fasten a clasp, the physical feedback simply has to feel expensive."
     ]
   },
-  "accessory": {
-    "paragraphs": [
-      "One significant piece carries more weight than five minor ones. Whether it is a heavy watch or a perfectly made bag, let that item be the anchor. This creates a focal point that allows the rest of your look to stay quiet.",
-      "Accessories are where you introduce your most rigid lines. While your clothes might flow, your accessories should provide the structure. A stiff bag or a firm leather strap acts as the frame for your more fluid choices.",
-      "Think about the sound and scent of your accessories. The weight of a heavy buckle or the specific smell of high-quality leather adds to the vibe. Style is a total sensory environment."
+  "code" : {
+    "avoid" : [
+      "Anything below your standard in fabric, construction, or fit. A single cheap piece drags down the authority of everything around it.",
+      "Compromising on quality for convenience or speed. Your wardrobe demands the same rigour and patience that defines the rest of your life.",
+      "Cheap fast fashion that falls apart after three washes. You feel the difference in quality even if nobody else sees it.",
+      "Anything that does not feel good against your skin. If a seam scratches or a waistband digs, the outfit is already ruined.",
+      "Harsh synthetic fabrics that trap heat and static. Your body knows the difference even before you check the label.",
+      "frivolous"
+    ],
+    "consider" : [
+      "treat dressing as creative self-expression",
+      "let joy drive your wardrobe choices",
+      "a leather bag that patinas beautifully over years",
+      "Heritage denim worn to personal perfection over years, where every fade tells your specific story"
+    ],
+    "leanInto" : [
+      "Embodying the standard that others aspire to. Your wardrobe should look like the definitive version of whatever dress code applies.",
+      "Treating timeless pieces as life investments rather than seasonal purchases. A perfect overcoat or a flawless trouser appreciates over decades.",
+      "Building an impeccable collection where nothing is accidental, nothing is filler, and every piece earns its place through quality.",
+      "Investing in fewer, better pieces that you will reach for every week. If it does not earn its place in a small wardrobe, it does not belong.",
+      "Touching before you buy. Run the fabric between your fingers. If the texture does not feel like a reward, walk away.",
+      "Choosing natural fibres over synthetics as a rule. Cashmere, silk, and cotton age gracefully. Polyester does not."
     ]
   },
-  "pattern": {
-    "narrativeText": "You do not really do busy prints. Anything too frantic fights your energy and looks forced. Your patterns need to feel like they have a pulse: organic, slightly blurred, or naturally occurring.",
-    "tipText": "Use pattern as a texture. A tonal jacquard weave or a subtle embossed print is your secret weapon. It adds depth without screaming for attention.",
-    "recommendedPatterns": ["large-scale soft-focus prints", "marble textures", "shadow checks", "large windowpane check"],
-    "avoidPatterns": ["tiny repetitive prints", "polka dots", "neon patterns", "synthetic-looking prints"]
+  "engineVersion" : "1.0.0",
+  "generatedAt" : "2026-04-17T00:00:00Z",
+  "hardware" : {
+    "metalsText" : "Hardware on you should feel like an investment rather than a decorative afterthought. You need serious, satisfying weight, the kind of brushed warm bronze that pulls together a heavy winter coat or secures a beautifully constructed leather bag. Flimsy, high-shine chains and noisy zips look nervous next to your natural composure. Lean on solid yellow gold details with a matte or gently aged finish, ensuring every buckle actually serves a structural purpose. When the metal feels substantial enough to outlast the garment itself, it belongs in your rotation.",
+    "recommendedMetals" : [
+      "warm bronze",
+      "yellow gold",
+      "platinum",
+      "polished silver",
+      "rose gold"
+    ],
+    "recommendedStones" : [
+      "emerald",
+      "jade",
+      "garnet",
+      "onyx",
+      "sapphire",
+      "rose quartz",
+      "lapis lazuli"
+    ],
+    "stonesText" : "You treat jewellery as a matter of density rather than dazzle. Forget fragile, light-catching facets and look for stones that carry serious physical weight. emerald set in thick, brushed gold offers the kind of solid, quiet luxury that suits you best. A heavy cabochon of jade or a smooth, flat slice of garnet feels infinitely more sophisticated on your skin than overly brilliant cuts. You want pieces that sit cold and substantial on the collarbone or wrist, giving your wardrobe a reliable, tactile finish.",
+    "tipText" : "Substantial weight is the only metric that matters when choosing your jewellery. A flimsy chain or a hollow band will instantly cheapen a perfectly good outfit. Seek out solid, cast pieces in warm bronze that carry a real physical presence on the body, or a heavy ring set with emerald for a quiet finish. A smooth cuff or an impeccably engineered watch strap provides that sense of disciplined luxury your eye naturally seeks. Two substantial items will always beat a tangle of delicate layers."
   },
-  "generatedAt": "2026-04-10T00:00:00Z",
-  "engineVersion": "1.0.0"
+  "occasions" : {
+    "dailyText" : "Downtime does not mean letting your standards slip. Your off-duty rotation relies on architectural integrity and undeniable physical weight just as much as your formal wardrobe. Swap out flimsy basics for heavy, densely woven separates that hold their shape from morning until evening. You feel at your best when there is a distinct sense of order to what you wear, so ensure your seams sit exactly where they should and your casual silhouettes remain crisp. Real luxury is the quiet satisfaction of knowing every daily piece is flawlessly engineered.\n\nYour comfort instinct gravitates toward emotional comfort visible in how you present, your feelings wear you. Your style energy concentrates in identity and creativity, so dressing is a core creative practice — lean into that.",
+    "intimateText" : "Dressing for the evening is less about reinvention and more about turning up the sensory dial. Your best looks rely on garments that possess a satisfying physical weight, bypassing anything flimsy or overly sheer. A meticulously tailored waist paired with a hem that drops heavily to the floor strikes exactly the right balance of discipline and indulgence. Let the cut frame your shape with absolute intent, trusting impeccable construction over loud embellishment. You want the final impression to feel incredibly grounded, inviting a closer look without giving everything away at once.",
+    "workText" : "Your professional wardrobe thrives on quiet authority and serious construction. You look your best in pieces that carry a noticeable physical weight, relying on flawless tailoring rather than loud trends to command a room. Seek out garments with serious structural integrity, the kind that hold their exact shape from the first morning meeting straight through to the taxi home. Flimsy materials and fussy finishes simply distract from your natural air of extreme competence. Keep the silhouette clean, substantial, and deliberately put together. When your outfit is built this well, you walk into the office looking exactly like the person who signs the cheques."
+  },
+  "palette" : {
+    "accentColours" : [
+      {
+        "hexValue" : "#DCAE96",
+        "name" : "dusty rose",
+        "provenance" : {
+          "comboKey" : "venus_taurus",
+          "contributorRank" : 1,
+          "hueGapApplied" : 15,
+          "kind" : "chartDerived",
+          "sourceRole" : "accent"
+        },
+        "role" : "accent"
+      },
+      {
+        "hexValue" : "#B08D57",
+        "name" : "oxidised gold",
+        "provenance" : {
+          "comboKey" : "venus_taurus",
+          "contributorRank" : 1,
+          "hueGapApplied" : 15,
+          "kind" : "chartDerived",
+          "sourceRole" : "accent"
+        },
+        "role" : "accent"
+      },
+      {
+        "hexValue" : "#008080",
+        "name" : "teal",
+        "provenance" : {
+          "comboKey" : "mars_gemini",
+          "contributorRank" : 5,
+          "hueGapApplied" : 15,
+          "kind" : "crossPoolEscalation",
+          "originalRole" : "primary",
+          "reason" : "accent band underflow after own-pool pass"
+        },
+        "role" : "accent"
+      },
+      {
+        "hexValue" : "#191970",
+        "name" : "midnight blue",
+        "provenance" : {
+          "comboKey" : "neptune_capricorn",
+          "contributorRank" : 8,
+          "hueGapApplied" : 15,
+          "kind" : "crossPoolEscalation",
+          "originalRole" : "primary",
+          "reason" : "accent band underflow after own-pool pass"
+        },
+        "role" : "accent"
+      }
+    ],
+    "coreColours" : [
+      {
+        "hexValue" : "#0A0A0A",
+        "name" : "jet black",
+        "provenance" : {
+          "comboKey" : "saturn_capricorn",
+          "contributorRank" : 0,
+          "hueGapApplied" : 15,
+          "kind" : "chartDerived",
+          "sourceRole" : "primary"
+        },
+        "role" : "core"
+      },
+      {
+        "hexValue" : "#708090",
+        "name" : "slate",
+        "provenance" : {
+          "comboKey" : "saturn_capricorn",
+          "contributorRank" : 0,
+          "hueGapApplied" : 15,
+          "kind" : "chartDerived",
+          "sourceRole" : "primary"
+        },
+        "role" : "core"
+      },
+      {
+        "hexValue" : "#FFFDD0",
+        "name" : "buttery cream",
+        "provenance" : {
+          "comboKey" : "venus_taurus",
+          "contributorRank" : 1,
+          "hueGapApplied" : 15,
+          "kind" : "chartDerived",
+          "sourceRole" : "primary"
+        },
+        "role" : "core"
+      },
+      {
+        "hexValue" : "#4A6741",
+        "name" : "deep sage green",
+        "provenance" : {
+          "comboKey" : "venus_taurus",
+          "contributorRank" : 1,
+          "hueGapApplied" : 15,
+          "kind" : "chartDerived",
+          "sourceRole" : "primary"
+        },
+        "role" : "core"
+      }
+    ],
+    "narrativeText" : "Your approach to colour is entirely about visual weight and unspoken expense. You look your best anchored in jet black and slate, rich tones that practically demand high-quality natural fibres to succeed. Rely on buttery cream for your heaviest winter coats or the sharp lines of a structured trouser. When you need a slight shift in temperature, introduce dusty rose through a heavy silk lining or the smooth leather of a top-handle bag. The overall effect is a palette that looks deeply grounded and completely unbothered by passing trends.",
+    "swatchFamilies" : [
+      {
+        "anchorHex" : "#0A0A0A",
+        "anchorName" : "jet black",
+        "role" : "core",
+        "tones" : [
+          {
+            "hex" : "#383838",
+            "name" : "soft jet black"
+          },
+          {
+            "hex" : "#0A0A0A",
+            "name" : "jet black"
+          },
+          {
+            "hex" : "#0E0C0C",
+            "name" : "deep jet black"
+          }
+        ]
+      },
+      {
+        "anchorHex" : "#708090",
+        "anchorName" : "slate",
+        "role" : "core",
+        "tones" : [
+          {
+            "hex" : "#ADAEAE",
+            "name" : "soft slate"
+          },
+          {
+            "hex" : "#708090",
+            "name" : "slate"
+          },
+          {
+            "hex" : "#475A6C",
+            "name" : "deep slate"
+          }
+        ]
+      },
+      {
+        "anchorHex" : "#FFFDD0",
+        "anchorName" : "buttery cream",
+        "role" : "core",
+        "tones" : [
+          {
+            "hex" : "#FDFDE7",
+            "name" : "soft buttery cream"
+          },
+          {
+            "hex" : "#FFFDD0",
+            "name" : "buttery cream"
+          },
+          {
+            "hex" : "#FFFA84",
+            "name" : "deep buttery cream"
+          }
+        ]
+      },
+      {
+        "anchorHex" : "#4A6741",
+        "anchorName" : "deep sage green",
+        "role" : "core",
+        "tones" : [
+          {
+            "hex" : "#7B8F75",
+            "name" : "soft deep sage green"
+          },
+          {
+            "hex" : "#4A6741",
+            "name" : "deep sage green"
+          },
+          {
+            "hex" : "#263C20",
+            "name" : "deep deep sage green"
+          }
+        ]
+      },
+      {
+        "anchorHex" : "#DCAE96",
+        "anchorName" : "dusty rose",
+        "role" : "accent",
+        "tones" : [
+          {
+            "hex" : "#F3EAE5",
+            "name" : "soft dusty rose"
+          },
+          {
+            "hex" : "#DCAE96",
+            "name" : "dusty rose"
+          }
+        ]
+      },
+      {
+        "anchorHex" : "#B08D57",
+        "anchorName" : "oxidised gold",
+        "role" : "accent",
+        "tones" : [
+          {
+            "hex" : "#C6BAA7",
+            "name" : "soft oxidised gold"
+          },
+          {
+            "hex" : "#B08D57",
+            "name" : "oxidised gold"
+          }
+        ]
+      },
+      {
+        "anchorHex" : "#008080",
+        "anchorName" : "teal",
+        "role" : "accent",
+        "tones" : [
+          {
+            "hex" : "#11D5D5",
+            "name" : "soft teal"
+          },
+          {
+            "hex" : "#008080",
+            "name" : "teal"
+          }
+        ]
+      },
+      {
+        "anchorHex" : "#191970",
+        "anchorName" : "midnight blue",
+        "role" : "accent",
+        "tones" : [
+          {
+            "hex" : "#3E3EB1",
+            "name" : "soft midnight blue"
+          },
+          {
+            "hex" : "#191970",
+            "name" : "midnight blue"
+          }
+        ]
+      }
+    ]
+  },
+  "pattern" : {
+    "avoidPatterns" : [
+      "aggressive graphics",
+      "neon prints",
+      "overly busy patterns",
+      "novelty prints"
+    ],
+    "narrativeText" : "You rely on the heavy drape and rich texture of your clothes to make an impression, making loud prints feel entirely unnecessary. Frantic, busy motifs like aggressive graphics or neon prints disrupt the calm order you naturally project. When you do wear a design, it needs to look woven deeply into the garment rather than cheaply stamped on top. Classic, disciplined arrangements like pinstripe and houndstooth give you exactly the right amount of structure without tipping into visual clutter. Keep the scale restrained and let the sheer quality of your fabrics take the lead.",
+    "recommendedPatterns" : [
+      "pinstripe",
+      "houndstooth",
+      "classic check",
+      "subtle herringbone",
+      "bark-effect weave",
+      "tonal knits"
+    ],
+    "tipText" : "Prints can feel like a loss of control when your wardrobe relies on the sensory perfection of solid, expensive fabrics. Treat pinstripe as a textural shift rather than a graphic statement. Look for designs built directly into the material itself, like a tonal weave on a heavy silk jacquard or a subtle check woven into brushed wool. Flat, high-contrast dyes instantly break your calm, grounded aesthetic. Sticking to patterns that read almost like solids from a distance satisfies your need for visual order, ensuring the sheer quality of the garment remains the most obvious detail you are wearing."
+  },
+  "styleCore" : {
+    "narrativeText" : "Your style presence projects the quiet, expensive authority that only comes from knowing exactly what a garment is worth. You look your best in clothing that carries real physical weight and flawless construction. Rather than chasing seasonal shifts, you rely on the discipline of a perfect fit and the gravity of an immaculate drape to communicate your taste. There is a deep psychological comfort for you in wearing pieces that feel enduring, structurally sound, and completely finished. You never have to fight for space in a room when your wardrobe makes it entirely obvious that you set the baseline.\n\nYour natural sense of beauty shows up most powerfully in your creative self-expression — creative joy in dressing, bold romantic expression, date-night dressing as art. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort."
+  },
+  "textures" : {
+    "avoidTextures" : [
+      "anything cheap",
+      "synthetic jersey",
+      "cheap polyester"
+    ],
+    "badText" : "A material that refuses to hold its shape is an instant drain on your composure. You have a very low tolerance for anything cheap that clings awkwardly or synthetic jersey that snags the moment you brush past a table. Your eye for quality means anything flimsy, scratchy, or visibly mass-produced feels almost insulting against your skin. If cheap polyester requires constant adjusting or panic-steaming just to look respectable, it has no business on your body. You are far too deliberate a person to walk around in cloth that feels like an afterthought.",
+    "goodText" : "Flimsy, synthetic fabrics are a complete waste of your time. You expect your clothes to feel luxurious against the skin while holding a definite, reliable shape. Build your wardrobe around finest wool for a sense of quiet indulgence, and rely on structured cashmere to create a structured silhouette that actually lasts through the day. Adding premium leather brings immediate tactile pleasure, while the sheer weight and longevity of cashmere appeals to your fiercely practical side. True comfort for you means knowing exactly how a garment will behave from the minute you leave the house.",
+    "recommendedTextures" : [
+      "finest wool",
+      "structured cashmere",
+      "premium leather",
+      "cashmere"
+    ],
+    "sweetSpotKeywords" : [
+      "authority",
+      "permanence"
+    ],
+    "sweetSpotText" : "True satisfaction hits when you find the precise tension between authority and permanence. You need pieces that hold their shape but reward the touch, like an impeccably tailored coat cut from dense finest wool or a sharp trouser in structured cashmere. There is a quiet discipline to this approach, demanding clothes that refuse to crease, sag, or surrender their silhouette by midday. When an item offers strict architectural boundaries to the outside world but pure sensory indulgence on the inside, it earns a permanent place on your rails."
+  },
+  "userInfo" : {
+    "birthDate" : "1989-04-28T00:00:00Z",
+    "birthLocation" : "Unknown",
+    "generationDate" : "2026-04-17T00:00:00Z"
+  }
 }

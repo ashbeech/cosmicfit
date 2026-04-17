@@ -60,9 +60,10 @@
 
 | Field | Swift Type | JSON Type | Required | Constraints |
 |-------|-----------|-----------|----------|-------------|
-| `coreColours` | `[BlueprintColour]` | array of objects | Yes | ≥ 3 items |
-| `accentColours` | `[BlueprintColour]` | array of objects | Yes | ≥ 2 items |
-| `narrativeText` | `String` | string | Yes | Non-empty |
+| `coreColours` | `[BlueprintColour]` | array of objects | Yes | 3 or 4 items, rank-sorted |
+| `accentColours` | `[BlueprintColour]` | array of objects | Yes | **Exactly 4 items (Phase A, was ≥ 2)**, rank-sorted |
+| `swatchFamilies` | `[SwatchFamily]` | array of objects | Yes | `coreColours.count + accentColours.count` entries |
+| `narrativeText` | `String` | string | Yes | Non-empty; names exactly 2 accents (`.prefix(2)`) |
 
 ### `BlueprintColour`
 
@@ -71,6 +72,19 @@
 | `name` | `String` | string | Yes | Non-empty |
 | `hexValue` | `String` | string | Yes | Matches `#[0-9A-Fa-f]{6}` |
 | `role` | `ColourRole` | string | Yes | One of: `core`, `accent`, `statement` |
+| `provenance` | `ColourProvenance` | object | Yes | See below; non-optional on new data (Phase A) |
+
+### `ColourProvenance` (new in Phase A)
+
+Tagged union. `kind` discriminates between three variants:
+
+| `kind` | Extra fields |
+|--------|--------------|
+| `"chartDerived"` | `comboKey: String`, `contributorRank: Int`, `sourceRole: "primary" | "accent"`, `hueGapApplied: Double` |
+| `"crossPoolEscalation"` | `comboKey: String`, `contributorRank: Int`, `originalRole: "primary" | "accent"`, `hueGapApplied: Double`, `reason: String` |
+| `"libraryFallback"` | `reason: String` |
+
+Fixture expectation: zero `"libraryFallback"` entries for `blueprint_input_user_1` and `_user_2`.
 
 ---
 

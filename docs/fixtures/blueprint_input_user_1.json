@@ -1,73 +1,349 @@
 {
-  "userInfo": {
-    "birthDate": "1984-12-11T00:00:00Z",
-    "birthLocation": "London, UK",
-    "generationDate": "2026-04-10T00:00:00Z"
-  },
-  "styleCore": {
-    "narrativeText": "Your presence is a study in precision and discipline. It is a look of sharp edges and clear boundaries. You lead with clean structure and a composed intensity. You do not just walk into a room; you occupy it with a focused authority that feels immediately powerful.\n\nYour impact comes from restraint rather than volume. Your style acts as a protective shield for your most personal ideas. Your look is a streamlined identity that prioritises self-control and clear, architectural standards."
-  },
-  "textures": {
-    "goodText": "You need materials that feel like armour. If a fabric feels sharp and engineered, it is probably for you. Crisp poplin, raw denim, and structured wool hold their shape regardless of what you are doing. These textures reflect how disciplined you are. You require surfaces that are smooth, cold, and incredibly durable to match your internal focus.",
-    "badText": "Anything fluffy or overly romantic is a mismatch for your energy. Avoid flimsy jerseys or cheap lace that lacks structure. If a fabric feels like it is trying to be cute or soft, it will clash with how controlled you are. You are far too precise for a messy or wrinkled silhouette.",
-    "sweetSpotText": "The stiff and the sharp. You want clothes that feel like a uniform. If a piece does not encourage you to stand with more alignment the moment you put it on, it is not doing its job."
-  },
-  "palette": {
-    "coreColours": [
-      { "name": "midnight", "hexValue": "#191970", "role": "core" },
-      { "name": "shadow", "hexValue": "#36454F", "role": "core" },
-      { "name": "ink", "hexValue": "#1B1B1B", "role": "core" }
-    ],
-    "accentColours": [
-      { "name": "deep oxblood", "hexValue": "#4A0000", "role": "accent" },
-      { "name": "cold forest green", "hexValue": "#2C5F2D", "role": "accent" }
-    ],
-    "narrativeText": "Your core colours are midnight, shadow, and ink. These deepest blacks and charcoal greys create a monochromatic shield. This allows your focus and sharp features to take centre stage. The drama comes from the cut of the garment rather than the pigment.\n\nYou can handle small hits of scholarly tones like a deep oxblood or a cold forest green. Keep these accents dark and muted. If a colour is bright enough to be described as cheerful, it is not for you. You are building a landscape of shadow and light where precision is the main goal."
-  },
-  "occasions": {
-    "workText": "Sharp tailoring and starched lines are your signature. You want to look like the most competent person in the building. A heavy overcoat or a structured layer is essential for your authority.",
-    "intimateText": "When you relax, keep it sleek and streamlined. You look capable, not soft. A dark silk separate or a slim knit provides mystery without losing control. Aim for intense, focused attention.",
-    "dailyText": "Even off-duty, things need to feel deliberate and put together. High-quality dark denim and a structured jacket are essential tools. You move like someone with a clear destination. Everything has a purpose and nothing looks accidental."
-  },
-  "hardware": {
-    "metalsText": "You need cold power. Look for polished silver, surgical steel, or blackened titanium. Yellow gold often looks too warm for your icy mix. You want hardware that looks industrial or ancient. Sharp edges and high-shine surfaces that feel clinical are your best match.",
-    "stonesText": "Choose stones that look like they hold secrets. Black onyx and obsidian are perfect. You want stones that are dark at first glance but show their complexity when you look closer.",
-    "tipText": "Precision is your law. One sharp piece: like a steel watch or a geometric signet ring: is all you need. Accessories work as hardware: functional, weighty, and intentional.",
-    "recommendedMetals": ["polished silver", "surgical steel", "blackened titanium"],
-    "recommendedStones": ["black onyx", "obsidian"]
-  },
-  "code": {
-    "leanInto": [
-      "Checking the silhouette first. If the lines are not sharp and the shoulders are not defined, walk away.",
-      "Buying for the ten-year test. If it still feels powerful in a decade, it belongs in your collection.",
-      "Sticking to the deepest blacks available. Avoid any black that pulls warm or looks washed out.",
-      "Using your style as a private foundation for your most creative and visionary thoughts."
-    ],
-    "avoid": [
-      "Bohemian or relaxed trends that lack a clear, disciplined shape.",
-      "Any black that pulls warm, looks washed out, or lacks depth.",
-      "Patterns or busy prints that distract from your focused intensity.",
-      "Settle only for an exact fit. If the tailoring is slightly off, the impact is gone."
-    ],
-    "consider": [
-      "Using monochromatic sets to maintain your protective, disciplined shield.",
-      "Selecting accessories that act as functional hardware rather than decoration.",
-      "The impact of a single, precise piece over a cluttered look."
+  "accessory" : {
+    "paragraphs" : [
+      "Piling on tiny, fiddly extras simply reads as fussy. A single, substantial anchor with genuine physical weight pulls a look together far more effectively. Look for thick, pliable leather belts, an oversized bag secured with heavy-duty clasps, or a serious mechanical watch. This approach provides a reassuring sense of physical armour while keeping you unencumbered and ready to move. One definitive, well-constructed object does the heavy lifting, leaving the rest of your silhouette clean and unbothered.",
+      "Accessories act as the load-bearing walls of your wardrobe. When your clothes lean into soft familiarity, a wide, rigid belt or a bag with an aggressively engineered clasp stops the look from feeling sentimental. It is entirely about tension. A heavy, blunt-edged ring or a thick leather strap pulls a fluid silhouette back into sharp focus. You want pieces that sit firmly on the body, offering a quiet sense of physical reassurance while you are on the move. Think of a bag that tucks tightly beneath the arm rather than swinging loose from the shoulder. They provide a strict, functional framework that lets the rest of your outfit breathe.",
+      "The sensory footprint of your accessories dictates how they actually feel to live in. Notice the satisfying mechanical snap of a heavy bag closure, or the dense, comforting drag of a wide woven strap sitting across your collarbone. The familiar, lived-in scent of leather set next to sleek, engineered hardware creates a friction that works entirely in your favour. Your pieces need to carry enough physical weight to match your daily momentum. It is strictly about how these items sound and move with you, announcing your arrival while wrapping you in a quiet, tactile familiarity."
     ]
   },
-  "accessory": {
-    "paragraphs": [
-      "One significant piece carries more weight than five minor ones. Whether it is a heavy steel watch or a structured leather case, let that item be the anchor. This creates a focal point that allows the rest of your look to stay quiet.",
-      "Accessories are where you introduce your most rigid lines. While your clothes provide the shell, your accessories are the steel reinforcements. A belt with a heavy silver buckle acts as the final word on your discipline.",
-      "Consider the click and the weight. The sound of a heavy watch being buckled is part of your daily ritual. You are not just decorating your body. You are setting the tone for the day ahead."
+  "code" : {
+    "avoid" : [
+      "Anything emotionally cold or sterile that strips warmth from a room. Clinical minimalism is not your language.",
+      "Harsh fabric against your skin, especially near your neck and wrists. Those contact points carry emotional weight.",
+      "Exposing too much when you feel fragile. Your wardrobe should protect you, not put you on display.",
+      "Rigid dress codes that strip away your natural range. If a rule says you cannot wear it, that rule was not written for you.",
+      "Movement-restricting pieces that limit your stride or your spontaneity. If you cannot run for a train in it, it does not belong in your life.",
+      "Corporate uniformity that flattens your expansive personality. Your style should feel like a passport, not a prison."
+    ],
+    "consider" : [
+      "dress for emotional belonging in groups",
+      "let comfort signal community",
+      "Treating your wardrobe as life armour, maintained and deployed with strategic intent. Every piece serves a protective purpose.",
+      "How the density of fabric affects your sense of control. Heavier, more opaque garments reinforce the containment you need."
+    ],
+    "leanInto" : [
+      "Keeping clothes with emotional history in active rotation. A coat from your mother or a scarf from a trip holds real power.",
+      "Wrapping yourself in soft protective layers as a daily practice. A worn-in cardigan or a heritage shawl is emotional armour.",
+      "Treating comfort as a non-negotiable, not a luxury. If a garment makes you tense, it is actively working against you.",
+      "Choosing pieces that feel like home. If an outfit does not settle your nervous system, it is not earning its place.",
+      "Dressing with travel inspiration woven into every outfit. A waxed jacket or a hand-woven scarf carries the energy of the road even at home.",
+      "Mixing cultural references with respect and confidence. An ikat shirt with tailored chinos bridges worlds in a single outfit."
     ]
   },
-  "pattern": {
-    "narrativeText": "Patterns are often a distraction. If you use them, they need to be as disciplined as you are. You do not do whimsical. You do structural.",
-    "tipText": "Keep it monochromatic. If you are wearing a pattern, make sure the colours stay within the same dark family. A black-on-charcoal pinstripe is your peak. It provides detail while keeping your silhouette intact.",
-    "recommendedPatterns": ["pinstripe", "houndstooth in dark tones", "architectural checks"],
-    "avoidPatterns": ["organic or curvy patterns", "florals", "soft gradients", "patterns with too much white space"]
+  "engineVersion" : "1.0.0",
+  "generatedAt" : "2026-04-17T00:00:00Z",
+  "hardware" : {
+    "metalsText" : "Your most effective hardware relies on a strict clash of high-tech precision and familiar, heavy warmth. Slick, industrial white gold gives you a sharp foundation, looking right at home on the oversized zips of technical outerwear or the chunky fastenings of a utility bag. A completely clinical finish leaves you cold, so you break up those stark details with antique silver. Seek out antique silver pieces with a battered, nostalgic patina—like a weighty heirloom pendant strung onto a modern synthetic cord, or thick, warm-toned belt buckles. This visual friction keeps your clothes from looking like a uniform, grounding bold shapes in something deeply personal.",
+    "recommendedMetals" : [
+      "white gold",
+      "antique silver",
+      "aged brass",
+      "hammered gold",
+      "brushed silver"
+    ],
+    "recommendedStones" : [
+      "moonstone",
+      "pearl",
+      "selenite",
+      "lapis lazuli",
+      "amber",
+      "turquoise",
+      "peridot",
+      "sapphire"
+    ],
+    "stonesText" : "The standard, polite solitaire diamond is never going to hold your attention. You suit stones that feel simultaneously like unearthed artefacts and entirely alien objects. moonstone gives you a striking, electric shock of colour while maintaining a comforting, heavy weight against the collarbone. Pair it with the milky, protective finish of pearl set in thick, molten silver. The icy depth of selenite works perfectly for this too, offering a fierce spark of heat wrapped in a smooth, nostalgic cabochon cut. These are not quiet gems meant to blend in, but bold centrepieces that demand a second look.",
+    "tipText" : "Your jewellery needs to strike a balance between sentimental armour and industrial design. Look for pieces in white gold that feel substantial and slightly odd, like a heavy vintage locket worn on a thick snake chain or a tactical closure on a slouchy bag. You want hardware that feels inherited but distinctly modern, rather than bought straight off a display bust. Skip the flimsy, tangled layering chains entirely. Instead, anchor your look with one dominant ring featuring moonstone or a chunky architectural cuff. It gives your high-energy outfits a necessary centre of gravity."
   },
-  "generatedAt": "2026-04-10T00:00:00Z",
-  "engineVersion": "1.0.0"
+  "occasions" : {
+    "dailyText" : "Your daily rotation requires a very specific friction to function properly. A part of you wants to retreat into an incredibly familiar, lived-in shell, while the rest of your personality needs to command the street. Master this tension by pairing deeply comforting foundation pieces with unapologetic, unconventional shapes. Look for garments that envelop the body, relying on generous proportions and sweeping lengths that give you ample room to hide. Then, deliberately puncture that safety with an unexpected cut or a stark silhouette that breaks the rules of typical casualwear. You do relaxed beautifully, provided the final result still reads as a completely original thought.\n\nYour comfort instinct gravitates toward emotional belonging through group-appropriate comfort, community softness.",
+    "intimateText" : "When the lighting drops, your best looks hinge on balancing protective volume with striking geometry. The standard delicate slip will leave you feeling exposed; instead, look for garments that cocoon the body while offering an entirely unpredictable silhouette. Generous, sweeping proportions work beautifully when anchored by an asymmetrical cut or an unusual drape that naturally holds the eye. The piece must offer serious physical comfort, allowing you to gesture wildly and take up space without adjusting a single seam. You end up with an outfit that feels completely secure to inhabit, yet visually thrilling for whoever is sitting across the table.",
+    "workText" : "Your professional wardrobe thrives on a brilliant contradiction: looking intellectually rigorous while feeling like a safe place to hide. You look best in tailoring that plays with unexpected proportions, favouring fluid, asymmetrical shapes that generously wrap the body rather than constricting it. An exaggerated blazer with unusual structural details or trousers cut wide enough to accommodate a commanding stride give you serious presence without sacrificing ease. The trick is to appear entirely in charge of the room, while remaining comfortably insulated from the noise of the working day.\n\nYour style energy concentrates in foundations and routine, so your wardrobe is at its best when it reflects both foundations and routine."
+  },
+  "palette" : {
+    "accentColours" : [
+      {
+        "hexValue" : "#AEC6CF",
+        "name" : "pale blue",
+        "provenance" : {
+          "comboKey" : "moon_cancer",
+          "contributorRank" : 0,
+          "hueGapApplied" : 15,
+          "kind" : "chartDerived",
+          "sourceRole" : "accent"
+        },
+        "role" : "accent"
+      },
+      {
+        "hexValue" : "#FFF5EE",
+        "name" : "seashell pink",
+        "provenance" : {
+          "comboKey" : "moon_cancer",
+          "contributorRank" : 0,
+          "hueGapApplied" : 15,
+          "kind" : "chartDerived",
+          "sourceRole" : "accent"
+        },
+        "role" : "accent"
+      },
+      {
+        "hexValue" : "#CCFF00",
+        "name" : "neon lime",
+        "provenance" : {
+          "comboKey" : "venus_aquarius",
+          "contributorRank" : 3,
+          "hueGapApplied" : 15,
+          "kind" : "chartDerived",
+          "sourceRole" : "accent"
+        },
+        "role" : "accent"
+      },
+      {
+        "hexValue" : "#6B0099",
+        "name" : "ultraviolet",
+        "provenance" : {
+          "comboKey" : "venus_aquarius",
+          "contributorRank" : 3,
+          "hueGapApplied" : 15,
+          "kind" : "chartDerived",
+          "sourceRole" : "accent"
+        },
+        "role" : "accent"
+      }
+    ],
+    "coreColours" : [
+      {
+        "hexValue" : "#F0EAD6",
+        "name" : "pearl",
+        "provenance" : {
+          "comboKey" : "moon_cancer",
+          "contributorRank" : 0,
+          "hueGapApplied" : 15,
+          "kind" : "chartDerived",
+          "sourceRole" : "primary"
+        },
+        "role" : "core"
+      },
+      {
+        "hexValue" : "#FAFAFA",
+        "name" : "soft white",
+        "provenance" : {
+          "comboKey" : "moon_cancer",
+          "contributorRank" : 0,
+          "hueGapApplied" : 15,
+          "kind" : "chartDerived",
+          "sourceRole" : "primary"
+        },
+        "role" : "core"
+      },
+      {
+        "hexValue" : "#0047AB",
+        "name" : "cobalt blue",
+        "provenance" : {
+          "comboKey" : "sun_sagittarius",
+          "contributorRank" : 1,
+          "hueGapApplied" : 15,
+          "kind" : "chartDerived",
+          "sourceRole" : "primary"
+        },
+        "role" : "core"
+      },
+      {
+        "hexValue" : "#8B8589",
+        "name" : "warm taupe",
+        "provenance" : {
+          "comboKey" : "ascendant_virgo",
+          "contributorRank" : 2,
+          "hueGapApplied" : 15,
+          "kind" : "chartDerived",
+          "sourceRole" : "primary"
+        },
+        "role" : "core"
+      }
+    ],
+    "narrativeText" : "Your colour story thrives on a clash of temperature. Build a foundation on the stark, synthetic edge of pearl and the industrial calm of soft white, then soften the impact with the washed-out safety of cobalt blue. This mix gives you the brilliant tension of a vintage silhouette cut from a space-age fabric. Introduce pale blue as a sudden, unapologetic hit of heat to break up the cool tones. A high-visibility shade always carries more attitude when it sits next to something reassuringly soft.",
+    "swatchFamilies" : [
+      {
+        "anchorHex" : "#F0EAD6",
+        "anchorName" : "pearl",
+        "role" : "core",
+        "tones" : [
+          {
+            "hex" : "#F7F5EE",
+            "name" : "soft pearl"
+          },
+          {
+            "hex" : "#F0EAD6",
+            "name" : "pearl"
+          },
+          {
+            "hex" : "#E1D099",
+            "name" : "deep pearl"
+          }
+        ]
+      },
+      {
+        "anchorHex" : "#FAFAFA",
+        "anchorName" : "soft white",
+        "role" : "core",
+        "tones" : [
+          {
+            "hex" : "#F2F2F2",
+            "name" : "soft soft white"
+          },
+          {
+            "hex" : "#FAFAFA",
+            "name" : "soft white"
+          },
+          {
+            "hex" : "#D7D0D0",
+            "name" : "deep soft white"
+          }
+        ]
+      },
+      {
+        "anchorHex" : "#0047AB",
+        "anchorName" : "cobalt blue",
+        "role" : "core",
+        "tones" : [
+          {
+            "hex" : "#1771F0",
+            "name" : "soft cobalt blue"
+          },
+          {
+            "hex" : "#0047AB",
+            "name" : "cobalt blue"
+          },
+          {
+            "hex" : "#00275E",
+            "name" : "deep cobalt blue"
+          }
+        ]
+      },
+      {
+        "anchorHex" : "#8B8589",
+        "anchorName" : "warm taupe",
+        "role" : "core",
+        "tones" : [
+          {
+            "hex" : "#B6B6B6",
+            "name" : "soft warm taupe"
+          },
+          {
+            "hex" : "#8B8589",
+            "name" : "warm taupe"
+          },
+          {
+            "hex" : "#6C5765",
+            "name" : "deep warm taupe"
+          }
+        ]
+      },
+      {
+        "anchorHex" : "#AEC6CF",
+        "anchorName" : "pale blue",
+        "role" : "accent",
+        "tones" : [
+          {
+            "hex" : "#F0F2F3",
+            "name" : "soft pale blue"
+          },
+          {
+            "hex" : "#AEC6CF",
+            "name" : "pale blue"
+          }
+        ]
+      },
+      {
+        "anchorHex" : "#FFF5EE",
+        "anchorName" : "seashell pink",
+        "role" : "accent",
+        "tones" : [
+          {
+            "hex" : "#FDF0E7",
+            "name" : "soft seashell pink"
+          },
+          {
+            "hex" : "#FFF5EE",
+            "name" : "seashell pink"
+          }
+        ]
+      },
+      {
+        "anchorHex" : "#CCFF00",
+        "anchorName" : "neon lime",
+        "role" : "accent",
+        "tones" : [
+          {
+            "hex" : "#DAF471",
+            "name" : "soft neon lime"
+          },
+          {
+            "hex" : "#CCFF00",
+            "name" : "neon lime"
+          }
+        ]
+      },
+      {
+        "anchorHex" : "#6B0099",
+        "anchorName" : "ultraviolet",
+        "role" : "accent",
+        "tones" : [
+          {
+            "hex" : "#AB13EC",
+            "name" : "soft ultraviolet"
+          },
+          {
+            "hex" : "#6B0099",
+            "name" : "ultraviolet"
+          }
+        ]
+      }
+    ]
+  },
+  "pattern" : {
+    "avoidPatterns" : [
+      "traditional florals",
+      "heritage plaid",
+      "conventional paisley",
+      "aggressive graphics"
+    ],
+    "narrativeText" : "You treat patterns as a high-voltage statement that still needs to feel deeply personal. Seek out prints that merge a sense of electric energy with a nostalgic, familiar undertone. vintage florals and nautical stripes hit this sweet spot perfectly, looking like a digital graphic layered over a cherished retro fabric. These prints work best when stamped onto structured neoprene or woven through a silver grey knit, grounding your bold visual heat with a comforting, tactile weight. Give traditional florals a total miss. It reads as far too flimsy and chaotic, failing to deliver the sharp visual punch you crave and the emotional safety you quietly demand from your wardrobe.",
+    "recommendedPatterns" : [
+      "vintage florals",
+      "nautical stripes",
+      "soft gingham",
+      "ethnic prints",
+      "ikat",
+      "oversized geometric"
+    ],
+    "tipText" : "Your eye for a print naturally gravitates towards something slightly off-kilter but entirely wearable. Take vintage florals and blow up the scale until it reads as a bold, graphic strike rather than a polite repeat. This satisfies your drive for visual volume while retaining a certain familiar ease. Put this loud motif on a comforting, everyday textile like a heavy loopback jersey or a spongy technical knit. The high-tension design brings the heat you crave, while the tactile weight keeps the outfit beautifully anchored."
+  },
+  "styleCore" : {
+    "narrativeText" : "Your presence thrives on a highly visible tension between the fiercely modern and the deeply familiar. You project an energy that is undeniably forward-looking, yet grounded in pieces that feel emotionally safe to wear. While you draw the eye with unexpected proportions and an unapologetic attitude, your silhouette always retains a distinct element of shelter. You take up space in a room with complete confidence, but there is a clear warmth to your subversion. It is the look of someone pushing the boundaries of taste while keeping themselves entirely protected.\n\nYour natural sense of beauty shows up most powerfully in your daily rituals — daily beauty rituals, functional elegance, beautiful workwear, aesthetic routines. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort."
+  },
+  "textures" : {
+    "avoidTextures" : [
+      "cold metallics",
+      "hard plastics",
+      "synthetic mesh"
+    ],
+    "badText" : "You move with far too much heat and urgency for clothes that dictate how you sit or stand. A heavy, unyielding cold metallics instantly traps your warmth and leaves you feeling physically boxed in. The same goes for any flimsy hard plastics that offers zero physical reassurance or stretch. Your wardrobe has to shield you while still letting you act on a whim, rather than holding you back like a stiff, historical costume. If a garment forces you to hold your breath just to keep its silhouette intact, leave it on the hanger.",
+    "goodText" : "You dress with a very specific tension, seeking out clothes that look completely progressive but feel as safe as a heavy blanket. You need materials that can handle your high-energy pace without sacrificing a sense of protective enclosure. Build your outfits around washed cotton and heritage knits, as they hold a bold, defined shape while you burn through your schedule. Introduce soft flannel when you crave something deeply tactile that still reads as visually sharp. The trick is looking utterly unconventional without ever feeling exposed.",
+    "recommendedTextures" : [
+      "washed cotton",
+      "heritage knits",
+      "soft flannel",
+      "vintage silk"
+    ],
+    "sweetSpotKeywords" : [
+      "memory",
+      "warmth"
+    ],
+    "sweetSpotText" : "Your true sweet spot bridges the gap between memory and warmth. You gravitate towards materials that look completely uncompromising, like a sharp washed cotton, but they must offer absolute physical reassurance once on the body. It is all about the contrast between visual heat and tactile safety. A garment has to look wildly progressive to catch your eye, but it must act like a familiar barrier against the outside world to actually make it out of the front door. If an experimental design lacks that protective warmth, it stays on the hanger."
+  },
+  "userInfo" : {
+    "birthDate" : "1984-12-11T00:00:00Z",
+    "birthLocation" : "London, UK",
+    "generationDate" : "2026-04-17T00:00:00Z"
+  }
 }
