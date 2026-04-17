@@ -375,3 +375,101 @@ enum GoldenSnapshotSupport {
         }
     }
 }
+
+// MARK: - P5 Live-wiring integration tests
+//
+// Validates the end-to-end path introduced by the P5 palette live-wiring:
+//   BlueprintStorage.load() → CosmicBlueprint.palette → PaletteGridViewModel.build → PaletteGrid
+//
+// These tests use BlueprintStorage.shared (the real singleton) since
+// that is the authoritative source on the production path. Each test
+// saves/cleans up its own data to avoid cross-test pollution.
+
+struct PaletteLiveWiringTests {
+
+    // MARK: - Round-trip: save fixture → load → build grid → compare
+
+    @Test("Live path produces identical grid to direct build from fixture palette")
+    func livePathMatchesDirectBuild() throws {
+        let blueprint = try GoldenSnapshotSupport.loadBlueprint("blueprint_input_user_1.json")
+        let directGrid = PaletteGridViewModel.build(from: blueprint.palette)
+
+        BlueprintStorage.shared.save(blueprint)
+        defer { BlueprintStorage.shared.delete() }
+
+        guard let loaded = BlueprintStorage.shared.load() else {
+            Issue.record("BlueprintStorage round-trip failed — load returned nil after save")
+            return
+        }
+        let liveGrid = PaletteGridViewModel.build(from: loaded.palette)
+
+        #expect(liveGrid == directGrid,
+                "Grid built from storage-round-tripped blueprint must match direct build")
+    }
+
+    // MARK: - Fallback: empty storage returns nil → placeholder path
+
+    @Test("No persisted blueprint means live grid build returns nil")
+    func emptyStorageTriggersPlaceholderFallback() {
+        BlueprintStorage.shared.delete()
+
+        let loaded = BlueprintStorage.shared.load()
+        #expect(loaded == nil, "Storage should return nil when no blueprint file exists")
+    }
+
+    // MARK: - PaletteSection validity from real fixtures
+
+    @Test("Fixture user 1 palette section meets Phase A contract (3-4 core, 4 accent)")
+    func fixtureUser1PaletteContract() throws {
+        let blueprint = try GoldenSnapshotSupport.loadBlueprint("blueprint_input_user_1.json")
+        let section = blueprint.palette
+        #expect((3...4).contains(section.coreColours.count),
+                "Core count \(section.coreColours.count) outside [3,4]")
+        #expect(section.accentColours.count == 4,
+                "Accent count \(section.accentColours.count) != 4")
+    }
+
+    @Test("Fixture user 2 palette section meets Phase A contract (3-4 core, 4 accent)")
+    func fixtureUser2PaletteContract() throws {
+        let blueprint = try GoldenSnapshotSupport.loadBlueprint("blueprint_input_user_2.json")
+        let section = blueprint.palette
+        #expect((3...4).contains(section.coreColours.count),
+                "Core count \(section.coreColours.count) outside [3,4]")
+        #expect(section.accentColours.count == 4,
+                "Accent count \(section.accentColours.count) != 4")
+    }
+
+    // MARK: - Notification
+
+    @Test("BlueprintStorage.save posts .blueprintDidUpdate notification")
+    func savePostsNotification() throws {
+        let blueprint = try GoldenSnapshotSupport.loadBlueprint("blueprint_input_user_1.json")
+        defer { BlueprintStorage.shared.delete() }
+
+        let flag = NotificationFlag(name: .blueprintDidUpdate)
+        BlueprintStorage.shared.save(blueprint)
+
+        let deadline = Date().addingTimeInterval(1.0)
+        while !flag.received && Date() < deadline {
+            RunLoop.main.run(until: Date().addingTimeInterval(0.05))
+        }
+        #expect(flag.received, ".blueprintDidUpdate should be posted after save")
+    }
+}
+
+/// Reference-type observer so the notification callback can mutate
+/// `received` and the test can poll it after calling `save()`.
+private final class NotificationFlag {
+    var received = false
+    var observer: NSObjectProtocol?
+
+    init(name: Notification.Name) {
+        observer = NotificationCenter.default.addObserver(
+            forName: name, object: nil, queue: .main
+        ) { [weak self] _ in self?.received = true }
+    }
+
+    deinit {
+        if let observer { NotificationCenter.default.removeObserver(observer) }
+    }
+}
