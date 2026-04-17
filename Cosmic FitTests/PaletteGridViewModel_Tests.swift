@@ -10,6 +10,9 @@
 //   • Short-core fallback (3 core + 4 accent → 1 empty core row).
 //   • Malformed hex fallback to #808080 (no crash, grid still 8×5).
 //   • Determinism — byte-identical PaletteGrid across repeated builds.
+//   • Byte-identity snapshot against golden JSON for fixture users 1 and 2
+//     (§11.3). Set REGENERATE_PALETTE_GRID_GOLDENS=1 to rewrite the
+//     goldens from the current output — leave unset for strict compare.
 //
 
 import Testing
@@ -220,5 +223,155 @@ struct PaletteGridViewModelTests {
             accent: Self.fullAccent
         ))
         #expect(grid.nonEmptyRowCount == 7)
+    }
+}
+
+// MARK: - §11.3 Golden fixture snapshots
+//
+// Asserts byte-identical `PaletteGrid` output for the two fixture users
+// against a committed golden JSON file. Any unintended change to
+// `PaletteGridViewModel.build` or `ColourMath` tone expansion will
+// trip these tests; intentional changes require regenerating the
+// goldens by re-running with `REGENERATE_PALETTE_GRID_GOLDENS=1`
+// in the environment, then committing the updated files.
+
+struct PaletteGridGoldenSnapshotTests {
+
+    @Test("Golden snapshot matches for fixture user 1 (Ash)")
+    func goldenSnapshotUser1() throws {
+        try assertGoldenMatches(fixture: "blueprint_input_user_1.json",
+                                golden:  "palette_grid_golden_user_1.json")
+    }
+
+    @Test("Golden snapshot matches for fixture user 2 (Maria)")
+    func goldenSnapshotUser2() throws {
+        try assertGoldenMatches(fixture: "blueprint_input_user_2.json",
+                                golden:  "palette_grid_golden_user_2.json")
+    }
+
+    // MARK: - Private
+
+    private func assertGoldenMatches(fixture: String, golden: String) throws {
+        let blueprint = try GoldenSnapshotSupport.loadBlueprint(fixture)
+        let grid = PaletteGridViewModel.build(from: blueprint.palette)
+        let current = try GoldenSnapshotSupport.canonicalJSON(for: grid)
+
+        let goldenURL = GoldenSnapshotSupport.fixturesURL().appendingPathComponent(golden)
+
+        if GoldenSnapshotSupport.shouldRegenerate {
+            try current.write(to: goldenURL, options: [.atomic])
+            Issue.record("Regenerated golden at \(goldenURL.path). Commit the new file and re-run with REGENERATE_PALETTE_GRID_GOLDENS unset to enforce.")
+            return
+        }
+
+        let expected: Data
+        do {
+            expected = try Data(contentsOf: goldenURL)
+        } catch {
+            Issue.record("Missing golden at \(goldenURL.path). Run tests once with REGENERATE_PALETTE_GRID_GOLDENS=1 to create it, then commit.")
+            return
+        }
+
+        if current != expected {
+            // Write the current output beside the golden with a `.actual`
+            // suffix so CI artifacts can be diffed. The file is not part
+            // of the commit set; it is purely a debugging aid.
+            let actualURL = goldenURL.appendingPathExtension("actual")
+            try? current.write(to: actualURL, options: [.atomic])
+
+            let currentString = String(data: current, encoding: .utf8) ?? "<non-utf8>"
+            let expectedString = String(data: expected, encoding: .utf8) ?? "<non-utf8>"
+            Issue.record("""
+                Golden mismatch for \(golden).
+                  Expected bytes: \(expected.count), actual bytes: \(current.count).
+                  See \(actualURL.lastPathComponent) for the full current output.
+                  First 400 chars of current:
+                \(String(currentString.prefix(400)))
+                  First 400 chars of expected:
+                \(String(expectedString.prefix(400)))
+                """)
+        }
+    }
+}
+
+// MARK: - Snapshot support (test-only)
+//
+// Canonical JSON encoder for `PaletteGrid`. Kept private to the test
+// target so the production `PaletteGrid` stays minimal (Foundation-only,
+// no Codable surface) while still letting us diff byte-for-byte.
+
+enum GoldenSnapshotSupport {
+
+    static var shouldRegenerate: Bool {
+        ProcessInfo.processInfo.environment["REGENERATE_PALETTE_GRID_GOLDENS"] == "1"
+    }
+
+    static func fixturesURL() -> URL {
+        URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()    // Cosmic FitTests/
+            .deletingLastPathComponent()    // repo root
+            .appendingPathComponent("docs")
+            .appendingPathComponent("fixtures")
+    }
+
+    static func loadBlueprint(_ filename: String) throws -> CosmicBlueprint {
+        let url = fixturesURL().appendingPathComponent(filename)
+        let data = try Data(contentsOf: url)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return try decoder.decode(CosmicBlueprint.self, from: data)
+    }
+
+    /// Produce a canonical JSON representation of a `PaletteGrid`. Keys
+    /// are sorted and output is pretty-printed so the committed golden
+    /// is human-diffable. The encoding is stable across machines and
+    /// Xcode versions — `JSONEncoder.OutputFormatting.sortedKeys` +
+    /// `prettyPrinted` is documented to produce deterministic byte
+    /// output for a given input.
+    static func canonicalJSON(for grid: PaletteGrid) throws -> Data {
+        let snapshot = PaletteGridSnapshot(from: grid)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        return try encoder.encode(snapshot)
+    }
+
+    // MARK: - Codable mirror
+
+    fileprivate struct PaletteGridSnapshot: Codable, Equatable {
+        let rows: [PaletteRowSnapshot]
+
+        init(from grid: PaletteGrid) {
+            self.rows = grid.rows.map(PaletteRowSnapshot.init(from:))
+        }
+    }
+
+    fileprivate struct PaletteRowSnapshot: Codable, Equatable {
+        let role: String
+        let anchorName: String?
+        let anchorHex: String?
+        let cells: [PaletteCellSnapshot]
+
+        init(from row: PaletteRow) {
+            self.role = row.role.rawValue
+            self.anchorName = row.anchorName
+            self.anchorHex = row.anchorHex
+            self.cells = row.cells.map(PaletteCellSnapshot.init(from:))
+        }
+    }
+
+    /// Uses `hex: String?` (null for empty cells) as the stable on-disk
+    /// shape. Preferred over a discriminated-union because it stays
+    /// trivially diff-readable in PR review.
+    fileprivate struct PaletteCellSnapshot: Codable, Equatable {
+        let toneIndex: Int
+        let hex: String?
+
+        init(from cell: PaletteCell) {
+            self.toneIndex = cell.toneIndex
+            switch cell.kind {
+            case .filled(let hex): self.hex = hex
+            case .empty:           self.hex = nil
+            }
+        }
     }
 }

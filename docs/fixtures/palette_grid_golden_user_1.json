@@ -1,0 +1,220 @@
+{
+  "rows" : [
+    {
+      "anchorHex" : "#F0EAD6",
+      "anchorName" : "pearl",
+      "cells" : [
+        {
+          "hex" : "#F8F5EC",
+          "toneIndex" : 0
+        },
+        {
+          "hex" : "#F8F5EC",
+          "toneIndex" : 1
+        },
+        {
+          "hex" : "#F0EAD6",
+          "toneIndex" : 2
+        },
+        {
+          "hex" : "#DCCD9E",
+          "toneIndex" : 3
+        },
+        {
+          "hex" : "#C7B166",
+          "toneIndex" : 4
+        }
+      ],
+      "role" : "core"
+    },
+    {
+      "anchorHex" : "#FAFAFA",
+      "anchorName" : "soft white",
+      "cells" : [
+        {
+          "hex" : "#F2F2F2",
+          "toneIndex" : 0
+        },
+        {
+          "hex" : "#F2F2F2",
+          "toneIndex" : 1
+        },
+        {
+          "hex" : "#F2F2F2",
+          "toneIndex" : 2
+        },
+        {
+          "hex" : "#D4D4D4",
+          "toneIndex" : 3
+        },
+        {
+          "hex" : "#AEAEAE",
+          "toneIndex" : 4
+        }
+      ],
+      "role" : "core"
+    },
+    {
+      "anchorHex" : "#0047AB",
+      "anchorName" : "cobalt blue",
+      "cells" : [
+        {
+          "hex" : "#4592FF",
+          "toneIndex" : 0
+        },
+        {
+          "hex" : "#0067F7",
+          "toneIndex" : 1
+        },
+        {
+          "hex" : "#0047AB",
+          "toneIndex" : 2
+        },
+        {
+          "hex" : "#00275E",
+          "toneIndex" : 3
+        },
+        {
+          "hex" : "#000B1A",
+          "toneIndex" : 4
+        }
+      ],
+      "role" : "core"
+    },
+    {
+      "anchorHex" : "#8B8589",
+      "anchorName" : "warm taupe",
+      "cells" : [
+        {
+          "hex" : "#D6D3D5",
+          "toneIndex" : 0
+        },
+        {
+          "hex" : "#B0ACAF",
+          "toneIndex" : 1
+        },
+        {
+          "hex" : "#8B8589",
+          "toneIndex" : 2
+        },
+        {
+          "hex" : "#645F63",
+          "toneIndex" : 3
+        },
+        {
+          "hex" : "#3D3A3C",
+          "toneIndex" : 4
+        }
+      ],
+      "role" : "core"
+    },
+    {
+      "anchorHex" : "#AEC6CF",
+      "anchorName" : "pale blue",
+      "cells" : [
+        {
+          "hex" : "#EFF4F6",
+          "toneIndex" : 0
+        },
+        {
+          "hex" : "#DEE8EB",
+          "toneIndex" : 1
+        },
+        {
+          "hex" : "#AEC6CF",
+          "toneIndex" : 2
+        },
+        {
+          "hex" : "#7EA4B3",
+          "toneIndex" : 3
+        },
+        {
+          "hex" : "#557F8F",
+          "toneIndex" : 4
+        }
+      ],
+      "role" : "accent"
+    },
+    {
+      "anchorHex" : "#FFF5EE",
+      "anchorName" : "seashell pink",
+      "cells" : [
+        {
+          "hex" : "#FFF0E5",
+          "toneIndex" : 0
+        },
+        {
+          "hex" : "#FFF0E5",
+          "toneIndex" : 1
+        },
+        {
+          "hex" : "#FFF0E5",
+          "toneIndex" : 2
+        },
+        {
+          "hex" : "#FFC8A2",
+          "toneIndex" : 3
+        },
+        {
+          "hex" : "#FF9B55",
+          "toneIndex" : 4
+        }
+      ],
+      "role" : "accent"
+    },
+    {
+      "anchorHex" : "#CCFF00",
+      "anchorName" : "neon lime",
+      "cells" : [
+        {
+          "hex" : "#EBFF99",
+          "toneIndex" : 0
+        },
+        {
+          "hex" : "#DBFF4D",
+          "toneIndex" : 1
+        },
+        {
+          "hex" : "#CCFF00",
+          "toneIndex" : 2
+        },
+        {
+          "hex" : "#8FB300",
+          "toneIndex" : 3
+        },
+        {
+          "hex" : "#526600",
+          "toneIndex" : 4
+        }
+      ],
+      "role" : "accent"
+    },
+    {
+      "anchorHex" : "#6B0099",
+      "anchorName" : "ultraviolet",
+      "cells" : [
+        {
+          "hex" : "#C233FF",
+          "toneIndex" : 0
+        },
+        {
+          "hex" : "#A000E5",
+          "toneIndex" : 1
+        },
+        {
+          "hex" : "#6B0099",
+          "toneIndex" : 2
+        },
+        {
+          "hex" : "#35004D",
+          "toneIndex" : 3
+        },
+        {
+          "hex" : "#12001A",
+          "toneIndex" : 4
+        }
+      ],
+      "role" : "accent"
+    }
+  ]
+}
