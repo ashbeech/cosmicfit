@@ -475,6 +475,13 @@ final class StyleGuideViewController: UIViewController {
         case .palette:
             let colourPalette = ColourPaletteView()
             colourPalette.configure(with: ColourPaletteView.placeholder())
+            // Dev-only: surface the anchor family name above each row so we
+            // can visually confirm which colour is named what during
+            // development. Spec §4.2 locks production to "no labels", so
+            // the flag must stay gated on DEBUG and never ship to release.
+            #if DEBUG
+            colourPalette.showsDevelopmentAnchorNames = true
+            #endif
 
             return StyleGuideDetailContent(
                 sectionType: .palette,

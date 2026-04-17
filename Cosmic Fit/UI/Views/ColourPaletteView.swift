@@ -8,12 +8,22 @@
 //  Rendering rules (locked, §4 / §8):
 //   • 5 columns × 8 rows (4 core + 4 accent), fixed.
 //   • 1× row-height band separator between core (rows 1–4) and accent
-//     (rows 5–8) bands — implemented as section 1's top inset.
+//     (rows 5–8) bands — implemented as the first accent section's top
+//     inset.
 //   • Cells are square, corner radius 4 pt, inter-cell spacing 2 pt.
-//   • No labels (§4.2), no tap (§4.4), scroll disabled (parent scroll view
-//     owns vertical scroll).
+//   • No production labels (§4.2), no tap (§4.4), scroll disabled (parent
+//     scroll view owns vertical scroll).
 //   • Empty anchor slots render as `ColourCell.configureEmpty()`
 //     (UIColor.label at 8% alpha).
+//
+//  Layout implementation:
+//   • One UICollectionView section per grid row (8 sections total). This
+//     is deliberately finer-grained than a two-section core/accent split
+//     so the optional development anchor-name label can sit natively in
+//     `UICollectionView.elementKindSectionHeader` above each row without
+//     reinventing layout code. When the dev flag is off, headers report
+//     zero reference size and the section collapses to just the row of
+//     cells — identical visually to a 2-section layout.
 //
 //  API surface (§8):
 //   • `init()`                                — empty grid.
@@ -21,6 +31,9 @@
 //   • `static placeholder() -> PaletteGrid`   — deterministic demo grid
 //     for previews, onboarding, and the current Style Guide call site
 //     (until P5 live wiring lands).
+//   • `showsDevelopmentAnchorNames: Bool`     — dev-only aid that draws
+//     the anchor family name above each row. NEVER enable in release
+//     builds; §4.2 production rule is "no labels".
 //
 
 import UIKit
@@ -35,9 +48,33 @@ final class ColourPaletteView: UIView {
     /// with `PaletteGrid.coreRowCount` so layout and data source agree.
     private let accentBandStartRow: Int = PaletteGrid.coreRowCount
 
+    /// Height reserved for a development anchor-name label above each row
+    /// when `showsDevelopmentAnchorNames` is true. Small enough not to
+    /// visibly dominate the swatches; generous enough for 10 pt semibold
+    /// text with 2 pt top/bottom padding.
+    private let devAnchorHeaderHeight: CGFloat = 18
+
     // MARK: - State
 
     private var grid: PaletteGrid?
+
+    /// Dev-only: render each row's anchor family name in a small label
+    /// above the row of swatches. Default off — production UI per §4.2
+    /// has no cell / row labels. Flip this on from a debug call site
+    /// (ideally gated with `#if DEBUG`) to inspect which anchors were
+    /// picked during development.
+    ///
+    /// Flipping the flag invalidates layout and intrinsic size so the
+    /// enclosing scroll view re-flows correctly.
+    var showsDevelopmentAnchorNames: Bool = false {
+        didSet {
+            guard oldValue != showsDevelopmentAnchorNames else { return }
+            collectionView.collectionViewLayout.invalidateLayout()
+            collectionView.reloadData()
+            invalidateIntrinsicContentSize()
+            setNeedsLayout()
+        }
+    }
 
     // MARK: - UI
 
@@ -52,6 +89,11 @@ final class ColourPaletteView: UIView {
         cv.isScrollEnabled = false
         cv.allowsSelection = false
         cv.register(ColourCell.self, forCellWithReuseIdentifier: ColourCell.reuseIdentifier)
+        cv.register(
+            AnchorNameHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: AnchorNameHeaderView.reuseIdentifier
+        )
         return cv
     }()
 
@@ -118,34 +160,46 @@ final class ColourPaletteView: UIView {
 
     override var intrinsicContentSize: CGSize {
         let width = bounds.width
-        guard width > 0 else {
+        guard width > 0, let grid = grid else {
             return CGSize(width: UIView.noIntrinsicMetric, height: UIView.noIntrinsicMetric)
         }
 
-        let coreRows = visibleRowCount(in: coreRowRange)
-        let accentRows = visibleRowCount(in: accentRowRange)
-
-        // Both bands always render — an empty band contributes zero height
-        // and no gap (see §4.3 / §8). If hidesEmptyRows is true AND the
-        // accent band is empty, we drop the band gap too.
         let cellSize = calculateCellSize(width: width)
-        let rowsPerSection = max(coreRows, 0) + max(accentRows, 0)
-        guard rowsPerSection > 0 else {
+
+        var coreVisibleRows = 0
+        var accentVisibleRows = 0
+        for (index, row) in grid.rows.enumerated() {
+            guard isRowVisible(row, in: grid) else { continue }
+            if index < accentBandStartRow {
+                coreVisibleRows += 1
+            } else {
+                accentVisibleRows += 1
+            }
+        }
+
+        let totalVisibleRows = coreVisibleRows + accentVisibleRows
+        guard totalVisibleRows > 0 else {
             return CGSize(width: width, height: 0)
         }
 
-        let coreSectionHeight: CGFloat = coreRows > 0
-            ? cellSize * CGFloat(coreRows) + cellSpacing * CGFloat(max(coreRows - 1, 0))
-            : 0
-        let accentSectionHeight: CGFloat = accentRows > 0
-            ? cellSize * CGFloat(accentRows) + cellSpacing * CGFloat(max(accentRows - 1, 0))
-            : 0
+        // Cell rows.
+        var height = cellSize * CGFloat(totalVisibleRows)
 
-        // Band gap: 1× row height between the bands. Only contributes if
-        // both bands have any visible rows.
-        let bandGap: CGFloat = (coreRows > 0 && accentRows > 0) ? cellSize : 0
+        // Dev headers: one per visible row when the flag is on.
+        if showsDevelopmentAnchorNames {
+            height += CGFloat(totalVisibleRows) * devAnchorHeaderHeight
+        }
 
-        let height = coreSectionHeight + bandGap + accentSectionHeight
+        // Intra-band spacing: between adjacent visible rows of the same band.
+        height += CGFloat(max(coreVisibleRows - 1, 0)) * cellSpacing
+        height += CGFloat(max(accentVisibleRows - 1, 0)) * cellSpacing
+
+        // Band gap: 1× row height between bands, only if both bands have
+        // visible content (matches §4.3 / §8 — no floating gap).
+        if coreVisibleRows > 0 && accentVisibleRows > 0 {
+            height += cellSize
+        }
+
         return CGSize(width: width, height: height)
     }
 
@@ -180,18 +234,9 @@ final class ColourPaletteView: UIView {
 
     // MARK: - Private helpers
 
-    private var coreRowRange: Range<Int> { 0..<accentBandStartRow }
-    private var accentRowRange: Range<Int> { accentBandStartRow..<PaletteGrid.rowCount }
-
-    /// Count of rows in the given range that should be laid out given the
-    /// grid's content and its `hidesEmptyRows` flag.
-    private func visibleRowCount(in range: Range<Int>) -> Int {
-        guard let grid = grid else { return 0 }
-        let slice = grid.rows[range]
-        if grid.hidesEmptyRows {
-            return slice.filter { $0.anchorHex != nil }.count
-        }
-        return slice.count
+    private func isRowVisible(_ row: PaletteRow, in grid: PaletteGrid) -> Bool {
+        if grid.hidesEmptyRows && row.anchorHex == nil { return false }
+        return true
     }
 
     private func calculateCellSize(width: CGFloat) -> CGFloat {
@@ -200,19 +245,24 @@ final class ColourPaletteView: UIView {
         return (width - totalSpacing) / CGFloat(columns)
     }
 
-    /// Returns the grid row index for (section, item), accounting for
-    /// `hidesEmptyRows`. Section 0 = core band, section 1 = accent band.
-    private func gridRowIndex(for indexPath: IndexPath) -> Int? {
-        guard let grid = grid else { return nil }
-        let range = indexPath.section == 0 ? coreRowRange : accentRowRange
-        let slice = grid.rows[range]
-        let visibleRows: [(offset: Int, row: PaletteRow)] = slice.enumerated().compactMap { offset, row in
-            if grid.hidesEmptyRows && row.anchorHex == nil { return nil }
-            return (offset, row)
+    /// First accent section index that will actually render cells — used to
+    /// place the band-gap top inset on the correct section when
+    /// `hidesEmptyRows` is true and the leading accent row(s) happen to be
+    /// empty. Falls back to `accentBandStartRow` when nothing in the accent
+    /// band is visible (inset won't be used in that case anyway).
+    private var firstVisibleAccentSection: Int {
+        guard let grid = grid else { return accentBandStartRow }
+        for index in accentBandStartRow..<PaletteGrid.rowCount {
+            if isRowVisible(grid.rows[index], in: grid) {
+                return index
+            }
         }
-        guard indexPath.item / PaletteGrid.columnCount < visibleRows.count else { return nil }
-        let visibleIndex = indexPath.item / PaletteGrid.columnCount
-        return range.lowerBound + visibleRows[visibleIndex].offset
+        return accentBandStartRow
+    }
+
+    private var hasAnyVisibleCoreRow: Bool {
+        guard let grid = grid else { return false }
+        return (0..<accentBandStartRow).contains { isRowVisible(grid.rows[$0], in: grid) }
     }
 }
 
@@ -221,12 +271,13 @@ final class ColourPaletteView: UIView {
 extension ColourPaletteView: UICollectionViewDataSource {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return grid == nil ? 0 : 2
+        return grid == nil ? 0 : PaletteGrid.rowCount
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let range = section == 0 ? coreRowRange : accentRowRange
-        return visibleRowCount(in: range) * PaletteGrid.columnCount
+        guard let grid = grid else { return 0 }
+        let row = grid.rows[section]
+        return isRowVisible(row, in: grid) ? PaletteGrid.columnCount : 0
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -236,15 +287,13 @@ extension ColourPaletteView: UICollectionViewDataSource {
                 withReuseIdentifier: ColourCell.reuseIdentifier,
                 for: indexPath
             ) as? ColourCell,
-            let grid = grid,
-            let rowIndex = gridRowIndex(for: indexPath)
+            let grid = grid
         else {
             return UICollectionViewCell()
         }
 
-        let row = grid.rows[rowIndex]
-        let columnIndex = indexPath.item % PaletteGrid.columnCount
-        let paletteCell = row.cells[columnIndex]
+        let row = grid.rows[indexPath.section]
+        let paletteCell = row.cells[indexPath.item]
 
         switch paletteCell.kind {
         case .filled(let hex):
@@ -258,6 +307,27 @@ extension ColourPaletteView: UICollectionViewDataSource {
         }
 
         return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionHeader else {
+            return UICollectionReusableView()
+        }
+        let header = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: AnchorNameHeaderView.reuseIdentifier,
+            for: indexPath
+        ) as? AnchorNameHeaderView ?? AnchorNameHeaderView()
+
+        if showsDevelopmentAnchorNames, let grid = grid {
+            let row = grid.rows[indexPath.section]
+            header.configure(name: row.anchorName, hex: row.anchorHex)
+        } else {
+            header.configure(name: nil, hex: nil)
+        }
+        return header
     }
 
     private func accessibilityLabel(for row: PaletteRow, toneIndex: Int) -> String? {
@@ -291,14 +361,96 @@ extension ColourPaletteView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        // Inject the 1× row-height band separator ahead of the accent band,
-        // but only if the core band actually rendered any rows. This keeps
-        // the intrinsicContentSize math honest when hidesEmptyRows is true
-        // and one band ends up empty.
-        guard section == 1 else { return .zero }
-        guard visibleRowCount(in: coreRowRange) > 0,
-              visibleRowCount(in: accentRowRange) > 0 else { return .zero }
+        guard let grid = grid else { return .zero }
+        let row = grid.rows[section]
+        guard isRowVisible(row, in: grid) else { return .zero }
+
         let cellSize = calculateCellSize(width: collectionView.bounds.width)
-        return UIEdgeInsets(top: cellSize, left: 0, bottom: 0, right: 0)
+
+        // First visible accent section: apply the 1× row-height band
+        // separator, but only if there was any visible core row above.
+        if section == firstVisibleAccentSection && hasAnyVisibleCoreRow {
+            return UIEdgeInsets(top: cellSize, left: 0, bottom: 0, right: 0)
+        }
+
+        // Intra-band spacing between adjacent visible rows. First visible
+        // row of the core band (section 0 when nothing is hidden) gets 0
+        // — there is no preceding content to space away from.
+        if section == 0 {
+            return .zero
+        }
+        // For any row other than the first core row / first accent row,
+        // insert cellSpacing of top inset so adjacent rows within the same
+        // band sit `cellSpacing` apart. (Flow layout applies `insetForSection`
+        // independently per section; the spacing between two adjacent
+        // sections is the sum of the previous section's bottom inset plus
+        // this section's top inset — previous bottom is 0 so this gives us
+        // exactly cellSpacing between visible rows of the same band.)
+        return UIEdgeInsets(top: cellSpacing, left: 0, bottom: 0, right: 0)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize {
+        guard showsDevelopmentAnchorNames, let grid = grid else { return .zero }
+        let row = grid.rows[section]
+        guard isRowVisible(row, in: grid) else { return .zero }
+        return CGSize(width: collectionView.bounds.width, height: devAnchorHeaderHeight)
+    }
+}
+
+// MARK: - Development anchor-name header
+//
+// Supplementary view that renders the anchor family name (and its hex)
+// above a row. Used only when `ColourPaletteView.showsDevelopmentAnchorNames`
+// is true; production builds never see it because the flag is `false` by
+// default and should only be flipped inside `#if DEBUG`. Kept fileprivate
+// so it can't be referenced from outside the view it belongs to.
+
+private final class AnchorNameHeaderView: UICollectionReusableView {
+
+    static let reuseIdentifier = "AnchorNameHeaderView"
+
+    private let label: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 10, weight: .semibold)
+        label.textColor = UIColor.secondaryLabel
+        label.textAlignment = .left
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(label)
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
+            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2),
+            label.topAnchor.constraint(equalTo: topAnchor, constant: 2),
+            label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
+        ])
+        isAccessibilityElement = false
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(name: String?, hex: String?) {
+        guard let name = name, !name.isEmpty else {
+            label.text = nil
+            return
+        }
+        if let hex = hex {
+            label.text = "\(name.uppercased())  \(hex)"
+        } else {
+            label.text = name.uppercased()
+        }
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        label.text = nil
     }
 }
