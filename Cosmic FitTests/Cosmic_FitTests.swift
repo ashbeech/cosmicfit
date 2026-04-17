@@ -85,7 +85,8 @@ struct BlueprintModelTests {
         #expect(!bp.textures.badText.isEmpty)
         #expect(!bp.textures.sweetSpotText.isEmpty)
         #expect(bp.palette.coreColours.count >= 3)
-        #expect(bp.palette.accentColours.count >= 2)
+        // Tightened from >= 2 by Phase A palette rework (spec v1.1 §12.1).
+        #expect(bp.palette.accentColours.count >= 4)
         #expect(!bp.palette.narrativeText.isEmpty)
         #expect(!bp.occasions.workText.isEmpty)
         #expect(!bp.occasions.intimateText.isEmpty)
@@ -119,7 +120,8 @@ struct BlueprintModelTests {
         #expect(!bp.textures.badText.isEmpty)
         #expect(!bp.textures.sweetSpotText.isEmpty)
         #expect(bp.palette.coreColours.count >= 3)
-        #expect(bp.palette.accentColours.count >= 2)
+        // Tightened from >= 2 by Phase A palette rework (spec v1.1 §12.1).
+        #expect(bp.palette.accentColours.count >= 4)
         #expect(!bp.palette.narrativeText.isEmpty)
         #expect(!bp.occasions.workText.isEmpty)
         #expect(!bp.occasions.intimateText.isEmpty)
