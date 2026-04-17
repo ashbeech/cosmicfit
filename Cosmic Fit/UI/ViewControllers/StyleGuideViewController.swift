@@ -437,6 +437,16 @@ final class StyleGuideViewController: UIViewController {
     /// persisted `CosmicBlueprint`. Returns nil when no valid blueprint is
     /// available (not yet generated, decode failure, empty palette, etc.),
     /// signalling the caller to fall back to `ColourPaletteView.placeholder()`.
+    ///
+    /// Validation: only `coreColours.isEmpty` is checked because a zero-core
+    /// grid is visually broken (entire top band empty), warranting fallback.
+    /// A short accent band (0–3 accents) is handled gracefully by
+    /// `PaletteGridViewModel.build` which pads with empty rows — acceptable
+    /// UI so no fallback is needed.
+    ///
+    /// Called from `createContent(for:)` on the main thread (button-tap
+    /// handler). The synchronous `BlueprintStorage.load()` is fast (<1ms
+    /// for a single-user JSON file) and avoids async complexity.
     private func buildLivePaletteGrid() -> PaletteGrid? {
         guard let blueprint = BlueprintStorage.shared.load() else {
             print("[Palette] No persisted blueprint — using placeholder grid")

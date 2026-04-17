@@ -25,9 +25,10 @@ final class BlueprintStorage {
             let data = try encoder.encode(blueprint)
             try data.write(to: fileURL, options: .atomic)
             print("✅ Blueprint saved to Documents")
-            DispatchQueue.main.async {
+            let post = {
                 NotificationCenter.default.post(name: .blueprintDidUpdate, object: nil)
             }
+            if Thread.isMainThread { post() } else { DispatchQueue.main.async(execute: post) }
         } catch {
             print("❌ Blueprint save failed: \(error.localizedDescription)")
         }

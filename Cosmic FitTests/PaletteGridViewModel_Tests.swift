@@ -381,10 +381,11 @@ enum GoldenSnapshotSupport {
 // Validates the end-to-end path introduced by the P5 palette live-wiring:
 //   BlueprintStorage.load() → CosmicBlueprint.palette → PaletteGridViewModel.build → PaletteGrid
 //
-// These tests use BlueprintStorage.shared (the real singleton) since
-// that is the authoritative source on the production path. Each test
-// saves/cleans up its own data to avoid cross-test pollution.
+// Tests that touch BlueprintStorage.shared mutate a shared file on disk
+// (Documents/cosmic_fit_blueprint.json), so the suite MUST be serialized
+// to prevent parallel tests from racing on the same file.
 
+@Suite(.serialized)
 struct PaletteLiveWiringTests {
 
     // MARK: - Round-trip: save fixture → load → build grid → compare
@@ -407,42 +408,53 @@ struct PaletteLiveWiringTests {
                 "Grid built from storage-round-tripped blueprint must match direct build")
     }
 
-    // MARK: - Fallback: empty storage returns nil → placeholder path
+    // MARK: - Fallback
 
-    @Test("No persisted blueprint means live grid build returns nil")
-    func emptyStorageTriggersPlaceholderFallback() {
+    @Test("BlueprintStorage.load returns nil when no file exists")
+    func emptyStorageReturnsNil() {
         BlueprintStorage.shared.delete()
 
         let loaded = BlueprintStorage.shared.load()
         #expect(loaded == nil, "Storage should return nil when no blueprint file exists")
     }
 
-    // MARK: - PaletteSection validity from real fixtures
+    @Test("Nil storage falls back to a valid, deterministic placeholder grid")
+    func fallbackProducesValidPlaceholderGrid() {
+        BlueprintStorage.shared.delete()
 
-    @Test("Fixture user 1 palette section meets Phase A contract (3-4 core, 4 accent)")
-    func fixtureUser1PaletteContract() throws {
-        let blueprint = try GoldenSnapshotSupport.loadBlueprint("blueprint_input_user_1.json")
-        let section = blueprint.palette
-        #expect((3...4).contains(section.coreColours.count),
-                "Core count \(section.coreColours.count) outside [3,4]")
-        #expect(section.accentColours.count == 4,
-                "Accent count \(section.accentColours.count) != 4")
+        let loaded = BlueprintStorage.shared.load()
+        #expect(loaded == nil)
+
+        let grid = ColourPaletteView.placeholder()
+        #expect(grid.rows.count == PaletteGrid.rowCount)
+        #expect(grid.nonEmptyRowCount == PaletteGrid.rowCount,
+                "Placeholder grid should have all 8 rows filled")
+        for row in grid.rows {
+            #expect(row.cells.count == PaletteGrid.columnCount)
+            #expect(row.anchorHex != nil, "Placeholder row should have an anchor")
+        }
+
+        let second = ColourPaletteView.placeholder()
+        #expect(grid == second, "Placeholder must be deterministic across calls")
     }
 
-    @Test("Fixture user 2 palette section meets Phase A contract (3-4 core, 4 accent)")
-    func fixtureUser2PaletteContract() throws {
-        let blueprint = try GoldenSnapshotSupport.loadBlueprint("blueprint_input_user_2.json")
+    // MARK: - PaletteSection validity from real fixtures
+
+    @Test("Fixture palette sections meet Phase A contract (3-4 core, 4 accent)",
+          arguments: ["blueprint_input_user_1.json", "blueprint_input_user_2.json"])
+    func fixturePaletteContract(filename: String) throws {
+        let blueprint = try GoldenSnapshotSupport.loadBlueprint(filename)
         let section = blueprint.palette
         #expect((3...4).contains(section.coreColours.count),
-                "Core count \(section.coreColours.count) outside [3,4]")
+                "Core count \(section.coreColours.count) outside [3,4] for \(filename)")
         #expect(section.accentColours.count == 4,
-                "Accent count \(section.accentColours.count) != 4")
+                "Accent count \(section.accentColours.count) != 4 for \(filename)")
     }
 
     // MARK: - Notification
 
     @Test("BlueprintStorage.save posts .blueprintDidUpdate notification")
-    func savePostsNotification() throws {
+    @MainActor func savePostsNotification() throws {
         let blueprint = try GoldenSnapshotSupport.loadBlueprint("blueprint_input_user_1.json")
         defer { BlueprintStorage.shared.delete() }
 
