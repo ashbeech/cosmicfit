@@ -111,7 +111,12 @@ struct DeterministicResolver {
             if tooClose { continue }
 
             let role: ColourRole = selected.count < 4 ? .core : .accent
-            selected.append(BlueprintColour(name: token.name, hexValue: hex, role: role))
+            selected.append(BlueprintColour(
+                name: token.name,
+                hexValue: hex,
+                role: role,
+                provenance: .libraryFallback(reason: "pre-resolver-rework legacy path")
+            ))
             selectedHues.append(hue)
         }
 
@@ -493,7 +498,12 @@ struct DeterministicResolver {
                 let hue = hueFromHex(hex)
                 let tooClose = hues.contains { hueDistance($0, hue) < 15.0 }
                 if !tooClose {
-                    result.append(BlueprintColour(name: name, hexValue: hex, role: .core))
+                    result.append(BlueprintColour(
+                        name: name,
+                        hexValue: hex,
+                        role: .core,
+                        provenance: .libraryFallback(reason: "pre-resolver-rework legacy path")
+                    ))
                     hues.append(hue)
                 }
                 if result.filter({ $0.role == .core }).count >= minCore { break }
@@ -510,7 +520,12 @@ struct DeterministicResolver {
                 let hue = hueFromHex(hex)
                 let tooClose = hues.contains { hueDistance($0, hue) < 15.0 }
                 if !tooClose {
-                    result.append(BlueprintColour(name: name, hexValue: hex, role: .accent))
+                    result.append(BlueprintColour(
+                        name: name,
+                        hexValue: hex,
+                        role: .accent,
+                        provenance: .libraryFallback(reason: "pre-resolver-rework legacy path")
+                    ))
                     hues.append(hue)
                 }
                 if result.filter({ $0.role == .accent }).count >= minAccent { break }

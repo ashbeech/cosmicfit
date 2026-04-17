@@ -1242,11 +1242,11 @@ struct NarrativeTemplateRendererTests {
     func buildContextMapping() {
         let resolved = DeterministicResolverResult(
             coreColours: [
-                BlueprintColour(name: "midnight", hexValue: "#191970", role: .core),
-                BlueprintColour(name: "slate", hexValue: "#708090", role: .core),
+                BlueprintColour(name: "midnight", hexValue: "#191970", role: .core, provenance: .libraryFallback(reason: "test stub")),
+                BlueprintColour(name: "slate", hexValue: "#708090", role: .core, provenance: .libraryFallback(reason: "test stub")),
             ],
             accentColours: [
-                BlueprintColour(name: "dusty rose", hexValue: "#DCAE96", role: .accent),
+                BlueprintColour(name: "dusty rose", hexValue: "#DCAE96", role: .accent, provenance: .libraryFallback(reason: "test stub")),
             ],
             swatchFamilies: [],
             recommendedMetals: ["silver", "steel"],
@@ -1358,13 +1358,13 @@ struct BlueprintComposerTemplateTests {
     private func makeMinimalResolved() -> DeterministicResolverResult {
         DeterministicResolverResult(
             coreColours: [
-                BlueprintColour(name: "midnight", hexValue: "#191970", role: .core),
-                BlueprintColour(name: "slate", hexValue: "#708090", role: .core),
-                BlueprintColour(name: "charcoal", hexValue: "#36454F", role: .core),
+                BlueprintColour(name: "midnight", hexValue: "#191970", role: .core, provenance: .libraryFallback(reason: "test stub")),
+                BlueprintColour(name: "slate", hexValue: "#708090", role: .core, provenance: .libraryFallback(reason: "test stub")),
+                BlueprintColour(name: "charcoal", hexValue: "#36454F", role: .core, provenance: .libraryFallback(reason: "test stub")),
             ],
             accentColours: [
-                BlueprintColour(name: "dusty rose", hexValue: "#DCAE96", role: .accent),
-                BlueprintColour(name: "sage", hexValue: "#9CAF88", role: .accent),
+                BlueprintColour(name: "dusty rose", hexValue: "#DCAE96", role: .accent, provenance: .libraryFallback(reason: "test stub")),
+                BlueprintColour(name: "sage", hexValue: "#9CAF88", role: .accent, provenance: .libraryFallback(reason: "test stub")),
             ],
             swatchFamilies: [],
             recommendedMetals: ["silver", "steel"],

@@ -134,12 +134,137 @@ struct BlueprintColour: Codable, Equatable {
     let name: String
     let hexValue: String
     let role: ColourRole
+    /// Provenance record — how this anchor was selected. Non-optional in new
+    /// data; a decode-tolerant init synthesises a legacy fallback value when
+    /// reading pre-Phase-A fixtures that lack the field (see §7.3 of the
+    /// palette engine rework spec).
+    let provenance: ColourProvenance
+
+    init(name: String, hexValue: String, role: ColourRole, provenance: ColourProvenance) {
+        self.name = name
+        self.hexValue = hexValue
+        self.role = role
+        self.provenance = provenance
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case name, hexValue, role, provenance
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.hexValue = try container.decode(String.self, forKey: .hexValue)
+        self.role = try container.decode(ColourRole.self, forKey: .role)
+        self.provenance = try container.decodeIfPresent(ColourProvenance.self, forKey: .provenance)
+            ?? .libraryFallback(reason: "legacy data — provenance unknown")
+    }
 }
 
 enum ColourRole: String, Codable, CaseIterable {
     case core
     case accent
     case statement
+}
+
+/// Dataset-side classification — which sub-array of a `PlanetSignEntry.colours`
+/// yielded a given colour. Preserved through the token layer so the resolver
+/// can honour the dataset's own primary vs accent semantics when assigning
+/// core / accent bands (see §5 of the palette engine rework spec).
+enum DatasetColourRole: String, Codable, CaseIterable {
+    case primary
+    case accent
+}
+
+/// Records why a `BlueprintColour` occupies its slot. Emitted by the resolver
+/// so tests, logs, and future narrative enrichment can audit fit after the
+/// fact. UI does not consume provenance in v1.
+enum ColourProvenance: Codable, Equatable {
+    /// Selected from a chart-derived token whose dataset source role matched
+    /// the expected role for the resolved band.
+    case chartDerived(
+        comboKey: String,
+        contributorRank: Int,
+        sourceRole: DatasetColourRole,
+        hueGapApplied: Double
+    )
+
+    /// Pulled from the opposite dataset pool because the expected pool
+    /// underflowed the band minimum. Carries its original dataset role.
+    case crossPoolEscalation(
+        comboKey: String,
+        contributorRank: Int,
+        originalRole: DatasetColourRole,
+        hueGapApplied: Double,
+        reason: String
+    )
+
+    /// Padded from the curated fallback pool — no chart grounding.
+    case libraryFallback(reason: String)
+
+    private enum CodingKeys: String, CodingKey {
+        case kind
+        case comboKey
+        case contributorRank
+        case sourceRole
+        case originalRole
+        case hueGapApplied
+        case reason
+    }
+
+    private enum Kind: String, Codable {
+        case chartDerived
+        case crossPoolEscalation
+        case libraryFallback
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case let .chartDerived(comboKey, contributorRank, sourceRole, hueGapApplied):
+            try container.encode(Kind.chartDerived, forKey: .kind)
+            try container.encode(comboKey, forKey: .comboKey)
+            try container.encode(contributorRank, forKey: .contributorRank)
+            try container.encode(sourceRole, forKey: .sourceRole)
+            try container.encode(hueGapApplied, forKey: .hueGapApplied)
+        case let .crossPoolEscalation(comboKey, contributorRank, originalRole, hueGapApplied, reason):
+            try container.encode(Kind.crossPoolEscalation, forKey: .kind)
+            try container.encode(comboKey, forKey: .comboKey)
+            try container.encode(contributorRank, forKey: .contributorRank)
+            try container.encode(originalRole, forKey: .originalRole)
+            try container.encode(hueGapApplied, forKey: .hueGapApplied)
+            try container.encode(reason, forKey: .reason)
+        case let .libraryFallback(reason):
+            try container.encode(Kind.libraryFallback, forKey: .kind)
+            try container.encode(reason, forKey: .reason)
+        }
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let kind = try container.decode(Kind.self, forKey: .kind)
+        switch kind {
+        case .chartDerived:
+            self = .chartDerived(
+                comboKey: try container.decode(String.self, forKey: .comboKey),
+                contributorRank: try container.decode(Int.self, forKey: .contributorRank),
+                sourceRole: try container.decode(DatasetColourRole.self, forKey: .sourceRole),
+                hueGapApplied: try container.decode(Double.self, forKey: .hueGapApplied)
+            )
+        case .crossPoolEscalation:
+            self = .crossPoolEscalation(
+                comboKey: try container.decode(String.self, forKey: .comboKey),
+                contributorRank: try container.decode(Int.self, forKey: .contributorRank),
+                originalRole: try container.decode(DatasetColourRole.self, forKey: .originalRole),
+                hueGapApplied: try container.decode(Double.self, forKey: .hueGapApplied),
+                reason: try container.decode(String.self, forKey: .reason)
+            )
+        case .libraryFallback:
+            self = .libraryFallback(
+                reason: try container.decode(String.self, forKey: .reason)
+            )
+        }
+    }
 }
 
 /// A tonal family grouped around one anchor colour.
@@ -225,6 +350,49 @@ struct BlueprintToken: Codable, Equatable {
     let signSource: String?
     let houseSource: Int?
     let aspectSource: String?
+    /// Non-nil only for `.colour` tokens. Records whether the dataset
+    /// classified this colour as a primary or subordinate accent for its
+    /// planet/sign combo — preserved so the resolver can honour dataset
+    /// semantics instead of inferring role from weight ordering alone.
+    let sourceColourRole: DatasetColourRole?
+
+    init(
+        name: String,
+        category: TokenCategory,
+        weight: Double,
+        planetarySource: String?,
+        signSource: String?,
+        houseSource: Int?,
+        aspectSource: String?,
+        sourceColourRole: DatasetColourRole? = nil
+    ) {
+        self.name = name
+        self.category = category
+        self.weight = weight
+        self.planetarySource = planetarySource
+        self.signSource = signSource
+        self.houseSource = houseSource
+        self.aspectSource = aspectSource
+        self.sourceColourRole = sourceColourRole
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case name, category, weight
+        case planetarySource, signSource, houseSource, aspectSource
+        case sourceColourRole
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.category = try container.decode(TokenCategory.self, forKey: .category)
+        self.weight = try container.decode(Double.self, forKey: .weight)
+        self.planetarySource = try container.decodeIfPresent(String.self, forKey: .planetarySource)
+        self.signSource = try container.decodeIfPresent(String.self, forKey: .signSource)
+        self.houseSource = try container.decodeIfPresent(Int.self, forKey: .houseSource)
+        self.aspectSource = try container.decodeIfPresent(String.self, forKey: .aspectSource)
+        self.sourceColourRole = try container.decodeIfPresent(DatasetColourRole.self, forKey: .sourceColourRole)
+    }
 
     enum TokenCategory: String, Codable, CaseIterable {
         case texture                          // → TexturesSection
