@@ -83,7 +83,12 @@ struct NarrativeTemplateRenderer {
         for (i, c) in resolved.coreColours.enumerated() {
             ctx["core_colour_\(i + 1)"] = c.name
         }
-        for (i, c) in resolved.accentColours.enumerated() {
+        // Narrative exposes only the top 2 accents by contributor rank
+        // (resolver guarantees rank-ascending order). Accents 3 and 4 exist
+        // in `resolved.accentColours` for the palette grid but are
+        // deliberately NOT written to the template context — see spec
+        // v1.1 §9.1 and the narrative-exposure test (§12.4).
+        for (i, c) in resolved.accentColours.prefix(2).enumerated() {
             ctx["accent_colour_\(i + 1)"] = c.name
         }
         for (i, m) in resolved.recommendedMetals.enumerated() {
