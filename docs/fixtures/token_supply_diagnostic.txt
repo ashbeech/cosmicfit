@@ -1,0 +1,91 @@
+=====================================================
+ Palette Engine Rework — Token Supply Diagnostic
+ Spec: docs/palette_engine_rework_spec_v1.md §8
+=====================================================
+
+[FIXTURE · Ash]
+  primary pool: 17 tokens, 8 distinct @ 15°
+  accent  pool: 14 tokens, 8 distinct @ 15°
+  escalation step expected: 0 · no escalation (clean at 15°)
+  top combos: moon_cancer(2.04), sun_sagittarius(1.19), ascendant_virgo(0.98), venus_aquarius(0.95), mars_aquarius(0.86)
+
+[FIXTURE · Maria]
+  primary pool: 18 tokens, 7 distinct @ 15°
+  accent  pool: 13 tokens, 5 distinct @ 15°
+  escalation step expected: 0 · no escalation (clean at 15°)
+  top combos: saturn_capricorn(2.65), venus_taurus(2.58), sun_taurus(1.15), moon_capricorn(1.14), ascendant_capricorn(1.10)
+
+[SYNTH · fire-dominant cardinal]
+  primary pool: 12 tokens, 4 distinct @ 15°
+  accent  pool: 9 tokens, 3 distinct @ 15°
+  escalation step expected: 1 · hue-gap loosen to 12°
+  top combos: mars_sagittarius(2.01), venus_aries(1.25), sun_aries(1.10), moon_leo(1.08), ascendant_aries(0.85)
+
+[SYNTH · fire-dominant mutable]
+  primary pool: 14 tokens, 7 distinct @ 15°
+  accent  pool: 9 tokens, 5 distinct @ 15°
+  escalation step expected: 0 · no escalation (clean at 15°)
+  top combos: jupiter_leo(1.35), venus_leo(1.25), sun_sagittarius(1.10), moon_sagittarius(1.08), ascendant_sagittarius(0.85)
+
+[SYNTH · earth-dominant fixed]
+  primary pool: 15 tokens, 7 distinct @ 15°
+  accent  pool: 10 tokens, 6 distinct @ 15°
+  escalation step expected: 0 · no escalation (clean at 15°)
+  top combos: venus_taurus(3.12), sun_taurus(1.10), moon_virgo(1.08), ascendant_taurus(0.85), mars_capricorn(0.81)
+
+[SYNTH · earth-dominant cardinal]
+  primary pool: 15 tokens, 6 distinct @ 15°
+  accent  pool: 10 tokens, 5 distinct @ 15°
+  escalation step expected: 0 · no escalation (clean at 15°)
+  top combos: saturn_capricorn(1.61), venus_virgo(1.25), sun_capricorn(1.10), moon_capricorn(1.08), ascendant_capricorn(0.85)
+
+[SYNTH · air-dominant fixed]
+  primary pool: 14 tokens, 7 distinct @ 15°
+  accent  pool: 11 tokens, 7 distinct @ 15°
+  escalation step expected: 0 · no escalation (clean at 15°)
+  top combos: saturn_aquarius(1.61), venus_libra(1.25), sun_aquarius(1.10), moon_gemini(1.08), ascendant_aquarius(0.85)
+
+[SYNTH · air-dominant cardinal]
+  primary pool: 14 tokens, 6 distinct @ 15°
+  accent  pool: 10 tokens, 7 distinct @ 15°
+  escalation step expected: 0 · no escalation (clean at 15°)
+  top combos: venus_libra(3.12), sun_libra(1.10), moon_aquarius(1.08), ascendant_libra(0.85), mars_gemini(0.81)
+
+[SYNTH · water-dominant mutable]
+  primary pool: 14 tokens, 6 distinct @ 15°
+  accent  pool: 11 tokens, 7 distinct @ 15°
+  escalation step expected: 0 · no escalation (clean at 15°)
+  top combos: jupiter_cancer(1.35), venus_scorpio(1.25), sun_pisces(1.10), moon_cancer(1.08), ascendant_pisces(0.85)
+
+[SYNTH · water-dominant fixed]
+  primary pool: 14 tokens, 5 distinct @ 15°
+  accent  pool: 10 tokens, 6 distinct @ 15°
+  escalation step expected: 0 · no escalation (clean at 15°)
+  top combos: mars_cancer(2.01), venus_scorpio(1.25), sun_scorpio(1.10), moon_scorpio(1.08), ascendant_scorpio(0.85)
+
+[SYNTH · mixed modality · cardinal blend]
+  primary pool: 14 tokens, 7 distinct @ 15°
+  accent  pool: 11 tokens, 5 distinct @ 15°
+  escalation step expected: 0 · no escalation (clean at 15°)
+  top combos: venus_libra(3.12), sun_aries(1.10), moon_cancer(1.08), ascendant_libra(0.85), mars_capricorn(0.81)
+
+[SYNTH · mixed modality · mutable blend]
+  primary pool: 14 tokens, 9 distinct @ 15°
+  accent  pool: 11 tokens, 7 distinct @ 15°
+  escalation step expected: 0 · no escalation (clean at 15°)
+  top combos: venus_pisces(1.25), mercury_gemini(1.25), sun_gemini(1.10), moon_virgo(1.08), ascendant_virgo(0.85)
+
+[SYNTH · balanced · no dominant element]
+  primary pool: 14 tokens, 6 distinct @ 15°
+  accent  pool: 11 tokens, 8 distinct @ 15°
+  escalation step expected: 0 · no escalation (clean at 15°)
+  top combos: mars_libra(2.01), venus_cancer(1.25), sun_leo(1.10), moon_taurus(1.08), ascendant_scorpio(0.85)
+
+-----------------------------------------------------
+ Aggregate — Pass criteria (§8.3)
+-----------------------------------------------------
+ Fixture users clean: 2 / 2
+ Synthetic charts clean: 11 / 11 (100%, floor 80%)
+ Fixture gate: PASS
+ Synthetic gate: PASS
+=====================================================
