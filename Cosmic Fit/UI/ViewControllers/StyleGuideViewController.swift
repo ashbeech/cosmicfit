@@ -431,6 +431,22 @@ final class StyleGuideViewController: UIViewController {
         tabBarController.presentDetailViewController(detailVC, animated: true)
     }
 
+    // MARK: - Live Palette Data
+
+    /// Attempts to build a live `PaletteGrid` from the current user's
+    /// persisted `CosmicBlueprint`. Returns nil when no valid blueprint is
+    /// available (not yet generated, decode failure, empty palette, etc.).
+    private func buildLivePaletteGrid() -> PaletteGrid? {
+        guard let blueprint = BlueprintStorage.shared.load() else {
+            return nil
+        }
+        let section = blueprint.palette
+        guard !section.coreColours.isEmpty else {
+            return nil
+        }
+        return PaletteGridViewModel.build(from: section)
+    }
+
     // MARK: - Section Content Factory
 
     private func createContent(for section: StyleGuideDetailContent.StyleGuideSection) -> StyleGuideDetailContent {
@@ -474,11 +490,8 @@ final class StyleGuideViewController: UIViewController {
 
         case .palette:
             let colourPalette = ColourPaletteView()
-            colourPalette.configure(with: ColourPaletteView.placeholder())
-            // Dev-only: surface the anchor family name above each row so we
-            // can visually confirm which colour is named what during
-            // development. Spec §4.2 locks production to "no labels", so
-            // the flag must stay gated on DEBUG and never ship to release.
+            let grid = buildLivePaletteGrid() ?? ColourPaletteView.placeholder()
+            colourPalette.configure(with: grid)
             #if DEBUG
             colourPalette.showsDevelopmentAnchorNames = true
             #endif
