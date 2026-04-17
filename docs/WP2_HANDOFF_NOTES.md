@@ -31,8 +31,8 @@ It preserves WP2 determinism and adds fields for astrological provenance.
 
 Three companion hand-off specs define the work:
 
-- **Phase 0** — [`repo_rename_spec_v1.md`](repo_rename_spec_v1.md) — rename this
-  directory from `_reference/` to `docs/`. Mechanical sweep; no engine work.
+- **Phase 0** — [`repo_rename_spec_v1.md`](repo_rename_spec_v1.md) — rename the
+  reference-material directory to `docs/`. Mechanical sweep; no engine work.
 - **Phase A** — [`palette_engine_rework_spec_v1.md`](palette_engine_rework_spec_v1.md)
   — token-layer + resolver rework for astrological fit. Adds `sourceColourRole`
   on `BlueprintToken` and `provenance` on `BlueprintColour`. Grows `accentColours`
@@ -85,11 +85,11 @@ core, accent, statement
 
 | File | Purpose |
 |------|---------|
-| `_reference/fixtures/blueprint_input_user_1.json` | Ash example — shape-validation fixture |
-| `_reference/fixtures/blueprint_input_user_2.json` | Maria example — shape-validation fixture |
-| `_reference/fixtures/blueprint_expected_shape_checklist.md` | Every required field, type, and constraint |
-| `_reference/fixtures/dataset_schema_checklist.md` | WP4 dataset structure requirements |
-| `_reference/fixtures/CHANGELOG.md` | Fixture change log |
+| `docs/fixtures/blueprint_input_user_1.json` | Ash example — shape-validation fixture |
+| `docs/fixtures/blueprint_input_user_2.json` | Maria example — shape-validation fixture |
+| `docs/fixtures/blueprint_expected_shape_checklist.md` | Every required field, type, and constraint |
+| `docs/fixtures/dataset_schema_checklist.md` | WP4 dataset structure requirements |
+| `docs/fixtures/CHANGELOG.md` | Fixture change log |
 
 **Fixture rules (from spec §D):**
 - All WPs must validate against the same fixture files.
@@ -97,7 +97,7 @@ core, accent, statement
 - Fixture updates require a CHANGELOG entry.
 
 **Important:** The colour hex values in the fixtures are synthetic (derived from
-the prose in `_reference/blueprint_examples.md`). They validate JSON shape, not
+the prose in `docs/blueprint_examples.md`). They validate JSON shape, not
 engine output correctness.
 
 ---
@@ -126,7 +126,7 @@ Each archetype cluster entry in `blueprint_narrative_cache.json` must contain al
 | `pattern_narrative` | `PatternSection` | `.narrativeText` |
 | `pattern_tip` | `PatternSection` | `.tipText` |
 
-Full detail: `_reference/blueprint_model_field_sources.md`.
+Full detail: `docs/blueprint_model_field_sources.md`.
 
 ---
 
@@ -160,7 +160,7 @@ These are critical for WP3's `ChartAnalyser`:
 
 ## 7. What the Review Tool Spec Defines
 
-`_reference/narrative_review_tool_spec.md` specifies:
+`docs/narrative_review_tool_spec.md` specifies:
 
 - The exact JSON schema for `blueprint_narrative_cache.json`
 - The exact JSON schema for `review_notes.json`

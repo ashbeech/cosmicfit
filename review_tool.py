@@ -3,7 +3,7 @@
 Cosmic Fit — Narrative Review Tool (WP3)
 
 A local-only web UI for reviewing AI-generated Blueprint paragraphs.
-Conforms to _reference/narrative_review_tool_spec.md.
+Conforms to docs/narrative_review_tool_spec.md.
 
 Usage:
     python3 review_tool.py [--cache blueprint_narrative_cache.json] [--port 8420]

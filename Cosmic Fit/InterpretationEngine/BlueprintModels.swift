@@ -14,7 +14,7 @@
 //    U  = User-input passthrough
 //    M  = Runtime metadata
 //
-//  See _reference/blueprint_model_field_sources.md for the full mapping.
+//  See docs/blueprint_model_field_sources.md for the full mapping.
 //
 
 import Foundation

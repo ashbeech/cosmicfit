@@ -194,7 +194,7 @@ The Blueprint is a one-off, per-user style profile generated from their natal ch
 
 **Test User 2 (28/04/1989)** -- Same sections, completely different content reflecting different natal chart.
 
-**Provision requirement:** The full text of both examples MUST be provided in-repo before WP2 begins. Create a file `_reference/blueprint_examples.md` containing the complete output text for both test users. This file is a hard dependency for WP2 — the developer cannot design accurate structs without seeing the exact content they must represent. Do NOT rely on the developer "requesting" them; the examples must be committed to the repository alongside this spec.
+**Provision requirement:** The full text of both examples MUST be provided in-repo before WP2 begins. Create a file `docs/blueprint_examples.md` containing the complete output text for both test users. This file is a hard dependency for WP2 — the developer cannot design accurate structs without seeing the exact content they must represent. Do NOT rely on the developer "requesting" them; the examples must be committed to the repository alongside this spec.
 
 If the examples have not yet been committed, the WP2 developer should treat this as a **blocker** and escalate immediately rather than guessing at the data shape.
 
@@ -819,7 +819,7 @@ Phase 2 should begin only after Phase 1 is verified: the app builds, runs, and p
 
 ### Phase 1 Concurrent Execution Controls (Required for Multi-Dev Run)
 
-> **Runbook (Kickoff for 5 parallel AI developers):** Assign one owner per WP (WP1-WP4 active now, WP5 deferred), require each owner to post a start note listing dependencies and owned files, and enforce Start Gates before coding (`_reference/blueprint_examples.md` for WP2, frozen WP2 contract for WP4, merged WP2+WP4 for WP3). During execution, each owner commits only within their file boundary, reports any cross-boundary touch as a blocker, and rebases at each dependency handoff. Merge in this order: WP2 -> WP4 -> WP3, with WP1 merged first or rebased before final integration if project references moved. Accept Phase 1 only when build is green, fixture/schema checks are green, and deterministic Blueprint spot checks are logged.
+> **Runbook (Kickoff for 5 parallel AI developers):** Assign one owner per WP (WP1-WP4 active now, WP5 deferred), require each owner to post a start note listing dependencies and owned files, and enforce Start Gates before coding (`docs/blueprint_examples.md` for WP2, frozen WP2 contract for WP4, merged WP2+WP4 for WP3). During execution, each owner commits only within their file boundary, reports any cross-boundary touch as a blocker, and rebases at each dependency handoff. Merge in this order: WP2 -> WP4 -> WP3, with WP1 merged first or rebased before final integration if project references moved. Accept Phase 1 only when build is green, fixture/schema checks are green, and deterministic Blueprint spot checks are logged.
 
 The following controls are mandatory when WP1-WP4 are assigned to separate AI developers in parallel. They are designed to prevent merge conflict churn and behavioural drift.
 
@@ -828,7 +828,7 @@ The following controls are mandatory when WP1-WP4 are assigned to separate AI de
 | Work Package | Depends On | Blocks | Can Run In Parallel With | Start Gate |
 |---|---|---|---|---|
 | WP1 | None | None (but unblocks cleaner integration) | WP2 | Immediate |
-| WP2 | `_reference/blueprint_examples.md` present in repo | WP4, WP3 | WP1 | Examples file committed and reviewed |
+| WP2 | `docs/blueprint_examples.md` present in repo | WP4, WP3 | WP1 | Examples file committed and reviewed |
 | WP4 | WP2 (`BlueprintModels.swift` and section/category contracts) | WP3 | WP1 | WP2 model contracts frozen |
 | WP3 | WP2 + WP4 complete | Phase 1 completion | None (integration-heavy) | WP2+WP4 merged into integration branch |
 
@@ -843,7 +843,7 @@ Each WP owns the following file zones for write access. Cross-zone edits require
 | WP | Primary write ownership | Must not modify without sign-off |
 |---|---|---|
 | WP1 | `Core/Calculations/NatalChartCalculator.swift`, `NatalChartViewController.swift`, `CosmicFitTabBarController.swift`, `NatalChartManager+Interpretation.swift`, listed Daily Fit-only files (comments only), `_archive/*`, project file references for archival cleanup | WP2 model structs, WP3 engine logic, WP4 dataset semantics |
-| WP2 | New/updated Blueprint model files (for example `BlueprintModels.swift`, `BlueprintToken`, `BlueprintArchetypeKey`), `_reference/blueprint_examples.md` verification | WP1 UI placeholder behavior, WP3 algorithm implementation, WP4 content population |
+| WP2 | New/updated Blueprint model files (for example `BlueprintModels.swift`, `BlueprintToken`, `BlueprintArchetypeKey`), `docs/blueprint_examples.md` verification | WP1 UI placeholder behavior, WP3 algorithm implementation, WP4 content population |
 | WP4 | `astrological_style_dataset.json` and dataset validation/report artifacts | WP1 archive/migration mechanics, WP2 public model contract shape, WP3 engine execution logic |
 | WP3 | Engine/runtime files that consume `CosmicBlueprint` + WP4 dataset, deterministic resolver/generation pipeline, logging for fallback events | WP2 contract-breaking model changes, WP4 source-of-truth dataset edits (except schema-alignment fixes approved by WP4 owner), unrelated UI behavior |
 
@@ -856,13 +856,13 @@ Rules:
 | WP | Done when all are true |
 |---|---|
 | WP1 | Project builds; placeholder content appears in targeted UI flows; direct and manager-wrapped engine calls are disconnected; required Daily Fit-only headers are added; archive + extracted token table delivered |
-| WP2 | `CosmicBlueprint` and all section structs compile; enum/raw-value keying rules are implemented exactly; sample decode/encode against `_reference/blueprint_examples.md` succeeds; no guessed fields |
+| WP2 | `CosmicBlueprint` and all section structs compile; enum/raw-value keying rules are implemented exactly; sample decode/encode against `docs/blueprint_examples.md` succeeds; no guessed fields |
 | WP4 | Dataset passes cardinality/schema checks (including `opposites`); 132 planet-sign entries present; key naming matches canonical WP2 keys; validation report committed |
 | WP3 | Deterministic algorithms implemented exactly per spec formulas/rules; nearest-match fallback + logging active; engine output populates all required Blueprint sections from dataset; build/tests pass |
 
 #### D) Shared Test Fixture Pack (single source of truth)
 
-Before WP3 finalization, commit and use a common fixture pack under `_reference/fixtures/`:
+Before WP3 finalization, commit and use a common fixture pack under `docs/fixtures/`:
 - `blueprint_input_user_1.json`
 - `blueprint_input_user_2.json`
 - `blueprint_expected_shape_checklist.md` (section presence/types, not prose exact-match)
@@ -871,7 +871,7 @@ Before WP3 finalization, commit and use a common fixture pack under `_reference/
 Fixture rules:
 - All WPs must validate against the same fixture files.
 - No WP may create a private fixture variant with divergent field names.
-- Fixture updates require a short changelog entry in `_reference/fixtures/CHANGELOG.md`.
+- Fixture updates require a short changelog entry in `docs/fixtures/CHANGELOG.md`.
 
 #### E) Integration and Merge Order (Phase 1)
 

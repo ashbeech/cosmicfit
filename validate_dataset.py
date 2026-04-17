@@ -3,7 +3,7 @@
 WP4 — Dataset Validation Script
 
 Validates astrological_style_dataset.json against the schema checklist
-(_reference/fixtures/dataset_schema_checklist.md) and the WP3 consumer
+(docs/fixtures/dataset_schema_checklist.md) and the WP3 consumer
 contract (BlueprintTokenGenerator.swift Codable types).
 
 Checks:

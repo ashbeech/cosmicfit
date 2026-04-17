@@ -3,7 +3,7 @@
 > **Version:** v1  
 > **Phase:** 0 of the Palette Rework programme  
 > **Dependency chain:** this spec is a hard prerequisite for `palette_engine_rework_spec_v1.md` (Phase A) and transitively for `palette_grid_spec_v1.md` (Phase B).  
-> **Companion specs:** `_reference/palette_engine_rework_spec_v1.md`, `_reference/palette_grid_spec_v1.md` (these paths will also move to `docs/...` as part of your sweep).
+> **Companion specs:** `docs/palette_engine_rework_spec_v1.md`, `docs/palette_grid_spec_v1.md` (these paths were moved from `_reference/...` as part of this sweep).
 
 ---
 

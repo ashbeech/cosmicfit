@@ -9,8 +9,8 @@ for palette/pattern stability.
 Usage:
   python3 generate_house_sect_regression.py \
     --fixture ash \
-    --before _reference/fixtures/blueprint_input_user_1.json \
-    --after _reference/house_sect_regression/input_after/ash.json
+    --before docs/fixtures/blueprint_input_user_1.json \
+    --after docs/house_sect_regression/input_after/ash.json
 """
 
 from __future__ import annotations
@@ -107,7 +107,7 @@ def main() -> int:
     parser.add_argument("--after", required=True, help="Path to post-integration Blueprint JSON")
     parser.add_argument(
         "--output-dir",
-        default="_reference/house_sect_regression",
+        default="docs/house_sect_regression",
         help="Directory to write snapshot bundle JSON",
     )
     args = parser.parse_args()

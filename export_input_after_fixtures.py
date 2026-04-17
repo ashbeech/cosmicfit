@@ -3,7 +3,7 @@
 One-command exporter for house/sect regression input_after fixtures.
 
 This script runs a focused XCTest that generates post-integration Blueprint JSON files:
-  _reference/house_sect_regression/input_after/{fixture}.json
+  docs/house_sect_regression/input_after/{fixture}.json
 
 Default fixtures:
   - ash
@@ -38,7 +38,7 @@ def main() -> int:
     )
     parser.add_argument(
         "--output-dir",
-        default="_reference/house_sect_regression/input_after",
+        default="docs/house_sect_regression/input_after",
         help="Output directory for exported JSON fixtures",
     )
     parser.add_argument(

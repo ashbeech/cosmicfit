@@ -21,7 +21,7 @@ struct BlueprintModelTests {
             .deletingLastPathComponent()  // Cosmic FitTests/
             .deletingLastPathComponent()  // repo root
         return repoRoot
-            .appendingPathComponent("_reference")
+            .appendingPathComponent("docs")
             .appendingPathComponent("fixtures")
     }
 
@@ -31,7 +31,7 @@ struct BlueprintModelTests {
             Issue.record("""
                 Fixture not found at \(url.path).
                 Tests load fixtures via #filePath-relative path from the source tree.
-                Ensure the repo checkout contains _reference/fixtures/\(filename).
+                Ensure the repo checkout contains docs/fixtures/\(filename).
                 """)
             throw CocoaError(.fileNoSuchFile)
         }
@@ -1084,7 +1084,7 @@ struct HardeningEdgeCaseTests {
         let testFile = URL(fileURLWithPath: #filePath)
         let repoRoot = testFile.deletingLastPathComponent().deletingLastPathComponent()
         return repoRoot
-            .appendingPathComponent("_reference")
+            .appendingPathComponent("docs")
             .appendingPathComponent("house_sect_regression")
             .appendingPathComponent("input_after")
     }

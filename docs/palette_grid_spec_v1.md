@@ -432,7 +432,7 @@ After every file add/move:
 4. For test files: confirm `Cosmic FitTests` is checked.
 5. Build from a clean fresh checkout (`Product > Clean Build Folder`, then build) to confirm.
 
-The project file has been checked and contains zero `_reference` references; Phase 0 does not touch it. But this spec *does* add/move files, so Phase B must update it.
+The project file has been checked and contains zero references to the former reference-material directory; Phase 0 does not touch it. But this spec *does* add/move files, so Phase B must update it.
 
 ---
 

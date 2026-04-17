@@ -1,6 +1,6 @@
 # House/Sect Regression Scorecard
 
-Auto-generated from `_reference/house_sect_regression/*.json`.
+Auto-generated from `docs/house_sect_regression/*.json`.
 Manual reviewer sign-off is required for contradiction and identity-retention gates.
 
 ## Mechanical Gates

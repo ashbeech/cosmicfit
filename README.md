@@ -783,7 +783,7 @@ If a placeholder has no resolved value (e.g. the user only has 2 core colours bu
 | `review_tool.py` | Local web UI for reviewing, approving, and flagging generated paragraphs. Displays templates with placeholders as-is so reviewers see the template structure. |
 | `blueprint_narrative_cache.json` | Output of the backfill — all AI-generated paragraph templates keyed by archetype cluster. Bundled into the app at `Cosmic Fit/Resources/`. Must be regenerated after placeholder vocabulary changes. |
 | `review_notes.json` | Auto-saved review state from the review tool. The backfill script reads this on re-run to skip approved paragraphs and regenerate flagged ones. |
-| `_reference/blueprint_examples.md` | Voice reference — two complete example Blueprints plus 234 tarot-style paragraphs that define the target writing style. |
+| `docs/blueprint_examples.md` | Voice reference — two complete example Blueprints plus 234 tarot-style paragraphs that define the target writing style. |
 | `BLUEPRINT_REBUILD_SPEC_v2.3.md` | Full architecture specification for the rebuild. |
 
 ### Setup
@@ -869,15 +869,15 @@ source .venv/bin/activate && python3 backfill_narratives.py \
 
 ### House/Sect regression snapshots
 
-Golden regression snapshots and scorecard tooling live in `_reference/house_sect_regression/`.
+Golden regression snapshots and scorecard tooling live in `docs/house_sect_regression/`.
 
 Build snapshot bundles from before/after Blueprint JSON:
 
 ```bash
 source .venv/bin/activate && python3 generate_house_sect_regression.py \
   --fixture ash \
-  --before _reference/fixtures/blueprint_input_user_1.json \
-  --after _reference/house_sect_regression/input_after/ash.json
+  --before docs/fixtures/blueprint_input_user_1.json \
+  --after docs/house_sect_regression/input_after/ash.json
 ```
 
 Auto-generate `input_after/*.json` from runtime fixtures:
@@ -892,8 +892,8 @@ Generate the human review scorecard from snapshot bundles:
 
 ```bash
 source .venv/bin/activate && python3 review_house_sect_regression.py \
-  --snapshots-dir _reference/house_sect_regression \
-  --output _reference/house_sect_regression/REPORT.md
+  --snapshots-dir docs/house_sect_regression \
+  --output docs/house_sect_regression/REPORT.md
 ```
 
 **Dry run (no API calls):**

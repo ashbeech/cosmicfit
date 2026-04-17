@@ -2,7 +2,7 @@
 
 > **Date:** 2026-04-10
 > **Artifact:** `astrological_style_dataset.json` (298 KB)
-> **Validated against:** `_reference/fixtures/dataset_schema_checklist.md`, WP3 consumer code
+> **Validated against:** `docs/fixtures/dataset_schema_checklist.md`, WP3 consumer code
 
 > **Related programme (2026):** the Palette Rework programme may require minor
 > additive dataset changes (see [`palette_engine_rework_spec_v1.md`](palette_engine_rework_spec_v1.md)
@@ -137,14 +137,14 @@ Per spec requirements:
 | `astrological_style_dataset.json` | Complete WP4 dataset (production artifact) |
 | `generate_dataset.py` | Dataset generation script (developer tool, not a runtime dependency) |
 | `validate_dataset.py` | Dataset validation script (developer tool) |
-| `_reference/WP4_VALIDATION_REPORT.md` | This report |
+| `docs/WP4_VALIDATION_REPORT.md` | This report |
 
 ---
 
 ## No Fixture Changes Required
 
 The WP4 dataset introduces no changes to:
-- `_reference/fixtures/blueprint_input_user_1.json`
-- `_reference/fixtures/blueprint_input_user_2.json`
-- `_reference/fixtures/blueprint_expected_shape_checklist.md`
-- `_reference/fixtures/dataset_schema_checklist.md`
+- `docs/fixtures/blueprint_input_user_1.json`
+- `docs/fixtures/blueprint_input_user_2.json`
+- `docs/fixtures/blueprint_expected_shape_checklist.md`
+- `docs/fixtures/dataset_schema_checklist.md`

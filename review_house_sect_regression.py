@@ -2,12 +2,12 @@
 """
 House/Sect Regression Review Helper
 
-Reads snapshot artifacts from `_reference/house_sect_regression/*.json` and
+Reads snapshot artifacts from `docs/house_sect_regression/*.json` and
 generates a reviewer-friendly scorecard markdown report.
 
 Usage:
   python3 review_house_sect_regression.py
-  python3 review_house_sect_regression.py --snapshots-dir _reference/house_sect_regression --output _reference/house_sect_regression/SCORECARD.md
+  python3 review_house_sect_regression.py --snapshots-dir docs/house_sect_regression --output docs/house_sect_regression/SCORECARD.md
 """
 
 from __future__ import annotations
@@ -56,7 +56,7 @@ def build_report(snapshots: list[dict]) -> str:
     lines: list[str] = []
     lines.append("# House/Sect Regression Scorecard")
     lines.append("")
-    lines.append("Auto-generated from `_reference/house_sect_regression/*.json`.")
+    lines.append("Auto-generated from `docs/house_sect_regression/*.json`.")
     lines.append("Manual reviewer sign-off is required for contradiction and identity-retention gates.")
     lines.append("")
     lines.append("## Mechanical Gates")
@@ -113,12 +113,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Generate house/sect regression scorecard")
     parser.add_argument(
         "--snapshots-dir",
-        default="_reference/house_sect_regression",
+        default="docs/house_sect_regression",
         help="Directory containing fixture snapshot JSON files",
     )
     parser.add_argument(
         "--output",
-        default="_reference/house_sect_regression/SCORECARD.md",
+        default="docs/house_sect_regression/SCORECARD.md",
         help="Markdown output path",
     )
     args = parser.parse_args()

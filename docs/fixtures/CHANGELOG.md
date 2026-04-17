@@ -1,6 +1,6 @@
 # Fixtures Changelog
 
-All changes to shared test fixtures under `_reference/fixtures/`.
+All changes to shared test fixtures under `docs/fixtures/`.
 
 ---
 
@@ -14,7 +14,7 @@ All changes to shared test fixtures under `_reference/fixtures/`.
 
 **Notes on synthetic/placeholder values:**
 - Colour hex values in the fixture JSONs are synthetic (derived from prose
-  descriptions in `_reference/blueprint_examples.md`). They exist to validate
+  descriptions in `docs/blueprint_examples.md`). They exist to validate
   the `BlueprintColour` JSON shape, not to assert engine output correctness.
 - `blueprint_input_user_2.json` sets `birthLocation` to `"Unknown"` because the
   Maria example in `blueprint_examples.md` provides no location. This is a
