@@ -11,7 +11,7 @@
 //     (rows 5–8) bands — implemented as the first accent section's top
 //     inset.
 //   • Cells are square, corner radius 4 pt, inter-cell spacing 2 pt.
-//   • No production labels (§4.2), no tap (§4.4), scroll disabled (parent
+//   • No cell labels (§4.2), no tap (§4.4), scroll disabled (parent
 //     scroll view owns vertical scroll).
 //   • Empty anchor slots render as `ColourCell.configureEmpty()`
 //     (UIColor.label at 8% alpha).
@@ -19,11 +19,13 @@
 //  Layout implementation:
 //   • One UICollectionView section per grid row (8 sections total). This
 //     is deliberately finer-grained than a two-section core/accent split
-//     so the optional development anchor-name label can sit natively in
-//     `UICollectionView.elementKindSectionHeader` above each row without
-//     reinventing layout code. When the dev flag is off, headers report
-//     zero reference size and the section collapses to just the row of
-//     cells — identical visually to a 2-section layout.
+//     so section headers can sit natively in
+//     `UICollectionView.elementKindSectionHeader` above each row.
+//   • The first visible row of each band always carries a band title
+//     header ("Core Colours" / "Accent Colours") so users understand
+//     why the two grids are separated.
+//   • When `showsDevelopmentAnchorNames` is true, *every* visible row
+//     also shows its anchor family name and hex.
 //
 //  API surface (§8):
 //   • `init()`                                — empty grid.
@@ -33,7 +35,7 @@
 //     (until P5 live wiring lands).
 //   • `showsDevelopmentAnchorNames: Bool`     — dev-only aid that draws
 //     the anchor family name above each row. NEVER enable in release
-//     builds; §4.2 production rule is "no labels".
+//     builds; §4.2 production rule is "no cell labels".
 //
 
 import UIKit
@@ -48,11 +50,13 @@ final class ColourPaletteView: UIView {
     /// with `PaletteGrid.coreRowCount` so layout and data source agree.
     private let accentBandStartRow: Int = PaletteGrid.coreRowCount
 
+    /// Height reserved for a band title ("Core Colours" / "Accent Colours")
+    /// above the first row of each band. Always present in production.
+    private let bandTitleHeight: CGFloat = 28
+
     /// Height reserved for a development anchor-name label above each row
-    /// when `showsDevelopmentAnchorNames` is true. Small enough not to
-    /// visibly dominate the swatches; generous enough for 10 pt semibold
-    /// text with 2 pt top/bottom padding.
-    private let devAnchorHeaderHeight: CGFloat = 18
+    /// when `showsDevelopmentAnchorNames` is true.
+    private let devAnchorLabelHeight: CGFloat = 18
 
     // MARK: - State
 
@@ -63,9 +67,6 @@ final class ColourPaletteView: UIView {
     /// has no cell / row labels. Flip this on from a debug call site
     /// (ideally gated with `#if DEBUG`) to inspect which anchors were
     /// picked during development.
-    ///
-    /// Flipping the flag invalidates layout and intrinsic size so the
-    /// enclosing scroll view re-flows correctly.
     var showsDevelopmentAnchorNames: Bool = false {
         didSet {
             guard oldValue != showsDevelopmentAnchorNames else { return }
@@ -90,9 +91,9 @@ final class ColourPaletteView: UIView {
         cv.allowsSelection = false
         cv.register(ColourCell.self, forCellWithReuseIdentifier: ColourCell.reuseIdentifier)
         cv.register(
-            AnchorNameHeaderView.self,
+            PaletteSectionHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: AnchorNameHeaderView.reuseIdentifier
+            withReuseIdentifier: PaletteSectionHeaderView.reuseIdentifier
         )
         return cv
     }()
@@ -124,14 +125,6 @@ final class ColourPaletteView: UIView {
         collectionView.delegate = self
         collectionView.dataSource = self
 
-        // §9 — group the grid under a single labelled accessibility
-        // container. `shouldGroupAccessibilityChildren` tells VoiceOver to
-        // focus children before moving to siblings; `semanticGroup` plus
-        // the label surfaces "Personal palette" as a rotor summary while
-        // still allowing individual cells to be navigated (each filled
-        // cell carries its own "{anchorName} {toneRole}" label — set in
-        // the data source). The view itself must not be its own a11y
-        // element, otherwise children would be hidden from VoiceOver.
         isAccessibilityElement = false
         accessibilityLabel = "Personal palette"
         shouldGroupAccessibilityChildren = true
@@ -140,9 +133,6 @@ final class ColourPaletteView: UIView {
 
     // MARK: - Public API
 
-    /// Set the grid content. Triggers a data reload, layout invalidation,
-    /// and `intrinsicContentSize` recalculation so the enclosing scroll
-    /// view re-flows.
     func configure(with grid: PaletteGrid) {
         self.grid = grid
         collectionView.reloadData()
@@ -185,17 +175,21 @@ final class ColourPaletteView: UIView {
         // Cell rows.
         var height = cellSize * CGFloat(totalVisibleRows)
 
-        // Dev headers: one per visible row when the flag is on.
+        // Band title headers: one per band that has visible rows.
+        if coreVisibleRows > 0 { height += bandTitleHeight }
+        if accentVisibleRows > 0 { height += bandTitleHeight }
+
+        // Dev anchor-name headers: one per visible row.
         if showsDevelopmentAnchorNames {
-            height += CGFloat(totalVisibleRows) * devAnchorHeaderHeight
+            height += CGFloat(totalVisibleRows) * devAnchorLabelHeight
         }
 
-        // Intra-band spacing: between adjacent visible rows of the same band.
+        // Intra-band spacing.
         height += CGFloat(max(coreVisibleRows - 1, 0)) * cellSpacing
         height += CGFloat(max(accentVisibleRows - 1, 0)) * cellSpacing
 
         // Band gap: 1× row height between bands, only if both bands have
-        // visible content (matches §4.3 / §8 — no floating gap).
+        // visible content.
         if coreVisibleRows > 0 && accentVisibleRows > 0 {
             height += cellSize
         }
@@ -205,10 +199,6 @@ final class ColourPaletteView: UIView {
 
     // MARK: - Placeholder factory
 
-    /// Deterministic demo grid. Built from 4 made-up core + 4 accent anchors
-    /// so the Style Guide screen renders a stable preview today — and
-    /// previews / tests have a non-empty fixture — until live `PaletteSection`
-    /// wiring lands (spec §8 / §10 P5).
     static func placeholder() -> PaletteGrid {
         let provenance: ColourProvenance = .libraryFallback(reason: "UI placeholder")
         let core: [BlueprintColour] = [
@@ -245,11 +235,6 @@ final class ColourPaletteView: UIView {
         return (width - totalSpacing) / CGFloat(columns)
     }
 
-    /// First accent section index that will actually render cells — used to
-    /// place the band-gap top inset on the correct section when
-    /// `hidesEmptyRows` is true and the leading accent row(s) happen to be
-    /// empty. Falls back to `accentBandStartRow` when nothing in the accent
-    /// band is visible (inset won't be used in that case anyway).
     private var firstVisibleAccentSection: Int {
         guard let grid = grid else { return accentBandStartRow }
         for index in accentBandStartRow..<PaletteGrid.rowCount {
@@ -263,6 +248,39 @@ final class ColourPaletteView: UIView {
     private var hasAnyVisibleCoreRow: Bool {
         guard let grid = grid else { return false }
         return (0..<accentBandStartRow).contains { isRowVisible(grid.rows[$0], in: grid) }
+    }
+
+    /// Whether this section is the first visible row of its band.
+    private func isBandLeader(_ section: Int) -> Bool {
+        guard let grid = grid else { return false }
+        if section < accentBandStartRow {
+            // Core band: first visible core row.
+            for i in 0..<accentBandStartRow {
+                if isRowVisible(grid.rows[i], in: grid) { return i == section }
+            }
+            return false
+        } else {
+            return section == firstVisibleAccentSection
+        }
+    }
+
+    private func bandTitle(for section: Int) -> String? {
+        guard isBandLeader(section) else { return nil }
+        return section < accentBandStartRow ? "Core Colours" : "Accent Colours"
+    }
+
+    /// Total header height for a given section. Combines band title height
+    /// (if this section leads its band) + dev anchor label height (if the
+    /// dev flag is on).
+    private func headerHeight(for section: Int) -> CGFloat {
+        guard let grid = grid else { return 0 }
+        let row = grid.rows[section]
+        guard isRowVisible(row, in: grid) else { return 0 }
+
+        var h: CGFloat = 0
+        if isBandLeader(section) { h += bandTitleHeight }
+        if showsDevelopmentAnchorNames { h += devAnchorLabelHeight }
+        return h
     }
 }
 
@@ -317,16 +335,21 @@ extension ColourPaletteView: UICollectionViewDataSource {
         }
         let header = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
-            withReuseIdentifier: AnchorNameHeaderView.reuseIdentifier,
+            withReuseIdentifier: PaletteSectionHeaderView.reuseIdentifier,
             for: indexPath
-        ) as? AnchorNameHeaderView ?? AnchorNameHeaderView()
+        ) as? PaletteSectionHeaderView ?? PaletteSectionHeaderView()
 
+        let title = bandTitle(for: indexPath.section)
+
+        var anchorName: String? = nil
+        var anchorHex: String? = nil
         if showsDevelopmentAnchorNames, let grid = grid {
             let row = grid.rows[indexPath.section]
-            header.configure(name: row.anchorName, hex: row.anchorHex)
-        } else {
-            header.configure(name: nil, hex: nil)
+            anchorName = row.anchorName
+            anchorHex = row.anchorHex
         }
+
+        header.configure(bandTitle: title, anchorName: anchorName, anchorHex: anchorHex)
         return header
     }
 
@@ -367,69 +390,76 @@ extension ColourPaletteView: UICollectionViewDelegateFlowLayout {
 
         let cellSize = calculateCellSize(width: collectionView.bounds.width)
 
-        // First visible accent section: apply the 1× row-height band
-        // separator, but only if there was any visible core row above.
         if section == firstVisibleAccentSection && hasAnyVisibleCoreRow {
             return UIEdgeInsets(top: cellSize, left: 0, bottom: 0, right: 0)
         }
 
-        // Intra-band spacing between adjacent visible rows. First visible
-        // row of the core band (section 0 when nothing is hidden) gets 0
-        // — there is no preceding content to space away from.
         if section == 0 {
             return .zero
         }
-        // For any row other than the first core row / first accent row,
-        // insert cellSpacing of top inset so adjacent rows within the same
-        // band sit `cellSpacing` apart. (Flow layout applies `insetForSection`
-        // independently per section; the spacing between two adjacent
-        // sections is the sum of the previous section's bottom inset plus
-        // this section's top inset — previous bottom is 0 so this gives us
-        // exactly cellSpacing between visible rows of the same band.)
         return UIEdgeInsets(top: cellSpacing, left: 0, bottom: 0, right: 0)
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
-        guard showsDevelopmentAnchorNames, let grid = grid else { return .zero }
-        let row = grid.rows[section]
-        guard isRowVisible(row, in: grid) else { return .zero }
-        return CGSize(width: collectionView.bounds.width, height: devAnchorHeaderHeight)
+        let h = headerHeight(for: section)
+        guard h > 0 else { return .zero }
+        return CGSize(width: collectionView.bounds.width, height: h)
     }
 }
 
-// MARK: - Development anchor-name header
+// MARK: - Section header view
 //
-// Supplementary view that renders the anchor family name (and its hex)
-// above a row. Used only when `ColourPaletteView.showsDevelopmentAnchorNames`
-// is true; production builds never see it because the flag is `false` by
-// default and should only be flipped inside `#if DEBUG`. Kept fileprivate
-// so it can't be referenced from outside the view it belongs to.
+// Combined header that can show a band title ("Core Colours" /
+// "Accent Colours") and/or a development anchor-name label. Band
+// titles are production-visible; anchor names are dev-only.
 
-private final class AnchorNameHeaderView: UICollectionReusableView {
+private final class PaletteSectionHeaderView: UICollectionReusableView {
 
-    static let reuseIdentifier = "AnchorNameHeaderView"
+    static let reuseIdentifier = "PaletteSectionHeaderView"
 
-    private let label: UILabel = {
+    private let stackView: UIStackView = {
+        let sv = UIStackView()
+        sv.axis = .vertical
+        sv.alignment = .leading
+        sv.spacing = 0
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        return sv
+    }()
+
+    private let bandTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 10, weight: .semibold)
-        label.textColor = UIColor.secondaryLabel
+        label.font = .systemFont(ofSize: 13, weight: .medium)
+        label.textColor = .label
         label.textAlignment = .left
         label.numberOfLines = 1
-        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let anchorNameLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 10, weight: .semibold)
+        label.textColor = .label
+        label.textAlignment = .left
+        label.numberOfLines = 1
         return label
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(label)
+
+        addSubview(stackView)
+        stackView.addArrangedSubview(bandTitleLabel)
+        stackView.addArrangedSubview(anchorNameLabel)
+
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
-            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2),
-            label.topAnchor.constraint(equalTo: topAnchor, constant: 2),
-            label.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
+            stackView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor),
         ])
+
         isAccessibilityElement = false
     }
 
@@ -437,20 +467,33 @@ private final class AnchorNameHeaderView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(name: String?, hex: String?) {
-        guard let name = name, !name.isEmpty else {
-            label.text = nil
-            return
-        }
-        if let hex = hex {
-            label.text = "\(name.uppercased())  \(hex)"
+    func configure(bandTitle: String?, anchorName: String?, anchorHex: String?) {
+        if let title = bandTitle {
+            bandTitleLabel.text = title
+            bandTitleLabel.isHidden = false
         } else {
-            label.text = name.uppercased()
+            bandTitleLabel.text = nil
+            bandTitleLabel.isHidden = true
+        }
+
+        if let name = anchorName, !name.isEmpty {
+            if let hex = anchorHex {
+                anchorNameLabel.text = "\(name.uppercased())  \(hex)"
+            } else {
+                anchorNameLabel.text = name.uppercased()
+            }
+            anchorNameLabel.isHidden = false
+        } else {
+            anchorNameLabel.text = nil
+            anchorNameLabel.isHidden = true
         }
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        label.text = nil
+        bandTitleLabel.text = nil
+        bandTitleLabel.isHidden = true
+        anchorNameLabel.text = nil
+        anchorNameLabel.isHidden = true
     }
 }
