@@ -348,11 +348,21 @@ struct BlueprintTokenGenerator {
             ))
         }
 
-        for colour in entry.colours.primary + entry.colours.accent {
+        for colour in entry.colours.primary {
             tokens.append(BlueprintToken(
                 name: colour.name, category: .colour, weight: rawWeight,
                 planetarySource: planetarySource, signSource: signSource,
-                houseSource: houseSource, aspectSource: aspectSource
+                houseSource: houseSource, aspectSource: aspectSource,
+                sourceColourRole: .primary
+            ))
+        }
+
+        for colour in entry.colours.accent {
+            tokens.append(BlueprintToken(
+                name: colour.name, category: .colour, weight: rawWeight,
+                planetarySource: planetarySource, signSource: signSource,
+                houseSource: houseSource, aspectSource: aspectSource,
+                sourceColourRole: .accent
             ))
         }
 
@@ -432,7 +442,8 @@ struct BlueprintTokenGenerator {
                 planetarySource: token.planetarySource,
                 signSource: token.signSource,
                 houseSource: token.houseSource,
-                aspectSource: token.aspectSource
+                aspectSource: token.aspectSource,
+                sourceColourRole: token.sourceColourRole
             )
         }
     }
