@@ -82,7 +82,18 @@ final class ColourPaletteView: UIView {
         collectionView.delegate = self
         collectionView.dataSource = self
 
+        // §9 — group the grid under a single labelled accessibility
+        // container. `shouldGroupAccessibilityChildren` tells VoiceOver to
+        // focus children before moving to siblings; `semanticGroup` plus
+        // the label surfaces "Personal palette" as a rotor summary while
+        // still allowing individual cells to be navigated (each filled
+        // cell carries its own "{anchorName} {toneRole}" label — set in
+        // the data source). The view itself must not be its own a11y
+        // element, otherwise children would be hidden from VoiceOver.
+        isAccessibilityElement = false
         accessibilityLabel = "Personal palette"
+        shouldGroupAccessibilityChildren = true
+        accessibilityContainerType = .semanticGroup
     }
 
     // MARK: - Public API
