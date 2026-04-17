@@ -138,18 +138,6 @@ final class ColourPaletteView: UIView {
         return CGSize(width: width, height: height)
     }
 
-    // MARK: - Transitional compatibility shim
-    //
-    // TEMPORARY — removed in the next commit (slice (d), spec §10 P4) when
-    // `StyleGuideViewController.swift:476` is updated to the new API. Kept
-    // here only so this commit (slice (c)) builds green per §10.
-    // swiftlint:disable:next large_tuple
-    static func createPlaceholderPalette() -> ColourPaletteView {
-        let view = ColourPaletteView()
-        view.configure(with: placeholder())
-        return view
-    }
-
     // MARK: - Placeholder factory
 
     /// Deterministic demo grid. Built from 4 made-up core + 4 accent anchors

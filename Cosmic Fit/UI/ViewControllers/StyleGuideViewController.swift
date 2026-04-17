@@ -473,7 +473,8 @@ final class StyleGuideViewController: UIViewController {
             )
 
         case .palette:
-            let colourPalette = ColourPaletteView.createPlaceholderPalette()
+            let colourPalette = ColourPaletteView()
+            colourPalette.configure(with: ColourPaletteView.placeholder())
 
             return StyleGuideDetailContent(
                 sectionType: .palette,
