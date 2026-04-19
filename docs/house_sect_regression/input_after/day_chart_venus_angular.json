@@ -31,30 +31,30 @@
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-04-19T13:53:00Z",
+  "generatedAt" : "2026-04-19T16:53:11Z",
   "hardware" : {
-    "metalsText" : "Flimsy details ruin a look instantly, so your hardware needs real physical weight to ground your wardrobe. Thick, cast soft copper delivers immediate warmth and pairs flawlessly with heavy silks and buttery leathers. For items that see constant rotation, like a substantial boot zip or the clasp on an everyday bag, a polished rose gold catches the light beautifully and matches your energetic pace. When you wear warm bronze, the casting must be completely solid and the surface immaculate. Every single detail has to feel inherently expensive to the touch, right down to the rivets and zipper pulls.",
+    "metalsText" : "Flimsy details ruin a look instantly, so your hardware needs real physical weight to ground your wardrobe. Thick, cast soft copper delivers immediate warmth and pairs flawlessly with heavy silks and buttery leathers. For items that see constant rotation, like a substantial boot zip or the clasp on an everyday bag, a polished rose gold catches the light beautifully and matches your energetic pace. When you wear yellow gold, the casting must be completely solid and the surface immaculate. Every single detail has to feel inherently expensive to the touch, right down to the rivets and zipper pulls.",
     "recommendedMetals" : [
       "soft copper",
       "rose gold",
-      "warm bronze",
       "yellow gold",
-      "polished silver",
+      "warm bronze",
       "white gold",
-      "platinum"
+      "platinum",
+      "polished silver"
     ],
     "recommendedStones" : [
-      "kunzite",
       "pink tourmaline",
-      "malachite",
+      "kunzite",
       "rose quartz",
+      "malachite",
       "emerald",
       "onyx",
-      "garnet",
-      "sapphire"
+      "sapphire",
+      "garnet"
     ],
-    "stonesText" : "Flimsy, delicate little gems simply get lost on you. You need stones that feel substantial and warm to the touch, reflecting your natural heat and demand for sensory richness. A heavy cut of kunzite looks incredible sitting close to the skin, while the dense depth of pink tourmaline brings a brilliant flash of colour to a simple cream silk shirt. Look for smooth cabochon cuts set in chunky, buttery gold rather than fussy, intricate claws. The pieces you wear daily should look less like polite heirlooms and more like bold, tactile objects you genuinely love to handle.",
-    "tipText" : "Your jewellery needs to carry undeniable physical weight. Whisper-thin chains and delicate layers will simply annoy you by midday. Look for substantial hardware that feels satisfying in your hand before you even put it on, like a solid soft copper cuff or a leather bag secured with a seriously heavy clasp. You want pieces that make a bold entrance but remain deeply rooted in proper craftsmanship. A single, commanding ring set with kunzite works far harder for your outfit than a tangled stack of fine bands. Stick to items that match your natural heat and refuse to fade into the background, while always feeling distinctly expensive to wear."
+    "stonesText" : "Flimsy, delicate little gems simply get lost on you. You need stones that feel substantial and warm to the touch, reflecting your natural heat and demand for sensory richness. A heavy cut of pink tourmaline looks incredible sitting close to the skin, while the dense depth of kunzite brings a brilliant flash of colour to a simple cream silk shirt. Look for smooth cabochon cuts set in chunky, buttery gold rather than fussy, intricate claws. The pieces you wear daily should look less like polite heirlooms and more like bold, tactile objects you genuinely love to handle.",
+    "tipText" : "Your jewellery needs to carry undeniable physical weight. Whisper-thin chains and delicate layers will simply annoy you by midday. Look for substantial hardware that feels satisfying in your hand before you even put it on, like a solid soft copper cuff or a leather bag secured with a seriously heavy clasp. You want pieces that make a bold entrance but remain deeply rooted in proper craftsmanship. A single, commanding ring set with pink tourmaline works far harder for your outfit than a tangled stack of fine bands. Stick to items that match your natural heat and refuse to fade into the background, while always feeling distinctly expensive to wear."
   },
   "occasions" : {
     "dailyText" : "Dressing down is never an excuse to drop your standards. Flimsy, featherweight garments simply annoy you, so your casual rotation runs entirely on substantial, perfectly weighted pieces that keep their shape through a busy afternoon. The goal is total physical ease that still projects a warm, high-impact energy. Focus on impeccable drape, a thoughtfully dropped shoulder, and heavy hems that move exactly as fast as you do. You manage to look supremely comfortable while making it obvious that every single item is distinctly premium.\n\nYour comfort instinct gravitates toward security through tactile quality, fabrics as emotional anchors.",
@@ -97,8 +97,8 @@
         "role" : "accent"
       },
       {
-        "hexValue" : "#A36D2A",
-        "name" : "deep amber",
+        "hexValue" : "#A0522D",
+        "name" : "warm auburn",
         "provenance" : {
           "band" : "accent",
           "family" : "Deep Autumn",
@@ -144,8 +144,8 @@
         "role" : "core"
       },
       {
-        "hexValue" : "#9E4E3A",
-        "name" : "dark terracotta",
+        "hexValue" : "#CC7722",
+        "name" : "ochre",
         "provenance" : {
           "band" : "core",
           "family" : "Deep Autumn",
@@ -269,6 +269,6 @@
   "userInfo" : {
     "birthDate" : "1991-07-15T12:00:00Z",
     "birthLocation" : "Synthetic Fixture",
-    "generationDate" : "2026-04-19T13:53:00Z"
+    "generationDate" : "2026-04-19T16:53:11Z"
   }
 }

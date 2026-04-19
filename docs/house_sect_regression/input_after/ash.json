@@ -31,28 +31,28 @@
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-04-19T13:53:00Z",
+  "generatedAt" : "2026-04-19T16:53:11Z",
   "hardware" : {
     "metalsText" : "Your most effective hardware relies on a strict clash of high-tech precision and familiar, heavy warmth. Slick, industrial white gold gives you a sharp foundation, looking right at home on the oversized zips of technical outerwear or the chunky fastenings of a utility bag. A completely clinical finish leaves you cold, so you break up those stark details with antique silver. Seek out antique silver pieces with a battered, nostalgic patina—like a weighty heirloom pendant strung onto a modern synthetic cord, or thick, warm-toned belt buckles. This visual friction keeps your clothes from looking like a uniform, grounding bold shapes in something deeply personal.",
     "recommendedMetals" : [
       "white gold",
       "antique silver",
-      "aged brass",
       "hammered gold",
+      "aged brass",
       "brushed silver"
     ],
     "recommendedStones" : [
-      "selenite",
       "moonstone",
+      "selenite",
       "pearl",
-      "amber",
       "turquoise",
       "lapis lazuli",
+      "amber",
       "sapphire",
       "peridot"
     ],
-    "stonesText" : "The standard, polite solitaire diamond is never going to hold your attention. You suit stones that feel simultaneously like unearthed artefacts and entirely alien objects. selenite gives you a striking, electric shock of colour while maintaining a comforting, heavy weight against the collarbone. Pair it with the milky, protective finish of moonstone set in thick, molten silver. The icy depth of pearl works perfectly for this too, offering a fierce spark of heat wrapped in a smooth, nostalgic cabochon cut. These are not quiet gems meant to blend in, but bold centrepieces that demand a second look.",
-    "tipText" : "Your jewellery needs to strike a balance between sentimental armour and industrial design. Look for pieces in white gold that feel substantial and slightly odd, like a heavy vintage locket worn on a thick snake chain or a tactical closure on a slouchy bag. You want hardware that feels inherited but distinctly modern, rather than bought straight off a display bust. Skip the flimsy, tangled layering chains entirely. Instead, anchor your look with one dominant ring featuring selenite or a chunky architectural cuff. It gives your high-energy outfits a necessary centre of gravity."
+    "stonesText" : "The standard, polite solitaire diamond is never going to hold your attention. You suit stones that feel simultaneously like unearthed artefacts and entirely alien objects. moonstone gives you a striking, electric shock of colour while maintaining a comforting, heavy weight against the collarbone. Pair it with the milky, protective finish of selenite set in thick, molten silver. The icy depth of pearl works perfectly for this too, offering a fierce spark of heat wrapped in a smooth, nostalgic cabochon cut. These are not quiet gems meant to blend in, but bold centrepieces that demand a second look.",
+    "tipText" : "Your jewellery needs to strike a balance between sentimental armour and industrial design. Look for pieces in white gold that feel substantial and slightly odd, like a heavy vintage locket worn on a thick snake chain or a tactical closure on a slouchy bag. You want hardware that feels inherited but distinctly modern, rather than bought straight off a display bust. Skip the flimsy, tangled layering chains entirely. Instead, anchor your look with one dominant ring featuring moonstone or a chunky architectural cuff. It gives your high-energy outfits a necessary centre of gravity."
   },
   "occasions" : {
     "dailyText" : "Your daily rotation requires a very specific friction to function properly. A part of you wants to retreat into an incredibly familiar, lived-in shell, while the rest of your personality needs to command the street. Master this tension by pairing deeply comforting foundation pieces with unapologetic, unconventional shapes. Look for garments that envelop the body, relying on generous proportions and sweeping lengths that give you ample room to hide. Then, deliberately puncture that safety with an unexpected cut or a stark silhouette that breaks the rules of typical casualwear. You do relaxed beautifully, provided the final result still reads as a completely original thought.\n\nYour comfort instinct gravitates toward emotional belonging through group-appropriate comfort, community softness.",
@@ -95,8 +95,8 @@
         "role" : "accent"
       },
       {
-        "hexValue" : "#00CED1",
-        "name" : "clear aqua",
+        "hexValue" : "#00FFFF",
+        "name" : "clear cyan",
         "provenance" : {
           "band" : "accent",
           "family" : "Bright Spring",
@@ -142,8 +142,8 @@
         "role" : "core"
       },
       {
-        "hexValue" : "#0080FF",
-        "name" : "electric blue",
+        "hexValue" : "#4169E1",
+        "name" : "royal blue",
         "provenance" : {
           "band" : "core",
           "family" : "Bright Spring",
@@ -267,6 +267,6 @@
   "userInfo" : {
     "birthDate" : "1984-12-11T00:00:00Z",
     "birthLocation" : "London, UK",
-    "generationDate" : "2026-04-19T13:53:00Z"
+    "generationDate" : "2026-04-19T16:53:11Z"
   }
 }

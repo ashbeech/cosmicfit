@@ -31,15 +31,15 @@
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-04-19T13:53:00Z",
+  "generatedAt" : "2026-04-19T16:53:11Z",
   "hardware" : {
-    "metalsText" : "Heavy, rigid hardware will completely suffocate the lightness of your wardrobe. You always look much more interesting when you actively scramble your finishes, letting rose gold rings sit right next to a soft copper bag clasp. Because your clothes rely on fluid layers and soft movement, keep the actual metal textures equally relaxed. Liquid, slightly melted shapes in white gold work far better on you than aggressive, high-shine spikes. Treat your zips and jacket buttons as conversational details instead of purely functional bolts. The final effect should be a gentle, expensive jangle as you walk, never the imposing clank of a bank vault.",
+    "metalsText" : "Heavy, rigid hardware will completely suffocate the lightness of your wardrobe. You always look much more interesting when you actively scramble your finishes, letting rose gold rings sit right next to a soft copper bag clasp. Because your clothes rely on fluid layers and soft movement, keep the actual metal textures equally relaxed. Liquid, slightly melted shapes in sterling silver work far better on you than aggressive, high-shine spikes. Treat your zips and jacket buttons as conversational details instead of purely functional bolts. The final effect should be a gentle, expensive jangle as you walk, never the imposing clank of a bank vault.",
     "recommendedMetals" : [
       "rose gold",
       "soft copper",
-      "white gold",
       "sterling silver",
       "mixed metals",
+      "white gold",
       "polished brass"
     ],
     "recommendedStones" : [
@@ -48,8 +48,8 @@
       "agate",
       "citrine",
       "aquamarine",
-      "red jasper",
-      "carnelian"
+      "carnelian",
+      "red jasper"
     ],
     "stonesText" : "Your jewellery box is better off as a collection of conversation pieces than a vault of serious, static investments. You suit stones that catch the light and shift in colour as you talk, softening the crisp lines of your everyday shirting. Look for the cloudy, dreamlike finish of pink tourmaline or the iridescent, watery flash of kunzite. Set them in lightweight, playfully asymmetric hardware rather than heavy traditional prongs. The overall effect is a ring or pendant that catches the eye mid-gesture and immediately prompts a question.",
     "tipText" : "Your accessories are at their strongest when they feel slightly kinetic and completely open to conversation. Think lightweight charm necklaces, mismatched earrings, or articulated links that physically move when you talk. A delicate chain in rose gold paired with an unusually shaped pendant gives your outfit that essential element of play. If you wear pink tourmaline, look for pieces where the gem feels suspended and fluid rather than rigidly clamped into a heavy setting. A thick, static bangle looks like it belongs to someone else, but a cluster of fine chains brushing a soft silk cuff is entirely you."
@@ -95,8 +95,8 @@
         "role" : "accent"
       },
       {
-        "hexValue" : "#71BC78",
-        "name" : "fresh leaf",
+        "hexValue" : "#FFD700",
+        "name" : "bright gold",
         "provenance" : {
           "band" : "accent",
           "family" : "Light Spring",
@@ -142,8 +142,8 @@
         "role" : "core"
       },
       {
-        "hexValue" : "#A4C639",
-        "name" : "lime",
+        "hexValue" : "#FFE302",
+        "name" : "vivid yellow",
         "provenance" : {
           "band" : "core",
           "family" : "Light Spring",
@@ -267,6 +267,6 @@
   "userInfo" : {
     "birthDate" : "1993-03-21T00:00:00Z",
     "birthLocation" : "Synthetic Fixture",
-    "generationDate" : "2026-04-19T13:53:00Z"
+    "generationDate" : "2026-04-19T16:53:11Z"
   }
 }

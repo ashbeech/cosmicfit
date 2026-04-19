@@ -31,27 +31,27 @@
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-04-19T13:53:00Z",
+  "generatedAt" : "2026-04-19T16:53:11Z",
   "hardware" : {
-    "metalsText" : "Hardware on you should feel like an investment rather than a decorative afterthought. You need serious, satisfying weight, the kind of brushed yellow gold that pulls together a heavy winter coat or secures a beautifully constructed leather bag. Flimsy, high-shine chains and noisy zips look nervous next to your natural composure. Lean on solid warm bronze details with a matte or gently aged finish, ensuring every buckle actually serves a structural purpose. When the metal feels substantial enough to outlast the garment itself, it belongs in your rotation.",
+    "metalsText" : "Hardware on you should feel like an investment rather than a decorative afterthought. You need serious, satisfying weight, the kind of brushed warm bronze that pulls together a heavy winter coat or secures a beautifully constructed leather bag. Flimsy, high-shine chains and noisy zips look nervous next to your natural composure. Lean on solid yellow gold details with a matte or gently aged finish, ensuring every buckle actually serves a structural purpose. When the metal feels substantial enough to outlast the garment itself, it belongs in your rotation.",
     "recommendedMetals" : [
-      "yellow gold",
       "warm bronze",
+      "yellow gold",
       "platinum",
       "polished silver",
       "rose gold"
     ],
     "recommendedStones" : [
-      "jade",
       "emerald",
+      "jade",
+      "sapphire",
       "garnet",
       "onyx",
-      "sapphire",
       "rose quartz",
       "lapis lazuli"
     ],
-    "stonesText" : "You treat jewellery as a matter of density rather than dazzle. Forget fragile, light-catching facets and look for stones that carry serious physical weight. jade set in thick, brushed gold offers the kind of solid, quiet luxury that suits you best. A heavy cabochon of emerald or a smooth, flat slice of garnet feels infinitely more sophisticated on your skin than overly brilliant cuts. You want pieces that sit cold and substantial on the collarbone or wrist, giving your wardrobe a reliable, tactile finish.",
-    "tipText" : "Substantial weight is the only metric that matters when choosing your jewellery. A flimsy chain or a hollow band will instantly cheapen a perfectly good outfit. Seek out solid, cast pieces in yellow gold that carry a real physical presence on the body, or a heavy ring set with jade for a quiet finish. A smooth cuff or an impeccably engineered watch strap provides that sense of disciplined luxury your eye naturally seeks. Two substantial items will always beat a tangle of delicate layers."
+    "stonesText" : "You treat jewellery as a matter of density rather than dazzle. Forget fragile, light-catching facets and look for stones that carry serious physical weight. emerald set in thick, brushed gold offers the kind of solid, quiet luxury that suits you best. A heavy cabochon of jade or a smooth, flat slice of sapphire feels infinitely more sophisticated on your skin than overly brilliant cuts. You want pieces that sit cold and substantial on the collarbone or wrist, giving your wardrobe a reliable, tactile finish.",
+    "tipText" : "Substantial weight is the only metric that matters when choosing your jewellery. A flimsy chain or a hollow band will instantly cheapen a perfectly good outfit. Seek out solid, cast pieces in warm bronze that carry a real physical presence on the body, or a heavy ring set with emerald for a quiet finish. A smooth cuff or an impeccably engineered watch strap provides that sense of disciplined luxury your eye naturally seeks. Two substantial items will always beat a tangle of delicate layers."
   },
   "occasions" : {
     "dailyText" : "Downtime does not mean letting your standards slip. Your off-duty rotation relies on architectural integrity and undeniable physical weight just as much as your formal wardrobe. Swap out flimsy basics for heavy, densely woven separates that hold their shape from morning until evening. You feel at your best when there is a distinct sense of order to what you wear, so ensure your seams sit exactly where they should and your casual silhouettes remain crisp. Real luxury is the quiet satisfaction of knowing every daily piece is flawlessly engineered.\n\nYour comfort instinct gravitates toward emotional comfort visible in how you present, your feelings wear you. Your style energy concentrates in identity and creativity, so dressing is a core creative practice — lean into that.",
@@ -94,8 +94,8 @@
         "role" : "accent"
       },
       {
-        "hexValue" : "#5FADA5",
-        "name" : "icy teal",
+        "hexValue" : "#B87333",
+        "name" : "copper",
         "provenance" : {
           "band" : "accent",
           "family" : "Deep Winter",
@@ -141,8 +141,8 @@
         "role" : "core"
       },
       {
-        "hexValue" : "#0D1B2A",
-        "name" : "blue-black",
+        "hexValue" : "#4A1C20",
+        "name" : "oxblood",
         "provenance" : {
           "band" : "core",
           "family" : "Deep Winter",
@@ -266,6 +266,6 @@
   "userInfo" : {
     "birthDate" : "1989-04-28T00:00:00Z",
     "birthLocation" : "Unknown",
-    "generationDate" : "2026-04-19T13:53:00Z"
+    "generationDate" : "2026-04-19T16:53:11Z"
   }
 }
