@@ -24,8 +24,16 @@ struct NarrativeTemplateRenderer {
 
     static let allPlaceholders: Set<String> = {
         var set = Set<String>()
+        for i in 1...4 { set.insert("neutral_colour_\(i)") }
         for i in 1...4 { set.insert("core_colour_\(i)") }
-        for i in 1...2 { set.insert("accent_colour_\(i)") }
+        for i in 1...4 { set.insert("accent_colour_\(i)") }
+        set.insert("family")
+        set.insert("cluster")
+        set.insert("depth")
+        set.insert("temperature")
+        set.insert("saturation")
+        set.insert("contrast")
+        set.insert("surface")
         for i in 1...4 { set.insert("recommended_pattern_\(i)") }
         for i in 1...2 { set.insert("avoid_pattern_\(i)") }
         for i in 1...3 { set.insert("metal_\(i)") }
@@ -83,11 +91,6 @@ struct NarrativeTemplateRenderer {
         for (i, c) in resolved.coreColours.enumerated() {
             ctx["core_colour_\(i + 1)"] = c.name
         }
-        // Narrative exposes only the top 2 accents by contributor rank
-        // (resolver guarantees rank-ascending order). Accents 3 and 4 exist
-        // in `resolved.accentColours` for the palette grid but are
-        // deliberately NOT written to the template context — see spec
-        // v1.1 §9.1 and the narrative-exposure test (§12.4).
         for (i, c) in resolved.accentColours.prefix(2).enumerated() {
             ctx["accent_colour_\(i + 1)"] = c.name
         }
@@ -112,6 +115,33 @@ struct NarrativeTemplateRenderer {
         for (i, k) in resolved.sweetSpotKeywords.enumerated() {
             ctx["sweet_spot_keyword_\(i + 1)"] = k
         }
+
+        return ctx
+    }
+
+    /// Builds V4 palette placeholders from a colour engine result. Merge into
+    /// the main context so palette_narrative templates can reference family,
+    /// variables, and all 12 colour names.
+    static func buildV4PaletteContext(colourResult: ColourEngineResult) -> [String: String] {
+        var ctx: [String: String] = [:]
+
+        for (i, name) in colourResult.palette.neutrals.enumerated() {
+            ctx["neutral_colour_\(i + 1)"] = name
+        }
+        for (i, name) in colourResult.palette.coreColours.enumerated() {
+            ctx["core_colour_\(i + 1)"] = name
+        }
+        for (i, name) in colourResult.palette.accentColours.enumerated() {
+            ctx["accent_colour_\(i + 1)"] = name
+        }
+
+        ctx["family"] = colourResult.family.rawValue
+        ctx["cluster"] = colourResult.cluster.rawValue
+        ctx["depth"] = colourResult.variables.depth.rawValue
+        ctx["temperature"] = colourResult.variables.temperature.rawValue
+        ctx["saturation"] = colourResult.variables.saturation.rawValue
+        ctx["contrast"] = colourResult.variables.contrast.rawValue
+        ctx["surface"] = colourResult.variables.surface.rawValue
 
         return ctx
     }

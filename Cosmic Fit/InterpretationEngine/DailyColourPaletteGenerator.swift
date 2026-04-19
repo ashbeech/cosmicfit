@@ -286,5 +286,43 @@ class DailyColourPaletteGenerator {
         
         return selected
     }
+
+    // MARK: - V4 Daily Colour Selection
+
+    /// Deterministic daily 3-colour pick from the V4 palette. Rotates across
+    /// the 12 anchors (4 neutral + 4 core + 4 accent) using a day-based seed
+    /// so each day surfaces a different combination while always picking one
+    /// from each band.
+    struct V4DailyPalette: Codable {
+        let dailyHexes: [String]
+        let dailyNames: [String]
+        let allPaletteHexes: [String]
+    }
+
+    static func selectV4DailyColours(
+        from palette: PaletteSection,
+        date: Date = Date()
+    ) -> V4DailyPalette? {
+        guard let neutrals = palette.neutrals, !neutrals.isEmpty,
+              !palette.coreColours.isEmpty, !palette.accentColours.isEmpty else {
+            return nil
+        }
+
+        let dayIndex = Calendar.current.ordinality(of: .day, in: .era, for: date) ?? 0
+
+        let neutralPick = neutrals[dayIndex % neutrals.count]
+        let corePick = palette.coreColours[(dayIndex / neutrals.count) % palette.coreColours.count]
+        let accentPick = palette.accentColours[(dayIndex / (neutrals.count * palette.coreColours.count)) % palette.accentColours.count]
+
+        let dailyHexes = [corePick.hexValue, accentPick.hexValue, neutralPick.hexValue]
+        let dailyNames = [corePick.name, accentPick.name, neutralPick.name]
+        let allHexes = neutrals.map(\.hexValue) + palette.coreColours.map(\.hexValue) + palette.accentColours.map(\.hexValue)
+
+        return V4DailyPalette(
+            dailyHexes: dailyHexes,
+            dailyNames: dailyNames,
+            allPaletteHexes: allHexes
+        )
+    }
 }
 

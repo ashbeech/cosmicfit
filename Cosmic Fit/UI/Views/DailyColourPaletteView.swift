@@ -32,28 +32,39 @@ final class DailyColourPaletteView: UIView {
     
     // MARK: - Public Configuration
     
-    /// Configure the palette with style tokens from the IE
-    /// - Parameter tokens: Array of StyleTokens containing colour information
+    /// Configure the palette with style tokens from the IE (legacy path).
     func configure(with tokens: [StyleToken]) {
-        // Get top 3 colours
         let topColours = ColourMapper.getTopColours(from: tokens, count: 3)
-        
-        // Apply colours to views
-        if topColours.count >= 1 {
-            colour1View.backgroundColor = topColours[0].1
-        }
-        if topColours.count >= 2 {
-            colour2View.backgroundColor = topColours[1].1
-        }
-        if topColours.count >= 3 {
-            colour3View.backgroundColor = topColours[2].1
-        }
-        
-        // Get all colours for gradient
+
+        if topColours.count >= 1 { colour1View.backgroundColor = topColours[0].1 }
+        if topColours.count >= 2 { colour2View.backgroundColor = topColours[1].1 }
+        if topColours.count >= 3 { colour3View.backgroundColor = topColours[2].1 }
+
         allColours = ColourMapper.getAllColours(from: tokens)
-        
-        // Create gradient bar
         updateGradientBar()
+    }
+
+    /// Configure the palette directly from V4 hex strings (3 daily colours +
+    /// full gradient from all 12 palette anchors).
+    func configure(dailyHexes: [String], allPaletteHexes: [String]) {
+        let dailyUIColors = dailyHexes.compactMap { Self.uiColor(fromHex: $0) }
+        if dailyUIColors.count >= 1 { colour1View.backgroundColor = dailyUIColors[0] }
+        if dailyUIColors.count >= 2 { colour2View.backgroundColor = dailyUIColors[1] }
+        if dailyUIColors.count >= 3 { colour3View.backgroundColor = dailyUIColors[2] }
+
+        allColours = allPaletteHexes.compactMap { Self.uiColor(fromHex: $0) }
+        updateGradientBar()
+    }
+
+    private static func uiColor(fromHex hex: String) -> UIColor? {
+        let cleaned = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
+        guard cleaned.count == 6, let rgb = UInt32(cleaned, radix: 16) else { return nil }
+        return UIColor(
+            red: CGFloat((rgb >> 16) & 0xFF) / 255.0,
+            green: CGFloat((rgb >> 8) & 0xFF) / 255.0,
+            blue: CGFloat(rgb & 0xFF) / 255.0,
+            alpha: 1.0
+        )
     }
     
     // MARK: - Private Setup

@@ -166,12 +166,21 @@ final class SupabaseSyncService {
             }
         }
 
-        // Push local blueprint
+        // Blueprint: push if local exists, pull if not (new device / reinstall)
         if let blueprint = BlueprintStorage.shared.load() {
             do {
                 try await syncBlueprintToSupabase(blueprint)
             } catch {
-                print("⚠️ Blueprint sync failed: \(error.localizedDescription)")
+                print("⚠️ Blueprint push failed: \(error.localizedDescription)")
+            }
+        } else {
+            do {
+                if let remote = try await pullBlueprintFromSupabase() {
+                    BlueprintStorage.shared.save(remote)
+                    print("✅ Blueprint pulled from Supabase during full sync")
+                }
+            } catch {
+                print("⚠️ Blueprint pull failed: \(error.localizedDescription)")
             }
         }
 

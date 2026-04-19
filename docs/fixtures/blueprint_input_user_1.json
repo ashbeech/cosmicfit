@@ -30,29 +30,29 @@
       "Mixing cultural references with respect and confidence. An ikat shirt with tailored chinos bridges worlds in a single outfit."
     ]
   },
-  "engineVersion" : "1.0.0",
+  "engineVersion" : "2.0.0",
   "generatedAt" : "2026-04-17T00:00:00Z",
   "hardware" : {
     "metalsText" : "Your most effective hardware relies on a strict clash of high-tech precision and familiar, heavy warmth. Slick, industrial white gold gives you a sharp foundation, looking right at home on the oversized zips of technical outerwear or the chunky fastenings of a utility bag. A completely clinical finish leaves you cold, so you break up those stark details with antique silver. Seek out antique silver pieces with a battered, nostalgic patina—like a weighty heirloom pendant strung onto a modern synthetic cord, or thick, warm-toned belt buckles. This visual friction keeps your clothes from looking like a uniform, grounding bold shapes in something deeply personal.",
     "recommendedMetals" : [
       "white gold",
       "antique silver",
-      "aged brass",
       "hammered gold",
+      "aged brass",
       "brushed silver"
     ],
     "recommendedStones" : [
-      "moonstone",
       "pearl",
       "selenite",
+      "moonstone",
       "lapis lazuli",
-      "amber",
       "turquoise",
-      "peridot",
-      "sapphire"
+      "amber",
+      "sapphire",
+      "peridot"
     ],
-    "stonesText" : "The standard, polite solitaire diamond is never going to hold your attention. You suit stones that feel simultaneously like unearthed artefacts and entirely alien objects. moonstone gives you a striking, electric shock of colour while maintaining a comforting, heavy weight against the collarbone. Pair it with the milky, protective finish of pearl set in thick, molten silver. The icy depth of selenite works perfectly for this too, offering a fierce spark of heat wrapped in a smooth, nostalgic cabochon cut. These are not quiet gems meant to blend in, but bold centrepieces that demand a second look.",
-    "tipText" : "Your jewellery needs to strike a balance between sentimental armour and industrial design. Look for pieces in white gold that feel substantial and slightly odd, like a heavy vintage locket worn on a thick snake chain or a tactical closure on a slouchy bag. You want hardware that feels inherited but distinctly modern, rather than bought straight off a display bust. Skip the flimsy, tangled layering chains entirely. Instead, anchor your look with one dominant ring featuring moonstone or a chunky architectural cuff. It gives your high-energy outfits a necessary centre of gravity."
+    "stonesText" : "The standard, polite solitaire diamond is never going to hold your attention. You suit stones that feel simultaneously like unearthed artefacts and entirely alien objects. pearl gives you a striking, electric shock of colour while maintaining a comforting, heavy weight against the collarbone. Pair it with the milky, protective finish of selenite set in thick, molten silver. The icy depth of moonstone works perfectly for this too, offering a fierce spark of heat wrapped in a smooth, nostalgic cabochon cut. These are not quiet gems meant to blend in, but bold centrepieces that demand a second look.",
+    "tipText" : "Your jewellery needs to strike a balance between sentimental armour and industrial design. Look for pieces in white gold that feel substantial and slightly odd, like a heavy vintage locket worn on a thick snake chain or a tactical closure on a slouchy bag. You want hardware that feels inherited but distinctly modern, rather than bought straight off a display bust. Skip the flimsy, tangled layering chains entirely. Instead, anchor your look with one dominant ring featuring pearl or a chunky architectural cuff. It gives your high-energy outfits a necessary centre of gravity."
   },
   "occasions" : {
     "dailyText" : "Your daily rotation requires a very specific friction to function properly. A part of you wants to retreat into an incredibly familiar, lived-in shell, while the rest of your personality needs to command the street. Master this tension by pairing deeply comforting foundation pieces with unapologetic, unconventional shapes. Look for garments that envelop the body, relying on generous proportions and sweeping lengths that give you ample room to hide. Then, deliberately puncture that safety with an unexpected cut or a stark silhouette that breaks the rules of typical casualwear. You do relaxed beautifully, provided the final result still reads as a completely original thought.\n\nYour comfort instinct gravitates toward emotional belonging through group-appropriate comfort, community softness.",
@@ -62,243 +62,166 @@
   "palette" : {
     "accentColours" : [
       {
-        "hexValue" : "#AEC6CF",
-        "name" : "pale blue",
+        "hexValue" : "#E2583E",
+        "name" : "lacquer coral",
         "provenance" : {
-          "comboKey" : "moon_cancer",
-          "contributorRank" : 0,
-          "hueGapApplied" : 15,
-          "kind" : "chartDerived",
-          "sourceRole" : "accent"
+          "band" : "accent",
+          "family" : "Bright Spring",
+          "index" : 0,
+          "kind" : "v4Template"
         },
         "role" : "accent"
       },
       {
-        "hexValue" : "#FFF5EE",
-        "name" : "seashell pink",
+        "hexValue" : "#B0BF1A",
+        "name" : "acid lime",
         "provenance" : {
-          "comboKey" : "moon_cancer",
-          "contributorRank" : 0,
-          "hueGapApplied" : 15,
-          "kind" : "chartDerived",
-          "sourceRole" : "accent"
+          "band" : "accent",
+          "family" : "Bright Spring",
+          "index" : 1,
+          "kind" : "v4Template"
         },
         "role" : "accent"
       },
       {
-        "hexValue" : "#CCFF00",
-        "name" : "neon lime",
+        "hexValue" : "#FFD700",
+        "name" : "bright gold",
         "provenance" : {
-          "comboKey" : "venus_aquarius",
-          "contributorRank" : 3,
-          "hueGapApplied" : 15,
-          "kind" : "chartDerived",
-          "sourceRole" : "accent"
+          "band" : "accent",
+          "family" : "Bright Spring",
+          "index" : 2,
+          "kind" : "v4Template"
         },
         "role" : "accent"
       },
       {
-        "hexValue" : "#6B0099",
-        "name" : "ultraviolet",
+        "hexValue" : "#00CED1",
+        "name" : "clear aqua",
         "provenance" : {
-          "comboKey" : "venus_aquarius",
-          "contributorRank" : 3,
-          "hueGapApplied" : 15,
-          "kind" : "chartDerived",
-          "sourceRole" : "accent"
+          "band" : "accent",
+          "family" : "Bright Spring",
+          "index" : 3,
+          "kind" : "v4Template"
         },
         "role" : "accent"
       }
     ],
+    "cluster" : "Medium Neutral Electric",
     "coreColours" : [
       {
-        "hexValue" : "#F0EAD6",
-        "name" : "pearl",
+        "hexValue" : "#E35335",
+        "name" : "poppy",
         "provenance" : {
-          "comboKey" : "moon_cancer",
-          "contributorRank" : 0,
-          "hueGapApplied" : 15,
-          "kind" : "chartDerived",
-          "sourceRole" : "primary"
+          "band" : "core",
+          "family" : "Bright Spring",
+          "index" : 0,
+          "kind" : "v4Template"
         },
         "role" : "core"
       },
       {
-        "hexValue" : "#FAFAFA",
-        "name" : "soft white",
+        "hexValue" : "#009B8D",
+        "name" : "bright teal",
         "provenance" : {
-          "comboKey" : "moon_cancer",
-          "contributorRank" : 0,
-          "hueGapApplied" : 15,
-          "kind" : "chartDerived",
-          "sourceRole" : "primary"
+          "band" : "core",
+          "family" : "Bright Spring",
+          "index" : 1,
+          "kind" : "v4Template"
         },
         "role" : "core"
       },
       {
-        "hexValue" : "#0047AB",
-        "name" : "cobalt blue",
+        "hexValue" : "#FFE302",
+        "name" : "vivid yellow",
         "provenance" : {
-          "comboKey" : "sun_sagittarius",
-          "contributorRank" : 1,
-          "hueGapApplied" : 15,
-          "kind" : "chartDerived",
-          "sourceRole" : "primary"
+          "band" : "core",
+          "family" : "Bright Spring",
+          "index" : 2,
+          "kind" : "v4Template"
         },
         "role" : "core"
       },
       {
-        "hexValue" : "#8B8589",
-        "name" : "warm taupe",
+        "hexValue" : "#0080FF",
+        "name" : "electric blue",
         "provenance" : {
-          "comboKey" : "ascendant_virgo",
-          "contributorRank" : 2,
-          "hueGapApplied" : 15,
-          "kind" : "chartDerived",
-          "sourceRole" : "primary"
+          "band" : "core",
+          "family" : "Bright Spring",
+          "index" : 3,
+          "kind" : "v4Template"
         },
         "role" : "core"
       }
     ],
-    "narrativeText" : "Your colour story thrives on a clash of temperature. Build a foundation on the stark, synthetic edge of pearl and the industrial calm of soft white, then soften the impact with the washed-out safety of cobalt blue. This mix gives you the brilliant tension of a vintage silhouette cut from a space-age fabric. Introduce pale blue as a sudden, unapologetic hit of heat to break up the cool tones. A high-visibility shade always carries more attitude when it sits next to something reassuringly soft.",
-    "swatchFamilies" : [
+    "family" : "Bright Spring",
+    "narrativeText" : "Your colour story thrives on a clash of temperature. Build a foundation on the stark, synthetic edge of poppy and the industrial calm of bright teal, then soften the impact with the washed-out safety of vivid yellow. This mix gives you the brilliant tension of a vintage silhouette cut from a space-age fabric. Introduce lacquer coral as a sudden, unapologetic hit of heat to break up the cool tones. A high-visibility shade always carries more attitude when it sits next to something reassuringly soft.",
+    "neutrals" : [
       {
-        "anchorHex" : "#F0EAD6",
-        "anchorName" : "pearl",
-        "role" : "core",
-        "tones" : [
-          {
-            "hex" : "#F7F5EE",
-            "name" : "soft pearl"
-          },
-          {
-            "hex" : "#F0EAD6",
-            "name" : "pearl"
-          },
-          {
-            "hex" : "#E1D099",
-            "name" : "deep pearl"
-          }
-        ]
+        "hexValue" : "#FFFDF0",
+        "name" : "clear ivory",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Bright Spring",
+          "index" : 0,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
       },
       {
-        "anchorHex" : "#FAFAFA",
-        "anchorName" : "soft white",
-        "role" : "core",
-        "tones" : [
-          {
-            "hex" : "#F2F2F2",
-            "name" : "soft soft white"
-          },
-          {
-            "hex" : "#FAFAFA",
-            "name" : "soft white"
-          },
-          {
-            "hex" : "#D7D0D0",
-            "name" : "deep soft white"
-          }
-        ]
+        "hexValue" : "#384C70",
+        "name" : "warm navy",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Bright Spring",
+          "index" : 1,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
       },
       {
-        "anchorHex" : "#0047AB",
-        "anchorName" : "cobalt blue",
-        "role" : "core",
-        "tones" : [
-          {
-            "hex" : "#1771F0",
-            "name" : "soft cobalt blue"
-          },
-          {
-            "hex" : "#0047AB",
-            "name" : "cobalt blue"
-          },
-          {
-            "hex" : "#00275E",
-            "name" : "deep cobalt blue"
-          }
-        ]
+        "hexValue" : "#4B4F54",
+        "name" : "graphite",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Bright Spring",
+          "index" : 2,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
       },
       {
-        "anchorHex" : "#8B8589",
-        "anchorName" : "warm taupe",
-        "role" : "core",
-        "tones" : [
-          {
-            "hex" : "#B6B6B6",
-            "name" : "soft warm taupe"
-          },
-          {
-            "hex" : "#8B8589",
-            "name" : "warm taupe"
-          },
-          {
-            "hex" : "#6C5765",
-            "name" : "deep warm taupe"
-          }
-        ]
-      },
-      {
-        "anchorHex" : "#AEC6CF",
-        "anchorName" : "pale blue",
-        "role" : "accent",
-        "tones" : [
-          {
-            "hex" : "#F0F2F3",
-            "name" : "soft pale blue"
-          },
-          {
-            "hex" : "#AEC6CF",
-            "name" : "pale blue"
-          }
-        ]
-      },
-      {
-        "anchorHex" : "#FFF5EE",
-        "anchorName" : "seashell pink",
-        "role" : "accent",
-        "tones" : [
-          {
-            "hex" : "#FDF0E7",
-            "name" : "soft seashell pink"
-          },
-          {
-            "hex" : "#FFF5EE",
-            "name" : "seashell pink"
-          }
-        ]
-      },
-      {
-        "anchorHex" : "#CCFF00",
-        "anchorName" : "neon lime",
-        "role" : "accent",
-        "tones" : [
-          {
-            "hex" : "#DAF471",
-            "name" : "soft neon lime"
-          },
-          {
-            "hex" : "#CCFF00",
-            "name" : "neon lime"
-          }
-        ]
-      },
-      {
-        "anchorHex" : "#6B0099",
-        "anchorName" : "ultraviolet",
-        "role" : "accent",
-        "tones" : [
-          {
-            "hex" : "#AB13EC",
-            "name" : "soft ultraviolet"
-          },
-          {
-            "hex" : "#6B0099",
-            "name" : "ultraviolet"
-          }
-        ]
+        "hexValue" : "#C19A6B",
+        "name" : "clear camel",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Bright Spring",
+          "index" : 3,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
       }
-    ]
+    ],
+    "overrideFlags" : {
+      "capricornVirgoCoolingApplied" : true,
+      "coolLeanDeepAutumn" : false,
+      "earthDepthOverrideApplied" : false,
+      "fireAirChromaApplied" : true,
+      "scorpioDensityApplied" : true,
+      "surfacePreservationApplied" : false,
+      "waterSofteningApplied" : false,
+      "winterCompressionApplied" : false
+    },
+    "secondaryPull" : "Bright Winter",
+    "swatchFamilies" : [
+
+    ],
+    "variables" : {
+      "contrast" : "High",
+      "depth" : "Medium",
+      "saturation" : "Rich",
+      "surface" : "Structured",
+      "temperature" : "Neutral"
+    }
   },
   "pattern" : {
     "avoidPatterns" : [

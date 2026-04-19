@@ -1,0 +1,4102 @@
+[
+  {
+    "id" : "U001",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 10.884473670681407,
+        "sign" : "Aries"
+      },
+      "jupiter" : {
+        "degree" : 10.051502406119283,
+        "sign" : "Aries"
+      },
+      "mars" : {
+        "degree" : 5.2431235767045195,
+        "sign" : "Gemini"
+      },
+      "mercury" : {
+        "degree" : 1.062864519881698,
+        "sign" : "Aries"
+      },
+      "moon" : {
+        "degree" : 15.794197523115571,
+        "sign" : "Libra"
+      },
+      "pluto" : {
+        "degree" : 10.521091307324383,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 21.017316710269085,
+        "sign" : "Sagittarius"
+      },
+      "sun" : {
+        "degree" : 23.056929911234946,
+        "sign" : "Aries"
+      },
+      "venus" : {
+        "degree" : 18.993028929111972,
+        "sign" : "Pisces"
+      }
+    }
+  },
+  {
+    "id" : "U002",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 8.511890213694471,
+        "sign" : "Gemini"
+      },
+      "jupiter" : {
+        "degree" : 7.969977830986494,
+        "sign" : "Sagittarius"
+      },
+      "mars" : {
+        "degree" : 13.723378102955024,
+        "sign" : "Virgo"
+      },
+      "mercury" : {
+        "degree" : 10.822573255692419,
+        "sign" : "Gemini"
+      },
+      "moon" : {
+        "degree" : 29.27245634535594,
+        "sign" : "Aries"
+      },
+      "pluto" : {
+        "degree" : 22.395312379648743,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 24.5885742485126,
+        "sign" : "Pisces"
+      },
+      "sun" : {
+        "degree" : 0.5447889146236378,
+        "sign" : "Cancer"
+      },
+      "venus" : {
+        "degree" : 14.308354792979998,
+        "sign" : "Gemini"
+      }
+    }
+  },
+  {
+    "id" : "U003",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 2.282274130846162,
+        "sign" : "Aries"
+      },
+      "jupiter" : {
+        "degree" : 5.778083508308242,
+        "sign" : "Virgo"
+      },
+      "mars" : {
+        "degree" : 17.302968246402557,
+        "sign" : "Aries"
+      },
+      "mercury" : {
+        "degree" : 3.7906038883073094,
+        "sign" : "Gemini"
+      },
+      "moon" : {
+        "degree" : 22.849273240586598,
+        "sign" : "Aries"
+      },
+      "pluto" : {
+        "degree" : 17.951126406571575,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 18.484383551410815,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 7.538592144186154,
+        "sign" : "Gemini"
+      },
+      "venus" : {
+        "degree" : 3.1814340556836385,
+        "sign" : "Gemini"
+      }
+    }
+  },
+  {
+    "id" : "U004",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 0.33774087101944644,
+        "sign" : "Aries"
+      },
+      "jupiter" : {
+        "degree" : 4.738698940267284,
+        "sign" : "Pisces"
+      },
+      "mars" : {
+        "degree" : 21.78682843131014,
+        "sign" : "Sagittarius"
+      },
+      "mercury" : {
+        "degree" : 29.51757397362553,
+        "sign" : "Pisces"
+      },
+      "moon" : {
+        "degree" : 13.538187458648204,
+        "sign" : "Aries"
+      },
+      "pluto" : {
+        "degree" : 8.945399589322392,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 9.66703708769711,
+        "sign" : "Sagittarius"
+      },
+      "sun" : {
+        "degree" : 21.62328222016083,
+        "sign" : "Pisces"
+      },
+      "venus" : {
+        "degree" : 4.186763128117119,
+        "sign" : "Aries"
+      }
+    }
+  },
+  {
+    "id" : "U005",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 15.784602641556603,
+        "sign" : "Sagittarius"
+      },
+      "jupiter" : {
+        "degree" : 14.082315693264121,
+        "sign" : "Cancer"
+      },
+      "mars" : {
+        "degree" : 26.56046740000926,
+        "sign" : "Aquarius"
+      },
+      "mercury" : {
+        "degree" : 11.671492172702216,
+        "sign" : "Sagittarius"
+      },
+      "moon" : {
+        "degree" : 23.8822152145662,
+        "sign" : "Cancer"
+      },
+      "pluto" : {
+        "degree" : 1.7487353867208242,
+        "sign" : "Sagittarius"
+      },
+      "saturn" : {
+        "degree" : 11.434108173638606,
+        "sign" : "Gemini"
+      },
+      "sun" : {
+        "degree" : 12.071032580616844,
+        "sign" : "Sagittarius"
+      },
+      "venus" : {
+        "degree" : 2.153981904061226,
+        "sign" : "Sagittarius"
+      }
+    }
+  },
+  {
+    "id" : "U006",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 9.526157279873985,
+        "sign" : "Sagittarius"
+      },
+      "jupiter" : {
+        "degree" : 22.187300361630946,
+        "sign" : "Virgo"
+      },
+      "mars" : {
+        "degree" : 25.324127238675985,
+        "sign" : "Gemini"
+      },
+      "mercury" : {
+        "degree" : 1.7170619768909035,
+        "sign" : "Virgo"
+      },
+      "moon" : {
+        "degree" : 15.560735900237432,
+        "sign" : "Sagittarius"
+      },
+      "pluto" : {
+        "degree" : 18.34244619666839,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 13.18018237591997,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 11.950472589681965,
+        "sign" : "Virgo"
+      },
+      "venus" : {
+        "degree" : 4.3815357423542025,
+        "sign" : "Libra"
+      }
+    }
+  },
+  {
+    "id" : "U007",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 6.0054525103061,
+        "sign" : "Sagittarius"
+      },
+      "jupiter" : {
+        "degree" : 7.971224006654779,
+        "sign" : "Gemini"
+      },
+      "mars" : {
+        "degree" : 21.380515288726315,
+        "sign" : "Sagittarius"
+      },
+      "mercury" : {
+        "degree" : 24.32975267422063,
+        "sign" : "Pisces"
+      },
+      "moon" : {
+        "degree" : 3.143048101594502,
+        "sign" : "Leo"
+      },
+      "pluto" : {
+        "degree" : 0.7755553730328018,
+        "sign" : "Sagittarius"
+      },
+      "saturn" : {
+        "degree" : 27.996948037306836,
+        "sign" : "Taurus"
+      },
+      "sun" : {
+        "degree" : 13.268965447347838,
+        "sign" : "Aries"
+      },
+      "venus" : {
+        "degree" : 7.190944073088847,
+        "sign" : "Aries"
+      }
+    }
+  },
+  {
+    "id" : "U008",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 11.145053622411098,
+        "sign" : "Leo"
+      },
+      "jupiter" : {
+        "degree" : 15.621871437764952,
+        "sign" : "Leo"
+      },
+      "mars" : {
+        "degree" : 24.948432780989975,
+        "sign" : "Leo"
+      },
+      "mercury" : {
+        "degree" : 5.138373293711524,
+        "sign" : "Leo"
+      },
+      "moon" : {
+        "degree" : 11.770291093164367,
+        "sign" : "Taurus"
+      },
+      "pluto" : {
+        "degree" : 16.65582684006381,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 4.9203264669135365,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 14.670065222678659,
+        "sign" : "Cancer"
+      },
+      "venus" : {
+        "degree" : 27.406449308823113,
+        "sign" : "Leo"
+      }
+    }
+  },
+  {
+    "id" : "U009",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 20.588513117937197,
+        "sign" : "Gemini"
+      },
+      "jupiter" : {
+        "degree" : 24.888428503055025,
+        "sign" : "Pisces"
+      },
+      "mars" : {
+        "degree" : 6.586050839862267,
+        "sign" : "Gemini"
+      },
+      "mercury" : {
+        "degree" : 2.2789060296607673,
+        "sign" : "Gemini"
+      },
+      "moon" : {
+        "degree" : 15.80313897799843,
+        "sign" : "Virgo"
+      },
+      "pluto" : {
+        "degree" : 26.665789441022298,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 29.315709685700877,
+        "sign" : "Aries"
+      },
+      "sun" : {
+        "degree" : 11.701203002390443,
+        "sign" : "Gemini"
+      },
+      "venus" : {
+        "degree" : 4.0344985457798614,
+        "sign" : "Taurus"
+      }
+    }
+  },
+  {
+    "id" : "U010",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 29.145565545132555,
+        "sign" : "Gemini"
+      },
+      "jupiter" : {
+        "degree" : 26.770746017023328,
+        "sign" : "Pisces"
+      },
+      "mars" : {
+        "degree" : 26.581890446575343,
+        "sign" : "Cancer"
+      },
+      "mercury" : {
+        "degree" : 19.80130963453763,
+        "sign" : "Leo"
+      },
+      "moon" : {
+        "degree" : 1.2717003449188837,
+        "sign" : "Gemini"
+      },
+      "pluto" : {
+        "degree" : 26.95973059548254,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 3.630321365543665,
+        "sign" : "Taurus"
+      },
+      "sun" : {
+        "degree" : 22.466251364149855,
+        "sign" : "Leo"
+      },
+      "venus" : {
+        "degree" : 2.59124829316697,
+        "sign" : "Leo"
+      }
+    }
+  },
+  {
+    "id" : "U011",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 1.9423269403116024,
+        "sign" : "Libra"
+      },
+      "jupiter" : {
+        "degree" : 10.392749119123863,
+        "sign" : "Gemini"
+      },
+      "mars" : {
+        "degree" : 21.98239551537111,
+        "sign" : "Virgo"
+      },
+      "mercury" : {
+        "degree" : 14.94616941794908,
+        "sign" : "Scorpio"
+      },
+      "moon" : {
+        "degree" : 22.228802206544827,
+        "sign" : "Leo"
+      },
+      "pluto" : {
+        "degree" : 0.12923265343431467,
+        "sign" : "Sagittarius"
+      },
+      "saturn" : {
+        "degree" : 29.638094123860775,
+        "sign" : "Taurus"
+      },
+      "sun" : {
+        "degree" : 29.007170941422174,
+        "sign" : "Libra"
+      },
+      "venus" : {
+        "degree" : 3.4647601771728773,
+        "sign" : "Sagittarius"
+      }
+    }
+  },
+  {
+    "id" : "U012",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 21.0844909937681,
+        "sign" : "Sagittarius"
+      },
+      "jupiter" : {
+        "degree" : 18.657967470622623,
+        "sign" : "Pisces"
+      },
+      "mars" : {
+        "degree" : 1.7225361120337368,
+        "sign" : "Libra"
+      },
+      "mercury" : {
+        "degree" : 10.803078092036174,
+        "sign" : "Sagittarius"
+      },
+      "moon" : {
+        "degree" : 23.91594329100695,
+        "sign" : "Aries"
+      },
+      "pluto" : {
+        "degree" : 27.38435513575206,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 27.530015722714285,
+        "sign" : "Aries"
+      },
+      "sun" : {
+        "degree" : 8.070355556684689,
+        "sign" : "Sagittarius"
+      },
+      "venus" : {
+        "degree" : 15.850345124046697,
+        "sign" : "Sagittarius"
+      }
+    }
+  },
+  {
+    "id" : "U013",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 6.912829451070252,
+        "sign" : "Leo"
+      },
+      "jupiter" : {
+        "degree" : 13.673230568344962,
+        "sign" : "Sagittarius"
+      },
+      "mars" : {
+        "degree" : 21.676749430146515,
+        "sign" : "Leo"
+      },
+      "mercury" : {
+        "degree" : 4.117994670246418,
+        "sign" : "Gemini"
+      },
+      "moon" : {
+        "degree" : 15.123063158342589,
+        "sign" : "Cancer"
+      },
+      "pluto" : {
+        "degree" : 22.204375067305676,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 21.75152549644895,
+        "sign" : "Pisces"
+      },
+      "sun" : {
+        "degree" : 14.355711916833052,
+        "sign" : "Taurus"
+      },
+      "venus" : {
+        "degree" : 15.88722873902808,
+        "sign" : "Aries"
+      }
+    }
+  },
+  {
+    "id" : "U014",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 13.256326004106,
+        "sign" : "Leo"
+      },
+      "jupiter" : {
+        "degree" : 10.35975359164921,
+        "sign" : "Cancer"
+      },
+      "mars" : {
+        "degree" : 27.40325973070054,
+        "sign" : "Sagittarius"
+      },
+      "mercury" : {
+        "degree" : 3.572489708123527,
+        "sign" : "Libra"
+      },
+      "moon" : {
+        "degree" : 17.31681398293597,
+        "sign" : "Pisces"
+      },
+      "pluto" : {
+        "degree" : 1.3848140177955486,
+        "sign" : "Sagittarius"
+      },
+      "saturn" : {
+        "degree" : 14.47601762879897,
+        "sign" : "Gemini"
+      },
+      "sun" : {
+        "degree" : 11.027501604057932,
+        "sign" : "Virgo"
+      },
+      "venus" : {
+        "degree" : 8.716728789868142,
+        "sign" : "Leo"
+      }
+    }
+  },
+  {
+    "id" : "U015",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 1.8152836558682282,
+        "sign" : "Leo"
+      },
+      "jupiter" : {
+        "degree" : 26.12433797638971,
+        "sign" : "Pisces"
+      },
+      "mars" : {
+        "degree" : 29.51606560564531,
+        "sign" : "Libra"
+      },
+      "mercury" : {
+        "degree" : 28.231202478392277,
+        "sign" : "Capricorn"
+      },
+      "moon" : {
+        "degree" : 11.582038558631346,
+        "sign" : "Taurus"
+      },
+      "pluto" : {
+        "degree" : 27.60587968058337,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 27.423716369053018,
+        "sign" : "Aries"
+      },
+      "sun" : {
+        "degree" : 4.875646636900342,
+        "sign" : "Aquarius"
+      },
+      "venus" : {
+        "degree" : 25.809680462767574,
+        "sign" : "Aquarius"
+      }
+    }
+  },
+  {
+    "id" : "U016",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 25.75411563769461,
+        "sign" : "Pisces"
+      },
+      "jupiter" : {
+        "degree" : 2.1536015978039202,
+        "sign" : "Gemini"
+      },
+      "mars" : {
+        "degree" : 1.8282318960246755,
+        "sign" : "Sagittarius"
+      },
+      "mercury" : {
+        "degree" : 18.629405431921896,
+        "sign" : "Aquarius"
+      },
+      "moon" : {
+        "degree" : 5.385997751477646,
+        "sign" : "Capricorn"
+      },
+      "pluto" : {
+        "degree" : 0.6024169746754922,
+        "sign" : "Sagittarius"
+      },
+      "saturn" : {
+        "degree" : 24.617567301580266,
+        "sign" : "Taurus"
+      },
+      "sun" : {
+        "degree" : 29.73868576206354,
+        "sign" : "Aquarius"
+      },
+      "venus" : {
+        "degree" : 11.567826684921558,
+        "sign" : "Aries"
+      }
+    }
+  },
+  {
+    "id" : "U017",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 12.381970467906527,
+        "sign" : "Gemini"
+      },
+      "jupiter" : {
+        "degree" : 21.891162754763005,
+        "sign" : "Aries"
+      },
+      "mars" : {
+        "degree" : 7.713550345789827,
+        "sign" : "Sagittarius"
+      },
+      "mercury" : {
+        "degree" : 16.035844465584603,
+        "sign" : "Aquarius"
+      },
+      "moon" : {
+        "degree" : 13.12972290873131,
+        "sign" : "Aquarius"
+      },
+      "pluto" : {
+        "degree" : 11.639030125484737,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 27.61879903025698,
+        "sign" : "Sagittarius"
+      },
+      "sun" : {
+        "degree" : 29.350478106386277,
+        "sign" : "Capricorn"
+      },
+      "venus" : {
+        "degree" : 5.533148494320869,
+        "sign" : "Pisces"
+      }
+    }
+  },
+  {
+    "id" : "U018",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 23.080906840109265,
+        "sign" : "Aquarius"
+      },
+      "jupiter" : {
+        "degree" : 25.363525341971393,
+        "sign" : "Aries"
+      },
+      "mars" : {
+        "degree" : 29.800506116136546,
+        "sign" : "Aquarius"
+      },
+      "mercury" : {
+        "degree" : 5.582488459392437,
+        "sign" : "Capricorn"
+      },
+      "moon" : {
+        "degree" : 11.286696197964346,
+        "sign" : "Sagittarius"
+      },
+      "pluto" : {
+        "degree" : 28.96934043349259,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 10.356901805180463,
+        "sign" : "Taurus"
+      },
+      "sun" : {
+        "degree" : 12.777049912659606,
+        "sign" : "Capricorn"
+      },
+      "venus" : {
+        "degree" : 4.425322305288773,
+        "sign" : "Sagittarius"
+      }
+    }
+  },
+  {
+    "id" : "U019",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 24.539757684550878,
+        "sign" : "Cancer"
+      },
+      "jupiter" : {
+        "degree" : 21.205325054242735,
+        "sign" : "Pisces"
+      },
+      "mars" : {
+        "degree" : 11.442355288948477,
+        "sign" : "Capricorn"
+      },
+      "mercury" : {
+        "degree" : 2.472985633958558,
+        "sign" : "Leo"
+      },
+      "moon" : {
+        "degree" : 5.153970266939467,
+        "sign" : "Sagittarius"
+      },
+      "pluto" : {
+        "degree" : 9.55921958475983,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 3.1051023324487517,
+        "sign" : "Sagittarius"
+      },
+      "sun" : {
+        "degree" : 21.08564624641491,
+        "sign" : "Leo"
+      },
+      "venus" : {
+        "degree" : 6.617219423729495,
+        "sign" : "Libra"
+      }
+    }
+  },
+  {
+    "id" : "U020",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 15.957060200395375,
+        "sign" : "Libra"
+      },
+      "jupiter" : {
+        "degree" : 8.693947074460482,
+        "sign" : "Leo"
+      },
+      "mars" : {
+        "degree" : 12.493036677891212,
+        "sign" : "Gemini"
+      },
+      "mercury" : {
+        "degree" : 26.138894986986344,
+        "sign" : "Virgo"
+      },
+      "moon" : {
+        "degree" : 26.13040026771796,
+        "sign" : "Pisces"
+      },
+      "pluto" : {
+        "degree" : 15.557299256217732,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 18.78876529877067,
+        "sign" : "Capricorn"
+      },
+      "sun" : {
+        "degree" : 10.000018811757968,
+        "sign" : "Libra"
+      },
+      "venus" : {
+        "degree" : 2.458509858430176,
+        "sign" : "Libra"
+      }
+    }
+  },
+  {
+    "id" : "U021",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 4.878992638418794,
+        "sign" : "Libra"
+      },
+      "jupiter" : {
+        "degree" : 10.364861255168137,
+        "sign" : "Capricorn"
+      },
+      "mars" : {
+        "degree" : 5.202359249596043,
+        "sign" : "Pisces"
+      },
+      "mercury" : {
+        "degree" : 8.638003908892415,
+        "sign" : "Aquarius"
+      },
+      "moon" : {
+        "degree" : 13.606708725849018,
+        "sign" : "Aries"
+      },
+      "pluto" : {
+        "degree" : 23.366237900981247,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 24.456268953707138,
+        "sign" : "Pisces"
+      },
+      "sun" : {
+        "degree" : 2.7102821618638586,
+        "sign" : "Pisces"
+      },
+      "venus" : {
+        "degree" : 15.183993595262184,
+        "sign" : "Aries"
+      }
+    }
+  },
+  {
+    "id" : "U022",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 10.458756084642644,
+        "sign" : "Gemini"
+      },
+      "jupiter" : {
+        "degree" : 13.18294896017477,
+        "sign" : "Aquarius"
+      },
+      "mars" : {
+        "degree" : 25.373840381247476,
+        "sign" : "Sagittarius"
+      },
+      "mercury" : {
+        "degree" : 22.951067876110784,
+        "sign" : "Scorpio"
+      },
+      "moon" : {
+        "degree" : 10.956561125016407,
+        "sign" : "Sagittarius"
+      },
+      "pluto" : {
+        "degree" : 25.826787551905625,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 15.118250199261071,
+        "sign" : "Aries"
+      },
+      "sun" : {
+        "degree" : 10.648659267669984,
+        "sign" : "Scorpio"
+      },
+      "venus" : {
+        "degree" : 27.63862200685861,
+        "sign" : "Sagittarius"
+      }
+    }
+  },
+  {
+    "id" : "U023",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 25.92300899781526,
+        "sign" : "Sagittarius"
+      },
+      "jupiter" : {
+        "degree" : 18.280748472436585,
+        "sign" : "Pisces"
+      },
+      "mars" : {
+        "degree" : 26.791110669909585,
+        "sign" : "Virgo"
+      },
+      "mercury" : {
+        "degree" : 17.554894689070068,
+        "sign" : "Sagittarius"
+      },
+      "moon" : {
+        "degree" : 27.47284650033572,
+        "sign" : "Sagittarius"
+      },
+      "pluto" : {
+        "degree" : 27.34957862651109,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 28.022335622866702,
+        "sign" : "Aries"
+      },
+      "sun" : {
+        "degree" : 29.205255929624087,
+        "sign" : "Scorpio"
+      },
+      "venus" : {
+        "degree" : 4.847652872977449,
+        "sign" : "Sagittarius"
+      }
+    }
+  },
+  {
+    "id" : "U024",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 14.155111964011626,
+        "sign" : "Aries"
+      },
+      "jupiter" : {
+        "degree" : 15.292559856988959,
+        "sign" : "Gemini"
+      },
+      "mars" : {
+        "degree" : 29.019171996528428,
+        "sign" : "Sagittarius"
+      },
+      "mercury" : {
+        "degree" : 5.6798193413374065,
+        "sign" : "Gemini"
+      },
+      "moon" : {
+        "degree" : 9.579662779390901,
+        "sign" : "Sagittarius"
+      },
+      "pluto" : {
+        "degree" : 0.9197023226107603,
+        "sign" : "Sagittarius"
+      },
+      "saturn" : {
+        "degree" : 2.2808148209889296,
+        "sign" : "Gemini"
+      },
+      "sun" : {
+        "degree" : 18.718547375739668,
+        "sign" : "Taurus"
+      },
+      "venus" : {
+        "degree" : 7.584732189956467,
+        "sign" : "Aries"
+      }
+    }
+  },
+  {
+    "id" : "U025",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 14.240973237603441,
+        "sign" : "Sagittarius"
+      },
+      "jupiter" : {
+        "degree" : 23.142474844918,
+        "sign" : "Cancer"
+      },
+      "mars" : {
+        "degree" : 3.692530383112718,
+        "sign" : "Taurus"
+      },
+      "mercury" : {
+        "degree" : 11.603421729221623,
+        "sign" : "Leo"
+      },
+      "moon" : {
+        "degree" : 0.8304343350524164,
+        "sign" : "Gemini"
+      },
+      "pluto" : {
+        "degree" : 15.250316221765928,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 21.761755307644762,
+        "sign" : "Capricorn"
+      },
+      "sun" : {
+        "degree" : 25.255517293712046,
+        "sign" : "Cancer"
+      },
+      "venus" : {
+        "degree" : 27.567240242146724,
+        "sign" : "Gemini"
+      }
+    }
+  },
+  {
+    "id" : "U026",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 17.364055599858048,
+        "sign" : "Gemini"
+      },
+      "jupiter" : {
+        "degree" : 21.90961727616883,
+        "sign" : "Aquarius"
+      },
+      "mars" : {
+        "degree" : 27.929664940441654,
+        "sign" : "Virgo"
+      },
+      "mercury" : {
+        "degree" : 10.186282161335129,
+        "sign" : "Gemini"
+      },
+      "moon" : {
+        "degree" : 6.936702713594087,
+        "sign" : "Libra"
+      },
+      "pluto" : {
+        "degree" : 25.26484017339726,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 18.455049060371138,
+        "sign" : "Aries"
+      },
+      "sun" : {
+        "degree" : 23.420332154902667,
+        "sign" : "Gemini"
+      },
+      "venus" : {
+        "degree" : 12.556373969754162,
+        "sign" : "Cancer"
+      }
+    }
+  },
+  {
+    "id" : "U027",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 4.36160205210836,
+        "sign" : "Aries"
+      },
+      "jupiter" : {
+        "degree" : 20.73517837500134,
+        "sign" : "Pisces"
+      },
+      "mars" : {
+        "degree" : 28.033891511202626,
+        "sign" : "Leo"
+      },
+      "mercury" : {
+        "degree" : 17.296296491567375,
+        "sign" : "Libra"
+      },
+      "moon" : {
+        "degree" : 19.07084007150229,
+        "sign" : "Pisces"
+      },
+      "pluto" : {
+        "degree" : 27.15736248231815,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 1.6626063379767153,
+        "sign" : "Taurus"
+      },
+      "sun" : {
+        "degree" : 10.865288084422048,
+        "sign" : "Libra"
+      },
+      "venus" : {
+        "degree" : 4.165963079924495,
+        "sign" : "Libra"
+      }
+    }
+  },
+  {
+    "id" : "U028",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 27.91794866599463,
+        "sign" : "Cancer"
+      },
+      "jupiter" : {
+        "degree" : 3.4133922253723767,
+        "sign" : "Gemini"
+      },
+      "mars" : {
+        "degree" : 8.342999160950853,
+        "sign" : "Sagittarius"
+      },
+      "mercury" : {
+        "degree" : 17.035129401736697,
+        "sign" : "Aquarius"
+      },
+      "moon" : {
+        "degree" : 16.1483082234259,
+        "sign" : "Gemini"
+      },
+      "pluto" : {
+        "degree" : 0.6540608350439925,
+        "sign" : "Sagittarius"
+      },
+      "saturn" : {
+        "degree" : 25.341440702649514,
+        "sign" : "Taurus"
+      },
+      "sun" : {
+        "degree" : 12.826558511054316,
+        "sign" : "Pisces"
+      },
+      "venus" : {
+        "degree" : 17.09160439352348,
+        "sign" : "Aries"
+      }
+    }
+  },
+  {
+    "id" : "U029",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 11.07305356732681,
+        "sign" : "Sagittarius"
+      },
+      "jupiter" : {
+        "degree" : 12.64293857694301,
+        "sign" : "Virgo"
+      },
+      "mars" : {
+        "degree" : 27.085412350460814,
+        "sign" : "Scorpio"
+      },
+      "mercury" : {
+        "degree" : 23.157380674986314,
+        "sign" : "Sagittarius"
+      },
+      "moon" : {
+        "degree" : 13.165178860960026,
+        "sign" : "Cancer"
+      },
+      "pluto" : {
+        "degree" : 17.214268455396393,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 2.272276702854981,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 2.187945875434451,
+        "sign" : "Sagittarius"
+      },
+      "venus" : {
+        "degree" : 17.069136599861594,
+        "sign" : "Libra"
+      }
+    }
+  },
+  {
+    "id" : "U030",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 28.237780952354115,
+        "sign" : "Sagittarius"
+      },
+      "jupiter" : {
+        "degree" : 23.56039914232801,
+        "sign" : "Virgo"
+      },
+      "mars" : {
+        "degree" : 29.059741398082565,
+        "sign" : "Gemini"
+      },
+      "mercury" : {
+        "degree" : 13.985476193035879,
+        "sign" : "Virgo"
+      },
+      "moon" : {
+        "degree" : 1.9807995603982818,
+        "sign" : "Pisces"
+      },
+      "pluto" : {
+        "degree" : 18.36776375998204,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 12.816354669460168,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 18.143200221710316,
+        "sign" : "Virgo"
+      },
+      "venus" : {
+        "degree" : 12.207910474117341,
+        "sign" : "Libra"
+      }
+    }
+  },
+  {
+    "id" : "U031",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 5.730885285748627,
+        "sign" : "Pisces"
+      },
+      "jupiter" : {
+        "degree" : 23.58329141276772,
+        "sign" : "Aquarius"
+      },
+      "mars" : {
+        "degree" : 24.907803404873505,
+        "sign" : "Scorpio"
+      },
+      "mercury" : {
+        "degree" : 29.465492375546035,
+        "sign" : "Capricorn"
+      },
+      "moon" : {
+        "degree" : 18.800699856276523,
+        "sign" : "Cancer"
+      },
+      "pluto" : {
+        "degree" : 8.759621702029932,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 7.39304915620454,
+        "sign" : "Sagittarius"
+      },
+      "sun" : {
+        "degree" : 4.406361947736002,
+        "sign" : "Aquarius"
+      },
+      "venus" : {
+        "degree" : 5.6154676031048325,
+        "sign" : "Aquarius"
+      }
+    }
+  },
+  {
+    "id" : "U032",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 26.257279828995166,
+        "sign" : "Cancer"
+      },
+      "jupiter" : {
+        "degree" : 15.515948901609136,
+        "sign" : "Pisces"
+      },
+      "mars" : {
+        "degree" : 28.815925818309783,
+        "sign" : "Aries"
+      },
+      "mercury" : {
+        "degree" : 13.045358763953883,
+        "sign" : "Aries"
+      },
+      "moon" : {
+        "degree" : 15.966510958068199,
+        "sign" : "Libra"
+      },
+      "pluto" : {
+        "degree" : 26.459445512206287,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 23.097010703191145,
+        "sign" : "Aries"
+      },
+      "sun" : {
+        "degree" : 21.3502245067404,
+        "sign" : "Aries"
+      },
+      "venus" : {
+        "degree" : 5.478566694814731,
+        "sign" : "Pisces"
+      }
+    }
+  },
+  {
+    "id" : "U033",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 3.5439032539387654,
+        "sign" : "Cancer"
+      },
+      "jupiter" : {
+        "degree" : 0.13312141392970034,
+        "sign" : "Capricorn"
+      },
+      "mars" : {
+        "degree" : 26.418090702868028,
+        "sign" : "Capricorn"
+      },
+      "mercury" : {
+        "degree" : 2.152919006804325,
+        "sign" : "Aquarius"
+      },
+      "moon" : {
+        "degree" : 21.005305490105854,
+        "sign" : "Gemini"
+      },
+      "pluto" : {
+        "degree" : 23.171006579967354,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 19.596784982166753,
+        "sign" : "Pisces"
+      },
+      "sun" : {
+        "degree" : 12.770379611283659,
+        "sign" : "Capricorn"
+      },
+      "venus" : {
+        "degree" : 16.15555636379645,
+        "sign" : "Aquarius"
+      }
+    }
+  },
+  {
+    "id" : "U034",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 29.219030605907392,
+        "sign" : "Capricorn"
+      },
+      "jupiter" : {
+        "degree" : 8.496142522350311,
+        "sign" : "Sagittarius"
+      },
+      "mars" : {
+        "degree" : 11.270400895374962,
+        "sign" : "Virgo"
+      },
+      "mercury" : {
+        "degree" : 9.81837057454041,
+        "sign" : "Gemini"
+      },
+      "moon" : {
+        "degree" : 29.47206389824879,
+        "sign" : "Aquarius"
+      },
+      "pluto" : {
+        "degree" : 22.37680514715936,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 24.46280196116237,
+        "sign" : "Pisces"
+      },
+      "sun" : {
+        "degree" : 26.09406243585005,
+        "sign" : "Gemini"
+      },
+      "venus" : {
+        "degree" : 8.624546727793643,
+        "sign" : "Gemini"
+      }
+    }
+  },
+  {
+    "id" : "U035",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 28.277101953001647,
+        "sign" : "Aquarius"
+      },
+      "jupiter" : {
+        "degree" : 28.019488747557546,
+        "sign" : "Pisces"
+      },
+      "mars" : {
+        "degree" : 11.239792697772828,
+        "sign" : "Cancer"
+      },
+      "mercury" : {
+        "degree" : 25.743882903160056,
+        "sign" : "Leo"
+      },
+      "moon" : {
+        "degree" : 24.350700133970747,
+        "sign" : "Cancer"
+      },
+      "pluto" : {
+        "degree" : 26.86694087154848,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 3.1494916955541186,
+        "sign" : "Taurus"
+      },
+      "sun" : {
+        "degree" : 0.08132081818966697,
+        "sign" : "Leo"
+      },
+      "venus" : {
+        "degree" : 4.208496165783089,
+        "sign" : "Cancer"
+      }
+    }
+  },
+  {
+    "id" : "U036",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 15.044396808670882,
+        "sign" : "Sagittarius"
+      },
+      "jupiter" : {
+        "degree" : 1.290711554019481,
+        "sign" : "Libra"
+      },
+      "mars" : {
+        "degree" : 17.32073227839345,
+        "sign" : "Cancer"
+      },
+      "mercury" : {
+        "degree" : 13.530534826563752,
+        "sign" : "Scorpio"
+      },
+      "moon" : {
+        "degree" : 22.306355684700236,
+        "sign" : "Gemini"
+      },
+      "pluto" : {
+        "degree" : 18.510970878394716,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 11.815917459946661,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 23.581530917482667,
+        "sign" : "Libra"
+      },
+      "venus" : {
+        "degree" : 26.305086280294773,
+        "sign" : "Scorpio"
+      }
+    }
+  },
+  {
+    "id" : "U037",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 27.492495377821513,
+        "sign" : "Pisces"
+      },
+      "jupiter" : {
+        "degree" : 10.87029528265812,
+        "sign" : "Cancer"
+      },
+      "mars" : {
+        "degree" : 24.759218720911406,
+        "sign" : "Libra"
+      },
+      "mercury" : {
+        "degree" : 24.622160115926306,
+        "sign" : "Libra"
+      },
+      "moon" : {
+        "degree" : 9.199172526736561,
+        "sign" : "Libra"
+      },
+      "pluto" : {
+        "degree" : 14.203512425279797,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 8.985225978484948,
+        "sign" : "Capricorn"
+      },
+      "sun" : {
+        "degree" : 3.9227208692121565,
+        "sign" : "Scorpio"
+      },
+      "venus" : {
+        "degree" : 20.52339259454527,
+        "sign" : "Sagittarius"
+      }
+    }
+  },
+  {
+    "id" : "U038",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 24.300093216019135,
+        "sign" : "Cancer"
+      },
+      "jupiter" : {
+        "degree" : 7.974851684994832,
+        "sign" : "Scorpio"
+      },
+      "mars" : {
+        "degree" : 23.136478939444718,
+        "sign" : "Aries"
+      },
+      "mercury" : {
+        "degree" : 9.700573939878481,
+        "sign" : "Gemini"
+      },
+      "moon" : {
+        "degree" : 9.597307096303282,
+        "sign" : "Cancer"
+      },
+      "pluto" : {
+        "degree" : 20.793589267625407,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 11.156556001166564,
+        "sign" : "Pisces"
+      },
+      "sun" : {
+        "degree" : 23.803259199886824,
+        "sign" : "Taurus"
+      },
+      "venus" : {
+        "degree" : 22.52464258608613,
+        "sign" : "Gemini"
+      }
+    }
+  },
+  {
+    "id" : "U039",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 18.854266897426413,
+        "sign" : "Virgo"
+      },
+      "jupiter" : {
+        "degree" : 6.56618302548992,
+        "sign" : "Capricorn"
+      },
+      "mars" : {
+        "degree" : 19.70012907313179,
+        "sign" : "Aquarius"
+      },
+      "mercury" : {
+        "degree" : 19.668312002345147,
+        "sign" : "Capricorn"
+      },
+      "moon" : {
+        "degree" : 18.648845235141067,
+        "sign" : "Cancer"
+      },
+      "pluto" : {
+        "degree" : 23.28843586584594,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 22.252560798760726,
+        "sign" : "Pisces"
+      },
+      "sun" : {
+        "degree" : 12.88420775731413,
+        "sign" : "Aquarius"
+      },
+      "venus" : {
+        "degree" : 22.09213576185931,
+        "sign" : "Pisces"
+      }
+    }
+  },
+  {
+    "id" : "U040",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 15.555764019930123,
+        "sign" : "Cancer"
+      },
+      "jupiter" : {
+        "degree" : 8.228321332971376,
+        "sign" : "Aries"
+      },
+      "mars" : {
+        "degree" : 0.1624122035809492,
+        "sign" : "Gemini"
+      },
+      "mercury" : {
+        "degree" : 19.881312320812754,
+        "sign" : "Pisces"
+      },
+      "moon" : {
+        "degree" : 11.172598694487377,
+        "sign" : "Cancer"
+      },
+      "pluto" : {
+        "degree" : 10.490931270819175,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 21.13658070508876,
+        "sign" : "Sagittarius"
+      },
+      "sun" : {
+        "degree" : 15.592209053352411,
+        "sign" : "Aries"
+      },
+      "venus" : {
+        "degree" : 9.870875085684247,
+        "sign" : "Pisces"
+      }
+    }
+  },
+  {
+    "id" : "U041",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 20.0969535446975,
+        "sign" : "Cancer"
+      },
+      "jupiter" : {
+        "degree" : 6.156785813378036,
+        "sign" : "Libra"
+      },
+      "mars" : {
+        "degree" : 5.155300695280431,
+        "sign" : "Virgo"
+      },
+      "mercury" : {
+        "degree" : 28.241171714133813,
+        "sign" : "Cancer"
+      },
+      "moon" : {
+        "degree" : 18.0506164444094,
+        "sign" : "Sagittarius"
+      },
+      "pluto" : {
+        "degree" : 19.536853096053107,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 29.932426871682708,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 10.320394664892277,
+        "sign" : "Cancer"
+      },
+      "venus" : {
+        "degree" : 25.899343579996682,
+        "sign" : "Taurus"
+      }
+    }
+  },
+  {
+    "id" : "U042",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 16.181125806763106,
+        "sign" : "Virgo"
+      },
+      "jupiter" : {
+        "degree" : 14.038368497265395,
+        "sign" : "Libra"
+      },
+      "mars" : {
+        "degree" : 17.41810571374323,
+        "sign" : "Cancer"
+      },
+      "mercury" : {
+        "degree" : 9.16117919790156,
+        "sign" : "Capricorn"
+      },
+      "moon" : {
+        "degree" : 18.556282401562157,
+        "sign" : "Cancer"
+      },
+      "pluto" : {
+        "degree" : 18.843756550307262,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 17.167796357221505,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 18.28541841241423,
+        "sign" : "Capricorn"
+      },
+      "venus" : {
+        "degree" : 4.972991665202812,
+        "sign" : "Pisces"
+      }
+    }
+  },
+  {
+    "id" : "U043",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 16.273766211293065,
+        "sign" : "Cancer"
+      },
+      "jupiter" : {
+        "degree" : 8.317335239920112,
+        "sign" : "Capricorn"
+      },
+      "mars" : {
+        "degree" : 14.584172509511134,
+        "sign" : "Cancer"
+      },
+      "mercury" : {
+        "degree" : 20.988476924754593,
+        "sign" : "Virgo"
+      },
+      "moon" : {
+        "degree" : 20.985240420374737,
+        "sign" : "Virgo"
+      },
+      "pluto" : {
+        "degree" : 24.06744014601901,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 6.71117068480386,
+        "sign" : "Aries"
+      },
+      "sun" : {
+        "degree" : 24.126794691397492,
+        "sign" : "Leo"
+      },
+      "venus" : {
+        "degree" : 8.432107018698176,
+        "sign" : "Cancer"
+      }
+    }
+  },
+  {
+    "id" : "U044",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 18.16201289874664,
+        "sign" : "Aquarius"
+      },
+      "jupiter" : {
+        "degree" : 28.85855873567226,
+        "sign" : "Taurus"
+      },
+      "mars" : {
+        "degree" : 24.77714557543176,
+        "sign" : "Taurus"
+      },
+      "mercury" : {
+        "degree" : 18.250676836426862,
+        "sign" : "Aquarius"
+      },
+      "moon" : {
+        "degree" : 4.896055422380812,
+        "sign" : "Capricorn"
+      },
+      "pluto" : {
+        "degree" : 13.256476805840066,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 11.862471446316988,
+        "sign" : "Capricorn"
+      },
+      "sun" : {
+        "degree" : 12.14094680597782,
+        "sign" : "Pisces"
+      },
+      "venus" : {
+        "degree" : 3.8026174587159858,
+        "sign" : "Pisces"
+      }
+    }
+  },
+  {
+    "id" : "U045",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 10.802208814376712,
+        "sign" : "Cancer"
+      },
+      "jupiter" : {
+        "degree" : 12.267232986673378,
+        "sign" : "Aquarius"
+      },
+      "mars" : {
+        "degree" : 21.188217065469786,
+        "sign" : "Libra"
+      },
+      "mercury" : {
+        "degree" : 4.404571978003304,
+        "sign" : "Sagittarius"
+      },
+      "moon" : {
+        "degree" : 11.649582577294808,
+        "sign" : "Cancer"
+      },
+      "pluto" : {
+        "degree" : 8.540781601641982,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 1.611281495528658,
+        "sign" : "Sagittarius"
+      },
+      "sun" : {
+        "degree" : 8.28633850057318,
+        "sign" : "Sagittarius"
+      },
+      "venus" : {
+        "degree" : 26.254597648006893,
+        "sign" : "Scorpio"
+      }
+    }
+  },
+  {
+    "id" : "U046",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 9.5071389540052,
+        "sign" : "Cancer"
+      },
+      "jupiter" : {
+        "degree" : 26.761054448902705,
+        "sign" : "Aries"
+      },
+      "mars" : {
+        "degree" : 23.911186182073777,
+        "sign" : "Capricorn"
+      },
+      "mercury" : {
+        "degree" : 20.033339889865573,
+        "sign" : "Scorpio"
+      },
+      "moon" : {
+        "degree" : 18.0464539459677,
+        "sign" : "Pisces"
+      },
+      "pluto" : {
+        "degree" : 28.784510645676164,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 12.766385546582754,
+        "sign" : "Taurus"
+      },
+      "sun" : {
+        "degree" : 25.48164290850835,
+        "sign" : "Scorpio"
+      },
+      "venus" : {
+        "degree" : 9.949591218141649,
+        "sign" : "Libra"
+      }
+    }
+  },
+  {
+    "id" : "U047",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 27.08246561865293,
+        "sign" : "Aries"
+      },
+      "jupiter" : {
+        "degree" : 5.957841962019984,
+        "sign" : "Leo"
+      },
+      "mars" : {
+        "degree" : 20.328593065036472,
+        "sign" : "Cancer"
+      },
+      "mercury" : {
+        "degree" : 22.867685719046005,
+        "sign" : "Aries"
+      },
+      "moon" : {
+        "degree" : 20.74477229508301,
+        "sign" : "Pisces"
+      },
+      "pluto" : {
+        "degree" : 16.423773981291447,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 6.794344558949888,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 18.666679234928374,
+        "sign" : "Taurus"
+      },
+      "venus" : {
+        "degree" : 0.8249596833371697,
+        "sign" : "Cancer"
+      }
+    }
+  },
+  {
+    "id" : "U048",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 22.241462200208787,
+        "sign" : "Virgo"
+      },
+      "jupiter" : {
+        "degree" : 7.82763236778419,
+        "sign" : "Capricorn"
+      },
+      "mars" : {
+        "degree" : 27.536610450470008,
+        "sign" : "Cancer"
+      },
+      "mercury" : {
+        "degree" : 3.345858713235458,
+        "sign" : "Libra"
+      },
+      "moon" : {
+        "degree" : 26.25330185856076,
+        "sign" : "Gemini"
+      },
+      "pluto" : {
+        "degree" : 24.147493917408724,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 5.529069531004102,
+        "sign" : "Aries"
+      },
+      "sun" : {
+        "degree" : 13.602215158106105,
+        "sign" : "Virgo"
+      },
+      "venus" : {
+        "degree" : 28.62216349572266,
+        "sign" : "Cancer"
+      }
+    }
+  },
+  {
+    "id" : "U049",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 14.761082901314666,
+        "sign" : "Libra"
+      },
+      "jupiter" : {
+        "degree" : 28.719658531574762,
+        "sign" : "Aries"
+      },
+      "mars" : {
+        "degree" : 25.802022934368324,
+        "sign" : "Pisces"
+      },
+      "mercury" : {
+        "degree" : 2.0025525740441594,
+        "sign" : "Pisces"
+      },
+      "moon" : {
+        "degree" : 28.40772951660739,
+        "sign" : "Aquarius"
+      },
+      "pluto" : {
+        "degree" : 29.103022459503165,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 10.88895260336897,
+        "sign" : "Taurus"
+      },
+      "sun" : {
+        "degree" : 17.044249247033804,
+        "sign" : "Aquarius"
+      },
+      "venus" : {
+        "degree" : 15.637491860590785,
+        "sign" : "Capricorn"
+      }
+    }
+  },
+  {
+    "id" : "U050",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 15.462506660323898,
+        "sign" : "Aries"
+      },
+      "jupiter" : {
+        "degree" : 14.726545130498664,
+        "sign" : "Pisces"
+      },
+      "mars" : {
+        "degree" : 26.113789571699904,
+        "sign" : "Aries"
+      },
+      "mercury" : {
+        "degree" : 15.762512454253791,
+        "sign" : "Aries"
+      },
+      "moon" : {
+        "degree" : 3.2917137004516803,
+        "sign" : "Virgo"
+      },
+      "pluto" : {
+        "degree" : 26.445144093087436,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 22.64099547722419,
+        "sign" : "Aries"
+      },
+      "sun" : {
+        "degree" : 17.810813280799653,
+        "sign" : "Aries"
+      },
+      "venus" : {
+        "degree" : 1.6808346872591073,
+        "sign" : "Pisces"
+      }
+    }
+  },
+  {
+    "id" : "U051",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 10.639502706279217,
+        "sign" : "Scorpio"
+      },
+      "jupiter" : {
+        "degree" : 21.483722513696975,
+        "sign" : "Cancer"
+      },
+      "mars" : {
+        "degree" : 17.52579154475238,
+        "sign" : "Cancer"
+      },
+      "mercury" : {
+        "degree" : 10.313646189874007,
+        "sign" : "Gemini"
+      },
+      "moon" : {
+        "degree" : 24.8394351482072,
+        "sign" : "Sagittarius"
+      },
+      "pluto" : {
+        "degree" : 2.550926762490832,
+        "sign" : "Sagittarius"
+      },
+      "saturn" : {
+        "degree" : 20.384296404618226,
+        "sign" : "Gemini"
+      },
+      "sun" : {
+        "degree" : 2.6160210673411655,
+        "sign" : "Cancer"
+      },
+      "venus" : {
+        "degree" : 11.02538879592845,
+        "sign" : "Leo"
+      }
+    }
+  },
+  {
+    "id" : "U052",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 24.032277356223233,
+        "sign" : "Sagittarius"
+      },
+      "jupiter" : {
+        "degree" : 9.744636901861867,
+        "sign" : "Leo"
+      },
+      "mars" : {
+        "degree" : 29.81654759153698,
+        "sign" : "Taurus"
+      },
+      "mercury" : {
+        "degree" : 6.6480764502340435,
+        "sign" : "Capricorn"
+      },
+      "moon" : {
+        "degree" : 17.9030478316418,
+        "sign" : "Pisces"
+      },
+      "pluto" : {
+        "degree" : 15.988860908053312,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 27.93530303478883,
+        "sign" : "Capricorn"
+      },
+      "sun" : {
+        "degree" : 29.64081327780599,
+        "sign" : "Capricorn"
+      },
+      "venus" : {
+        "degree" : 18.789293060289197,
+        "sign" : "Aquarius"
+      }
+    }
+  },
+  {
+    "id" : "U053",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 11.736685645933164,
+        "sign" : "Leo"
+      },
+      "jupiter" : {
+        "degree" : 8.029900506341363,
+        "sign" : "Leo"
+      },
+      "mars" : {
+        "degree" : 29.49499037030229,
+        "sign" : "Cancer"
+      },
+      "mercury" : {
+        "degree" : 11.808329746673657,
+        "sign" : "Taurus"
+      },
+      "moon" : {
+        "degree" : 1.8226947763544104,
+        "sign" : "Scorpio"
+      },
+      "pluto" : {
+        "degree" : 16.486673766827153,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 6.77862772844162,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 3.937951238718213,
+        "sign" : "Gemini"
+      },
+      "venus" : {
+        "degree" : 18.16110818261538,
+        "sign" : "Cancer"
+      }
+    }
+  },
+  {
+    "id" : "U054",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 20.127250879545443,
+        "sign" : "Leo"
+      },
+      "jupiter" : {
+        "degree" : 10.483174587943267,
+        "sign" : "Libra"
+      },
+      "mars" : {
+        "degree" : 26.02791984229475,
+        "sign" : "Virgo"
+      },
+      "mercury" : {
+        "degree" : 24.089051327837254,
+        "sign" : "Cancer"
+      },
+      "moon" : {
+        "degree" : 19.081362231970445,
+        "sign" : "Pisces"
+      },
+      "pluto" : {
+        "degree" : 19.673809372575903,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 28.005572308194303,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 13.267518995649738,
+        "sign" : "Leo"
+      },
+      "venus" : {
+        "degree" : 4.308023124211516,
+        "sign" : "Cancer"
+      }
+    }
+  },
+  {
+    "id" : "U055",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 15.724737727158015,
+        "sign" : "Virgo"
+      },
+      "jupiter" : {
+        "degree" : 26.332680946535568,
+        "sign" : "Aries"
+      },
+      "mars" : {
+        "degree" : 28.26748389339454,
+        "sign" : "Virgo"
+      },
+      "mercury" : {
+        "degree" : 7.758024355976687,
+        "sign" : "Scorpio"
+      },
+      "moon" : {
+        "degree" : 27.989729437985204,
+        "sign" : "Pisces"
+      },
+      "pluto" : {
+        "degree" : 11.217911348391027,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 16.321761515471337,
+        "sign" : "Sagittarius"
+      },
+      "sun" : {
+        "degree" : 12.30891641266706,
+        "sign" : "Libra"
+      },
+      "venus" : {
+        "degree" : 24.072665276572877,
+        "sign" : "Libra"
+      }
+    }
+  },
+  {
+    "id" : "U056",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 11.492185621596306,
+        "sign" : "Gemini"
+      },
+      "jupiter" : {
+        "degree" : 7.753815046321762,
+        "sign" : "Virgo"
+      },
+      "mars" : {
+        "degree" : 19.9084455415487,
+        "sign" : "Aquarius"
+      },
+      "mercury" : {
+        "degree" : 11.03406588027035,
+        "sign" : "Aries"
+      },
+      "moon" : {
+        "degree" : 3.8110698619507417,
+        "sign" : "Leo"
+      },
+      "pluto" : {
+        "degree" : 17.655104394249776,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 14.35198561983725,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 24.716988969996976,
+        "sign" : "Pisces"
+      },
+      "venus" : {
+        "degree" : 1.3043969530631898,
+        "sign" : "Pisces"
+      }
+    }
+  },
+  {
+    "id" : "U057",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 24.761472836921072,
+        "sign" : "Cancer"
+      },
+      "jupiter" : {
+        "degree" : 14.708834446925366,
+        "sign" : "Cancer"
+      },
+      "mars" : {
+        "degree" : 21.441121206754644,
+        "sign" : "Aquarius"
+      },
+      "mercury" : {
+        "degree" : 0.5379553683578706,
+        "sign" : "Sagittarius"
+      },
+      "moon" : {
+        "degree" : 20.243926105557676,
+        "sign" : "Aries"
+      },
+      "pluto" : {
+        "degree" : 1.720672744694923,
+        "sign" : "Sagittarius"
+      },
+      "saturn" : {
+        "degree" : 12.01257990160525,
+        "sign" : "Gemini"
+      },
+      "sun" : {
+        "degree" : 4.905425551600274,
+        "sign" : "Sagittarius"
+      },
+      "venus" : {
+        "degree" : 23.267346906748656,
+        "sign" : "Scorpio"
+      }
+    }
+  },
+  {
+    "id" : "U058",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 11.096856082150653,
+        "sign" : "Aries"
+      },
+      "jupiter" : {
+        "degree" : 4.141674772403491,
+        "sign" : "Libra"
+      },
+      "mars" : {
+        "degree" : 22.537001753361054,
+        "sign" : "Cancer"
+      },
+      "mercury" : {
+        "degree" : 1.0982241647070055,
+        "sign" : "Sagittarius"
+      },
+      "moon" : {
+        "degree" : 8.166910270135759,
+        "sign" : "Capricorn"
+      },
+      "pluto" : {
+        "degree" : 18.566699283595995,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 11.999034856180288,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 7.568680227265872,
+        "sign" : "Scorpio"
+      },
+      "venus" : {
+        "degree" : 13.354876246287319,
+        "sign" : "Sagittarius"
+      }
+    }
+  },
+  {
+    "id" : "U059",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 9.555175534446256,
+        "sign" : "Aries"
+      },
+      "jupiter" : {
+        "degree" : 20.804867508007813,
+        "sign" : "Aries"
+      },
+      "mars" : {
+        "degree" : 27.900349385310193,
+        "sign" : "Libra"
+      },
+      "mercury" : {
+        "degree" : 6.511988987259009,
+        "sign" : "Taurus"
+      },
+      "moon" : {
+        "degree" : 8.231756089768988,
+        "sign" : "Aries"
+      },
+      "pluto" : {
+        "degree" : 28.031055441478458,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 8.668820666837782,
+        "sign" : "Taurus"
+      },
+      "sun" : {
+        "degree" : 21.27377925474554,
+        "sign" : "Taurus"
+      },
+      "venus" : {
+        "degree" : 4.174221161575119,
+        "sign" : "Cancer"
+      }
+    }
+  },
+  {
+    "id" : "U060",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 6.534879411120734,
+        "sign" : "Taurus"
+      },
+      "jupiter" : {
+        "degree" : 9.106505021012708,
+        "sign" : "Scorpio"
+      },
+      "mars" : {
+        "degree" : 6.781833625233304,
+        "sign" : "Cancer"
+      },
+      "mercury" : {
+        "degree" : 16.968478403176533,
+        "sign" : "Virgo"
+      },
+      "moon" : {
+        "degree" : 12.078402295053912,
+        "sign" : "Taurus"
+      },
+      "pluto" : {
+        "degree" : 21.208076860598425,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 9.415064840489492,
+        "sign" : "Pisces"
+      },
+      "sun" : {
+        "degree" : 3.7835200280081835,
+        "sign" : "Virgo"
+      },
+      "venus" : {
+        "degree" : 19.75589233642083,
+        "sign" : "Libra"
+      }
+    }
+  },
+  {
+    "id" : "U061",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 5.792825512884178,
+        "sign" : "Capricorn"
+      },
+      "jupiter" : {
+        "degree" : 8.139520586834053,
+        "sign" : "Cancer"
+      },
+      "mars" : {
+        "degree" : 28.1124880558137,
+        "sign" : "Taurus"
+      },
+      "mercury" : {
+        "degree" : 24.843407046144794,
+        "sign" : "Aries"
+      },
+      "moon" : {
+        "degree" : 0.5063141815013134,
+        "sign" : "Aries"
+      },
+      "pluto" : {
+        "degree" : 2.255894191193164,
+        "sign" : "Sagittarius"
+      },
+      "saturn" : {
+        "degree" : 11.353339002174707,
+        "sign" : "Gemini"
+      },
+      "sun" : {
+        "degree" : 20.895568697174454,
+        "sign" : "Aries"
+      },
+      "venus" : {
+        "degree" : 11.920595462714111,
+        "sign" : "Taurus"
+      }
+    }
+  },
+  {
+    "id" : "U062",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 26.483524002485865,
+        "sign" : "Leo"
+      },
+      "jupiter" : {
+        "degree" : 4.815063201172819,
+        "sign" : "Scorpio"
+      },
+      "mars" : {
+        "degree" : 24.544440407104496,
+        "sign" : "Taurus"
+      },
+      "mercury" : {
+        "degree" : 3.1015610071558655,
+        "sign" : "Cancer"
+      },
+      "moon" : {
+        "degree" : 11.517009943257676,
+        "sign" : "Aquarius"
+      },
+      "pluto" : {
+        "degree" : 20.962097412730287,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 12.39084520228431,
+        "sign" : "Pisces"
+      },
+      "sun" : {
+        "degree" : 4.4760663554499445,
+        "sign" : "Cancer"
+      },
+      "venus" : {
+        "degree" : 12.832531281632612,
+        "sign" : "Leo"
+      }
+    }
+  },
+  {
+    "id" : "U063",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 17.950604092162337,
+        "sign" : "Gemini"
+      },
+      "jupiter" : {
+        "degree" : 26.23864656973973,
+        "sign" : "Sagittarius"
+      },
+      "mars" : {
+        "degree" : 25.426740155067108,
+        "sign" : "Libra"
+      },
+      "mercury" : {
+        "degree" : 6.247249644277815,
+        "sign" : "Capricorn"
+      },
+      "moon" : {
+        "degree" : 1.8744091964811673,
+        "sign" : "Capricorn"
+      },
+      "pluto" : {
+        "degree" : 5.770018763404607,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 14.06790750439285,
+        "sign" : "Scorpio"
+      },
+      "sun" : {
+        "degree" : 11.189020954948774,
+        "sign" : "Capricorn"
+      },
+      "venus" : {
+        "degree" : 1.6103339224746094,
+        "sign" : "Sagittarius"
+      }
+    }
+  },
+  {
+    "id" : "U064",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 26.402956534330542,
+        "sign" : "Scorpio"
+      },
+      "jupiter" : {
+        "degree" : 8.53743220005444,
+        "sign" : "Leo"
+      },
+      "mars" : {
+        "degree" : 1.4795754553306466,
+        "sign" : "Leo"
+      },
+      "mercury" : {
+        "degree" : 17.24435073563999,
+        "sign" : "Taurus"
+      },
+      "moon" : {
+        "degree" : 13.159081662949035,
+        "sign" : "Sagittarius"
+      },
+      "pluto" : {
+        "degree" : 16.500134574492904,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 6.722719417506255,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 7.193935494669006,
+        "sign" : "Gemini"
+      },
+      "venus" : {
+        "degree" : 21.74653205526195,
+        "sign" : "Cancer"
+      }
+    }
+  },
+  {
+    "id" : "U065",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 19.150748409012436,
+        "sign" : "Scorpio"
+      },
+      "jupiter" : {
+        "degree" : 1.2105491580077796,
+        "sign" : "Cancer"
+      },
+      "mars" : {
+        "degree" : 1.5352903786117622,
+        "sign" : "Virgo"
+      },
+      "mercury" : {
+        "degree" : 1.6215097128984723,
+        "sign" : "Virgo"
+      },
+      "moon" : {
+        "degree" : 2.655455450083906,
+        "sign" : "Libra"
+      },
+      "pluto" : {
+        "degree" : 13.876583472507718,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 8.314175267716166,
+        "sign" : "Capricorn"
+      },
+      "sun" : {
+        "degree" : 13.517043780100465,
+        "sign" : "Leo"
+      },
+      "venus" : {
+        "degree" : 15.556441389074621,
+        "sign" : "Virgo"
+      }
+    }
+  },
+  {
+    "id" : "U066",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 12.556573447903077,
+        "sign" : "Capricorn"
+      },
+      "jupiter" : {
+        "degree" : 8.704289886549873,
+        "sign" : "Capricorn"
+      },
+      "mars" : {
+        "degree" : 10.80593555457014,
+        "sign" : "Leo"
+      },
+      "mercury" : {
+        "degree" : 19.031305836092002,
+        "sign" : "Virgo"
+      },
+      "moon" : {
+        "degree" : 7.364038311079764,
+        "sign" : "Aries"
+      },
+      "pluto" : {
+        "degree" : 24.232541747662083,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 3.919414687864223,
+        "sign" : "Aries"
+      },
+      "sun" : {
+        "degree" : 4.506476346382385,
+        "sign" : "Libra"
+      },
+      "venus" : {
+        "degree" : 22.209862688795795,
+        "sign" : "Leo"
+      }
+    }
+  },
+  {
+    "id" : "U067",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 1.6999686579773083,
+        "sign" : "Leo"
+      },
+      "jupiter" : {
+        "degree" : 3.9475767471305727,
+        "sign" : "Aries"
+      },
+      "mars" : {
+        "degree" : 10.717028700123251,
+        "sign" : "Scorpio"
+      },
+      "mercury" : {
+        "degree" : 29.440886801428462,
+        "sign" : "Pisces"
+      },
+      "moon" : {
+        "degree" : 12.943492222093823,
+        "sign" : "Virgo"
+      },
+      "pluto" : {
+        "degree" : 27.749235628565202,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 0.14202994023744608,
+        "sign" : "Taurus"
+      },
+      "sun" : {
+        "degree" : 11.391550254090134,
+        "sign" : "Pisces"
+      },
+      "venus" : {
+        "degree" : 10.53619907448247,
+        "sign" : "Aries"
+      }
+    }
+  },
+  {
+    "id" : "U068",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 10.870206556165897,
+        "sign" : "Libra"
+      },
+      "jupiter" : {
+        "degree" : 28.12001868490399,
+        "sign" : "Taurus"
+      },
+      "mars" : {
+        "degree" : 12.599141401720683,
+        "sign" : "Aries"
+      },
+      "mercury" : {
+        "degree" : 2.6125732620783992,
+        "sign" : "Capricorn"
+      },
+      "moon" : {
+        "degree" : 23.245261384679736,
+        "sign" : "Pisces"
+      },
+      "pluto" : {
+        "degree" : 12.952467606662879,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 3.7274269067731893,
+        "sign" : "Capricorn"
+      },
+      "sun" : {
+        "degree" : 24.40721552681879,
+        "sign" : "Sagittarius"
+      },
+      "venus" : {
+        "degree" : 28.01219531794021,
+        "sign" : "Scorpio"
+      }
+    }
+  },
+  {
+    "id" : "U069",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 17.891053814930615,
+        "sign" : "Capricorn"
+      },
+      "jupiter" : {
+        "degree" : 13.980026355090345,
+        "sign" : "Cancer"
+      },
+      "mars" : {
+        "degree" : 23.44836998408742,
+        "sign" : "Gemini"
+      },
+      "mercury" : {
+        "degree" : 9.69083702300685,
+        "sign" : "Gemini"
+      },
+      "moon" : {
+        "degree" : 11.074611004465424,
+        "sign" : "Leo"
+      },
+      "pluto" : {
+        "degree" : 2.4051371754499087,
+        "sign" : "Sagittarius"
+      },
+      "saturn" : {
+        "degree" : 15.649194133115998,
+        "sign" : "Gemini"
+      },
+      "sun" : {
+        "degree" : 27.439361590597755,
+        "sign" : "Taurus"
+      },
+      "venus" : {
+        "degree" : 27.609999629751215,
+        "sign" : "Gemini"
+      }
+    }
+  },
+  {
+    "id" : "U070",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 0.46714382493033213,
+        "sign" : "Virgo"
+      },
+      "jupiter" : {
+        "degree" : 14.454745395750308,
+        "sign" : "Libra"
+      },
+      "mars" : {
+        "degree" : 10.42989533476765,
+        "sign" : "Libra"
+      },
+      "mercury" : {
+        "degree" : 4.204685877819969,
+        "sign" : "Virgo"
+      },
+      "moon" : {
+        "degree" : 23.400516234093914,
+        "sign" : "Capricorn"
+      },
+      "pluto" : {
+        "degree" : 19.76398631074545,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 26.312841912470674,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 5.117025209689643,
+        "sign" : "Virgo"
+      },
+      "venus" : {
+        "degree" : 0.9032777554692188,
+        "sign" : "Leo"
+      }
+    }
+  },
+  {
+    "id" : "U071",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 5.856099672413791,
+        "sign" : "Scorpio"
+      },
+      "jupiter" : {
+        "degree" : 29.49939502593896,
+        "sign" : "Aries"
+      },
+      "mars" : {
+        "degree" : 29.759576267301327,
+        "sign" : "Pisces"
+      },
+      "mercury" : {
+        "degree" : 9.843484146965864,
+        "sign" : "Pisces"
+      },
+      "moon" : {
+        "degree" : 6.129427379965605,
+        "sign" : "Taurus"
+      },
+      "pluto" : {
+        "degree" : 29.123566452201175,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 11.15150477129609,
+        "sign" : "Taurus"
+      },
+      "sun" : {
+        "degree" : 22.286123240371694,
+        "sign" : "Aquarius"
+      },
+      "venus" : {
+        "degree" : 22.01645622999996,
+        "sign" : "Capricorn"
+      }
+    }
+  },
+  {
+    "id" : "U072",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 3.9223542097952304,
+        "sign" : "Capricorn"
+      },
+      "jupiter" : {
+        "degree" : 7.1147981380769565,
+        "sign" : "Taurus"
+      },
+      "mars" : {
+        "degree" : 1.7458465728656734,
+        "sign" : "Aquarius"
+      },
+      "mercury" : {
+        "degree" : 8.367127959868567,
+        "sign" : "Aries"
+      },
+      "moon" : {
+        "degree" : 15.73375909130948,
+        "sign" : "Capricorn"
+      },
+      "pluto" : {
+        "degree" : 11.957690768879075,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 2.5512817927884726,
+        "sign" : "Capricorn"
+      },
+      "sun" : {
+        "degree" : 19.852513559215414,
+        "sign" : "Aries"
+      },
+      "venus" : {
+        "degree" : 5.52684698940007,
+        "sign" : "Gemini"
+      }
+    }
+  },
+  {
+    "id" : "U073",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 29.966084831384137,
+        "sign" : "Aquarius"
+      },
+      "jupiter" : {
+        "degree" : 3.1534128854831636,
+        "sign" : "Taurus"
+      },
+      "mars" : {
+        "degree" : 6.645959329493479,
+        "sign" : "Scorpio"
+      },
+      "mercury" : {
+        "degree" : 6.389453929982366,
+        "sign" : "Leo"
+      },
+      "moon" : {
+        "degree" : 17.695065216861906,
+        "sign" : "Scorpio"
+      },
+      "pluto" : {
+        "degree" : 28.3113979831175,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 15.884903722396515,
+        "sign" : "Taurus"
+      },
+      "sun" : {
+        "degree" : 28.85093491133985,
+        "sign" : "Cancer"
+      },
+      "venus" : {
+        "degree" : 3.9607568003240488,
+        "sign" : "Virgo"
+      }
+    }
+  },
+  {
+    "id" : "U074",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 22.083640597399324,
+        "sign" : "Aquarius"
+      },
+      "jupiter" : {
+        "degree" : 25.596062030726873,
+        "sign" : "Aries"
+      },
+      "mars" : {
+        "degree" : 3.041874942117886,
+        "sign" : "Pisces"
+      },
+      "mercury" : {
+        "degree" : 12.192727234076244,
+        "sign" : "Capricorn"
+      },
+      "moon" : {
+        "degree" : 1.015477655639927,
+        "sign" : "Aquarius"
+      },
+      "pluto" : {
+        "degree" : 28.985926662103253,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 10.308176406102142,
+        "sign" : "Taurus"
+      },
+      "sun" : {
+        "degree" : 17.036540152404257,
+        "sign" : "Capricorn"
+      },
+      "venus" : {
+        "degree" : 9.497283439139665,
+        "sign" : "Sagittarius"
+      }
+    }
+  },
+  {
+    "id" : "U075",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 21.65905319241716,
+        "sign" : "Capricorn"
+      },
+      "jupiter" : {
+        "degree" : 11.19188598610576,
+        "sign" : "Cancer"
+      },
+      "mars" : {
+        "degree" : 24.61621592916606,
+        "sign" : "Pisces"
+      },
+      "mercury" : {
+        "degree" : 9.702114977489941,
+        "sign" : "Taurus"
+      },
+      "moon" : {
+        "degree" : 25.309874009960645,
+        "sign" : "Taurus"
+      },
+      "pluto" : {
+        "degree" : 15.031451316449477,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 25.04517666300825,
+        "sign" : "Capricorn"
+      },
+      "sun" : {
+        "degree" : 2.5679993584087555,
+        "sign" : "Gemini"
+      },
+      "venus" : {
+        "degree" : 22.54646612678935,
+        "sign" : "Aries"
+      }
+    }
+  },
+  {
+    "id" : "U076",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 29.828705186846186,
+        "sign" : "Taurus"
+      },
+      "jupiter" : {
+        "degree" : 0.9208780767331035,
+        "sign" : "Leo"
+      },
+      "mars" : {
+        "degree" : 14.864501310708278,
+        "sign" : "Leo"
+      },
+      "mercury" : {
+        "degree" : 29.00869262467586,
+        "sign" : "Leo"
+      },
+      "moon" : {
+        "degree" : 4.313991418688616,
+        "sign" : "Cancer"
+      },
+      "pluto" : {
+        "degree" : 2.7197656399732466,
+        "sign" : "Sagittarius"
+      },
+      "saturn" : {
+        "degree" : 25.376782864856068,
+        "sign" : "Gemini"
+      },
+      "sun" : {
+        "degree" : 13.22323535942951,
+        "sign" : "Leo"
+      },
+      "venus" : {
+        "degree" : 28.38783356106609,
+        "sign" : "Virgo"
+      }
+    }
+  },
+  {
+    "id" : "U077",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 9.095267884394275,
+        "sign" : "Leo"
+      },
+      "jupiter" : {
+        "degree" : 21.459899204653595,
+        "sign" : "Libra"
+      },
+      "mars" : {
+        "degree" : 3.1856681605316624,
+        "sign" : "Scorpio"
+      },
+      "mercury" : {
+        "degree" : 0.9590260273961064,
+        "sign" : "Scorpio"
+      },
+      "moon" : {
+        "degree" : 19.684219089933766,
+        "sign" : "Aries"
+      },
+      "pluto" : {
+        "degree" : 19.900432708190834,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 24.203927959484815,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 8.61869972214609,
+        "sign" : "Libra"
+      },
+      "venus" : {
+        "degree" : 12.472188606628919,
+        "sign" : "Virgo"
+      }
+    }
+  },
+  {
+    "id" : "U078",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 12.642153921759032,
+        "sign" : "Taurus"
+      },
+      "jupiter" : {
+        "degree" : 4.424137216456856,
+        "sign" : "Leo"
+      },
+      "mars" : {
+        "degree" : 16.419245023474502,
+        "sign" : "Gemini"
+      },
+      "mercury" : {
+        "degree" : 20.304930185567343,
+        "sign" : "Pisces"
+      },
+      "moon" : {
+        "degree" : 29.77722019773853,
+        "sign" : "Scorpio"
+      },
+      "pluto" : {
+        "degree" : 16.170432981975296,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 3.036549361249797,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 15.88366008079413,
+        "sign" : "Pisces"
+      },
+      "venus" : {
+        "degree" : 15.465103959418252,
+        "sign" : "Aries"
+      }
+    }
+  },
+  {
+    "id" : "U079",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 9.374202864395132,
+        "sign" : "Aries"
+      },
+      "jupiter" : {
+        "degree" : 26.334326640329664,
+        "sign" : "Scorpio"
+      },
+      "mars" : {
+        "degree" : 23.85522341256015,
+        "sign" : "Leo"
+      },
+      "mercury" : {
+        "degree" : 18.31414414721462,
+        "sign" : "Scorpio"
+      },
+      "moon" : {
+        "degree" : 19.11333286616579,
+        "sign" : "Cancer"
+      },
+      "pluto" : {
+        "degree" : 21.55526592744684,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 5.8345795409494485,
+        "sign" : "Pisces"
+      },
+      "sun" : {
+        "degree" : 0.2217446341585969,
+        "sign" : "Sagittarius"
+      },
+      "venus" : {
+        "degree" : 2.495085846920233,
+        "sign" : "Scorpio"
+      }
+    }
+  },
+  {
+    "id" : "U080",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 21.154775510534932,
+        "sign" : "Capricorn"
+      },
+      "jupiter" : {
+        "degree" : 15.685416488974198,
+        "sign" : "Cancer"
+      },
+      "mars" : {
+        "degree" : 2.2539101022242676,
+        "sign" : "Aquarius"
+      },
+      "mercury" : {
+        "degree" : 19.27314654166895,
+        "sign" : "Libra"
+      },
+      "moon" : {
+        "degree" : 23.29580588958418,
+        "sign" : "Aries"
+      },
+      "pluto" : {
+        "degree" : 1.613099283596,
+        "sign" : "Sagittarius"
+      },
+      "saturn" : {
+        "degree" : 13.955111725949251,
+        "sign" : "Gemini"
+      },
+      "sun" : {
+        "degree" : 7.627465417094129,
+        "sign" : "Scorpio"
+      },
+      "venus" : {
+        "degree" : 19.303465405312494,
+        "sign" : "Libra"
+      }
+    }
+  },
+  {
+    "id" : "U081",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 19.09282611157107,
+        "sign" : "Pisces"
+      },
+      "jupiter" : {
+        "degree" : 14.070054267257774,
+        "sign" : "Aquarius"
+      },
+      "mars" : {
+        "degree" : 26.94900248459801,
+        "sign" : "Taurus"
+      },
+      "mercury" : {
+        "degree" : 7.671995787833388,
+        "sign" : "Aries"
+      },
+      "moon" : {
+        "degree" : 20.936353623564557,
+        "sign" : "Taurus"
+      },
+      "pluto" : {
+        "degree" : 7.657491891398877,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 26.525667514384423,
+        "sign" : "Scorpio"
+      },
+      "sun" : {
+        "degree" : 1.8089647377821727,
+        "sign" : "Taurus"
+      },
+      "venus" : {
+        "degree" : 6.186040086547579,
+        "sign" : "Aries"
+      }
+    }
+  },
+  {
+    "id" : "U082",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 3.7530799807552384,
+        "sign" : "Taurus"
+      },
+      "jupiter" : {
+        "degree" : 28.252249893753778,
+        "sign" : "Aries"
+      },
+      "mars" : {
+        "degree" : 17.370857626819287,
+        "sign" : "Virgo"
+      },
+      "mercury" : {
+        "degree" : 17.44871303432126,
+        "sign" : "Libra"
+      },
+      "moon" : {
+        "degree" : 10.406039116689357,
+        "sign" : "Leo"
+      },
+      "pluto" : {
+        "degree" : 11.150356504678086,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 15.292444766852867,
+        "sign" : "Sagittarius"
+      },
+      "sun" : {
+        "degree" : 25.609628581502875,
+        "sign" : "Virgo"
+      },
+      "venus" : {
+        "degree" : 2.8915591126713025,
+        "sign" : "Libra"
+      }
+    }
+  },
+  {
+    "id" : "U083",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 17.17061369888637,
+        "sign" : "Virgo"
+      },
+      "jupiter" : {
+        "degree" : 28.88013349999767,
+        "sign" : "Pisces"
+      },
+      "mars" : {
+        "degree" : 4.668508446291298,
+        "sign" : "Scorpio"
+      },
+      "mercury" : {
+        "degree" : 21.302150993708324,
+        "sign" : "Aquarius"
+      },
+      "moon" : {
+        "degree" : 11.192557587315122,
+        "sign" : "Scorpio"
+      },
+      "pluto" : {
+        "degree" : 27.659524471823858,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 28.223143419605563,
+        "sign" : "Aries"
+      },
+      "sun" : {
+        "degree" : 18.59588546544444,
+        "sign" : "Aquarius"
+      },
+      "venus" : {
+        "degree" : 12.633478643128228,
+        "sign" : "Pisces"
+      }
+    }
+  },
+  {
+    "id" : "U084",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 16.838039538734563,
+        "sign" : "Aquarius"
+      },
+      "jupiter" : {
+        "degree" : 25.99586096760467,
+        "sign" : "Gemini"
+      },
+      "mars" : {
+        "degree" : 15.963654499842079,
+        "sign" : "Leo"
+      },
+      "mercury" : {
+        "degree" : 12.52250294995143,
+        "sign" : "Cancer"
+      },
+      "moon" : {
+        "degree" : 2.649444975152875,
+        "sign" : "Scorpio"
+      },
+      "pluto" : {
+        "degree" : 13.778154761578179,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 9.907080415556663,
+        "sign" : "Capricorn"
+      },
+      "sun" : {
+        "degree" : 19.82391400519174,
+        "sign" : "Cancer"
+      },
+      "venus" : {
+        "degree" : 15.652873648459433,
+        "sign" : "Leo"
+      }
+    }
+  },
+  {
+    "id" : "U085",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 19.831919313462095,
+        "sign" : "Capricorn"
+      },
+      "jupiter" : {
+        "degree" : 20.633878333387543,
+        "sign" : "Aquarius"
+      },
+      "mars" : {
+        "degree" : 4.491412822221662,
+        "sign" : "Aquarius"
+      },
+      "mercury" : {
+        "degree" : 18.084274172165237,
+        "sign" : "Sagittarius"
+      },
+      "moon" : {
+        "degree" : 24.83714117789981,
+        "sign" : "Libra"
+      },
+      "pluto" : {
+        "degree" : 26.029049691991787,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 13.588548183882022,
+        "sign" : "Aries"
+      },
+      "sun" : {
+        "degree" : 2.2138606650473207,
+        "sign" : "Capricorn"
+      },
+      "venus" : {
+        "degree" : 3.772563085495449,
+        "sign" : "Aquarius"
+      }
+    }
+  },
+  {
+    "id" : "U086",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 2.208468899842053,
+        "sign" : "Taurus"
+      },
+      "jupiter" : {
+        "degree" : 8.27371355186878,
+        "sign" : "Leo"
+      },
+      "mars" : {
+        "degree" : 0.4575122724195637,
+        "sign" : "Leo"
+      },
+      "mercury" : {
+        "degree" : 14.390522212295956,
+        "sign" : "Taurus"
+      },
+      "moon" : {
+        "degree" : 22.080803589890053,
+        "sign" : "Scorpio"
+      },
+      "pluto" : {
+        "degree" : 16.49320848733683,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 6.753746903848594,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 5.519102737468799,
+        "sign" : "Gemini"
+      },
+      "venus" : {
+        "degree" : 19.90808405750883,
+        "sign" : "Cancer"
+      }
+    }
+  },
+  {
+    "id" : "U087",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 3.0070592992810248,
+        "sign" : "Capricorn"
+      },
+      "jupiter" : {
+        "degree" : 5.165170933270645,
+        "sign" : "Capricorn"
+      },
+      "mars" : {
+        "degree" : 0.1511217802453757,
+        "sign" : "Capricorn"
+      },
+      "mercury" : {
+        "degree" : 8.35980304405797,
+        "sign" : "Libra"
+      },
+      "moon" : {
+        "degree" : 22.90767969892181,
+        "sign" : "Aquarius"
+      },
+      "pluto" : {
+        "degree" : 6.869557837098512,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 14.825735533172235,
+        "sign" : "Scorpio"
+      },
+      "sun" : {
+        "degree" : 12.392789645619331,
+        "sign" : "Libra"
+      },
+      "venus" : {
+        "degree" : 11.987118938240656,
+        "sign" : "Scorpio"
+      }
+    }
+  },
+  {
+    "id" : "U088",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 15.58355224544627,
+        "sign" : "Leo"
+      },
+      "jupiter" : {
+        "degree" : 28.275811472621946,
+        "sign" : "Taurus"
+      },
+      "mars" : {
+        "degree" : 21.857385264280538,
+        "sign" : "Taurus"
+      },
+      "mercury" : {
+        "degree" : 11.832904695164984,
+        "sign" : "Aquarius"
+      },
+      "moon" : {
+        "degree" : 4.116034811456643,
+        "sign" : "Scorpio"
+      },
+      "pluto" : {
+        "degree" : 13.237228181611556,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 11.47554309316763,
+        "sign" : "Capricorn"
+      },
+      "sun" : {
+        "degree" : 7.270890002770898,
+        "sign" : "Pisces"
+      },
+      "venus" : {
+        "degree" : 27.74522963278133,
+        "sign" : "Aquarius"
+      }
+    }
+  },
+  {
+    "id" : "U089",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 20.338944140246156,
+        "sign" : "Aquarius"
+      },
+      "jupiter" : {
+        "degree" : 9.579665188038035,
+        "sign" : "Libra"
+      },
+      "mars" : {
+        "degree" : 27.60820160169824,
+        "sign" : "Cancer"
+      },
+      "mercury" : {
+        "degree" : 22.318845533923025,
+        "sign" : "Scorpio"
+      },
+      "moon" : {
+        "degree" : 15.451248312857047,
+        "sign" : "Aquarius"
+      },
+      "pluto" : {
+        "degree" : 18.687452429841954,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 13.491730998834726,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 8.211124539261789,
+        "sign" : "Sagittarius"
+      },
+      "venus" : {
+        "degree" : 19.881514757956893,
+        "sign" : "Capricorn"
+      }
+    }
+  },
+  {
+    "id" : "U090",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 20.68864200214233,
+        "sign" : "Taurus"
+      },
+      "jupiter" : {
+        "degree" : 9.862630741297608,
+        "sign" : "Virgo"
+      },
+      "mars" : {
+        "degree" : 12.181074047818981,
+        "sign" : "Scorpio"
+      },
+      "mercury" : {
+        "degree" : 28.852067278026908,
+        "sign" : "Scorpio"
+      },
+      "moon" : {
+        "degree" : 6.109464262434358,
+        "sign" : "Libra"
+      },
+      "pluto" : {
+        "degree" : 17.129556869724638,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 0.913348550179137,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 10.702051797232173,
+        "sign" : "Scorpio"
+      },
+      "venus" : {
+        "degree" : 24.18610876659139,
+        "sign" : "Virgo"
+      }
+    }
+  },
+  {
+    "id" : "U091",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 14.472869359796618,
+        "sign" : "Sagittarius"
+      },
+      "jupiter" : {
+        "degree" : 3.069387938677494,
+        "sign" : "Pisces"
+      },
+      "mars" : {
+        "degree" : 17.98929830074883,
+        "sign" : "Pisces"
+      },
+      "mercury" : {
+        "degree" : 24.33013978138746,
+        "sign" : "Aquarius"
+      },
+      "moon" : {
+        "degree" : 1.8003592130775132,
+        "sign" : "Scorpio"
+      },
+      "pluto" : {
+        "degree" : 26.24834454939611,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 16.883150949944273,
+        "sign" : "Aries"
+      },
+      "sun" : {
+        "degree" : 28.37889723081571,
+        "sign" : "Aquarius"
+      },
+      "venus" : {
+        "degree" : 20.877819908107654,
+        "sign" : "Capricorn"
+      }
+    }
+  },
+  {
+    "id" : "U092",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 13.331830791763423,
+        "sign" : "Aquarius"
+      },
+      "jupiter" : {
+        "degree" : 13.308992134858528,
+        "sign" : "Libra"
+      },
+      "mars" : {
+        "degree" : 21.179256281205355,
+        "sign" : "Cancer"
+      },
+      "mercury" : {
+        "degree" : 24.537400896432075,
+        "sign" : "Sagittarius"
+      },
+      "moon" : {
+        "degree" : 15.122621763102416,
+        "sign" : "Pisces"
+      },
+      "pluto" : {
+        "degree" : 18.8058546201232,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 16.143497794411587,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 8.551634928580029,
+        "sign" : "Capricorn"
+      },
+      "venus" : {
+        "degree" : 24.44583224900606,
+        "sign" : "Aquarius"
+      }
+    }
+  },
+  {
+    "id" : "U093",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 24.20439861547969,
+        "sign" : "Aries"
+      },
+      "jupiter" : {
+        "degree" : 1.1390146720619327,
+        "sign" : "Libra"
+      },
+      "mars" : {
+        "degree" : 17.014051503765714,
+        "sign" : "Cancer"
+      },
+      "mercury" : {
+        "degree" : 12.51080680164253,
+        "sign" : "Scorpio"
+      },
+      "moon" : {
+        "degree" : 12.663154978677412,
+        "sign" : "Gemini"
+      },
+      "pluto" : {
+        "degree" : 18.508079726214447,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 11.815559840223784,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 22.858849342255297,
+        "sign" : "Libra"
+      },
+      "venus" : {
+        "degree" : 25.41868407728748,
+        "sign" : "Scorpio"
+      }
+    }
+  },
+  {
+    "id" : "U094",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 28.653963908580863,
+        "sign" : "Sagittarius"
+      },
+      "jupiter" : {
+        "degree" : 28.42517264438436,
+        "sign" : "Taurus"
+      },
+      "mars" : {
+        "degree" : 22.633531003990512,
+        "sign" : "Taurus"
+      },
+      "mercury" : {
+        "degree" : 13.483677347598302,
+        "sign" : "Aquarius"
+      },
+      "moon" : {
+        "degree" : 19.640947951919657,
+        "sign" : "Scorpio"
+      },
+      "pluto" : {
+        "degree" : 13.24235453342476,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 11.581265618839154,
+        "sign" : "Capricorn"
+      },
+      "sun" : {
+        "degree" : 8.56899335092254,
+        "sign" : "Pisces"
+      },
+      "venus" : {
+        "degree" : 29.358744182704356,
+        "sign" : "Aquarius"
+      }
+    }
+  },
+  {
+    "id" : "U095",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 21.06676838628499,
+        "sign" : "Aquarius"
+      },
+      "jupiter" : {
+        "degree" : 0.4723236714602308,
+        "sign" : "Pisces"
+      },
+      "mars" : {
+        "degree" : 9.474003532279482,
+        "sign" : "Pisces"
+      },
+      "mercury" : {
+        "degree" : 6.011854535082364,
+        "sign" : "Aquarius"
+      },
+      "moon" : {
+        "degree" : 18.237524448239284,
+        "sign" : "Gemini"
+      },
+      "pluto" : {
+        "degree" : 26.205277681953675,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 15.887801772137333,
+        "sign" : "Aries"
+      },
+      "sun" : {
+        "degree" : 17.403574641666296,
+        "sign" : "Aquarius"
+      },
+      "venus" : {
+        "degree" : 18.473864776110076,
+        "sign" : "Capricorn"
+      }
+    }
+  },
+  {
+    "id" : "U096",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 25.632989873494395,
+        "sign" : "Aries"
+      },
+      "jupiter" : {
+        "degree" : 2.1960428767011706,
+        "sign" : "Cancer"
+      },
+      "mars" : {
+        "degree" : 10.870148000591087,
+        "sign" : "Aquarius"
+      },
+      "mercury" : {
+        "degree" : 12.693406913336103,
+        "sign" : "Aries"
+      },
+      "moon" : {
+        "degree" : 28.27159034998556,
+        "sign" : "Pisces"
+      },
+      "pluto" : {
+        "degree" : 14.798568870635819,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 24.08017214375701,
+        "sign" : "Capricorn"
+      },
+      "sun" : {
+        "degree" : 5.378951252498157,
+        "sign" : "Aries"
+      },
+      "venus" : {
+        "degree" : 18.97781883795568,
+        "sign" : "Aquarius"
+      }
+    }
+  },
+  {
+    "id" : "U097",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 28.574633121755028,
+        "sign" : "Aries"
+      },
+      "jupiter" : {
+        "degree" : 13.324784408547544,
+        "sign" : "Libra"
+      },
+      "mars" : {
+        "degree" : 6.523923344190024,
+        "sign" : "Libra"
+      },
+      "mercury" : {
+        "degree" : 22.079069845509053,
+        "sign" : "Leo"
+      },
+      "moon" : {
+        "degree" : 2.0740999790324395,
+        "sign" : "Scorpio"
+      },
+      "pluto" : {
+        "degree" : 19.739842847365452,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 26.768171477140868,
+        "sign" : "Aquarius"
+      },
+      "sun" : {
+        "degree" : 29.24824327772015,
+        "sign" : "Leo"
+      },
+      "venus" : {
+        "degree" : 23.705367257107227,
+        "sign" : "Cancer"
+      }
+    }
+  },
+  {
+    "id" : "U098",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 19.24261601555213,
+        "sign" : "Sagittarius"
+      },
+      "jupiter" : {
+        "degree" : 21.035175729816185,
+        "sign" : "Aries"
+      },
+      "mars" : {
+        "degree" : 26.043009872865525,
+        "sign" : "Libra"
+      },
+      "mercury" : {
+        "degree" : 6.922804330069681,
+        "sign" : "Scorpio"
+      },
+      "moon" : {
+        "degree" : 15.0499618120256,
+        "sign" : "Libra"
+      },
+      "pluto" : {
+        "degree" : 11.388434204882685,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 20.35561405113964,
+        "sign" : "Sagittarius"
+      },
+      "sun" : {
+        "degree" : 25.17261403287955,
+        "sign" : "Scorpio"
+      },
+      "venus" : {
+        "degree" : 17.55590099638289,
+        "sign" : "Sagittarius"
+      }
+    }
+  },
+  {
+    "id" : "U099",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 7.558246250656396,
+        "sign" : "Aquarius"
+      },
+      "jupiter" : {
+        "degree" : 18.311678196130135,
+        "sign" : "Aries"
+      },
+      "mars" : {
+        "degree" : 29.162048711969575,
+        "sign" : "Gemini"
+      },
+      "mercury" : {
+        "degree" : 12.464784469793216,
+        "sign" : "Gemini"
+      },
+      "moon" : {
+        "degree" : 23.737006931051553,
+        "sign" : "Aquarius"
+      },
+      "pluto" : {
+        "degree" : 10.665172110427562,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 19.3258514965828,
+        "sign" : "Sagittarius"
+      },
+      "sun" : {
+        "degree" : 28.303854672977188,
+        "sign" : "Taurus"
+      },
+      "venus" : {
+        "degree" : 2.8299200991462143,
+        "sign" : "Taurus"
+      }
+    }
+  },
+  {
+    "id" : "U100",
+    "placements" : {
+      "ascendant" : {
+        "degree" : 7.740478539947389,
+        "sign" : "Aquarius"
+      },
+      "jupiter" : {
+        "degree" : 8.673727989270702,
+        "sign" : "Cancer"
+      },
+      "mars" : {
+        "degree" : 1.2991621558622626,
+        "sign" : "Libra"
+      },
+      "mercury" : {
+        "degree" : 5.384575112214662,
+        "sign" : "Libra"
+      },
+      "moon" : {
+        "degree" : 22.432061183588615,
+        "sign" : "Gemini"
+      },
+      "pluto" : {
+        "degree" : 14.061592407027746,
+        "sign" : "Scorpio"
+      },
+      "saturn" : {
+        "degree" : 7.38604542133038,
+        "sign" : "Capricorn"
+      },
+      "sun" : {
+        "degree" : 28.591721958917617,
+        "sign" : "Virgo"
+      },
+      "venus" : {
+        "degree" : 10.552082843904998,
+        "sign" : "Scorpio"
+      }
+    }
+  }
+]

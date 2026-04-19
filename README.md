@@ -1013,6 +1013,19 @@ Each archetype cluster entry contains 16 narrative paragraphs, one per `Blueprin
 
 ---
 
+## Palette Calibration Benchmark
+
+Palette calibration review now has a lightweight benchmark harness:
+
+- Benchmarks live in `docs/palette_calibration/benchmarks/`
+- Usage and workflow live in `docs/palette_calibration/README.md`
+- Review script: `python3 review_palette_calibration.py --benchmark ... --blueprint ...`
+- Calibration handoff spec: `docs/palette_calibration_programme_spec_v1.md`
+
+This is an off-device review tool. The user-facing result is still reviewed in-app via `Style Guide` → `The Palette`.
+
+---
+
 ## Version History
 
 **April 2026 — Placeholder Template Pipeline**

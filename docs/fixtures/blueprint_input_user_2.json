@@ -30,27 +30,27 @@
       "Choosing natural fibres over synthetics as a rule. Cashmere, silk, and cotton age gracefully. Polyester does not."
     ]
   },
-  "engineVersion" : "1.0.0",
+  "engineVersion" : "2.0.0",
   "generatedAt" : "2026-04-17T00:00:00Z",
   "hardware" : {
     "metalsText" : "Hardware on you should feel like an investment rather than a decorative afterthought. You need serious, satisfying weight, the kind of brushed warm bronze that pulls together a heavy winter coat or secures a beautifully constructed leather bag. Flimsy, high-shine chains and noisy zips look nervous next to your natural composure. Lean on solid yellow gold details with a matte or gently aged finish, ensuring every buckle actually serves a structural purpose. When the metal feels substantial enough to outlast the garment itself, it belongs in your rotation.",
     "recommendedMetals" : [
       "warm bronze",
       "yellow gold",
-      "platinum",
       "polished silver",
+      "platinum",
       "rose gold"
     ],
     "recommendedStones" : [
       "emerald",
       "jade",
-      "garnet",
       "onyx",
+      "garnet",
       "sapphire",
       "rose quartz",
       "lapis lazuli"
     ],
-    "stonesText" : "You treat jewellery as a matter of density rather than dazzle. Forget fragile, light-catching facets and look for stones that carry serious physical weight. emerald set in thick, brushed gold offers the kind of solid, quiet luxury that suits you best. A heavy cabochon of jade or a smooth, flat slice of garnet feels infinitely more sophisticated on your skin than overly brilliant cuts. You want pieces that sit cold and substantial on the collarbone or wrist, giving your wardrobe a reliable, tactile finish.",
+    "stonesText" : "You treat jewellery as a matter of density rather than dazzle. Forget fragile, light-catching facets and look for stones that carry serious physical weight. emerald set in thick, brushed gold offers the kind of solid, quiet luxury that suits you best. A heavy cabochon of jade or a smooth, flat slice of onyx feels infinitely more sophisticated on your skin than overly brilliant cuts. You want pieces that sit cold and substantial on the collarbone or wrist, giving your wardrobe a reliable, tactile finish.",
     "tipText" : "Substantial weight is the only metric that matters when choosing your jewellery. A flimsy chain or a hollow band will instantly cheapen a perfectly good outfit. Seek out solid, cast pieces in warm bronze that carry a real physical presence on the body, or a heavy ring set with emerald for a quiet finish. A smooth cuff or an impeccably engineered watch strap provides that sense of disciplined luxury your eye naturally seeks. Two substantial items will always beat a tangle of delicate layers."
   },
   "occasions" : {
@@ -61,245 +61,166 @@
   "palette" : {
     "accentColours" : [
       {
-        "hexValue" : "#DCAE96",
-        "name" : "dusty rose",
+        "hexValue" : "#C0C0C0",
+        "name" : "silver",
         "provenance" : {
-          "comboKey" : "venus_taurus",
-          "contributorRank" : 1,
-          "hueGapApplied" : 15,
-          "kind" : "chartDerived",
-          "sourceRole" : "accent"
+          "band" : "accent",
+          "family" : "Deep Winter",
+          "index" : 0,
+          "kind" : "v4Template"
         },
         "role" : "accent"
       },
       {
-        "hexValue" : "#B08D57",
-        "name" : "oxidised gold",
+        "hexValue" : "#53565A",
+        "name" : "gunmetal",
         "provenance" : {
-          "comboKey" : "venus_taurus",
-          "contributorRank" : 1,
-          "hueGapApplied" : 15,
-          "kind" : "chartDerived",
-          "sourceRole" : "accent"
+          "band" : "accent",
+          "family" : "Deep Winter",
+          "index" : 1,
+          "kind" : "v4Template"
         },
         "role" : "accent"
       },
       {
-        "hexValue" : "#008080",
-        "name" : "teal",
+        "hexValue" : "#9B1B30",
+        "name" : "cool ruby",
         "provenance" : {
-          "comboKey" : "mars_gemini",
-          "contributorRank" : 5,
-          "hueGapApplied" : 15,
-          "kind" : "crossPoolEscalation",
-          "originalRole" : "primary",
-          "reason" : "accent band underflow after own-pool pass"
+          "band" : "accent",
+          "family" : "Deep Winter",
+          "index" : 2,
+          "kind" : "v4Template"
         },
         "role" : "accent"
       },
       {
-        "hexValue" : "#191970",
-        "name" : "midnight blue",
+        "hexValue" : "#5FADA5",
+        "name" : "icy teal",
         "provenance" : {
-          "comboKey" : "neptune_capricorn",
-          "contributorRank" : 8,
-          "hueGapApplied" : 15,
-          "kind" : "crossPoolEscalation",
-          "originalRole" : "primary",
-          "reason" : "accent band underflow after own-pool pass"
+          "band" : "accent",
+          "family" : "Deep Winter",
+          "index" : 3,
+          "kind" : "v4Template"
         },
         "role" : "accent"
       }
     ],
+    "cluster" : "Deep Cool Controlled",
     "coreColours" : [
       {
-        "hexValue" : "#0A0A0A",
-        "name" : "jet black",
+        "hexValue" : "#4D0F28",
+        "name" : "black cherry",
         "provenance" : {
-          "comboKey" : "saturn_capricorn",
-          "contributorRank" : 0,
-          "hueGapApplied" : 15,
-          "kind" : "chartDerived",
-          "sourceRole" : "primary"
+          "band" : "core",
+          "family" : "Deep Winter",
+          "index" : 0,
+          "kind" : "v4Template"
         },
         "role" : "core"
       },
       {
-        "hexValue" : "#708090",
-        "name" : "slate",
+        "hexValue" : "#1B3A4B",
+        "name" : "petrol",
         "provenance" : {
-          "comboKey" : "saturn_capricorn",
-          "contributorRank" : 0,
-          "hueGapApplied" : 15,
-          "kind" : "chartDerived",
-          "sourceRole" : "primary"
+          "band" : "core",
+          "family" : "Deep Winter",
+          "index" : 1,
+          "kind" : "v4Template"
         },
         "role" : "core"
       },
       {
-        "hexValue" : "#FFFDD0",
-        "name" : "buttery cream",
+        "hexValue" : "#014421",
+        "name" : "dark emerald",
         "provenance" : {
-          "comboKey" : "venus_taurus",
-          "contributorRank" : 1,
-          "hueGapApplied" : 15,
-          "kind" : "chartDerived",
-          "sourceRole" : "primary"
+          "band" : "core",
+          "family" : "Deep Winter",
+          "index" : 2,
+          "kind" : "v4Template"
         },
         "role" : "core"
       },
       {
-        "hexValue" : "#4A6741",
-        "name" : "deep sage green",
+        "hexValue" : "#0D1B2A",
+        "name" : "blue-black",
         "provenance" : {
-          "comboKey" : "venus_taurus",
-          "contributorRank" : 1,
-          "hueGapApplied" : 15,
-          "kind" : "chartDerived",
-          "sourceRole" : "primary"
+          "band" : "core",
+          "family" : "Deep Winter",
+          "index" : 3,
+          "kind" : "v4Template"
         },
         "role" : "core"
       }
     ],
-    "narrativeText" : "Your approach to colour is entirely about visual weight and unspoken expense. You look your best anchored in jet black and slate, rich tones that practically demand high-quality natural fibres to succeed. Rely on buttery cream for your heaviest winter coats or the sharp lines of a structured trouser. When you need a slight shift in temperature, introduce dusty rose through a heavy silk lining or the smooth leather of a top-handle bag. The overall effect is a palette that looks deeply grounded and completely unbothered by passing trends.",
-    "swatchFamilies" : [
+    "family" : "Deep Winter",
+    "narrativeText" : "Your approach to colour is entirely about visual weight and unspoken expense. You look your best anchored in black cherry and petrol, rich tones that practically demand high-quality natural fibres to succeed. Rely on dark emerald for your heaviest winter coats or the sharp lines of a structured trouser. When you need a slight shift in temperature, introduce silver through a heavy silk lining or the smooth leather of a top-handle bag. The overall effect is a palette that looks deeply grounded and completely unbothered by passing trends.",
+    "neutrals" : [
       {
-        "anchorHex" : "#0A0A0A",
-        "anchorName" : "jet black",
-        "role" : "core",
-        "tones" : [
-          {
-            "hex" : "#383838",
-            "name" : "soft jet black"
-          },
-          {
-            "hex" : "#0A0A0A",
-            "name" : "jet black"
-          },
-          {
-            "hex" : "#0E0C0C",
-            "name" : "deep jet black"
-          }
-        ]
+        "hexValue" : "#0A0A0A",
+        "name" : "black",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Deep Winter",
+          "index" : 0,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
       },
       {
-        "anchorHex" : "#708090",
-        "anchorName" : "slate",
-        "role" : "core",
-        "tones" : [
-          {
-            "hex" : "#ADAEAE",
-            "name" : "soft slate"
-          },
-          {
-            "hex" : "#708090",
-            "name" : "slate"
-          },
-          {
-            "hex" : "#475A6C",
-            "name" : "deep slate"
-          }
-        ]
+        "hexValue" : "#1B2A4A",
+        "name" : "ink navy",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Deep Winter",
+          "index" : 1,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
       },
       {
-        "anchorHex" : "#FFFDD0",
-        "anchorName" : "buttery cream",
-        "role" : "core",
-        "tones" : [
-          {
-            "hex" : "#FDFDE7",
-            "name" : "soft buttery cream"
-          },
-          {
-            "hex" : "#FFFDD0",
-            "name" : "buttery cream"
-          },
-          {
-            "hex" : "#FFFA84",
-            "name" : "deep buttery cream"
-          }
-        ]
+        "hexValue" : "#4B4F54",
+        "name" : "graphite",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Deep Winter",
+          "index" : 2,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
       },
       {
-        "anchorHex" : "#4A6741",
-        "anchorName" : "deep sage green",
-        "role" : "core",
-        "tones" : [
-          {
-            "hex" : "#7B8F75",
-            "name" : "soft deep sage green"
-          },
-          {
-            "hex" : "#4A6741",
-            "name" : "deep sage green"
-          },
-          {
-            "hex" : "#263C20",
-            "name" : "deep deep sage green"
-          }
-        ]
-      },
-      {
-        "anchorHex" : "#DCAE96",
-        "anchorName" : "dusty rose",
-        "role" : "accent",
-        "tones" : [
-          {
-            "hex" : "#F3EAE5",
-            "name" : "soft dusty rose"
-          },
-          {
-            "hex" : "#DCAE96",
-            "name" : "dusty rose"
-          }
-        ]
-      },
-      {
-        "anchorHex" : "#B08D57",
-        "anchorName" : "oxidised gold",
-        "role" : "accent",
-        "tones" : [
-          {
-            "hex" : "#C6BAA7",
-            "name" : "soft oxidised gold"
-          },
-          {
-            "hex" : "#B08D57",
-            "name" : "oxidised gold"
-          }
-        ]
-      },
-      {
-        "anchorHex" : "#008080",
-        "anchorName" : "teal",
-        "role" : "accent",
-        "tones" : [
-          {
-            "hex" : "#11D5D5",
-            "name" : "soft teal"
-          },
-          {
-            "hex" : "#008080",
-            "name" : "teal"
-          }
-        ]
-      },
-      {
-        "anchorHex" : "#191970",
-        "anchorName" : "midnight blue",
-        "role" : "accent",
-        "tones" : [
-          {
-            "hex" : "#3E3EB1",
-            "name" : "soft midnight blue"
-          },
-          {
-            "hex" : "#191970",
-            "name" : "midnight blue"
-          }
-        ]
+        "hexValue" : "#3B3F42",
+        "name" : "cool charcoal",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Deep Winter",
+          "index" : 3,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
       }
-    ]
+    ],
+    "overrideFlags" : {
+      "capricornVirgoCoolingApplied" : true,
+      "coolLeanDeepAutumn" : false,
+      "earthDepthOverrideApplied" : true,
+      "fireAirChromaApplied" : false,
+      "scorpioDensityApplied" : false,
+      "surfacePreservationApplied" : false,
+      "waterSofteningApplied" : false,
+      "winterCompressionApplied" : false
+    },
+    "secondaryPull" : "Deep Autumn",
+    "swatchFamilies" : [
+
+    ],
+    "variables" : {
+      "contrast" : "Medium",
+      "depth" : "Deep",
+      "saturation" : "Rich",
+      "surface" : "Structured",
+      "temperature" : "Cool"
+    }
   },
   "pattern" : {
     "avoidPatterns" : [

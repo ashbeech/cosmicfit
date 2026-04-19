@@ -3,30 +3,32 @@
 //  Cosmic Fit
 //
 //  Pure-function transform `PaletteSection` → `PaletteGrid`. Foundation-only,
-//  deterministic, unit-testable. See `docs/palette_grid_spec_v1.md` §7.2.
+//  deterministic, unit-testable.
 //
-//  This is strictly a pass-through of Phase A's engine output for anchor
-//  counts: if the engine ships 4 accents, the grid shows 4 accent rows.
-//  There is NO 2→4 extrapolation here (Phase A's territory). The only
-//  expansion this layer performs is the display-side 1→5 tonal expansion
+//  V4 layout: 4 neutral rows + 4 core rows + 4 accent rows = 12 rows × 5 tones.
+//  The only expansion this layer performs is the display-side 1→5 tonal expansion
 //  per row via `ColourMath.tonalOffsets`.
-//
-//  `SwatchFamily.tones` is deliberately not consumed on this path — see §6
-//  of the spec. Those tones are for narrative/engine consumers; the grid
-//  owns its own display tones so the engine's authoritative per-family
-//  tone count (3 for core, 2 for accent) stays unchanged.
 //
 
 import Foundation
 
 enum PaletteGridViewModel {
 
-    /// Build the 5×8 grid from a `PaletteSection`. Always returns exactly
+    /// Build the 5×12 grid from a `PaletteSection`. Always returns exactly
     /// `PaletteGrid.rowCount` rows × `PaletteGrid.columnCount` cells.
     /// Deterministic — same input produces byte-identical output.
     static func build(from section: PaletteSection) -> PaletteGrid {
         var rows: [PaletteRow] = []
         rows.reserveCapacity(PaletteGrid.rowCount)
+
+        let neutrals = section.neutrals ?? []
+        for i in 0..<PaletteGrid.neutralRowCount {
+            if i < neutrals.count {
+                rows.append(buildFilledRow(anchor: neutrals[i], role: .neutral))
+            } else {
+                rows.append(buildEmptyRow(role: .neutral))
+            }
+        }
 
         for i in 0..<PaletteGrid.coreRowCount {
             if i < section.coreColours.count {
@@ -36,8 +38,7 @@ enum PaletteGridViewModel {
             }
         }
 
-        let accentRowCount = PaletteGrid.rowCount - PaletteGrid.coreRowCount
-        for i in 0..<accentRowCount {
+        for i in 0..<PaletteGrid.accentRowCount {
             if i < section.accentColours.count {
                 rows.append(buildFilledRow(anchor: section.accentColours[i], role: .accent))
             } else {

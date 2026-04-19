@@ -1,0 +1,38 @@
+{
+  "ascendant" : {
+    "degree" : 19.971284411334835,
+    "sign" : "Scorpio"
+  },
+  "jupiter" : {
+    "degree" : 11.066201442742198,
+    "sign" : "Leo"
+  },
+  "mars" : {
+    "degree" : 10.534330701846073,
+    "sign" : "Leo"
+  },
+  "mercury" : {
+    "degree" : 17.115537865500528,
+    "sign" : "Gemini"
+  },
+  "moon" : {
+    "degree" : 3.937490029988936,
+    "sign" : "Cancer"
+  },
+  "pluto" : {
+    "degree" : 16.560925941135594,
+    "sign" : "Scorpio"
+  },
+  "saturn" : {
+    "degree" : 6.252355768036864,
+    "sign" : "Aquarius"
+  },
+  "sun" : {
+    "degree" : 21.857509369179994,
+    "sign" : "Gemini"
+  },
+  "venus" : {
+    "degree" : 7.197426769077978,
+    "sign" : "Leo"
+  }
+}

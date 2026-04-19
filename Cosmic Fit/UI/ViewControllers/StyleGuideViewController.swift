@@ -463,41 +463,45 @@ final class StyleGuideViewController: UIViewController {
 
     // MARK: - Section Content Factory
 
+    /// Loads the persisted blueprint once per detail-view tap and routes each
+    /// section to the corresponding `CosmicBlueprint` field. Falls back to
+    /// placeholder copy when no blueprint is available (not yet generated,
+    /// narrative cache empty, etc.).
     private func createContent(for section: StyleGuideDetailContent.StyleGuideSection) -> StyleGuideDetailContent {
+        let bp = BlueprintStorage.shared.load()
+
         switch section {
 
         case .styleCore:
+            let body = bp?.styleCore.narrativeText.nonEmpty
+                ?? "Your presence works best when you treat your wardrobe as a public language. While you value the heavy and the settled, you use those qualities to set a standard for the people around you. You move through a room with the composure of someone who is teaching others how to appreciate quality. Your style works best when it feels like a long-term social legacy. This kind of intentional curation looks like a gift you are giving to your community."
+
             return StyleGuideDetailContent(
                 sectionType: .styleCore,
                 title: "Style Core",
                 iconImageName: "style_core_glyph",
                 textSections: [
-                    StyleGuideDetailContent.TextSection(
-                        subheading: nil,
-                        bodyText: "Your presence works best when you treat your wardrobe as a public language. While you value the heavy and the settled, you use those qualities to set a standard for the people around you. You move through a room with the composure of someone who is teaching others how to appreciate quality. Your style works best when it feels like a long-term social legacy. This kind of intentional curation looks like a gift you are giving to your community."
-                    )
+                    StyleGuideDetailContent.TextSection(subheading: nil, bodyText: body)
                 ],
                 customComponent: nil
             )
 
         case .textures:
+            let good = bp?.textures.goodText.nonEmpty
+                ?? "Go for fabrics with actual weight and integrity. Heavy gauge silks that feel cool and substantial provide the right anchor. Organic wools offer a proper architectural frame. Leather that is buttery and gains character with age belongs in your collection. They ground you, make you feel secure, and still look polished."
+            let bad = bp?.textures.badText.nonEmpty
+                ?? "Flimsy or disposable fabrics just do not suit you. If a material is scratchy or overly synthetic, it is a hard pass. Static-prone polyesters or stiff cottons that fight your natural movement are a distraction. If you have to spend your whole day messing with a garment to make it sit right, it is draining your energy."
+            let sweet = bp?.textures.sweetSpotText.nonEmpty
+                ?? "Your absolute peak is a blend of the sturdy and the soft. Choose items that look high quality at a glance but feel like a secret luxury when touched. If it does not feel like a treat for your skin, it does not belong in your wardrobe."
+
             return StyleGuideDetailContent(
                 sectionType: .textures,
                 title: "The Textures",
                 iconImageName: "fabric_guide_glyph",
                 textSections: [
-                    StyleGuideDetailContent.TextSection(
-                        subheading: "The Good",
-                        bodyText: "Go for fabrics with actual weight and integrity. Heavy gauge silks that feel cool and substantial provide the right anchor. Organic wools offer a proper architectural frame. Leather that is buttery and gains character with age belongs in your collection. They ground you, make you feel secure, and still look polished."
-                    ),
-                    StyleGuideDetailContent.TextSection(
-                        subheading: "The Bad",
-                        bodyText: "Flimsy or disposable fabrics just do not suit you. If a material is scratchy or overly synthetic, it is a hard pass. Static-prone polyesters or stiff cottons that fight your natural movement are a distraction. If you have to spend your whole day messing with a garment to make it sit right, it is draining your energy."
-                    ),
-                    StyleGuideDetailContent.TextSection(
-                        subheading: "The Sweet Spot",
-                        bodyText: "Your absolute peak is a blend of the sturdy and the soft. Choose items that look high quality at a glance but feel like a secret luxury when touched. If it does not feel like a treat for your skin, it does not belong in your wardrobe."
-                    )
+                    StyleGuideDetailContent.TextSection(subheading: "The Good", bodyText: good),
+                    StyleGuideDetailContent.TextSection(subheading: "The Bad", bodyText: bad),
+                    StyleGuideDetailContent.TextSection(subheading: "The Sweet Spot", bodyText: sweet)
                 ],
                 customComponent: nil
             )
@@ -510,67 +514,65 @@ final class StyleGuideViewController: UIViewController {
             colourPalette.showsDevelopmentAnchorNames = true
             #endif
 
+            let narrativeText = bp?.palette.narrativeText.nonEmpty
+            let para1 = narrativeText
+                ?? "Your core colours are found in the natural world. Look for deep sage greens, sophisticated caramels, slate greys, and creamy neutrals. These tones provide a stable base for your personality to shine through. Accents work best when they feel weathered, muted, or mineral-toned."
+
+            var textSections = [
+                StyleGuideDetailContent.TextSection(subheading: nil, bodyText: para1)
+            ]
+            if narrativeText == nil {
+                textSections.append(StyleGuideDetailContent.TextSection(
+                    subheading: nil,
+                    bodyText: "Flashes of considered tones like oxidised gold, dusty rose, or a deep burnt saffron add depth. Keep these accents as a highlight rather than the main story. They show that you are adventurous under the surface. It is about creating a look that stays timeless. Aim for colours that feel organic and permanent."
+                ))
+            }
+            textSections.append(StyleGuideDetailContent.TextSection(subheading: "Personal Palette", bodyText: ""))
+
             return StyleGuideDetailContent(
                 sectionType: .palette,
                 title: "The Palette",
                 iconImageName: "colour_guide_glyph",
-                textSections: [
-                    StyleGuideDetailContent.TextSection(
-                        subheading: nil,
-                        bodyText: "Your core colours are found in the natural world. Look for deep sage greens, sophisticated caramels, slate greys, and creamy neutrals. These tones provide a stable base for your personality to shine through. Accents work best when they feel weathered, muted, or mineral-toned."
-                    ),
-                    StyleGuideDetailContent.TextSection(
-                        subheading: nil,
-                        bodyText: "Flashes of considered tones like oxidised gold, dusty rose, or a deep burnt saffron add depth. Keep these accents as a highlight rather than the main story. They show that you are adventurous under the surface. It is about creating a look that stays timeless. Aim for colours that feel organic and permanent."
-                    ),
-                    StyleGuideDetailContent.TextSection(
-                        subheading: "Personal Palette",
-                        bodyText: ""
-                    )
-                ],
+                textSections: textSections,
                 customComponent: colourPalette
             )
 
         case .occasions:
+            let work = bp?.occasions.workText.nonEmpty
+                ?? "Lean into your architectural side. Use clean lines and structured shapes to settle into the room. A properly made coat or a weighted layer that holds its shape is your best tool. You look best when you appear as the person who is definitely in charge."
+            let intimate = bp?.occasions.intimateText.nonEmpty
+                ?? "Soften the edges when the sun goes down. Keep that solid base but introduce pieces with drape and mystery. Aim for quiet magnetism and close-range impact. Heavy silk or soft knits that move with you invite people to get a bit closer."
+            let daily = bp?.occasions.dailyText.nonEmpty
+                ?? "Even casual looks need to look intentional. Ditch the mess for high-quality basics that allow you to move freely. You can do relaxed, but it should never look sloppy. Think of your daily look as the visionary on a day off: elevated and completely unbothered."
+
             return StyleGuideDetailContent(
                 sectionType: .occasions,
                 title: "The Occasions",
                 iconImageName: "style_core_glyph",
                 textSections: [
-                    StyleGuideDetailContent.TextSection(
-                        subheading: "At Work",
-                        bodyText: "Lean into your architectural side. Use clean lines and structured shapes to settle into the room. A properly made coat or a weighted layer that holds its shape is your best tool. You look best when you appear as the person who is definitely in charge."
-                    ),
-                    StyleGuideDetailContent.TextSection(
-                        subheading: "Intimate Energy",
-                        bodyText: "Soften the edges when the sun goes down. Keep that solid base but introduce pieces with drape and mystery. Aim for quiet magnetism and close-range impact. Heavy silk or soft knits that move with you invite people to get a bit closer."
-                    ),
-                    StyleGuideDetailContent.TextSection(
-                        subheading: "Daily Movement",
-                        bodyText: "Even casual looks need to look intentional. Ditch the mess for high-quality basics that allow you to move freely. You can do relaxed, but it should never look sloppy. Think of your daily look as the visionary on a day off: elevated and completely unbothered."
-                    )
+                    StyleGuideDetailContent.TextSection(subheading: "At Work", bodyText: work),
+                    StyleGuideDetailContent.TextSection(subheading: "Intimate Energy", bodyText: intimate),
+                    StyleGuideDetailContent.TextSection(subheading: "Daily Movement", bodyText: daily)
                 ],
                 customComponent: nil
             )
 
         case .hardware:
+            let metals = bp?.hardware.metalsText.nonEmpty
+                ?? "Your energy requires hardware with actual presence. Look for brushed gold, matte silver, or hammered bronze. Choose pieces that feel like they have some history. Heavy chains and matte surfaces that soak up the light are your best options."
+            let stones = bp?.hardware.stonesText.nonEmpty
+                ?? "Skip the perfectly clear gems. You suit stones that look like they were pulled directly from the earth. Raw emeralds, smoky quartz, and malachite work best. These natural inclusions make the pieces feel alive and connected to you."
+            let tip = bp?.hardware.tipText.nonEmpty
+                ?? "One substantial anchor piece is always more powerful than a bunch of delicate items. Pick a signature like a heavy ring or a bold pendant and let it be the focal point."
+
             return StyleGuideDetailContent(
                 sectionType: .hardware,
                 title: "The Hardware",
                 iconImageName: "style_core_glyph",
                 textSections: [
-                    StyleGuideDetailContent.TextSection(
-                        subheading: "The Metals",
-                        bodyText: "Your energy requires hardware with actual presence. Look for brushed gold, matte silver, or hammered bronze. Choose pieces that feel like they have some history. Heavy chains and matte surfaces that soak up the light are your best options."
-                    ),
-                    StyleGuideDetailContent.TextSection(
-                        subheading: "The Stones",
-                        bodyText: "Skip the perfectly clear gems. You suit stones that look like they were pulled directly from the earth. Raw emeralds, smoky quartz, and malachite work best. These natural inclusions make the pieces feel alive and connected to you."
-                    ),
-                    StyleGuideDetailContent.TextSection(
-                        subheading: "Tip",
-                        bodyText: "One substantial anchor piece is always more powerful than a bunch of delicate items. Pick a signature like a heavy ring or a bold pendant and let it be the focal point."
-                    )
+                    StyleGuideDetailContent.TextSection(subheading: "The Metals", bodyText: metals),
+                    StyleGuideDetailContent.TextSection(subheading: "The Stones", bodyText: stones),
+                    StyleGuideDetailContent.TextSection(subheading: "Tip", bodyText: tip)
                 ],
                 customComponent: nil
             )
@@ -582,37 +584,28 @@ final class StyleGuideViewController: UIViewController {
             codeContainer.alignment = .fill
             codeContainer.distribution = .fill
 
-            let leanIntoSection = DosAndDontsSectionView(
-                title: "Lean Into",
-                bulletPoints: [
-                    "Trusting your body's first tactile reaction. If the fabric feels right against your skin, it is usually a win.",
-                    "Investing in the highest quality version of a piece you can afford.",
-                    "Using your style to communicate your values without saying a single word.",
-                    "Sticking to the three-year test: only buy things you can see yourself loving in 2029."
-                ]
-            )
-            codeContainer.addArrangedSubview(leanIntoSection)
+            let leanIntoItems = bp?.code.leanInto.nilIfEmpty ?? [
+                "Trusting your body's first tactile reaction. If the fabric feels right against your skin, it is usually a win.",
+                "Investing in the highest quality version of a piece you can afford.",
+                "Using your style to communicate your values without saying a single word.",
+                "Sticking to the three-year test: only buy things you can see yourself loving in 2029."
+            ]
+            codeContainer.addArrangedSubview(DosAndDontsSectionView(title: "Lean Into", bulletPoints: leanIntoItems))
 
-            let avoidSection = DosAndDontsSectionView(
-                title: "Avoid",
-                bulletPoints: [
-                    "Buying something just because it is a bargain. A deal is only a deal if the item is perfect.",
-                    "Chasing trends that clash with your natural composure. If it feels like a costume, it will look like one.",
-                    "Keeping your best pieces hidden. Your style works best when it is seen and shared.",
-                    "Flimsy or disposable fabrics that lack actual integrity."
-                ]
-            )
-            codeContainer.addArrangedSubview(avoidSection)
+            let avoidItems = bp?.code.avoid.nilIfEmpty ?? [
+                "Buying something just because it is a bargain. A deal is only a deal if the item is perfect.",
+                "Chasing trends that clash with your natural composure. If it feels like a costume, it will look like one.",
+                "Keeping your best pieces hidden. Your style works best when it is seen and shared.",
+                "Flimsy or disposable fabrics that lack actual integrity."
+            ]
+            codeContainer.addArrangedSubview(DosAndDontsSectionView(title: "Avoid", bulletPoints: avoidItems))
 
-            let considerSection = DosAndDontsSectionView(
-                title: "Consider",
-                bulletPoints: [
-                    "How your style acts as a conversation starter in your daily environment.",
-                    "The way your physical home space influences your creative output.",
-                    "Making sure your outfit is actually comfortable. If you are constantly tugging at your clothes, you lose your edge."
-                ]
-            )
-            codeContainer.addArrangedSubview(considerSection)
+            let considerItems = bp?.code.consider.nilIfEmpty ?? [
+                "How your style acts as a conversation starter in your daily environment.",
+                "The way your physical home space influences your creative output.",
+                "Making sure your outfit is actually comfortable. If you are constantly tugging at your clothes, you lose your edge."
+            ]
+            codeContainer.addArrangedSubview(DosAndDontsSectionView(title: "Consider", bulletPoints: considerItems))
 
             return StyleGuideDetailContent(
                 sectionType: .code,
@@ -623,50 +616,49 @@ final class StyleGuideViewController: UIViewController {
             )
 
         case .accessory:
+            let fallback = [
+                "One significant piece carries more weight than five minor ones. Whether it is a heavy watch or a perfectly made bag, let that item be the anchor. This creates a focal point that allows the rest of your look to stay quiet.",
+                "Accessories are where you introduce your most rigid lines. While your clothes might flow, your accessories should provide the structure. A stiff bag or a firm leather strap acts as the frame for your more fluid choices.",
+                "Think about the sound and scent of your accessories. The weight of a heavy buckle or the specific smell of high-quality leather adds to the vibe. Style is a total sensory environment."
+            ]
+            let paragraphs = bp?.accessory.paragraphs.nilIfEmpty ?? fallback
+
             return StyleGuideDetailContent(
                 sectionType: .accessory,
                 title: "The Accessory",
                 iconImageName: "style_core_glyph",
-                textSections: [
-                    StyleGuideDetailContent.TextSection(
-                        subheading: nil,
-                        bodyText: "One significant piece carries more weight than five minor ones. Whether it is a heavy watch or a perfectly made bag, let that item be the anchor. This creates a focal point that allows the rest of your look to stay quiet."
-                    ),
-                    StyleGuideDetailContent.TextSection(
-                        subheading: nil,
-                        bodyText: "Accessories are where you introduce your most rigid lines. While your clothes might flow, your accessories should provide the structure. A stiff bag or a firm leather strap acts as the frame for your more fluid choices."
-                    ),
-                    StyleGuideDetailContent.TextSection(
-                        subheading: nil,
-                        bodyText: "Think about the sound and scent of your accessories. The weight of a heavy buckle or the specific smell of high-quality leather adds to the vibe. Style is a total sensory environment."
-                    )
-                ],
+                textSections: paragraphs.map {
+                    StyleGuideDetailContent.TextSection(subheading: nil, bodyText: $0)
+                },
                 customComponent: nil
             )
 
         case .pattern:
+            let narrative = bp?.pattern.narrativeText.nonEmpty
+                ?? "You do not really do busy prints. Anything too frantic fights your energy and looks forced. Your patterns need to feel like they have a pulse: organic, slightly blurred, or naturally occurring."
+            let tipText = bp?.pattern.tipText.nonEmpty
+                ?? "Use pattern as a texture. A tonal jacquard weave or a subtle embossed print is your secret weapon. It adds depth without screaming for attention."
+
+            var textSections = [
+                StyleGuideDetailContent.TextSection(subheading: nil, bodyText: narrative)
+            ]
+            if bp == nil {
+                textSections.append(StyleGuideDetailContent.TextSection(
+                    subheading: nil,
+                    bodyText: "Look for large-scale and soft-focus prints. Marble textures or shadow checks where the lines are not quite sharp work well. You also suit classics like a large windowpane check in your neutral palette. The goal is a pattern that looks painted on rather than factory-made."
+                ))
+                textSections.append(StyleGuideDetailContent.TextSection(
+                    subheading: nil,
+                    bodyText: "Avoid tiny repetitive prints like polka dots. They look cluttered against your sophisticated aura. Stay away from anything neon or synthetic. If a pattern looks like it belongs on a disposable holiday shirt, it does not belong in your life."
+                ))
+            }
+            textSections.append(StyleGuideDetailContent.TextSection(subheading: "Tip", bodyText: tipText))
+
             return StyleGuideDetailContent(
                 sectionType: .pattern,
                 title: "The Pattern",
                 iconImageName: "style_core_glyph",
-                textSections: [
-                    StyleGuideDetailContent.TextSection(
-                        subheading: nil,
-                        bodyText: "You do not really do busy prints. Anything too frantic fights your energy and looks forced. Your patterns need to feel like they have a pulse: organic, slightly blurred, or naturally occurring."
-                    ),
-                    StyleGuideDetailContent.TextSection(
-                        subheading: nil,
-                        bodyText: "Look for large-scale and soft-focus prints. Marble textures or shadow checks where the lines are not quite sharp work well. You also suit classics like a large windowpane check in your neutral palette. The goal is a pattern that looks painted on rather than factory-made."
-                    ),
-                    StyleGuideDetailContent.TextSection(
-                        subheading: nil,
-                        bodyText: "Avoid tiny repetitive prints like polka dots. They look cluttered against your sophisticated aura. Stay away from anything neon or synthetic. If a pattern looks like it belongs on a disposable holiday shirt, it does not belong in your life."
-                    ),
-                    StyleGuideDetailContent.TextSection(
-                        subheading: "Tip",
-                        bodyText: "Use pattern as a texture. A tonal jacquard weave or a subtle embossed print is your secret weapon. It adds depth without screaming for attention."
-                    )
-                ],
+                textSections: textSections,
                 customComponent: nil
             )
         }

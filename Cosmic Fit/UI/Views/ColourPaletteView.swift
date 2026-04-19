@@ -2,39 +2,23 @@
 //  ColourPaletteView.swift
 //  Cosmic Fit
 //
-//  Data-driven 5×8 personal palette grid. See
-//  `docs/palette_grid_spec_v1.md` §5 / §7.1 / §8.
+//  Data-driven 5×12 personal palette grid (V4 layout).
 //
-//  Rendering rules (locked, §4 / §8):
-//   • 5 columns × 8 rows (4 core + 4 accent), fixed.
-//   • Core (rows 1–4) and accent (rows 5–8) render as one continuous grid
-//     with standard row spacing; no extra inter-band spacer.
+//  Rendering rules:
+//   • 5 columns × 12 rows (4 neutral + 4 core + 4 accent).
+//   • Three bands render as one continuous grid with standard row spacing.
 //   • Cells are square, corner radius 4 pt, inter-cell spacing 2 pt.
-//   • No cell labels (§4.2), no tap (§4.4), scroll disabled (parent
-//     scroll view owns vertical scroll).
+//   • No cell labels, no tap, scroll disabled (parent scroll view owns
+//     vertical scroll).
 //   • Empty anchor slots render as `ColourCell.configureEmpty()`
 //     (UIColor.label at 8% alpha).
 //
-//  Layout implementation:
-//   • One UICollectionView section per grid row (8 sections total). This
-//     is deliberately finer-grained than a two-section core/accent split
-//     so section headers can sit natively in
-//     `UICollectionView.elementKindSectionHeader` above each row.
-//   • The first visible row of each band always carries a band title
-//     header ("Core Colours" / "Accent Colours") so users understand
-//     why the two grids are separated.
-//   • When `showsDevelopmentAnchorNames` is true, *every* visible row
+//  Layout:
+//   • One UICollectionView section per grid row (12 sections total).
+//   • The first visible row of each band carries a band title header
+//     ("Neutral Colours" / "Core Colours" / "Accent Colours").
+//   • When `showsDevelopmentAnchorNames` is true, every visible row
 //     also shows its anchor family name and hex.
-//
-//  API surface (§8):
-//   • `init()`                                — empty grid.
-//   • `configure(with: PaletteGrid)`          — set content.
-//   • `static placeholder() -> PaletteGrid`   — deterministic demo grid
-//     for previews, onboarding, and the current Style Guide call site
-//     (until P5 live wiring lands).
-//   • `showsDevelopmentAnchorNames: Bool`     — dev-only aid that draws
-//     the anchor family name above each row. NEVER enable in release
-//     builds; §4.2 production rule is "no cell labels".
 //
 
 import UIKit
@@ -45,9 +29,10 @@ final class ColourPaletteView: UIView {
 
     private let cellSpacing: CGFloat = 2
 
-    /// Index of the first row that belongs to the accent band. Kept aligned
-    /// with `PaletteGrid.coreRowCount` so layout and data source agree.
-    private let accentBandStartRow: Int = PaletteGrid.coreRowCount
+    /// Index of the first row that belongs to the core band.
+    private let coreBandStartRow: Int = PaletteGrid.neutralRowCount
+    /// Index of the first row that belongs to the accent band.
+    private let accentBandStartRow: Int = PaletteGrid.neutralRowCount + PaletteGrid.coreRowCount
 
     /// Height reserved for a band title ("Core Colours" / "Accent Colours")
     /// above the first row of each band. Always present in production.
@@ -155,26 +140,28 @@ final class ColourPaletteView: UIView {
 
         let cellSize = calculateCellSize(width: width)
 
+        var neutralVisibleRows = 0
         var coreVisibleRows = 0
         var accentVisibleRows = 0
         for (index, row) in grid.rows.enumerated() {
             guard isRowVisible(row, in: grid) else { continue }
-            if index < accentBandStartRow {
+            if index < coreBandStartRow {
+                neutralVisibleRows += 1
+            } else if index < accentBandStartRow {
                 coreVisibleRows += 1
             } else {
                 accentVisibleRows += 1
             }
         }
 
-        let totalVisibleRows = coreVisibleRows + accentVisibleRows
+        let totalVisibleRows = neutralVisibleRows + coreVisibleRows + accentVisibleRows
         guard totalVisibleRows > 0 else {
             return CGSize(width: width, height: 0)
         }
 
-        // Cell rows.
         var height = cellSize * CGFloat(totalVisibleRows)
 
-        // Band title headers: one per band that has visible rows.
+        if neutralVisibleRows > 0 { height += bandTitleHeight }
         if coreVisibleRows > 0 { height += bandTitleHeight }
         if accentVisibleRows > 0 { height += bandTitleHeight }
 
@@ -194,7 +181,13 @@ final class ColourPaletteView: UIView {
     // MARK: - Placeholder factory
 
     static func placeholder() -> PaletteGrid {
-        let provenance: ColourProvenance = .libraryFallback(reason: "UI placeholder")
+        let provenance: ColourProvenance = .v4Template(family: "Deep Autumn", band: "placeholder", index: 0)
+        let neutral: [BlueprintColour] = [
+            BlueprintColour(name: "warm ivory",  hexValue: "#F5EDE0", role: .neutral, provenance: provenance),
+            BlueprintColour(name: "camel sand",  hexValue: "#C4A775", role: .neutral, provenance: provenance),
+            BlueprintColour(name: "warm stone",  hexValue: "#8C7A6B", role: .neutral, provenance: provenance),
+            BlueprintColour(name: "espresso",    hexValue: "#3C2415", role: .neutral, provenance: provenance),
+        ]
         let core: [BlueprintColour] = [
             BlueprintColour(name: "sage",    hexValue: "#7AA18C", role: .core, provenance: provenance),
             BlueprintColour(name: "caramel", hexValue: "#B08254", role: .core, provenance: provenance),
@@ -202,15 +195,23 @@ final class ColourPaletteView: UIView {
             BlueprintColour(name: "cream",   hexValue: "#E8DCC4", role: .core, provenance: provenance),
         ]
         let accent: [BlueprintColour] = [
-            BlueprintColour(name: "saffron",      hexValue: "#D4A23C", role: .accent, provenance: provenance),
-            BlueprintColour(name: "dusty rose",   hexValue: "#C97D7D", role: .accent, provenance: provenance),
-            BlueprintColour(name: "teal",         hexValue: "#3C7A85", role: .accent, provenance: provenance),
+            BlueprintColour(name: "saffron",       hexValue: "#D4A23C", role: .accent, provenance: provenance),
+            BlueprintColour(name: "dusty rose",    hexValue: "#C97D7D", role: .accent, provenance: provenance),
+            BlueprintColour(name: "teal",          hexValue: "#3C7A85", role: .accent, provenance: provenance),
             BlueprintColour(name: "midnight blue", hexValue: "#1F2A44", role: .accent, provenance: provenance),
         ]
         let section = PaletteSection(
+            neutrals: neutral,
             coreColours: core,
             accentColours: accent,
-            swatchFamilies: [],
+            family: .deepAutumn,
+            cluster: .deepWarmStructured,
+            variables: DerivedVariables(
+                depth: .deep, temperature: .warm, saturation: .rich,
+                contrast: .medium, surface: .structured
+            ),
+            secondaryPull: nil,
+            overrideFlags: OverrideFlags(),
             narrativeText: ""
         )
         return PaletteGridViewModel.build(from: section)
@@ -229,33 +230,32 @@ final class ColourPaletteView: UIView {
         return (width - totalSpacing) / CGFloat(columns)
     }
 
-    private var firstVisibleAccentSection: Int {
-        guard let grid = grid else { return accentBandStartRow }
-        for index in accentBandStartRow..<PaletteGrid.rowCount {
+    private func firstVisibleRow(inRange range: Range<Int>) -> Int? {
+        guard let grid = grid else { return nil }
+        for index in range {
             if isRowVisible(grid.rows[index], in: grid) {
                 return index
             }
         }
-        return accentBandStartRow
+        return nil
     }
 
     /// Whether this section is the first visible row of its band.
     private func isBandLeader(_ section: Int) -> Bool {
-        guard let grid = grid else { return false }
-        if section < accentBandStartRow {
-            // Core band: first visible core row.
-            for i in 0..<accentBandStartRow {
-                if isRowVisible(grid.rows[i], in: grid) { return i == section }
-            }
-            return false
+        if section < coreBandStartRow {
+            return firstVisibleRow(inRange: 0..<coreBandStartRow) == section
+        } else if section < accentBandStartRow {
+            return firstVisibleRow(inRange: coreBandStartRow..<accentBandStartRow) == section
         } else {
-            return section == firstVisibleAccentSection
+            return firstVisibleRow(inRange: accentBandStartRow..<PaletteGrid.rowCount) == section
         }
     }
 
     private func bandTitle(for section: Int) -> String? {
         guard isBandLeader(section) else { return nil }
-        return section < accentBandStartRow ? "Core Colours" : "Accent Colours"
+        if section < coreBandStartRow { return "Neutral Colours" }
+        if section < accentBandStartRow { return "Core Colours" }
+        return "Accent Colours"
     }
 
     /// Total header height for a given section. Combines band title height

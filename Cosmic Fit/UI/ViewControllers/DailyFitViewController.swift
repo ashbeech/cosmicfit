@@ -1504,12 +1504,14 @@ class DailyFitViewController: UIViewController {
         // UPDATE: Configure vibe breakdown bars with actual data
         vibeContainer.configure(with: content.vibeBreakdown)
         
-        // Configure colour palette with curated Style Guide-derived colours
-        // Use paletteColours if available (curated selection), fallback to styleTokens if needed
-        if !content.paletteColours.isEmpty {
+        if let v4 = content.v4DailyPalette {
+            colourPaletteContainer.configure(
+                dailyHexes: v4.dailyHexes,
+                allPaletteHexes: v4.allPaletteHexes
+            )
+        } else if !content.paletteColours.isEmpty {
             colourPaletteContainer.configure(with: content.paletteColours)
         } else if let tokens = extractTokensFromContent(content) {
-            // Fallback for legacy content without curated palette
             colourPaletteContainer.configure(with: tokens)
         }
         

@@ -1,0 +1,272 @@
+{
+  "accessory" : {
+    "paragraphs" : [
+      "When your clothes are inherently fluid and conversation-driven, a single substantial accessory provides a necessary tether. A serious leather bag with heavy clasps or an imposing watch on a thick strap pulls a soft, layered outfit right back down to earth. A solitary, well-constructed object carries much more visual authority than a handful of delicate rings. Because your instinct is to play with lightweight textiles and shifting silhouettes, this focal point acts as a sharp full stop. One undeniable item secures the look, leaving you free to keep the rest of your clothing in constant motion.",
+      "Since your everyday rotation revolves around soft, floating layers and conversational styling, your accessories act as the necessary punctuation. A firm leather strap or a rigidly constructed bag gives lightweight linens and sheer silk blends the exact boundaries they need to hold their shape. Substantial hardware, like a heavy clasp or a properly weighted watch, stops a fluid silhouette from looking totally untethered. They supply the physical tension needed to ensure a soft outfit always looks deliberate rather than accidentally thrown on.",
+      "Getting dressed is a profoundly physical habit, right down to the noise your outfit makes. The satisfying snap of a heavy bag clasp or the quiet friction of woven straps sliding over your shoulder sets an immediate mood. You naturally register the faint, familiar scent of treated leather warming up on your wrist, along with the kinetic clink of stacked rings whenever you talk with your hands. These tiny, tactile details turn the act of putting on clothes into a living, sensory environment."
+    ]
+  },
+  "code" : {
+    "avoid" : [
+      "Blunt, aggressive dressing that shuts down dialogue. Your power comes from persuasion, not intimidation.",
+      "Harsh industrial textures that contradict your natural grace. Rough fabrics fight your energy instead of channelling it.",
+      "Rigid matching sets that remove all surprise. If the outfit looks like it came off a mannequin as one unit, it is too predictable.",
+      "Head-to-toe uniform dressing that shuts down your versatility. You need room to remix.",
+      "One-note outfits that say only one thing. Your style should carry at least two ideas at once.",
+      "Fussy or indecisive presentations that dilute your natural impact. If the outfit looks like you could not choose, neither can anyone else."
+    ],
+    "consider" : [
+      "A dedicated pressing routine as a style ritual that ensures every garment meets your standard daily",
+      "Strategic fit alterations on every key piece so nothing in rotation is merely approximate",
+      "Military-inspired details as a through-line in your wardrobe. Epaulettes, structured shoulders, and clean brass hardware suit your energy.",
+      "How a consistent dark palette communicates reliability. When people know what to expect visually, they trust your judgement."
+    ],
+    "leanInto" : [
+      "Using charm as a form of strength in your wardrobe. A beautifully cut blazer disarms a room more effectively than a power suit.",
+      "Bringing elegance to confrontation. When the day demands toughness, a silk blouse with a sharp trouser says you can do both.",
+      "Dressing strategically for the reaction you want. Your clothes are diplomatic tools, and every outfit is a negotiation.",
+      "Mixing high and low fearlessly. A vintage market find paired with a designer knit shows range, not confusion.",
+      "Embracing pattern clashing with clear intention. Stripes with florals works when the colour story holds together.",
+      "Treating accessories as conversation starters. A ring with a story or a bag that prompts a question earns its place."
+    ]
+  },
+  "engineVersion" : "2.0.0",
+  "generatedAt" : "2026-04-19T13:53:00Z",
+  "hardware" : {
+    "metalsText" : "Heavy, rigid hardware will completely suffocate the lightness of your wardrobe. You always look much more interesting when you actively scramble your finishes, letting rose gold rings sit right next to a soft copper bag clasp. Because your clothes rely on fluid layers and soft movement, keep the actual metal textures equally relaxed. Liquid, slightly melted shapes in white gold work far better on you than aggressive, high-shine spikes. Treat your zips and jacket buttons as conversational details instead of purely functional bolts. The final effect should be a gentle, expensive jangle as you walk, never the imposing clank of a bank vault.",
+    "recommendedMetals" : [
+      "rose gold",
+      "soft copper",
+      "white gold",
+      "sterling silver",
+      "mixed metals",
+      "polished brass"
+    ],
+    "recommendedStones" : [
+      "pink tourmaline",
+      "kunzite",
+      "agate",
+      "citrine",
+      "aquamarine",
+      "red jasper",
+      "carnelian"
+    ],
+    "stonesText" : "Your jewellery box is better off as a collection of conversation pieces than a vault of serious, static investments. You suit stones that catch the light and shift in colour as you talk, softening the crisp lines of your everyday shirting. Look for the cloudy, dreamlike finish of pink tourmaline or the iridescent, watery flash of kunzite. Set them in lightweight, playfully asymmetric hardware rather than heavy traditional prongs. The overall effect is a ring or pendant that catches the eye mid-gesture and immediately prompts a question.",
+    "tipText" : "Your accessories are at their strongest when they feel slightly kinetic and completely open to conversation. Think lightweight charm necklaces, mismatched earrings, or articulated links that physically move when you talk. A delicate chain in rose gold paired with an unusually shaped pendant gives your outfit that essential element of play. If you wear pink tourmaline, look for pieces where the gem feels suspended and fluid rather than rigidly clamped into a heavy setting. A thick, static bangle looks like it belongs to someone else, but a cluster of fine chains brushing a soft silk cuff is entirely you."
+  },
+  "occasions" : {
+    "dailyText" : "Dressing for a standard weekday is an exercise in leaving room to change your mind. Your off-duty wardrobe relies on weightless layers and pieces that overlap, allowing the look to evolve as your mood shifts. Look for fluid silhouettes that drape gently rather than holding a rigid shape, giving you total physical ease without sacrificing visual interest. A stiff collar or an unforgiving waistline will only annoy you before noon. Focus instead on garments with clever construction, movement, and a bit of playful volume. Give yourself an outfit that feels like a private comfort blanket but looks entirely ready to talk to anyone.\n\nYour style energy concentrates in expression and retreat, so your wardrobe is at its best when it reflects both expression and retreat.",
+    "intimateText" : "Close-quarters dressing requires a balance between complete physical ease and a flash of wit. Choose garments that float away from the body, relying on weightless layers that respond to how you shift in a chair or lean over a table. Contrast that fluid drape with one highly specific, slightly eccentric finishing touch that prompts a question from whoever sits next to you. The overall impression is a look entirely surrendered to the mood of the room, while keeping the conversation in motion.",
+    "workText" : "Workwear for you is an exercise in social agility. Keep your professional silhouette light and adaptable by layering sharp tailoring over pieces with genuine drape and physical ease. You need an outfit that looks totally intentional while sitting in a meeting, but still moves with you when you talk with your hands or pivot into a sudden pitch. Ground the look in classic shapes, then let the styling do the talking through unexpected proportions. You are aiming for a wardrobe that functions seamlessly without ever feeling rigid."
+  },
+  "palette" : {
+    "accentColours" : [
+      {
+        "hexValue" : "#FBCEB1",
+        "name" : "apricot",
+        "provenance" : {
+          "band" : "accent",
+          "family" : "Light Spring",
+          "index" : 0,
+          "kind" : "v4Template"
+        },
+        "role" : "accent"
+      },
+      {
+        "hexValue" : "#D4AF37",
+        "name" : "soft gold",
+        "provenance" : {
+          "band" : "accent",
+          "family" : "Light Spring",
+          "index" : 1,
+          "kind" : "v4Template"
+        },
+        "role" : "accent"
+      },
+      {
+        "hexValue" : "#00CED1",
+        "name" : "clear aqua",
+        "provenance" : {
+          "band" : "accent",
+          "family" : "Light Spring",
+          "index" : 2,
+          "kind" : "v4Template"
+        },
+        "role" : "accent"
+      },
+      {
+        "hexValue" : "#71BC78",
+        "name" : "fresh leaf",
+        "provenance" : {
+          "band" : "accent",
+          "family" : "Light Spring",
+          "index" : 3,
+          "kind" : "v4Template"
+        },
+        "role" : "accent"
+      }
+    ],
+    "cluster" : "Light Airy Warm",
+    "coreColours" : [
+      {
+        "hexValue" : "#E8A317",
+        "name" : "honey yellow",
+        "provenance" : {
+          "band" : "core",
+          "family" : "Light Spring",
+          "index" : 0,
+          "kind" : "v4Template"
+        },
+        "role" : "core"
+      },
+      {
+        "hexValue" : "#FFCBA4",
+        "name" : "peach",
+        "provenance" : {
+          "band" : "core",
+          "family" : "Light Spring",
+          "index" : 1,
+          "kind" : "v4Template"
+        },
+        "role" : "core"
+      },
+      {
+        "hexValue" : "#7FFFD4",
+        "name" : "aqua mint",
+        "provenance" : {
+          "band" : "core",
+          "family" : "Light Spring",
+          "index" : 2,
+          "kind" : "v4Template"
+        },
+        "role" : "core"
+      },
+      {
+        "hexValue" : "#A4C639",
+        "name" : "lime",
+        "provenance" : {
+          "band" : "core",
+          "family" : "Light Spring",
+          "index" : 3,
+          "kind" : "v4Template"
+        },
+        "role" : "core"
+      }
+    ],
+    "family" : "Light Spring",
+    "narrativeText" : "Dressing for you is a constant dialogue, meaning your wardrobe needs shades that are naturally light on their feet. Your daily foundations rely heavily on honey yellow and peach, which translate beautifully across crisp cotton shirting and sheer silk-blend layers. A wash of aqua mint brings a softer, almost watercolour quality to the mix, ensuring the overall effect remains approachable rather than stark. Introduce apricot as an unexpected flash of detail—think an enamel pendant or a slightly unusual flat shoe—to keep the eye moving. The result is a highly conversational mix of tones that shifts seamlessly depending on your mood and whoever you happen to be talking to.",
+    "neutrals" : [
+      {
+        "hexValue" : "#FAF5EF",
+        "name" : "warm white",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Light Spring",
+          "index" : 0,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
+      },
+      {
+        "hexValue" : "#F5E6C8",
+        "name" : "buttercream",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Light Spring",
+          "index" : 1,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
+      },
+      {
+        "hexValue" : "#E8D5B7",
+        "name" : "pale sand",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Light Spring",
+          "index" : 2,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
+      },
+      {
+        "hexValue" : "#C9A96E",
+        "name" : "light camel",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Light Spring",
+          "index" : 3,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
+      }
+    ],
+    "overrideFlags" : {
+      "capricornVirgoCoolingApplied" : false,
+      "coolLeanDeepAutumn" : false,
+      "earthDepthOverrideApplied" : false,
+      "fireAirChromaApplied" : true,
+      "scorpioDensityApplied" : false,
+      "surfacePreservationApplied" : false,
+      "waterSofteningApplied" : false,
+      "winterCompressionApplied" : false
+    },
+    "secondaryPull" : "Bright Spring",
+    "swatchFamilies" : [
+
+    ],
+    "variables" : {
+      "contrast" : "Medium",
+      "depth" : "Light",
+      "saturation" : "Rich",
+      "surface" : "Soft",
+      "temperature" : "Warm"
+    }
+  },
+  "pattern" : {
+    "avoidPatterns" : [
+      "uniform solids",
+      "heavy tartans",
+      "single-pattern monotony",
+      "harsh geometric"
+    ],
+    "narrativeText" : "You treat prints as a running dialogue rather than a fixed statement. Your eye naturally gravitates toward visual wit, but the execution needs enough softness to stop the garment feeling rigid. Heavy, over-engineered designs like uniform solids end up wearing you and dragging down your naturally buoyant mood. Stick to balanced geometric and elegant stripe on lightweight linen or a fluid silk blend. These provide that sharp, conversational interest while letting the silhouette breathe. Throw in mixed-scale print clash when you want to mix layers without losing that effortless, intuitive ease.",
+    "recommendedPatterns" : [
+      "balanced geometric",
+      "elegant stripe",
+      "mixed-scale print clash",
+      "novelty illustrated prints",
+      "stripes with florals",
+      "geometric mix"
+    ],
+    "tipText" : "Treat your prints like a conversation starter rather than a loud declaration. Slip a balanced geometric into your outfit through a washed silk shirt layered under a crisp cotton jacket, letting just the collar and cuffs show. You need visual variety to stay interested, but stiff, heavy motifs will instantly ruin your comfort. Grounding a playful design in a lightweight, fluid fabric softens the entire look. It reads as clever and observant, giving your outfit a sense of humour without sacrificing an ounce of physical ease."
+  },
+  "styleCore" : {
+    "narrativeText" : "Your presence is inherently conversational. You walk into a room and instantly broadcast a clever, adaptable energy that feels completely approachable. There is a quick-witted quality to how you build an outfit, effortlessly mixing unexpected proportions while keeping the overall silhouette loose and fluid. While your aesthetic thrives on social motion and visual intrigue, the actual foundation relies on absolute physical ease. You do not dress to build a wall between yourself and the rest of the room. Your style acts as an intelligent, shifting dialogue with whoever happens to be standing in front of you.\n\nYour natural sense of beauty shows up most powerfully in your everyday expression — style as social currency, approachable beauty that invites conversation. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort."
+  },
+  "textures" : {
+    "avoidTextures" : [
+      "harsh industrial fabric",
+      "heavy wool",
+      "stiff canvas"
+    ],
+    "badText" : "Heavy, restrictive materials act like a straitjacket on your naturally breezy, communicative energy. Wearing harsh industrial fabric instantly dampens your mood, anchoring you to the floor when you prefer a bit of lift in your step. Similarly, heavy wool feels completely wrong against your skin, lacking the gentle give and breathable quality you instinctively crave. You need clothes that move with your rapid shifts in thought and feeling, rather than rigid armour that traps you inside a static silhouette. If a garment fights your frame every time you reach for a coffee or wave across a room, it goes straight to the charity shop.",
+    "goodText" : "Your wardrobe acts as a running conversation, so the materials you wear have to be capable of keeping up. Favour fluid silk and fine wool that sit lightly against the body, offering total breathability without stiffening your posture. When you just want to feel swaddled, soft structured blend brings immediate comfort, wrapping you in a soft, fluid layer that actually catches the breeze. Throwing lightweight linen into an outfit satisfies your eye for clever, unexpected contrast. Anything rigid or tightly constructed will only frustrate your instinct to keep moving, so stick to surfaces with genuine give.",
+    "recommendedTextures" : [
+      "fluid silk",
+      "fine wool",
+      "soft structured blend",
+      "lightweight linen"
+    ],
+    "sweetSpotKeywords" : [
+      "strategy",
+      "grace"
+    ],
+    "sweetSpotText" : "The sweet spot for your wardrobe is an exact calibration of strategy and grace. You gravitate towards garments that hold enough visual wit to keep your attention, yet wear with the sheer comfort of a trusted favourite. A beautifully cut shirt in fluid silk or a draped fine wool slip delivers that necessary social lightness while still wrapping you in softness. If an item looks fantastic on the rack but restricts your arms or scratches at the collar, it simply will not survive in your rotation. Your clothes must travel seamlessly with your shifting moods, offering a gentle touch without ever weighing you down.\n\nYour comfort instinct gravitates toward private emotional retreat, the softest, most comforting pieces saved for solitude."
+  },
+  "userInfo" : {
+    "birthDate" : "1993-03-21T00:00:00Z",
+    "birthLocation" : "Synthetic Fixture",
+    "generationDate" : "2026-04-19T13:53:00Z"
+  }
+}

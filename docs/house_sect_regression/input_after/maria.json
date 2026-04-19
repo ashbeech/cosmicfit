@@ -1,42 +1,42 @@
 {
   "accessory" : {
     "paragraphs" : [
-      "Ditch the fiddly layers and wear one heavy-gauge piece that actually matters. Your tolerance for fuss is zero, so skip the fragile chains in favour of a single, architectural anchor in brushed silver grey or an oxidised, industrial metal. Whether it is a weighted, modular cuff or a dense, recycled rubber strap, this item needs to feel substantial against your skin and survive the friction of your day. Let a solitary, intentional object do all the talking.",
-      "Treat your accessories as industrial reinforcements rather than decorative afterthoughts. Think heavy-gauge silver chains, oxidised carabiner clasps, and matte neoprene utility belts that snap shut with a decisive click. You lack the patience for delicate jewellery or fussy additions; you require tactical pieces that keep pace with your physical momentum. Anchor your look with modular bags in dense, recycled technical fabrics to ground your electric blue and silver grey colour story while maintaining a strict architectural shape. Your hardware is your personal scaffolding, built exclusively for the vanguard.",
-      "Demand absolute tactile precision from your hardware. The cold, physical weight of a brushed silver-grey cuff grounds your high-speed energy the second it hits your skin. You have exactly zero patience for fiddly closures or delicate chains that tangle when you actually move. Swap fragile trinkets for the matte resistance of a recycled neoprene strap and the instant, satisfying snap of a heavy-gauge magnetic lock. Let the sharp, mineral-toned scent of wet asphalt and ozone trail behind you. Your accessories are not polite decorations, they are the architectural anchors keeping your electric momentum bolted to the earth."
+      "Fussy layers of delicate trinkets will never suit your temperament. You operate on a strict principle of one undeniable anchor piece doing all the heavy lifting. Instead of cluttering your silhouette, you rely on a single item of serious substance to finish a look. A flawlessly constructed leather bag or a watch with a reassuringly heavy strap provides all the necessary punctuation. You appreciate the tangible reality of an object made to last, like the satisfying click of a solid belt clasp or the smooth finish of premium hide. One significant object communicates a quiet, expensive discipline. It draws the eye and grounds your wardrobe, allowing the rest of your clothing to remain clean, deliberate, and entirely free of distraction.",
+      "Accessories operate as the physical boundaries that keep your softer layers firmly in check. The satisfying weight of a heavy belt buckle or the rigid lines of a stiff leather bag introduces a necessary tension to your wardrobe. These pieces contrast with luxurious drape through sheer, unyielding solidity. A thick strap that feels substantial in the hand or a watch clasp that snaps shut with a decisive click provides a very specific kind of sensory comfort. It is less about surface decoration and entirely about the quiet satisfaction of putting your outfit into strict, beautiful order.",
+      "True luxury registers in the hands long before it hits the mirror. The solid, decisive click of a heavy belt buckle or the rich scent of properly tanned leather provides you with a deeply satisfying sense of order. You rely on pieces that feel substantial the second you pick them up, like a watch with reassuring heft or a thick bag strap that softens to your shape over time. Flimsy, hollow hardware is an immediate dealbreaker. When you fasten a clasp, the physical feedback simply has to feel expensive."
     ]
   },
   "code" : {
     "avoid" : [
-      "anything below your standard",
-      "cheap fast fashion",
-      "anything that does not feel good against skin",
-      "harsh synthetic fabrics",
-      "frivolous",
-      "undisciplined"
+      "Anything below your standard in fabric, construction, or fit. A single cheap piece drags down the authority of everything around it.",
+      "Compromising on quality for convenience or speed. Your wardrobe demands the same rigour and patience that defines the rest of your life.",
+      "Cheap fast fashion that falls apart after three washes. You feel the difference in quality even if nobody else sees it.",
+      "Anything that does not feel good against your skin. If a seam scratches or a waistband digs, the outfit is already ruined.",
+      "Harsh synthetic fabrics that trap heat and static. Your body knows the difference even before you check the label.",
+      "frivolous"
     ],
     "consider" : [
       "treat dressing as creative self-expression",
       "let joy drive your wardrobe choices",
       "a leather bag that patinas beautifully over years",
-      "heritage denim worn to personal perfection"
+      "Heritage denim worn to personal perfection over years, where every fade tells your specific story"
     ],
     "leanInto" : [
-      "embody the standard",
-      "timeless pieces as life investments",
-      "invest in fewer, better pieces",
-      "touch before you buy, texture is everything",
-      "natural fibres over synthetics",
-      "warm neutrals as your foundation"
+      "Embodying the standard that others aspire to. Your wardrobe should look like the definitive version of whatever dress code applies.",
+      "Treating timeless pieces as life investments rather than seasonal purchases. A perfect overcoat or a flawless trouser appreciates over decades.",
+      "Building an impeccable collection where nothing is accidental, nothing is filler, and every piece earns its place through quality.",
+      "Investing in fewer, better pieces that you will reach for every week. If it does not earn its place in a small wardrobe, it does not belong.",
+      "Touching before you buy. Run the fabric between your fingers. If the texture does not feel like a reward, walk away.",
+      "Choosing natural fibres over synthetics as a rule. Cashmere, silk, and cotton age gracefully. Polyester does not."
     ]
   },
-  "engineVersion" : "1.0.0",
-  "generatedAt" : "2026-04-11T10:14:52Z",
+  "engineVersion" : "2.0.0",
+  "generatedAt" : "2026-04-19T13:53:00Z",
   "hardware" : {
-    "metalsText" : "Treat your hardware like tactile, functional architecture. Skip the delicate chains and anchor your frame with heavy-gauge surgical steel, brushed aluminium, and oxidised silver. You demand matte, industrial finishes that feel incredibly dense and cold to the touch. Because you have zero patience for fussy fastenings, your zips and closures must be ruthlessly efficient, using rapid-release tactical buckles and oversized snaps that make a loud, satisfying click. Your metals are not mere decoration; they are high-functioning, streamlined machinery.",
+    "metalsText" : "Hardware on you should feel like an investment rather than a decorative afterthought. You need serious, satisfying weight, the kind of brushed yellow gold that pulls together a heavy winter coat or secures a beautifully constructed leather bag. Flimsy, high-shine chains and noisy zips look nervous next to your natural composure. Lean on solid warm bronze details with a matte or gently aged finish, ensuring every buckle actually serves a structural purpose. When the metal feels substantial enough to outlast the garment itself, it belongs in your rotation.",
     "recommendedMetals" : [
-      "warm bronze",
       "yellow gold",
+      "warm bronze",
       "platinum",
       "polished silver",
       "rose gold"
@@ -44,56 +44,183 @@
     "recommendedStones" : [
       "jade",
       "emerald",
-      "sapphire",
       "garnet",
       "onyx",
+      "sapphire",
       "rose quartz",
       "lapis lazuli"
     ],
-    "stonesText" : "Demand stones that look like they were mined from a futuristic dystopia. Forget delicate, fussy cuts that snag on your clothes; you require heavy, mineral-toned hardware that acts as a structural shield while staying firmly out of your way. Look for raw hematite, oxidised metal set with uncut electric-blue sapphires, and industrial pyrite that feels cold, dense, and fiercely tactile against your skin. The finish must be aggressively matte or jarringly high-shine, offering zero apologies for its absolute lack of tradition. Lab-grown gems set in heavy-gauge brushed steel give you a sharp, progressive edge, ensuring your accessories are grounded and always ready for impact.",
-    "tipText" : "Ditch the delicate chains and fiddly clasps entirely. Your hardware must function like industrial machinery, entirely stripped of unnecessary fuss. Seek out heavy-gauge zips, slick magnetic closures, and brushed silver carabiners that snap shut with a satisfying, tactile clunk. Anchor an electric blue neoprene layer with a single, weighted oxidised cuff or a hammered steel ring that slides on without slowing your stride. Treat your metalwork as architectural armour, never mere decoration."
+    "stonesText" : "You treat jewellery as a matter of density rather than dazzle. Forget fragile, light-catching facets and look for stones that carry serious physical weight. jade set in thick, brushed gold offers the kind of solid, quiet luxury that suits you best. A heavy cabochon of emerald or a smooth, flat slice of garnet feels infinitely more sophisticated on your skin than overly brilliant cuts. You want pieces that sit cold and substantial on the collarbone or wrist, giving your wardrobe a reliable, tactile finish.",
+    "tipText" : "Substantial weight is the only metric that matters when choosing your jewellery. A flimsy chain or a hollow band will instantly cheapen a perfectly good outfit. Seek out solid, cast pieces in yellow gold that carry a real physical presence on the body, or a heavy ring set with jade for a quiet finish. A smooth cuff or an impeccably engineered watch strap provides that sense of disciplined luxury your eye naturally seeks. Two substantial items will always beat a tangle of delicate layers."
   },
   "occasions" : {
-    "dailyText" : "Your daily uniform demands zero friction and total visual impact. Build your off-duty armour from dense, recycled technical fabrics and architectural neoprene that hold their shape while letting you sprint away from a boring conversation. You have absolutely no patience for fussy fastenings, so anchor the look with heavy-gauge metallic knits, streamlined slip-on boots, and crisp, mineral-toned poplin flashed with electric blue. A weighted silver-grey jacket provides a necessary grounding layer, feeling intensely tactile against the skin while looking ruthlessly industrial. You are dressing for a high-tech future only you can see, but making it perfectly practical for the morning coffee run.\n\nYour comfort instinct gravitates toward emotional comfort visible in how you present, your feelings wear you. Your style energy concentrates in identity and creativity, so dressing is a core creative practice — lean into that.",
-    "intimateText" : "Intimacy does not mean you must soften your frame into a predictable puddle of lace. Slip into a heavy-gauge metallic knit or a silver grey slip cut from dense, recycled technical fabric that moves exactly as you do. You have absolutely no patience for fussy closures or dragging hemlines. Keep the silhouette architectural, fluid, and fiercely streamlined. Anchor the evening with a hammered silver cuff or an electric blue neoprene bodice that feels deliberately tactile against bare skin. Seduction, for you, is a highly intellectual operation.",
-    "workText" : "The traditional office uniform bores you to tears, so you rewrite the programme completely. You demand clothing that moves as fast as you do, with absolutely zero fuss to slow you down. Anchor your weekday rotation in dense, tactile fabrics that hold an architectural silhouette without restricting your frame. Swap the standard wool blazer for a structured neoprene jacket or a weighted overshirt cut from recycled technical poplin. Inject sudden, intentional flashes of electric blue or high-shine silver grey to disrupt the corporate monotony. You are not dressing for the job you want, but for the future you are inventing."
+    "dailyText" : "Downtime does not mean letting your standards slip. Your off-duty rotation relies on architectural integrity and undeniable physical weight just as much as your formal wardrobe. Swap out flimsy basics for heavy, densely woven separates that hold their shape from morning until evening. You feel at your best when there is a distinct sense of order to what you wear, so ensure your seams sit exactly where they should and your casual silhouettes remain crisp. Real luxury is the quiet satisfaction of knowing every daily piece is flawlessly engineered.\n\nYour comfort instinct gravitates toward emotional comfort visible in how you present, your feelings wear you. Your style energy concentrates in identity and creativity, so dressing is a core creative practice — lean into that.",
+    "intimateText" : "Dressing for the evening is less about reinvention and more about turning up the sensory dial. Your best looks rely on garments that possess a satisfying physical weight, bypassing anything flimsy or overly sheer. A meticulously tailored waist paired with a hem that drops heavily to the floor strikes exactly the right balance of discipline and indulgence. Let the cut frame your shape with absolute intent, trusting impeccable construction over loud embellishment. You want the final impression to feel incredibly grounded, inviting a closer look without giving everything away at once.",
+    "workText" : "Your professional wardrobe thrives on quiet authority and serious construction. You look your best in pieces that carry a noticeable physical weight, relying on flawless tailoring rather than loud trends to command a room. Seek out garments with serious structural integrity, the kind that hold their exact shape from the first morning meeting straight through to the taxi home. Flimsy materials and fussy finishes simply distract from your natural air of extreme competence. Keep the silhouette clean, substantial, and deliberately put together. When your outfit is built this well, you walk into the office looking exactly like the person who signs the cheques."
   },
   "palette" : {
     "accentColours" : [
       {
-        "hexValue" : "#228B22",
-        "name" : "forest green",
+        "hexValue" : "#C0C0C0",
+        "name" : "silver",
+        "provenance" : {
+          "band" : "accent",
+          "family" : "Deep Winter",
+          "index" : 0,
+          "kind" : "v4Template"
+        },
         "role" : "accent"
       },
       {
-        "hexValue" : "#C19A6B",
-        "name" : "warm camel",
+        "hexValue" : "#53565A",
+        "name" : "gunmetal",
+        "provenance" : {
+          "band" : "accent",
+          "family" : "Deep Winter",
+          "index" : 1,
+          "kind" : "v4Template"
+        },
+        "role" : "accent"
+      },
+      {
+        "hexValue" : "#9B1B30",
+        "name" : "cool ruby",
+        "provenance" : {
+          "band" : "accent",
+          "family" : "Deep Winter",
+          "index" : 2,
+          "kind" : "v4Template"
+        },
+        "role" : "accent"
+      },
+      {
+        "hexValue" : "#5FADA5",
+        "name" : "icy teal",
+        "provenance" : {
+          "band" : "accent",
+          "family" : "Deep Winter",
+          "index" : 3,
+          "kind" : "v4Template"
+        },
         "role" : "accent"
       }
     ],
+    "cluster" : "Deep Cool Controlled",
     "coreColours" : [
       {
-        "hexValue" : "#0A0A0A",
-        "name" : "jet black",
+        "hexValue" : "#4D0F28",
+        "name" : "black cherry",
+        "provenance" : {
+          "band" : "core",
+          "family" : "Deep Winter",
+          "index" : 0,
+          "kind" : "v4Template"
+        },
         "role" : "core"
       },
       {
-        "hexValue" : "#708090",
-        "name" : "slate",
+        "hexValue" : "#1B3A4B",
+        "name" : "petrol",
+        "provenance" : {
+          "band" : "core",
+          "family" : "Deep Winter",
+          "index" : 1,
+          "kind" : "v4Template"
+        },
         "role" : "core"
       },
       {
-        "hexValue" : "#000080",
-        "name" : "dark navy",
+        "hexValue" : "#014421",
+        "name" : "dark emerald",
+        "provenance" : {
+          "band" : "core",
+          "family" : "Deep Winter",
+          "index" : 2,
+          "kind" : "v4Template"
+        },
         "role" : "core"
       },
       {
-        "hexValue" : "#FFFDD0",
-        "name" : "cream",
+        "hexValue" : "#0D1B2A",
+        "name" : "blue-black",
+        "provenance" : {
+          "band" : "core",
+          "family" : "Deep Winter",
+          "index" : 3,
+          "kind" : "v4Template"
+        },
         "role" : "core"
       }
     ],
-    "narrativeText" : "Ground your wardrobe in the crisp, mineral-toned chill of silver grey. Treat this industrial neutral as a heavy-gauge, architectural canvas for sudden, unapologetic shocks of electric blue. You have absolutely zero patience for fussy prints or sweet, forgettable pastels, so you require bold block solids rendered in high-shine technical fabrics, metallic knits, and dense neoprene. These saturated colours anchor your progressive edge in something fiercely tactile, allowing you to dress in seconds and move faster than everyone else in the room. This is a deliberate, high-voltage palette built for an intellectual insurgent."
+    "family" : "Deep Winter",
+    "narrativeText" : "Your approach to colour is entirely about visual weight and unspoken expense. You look your best anchored in black cherry and petrol, rich tones that practically demand high-quality natural fibres to succeed. Rely on dark emerald for your heaviest winter coats or the sharp lines of a structured trouser. When you need a slight shift in temperature, introduce silver through a heavy silk lining or the smooth leather of a top-handle bag. The overall effect is a palette that looks deeply grounded and completely unbothered by passing trends.",
+    "neutrals" : [
+      {
+        "hexValue" : "#0A0A0A",
+        "name" : "black",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Deep Winter",
+          "index" : 0,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
+      },
+      {
+        "hexValue" : "#1B2A4A",
+        "name" : "ink navy",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Deep Winter",
+          "index" : 1,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
+      },
+      {
+        "hexValue" : "#4B4F54",
+        "name" : "graphite",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Deep Winter",
+          "index" : 2,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
+      },
+      {
+        "hexValue" : "#3B3F42",
+        "name" : "cool charcoal",
+        "provenance" : {
+          "band" : "neutrals",
+          "family" : "Deep Winter",
+          "index" : 3,
+          "kind" : "v4Template"
+        },
+        "role" : "neutral"
+      }
+    ],
+    "overrideFlags" : {
+      "capricornVirgoCoolingApplied" : true,
+      "coolLeanDeepAutumn" : false,
+      "earthDepthOverrideApplied" : true,
+      "fireAirChromaApplied" : false,
+      "scorpioDensityApplied" : false,
+      "surfacePreservationApplied" : false,
+      "waterSofteningApplied" : false,
+      "winterCompressionApplied" : false
+    },
+    "secondaryPull" : "Deep Autumn",
+    "swatchFamilies" : [
+
+    ],
+    "variables" : {
+      "contrast" : "Medium",
+      "depth" : "Deep",
+      "saturation" : "Rich",
+      "surface" : "Structured",
+      "temperature" : "Cool"
+    }
   },
   "pattern" : {
     "avoidPatterns" : [
@@ -102,28 +229,43 @@
       "overly busy patterns",
       "novelty prints"
     ],
-    "narrativeText" : "Your wardrobe has zero tolerance for fussy prints or whimsical florals. You demand patterns that read as progressive and architectural, hitting the eye with immediate, unfiltered impact. Think digital distortion mapped onto dense neoprene, or sharp silver grey and electric blue grids woven directly into a heavy-gauge metallic knit. Because surface-level stamping feels cheap to your grounded sensibilities, the design must be anchored physically in the tactile reality of the garment rather than just painted on top. You do not wear patterns to look pretty, you wear them as a visual shock to the system.",
+    "narrativeText" : "You rely on the heavy drape and rich texture of your clothes to make an impression, making loud prints feel entirely unnecessary. Frantic, busy motifs like aggressive graphics or neon prints disrupt the calm order you naturally project. When you do wear a design, it needs to look woven deeply into the garment rather than cheaply stamped on top. Classic, disciplined arrangements like pinstripe and houndstooth give you exactly the right amount of structure without tipping into visual clutter. Keep the scale restrained and let the sheer quality of your fabrics take the lead.",
     "recommendedPatterns" : [
       "pinstripe",
       "houndstooth",
       "classic check",
       "subtle herringbone",
-      "organic textures",
+      "bark-effect weave",
       "tonal knits"
     ],
-    "tipText" : "Ditch the traditional florals and demand a digital grid. Your patterns must look engineered rather than grown, built directly into the structure of your garments. Opt for sharp, architectural geometries woven straight into heavy-gauge knits or densely constructed neoprene. Think an electric blue glitch motif slashing across a matte silver grey base. You have zero patience for fussy prints that require overthinking or slow you down. Anchor the look with heavy hardware and let a single, uncompromising graphic do all the talking."
+    "tipText" : "Prints can feel like a loss of control when your wardrobe relies on the sensory perfection of solid, expensive fabrics. Treat pinstripe as a textural shift rather than a graphic statement. Look for designs built directly into the material itself, like a tonal weave on a heavy silk jacquard or a subtle check woven into brushed wool. Flat, high-contrast dyes instantly break your calm, grounded aesthetic. Sticking to patterns that read almost like solids from a distance satisfies your need for visual order, ensuring the sheer quality of the garment remains the most obvious detail you are wearing."
   },
   "styleCore" : {
-    "narrativeText" : "Your presence is an exercise in grounded, high-speed rebellion. You project an intellectually driven identity that has absolutely no time for fussy hemlines or fragile drapery. Instead, you anchor your wardrobe in dense, tactile quality, building streamlined silhouettes out of crisp neoprene, heavy-gauge metallic knits, and recycled technical fabrics. Slashes of electric blue and cold silver grey cut through the room, turning your outfit into a bold, wearable manifesto. You do not just get dressed; you engineer the uniform for a highly fashionable resistance.\n\nYour natural sense of beauty shows up most powerfully in your creative self-expression — creative joy in dressing, bold romantic expression, date-night dressing as art. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort."
+    "narrativeText" : "Your style presence projects the quiet, expensive authority that only comes from knowing exactly what a garment is worth. You look your best in clothing that carries real physical weight and flawless construction. Rather than chasing seasonal shifts, you rely on the discipline of a perfect fit and the gravity of an immaculate drape to communicate your taste. There is a deep psychological comfort for you in wearing pieces that feel enduring, structurally sound, and completely finished. You never have to fight for space in a room when your wardrobe makes it entirely obvious that you set the baseline.\n\nYour natural sense of beauty shows up most powerfully in your creative self-expression — creative joy in dressing, bold romantic expression, date-night dressing as art. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort."
   },
   "textures" : {
-    "badText" : "Step away from anything flimsy, fragile, or hopelessly romantic. You have absolutely zero patience for fussy garments that require constant adjustment just to hold a silhouette. Forget cheap polyester lace, static-cling chiffon, and any textile that snags the moment you brush past a doorframe. Your demand for tactile quality and sudden movement actively rejects overly delicate silks or heavy-gauge, scratchy heritage wools that drag you down. If a material feels like a costume from a bygone era or lacks architectural substance, leave it behind. You are built for forward motion, not for standing still in a delicate museum piece.",
-    "goodText" : "Dress in progressive materials that feel distinctly futuristic but remain grounded in tactile reality. You require dense neoprene that holds a crisp, architectural silhouette without ever restricting your physical stride. Reach for high-shine technical fabrics, recycled materials, and heavy-gauge metallic knits in core colours like electric blue or silver grey. These textiles refuse to be fussy or fragile, offering an engineered, sensory experience that matches your absolute impatience with the ordinary. Let the traditionalists keep their delicate vintage; you are building a modular wardrobe for tomorrow.",
-    "sweetSpotText" : "The sweet spot is where high-concept technicality meets heavy-gauge wearability. You require dense neoprene that holds an architectural silhouette without trapping your frame in a stiff, fussy cage. Anchor your wardrobe with recycled technical fabrics and brushed metallic knits in silver grey that feel physically grounded to the touch but look engineered for the future. You have zero patience for delicate materials that demand babysitting or slow your momentum. If a shock of electric blue does not offer absolute freedom of movement while acting as a tactile shield, it belongs to someone else. You dress in progressive, friction-free armour."
+    "avoidTextures" : [
+      "anything cheap",
+      "synthetic jersey",
+      "cheap polyester"
+    ],
+    "badText" : "A material that refuses to hold its shape is an instant drain on your composure. You have a very low tolerance for anything cheap that clings awkwardly or synthetic jersey that snags the moment you brush past a table. Your eye for quality means anything flimsy, scratchy, or visibly mass-produced feels almost insulting against your skin. If cheap polyester requires constant adjusting or panic-steaming just to look respectable, it has no business on your body. You are far too deliberate a person to walk around in cloth that feels like an afterthought.",
+    "goodText" : "Flimsy, synthetic fabrics are a complete waste of your time. You expect your clothes to feel luxurious against the skin while holding a definite, reliable shape. Build your wardrobe around finest wool for a sense of quiet indulgence, and rely on structured cashmere to create a structured silhouette that actually lasts through the day. Adding premium leather brings immediate tactile pleasure, while the sheer weight and longevity of cashmere appeals to your fiercely practical side. True comfort for you means knowing exactly how a garment will behave from the minute you leave the house.",
+    "recommendedTextures" : [
+      "finest wool",
+      "structured cashmere",
+      "premium leather",
+      "cashmere"
+    ],
+    "sweetSpotKeywords" : [
+      "authority",
+      "permanence"
+    ],
+    "sweetSpotText" : "True satisfaction hits when you find the precise tension between authority and permanence. You need pieces that hold their shape but reward the touch, like an impeccably tailored coat cut from dense finest wool or a sharp trouser in structured cashmere. There is a quiet discipline to this approach, demanding clothes that refuse to crease, sag, or surrender their silhouette by midday. When an item offers strict architectural boundaries to the outside world but pure sensory indulgence on the inside, it earns a permanent place on your rails."
   },
   "userInfo" : {
     "birthDate" : "1989-04-28T00:00:00Z",
     "birthLocation" : "Unknown",
-    "generationDate" : "2026-04-11T10:14:52Z"
+    "generationDate" : "2026-04-19T13:53:00Z"
   }
 }

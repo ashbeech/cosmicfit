@@ -1,0 +1,68 @@
+{
+  "id": "maria",
+  "label": "Maria - Deep Autumn benchmark",
+  "source": "User-provided exemplar images plus manual seasonal matching",
+  "birth": {
+    "localBirthDate": "1989-04-28",
+    "localBirthTime": "04:30",
+    "birthLocation": "Athens, Attica, Greece"
+  },
+  "expectedFamily": {
+    "season": "deep_autumn",
+    "temperature": "warm",
+    "depth": "deep",
+    "chroma": "muted_to_rich",
+    "summary": "Grounded, earthy, warm, dark, mineral, and softly saturated rather than icy, pastel, or metallic-cool."
+  },
+  "paletteExpectations": {
+    "preferredCoreAnchors": [
+      "buttery cream",
+      "deep sage green",
+      "sophisticated caramel",
+      "cool navy",
+      "olive",
+      "camel",
+      "cognac",
+      "tawny",
+      "mocha",
+      "hunter green",
+      "dark teal",
+      "plum"
+    ],
+    "preferredAccentAnchors": [
+      "oxidised gold",
+      "deep burnt saffron",
+      "dusty rose",
+      "rust",
+      "copper",
+      "mustard",
+      "honey",
+      "mulberry",
+      "plum",
+      "aubergine"
+    ],
+    "forbiddenAnchors": [
+      "lilac",
+      "seafoam",
+      "silver shimmer",
+      "icy pink",
+      "mint",
+      "baby blue",
+      "frosted silver"
+    ],
+    "requiredCoreHits": 3,
+    "requiredAccentHits": 2,
+    "maxForbiddenHits": 0
+  },
+  "humanReviewPrompts": [
+    "Does the palette read as one coherent family rather than a bag of individually plausible chart colours?",
+    "Do the top two accents feel like the strongest chart-characteristic flashes for this user?",
+    "Does the palette stay warm/deep overall, or drift into cool, airy, pastel territory?",
+    "Do later accent slots strengthen the family, or merely increase hue diversity?",
+    "Would a stylist looking only at these anchors recognise the target family as Deep Autumn-adjacent?"
+  ],
+  "notes": [
+    "This benchmark is intentionally opinionated: it represents a target family the user expected and manually validated.",
+    "It should be used as a calibration exemplar, not as ground truth for every Taurus-heavy chart."
+  ]
+}

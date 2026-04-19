@@ -156,9 +156,32 @@ struct ElementBalanceEntry: Codable {
     }
 }
 
+// MARK: - Colour Family Metadata (Phase 2 — Palette Calibration Programme)
+
+enum ColourTemperature: String, Codable, CaseIterable {
+    case warm, neutral, cool
+}
+
+enum ColourDepth: String, Codable, CaseIterable {
+    case deep, medium, light
+}
+
+enum ColourChroma: String, Codable, CaseIterable {
+    case muted, moderate, bright
+}
+
+struct ColourFamilyProfile: Equatable {
+    let temperature: ColourTemperature
+    let depth: ColourDepth
+    let chroma: ColourChroma
+}
+
 struct ColourLibraryEntry: Codable {
     let hex: String
     let associations: [String]
+    let temperature: ColourTemperature?
+    let depth: ColourDepth?
+    let chroma: ColourChroma?
 }
 
 /// Entry in `astrological_style_dataset.json -> fallback_palette_pool`.

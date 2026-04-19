@@ -203,8 +203,14 @@ class DailyVibeGenerator {
         //dailyContent.temperature = weather?.temperature
         //dailyContent.weatherCondition = weather?.condition
         dailyContent.styleTokens = allTokens
-        dailyContent.paletteColours = dailyPaletteColours // ✨ NEW: Curated daily palette from Style Guide
-        
+        dailyContent.paletteColours = dailyPaletteColours
+
+        if let blueprint = BlueprintStorage.shared.load(), blueprint.palette.isV4 {
+            dailyContent.v4DailyPalette = DailyColourPaletteGenerator.selectV4DailyColours(
+                from: blueprint.palette, date: date
+            )
+        }
+
         return dailyContent
     }
     
@@ -931,6 +937,10 @@ struct DailyVibeContent: Codable {
     
     // Daily colour palette - curated 3 colours from Style Guide for today
     var paletteColours: [StyleToken] = []
+
+    /// V4 daily palette — deterministic 3-colour pick from the persisted V4 palette.
+    /// Non-nil when a V4 blueprint is available; takes precedence over `paletteColours`.
+    var v4DailyPalette: DailyColourPaletteGenerator.V4DailyPalette?
     
     // MARK: - Environmental Context
     

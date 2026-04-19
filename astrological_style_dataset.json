@@ -14864,7 +14864,10 @@
         "taurus",
         "venus_taurus",
         "saturn"
-      ]
+      ],
+      "temperature": "warm",
+      "depth": "medium",
+      "chroma": "moderate"
     },
     "honey": {
       "hex": "#EB9605",
@@ -14937,7 +14940,10 @@
         "taurus",
         "venus_taurus",
         "earth"
-      ]
+      ],
+      "temperature": "warm",
+      "depth": "light",
+      "chroma": "moderate"
     },
     "cream": {
       "hex": "#FFFDD0",
@@ -15005,7 +15011,10 @@
       "associations": [
         "cancer",
         "moon"
-      ]
+      ],
+      "temperature": "neutral",
+      "depth": "light",
+      "chroma": "muted"
     },
     "shell white": {
       "hex": "#FFF5EE",
@@ -15050,7 +15059,10 @@
         "libra",
         "moon_libra",
         "taurus"
-      ]
+      ],
+      "temperature": "warm",
+      "depth": "medium",
+      "chroma": "muted"
     },
     "dusky pink": {
       "hex": "#CC8899",
@@ -15150,7 +15162,10 @@
       "associations": [
         "pisces",
         "venus_pisces"
-      ]
+      ],
+      "temperature": "cool",
+      "depth": "light",
+      "chroma": "moderate"
     },
     "ultraviolet": {
       "hex": "#6B0099",
@@ -15234,7 +15249,10 @@
       "associations": [
         "cancer",
         "moon_cancer"
-      ]
+      ],
+      "temperature": "cool",
+      "depth": "light",
+      "chroma": "muted"
     },
     "icy blue": {
       "hex": "#D6ECEF",
@@ -15256,7 +15274,10 @@
       "associations": [
         "sagittarius",
         "venus_sagittarius"
-      ]
+      ],
+      "temperature": "cool",
+      "depth": "deep",
+      "chroma": "bright"
     },
     "electric blue": {
       "hex": "#7DF9FF",
@@ -15315,7 +15336,10 @@
       "associations": [
         "capricorn",
         "moon_capricorn"
-      ]
+      ],
+      "temperature": "cool",
+      "depth": "deep",
+      "chroma": "moderate"
     },
     "deep navy": {
       "hex": "#000080",
@@ -15372,14 +15396,20 @@
       "associations": [
         "sagittarius",
         "venus_sagittarius"
-      ]
+      ],
+      "temperature": "neutral",
+      "depth": "deep",
+      "chroma": "moderate"
     },
     "dark teal": {
       "hex": "#004953",
       "associations": [
         "scorpio",
         "moon_scorpio"
-      ]
+      ],
+      "temperature": "neutral",
+      "depth": "deep",
+      "chroma": "moderate"
     },
     "turquoise": {
       "hex": "#40E0D0",
@@ -15422,7 +15452,10 @@
         "pisces",
         "venus_pisces",
         "water"
-      ]
+      ],
+      "temperature": "cool",
+      "depth": "light",
+      "chroma": "moderate"
     },
     "sea glass": {
       "hex": "#B2D8D8",
@@ -15468,7 +15501,10 @@
         "taurus",
         "venus_taurus",
         "earth"
-      ]
+      ],
+      "temperature": "warm",
+      "depth": "deep",
+      "chroma": "muted"
     },
     "sage": {
       "hex": "#9CAF88",
@@ -15519,14 +15555,20 @@
       "associations": [
         "mars_taurus",
         "earth"
-      ]
+      ],
+      "temperature": "warm",
+      "depth": "deep",
+      "chroma": "muted"
     },
     "olive": {
       "hex": "#808000",
       "associations": [
         "mercury_taurus",
         "earth"
-      ]
+      ],
+      "temperature": "warm",
+      "depth": "deep",
+      "chroma": "muted"
     },
     "olive green": {
       "hex": "#808000",
@@ -15576,7 +15618,10 @@
         "taurus",
         "venus_taurus",
         "earth"
-      ]
+      ],
+      "temperature": "warm",
+      "depth": "medium",
+      "chroma": "moderate"
     },
     "warm camel": {
       "hex": "#C19A6B",
@@ -15635,7 +15680,10 @@
       "associations": [
         "sagittarius",
         "venus_sagittarius"
-      ]
+      ],
+      "temperature": "warm",
+      "depth": "medium",
+      "chroma": "moderate"
     },
     "burnt sienna": {
       "hex": "#E97451",
@@ -15664,7 +15712,10 @@
       "associations": [
         "mars_taurus",
         "earth"
-      ]
+      ],
+      "temperature": "warm",
+      "depth": "deep",
+      "chroma": "moderate"
     },
     "copper": {
       "hex": "#B87333",
@@ -15898,7 +15949,10 @@
         "scorpio",
         "pluto",
         "mars"
-      ]
+      ],
+      "temperature": "warm",
+      "depth": "deep",
+      "chroma": "moderate"
     },
     "blood red": {
       "hex": "#660000",
@@ -15912,7 +15966,10 @@
       "associations": [
         "capricorn",
         "venus_capricorn"
-      ]
+      ],
+      "temperature": "warm",
+      "depth": "deep",
+      "chroma": "moderate"
     },
     "deep burgundy": {
       "hex": "#800020",
@@ -16003,7 +16060,10 @@
       "associations": [
         "pisces",
         "venus_pisces"
-      ]
+      ],
+      "temperature": "cool",
+      "depth": "light",
+      "chroma": "muted"
     },
     "soft silver": {
       "hex": "#C0C0C0",
@@ -16102,7 +16162,10 @@
       "associations": [
         "cancer",
         "moon"
-      ]
+      ],
+      "temperature": "neutral",
+      "depth": "light",
+      "chroma": "muted"
     }
   },
   "fallback_palette_pool": [

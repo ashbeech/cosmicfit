@@ -1,0 +1,69 @@
+{
+  "id": "ash",
+  "label": "Ash - Deep Autumn with Winter edge benchmark",
+  "source": "User-provided in-app screenshots plus external chart-family analysis supplied by user",
+  "birth": {
+    "localBirthDate": "1984-11-12",
+    "localBirthTime": "12:00",
+    "birthLocation": "London, UK"
+  },
+  "expectedFamily": {
+    "season": "deep_autumn_with_winter_edge",
+    "temperature": "slightly_warm_to_neutral",
+    "depth": "deep",
+    "chroma": "muted_to_rich",
+    "summary": "Darker, grounded, slightly warm colours that feel expensive and controlled, with room for black, oxblood, and dark navy as a winter edge."
+  },
+  "paletteExpectations": {
+    "preferredCoreAnchors": [
+      "deep olive",
+      "forest green",
+      "warm charcoal",
+      "espresso brown",
+      "deep teal",
+      "burnt orange",
+      "rust",
+      "terracotta",
+      "muted gold",
+      "black",
+      "oxblood",
+      "dark navy",
+      "warm ochre"
+    ],
+    "preferredAccentAnchors": [
+      "deep teal",
+      "dark plum",
+      "navy",
+      "oxblood",
+      "burgundy",
+      "rust",
+      "terracotta",
+      "muted gold",
+      "burnt orange"
+    ],
+    "forbiddenAnchors": [
+      "pearl",
+      "soft white",
+      "pale blue",
+      "icy blue",
+      "baby blue",
+      "powder blue",
+      "cobalt blue",
+      "neon"
+    ],
+    "requiredCoreHits": 2,
+    "requiredAccentHits": 2,
+    "maxForbiddenHits": 1
+  },
+  "humanReviewPrompts": [
+    "Does the palette read as grounded, dark, and controlled rather than bright, playful, or airy?",
+    "Do the anchors feel like one coherent family, or does the palette split between autumnal depth and cool bright contrast?",
+    "Is the winter edge limited to black, dark navy, burgundy, or oxblood rather than turning the whole palette icy?",
+    "Would a stylist looking only at these anchors recognise a Deep Autumn base before a Winter reading?",
+    "Do light or cool anchors weaken the structure of the palette?"
+  ],
+  "notes": [
+    "This benchmark is based on the live user and should not be conflated with the older repo fixture currently named Ash.",
+    "The known current drift pattern for this user is cool/light intrusion: pearl, soft white, pale blue, and cobalt blue."
+  ]
+}
