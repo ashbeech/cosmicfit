@@ -39,6 +39,7 @@ struct DeterministicResolver {
     ) -> DeterministicResolverResult {
         let palette = resolvePalette(
             tokens: tokens,
+            analysis: analysis,
             dataset: dataset,
             contributingCombos: contributingCombos
         )
@@ -58,14 +59,53 @@ struct DeterministicResolver {
             tokens: tokens, contributingCombos: contributingCombos, dataset: dataset
         )
 
-        let swatchFamilies = PaletteSwatchGenerator.generateFamilies(
-            core: palette.core, accent: palette.accent
-        )
-
         return DeterministicResolverResult(
             coreColours: palette.core,
             accentColours: palette.accent,
-            swatchFamilies: swatchFamilies,
+            swatchFamilies: [],
+            recommendedMetals: hardware.metals,
+            recommendedStones: hardware.stones,
+            leanInto: code.leanInto,
+            avoid: code.avoid,
+            consider: code.consider,
+            recommendedPatterns: patterns.recommended,
+            avoidPatterns: patterns.avoid,
+            recommendedTextures: textures.recommended,
+            avoidTextures: textures.avoid,
+            sweetSpotKeywords: textures.sweetSpot
+        )
+    }
+
+    /// Production path for V4 blueprint composition where palette anchors are
+    /// provided exclusively by `ColourEngineV4`. This skips legacy palette
+    /// resolution while retaining deterministic non-palette outputs used by
+    /// narrative rendering and section content.
+    static func resolveNonPalette(
+        tokens: [BlueprintToken],
+        analysis: ChartAnalysis,
+        dataset: AstrologicalStyleDataset,
+        contributingCombos: [(key: String, aggregateWeight: Double)]
+    ) -> DeterministicResolverResult {
+        let hardware = resolveHardware(
+            contributingCombos: contributingCombos, dataset: dataset, analysis: analysis
+        )
+        let code = resolveCode(
+            tokens: tokens,
+            analysis: analysis,
+            contributingCombos: contributingCombos,
+            dataset: dataset
+        )
+        let patterns = resolvePatterns(
+            tokens: tokens, analysis: analysis, dataset: dataset
+        )
+        let textures = resolveTextures(
+            tokens: tokens, contributingCombos: contributingCombos, dataset: dataset
+        )
+
+        return DeterministicResolverResult(
+            coreColours: [],
+            accentColours: [],
+            swatchFamilies: [],
             recommendedMetals: hardware.metals,
             recommendedStones: hardware.stones,
             leanInto: code.leanInto,
@@ -99,8 +139,21 @@ struct DeterministicResolver {
     /// picks; see §6.1.
     private static let hueGapLadder: [Double] = [15.0, 12.0, 10.0]
 
+    // MARK: Family-Coherence Parameters (Phase 2/3 — Palette Calibration Programme)
+    //
+    // The composite score uses additive blending of token weight and family fit:
+    //   compositeScore = (1 - familyFitWeight) × weight + familyFitWeight × familyFitScore
+    // This lets high-fit colours from lower-weight planets compete with
+    // low-fit colours from high-weight planets (e.g. Pluto-sourced oxblood
+    // can beat Moon-sourced pearl when the target profile is warm/deep).
+
+    private static let familyFitWeight: Double = 0.6
+    private static let crossPoolMinFamilyFit: Double = 0.45
+    private static let fallbackMinFamilyFit: Double = 0.35
+
     private static func resolvePalette(
         tokens: [BlueprintToken],
+        analysis: ChartAnalysis,
         dataset: AstrologicalStyleDataset,
         contributingCombos: [(key: String, aggregateWeight: Double)]
     ) -> PaletteResult {
@@ -109,51 +162,104 @@ struct DeterministicResolver {
             .filter { $0.category == .colour }
             .sorted { tieBreakSort($0, $1) }
 
+        let targetProfile = deriveTargetProfileFromChart(analysis: analysis)
+
+        #if DEBUG
+        print("🎨🎨🎨 [Palette/Calibration v2 ADDITIVE] Venus=\(analysis.venusSign) dominant=\(analysis.elementBalance.dominant) sect=\(analysis.chartSect)")
+        print("🎨🎨🎨 [Palette/Calibration v2] Target: \(targetProfile.temperature.rawValue)/\(targetProfile.depth.rawValue)/\(targetProfile.chroma.rawValue)")
+        print("🎨🎨🎨 [Palette/Calibration v2] Formula: (1-\(familyFitWeight))×weight + \(familyFitWeight)×fit")
+        #endif
+
         let primaryPool = colourTokens.filter { $0.sourceColourRole == .primary }
         let accentPool = colourTokens.filter { $0.sourceColourRole == .accent }
+
+        let sortedPrimaryPool = primaryPool.sorted {
+            compositeSortScore($0, library: colourLibrary, target: targetProfile) >
+            compositeSortScore($1, library: colourLibrary, target: targetProfile)
+        }
+        let sortedAccentPool = accentPool.sorted {
+            compositeSortScore($0, library: colourLibrary, target: targetProfile) >
+            compositeSortScore($1, library: colourLibrary, target: targetProfile)
+        }
+
+        func logDeduplicatedPool(_ pool: [BlueprintToken], label: String) {
+            var seen = Set<String>()
+            var rank = 0
+            for t in pool {
+                guard rank < 8 else { break }
+                if seen.contains(t.name) { continue }
+                seen.insert(t.name)
+                rank += 1
+                let sc = compositeSortScore(t, library: colourLibrary, target: targetProfile)
+                let hex = resolveHex(name: t.name, library: colourLibrary)
+                let cls = classifyColour(hex: hex, library: colourLibrary, name: t.name)
+                let fit = familyFitScore(hex: hex, library: colourLibrary, name: t.name, target: targetProfile)
+                print("🎨   \(rank). \(t.name) (\(hex)) w=\(String(format: "%.3f", t.weight)) fit=\(String(format: "%.2f", fit)) composite=\(String(format: "%.3f", sc)) [\(cls.temperature.rawValue)/\(cls.depth.rawValue)/\(cls.chroma.rawValue)] from \(t.planetarySource ?? "?")/\(t.signSource ?? "?")")
+            }
+        }
+
+        #if DEBUG
+        print("🎨 Primary pool top 8 (deduplicated):")
+        logDeduplicatedPool(sortedPrimaryPool, label: "Primary")
+        print("🎨 Accent pool top 8 (deduplicated):")
+        logDeduplicatedPool(sortedAccentPool, label: "Accent")
+        #endif
 
         let comboRankIndex = indexComboRanks(contributingCombos)
 
         var selected: [BlueprintColour] = []
-        var selectedHues: [Double] = []
+
+        // Hue-gap is enforced WITHIN each band, not across bands.
+        // A dark burgundy accent next to a bitter chocolate core is
+        // desirable — they serve different roles. Sharing hues between
+        // bands starves the accent pool when the target profile is
+        // warm/deep (all warm colours cluster in 0-30° hue range).
+        var coreHues: [Double] = []
+        var accentHues: [Double] = []
 
         // Pass 1 — fill core band from the primary-sourced pool.
         selected += selectAnchors(
-            from: primaryPool,
+            from: sortedPrimaryPool,
             desiredCount: coreDesired,
             role: .core,
             sourceRole: .primary,
             colourLibrary: colourLibrary,
             comboRankIndex: comboRankIndex,
-            selectedHues: &selectedHues
+            selectedHues: &coreHues
         )
 
         // Pass 2 — fill accent band from the accent-sourced pool.
         selected += selectAnchors(
-            from: accentPool,
+            from: sortedAccentPool,
             desiredCount: accentDesired,
             role: .accent,
             sourceRole: .accent,
             colourLibrary: colourLibrary,
             comboRankIndex: comboRankIndex,
-            selectedHues: &selectedHues
+            selectedHues: &accentHues
         )
 
-        // Pass 3 — cross-pool escalation when either band missed its minimum.
+        // Pass 3 — cross-pool escalation with family-fit gate.
+        // Escalation respects per-band hue tracking.
         selected = applyCrossPoolEscalation(
             selected: selected,
-            primaryPool: primaryPool,
-            accentPool: accentPool,
+            primaryPool: sortedPrimaryPool,
+            accentPool: sortedAccentPool,
             colourLibrary: colourLibrary,
             comboRankIndex: comboRankIndex,
-            selectedHues: &selectedHues
+            targetProfile: targetProfile,
+            coreHues: &coreHues,
+            accentHues: &accentHues
         )
 
-        // Pass 4 — library fallback (Option A: dataset-sourced pool).
+        // Pass 4 — library fallback with family-fit gate.
         selected = applyLibraryFallback(
             selected: selected,
             fallbackPool: dataset.fallbackPalettePool ?? [],
-            selectedHues: &selectedHues
+            colourLibrary: colourLibrary,
+            targetProfile: targetProfile,
+            coreHues: &coreHues,
+            accentHues: &accentHues
         )
 
         // Rank-sort (§9.2): ascending by contributorRank; cross-pool and
@@ -165,7 +271,14 @@ struct DeterministicResolver {
             .filter { $0.role == .accent }
             .sorted(by: provenanceRankSort)
 
+        #if DEBUG
+        print("🎨🎨🎨 === FINAL PALETTE (v2 ADDITIVE, per-band hue-gap) ===")
+        for c in core { print("🎨   CORE: \(c.name) (\(c.hexValue)) — \(provenanceSummary(c))") }
+        for c in accent { print("🎨   ACCENT: \(c.name) (\(c.hexValue)) — \(provenanceSummary(c))") }
+        #endif
+
         logPaletteProvenance(core: core, accent: accent)
+        logFamilyCoherence(targetProfile, core: core, accent: accent, library: colourLibrary)
         return PaletteResult(core: core, accent: accent)
     }
 
@@ -190,11 +303,17 @@ struct DeterministicResolver {
 
             for token in pool where !usedTokens.contains(token.name) {
                 let hex = resolveHex(name: token.name, library: colourLibrary)
-                let hue = hueFromHex(hex)
-                let tooClose = selectedHues.contains { existing in
-                    hueDistance(hue, existing) < currentGap
+                let info = hueInfoFromHex(hex)
+
+                // Achromatic colours (ink, charcoal, pearl) have meaningless
+                // hue and never block or get blocked by hue distance. Only
+                // check hue-gap between two chromatic colours.
+                if !info.isAchromatic {
+                    let tooClose = selectedHues.contains { existing in
+                        hueDistance(info.hue, existing) < currentGap
+                    }
+                    if tooClose { continue }
                 }
-                if tooClose { continue }
 
                 let comboKey = makeComboKey(
                     planet: token.planetarySource,
@@ -213,7 +332,9 @@ struct DeterministicResolver {
                         hueGapApplied: currentGap
                     )
                 ))
-                selectedHues.append(hue)
+                if !info.isAchromatic {
+                    selectedHues.append(info.hue)
+                }
                 usedTokens.insert(token.name)
                 madeProgress = true
 
@@ -241,7 +362,9 @@ struct DeterministicResolver {
         accentPool: [BlueprintToken],
         colourLibrary: [String: ColourLibraryEntry],
         comboRankIndex: [String: Int],
-        selectedHues: inout [Double]
+        targetProfile: ColourFamilyProfile,
+        coreHues: inout [Double],
+        accentHues: inout [Double]
     ) -> [BlueprintColour] {
         var result = selected
 
@@ -257,7 +380,8 @@ struct DeterministicResolver {
                 reason: "core band underflow after own-pool pass",
                 colourLibrary: colourLibrary,
                 comboRankIndex: comboRankIndex,
-                selectedHues: &selectedHues
+                targetProfile: targetProfile,
+                selectedHues: &coreHues
             )
             result += added
         }
@@ -274,7 +398,8 @@ struct DeterministicResolver {
                 reason: "accent band underflow after own-pool pass",
                 colourLibrary: colourLibrary,
                 comboRankIndex: comboRankIndex,
-                selectedHues: &selectedHues
+                targetProfile: targetProfile,
+                selectedHues: &accentHues
             )
             result += added
         }
@@ -291,6 +416,7 @@ struct DeterministicResolver {
         reason: String,
         colourLibrary: [String: ColourLibraryEntry],
         comboRankIndex: [String: Int],
+        targetProfile: ColourFamilyProfile,
         selectedHues: inout [Double]
     ) -> [BlueprintColour] {
         var borrowed: [BlueprintColour] = []
@@ -299,9 +425,14 @@ struct DeterministicResolver {
         for token in pool where !blocked.contains(token.name) {
             if borrowed.count >= deficit { break }
             let hex = resolveHex(name: token.name, library: colourLibrary)
-            let hue = hueFromHex(hex)
-            let tooClose = selectedHues.contains { hueDistance($0, hue) < 15.0 }
-            if tooClose { continue }
+            let info = hueInfoFromHex(hex)
+            if !info.isAchromatic {
+                let tooClose = selectedHues.contains { hueDistance($0, info.hue) < 15.0 }
+                if tooClose { continue }
+            }
+
+            let fit = familyFitScore(hex: hex, library: colourLibrary, name: token.name, target: targetProfile)
+            if fit < crossPoolMinFamilyFit { continue }
 
             let comboKey = makeComboKey(
                 planet: token.planetarySource,
@@ -321,7 +452,9 @@ struct DeterministicResolver {
                     reason: reason
                 )
             ))
-            selectedHues.append(hue)
+            if !info.isAchromatic {
+                selectedHues.append(info.hue)
+            }
             blocked.insert(token.name)
         }
 
@@ -340,31 +473,38 @@ struct DeterministicResolver {
     private static func applyLibraryFallback(
         selected: [BlueprintColour],
         fallbackPool: [FallbackPaletteEntry],
-        selectedHues: inout [Double]
+        colourLibrary: [String: ColourLibraryEntry],
+        targetProfile: ColourFamilyProfile,
+        coreHues: inout [Double],
+        accentHues: inout [Double]
     ) -> [BlueprintColour] {
         var result = selected
         let usedNames = Set(result.map(\.name))
 
         if fallbackPool.isEmpty {
-            // Dataset did not ship a `fallback_palette_pool`. The resolver
-            // cannot pad from anywhere, so bands may underflow their
-            // minimums. Log once per resolve so the regression is visible
-            // in test output — production datasets are required to ship
-            // the pool (see `validate_dataset.py`).
             print("[Resolver] Warning: astrological_style_dataset.json has no fallback_palette_pool; library fallback unavailable.")
             return result
         }
 
-        func padBand(role: ColourRole, minimum: Int, reasonContext: String) {
+        func padBand(role: ColourRole, minimum: Int, reasonContext: String,
+                      hues: inout [Double]) {
             var count = result.filter { $0.role == role }.count
             guard count < minimum else { return }
 
             for candidate in fallbackPool where candidate.role == role {
                 if count >= minimum { break }
                 if usedNames.contains(candidate.name) { continue }
-                let hue = hueFromHex(candidate.hex)
-                let tooClose = selectedHues.contains { hueDistance($0, hue) < 15.0 }
-                if tooClose { continue }
+                let info = hueInfoFromHex(candidate.hex)
+                if !info.isAchromatic {
+                    let tooClose = hues.contains { hueDistance($0, info.hue) < 15.0 }
+                    if tooClose { continue }
+                }
+
+                let fit = familyFitScore(
+                    hex: candidate.hex, library: colourLibrary,
+                    name: candidate.name, target: targetProfile
+                )
+                if fit < fallbackMinFamilyFit { continue }
 
                 result.append(BlueprintColour(
                     name: candidate.name,
@@ -374,15 +514,19 @@ struct DeterministicResolver {
                         reason: "\(reasonContext) — padded from fallback_palette_pool"
                     )
                 ))
-                selectedHues.append(hue)
+                if !info.isAchromatic {
+                    hues.append(info.hue)
+                }
                 count += 1
             }
         }
 
         padBand(role: .core, minimum: coreMinimum,
-                reasonContext: "core band below minimum after escalation")
+                reasonContext: "core band below minimum after escalation",
+                hues: &coreHues)
         padBand(role: .accent, minimum: accentMinimum,
-                reasonContext: "accent band below minimum after escalation")
+                reasonContext: "accent band below minimum after escalation",
+                hues: &accentHues)
 
         return result
     }
@@ -408,6 +552,7 @@ struct DeterministicResolver {
         case let .chartDerived(_, rank, _, _):       return rank
         case let .crossPoolEscalation(_, rank, _, _, _): return rank
         case .libraryFallback:                       return Int.max
+        case .v4Template:                            return 0
         }
     }
 
@@ -435,6 +580,19 @@ struct DeterministicResolver {
         return findClosestColourHex(name: name, library: library) ?? "#808080"
     }
 
+    private static func provenanceSummary(_ colour: BlueprintColour) -> String {
+        switch colour.provenance {
+        case let .chartDerived(comboKey, rank, sourceRole, gap):
+            return "\(sourceRole) from \(comboKey) (rank \(rank), gap \(String(format: "%.0f", gap))°)"
+        case let .crossPoolEscalation(comboKey, rank, originalRole, gap, reason):
+            return "crossPool(\(originalRole)) from \(comboKey) (rank \(rank), gap \(String(format: "%.0f", gap))°) — \(reason)"
+        case let .libraryFallback(reason):
+            return "fallback — \(reason)"
+        case let .v4Template(family, band, index):
+            return "v4Template(\(family)/\(band)[\(index)])"
+        }
+    }
+
     private static func logPaletteProvenance(
         core: [BlueprintColour],
         accent: [BlueprintColour]
@@ -452,6 +610,8 @@ struct DeterministicResolver {
                     cross += 1; ranks.append(rank); maxGap = max(maxGap, gap)
                 case .libraryFallback:
                     fallback += 1
+                case .v4Template:
+                    chart += 1
                 }
             }
             let rankRange: String
@@ -465,6 +625,185 @@ struct DeterministicResolver {
                 + "\(cross) cross-pool; \(fallback) fallback"
         }
         print("[Palette] core: \(summarise(core)); accent: \(summarise(accent)).")
+        #endif
+    }
+
+    // MARK: - Family Coherence (Phase 2/3 — Palette Calibration Programme)
+
+    private static let signElements: [String: String] = [
+        "Aries": "fire", "Taurus": "earth", "Gemini": "air", "Cancer": "water",
+        "Leo": "fire", "Virgo": "earth", "Libra": "air", "Scorpio": "water",
+        "Sagittarius": "fire", "Capricorn": "earth", "Aquarius": "air", "Pisces": "water"
+    ]
+
+    /// Derives the target palette family from chart-level characteristics
+    /// rather than from the colour tokens themselves. This prevents the
+    /// feedback loop where a cool/light token pool self-reinforces.
+    ///
+    /// Signals used:
+    /// - **Temperature**: Venus sign element (fire/earth → warm, air → cool,
+    ///   water → neutral unless air-dominant → cool)
+    /// - **Depth**: chart sect (night → deep, day → medium; earth/water
+    ///   dominant nudges day charts toward deep)
+    /// - **Chroma**: night charts default muted; day charts use element
+    ///   balance (earth/water → muted, fire → moderate, air → moderate)
+    private static func deriveTargetProfileFromChart(
+        analysis: ChartAnalysis
+    ) -> ColourFamilyProfile {
+        let venusElement = signElements[analysis.venusSign] ?? "fire"
+        let dominant = analysis.elementBalance.dominant
+        let isNight = analysis.chartSect == .night
+
+        let temperature: ColourTemperature = {
+            switch venusElement {
+            case "fire", "earth":
+                return .warm
+            case "water":
+                return dominant == "air" ? .cool : .neutral
+            case "air":
+                return dominant == "fire" ? .neutral : .cool
+            default:
+                return .neutral
+            }
+        }()
+
+        let depth: ColourDepth = {
+            if isNight { return .deep }
+            if dominant == "earth" || dominant == "water" { return .deep }
+            return .medium
+        }()
+
+        let chroma: ColourChroma = {
+            if isNight { return .muted }
+            switch dominant {
+            case "earth", "water": return .muted
+            case "fire":           return .moderate
+            default:               return .moderate
+            }
+        }()
+
+        return ColourFamilyProfile(temperature: temperature, depth: depth, chroma: chroma)
+    }
+
+    /// Classifies a colour using explicit library metadata when available,
+    /// falling back to algorithmic derivation from hex.
+    private static func classifyColour(
+        hex: String,
+        library: [String: ColourLibraryEntry],
+        name: String
+    ) -> ColourFamilyProfile {
+        if let entry = library[name],
+           let t = entry.temperature, let d = entry.depth, let c = entry.chroma {
+            return ColourFamilyProfile(temperature: t, depth: d, chroma: c)
+        }
+        return deriveProfileFromHex(hex)
+    }
+
+    /// Algorithmic classification from hex value. Provides reasonable defaults
+    /// for any colour without requiring manual annotation.
+    private static func deriveProfileFromHex(_ hex: String) -> ColourFamilyProfile {
+        guard let hsl = ColourMath.hexToHSL(hex) else {
+            return ColourFamilyProfile(temperature: .neutral, depth: .medium, chroma: .moderate)
+        }
+
+        let hueDeg = hsl.h * 360.0
+        let sat = hsl.s
+        let light = hsl.l
+
+        let temperature: ColourTemperature
+        if sat < 0.10 {
+            temperature = .neutral
+        } else if hueDeg < 75 || hueDeg >= 335 {
+            temperature = .warm
+        } else if hueDeg >= 170 && hueDeg < 275 {
+            temperature = .cool
+        } else {
+            temperature = .neutral
+        }
+
+        let depth: ColourDepth
+        if light < 0.35 {
+            depth = .deep
+        } else if light > 0.65 {
+            depth = .light
+        } else {
+            depth = .medium
+        }
+
+        let chroma: ColourChroma
+        if sat < 0.25 {
+            chroma = .muted
+        } else if sat > 0.65 {
+            chroma = .bright
+        } else {
+            chroma = .moderate
+        }
+
+        return ColourFamilyProfile(temperature: temperature, depth: depth, chroma: chroma)
+    }
+
+    /// Scores how well a colour fits the target profile. Returns 0.0–1.0.
+    /// Depth is the heaviest axis (0.30/step) because light↔deep drift is the
+    /// primary coherence failure the calibration programme addresses.
+    /// Temperature 0.20/step, chroma 0.10/step.
+    private static func familyFitScore(
+        hex: String,
+        library: [String: ColourLibraryEntry],
+        name: String,
+        target: ColourFamilyProfile
+    ) -> Double {
+        let profile = classifyColour(hex: hex, library: library, name: name)
+        var score = 1.0
+        score -= Double(axisDistance(profile.temperature, target.temperature)) * 0.20
+        score -= Double(axisDistance(profile.depth, target.depth)) * 0.30
+        score -= Double(axisDistance(profile.chroma, target.chroma)) * 0.10
+        return max(score, 0.0)
+    }
+
+    private static func axisDistance(_ a: ColourTemperature, _ b: ColourTemperature) -> Int {
+        let order: [ColourTemperature] = [.warm, .neutral, .cool]
+        guard let ai = order.firstIndex(of: a), let bi = order.firstIndex(of: b) else { return 0 }
+        return abs(ai - bi)
+    }
+
+    private static func axisDistance(_ a: ColourDepth, _ b: ColourDepth) -> Int {
+        let order: [ColourDepth] = [.deep, .medium, .light]
+        guard let ai = order.firstIndex(of: a), let bi = order.firstIndex(of: b) else { return 0 }
+        return abs(ai - bi)
+    }
+
+    private static func axisDistance(_ a: ColourChroma, _ b: ColourChroma) -> Int {
+        let order: [ColourChroma] = [.muted, .moderate, .bright]
+        guard let ai = order.firstIndex(of: a), let bi = order.firstIndex(of: b) else { return 0 }
+        return abs(ai - bi)
+    }
+
+    /// Composite sort score: additive blend of token weight and family-fit.
+    /// Lets deeply relevant colours from outer planets (Pluto, Neptune)
+    /// compete with chart-dominant but off-family colours.
+    private static func compositeSortScore(
+        _ token: BlueprintToken,
+        library: [String: ColourLibraryEntry],
+        target: ColourFamilyProfile
+    ) -> Double {
+        let hex = resolveHex(name: token.name, library: library)
+        let fit = familyFitScore(hex: hex, library: library, name: token.name, target: target)
+        return (1.0 - familyFitWeight) * token.weight + familyFitWeight * fit
+    }
+
+    private static func logFamilyCoherence(
+        _ profile: ColourFamilyProfile,
+        core: [BlueprintColour],
+        accent: [BlueprintColour],
+        library: [String: ColourLibraryEntry]
+    ) {
+        #if DEBUG
+        print("[Palette] Target family: \(profile.temperature.rawValue)/\(profile.depth.rawValue)/\(profile.chroma.rawValue)")
+        for anchor in core + accent {
+            let fit = familyFitScore(hex: anchor.hexValue, library: library, name: anchor.name, target: profile)
+            let cls = classifyColour(hex: anchor.hexValue, library: library, name: anchor.name)
+            print("[Palette]   \(anchor.role.rawValue) \(anchor.name): fit=\(String(format: "%.2f", fit)) (\(cls.temperature.rawValue)/\(cls.depth.rawValue)/\(cls.chroma.rawValue))")
+        }
         #endif
     }
 
@@ -763,10 +1102,22 @@ struct DeterministicResolver {
 
     // MARK: - Colour Utilities
 
-    private static func hueFromHex(_ hex: String) -> Double {
+    /// Saturation threshold below which a colour is considered achromatic.
+    /// Achromatic colours (ink, charcoal, pearl, etc.) have meaningless hue
+    /// values and should not block chromatic neighbours on hue distance.
+    private static let achromaticSaturationThreshold: Double = 0.12
+
+    private struct HueInfo {
+        let hue: Double
+        let isAchromatic: Bool
+    }
+
+    private static func hueInfoFromHex(_ hex: String) -> HueInfo {
         let cleaned = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
         guard cleaned.count == 6,
-              let rgb = UInt32(cleaned, radix: 16) else { return 0 }
+              let rgb = UInt32(cleaned, radix: 16) else {
+            return HueInfo(hue: 0, isAchromatic: true)
+        }
 
         let r = Double((rgb >> 16) & 0xFF) / 255.0
         let g = Double((rgb >> 8) & 0xFF) / 255.0
@@ -776,7 +1127,10 @@ struct DeterministicResolver {
         let minC = min(r, g, b)
         let delta = maxC - minC
 
-        guard delta > 0 else { return 0 }
+        let saturation = maxC > 0 ? delta / maxC : 0
+        let achromatic = saturation < achromaticSaturationThreshold
+
+        guard delta > 0 else { return HueInfo(hue: 0, isAchromatic: true) }
 
         var hue: Double
         if maxC == r {
@@ -788,7 +1142,11 @@ struct DeterministicResolver {
         }
 
         if hue < 0 { hue += 360 }
-        return hue
+        return HueInfo(hue: hue, isAchromatic: achromatic)
+    }
+
+    private static func hueFromHex(_ hex: String) -> Double {
+        hueInfoFromHex(hex).hue
     }
 
     private static func hueDistance(_ h1: Double, _ h2: Double) -> Double {

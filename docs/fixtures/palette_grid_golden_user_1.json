@@ -1,216 +1,324 @@
 {
   "rows" : [
     {
-      "anchorHex" : "#F0EAD6",
-      "anchorName" : "pearl",
+      "anchorHex" : "#FFFDF0",
+      "anchorName" : "clear ivory",
       "cells" : [
         {
-          "hex" : "#F8F5EC",
+          "hex" : "#FFFCE5",
           "toneIndex" : 0
         },
         {
-          "hex" : "#F8F5EC",
+          "hex" : "#FFFCE5",
           "toneIndex" : 1
         },
         {
-          "hex" : "#F0EAD6",
+          "hex" : "#FFFCE5",
           "toneIndex" : 2
         },
         {
-          "hex" : "#DCCD9E",
+          "hex" : "#FFF3A3",
           "toneIndex" : 3
         },
         {
-          "hex" : "#C7B166",
+          "hex" : "#FFE957",
+          "toneIndex" : 4
+        }
+      ],
+      "role" : "neutral"
+    },
+    {
+      "anchorHex" : "#384C70",
+      "anchorName" : "warm navy",
+      "cells" : [
+        {
+          "hex" : "#8198C0",
+          "toneIndex" : 0
+        },
+        {
+          "hex" : "#526FA3",
+          "toneIndex" : 1
+        },
+        {
+          "hex" : "#384C70",
+          "toneIndex" : 2
+        },
+        {
+          "hex" : "#1F293D",
+          "toneIndex" : 3
+        },
+        {
+          "hex" : "#090C11",
+          "toneIndex" : 4
+        }
+      ],
+      "role" : "neutral"
+    },
+    {
+      "anchorHex" : "#4B4F54",
+      "anchorName" : "graphite",
+      "cells" : [
+        {
+          "hex" : "#969BA2",
+          "toneIndex" : 0
+        },
+        {
+          "hex" : "#6F757C",
+          "toneIndex" : 1
+        },
+        {
+          "hex" : "#4B4F54",
+          "toneIndex" : 2
+        },
+        {
+          "hex" : "#27292C",
+          "toneIndex" : 3
+        },
+        {
+          "hex" : "#0C0D0D",
+          "toneIndex" : 4
+        }
+      ],
+      "role" : "neutral"
+    },
+    {
+      "anchorHex" : "#C19A6B",
+      "anchorName" : "clear camel",
+      "cells" : [
+        {
+          "hex" : "#EEE4D7",
+          "toneIndex" : 0
+        },
+        {
+          "hex" : "#D8BFA1",
+          "toneIndex" : 1
+        },
+        {
+          "hex" : "#C19A6B",
+          "toneIndex" : 2
+        },
+        {
+          "hex" : "#9E7442",
+          "toneIndex" : 3
+        },
+        {
+          "hex" : "#684C2B",
+          "toneIndex" : 4
+        }
+      ],
+      "role" : "neutral"
+    },
+    {
+      "anchorHex" : "#E35335",
+      "anchorName" : "poppy",
+      "cells" : [
+        {
+          "hex" : "#F6C5BB",
+          "toneIndex" : 0
+        },
+        {
+          "hex" : "#EC8C78",
+          "toneIndex" : 1
+        },
+        {
+          "hex" : "#E35335",
+          "toneIndex" : 2
+        },
+        {
+          "hex" : "#B33319",
+          "toneIndex" : 3
+        },
+        {
+          "hex" : "#70200F",
           "toneIndex" : 4
         }
       ],
       "role" : "core"
     },
     {
-      "anchorHex" : "#FAFAFA",
-      "anchorName" : "soft white",
+      "anchorHex" : "#009B8D",
+      "anchorName" : "bright teal",
       "cells" : [
         {
-          "hex" : "#F2F2F2",
+          "hex" : "#35FFED",
           "toneIndex" : 0
         },
         {
-          "hex" : "#F2F2F2",
+          "hex" : "#00E7D3",
           "toneIndex" : 1
         },
         {
-          "hex" : "#F2F2F2",
+          "hex" : "#009B8D",
           "toneIndex" : 2
         },
         {
-          "hex" : "#D4D4D4",
+          "hex" : "#004E47",
           "toneIndex" : 3
         },
         {
-          "hex" : "#AEAEAE",
+          "hex" : "#001A17",
           "toneIndex" : 4
         }
       ],
       "role" : "core"
     },
     {
-      "anchorHex" : "#0047AB",
-      "anchorName" : "cobalt blue",
+      "anchorHex" : "#FFE302",
+      "anchorName" : "vivid yellow",
       "cells" : [
         {
-          "hex" : "#4592FF",
+          "hex" : "#FFF49B",
           "toneIndex" : 0
         },
         {
-          "hex" : "#0067F7",
+          "hex" : "#FFEB4F",
           "toneIndex" : 1
         },
         {
-          "hex" : "#0047AB",
+          "hex" : "#FFE302",
           "toneIndex" : 2
         },
         {
-          "hex" : "#00275E",
+          "hex" : "#B4A100",
           "toneIndex" : 3
         },
         {
-          "hex" : "#000B1A",
+          "hex" : "#685C00",
           "toneIndex" : 4
         }
       ],
       "role" : "core"
     },
     {
-      "anchorHex" : "#8B8589",
-      "anchorName" : "warm taupe",
+      "anchorHex" : "#0080FF",
+      "anchorName" : "electric blue",
       "cells" : [
         {
-          "hex" : "#D6D3D5",
+          "hex" : "#99CCFF",
           "toneIndex" : 0
         },
         {
-          "hex" : "#B0ACAF",
+          "hex" : "#4DA6FF",
           "toneIndex" : 1
         },
         {
-          "hex" : "#8B8589",
+          "hex" : "#0080FF",
           "toneIndex" : 2
         },
         {
-          "hex" : "#645F63",
+          "hex" : "#005AB3",
           "toneIndex" : 3
         },
         {
-          "hex" : "#3D3A3C",
+          "hex" : "#003366",
           "toneIndex" : 4
         }
       ],
       "role" : "core"
     },
     {
-      "anchorHex" : "#AEC6CF",
-      "anchorName" : "pale blue",
+      "anchorHex" : "#E2583E",
+      "anchorName" : "lacquer coral",
       "cells" : [
         {
-          "hex" : "#EFF4F6",
+          "hex" : "#F6CBC3",
           "toneIndex" : 0
         },
         {
-          "hex" : "#DEE8EB",
+          "hex" : "#EC9281",
           "toneIndex" : 1
         },
         {
-          "hex" : "#AEC6CF",
+          "hex" : "#E2583E",
           "toneIndex" : 2
         },
         {
-          "hex" : "#7EA4B3",
+          "hex" : "#B8341C",
           "toneIndex" : 3
         },
         {
-          "hex" : "#557F8F",
+          "hex" : "#752112",
           "toneIndex" : 4
         }
       ],
       "role" : "accent"
     },
     {
-      "anchorHex" : "#FFF5EE",
-      "anchorName" : "seashell pink",
+      "anchorHex" : "#B0BF1A",
+      "anchorName" : "acid lime",
       "cells" : [
         {
-          "hex" : "#FFF0E5",
+          "hex" : "#E5EE84",
           "toneIndex" : 0
         },
         {
-          "hex" : "#FFF0E5",
+          "hex" : "#D6E540",
           "toneIndex" : 1
         },
         {
-          "hex" : "#FFF0E5",
+          "hex" : "#B0BF1A",
           "toneIndex" : 2
         },
         {
-          "hex" : "#FFC8A2",
+          "hex" : "#727C11",
           "toneIndex" : 3
         },
         {
-          "hex" : "#FF9B55",
+          "hex" : "#343808",
           "toneIndex" : 4
         }
       ],
       "role" : "accent"
     },
     {
-      "anchorHex" : "#CCFF00",
-      "anchorName" : "neon lime",
+      "anchorHex" : "#FFD700",
+      "anchorName" : "bright gold",
       "cells" : [
         {
-          "hex" : "#EBFF99",
+          "hex" : "#FFEF99",
           "toneIndex" : 0
         },
         {
-          "hex" : "#DBFF4D",
+          "hex" : "#FFE34D",
           "toneIndex" : 1
         },
         {
-          "hex" : "#CCFF00",
+          "hex" : "#FFD700",
           "toneIndex" : 2
         },
         {
-          "hex" : "#8FB300",
+          "hex" : "#B39600",
           "toneIndex" : 3
         },
         {
-          "hex" : "#526600",
+          "hex" : "#665600",
           "toneIndex" : 4
         }
       ],
       "role" : "accent"
     },
     {
-      "anchorHex" : "#6B0099",
-      "anchorName" : "ultraviolet",
+      "anchorHex" : "#00CED1",
+      "anchorName" : "clear aqua",
       "cells" : [
         {
-          "hex" : "#C233FF",
+          "hex" : "#6BFDFF",
           "toneIndex" : 0
         },
         {
-          "hex" : "#A000E5",
+          "hex" : "#1FFCFF",
           "toneIndex" : 1
         },
         {
-          "hex" : "#6B0099",
+          "hex" : "#00CED1",
           "toneIndex" : 2
         },
         {
-          "hex" : "#35004D",
+          "hex" : "#008384",
           "toneIndex" : 3
         },
         {
-          "hex" : "#12001A",
+          "hex" : "#003738",
           "toneIndex" : 4
         }
       ],

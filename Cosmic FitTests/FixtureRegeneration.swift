@@ -29,8 +29,20 @@ struct FixtureRegeneration {
         ISO8601DateFormatter().date(from: "2026-04-17T00:00:00Z")!
     }()
 
+    private static var shouldRegenerate: Bool {
+        ProcessInfo.processInfo.environment["REGENERATE_BLUEPRINT_FIXTURES"] == "1"
+    }
+
     @Test("Regenerate blueprint_input_user_1 and _user_2 against new resolver")
     func regenerateBothFixtures() throws {
+        // Safe default for CI/local test runs: validate fixture shape only.
+        // Opt in to write-on-disk regeneration explicitly.
+        guard Self.shouldRegenerate else {
+            try validateFixtureShape(filename: "blueprint_input_user_1.json")
+            try validateFixtureShape(filename: "blueprint_input_user_2.json")
+            return
+        }
+
         guard let dataset = Self.loadDataset() else {
             Issue.record("Failed to load astrological_style_dataset.json")
             return
@@ -55,6 +67,18 @@ struct FixtureRegeneration {
             latitude: 51.5074, longitude: -0.1278,
             dataset: dataset, narrativeCache: narrativeCache
         )
+    }
+
+    private func validateFixtureShape(filename: String) throws {
+        let data = try Data(contentsOf: Self.fixturesURL().appendingPathComponent(filename))
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let fixture = try decoder.decode(CosmicBlueprint.self, from: data)
+
+        #expect(fixture.palette.accentColours.count == 4,
+                "Fixture \(filename) must have exactly 4 accents")
+        #expect(fixture.palette.coreColours.count >= 3,
+                "Fixture \(filename) must have at least 3 core colours")
     }
 
     // MARK: - Regeneration

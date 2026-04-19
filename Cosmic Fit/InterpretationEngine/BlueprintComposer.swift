@@ -12,7 +12,7 @@ import Foundation
 
 struct BlueprintComposer {
 
-    static let engineVersion = "1.0.0"
+    static let engineVersion = "2.0.0"
 
     // MARK: - Full Pipeline
 
@@ -27,12 +27,20 @@ struct BlueprintComposer {
     ) -> CosmicBlueprint {
         let analysis = ChartAnalyser.analyse(chart: chart)
 
+        // V4 colour engine — the only palette path
+        let adapted = ChartInputAdapter.adapt(analysis: analysis, natalChart: chart)
+        let colourResult = ColourEngine.evaluateProduction(input: adapted.colourInput)
+
         let tokenResult = BlueprintTokenGenerator.generate(
             analysis: analysis,
             dataset: dataset
         )
 
-        let resolved = DeterministicResolver.resolve(
+        // NOTE: V4 is the only production palette path. We still run the
+        // deterministic resolver for non-palette fields (metals, stones,
+        // code, patterns, textures) used by Group B narrative placeholders.
+        // Palette anchors from this resolver are intentionally discarded.
+        let resolved = DeterministicResolver.resolveNonPalette(
             tokens: tokenResult.tokens,
             analysis: analysis,
             dataset: tokenResult.dataset,
@@ -70,13 +78,21 @@ struct BlueprintComposer {
             narrativesMut["occasions_daily"] = (narrativesMut["occasions_daily"] ?? "") + "\n\n" + append
         }
 
-        let templateContext = NarrativeTemplateRenderer.buildContext(resolved: resolved)
+        var templateContext = NarrativeTemplateRenderer.buildContext(resolved: resolved)
+        let v4Context = NarrativeTemplateRenderer.buildV4PaletteContext(colourResult: colourResult)
+        templateContext.merge(v4Context) { _, v4 in v4 }
+
         for sectionKey in NarrativeTemplateRenderer.groupBSections {
             guard let raw = narrativesMut[sectionKey], !raw.isEmpty else { continue }
             narrativesMut[sectionKey] = NarrativeTemplateRenderer.render(
                 template: raw, context: templateContext
             )
         }
+
+        let paletteSection = buildV4PaletteSection(
+            colourResult: colourResult,
+            narrativeText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.paletteNarrative.rawValue] ?? ""
+        )
 
         let now = Date()
 
@@ -97,12 +113,7 @@ struct BlueprintComposer {
                 avoidTextures: resolved.avoidTextures,
                 sweetSpotKeywords: resolved.sweetSpotKeywords
             ),
-            palette: PaletteSection(
-                coreColours: resolved.coreColours,
-                accentColours: resolved.accentColours,
-                swatchFamilies: resolved.swatchFamilies,
-                narrativeText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.paletteNarrative.rawValue] ?? ""
-            ),
+            palette: paletteSection,
             occasions: OccasionsSection(
                 workText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.occasionsWork.rawValue] ?? "",
                 intimateText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.occasionsIntimate.rawValue] ?? "",
@@ -135,6 +146,42 @@ struct BlueprintComposer {
             ),
             generatedAt: now,
             engineVersion: engineVersion
+        )
+    }
+
+    // MARK: - V4 Palette Builder
+
+    private static func buildV4PaletteSection(
+        colourResult: ColourEngineResult,
+        narrativeText: String
+    ) -> PaletteSection {
+        let family = colourResult.family
+
+        func makeBand(
+            names: [String], band: String, role: ColourRole
+        ) -> [BlueprintColour] {
+            names.enumerated().map { index, name in
+                BlueprintColour(
+                    name: name,
+                    hexValue: PaletteLibrary.hex(for: name),
+                    role: role,
+                    provenance: .v4Template(
+                        family: family.rawValue, band: band, index: index
+                    )
+                )
+            }
+        }
+
+        return PaletteSection(
+            neutrals: makeBand(names: colourResult.palette.neutrals, band: "neutrals", role: .neutral),
+            coreColours: makeBand(names: colourResult.palette.coreColours, band: "core", role: .core),
+            accentColours: makeBand(names: colourResult.palette.accentColours, band: "accent", role: .accent),
+            family: colourResult.family,
+            cluster: colourResult.cluster,
+            variables: colourResult.variables,
+            secondaryPull: colourResult.secondaryPull,
+            overrideFlags: colourResult.trace.overrideFlags,
+            narrativeText: narrativeText
         )
     }
 

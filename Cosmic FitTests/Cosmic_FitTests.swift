@@ -268,13 +268,99 @@ struct BlueprintModelTests {
 
     // MARK: - ColourRole Assertions
 
-    @Test("ColourRole has exactly 3 cases")
+    @Test("ColourRole has exactly 4 cases")
     func colourRoleCoverage() {
         let allCases = ColourRole.allCases
-        #expect(allCases.count == 3)
-        let expected: Set<String> = ["core", "accent", "statement"]
+        #expect(allCases.count == 4)
+        let expected: Set<String> = ["neutral", "core", "accent", "statement"]
         let actual = Set(allCases.map(\.rawValue))
         #expect(actual == expected)
+    }
+
+    @Test("Blueprint JSON contract round-trip preserves V4 palette fields")
+    func v4PaletteJsonContractRoundTrip() throws {
+        let provenance: ColourProvenance = .v4Template(family: "Deep Autumn", band: "test", index: 0)
+        var flags = OverrideFlags()
+        flags.scorpioDensityApplied = true
+        flags.capricornVirgoCoolingApplied = true
+        flags.fireAirChromaApplied = true
+        flags.waterSofteningApplied = false
+        flags.earthDepthOverrideApplied = true
+        flags.winterCompressionApplied = false
+        flags.surfacePreservationApplied = true
+        flags.coolLeanDeepAutumn = false
+        let palette = PaletteSection(
+            neutrals: [
+                BlueprintColour(name: "warm ivory", hexValue: "#F5EDE0", role: .neutral, provenance: provenance),
+                BlueprintColour(name: "camel sand", hexValue: "#C4A775", role: .neutral, provenance: provenance),
+                BlueprintColour(name: "warm stone", hexValue: "#8C7A6B", role: .neutral, provenance: provenance),
+                BlueprintColour(name: "espresso", hexValue: "#3C2415", role: .neutral, provenance: provenance),
+            ],
+            coreColours: [
+                BlueprintColour(name: "sage", hexValue: "#7AA18C", role: .core, provenance: provenance),
+                BlueprintColour(name: "caramel", hexValue: "#B08254", role: .core, provenance: provenance),
+                BlueprintColour(name: "slate", hexValue: "#4B5A6E", role: .core, provenance: provenance),
+                BlueprintColour(name: "cream", hexValue: "#F0EADC", role: .core, provenance: provenance),
+            ],
+            accentColours: [
+                BlueprintColour(name: "saffron", hexValue: "#D4A23C", role: .accent, provenance: provenance),
+                BlueprintColour(name: "dusty rose", hexValue: "#C97D7D", role: .accent, provenance: provenance),
+                BlueprintColour(name: "teal", hexValue: "#3C7A85", role: .accent, provenance: provenance),
+                BlueprintColour(name: "midnight blue", hexValue: "#1F2A44", role: .accent, provenance: provenance),
+            ],
+            family: .deepAutumn,
+            cluster: .deepWarmStructured,
+            variables: DerivedVariables(depth: .deep, temperature: .warm, saturation: .rich, contrast: .medium, surface: .structured),
+            secondaryPull: .deepWinter,
+            overrideFlags: flags,
+            narrativeText: "V4 test palette"
+        )
+
+        let blueprint = CosmicBlueprint(
+            userInfo: BlueprintUserInfo(
+                birthDate: Date(timeIntervalSince1970: 500_000_000),
+                birthLocation: "London, UK",
+                generationDate: Date(timeIntervalSince1970: 500_000_100)
+            ),
+            styleCore: StyleCoreSection(narrativeText: "Style core"),
+            textures: TexturesSection(goodText: "Good", badText: "Bad", sweetSpotText: "Sweet"),
+            palette: palette,
+            occasions: OccasionsSection(workText: "Work", intimateText: "Intimate", dailyText: "Daily"),
+            hardware: HardwareSection(
+                metalsText: "Metals",
+                stonesText: "Stones",
+                tipText: "Tip",
+                recommendedMetals: ["silver", "gold"],
+                recommendedStones: ["onyx", "amber"]
+            ),
+            code: CodeSection(leanInto: ["lean"], avoid: ["avoid"], consider: ["consider"]),
+            accessory: AccessorySection(paragraphs: ["a", "b", "c"]),
+            pattern: PatternSection(
+                narrativeText: "Pattern narrative",
+                tipText: "Pattern tip",
+                recommendedPatterns: ["pinstripe"],
+                avoidPatterns: ["paisley"]
+            ),
+            generatedAt: Date(timeIntervalSince1970: 500_000_200),
+            engineVersion: "2.0.0"
+        )
+
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let encoded = try encoder.encode(blueprint)
+
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let decoded = try decoder.decode(CosmicBlueprint.self, from: encoded)
+
+        #expect(decoded.palette.isV4)
+        #expect((decoded.palette.neutrals ?? []).count == 4)
+        #expect(decoded.palette.family == PaletteFamily.deepAutumn)
+        #expect(decoded.palette.cluster == PaletteCluster.deepWarmStructured)
+        #expect(decoded.palette.variables?.depth == .deep)
+        #expect(decoded.palette.secondaryPull == PaletteFamily.deepWinter)
+        #expect(decoded.palette.overrideFlags?.earthDepthOverrideApplied == true)
+        #expect(decoded.palette.overrideFlags?.surfacePreservationApplied == true)
     }
 
     // MARK: - BlueprintToken Round-Trip
@@ -1383,3 +1469,74 @@ struct BlueprintComposerTemplateTests {
     }
 }
 
+// MARK: - Palette Calibration Diagnostic
+
+struct PaletteCalibrationDiagnostic {
+
+    @Test("Ash palette contains warm/deep colours after additive formula")
+    func ashPaletteCalibration() throws {
+        guard ProcessInfo.processInfo.environment["PALETTE_CALIBRATION_DIAGNOSTIC"] == "1" else {
+            return
+        }
+        let testFile = URL(fileURLWithPath: #filePath)
+        let repoRoot = testFile.deletingLastPathComponent().deletingLastPathComponent()
+        guard let dataset = BlueprintTokenGenerator.loadDataset(
+            from: repoRoot.appendingPathComponent("astrological_style_dataset.json")
+        ) else {
+            Issue.record("Failed to load dataset")
+            return
+        }
+
+        let chart = NatalChartCalculator.calculateNatalChart(
+            birthDate: ISO8601DateFormatter().date(from: "1984-12-11T00:00:00Z")!,
+            latitude: 51.5074, longitude: -0.1278,
+            timeZone: TimeZone(secondsFromGMT: 0)!
+        )
+        let analysis = ChartAnalyser.analyse(chart: chart)
+
+        // Diagnostic: check what Venus sign the calculator actually produces
+        #expect(analysis.venusSign == "Sagittarius",
+                "Expected Venus in Sagittarius but got \(analysis.venusSign). planetSigns=\(analysis.planetSigns)")
+
+        // Diagnostic: check token provenance for venus
+        let tokenResult = BlueprintTokenGenerator.generate(analysis: analysis, dataset: dataset)
+        let venusTokenKeys = tokenResult.contributingCombos
+            .filter { $0.key.hasPrefix("venus_") }
+            .map { "\($0.key) w=\(String(format: "%.3f", $0.aggregateWeight))" }
+        #expect(!venusTokenKeys.isEmpty, "No venus tokens found. Combos: \(tokenResult.contributingCombos.map(\.key))")
+
+        let resolved = DeterministicResolver.resolve(
+            tokens: tokenResult.tokens, analysis: analysis,
+            dataset: dataset, contributingCombos: tokenResult.contributingCombos
+        )
+
+        let allColours = resolved.coreColours + resolved.accentColours
+        let allNames = allColours.map { $0.name.lowercased() }
+        let allNamesJoined = allNames.joined(separator: ", ")
+
+        // Build provenance info for debugging
+        let provenanceInfo = allColours.map { c -> String in
+            switch c.provenance {
+            case let .chartDerived(comboKey, _, _, _): return "\(c.name)←\(comboKey)"
+            case let .crossPoolEscalation(comboKey, _, _, _, _): return "\(c.name)←xpool(\(comboKey))"
+            case .libraryFallback: return "\(c.name)←fallback"
+            case let .v4Template(family, band, _): return "\(c.name)←v4(\(family)/\(band))"
+            }
+        }.joined(separator: ", ")
+
+        print("[PaletteCalibrationDiagnostic] Venus tokens: \(venusTokenKeys). Palette provenance: \(provenanceInfo)")
+
+        // Pearl and soft white should NOT be in the palette with additive formula
+        let hasPearl = allNames.contains("pearl")
+        let hasSoftWhite = allNames.contains("soft white")
+        #expect(!hasPearl, "Pearl should be demoted. Palette: \(allNamesJoined)")
+        #expect(!hasSoftWhite, "Soft white should be demoted. Palette: \(allNamesJoined)")
+
+        // Warm/deep colours should appear
+        let warmDeepNames = ["warm ochre", "burnt sienna", "dark burgundy", "oxblood",
+                             "worn leather", "deep teal", "warm taupe", "ink"]
+        let warmDeepCount = allNames.filter { name in warmDeepNames.contains(name) }.count
+        #expect(warmDeepCount >= 5,
+                "Expected ≥5 warm/deep colours, got \(warmDeepCount). Palette: \(allNamesJoined)")
+    }
+}

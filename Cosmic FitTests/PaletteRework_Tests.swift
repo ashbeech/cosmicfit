@@ -63,6 +63,13 @@ struct PaletteReworkTests {
         ISO8601DateFormatter().date(from: s)!
     }
 
+    /// Returns false when no legacy fixtures are present in the current set.
+    /// This keeps legacy assertions dormant under all-V4 fixtures while
+    /// automatically re-activating if a legacy fixture is reintroduced.
+    private static func hasLegacyFixtures(_ fixtures: [CosmicBlueprint]) -> Bool {
+        fixtures.contains { !$0.palette.isV4 }
+    }
+
     // MARK: - §12.2: Exact accent count
 
     @Test("Both fixtures have exactly 4 accent colours")
@@ -114,8 +121,15 @@ struct PaletteReworkTests {
     /// escalation here should be rare. ≥ 3 of 4 core anchors must be chart-derived.
     @Test("Both fixtures: at least 3 of 4 core anchors are chart-derived")
     func coreChartDerivedFloor() throws {
-        for spec in Self.fixtureSpecs {
-            let bp = try Self.loadBlueprint(spec.filename)
+        let fixtures = try Self.fixtureSpecs.map { spec in
+            (spec: spec, bp: try Self.loadBlueprint(spec.filename))
+        }
+        guard Self.hasLegacyFixtures(fixtures.map { $0.bp }) else { return }
+
+        for entry in fixtures {
+            let spec = entry.spec
+            let bp = entry.bp
+            guard !bp.palette.isV4 else { continue }
             let chartDerivedCore = bp.palette.coreColours.reduce(into: 0) { acc, colour in
                 if case .chartDerived = colour.provenance { acc += 1 }
             }
@@ -128,8 +142,15 @@ struct PaletteReworkTests {
     /// ≥ 2 of 4 accents must be chart-derived; up to 2 may be cross-pool.
     @Test("Both fixtures: at least 2 of 4 accent anchors are chart-derived")
     func accentChartDerivedFloor() throws {
-        for spec in Self.fixtureSpecs {
-            let bp = try Self.loadBlueprint(spec.filename)
+        let fixtures = try Self.fixtureSpecs.map { spec in
+            (spec: spec, bp: try Self.loadBlueprint(spec.filename))
+        }
+        guard Self.hasLegacyFixtures(fixtures.map { $0.bp }) else { return }
+
+        for entry in fixtures {
+            let spec = entry.spec
+            let bp = entry.bp
+            guard !bp.palette.isV4 else { continue }
             let chartDerivedAccent = bp.palette.accentColours.reduce(into: 0) { acc, colour in
                 if case .chartDerived = colour.provenance { acc += 1 }
             }
@@ -150,19 +171,67 @@ struct PaletteReworkTests {
     /// (`mars_gemini` rank 5, `neptune_capricorn` rank 8).
     @Test("Both fixtures: at least 2 of 4 accents come from the top-5 contributors")
     func accentsTopContributors() throws {
-        for spec in Self.fixtureSpecs {
-            let bp = try Self.loadBlueprint(spec.filename)
+        let fixtures = try Self.fixtureSpecs.map { spec in
+            (spec: spec, bp: try Self.loadBlueprint(spec.filename))
+        }
+        guard Self.hasLegacyFixtures(fixtures.map { $0.bp }) else { return }
+
+        for entry in fixtures {
+            let spec = entry.spec
+            let bp = entry.bp
+            guard !bp.palette.isV4 else { continue }
             let topRankAccentCount = bp.palette.accentColours.reduce(into: 0) { acc, colour in
                 let rank: Int
                 switch colour.provenance {
                 case let .chartDerived(_, r, _, _):           rank = r
                 case let .crossPoolEscalation(_, r, _, _, _): rank = r
                 case .libraryFallback:                        return
+                case .v4Template:                             return
                 }
                 if rank < 5 { acc += 1 }
             }
             #expect(topRankAccentCount >= 2,
                     "\(spec.label): only \(topRankAccentCount) of 4 accents in top-5 contributors")
+        }
+    }
+
+    // MARK: - V4 Invariants
+
+    @Test("V4 fixtures use template provenance for all 12 anchors")
+    func v4TemplateProvenanceIntegrity() throws {
+        for spec in Self.fixtureSpecs {
+            let bp = try Self.loadBlueprint(spec.filename)
+            guard bp.palette.isV4 else { continue }
+            let allAnchors = (bp.palette.neutrals ?? []) + bp.palette.coreColours + bp.palette.accentColours
+            #expect(allAnchors.count == 12, "\(spec.label): expected 12 anchors for V4 template integrity")
+            for anchor in allAnchors {
+                if case .v4Template = anchor.provenance {
+                    continue
+                }
+                Issue.record("\(spec.label): non-template provenance found in V4 fixture for \(anchor.name)")
+            }
+        }
+    }
+
+    @Test("V4 fixtures keep 4/4/4 band counts")
+    func v4BandCounts() throws {
+        for spec in Self.fixtureSpecs {
+            let bp = try Self.loadBlueprint(spec.filename)
+            guard bp.palette.isV4 else { continue }
+            #expect((bp.palette.neutrals ?? []).count == 4, "\(spec.label): V4 neutrals count must be 4")
+            #expect(bp.palette.coreColours.count == 4, "\(spec.label): V4 core count must be 4")
+            #expect(bp.palette.accentColours.count == 4, "\(spec.label): V4 accent count must be 4")
+        }
+    }
+
+    @Test("V4 fixtures include family, cluster, and variables")
+    func v4ClassificationFieldsPresent() throws {
+        for spec in Self.fixtureSpecs {
+            let bp = try Self.loadBlueprint(spec.filename)
+            guard bp.palette.isV4 else { continue }
+            #expect(bp.palette.family != nil, "\(spec.label): V4 family should be present")
+            #expect(bp.palette.cluster != nil, "\(spec.label): V4 cluster should be present")
+            #expect(bp.palette.variables != nil, "\(spec.label): V4 variables should be present")
         }
     }
 
@@ -206,6 +275,7 @@ struct PaletteReworkTests {
         case let .chartDerived(_, _, _, gap):                return gap
         case let .crossPoolEscalation(_, _, _, gap, _):      return gap
         case .libraryFallback:                               return 15.0
+        case .v4Template:                                    return 0.0
         }
     }
 
@@ -330,6 +400,7 @@ struct PaletteReworkTests {
         case let .chartDerived(_, rank, _, _):           return rank
         case let .crossPoolEscalation(_, rank, _, _, _): return rank
         case .libraryFallback:                           return .max
+        case .v4Template:                                return 0
         }
     }
 
