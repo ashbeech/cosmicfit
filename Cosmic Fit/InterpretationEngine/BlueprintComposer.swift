@@ -96,6 +96,21 @@ struct BlueprintComposer {
 
         logV4PaletteReadout(paletteSection)
 
+        #if DEBUG
+        logBlueprintDiagnostics(
+            analysis: analysis,
+            tokenResult: tokenResult,
+            resolved: resolved,
+            keyResult: keyResult,
+            resolvedKey: resolvedKey,
+            usedFallback: usedFallback,
+            overlays: overlays,
+            templateContext: templateContext,
+            narrativesMut: narrativesMut,
+            dataset: dataset
+        )
+        #endif
+
         let now = Date()
 
         return CosmicBlueprint(
@@ -315,6 +330,180 @@ struct BlueprintComposer {
             narrativeText: narrativeText
         )
     }
+
+    // MARK: - Blueprint Decision Tree Diagnostics
+
+    #if DEBUG
+    private static func logBlueprintDiagnostics(
+        analysis: ChartAnalysis,
+        tokenResult: BlueprintTokenGenerator.TokenGenerationResult,
+        resolved: DeterministicResolverResult,
+        keyResult: ArchetypeKeyGenerator.KeyGenerationResult,
+        resolvedKey: String,
+        usedFallback: Bool,
+        overlays: HouseSectOverlayGenerator.Overlays,
+        templateContext: [String: String],
+        narrativesMut: NarrativeClusterEntry,
+        dataset: AstrologicalStyleDataset
+    ) {
+        let p = "[BlueprintDiag]"
+
+        print("\(p) ╔══════════════════════════════════════════════════════════════")
+        print("\(p) ║  BLUEPRINT DECISION TREE — FULL DIAGNOSTIC")
+        print("\(p) ╚══════════════════════════════════════════════════════════════")
+
+        // ── 1. CHART INPUT ──
+        print("\(p)")
+        print("\(p) ── 1. CHART INPUT ──────────────────────────────────────────")
+        print("\(p) Sun: \(analysis.sunSign)   Moon: \(analysis.moonSign)   Ascendant: \(analysis.ascendantSign)")
+        print("\(p) Venus: \(analysis.venusSign)   Mars: \(analysis.marsSign)")
+        print("\(p) Chart Ruler: \(analysis.chartRuler)")
+        print("\(p) Sect: \(analysis.chartSect) chart")
+        print("\(p) Elements: fire=\(analysis.elementBalance.fire) earth=\(analysis.elementBalance.earth) air=\(analysis.elementBalance.air) water=\(analysis.elementBalance.water) → dominant: \(analysis.elementBalance.dominant)")
+        print("\(p) Dominant planets: \(analysis.dominantPlanets.joined(separator: ", "))")
+
+        print("\(p) Planet signs & houses:")
+        for planet in ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"] {
+            let sign = analysis.planetSigns[planet] ?? "—"
+            let house = analysis.planetHouses[planet].map { "H\($0)" } ?? "—"
+            let dignity = analysis.planetDignities[planet].map { "\($0)" } ?? "peregrine"
+            let sect = analysis.planetSectStatus[planet].map { "\($0)" } ?? "—"
+            print("\(p)   \(planet.padding(toLength: 9, withPad: " ", startingAt: 0)) \(sign.padding(toLength: 12, withPad: " ", startingAt: 0)) \(house.padding(toLength: 5, withPad: " ", startingAt: 0)) dignity=\(dignity.padding(toLength: 10, withPad: " ", startingAt: 0)) sect=\(sect)")
+        }
+        print("\(p)   Ascendant  \(analysis.ascendantSign)")
+
+        // ── 2. CONTRIBUTING COMBOS ──
+        print("\(p)")
+        print("\(p) ── 2. CONTRIBUTING COMBOS (ranked by weight) ────────────────")
+        for (i, combo) in tokenResult.contributingCombos.enumerated() {
+            let marker = i < 5 ? "★" : " "
+            print("\(p)   \(marker) #\(i + 1) \(combo.key.padding(toLength: 22, withPad: " ", startingAt: 0)) weight=\(String(format: "%.3f", combo.aggregateWeight))")
+        }
+
+        // Sign concentration
+        var signGroups: [String: Int] = [:]
+        for combo in tokenResult.contributingCombos {
+            let parts = combo.key.split(separator: "_")
+            if let sign = parts.last { signGroups[String(sign), default: 0] += 1 }
+        }
+        let stelliums = signGroups.filter { $0.value >= 3 }.sorted { $0.value > $1.value }
+        if !stelliums.isEmpty {
+            print("\(p)   Stelliums detected:")
+            for (sign, count) in stelliums {
+                print("\(p)     \(sign): \(count) combos (concentration bonus = +\(count - 2))")
+            }
+        } else {
+            print("\(p)   No stelliums (3+ combos in one sign)")
+        }
+
+        // ── 3. NARRATIVE SELECTION ──
+        print("\(p)")
+        print("\(p) ── 3. NARRATIVE SELECTION ──────────────────────────────────")
+        print("\(p) Archetype key: \(keyResult.archetypeCluster)")
+        print("\(p) Venus=\(keyResult.venusComponent) Moon=\(keyResult.moonComponent) element=\(keyResult.elementComponent)")
+        if usedFallback {
+            print("\(p) ⚠️  FALLBACK: exact key not found → resolved to: \(resolvedKey)")
+        } else {
+            print("\(p) ✅ Exact match found")
+        }
+
+        // ── 4. HARDWARE (Metals & Stones) ──
+        print("\(p)")
+        print("\(p) ── 4. HARDWARE ─────────────────────────────────────────────")
+        print("\(p) Sect bias: \(analysis.chartSect) → \(analysis.chartSect == .night ? "cool metals boosted +1" : "warm metals boosted +1")")
+
+        print("\(p) Top 5 combo metals contribution:")
+        for combo in tokenResult.contributingCombos.prefix(5) {
+            if let entry = dataset.planetSign[combo.key] {
+                print("\(p)   \(combo.key): metals=\(entry.metals) stones=\(entry.stones)")
+            }
+        }
+
+        print("\(p) Final recommended metals: \(resolved.recommendedMetals.joined(separator: ", "))")
+        print("\(p) Final recommended stones: \(resolved.recommendedStones.joined(separator: ", "))")
+
+        // ── 5. TEXTURES ──
+        print("\(p)")
+        print("\(p) ── 5. TEXTURES ─────────────────────────────────────────────")
+        print("\(p) Recommended: \(resolved.recommendedTextures.joined(separator: ", "))")
+        print("\(p) Avoid: \(resolved.avoidTextures.joined(separator: ", "))")
+        print("\(p) Sweet spot keywords: \(resolved.sweetSpotKeywords.joined(separator: ", "))")
+
+        // ── 6. PATTERNS ──
+        print("\(p)")
+        print("\(p) ── 6. PATTERNS ─────────────────────────────────────────────")
+        print("\(p) Recommended: \(resolved.recommendedPatterns.joined(separator: ", "))")
+        print("\(p) Avoid: \(resolved.avoidPatterns.joined(separator: ", "))")
+
+        // ── 7. CODE DIRECTIVES ──
+        print("\(p)")
+        print("\(p) ── 7. CODE DIRECTIVES ──────────────────────────────────────")
+        print("\(p) Lean into: \(resolved.leanInto.joined(separator: " · "))")
+        print("\(p) Avoid: \(resolved.avoid.joined(separator: " · "))")
+        print("\(p) Consider: \(resolved.consider.joined(separator: " · "))")
+
+        // ── 8. HOUSE/SECT OVERLAYS ──
+        print("\(p)")
+        print("\(p) ── 8. HOUSE/SECT OVERLAYS ──────────────────────────────────")
+        let venusH = analysis.planetHouses["Venus"].map { "H\($0)" } ?? "—"
+        let moonH = analysis.planetHouses["Moon"].map { "H\($0)" } ?? "—"
+        print("\(p) Venus house: \(venusH)   Moon house: \(moonH)")
+        print("\(p) style_core append: \(overlays.styleCoreAppend != nil ? "YES (\(overlays.styleCoreAppend!.prefix(60))…)" : "none")")
+        print("\(p) textures_sweet_spot append: \(overlays.texturesSweetSpotAppend != nil ? "YES (\(overlays.texturesSweetSpotAppend!.prefix(60))…)" : "none")")
+        print("\(p) occasions_work append: \(overlays.occasionsWorkAppend != nil ? "YES (\(overlays.occasionsWorkAppend!.prefix(60))…)" : "none")")
+        print("\(p) occasions_intimate append: \(overlays.occasionsIntimateAppend != nil ? "YES (\(overlays.occasionsIntimateAppend!.prefix(60))…)" : "none")")
+        print("\(p) occasions_daily append: \(overlays.occasionsDailyAppend != nil ? "YES (\(overlays.occasionsDailyAppend!.prefix(60))…)" : "none")")
+
+        // ── 9. TEMPLATE RENDERING (Group B placeholders) ──
+        print("\(p)")
+        print("\(p) ── 9. TEMPLATE PLACEHOLDERS (Group B substitutions) ────────")
+        let metalKeys = templateContext.filter { $0.key.hasPrefix("metal_") }.sorted { $0.key < $1.key }
+        let stoneKeys = templateContext.filter { $0.key.hasPrefix("stone_") }.sorted { $0.key < $1.key }
+        let textureKeys = templateContext.filter { $0.key.hasPrefix("texture_") }.sorted { $0.key < $1.key }
+        let patternKeys = templateContext.filter { $0.key.hasPrefix("recommended_pattern_") || $0.key.hasPrefix("avoid_pattern_") }.sorted { $0.key < $1.key }
+        let colourKeys = templateContext.filter { $0.key.hasPrefix("core_colour_") || $0.key.hasPrefix("accent_colour_") || $0.key.hasPrefix("neutral_colour_") }.sorted { $0.key < $1.key }
+        let paletteVarKeys = templateContext.filter { ["family", "cluster", "depth", "temperature", "saturation", "contrast", "surface"].contains($0.key) }.sorted { $0.key < $1.key }
+
+        for kv in metalKeys { print("\(p)   {\(kv.key)} → \(kv.value)") }
+        for kv in stoneKeys { print("\(p)   {\(kv.key)} → \(kv.value)") }
+        for kv in textureKeys { print("\(p)   {\(kv.key)} → \(kv.value)") }
+        for kv in patternKeys { print("\(p)   {\(kv.key)} → \(kv.value)") }
+        for kv in colourKeys { print("\(p)   {\(kv.key)} → \(kv.value)") }
+        for kv in paletteVarKeys { print("\(p)   {\(kv.key)} → \(kv.value)") }
+
+        // ── 10. FINAL NARRATIVE SECTIONS ──
+        print("\(p)")
+        print("\(p) ── 10. FINAL NARRATIVE SECTIONS (first 80 chars each) ──────")
+        let sectionOrder: [(String, String)] = [
+            ("style_core", "Style Core"),
+            ("textures_good", "Textures: Good"),
+            ("textures_bad", "Textures: Avoid"),
+            ("textures_sweet_spot", "Textures: Sweet Spot"),
+            ("palette_narrative", "Palette"),
+            ("occasions_work", "Occasions: Work"),
+            ("occasions_intimate", "Occasions: Intimate"),
+            ("occasions_daily", "Occasions: Daily"),
+            ("hardware_metals", "Hardware: Metals"),
+            ("hardware_stones", "Hardware: Stones"),
+            ("hardware_tip", "Hardware: Tip"),
+            ("accessory_1", "Accessory §1"),
+            ("accessory_2", "Accessory §2"),
+            ("accessory_3", "Accessory §3"),
+            ("pattern_narrative", "Pattern"),
+            ("pattern_tip", "Pattern: Tip")
+        ]
+        for (key, label) in sectionOrder {
+            let text = narrativesMut[key] ?? "(empty)"
+            let preview = String(text.prefix(80)).replacingOccurrences(of: "\n", with: " ")
+            let suffix = text.count > 80 ? "…" : ""
+            print("\(p)   \(label.padding(toLength: 22, withPad: " ", startingAt: 0)) \(preview)\(suffix)")
+        }
+
+        print("\(p) ╔══════════════════════════════════════════════════════════════")
+        print("\(p) ║  END BLUEPRINT DIAGNOSTIC")
+        print("\(p) ╚══════════════════════════════════════════════════════════════")
+    }
+    #endif
 
     // MARK: - Pre-assembled (for testing or when steps are run separately)
 

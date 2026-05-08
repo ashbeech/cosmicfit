@@ -1354,8 +1354,8 @@ struct NarrativeTemplateRendererTests {
         #expect(ctx["core_colour_1"] == "midnight")
         #expect(ctx["core_colour_2"] == "slate")
         #expect(ctx["accent_colour_1"] == "dusty rose")
-        #expect(ctx["metal_1"] == "silver")
-        #expect(ctx["metal_2"] == "steel")
+        #expect(ctx["metal_1"] == "silver tones")
+        #expect(ctx["metal_2"] == "steel tones")
         #expect(ctx["stone_1"] == "onyx")
         #expect(ctx["stone_2"] == "obsidian")
         #expect(ctx["recommended_pattern_1"] == "pinstripe")
@@ -1539,5 +1539,402 @@ struct PaletteCalibrationDiagnostic {
         let warmDeepCount = allNames.filter { name in warmDeepNames.contains(name) }.count
         #expect(warmDeepCount >= 5,
                 "Expected ≥5 warm/deep colours, got \(warmDeepCount). Palette: \(allNamesJoined)")
+    }
+}
+
+// MARK: - Hardware Allocation Audit (100 synthetic users)
+
+struct HardwareAllocationAuditTests {
+
+    private static let allSigns = [
+        "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+        "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
+    ]
+
+    private static let signElements: [String: String] = [
+        "Aries": "fire", "Taurus": "earth", "Gemini": "air", "Cancer": "water",
+        "Leo": "fire", "Virgo": "earth", "Libra": "air", "Scorpio": "water",
+        "Sagittarius": "fire", "Capricorn": "earth", "Aquarius": "air", "Pisces": "water"
+    ]
+
+    private static let warmMetals: Set<String> = [
+        "yellow gold", "rose gold", "warm bronze", "polished brass",
+        "bright copper", "polished copper", "soft gold", "aged brass",
+        "hammered gold", "oxidised copper", "gilded finishes", "gilded bronze",
+        "polished brass", "polished copper"
+    ]
+
+    private static let coolMetals: Set<String> = [
+        "sterling silver", "polished silver", "brushed silver", "silver",
+        "white gold", "platinum", "matte platinum", "surgical steel",
+        "titanium", "gunmetal", "blackened silver", "oxidised steel",
+        "matte white gold", "antique silver", "opal-set silver"
+    ]
+
+    private func loadTestDataset() -> AstrologicalStyleDataset? {
+        let testFile = URL(fileURLWithPath: #filePath)
+        let repoRoot = testFile.deletingLastPathComponent().deletingLastPathComponent()
+        let datasetURL = repoRoot.appendingPathComponent("astrological_style_dataset.json")
+        return BlueprintTokenGenerator.loadDataset(from: datasetURL)
+    }
+
+    private struct SyntheticUser {
+        let id: Int
+        let venusSign: String
+        let moonSign: String
+        let sunSign: String
+        let marsSign: String
+        let ascendantSign: String
+        let sect: ChartSect
+    }
+
+    private func generateSyntheticUsers() -> [SyntheticUser] {
+        let signs = Self.allSigns
+        var users: [SyntheticUser] = []
+        var id = 0
+
+        for venusSign in signs {
+            let moonIndex = (signs.firstIndex(of: venusSign)! + 3) % 12
+            let sunIndex = (signs.firstIndex(of: venusSign)! + 1) % 12
+            let marsIndex = (signs.firstIndex(of: venusSign)! + 5) % 12
+            let ascIndex = (signs.firstIndex(of: venusSign)! + 7) % 12
+
+            // Two users per Venus sign: one day sect, one night sect
+            for sect in [ChartSect.day, ChartSect.night] {
+                users.append(SyntheticUser(
+                    id: id, venusSign: venusSign, moonSign: signs[moonIndex],
+                    sunSign: signs[sunIndex], marsSign: signs[marsIndex],
+                    ascendantSign: signs[ascIndex], sect: sect
+                ))
+                id += 1
+            }
+
+            // Third user: shifted Moon for variety
+            let moonIndex2 = (signs.firstIndex(of: venusSign)! + 6) % 12
+            users.append(SyntheticUser(
+                id: id, venusSign: venusSign, moonSign: signs[moonIndex2],
+                sunSign: signs[sunIndex], marsSign: signs[marsIndex],
+                ascendantSign: signs[ascIndex], sect: .night
+            ))
+            id += 1
+
+            // Fourth user: shifted Ascendant
+            let ascIndex2 = (signs.firstIndex(of: venusSign)! + 10) % 12
+            users.append(SyntheticUser(
+                id: id, venusSign: venusSign, moonSign: signs[moonIndex],
+                sunSign: signs[sunIndex], marsSign: signs[marsIndex],
+                ascendantSign: signs[ascIndex2], sect: .day
+            ))
+            id += 1
+        }
+
+        // Additional edge cases: same sign stelliums
+        for sign in signs.prefix(4) {
+            users.append(SyntheticUser(
+                id: id, venusSign: sign, moonSign: sign,
+                sunSign: sign, marsSign: sign,
+                ascendantSign: signs[(signs.firstIndex(of: sign)! + 6) % 12],
+                sect: .night
+            ))
+            id += 1
+        }
+
+        return users
+    }
+
+    private func makeAnalysis(user: SyntheticUser) -> ChartAnalysis {
+        let signs = [
+            "Sun": user.sunSign, "Moon": user.moonSign,
+            "Venus": user.venusSign, "Mars": user.marsSign,
+            "Mercury": Self.allSigns[(Self.allSigns.firstIndex(of: user.sunSign)! + 2) % 12],
+            "Jupiter": Self.allSigns[(Self.allSigns.firstIndex(of: user.sunSign)! + 4) % 12],
+            "Saturn": Self.allSigns[(Self.allSigns.firstIndex(of: user.sunSign)! + 8) % 12]
+        ]
+
+        var fire = 0, earth = 0, air = 0, water = 0
+        for (_, sign) in signs {
+            switch Self.signElements[sign] {
+            case "fire": fire += 1
+            case "earth": earth += 1
+            case "air": air += 1
+            case "water": water += 1
+            default: break
+            }
+        }
+        if let ascEl = Self.signElements[user.ascendantSign] {
+            switch ascEl {
+            case "fire": fire += 1
+            case "earth": earth += 1
+            case "air": air += 1
+            case "water": water += 1
+            default: break
+            }
+        }
+
+        let houses: [String: Int] = [
+            "Sun": 5, "Moon": 4, "Venus": 7, "Mars": 10,
+            "Mercury": 3, "Jupiter": 9, "Saturn": 11
+        ]
+
+        var houseScores: [Int: Double] = [:]
+        for h in 1...12 { houseScores[h] = 0.0 }
+        for (_, house) in houses { houseScores[house, default: 0] += 0.5 }
+
+        let dominantHouses = houseScores
+            .sorted { a, b in a.value != b.value ? a.value > b.value : a.key < b.key }
+            .prefix(3).map(\.key)
+
+        let sectStatus = ChartAnalyser.computePlanetSectStatus(chartSect: user.sect)
+
+        return ChartAnalysis(
+            elementBalance: ElementBalance(fire: fire, earth: earth, air: air, water: water),
+            modalityBalance: ModalityBalance(cardinal: 3, fixed: 3, mutable: 2),
+            chartRuler: "Venus",
+            sunSign: user.sunSign,
+            moonSign: user.moonSign,
+            ascendantSign: user.ascendantSign,
+            venusSign: user.venusSign,
+            marsSign: user.marsSign,
+            planetSigns: signs,
+            planetDignities: [:],
+            planetHouses: houses,
+            significantAspects: [],
+            dominantPlanets: ["Venus", "Moon", "Sun"],
+            chartSect: user.sect,
+            planetSectStatus: sectStatus,
+            houseEmphasis: HouseEmphasis(
+                houseScores: houseScores,
+                dominantHouses: Array(dominantHouses),
+                venusHouseDomain: ChartAnalyser.houseDomainLabels[7] ?? "partnerships",
+                moonHouseDomain: ChartAnalyser.houseDomainLabels[4] ?? "home"
+            )
+        )
+    }
+
+    @Test("Hardware allocation produces non-empty metals and stones for 52 synthetic users")
+    func hardwareNonEmpty() {
+        guard let dataset = loadTestDataset() else {
+            Issue.record("Failed to load dataset"); return
+        }
+
+        let users = generateSyntheticUsers()
+        #expect(users.count >= 52)
+
+        for user in users {
+            let analysis = makeAnalysis(user: user)
+            let tokenResult = BlueprintTokenGenerator.generate(analysis: analysis, dataset: dataset)
+            let resolved = DeterministicResolver.resolveNonPalette(
+                tokens: tokenResult.tokens, analysis: analysis,
+                dataset: dataset, contributingCombos: tokenResult.contributingCombos
+            )
+
+            #expect(resolved.recommendedMetals.count >= 2,
+                    "User \(user.id) (Venus \(user.venusSign)): got \(resolved.recommendedMetals.count) metals — expected ≥2")
+            #expect(resolved.recommendedStones.count >= 2,
+                    "User \(user.id) (Venus \(user.venusSign)): got \(resolved.recommendedStones.count) stones — expected ≥2")
+
+            let hasPlaceholder = resolved.recommendedMetals.contains("(see Blueprint for details)")
+            #expect(!hasPlaceholder,
+                    "User \(user.id) (Venus \(user.venusSign)): metals fell back to placeholder — \(resolved.recommendedMetals)")
+        }
+    }
+
+    @Test("Hardware allocation includes variety and warm metals surface for warm-Venus users")
+    func hardwareTemperatureDistribution() {
+        guard let dataset = loadTestDataset() else {
+            Issue.record("Failed to load dataset"); return
+        }
+
+        let users = generateSyntheticUsers()
+        var noMetalUsers: [Int] = []
+        var distinctTopMetals: Set<String> = []
+        var warmPresenceCount = 0
+        var coolPresenceCount = 0
+        var mixedCount = 0
+
+        for user in users {
+            let analysis = makeAnalysis(user: user)
+            let tokenResult = BlueprintTokenGenerator.generate(analysis: analysis, dataset: dataset)
+            let resolved = DeterministicResolver.resolveNonPalette(
+                tokens: tokenResult.tokens, analysis: analysis,
+                dataset: dataset, contributingCombos: tokenResult.contributingCombos
+            )
+
+            let metals = resolved.recommendedMetals
+            if metals.isEmpty || metals.allSatisfy({ $0 == "(see Blueprint for details)" }) {
+                noMetalUsers.append(user.id)
+                continue
+            }
+
+            if let top = metals.first { distinctTopMetals.insert(top.lowercased()) }
+
+            let hasWarmAny = metals.contains { Self.warmMetals.contains($0.lowercased()) }
+            let hasCoolAny = metals.contains { Self.coolMetals.contains($0.lowercased()) }
+
+            if hasWarmAny { warmPresenceCount += 1 }
+            if hasCoolAny { coolPresenceCount += 1 }
+            if hasWarmAny && hasCoolAny { mixedCount += 1 }
+
+            print("[HardwareAudit] User \(user.id) Venus=\(user.venusSign) Moon=\(user.moonSign) Asc=\(user.ascendantSign) → \(metals.prefix(5).joined(separator: ", "))")
+        }
+
+        print("[HardwareAudit] Population: \(users.count) users")
+        print("[HardwareAudit] Warm metals present: \(warmPresenceCount)")
+        print("[HardwareAudit] Cool metals present: \(coolPresenceCount)")
+        print("[HardwareAudit] Mixed warm+cool: \(mixedCount)")
+        print("[HardwareAudit] Distinct top metals: \(distinctTopMetals.count) — \(distinctTopMetals.sorted().joined(separator: ", "))")
+
+        #expect(noMetalUsers.isEmpty,
+                "Users with no metals: \(noMetalUsers)")
+        #expect(distinctTopMetals.count >= 4,
+                "Only \(distinctTopMetals.count) distinct top metals across \(users.count) users — insufficient variety")
+        #expect(warmPresenceCount > users.count / 3,
+                "Warm metals appeared for only \(warmPresenceCount)/\(users.count) users — warm metals underrepresented")
+        #expect(coolPresenceCount > users.count / 3,
+                "Cool metals appeared for only \(coolPresenceCount)/\(users.count) users — cool metals underrepresented")
+        #expect(mixedCount > users.count / 4,
+                "Only \(mixedCount)/\(users.count) users got mixed warm+cool — widened combo window should produce blended results")
+    }
+
+    @Test("Cool-sign Moon or Ascendant can surface silver-family metals in top 3")
+    func silverSurfacesForCoolPlacements() {
+        guard let dataset = loadTestDataset() else {
+            Issue.record("Failed to load dataset"); return
+        }
+
+        let coolMoonSigns = ["Capricorn", "Aquarius", "Virgo", "Scorpio"]
+        let coolAscSigns = ["Pisces", "Aquarius", "Capricorn", "Virgo"]
+        var silverSurfacedCount = 0
+        var testedCount = 0
+
+        for moonSign in coolMoonSigns {
+            for ascSign in coolAscSigns {
+                let user = SyntheticUser(
+                    id: testedCount, venusSign: "Aries", moonSign: moonSign,
+                    sunSign: "Taurus", marsSign: "Gemini",
+                    ascendantSign: ascSign, sect: .night
+                )
+
+                let analysis = makeAnalysis(user: user)
+                let tokenResult = BlueprintTokenGenerator.generate(analysis: analysis, dataset: dataset)
+                let resolved = DeterministicResolver.resolveNonPalette(
+                    tokens: tokenResult.tokens, analysis: analysis,
+                    dataset: dataset, contributingCombos: tokenResult.contributingCombos
+                )
+
+                let top3 = resolved.recommendedMetals.prefix(3).map { $0.lowercased() }
+                let hasSilverFamily = top3.contains { Self.coolMetals.contains($0) }
+
+                if hasSilverFamily { silverSurfacedCount += 1 }
+                testedCount += 1
+
+                print("[SilverAudit] Moon=\(moonSign) Asc=\(ascSign) → \(resolved.recommendedMetals.joined(separator: ", ")) | silver in top 3: \(hasSilverFamily)")
+            }
+        }
+
+        #expect(silverSurfacedCount >= testedCount / 3,
+                "Silver-family metals surfaced in only \(silverSurfacedCount)/\(testedCount) cool-placement users — expected at least a third")
+    }
+
+    @Test("Hardware allocation is deterministic across 20 runs")
+    func hardwareDeterminism() {
+        guard let dataset = loadTestDataset() else {
+            Issue.record("Failed to load dataset"); return
+        }
+
+        let user = SyntheticUser(
+            id: 0, venusSign: "Aries", moonSign: "Capricorn",
+            sunSign: "Taurus", marsSign: "Gemini",
+            ascendantSign: "Pisces", sect: .night
+        )
+
+        let analysis = makeAnalysis(user: user)
+        var previousMetals: [String]?
+        var previousStones: [String]?
+
+        for _ in 0..<20 {
+            let tokenResult = BlueprintTokenGenerator.generate(analysis: analysis, dataset: dataset)
+            let resolved = DeterministicResolver.resolveNonPalette(
+                tokens: tokenResult.tokens, analysis: analysis,
+                dataset: dataset, contributingCombos: tokenResult.contributingCombos
+            )
+
+            if let prev = previousMetals {
+                #expect(resolved.recommendedMetals == prev,
+                        "Metal output is nondeterministic")
+            }
+            if let prev = previousStones {
+                #expect(resolved.recommendedStones == prev,
+                        "Stone output is nondeterministic")
+            }
+            previousMetals = resolved.recommendedMetals
+            previousStones = resolved.recommendedStones
+        }
+    }
+
+    @Test("Night chart with Capricorn stellium surfaces silver/platinum in top metals")
+    func capricornStelliumNightChart() {
+        guard let dataset = loadTestDataset() else {
+            Issue.record("Failed to load dataset"); return
+        }
+
+        let signs: [String: String] = [
+            "Sun": "Taurus", "Moon": "Capricorn", "Venus": "Taurus",
+            "Mars": "Gemini", "Mercury": "Aries",
+            "Jupiter": "Gemini", "Saturn": "Capricorn",
+            "Uranus": "Capricorn", "Neptune": "Capricorn"
+        ]
+
+        let houses: [String: Int] = [
+            "Sun": 2, "Moon": 10, "Venus": 2, "Mars": 3,
+            "Mercury": 1, "Jupiter": 3, "Saturn": 10,
+            "Uranus": 10, "Neptune": 10
+        ]
+
+        var houseScores: [Int: Double] = [:]
+        for h in 1...12 { houseScores[h] = 0.0 }
+        for (_, house) in houses { houseScores[house, default: 0] += 0.5 }
+        let dominantHouses = houseScores
+            .sorted { a, b in a.value != b.value ? a.value > b.value : a.key < b.key }
+            .prefix(3).map(\.key)
+
+        let sectStatus = ChartAnalyser.computePlanetSectStatus(chartSect: .night)
+
+        let analysis = ChartAnalysis(
+            elementBalance: ElementBalance(fire: 1, earth: 4, air: 2, water: 1),
+            modalityBalance: ModalityBalance(cardinal: 4, fixed: 2, mutable: 2),
+            chartRuler: "Venus",
+            sunSign: "Taurus", moonSign: "Capricorn",
+            ascendantSign: "Pisces", venusSign: "Taurus", marsSign: "Gemini",
+            planetSigns: signs, planetDignities: ["Venus": .domicile],
+            planetHouses: houses, significantAspects: [],
+            dominantPlanets: ["Venus", "Moon", "Saturn"],
+            chartSect: .night, planetSectStatus: sectStatus,
+            houseEmphasis: HouseEmphasis(
+                houseScores: houseScores,
+                dominantHouses: Array(dominantHouses),
+                venusHouseDomain: ChartAnalyser.houseDomainLabels[2] ?? "resources",
+                moonHouseDomain: ChartAnalyser.houseDomainLabels[10] ?? "career"
+            )
+        )
+
+        let tokenResult = BlueprintTokenGenerator.generate(analysis: analysis, dataset: dataset)
+        let resolved = DeterministicResolver.resolveNonPalette(
+            tokens: tokenResult.tokens, analysis: analysis,
+            dataset: dataset, contributingCombos: tokenResult.contributingCombos
+        )
+
+        let allMetals = resolved.recommendedMetals.map { $0.lowercased() }
+        let top5 = Array(allMetals.prefix(5))
+        let silverFamily = top5.filter {
+            $0.contains("silver") || $0.contains("platinum") || $0.contains("white gold")
+        }
+
+        print("[CapStellium] Night chart, Venus domicile Taurus, Cap stellium (Moon+Saturn+Uranus+Neptune)")
+        print("[CapStellium] All metals: \(resolved.recommendedMetals.joined(separator: ", "))")
+        print("[CapStellium] Silver-family in top 5: \(silverFamily)")
+
+        #expect(silverFamily.count >= 2,
+                "Capricorn stellium + night chart should surface ≥2 silver-family metals in top 5, got \(silverFamily) from \(top5)")
     }
 }

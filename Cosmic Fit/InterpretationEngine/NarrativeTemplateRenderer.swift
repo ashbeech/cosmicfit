@@ -95,7 +95,7 @@ struct NarrativeTemplateRenderer {
             ctx["accent_colour_\(i + 1)"] = c.name
         }
         for (i, m) in resolved.recommendedMetals.enumerated() {
-            ctx["metal_\(i + 1)"] = m
+            ctx["metal_\(i + 1)"] = softenMetalName(m)
         }
         for (i, s) in resolved.recommendedStones.enumerated() {
             ctx["stone_\(i + 1)"] = s
@@ -152,5 +152,17 @@ struct NarrativeTemplateRenderer {
         ctx["surface"] = colourResult.variables.surface.rawValue
 
         return ctx
+    }
+
+    // MARK: - Tone Softening
+
+    private static let alreadySoftSuffixes = ["metals", "finishes", "tones", "set"]
+
+    private static func softenMetalName(_ name: String) -> String {
+        let lower = name.lowercased()
+        if alreadySoftSuffixes.contains(where: { lower.hasSuffix($0) }) {
+            return name
+        }
+        return "\(name) tones"
     }
 }

@@ -819,12 +819,28 @@ struct DeterministicResolver {
         let stones: [String]
     }
 
+    private static let coolMetalKeywords: Set<String> = [
+        "silver", "platinum", "white gold", "matte platinum", "surgical steel",
+        "titanium", "gunmetal", "steel"
+    ]
+
+    private static let warmMetalKeywords: Set<String> = [
+        "gold", "rose gold", "brass", "bronze", "copper"
+    ]
+
+    private static func metalTemperature(_ name: String) -> Int {
+        let lower = name.lowercased()
+        if coolMetalKeywords.contains(where: { lower.contains($0) }) { return -1 }
+        if warmMetalKeywords.contains(where: { lower.contains($0) }) { return 1 }
+        return 0
+    }
+
     private static func resolveHardware(
         contributingCombos: [(key: String, aggregateWeight: Double)],
         dataset: AstrologicalStyleDataset,
         analysis: ChartAnalysis
     ) -> HardwareResult {
-        let topCombos = Array(contributingCombos.prefix(3))
+        let topCombos = Array(contributingCombos.prefix(5))
 
         var metalCounts: [String: (count: Int, maxWeight: Double)] = [:]
         var stoneCounts: [String: (count: Int, maxWeight: Double)] = [:]
@@ -842,6 +858,52 @@ struct DeterministicResolver {
                 let lower = stone.lowercased()
                 let existing = stoneCounts[lower] ?? (0, 0)
                 stoneCounts[lower] = (existing.count + 1, max(existing.maxWeight, combo.aggregateWeight))
+            }
+        }
+
+        // Stellium detection: if 3+ combos share a sign, boost metals/stones
+        // from ALL combos in that sign (not just the top 5). This ensures a
+        // Capricorn stellium surfaces silver/platinum even when individual
+        // outer-planet combos rank below the top 5.
+        var signGroups: [String: [(key: String, aggregateWeight: Double)]] = [:]
+        for combo in contributingCombos {
+            let parts = combo.key.split(separator: "_")
+            if let sign = parts.last { signGroups[String(sign), default: []].append(combo) }
+        }
+        for (_, combos) in signGroups where combos.count >= 3 {
+            let bestWeight = combos.map(\.aggregateWeight).max() ?? 0
+            let concentration = combos.count - 2
+            for combo in combos {
+                guard let entry = dataset.planetSign[combo.key] else { continue }
+                for metal in entry.metals {
+                    let lower = metal.lowercased()
+                    let existing = metalCounts[lower] ?? (0, 0)
+                    metalCounts[lower] = (
+                        existing.count + concentration,
+                        max(existing.maxWeight, bestWeight)
+                    )
+                }
+                for stone in entry.stones {
+                    let lower = stone.lowercased()
+                    let existing = stoneCounts[lower] ?? (0, 0)
+                    stoneCounts[lower] = (
+                        existing.count + concentration,
+                        max(existing.maxWeight, bestWeight)
+                    )
+                }
+            }
+        }
+
+        // Sect influence: night charts favour cooler/deeper metals,
+        // day charts favour warmer/brighter metals. Applied as a count
+        // nudge so it influences ranking without overriding strong signals.
+        let isNight = analysis.chartSect == .night
+        for (metal, value) in metalCounts {
+            let temp = metalTemperature(metal)
+            if isNight && temp < 0 {
+                metalCounts[metal] = (value.count + 1, value.maxWeight)
+            } else if !isNight && temp > 0 {
+                metalCounts[metal] = (value.count + 1, value.maxWeight)
             }
         }
 
@@ -863,7 +925,8 @@ struct DeterministicResolver {
                 if a.value.maxWeight != b.value.maxWeight { return a.value.maxWeight > b.value.maxWeight }
                 let aBias: Double = biasMetals.contains(a.key) ? 1.0 : 0.0
                 let bBias: Double = biasMetals.contains(b.key) ? 1.0 : 0.0
-                return aBias > bBias
+                if aBias != bBias { return aBias > bBias }
+                return a.key < b.key
             }
             .map(\.key)
 
@@ -873,7 +936,8 @@ struct DeterministicResolver {
                 if a.value.maxWeight != b.value.maxWeight { return a.value.maxWeight > b.value.maxWeight }
                 let aBias: Double = biasStones.contains(a.key) ? 1.0 : 0.0
                 let bBias: Double = biasStones.contains(b.key) ? 1.0 : 0.0
-                return aBias > bBias
+                if aBias != bBias { return aBias > bBias }
+                return a.key < b.key
             }
             .map(\.key)
 

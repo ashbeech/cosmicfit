@@ -137,7 +137,7 @@ final class StyleGuideDetailViewController: UIViewController {
     private let contentStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = 40
+        stack.spacing = 20
         stack.alignment = .fill
         stack.distribution = .fill
         return stack
@@ -429,32 +429,78 @@ final class StyleGuideDetailViewController: UIViewController {
         return container
     }
     
+    private static let sentencesPerParagraph = 2
+
     private func createBodyLabel(text: String) -> UIView {
-        // Create container for padding
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Create the label
+
         let label = UILabel()
-        label.text = text
-        label.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
+        label.attributedText = Self.paragraphFormatted(text)
         label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .left
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.translatesAutoresizingMaskIntoConstraints = false
-        
+
         container.addSubview(label)
-        
-        // Reduced padding - 10px less on each side
+
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: container.topAnchor),
             label.bottomAnchor.constraint(equalTo: container.bottomAnchor),
             label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
             label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10)
         ])
-        
+
         return container
+    }
+
+    private static func paragraphFormatted(_ text: String) -> NSAttributedString {
+        let style = NSMutableParagraphStyle()
+        style.paragraphSpacing = 14
+        style.lineSpacing = 3
+
+        let font = CosmicFitTheme.Typography.DMSerifTextFont(
+            size: CosmicFitTheme.Typography.FontSizes.body,
+            weight: .regular
+        )
+
+        let attrs: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .paragraphStyle: style
+        ]
+
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if trimmed.contains("\n\n") {
+            return NSAttributedString(string: trimmed, attributes: attrs)
+        }
+
+        let sentences = splitIntoSentences(trimmed)
+        guard sentences.count > sentencesPerParagraph else {
+            return NSAttributedString(string: trimmed, attributes: attrs)
+        }
+
+        var paragraphs: [String] = []
+        for start in stride(from: 0, to: sentences.count, by: sentencesPerParagraph) {
+            let end = min(start + sentencesPerParagraph, sentences.count)
+            paragraphs.append(sentences[start..<end].joined(separator: " "))
+        }
+
+        return NSAttributedString(string: paragraphs.joined(separator: "\n"), attributes: attrs)
+    }
+
+    private static func splitIntoSentences(_ text: String) -> [String] {
+        var sentences: [String] = []
+        text.enumerateSubstrings(
+            in: text.startIndex...,
+            options: .bySentences
+        ) { substring, _, _, _ in
+            if let s = substring?.trimmingCharacters(in: .whitespaces), !s.isEmpty {
+                sentences.append(s)
+            }
+        }
+        return sentences
     }
     
     // MARK: - Actions

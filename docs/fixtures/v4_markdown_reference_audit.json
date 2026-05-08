@@ -1,5 +1,5 @@
 {
-  "generatedAt" : "2026-05-07T09:21:12Z",
+  "generatedAt" : "2026-05-08T10:46:03Z",
   "markdownReferencePath" : "\/Users\/ash\/dev\/mobile_apps\/cosmicfit\/docs\/fixtures\/v4_markdown_reference.json",
   "placementsPath" : "\/Users\/ash\/dev\/mobile_apps\/cosmicfit\/docs\/fixtures\/v4_placements.json",
   "rows" : [
@@ -10,9 +10,7 @@
       "lightAnchor" : "warm white",
       "liveAccentColours" : [
         "#056463",
-        "#865373",
-        "#2E766B",
-        "#7E1B2F"
+        "#865373"
       ],
       "liveCoreColours" : [
         "honey yellow",
@@ -111,16 +109,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#2E766B",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#C9C0BB",
           "name" : "pearl grey",
           "source" : "support[0]"
@@ -194,9 +182,7 @@
       "lightAnchor" : "warm white",
       "liveAccentColours" : [
         "#00706F",
-        "#366064",
-        "#005E64",
-        "#82312E"
+        "#366064"
       ],
       "liveCoreColours" : [
         "honey yellow",
@@ -295,16 +281,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#005E64",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#82312E",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#C9C0BB",
           "name" : "pearl grey",
           "source" : "support[0]"
@@ -378,9 +354,7 @@
       "lightAnchor" : "warm white",
       "liveAccentColours" : [
         "#00706F",
-        "#005D69",
-        "#7E1B2F",
-        "#CB674C"
+        "#005D69"
       ],
       "liveCoreColours" : [
         "honey yellow",
@@ -479,16 +453,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#CB674C",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#C9C0BB",
           "name" : "pearl grey",
           "source" : "support[0]"
@@ -562,9 +526,7 @@
       "lightAnchor" : "warm white",
       "liveAccentColours" : [
         "#056463",
-        "#82312E",
-        "#D14649",
-        "#CA692D"
+        "#82312E"
       ],
       "liveCoreColours" : [
         "honey yellow",
@@ -663,16 +625,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#D14649",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#CA692D",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#C9C0BB",
           "name" : "pearl grey",
           "source" : "support[0]"
@@ -746,9 +698,7 @@
       "lightAnchor" : "warm white",
       "liveAccentColours" : [
         "#386B6C",
-        "#005D69",
-        "#00706F",
-        "#AE4D37"
+        "#005D69"
       ],
       "liveCoreColours" : [
         "honey yellow",
@@ -847,16 +797,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#00706F",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#AE4D37",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#C9C0BB",
           "name" : "pearl grey",
           "source" : "support[0]"
@@ -930,9 +870,7 @@
       "lightAnchor" : "warm white",
       "liveAccentColours" : [
         "#865373",
-        "#00706F",
-        "#005D69",
-        "#82312E"
+        "#00706F"
       ],
       "liveCoreColours" : [
         "honey yellow",
@@ -1031,16 +969,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#005D69",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#82312E",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#C9C0BB",
           "name" : "pearl grey",
           "source" : "support[0]"
@@ -1114,9 +1042,7 @@
       "lightAnchor" : "warm ivory",
       "liveAccentColours" : [
         "#005E64",
-        "#2E766B",
-        "#CA692D",
-        "#E96675"
+        "#2E766B"
       ],
       "liveCoreColours" : [
         "marigold",
@@ -1215,16 +1141,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#CA692D",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#E96675",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -1298,9 +1214,7 @@
       "lightAnchor" : "warm ivory",
       "liveAccentColours" : [
         "#3C746F",
-        "#005D69",
-        "#7E1B2F",
-        "#C47A3E"
+        "#005D69"
       ],
       "liveCoreColours" : [
         "marigold",
@@ -1399,16 +1313,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#C47A3E",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -1482,9 +1386,7 @@
       "lightAnchor" : "warm ivory",
       "liveAccentColours" : [
         "#00656E",
-        "#2D6D68",
-        "#7E1B2F",
-        "#736C29"
+        "#2D6D68"
       ],
       "liveCoreColours" : [
         "marigold",
@@ -1583,16 +1485,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#736C29",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -1666,9 +1558,7 @@
       "lightAnchor" : "warm ivory",
       "liveAccentColours" : [
         "#00656E",
-        "#366064",
-        "#2D6D68",
-        "#7E1B2F"
+        "#366064"
       ],
       "liveCoreColours" : [
         "marigold",
@@ -1767,16 +1657,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#2D6D68",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -1850,9 +1730,7 @@
       "lightAnchor" : "warm ivory",
       "liveAccentColours" : [
         "#865373",
-        "#82312E",
-        "#00656E",
-        "#AE4D37"
+        "#82312E"
       ],
       "liveCoreColours" : [
         "marigold",
@@ -1951,16 +1829,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#00656E",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#AE4D37",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -2034,9 +1902,7 @@
       "lightAnchor" : "warm ivory",
       "liveAccentColours" : [
         "#865373",
-        "#005E64",
-        "#82312E",
-        "#AE4D37"
+        "#005E64"
       ],
       "liveCoreColours" : [
         "marigold",
@@ -2135,16 +2001,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#82312E",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#AE4D37",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -2218,9 +2074,7 @@
       "lightAnchor" : "warm ivory",
       "liveAccentColours" : [
         "#3C746F",
-        "#00656E",
-        "#005E64",
-        "#7E1B2F"
+        "#00656E"
       ],
       "liveCoreColours" : [
         "marigold",
@@ -2319,16 +2173,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#005E64",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -2402,9 +2246,7 @@
       "lightAnchor" : "warm ivory",
       "liveAccentColours" : [
         "#005E64",
-        "#865373",
-        "#2E766B",
-        "#366064"
+        "#865373"
       ],
       "liveCoreColours" : [
         "marigold",
@@ -2503,16 +2345,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#2E766B",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#366064",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -2586,9 +2418,7 @@
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
         "#00818A",
-        "#A36B89",
-        "#21776B",
-        "#762249"
+        "#A36B89"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -2687,16 +2517,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#21776B",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#762249",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#9C9A9A",
           "name" : "dove grey",
           "source" : "support[0]"
@@ -2770,9 +2590,7 @@
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
         "#387C7E",
-        "#007788",
-        "#2F9097",
-        "#D35D70"
+        "#007788"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -2871,16 +2689,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#2F9097",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#D35D70",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#9C9A9A",
           "name" : "dove grey",
           "source" : "support[0]"
@@ -2954,9 +2762,7 @@
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
         "#2F9097",
-        "#387C7E",
-        "#007788",
-        "#762249"
+        "#387C7E"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -3055,16 +2861,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#007788",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#762249",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#9C9A9A",
           "name" : "dove grey",
           "source" : "support[0]"
@@ -3138,9 +2934,7 @@
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
         "#007788",
-        "#762249",
-        "#8A4484",
-        "#25515B"
+        "#762249"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -3239,16 +3033,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#8A4484",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#25515B",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#9C9A9A",
           "name" : "dove grey",
           "source" : "support[0]"
@@ -3322,9 +3106,7 @@
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
         "#5E8B91",
-        "#A36B89",
-        "#387C7E",
-        "#762249"
+        "#A36B89"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -3423,16 +3205,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#387C7E",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#762249",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#9C9A9A",
           "name" : "dove grey",
           "source" : "support[0]"
@@ -3506,9 +3278,7 @@
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
         "#906584",
-        "#387C7E",
-        "#2F9097",
-        "#751A2F"
+        "#387C7E"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -3607,16 +3377,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#2F9097",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#751A2F",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#9C9A9A",
           "name" : "dove grey",
           "source" : "support[0]"
@@ -3690,9 +3450,7 @@
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
         "#A36B89",
-        "#387C7E",
-        "#007788",
-        "#762249"
+        "#387C7E"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -3791,16 +3549,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#007788",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#762249",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#9C9A9A",
           "name" : "dove grey",
           "source" : "support[0]"
@@ -3874,9 +3622,7 @@
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
         "#2F9097",
-        "#762249",
-        "#007788",
-        "#8A4484"
+        "#762249"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -3975,16 +3721,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#007788",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#8A4484",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#9C9A9A",
           "name" : "dove grey",
           "source" : "support[0]"
@@ -4058,9 +3794,7 @@
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
         "#762249",
-        "#387C7E",
-        "#8A4484",
-        "#6E764B"
+        "#387C7E"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -4159,16 +3893,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#8A4484",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#6E764B",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#9C9A9A",
           "name" : "dove grey",
           "source" : "support[0]"
@@ -4242,9 +3966,7 @@
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
         "#2F9097",
-        "#D35D70",
-        "#437F4C",
-        "#AD661D"
+        "#D35D70"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -4343,16 +4065,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#437F4C",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#AD661D",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#9C9A9A",
           "name" : "dove grey",
           "source" : "support[0]"
@@ -4426,9 +4138,7 @@
       "lightAnchor" : "soft white",
       "liveAccentColours" : [
         "#653F96",
-        "#5485C8",
-        "#1D6640",
-        "#1C475B"
+        "#5485C8"
       ],
       "liveCoreColours" : [
         "powder blue",
@@ -4527,16 +4237,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#1D6640",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#1C475B",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#F5E6C8",
           "name" : "buttercream",
           "source" : "support[0]"
@@ -4610,9 +4310,7 @@
       "lightAnchor" : "soft white",
       "liveAccentColours" : [
         "#3D7E65",
-        "#9F3D8A",
-        "#00BAB2",
-        "#8EB6CE"
+        "#9F3D8A"
       ],
       "liveCoreColours" : [
         "powder blue",
@@ -4711,16 +4409,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#00BAB2",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#8EB6CE",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#F5E6C8",
           "name" : "buttercream",
           "source" : "support[0]"
@@ -4794,9 +4482,7 @@
       "lightAnchor" : "soft white",
       "liveAccentColours" : [
         "#9F3D8A",
-        "#5485C8",
-        "#1D6640",
-        "#A08CC9"
+        "#5485C8"
       ],
       "liveCoreColours" : [
         "powder blue",
@@ -4895,16 +4581,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#1D6640",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#A08CC9",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#F5E6C8",
           "name" : "buttercream",
           "source" : "support[0]"
@@ -4978,9 +4654,7 @@
       "lightAnchor" : "soft white",
       "liveAccentColours" : [
         "#9F3D8A",
-        "#9665A3",
-        "#1D6640",
-        "#8EB6CE"
+        "#9665A3"
       ],
       "liveCoreColours" : [
         "powder blue",
@@ -5079,16 +4753,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#1D6640",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#8EB6CE",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#F5E6C8",
           "name" : "buttercream",
           "source" : "support[0]"
@@ -5162,9 +4826,7 @@
       "lightAnchor" : "soft white",
       "liveAccentColours" : [
         "#653F96",
-        "#3D7E65",
-        "#A08CC9",
-        "#8EB6CE"
+        "#3D7E65"
       ],
       "liveCoreColours" : [
         "powder blue",
@@ -5263,16 +4925,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#A08CC9",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#8EB6CE",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#F5E6C8",
           "name" : "buttercream",
           "source" : "support[0]"
@@ -5346,9 +4998,7 @@
       "lightAnchor" : "soft white",
       "liveAccentColours" : [
         "#653F96",
-        "#3D7E65",
-        "#A08CC9",
-        "#51A9C0"
+        "#3D7E65"
       ],
       "liveCoreColours" : [
         "powder blue",
@@ -5447,16 +5097,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#A08CC9",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#51A9C0",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#F5E6C8",
           "name" : "buttercream",
           "source" : "support[0]"
@@ -5530,9 +5170,7 @@
       "lightAnchor" : "cool ivory",
       "liveAccentColours" : [
         "#085267",
-        "#653F96",
-        "#69B8BD",
-        "#008ABE"
+        "#653F96"
       ],
       "liveCoreColours" : [
         "dusty blue",
@@ -5631,16 +5269,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#69B8BD",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#008ABE",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#AF9B88",
           "name" : "warm taupe",
           "source" : "support[0]"
@@ -5714,9 +5342,7 @@
       "lightAnchor" : "cool ivory",
       "liveAccentColours" : [
         "#BA4983",
-        "#A6C6D0",
-        "#69B8BD",
-        "#A08CC9"
+        "#A6C6D0"
       ],
       "liveCoreColours" : [
         "dusty blue",
@@ -5815,16 +5441,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#69B8BD",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#A08CC9",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#AF9B88",
           "name" : "warm taupe",
           "source" : "support[0]"
@@ -5898,9 +5514,7 @@
       "lightAnchor" : "cool ivory",
       "liveAccentColours" : [
         "#085267",
-        "#A6C6D0",
-        "#0095AC",
-        "#00BAB2"
+        "#A6C6D0"
       ],
       "liveCoreColours" : [
         "dusty blue",
@@ -5999,16 +5613,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#0095AC",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#00BAB2",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#AF9B88",
           "name" : "warm taupe",
           "source" : "support[0]"
@@ -6082,9 +5686,7 @@
       "lightAnchor" : "cool ivory",
       "liveAccentColours" : [
         "#085267",
-        "#3D7E65",
-        "#653F96",
-        "#00AFBF"
+        "#3D7E65"
       ],
       "liveCoreColours" : [
         "dusty blue",
@@ -6183,16 +5785,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#653F96",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#00AFBF",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#AF9B88",
           "name" : "warm taupe",
           "source" : "support[0]"
@@ -6266,9 +5858,7 @@
       "lightAnchor" : "cool ivory",
       "liveAccentColours" : [
         "#00A9AE",
-        "#008265",
-        "#0095AC",
-        "#A6C6D0"
+        "#008265"
       ],
       "liveCoreColours" : [
         "dusty blue",
@@ -6367,16 +5957,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#0095AC",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#A6C6D0",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#AF9B88",
           "name" : "warm taupe",
           "source" : "support[0]"
@@ -6450,9 +6030,7 @@
       "lightAnchor" : "cool ivory",
       "liveAccentColours" : [
         "#653F96",
-        "#702E62",
-        "#A08CC9",
-        "#00AFBF"
+        "#702E62"
       ],
       "liveCoreColours" : [
         "dusty blue",
@@ -6551,16 +6129,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#A08CC9",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#00AFBF",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#AF9B88",
           "name" : "warm taupe",
           "source" : "support[0]"
@@ -6634,9 +6202,7 @@
       "lightAnchor" : "cool ivory",
       "liveAccentColours" : [
         "#653F96",
-        "#085267",
-        "#69B8BD",
-        "#702E62"
+        "#085267"
       ],
       "liveCoreColours" : [
         "dusty blue",
@@ -6735,16 +6301,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#69B8BD",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#702E62",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#AF9B88",
           "name" : "warm taupe",
           "source" : "support[0]"
@@ -6818,9 +6374,7 @@
       "lightAnchor" : "cool ivory",
       "liveAccentColours" : [
         "#008265",
-        "#9F3D8A",
-        "#A4BBD3",
-        "#00A8AD"
+        "#9F3D8A"
       ],
       "liveCoreColours" : [
         "dusty blue",
@@ -6919,16 +6473,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#A4BBD3",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#00A8AD",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#AF9B88",
           "name" : "warm taupe",
           "source" : "support[0]"
@@ -7002,9 +6546,7 @@
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
         "#3D7E65",
-        "#085267",
-        "#69B8BD",
-        "#008ABE"
+        "#085267"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -7103,16 +6645,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#69B8BD",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#008ABE",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#D2C6B2",
           "name" : "oatmeal",
           "source" : "support[0]"
@@ -7186,9 +6718,7 @@
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
         "#BA4983",
-        "#653F96",
-        "#8EB6CE",
-        "#69B8BD"
+        "#653F96"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -7287,16 +6817,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#8EB6CE",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#69B8BD",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#D2C6B2",
           "name" : "oatmeal",
           "source" : "support[0]"
@@ -7370,9 +6890,7 @@
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
         "#1D6640",
-        "#653F96",
-        "#678C70",
-        "#8EB6CE"
+        "#653F96"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -7471,16 +6989,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#678C70",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#8EB6CE",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#D2C6B2",
           "name" : "oatmeal",
           "source" : "support[0]"
@@ -7554,9 +7062,7 @@
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
         "#3D7E65",
-        "#085267",
-        "#69B8BD",
-        "#A4BBD3"
+        "#085267"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -7655,16 +7161,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#69B8BD",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#A4BBD3",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#D2C6B2",
           "name" : "oatmeal",
           "source" : "support[0]"
@@ -7738,9 +7234,7 @@
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
         "#00A9AE",
-        "#678C70",
-        "#BA4983",
-        "#085267"
+        "#678C70"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -7839,16 +7333,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#BA4983",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#085267",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#D2C6B2",
           "name" : "oatmeal",
           "source" : "support[0]"
@@ -7922,9 +7406,7 @@
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
         "#085267",
-        "#1D6640",
-        "#0095AC",
-        "#79BBC7"
+        "#1D6640"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -8023,16 +7505,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#0095AC",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#79BBC7",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#D2C6B2",
           "name" : "oatmeal",
           "source" : "support[0]"
@@ -8106,9 +7578,7 @@
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
         "#653F96",
-        "#8EB6CE",
-        "#702E62",
-        "#A3AEE2"
+        "#8EB6CE"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -8207,16 +7677,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#702E62",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#A3AEE2",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#D2C6B2",
           "name" : "oatmeal",
           "source" : "support[0]"
@@ -8290,9 +7750,7 @@
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
         "#085267",
-        "#1D6640",
-        "#BA4983",
-        "#8EB6CE"
+        "#1D6640"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -8391,16 +7849,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#BA4983",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#8EB6CE",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#D2C6B2",
           "name" : "oatmeal",
           "source" : "support[0]"
@@ -8474,9 +7922,7 @@
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
         "#BA4983",
-        "#1D6640",
-        "#00A9AE",
-        "#8EB6CE"
+        "#1D6640"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -8575,16 +8021,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#00A9AE",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#8EB6CE",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#D2C6B2",
           "name" : "oatmeal",
           "source" : "support[0]"
@@ -8658,9 +8094,7 @@
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
         "#678C70",
-        "#BA4983",
-        "#085267",
-        "#8EB6CE"
+        "#BA4983"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -8759,16 +8193,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#085267",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#8EB6CE",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#D2C6B2",
           "name" : "oatmeal",
           "source" : "support[0]"
@@ -8842,9 +8266,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#744D6D",
-        "#005D69",
-        "#056463",
-        "#7E1B2F"
+        "#005D69"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -8943,16 +8365,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#056463",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -9026,9 +8438,7 @@
       "lightAnchor" : "bone",
       "liveAccentColours" : [
         "#005E64",
-        "#731632",
-        "#E96675",
-        "#89744D"
+        "#731632"
       ],
       "liveCoreColours" : [
         "terracotta",
@@ -9127,16 +8537,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#E96675",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#89744D",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -9210,9 +8610,7 @@
       "lightAnchor" : "bone",
       "liveAccentColours" : [
         "#731632",
-        "#366064",
-        "#2E766B",
-        "#DFA74B"
+        "#366064"
       ],
       "liveCoreColours" : [
         "terracotta",
@@ -9311,16 +8709,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#2E766B",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#DFA74B",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -9394,9 +8782,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#005D69",
-        "#056463",
-        "#7E1B2F",
-        "#CA692D"
+        "#056463"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -9495,16 +8881,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#CA692D",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -9578,9 +8954,7 @@
       "lightAnchor" : "bone",
       "liveAccentColours" : [
         "#366064",
-        "#2E766B",
-        "#731632",
-        "#005D69"
+        "#2E766B"
       ],
       "liveCoreColours" : [
         "terracotta",
@@ -9679,16 +9053,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#731632",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#005D69",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -9762,9 +9126,7 @@
       "lightAnchor" : "bone",
       "liveAccentColours" : [
         "#366064",
-        "#2D6D68",
-        "#005D69",
-        "#865373"
+        "#2D6D68"
       ],
       "liveCoreColours" : [
         "terracotta",
@@ -9863,16 +9225,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#005D69",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#865373",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -9946,9 +9298,7 @@
       "lightAnchor" : "bone",
       "liveAccentColours" : [
         "#744D6D",
-        "#005E64",
-        "#82312E",
-        "#89744D"
+        "#005E64"
       ],
       "liveCoreColours" : [
         "terracotta",
@@ -10047,16 +9397,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#82312E",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#89744D",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -10130,9 +9470,7 @@
       "lightAnchor" : "bone",
       "liveAccentColours" : [
         "#00656E",
-        "#2D6D68",
-        "#005D69",
-        "#731632"
+        "#2D6D68"
       ],
       "liveCoreColours" : [
         "terracotta",
@@ -10231,16 +9569,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#005D69",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#731632",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -10314,9 +9642,7 @@
       "lightAnchor" : "bone",
       "liveAccentColours" : [
         "#366064",
-        "#7E1B2F",
-        "#005D69",
-        "#2E766B"
+        "#7E1B2F"
       ],
       "liveCoreColours" : [
         "terracotta",
@@ -10415,16 +9741,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#005D69",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#2E766B",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -10498,9 +9814,7 @@
       "lightAnchor" : "bone",
       "liveAccentColours" : [
         "#731632",
-        "#366064",
-        "#005D69",
-        "#744D6D"
+        "#366064"
       ],
       "liveCoreColours" : [
         "terracotta",
@@ -10599,16 +9913,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#005D69",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#744D6D",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -10682,9 +9986,7 @@
       "lightAnchor" : "bone",
       "liveAccentColours" : [
         "#366064",
-        "#865373",
-        "#7E1B2F",
-        "#E96675"
+        "#865373"
       ],
       "liveCoreColours" : [
         "terracotta",
@@ -10783,16 +10085,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#E96675",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -10866,9 +10158,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#744D6D",
-        "#366064",
-        "#005E64",
-        "#7E1B2F"
+        "#366064"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -10967,16 +10257,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#005E64",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -11050,9 +10330,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#00656E",
-        "#366064",
-        "#663C2A",
-        "#736C29"
+        "#366064"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -11151,16 +10429,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#663C2A",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#736C29",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -11234,9 +10502,7 @@
       "lightAnchor" : "bone",
       "liveAccentColours" : [
         "#3C746F",
-        "#005D69",
-        "#056463",
-        "#7E1B2F"
+        "#005D69"
       ],
       "liveCoreColours" : [
         "rust",
@@ -11335,16 +10601,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#056463",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -11418,9 +10674,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#00656E",
-        "#744D6D",
-        "#7E1B2F",
-        "#C79538"
+        "#744D6D"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -11519,16 +10773,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#C79538",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -11602,9 +10846,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#731632",
-        "#366064",
-        "#00656E",
-        "#1C6E6B"
+        "#366064"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -11703,16 +10945,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#00656E",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#1C6E6B",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -11786,9 +11018,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#731632",
-        "#865373",
-        "#366064",
-        "#95824F"
+        "#865373"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -11887,16 +11117,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#366064",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#95824F",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -11970,9 +11190,7 @@
       "lightAnchor" : "bone",
       "liveAccentColours" : [
         "#865373",
-        "#7E1B2F",
-        "#663C2A",
-        "#DFA74B"
+        "#7E1B2F"
       ],
       "liveCoreColours" : [
         "rust",
@@ -12071,16 +11289,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#663C2A",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#DFA74B",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -12154,9 +11362,7 @@
       "lightAnchor" : "bone",
       "liveAccentColours" : [
         "#2D6D68",
-        "#7E1B2F",
-        "#DFA74B",
-        "#E96675"
+        "#7E1B2F"
       ],
       "liveCoreColours" : [
         "rust",
@@ -12255,16 +11461,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#DFA74B",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#E96675",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -12338,9 +11534,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#865373",
-        "#82312E",
-        "#005E64",
-        "#C79538"
+        "#82312E"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -12439,16 +11633,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#005E64",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#C79538",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -12522,9 +11706,7 @@
       "lightAnchor" : "bone",
       "liveAccentColours" : [
         "#2E766B",
-        "#366064",
-        "#663C2A",
-        "#9E803D"
+        "#366064"
       ],
       "liveCoreColours" : [
         "rust",
@@ -12623,16 +11805,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#663C2A",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#9E803D",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -12706,9 +11878,7 @@
       "lightAnchor" : "bone",
       "liveAccentColours" : [
         "#865373",
-        "#1C6E6B",
-        "#7E1B2F",
-        "#95824F"
+        "#1C6E6B"
       ],
       "liveCoreColours" : [
         "rust",
@@ -12807,16 +11977,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#95824F",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -12890,9 +12050,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#731632",
-        "#005D69",
-        "#056463",
-        "#663C2A"
+        "#005D69"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -12991,16 +12149,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#056463",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#663C2A",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -13074,9 +12222,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#00656E",
-        "#1C6E6B",
-        "#7E1B2F",
-        "#663C2A"
+        "#1C6E6B"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -13175,16 +12321,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#663C2A",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -13258,9 +12394,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#005D69",
-        "#366064",
-        "#731632",
-        "#95824F"
+        "#366064"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -13359,16 +12493,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#731632",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#95824F",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -13442,9 +12566,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#005D69",
-        "#056463",
-        "#7E1B2F",
-        "#C79538"
+        "#056463"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -13543,16 +12665,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#C79538",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -13626,9 +12738,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#00656E",
-        "#2D6D68",
-        "#366064",
-        "#7E1B2F"
+        "#2D6D68"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -13727,16 +12837,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#366064",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#7E1B2F",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -13810,9 +12910,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#366064",
-        "#00656E",
-        "#9E803D",
-        "#95824F"
+        "#00656E"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -13911,16 +13009,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#9E803D",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#95824F",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -13994,9 +13082,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#744D6D",
-        "#7E1B2F",
-        "#005D69",
-        "#DFA74B"
+        "#7E1B2F"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -14095,16 +13181,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#005D69",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#DFA74B",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -14178,9 +13254,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#005E64",
-        "#731632",
-        "#2E766B",
-        "#005D69"
+        "#731632"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -14279,16 +13353,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#2E766B",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#005D69",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -14362,9 +13426,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#82312E",
-        "#366064",
-        "#005E64",
-        "#D14649"
+        "#366064"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -14463,16 +13525,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#005E64",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#D14649",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -14546,9 +13598,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#865373",
-        "#82312E",
-        "#005D69",
-        "#2E766B"
+        "#82312E"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -14647,16 +13697,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#005D69",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#2E766B",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -14730,9 +13770,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#005E64",
-        "#731632",
-        "#1C6E6B",
-        "#E96675"
+        "#731632"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -14831,16 +13869,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#1C6E6B",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#E96675",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -14914,9 +13942,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#744D6D",
-        "#7E1B2F",
-        "#9E803D",
-        "#95824F"
+        "#7E1B2F"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -15015,16 +14041,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#9E803D",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#95824F",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -15098,9 +14114,7 @@
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
         "#678C70",
-        "#9F3D8A",
-        "#69B8BD",
-        "#008ABE"
+        "#9F3D8A"
       ],
       "liveCoreColours" : [
         "black cherry",
@@ -15199,16 +14213,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#69B8BD",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#008ABE",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#4A4244",
           "name" : "warm charcoal",
           "source" : "support[0]"
@@ -15282,9 +14286,7 @@
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
         "#00A9AE",
-        "#085267",
-        "#008ABE",
-        "#A4BBD3"
+        "#085267"
       ],
       "liveCoreColours" : [
         "black cherry",
@@ -15383,16 +14385,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#008ABE",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#A4BBD3",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#4A4244",
           "name" : "warm charcoal",
           "source" : "support[0]"
@@ -15466,9 +14458,7 @@
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
         "#085267",
-        "#9665A3",
-        "#CB627F",
-        "#00A0BF"
+        "#9665A3"
       ],
       "liveCoreColours" : [
         "black cherry",
@@ -15567,16 +14557,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#CB627F",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#00A0BF",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#4A4244",
           "name" : "warm charcoal",
           "source" : "support[0]"
@@ -15650,9 +14630,7 @@
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
         "#007362",
-        "#00A9AE",
-        "#A4BBD3",
-        "#00BAB2"
+        "#00A9AE"
       ],
       "liveCoreColours" : [
         "black cherry",
@@ -15751,16 +14729,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#A4BBD3",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#00BAB2",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#4A4244",
           "name" : "warm charcoal",
           "source" : "support[0]"
@@ -15834,9 +14802,7 @@
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
         "#085267",
-        "#702E62",
-        "#A3AEE2",
-        "#00A0BF"
+        "#702E62"
       ],
       "liveCoreColours" : [
         "black cherry",
@@ -15935,16 +14901,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#A3AEE2",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#00A0BF",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#4A4244",
           "name" : "warm charcoal",
           "source" : "support[0]"
@@ -16018,9 +14974,7 @@
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
         "#5485C8",
-        "#008265",
-        "#085267",
-        "#00A0BF"
+        "#008265"
       ],
       "liveCoreColours" : [
         "black cherry",
@@ -16119,16 +15073,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#085267",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#00A0BF",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#4A4244",
           "name" : "warm charcoal",
           "source" : "support[0]"
@@ -16202,9 +15146,7 @@
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
         "#085267",
-        "#9665A3",
-        "#008ABE",
-        "#702E62"
+        "#9665A3"
       ],
       "liveCoreColours" : [
         "black cherry",
@@ -16303,16 +15245,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#008ABE",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#702E62",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#4A4244",
           "name" : "warm charcoal",
           "source" : "support[0]"
@@ -16386,9 +15318,7 @@
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
         "#007362",
-        "#678C70",
-        "#702E62",
-        "#A3A0D7"
+        "#678C70"
       ],
       "liveCoreColours" : [
         "black cherry",
@@ -16487,16 +15417,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#702E62",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#A3A0D7",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#4A4244",
           "name" : "warm charcoal",
           "source" : "support[0]"
@@ -16570,9 +15490,7 @@
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
         "#9665A3",
-        "#085267",
-        "#CB627F",
-        "#008ABE"
+        "#085267"
       ],
       "liveCoreColours" : [
         "cobalt",
@@ -16671,16 +15589,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#CB627F",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#008ABE",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#AF9B88",
           "name" : "warm taupe",
           "source" : "support[0]"
@@ -16754,9 +15662,7 @@
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
         "#085267",
-        "#9665A3",
-        "#008ABE",
-        "#69B8BD"
+        "#9665A3"
       ],
       "liveCoreColours" : [
         "cobalt",
@@ -16855,16 +15761,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#008ABE",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#69B8BD",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#AF9B88",
           "name" : "warm taupe",
           "source" : "support[0]"
@@ -16938,9 +15834,7 @@
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
         "#BA4983",
-        "#702E62",
-        "#A3AEE2",
-        "#00BAB2"
+        "#702E62"
       ],
       "liveCoreColours" : [
         "cobalt",
@@ -17039,16 +15933,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#A3AEE2",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#00BAB2",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#AF9B88",
           "name" : "warm taupe",
           "source" : "support[0]"
@@ -17122,9 +16006,7 @@
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
         "#9665A3",
-        "#1D6640",
-        "#085267",
-        "#00A0BF"
+        "#1D6640"
       ],
       "liveCoreColours" : [
         "cobalt",
@@ -17223,16 +16105,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#085267",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#00A0BF",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#AF9B88",
           "name" : "warm taupe",
           "source" : "support[0]"
@@ -17306,9 +16178,7 @@
       "lightAnchor" : "bright white",
       "liveAccentColours" : [
         "#085267",
-        "#9F3D8A",
-        "#008ABE",
-        "#00AFBF"
+        "#9F3D8A"
       ],
       "liveCoreColours" : [
         "midnight",
@@ -17407,16 +16277,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#008ABE",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#00AFBF",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#A89F91",
           "name" : "warm stone",
           "source" : "support[0]"
@@ -17490,9 +16350,7 @@
       "lightAnchor" : "bright white",
       "liveAccentColours" : [
         "#9F3D8A",
-        "#085267",
-        "#008ABE",
-        "#79BBC7"
+        "#085267"
       ],
       "liveCoreColours" : [
         "midnight",
@@ -17591,16 +16449,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#008ABE",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#79BBC7",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#A89F91",
           "name" : "warm stone",
           "source" : "support[0]"
@@ -17674,9 +16522,7 @@
       "lightAnchor" : "bright white",
       "liveAccentColours" : [
         "#9F3D8A",
-        "#5485C8",
-        "#A4BBD3",
-        "#702E62"
+        "#5485C8"
       ],
       "liveCoreColours" : [
         "midnight",
@@ -17775,16 +16621,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#A4BBD3",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#702E62",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#A89F91",
           "name" : "warm stone",
           "source" : "support[0]"
@@ -17858,9 +16694,7 @@
       "lightAnchor" : "bright white",
       "liveAccentColours" : [
         "#9665A3",
-        "#9F3D8A",
-        "#702E62",
-        "#A3AEE2"
+        "#9F3D8A"
       ],
       "liveCoreColours" : [
         "midnight",
@@ -17959,16 +16793,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#702E62",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#A3AEE2",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#A89F91",
           "name" : "warm stone",
           "source" : "support[0]"
@@ -18042,9 +16866,7 @@
       "lightAnchor" : "bright white",
       "liveAccentColours" : [
         "#1D6640",
-        "#9665A3",
-        "#9F3D8A",
-        "#008ABE"
+        "#9665A3"
       ],
       "liveCoreColours" : [
         "midnight",
@@ -18143,16 +16965,6 @@
           "source" : "accent[1]"
         },
         {
-          "hex" : "#808080",
-          "name" : "#9F3D8A",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#008ABE",
-          "source" : "accent[3]"
-        },
-        {
           "hex" : "#A89F91",
           "name" : "warm stone",
           "source" : "support[0]"
@@ -18226,9 +17038,7 @@
       "lightAnchor" : "bright white",
       "liveAccentColours" : [
         "#678C70",
-        "#085267",
-        "#0095AC",
-        "#702E62"
+        "#085267"
       ],
       "liveCoreColours" : [
         "midnight",
@@ -18325,16 +17135,6 @@
           "hex" : "#808080",
           "name" : "#085267",
           "source" : "accent[1]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#0095AC",
-          "source" : "accent[2]"
-        },
-        {
-          "hex" : "#808080",
-          "name" : "#702E62",
-          "source" : "accent[3]"
         },
         {
           "hex" : "#A89F91",
