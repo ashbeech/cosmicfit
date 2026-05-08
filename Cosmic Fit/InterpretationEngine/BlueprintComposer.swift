@@ -94,6 +94,8 @@ struct BlueprintComposer {
             narrativeText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.paletteNarrative.rawValue] ?? ""
         )
 
+        logV4PaletteReadout(paletteSection)
+
         let now = Date()
 
         return CosmicBlueprint(
@@ -149,6 +151,77 @@ struct BlueprintComposer {
         )
     }
 
+    // MARK: - Palette console readout
+
+    /// Prints every V4 palette colour by section when the blueprint is composed
+    /// (visible in Xcode console and device logs).
+    private static func logV4PaletteReadout(_ palette: PaletteSection) {
+        guard palette.isV4 else {
+            print("[BlueprintComposer] Palette readout: legacy palette (no V4 bands)")
+            return
+        }
+
+        print("[BlueprintComposer] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("[BlueprintComposer] V4 palette colour readout (name — hex)")
+        if let family = palette.family {
+            print("[BlueprintComposer] Family: \(family.rawValue)")
+        }
+        if let cluster = palette.cluster {
+            print("[BlueprintComposer] Cluster: \(cluster.rawValue)")
+        }
+        print("[BlueprintComposer] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+
+        if let neutrals = palette.neutrals, !neutrals.isEmpty {
+            print("[BlueprintComposer] Neutrals (\(neutrals.count)):")
+            for (i, c) in neutrals.enumerated() {
+                print("[BlueprintComposer]   \(i + 1). \(c.name) — \(c.hexValue)")
+            }
+        }
+
+        print("[BlueprintComposer] Core (\(palette.coreColours.count)):")
+        for (i, c) in palette.coreColours.enumerated() {
+            print("[BlueprintComposer]   \(i + 1). \(c.name) — \(c.hexValue)")
+        }
+
+        print("[BlueprintComposer] Accents (\(palette.accentColours.count)):")
+        for (i, c) in palette.accentColours.enumerated() {
+            let extra = accentProvenanceLogSuffix(c.provenance)
+            print("[BlueprintComposer]   \(i + 1). \(c.name) — \(c.hexValue)\(extra)")
+        }
+
+        if let support = palette.supportColours, !support.isEmpty {
+            print("[BlueprintComposer] Support (\(support.count)):")
+            for (i, c) in support.enumerated() {
+                print("[BlueprintComposer]   \(i + 1). \(c.name) — \(c.hexValue)")
+            }
+        }
+
+        if let la = palette.lightAnchor {
+            print("[BlueprintComposer] Light anchor: \(la.name) — \(la.hexValue)")
+        }
+        if let da = palette.deepAnchor {
+            print("[BlueprintComposer] Deep anchor: \(da.name) — \(da.hexValue)")
+        }
+        if let lum = palette.luminarySignature {
+            print("[BlueprintComposer] Luminary signature: \(lum.name) — \(lum.hexValue)")
+        }
+        if let rul = palette.rulerSignature {
+            print("[BlueprintComposer] Ruler signature: \(rul.name) — \(rul.hexValue)")
+        }
+
+        print("[BlueprintComposer] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    }
+
+    private static func accentProvenanceLogSuffix(_ p: ColourProvenance) -> String {
+        switch p {
+        case let .chartDerivedAccent(role, planet, sign, saturationOverride):
+            let vivid = saturationOverride ? " · vivid element" : ""
+            return "  [\(role) · \(planet) in \(sign)\(vivid)]"
+        default:
+            return ""
+        }
+    }
+
     // MARK: - V4 Palette Builder
 
     private static func buildV4PaletteSection(
@@ -172,10 +245,68 @@ struct BlueprintComposer {
             }
         }
 
+        let supportBand: [BlueprintColour]? = colourResult.palette.supportColours.map {
+            makeBand(names: $0, band: "support", role: .support)
+        }
+
+        func makeAnchor(name: String, band: String) -> BlueprintColour {
+            BlueprintColour(
+                name: name,
+                hexValue: PaletteLibrary.hex(for: name),
+                role: .anchor,
+                provenance: .v4Template(family: family.rawValue, band: band, index: 0)
+            )
+        }
+
+        func makeSignature(hex: String, band: String, semanticLabel: String) -> BlueprintColour {
+            BlueprintColour(
+                name: PaletteLibrary.nearestColourName(forHex: hex),
+                hexValue: hex,
+                role: .signature,
+                provenance: .v4Template(family: family.rawValue, band: band, index: 0),
+                semanticLabel: semanticLabel
+            )
+        }
+
+        // V4.5: Build accent band from chart-derived AccentSlots
+        let accentBand: [BlueprintColour]
+        if !colourResult.accentSlots.isEmpty {
+            accentBand = colourResult.accentSlots.enumerated().map { index, slot in
+                BlueprintColour(
+                    name: slot.displayName,
+                    hexValue: slot.hex,
+                    role: .accent,
+                    provenance: .chartDerivedAccent(
+                        role: slot.role.rawValue,
+                        sourcePlanet: slot.sourcePlanet.rawValue,
+                        sourceSign: slot.sourceSign.rawValue,
+                        saturationOverride: slot.saturationOverrideApplied
+                    )
+                )
+            }
+        } else {
+            accentBand = makeBand(
+                names: colourResult.palette.accentColours, band: "accent", role: .accent
+            )
+        }
+
         return PaletteSection(
             neutrals: makeBand(names: colourResult.palette.neutrals, band: "neutrals", role: .neutral),
             coreColours: makeBand(names: colourResult.palette.coreColours, band: "core", role: .core),
-            accentColours: makeBand(names: colourResult.palette.accentColours, band: "accent", role: .accent),
+            accentColours: accentBand,
+            supportColours: supportBand,
+            lightAnchor: makeAnchor(name: colourResult.palette.lightAnchor, band: "lightAnchor"),
+            deepAnchor: makeAnchor(name: colourResult.palette.deepAnchor, band: "deepAnchor"),
+            luminarySignature: makeSignature(
+                hex: colourResult.luminarySignature,
+                band: "luminarySignature",
+                semanticLabel: "luminary signature"
+            ),
+            rulerSignature: makeSignature(
+                hex: colourResult.rulerSignature,
+                band: "rulerSignature",
+                semanticLabel: "ruler signature"
+            ),
             family: colourResult.family,
             cluster: colourResult.cluster,
             variables: colourResult.variables,

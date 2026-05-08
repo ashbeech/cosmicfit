@@ -3,10 +3,8 @@
     "birthData" : "1987-04-13 18:00",
     "expected" : {
       "accentColours" : [
-        "apricot",
-        "soft gold",
-        "clear aqua",
-        "bright gold"
+        "#056463",
+        "#865373"
       ],
       "cluster" : "Light Airy Warm",
       "contrast" : "Medium",
@@ -14,7 +12,7 @@
         "honey yellow",
         "peach",
         "aqua mint",
-        "vivid yellow"
+        "lime"
       ],
       "depth" : "Light",
       "family" : "Light Spring",
@@ -36,10 +34,8 @@
     "birthData" : "1995-06-22 17:07",
     "expected" : {
       "accentColours" : [
-        "apricot",
-        "soft gold",
-        "clear aqua",
-        "bright gold"
+        "#00706F",
+        "#366064"
       ],
       "cluster" : "Light Airy Warm",
       "contrast" : "Medium",
@@ -47,7 +43,7 @@
         "honey yellow",
         "peach",
         "aqua mint",
-        "vivid yellow"
+        "lime"
       ],
       "depth" : "Light",
       "family" : "Light Spring",
@@ -69,10 +65,8 @@
     "birthData" : "1992-05-28 15:18",
     "expected" : {
       "accentColours" : [
-        "apricot",
-        "soft gold",
-        "clear aqua",
-        "bright gold"
+        "#00706F",
+        "#005D69"
       ],
       "cluster" : "Light Airy Warm",
       "contrast" : "Medium",
@@ -80,7 +74,7 @@
         "honey yellow",
         "peach",
         "aqua mint",
-        "vivid yellow"
+        "lime"
       ],
       "depth" : "Light",
       "family" : "Light Spring",
@@ -102,10 +96,8 @@
     "birthData" : "1986-03-12 19:00",
     "expected" : {
       "accentColours" : [
-        "apricot",
-        "soft gold",
-        "clear aqua",
-        "bright gold"
+        "#056463",
+        "#82312E"
       ],
       "cluster" : "Light Airy Warm",
       "contrast" : "Medium",
@@ -113,7 +105,7 @@
         "honey yellow",
         "peach",
         "aqua mint",
-        "vivid yellow"
+        "lime"
       ],
       "depth" : "Light",
       "family" : "Light Spring",
@@ -135,10 +127,8 @@
     "birthData" : "2001-12-03 18:00",
     "expected" : {
       "accentColours" : [
-        "apricot",
-        "soft gold",
-        "clear aqua",
-        "bright gold"
+        "#386B6C",
+        "#005D69"
       ],
       "cluster" : "Light Airy Warm",
       "contrast" : "Medium",
@@ -146,7 +136,7 @@
         "honey yellow",
         "peach",
         "aqua mint",
-        "vivid yellow"
+        "lime"
       ],
       "depth" : "Light",
       "family" : "Light Spring",
@@ -168,10 +158,8 @@
     "birthData" : "1992-09-03 23:41",
     "expected" : {
       "accentColours" : [
-        "apricot",
-        "soft gold",
-        "clear aqua",
-        "bright gold"
+        "#865373",
+        "#00706F"
       ],
       "cluster" : "Light Airy Warm",
       "contrast" : "Medium",
@@ -179,7 +167,7 @@
         "honey yellow",
         "peach",
         "aqua mint",
-        "vivid yellow"
+        "lime"
       ],
       "depth" : "Light",
       "family" : "Light Spring",
@@ -201,10 +189,8 @@
     "birthData" : "2001-04-03 11:00",
     "expected" : {
       "accentColours" : [
-        "tomato red",
-        "goldenrod",
-        "bright jade",
-        "bright gold"
+        "#005E64",
+        "#2E766B"
       ],
       "cluster" : "Medium Warm Grounded",
       "contrast" : "Medium",
@@ -212,7 +198,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "electric blue"
+        "clear turquoise"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -234,10 +220,8 @@
     "birthData" : "1991-07-07 07:23",
     "expected" : {
       "accentColours" : [
-        "tomato red",
-        "goldenrod",
-        "bright jade",
-        "bright gold"
+        "#3C746F",
+        "#005D69"
       ],
       "cluster" : "Medium Warm Grounded",
       "contrast" : "Medium",
@@ -245,7 +229,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "electric blue"
+        "clear turquoise"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -267,10 +251,8 @@
     "birthData" : "1998-06-02 19:29",
     "expected" : {
       "accentColours" : [
-        "tomato red",
-        "goldenrod",
-        "bright jade",
-        "bright gold"
+        "#00656E",
+        "#2D6D68"
       ],
       "cluster" : "Medium Warm Grounded",
       "contrast" : "Medium",
@@ -278,7 +260,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "electric blue"
+        "clear turquoise"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -300,10 +282,8 @@
     "birthData" : "1998-08-15 14:00",
     "expected" : {
       "accentColours" : [
-        "tomato red",
-        "goldenrod",
-        "bright jade",
-        "bright gold"
+        "#00656E",
+        "#366064"
       ],
       "cluster" : "Medium Warm Grounded",
       "contrast" : "Medium",
@@ -311,7 +291,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "electric blue"
+        "clear turquoise"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -333,10 +313,8 @@
     "birthData" : "2000-10-21 16:34",
     "expected" : {
       "accentColours" : [
-        "tomato red",
-        "goldenrod",
-        "bright jade",
-        "bright gold"
+        "#865373",
+        "#82312E"
       ],
       "cluster" : "Medium Warm Grounded",
       "contrast" : "Medium",
@@ -344,7 +322,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "electric blue"
+        "clear turquoise"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -366,10 +344,8 @@
     "birthData" : "1998-11-30 19:47",
     "expected" : {
       "accentColours" : [
-        "tomato red",
-        "goldenrod",
-        "bright jade",
-        "bright gold"
+        "#865373",
+        "#005E64"
       ],
       "cluster" : "Medium Warm Grounded",
       "contrast" : "Medium",
@@ -377,7 +353,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "electric blue"
+        "clear turquoise"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -399,10 +375,8 @@
     "birthData" : "1995-05-05 11:29",
     "expected" : {
       "accentColours" : [
-        "tomato red",
-        "goldenrod",
-        "bright jade",
-        "bright gold"
+        "#3C746F",
+        "#00656E"
       ],
       "cluster" : "Medium Warm Grounded",
       "contrast" : "Medium",
@@ -410,7 +384,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "electric blue"
+        "clear turquoise"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -432,10 +406,8 @@
     "birthData" : "2001-09-03 04:18",
     "expected" : {
       "accentColours" : [
-        "tomato red",
-        "goldenrod",
-        "bright jade",
-        "bright gold"
+        "#005E64",
+        "#865373"
       ],
       "cluster" : "Medium Warm Grounded",
       "contrast" : "Medium",
@@ -443,7 +415,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "electric blue"
+        "clear turquoise"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -465,10 +437,8 @@
     "birthData" : "1999-01-25 20:23",
     "expected" : {
       "accentColours" : [
-        "lacquer coral",
-        "acid lime",
-        "bright gold",
-        "clear cyan"
+        "#00818A",
+        "#A36B89"
       ],
       "cluster" : "Medium Neutral Electric",
       "contrast" : "High",
@@ -476,7 +446,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "royal blue"
+        "electric blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -498,10 +468,8 @@
     "birthData" : "2001-02-18 08:00",
     "expected" : {
       "accentColours" : [
-        "lacquer coral",
-        "acid lime",
-        "bright gold",
-        "clear cyan"
+        "#387C7E",
+        "#007788"
       ],
       "cluster" : "Medium Neutral Electric",
       "contrast" : "High",
@@ -509,7 +477,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "royal blue"
+        "electric blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -531,10 +499,8 @@
     "birthData" : "1988-01-20 04:53",
     "expected" : {
       "accentColours" : [
-        "lacquer coral",
-        "acid lime",
-        "bright gold",
-        "clear cyan"
+        "#2F9097",
+        "#387C7E"
       ],
       "cluster" : "Medium Neutral Electric",
       "contrast" : "High",
@@ -542,7 +508,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "royal blue"
+        "electric blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -564,10 +530,8 @@
     "birthData" : "2000-01-04 09:29",
     "expected" : {
       "accentColours" : [
-        "lacquer coral",
-        "acid lime",
-        "bright gold",
-        "clear cyan"
+        "#007788",
+        "#762249"
       ],
       "cluster" : "Medium Neutral Electric",
       "contrast" : "High",
@@ -575,7 +539,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "royal blue"
+        "electric blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -597,10 +561,8 @@
     "birthData" : "1986-08-14 04:53",
     "expected" : {
       "accentColours" : [
-        "lacquer coral",
-        "acid lime",
-        "bright gold",
-        "clear cyan"
+        "#5E8B91",
+        "#A36B89"
       ],
       "cluster" : "Medium Neutral Electric",
       "contrast" : "High",
@@ -608,7 +570,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "royal blue"
+        "electric blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -630,10 +592,8 @@
     "birthData" : "1990-10-03 18:23",
     "expected" : {
       "accentColours" : [
-        "lacquer coral",
-        "acid lime",
-        "bright gold",
-        "clear cyan"
+        "#906584",
+        "#387C7E"
       ],
       "cluster" : "Medium Neutral Electric",
       "contrast" : "High",
@@ -641,7 +601,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "royal blue"
+        "electric blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -663,10 +623,8 @@
     "birthData" : "1996-02-22 08:29",
     "expected" : {
       "accentColours" : [
-        "lacquer coral",
-        "acid lime",
-        "bright gold",
-        "clear cyan"
+        "#A36B89",
+        "#387C7E"
       ],
       "cluster" : "Medium Neutral Electric",
       "contrast" : "High",
@@ -674,7 +632,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "royal blue"
+        "electric blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -696,10 +654,8 @@
     "birthData" : "1997-11-03 08:53",
     "expected" : {
       "accentColours" : [
-        "lacquer coral",
-        "acid lime",
-        "bright gold",
-        "clear cyan"
+        "#2F9097",
+        "#762249"
       ],
       "cluster" : "Medium Neutral Electric",
       "contrast" : "High",
@@ -707,7 +663,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "royal blue"
+        "electric blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -729,10 +685,8 @@
     "birthData" : "1998-11-21 17:29",
     "expected" : {
       "accentColours" : [
-        "lacquer coral",
-        "acid lime",
-        "bright gold",
-        "clear cyan"
+        "#762249",
+        "#387C7E"
       ],
       "cluster" : "Medium Neutral Electric",
       "contrast" : "High",
@@ -740,7 +694,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "royal blue"
+        "electric blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -762,10 +716,8 @@
     "birthData" : "2001-05-09 15:41",
     "expected" : {
       "accentColours" : [
-        "lacquer coral",
-        "acid lime",
-        "bright gold",
-        "clear cyan"
+        "#2F9097",
+        "#D35D70"
       ],
       "cluster" : "Medium Neutral Electric",
       "contrast" : "High",
@@ -773,7 +725,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "royal blue"
+        "electric blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -795,10 +747,8 @@
     "birthData" : "1990-07-18 05:00",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "icy aqua",
-        "soft lilac",
-        "apricot"
+        "#653F96",
+        "#5485C8"
       ],
       "cluster" : "Light Airy Cool",
       "contrast" : "Low",
@@ -828,10 +778,8 @@
     "birthData" : "1997-06-14 18:41",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "icy aqua",
-        "soft lilac",
-        "berry mauve"
+        "#3D7E65",
+        "#9F3D8A"
       ],
       "cluster" : "Light Airy Cool",
       "contrast" : "Low",
@@ -861,10 +809,8 @@
     "birthData" : "1998-10-04 07:07",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "icy aqua",
-        "soft lilac",
-        "apricot"
+        "#9F3D8A",
+        "#5485C8"
       ],
       "cluster" : "Light Airy Cool",
       "contrast" : "Low",
@@ -894,10 +840,8 @@
     "birthData" : "2001-03-03 16:18",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "icy aqua",
-        "soft lilac",
-        "apricot"
+        "#9F3D8A",
+        "#9665A3"
       ],
       "cluster" : "Light Airy Cool",
       "contrast" : "Low",
@@ -927,10 +871,8 @@
     "birthData" : "1991-11-24 21:23",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "icy aqua",
-        "soft lilac",
-        "apricot"
+        "#653F96",
+        "#3D7E65"
       ],
       "cluster" : "Light Airy Cool",
       "contrast" : "Low",
@@ -960,10 +902,8 @@
     "birthData" : "1992-09-10 23:47",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "icy aqua",
-        "soft lilac",
-        "berry mauve"
+        "#653F96",
+        "#3D7E65"
       ],
       "cluster" : "Light Airy Cool",
       "contrast" : "Low",
@@ -993,10 +933,8 @@
     "birthData" : "1986-01-24 08:34",
     "expected" : {
       "accentColours" : [
-        "pewter",
-        "mist teal",
-        "lavender grey",
-        "dusty plum"
+        "#085267",
+        "#653F96"
       ],
       "cluster" : "Medium Cool Soft",
       "contrast" : "Low",
@@ -1004,7 +942,7 @@
         "dusty blue",
         "rose mauve",
         "sage aqua",
-        "smoky periwinkle"
+        "soft violet"
       ],
       "depth" : "Medium",
       "family" : "True Summer",
@@ -1026,10 +964,8 @@
     "birthData" : "1998-04-11 11:41",
     "expected" : {
       "accentColours" : [
-        "pewter",
-        "mist teal",
-        "lavender grey",
-        "dusty plum"
+        "#BA4983",
+        "#A6C6D0"
       ],
       "cluster" : "Medium Cool Soft",
       "contrast" : "Low",
@@ -1037,7 +973,7 @@
         "dusty blue",
         "rose mauve",
         "sage aqua",
-        "smoky periwinkle"
+        "soft violet"
       ],
       "depth" : "Medium",
       "family" : "True Summer",
@@ -1059,10 +995,8 @@
     "birthData" : "1996-01-03 15:53",
     "expected" : {
       "accentColours" : [
-        "pewter",
-        "mist teal",
-        "lavender grey",
-        "dusty plum"
+        "#085267",
+        "#A6C6D0"
       ],
       "cluster" : "Medium Cool Soft",
       "contrast" : "Low",
@@ -1092,10 +1026,8 @@
     "birthData" : "1995-06-17 20:12",
     "expected" : {
       "accentColours" : [
-        "pewter",
-        "mist teal",
-        "lavender grey",
-        "dusty plum"
+        "#085267",
+        "#3D7E65"
       ],
       "cluster" : "Medium Cool Soft",
       "contrast" : "Low",
@@ -1125,10 +1057,8 @@
     "birthData" : "1998-07-22 21:53",
     "expected" : {
       "accentColours" : [
-        "pewter",
-        "mist teal",
-        "lavender grey",
-        "dusty plum"
+        "#00A9AE",
+        "#008265"
       ],
       "cluster" : "Medium Cool Soft",
       "contrast" : "Low",
@@ -1136,7 +1066,7 @@
         "dusty blue",
         "rose mauve",
         "sage aqua",
-        "smoky periwinkle"
+        "soft violet"
       ],
       "depth" : "Medium",
       "family" : "True Summer",
@@ -1158,10 +1088,8 @@
     "birthData" : "1992-10-16 20:47",
     "expected" : {
       "accentColours" : [
-        "pewter",
-        "mist teal",
-        "lavender grey",
-        "dusty plum"
+        "#653F96",
+        "#702E62"
       ],
       "cluster" : "Medium Cool Soft",
       "contrast" : "Low",
@@ -1191,10 +1119,8 @@
     "birthData" : "1989-10-27 15:47",
     "expected" : {
       "accentColours" : [
-        "pewter",
-        "mist teal",
-        "lavender grey",
-        "dusty plum"
+        "#653F96",
+        "#085267"
       ],
       "cluster" : "Medium Cool Soft",
       "contrast" : "Low",
@@ -1224,10 +1150,8 @@
     "birthData" : "1994-05-14 10:12",
     "expected" : {
       "accentColours" : [
-        "pewter",
-        "mist teal",
-        "lavender grey",
-        "dusty plum"
+        "#008265",
+        "#9F3D8A"
       ],
       "cluster" : "Medium Cool Soft",
       "contrast" : "Low",
@@ -1235,7 +1159,7 @@
         "dusty blue",
         "rose mauve",
         "sage aqua",
-        "smoky periwinkle"
+        "soft violet"
       ],
       "depth" : "Medium",
       "family" : "True Summer",
@@ -1257,10 +1181,8 @@
     "birthData" : "1996-02-02 20:00",
     "expected" : {
       "accentColours" : [
-        "brushed pewter",
-        "dusty plum",
-        "sea glass",
-        "berry mauve"
+        "#3D7E65",
+        "#085267"
       ],
       "cluster" : "Medium Cool Muted",
       "contrast" : "Low",
@@ -1268,7 +1190,7 @@
         "eucalyptus",
         "muted rose",
         "moss sage",
-        "soft violet"
+        "smoky periwinkle"
       ],
       "depth" : "Medium",
       "family" : "Soft Summer",
@@ -1290,10 +1212,8 @@
     "birthData" : "1987-04-05 12:07",
     "expected" : {
       "accentColours" : [
-        "brushed pewter",
-        "dusty plum",
-        "sea glass",
-        "berry mauve"
+        "#BA4983",
+        "#653F96"
       ],
       "cluster" : "Medium Cool Muted",
       "contrast" : "Low",
@@ -1301,7 +1221,7 @@
         "eucalyptus",
         "muted rose",
         "moss sage",
-        "soft violet"
+        "smoky periwinkle"
       ],
       "depth" : "Medium",
       "family" : "Soft Summer",
@@ -1323,10 +1243,8 @@
     "birthData" : "1993-07-02 04:29",
     "expected" : {
       "accentColours" : [
-        "brushed pewter",
-        "dusty plum",
-        "sea glass",
-        "moss green"
+        "#1D6640",
+        "#653F96"
       ],
       "cluster" : "Medium Cool Muted",
       "contrast" : "Low",
@@ -1356,10 +1274,8 @@
     "birthData" : "1993-01-08 22:12",
     "expected" : {
       "accentColours" : [
-        "brushed pewter",
-        "dusty plum",
-        "sea glass",
-        "berry mauve"
+        "#3D7E65",
+        "#085267"
       ],
       "cluster" : "Medium Cool Muted",
       "contrast" : "Low",
@@ -1367,7 +1283,7 @@
         "eucalyptus",
         "muted rose",
         "moss sage",
-        "soft violet"
+        "smoky periwinkle"
       ],
       "depth" : "Medium",
       "family" : "Soft Summer",
@@ -1389,10 +1305,8 @@
     "birthData" : "1996-08-17 02:47",
     "expected" : {
       "accentColours" : [
-        "brushed pewter",
-        "dusty plum",
-        "sea glass",
-        "berry mauve"
+        "#00A9AE",
+        "#678C70"
       ],
       "cluster" : "Medium Cool Muted",
       "contrast" : "Low",
@@ -1400,7 +1314,7 @@
         "eucalyptus",
         "muted rose",
         "moss sage",
-        "soft violet"
+        "smoky periwinkle"
       ],
       "depth" : "Medium",
       "family" : "Soft Summer",
@@ -1422,10 +1336,8 @@
     "birthData" : "1989-03-03 04:53",
     "expected" : {
       "accentColours" : [
-        "brushed pewter",
-        "dusty plum",
-        "sea glass",
-        "berry mauve"
+        "#085267",
+        "#1D6640"
       ],
       "cluster" : "Medium Cool Muted",
       "contrast" : "Low",
@@ -1433,7 +1345,7 @@
         "eucalyptus",
         "muted rose",
         "moss sage",
-        "soft violet"
+        "smoky periwinkle"
       ],
       "depth" : "Medium",
       "family" : "Soft Summer",
@@ -1455,10 +1367,8 @@
     "birthData" : "1985-11-30 21:12",
     "expected" : {
       "accentColours" : [
-        "brushed pewter",
-        "dusty plum",
-        "sea glass",
-        "berry mauve"
+        "#653F96",
+        "#8EB6CE"
       ],
       "cluster" : "Medium Cool Muted",
       "contrast" : "Low",
@@ -1466,7 +1376,7 @@
         "eucalyptus",
         "muted rose",
         "moss sage",
-        "soft violet"
+        "smoky periwinkle"
       ],
       "depth" : "Medium",
       "family" : "Soft Summer",
@@ -1488,10 +1398,8 @@
     "birthData" : "1999-11-17 20:47",
     "expected" : {
       "accentColours" : [
-        "brushed pewter",
-        "dusty plum",
-        "sea glass",
-        "berry mauve"
+        "#085267",
+        "#1D6640"
       ],
       "cluster" : "Medium Cool Muted",
       "contrast" : "Low",
@@ -1499,7 +1407,7 @@
         "eucalyptus",
         "muted rose",
         "moss sage",
-        "soft violet"
+        "smoky periwinkle"
       ],
       "depth" : "Medium",
       "family" : "Soft Summer",
@@ -1521,10 +1429,8 @@
     "birthData" : "1991-05-09 16:07",
     "expected" : {
       "accentColours" : [
-        "brushed pewter",
-        "dusty plum",
-        "sea glass",
-        "berry mauve"
+        "#BA4983",
+        "#1D6640"
       ],
       "cluster" : "Medium Cool Muted",
       "contrast" : "Low",
@@ -1532,7 +1438,7 @@
         "eucalyptus",
         "muted rose",
         "moss sage",
-        "soft violet"
+        "smoky periwinkle"
       ],
       "depth" : "Medium",
       "family" : "Soft Summer",
@@ -1554,10 +1460,8 @@
     "birthData" : "1996-09-06 06:53",
     "expected" : {
       "accentColours" : [
-        "brushed pewter",
-        "dusty plum",
-        "sea glass",
-        "berry mauve"
+        "#678C70",
+        "#BA4983"
       ],
       "cluster" : "Medium Cool Muted",
       "contrast" : "Low",
@@ -1587,10 +1491,8 @@
     "birthData" : "2000-02-06 10:53",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "cool ruby",
-        "deep amber"
+        "#744D6D",
+        "#005D69"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -1598,13 +1500,13 @@
         "oxblood",
         "forest teal",
         "forest green",
-        "petrol"
+        "dark terracotta"
       ],
       "depth" : "Deep",
       "family" : "Deep Autumn",
       "neutrals" : [
         "espresso",
-        "cool charcoal",
+        "warm charcoal",
         "deep olive",
         "bark brown"
       ],
@@ -1620,17 +1522,15 @@
     "birthData" : "1998-04-07 20:12",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "soft copper",
-        "steel grey",
-        "muted amber"
+        "#005E64",
+        "#731632"
       ],
       "cluster" : "Medium Warm Muted",
       "contrast" : "Low",
       "coreColours" : [
         "terracotta",
         "olive sage",
-        "icy teal",
+        "muted teal",
         "soft rust"
       ],
       "depth" : "Medium",
@@ -1653,10 +1553,8 @@
     "birthData" : "2002-06-24 04:00",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "soft copper",
-        "steel grey",
-        "muted amber"
+        "#731632",
+        "#366064"
       ],
       "cluster" : "Medium Warm Muted",
       "contrast" : "Low",
@@ -1686,10 +1584,8 @@
     "birthData" : "1991-01-20 14:07",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "copper",
-        "warm auburn"
+        "#005D69",
+        "#056463"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -1719,10 +1615,8 @@
     "birthData" : "1991-05-25 12:29",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "soft copper",
-        "moss green",
-        "bronze"
+        "#366064",
+        "#2E766B"
       ],
       "cluster" : "Medium Warm Muted",
       "contrast" : "Low",
@@ -1752,10 +1646,8 @@
     "birthData" : "1993-08-05 06:41",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "soft copper",
-        "moss green",
-        "bronze"
+        "#366064",
+        "#2D6D68"
       ],
       "cluster" : "Medium Warm Muted",
       "contrast" : "Low",
@@ -1785,10 +1677,8 @@
     "birthData" : "1987-10-06 04:18",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "soft copper",
-        "steel grey",
-        "muted amber"
+        "#744D6D",
+        "#005E64"
       ],
       "cluster" : "Medium Warm Muted",
       "contrast" : "Low",
@@ -1818,17 +1708,15 @@
     "birthData" : "1992-03-15 01:12",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "soft copper",
-        "steel grey",
-        "muted amber"
+        "#00656E",
+        "#2D6D68"
       ],
       "cluster" : "Medium Warm Muted",
       "contrast" : "Low",
       "coreColours" : [
         "terracotta",
         "olive sage",
-        "icy teal",
+        "muted teal",
         "soft rust"
       ],
       "depth" : "Medium",
@@ -1851,17 +1739,15 @@
     "birthData" : "2001-11-26 23:18",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "soft copper",
-        "steel grey",
-        "muted amber"
+        "#366064",
+        "#7E1B2F"
       ],
       "cluster" : "Medium Warm Muted",
       "contrast" : "Low",
       "coreColours" : [
         "terracotta",
         "olive sage",
-        "icy teal",
+        "muted teal",
         "soft rust"
       ],
       "depth" : "Medium",
@@ -1884,10 +1770,8 @@
     "birthData" : "1992-10-31 04:47",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "soft copper",
-        "steel grey",
-        "muted amber"
+        "#731632",
+        "#366064"
       ],
       "cluster" : "Medium Warm Muted",
       "contrast" : "Low",
@@ -1917,10 +1801,8 @@
     "birthData" : "1999-05-12 16:00",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "soft copper",
-        "steel grey",
-        "muted amber"
+        "#366064",
+        "#865373"
       ],
       "cluster" : "Medium Warm Muted",
       "contrast" : "Low",
@@ -1950,10 +1832,8 @@
     "birthData" : "1994-08-27 10:41",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "copper",
-        "warm auburn"
+        "#744D6D",
+        "#366064"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -1961,7 +1841,7 @@
         "oxblood",
         "forest teal",
         "forest green",
-        "ochre"
+        "dark terracotta"
       ],
       "depth" : "Deep",
       "family" : "Deep Autumn",
@@ -1983,10 +1863,8 @@
     "birthData" : "2002-04-11 01:53",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "copper",
-        "warm auburn"
+        "#00656E",
+        "#366064"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -1994,7 +1872,7 @@
         "oxblood",
         "forest teal",
         "forest green",
-        "ochre"
+        "dark terracotta"
       ],
       "depth" : "Deep",
       "family" : "Deep Autumn",
@@ -2016,10 +1894,8 @@
     "birthData" : "1994-06-26 10:12",
     "expected" : {
       "accentColours" : [
-        "bronze",
-        "amber",
-        "olive gold",
-        "deep amber"
+        "#3C746F",
+        "#005D69"
       ],
       "cluster" : "Medium Warm Grounded",
       "contrast" : "Medium",
@@ -2027,7 +1903,7 @@
         "rust",
         "moss",
         "ochre",
-        "forest teal"
+        "deep teal"
       ],
       "depth" : "Medium",
       "family" : "True Autumn",
@@ -2049,10 +1925,8 @@
     "birthData" : "1984-01-02 09:53",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "cool ruby",
-        "deep amber"
+        "#00656E",
+        "#744D6D"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2060,13 +1934,13 @@
         "oxblood",
         "forest teal",
         "forest green",
-        "petrol"
+        "dark terracotta"
       ],
       "depth" : "Deep",
       "family" : "Deep Autumn",
       "neutrals" : [
         "espresso",
-        "cool charcoal",
+        "warm charcoal",
         "deep olive",
         "bark brown"
       ],
@@ -2082,10 +1956,8 @@
     "birthData" : "1991-05-29 04:53",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "copper",
-        "warm auburn"
+        "#731632",
+        "#366064"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2115,10 +1987,8 @@
     "birthData" : "1989-08-06 00:47",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "cool ruby",
-        "deep amber"
+        "#731632",
+        "#865373"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2126,13 +1996,13 @@
         "oxblood",
         "forest teal",
         "forest green",
-        "petrol"
+        "dark terracotta"
       ],
       "depth" : "Deep",
       "family" : "Deep Autumn",
       "neutrals" : [
         "espresso",
-        "cool charcoal",
+        "warm charcoal",
         "deep olive",
         "bark brown"
       ],
@@ -2148,10 +2018,8 @@
     "birthData" : "1996-09-27 13:41",
     "expected" : {
       "accentColours" : [
-        "bronze",
-        "amber",
-        "olive gold",
-        "goldenrod"
+        "#865373",
+        "#7E1B2F"
       ],
       "cluster" : "Medium Warm Grounded",
       "contrast" : "Medium",
@@ -2181,10 +2049,8 @@
     "birthData" : "1999-03-02 15:47",
     "expected" : {
       "accentColours" : [
-        "bronze",
-        "amber",
-        "olive gold",
-        "deep amber"
+        "#2D6D68",
+        "#7E1B2F"
       ],
       "cluster" : "Medium Warm Grounded",
       "contrast" : "Medium",
@@ -2192,7 +2058,7 @@
         "rust",
         "moss",
         "ochre",
-        "forest teal"
+        "deep teal"
       ],
       "depth" : "Medium",
       "family" : "True Autumn",
@@ -2214,10 +2080,8 @@
     "birthData" : "1988-12-16 12:29",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "copper",
-        "warm auburn"
+        "#865373",
+        "#82312E"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2247,10 +2111,8 @@
     "birthData" : "2002-05-18 22:23",
     "expected" : {
       "accentColours" : [
-        "bronze",
-        "amber",
-        "olive gold",
-        "goldenrod"
+        "#2E766B",
+        "#366064"
       ],
       "cluster" : "Medium Warm Grounded",
       "contrast" : "Medium",
@@ -2280,10 +2142,8 @@
     "birthData" : "1993-08-28 06:00",
     "expected" : {
       "accentColours" : [
-        "bronze",
-        "amber",
-        "olive gold",
-        "deep amber"
+        "#865373",
+        "#1C6E6B"
       ],
       "cluster" : "Medium Warm Grounded",
       "contrast" : "Medium",
@@ -2291,7 +2151,7 @@
         "rust",
         "moss",
         "ochre",
-        "forest teal"
+        "deep teal"
       ],
       "depth" : "Medium",
       "family" : "True Autumn",
@@ -2313,10 +2173,8 @@
     "birthData" : "2000-02-11 11:07",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "cool ruby",
-        "deep amber"
+        "#731632",
+        "#005D69"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2324,13 +2182,13 @@
         "oxblood",
         "forest teal",
         "forest green",
-        "petrol"
+        "dark terracotta"
       ],
       "depth" : "Deep",
       "family" : "Deep Autumn",
       "neutrals" : [
         "espresso",
-        "cool charcoal",
+        "warm charcoal",
         "deep olive",
         "bark brown"
       ],
@@ -2346,10 +2204,8 @@
     "birthData" : "1988-04-09 21:53",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "cool ruby",
-        "deep amber"
+        "#00656E",
+        "#1C6E6B"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2357,13 +2213,13 @@
         "oxblood",
         "forest teal",
         "forest green",
-        "petrol"
+        "dark terracotta"
       ],
       "depth" : "Deep",
       "family" : "Deep Autumn",
       "neutrals" : [
         "espresso",
-        "cool charcoal",
+        "warm charcoal",
         "deep olive",
         "bark brown"
       ],
@@ -2379,10 +2235,8 @@
     "birthData" : "1999-07-21 21:47",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "cool ruby",
-        "deep amber"
+        "#005D69",
+        "#366064"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2390,13 +2244,13 @@
         "oxblood",
         "forest teal",
         "forest green",
-        "petrol"
+        "dark terracotta"
       ],
       "depth" : "Deep",
       "family" : "Deep Autumn",
       "neutrals" : [
         "espresso",
-        "cool charcoal",
+        "warm charcoal",
         "deep olive",
         "bark brown"
       ],
@@ -2412,10 +2266,8 @@
     "birthData" : "2000-01-08 09:47",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "cool ruby",
-        "deep amber"
+        "#005D69",
+        "#056463"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2423,13 +2275,13 @@
         "oxblood",
         "forest teal",
         "forest green",
-        "petrol"
+        "dark terracotta"
       ],
       "depth" : "Deep",
       "family" : "Deep Autumn",
       "neutrals" : [
         "espresso",
-        "cool charcoal",
+        "warm charcoal",
         "deep olive",
         "bark brown"
       ],
@@ -2445,10 +2297,8 @@
     "birthData" : "1990-05-24 00:29",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "copper",
-        "warm auburn"
+        "#00656E",
+        "#2D6D68"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2456,7 +2306,7 @@
         "oxblood",
         "forest teal",
         "forest green",
-        "ochre"
+        "dark terracotta"
       ],
       "depth" : "Deep",
       "family" : "Deep Autumn",
@@ -2478,10 +2328,8 @@
     "birthData" : "2002-08-05 15:00",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "copper",
-        "warm auburn"
+        "#366064",
+        "#00656E"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2511,10 +2359,8 @@
     "birthData" : "1993-10-02 03:07",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "copper",
-        "warm auburn"
+        "#744D6D",
+        "#7E1B2F"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2544,10 +2390,8 @@
     "birthData" : "1991-03-06 23:07",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "copper",
-        "warm auburn"
+        "#005E64",
+        "#731632"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2577,10 +2421,8 @@
     "birthData" : "1994-11-23 03:12",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "copper",
-        "warm auburn"
+        "#82312E",
+        "#366064"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2610,10 +2452,8 @@
     "birthData" : "2001-10-31 10:47",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "cool ruby",
-        "deep amber"
+        "#865373",
+        "#82312E"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2621,13 +2461,13 @@
         "oxblood",
         "forest teal",
         "forest green",
-        "petrol"
+        "dark terracotta"
       ],
       "depth" : "Deep",
       "family" : "Deep Autumn",
       "neutrals" : [
         "espresso",
-        "cool charcoal",
+        "warm charcoal",
         "deep olive",
         "bark brown"
       ],
@@ -2643,10 +2483,8 @@
     "birthData" : "1985-04-22 03:47",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "copper",
-        "warm auburn"
+        "#005E64",
+        "#731632"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2654,7 +2492,7 @@
         "oxblood",
         "forest teal",
         "forest green",
-        "ochre"
+        "dark terracotta"
       ],
       "depth" : "Deep",
       "family" : "Deep Autumn",
@@ -2676,10 +2514,8 @@
     "birthData" : "1987-09-19 08:47",
     "expected" : {
       "accentColours" : [
-        "antique gold",
-        "aged brass",
-        "copper",
-        "warm auburn"
+        "#744D6D",
+        "#7E1B2F"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2687,7 +2523,7 @@
         "oxblood",
         "forest teal",
         "forest green",
-        "ochre"
+        "dark terracotta"
       ],
       "depth" : "Deep",
       "family" : "Deep Autumn",
@@ -2709,10 +2545,8 @@
     "birthData" : "1999-02-07 20:47",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "gunmetal",
-        "cool ruby",
-        "true red"
+        "#678C70",
+        "#9F3D8A"
       ],
       "cluster" : "Deep Cool Controlled",
       "contrast" : "Medium",
@@ -2742,10 +2576,8 @@
     "birthData" : "1989-07-11 21:34",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "gunmetal",
-        "cool ruby",
-        "true red"
+        "#00A9AE",
+        "#085267"
       ],
       "cluster" : "Deep Cool Controlled",
       "contrast" : "Medium",
@@ -2775,10 +2607,8 @@
     "birthData" : "1997-12-24 09:00",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "gunmetal",
-        "cool ruby",
-        "true red"
+        "#085267",
+        "#9665A3"
       ],
       "cluster" : "Deep Cool Controlled",
       "contrast" : "Medium",
@@ -2786,7 +2616,7 @@
         "black cherry",
         "petrol",
         "dark emerald",
-        "royal blue"
+        "blue-black"
       ],
       "depth" : "Deep",
       "family" : "Deep Winter",
@@ -2808,10 +2638,8 @@
     "birthData" : "1991-05-27 16:00",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "gunmetal",
-        "cool ruby",
-        "copper"
+        "#007362",
+        "#00A9AE"
       ],
       "cluster" : "Deep Cool Controlled",
       "contrast" : "Medium",
@@ -2819,7 +2647,7 @@
         "black cherry",
         "petrol",
         "dark emerald",
-        "oxblood"
+        "blue-black"
       ],
       "depth" : "Deep",
       "family" : "Deep Winter",
@@ -2841,10 +2669,8 @@
     "birthData" : "1984-10-05 13:00",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "gunmetal",
-        "cool ruby",
-        "true red"
+        "#085267",
+        "#702E62"
       ],
       "cluster" : "Deep Cool Controlled",
       "contrast" : "Medium",
@@ -2874,10 +2700,8 @@
     "birthData" : "1989-02-25 19:29",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "gunmetal",
-        "cool ruby",
-        "true red"
+        "#5485C8",
+        "#008265"
       ],
       "cluster" : "Deep Cool Controlled",
       "contrast" : "Medium",
@@ -2907,10 +2731,8 @@
     "birthData" : "1992-11-30 12:00",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "gunmetal",
-        "cool ruby",
-        "true red"
+        "#085267",
+        "#9665A3"
       ],
       "cluster" : "Deep Cool Controlled",
       "contrast" : "Medium",
@@ -2940,10 +2762,8 @@
     "birthData" : "1991-11-03 07:07",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "gunmetal",
-        "cool ruby",
-        "copper"
+        "#007362",
+        "#678C70"
       ],
       "cluster" : "Deep Cool Controlled",
       "contrast" : "Medium",
@@ -2951,7 +2771,7 @@
         "black cherry",
         "petrol",
         "dark emerald",
-        "oxblood"
+        "blue-black"
       ],
       "depth" : "Deep",
       "family" : "Deep Winter",
@@ -2959,7 +2779,7 @@
         "black",
         "ink navy",
         "graphite",
-        "warm charcoal"
+        "cool charcoal"
       ],
       "saturation" : "Rich",
       "secondaryPull" : "Deep Autumn",
@@ -2973,10 +2793,8 @@
     "birthData" : "1998-02-17 14:07",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "icy blue",
-        "fuchsia red",
-        "clear cyan"
+        "#9665A3",
+        "#085267"
       ],
       "cluster" : "Deep Cool High-Contrast",
       "contrast" : "High",
@@ -3006,10 +2824,8 @@
     "birthData" : "1992-12-30 09:00",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "icy blue",
-        "fuchsia red",
-        "clear cyan"
+        "#085267",
+        "#9665A3"
       ],
       "cluster" : "Deep Cool High-Contrast",
       "contrast" : "High",
@@ -3039,10 +2855,8 @@
     "birthData" : "1992-10-16 06:18",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "icy blue",
-        "fuchsia red",
-        "clear cyan"
+        "#BA4983",
+        "#702E62"
       ],
       "cluster" : "Deep Cool High-Contrast",
       "contrast" : "High",
@@ -3072,10 +2886,8 @@
     "birthData" : "1989-02-27 15:29",
     "expected" : {
       "accentColours" : [
-        "silver",
-        "icy blue",
-        "fuchsia red",
-        "clear cyan"
+        "#9665A3",
+        "#1D6640"
       ],
       "cluster" : "Deep Cool High-Contrast",
       "contrast" : "High",
@@ -3105,10 +2917,8 @@
     "birthData" : "1998-02-06 06:41",
     "expected" : {
       "accentColours" : [
-        "chrome silver",
-        "electric fuchsia",
-        "clear cyan",
-        "bright gold"
+        "#085267",
+        "#9F3D8A"
       ],
       "cluster" : "Deep Cool High-Contrast",
       "contrast" : "High",
@@ -3116,7 +2926,7 @@
         "midnight",
         "royal blue",
         "magenta red",
-        "bright teal"
+        "icy teal"
       ],
       "depth" : "Deep",
       "family" : "Bright Winter",
@@ -3138,10 +2948,8 @@
     "birthData" : "1990-03-26 19:12",
     "expected" : {
       "accentColours" : [
-        "chrome silver",
-        "electric fuchsia",
-        "clear cyan",
-        "bright gold"
+        "#9F3D8A",
+        "#085267"
       ],
       "cluster" : "Deep Cool High-Contrast",
       "contrast" : "High",
@@ -3149,7 +2957,7 @@
         "midnight",
         "royal blue",
         "magenta red",
-        "bright teal"
+        "icy teal"
       ],
       "depth" : "Deep",
       "family" : "Bright Winter",
@@ -3171,10 +2979,8 @@
     "birthData" : "1993-08-22 10:00",
     "expected" : {
       "accentColours" : [
-        "chrome silver",
-        "electric fuchsia",
-        "clear cyan",
-        "bright gold"
+        "#9F3D8A",
+        "#5485C8"
       ],
       "cluster" : "Deep Cool High-Contrast",
       "contrast" : "High",
@@ -3182,7 +2988,7 @@
         "midnight",
         "royal blue",
         "magenta red",
-        "bright teal"
+        "icy teal"
       ],
       "depth" : "Deep",
       "family" : "Bright Winter",
@@ -3204,10 +3010,8 @@
     "birthData" : "1987-11-17 19:29",
     "expected" : {
       "accentColours" : [
-        "chrome silver",
-        "electric fuchsia",
-        "clear cyan",
-        "bright gold"
+        "#9665A3",
+        "#9F3D8A"
       ],
       "cluster" : "Deep Cool High-Contrast",
       "contrast" : "High",
@@ -3215,7 +3019,7 @@
         "midnight",
         "royal blue",
         "magenta red",
-        "bright teal"
+        "icy teal"
       ],
       "depth" : "Deep",
       "family" : "Bright Winter",
@@ -3237,10 +3041,8 @@
     "birthData" : "1987-05-19 23:47",
     "expected" : {
       "accentColours" : [
-        "chrome silver",
-        "electric fuchsia",
-        "clear cyan",
-        "bright gold"
+        "#1D6640",
+        "#9665A3"
       ],
       "cluster" : "Deep Cool High-Contrast",
       "contrast" : "High",
@@ -3248,7 +3050,7 @@
         "midnight",
         "royal blue",
         "magenta red",
-        "bright teal"
+        "icy teal"
       ],
       "depth" : "Deep",
       "family" : "Bright Winter",
@@ -3270,10 +3072,8 @@
     "birthData" : "1989-09-21 15:34",
     "expected" : {
       "accentColours" : [
-        "chrome silver",
-        "electric fuchsia",
-        "clear cyan",
-        "bright gold"
+        "#678C70",
+        "#085267"
       ],
       "cluster" : "Deep Cool High-Contrast",
       "contrast" : "High",
@@ -3281,7 +3081,7 @@
         "midnight",
         "royal blue",
         "magenta red",
-        "bright teal"
+        "icy teal"
       ],
       "depth" : "Deep",
       "family" : "Bright Winter",

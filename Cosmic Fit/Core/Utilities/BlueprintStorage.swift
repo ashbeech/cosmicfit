@@ -28,7 +28,7 @@ final class BlueprintStorage {
     /// Bump this when the PaletteSection (or any persisted model) shape changes
     /// in a way that requires regeneration. On load, if the stored version
     /// doesn't match, the file is deleted and nil is returned.
-    static let schemaVersion = 2
+    static let schemaVersion = 4
 
     private static let schemaVersionKey = "cosmicFitBlueprintSchemaVersion"
 

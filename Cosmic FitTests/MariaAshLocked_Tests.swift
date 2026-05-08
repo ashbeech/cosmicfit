@@ -43,18 +43,26 @@ final class MariaAshLocked_Tests: XCTestCase {
         )
     }
 
-    func testMariaPaletteIsDeepAutumnWithTAVariation() throws {
+    func testMariaPaletteNeutralsAndCoreUnchanged() throws {
         let result = ColourEngine.evaluateStrict(input: try mariaInput)
         let base = PaletteLibrary.palette(for: .deepAutumn)
 
-        XCTAssertEqual(result.palette.accentColours[3], "warm auburn",
-            "Maria accent[3] should be 'warm auburn' from True Autumn pull")
-
         XCTAssertEqual(result.palette.neutrals, base.neutrals)
         XCTAssertEqual(result.palette.coreColours, base.coreColours)
-        XCTAssertEqual(result.palette.accentColours[0], base.accentColours[0])
-        XCTAssertEqual(result.palette.accentColours[1], base.accentColours[1])
-        XCTAssertEqual(result.palette.accentColours[2], base.accentColours[2])
+    }
+
+    func testMariaAccentsAreChartDerived() throws {
+        let result = ColourEngine.evaluateStrict(input: try mariaInput)
+        XCTAssertEqual(result.accentSlots.count, 2,
+            "Maria must have exactly 2 chart-derived accent slots")
+        for slot in result.accentSlots {
+            XCTAssertTrue(slot.hex.hasPrefix("#") && slot.hex.count == 7,
+                "Accent hex '\(slot.hex)' must be valid 7-char format")
+            XCTAssertFalse(slot.displayName.isEmpty,
+                "Accent displayName must not be empty")
+            XCTAssertFalse(slot.displayName.contains("#"),
+                "Accent displayName must not contain '#'")
+        }
     }
 
     // MARK: - Ash
@@ -79,26 +87,31 @@ final class MariaAshLocked_Tests: XCTestCase {
         )
     }
 
-    func testAshPaletteIsDeepAutumnWithDWVariation() throws {
+    func testAshPaletteNeutralsCoreSupportUnchanged() throws {
         let result = ColourEngine.evaluateStrict(input: try ashInput)
         let base = PaletteLibrary.palette(for: .deepAutumn)
+        let support = PaletteLibrary.supportPalette(for: .deepAutumn)
 
-        XCTAssertEqual(result.palette.accentColours[2], "cool ruby",
-            "Ash accent[2] should be 'cool ruby' from Deep Winter pull")
-        XCTAssertEqual(result.palette.coreColours[3], "petrol",
-            "Ash core[3] should be 'petrol' from Deep Winter pull")
-        XCTAssertEqual(result.palette.neutrals[1], "cool charcoal",
-            "Ash neutral[1] should be 'cool charcoal' from Deep Winter pull (strength 3)")
+        XCTAssertEqual(result.palette.neutrals, base.neutrals)
+        XCTAssertEqual(result.palette.coreColours, base.coreColours,
+            "Ash gets the unmodified Deep Autumn core band")
+        XCTAssertEqual(result.palette.supportColours, support,
+            "Ash gets the unmodified Deep Autumn support band")
+        XCTAssertEqual(result.palette.lightAnchor, base.lightAnchor)
+    }
 
-        XCTAssertEqual(result.palette.accentColours[0], base.accentColours[0])
-        XCTAssertEqual(result.palette.accentColours[1], base.accentColours[1])
-        XCTAssertEqual(result.palette.accentColours[3], base.accentColours[3])
-        XCTAssertEqual(result.palette.coreColours[0], base.coreColours[0])
-        XCTAssertEqual(result.palette.coreColours[1], base.coreColours[1])
-        XCTAssertEqual(result.palette.coreColours[2], base.coreColours[2])
-        XCTAssertEqual(result.palette.neutrals[0], base.neutrals[0])
-        XCTAssertEqual(result.palette.neutrals[2], base.neutrals[2])
-        XCTAssertEqual(result.palette.neutrals[3], base.neutrals[3])
+    func testAshAccentsAreChartDerived() throws {
+        let result = ColourEngine.evaluateStrict(input: try ashInput)
+        XCTAssertEqual(result.accentSlots.count, 2,
+            "Ash must have exactly 2 chart-derived accent slots")
+        for slot in result.accentSlots {
+            XCTAssertTrue(slot.hex.hasPrefix("#") && slot.hex.count == 7,
+                "Accent hex '\(slot.hex)' must be valid 7-char format")
+            XCTAssertFalse(slot.displayName.isEmpty,
+                "Accent displayName must not be empty")
+            XCTAssertFalse(slot.displayName.contains("#"),
+                "Accent displayName must not contain '#'")
+        }
     }
 
     func testAshSecondaryPullMayBeDeepWinter() throws {
@@ -113,28 +126,245 @@ final class MariaAshLocked_Tests: XCTestCase {
 
     // MARK: - Variation Difference
 
-    func testAshAndMariaHaveDifferentPalettes() throws {
+    func testAshAndMariaShareNeutralsAndCoreButDifferInAccents() throws {
         let ashResult = ColourEngine.evaluateStrict(input: try ashInput)
         let mariaResult = ColourEngine.evaluateStrict(input: try mariaInput)
-        XCTAssertNotEqual(ashResult.palette, mariaResult.palette,
-            "Ash and Maria should have different palettes despite both being Deep Autumn")
+        XCTAssertEqual(ashResult.palette.neutrals, mariaResult.palette.neutrals,
+            "Same-family users share the neutral band")
+        XCTAssertEqual(ashResult.palette.coreColours, mariaResult.palette.coreColours,
+            "Same-family users share the core band")
+        XCTAssertNotEqual(ashResult.palette.accentColours, mariaResult.palette.accentColours,
+            "Chart-derived accents differ between users with different placements")
+        XCTAssertNotEqual(ashResult.luminarySignature, mariaResult.luminarySignature,
+            "Chart signatures still provide per-user individuation")
     }
 
-    func testAshVariationTrace() throws {
+    func testAshVariationTraceIsNone() throws {
         let result = ColourEngine.evaluateStrict(input: try ashInput)
         let v = result.trace.variation
-        XCTAssertEqual(v.pullFamily, "Deep Winter")
-        XCTAssertEqual(v.pullStrength, 3,
-            "Ash has 3 DW-aligned flags: winterCompression, coolLeanDeepAutumn, capricornVirgoCooling")
-        XCTAssertEqual(v.substitutions.count, 3)
+        XCTAssertTrue(v.substitutions.isEmpty,
+            "Variation is bypassed — no substitutions should be applied")
     }
 
-    func testMariaVariationTrace() throws {
+    func testMariaVariationTraceIsNone() throws {
         let result = ColourEngine.evaluateStrict(input: try mariaInput)
         let v = result.trace.variation
-        XCTAssertEqual(v.pullFamily, "True Autumn")
-        XCTAssertEqual(v.pullStrength, 1)
-        XCTAssertEqual(v.substitutions.count, 1)
+        XCTAssertTrue(v.substitutions.isEmpty,
+            "Variation is bypassed — no substitutions should be applied")
+    }
+
+    // MARK: - V4.3 Universal Anchors
+
+    /// Every Deep Autumn user, regardless of pull, should receive the same
+    /// anchor pair: warm cream + ink brown. Anchors are purely
+    /// family-determined foundation; variation lives in the 12+4 mid-palette.
+    func testMariaHasDeepAutumnAnchors() throws {
+        let result = ColourEngine.evaluateStrict(input: try mariaInput)
+        XCTAssertEqual(result.palette.lightAnchor, "warm cream",
+            "Maria lightAnchor should be 'warm cream' for Deep Autumn")
+        XCTAssertEqual(result.palette.deepAnchor, "black",
+            "Maria deepAnchor should be 'black' — winter-compressed DA override")
+    }
+
+    func testAshHasDeepAutumnAnchors() throws {
+        let result = ColourEngine.evaluateStrict(input: try ashInput)
+        XCTAssertEqual(result.palette.lightAnchor, "warm cream",
+            "Ash lightAnchor should be 'warm cream' for Deep Autumn")
+        XCTAssertEqual(result.palette.deepAnchor, "black",
+            "Ash deepAnchor should be 'black' — winter-compressed DA override")
+    }
+
+    /// Both Ash and Maria are winter-compressed Deep Autumn, so they share
+    /// both anchors: "warm cream" (light) and "black" (deep override).
+    func testAshAndMariaShareAnchors() throws {
+        let ashResult = ColourEngine.evaluateStrict(input: try ashInput)
+        let mariaResult = ColourEngine.evaluateStrict(input: try mariaInput)
+        XCTAssertEqual(ashResult.palette.lightAnchor, mariaResult.palette.lightAnchor,
+            "Same-family users must share the lightAnchor (foundation invariance)")
+        XCTAssertEqual(ashResult.palette.deepAnchor, mariaResult.palette.deepAnchor,
+            "Both winter-compressed DA users get 'black' as deepAnchor")
+    }
+
+    // MARK: - V4.5 Winter-Compression Anchor Override
+
+    func testWinterCompressedDAGetsBlackDeepAnchor() throws {
+        let result = ColourEngine.evaluateStrict(input: try ashInput)
+        XCTAssertTrue(result.trace.overrideFlags.winterCompressionApplied)
+        XCTAssertEqual(result.palette.deepAnchor, "black",
+            "Deep Autumn + winterCompressionApplied → deepAnchor must be 'black'")
+    }
+
+    func testMariaIsAlsoWinterCompressedDA() throws {
+        let result = ColourEngine.evaluateStrict(input: try mariaInput)
+        XCTAssertTrue(result.trace.overrideFlags.winterCompressionApplied,
+            "Maria is also winter-compressed DA")
+        XCTAssertEqual(result.palette.deepAnchor, "black",
+            "Winter-compressed DA gets 'black' as deepAnchor")
+    }
+
+    // MARK: - V4.4 Chart Signatures
+
+    /// Both signatures are parseable hexes inside the Deep Autumn envelope.
+    /// This is the structural contract that prevents a malformed LCH
+    /// projection from leaking into the grid.
+    func testSignaturesAreValidHexAndInsideEnvelope() throws {
+        let envelope = ChartSignatureResolver.envelope(for: .deepAutumn)
+        let LTol = 6.0
+        let CTol = 12.0
+
+        for (label, input) in [("Ash", try ashInput), ("Maria", try mariaInput)] {
+            let result = ColourEngine.evaluateStrict(input: input)
+            for (sigLabel, hex) in [
+                ("luminary", result.luminarySignature),
+                ("ruler", result.rulerSignature),
+            ] {
+                guard let lab = ColourMath.hexToLab(hex) else {
+                    XCTFail("\(label) \(sigLabel) hex '\(hex)' is unparseable")
+                    continue
+                }
+                XCTAssertGreaterThanOrEqual(lab.L, envelope.lightness.min - LTol,
+                    "\(label) \(sigLabel) L*=\(lab.L) below Deep Autumn envelope min")
+                XCTAssertLessThanOrEqual(lab.L, envelope.lightness.max + LTol,
+                    "\(label) \(sigLabel) L*=\(lab.L) above Deep Autumn envelope max")
+                let chroma = (lab.a * lab.a + lab.b * lab.b).squareRoot()
+                XCTAssertLessThanOrEqual(chroma, envelope.chroma.max + CTol,
+                    "\(label) \(sigLabel) C*=\(chroma) exceeds Deep Autumn chroma ceiling")
+            }
+        }
+    }
+
+    /// Ash (Scorpio Sun) and Maria (Taurus Sun) must get distinct luminary
+    /// signatures — this is the *point* of chart signatures: user-level
+    /// individuation inside a shared family template.
+    func testAshAndMariaHaveDistinctLuminarySignatures() throws {
+        let ashResult = ColourEngine.evaluateStrict(input: try ashInput)
+        let mariaResult = ColourEngine.evaluateStrict(input: try mariaInput)
+        XCTAssertNotEqual(ashResult.luminarySignature, mariaResult.luminarySignature,
+            "Different Sun signs must yield different luminary signatures within Deep Autumn")
+    }
+
+    /// Likewise for ruler signatures — Ash and Maria's Ascendant-ruler
+    /// signs differ, so their ruler cells must differ.
+    func testAshAndMariaHaveDistinctRulerSignatures() throws {
+        let ashResult = ColourEngine.evaluateStrict(input: try ashInput)
+        let mariaResult = ColourEngine.evaluateStrict(input: try mariaInput)
+        XCTAssertNotEqual(ashResult.rulerSignature, mariaResult.rulerSignature,
+            "Different Ascendant-ruler signs must yield different ruler signatures within Deep Autumn")
+    }
+
+    /// Signatures are chart-derived but pull-invariant — they don't live
+    /// in `VariationSlots.apply`. Assert this explicitly so a future
+    /// refactor that routes signatures through pulls immediately fails.
+    func testAshSignaturesAreInvariantAcrossRepeatedEvaluations() throws {
+        let input = try ashInput
+        let firstResult = ColourEngine.evaluateStrict(input: input)
+        let secondResult = ColourEngine.evaluateStrict(input: input)
+        XCTAssertEqual(firstResult.luminarySignature, secondResult.luminarySignature)
+        XCTAssertEqual(firstResult.rulerSignature, secondResult.rulerSignature)
+    }
+
+    // MARK: - V4.6 Accent Slot Candidate Selection & Diversity
+
+    func testAccentSlotsAreValidHexes() throws {
+        for (label, input) in [("Ash", try ashInput), ("Maria", try mariaInput)] {
+            let result = ColourEngine.evaluateStrict(input: input)
+            for (i, slot) in result.accentSlots.enumerated() {
+                guard let lab = ColourMath.hexToLab(slot.hex) else {
+                    XCTFail("\(label) accent[\(i)] hex '\(slot.hex)' is unparseable")
+                    continue
+                }
+                XCTAssertGreaterThanOrEqual(lab.L, 10,
+                    "\(label) accent[\(i)] L*=\(lab.L) unexpectedly dark")
+                XCTAssertLessThanOrEqual(lab.L, 95,
+                    "\(label) accent[\(i)] L*=\(lab.L) unexpectedly light")
+            }
+        }
+    }
+
+    func testAccentSlotsPairwiseDiversity() throws {
+        for (label, input) in [("Ash", try ashInput), ("Maria", try mariaInput)] {
+            let result = ColourEngine.evaluateStrict(input: input)
+            let hexes = result.accentSlots.map(\.hex)
+            for i in 0..<hexes.count {
+                for j in (i+1)..<hexes.count {
+                    let dist = ColourMath.labDistanceSquared(hexes[i], hexes[j])
+                    XCTAssertGreaterThanOrEqual(dist, 64.0,
+                        "\(label) accent[\(i)] vs [\(j)] Delta E² = \(dist) < 64 (threshold)")
+                }
+            }
+        }
+    }
+
+    func testAccentSlotsMinimumDistanceFromCorePalette() throws {
+        let corePaletteThreshold: Double = 64.0 // ΔE ≥ 8
+
+        for (label, input) in [("Ash", try ashInput), ("Maria", try mariaInput)] {
+            let result = ColourEngine.evaluateStrict(input: input)
+            let corePaletteHexes = (result.palette.neutrals + result.palette.coreColours).map {
+                PaletteLibrary.hex(for: $0)
+            }
+            for (i, slot) in result.accentSlots.enumerated() {
+                let minDist = corePaletteHexes.map { coreHex in
+                    ColourMath.labDistanceSquared(slot.hex, coreHex)
+                }.min() ?? .infinity
+                XCTAssertGreaterThanOrEqual(minDist, corePaletteThreshold,
+                    "\(label) accent[\(i)] '\(slot.displayName)' too close to core palette: ΔE=\(String(format: "%.1f", minDist.squareRoot()))")
+            }
+        }
+    }
+
+    func testAshAndMariaGetDifferentAccentHexes() throws {
+        let ashResult = ColourEngine.evaluateStrict(input: try ashInput)
+        let mariaResult = ColourEngine.evaluateStrict(input: try mariaInput)
+        let ashHexes = Set(ashResult.accentSlots.map(\.hex))
+        let mariaHexes = Set(mariaResult.accentSlots.map(\.hex))
+        XCTAssertNotEqual(ashHexes, mariaHexes,
+            "Ash and Maria have different Venus/Mars/Jupiter signs — accents must differ")
+    }
+
+    func testAccentSlotsAreDeterministic() throws {
+        let input = try ashInput
+        let first = ColourEngine.evaluateStrict(input: input)
+        let second = ColourEngine.evaluateStrict(input: input)
+        XCTAssertEqual(first.accentSlots, second.accentSlots,
+            "AccentResolver must be deterministic")
+    }
+
+    func testAccentDisplayNamesFromCandidateTable() throws {
+        for (label, input) in [("Ash", try ashInput), ("Maria", try mariaInput)] {
+            let result = ColourEngine.evaluateStrict(input: input)
+            for slot in result.accentSlots {
+                XCTAssertFalse(slot.displayName.isEmpty,
+                    "\(label) accent displayName must not be empty")
+                XCTAssertFalse(slot.displayName.contains("#"),
+                    "\(label) accent displayName '\(slot.displayName)' must not contain hex")
+                let candidates = SignAccentExpressions.candidates(
+                    for: slot.sourceSign,
+                    temperature: FamilyProfiles.variables(for: result.family).temperature
+                )
+                let candidateNames = candidates.map(\.name)
+                XCTAssertTrue(candidateNames.contains(slot.displayName),
+                    "\(label) accent displayName '\(slot.displayName)' not in expression table for \(slot.sourceSign)")
+            }
+        }
+    }
+
+    // MARK: - V4.6 Temperature-Conditioned Accent Qualitative
+
+    func testDeepAutumnWarmGetsWarmAccents() throws {
+        let result = ColourEngine.evaluateStrict(input: try ashInput)
+        XCTAssertEqual(result.family, .deepAutumn)
+        let temperature = FamilyProfiles.variables(for: result.family).temperature
+        XCTAssertEqual(temperature, .warm,
+            "Deep Autumn canonical temperature must be warm")
+        for slot in result.accentSlots {
+            let candidates = SignAccentExpressions.candidates(
+                for: slot.sourceSign,
+                temperature: .warm
+            )
+            XCTAssertFalse(candidates.isEmpty,
+                "Warm candidates must exist for \(slot.sourceSign)")
+        }
     }
 
     // MARK: - Fixture Loading

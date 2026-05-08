@@ -196,4 +196,7 @@ extension Notification.Name {
     
     /// Posted when profile view controller requests dismissal
     static let dismissProfileRequested = Notification.Name("dismissProfileRequested")
+
+    /// DEBUG: Posted to force-regenerate blueprint, clear daily vibes, and refresh all UI.
+    static let devForceRefreshRequested = Notification.Name("devForceRefreshRequested")
 }

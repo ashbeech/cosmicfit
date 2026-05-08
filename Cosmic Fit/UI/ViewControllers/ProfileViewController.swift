@@ -26,6 +26,9 @@ class ProfileViewController: UIViewController {
     private let birthTimePicker = UIDatePicker()
     private let locationAutocompleteView = LocationAutocompleteView()
     private let updateButton = UIButton(type: .system)
+    #if DEBUG
+    private let forceRefreshButton = UIButton(type: .system)
+    #endif
     private let signOutButton = UIButton(type: .system)
     private let deleteProfileButton = UIButton(type: .system)
     private let activityIndicator = UIActivityIndicatorView(style: .large)
@@ -200,7 +203,18 @@ class ProfileViewController: UIViewController {
         CosmicFitTheme.styleButton(updateButton, style: .primary)
         
         contentView.addSubview(updateButton)
-        
+
+        #if DEBUG
+        forceRefreshButton.setTitle("⟳ Force Refresh All Data", for: .normal)
+        forceRefreshButton.addTarget(self, action: #selector(forceRefreshTapped), for: .touchUpInside)
+        forceRefreshButton.translatesAutoresizingMaskIntoConstraints = false
+        CosmicFitTheme.styleButton(forceRefreshButton, style: .secondary)
+        forceRefreshButton.layer.borderColor = UIColor.systemOrange.cgColor
+        forceRefreshButton.layer.borderWidth = 1.5
+        forceRefreshButton.setTitleColor(.systemOrange, for: .normal)
+        contentView.addSubview(forceRefreshButton)
+        #endif
+
         // Sign Out button (only visible when authenticated)
         signOutButton.setTitle("Sign Out", for: .normal)
         signOutButton.addTarget(self, action: #selector(signOutButtonTapped), for: .touchUpInside)
@@ -294,21 +308,35 @@ class ProfileViewController: UIViewController {
             updateButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             updateButton.widthAnchor.constraint(equalToConstant: 250),
             updateButton.heightAnchor.constraint(equalToConstant: 50),
-            
-            signOutButton.topAnchor.constraint(equalTo: updateButton.bottomAnchor, constant: 20),
+
+            // Activity indicator
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+
+        #if DEBUG
+        let anchorAboveSignOut = forceRefreshButton.bottomAnchor
+        NSLayoutConstraint.activate([
+            forceRefreshButton.topAnchor.constraint(equalTo: updateButton.bottomAnchor, constant: 20),
+            forceRefreshButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            forceRefreshButton.widthAnchor.constraint(equalToConstant: 250),
+            forceRefreshButton.heightAnchor.constraint(equalToConstant: 50),
+        ])
+        #else
+        let anchorAboveSignOut = updateButton.bottomAnchor
+        #endif
+
+        NSLayoutConstraint.activate([
+            signOutButton.topAnchor.constraint(equalTo: anchorAboveSignOut, constant: 20),
             signOutButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             signOutButton.widthAnchor.constraint(equalToConstant: 250),
             signOutButton.heightAnchor.constraint(equalToConstant: 50),
-            
+
             deleteProfileButton.topAnchor.constraint(equalTo: signOutButton.bottomAnchor, constant: 20),
             deleteProfileButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             deleteProfileButton.widthAnchor.constraint(equalToConstant: 250),
             deleteProfileButton.heightAnchor.constraint(equalToConstant: 50),
             deleteProfileButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
-            
-            // Activity indicator
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
@@ -412,6 +440,24 @@ class ProfileViewController: UIViewController {
         updateProfile()
     }
     
+    #if DEBUG
+    @objc private func forceRefreshTapped() {
+        forceRefreshButton.isEnabled = false
+        forceRefreshButton.setTitle("Refreshing…", for: .normal)
+
+        BlueprintStorage.shared.delete()
+        DailyVibeStorage.shared.cleanupOldEntries(daysToKeep: 0)
+
+        NotificationCenter.default.post(name: .devForceRefreshRequested, object: nil)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            guard let self else { return }
+            self.forceRefreshButton.setTitle("⟳ Force Refresh All Data", for: .normal)
+            self.forceRefreshButton.isEnabled = true
+        }
+    }
+    #endif
+
     @objc private func signOutButtonTapped() {
         let alert = UIAlertController(
             title: "Sign Out",

@@ -1,9 +1,9 @@
 {
   "accessory" : {
     "paragraphs" : [
-      "Fussy layers of fragile trinkets actively dilute your physical presence. Instead of scattering your attention across ten minor additions, rely on one commanding anchor piece to finish the silhouette. A wide, thick leather belt with a solid mechanical clasp or a serious watch delivers the tangible weight you crave. This single focal point channels your bold energy into something grounded and undeniably expensive. Let a flawlessly constructed bag do the heavy lifting, rather than burying your shape in unnecessary noise.",
-      "Because your clothes rely heavily on plush, tactile drape, your accessories have to provide the architectural spine. This is where you introduce serious weight to give your natural warmth some boundaries. A thick, unyielding leather belt or a bag with rigid geometry snaps softer fabrics to attention. Pay attention to the sensory feedback of the hardware itself. You want clasps that shut with a definitive click, rings with undeniable heft, and thick straps that refuse to warp. Rather than delicate afterthoughts, these pieces act as the structural framework of your outfit, proving that deep comfort and bold, deliberate style occupy the exact same space.",
-      "The tactile reality of a piece matters far more than its label. You want the heavy, satisfying drop of a thick bag strap and the unmistakable scent of properly tanned leather. Even the mechanical snap of a well-engineered clasp offers a quiet sort of reassurance when you are rushing out the door. These sensory details bring a necessary friction to your wardrobe. Substantial hardware and dense, pliant textures give your outfits a grounded finish, especially when you are moving fast. It is about wearing items that feel as expensive to the touch as they look from a distance."
+      "A single, substantial accessory always hits harder than a noisy stack of delicate trinkets. True impact comes from physical weight—a thick leather strap on a significant watch or an architectural ring that sits boldly on the hand. This solitary approach creates an immediate focal point, allowing the heavy crepe and pressed cotton of your clothes to speak for themselves. You get to walk into a room looking entirely finished, without jingling every time you move your wrist.",
+      "Hardware and leather goods do the heavy lifting in your wardrobe. They supply the necessary tension that pulls a look together. Every item must feel substantial in your hands long before you put it on. A thick strap that fastens with a definitive click or a bag with enough internal framing to sit upright on a table does more than just hold your things. Your watches and rings should carry a noticeable physical weight on the skin. This kind of dense, unyielding finish is never merely decoration. It serves as the visual full stop to everything else you wear.",
+      "The physical reality of your accessories matters just as much as their shape. Quality carries a very specific acoustic profile. Notice the satisfying heft of a solid watch settling onto your wrist, or the firm, deliberate snap of a heavy bag clasp. You want thick leather that smells faintly of a proper workshop, cut into belts and wide straps that yield to your movement without losing their tension. Even the sheer density of substantial rings and heavy hardware provides a necessary, grounding friction while you work. That quiet, heavy click of a closure speaks volumes before you even say a word."
     ]
   },
   "code" : {
@@ -31,79 +31,83 @@
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-04-19T16:53:11Z",
+  "generatedAt" : "2026-05-07T09:21:13Z",
   "hardware" : {
-    "metalsText" : "Flimsy details ruin a look instantly, so your hardware needs real physical weight to ground your wardrobe. Thick, cast soft copper delivers immediate warmth and pairs flawlessly with heavy silks and buttery leathers. For items that see constant rotation, like a substantial boot zip or the clasp on an everyday bag, a polished rose gold catches the light beautifully and matches your energetic pace. When you wear yellow gold, the casting must be completely solid and the surface immaculate. Every single detail has to feel inherently expensive to the touch, right down to the rivets and zipper pulls.",
+    "metalsText" : "Flimsy zips and hollow buttons are an immediate dealbreaker. Hardware is where a garment truly proves its worth, and you naturally gravitate towards metals with literal, physical weight. soft copper provides traditional warmth and deep sensory satisfaction, particularly when the finish is lightly brushed rather than blindingly polished. When you want a sharper, more assertive edge on heavy leather belts or structured bags, rose gold cuts through beautifully. Every clasp, rivet, and buckle should yield a deeply satisfying mechanical thunk when you snap it shut.",
     "recommendedMetals" : [
       "soft copper",
       "rose gold",
-      "yellow gold",
       "warm bronze",
-      "white gold",
+      "yellow gold",
+      "polished silver",
       "platinum",
-      "polished silver"
+      "white gold"
     ],
     "recommendedStones" : [
-      "pink tourmaline",
       "kunzite",
-      "rose quartz",
+      "pink tourmaline",
       "malachite",
       "emerald",
+      "rose quartz",
       "onyx",
       "sapphire",
       "garnet"
     ],
-    "stonesText" : "Flimsy, delicate little gems simply get lost on you. You need stones that feel substantial and warm to the touch, reflecting your natural heat and demand for sensory richness. A heavy cut of pink tourmaline looks incredible sitting close to the skin, while the dense depth of kunzite brings a brilliant flash of colour to a simple cream silk shirt. Look for smooth cabochon cuts set in chunky, buttery gold rather than fussy, intricate claws. The pieces you wear daily should look less like polite heirlooms and more like bold, tactile objects you genuinely love to handle.",
-    "tipText" : "Your jewellery needs to carry undeniable physical weight. Whisper-thin chains and delicate layers will simply annoy you by midday. Look for substantial hardware that feels satisfying in your hand before you even put it on, like a solid soft copper cuff or a leather bag secured with a seriously heavy clasp. You want pieces that make a bold entrance but remain deeply rooted in proper craftsmanship. A single, commanding ring set with pink tourmaline works far harder for your outfit than a tangled stack of fine bands. Stick to items that match your natural heat and refuse to fade into the background, while always feeling distinctly expensive to wear."
+    "stonesText" : "Your jewellery box should feel less like a delicate collection and more like a high-stakes archive. You need stones with actual physical weight that warm up against your skin as the day goes on. Heavy, substantial gems set in solid metal hit the right note, especially when you wear the grounded heat of kunzite. A chunky slab of pink tourmaline locked into a thick gold bezel feels quietly expensive and incredibly tactile. Add malachite when you want a deliberate flash of fire, proving that serious investment pieces never have to be boring.",
+    "tipText" : "Flimsy jewellery is entirely wasted on you. Your hardware needs genuine physical weight to match your energy, acting as a structural component rather than a delicate afterthought. A thick, sculptural cuff in soft copper or a substantial geometric belt buckle worn over heavy crepe provides immediate tactile satisfaction. There is an undeniable grounding effect in the decisive clink of a proper watch clasp shutting or the cold weight of a heavy ring. Skip the tangled layers of thin chains and let one boldly crafted item do all the talking."
   },
   "occasions" : {
-    "dailyText" : "Dressing down is never an excuse to drop your standards. Flimsy, featherweight garments simply annoy you, so your casual rotation runs entirely on substantial, perfectly weighted pieces that keep their shape through a busy afternoon. The goal is total physical ease that still projects a warm, high-impact energy. Focus on impeccable drape, a thoughtfully dropped shoulder, and heavy hems that move exactly as fast as you do. You manage to look supremely comfortable while making it obvious that every single item is distinctly premium.\n\nYour comfort instinct gravitates toward security through tactile quality, fabrics as emotional anchors.",
-    "intimateText" : "Evening settings are where your natural heat meets an appetite for total sensory indulgence. Garments with serious physical weight and a magnificent drape work best here, especially pieces that feel exceptional against bare skin. Let the silhouette stay relatively uncomplicated so the undeniable quality of the construction and your own lively presence can lead the way. Close quarters require clothes that reward a lingering touch, meaning flimsy materials and fussy structural details should be left in the wardrobe. You want to look entirely approachable, yet distinctly expensive.",
-    "workText" : "Your best workwear always sits at the exact intersection of relentless momentum and pure physical ease. Rather than rigid suiting that restricts your frame, you need heavy, substantial pieces that hold their shape beautifully and offer an immediate sense of sensory grounding. Look for tailoring that wraps and drapes, favouring generous proportions that actually let you breathe and gesture wildly in a meeting. A sweeping trouser leg paired with a precise waist creates a silhouette that naturally commands the room. The overall effect is incredibly expensive, warmly engaging, and totally prepared to run the show.\n\nYour style energy concentrates in partnership and public, so your wardrobe is at its best when it reflects both partnership and public."
+    "dailyText" : "Downtime never means letting your standards drop, but your everyday uniform still has to carry a real sense of physical ease. You move through the world with undeniable energy, so your casual pieces must allow for serious momentum while refusing to lose their shape. Forget flimsy basics that require constant adjustment. You need garments with substantial weight and a proper drape, ensuring you feel entirely secure and grounded the moment you put them on. The goal is an off-duty look that feels warm, intentional, and entirely ready for action. When the foundation of your daily rotation relies on uncompromising quality, even the quickest dash out the door looks thoroughly finished.\n\nYour comfort instinct gravitates toward security through tactile quality, fabrics as emotional anchors.",
+    "intimateText" : "Intimate settings bring out a warmer, more tactile side of your usual polish. Rather than unravelling into formless shapes or overcomplicated evening pieces, you thrive in garments that offer a heavy, satisfying drape. Look for pieces that yield to the touch while still holding a decisive silhouette. Your natural spark shows up best here through slightly exaggerated proportions or an unexpected cut, always anchored by clothing that feels physically secure on the body. At close range, the overall impression is expensive, intentional, and deeply comfortable. You look utterly magnetic without sacrificing an ounce of your composure.",
+    "workText" : "Your approach to workwear thrives on the brilliant tension between strict tailoring and total physical ease. Seek out substantial garments that hold their shape flawlessly but still swing when you stride down a corridor. A jacket should sit squarely on the shoulder to project instant competence, paired with trousers cut generously enough to let you jump in a cab. You want a wardrobe that provides serious structural support without turning you into a stiff mannequin. The goal is to let your outfit establish your credentials the second you walk in, leaving your energy free to run the room.\n\nYour style energy concentrates in partnership and public, so your wardrobe is at its best when it reflects both partnership and public."
   },
   "palette" : {
     "accentColours" : [
       {
-        "hexValue" : "#C9A84C",
-        "name" : "antique gold",
+        "hexValue" : "#744D6D",
+        "name" : "Dusky Plum",
         "provenance" : {
-          "band" : "accent",
-          "family" : "Deep Autumn",
-          "index" : 0,
-          "kind" : "v4Template"
+          "kind" : "chartDerivedAccent",
+          "role" : "Signature",
+          "saturationOverride" : false,
+          "sourcePlanet" : "Mars",
+          "sourceSign" : "Libra"
         },
         "role" : "accent"
       },
       {
-        "hexValue" : "#8E7530",
-        "name" : "aged brass",
+        "hexValue" : "#005E64",
+        "name" : "Midnight Teal",
         "provenance" : {
-          "band" : "accent",
-          "family" : "Deep Autumn",
-          "index" : 1,
-          "kind" : "v4Template"
+          "kind" : "chartDerivedAccent",
+          "role" : "Contrast",
+          "saturationOverride" : false,
+          "sourcePlanet" : "Jupiter",
+          "sourceSign" : "Pisces"
         },
         "role" : "accent"
       },
       {
-        "hexValue" : "#B87333",
-        "name" : "copper",
+        "hexValue" : "#82312E",
+        "name" : "Dark Sienna",
         "provenance" : {
-          "band" : "accent",
-          "family" : "Deep Autumn",
-          "index" : 2,
-          "kind" : "v4Template"
+          "kind" : "chartDerivedAccent",
+          "role" : "Depth",
+          "saturationOverride" : false,
+          "sourcePlanet" : "Pluto",
+          "sourceSign" : "Scorpio"
         },
         "role" : "accent"
       },
       {
-        "hexValue" : "#A0522D",
-        "name" : "warm auburn",
+        "hexValue" : "#D14649",
+        "name" : "Crimson Ember",
         "provenance" : {
-          "band" : "accent",
-          "family" : "Deep Autumn",
-          "index" : 3,
-          "kind" : "v4Template"
+          "kind" : "chartDerivedAccent",
+          "role" : "Lift",
+          "saturationOverride" : false,
+          "sourcePlanet" : "Ascendant",
+          "sourceSign" : "Aries"
         },
         "role" : "accent"
       }
@@ -144,8 +148,8 @@
         "role" : "core"
       },
       {
-        "hexValue" : "#CC7722",
-        "name" : "ochre",
+        "hexValue" : "#9E4E3A",
+        "name" : "dark terracotta",
         "provenance" : {
           "band" : "core",
           "family" : "Deep Autumn",
@@ -155,8 +159,42 @@
         "role" : "core"
       }
     ],
+    "deepAnchor" : {
+      "hexValue" : "#0A0A0A",
+      "name" : "black",
+      "provenance" : {
+        "band" : "deepAnchor",
+        "family" : "Deep Autumn",
+        "index" : 0,
+        "kind" : "v4Template"
+      },
+      "role" : "anchor"
+    },
     "family" : "Deep Autumn",
-    "narrativeText" : "A wardrobe built on deeply saturated colours gives your natural energy an incredibly chic place to land. Anchor your daily rotation with oxblood, forest teal, and forest green. These shades look their absolute best when they saturate a weighty fabric like heavy silk or densely woven wool. To match your innate warmth and forward motion, inject sudden flashes of antique gold and aged brass. A striking antique gold leather boot or a sharply cut jacket cuts through the calm foundation, giving the outfit an immediate pulse. The trick is keeping the baseline exceptionally lush so those bright hits of contrast land with absolute authority.",
+    "lightAnchor" : {
+      "hexValue" : "#F2E8D4",
+      "name" : "warm cream",
+      "provenance" : {
+        "band" : "lightAnchor",
+        "family" : "Deep Autumn",
+        "index" : 0,
+        "kind" : "v4Template"
+      },
+      "role" : "anchor"
+    },
+    "luminarySignature" : {
+      "hexValue" : "#9E1A46",
+      "name" : "cool ruby",
+      "provenance" : {
+        "band" : "luminarySignature",
+        "family" : "Deep Autumn",
+        "index" : 0,
+        "kind" : "v4Template"
+      },
+      "role" : "signature",
+      "semanticLabel" : "luminary signature"
+    },
+    "narrativeText" : "There is a distinctly expensive weight to your ideal palette, rooted firmly in oxblood and forest teal. These are serious shades that take beautifully to heavy crepe and thick, structured wool, projecting a quiet but absolute competence. You soften this severity by bringing in forest green, keeping the overall mood rich, tactile, and completely grounded. When you want a flash of heat or a more active edge, cut through the classics with Dusky Plum. It is a colour story designed for someone who respects heritage but moves through the world with a highly visible spark.",
     "neutrals" : [
       {
         "hexValue" : "#3C2415",
@@ -206,6 +244,7 @@
     "overrideFlags" : {
       "capricornVirgoCoolingApplied" : true,
       "coolLeanDeepAutumn" : false,
+      "deepAnchorOverriddenToBlack" : true,
       "earthDepthOverrideApplied" : true,
       "fireAirChromaApplied" : false,
       "scorpioDensityApplied" : false,
@@ -213,7 +252,65 @@
       "waterSofteningApplied" : false,
       "winterCompressionApplied" : true
     },
+    "rulerSignature" : {
+      "hexValue" : "#A0606B",
+      "name" : "berry mauve",
+      "provenance" : {
+        "band" : "rulerSignature",
+        "family" : "Deep Autumn",
+        "index" : 0,
+        "kind" : "v4Template"
+      },
+      "role" : "signature",
+      "semanticLabel" : "ruler signature"
+    },
     "secondaryPull" : "True Autumn",
+    "supportColours" : [
+      {
+        "hexValue" : "#1B2A4A",
+        "name" : "ink navy",
+        "provenance" : {
+          "band" : "support",
+          "family" : "Deep Autumn",
+          "index" : 0,
+          "kind" : "v4Template"
+        },
+        "role" : "support"
+      },
+      {
+        "hexValue" : "#3B3F42",
+        "name" : "cool charcoal",
+        "provenance" : {
+          "band" : "support",
+          "family" : "Deep Autumn",
+          "index" : 1,
+          "kind" : "v4Template"
+        },
+        "role" : "support"
+      },
+      {
+        "hexValue" : "#5B6770",
+        "name" : "slate",
+        "provenance" : {
+          "band" : "support",
+          "family" : "Deep Autumn",
+          "index" : 2,
+          "kind" : "v4Template"
+        },
+        "role" : "support"
+      },
+      {
+        "hexValue" : "#2F3A2B",
+        "name" : "midnight olive",
+        "provenance" : {
+          "band" : "support",
+          "family" : "Deep Autumn",
+          "index" : 3,
+          "kind" : "v4Template"
+        },
+        "role" : "support"
+      }
+    ],
     "swatchFamilies" : [
 
     ],
@@ -232,7 +329,7 @@
       "trend-driven logos",
       "harsh graphics"
     ],
-    "narrativeText" : "You treat print less like a decoration and more like a structural element of the garment. Because you favour clothes with visual heat and physical weight, a flimsy surface design feels incredibly cheap to you. balanced geometric and elegant stripe work beautifully because they carry enough graphic boldness to match your energy, especially when woven into a heavy silk or thick jacquard. Steer clear of novelty prints and cartoonish patterns entirely. They lack the sensory depth you need, reading as flat and frantic rather than genuinely expensive.",
+    "narrativeText" : "Fussy prints are a complete non-starter. You need visual weight and clear lines, not a frantic jumble of shapes fighting for attention. Rely on bold, traditional motifs like balanced geometric and elegant stripe woven directly into structured wool or heavy crepe. A crisp soft plaid also delivers striking energy without sacrificing your need for structure. Stay well away from novelty prints and cartoonish patterns. Anything that looks like a random accident simply cheapens the impact of a good cut.",
     "recommendedPatterns" : [
       "balanced geometric",
       "elegant stripe",
@@ -241,10 +338,10 @@
       "tone-on-tone cable knit",
       "classic pinstripe"
     ],
-    "tipText" : "Your relationship with print needs to feel inherently expensive. Flat, fussy motifs on flimsy fabric will immediately put your teeth on edge. Instead, let a balanced geometric operate as a bold structural detail rather than a superficial surface decoration. Look for designs woven straight into heavy jacquard or dyed deep into thick silk. This approach delivers a sudden hit of warm, expressive energy while keeping the garment feeling rich and substantial in your hands. You get the visual heat without losing the dense, tactile comfort that makes clothes actually worth wearing."
+    "tipText" : "Flimsy prints feel entirely too fussy when your wardrobe thrives on structured wool and deep charcoal. To make balanced geometric work, treat it like a striking graphic rather than a delicate afterthought. Look for exaggerated scales woven directly into heavy jacquard or crisp pressed cotton, giving the motif genuine physical weight. Keep the surrounding garments entirely solid and strictly tailored. This delivers a sharp flash of energy without sacrificing the expensive finish of your silhouette."
   },
   "styleCore" : {
-    "narrativeText" : "Your presence is an exercise in warm, expensive authority. You do not need to shout to be noticed, because you take up space through the sheer physical weight and uncompromising quality of your clothing. There is a deep, settled heat to the way you put yourself together. When you walk into a room, people immediately sense someone who demands the absolute best and refuses to compromise on personal pleasure. Your wardrobe functions as a direct extension of your confidence, built entirely on pieces that feel incredible to wear while projecting total command. It is the rare aesthetic that manages to look entirely relaxed while completely taking over.\n\nYour natural sense of beauty shows up most powerfully in your public-facing identity — public beauty, polished image, aesthetic reputation, career-enhancing style. Your style instincts lean toward clarity, structure, and visible polish."
+    "narrativeText" : "You walk into a room and instantly ground it. There is a distinct physical weight to your style, driven by substantial construction and immaculate tailoring, yet you carry it with a dynamic, restless energy. Your wardrobe functions as a collection of serious investments that look best in motion. You gravitate toward clean, architectural shapes that offer sensory security without ever feeling rigid or restrictive. It is a deeply authoritative way of dressing, built for someone who naturally takes the lead but refuses to sacrifice an ounce of physical ease to get there. You arrive looking fully established, carrying the kind of permanent polish that makes everyone else feel like they need to stand a little straighter.\n\nYour natural sense of beauty shows up most powerfully in your public-facing identity — public beauty, polished image, aesthetic reputation, career-enhancing style. Your style instincts lean toward clarity, structure, and visible polish."
   },
   "textures" : {
     "avoidTextures" : [
@@ -252,8 +349,8 @@
       "scratchy wool",
       "stiff synthetics"
     ],
-    "badText" : "Anything scratchy or flimsy is a fast track to ruining your mood. You have absolutely no time for harsh industrial fabric, while scratchy wool will just leave you feeling trapped and stifled the minute you pick up the pace. Your wardrobe has to sustain a dynamic routine without sacrificing true sensory comfort. Steer well clear of stiff synthetics too, as it rarely holds a clean shape and feels actively hostile against the skin. If a piece feels like a compromise the second you pull it over your head, leave it right there on the hanger.",
-    "goodText" : "Your clothes need to function as an indulgent physical experience before they do anything else. That means bypassing flimsy synthetics for fluid silk that drapes with genuine weight and character. Combine that with the confident structural bite of fine wool to give your daily rotation an assertive, tactile edge. You are naturally drawn to soft structured blend because it looks instantly expensive but still thrives in motion. These materials secure your physical comfort while guaranteeing you have a bold, unmistakable presence in any room.",
+    "badText" : "Your wardrobe has zero tolerance for garments that surrender to wear by midday. Flimsy construction and hyper-delicate finishes actively fight your natural momentum, dragging down your inherent authority. Leave harsh industrial fabric on the rack if it is prone to clinging or static. The same goes for scratchy wool that snags the second you brush past a chair, or stiff synthetics that demands constant, neurotic readjustment just to sit properly. You move through the world with unbothered confidence, stepping into the room rather than babysitting a fragile outfit. A material must earn its keep by maintaining sharp composure, no matter how demanding the day gets.",
+    "goodText" : "Your clothes need to feel as decisive as you are, providing a sensory anchor that grounds your momentum. When you put on fluid silk, it offers immediate structural authority without restricting how you move through a room. You instinctively reach for materials that have actual weight to them, the kind that hold a clean line and absolutely never cling. A substantial fine wool works exceptionally well here, feeling reassuringly heavy and incredibly secure against the skin. Keep soft structured blend in regular rotation for the pieces that take a daily beating. These textures look expensive simply because they are constructed with proper integrity, proving their worth every single time you wear them.",
     "recommendedTextures" : [
       "fluid silk",
       "fine wool",
@@ -264,11 +361,11 @@
       "strategy",
       "grace"
     ],
-    "sweetSpotText" : "Your wardrobe comes alive right at the intersection of strategy and grace. You naturally gravitate towards garments that carry actual physical weight, yet move with a sudden, dynamic spark. Picture how a substantial drape of fluid silk or the dense, tactile warmth of fine wool sits across your shoulders. This kind of construction anchors you instantly while easily keeping pace with your natural heat. Scratchy synthetics and stiff, lifeless weaves are immediately disqualified. The piece must deliver a rich thrill to the touch and be ready for spontaneous action, otherwise it goes straight back on the rail."
+    "sweetSpotText" : "Your wardrobe hits its absolute peak at the intersection of strategy and grace. A garment has to look impeccably cut from across the room, but the second it touches your skin, it must offer immediate, unapologetic luxury. You expect the visual discipline of fluid silk without any of the rigidity that restricts your natural stride. Even a sharp jacket in fine wool needs enough internal give to match your fast pace. If an item demands you sacrifice your own ease just to maintain a strict shape, it goes straight back on the hanger."
   },
   "userInfo" : {
     "birthDate" : "1991-07-15T12:00:00Z",
     "birthLocation" : "Synthetic Fixture",
-    "generationDate" : "2026-04-19T16:53:11Z"
+    "generationDate" : "2026-05-07T09:21:13Z"
   }
 }

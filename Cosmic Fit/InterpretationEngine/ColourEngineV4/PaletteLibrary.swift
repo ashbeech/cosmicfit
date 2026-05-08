@@ -6,67 +6,112 @@ enum PaletteLibrary {
         .lightSpring: PaletteTriadV4(
             neutrals: ["warm white", "buttercream", "pale sand", "light camel"],
             coreColours: ["honey yellow", "peach", "aqua mint", "lime"],
-            accentColours: ["apricot", "soft gold", "clear aqua", "fresh leaf"]
+            accentColours: ["apricot", "soft gold", "clear aqua", "fresh leaf"],
+            lightAnchor: "warm white",
+            deepAnchor: "warm charcoal"
         ),
         .trueSpring: PaletteTriadV4(
             neutrals: ["warm ivory", "camel sand", "light khaki", "warm stone"],
             coreColours: ["marigold", "coral", "fresh green", "clear turquoise"],
-            accentColours: ["tomato red", "goldenrod", "bright jade", "clear aqua"]
+            accentColours: ["tomato red", "goldenrod", "bright jade", "clear aqua"],
+            lightAnchor: "warm ivory",
+            deepAnchor: "graphite"
         ),
         .brightSpring: PaletteTriadV4(
             neutrals: ["clear ivory", "warm navy", "graphite", "clear camel"],
             coreColours: ["poppy", "bright teal", "vivid yellow", "electric blue"],
-            accentColours: ["lacquer coral", "acid lime", "bright gold", "clear aqua"]
+            accentColours: ["lacquer coral", "acid lime", "bright gold", "clear aqua"],
+            lightAnchor: "clear ivory",
+            deepAnchor: "clear black"
         ),
         .lightSummer: PaletteTriadV4(
             neutrals: ["soft white", "pearl grey", "cool taupe", "mist navy"],
             coreColours: ["powder blue", "shell pink", "seafoam", "lavender mist"],
-            accentColours: ["silver", "icy aqua", "soft lilac", "rose quartz"]
+            accentColours: ["silver", "icy aqua", "soft lilac", "rose quartz"],
+            lightAnchor: "soft white",
+            deepAnchor: "mist navy"
         ),
         .trueSummer: PaletteTriadV4(
             neutrals: ["dove grey", "mushroom taupe", "soft navy", "cool stone"],
             coreColours: ["dusty blue", "rose mauve", "sage aqua", "soft violet"],
-            accentColours: ["pewter", "mist teal", "lavender grey", "berry mauve"]
+            accentColours: ["pewter", "mist teal", "lavender grey", "berry mauve"],
+            lightAnchor: "cool ivory",
+            deepAnchor: "soft navy"
         ),
         .softSummer: PaletteTriadV4(
             neutrals: ["stone grey", "mushroom", "smoked navy", "muted charcoal"],
             coreColours: ["eucalyptus", "muted rose", "moss sage", "smoky periwinkle"],
-            accentColours: ["brushed pewter", "dusty plum", "sea glass", "faded mauve"]
+            accentColours: ["brushed pewter", "dusty plum", "sea glass", "faded mauve"],
+            lightAnchor: "smoke white",
+            deepAnchor: "muted charcoal"
         ),
         .softAutumn: PaletteTriadV4(
             neutrals: ["camel", "warm taupe", "oatmeal", "olive beige"],
             coreColours: ["terracotta", "olive sage", "muted teal", "soft rust"],
-            accentColours: ["antique gold", "soft copper", "moss green", "muted amber"]
+            accentColours: ["antique gold", "soft copper", "moss green", "muted amber"],
+            lightAnchor: "bone",
+            deepAnchor: "bitter chocolate"
         ),
         .trueAutumn: PaletteTriadV4(
             neutrals: ["camel", "cocoa", "warm olive", "deep khaki"],
             coreColours: ["rust", "moss", "ochre", "deep teal"],
-            accentColours: ["bronze", "amber", "olive gold", "warm auburn"]
+            accentColours: ["bronze", "amber", "olive gold", "warm auburn"],
+            lightAnchor: "bone",
+            deepAnchor: "espresso"
         ),
         .deepAutumn: PaletteTriadV4(
             neutrals: ["espresso", "warm charcoal", "deep olive", "bark brown"],
             coreColours: ["oxblood", "forest teal", "forest green", "dark terracotta"],
-            accentColours: ["antique gold", "aged brass", "copper", "deep amber"]
+            accentColours: ["antique gold", "aged brass", "copper", "deep amber"],
+            lightAnchor: "warm cream",
+            deepAnchor: "ink brown"
         ),
         .deepWinter: PaletteTriadV4(
             neutrals: ["black", "ink navy", "graphite", "cool charcoal"],
             coreColours: ["black cherry", "petrol", "dark emerald", "blue-black"],
-            accentColours: ["silver", "gunmetal", "cool ruby", "icy teal"]
+            accentColours: ["silver", "gunmetal", "cool ruby", "icy teal"],
+            lightAnchor: "optic white",
+            deepAnchor: "black"
         ),
         .trueWinter: PaletteTriadV4(
             neutrals: ["black", "optic white", "graphite", "icy grey"],
             coreColours: ["cobalt", "crimson", "blue-red", "clear pine"],
-            accentColours: ["silver", "icy blue", "fuchsia red", "hard white"]
+            accentColours: ["silver", "icy blue", "fuchsia red", "hard white"],
+            lightAnchor: "optic white",
+            deepAnchor: "black"
         ),
         .brightWinter: PaletteTriadV4(
             neutrals: ["black", "bright white", "ink navy", "steel grey"],
             coreColours: ["midnight", "royal blue", "magenta red", "icy teal"],
-            accentColours: ["chrome silver", "electric fuchsia", "clear cyan", "true red"]
+            accentColours: ["chrome silver", "electric fuchsia", "clear cyan", "true red"],
+            lightAnchor: "bright white",
+            deepAnchor: "black"
         ),
     ]
 
     static func palette(for family: PaletteFamily) -> PaletteTriadV4 {
         library[family]!
+    }
+
+    // MARK: - Support Colour Templates (V4.2)
+
+    static let supportLibrary: [PaletteFamily: [String]] = [
+        .lightSpring:  ["pearl grey", "cool taupe", "soft slate", "mist navy"],
+        .trueSpring:   ["cool stone", "mist navy", "soft navy", "graphite"],
+        .brightSpring: ["dove grey", "muted charcoal", "smoked navy", "slate"],
+        .lightSummer:  ["buttercream", "pale sand", "light camel", "warm stone"],
+        .trueSummer:   ["warm taupe", "warm stone", "camel", "cocoa"],
+        .softSummer:   ["oatmeal", "warm taupe", "olive beige", "camel"],
+        .softAutumn:   ["cool stone", "soft navy", "muted charcoal", "slate"],
+        .trueAutumn:   ["cool stone", "steel grey", "ink navy", "graphite"],
+        .deepAutumn:   ["ink navy", "cool charcoal", "slate", "midnight olive"],
+        .deepWinter:   ["warm charcoal", "espresso", "bark brown", "cocoa"],
+        .trueWinter:   ["warm taupe", "deep khaki", "espresso", "camel"],
+        .brightWinter: ["warm stone", "deep khaki", "cocoa", "camel sand"],
+    ]
+
+    static func supportPalette(for family: PaletteFamily) -> [String] {
+        supportLibrary[family]!
     }
 
     // MARK: - Colour Name to Hex
@@ -227,9 +272,44 @@ enum PaletteLibrary {
         "electric fuchsia": "#FF00FF",
         "clear cyan": "#00FFFF",
         "true red": "#CC0000",
+
+        // Support-only colours (V4.2)
+        "slate": "#5B6770",
+        "midnight olive": "#2F3A2B",
+        "soft slate": "#8B9DAF",
+
+        // Universal anchors (V4.3)
+        // Light-edge anchors — each tinted to its family's temperature.
+        "cool ivory": "#F3F3EE",
+        "smoke white": "#E8E6E2",
+        "bone": "#EFE6D3",
+        "warm cream": "#F2E8D4",
+        // Deep-edge anchors — each tinted to its family's temperature.
+        "clear black": "#0D1014",
+        "bitter chocolate": "#3A2A1E",
+        "ink brown": "#2B1E15",
     ]
 
     static func hex(for colourName: String) -> String {
         colourNameToHex[colourName] ?? "#808080"
+    }
+
+    /// Nearest wardrobe colour token to `hex` in perceptual Lab space (for consistent UI labels).
+    static func nearestColourName(forHex hex: String) -> String {
+        guard ColourMath.hexToLab(hex) != nil else {
+            return "palette colour"
+        }
+        var bestName = ""
+        var bestDist = Double.infinity
+        for (name, candidateHex) in colourNameToHex {
+            let d = ColourMath.labDistanceSquared(hex, candidateHex)
+            if d < bestDist - 1e-9 {
+                bestDist = d
+                bestName = name
+            } else if abs(d - bestDist) <= 1e-9 && (bestName.isEmpty || name < bestName) {
+                bestName = name
+            }
+        }
+        return bestName.isEmpty ? "palette colour" : bestName
     }
 }

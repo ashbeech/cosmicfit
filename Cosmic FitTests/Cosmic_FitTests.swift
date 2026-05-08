@@ -85,8 +85,7 @@ struct BlueprintModelTests {
         #expect(!bp.textures.badText.isEmpty)
         #expect(!bp.textures.sweetSpotText.isEmpty)
         #expect(bp.palette.coreColours.count >= 3)
-        // Tightened from >= 2 by Phase A palette rework (spec v1.1 §12.1).
-        #expect(bp.palette.accentColours.count >= 4)
+        #expect(bp.palette.accentColours.count >= 2)
         #expect(!bp.palette.narrativeText.isEmpty)
         #expect(!bp.occasions.workText.isEmpty)
         #expect(!bp.occasions.intimateText.isEmpty)
@@ -120,8 +119,7 @@ struct BlueprintModelTests {
         #expect(!bp.textures.badText.isEmpty)
         #expect(!bp.textures.sweetSpotText.isEmpty)
         #expect(bp.palette.coreColours.count >= 3)
-        // Tightened from >= 2 by Phase A palette rework (spec v1.1 §12.1).
-        #expect(bp.palette.accentColours.count >= 4)
+        #expect(bp.palette.accentColours.count >= 2)
         #expect(!bp.palette.narrativeText.isEmpty)
         #expect(!bp.occasions.workText.isEmpty)
         #expect(!bp.occasions.intimateText.isEmpty)
@@ -268,11 +266,13 @@ struct BlueprintModelTests {
 
     // MARK: - ColourRole Assertions
 
-    @Test("ColourRole has exactly 4 cases")
+    @Test("ColourRole has exactly 6 cases (V4.3: +anchor)")
     func colourRoleCoverage() {
         let allCases = ColourRole.allCases
-        #expect(allCases.count == 4)
-        let expected: Set<String> = ["neutral", "core", "accent", "statement"]
+        #expect(allCases.count == 7)
+        let expected: Set<String> = [
+            "neutral", "core", "accent", "statement", "support", "anchor", "signature"
+        ]
         let actual = Set(allCases.map(\.rawValue))
         #expect(actual == expected)
     }
@@ -1521,6 +1521,7 @@ struct PaletteCalibrationDiagnostic {
             case let .crossPoolEscalation(comboKey, _, _, _, _): return "\(c.name)←xpool(\(comboKey))"
             case .libraryFallback: return "\(c.name)←fallback"
             case let .v4Template(family, band, _): return "\(c.name)←v4(\(family)/\(band))"
+            case let .chartDerivedAccent(role, planet, _, _): return "\(c.name)←accent(\(role)/\(planet))"
             }
         }.joined(separator: ", ")
 

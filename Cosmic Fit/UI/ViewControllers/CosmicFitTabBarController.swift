@@ -226,13 +226,13 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     }
     
     func presentDetailViewController(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
-        // Check if a detail view is already open
-        if children.contains(where: { 
-            $0 is StyleGuideDetailViewController || $0 is GenericDetailViewController 
-        }) {
+        // Check if a detail view is already open (child VC or orphaned subview)
+        let hasChildDetail = children.contains(where: {
+            $0 is StyleGuideDetailViewController || $0 is GenericDetailViewController
+        })
+        if hasChildDetail || !detailContentContainer.subviews.isEmpty {
             print("⚠️ Detail view already open - dismissing existing before presenting new one")
-            
-            // Dismiss existing, then present new one
+
             dismissDetailViewController(animated: false) { [weak self] in
                 self?.presentDetailViewController(viewController, animated: animated, completion: completion)
             }
@@ -306,7 +306,16 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         print("🔍 Current children types: \(children.map { String(describing: type(of: $0)) })")
         
         guard let detailVC = detailVC else {
-            print("⚠️ No detail VC found - calling completion")
+            // Defensive: clean up orphaned subviews in the container even when
+            // no child VC is found (can happen if the VC hierarchy was rebuilt
+            // while a detail page was still on screen).
+            if !detailContentContainer.subviews.isEmpty {
+                print("⚠️ No child detail VC but container has orphaned subviews — cleaning up")
+                detailContentContainer.subviews.forEach { $0.removeFromSuperview() }
+                detailContentContainer.isHidden = true
+                dimmingView?.removeFromSuperview()
+                dimmingView = nil
+            }
             completion?()
             return
         }
@@ -488,8 +497,32 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
             object: nil
         )
         print("🔍 Dismiss observer added successfully")
+
+        #if DEBUG
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleDevForceRefresh),
+            name: .devForceRefreshRequested,
+            object: nil
+        )
+        #endif
     }
-    
+
+    #if DEBUG
+    @objc private func handleDevForceRefresh() {
+        print("🔄 [DEV] Force refresh requested — wiping caches and regenerating")
+
+        BlueprintStorage.shared.delete()
+        DailyVibeStorage.shared.cleanupOldEntries(daysToKeep: 0)
+        dailyVibeContent = nil
+
+        calculateCharts()
+        generateContent()
+
+        print("✅ [DEV] Force refresh complete")
+    }
+    #endif
+
     @objc private func handleProfileUpdate(_ notification: Notification) {
         guard let updatedProfile = notification.object as? UserProfile else { return }
         
@@ -690,8 +723,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
                 self.dailyVibeContent = existingContent
                 print("✅ Loaded existing daily vibe for today (legacy storage)")
             } else {
-                dailyVibeContent = .placeholder
-                print("✅ Daily Fit placeholder set")
+                generateAndCacheDailyVibe(chartId: chartId)
             }
         } else {
             print("✅ Daily Fit already cached, skipping regeneration")
@@ -744,6 +776,43 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         }
     }
     
+    private func generateAndCacheDailyVibe(chartId: String) {
+        guard let natal = natalChart, let progressed = progressedChart else {
+            dailyVibeContent = .placeholder
+            print("✅ Daily Fit placeholder set (missing chart data)")
+            return
+        }
+
+        let transits = NatalChartCalculator.calculateTransits(natalChart: natal)
+        let julianDay = JulianDateCalculator.calculateJulianDate(from: Date())
+        let moonPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: julianDay)
+        let profileHash = userProfile?.id ?? chartId
+
+        let content = DailyVibeGenerator.generateDailyVibe(
+            natalChart: natal,
+            progressedChart: progressed,
+            transits: transits,
+            weather: todayWeather,
+            moonPhase: moonPhase,
+            profileHash: profileHash,
+            date: Date()
+        )
+
+        dailyVibeContent = content
+
+        if let userId = userProfile?.id {
+            DailyVibeStorage.shared.saveDailyVibeForUser(
+                content, userId: userId, for: Date()
+            )
+        } else {
+            DailyVibeStorage.shared.saveDailyVibe(
+                content, for: Date(), chartIdentifier: chartId
+            )
+        }
+
+        print("✅ Daily Fit generated and cached via DailyVibeGenerator")
+    }
+
     private func extractLocationFromBirthInfo() -> (city: String, country: String) {
         var city = ""
         var country = ""

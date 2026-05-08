@@ -31,28 +31,28 @@
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-04-19T16:53:11Z",
+  "generatedAt" : "2026-05-07T09:21:13Z",
   "hardware" : {
-    "metalsText" : "Heavy, rigid hardware will completely suffocate the lightness of your wardrobe. You always look much more interesting when you actively scramble your finishes, letting rose gold rings sit right next to a soft copper bag clasp. Because your clothes rely on fluid layers and soft movement, keep the actual metal textures equally relaxed. Liquid, slightly melted shapes in sterling silver work far better on you than aggressive, high-shine spikes. Treat your zips and jacket buttons as conversational details instead of purely functional bolts. The final effect should be a gentle, expensive jangle as you walk, never the imposing clank of a bank vault.",
+    "metalsText" : "Heavy, rigid hardware will completely suffocate the lightness of your wardrobe. You always look much more interesting when you actively scramble your finishes, letting rose gold rings sit right next to a soft copper bag clasp. Because your clothes rely on fluid layers and soft movement, keep the actual metal textures equally relaxed. Liquid, slightly melted shapes in mixed metals work far better on you than aggressive, high-shine spikes. Treat your zips and jacket buttons as conversational details instead of purely functional bolts. The final effect should be a gentle, expensive jangle as you walk, never the imposing clank of a bank vault.",
     "recommendedMetals" : [
       "rose gold",
       "soft copper",
-      "sterling silver",
       "mixed metals",
       "white gold",
+      "sterling silver",
       "polished brass"
     ],
     "recommendedStones" : [
-      "pink tourmaline",
       "kunzite",
+      "pink tourmaline",
       "agate",
-      "citrine",
       "aquamarine",
+      "citrine",
       "carnelian",
       "red jasper"
     ],
-    "stonesText" : "Your jewellery box is better off as a collection of conversation pieces than a vault of serious, static investments. You suit stones that catch the light and shift in colour as you talk, softening the crisp lines of your everyday shirting. Look for the cloudy, dreamlike finish of pink tourmaline or the iridescent, watery flash of kunzite. Set them in lightweight, playfully asymmetric hardware rather than heavy traditional prongs. The overall effect is a ring or pendant that catches the eye mid-gesture and immediately prompts a question.",
-    "tipText" : "Your accessories are at their strongest when they feel slightly kinetic and completely open to conversation. Think lightweight charm necklaces, mismatched earrings, or articulated links that physically move when you talk. A delicate chain in rose gold paired with an unusually shaped pendant gives your outfit that essential element of play. If you wear pink tourmaline, look for pieces where the gem feels suspended and fluid rather than rigidly clamped into a heavy setting. A thick, static bangle looks like it belongs to someone else, but a cluster of fine chains brushing a soft silk cuff is entirely you."
+    "stonesText" : "Your jewellery box is better off as a collection of conversation pieces than a vault of serious, static investments. You suit stones that catch the light and shift in colour as you talk, softening the crisp lines of your everyday shirting. Look for the cloudy, dreamlike finish of kunzite or the iridescent, watery flash of pink tourmaline. Set them in lightweight, playfully asymmetric hardware rather than heavy traditional prongs. The overall effect is a ring or pendant that catches the eye mid-gesture and immediately prompts a question.",
+    "tipText" : "Your accessories are at their strongest when they feel slightly kinetic and completely open to conversation. Think lightweight charm necklaces, mismatched earrings, or articulated links that physically move when you talk. A delicate chain in rose gold paired with an unusually shaped pendant gives your outfit that essential element of play. If you wear kunzite, look for pieces where the gem feels suspended and fluid rather than rigidly clamped into a heavy setting. A thick, static bangle looks like it belongs to someone else, but a cluster of fine chains brushing a soft silk cuff is entirely you."
   },
   "occasions" : {
     "dailyText" : "Dressing for a standard weekday is an exercise in leaving room to change your mind. Your off-duty wardrobe relies on weightless layers and pieces that overlap, allowing the look to evolve as your mood shifts. Look for fluid silhouettes that drape gently rather than holding a rigid shape, giving you total physical ease without sacrificing visual interest. A stiff collar or an unforgiving waistline will only annoy you before noon. Focus instead on garments with clever construction, movement, and a bit of playful volume. Give yourself an outfit that feels like a private comfort blanket but looks entirely ready to talk to anyone.\n\nYour style energy concentrates in expression and retreat, so your wardrobe is at its best when it reflects both expression and retreat.",
@@ -62,46 +62,50 @@
   "palette" : {
     "accentColours" : [
       {
-        "hexValue" : "#FBCEB1",
-        "name" : "apricot",
+        "hexValue" : "#00706F",
+        "name" : "Mercury Teal",
         "provenance" : {
-          "band" : "accent",
-          "family" : "Light Spring",
-          "index" : 0,
-          "kind" : "v4Template"
+          "kind" : "chartDerivedAccent",
+          "role" : "Signature",
+          "saturationOverride" : false,
+          "sourcePlanet" : "Venus",
+          "sourceSign" : "Gemini"
         },
         "role" : "accent"
       },
       {
-        "hexValue" : "#D4AF37",
-        "name" : "soft gold",
+        "hexValue" : "#005E64",
+        "name" : "Midnight Teal",
         "provenance" : {
-          "band" : "accent",
-          "family" : "Light Spring",
-          "index" : 1,
-          "kind" : "v4Template"
+          "kind" : "chartDerivedAccent",
+          "role" : "Contrast",
+          "saturationOverride" : false,
+          "sourcePlanet" : "Moon",
+          "sourceSign" : "Pisces"
         },
         "role" : "accent"
       },
       {
-        "hexValue" : "#00CED1",
-        "name" : "clear aqua",
+        "hexValue" : "#865373",
+        "name" : "Warm Mauve",
         "provenance" : {
-          "band" : "accent",
-          "family" : "Light Spring",
-          "index" : 2,
-          "kind" : "v4Template"
+          "kind" : "chartDerivedAccent",
+          "role" : "Depth",
+          "saturationOverride" : false,
+          "sourcePlanet" : "Mars",
+          "sourceSign" : "Libra"
         },
         "role" : "accent"
       },
       {
-        "hexValue" : "#FFD700",
-        "name" : "bright gold",
+        "hexValue" : "#D14649",
+        "name" : "Crimson Ember",
         "provenance" : {
-          "band" : "accent",
-          "family" : "Light Spring",
-          "index" : 3,
-          "kind" : "v4Template"
+          "kind" : "chartDerivedAccent",
+          "role" : "Lift",
+          "saturationOverride" : false,
+          "sourcePlanet" : "Ascendant",
+          "sourceSign" : "Aries"
         },
         "role" : "accent"
       }
@@ -142,8 +146,8 @@
         "role" : "core"
       },
       {
-        "hexValue" : "#FFE302",
-        "name" : "vivid yellow",
+        "hexValue" : "#A4C639",
+        "name" : "lime",
         "provenance" : {
           "band" : "core",
           "family" : "Light Spring",
@@ -153,8 +157,42 @@
         "role" : "core"
       }
     ],
+    "deepAnchor" : {
+      "hexValue" : "#4A4244",
+      "name" : "warm charcoal",
+      "provenance" : {
+        "band" : "deepAnchor",
+        "family" : "Light Spring",
+        "index" : 0,
+        "kind" : "v4Template"
+      },
+      "role" : "anchor"
+    },
     "family" : "Light Spring",
-    "narrativeText" : "Dressing for you is a constant dialogue, meaning your wardrobe needs shades that are naturally light on their feet. Your daily foundations rely heavily on honey yellow and peach, which translate beautifully across crisp cotton shirting and sheer silk-blend layers. A wash of aqua mint brings a softer, almost watercolour quality to the mix, ensuring the overall effect remains approachable rather than stark. Introduce apricot as an unexpected flash of detail—think an enamel pendant or a slightly unusual flat shoe—to keep the eye moving. The result is a highly conversational mix of tones that shifts seamlessly depending on your mood and whoever you happen to be talking to.",
+    "lightAnchor" : {
+      "hexValue" : "#FAF5EF",
+      "name" : "warm white",
+      "provenance" : {
+        "band" : "lightAnchor",
+        "family" : "Light Spring",
+        "index" : 0,
+        "kind" : "v4Template"
+      },
+      "role" : "anchor"
+    },
+    "luminarySignature" : {
+      "hexValue" : "#D3AB53",
+      "name" : "antique gold",
+      "provenance" : {
+        "band" : "luminarySignature",
+        "family" : "Light Spring",
+        "index" : 0,
+        "kind" : "v4Template"
+      },
+      "role" : "signature",
+      "semanticLabel" : "luminary signature"
+    },
+    "narrativeText" : "Dressing for you is a constant dialogue, meaning your wardrobe needs shades that are naturally light on their feet. Your daily foundations rely heavily on honey yellow and peach, which translate beautifully across crisp cotton shirting and sheer silk-blend layers. A wash of aqua mint brings a softer, almost watercolour quality to the mix, ensuring the overall effect remains approachable rather than stark. Introduce Mercury Teal as an unexpected flash of detail—think an enamel pendant or a slightly unusual flat shoe—to keep the eye moving. The result is a highly conversational mix of tones that shifts seamlessly depending on your mood and whoever you happen to be talking to.",
     "neutrals" : [
       {
         "hexValue" : "#FAF5EF",
@@ -204,6 +242,7 @@
     "overrideFlags" : {
       "capricornVirgoCoolingApplied" : false,
       "coolLeanDeepAutumn" : false,
+      "deepAnchorOverriddenToBlack" : false,
       "earthDepthOverrideApplied" : false,
       "fireAirChromaApplied" : true,
       "scorpioDensityApplied" : false,
@@ -211,7 +250,65 @@
       "waterSofteningApplied" : false,
       "winterCompressionApplied" : false
     },
+    "rulerSignature" : {
+      "hexValue" : "#ECA6B1",
+      "name" : "shell pink",
+      "provenance" : {
+        "band" : "rulerSignature",
+        "family" : "Light Spring",
+        "index" : 0,
+        "kind" : "v4Template"
+      },
+      "role" : "signature",
+      "semanticLabel" : "ruler signature"
+    },
     "secondaryPull" : "Bright Spring",
+    "supportColours" : [
+      {
+        "hexValue" : "#C9C0BB",
+        "name" : "pearl grey",
+        "provenance" : {
+          "band" : "support",
+          "family" : "Light Spring",
+          "index" : 0,
+          "kind" : "v4Template"
+        },
+        "role" : "support"
+      },
+      {
+        "hexValue" : "#B0A093",
+        "name" : "cool taupe",
+        "provenance" : {
+          "band" : "support",
+          "family" : "Light Spring",
+          "index" : 1,
+          "kind" : "v4Template"
+        },
+        "role" : "support"
+      },
+      {
+        "hexValue" : "#8B9DAF",
+        "name" : "soft slate",
+        "provenance" : {
+          "band" : "support",
+          "family" : "Light Spring",
+          "index" : 2,
+          "kind" : "v4Template"
+        },
+        "role" : "support"
+      },
+      {
+        "hexValue" : "#6B7B8D",
+        "name" : "mist navy",
+        "provenance" : {
+          "band" : "support",
+          "family" : "Light Spring",
+          "index" : 3,
+          "kind" : "v4Template"
+        },
+        "role" : "support"
+      }
+    ],
     "swatchFamilies" : [
 
     ],
@@ -267,6 +364,6 @@
   "userInfo" : {
     "birthDate" : "1993-03-21T00:00:00Z",
     "birthLocation" : "Synthetic Fixture",
-    "generationDate" : "2026-04-19T16:53:11Z"
+    "generationDate" : "2026-05-07T09:21:13Z"
   }
 }

@@ -104,6 +104,20 @@ struct PaletteSection: Codable, Equatable {
     let coreColours: [BlueprintColour]        // D
     /// Deterministic accent colours (4 anchors in V4, 2–3 in legacy).
     let accentColours: [BlueprintColour]      // D
+    /// V4.2 support colours (4 versatile complements). Nil for V4.1 and legacy.
+    let supportColours: [BlueprintColour]?    // D — V4.2 only
+    /// V4.3 light-edge universal anchor (family-temperature-tinted off-white/pale).
+    /// Nil for V4.2 and earlier blueprints.
+    let lightAnchor: BlueprintColour?         // D — V4.3 only
+    /// V4.3 deep-edge universal anchor (family-temperature-tinted near-black).
+    /// Nil for V4.2 and earlier blueprints.
+    let deepAnchor: BlueprintColour?          // D — V4.3 only
+    /// V4.4 chart-derived hero colour (Sun sign projected into family envelope).
+    /// Nil for V4.3 and earlier blueprints.
+    let luminarySignature: BlueprintColour?   // D — V4.4 only
+    /// V4.4 chart-derived signature colour (Ascendant's domicile ruler sign
+    /// projected into family envelope). Nil for V4.3 and earlier blueprints.
+    let rulerSignature: BlueprintColour?      // D — V4.4 only
     /// V4 palette family (e.g. Deep Autumn). Nil for legacy blueprints.
     let family: PaletteFamily?                // D — V4 only
     /// V4 palette cluster (e.g. Deep Warm Structured). Nil for legacy blueprints.
@@ -119,15 +133,22 @@ struct PaletteSection: Codable, Equatable {
     /// AI-generated narrative about the user's palette.
     let narrativeText: String                 // AI — key: "palette_narrative"
 
-    /// V4 initialiser — all fields populated from ColourEngineResult.
+    /// V4.7 initialiser — all fields populated from ColourEngineResult.
     init(neutrals: [BlueprintColour], coreColours: [BlueprintColour],
-         accentColours: [BlueprintColour], family: PaletteFamily,
-         cluster: PaletteCluster, variables: DerivedVariables,
+         accentColours: [BlueprintColour], supportColours: [BlueprintColour]? = nil,
+         lightAnchor: BlueprintColour? = nil, deepAnchor: BlueprintColour? = nil,
+         luminarySignature: BlueprintColour? = nil, rulerSignature: BlueprintColour? = nil,
+         family: PaletteFamily, cluster: PaletteCluster, variables: DerivedVariables,
          secondaryPull: PaletteFamily?, overrideFlags: OverrideFlags,
          narrativeText: String) {
         self.neutrals = neutrals
         self.coreColours = coreColours
         self.accentColours = accentColours
+        self.supportColours = supportColours
+        self.lightAnchor = lightAnchor
+        self.deepAnchor = deepAnchor
+        self.luminarySignature = luminarySignature
+        self.rulerSignature = rulerSignature
         self.family = family
         self.cluster = cluster
         self.variables = variables
@@ -143,6 +164,11 @@ struct PaletteSection: Codable, Equatable {
         self.neutrals = nil
         self.coreColours = coreColours
         self.accentColours = accentColours
+        self.supportColours = nil
+        self.lightAnchor = nil
+        self.deepAnchor = nil
+        self.luminarySignature = nil
+        self.rulerSignature = nil
         self.family = nil
         self.cluster = nil
         self.variables = nil
@@ -157,6 +183,11 @@ struct PaletteSection: Codable, Equatable {
         neutrals = try container.decodeIfPresent([BlueprintColour].self, forKey: .neutrals)
         coreColours = try container.decode([BlueprintColour].self, forKey: .coreColours)
         accentColours = try container.decode([BlueprintColour].self, forKey: .accentColours)
+        supportColours = try container.decodeIfPresent([BlueprintColour].self, forKey: .supportColours)
+        lightAnchor = try container.decodeIfPresent(BlueprintColour.self, forKey: .lightAnchor)
+        deepAnchor = try container.decodeIfPresent(BlueprintColour.self, forKey: .deepAnchor)
+        luminarySignature = try container.decodeIfPresent(BlueprintColour.self, forKey: .luminarySignature)
+        rulerSignature = try container.decodeIfPresent(BlueprintColour.self, forKey: .rulerSignature)
         family = try container.decodeIfPresent(PaletteFamily.self, forKey: .family)
         cluster = try container.decodeIfPresent(PaletteCluster.self, forKey: .cluster)
         variables = try container.decodeIfPresent(DerivedVariables.self, forKey: .variables)
@@ -167,7 +198,9 @@ struct PaletteSection: Codable, Equatable {
     }
 
     private enum CodingKeys: String, CodingKey {
-        case neutrals, coreColours, accentColours
+        case neutrals, coreColours, accentColours, supportColours
+        case lightAnchor, deepAnchor
+        case luminarySignature, rulerSignature
         case family, cluster, variables, secondaryPull, overrideFlags
         case swatchFamilies, narrativeText
     }
@@ -177,6 +210,7 @@ struct PaletteSection: Codable, Equatable {
 }
 
 struct BlueprintColour: Codable, Equatable {
+    /// Wardrobe / palette library colour token (or nearest match) — primary UI label.
     let name: String
     let hexValue: String
     let role: ColourRole
@@ -185,16 +219,19 @@ struct BlueprintColour: Codable, Equatable {
     /// reading pre-Phase-A fixtures that lack the field (see §7.3 of the
     /// palette engine rework spec).
     let provenance: ColourProvenance
+    /// Optional richer label for audits / future UI (e.g. chart role, progressed planet line).
+    let semanticLabel: String?
 
-    init(name: String, hexValue: String, role: ColourRole, provenance: ColourProvenance) {
+    init(name: String, hexValue: String, role: ColourRole, provenance: ColourProvenance, semanticLabel: String? = nil) {
         self.name = name
         self.hexValue = hexValue
         self.role = role
         self.provenance = provenance
+        self.semanticLabel = semanticLabel
     }
 
     private enum CodingKeys: String, CodingKey {
-        case name, hexValue, role, provenance
+        case name, hexValue, role, provenance, semanticLabel
     }
 
     init(from decoder: Decoder) throws {
@@ -204,6 +241,7 @@ struct BlueprintColour: Codable, Equatable {
         self.role = try container.decode(ColourRole.self, forKey: .role)
         self.provenance = try container.decodeIfPresent(ColourProvenance.self, forKey: .provenance)
             ?? .libraryFallback(reason: "legacy data — provenance unknown")
+        self.semanticLabel = try container.decodeIfPresent(String.self, forKey: .semanticLabel)
     }
 }
 
@@ -212,6 +250,9 @@ enum ColourRole: String, Codable, CaseIterable {
     case core
     case accent
     case statement
+    case support
+    case anchor
+    case signature
 }
 
 /// Dataset-side classification — which sub-array of a `PlanetSignEntry.colours`
@@ -252,6 +293,9 @@ enum ColourProvenance: Codable, Equatable {
     /// V4 engine: colour comes from a fixed palette template lookup.
     case v4Template(family: String, band: String, index: Int)
 
+    /// V4.5: accent colour derived from chart placement projected into family envelope.
+    case chartDerivedAccent(role: String, sourcePlanet: String, sourceSign: String, saturationOverride: Bool)
+
     private enum CodingKeys: String, CodingKey {
         case kind
         case comboKey
@@ -263,6 +307,10 @@ enum ColourProvenance: Codable, Equatable {
         case family
         case band
         case index
+        case role
+        case sourcePlanet
+        case sourceSign
+        case saturationOverride
     }
 
     private enum Kind: String, Codable {
@@ -270,6 +318,7 @@ enum ColourProvenance: Codable, Equatable {
         case crossPoolEscalation
         case libraryFallback
         case v4Template
+        case chartDerivedAccent
     }
 
     func encode(to encoder: Encoder) throws {
@@ -296,6 +345,12 @@ enum ColourProvenance: Codable, Equatable {
             try container.encode(family, forKey: .family)
             try container.encode(band, forKey: .band)
             try container.encode(index, forKey: .index)
+        case let .chartDerivedAccent(role, sourcePlanet, sourceSign, saturationOverride):
+            try container.encode(Kind.chartDerivedAccent, forKey: .kind)
+            try container.encode(role, forKey: .role)
+            try container.encode(sourcePlanet, forKey: .sourcePlanet)
+            try container.encode(sourceSign, forKey: .sourceSign)
+            try container.encode(saturationOverride, forKey: .saturationOverride)
         }
     }
 
@@ -327,6 +382,13 @@ enum ColourProvenance: Codable, Equatable {
                 family: try container.decode(String.self, forKey: .family),
                 band: try container.decode(String.self, forKey: .band),
                 index: try container.decode(Int.self, forKey: .index)
+            )
+        case .chartDerivedAccent:
+            self = .chartDerivedAccent(
+                role: try container.decode(String.self, forKey: .role),
+                sourcePlanet: try container.decode(String.self, forKey: .sourcePlanet),
+                sourceSign: try container.decode(String.self, forKey: .sourceSign),
+                saturationOverride: try container.decode(Bool.self, forKey: .saturationOverride)
             )
         }
     }

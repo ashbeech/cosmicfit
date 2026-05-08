@@ -339,17 +339,21 @@ final class ColourEngineV4_UnitTests: XCTestCase {
 
         XCTAssertEqual(result.palette.neutrals.count, 4)
         XCTAssertEqual(result.palette.coreColours.count, 4)
-        XCTAssertEqual(result.palette.accentColours.count, 4)
+        XCTAssertEqual(result.palette.accentColours.count, 2)
 
-        let allResult = result.palette.neutrals + result.palette.coreColours + result.palette.accentColours
-        let allBase = base.neutrals + base.coreColours + base.accentColours
-        let matchCount = zip(allResult, allBase).filter { $0 == $1 }.count
-        XCTAssertGreaterThanOrEqual(matchCount, 9,
-            "At least 9 of 12 slots (≥75%) should match the base template for \(result.family); matched \(matchCount)")
+        // Neutrals and cores should still match the template;
+        // accents are now chart-derived via AccentResolver with accentPop
+        // and won't match template names.
+        let templateNeutralsAndCores = result.palette.neutrals + result.palette.coreColours
+        let baseNeutralsAndCores = base.neutrals + base.coreColours
+        let matchCount = zip(templateNeutralsAndCores, baseNeutralsAndCores).filter { $0 == $1 }.count
+        XCTAssertGreaterThanOrEqual(matchCount, 6,
+            "At least 6 of 8 neutral+core slots (≥75%) should match the base template for \(result.family); matched \(matchCount)")
 
-        for name in allResult {
-            XCTAssertNotEqual(PaletteLibrary.hex(for: name), "#808080",
-                "Colour '\(name)' must have a valid hex value")
+        // Accents are hex strings — validate they parse as valid colours
+        for hex in result.palette.accentColours {
+            XCTAssertTrue(hex.hasPrefix("#") && hex.count == 7,
+                "Accent '\(hex)' must be a valid 7-char hex")
         }
     }
 
@@ -404,7 +408,7 @@ final class ColourEngineV4_UnitTests: XCTestCase {
             let palette = PaletteLibrary.palette(for: family)
             XCTAssertEqual(palette.neutrals.count, 4, "\(family) neutrals count")
             XCTAssertEqual(palette.coreColours.count, 4, "\(family) core count")
-            XCTAssertEqual(palette.accentColours.count, 4, "\(family) accent count")
+            XCTAssertEqual(palette.accentColours.count, 4, "\(family) template accent count")
         }
     }
 

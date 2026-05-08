@@ -941,7 +941,7 @@ struct DailyVibeContent: Codable {
     /// V4 daily palette — deterministic 3-colour pick from the persisted V4 palette.
     /// Non-nil when a V4 blueprint is available; takes precedence over `paletteColours`.
     var v4DailyPalette: DailyColourPaletteGenerator.V4DailyPalette?
-    
+
     // MARK: - Environmental Context
     
     // Weather information (optional)

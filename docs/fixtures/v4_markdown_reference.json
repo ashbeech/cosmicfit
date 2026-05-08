@@ -1,0 +1,3102 @@
+[
+  {
+    "accentColours": [
+      "apricot",
+      "soft gold",
+      "clear aqua",
+      "fresh leaf"
+    ],
+    "birthData": "1987-04-13 18:00",
+    "cluster": "Light Airy Warm",
+    "contrast": "Medium",
+    "coreColours": [
+      "honey yellow",
+      "peach",
+      "aqua mint",
+      "lime"
+    ],
+    "depth": "Light",
+    "family": "Light Spring",
+    "id": "U001",
+    "location": "Mumbai, India",
+    "neutrals": [
+      "warm white",
+      "buttercream",
+      "pale sand",
+      "light camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Soft",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "apricot",
+      "soft gold",
+      "clear aqua",
+      "fresh leaf"
+    ],
+    "birthData": "1995-06-22 17:07",
+    "cluster": "Light Airy Warm",
+    "contrast": "Medium",
+    "coreColours": [
+      "honey yellow",
+      "peach",
+      "aqua mint",
+      "lime"
+    ],
+    "depth": "Light",
+    "family": "Light Spring",
+    "id": "U002",
+    "location": "Bangkok, Thailand",
+    "neutrals": [
+      "warm white",
+      "buttercream",
+      "pale sand",
+      "light camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Soft",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "apricot",
+      "soft gold",
+      "clear aqua",
+      "fresh leaf"
+    ],
+    "birthData": "1992-05-28 15:18",
+    "cluster": "Light Airy Warm",
+    "contrast": "Medium",
+    "coreColours": [
+      "honey yellow",
+      "peach",
+      "aqua mint",
+      "lime"
+    ],
+    "depth": "Light",
+    "family": "Light Spring",
+    "id": "U003",
+    "location": "Reykjavik, Iceland",
+    "neutrals": [
+      "warm white",
+      "buttercream",
+      "pale sand",
+      "light camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Soft",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "apricot",
+      "soft gold",
+      "clear aqua",
+      "fresh leaf"
+    ],
+    "birthData": "1986-03-12 19:00",
+    "cluster": "Light Airy Warm",
+    "contrast": "Medium",
+    "coreColours": [
+      "honey yellow",
+      "peach",
+      "aqua mint",
+      "lime"
+    ],
+    "depth": "Light",
+    "family": "Light Spring",
+    "id": "U004",
+    "location": "Bangkok, Thailand",
+    "neutrals": [
+      "warm white",
+      "buttercream",
+      "pale sand",
+      "light camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Soft",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "apricot",
+      "soft gold",
+      "clear aqua",
+      "fresh leaf"
+    ],
+    "birthData": "2001-12-03 18:00",
+    "cluster": "Light Airy Warm",
+    "contrast": "Medium",
+    "coreColours": [
+      "honey yellow",
+      "peach",
+      "aqua mint",
+      "lime"
+    ],
+    "depth": "Light",
+    "family": "Light Spring",
+    "id": "U005",
+    "location": "Honolulu, USA",
+    "neutrals": [
+      "warm white",
+      "buttercream",
+      "pale sand",
+      "light camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Soft",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "apricot",
+      "soft gold",
+      "clear aqua",
+      "fresh leaf"
+    ],
+    "birthData": "1992-09-03 23:41",
+    "cluster": "Light Airy Warm",
+    "contrast": "Medium",
+    "coreColours": [
+      "honey yellow",
+      "peach",
+      "aqua mint",
+      "lime"
+    ],
+    "depth": "Light",
+    "family": "Light Spring",
+    "id": "U006",
+    "location": "Mexico City, Mexico",
+    "neutrals": [
+      "warm white",
+      "buttercream",
+      "pale sand",
+      "light camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Light Summer",
+    "surface": "Soft",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "tomato red",
+      "goldenrod",
+      "bright jade",
+      "clear aqua"
+    ],
+    "birthData": "2001-04-03 11:00",
+    "cluster": "Medium Warm Grounded",
+    "contrast": "Medium",
+    "coreColours": [
+      "marigold",
+      "coral",
+      "fresh green",
+      "clear turquoise"
+    ],
+    "depth": "Medium",
+    "family": "True Spring",
+    "id": "U007",
+    "location": "Auckland, New Zealand",
+    "neutrals": [
+      "warm ivory",
+      "camel sand",
+      "light khaki",
+      "warm stone"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "tomato red",
+      "goldenrod",
+      "bright jade",
+      "clear aqua"
+    ],
+    "birthData": "1991-07-07 07:23",
+    "cluster": "Medium Warm Grounded",
+    "contrast": "Medium",
+    "coreColours": [
+      "marigold",
+      "coral",
+      "fresh green",
+      "clear turquoise"
+    ],
+    "depth": "Medium",
+    "family": "True Spring",
+    "id": "U008",
+    "location": "London, UK",
+    "neutrals": [
+      "warm ivory",
+      "camel sand",
+      "light khaki",
+      "warm stone"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "tomato red",
+      "goldenrod",
+      "bright jade",
+      "clear aqua"
+    ],
+    "birthData": "1998-06-02 19:29",
+    "cluster": "Medium Warm Grounded",
+    "contrast": "Medium",
+    "coreColours": [
+      "marigold",
+      "coral",
+      "fresh green",
+      "clear turquoise"
+    ],
+    "depth": "Medium",
+    "family": "True Spring",
+    "id": "U009",
+    "location": "Tokyo, Japan",
+    "neutrals": [
+      "warm ivory",
+      "camel sand",
+      "light khaki",
+      "warm stone"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "tomato red",
+      "goldenrod",
+      "bright jade",
+      "clear aqua"
+    ],
+    "birthData": "1998-08-15 14:00",
+    "cluster": "Medium Warm Grounded",
+    "contrast": "Medium",
+    "coreColours": [
+      "marigold",
+      "coral",
+      "fresh green",
+      "clear turquoise"
+    ],
+    "depth": "Medium",
+    "family": "True Spring",
+    "id": "U010",
+    "location": "Cape Town, South Africa",
+    "neutrals": [
+      "warm ivory",
+      "camel sand",
+      "light khaki",
+      "warm stone"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "tomato red",
+      "goldenrod",
+      "bright jade",
+      "clear aqua"
+    ],
+    "birthData": "2000-10-21 16:34",
+    "cluster": "Medium Warm Grounded",
+    "contrast": "Medium",
+    "coreColours": [
+      "marigold",
+      "coral",
+      "fresh green",
+      "clear turquoise"
+    ],
+    "depth": "Medium",
+    "family": "True Spring",
+    "id": "U011",
+    "location": "Honolulu, USA",
+    "neutrals": [
+      "warm ivory",
+      "camel sand",
+      "light khaki",
+      "warm stone"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "tomato red",
+      "goldenrod",
+      "bright jade",
+      "clear aqua"
+    ],
+    "birthData": "1998-11-30 19:47",
+    "cluster": "Medium Warm Grounded",
+    "contrast": "Medium",
+    "coreColours": [
+      "marigold",
+      "coral",
+      "fresh green",
+      "clear turquoise"
+    ],
+    "depth": "Medium",
+    "family": "True Spring",
+    "id": "U012",
+    "location": "Singapore, Singapore",
+    "neutrals": [
+      "warm ivory",
+      "camel sand",
+      "light khaki",
+      "warm stone"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "tomato red",
+      "goldenrod",
+      "bright jade",
+      "clear aqua"
+    ],
+    "birthData": "1995-05-05 11:29",
+    "cluster": "Medium Warm Grounded",
+    "contrast": "Medium",
+    "coreColours": [
+      "marigold",
+      "coral",
+      "fresh green",
+      "clear turquoise"
+    ],
+    "depth": "Medium",
+    "family": "True Spring",
+    "id": "U013",
+    "location": "Dubai, UAE",
+    "neutrals": [
+      "warm ivory",
+      "camel sand",
+      "light khaki",
+      "warm stone"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "tomato red",
+      "goldenrod",
+      "bright jade",
+      "clear aqua"
+    ],
+    "birthData": "2001-09-03 04:18",
+    "cluster": "Medium Warm Grounded",
+    "contrast": "Medium",
+    "coreColours": [
+      "marigold",
+      "coral",
+      "fresh green",
+      "clear turquoise"
+    ],
+    "depth": "Medium",
+    "family": "True Spring",
+    "id": "U014",
+    "location": "Los Angeles, USA",
+    "neutrals": [
+      "warm ivory",
+      "camel sand",
+      "light khaki",
+      "warm stone"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "lacquer coral",
+      "acid lime",
+      "bright gold",
+      "clear aqua"
+    ],
+    "birthData": "1999-01-25 20:23",
+    "cluster": "Medium Neutral Electric",
+    "contrast": "High",
+    "coreColours": [
+      "poppy",
+      "bright teal",
+      "vivid yellow",
+      "electric blue"
+    ],
+    "depth": "Medium",
+    "family": "Bright Spring",
+    "id": "U015",
+    "location": "Auckland, New Zealand",
+    "neutrals": [
+      "clear ivory",
+      "warm navy",
+      "graphite",
+      "clear camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Winter",
+    "surface": "Structured",
+    "temperature": "Neutral"
+  },
+  {
+    "accentColours": [
+      "lacquer coral",
+      "acid lime",
+      "bright gold",
+      "clear aqua"
+    ],
+    "birthData": "2001-02-18 08:00",
+    "cluster": "Medium Neutral Electric",
+    "contrast": "High",
+    "coreColours": [
+      "poppy",
+      "bright teal",
+      "vivid yellow",
+      "electric blue"
+    ],
+    "depth": "Medium",
+    "family": "Bright Spring",
+    "id": "U016",
+    "location": "London, UK",
+    "neutrals": [
+      "clear ivory",
+      "warm navy",
+      "graphite",
+      "clear camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Winter",
+    "surface": "Structured",
+    "temperature": "Neutral"
+  },
+  {
+    "accentColours": [
+      "lacquer coral",
+      "acid lime",
+      "bright gold",
+      "clear aqua"
+    ],
+    "birthData": "1988-01-20 04:53",
+    "cluster": "Medium Neutral Electric",
+    "contrast": "High",
+    "coreColours": [
+      "poppy",
+      "bright teal",
+      "vivid yellow",
+      "electric blue"
+    ],
+    "depth": "Medium",
+    "family": "Bright Spring",
+    "id": "U017",
+    "location": "London, UK",
+    "neutrals": [
+      "clear ivory",
+      "warm navy",
+      "graphite",
+      "clear camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Autumn",
+    "surface": "Structured",
+    "temperature": "Neutral"
+  },
+  {
+    "accentColours": [
+      "lacquer coral",
+      "acid lime",
+      "bright gold",
+      "clear aqua"
+    ],
+    "birthData": "2000-01-04 09:29",
+    "cluster": "Medium Neutral Electric",
+    "contrast": "High",
+    "coreColours": [
+      "poppy",
+      "bright teal",
+      "vivid yellow",
+      "electric blue"
+    ],
+    "depth": "Medium",
+    "family": "Bright Spring",
+    "id": "U018",
+    "location": "Auckland, New Zealand",
+    "neutrals": [
+      "clear ivory",
+      "warm navy",
+      "graphite",
+      "clear camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Autumn",
+    "surface": "Structured",
+    "temperature": "Neutral"
+  },
+  {
+    "accentColours": [
+      "lacquer coral",
+      "acid lime",
+      "bright gold",
+      "clear aqua"
+    ],
+    "birthData": "1986-08-14 04:53",
+    "cluster": "Medium Neutral Electric",
+    "contrast": "High",
+    "coreColours": [
+      "poppy",
+      "bright teal",
+      "vivid yellow",
+      "electric blue"
+    ],
+    "depth": "Medium",
+    "family": "Bright Spring",
+    "id": "U019",
+    "location": "Lagos, Nigeria",
+    "neutrals": [
+      "clear ivory",
+      "warm navy",
+      "graphite",
+      "clear camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Autumn",
+    "surface": "Structured",
+    "temperature": "Neutral"
+  },
+  {
+    "accentColours": [
+      "lacquer coral",
+      "acid lime",
+      "bright gold",
+      "clear aqua"
+    ],
+    "birthData": "1990-10-03 18:23",
+    "cluster": "Medium Neutral Electric",
+    "contrast": "High",
+    "coreColours": [
+      "poppy",
+      "bright teal",
+      "vivid yellow",
+      "electric blue"
+    ],
+    "depth": "Medium",
+    "family": "Bright Spring",
+    "id": "U020",
+    "location": "Bangkok, Thailand",
+    "neutrals": [
+      "clear ivory",
+      "warm navy",
+      "graphite",
+      "clear camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Light Spring",
+    "surface": "Structured",
+    "temperature": "Neutral"
+  },
+  {
+    "accentColours": [
+      "lacquer coral",
+      "acid lime",
+      "bright gold",
+      "clear aqua"
+    ],
+    "birthData": "1996-02-22 08:29",
+    "cluster": "Medium Neutral Electric",
+    "contrast": "High",
+    "coreColours": [
+      "poppy",
+      "bright teal",
+      "vivid yellow",
+      "electric blue"
+    ],
+    "depth": "Medium",
+    "family": "Bright Spring",
+    "id": "U021",
+    "location": "Bangkok, Thailand",
+    "neutrals": [
+      "clear ivory",
+      "warm navy",
+      "graphite",
+      "clear camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Spring",
+    "surface": "Structured",
+    "temperature": "Neutral"
+  },
+  {
+    "accentColours": [
+      "lacquer coral",
+      "acid lime",
+      "bright gold",
+      "clear aqua"
+    ],
+    "birthData": "1997-11-03 08:53",
+    "cluster": "Medium Neutral Electric",
+    "contrast": "High",
+    "coreColours": [
+      "poppy",
+      "bright teal",
+      "vivid yellow",
+      "electric blue"
+    ],
+    "depth": "Medium",
+    "family": "Bright Spring",
+    "id": "U022",
+    "location": "Singapore, Singapore",
+    "neutrals": [
+      "clear ivory",
+      "warm navy",
+      "graphite",
+      "clear camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Autumn",
+    "surface": "Structured",
+    "temperature": "Neutral"
+  },
+  {
+    "accentColours": [
+      "lacquer coral",
+      "acid lime",
+      "bright gold",
+      "clear aqua"
+    ],
+    "birthData": "1998-11-21 17:29",
+    "cluster": "Medium Neutral Electric",
+    "contrast": "High",
+    "coreColours": [
+      "poppy",
+      "bright teal",
+      "vivid yellow",
+      "electric blue"
+    ],
+    "depth": "Medium",
+    "family": "Bright Spring",
+    "id": "U023",
+    "location": "London, UK",
+    "neutrals": [
+      "clear ivory",
+      "warm navy",
+      "graphite",
+      "clear camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Spring",
+    "surface": "Structured",
+    "temperature": "Neutral"
+  },
+  {
+    "accentColours": [
+      "lacquer coral",
+      "acid lime",
+      "bright gold",
+      "clear aqua"
+    ],
+    "birthData": "2001-05-09 15:41",
+    "cluster": "Medium Neutral Electric",
+    "contrast": "High",
+    "coreColours": [
+      "poppy",
+      "bright teal",
+      "vivid yellow",
+      "electric blue"
+    ],
+    "depth": "Medium",
+    "family": "Bright Spring",
+    "id": "U024",
+    "location": "Tokyo, Japan",
+    "neutrals": [
+      "clear ivory",
+      "warm navy",
+      "graphite",
+      "clear camel"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Spring",
+    "surface": "Structured",
+    "temperature": "Neutral"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "icy aqua",
+      "soft lilac",
+      "rose quartz"
+    ],
+    "birthData": "1990-07-18 05:00",
+    "cluster": "Light Airy Cool",
+    "contrast": "Low",
+    "coreColours": [
+      "powder blue",
+      "shell pink",
+      "seafoam",
+      "lavender mist"
+    ],
+    "depth": "Light",
+    "family": "Light Summer",
+    "id": "U025",
+    "location": "Cape Town, South Africa",
+    "neutrals": [
+      "soft white",
+      "pearl grey",
+      "cool taupe",
+      "mist navy"
+    ],
+    "saturation": "Soft",
+    "secondaryPull": "True Summer",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "icy aqua",
+      "soft lilac",
+      "rose quartz"
+    ],
+    "birthData": "1997-06-14 18:41",
+    "cluster": "Light Airy Cool",
+    "contrast": "Low",
+    "coreColours": [
+      "powder blue",
+      "shell pink",
+      "seafoam",
+      "lavender mist"
+    ],
+    "depth": "Light",
+    "family": "Light Summer",
+    "id": "U026",
+    "location": "Singapore, Singapore",
+    "neutrals": [
+      "soft white",
+      "pearl grey",
+      "cool taupe",
+      "mist navy"
+    ],
+    "saturation": "Soft",
+    "secondaryPull": "Light Spring",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "icy aqua",
+      "soft lilac",
+      "rose quartz"
+    ],
+    "birthData": "1998-10-04 07:07",
+    "cluster": "Light Airy Cool",
+    "contrast": "Low",
+    "coreColours": [
+      "powder blue",
+      "shell pink",
+      "seafoam",
+      "lavender mist"
+    ],
+    "depth": "Light",
+    "family": "Light Summer",
+    "id": "U027",
+    "location": "Reykjavik, Iceland",
+    "neutrals": [
+      "soft white",
+      "pearl grey",
+      "cool taupe",
+      "mist navy"
+    ],
+    "saturation": "Soft",
+    "secondaryPull": "True Summer",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "icy aqua",
+      "soft lilac",
+      "rose quartz"
+    ],
+    "birthData": "2001-03-03 16:18",
+    "cluster": "Light Airy Cool",
+    "contrast": "Low",
+    "coreColours": [
+      "powder blue",
+      "shell pink",
+      "seafoam",
+      "lavender mist"
+    ],
+    "depth": "Light",
+    "family": "Light Summer",
+    "id": "U028",
+    "location": "Singapore, Singapore",
+    "neutrals": [
+      "soft white",
+      "pearl grey",
+      "cool taupe",
+      "mist navy"
+    ],
+    "saturation": "Soft",
+    "secondaryPull": "True Summer",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "icy aqua",
+      "soft lilac",
+      "rose quartz"
+    ],
+    "birthData": "1991-11-24 21:23",
+    "cluster": "Light Airy Cool",
+    "contrast": "Low",
+    "coreColours": [
+      "powder blue",
+      "shell pink",
+      "seafoam",
+      "lavender mist"
+    ],
+    "depth": "Light",
+    "family": "Light Summer",
+    "id": "U029",
+    "location": "Buenos Aires, Argentina",
+    "neutrals": [
+      "soft white",
+      "pearl grey",
+      "cool taupe",
+      "mist navy"
+    ],
+    "saturation": "Soft",
+    "secondaryPull": "True Summer",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "icy aqua",
+      "soft lilac",
+      "rose quartz"
+    ],
+    "birthData": "1992-09-10 23:47",
+    "cluster": "Light Airy Cool",
+    "contrast": "Low",
+    "coreColours": [
+      "powder blue",
+      "shell pink",
+      "seafoam",
+      "lavender mist"
+    ],
+    "depth": "Light",
+    "family": "Light Summer",
+    "id": "U030",
+    "location": "Seoul, South Korea",
+    "neutrals": [
+      "soft white",
+      "pearl grey",
+      "cool taupe",
+      "mist navy"
+    ],
+    "saturation": "Soft",
+    "secondaryPull": "True Summer",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "pewter",
+      "mist teal",
+      "lavender grey",
+      "berry mauve"
+    ],
+    "birthData": "1986-01-24 08:34",
+    "cluster": "Medium Cool Soft",
+    "contrast": "Low",
+    "coreColours": [
+      "dusty blue",
+      "rose mauve",
+      "sage aqua",
+      "soft violet"
+    ],
+    "depth": "Medium",
+    "family": "True Summer",
+    "id": "U031",
+    "location": "Los Angeles, USA",
+    "neutrals": [
+      "dove grey",
+      "mushroom taupe",
+      "soft navy",
+      "cool stone"
+    ],
+    "saturation": "Soft",
+    "secondaryPull": "Soft Summer",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "pewter",
+      "mist teal",
+      "lavender grey",
+      "berry mauve"
+    ],
+    "birthData": "1998-04-11 11:41",
+    "cluster": "Medium Cool Soft",
+    "contrast": "Low",
+    "coreColours": [
+      "dusty blue",
+      "rose mauve",
+      "sage aqua",
+      "soft violet"
+    ],
+    "depth": "Medium",
+    "family": "True Summer",
+    "id": "U032",
+    "location": "London, UK",
+    "neutrals": [
+      "dove grey",
+      "mushroom taupe",
+      "soft navy",
+      "cool stone"
+    ],
+    "saturation": "Soft",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "pewter",
+      "mist teal",
+      "lavender grey",
+      "berry mauve"
+    ],
+    "birthData": "1996-01-03 15:53",
+    "cluster": "Medium Cool Soft",
+    "contrast": "Low",
+    "coreColours": [
+      "dusty blue",
+      "rose mauve",
+      "sage aqua",
+      "soft violet"
+    ],
+    "depth": "Medium",
+    "family": "True Summer",
+    "id": "U033",
+    "location": "New York, USA",
+    "neutrals": [
+      "dove grey",
+      "mushroom taupe",
+      "soft navy",
+      "cool stone"
+    ],
+    "saturation": "Soft",
+    "secondaryPull": "Soft Summer",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "pewter",
+      "mist teal",
+      "lavender grey",
+      "berry mauve"
+    ],
+    "birthData": "1995-06-17 20:12",
+    "cluster": "Medium Cool Soft",
+    "contrast": "Low",
+    "coreColours": [
+      "dusty blue",
+      "rose mauve",
+      "sage aqua",
+      "soft violet"
+    ],
+    "depth": "Medium",
+    "family": "True Summer",
+    "id": "U034",
+    "location": "Cape Town, South Africa",
+    "neutrals": [
+      "dove grey",
+      "mushroom taupe",
+      "soft navy",
+      "cool stone"
+    ],
+    "saturation": "Soft",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "pewter",
+      "mist teal",
+      "lavender grey",
+      "berry mauve"
+    ],
+    "birthData": "1998-07-22 21:53",
+    "cluster": "Medium Cool Soft",
+    "contrast": "Low",
+    "coreColours": [
+      "dusty blue",
+      "rose mauve",
+      "sage aqua",
+      "soft violet"
+    ],
+    "depth": "Medium",
+    "family": "True Summer",
+    "id": "U035",
+    "location": "Mexico City, Mexico",
+    "neutrals": [
+      "dove grey",
+      "mushroom taupe",
+      "soft navy",
+      "cool stone"
+    ],
+    "saturation": "Soft",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "pewter",
+      "mist teal",
+      "lavender grey",
+      "berry mauve"
+    ],
+    "birthData": "1992-10-16 20:47",
+    "cluster": "Medium Cool Soft",
+    "contrast": "Low",
+    "coreColours": [
+      "dusty blue",
+      "rose mauve",
+      "sage aqua",
+      "soft violet"
+    ],
+    "depth": "Medium",
+    "family": "True Summer",
+    "id": "U036",
+    "location": "Dubai, UAE",
+    "neutrals": [
+      "dove grey",
+      "mushroom taupe",
+      "soft navy",
+      "cool stone"
+    ],
+    "saturation": "Soft",
+    "secondaryPull": "True Winter",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "pewter",
+      "mist teal",
+      "lavender grey",
+      "berry mauve"
+    ],
+    "birthData": "1989-10-27 15:47",
+    "cluster": "Medium Cool Soft",
+    "contrast": "Low",
+    "coreColours": [
+      "dusty blue",
+      "rose mauve",
+      "sage aqua",
+      "soft violet"
+    ],
+    "depth": "Medium",
+    "family": "True Summer",
+    "id": "U037",
+    "location": "Bangkok, Thailand",
+    "neutrals": [
+      "dove grey",
+      "mushroom taupe",
+      "soft navy",
+      "cool stone"
+    ],
+    "saturation": "Soft",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "pewter",
+      "mist teal",
+      "lavender grey",
+      "berry mauve"
+    ],
+    "birthData": "1994-05-14 10:12",
+    "cluster": "Medium Cool Soft",
+    "contrast": "Low",
+    "coreColours": [
+      "dusty blue",
+      "rose mauve",
+      "sage aqua",
+      "soft violet"
+    ],
+    "depth": "Medium",
+    "family": "True Summer",
+    "id": "U038",
+    "location": "Honolulu, USA",
+    "neutrals": [
+      "dove grey",
+      "mushroom taupe",
+      "soft navy",
+      "cool stone"
+    ],
+    "saturation": "Soft",
+    "secondaryPull": "Soft Summer",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "brushed pewter",
+      "dusty plum",
+      "sea glass",
+      "faded mauve"
+    ],
+    "birthData": "1996-02-02 20:00",
+    "cluster": "Medium Cool Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "eucalyptus",
+      "muted rose",
+      "moss sage",
+      "smoky periwinkle"
+    ],
+    "depth": "Medium",
+    "family": "Soft Summer",
+    "id": "U039",
+    "location": "Tokyo, Japan",
+    "neutrals": [
+      "stone grey",
+      "mushroom",
+      "smoked navy",
+      "muted charcoal"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "brushed pewter",
+      "dusty plum",
+      "sea glass",
+      "faded mauve"
+    ],
+    "birthData": "1987-04-05 12:07",
+    "cluster": "Medium Cool Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "eucalyptus",
+      "muted rose",
+      "moss sage",
+      "smoky periwinkle"
+    ],
+    "depth": "Medium",
+    "family": "Soft Summer",
+    "id": "U040",
+    "location": "Honolulu, USA",
+    "neutrals": [
+      "stone grey",
+      "mushroom",
+      "smoked navy",
+      "muted charcoal"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "True Summer",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "brushed pewter",
+      "dusty plum",
+      "sea glass",
+      "faded mauve"
+    ],
+    "birthData": "1993-07-02 04:29",
+    "cluster": "Medium Cool Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "eucalyptus",
+      "muted rose",
+      "moss sage",
+      "smoky periwinkle"
+    ],
+    "depth": "Medium",
+    "family": "Soft Summer",
+    "id": "U041",
+    "location": "Reykjavik, Iceland",
+    "neutrals": [
+      "stone grey",
+      "mushroom",
+      "smoked navy",
+      "muted charcoal"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "brushed pewter",
+      "dusty plum",
+      "sea glass",
+      "faded mauve"
+    ],
+    "birthData": "1993-01-08 22:12",
+    "cluster": "Medium Cool Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "eucalyptus",
+      "muted rose",
+      "moss sage",
+      "smoky periwinkle"
+    ],
+    "depth": "Medium",
+    "family": "Soft Summer",
+    "id": "U042",
+    "location": "Seoul, South Korea",
+    "neutrals": [
+      "stone grey",
+      "mushroom",
+      "smoked navy",
+      "muted charcoal"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "brushed pewter",
+      "dusty plum",
+      "sea glass",
+      "faded mauve"
+    ],
+    "birthData": "1996-08-17 02:47",
+    "cluster": "Medium Cool Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "eucalyptus",
+      "muted rose",
+      "moss sage",
+      "smoky periwinkle"
+    ],
+    "depth": "Medium",
+    "family": "Soft Summer",
+    "id": "U043",
+    "location": "Seoul, South Korea",
+    "neutrals": [
+      "stone grey",
+      "mushroom",
+      "smoked navy",
+      "muted charcoal"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "brushed pewter",
+      "dusty plum",
+      "sea glass",
+      "faded mauve"
+    ],
+    "birthData": "1989-03-03 04:53",
+    "cluster": "Medium Cool Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "eucalyptus",
+      "muted rose",
+      "moss sage",
+      "smoky periwinkle"
+    ],
+    "depth": "Medium",
+    "family": "Soft Summer",
+    "id": "U044",
+    "location": "Sydney, Australia",
+    "neutrals": [
+      "stone grey",
+      "mushroom",
+      "smoked navy",
+      "muted charcoal"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "brushed pewter",
+      "dusty plum",
+      "sea glass",
+      "faded mauve"
+    ],
+    "birthData": "1985-11-30 21:12",
+    "cluster": "Medium Cool Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "eucalyptus",
+      "muted rose",
+      "moss sage",
+      "smoky periwinkle"
+    ],
+    "depth": "Medium",
+    "family": "Soft Summer",
+    "id": "U045",
+    "location": "Singapore, Singapore",
+    "neutrals": [
+      "stone grey",
+      "mushroom",
+      "smoked navy",
+      "muted charcoal"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "True Summer",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "brushed pewter",
+      "dusty plum",
+      "sea glass",
+      "faded mauve"
+    ],
+    "birthData": "1999-11-17 20:47",
+    "cluster": "Medium Cool Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "eucalyptus",
+      "muted rose",
+      "moss sage",
+      "smoky periwinkle"
+    ],
+    "depth": "Medium",
+    "family": "Soft Summer",
+    "id": "U046",
+    "location": "Honolulu, USA",
+    "neutrals": [
+      "stone grey",
+      "mushroom",
+      "smoked navy",
+      "muted charcoal"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "brushed pewter",
+      "dusty plum",
+      "sea glass",
+      "faded mauve"
+    ],
+    "birthData": "1991-05-09 16:07",
+    "cluster": "Medium Cool Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "eucalyptus",
+      "muted rose",
+      "moss sage",
+      "smoky periwinkle"
+    ],
+    "depth": "Medium",
+    "family": "Soft Summer",
+    "id": "U047",
+    "location": "Rio de Janeiro, Brazil",
+    "neutrals": [
+      "stone grey",
+      "mushroom",
+      "smoked navy",
+      "muted charcoal"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "brushed pewter",
+      "dusty plum",
+      "sea glass",
+      "faded mauve"
+    ],
+    "birthData": "1996-09-06 06:53",
+    "cluster": "Medium Cool Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "eucalyptus",
+      "muted rose",
+      "moss sage",
+      "smoky periwinkle"
+    ],
+    "depth": "Medium",
+    "family": "Soft Summer",
+    "id": "U048",
+    "location": "Seoul, South Korea",
+    "neutrals": [
+      "stone grey",
+      "mushroom",
+      "smoked navy",
+      "muted charcoal"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Soft",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "2000-02-06 10:53",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U049",
+    "location": "Rio de Janeiro, Brazil",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "soft copper",
+      "moss green",
+      "muted amber"
+    ],
+    "birthData": "1998-04-07 20:12",
+    "cluster": "Medium Warm Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "terracotta",
+      "olive sage",
+      "muted teal",
+      "soft rust"
+    ],
+    "depth": "Medium",
+    "family": "Soft Autumn",
+    "id": "U050",
+    "location": "Reykjavik, Iceland",
+    "neutrals": [
+      "camel",
+      "warm taupe",
+      "oatmeal",
+      "olive beige"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "True Autumn",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "soft copper",
+      "moss green",
+      "muted amber"
+    ],
+    "birthData": "2002-06-24 04:00",
+    "cluster": "Medium Warm Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "terracotta",
+      "olive sage",
+      "muted teal",
+      "soft rust"
+    ],
+    "depth": "Medium",
+    "family": "Soft Autumn",
+    "id": "U051",
+    "location": "Buenos Aires, Argentina",
+    "neutrals": [
+      "camel",
+      "warm taupe",
+      "oatmeal",
+      "olive beige"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "True Autumn",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "1991-01-20 14:07",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U052",
+    "location": "Tokyo, Japan",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "soft copper",
+      "moss green",
+      "muted amber"
+    ],
+    "birthData": "1991-05-25 12:29",
+    "cluster": "Medium Warm Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "terracotta",
+      "olive sage",
+      "muted teal",
+      "soft rust"
+    ],
+    "depth": "Medium",
+    "family": "Soft Autumn",
+    "id": "U053",
+    "location": "Buenos Aires, Argentina",
+    "neutrals": [
+      "camel",
+      "warm taupe",
+      "oatmeal",
+      "olive beige"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "Deep Autumn",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "soft copper",
+      "moss green",
+      "muted amber"
+    ],
+    "birthData": "1993-08-05 06:41",
+    "cluster": "Medium Warm Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "terracotta",
+      "olive sage",
+      "muted teal",
+      "soft rust"
+    ],
+    "depth": "Medium",
+    "family": "Soft Autumn",
+    "id": "U054",
+    "location": "Honolulu, USA",
+    "neutrals": [
+      "camel",
+      "warm taupe",
+      "oatmeal",
+      "olive beige"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "True Autumn",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "soft copper",
+      "moss green",
+      "muted amber"
+    ],
+    "birthData": "1987-10-06 04:18",
+    "cluster": "Medium Warm Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "terracotta",
+      "olive sage",
+      "muted teal",
+      "soft rust"
+    ],
+    "depth": "Medium",
+    "family": "Soft Autumn",
+    "id": "U055",
+    "location": "Athens, Greece",
+    "neutrals": [
+      "camel",
+      "warm taupe",
+      "oatmeal",
+      "olive beige"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "Soft Summer",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "soft copper",
+      "moss green",
+      "muted amber"
+    ],
+    "birthData": "1992-03-15 01:12",
+    "cluster": "Medium Warm Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "terracotta",
+      "olive sage",
+      "muted teal",
+      "soft rust"
+    ],
+    "depth": "Medium",
+    "family": "Soft Autumn",
+    "id": "U056",
+    "location": "London, UK",
+    "neutrals": [
+      "camel",
+      "warm taupe",
+      "oatmeal",
+      "olive beige"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "True Autumn",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "soft copper",
+      "moss green",
+      "muted amber"
+    ],
+    "birthData": "2001-11-26 23:18",
+    "cluster": "Medium Warm Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "terracotta",
+      "olive sage",
+      "muted teal",
+      "soft rust"
+    ],
+    "depth": "Medium",
+    "family": "Soft Autumn",
+    "id": "U057",
+    "location": "Buenos Aires, Argentina",
+    "neutrals": [
+      "camel",
+      "warm taupe",
+      "oatmeal",
+      "olive beige"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "Bright Winter",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "soft copper",
+      "moss green",
+      "muted amber"
+    ],
+    "birthData": "1992-10-31 04:47",
+    "cluster": "Medium Warm Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "terracotta",
+      "olive sage",
+      "muted teal",
+      "soft rust"
+    ],
+    "depth": "Medium",
+    "family": "Soft Autumn",
+    "id": "U058",
+    "location": "Sydney, Australia",
+    "neutrals": [
+      "camel",
+      "warm taupe",
+      "oatmeal",
+      "olive beige"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "True Autumn",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "soft copper",
+      "moss green",
+      "muted amber"
+    ],
+    "birthData": "1999-05-12 16:00",
+    "cluster": "Medium Warm Muted",
+    "contrast": "Low",
+    "coreColours": [
+      "terracotta",
+      "olive sage",
+      "muted teal",
+      "soft rust"
+    ],
+    "depth": "Medium",
+    "family": "Soft Autumn",
+    "id": "U059",
+    "location": "Mumbai, India",
+    "neutrals": [
+      "camel",
+      "warm taupe",
+      "oatmeal",
+      "olive beige"
+    ],
+    "saturation": "Muted",
+    "secondaryPull": "True Autumn",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "1994-08-27 10:41",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U060",
+    "location": "Dubai, UAE",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "2002-04-11 01:53",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U061",
+    "location": "Athens, Greece",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Autumn",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "bronze",
+      "amber",
+      "olive gold",
+      "warm auburn"
+    ],
+    "birthData": "1994-06-26 10:12",
+    "cluster": "Medium Warm Grounded",
+    "contrast": "Medium",
+    "coreColours": [
+      "rust",
+      "moss",
+      "ochre",
+      "deep teal"
+    ],
+    "depth": "Medium",
+    "family": "True Autumn",
+    "id": "U062",
+    "location": "Nairobi, Kenya",
+    "neutrals": [
+      "camel",
+      "cocoa",
+      "warm olive",
+      "deep khaki"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Deep Autumn",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "1984-01-02 09:53",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U063",
+    "location": "Reykjavik, Iceland",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Autumn",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "1991-05-29 04:53",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U064",
+    "location": "Dubai, UAE",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Autumn",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "1989-08-06 00:47",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U065",
+    "location": "Lagos, Nigeria",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Autumn",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "bronze",
+      "amber",
+      "olive gold",
+      "warm auburn"
+    ],
+    "birthData": "1996-09-27 13:41",
+    "cluster": "Medium Warm Grounded",
+    "contrast": "Medium",
+    "coreColours": [
+      "rust",
+      "moss",
+      "ochre",
+      "deep teal"
+    ],
+    "depth": "Medium",
+    "family": "True Autumn",
+    "id": "U066",
+    "location": "Mumbai, India",
+    "neutrals": [
+      "camel",
+      "cocoa",
+      "warm olive",
+      "deep khaki"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Spring",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "bronze",
+      "amber",
+      "olive gold",
+      "warm auburn"
+    ],
+    "birthData": "1999-03-02 15:47",
+    "cluster": "Medium Warm Grounded",
+    "contrast": "Medium",
+    "coreColours": [
+      "rust",
+      "moss",
+      "ochre",
+      "deep teal"
+    ],
+    "depth": "Medium",
+    "family": "True Autumn",
+    "id": "U067",
+    "location": "Mumbai, India",
+    "neutrals": [
+      "camel",
+      "cocoa",
+      "warm olive",
+      "deep khaki"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "1988-12-16 12:29",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U068",
+    "location": "Tokyo, Japan",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Autumn",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "bronze",
+      "amber",
+      "olive gold",
+      "warm auburn"
+    ],
+    "birthData": "2002-05-18 22:23",
+    "cluster": "Medium Warm Grounded",
+    "contrast": "Medium",
+    "coreColours": [
+      "rust",
+      "moss",
+      "ochre",
+      "deep teal"
+    ],
+    "depth": "Medium",
+    "family": "True Autumn",
+    "id": "U069",
+    "location": "Tokyo, Japan",
+    "neutrals": [
+      "camel",
+      "cocoa",
+      "warm olive",
+      "deep khaki"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "bronze",
+      "amber",
+      "olive gold",
+      "warm auburn"
+    ],
+    "birthData": "1993-08-28 06:00",
+    "cluster": "Medium Warm Grounded",
+    "contrast": "Medium",
+    "coreColours": [
+      "rust",
+      "moss",
+      "ochre",
+      "deep teal"
+    ],
+    "depth": "Medium",
+    "family": "True Autumn",
+    "id": "U070",
+    "location": "New York, USA",
+    "neutrals": [
+      "camel",
+      "cocoa",
+      "warm olive",
+      "deep khaki"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Balanced",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "2000-02-11 11:07",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U071",
+    "location": "Mexico City, Mexico",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Soft Autumn",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "1988-04-09 21:53",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U072",
+    "location": "Sydney, Australia",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Autumn",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "1999-07-21 21:47",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U073",
+    "location": "New York, USA",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Deep Winter",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "2000-01-08 09:47",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U074",
+    "location": "Seoul, South Korea",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Deep Winter",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "1990-05-24 00:29",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U075",
+    "location": "London, UK",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Autumn",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "2002-08-05 15:00",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U076",
+    "location": "Mexico City, Mexico",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Autumn",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "1993-10-02 03:07",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U077",
+    "location": "Singapore, Singapore",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Autumn",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "1991-03-06 23:07",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U078",
+    "location": "London, UK",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Deep Winter",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "1994-11-23 03:12",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U079",
+    "location": "Seoul, South Korea",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Deep Winter",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "2001-10-31 10:47",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U080",
+    "location": "Sydney, Australia",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Deep Winter",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "1985-04-22 03:47",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U081",
+    "location": "Dubai, UAE",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Autumn",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "antique gold",
+      "aged brass",
+      "copper",
+      "deep amber"
+    ],
+    "birthData": "1987-09-19 08:47",
+    "cluster": "Deep Warm Structured",
+    "contrast": "Medium",
+    "coreColours": [
+      "oxblood",
+      "forest teal",
+      "forest green",
+      "dark terracotta"
+    ],
+    "depth": "Deep",
+    "family": "Deep Autumn",
+    "id": "U082",
+    "location": "Bangkok, Thailand",
+    "neutrals": [
+      "espresso",
+      "warm charcoal",
+      "deep olive",
+      "bark brown"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Autumn",
+    "surface": "Structured",
+    "temperature": "Warm"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "gunmetal",
+      "cool ruby",
+      "icy teal"
+    ],
+    "birthData": "1999-02-07 20:47",
+    "cluster": "Deep Cool Controlled",
+    "contrast": "Medium",
+    "coreColours": [
+      "black cherry",
+      "petrol",
+      "dark emerald",
+      "blue-black"
+    ],
+    "depth": "Deep",
+    "family": "Deep Winter",
+    "id": "U083",
+    "location": "Lagos, Nigeria",
+    "neutrals": [
+      "black",
+      "ink navy",
+      "graphite",
+      "cool charcoal"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Deep Autumn",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "gunmetal",
+      "cool ruby",
+      "icy teal"
+    ],
+    "birthData": "1989-07-11 21:34",
+    "cluster": "Deep Cool Controlled",
+    "contrast": "Medium",
+    "coreColours": [
+      "black cherry",
+      "petrol",
+      "dark emerald",
+      "blue-black"
+    ],
+    "depth": "Deep",
+    "family": "Deep Winter",
+    "id": "U084",
+    "location": "Los Angeles, USA",
+    "neutrals": [
+      "black",
+      "ink navy",
+      "graphite",
+      "cool charcoal"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Winter",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "gunmetal",
+      "cool ruby",
+      "icy teal"
+    ],
+    "birthData": "1997-12-24 09:00",
+    "cluster": "Deep Cool Controlled",
+    "contrast": "Medium",
+    "coreColours": [
+      "black cherry",
+      "petrol",
+      "dark emerald",
+      "blue-black"
+    ],
+    "depth": "Deep",
+    "family": "Deep Winter",
+    "id": "U085",
+    "location": "Seoul, South Korea",
+    "neutrals": [
+      "black",
+      "ink navy",
+      "graphite",
+      "cool charcoal"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Deep Autumn",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "gunmetal",
+      "cool ruby",
+      "icy teal"
+    ],
+    "birthData": "1991-05-27 16:00",
+    "cluster": "Deep Cool Controlled",
+    "contrast": "Medium",
+    "coreColours": [
+      "black cherry",
+      "petrol",
+      "dark emerald",
+      "blue-black"
+    ],
+    "depth": "Deep",
+    "family": "Deep Winter",
+    "id": "U086",
+    "location": "Tokyo, Japan",
+    "neutrals": [
+      "black",
+      "ink navy",
+      "graphite",
+      "cool charcoal"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Deep Autumn",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "gunmetal",
+      "cool ruby",
+      "icy teal"
+    ],
+    "birthData": "1984-10-05 13:00",
+    "cluster": "Deep Cool Controlled",
+    "contrast": "Medium",
+    "coreColours": [
+      "black cherry",
+      "petrol",
+      "dark emerald",
+      "blue-black"
+    ],
+    "depth": "Deep",
+    "family": "Deep Winter",
+    "id": "U087",
+    "location": "Athens, Greece",
+    "neutrals": [
+      "black",
+      "ink navy",
+      "graphite",
+      "cool charcoal"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Deep Autumn",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "gunmetal",
+      "cool ruby",
+      "icy teal"
+    ],
+    "birthData": "1989-02-25 19:29",
+    "cluster": "Deep Cool Controlled",
+    "contrast": "Medium",
+    "coreColours": [
+      "black cherry",
+      "petrol",
+      "dark emerald",
+      "blue-black"
+    ],
+    "depth": "Deep",
+    "family": "Deep Winter",
+    "id": "U088",
+    "location": "Buenos Aires, Argentina",
+    "neutrals": [
+      "black",
+      "ink navy",
+      "graphite",
+      "cool charcoal"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Deep Autumn",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "gunmetal",
+      "cool ruby",
+      "icy teal"
+    ],
+    "birthData": "1992-11-30 12:00",
+    "cluster": "Deep Cool Controlled",
+    "contrast": "Medium",
+    "coreColours": [
+      "black cherry",
+      "petrol",
+      "dark emerald",
+      "blue-black"
+    ],
+    "depth": "Deep",
+    "family": "Deep Winter",
+    "id": "U089",
+    "location": "Singapore, Singapore",
+    "neutrals": [
+      "black",
+      "ink navy",
+      "graphite",
+      "cool charcoal"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Winter",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "gunmetal",
+      "cool ruby",
+      "icy teal"
+    ],
+    "birthData": "1991-11-03 07:07",
+    "cluster": "Deep Cool Controlled",
+    "contrast": "Medium",
+    "coreColours": [
+      "black cherry",
+      "petrol",
+      "dark emerald",
+      "blue-black"
+    ],
+    "depth": "Deep",
+    "family": "Deep Winter",
+    "id": "U090",
+    "location": "Los Angeles, USA",
+    "neutrals": [
+      "black",
+      "ink navy",
+      "graphite",
+      "cool charcoal"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Deep Autumn",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "icy blue",
+      "fuchsia red",
+      "hard white"
+    ],
+    "birthData": "1998-02-17 14:07",
+    "cluster": "Deep Cool High-Contrast",
+    "contrast": "High",
+    "coreColours": [
+      "cobalt",
+      "crimson",
+      "blue-red",
+      "clear pine"
+    ],
+    "depth": "Deep",
+    "family": "True Winter",
+    "id": "U091",
+    "location": "Singapore, Singapore",
+    "neutrals": [
+      "black",
+      "optic white",
+      "graphite",
+      "icy grey"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Winter",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "icy blue",
+      "fuchsia red",
+      "hard white"
+    ],
+    "birthData": "1992-12-30 09:00",
+    "cluster": "Deep Cool High-Contrast",
+    "contrast": "High",
+    "coreColours": [
+      "cobalt",
+      "crimson",
+      "blue-red",
+      "clear pine"
+    ],
+    "depth": "Deep",
+    "family": "True Winter",
+    "id": "U092",
+    "location": "Tokyo, Japan",
+    "neutrals": [
+      "black",
+      "optic white",
+      "graphite",
+      "icy grey"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Winter",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "icy blue",
+      "fuchsia red",
+      "hard white"
+    ],
+    "birthData": "1992-10-16 06:18",
+    "cluster": "Deep Cool High-Contrast",
+    "contrast": "High",
+    "coreColours": [
+      "cobalt",
+      "crimson",
+      "blue-red",
+      "clear pine"
+    ],
+    "depth": "Deep",
+    "family": "True Winter",
+    "id": "U093",
+    "location": "Bangkok, Thailand",
+    "neutrals": [
+      "black",
+      "optic white",
+      "graphite",
+      "icy grey"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Summer",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "silver",
+      "icy blue",
+      "fuchsia red",
+      "hard white"
+    ],
+    "birthData": "1989-02-27 15:29",
+    "cluster": "Deep Cool High-Contrast",
+    "contrast": "High",
+    "coreColours": [
+      "cobalt",
+      "crimson",
+      "blue-red",
+      "clear pine"
+    ],
+    "depth": "Deep",
+    "family": "True Winter",
+    "id": "U094",
+    "location": "Sydney, Australia",
+    "neutrals": [
+      "black",
+      "optic white",
+      "graphite",
+      "icy grey"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Winter",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "chrome silver",
+      "electric fuchsia",
+      "clear cyan",
+      "true red"
+    ],
+    "birthData": "1998-02-06 06:41",
+    "cluster": "Deep Cool High-Contrast",
+    "contrast": "High",
+    "coreColours": [
+      "midnight",
+      "royal blue",
+      "magenta red",
+      "icy teal"
+    ],
+    "depth": "Deep",
+    "family": "Bright Winter",
+    "id": "U095",
+    "location": "Buenos Aires, Argentina",
+    "neutrals": [
+      "black",
+      "bright white",
+      "ink navy",
+      "steel grey"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Winter",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "chrome silver",
+      "electric fuchsia",
+      "clear cyan",
+      "true red"
+    ],
+    "birthData": "1990-03-26 19:12",
+    "cluster": "Deep Cool High-Contrast",
+    "contrast": "High",
+    "coreColours": [
+      "midnight",
+      "royal blue",
+      "magenta red",
+      "icy teal"
+    ],
+    "depth": "Deep",
+    "family": "Bright Winter",
+    "id": "U096",
+    "location": "Auckland, New Zealand",
+    "neutrals": [
+      "black",
+      "bright white",
+      "ink navy",
+      "steel grey"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "chrome silver",
+      "electric fuchsia",
+      "clear cyan",
+      "true red"
+    ],
+    "birthData": "1993-08-22 10:00",
+    "cluster": "Deep Cool High-Contrast",
+    "contrast": "High",
+    "coreColours": [
+      "midnight",
+      "royal blue",
+      "magenta red",
+      "icy teal"
+    ],
+    "depth": "Deep",
+    "family": "Bright Winter",
+    "id": "U097",
+    "location": "Cape Town, South Africa",
+    "neutrals": [
+      "black",
+      "bright white",
+      "ink navy",
+      "steel grey"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "chrome silver",
+      "electric fuchsia",
+      "clear cyan",
+      "true red"
+    ],
+    "birthData": "1987-11-17 19:29",
+    "cluster": "Deep Cool High-Contrast",
+    "contrast": "High",
+    "coreColours": [
+      "midnight",
+      "royal blue",
+      "magenta red",
+      "icy teal"
+    ],
+    "depth": "Deep",
+    "family": "Bright Winter",
+    "id": "U098",
+    "location": "Mexico City, Mexico",
+    "neutrals": [
+      "black",
+      "bright white",
+      "ink navy",
+      "steel grey"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "chrome silver",
+      "electric fuchsia",
+      "clear cyan",
+      "true red"
+    ],
+    "birthData": "1987-05-19 23:47",
+    "cluster": "Deep Cool High-Contrast",
+    "contrast": "High",
+    "coreColours": [
+      "midnight",
+      "royal blue",
+      "magenta red",
+      "icy teal"
+    ],
+    "depth": "Deep",
+    "family": "Bright Winter",
+    "id": "U099",
+    "location": "Dubai, UAE",
+    "neutrals": [
+      "black",
+      "bright white",
+      "ink navy",
+      "steel grey"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "Bright Spring",
+    "surface": "Structured",
+    "temperature": "Cool"
+  },
+  {
+    "accentColours": [
+      "chrome silver",
+      "electric fuchsia",
+      "clear cyan",
+      "true red"
+    ],
+    "birthData": "1989-09-21 15:34",
+    "cluster": "Deep Cool High-Contrast",
+    "contrast": "High",
+    "coreColours": [
+      "midnight",
+      "royal blue",
+      "magenta red",
+      "icy teal"
+    ],
+    "depth": "Deep",
+    "family": "Bright Winter",
+    "id": "U100",
+    "location": "Lagos, Nigeria",
+    "neutrals": [
+      "black",
+      "bright white",
+      "ink navy",
+      "steel grey"
+    ],
+    "saturation": "Rich",
+    "secondaryPull": "True Winter",
+    "surface": "Structured",
+    "temperature": "Cool"
+  }
+]

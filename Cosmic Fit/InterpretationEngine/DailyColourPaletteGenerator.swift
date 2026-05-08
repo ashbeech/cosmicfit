@@ -299,6 +299,8 @@ class DailyColourPaletteGenerator {
         let allPaletteHexes: [String]
     }
 
+    private static let supportRotationCadence = 4
+
     static func selectV4DailyColours(
         from palette: PaletteSection,
         date: Date = Date()
@@ -309,14 +311,22 @@ class DailyColourPaletteGenerator {
         }
 
         let dayIndex = Calendar.current.ordinality(of: .day, in: .era, for: date) ?? 0
+        let supports = palette.supportColours ?? []
 
         let neutralPick = neutrals[dayIndex % neutrals.count]
         let corePick = palette.coreColours[(dayIndex / neutrals.count) % palette.coreColours.count]
-        let accentPick = palette.accentColours[(dayIndex / (neutrals.count * palette.coreColours.count)) % palette.accentColours.count]
+
+        let accentPick: BlueprintColour
+        if !supports.isEmpty && dayIndex % supportRotationCadence == 0 {
+            accentPick = supports[dayIndex / supportRotationCadence % supports.count]
+        } else {
+            accentPick = palette.accentColours[(dayIndex / (neutrals.count * palette.coreColours.count)) % palette.accentColours.count]
+        }
 
         let dailyHexes = [corePick.hexValue, accentPick.hexValue, neutralPick.hexValue]
         let dailyNames = [corePick.name, accentPick.name, neutralPick.name]
-        let allHexes = neutrals.map(\.hexValue) + palette.coreColours.map(\.hexValue) + palette.accentColours.map(\.hexValue)
+        var allHexes = neutrals.map(\.hexValue) + palette.coreColours.map(\.hexValue) + palette.accentColours.map(\.hexValue)
+        allHexes += supports.map(\.hexValue)
 
         return V4DailyPalette(
             dailyHexes: dailyHexes,

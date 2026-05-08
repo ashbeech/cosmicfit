@@ -553,6 +553,7 @@ struct DeterministicResolver {
         case let .crossPoolEscalation(_, rank, _, _, _): return rank
         case .libraryFallback:                       return Int.max
         case .v4Template:                            return 0
+        case .chartDerivedAccent:                    return 0
         }
     }
 
@@ -590,6 +591,8 @@ struct DeterministicResolver {
             return "fallback — \(reason)"
         case let .v4Template(family, band, index):
             return "v4Template(\(family)/\(band)[\(index)])"
+        case let .chartDerivedAccent(role, planet, sign, satOverride):
+            return "chartAccent(\(role), \(planet) in \(sign)\(satOverride ? " [vivid]" : ""))"
         }
     }
 
@@ -611,6 +614,8 @@ struct DeterministicResolver {
                 case .libraryFallback:
                     fallback += 1
                 case .v4Template:
+                    chart += 1
+                case .chartDerivedAccent:
                     chart += 1
                 }
             }

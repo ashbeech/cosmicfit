@@ -31,7 +31,7 @@
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-04-19T16:53:11Z",
+  "generatedAt" : "2026-05-07T09:21:13Z",
   "hardware" : {
     "metalsText" : "Your most effective hardware relies on a strict clash of high-tech precision and familiar, heavy warmth. Slick, industrial white gold gives you a sharp foundation, looking right at home on the oversized zips of technical outerwear or the chunky fastenings of a utility bag. A completely clinical finish leaves you cold, so you break up those stark details with antique silver. Seek out antique silver pieces with a battered, nostalgic patina—like a weighty heirloom pendant strung onto a modern synthetic cord, or thick, warm-toned belt buckles. This visual friction keeps your clothes from looking like a uniform, grounding bold shapes in something deeply personal.",
     "recommendedMetals" : [
@@ -62,46 +62,50 @@
   "palette" : {
     "accentColours" : [
       {
-        "hexValue" : "#E2583E",
-        "name" : "lacquer coral",
+        "hexValue" : "#007788",
+        "name" : "Cerulean",
         "provenance" : {
-          "band" : "accent",
-          "family" : "Bright Spring",
-          "index" : 0,
-          "kind" : "v4Template"
+          "kind" : "chartDerivedAccent",
+          "role" : "Signature",
+          "saturationOverride" : false,
+          "sourcePlanet" : "Venus",
+          "sourceSign" : "Aquarius"
         },
         "role" : "accent"
       },
       {
-        "hexValue" : "#B0BF1A",
-        "name" : "acid lime",
+        "hexValue" : "#5E8B91",
+        "name" : "Moonstone",
         "provenance" : {
-          "band" : "accent",
-          "family" : "Bright Spring",
-          "index" : 1,
-          "kind" : "v4Template"
+          "kind" : "chartDerivedAccent",
+          "role" : "Contrast",
+          "saturationOverride" : false,
+          "sourcePlanet" : "Moon",
+          "sourceSign" : "Cancer"
         },
         "role" : "accent"
       },
       {
-        "hexValue" : "#FFD700",
-        "name" : "bright gold",
+        "hexValue" : "#762249",
+        "name" : "Dark Cherry",
         "provenance" : {
-          "band" : "accent",
-          "family" : "Bright Spring",
-          "index" : 2,
-          "kind" : "v4Template"
+          "kind" : "chartDerivedAccent",
+          "role" : "Depth",
+          "saturationOverride" : false,
+          "sourcePlanet" : "Saturn",
+          "sourceSign" : "Scorpio"
         },
         "role" : "accent"
       },
       {
-        "hexValue" : "#00FFFF",
-        "name" : "clear cyan",
+        "hexValue" : "#6E764B",
+        "name" : "Muted Olive",
         "provenance" : {
-          "band" : "accent",
-          "family" : "Bright Spring",
-          "index" : 3,
-          "kind" : "v4Template"
+          "kind" : "chartDerivedAccent",
+          "role" : "Lift",
+          "saturationOverride" : false,
+          "sourcePlanet" : "Ascendant",
+          "sourceSign" : "Virgo"
         },
         "role" : "accent"
       }
@@ -142,8 +146,8 @@
         "role" : "core"
       },
       {
-        "hexValue" : "#4169E1",
-        "name" : "royal blue",
+        "hexValue" : "#0080FF",
+        "name" : "electric blue",
         "provenance" : {
           "band" : "core",
           "family" : "Bright Spring",
@@ -153,8 +157,42 @@
         "role" : "core"
       }
     ],
+    "deepAnchor" : {
+      "hexValue" : "#0D1014",
+      "name" : "clear black",
+      "provenance" : {
+        "band" : "deepAnchor",
+        "family" : "Bright Spring",
+        "index" : 0,
+        "kind" : "v4Template"
+      },
+      "role" : "anchor"
+    },
     "family" : "Bright Spring",
-    "narrativeText" : "Your colour story thrives on a clash of temperature. Build a foundation on the stark, synthetic edge of poppy and the industrial calm of bright teal, then soften the impact with the washed-out safety of vivid yellow. This mix gives you the brilliant tension of a vintage silhouette cut from a space-age fabric. Introduce lacquer coral as a sudden, unapologetic hit of heat to break up the cool tones. A high-visibility shade always carries more attitude when it sits next to something reassuringly soft.",
+    "lightAnchor" : {
+      "hexValue" : "#FFFDF0",
+      "name" : "clear ivory",
+      "provenance" : {
+        "band" : "lightAnchor",
+        "family" : "Bright Spring",
+        "index" : 0,
+        "kind" : "v4Template"
+      },
+      "role" : "anchor"
+    },
+    "luminarySignature" : {
+      "hexValue" : "#724BA4",
+      "name" : "cobalt",
+      "provenance" : {
+        "band" : "luminarySignature",
+        "family" : "Bright Spring",
+        "index" : 0,
+        "kind" : "v4Template"
+      },
+      "role" : "signature",
+      "semanticLabel" : "luminary signature"
+    },
+    "narrativeText" : "Your colour story thrives on a clash of temperature. Build a foundation on the stark, synthetic edge of poppy and the industrial calm of bright teal, then soften the impact with the washed-out safety of vivid yellow. This mix gives you the brilliant tension of a vintage silhouette cut from a space-age fabric. Introduce Cerulean as a sudden, unapologetic hit of heat to break up the cool tones. A high-visibility shade always carries more attitude when it sits next to something reassuringly soft.",
     "neutrals" : [
       {
         "hexValue" : "#FFFDF0",
@@ -204,6 +242,7 @@
     "overrideFlags" : {
       "capricornVirgoCoolingApplied" : true,
       "coolLeanDeepAutumn" : false,
+      "deepAnchorOverriddenToBlack" : false,
       "earthDepthOverrideApplied" : false,
       "fireAirChromaApplied" : true,
       "scorpioDensityApplied" : true,
@@ -211,7 +250,65 @@
       "waterSofteningApplied" : false,
       "winterCompressionApplied" : false
     },
+    "rulerSignature" : {
+      "hexValue" : "#724BA4",
+      "name" : "cobalt",
+      "provenance" : {
+        "band" : "rulerSignature",
+        "family" : "Bright Spring",
+        "index" : 0,
+        "kind" : "v4Template"
+      },
+      "role" : "signature",
+      "semanticLabel" : "ruler signature"
+    },
     "secondaryPull" : "Bright Winter",
+    "supportColours" : [
+      {
+        "hexValue" : "#9C9A9A",
+        "name" : "dove grey",
+        "provenance" : {
+          "band" : "support",
+          "family" : "Bright Spring",
+          "index" : 0,
+          "kind" : "v4Template"
+        },
+        "role" : "support"
+      },
+      {
+        "hexValue" : "#636B6F",
+        "name" : "muted charcoal",
+        "provenance" : {
+          "band" : "support",
+          "family" : "Bright Spring",
+          "index" : 1,
+          "kind" : "v4Template"
+        },
+        "role" : "support"
+      },
+      {
+        "hexValue" : "#3B4B5E",
+        "name" : "smoked navy",
+        "provenance" : {
+          "band" : "support",
+          "family" : "Bright Spring",
+          "index" : 2,
+          "kind" : "v4Template"
+        },
+        "role" : "support"
+      },
+      {
+        "hexValue" : "#5B6770",
+        "name" : "slate",
+        "provenance" : {
+          "band" : "support",
+          "family" : "Bright Spring",
+          "index" : 3,
+          "kind" : "v4Template"
+        },
+        "role" : "support"
+      }
+    ],
     "swatchFamilies" : [
 
     ],
@@ -267,6 +364,6 @@
   "userInfo" : {
     "birthDate" : "1984-12-11T00:00:00Z",
     "birthLocation" : "London, UK",
-    "generationDate" : "2026-04-19T16:53:11Z"
+    "generationDate" : "2026-05-07T09:21:13Z"
   }
 }

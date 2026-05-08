@@ -3,7 +3,7 @@ import Foundation
 enum VariationSlots {
 
     struct CuratedSubstitution {
-        enum Band: String { case neutral, core, accent }
+        enum Band: String { case neutral, core, accent, support }
         let band: Band
         let targetIndex: Int
         let sourceColourName: String
@@ -18,12 +18,12 @@ enum VariationSlots {
             .brightSpring: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "bright gold"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "vivid yellow"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "clear camel"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "slate"),
             ],
             .lightSummer: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "rose quartz"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "seafoam"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "cool taupe"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "warm stone"),
             ],
         ],
 
@@ -32,7 +32,7 @@ enum VariationSlots {
             .brightSpring: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "bright gold"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "electric blue"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "warm navy"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "slate"),
             ],
         ],
 
@@ -41,12 +41,12 @@ enum VariationSlots {
             .brightWinter: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "clear cyan"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "royal blue"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "steel grey"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "camel sand"),
             ],
             .trueAutumn: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "bronze"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "deep teal"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "cocoa"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "graphite"),
             ],
         ],
 
@@ -55,12 +55,12 @@ enum VariationSlots {
             .trueSummer: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "berry mauve"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "soft violet"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "cool stone"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "cocoa"),
             ],
             .lightSpring: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "apricot"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "peach"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "light camel"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "mist navy"),
             ],
         ],
 
@@ -69,17 +69,17 @@ enum VariationSlots {
             .softSummer: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "dusty plum"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "smoky periwinkle"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "muted charcoal"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "camel"),
             ],
             .softAutumn: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "soft copper"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "muted teal"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "warm taupe"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "slate"),
             ],
             .trueWinter: [
                 CuratedSubstitution(band: .accent,  targetIndex: 2, sourceColourName: "icy blue"),
                 CuratedSubstitution(band: .core,    targetIndex: 0, sourceColourName: "cobalt"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "icy grey"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "camel"),
             ],
         ],
 
@@ -88,12 +88,12 @@ enum VariationSlots {
             .trueSummer: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "berry mauve"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "soft violet"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "cool stone"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "cocoa"),
             ],
             .softAutumn: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "moss green"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "olive sage"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "olive beige"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "slate"),
             ],
         ],
 
@@ -102,17 +102,17 @@ enum VariationSlots {
             .trueAutumn: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "bronze"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "ochre"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "deep khaki"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "graphite"),
             ],
             .deepAutumn: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "copper"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "dark terracotta"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "bark brown"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "midnight olive"),
             ],
             .brightWinter: [
                 CuratedSubstitution(band: .accent,  targetIndex: 2, sourceColourName: "steel grey"),
                 CuratedSubstitution(band: .core,    targetIndex: 2, sourceColourName: "icy teal"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "ink navy"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "camel sand"),
             ],
         ],
 
@@ -121,12 +121,12 @@ enum VariationSlots {
             .deepAutumn: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "deep amber"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "forest teal"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "espresso"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "midnight olive"),
             ],
             .trueSpring: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "goldenrod"),
                 CuratedSubstitution(band: .core,    targetIndex: 2, sourceColourName: "marigold"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "warm stone"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "graphite"),
             ],
         ],
 
@@ -135,12 +135,12 @@ enum VariationSlots {
             .trueAutumn: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "warm auburn"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "ochre"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "cocoa"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "graphite"),
             ],
             .deepWinter: [
                 CuratedSubstitution(band: .accent,  targetIndex: 2, sourceColourName: "cool ruby"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "petrol"),
-                CuratedSubstitution(band: .neutral, targetIndex: 1, sourceColourName: "cool charcoal"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "cocoa"),
             ],
         ],
 
@@ -149,12 +149,12 @@ enum VariationSlots {
             .deepAutumn: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "copper"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "oxblood"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "warm charcoal"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "midnight olive"),
             ],
             .brightWinter: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "true red"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "royal blue"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "steel grey"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "camel sand"),
             ],
         ],
 
@@ -163,12 +163,12 @@ enum VariationSlots {
             .brightWinter: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "clear cyan"),
                 CuratedSubstitution(band: .core,    targetIndex: 2, sourceColourName: "magenta red"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "ink navy"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "camel sand"),
             ],
             .trueSummer: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "pewter"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "sage aqua"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "dove grey"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "cocoa"),
             ],
         ],
 
@@ -177,12 +177,12 @@ enum VariationSlots {
             .brightSpring: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "bright gold"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "bright teal"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "warm navy"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "slate"),
             ],
             .trueWinter: [
                 CuratedSubstitution(band: .accent,  targetIndex: 3, sourceColourName: "fuchsia red"),
                 CuratedSubstitution(band: .core,    targetIndex: 3, sourceColourName: "clear pine"),
-                CuratedSubstitution(band: .neutral, targetIndex: 3, sourceColourName: "icy grey"),
+                CuratedSubstitution(band: .support, targetIndex: 3, sourceColourName: "camel"),
             ],
         ],
     ]
@@ -234,6 +234,7 @@ enum VariationSlots {
         var neutrals = base.neutrals
         var cores = base.coreColours
         var accents = base.accentColours
+        var supports = base.supportColours ?? []
         var substitutions: [VariationSubstitution] = []
 
         for entry in activeEntries {
@@ -248,6 +249,10 @@ enum VariationSlots {
             case .accent:
                 original = accents[entry.targetIndex]
                 accents[entry.targetIndex] = entry.sourceColourName
+            case .support:
+                guard entry.targetIndex < supports.count else { continue }
+                original = supports[entry.targetIndex]
+                supports[entry.targetIndex] = entry.sourceColourName
             }
             substitutions.append(VariationSubstitution(
                 band: entry.band.rawValue,
@@ -261,7 +266,10 @@ enum VariationSlots {
         let variedPalette = PaletteTriadV4(
             neutrals: neutrals,
             coreColours: cores,
-            accentColours: accents
+            accentColours: accents,
+            supportColours: supports.isEmpty ? base.supportColours : supports,
+            lightAnchor: base.lightAnchor,
+            deepAnchor: base.deepAnchor
         )
         let trace = VariationTrace(
             pullFamily: pull.rawValue,

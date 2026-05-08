@@ -1,19 +1,3 @@
-//
-//  PaletteGridViewModel_Tests.swift
-//  Cosmic FitTests
-//
-//  V4 Palette Grid UI tests.
-//
-//  Covers:
-//   • ColourMath HSL round-trips and tonal-offset clamp boundaries.
-//   • PaletteGridViewModel happy path (4 neutral + 4 core + 4 accent → 12 filled rows).
-//   • Short-core fallback with V4 layout.
-//   • Malformed hex fallback to #808080 (no crash, grid still 12×5).
-//   • Determinism — byte-identical PaletteGrid across repeated builds.
-//   • Byte-identity snapshot against golden JSON for fixture users 1 and 2.
-//     Set REGENERATE_PALETTE_GRID_GOLDENS=1 to rewrite the goldens.
-//
-
 import Testing
 import Foundation
 @testable import Cosmic_Fit
@@ -22,17 +6,15 @@ import Foundation
 
 struct ColourMathTests {
 
-    // §11.2 — invalid hex returns nil.
     @Test("hexToHSL returns nil for malformed hex")
     func hexToHSLRejectsBadHex() {
         #expect(ColourMath.hexToHSL("") == nil)
         #expect(ColourMath.hexToHSL("abc") == nil)
         #expect(ColourMath.hexToHSL("#ZZZZZZ") == nil)
-        #expect(ColourMath.hexToHSL("#12345") == nil)       // 5 digits
-        #expect(ColourMath.hexToHSL("#1234567") == nil)     // 7 digits
+        #expect(ColourMath.hexToHSL("#12345") == nil)
+        #expect(ColourMath.hexToHSL("#1234567") == nil)
     }
 
-    // §11.2 — round-trip stays within 1 channel unit (±1/255).
     @Test("hexToHSL → hslToHex round-trip is within 1 channel unit")
     func hexRoundTripStable() {
         let samples = [
@@ -51,20 +33,6 @@ struct ColourMathTests {
                 channelDiff(input, output) <= 1,
                 "Round-trip drift > 1 channel for \(input) → \(output)"
             )
-        }
-    }
-
-    // §11.2 — tonal offsets applied to a sweep of L values never escape
-    // the expected clamp of [0.05, 0.95].
-    @Test("tonalOffsets + clamp stay within [0.05, 0.95]")
-    func tonalOffsetsClampToValidRange() {
-        let lValues = stride(from: 0.0, through: 1.0, by: 0.05)
-        for l in lValues {
-            for offset in ColourMath.tonalOffsets {
-                let clamped = min(max(l + offset, 0.05), 0.95)
-                #expect(clamped >= 0.05 && clamped <= 0.95,
-                        "L=\(l), offset=\(offset) → \(clamped) escaped clamp range")
-            }
         }
     }
 
@@ -98,10 +66,12 @@ struct PaletteGridViewModelTests {
     private static func v4Section(
         neutrals: [BlueprintColour] = fullNeutral,
         core: [BlueprintColour] = fullCore,
-        accent: [BlueprintColour] = fullAccent
+        accent: [BlueprintColour] = fullAccent,
+        support: [BlueprintColour]? = fullSupport
     ) -> PaletteSection {
         PaletteSection(
             neutrals: neutrals, coreColours: core, accentColours: accent,
+            supportColours: support,
             family: .deepAutumn, cluster: .deepWarmStructured,
             variables: DerivedVariables(
                 depth: .deep, temperature: .warm, saturation: .rich,
@@ -133,124 +103,277 @@ struct PaletteGridViewModelTests {
         colour("midnight", "#1F2A44", role: .accent),
     ]
 
+    private static let fullSupport: [BlueprintColour] = [
+        colour("ink navy",       "#1B2A4A", role: .support),
+        colour("cool charcoal",  "#3B3F42", role: .support),
+        colour("slate",          "#5B6770", role: .support),
+        colour("midnight olive", "#2F3A2B", role: .support),
+    ]
+
+    // MARK: - Helpers for new two-section structure
+
+    private static func allCells(from grid: PaletteGrid) -> [PaletteCell] {
+        grid.sections.flatMap(\.cells)
+    }
+
+    private static func mainSection(of grid: PaletteGrid) -> PaletteGrid.Section {
+        grid.sections[0]
+    }
+
+    private static func accentSection(of grid: PaletteGrid) -> PaletteGrid.Section {
+        grid.sections[1]
+    }
+
     // MARK: - Shape
 
-    @Test("Happy path: 4 neutral + 4 core + 4 accent → 12 filled rows, 5 filled cells each")
-    func happyPathAllFilled() {
+    @Test("Output has two sections with correct titles")
+    func hasTwoSections() {
         let grid = PaletteGridViewModel.build(from: Self.v4Section())
-
-        #expect(grid.rows.count == PaletteGrid.rowCount)
-        #expect(grid.rows.count == 12)
-
-        for (rowIndex, row) in grid.rows.enumerated() {
-            #expect(row.cells.count == PaletteGrid.columnCount)
-            #expect(row.anchorHex != nil, "Row \(rowIndex) should be filled")
-            for cell in row.cells {
-                if case .empty = cell.kind {
-                    Issue.record("Row \(rowIndex) has empty cell in a filled row")
-                }
-            }
-        }
-
-        let neutralRows = Array(grid.rows.prefix(PaletteGrid.neutralRowCount))
-        let coreRows = Array(grid.rows[PaletteGrid.neutralRowCount..<(PaletteGrid.neutralRowCount + PaletteGrid.coreRowCount)])
-        let accentRows = Array(grid.rows.suffix(PaletteGrid.accentRowCount))
-        #expect(neutralRows.allSatisfy { $0.role == .neutral })
-        #expect(coreRows.allSatisfy { $0.role == .core })
-        #expect(accentRows.allSatisfy { $0.role == .accent })
+        #expect(grid.sections.count == 2)
+        #expect(grid.sections[0].title == "Core Palette")
+        #expect(grid.sections[1].title == "Accent Colours")
     }
 
-    @Test("Short core: 3 core → one empty core row padded, all neutrals and accents filled")
-    func shortCorePadsWithEmptyRow() {
-        let shortCore = Array(Self.fullCore.prefix(3))
-        let grid = PaletteGridViewModel.build(from: Self.v4Section(core: shortCore))
+    @Test("Main section has 16 cells (4x4), accent section has 4 cells")
+    func producesExpectedCellCounts() {
+        let grid = PaletteGridViewModel.build(from: Self.v4Section())
+        #expect(Self.mainSection(of: grid).cells.count == 16)
+        #expect(Self.accentSection(of: grid).cells.count == 4)
 
-        #expect(grid.rows.count == PaletteGrid.rowCount)
-
-        let coreStart = PaletteGrid.neutralRowCount
-        let row4 = grid.rows[coreStart]
-        let row6 = grid.rows[coreStart + 2]
-        let row7 = grid.rows[coreStart + 3]
-        let row8 = grid.rows[coreStart + 4]
-
-        #expect(row4.anchorHex != nil)
-        #expect(row6.anchorHex != nil)
-        #expect(row7.anchorHex == nil)
-        #expect(row7.anchorName == nil)
-        #expect(row7.role == .core)
-        for cell in row7.cells {
-            if case .filled = cell.kind {
-                Issue.record("Padded core row should contain only empty cells")
-            }
+        var mainFilled = 0
+        for cell in Self.mainSection(of: grid).cells {
+            if case .filled = cell.kind { mainFilled += 1 }
         }
+        #expect(mainFilled == 12, "Expected 12 filled main cells (4 neutral + 4 core + 4 support, no anchors/signatures in fixture), got \(mainFilled)")
 
-        #expect(row8.anchorHex != nil)
-        #expect(row8.role == .accent)
+        var accentFilled = 0
+        for cell in Self.accentSection(of: grid).cells {
+            if case .filled = cell.kind { accentFilled += 1 }
+        }
+        #expect(accentFilled == 4, "Expected 4 filled accent cells, got \(accentFilled)")
     }
 
-    @Test("Malformed hex anchor: row is fully filled with the fallback sentinel")
-    func malformedHexFallsBackToSentinel() {
-        let badCore = [Self.colour("glitch", "not-a-hex", role: .core)]
-        let grid = PaletteGridViewModel.build(from: Self.v4Section(core: badCore))
+    @Test("Accent section preserves template order (not Lab-sorted)")
+    func accentSectionPreservesTemplateOrder() {
+        let grid = PaletteGridViewModel.build(from: Self.v4Section())
+        let accentNames = Self.accentSection(of: grid).cells.compactMap { cell -> String? in
+            guard case .filled(_, let name) = cell.kind else { return nil }
+            return name
+        }
+        #expect(accentNames == ["saffron", "rose", "teal", "midnight"])
+    }
 
-        let coreStart = PaletteGrid.neutralRowCount
-        let row = grid.rows[coreStart]
-        #expect(row.anchorHex == "not-a-hex")
-        #expect(row.anchorName == "glitch")
-        #expect(row.cells.count == PaletteGrid.columnCount)
+    // MARK: - Greedy Lab chain (main section only)
 
-        for cell in row.cells {
-            guard case .filled(let hex) = cell.kind else {
-                Issue.record("Expected filled cell on malformed-hex row, got empty")
-                continue
+    @Test("Main section chain seeds with the lightest (highest Lab L*) swatch")
+    func chainSeedsWithLightestSwatch() {
+        let section = Self.v4Section(
+            neutrals: [
+                Self.colour("deep-teal",  "#14444E", role: .neutral),
+                Self.colour("mid-rust",   "#8A3B1F", role: .neutral),
+                Self.colour("paper",      "#F8F2E3", role: .neutral),
+                Self.colour("deep-brown", "#2B1B0F", role: .neutral),
+            ],
+            core: [
+                Self.colour("mustard", "#C7A02B", role: .core),
+                Self.colour("forest",  "#254D32", role: .core),
+                Self.colour("coral",   "#D07556", role: .core),
+                Self.colour("plum",    "#4A1F3A", role: .core),
+            ],
+            accent: [
+                Self.colour("aubergine", "#2E1221", role: .accent),
+                Self.colour("ochre",     "#B78328", role: .accent),
+                Self.colour("teal",      "#2F6B6B", role: .accent),
+                Self.colour("oxblood",   "#541517", role: .accent),
+            ],
+            support: [
+                Self.colour("slate",   "#566270", role: .support),
+                Self.colour("cocoa",   "#40261B", role: .support),
+                Self.colour("saffron", "#D89A2E", role: .support),
+                Self.colour("moss",    "#4E5A2D", role: .support),
+            ]
+        )
+
+        let grid = PaletteGridViewModel.build(from: section)
+        let mainCells = Self.mainSection(of: grid).cells
+        guard case .filled(_, let firstName) = mainCells[0].kind else {
+            Issue.record("First cell not filled")
+            return
+        }
+        #expect(firstName == "paper",
+                "Chain must seed with the lightest (Lab L*) swatch; got '\(firstName)'")
+    }
+
+    @Test("Main section chain is 2-opt locally optimal in Lab space")
+    func chainIs2OptLocallyOptimal() {
+        let section = Self.v4Section(
+            neutrals: [
+                Self.colour("cream",     "#F2E8D4", role: .neutral),
+                Self.colour("camel",     "#C19A6B", role: .neutral),
+                Self.colour("bark",      "#3D2C1F", role: .neutral),
+                Self.colour("ink-brown", "#2B1E15", role: .neutral),
+            ],
+            core: [
+                Self.colour("saffron",   "#D89A2E", role: .core),
+                Self.colour("teal",      "#2F6B6B", role: .core),
+                Self.colour("rust",      "#A0421F", role: .core),
+                Self.colour("forest",    "#254D32", role: .core),
+            ],
+            accent: [
+                Self.colour("mustard",   "#C7A02B", role: .accent),
+                Self.colour("slate",     "#566270", role: .accent),
+                Self.colour("oxblood",   "#541517", role: .accent),
+                Self.colour("moss",      "#4E5A2D", role: .accent),
+            ],
+            support: [
+                Self.colour("sand",      "#E1C69A", role: .support),
+                Self.colour("plum",      "#4A1F3A", role: .support),
+                Self.colour("paper",     "#F8F2E3", role: .support),
+                Self.colour("charcoal",  "#333333", role: .support),
+            ]
+        )
+
+        let grid = PaletteGridViewModel.build(from: section)
+        let hexes: [String] = Self.mainSection(of: grid).cells.compactMap { cell in
+            guard case .filled(let hex, _) = cell.kind else { return nil }
+            return hex
+        }
+        #expect(hexes.count >= 4)
+
+        func totalCost(_ path: [String]) -> Double {
+            var sum = 0.0
+            for k in 1..<path.count {
+                sum += ColourMath.labDistanceSquared(path[k - 1], path[k])
             }
-            #expect(hex.caseInsensitiveCompare(PaletteGridViewModel.malformedHexFallback) == .orderedSame,
-                    "Expected \(PaletteGridViewModel.malformedHexFallback), got \(hex)")
+            return sum
+        }
+
+        let baseCost = totalCost(hexes)
+        for i in 1..<(hexes.count - 1) {
+            for j in (i + 1)..<hexes.count {
+                var swapped = hexes
+                swapped[i...j].reverse()
+                let newCost = totalCost(swapped)
+                #expect(newCost + 1e-9 >= baseCost,
+                        "2-opt violation at (i=\(i), j=\(j)): reversing shortens chain from \(baseCost) to \(newCost)")
+            }
         }
     }
 
-    @Test("Determinism: 10 rebuilds from the same PaletteSection are byte-identical")
-    func determinismAcrossRebuilds() {
-        let s = Self.v4Section()
-        let first = PaletteGridViewModel.build(from: s)
+    @Test("Determinism: repeated builds yield identical grids")
+    func deterministicBuild() {
+        let section = Self.v4Section()
+        let first = PaletteGridViewModel.build(from: section)
         for run in 1..<10 {
-            let repeated = PaletteGridViewModel.build(from: s)
+            let repeated = PaletteGridViewModel.build(from: section)
             #expect(repeated == first, "Rebuild #\(run) diverged from first")
         }
     }
 
-    @Test("Filled row produces 5 well-formed hex tones in toneIndex order")
-    func filledRowProducesFiveValidHexTones() {
-        let grid = PaletteGridViewModel.build(from: Self.v4Section())
+    @Test("Fewer than 16 main inputs pads trailing cells with .empty")
+    func padsShortInputs() {
+        let section = Self.v4Section(support: nil)
+        let grid = PaletteGridViewModel.build(from: section)
+        let mainCells = Self.mainSection(of: grid).cells
 
-        let row = grid.rows[0]
-        for (index, cell) in row.cells.enumerated() {
-            #expect(cell.toneIndex == index)
-            guard case .filled(let hex) = cell.kind else {
-                Issue.record("Expected filled cell at index \(index)")
-                continue
+        #expect(mainCells.count == 16)
+
+        var filledCount = 0
+        for cell in mainCells {
+            if case .filled = cell.kind { filledCount += 1 }
+        }
+        #expect(filledCount == 8, "Expected 8 filled (4 neutral + 4 core, no support/anchors), got \(filledCount)")
+
+        for i in 8..<16 {
+            if case .filled = mainCells[i].kind {
+                Issue.record("Expected trailing cell \(i) to be .empty")
             }
-            #expect(ColourMath.hexToHSL(hex) != nil, "Produced cell hex \(hex) failed to parse")
         }
     }
 
-    @Test("nonEmptyRowCount reflects the number of anchored rows")
-    func nonEmptyRowCountMatchesFilledRows() {
-        let grid = PaletteGridViewModel.build(from: Self.v4Section(
-            core: Array(Self.fullCore.prefix(3))
-        ))
-        #expect(grid.nonEmptyRowCount == 11)
+    @Test("Similar hues land adjacent in main section: petrol / teal / forest-green together")
+    func similarHuesAdjacent() {
+        let petrol = Self.colour("petrol", "#1B3A4B", role: .neutral)
+        let teal   = Self.colour("teal",   "#3C7A85", role: .core)
+        let forest = Self.colour("forest", "#254D32", role: .core)
+
+        let others: [BlueprintColour] = [
+            Self.colour("red-1",    "#C0392B", role: .neutral),
+            Self.colour("red-2",    "#B22222", role: .neutral),
+            Self.colour("red-3",    "#E74C3C", role: .neutral),
+            Self.colour("orange-1", "#E67E22", role: .core),
+            Self.colour("orange-2", "#D35400", role: .core),
+            Self.colour("yellow-1", "#F1C40F", role: .support),
+            Self.colour("yellow-2", "#E8D93A", role: .support),
+            Self.colour("purple-1", "#8E44AD", role: .support),
+            Self.colour("purple-2", "#6A1B9A", role: .support),
+        ]
+
+        let neutrals = [petrol] + others.filter { $0.role == .neutral }
+        let core = [teal, forest] + others.filter { $0.role == .core }
+        let support = others.filter { $0.role == .support }
+
+        let section = Self.v4Section(
+            neutrals: neutrals,
+            core: core,
+            accent: Self.fullAccent,
+            support: support
+        )
+        let grid = PaletteGridViewModel.build(from: section)
+        let mainCells = Self.mainSection(of: grid).cells
+
+        let targetNames: Set<String> = ["petrol", "teal", "forest"]
+        let indices = mainCells.enumerated().compactMap { pair -> Int? in
+            guard case .filled(_, let name) = pair.element.kind,
+                  targetNames.contains(name) else { return nil }
+            return pair.offset
+        }
+        #expect(indices.count == 3, "Expected 3 target cells, got \(indices.count)")
+        if indices.count == 3 {
+            let sorted = indices.sorted()
+            #expect(sorted[2] - sorted[0] == 2,
+                    "petrol/teal/forest should be contiguous; got indices \(sorted)")
+        }
+    }
+
+    // MARK: - Malformed hex
+
+    @Test("Malformed hex anchor: produces a filled cell backed by the fallback sentinel")
+    func malformedHexFallsBackToSentinel() {
+        let badCore: [BlueprintColour] = [
+            Self.colour("glitch",  "not-a-hex", role: .core),
+            Self.fullCore[1],
+            Self.fullCore[2],
+            Self.fullCore[3],
+        ]
+        let grid = PaletteGridViewModel.build(from: Self.v4Section(core: badCore))
+        let mainCells = Self.mainSection(of: grid).cells
+
+        #expect(mainCells.count == 16)
+
+        var filledCount = 0
+        var fallbackCount = 0
+        for cell in mainCells {
+            guard case .filled(let hex, let name) = cell.kind else { continue }
+            filledCount += 1
+            if hex.caseInsensitiveCompare(PaletteGridViewModel.malformedHexFallback) == .orderedSame,
+               name == "glitch" {
+                fallbackCount += 1
+            }
+        }
+        #expect(filledCount == 12, "Malformed anchor should still produce a filled cell (12 from neutral+core+support)")
+        #expect(fallbackCount == 1, "Exactly one fallback-hex cell expected, got \(fallbackCount)")
+    }
+
+    // MARK: - Helpers
+
+    private static func nameOf(_ cell: PaletteCell) -> String {
+        if case .filled(_, let name) = cell.kind { return name }
+        return ""
     }
 }
 
-// MARK: - §11.3 Golden fixture snapshots
-//
-// Asserts byte-identical `PaletteGrid` output for the two fixture users
-// against a committed golden JSON file. Any unintended change to
-// `PaletteGridViewModel.build` or `ColourMath` tone expansion will
-// trip these tests; intentional changes require regenerating the
-// goldens by re-running with `REGENERATE_PALETTE_GRID_GOLDENS=1`
-// in the environment, then committing the updated files.
+// MARK: - §5 Golden fixture snapshots
 
 struct PaletteGridGoldenSnapshotTests {
 
@@ -290,9 +413,6 @@ struct PaletteGridGoldenSnapshotTests {
         }
 
         if current != expected {
-            // Write the current output beside the golden with a `.actual`
-            // suffix so CI artifacts can be diffed. The file is not part
-            // of the commit set; it is purely a debugging aid.
             let actualURL = goldenURL.appendingPathExtension("actual")
             try? current.write(to: actualURL, options: [.atomic])
 
@@ -312,10 +432,6 @@ struct PaletteGridGoldenSnapshotTests {
 }
 
 // MARK: - Snapshot support (test-only)
-//
-// Canonical JSON encoder for `PaletteGrid`. Kept private to the test
-// target so the production `PaletteGrid` stays minimal (Foundation-only,
-// no Codable surface) while still letting us diff byte-for-byte.
 
 enum GoldenSnapshotSupport {
 
@@ -325,8 +441,8 @@ enum GoldenSnapshotSupport {
 
     static func fixturesURL() -> URL {
         URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent()    // Cosmic FitTests/
-            .deletingLastPathComponent()    // repo root
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
             .appendingPathComponent("docs")
             .appendingPathComponent("fixtures")
     }
@@ -339,12 +455,6 @@ enum GoldenSnapshotSupport {
         return try decoder.decode(CosmicBlueprint.self, from: data)
     }
 
-    /// Produce a canonical JSON representation of a `PaletteGrid`. Keys
-    /// are sorted and output is pretty-printed so the committed golden
-    /// is human-diffable. The encoding is stable across machines and
-    /// Xcode versions — `JSONEncoder.OutputFormatting.sortedKeys` +
-    /// `prettyPrinted` is documented to produce deterministic byte
-    /// output for a given input.
     static func canonicalJSON(for grid: PaletteGrid) throws -> Data {
         let snapshot = PaletteGridSnapshot(from: grid)
         let encoder = JSONEncoder()
@@ -355,57 +465,46 @@ enum GoldenSnapshotSupport {
     // MARK: - Codable mirror
 
     fileprivate struct PaletteGridSnapshot: Codable, Equatable {
-        let rows: [PaletteRowSnapshot]
+        let sections: [SectionSnapshot]
 
         init(from grid: PaletteGrid) {
-            self.rows = grid.rows.map(PaletteRowSnapshot.init(from:))
+            self.sections = grid.sections.map(SectionSnapshot.init(from:))
         }
     }
 
-    fileprivate struct PaletteRowSnapshot: Codable, Equatable {
-        let role: String
-        let anchorName: String?
-        let anchorHex: String?
+    fileprivate struct SectionSnapshot: Codable, Equatable {
+        let title: String
+        let columnCount: Int
         let cells: [PaletteCellSnapshot]
 
-        init(from row: PaletteRow) {
-            self.role = row.role.rawValue
-            self.anchorName = row.anchorName
-            self.anchorHex = row.anchorHex
-            self.cells = row.cells.map(PaletteCellSnapshot.init(from:))
+        init(from section: PaletteGrid.Section) {
+            self.title = section.title
+            self.columnCount = section.columnCount
+            self.cells = section.cells.map(PaletteCellSnapshot.init(from:))
         }
     }
 
-    /// Uses `hex: String?` (null for empty cells) as the stable on-disk
-    /// shape. Preferred over a discriminated-union because it stays
-    /// trivially diff-readable in PR review.
     fileprivate struct PaletteCellSnapshot: Codable, Equatable {
-        let toneIndex: Int
         let hex: String?
+        let anchorName: String?
 
         init(from cell: PaletteCell) {
-            self.toneIndex = cell.toneIndex
             switch cell.kind {
-            case .filled(let hex): self.hex = hex
-            case .empty:           self.hex = nil
+            case .filled(let hex, let name):
+                self.hex = hex
+                self.anchorName = name
+            case .empty:
+                self.hex = nil
+                self.anchorName = nil
             }
         }
     }
 }
 
 // MARK: - P5 Live-wiring integration tests
-//
-// Validates the end-to-end path introduced by the P5 palette live-wiring:
-//   BlueprintStorage.load() → CosmicBlueprint.palette → PaletteGridViewModel.build → PaletteGrid
-//
-// Tests that touch BlueprintStorage.shared mutate a shared file on disk
-// (Documents/cosmic_fit_blueprint.json), so the suite MUST be serialized
-// to prevent parallel tests from racing on the same file.
 
 @Suite(.serialized)
 struct PaletteLiveWiringTests {
-
-    // MARK: - Round-trip: save fixture → load → build grid → compare
 
     @Test("Live path produces identical grid to direct build from fixture palette")
     func livePathMatchesDirectBuild() throws {
@@ -425,8 +524,6 @@ struct PaletteLiveWiringTests {
                 "Grid built from storage-round-tripped blueprint must match direct build")
     }
 
-    // MARK: - Fallback
-
     @Test("BlueprintStorage.load returns nil when no file exists")
     func emptyStorageReturnsNil() {
         BlueprintStorage.shared.delete()
@@ -443,32 +540,33 @@ struct PaletteLiveWiringTests {
         #expect(loaded == nil)
 
         let grid = ColourPaletteView.placeholder()
-        #expect(grid.rows.count == PaletteGrid.rowCount)
-        #expect(grid.nonEmptyRowCount == PaletteGrid.rowCount,
-                "Placeholder grid should have all 12 rows filled")
-        for row in grid.rows {
-            #expect(row.cells.count == PaletteGrid.columnCount)
-            #expect(row.anchorHex != nil, "Placeholder row should have an anchor")
+        #expect(grid.sections.count == 2)
+
+        let mainFilled = grid.sections[0].cells.reduce(into: 0) { acc, cell in
+            if case .filled = cell.kind { acc += 1 }
         }
+        let accentFilled = grid.sections[1].cells.reduce(into: 0) { acc, cell in
+            if case .filled = cell.kind { acc += 1 }
+        }
+        #expect(mainFilled == 16,
+                "Placeholder main section should have 16 filled cells (4 neutral + 4 core + 4 support + 2 anchors + 2 signatures), got \(mainFilled)")
+        #expect(accentFilled == 4,
+                "Placeholder accent section should have 4 filled cells, got \(accentFilled)")
 
         let second = ColourPaletteView.placeholder()
         #expect(grid == second, "Placeholder must be deterministic across calls")
     }
 
-    // MARK: - PaletteSection validity from real fixtures
-
-    @Test("Fixture palette sections meet legacy contract (3-4 core, 4 accent)",
+    @Test("Fixture palette sections meet legacy contract (3-4 core, 2+ accent)",
           arguments: ["blueprint_input_user_1.json", "blueprint_input_user_2.json"])
     func fixturePaletteContract(filename: String) throws {
         let blueprint = try GoldenSnapshotSupport.loadBlueprint(filename)
         let section = blueprint.palette
         #expect((3...4).contains(section.coreColours.count),
                 "Core count \(section.coreColours.count) outside [3,4] for \(filename)")
-        #expect(section.accentColours.count == 4,
-                "Accent count \(section.accentColours.count) != 4 for \(filename)")
+        #expect(section.accentColours.count >= 2,
+                "Accent count \(section.accentColours.count) < 2 for \(filename)")
     }
-
-    // MARK: - Notification
 
     @Test("BlueprintStorage.save posts .blueprintDidUpdate notification")
     @MainActor func savePostsNotification() throws {
@@ -486,8 +584,6 @@ struct PaletteLiveWiringTests {
     }
 }
 
-/// Reference-type observer so the notification callback can mutate
-/// `received` and the test can poll it after calling `save()`.
 private final class NotificationFlag {
     var received = false
     var observer: NSObjectProtocol?

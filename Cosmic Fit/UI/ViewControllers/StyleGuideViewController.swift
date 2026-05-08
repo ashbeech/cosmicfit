@@ -510,9 +510,19 @@ final class StyleGuideViewController: UIViewController {
             let colourPalette = ColourPaletteView()
             let grid = buildLivePaletteGrid() ?? ColourPaletteView.placeholder()
             colourPalette.configure(with: grid)
-            #if DEBUG
-            colourPalette.showsDevelopmentAnchorNames = true
-            #endif
+
+
+            let paletteContainer = UIView()
+            paletteContainer.translatesAutoresizingMaskIntoConstraints = false
+            paletteContainer.addSubview(colourPalette)
+            colourPalette.translatesAutoresizingMaskIntoConstraints = false
+
+            NSLayoutConstraint.activate([
+                colourPalette.topAnchor.constraint(equalTo: paletteContainer.topAnchor),
+                colourPalette.leadingAnchor.constraint(equalTo: paletteContainer.leadingAnchor),
+                colourPalette.trailingAnchor.constraint(equalTo: paletteContainer.trailingAnchor),
+                colourPalette.bottomAnchor.constraint(equalTo: paletteContainer.bottomAnchor),
+            ])
 
             let narrativeText = bp?.palette.narrativeText.nonEmpty
             let para1 = narrativeText
@@ -527,14 +537,12 @@ final class StyleGuideViewController: UIViewController {
                     bodyText: "Flashes of considered tones like oxidised gold, dusty rose, or a deep burnt saffron add depth. Keep these accents as a highlight rather than the main story. They show that you are adventurous under the surface. It is about creating a look that stays timeless. Aim for colours that feel organic and permanent."
                 ))
             }
-            textSections.append(StyleGuideDetailContent.TextSection(subheading: "Personal Palette", bodyText: ""))
-
             return StyleGuideDetailContent(
                 sectionType: .palette,
                 title: "The Palette",
                 iconImageName: "colour_guide_glyph",
                 textSections: textSections,
-                customComponent: colourPalette
+                customComponent: paletteContainer
             )
 
         case .occasions:

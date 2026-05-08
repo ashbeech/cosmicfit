@@ -1514,7 +1514,7 @@ class DailyFitViewController: UIViewController {
         } else if let tokens = extractTokensFromContent(content) {
             colourPaletteContainer.configure(with: tokens)
         }
-        
+
         print("Content updated with new layout structure")
     }
     

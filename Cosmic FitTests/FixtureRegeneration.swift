@@ -75,8 +75,8 @@ struct FixtureRegeneration {
         decoder.dateDecodingStrategy = .iso8601
         let fixture = try decoder.decode(CosmicBlueprint.self, from: data)
 
-        #expect(fixture.palette.accentColours.count == 4,
-                "Fixture \(filename) must have exactly 4 accents")
+        #expect(fixture.palette.accentColours.count >= 2,
+                "Fixture \(filename) must have at least 2 accents")
         #expect(fixture.palette.coreColours.count >= 3,
                 "Fixture \(filename) must have at least 3 core colours")
     }
@@ -119,8 +119,8 @@ struct FixtureRegeneration {
 
         // Contract check — no point regenerating if the new shape violates
         // the §11.4 updated checklist.
-        #expect(frozen.palette.accentColours.count == 4,
-                "Regenerated fixture \(fixtureFilename) must have exactly 4 accents")
+        #expect(frozen.palette.accentColours.count >= 2,
+                "Regenerated fixture \(fixtureFilename) must have at least 2 accents")
         #expect(frozen.palette.coreColours.count >= 3,
                 "Regenerated fixture \(fixtureFilename) must have at least 3 core colours")
     }

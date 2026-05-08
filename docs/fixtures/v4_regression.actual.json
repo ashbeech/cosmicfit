@@ -1,1039 +1,601 @@
 [
   {
-    "actual" : "honey yellow, peach, aqua mint, vivid yellow",
-    "expected" : "honey yellow, peach, aqua mint, lime",
-    "field" : "palette.coreColours",
-    "id" : "U001"
-  },
-  {
-    "actual" : "apricot, soft gold, clear aqua, bright gold",
-    "expected" : "apricot, soft gold, clear aqua, fresh leaf",
+    "actual" : "#056463, #865373, #2E766B, #7E1B2F",
+    "expected" : "#A4965D, #D14649, #731632, #CB674C",
     "field" : "palette.accentColours",
     "id" : "U001"
   },
   {
-    "actual" : "honey yellow, peach, aqua mint, vivid yellow",
-    "expected" : "honey yellow, peach, aqua mint, lime",
-    "field" : "palette.coreColours",
-    "id" : "U002"
-  },
-  {
-    "actual" : "apricot, soft gold, clear aqua, bright gold",
-    "expected" : "apricot, soft gold, clear aqua, fresh leaf",
+    "actual" : "#00706F, #366064, #005E64, #82312E",
+    "expected" : "#D48F46, #89744D, #7E1B2F, #AE4D37",
     "field" : "palette.accentColours",
     "id" : "U002"
   },
   {
-    "actual" : "honey yellow, peach, aqua mint, vivid yellow",
-    "expected" : "honey yellow, peach, aqua mint, lime",
-    "field" : "palette.coreColours",
-    "id" : "U003"
-  },
-  {
-    "actual" : "apricot, soft gold, clear aqua, bright gold",
-    "expected" : "apricot, soft gold, clear aqua, fresh leaf",
+    "actual" : "#00706F, #005D69, #7E1B2F, #CB674C",
+    "expected" : "#D48F46, #D39C41, #7E1B2F, #89744D",
     "field" : "palette.accentColours",
     "id" : "U003"
   },
   {
-    "actual" : "honey yellow, peach, aqua mint, vivid yellow",
-    "expected" : "honey yellow, peach, aqua mint, lime",
-    "field" : "palette.coreColours",
-    "id" : "U004"
-  },
-  {
-    "actual" : "apricot, soft gold, clear aqua, bright gold",
-    "expected" : "apricot, soft gold, clear aqua, fresh leaf",
+    "actual" : "#056463, #82312E, #D14649, #CA692D",
+    "expected" : "#CB674C, #A4965D, #731632, #B69A6C",
     "field" : "palette.accentColours",
     "id" : "U004"
   },
   {
-    "actual" : "honey yellow, peach, aqua mint, vivid yellow",
-    "expected" : "honey yellow, peach, aqua mint, lime",
-    "field" : "palette.coreColours",
-    "id" : "U005"
-  },
-  {
-    "actual" : "apricot, soft gold, clear aqua, bright gold",
-    "expected" : "apricot, soft gold, clear aqua, fresh leaf",
+    "actual" : "#386B6C, #005D69, #00706F, #AE4D37",
+    "expected" : "#AE4D37, #C79538, #CA692D, #DCAEAB",
     "field" : "palette.accentColours",
     "id" : "U005"
   },
   {
-    "actual" : "honey yellow, peach, aqua mint, vivid yellow",
-    "expected" : "honey yellow, peach, aqua mint, lime",
-    "field" : "palette.coreColours",
-    "id" : "U006"
-  },
-  {
-    "actual" : "apricot, soft gold, clear aqua, bright gold",
-    "expected" : "apricot, soft gold, clear aqua, fresh leaf",
+    "actual" : "#865373, #00706F, #005D69, #82312E",
+    "expected" : "#DB868C, #89744D, #731632, #95824F",
     "field" : "palette.accentColours",
     "id" : "U006"
   },
   {
-    "actual" : "marigold, coral, fresh green, electric blue",
-    "expected" : "marigold, coral, fresh green, clear turquoise",
-    "field" : "palette.coreColours",
-    "id" : "U007"
-  },
-  {
-    "actual" : "tomato red, goldenrod, bright jade, bright gold",
-    "expected" : "tomato red, goldenrod, bright jade, clear aqua",
+    "actual" : "#005E64, #2E766B, #CA692D, #E96675",
+    "expected" : "#CB674C, #D48F46, #CA692D, #E96675",
     "field" : "palette.accentColours",
     "id" : "U007"
   },
   {
-    "actual" : "marigold, coral, fresh green, electric blue",
-    "expected" : "marigold, coral, fresh green, clear turquoise",
-    "field" : "palette.coreColours",
-    "id" : "U008"
-  },
-  {
-    "actual" : "tomato red, goldenrod, bright jade, bright gold",
-    "expected" : "tomato red, goldenrod, bright jade, clear aqua",
+    "actual" : "#3C746F, #005D69, #7E1B2F, #C47A3E",
+    "expected" : "#C47A3E, #83712B, #7E1B2F, #DFA74B",
     "field" : "palette.accentColours",
     "id" : "U008"
   },
   {
-    "actual" : "marigold, coral, fresh green, electric blue",
-    "expected" : "marigold, coral, fresh green, clear turquoise",
-    "field" : "palette.coreColours",
-    "id" : "U009"
-  },
-  {
-    "actual" : "tomato red, goldenrod, bright jade, bright gold",
-    "expected" : "tomato red, goldenrod, bright jade, clear aqua",
+    "actual" : "#00656E, #2D6D68, #7E1B2F, #736C29",
+    "expected" : "#736C29, #A4965D, #7E1B2F, #D48F46",
     "field" : "palette.accentColours",
     "id" : "U009"
   },
   {
-    "actual" : "marigold, coral, fresh green, electric blue",
-    "expected" : "marigold, coral, fresh green, clear turquoise",
-    "field" : "palette.coreColours",
-    "id" : "U010"
-  },
-  {
-    "actual" : "tomato red, goldenrod, bright jade, bright gold",
-    "expected" : "tomato red, goldenrod, bright jade, clear aqua",
+    "actual" : "#00656E, #366064, #2D6D68, #7E1B2F",
+    "expected" : "#C47A3E, #736C29, #7E1B2F, #A4965D",
     "field" : "palette.accentColours",
     "id" : "U010"
   },
   {
-    "actual" : "marigold, coral, fresh green, electric blue",
-    "expected" : "marigold, coral, fresh green, clear turquoise",
-    "field" : "palette.coreColours",
-    "id" : "U011"
-  },
-  {
-    "actual" : "tomato red, goldenrod, bright jade, bright gold",
-    "expected" : "tomato red, goldenrod, bright jade, clear aqua",
+    "actual" : "#865373, #82312E, #00656E, #AE4D37",
+    "expected" : "#AE4D37, #731632, #CA692D, #D48F46",
     "field" : "palette.accentColours",
     "id" : "U011"
   },
   {
-    "actual" : "marigold, coral, fresh green, electric blue",
-    "expected" : "marigold, coral, fresh green, clear turquoise",
-    "field" : "palette.coreColours",
-    "id" : "U012"
-  },
-  {
-    "actual" : "tomato red, goldenrod, bright jade, bright gold",
-    "expected" : "tomato red, goldenrod, bright jade, clear aqua",
+    "actual" : "#865373, #005E64, #82312E, #AE4D37",
+    "expected" : "#AE4D37, #CA692D, #731632, #A4965D",
     "field" : "palette.accentColours",
     "id" : "U012"
   },
   {
-    "actual" : "marigold, coral, fresh green, electric blue",
-    "expected" : "marigold, coral, fresh green, clear turquoise",
-    "field" : "palette.coreColours",
-    "id" : "U013"
-  },
-  {
-    "actual" : "tomato red, goldenrod, bright jade, bright gold",
-    "expected" : "tomato red, goldenrod, bright jade, clear aqua",
+    "actual" : "#3C746F, #00656E, #005E64, #7E1B2F",
+    "expected" : "#E96675, #D48F46, #731632, #AE4D37",
     "field" : "palette.accentColours",
     "id" : "U013"
   },
   {
-    "actual" : "marigold, coral, fresh green, electric blue",
-    "expected" : "marigold, coral, fresh green, clear turquoise",
-    "field" : "palette.coreColours",
-    "id" : "U014"
-  },
-  {
-    "actual" : "tomato red, goldenrod, bright jade, bright gold",
-    "expected" : "tomato red, goldenrod, bright jade, clear aqua",
+    "actual" : "#005E64, #865373, #2E766B, #366064",
+    "expected" : "#C47A3E, #DB868C, #AE4D37, #DCAEAB",
     "field" : "palette.accentColours",
     "id" : "U014"
   },
   {
-    "actual" : "poppy, bright teal, vivid yellow, royal blue",
-    "expected" : "poppy, bright teal, vivid yellow, electric blue",
-    "field" : "palette.coreColours",
-    "id" : "U015"
-  },
-  {
-    "actual" : "lacquer coral, acid lime, bright gold, clear cyan",
-    "expected" : "lacquer coral, acid lime, bright gold, clear aqua",
+    "actual" : "#00818A, #A36B89, #21776B, #762249",
+    "expected" : "#0095A0, #70B8AE, #751A2F, #009C9A",
     "field" : "palette.accentColours",
     "id" : "U015"
   },
   {
-    "actual" : "poppy, bright teal, vivid yellow, royal blue",
-    "expected" : "poppy, bright teal, vivid yellow, electric blue",
-    "field" : "palette.coreColours",
-    "id" : "U016"
-  },
-  {
-    "actual" : "lacquer coral, acid lime, bright gold, clear cyan",
-    "expected" : "lacquer coral, acid lime, bright gold, clear aqua",
+    "actual" : "#387C7E, #007788, #2F9097, #D35D70",
+    "expected" : "#D35D70, #25515B, #8A4484, #C9984A",
     "field" : "palette.accentColours",
     "id" : "U016"
   },
   {
-    "actual" : "poppy, bright teal, vivid yellow, royal blue",
-    "expected" : "poppy, bright teal, vivid yellow, electric blue",
-    "field" : "palette.coreColours",
-    "id" : "U017"
-  },
-  {
-    "actual" : "lacquer coral, acid lime, bright gold, clear cyan",
-    "expected" : "lacquer coral, acid lime, bright gold, clear aqua",
+    "actual" : "#2F9097, #387C7E, #007788, #762249",
+    "expected" : "#6FB1AF, #25515B, #751A2F, #D35D70",
     "field" : "palette.accentColours",
     "id" : "U017"
   },
   {
-    "actual" : "poppy, bright teal, vivid yellow, royal blue",
-    "expected" : "poppy, bright teal, vivid yellow, electric blue",
-    "field" : "palette.coreColours",
-    "id" : "U018"
-  },
-  {
-    "actual" : "lacquer coral, acid lime, bright gold, clear cyan",
-    "expected" : "lacquer coral, acid lime, bright gold, clear aqua",
+    "actual" : "#007788, #762249, #8A4484, #25515B",
+    "expected" : "#8A4484, #25515B, #751A2F, #D35D70",
     "field" : "palette.accentColours",
     "id" : "U018"
   },
   {
-    "actual" : "poppy, bright teal, vivid yellow, royal blue",
-    "expected" : "poppy, bright teal, vivid yellow, electric blue",
-    "field" : "palette.coreColours",
-    "id" : "U019"
-  },
-  {
-    "actual" : "lacquer coral, acid lime, bright gold, clear cyan",
-    "expected" : "lacquer coral, acid lime, bright gold, clear aqua",
+    "actual" : "#5E8B91, #A36B89, #387C7E, #762249",
+    "expected" : "#D18A9F, #25515B, #751A2F, #6FB1AF",
     "field" : "palette.accentColours",
     "id" : "U019"
   },
   {
-    "actual" : "poppy, bright teal, vivid yellow, royal blue",
-    "expected" : "poppy, bright teal, vivid yellow, electric blue",
-    "field" : "palette.coreColours",
-    "id" : "U020"
-  },
-  {
-    "actual" : "lacquer coral, acid lime, bright gold, clear cyan",
-    "expected" : "lacquer coral, acid lime, bright gold, clear aqua",
+    "actual" : "#906584, #387C7E, #2F9097, #751A2F",
+    "expected" : "#D18A9F, #D59B49, #751A2F, #E49EA9",
     "field" : "palette.accentColours",
     "id" : "U020"
   },
   {
-    "actual" : "poppy, bright teal, vivid yellow, royal blue",
-    "expected" : "poppy, bright teal, vivid yellow, electric blue",
-    "field" : "palette.coreColours",
-    "id" : "U021"
-  },
-  {
-    "actual" : "lacquer coral, acid lime, bright gold, clear cyan",
-    "expected" : "lacquer coral, acid lime, bright gold, clear aqua",
+    "actual" : "#A36B89, #387C7E, #007788, #762249",
+    "expected" : "#D35D70, #25515B, #762249, #5CAC9D",
     "field" : "palette.accentColours",
     "id" : "U021"
   },
   {
-    "actual" : "poppy, bright teal, vivid yellow, royal blue",
-    "expected" : "poppy, bright teal, vivid yellow, electric blue",
-    "field" : "palette.coreColours",
-    "id" : "U022"
-  },
-  {
-    "actual" : "lacquer coral, acid lime, bright gold, clear cyan",
-    "expected" : "lacquer coral, acid lime, bright gold, clear aqua",
+    "actual" : "#2F9097, #762249, #007788, #8A4484",
+    "expected" : "#8A4484, #762249, #751A2F, #008C9C",
     "field" : "palette.accentColours",
     "id" : "U022"
   },
   {
-    "actual" : "poppy, bright teal, vivid yellow, royal blue",
-    "expected" : "poppy, bright teal, vivid yellow, electric blue",
-    "field" : "palette.coreColours",
-    "id" : "U023"
-  },
-  {
-    "actual" : "lacquer coral, acid lime, bright gold, clear cyan",
-    "expected" : "lacquer coral, acid lime, bright gold, clear aqua",
+    "actual" : "#762249, #387C7E, #8A4484, #6E764B",
+    "expected" : "#8A4484, #AD661D, #762249, #5CAC9D",
     "field" : "palette.accentColours",
     "id" : "U023"
   },
   {
-    "actual" : "poppy, bright teal, vivid yellow, royal blue",
-    "expected" : "poppy, bright teal, vivid yellow, electric blue",
-    "field" : "palette.coreColours",
-    "id" : "U024"
-  },
-  {
-    "actual" : "lacquer coral, acid lime, bright gold, clear cyan",
-    "expected" : "lacquer coral, acid lime, bright gold, clear aqua",
+    "actual" : "#2F9097, #D35D70, #437F4C, #AD661D",
+    "expected" : "#D35D70, #D3AB53, #AD661D, #C9984A",
     "field" : "palette.accentColours",
     "id" : "U024"
   },
   {
-    "actual" : "silver, icy aqua, soft lilac, apricot",
-    "expected" : "silver, icy aqua, soft lilac, rose quartz",
+    "actual" : "#653F96, #5485C8, #1D6640, #1C475B",
+    "expected" : "#00A8AD, #1D6640, #562865, #8EB6CE",
     "field" : "palette.accentColours",
     "id" : "U025"
   },
   {
-    "actual" : "silver, icy aqua, soft lilac, berry mauve",
-    "expected" : "silver, icy aqua, soft lilac, rose quartz",
+    "actual" : "#3D7E65, #9F3D8A, #00BAB2, #8EB6CE",
+    "expected" : "#8EB6CE, #9F3D8A, #4F376C, #008ABE",
     "field" : "palette.accentColours",
     "id" : "U026"
   },
   {
-    "actual" : "silver, icy aqua, soft lilac, apricot",
-    "expected" : "silver, icy aqua, soft lilac, rose quartz",
+    "actual" : "#9F3D8A, #5485C8, #1D6640, #A08CC9",
+    "expected" : "#A08CC9, #1D6640, #4F376C, #51A9C0",
     "field" : "palette.accentColours",
     "id" : "U027"
   },
   {
-    "actual" : "silver, icy aqua, soft lilac, apricot",
-    "expected" : "silver, icy aqua, soft lilac, rose quartz",
+    "actual" : "#9F3D8A, #9665A3, #1D6640, #8EB6CE",
+    "expected" : "#9F3D8A, #1D6640, #653F96, #00AFBF",
     "field" : "palette.accentColours",
     "id" : "U028"
   },
   {
-    "actual" : "silver, icy aqua, soft lilac, apricot",
-    "expected" : "silver, icy aqua, soft lilac, rose quartz",
+    "actual" : "#653F96, #3D7E65, #A08CC9, #8EB6CE",
+    "expected" : "#A08CC9, #418273, #4F376C, #653F96",
     "field" : "palette.accentColours",
     "id" : "U029"
   },
   {
-    "actual" : "silver, icy aqua, soft lilac, berry mauve",
-    "expected" : "silver, icy aqua, soft lilac, rose quartz",
+    "actual" : "#653F96, #3D7E65, #A08CC9, #51A9C0",
+    "expected" : "#A08CC9, #51A9C0, #4F376C, #418273",
     "field" : "palette.accentColours",
     "id" : "U030"
   },
   {
-    "actual" : "dusty blue, rose mauve, sage aqua, smoky periwinkle",
-    "expected" : "dusty blue, rose mauve, sage aqua, soft violet",
-    "field" : "palette.coreColours",
-    "id" : "U031"
-  },
-  {
-    "actual" : "pewter, mist teal, lavender grey, dusty plum",
-    "expected" : "pewter, mist teal, lavender grey, berry mauve",
+    "actual" : "#085267, #653F96, #69B8BD, #008ABE",
+    "expected" : "#008ABE, #653F96, #4F376C, #00A0BF",
     "field" : "palette.accentColours",
     "id" : "U031"
   },
   {
-    "actual" : "dusty blue, rose mauve, sage aqua, smoky periwinkle",
-    "expected" : "dusty blue, rose mauve, sage aqua, soft violet",
-    "field" : "palette.coreColours",
-    "id" : "U032"
-  },
-  {
-    "actual" : "pewter, mist teal, lavender grey, dusty plum",
-    "expected" : "pewter, mist teal, lavender grey, berry mauve",
+    "actual" : "#BA4983, #A6C6D0, #69B8BD, #A08CC9",
+    "expected" : "#79BBC7, #9F3D8A, #4F376C, #51A9C0",
     "field" : "palette.accentColours",
     "id" : "U032"
   },
   {
-    "actual" : "pewter, mist teal, lavender grey, dusty plum",
-    "expected" : "pewter, mist teal, lavender grey, berry mauve",
+    "actual" : "#085267, #A6C6D0, #0095AC, #00BAB2",
+    "expected" : "#00A0BF, #008ABE, #702E62, #085267",
     "field" : "palette.accentColours",
     "id" : "U033"
   },
   {
-    "actual" : "pewter, mist teal, lavender grey, dusty plum",
-    "expected" : "pewter, mist teal, lavender grey, berry mauve",
+    "actual" : "#085267, #3D7E65, #653F96, #00AFBF",
+    "expected" : "#00AFBF, #653F96, #4F376C, #00BAB2",
     "field" : "palette.accentColours",
     "id" : "U034"
   },
   {
-    "actual" : "dusty blue, rose mauve, sage aqua, smoky periwinkle",
-    "expected" : "dusty blue, rose mauve, sage aqua, soft violet",
-    "field" : "palette.coreColours",
-    "id" : "U035"
-  },
-  {
-    "actual" : "pewter, mist teal, lavender grey, dusty plum",
-    "expected" : "pewter, mist teal, lavender grey, berry mauve",
+    "actual" : "#00A9AE, #008265, #0095AC, #A6C6D0",
+    "expected" : "#A6C6D0, #008265, #702E62, #51A9C0",
     "field" : "palette.accentColours",
     "id" : "U035"
   },
   {
-    "actual" : "pewter, mist teal, lavender grey, dusty plum",
-    "expected" : "pewter, mist teal, lavender grey, berry mauve",
+    "actual" : "#653F96, #702E62, #A08CC9, #00AFBF",
+    "expected" : "#702E62, #4F376C, #562865, #A08CC9",
     "field" : "palette.accentColours",
     "id" : "U036"
   },
   {
-    "actual" : "pewter, mist teal, lavender grey, dusty plum",
-    "expected" : "pewter, mist teal, lavender grey, berry mauve",
+    "actual" : "#653F96, #085267, #69B8BD, #702E62",
+    "expected" : "#653F96, #085267, #702E62, #A4BBD3",
     "field" : "palette.accentColours",
     "id" : "U037"
   },
   {
-    "actual" : "dusty blue, rose mauve, sage aqua, smoky periwinkle",
-    "expected" : "dusty blue, rose mauve, sage aqua, soft violet",
-    "field" : "palette.coreColours",
-    "id" : "U038"
-  },
-  {
-    "actual" : "pewter, mist teal, lavender grey, dusty plum",
-    "expected" : "pewter, mist teal, lavender grey, berry mauve",
+    "actual" : "#008265, #9F3D8A, #A4BBD3, #00A8AD",
+    "expected" : "#00AFBF, #9F3D8A, #4F376C, #702E62",
     "field" : "palette.accentColours",
     "id" : "U038"
   },
   {
-    "actual" : "eucalyptus, muted rose, moss sage, soft violet",
-    "expected" : "eucalyptus, muted rose, moss sage, smoky periwinkle",
-    "field" : "palette.coreColours",
-    "id" : "U039"
-  },
-  {
-    "actual" : "brushed pewter, dusty plum, sea glass, berry mauve",
-    "expected" : "brushed pewter, dusty plum, sea glass, faded mauve",
+    "actual" : "#3D7E65, #085267, #69B8BD, #008ABE",
+    "expected" : "#79BBC7, #085267, #562865, #273E51",
     "field" : "palette.accentColours",
     "id" : "U039"
   },
   {
-    "actual" : "eucalyptus, muted rose, moss sage, soft violet",
-    "expected" : "eucalyptus, muted rose, moss sage, smoky periwinkle",
-    "field" : "palette.coreColours",
-    "id" : "U040"
-  },
-  {
-    "actual" : "brushed pewter, dusty plum, sea glass, berry mauve",
-    "expected" : "brushed pewter, dusty plum, sea glass, faded mauve",
+    "actual" : "#BA4983, #653F96, #8EB6CE, #69B8BD",
+    "expected" : "#51A9C0, #69B8BD, #562865, #BA4983",
     "field" : "palette.accentColours",
     "id" : "U040"
   },
   {
-    "actual" : "brushed pewter, dusty plum, sea glass, moss green",
-    "expected" : "brushed pewter, dusty plum, sea glass, faded mauve",
+    "actual" : "#1D6640, #653F96, #678C70, #8EB6CE",
+    "expected" : "#008265, #008ABE, #702E62, #A3AEE2",
     "field" : "palette.accentColours",
     "id" : "U041"
   },
   {
-    "actual" : "eucalyptus, muted rose, moss sage, soft violet",
-    "expected" : "eucalyptus, muted rose, moss sage, smoky periwinkle",
-    "field" : "palette.coreColours",
-    "id" : "U042"
-  },
-  {
-    "actual" : "brushed pewter, dusty plum, sea glass, berry mauve",
-    "expected" : "brushed pewter, dusty plum, sea glass, faded mauve",
+    "actual" : "#3D7E65, #085267, #69B8BD, #A4BBD3",
+    "expected" : "#51A9C0, #085267, #562865, #A3AEE2",
     "field" : "palette.accentColours",
     "id" : "U042"
   },
   {
-    "actual" : "eucalyptus, muted rose, moss sage, soft violet",
-    "expected" : "eucalyptus, muted rose, moss sage, smoky periwinkle",
-    "field" : "palette.coreColours",
-    "id" : "U043"
-  },
-  {
-    "actual" : "brushed pewter, dusty plum, sea glass, berry mauve",
-    "expected" : "brushed pewter, dusty plum, sea glass, faded mauve",
+    "actual" : "#00A9AE, #678C70, #BA4983, #085267",
+    "expected" : "#8EB6CE, #418273, #562865, #085267",
     "field" : "palette.accentColours",
     "id" : "U043"
   },
   {
-    "actual" : "eucalyptus, muted rose, moss sage, soft violet",
-    "expected" : "eucalyptus, muted rose, moss sage, smoky periwinkle",
-    "field" : "palette.coreColours",
-    "id" : "U044"
-  },
-  {
-    "actual" : "brushed pewter, dusty plum, sea glass, berry mauve",
-    "expected" : "brushed pewter, dusty plum, sea glass, faded mauve",
+    "actual" : "#085267, #1D6640, #0095AC, #79BBC7",
+    "expected" : "#51A9C0, #008ABE, #562865, #008265",
     "field" : "palette.accentColours",
     "id" : "U044"
   },
   {
-    "actual" : "eucalyptus, muted rose, moss sage, soft violet",
-    "expected" : "eucalyptus, muted rose, moss sage, smoky periwinkle",
-    "field" : "palette.coreColours",
-    "id" : "U045"
-  },
-  {
-    "actual" : "brushed pewter, dusty plum, sea glass, berry mauve",
-    "expected" : "brushed pewter, dusty plum, sea glass, faded mauve",
+    "actual" : "#653F96, #8EB6CE, #702E62, #A3AEE2",
+    "expected" : "#702E62, #653F96, #4F376C, #008ABE",
     "field" : "palette.accentColours",
     "id" : "U045"
   },
   {
-    "actual" : "eucalyptus, muted rose, moss sage, soft violet",
-    "expected" : "eucalyptus, muted rose, moss sage, smoky periwinkle",
-    "field" : "palette.coreColours",
-    "id" : "U046"
-  },
-  {
-    "actual" : "brushed pewter, dusty plum, sea glass, berry mauve",
-    "expected" : "brushed pewter, dusty plum, sea glass, faded mauve",
+    "actual" : "#085267, #1D6640, #BA4983, #8EB6CE",
+    "expected" : "#A3AEE2, #BA4983, #702E62, #4F376C",
     "field" : "palette.accentColours",
     "id" : "U046"
   },
   {
-    "actual" : "eucalyptus, muted rose, moss sage, soft violet",
-    "expected" : "eucalyptus, muted rose, moss sage, smoky periwinkle",
-    "field" : "palette.coreColours",
-    "id" : "U047"
-  },
-  {
-    "actual" : "brushed pewter, dusty plum, sea glass, berry mauve",
-    "expected" : "brushed pewter, dusty plum, sea glass, faded mauve",
+    "actual" : "#BA4983, #1D6640, #00A9AE, #8EB6CE",
+    "expected" : "#A4BBD3, #008ABE, #562865, #00A9AE",
     "field" : "palette.accentColours",
     "id" : "U047"
   },
   {
-    "actual" : "brushed pewter, dusty plum, sea glass, berry mauve",
-    "expected" : "brushed pewter, dusty plum, sea glass, faded mauve",
+    "actual" : "#678C70, #BA4983, #085267, #8EB6CE",
+    "expected" : "#8EB6CE, #BA4983, #562865, #085267",
     "field" : "palette.accentColours",
     "id" : "U048"
   },
   {
-    "actual" : "espresso, cool charcoal, deep olive, bark brown",
-    "expected" : "espresso, warm charcoal, deep olive, bark brown",
-    "field" : "palette.neutrals",
-    "id" : "U049"
-  },
-  {
-    "actual" : "oxblood, forest teal, forest green, petrol",
-    "expected" : "oxblood, forest teal, forest green, dark terracotta",
-    "field" : "palette.coreColours",
-    "id" : "U049"
-  },
-  {
-    "actual" : "antique gold, aged brass, cool ruby, deep amber",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#744D6D, #005D69, #056463, #7E1B2F",
+    "expected" : "#663C2A, #E96675, #7E1B2F, #B18336",
     "field" : "palette.accentColours",
     "id" : "U049"
   },
   {
-    "actual" : "terracotta, olive sage, icy teal, soft rust",
-    "expected" : "terracotta, olive sage, muted teal, soft rust",
-    "field" : "palette.coreColours",
-    "id" : "U050"
-  },
-  {
-    "actual" : "antique gold, soft copper, steel grey, muted amber",
-    "expected" : "antique gold, soft copper, moss green, muted amber",
+    "actual" : "#005E64, #731632, #E96675, #89744D",
+    "expected" : "#A4965D, #E96675, #731632, #B69A6C",
     "field" : "palette.accentColours",
     "id" : "U050"
   },
   {
-    "actual" : "antique gold, soft copper, steel grey, muted amber",
-    "expected" : "antique gold, soft copper, moss green, muted amber",
+    "actual" : "#731632, #366064, #2E766B, #DFA74B",
+    "expected" : "#DFA74B, #D48F46, #CA692D, #DCAEAB",
     "field" : "palette.accentColours",
     "id" : "U051"
   },
   {
-    "actual" : "antique gold, aged brass, copper, warm auburn",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#005D69, #056463, #7E1B2F, #CA692D",
+    "expected" : "#83712B, #B9A46F, #7E1B2F, #DFA74B",
     "field" : "palette.accentColours",
     "id" : "U052"
   },
   {
-    "actual" : "antique gold, soft copper, moss green, bronze",
-    "expected" : "antique gold, soft copper, moss green, muted amber",
+    "actual" : "#366064, #2E766B, #731632, #005D69",
+    "expected" : "#DCAEAB, #9E803D, #731632, #DFA74B",
     "field" : "palette.accentColours",
     "id" : "U053"
   },
   {
-    "actual" : "antique gold, soft copper, moss green, bronze",
-    "expected" : "antique gold, soft copper, moss green, muted amber",
+    "actual" : "#366064, #2D6D68, #005D69, #865373",
+    "expected" : "#DCAEAB, #B18336, #731632, #DB868C",
     "field" : "palette.accentColours",
     "id" : "U054"
   },
   {
-    "actual" : "antique gold, soft copper, steel grey, muted amber",
-    "expected" : "antique gold, soft copper, moss green, muted amber",
+    "actual" : "#744D6D, #005E64, #82312E, #89744D",
+    "expected" : "#E99E90, #C79538, #731632, #E96675",
     "field" : "palette.accentColours",
     "id" : "U055"
   },
   {
-    "actual" : "terracotta, olive sage, icy teal, soft rust",
-    "expected" : "terracotta, olive sage, muted teal, soft rust",
-    "field" : "palette.coreColours",
-    "id" : "U056"
-  },
-  {
-    "actual" : "antique gold, soft copper, steel grey, muted amber",
-    "expected" : "antique gold, soft copper, moss green, muted amber",
+    "actual" : "#00656E, #2D6D68, #005D69, #731632",
+    "expected" : "#A4965D, #89744D, #731632, #B69A6C",
     "field" : "palette.accentColours",
     "id" : "U056"
   },
   {
-    "actual" : "terracotta, olive sage, icy teal, soft rust",
-    "expected" : "terracotta, olive sage, muted teal, soft rust",
-    "field" : "palette.coreColours",
-    "id" : "U057"
-  },
-  {
-    "actual" : "antique gold, soft copper, steel grey, muted amber",
-    "expected" : "antique gold, soft copper, moss green, muted amber",
+    "actual" : "#366064, #7E1B2F, #005D69, #2E766B",
+    "expected" : "#7E1B2F, #C79538, #CA692D, #DCAEAB",
     "field" : "palette.accentColours",
     "id" : "U057"
   },
   {
-    "actual" : "antique gold, soft copper, steel grey, muted amber",
-    "expected" : "antique gold, soft copper, moss green, muted amber",
+    "actual" : "#731632, #366064, #005D69, #744D6D",
+    "expected" : "#C79538, #97782B, #731632, #E19993",
     "field" : "palette.accentColours",
     "id" : "U058"
   },
   {
-    "actual" : "antique gold, soft copper, steel grey, muted amber",
-    "expected" : "antique gold, soft copper, moss green, muted amber",
+    "actual" : "#366064, #865373, #7E1B2F, #E96675",
+    "expected" : "#DCAEAB, #E99E90, #731632, #E96675",
     "field" : "palette.accentColours",
     "id" : "U059"
   },
   {
-    "actual" : "oxblood, forest teal, forest green, ochre",
-    "expected" : "oxblood, forest teal, forest green, dark terracotta",
-    "field" : "palette.coreColours",
-    "id" : "U060"
-  },
-  {
-    "actual" : "antique gold, aged brass, copper, warm auburn",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#744D6D, #366064, #005E64, #7E1B2F",
+    "expected" : "#E99E90, #95824F, #7E1B2F, #82312E",
     "field" : "palette.accentColours",
     "id" : "U060"
   },
   {
-    "actual" : "oxblood, forest teal, forest green, ochre",
-    "expected" : "oxblood, forest teal, forest green, dark terracotta",
-    "field" : "palette.coreColours",
-    "id" : "U061"
-  },
-  {
-    "actual" : "antique gold, aged brass, copper, warm auburn",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#00656E, #366064, #663C2A, #736C29",
+    "expected" : "#8F7A3F, #D0A893, #CA692D, #E96675",
     "field" : "palette.accentColours",
     "id" : "U061"
   },
   {
-    "actual" : "rust, moss, ochre, forest teal",
-    "expected" : "rust, moss, ochre, deep teal",
-    "field" : "palette.coreColours",
-    "id" : "U062"
-  },
-  {
-    "actual" : "bronze, amber, olive gold, deep amber",
-    "expected" : "bronze, amber, olive gold, warm auburn",
+    "actual" : "#3C746F, #005D69, #056463, #7E1B2F",
+    "expected" : "#DFA74B, #9E803D, #7E1B2F, #82312E",
     "field" : "palette.accentColours",
     "id" : "U062"
   },
   {
-    "actual" : "espresso, cool charcoal, deep olive, bark brown",
-    "expected" : "espresso, warm charcoal, deep olive, bark brown",
-    "field" : "palette.neutrals",
-    "id" : "U063"
-  },
-  {
-    "actual" : "oxblood, forest teal, forest green, petrol",
-    "expected" : "oxblood, forest teal, forest green, dark terracotta",
-    "field" : "palette.coreColours",
-    "id" : "U063"
-  },
-  {
-    "actual" : "antique gold, aged brass, cool ruby, deep amber",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#00656E, #744D6D, #7E1B2F, #C79538",
+    "expected" : "#C79538, #7E1B2F, #82312E, #CA692D",
     "field" : "palette.accentColours",
     "id" : "U063"
   },
   {
-    "actual" : "antique gold, aged brass, copper, warm auburn",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#731632, #366064, #00656E, #1C6E6B",
+    "expected" : "#D0A893, #8F7A3F, #7E1B2F, #DFA74B",
     "field" : "palette.accentColours",
     "id" : "U064"
   },
   {
-    "actual" : "espresso, cool charcoal, deep olive, bark brown",
-    "expected" : "espresso, warm charcoal, deep olive, bark brown",
-    "field" : "palette.neutrals",
-    "id" : "U065"
-  },
-  {
-    "actual" : "oxblood, forest teal, forest green, petrol",
-    "expected" : "oxblood, forest teal, forest green, dark terracotta",
-    "field" : "palette.coreColours",
-    "id" : "U065"
-  },
-  {
-    "actual" : "antique gold, aged brass, cool ruby, deep amber",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#731632, #865373, #366064, #95824F",
+    "expected" : "#95824F, #E99E90, #7E1B2F, #DCBAAE",
     "field" : "palette.accentColours",
     "id" : "U065"
   },
   {
-    "actual" : "bronze, amber, olive gold, goldenrod",
-    "expected" : "bronze, amber, olive gold, warm auburn",
+    "actual" : "#865373, #7E1B2F, #663C2A, #DFA74B",
+    "expected" : "#DFA74B, #95824F, #731632, #663C2A",
     "field" : "palette.accentColours",
     "id" : "U066"
   },
   {
-    "actual" : "rust, moss, ochre, forest teal",
-    "expected" : "rust, moss, ochre, deep teal",
-    "field" : "palette.coreColours",
-    "id" : "U067"
-  },
-  {
-    "actual" : "bronze, amber, olive gold, deep amber",
-    "expected" : "bronze, amber, olive gold, warm auburn",
+    "actual" : "#2D6D68, #7E1B2F, #DFA74B, #E96675",
+    "expected" : "#E96675, #A4965D, #731632, #CB674C",
     "field" : "palette.accentColours",
     "id" : "U067"
   },
   {
-    "actual" : "antique gold, aged brass, copper, warm auburn",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#865373, #82312E, #005E64, #C79538",
+    "expected" : "#82312E, #663C2A, #7E1B2F, #9E803D",
     "field" : "palette.accentColours",
     "id" : "U068"
   },
   {
-    "actual" : "bronze, amber, olive gold, goldenrod",
-    "expected" : "bronze, amber, olive gold, warm auburn",
+    "actual" : "#2E766B, #366064, #663C2A, #9E803D",
+    "expected" : "#D48F46, #DCAEAB, #AE4D37, #9E803D",
     "field" : "palette.accentColours",
     "id" : "U069"
   },
   {
-    "actual" : "rust, moss, ochre, forest teal",
-    "expected" : "rust, moss, ochre, deep teal",
-    "field" : "palette.coreColours",
-    "id" : "U070"
-  },
-  {
-    "actual" : "bronze, amber, olive gold, deep amber",
-    "expected" : "bronze, amber, olive gold, warm auburn",
+    "actual" : "#865373, #1C6E6B, #7E1B2F, #95824F",
+    "expected" : "#DFA74B, #95824F, #7E1B2F, #DB868C",
     "field" : "palette.accentColours",
     "id" : "U070"
   },
   {
-    "actual" : "espresso, cool charcoal, deep olive, bark brown",
-    "expected" : "espresso, warm charcoal, deep olive, bark brown",
-    "field" : "palette.neutrals",
-    "id" : "U071"
-  },
-  {
-    "actual" : "oxblood, forest teal, forest green, petrol",
-    "expected" : "oxblood, forest teal, forest green, dark terracotta",
-    "field" : "palette.coreColours",
-    "id" : "U071"
-  },
-  {
-    "actual" : "antique gold, aged brass, cool ruby, deep amber",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#731632, #005D69, #056463, #663C2A",
+    "expected" : "#663C2A, #E96675, #7E1B2F, #B18336",
     "field" : "palette.accentColours",
     "id" : "U071"
   },
   {
-    "actual" : "espresso, cool charcoal, deep olive, bark brown",
-    "expected" : "espresso, warm charcoal, deep olive, bark brown",
-    "field" : "palette.neutrals",
-    "id" : "U072"
-  },
-  {
-    "actual" : "oxblood, forest teal, forest green, petrol",
-    "expected" : "oxblood, forest teal, forest green, dark terracotta",
-    "field" : "palette.coreColours",
-    "id" : "U072"
-  },
-  {
-    "actual" : "antique gold, aged brass, cool ruby, deep amber",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#00656E, #1C6E6B, #7E1B2F, #663C2A",
+    "expected" : "#CFAD53, #E96675, #7E1B2F, #8F7A3F",
     "field" : "palette.accentColours",
     "id" : "U072"
   },
   {
-    "actual" : "espresso, cool charcoal, deep olive, bark brown",
-    "expected" : "espresso, warm charcoal, deep olive, bark brown",
-    "field" : "palette.neutrals",
-    "id" : "U073"
-  },
-  {
-    "actual" : "oxblood, forest teal, forest green, petrol",
-    "expected" : "oxblood, forest teal, forest green, dark terracotta",
-    "field" : "palette.coreColours",
-    "id" : "U073"
-  },
-  {
-    "actual" : "antique gold, aged brass, cool ruby, deep amber",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#005D69, #366064, #731632, #95824F",
+    "expected" : "#95824F, #DFA74B, #7E1B2F, #9E803D",
     "field" : "palette.accentColours",
     "id" : "U073"
   },
   {
-    "actual" : "espresso, cool charcoal, deep olive, bark brown",
-    "expected" : "espresso, warm charcoal, deep olive, bark brown",
-    "field" : "palette.neutrals",
-    "id" : "U074"
-  },
-  {
-    "actual" : "oxblood, forest teal, forest green, petrol",
-    "expected" : "oxblood, forest teal, forest green, dark terracotta",
-    "field" : "palette.coreColours",
-    "id" : "U074"
-  },
-  {
-    "actual" : "antique gold, aged brass, cool ruby, deep amber",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#005D69, #056463, #7E1B2F, #C79538",
+    "expected" : "#C79538, #B9A46F, #7E1B2F, #E96675",
     "field" : "palette.accentColours",
     "id" : "U074"
   },
   {
-    "actual" : "oxblood, forest teal, forest green, ochre",
-    "expected" : "oxblood, forest teal, forest green, dark terracotta",
-    "field" : "palette.coreColours",
-    "id" : "U075"
-  },
-  {
-    "actual" : "antique gold, aged brass, copper, warm auburn",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#00656E, #2D6D68, #366064, #7E1B2F",
+    "expected" : "#E96675, #B9A46F, #7E1B2F, #DCAEAB",
     "field" : "palette.accentColours",
     "id" : "U075"
   },
   {
-    "actual" : "antique gold, aged brass, copper, warm auburn",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#366064, #00656E, #9E803D, #95824F",
+    "expected" : "#95824F, #CFAD53, #CA692D, #C47A3E",
     "field" : "palette.accentColours",
     "id" : "U076"
   },
   {
-    "actual" : "antique gold, aged brass, copper, warm auburn",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#744D6D, #7E1B2F, #005D69, #DFA74B",
+    "expected" : "#95824F, #7E1B2F, #82312E, #E99E90",
     "field" : "palette.accentColours",
     "id" : "U077"
   },
   {
-    "actual" : "antique gold, aged brass, copper, warm auburn",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#005E64, #731632, #2E766B, #005D69",
+    "expected" : "#E96675, #D39C41, #7E1B2F, #CB6835",
     "field" : "palette.accentColours",
     "id" : "U078"
   },
   {
-    "actual" : "antique gold, aged brass, copper, warm auburn",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#82312E, #366064, #005E64, #D14649",
+    "expected" : "#731632, #82312E, #7E1B2F, #7E1B2F",
     "field" : "palette.accentColours",
     "id" : "U079"
   },
   {
-    "actual" : "espresso, cool charcoal, deep olive, bark brown",
-    "expected" : "espresso, warm charcoal, deep olive, bark brown",
-    "field" : "palette.neutrals",
-    "id" : "U080"
-  },
-  {
-    "actual" : "oxblood, forest teal, forest green, petrol",
-    "expected" : "oxblood, forest teal, forest green, dark terracotta",
-    "field" : "palette.coreColours",
-    "id" : "U080"
-  },
-  {
-    "actual" : "antique gold, aged brass, cool ruby, deep amber",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#865373, #82312E, #005D69, #2E766B",
+    "expected" : "#E99E90, #E96675, #CA692D, #DCBAAE",
     "field" : "palette.accentColours",
     "id" : "U080"
   },
   {
-    "actual" : "oxblood, forest teal, forest green, ochre",
-    "expected" : "oxblood, forest teal, forest green, dark terracotta",
-    "field" : "palette.coreColours",
-    "id" : "U081"
-  },
-  {
-    "actual" : "antique gold, aged brass, copper, warm auburn",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#005E64, #731632, #1C6E6B, #E96675",
+    "expected" : "#E96675, #B18336, #7E1B2F, #9E803D",
     "field" : "palette.accentColours",
     "id" : "U081"
   },
   {
-    "actual" : "oxblood, forest teal, forest green, ochre",
-    "expected" : "oxblood, forest teal, forest green, dark terracotta",
-    "field" : "palette.coreColours",
-    "id" : "U082"
-  },
-  {
-    "actual" : "antique gold, aged brass, copper, warm auburn",
-    "expected" : "antique gold, aged brass, copper, deep amber",
+    "actual" : "#744D6D, #7E1B2F, #9E803D, #95824F",
+    "expected" : "#E99E90, #DB868C, #7E1B2F, #D14649",
     "field" : "palette.accentColours",
     "id" : "U082"
   },
   {
-    "actual" : "silver, gunmetal, cool ruby, true red",
-    "expected" : "silver, gunmetal, cool ruby, icy teal",
+    "actual" : "#678C70, #9F3D8A, #69B8BD, #008ABE",
+    "expected" : "#79BBC7, #CB627F, #562865, #51A9C0",
     "field" : "palette.accentColours",
     "id" : "U083"
   },
   {
-    "actual" : "silver, gunmetal, cool ruby, true red",
-    "expected" : "silver, gunmetal, cool ruby, icy teal",
+    "actual" : "#00A9AE, #085267, #008ABE, #A4BBD3",
+    "expected" : "#5485C8, #085267, #562865, #00BAB2",
     "field" : "palette.accentColours",
     "id" : "U084"
   },
   {
-    "actual" : "black cherry, petrol, dark emerald, royal blue",
-    "expected" : "black cherry, petrol, dark emerald, blue-black",
-    "field" : "palette.coreColours",
-    "id" : "U085"
-  },
-  {
-    "actual" : "silver, gunmetal, cool ruby, true red",
-    "expected" : "silver, gunmetal, cool ruby, icy teal",
+    "actual" : "#085267, #9665A3, #CB627F, #00A0BF",
+    "expected" : "#00A0BF, #9665A3, #4F376C, #008ABE",
     "field" : "palette.accentColours",
     "id" : "U085"
   },
   {
-    "actual" : "black cherry, petrol, dark emerald, oxblood",
-    "expected" : "black cherry, petrol, dark emerald, blue-black",
-    "field" : "palette.coreColours",
-    "id" : "U086"
-  },
-  {
-    "actual" : "silver, gunmetal, cool ruby, copper",
-    "expected" : "silver, gunmetal, cool ruby, icy teal",
+    "actual" : "#007362, #00A9AE, #A4BBD3, #00BAB2",
+    "expected" : "#A4BBD3, #5485C8, #562865, #00A9AE",
     "field" : "palette.accentColours",
     "id" : "U086"
   },
   {
-    "actual" : "silver, gunmetal, cool ruby, true red",
-    "expected" : "silver, gunmetal, cool ruby, icy teal",
+    "actual" : "#085267, #702E62, #A3AEE2, #00A0BF",
+    "expected" : "#702E62, #A3AEE2, #4F376C, #085267",
     "field" : "palette.accentColours",
     "id" : "U087"
   },
   {
-    "actual" : "silver, gunmetal, cool ruby, true red",
-    "expected" : "silver, gunmetal, cool ruby, icy teal",
+    "actual" : "#5485C8, #008265, #085267, #00A0BF",
+    "expected" : "#008ABE, #008265, #562865, #007362",
     "field" : "palette.accentColours",
     "id" : "U088"
   },
   {
-    "actual" : "silver, gunmetal, cool ruby, true red",
-    "expected" : "silver, gunmetal, cool ruby, icy teal",
+    "actual" : "#085267, #9665A3, #008ABE, #702E62",
+    "expected" : "#085267, #9665A3, #4F376C, #A3AEE2",
     "field" : "palette.accentColours",
     "id" : "U089"
   },
   {
-    "actual" : "black, ink navy, graphite, warm charcoal",
-    "expected" : "black, ink navy, graphite, cool charcoal",
-    "field" : "palette.neutrals",
-    "id" : "U090"
-  },
-  {
-    "actual" : "black cherry, petrol, dark emerald, oxblood",
-    "expected" : "black cherry, petrol, dark emerald, blue-black",
-    "field" : "palette.coreColours",
-    "id" : "U090"
-  },
-  {
-    "actual" : "silver, gunmetal, cool ruby, copper",
-    "expected" : "silver, gunmetal, cool ruby, icy teal",
+    "actual" : "#007362, #678C70, #702E62, #A3A0D7",
+    "expected" : "#678C70, #702E62, #4F376C, #418273",
     "field" : "palette.accentColours",
     "id" : "U090"
   },
   {
-    "actual" : "silver, icy blue, fuchsia red, clear cyan",
-    "expected" : "silver, icy blue, fuchsia red, hard white",
+    "actual" : "#9665A3, #085267, #CB627F, #008ABE",
+    "expected" : "#085267, #008ABE, #702E62, #79BBC7",
     "field" : "palette.accentColours",
     "id" : "U091"
   },
   {
-    "actual" : "silver, icy blue, fuchsia red, clear cyan",
-    "expected" : "silver, icy blue, fuchsia red, hard white",
+    "actual" : "#085267, #9665A3, #008ABE, #69B8BD",
+    "expected" : "#008ABE, #9665A3, #4F376C, #A3AEE2",
     "field" : "palette.accentColours",
     "id" : "U092"
   },
   {
-    "actual" : "silver, icy blue, fuchsia red, clear cyan",
-    "expected" : "silver, icy blue, fuchsia red, hard white",
+    "actual" : "#BA4983, #702E62, #A3AEE2, #00BAB2",
+    "expected" : "#562865, #4F376C, #702E62, #A3AEE2",
     "field" : "palette.accentColours",
     "id" : "U093"
   },
   {
-    "actual" : "silver, icy blue, fuchsia red, clear cyan",
-    "expected" : "silver, icy blue, fuchsia red, hard white",
+    "actual" : "#9665A3, #1D6640, #085267, #00A0BF",
+    "expected" : "#008ABE, #008265, #702E62, #1D6640",
     "field" : "palette.accentColours",
     "id" : "U094"
   },
   {
-    "actual" : "midnight, royal blue, magenta red, bright teal",
-    "expected" : "midnight, royal blue, magenta red, icy teal",
-    "field" : "palette.coreColours",
-    "id" : "U095"
-  },
-  {
-    "actual" : "chrome silver, electric fuchsia, clear cyan, bright gold",
-    "expected" : "chrome silver, electric fuchsia, clear cyan, true red",
+    "actual" : "#085267, #9F3D8A, #008ABE, #00AFBF",
+    "expected" : "#085267, #CB627F, #702E62, #51A9C0",
     "field" : "palette.accentColours",
     "id" : "U095"
   },
   {
-    "actual" : "midnight, royal blue, magenta red, bright teal",
-    "expected" : "midnight, royal blue, magenta red, icy teal",
-    "field" : "palette.coreColours",
-    "id" : "U096"
-  },
-  {
-    "actual" : "chrome silver, electric fuchsia, clear cyan, bright gold",
-    "expected" : "chrome silver, electric fuchsia, clear cyan, true red",
+    "actual" : "#9F3D8A, #085267, #008ABE, #79BBC7",
+    "expected" : "#008ABE, #085267, #702E62, #A4BBD3",
     "field" : "palette.accentColours",
     "id" : "U096"
   },
   {
-    "actual" : "midnight, royal blue, magenta red, bright teal",
-    "expected" : "midnight, royal blue, magenta red, icy teal",
-    "field" : "palette.coreColours",
-    "id" : "U097"
-  },
-  {
-    "actual" : "chrome silver, electric fuchsia, clear cyan, bright gold",
-    "expected" : "chrome silver, electric fuchsia, clear cyan, true red",
+    "actual" : "#9F3D8A, #5485C8, #A4BBD3, #702E62",
+    "expected" : "#A4BBD3, #5485C8, #4F376C, #A3A0D7",
     "field" : "palette.accentColours",
     "id" : "U097"
   },
   {
-    "actual" : "midnight, royal blue, magenta red, bright teal",
-    "expected" : "midnight, royal blue, magenta red, icy teal",
-    "field" : "palette.coreColours",
-    "id" : "U098"
-  },
-  {
-    "actual" : "chrome silver, electric fuchsia, clear cyan, bright gold",
-    "expected" : "chrome silver, electric fuchsia, clear cyan, true red",
+    "actual" : "#9665A3, #9F3D8A, #702E62, #A3AEE2",
+    "expected" : "#9665A3, #702E62, #4F376C, #CB627F",
     "field" : "palette.accentColours",
     "id" : "U098"
   },
   {
-    "actual" : "midnight, royal blue, magenta red, bright teal",
-    "expected" : "midnight, royal blue, magenta red, icy teal",
-    "field" : "palette.coreColours",
-    "id" : "U099"
-  },
-  {
-    "actual" : "chrome silver, electric fuchsia, clear cyan, bright gold",
-    "expected" : "chrome silver, electric fuchsia, clear cyan, true red",
+    "actual" : "#1D6640, #9665A3, #9F3D8A, #008ABE",
+    "expected" : "#008265, #00AFBF, #4F376C, #CB627F",
     "field" : "palette.accentColours",
     "id" : "U099"
   },
   {
-    "actual" : "midnight, royal blue, magenta red, bright teal",
-    "expected" : "midnight, royal blue, magenta red, icy teal",
-    "field" : "palette.coreColours",
-    "id" : "U100"
-  },
-  {
-    "actual" : "chrome silver, electric fuchsia, clear cyan, bright gold",
-    "expected" : "chrome silver, electric fuchsia, clear cyan, true red",
+    "actual" : "#678C70, #085267, #0095AC, #702E62",
+    "expected" : "#702E62, #A08CC9, #4F376C, #A4BBD3",
     "field" : "palette.accentColours",
     "id" : "U100"
   }

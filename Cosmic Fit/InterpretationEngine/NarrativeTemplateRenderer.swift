@@ -131,8 +131,16 @@ struct NarrativeTemplateRenderer {
         for (i, name) in colourResult.palette.coreColours.enumerated() {
             ctx["core_colour_\(i + 1)"] = name
         }
-        for (i, name) in colourResult.palette.accentColours.enumerated() {
-            ctx["accent_colour_\(i + 1)"] = name
+
+        // V4.5: use displayName from accentSlots (never raw hex)
+        if !colourResult.accentSlots.isEmpty {
+            for (i, slot) in colourResult.accentSlots.enumerated() {
+                ctx["accent_colour_\(i + 1)"] = slot.displayName
+            }
+        } else {
+            for (i, name) in colourResult.palette.accentColours.enumerated() {
+                ctx["accent_colour_\(i + 1)"] = name
+            }
         }
 
         ctx["family"] = colourResult.family.rawValue

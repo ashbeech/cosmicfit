@@ -77,6 +77,19 @@ enum V4ZodiacSign: String, Codable, Equatable, CaseIterable {
     case capricorn = "Capricorn"
     case aquarius = "Aquarius"
     case pisces = "Pisces"
+
+    enum Element: String, Codable, CaseIterable {
+        case fire, earth, air, water
+    }
+
+    var element: Element {
+        switch self {
+        case .aries, .leo, .sagittarius: return .fire
+        case .taurus, .virgo, .capricorn: return .earth
+        case .gemini, .libra, .aquarius: return .air
+        case .cancer, .scorpio, .pisces: return .water
+        }
+    }
 }
 
 enum DriverKey: String, Codable, Equatable, CaseIterable {
@@ -132,6 +145,20 @@ struct BirthChartColourInput: Codable, Equatable {
         case .saturn: return saturn.sign
         case .jupiter: return jupiter.sign
         case .pluto: return pluto?.sign
+        }
+    }
+
+    func degree(for driver: DriverKey) -> Double? {
+        switch driver {
+        case .ascendant: return ascendant.degree
+        case .venus: return venus.degree
+        case .sun: return sun.degree
+        case .moon: return moon.degree
+        case .mercury: return mercury.degree
+        case .mars: return mars.degree
+        case .saturn: return saturn.degree
+        case .jupiter: return jupiter.degree
+        case .pluto: return pluto?.degree
         }
     }
 
@@ -191,6 +218,22 @@ struct OverrideFlags: Codable, Equatable {
     var fireAirChromaApplied: Bool = false
     var waterSofteningApplied: Bool = false
     var surfacePreservationApplied: Bool = false
+    var deepAnchorOverriddenToBlack: Bool = false
+
+    init() {}
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        earthDepthOverrideApplied     = try c.decodeIfPresent(Bool.self, forKey: .earthDepthOverrideApplied) ?? false
+        winterCompressionApplied      = try c.decodeIfPresent(Bool.self, forKey: .winterCompressionApplied) ?? false
+        coolLeanDeepAutumn            = try c.decodeIfPresent(Bool.self, forKey: .coolLeanDeepAutumn) ?? false
+        scorpioDensityApplied         = try c.decodeIfPresent(Bool.self, forKey: .scorpioDensityApplied) ?? false
+        capricornVirgoCoolingApplied  = try c.decodeIfPresent(Bool.self, forKey: .capricornVirgoCoolingApplied) ?? false
+        fireAirChromaApplied          = try c.decodeIfPresent(Bool.self, forKey: .fireAirChromaApplied) ?? false
+        waterSofteningApplied         = try c.decodeIfPresent(Bool.self, forKey: .waterSofteningApplied) ?? false
+        surfacePreservationApplied    = try c.decodeIfPresent(Bool.self, forKey: .surfacePreservationApplied) ?? false
+        deepAnchorOverriddenToBlack   = try c.decodeIfPresent(Bool.self, forKey: .deepAnchorOverriddenToBlack) ?? false
+    }
 }
 
 // MARK: - Palette Output
@@ -199,6 +242,41 @@ struct PaletteTriadV4: Codable, Equatable {
     let neutrals: [String]
     let coreColours: [String]
     let accentColours: [String]
+    let supportColours: [String]?
+    let lightAnchor: String
+    let deepAnchor: String
+
+    init(
+        neutrals: [String],
+        coreColours: [String],
+        accentColours: [String],
+        supportColours: [String]? = nil,
+        lightAnchor: String,
+        deepAnchor: String
+    ) {
+        self.neutrals = neutrals
+        self.coreColours = coreColours
+        self.accentColours = accentColours
+        self.supportColours = supportColours
+        self.lightAnchor = lightAnchor
+        self.deepAnchor = deepAnchor
+    }
+
+    // Back-compat decode: existing cached blueprints may not have anchor fields.
+    // We accept them but then synthesise safe defaults during decode.
+    enum CodingKeys: String, CodingKey {
+        case neutrals, coreColours, accentColours, supportColours, lightAnchor, deepAnchor
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.neutrals = try c.decode([String].self, forKey: .neutrals)
+        self.coreColours = try c.decode([String].self, forKey: .coreColours)
+        self.accentColours = try c.decode([String].self, forKey: .accentColours)
+        self.supportColours = try c.decodeIfPresent([String].self, forKey: .supportColours)
+        self.lightAnchor = try c.decodeIfPresent(String.self, forKey: .lightAnchor) ?? "warm ivory"
+        self.deepAnchor = try c.decodeIfPresent(String.self, forKey: .deepAnchor) ?? "espresso"
+    }
 }
 
 // MARK: - Decision Trace
@@ -234,6 +312,24 @@ struct VariationTrace: Codable, Equatable {
     static let none = VariationTrace(pullFamily: nil, pullStrength: 0, substitutions: [])
 }
 
+// MARK: - Accent Slots (V4.5)
+
+enum AccentRole: String, Codable, CaseIterable {
+    case signature = "Signature"
+    case contrast = "Contrast"
+    case depth = "Depth"
+    case lift = "Lift"
+}
+
+struct AccentSlot: Codable, Equatable {
+    let hex: String
+    let displayName: String
+    let role: AccentRole
+    let sourcePlanet: DriverKey
+    let sourceSign: V4ZodiacSign
+    let saturationOverrideApplied: Bool
+}
+
 // MARK: - Final Result
 
 struct ColourEngineResult: Codable, Equatable {
@@ -243,4 +339,53 @@ struct ColourEngineResult: Codable, Equatable {
     let palette: PaletteTriadV4
     let secondaryPull: PaletteFamily?
     let trace: FamilyDecisionTrace
+    /// V4.4 — chart-derived hero colour (Sun's sign projected into family
+    /// envelope). Hex. Invariant to secondary pulls.
+    let luminarySignature: String
+    /// V4.4 — chart-derived signature colour (Ascendant's domicile ruler
+    /// sign projected into family envelope). Hex. Invariant to secondary
+    /// pulls.
+    let rulerSignature: String
+    /// V4.5 — chart-derived accent slots (4 functional roles).
+    let accentSlots: [AccentSlot]
+
+    init(
+        variables: DerivedVariables,
+        family: PaletteFamily,
+        cluster: PaletteCluster,
+        palette: PaletteTriadV4,
+        secondaryPull: PaletteFamily?,
+        trace: FamilyDecisionTrace,
+        luminarySignature: String,
+        rulerSignature: String,
+        accentSlots: [AccentSlot] = []
+    ) {
+        self.variables = variables
+        self.family = family
+        self.cluster = cluster
+        self.palette = palette
+        self.secondaryPull = secondaryPull
+        self.trace = trace
+        self.luminarySignature = luminarySignature
+        self.rulerSignature = rulerSignature
+        self.accentSlots = accentSlots
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case variables, family, cluster, palette, secondaryPull, trace
+        case luminarySignature, rulerSignature, accentSlots
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.variables = try c.decode(DerivedVariables.self, forKey: .variables)
+        self.family = try c.decode(PaletteFamily.self, forKey: .family)
+        self.cluster = try c.decode(PaletteCluster.self, forKey: .cluster)
+        self.palette = try c.decode(PaletteTriadV4.self, forKey: .palette)
+        self.secondaryPull = try c.decodeIfPresent(PaletteFamily.self, forKey: .secondaryPull)
+        self.trace = try c.decode(FamilyDecisionTrace.self, forKey: .trace)
+        self.luminarySignature = try c.decodeIfPresent(String.self, forKey: .luminarySignature) ?? "#808080"
+        self.rulerSignature = try c.decodeIfPresent(String.self, forKey: .rulerSignature) ?? "#808080"
+        self.accentSlots = try c.decodeIfPresent([AccentSlot].self, forKey: .accentSlots) ?? []
+    }
 }

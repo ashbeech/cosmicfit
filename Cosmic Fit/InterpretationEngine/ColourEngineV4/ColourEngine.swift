@@ -69,8 +69,17 @@ enum ColourEngine {
             family: family
         )
 
-        // 9. Look up base palette template
-        let basePalette = PaletteLibrary.palette(for: family)
+        // 9. Look up base palette template + support colours
+        let baseTriad = PaletteLibrary.palette(for: family)
+        let supportColours = PaletteLibrary.supportPalette(for: family)
+        let basePalette = PaletteTriadV4(
+            neutrals: baseTriad.neutrals,
+            coreColours: baseTriad.coreColours,
+            accentColours: baseTriad.accentColours,
+            supportColours: supportColours,
+            lightAnchor: baseTriad.lightAnchor,
+            deepAnchor: baseTriad.deepAnchor
+        )
 
         // 10. Derive secondary pull
         let secondaryPull = SecondaryPullDerivation.derive(
@@ -79,13 +88,25 @@ enum ColourEngine {
             rawScores: rawScoresModified
         )
 
-        // 11. Apply per-user variation
-        let (palette, variationTrace) = VariationSlots.apply(
-            base: basePalette,
-            family: family,
-            secondaryPull: secondaryPull,
-            overrideFlags: flags
-        )
+        // 11. VariationSlots — retained but not invoked.
+        // Chart signatures (V4.4) + AccentResolver (V4.5) provide per-user
+        // individuation. Re-enable only if future design requires
+        // core/neutral/support per-user substitution.
+        let variationTrace: VariationTrace = .none
+
+        // 11b. Deep Autumn winter-compression anchor override
+        var palette = basePalette
+        if family == .deepAutumn && flags.winterCompressionApplied {
+            palette = PaletteTriadV4(
+                neutrals: basePalette.neutrals,
+                coreColours: basePalette.coreColours,
+                accentColours: basePalette.accentColours,
+                supportColours: basePalette.supportColours,
+                lightAnchor: basePalette.lightAnchor,
+                deepAnchor: "black"
+            )
+            flags.deepAnchorOverriddenToBlack = true
+        }
 
         // 12. Assemble trace
         let trace = FamilyDecisionTrace(
@@ -101,13 +122,64 @@ enum ColourEngine {
             variation: variationTrace
         )
 
+        // 13. Resolve V4.4 chart-signature swatches. These live alongside
+        // the template palette and anchors — computed from the user's
+        // actual chart (Sun sign + Ascendant's traditional ruler), then
+        // projected into the family envelope so they never break
+        // coherence. Invariant to secondary pulls by construction.
+        let luminarySignature = ChartSignatureResolver.luminarySignature(
+            family: family, input: input
+        )
+        let rulerSignature = ChartSignatureResolver.rulerSignature(
+            family: family, input: input
+        )
+
+        // 14. V4.6 — Resolve chart-derived accent slots. Each of 4 roles
+        // sources a planet's sign, then picks the best candidate from
+        // SignAccentExpressions (temperature-keyed) via spike scoring
+        // against the core palette. No envelope projection for accents.
+        var personalPaletteHexes = (palette.neutrals + palette.coreColours).map {
+            PaletteLibrary.hex(for: $0)
+        }
+        if let support = palette.supportColours {
+            personalPaletteHexes.append(contentsOf: support.map { PaletteLibrary.hex(for: $0) })
+        }
+        personalPaletteHexes.append(PaletteLibrary.hex(for: palette.lightAnchor))
+        personalPaletteHexes.append(PaletteLibrary.hex(for: palette.deepAnchor))
+        personalPaletteHexes.append(luminarySignature)
+        personalPaletteHexes.append(rulerSignature)
+
+        let accentSlots = AccentResolver.resolve(
+            family: family, input: input,
+            personalPaletteHexes: personalPaletteHexes
+        )
+
+        // Replace template accent band with chart-derived hex values
+        let accentHexes = accentSlots.map(\.hex)
+        palette = PaletteTriadV4(
+            neutrals: palette.neutrals,
+            coreColours: palette.coreColours,
+            accentColours: accentHexes,
+            supportColours: palette.supportColours,
+            lightAnchor: palette.lightAnchor,
+            deepAnchor: palette.deepAnchor
+        )
+
+        // 15. V4.5 — Post-assembly palette diagnostics (passive logging)
+        var allHexes = personalPaletteHexes
+        allHexes.append(contentsOf: accentHexes)
+        let _ = PaletteValidator.validate(accentHexes: accentHexes, allHexes: allHexes)
+
         return ColourEngineResult(
             variables: canonicalVariables,
             family: family,
             cluster: cluster,
             palette: palette,
             secondaryPull: secondaryPull,
-            trace: trace
+            trace: trace,
+            luminarySignature: luminarySignature,
+            rulerSignature: rulerSignature,
+            accentSlots: accentSlots
         )
     }
 }

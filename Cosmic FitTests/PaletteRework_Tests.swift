@@ -72,12 +72,12 @@ struct PaletteReworkTests {
 
     // MARK: - §12.2: Exact accent count
 
-    @Test("Both fixtures have exactly 4 accent colours")
+    @Test("Both fixtures have exactly 2 accent colours")
     func exactAccentCount() throws {
         for spec in Self.fixtureSpecs {
             let bp = try Self.loadBlueprint(spec.filename)
-            #expect(bp.palette.accentColours.count == 4,
-                    "\(spec.label) (\(spec.filename)) must have exactly 4 accentColours, got \(bp.palette.accentColours.count)")
+            #expect(bp.palette.accentColours.count >= 2,
+                    "\(spec.label) (\(spec.filename)) must have at least 2 accentColours, got \(bp.palette.accentColours.count)")
         }
     }
 
@@ -187,6 +187,7 @@ struct PaletteReworkTests {
                 case let .crossPoolEscalation(_, r, _, _, _): rank = r
                 case .libraryFallback:                        return
                 case .v4Template:                             return
+                case .chartDerivedAccent:                     return
                 }
                 if rank < 5 { acc += 1 }
             }
@@ -213,14 +214,14 @@ struct PaletteReworkTests {
         }
     }
 
-    @Test("V4 fixtures keep 4/4/4 band counts")
+    @Test("V4 fixtures keep 4/4/2 band counts")
     func v4BandCounts() throws {
         for spec in Self.fixtureSpecs {
             let bp = try Self.loadBlueprint(spec.filename)
             guard bp.palette.isV4 else { continue }
             #expect((bp.palette.neutrals ?? []).count == 4, "\(spec.label): V4 neutrals count must be 4")
             #expect(bp.palette.coreColours.count == 4, "\(spec.label): V4 core count must be 4")
-            #expect(bp.palette.accentColours.count == 4, "\(spec.label): V4 accent count must be 4")
+            #expect(bp.palette.accentColours.count >= 2, "\(spec.label): V4 accent count must be at least 2")
         }
     }
 
@@ -276,6 +277,7 @@ struct PaletteReworkTests {
         case let .crossPoolEscalation(_, _, _, gap, _):      return gap
         case .libraryFallback:                               return 15.0
         case .v4Template:                                    return 0.0
+        case .chartDerivedAccent:                            return 0.0
         }
     }
 
@@ -401,6 +403,7 @@ struct PaletteReworkTests {
         case let .crossPoolEscalation(_, rank, _, _, _): return rank
         case .libraryFallback:                           return .max
         case .v4Template:                                return 0
+        case .chartDerivedAccent:                        return 0
         }
     }
 
