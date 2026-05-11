@@ -446,7 +446,6 @@ class ProfileViewController: UIViewController {
         forceRefreshButton.setTitle("Refreshing…", for: .normal)
 
         BlueprintStorage.shared.delete()
-        DailyVibeStorage.shared.cleanupOldEntries(daysToKeep: 0)
 
         NotificationCenter.default.post(name: .devForceRefreshRequested, object: nil)
 

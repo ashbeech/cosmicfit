@@ -13,7 +13,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     private var lastActiveDate: Date?
     
+    private var isRunningTests: Bool {
+        ProcessInfo.processInfo.environment["XCTestBundlePath"] != nil
+            || ProcessInfo.processInfo.environment["XCTestSessionIdentifier"] != nil
+            || NSClassFromString("XCTestCase") != nil
+    }
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        if isRunningTests {
+            window = UIWindow(frame: UIScreen.main.bounds)
+            window?.rootViewController = UIViewController()
+            window?.makeKeyAndVisible()
+            return true
+        }
         
         requestLocationPermissionEarly()
         
@@ -89,7 +102,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                  longitude: userProfile.longitude,
                                  timeZone: TimeZone(identifier: userProfile.timeZoneIdentifier) ?? TimeZone.current)
         
-        // Always land on Blueprint (Style Guide, index 1) first.
+        // Always land on Style Guide tab (index 1) first.
         // Auth resolves async; tab controller handles deferred swap to Daily Fit.
         tabBarController.selectedIndex = 1
         
@@ -97,7 +110,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         launchScreenVC.setMainViewController(tabBarController)
         
-        print("✅ Returning user detected — landing on Blueprint tab (auth resolving async)")
+        print("✅ Returning user detected — landing on Style Guide tab (auth resolving async)")
     }
     
     private func setupWelcomeIntroFlow(launchScreenVC: AnimatedLaunchScreenViewController) {
@@ -179,21 +192,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
     }
     
-    // MARK: - Daily Vibe Management
+    // MARK: - Daily Fit Management
     private func setupDailyVibeManagement() {
-        // Clean up old daily vibe entries on app launch
-        DailyVibeStorage.shared.cleanupOldEntries(daysToKeep: 30)
-        
         // Set up background task for midnight refresh if needed
         setupMidnightRefreshObserver()
-        
-        // Set up notification observers for daily vibe updates
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleDailyVibeUpdate),
-            name: Notification.Name("DailyVibeGenerated"),
-            object: nil
-        )
     }
     
     private func setupMidnightRefreshObserver() {
@@ -217,7 +219,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     @objc private func handleDailyVibeUpdate() {
-        print("📅 Daily vibe content updated")
+        print("📅 Daily fit content updated")
     }
     
     private func checkForDateChange() {
@@ -234,17 +236,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func handleDateChange() {
-        print("🔄 Handling date change - preparing for new daily vibe")
+        print("🔄 Handling date change - preparing for new daily fit")
         
-        // Post notification that date has changed
-        // This allows any daily vibe view controllers to refresh their content
         NotificationCenter.default.post(name: .dailyVibeNeedsRefresh, object: nil)
-        
-        // Clear any cached daily vibe data for the new day
-        // (The storage handles date-specific keys, so this is just for any in-memory caches)
-        
-        // Optionally clean up old entries
-        DailyVibeStorage.shared.cleanupOldEntries(daysToKeep: 30)
     }
     
     // MARK: - Early Location Request

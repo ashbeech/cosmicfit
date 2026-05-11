@@ -29,12 +29,14 @@ class TarotRecencyTracker {
     
     // MARK: - Singleton
     
-    static let shared = TarotRecencyTracker()
-    private init() {}
+    static var shared = TarotRecencyTracker()
+    init(userDefaults: UserDefaults = .standard) {
+        self.userDefaults = userDefaults
+    }
     
     // MARK: - Private Properties
     
-    private let userDefaults = UserDefaults.standard
+    private let userDefaults: UserDefaults
     
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()

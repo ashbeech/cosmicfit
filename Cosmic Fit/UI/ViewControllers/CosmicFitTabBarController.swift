@@ -25,7 +25,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     
     private var natalChart: NatalChartCalculator.NatalChart?
     private var progressedChart: NatalChartCalculator.NatalChart?
-    private var dailyVibeContent: DailyVibeContent?
+    private var dailyFitPayload: DailyFitPayload?
     
     private var todayWeather: TodayWeather?
     private var chartIdentifier: String?
@@ -128,7 +128,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         return true
     }
     
-    // Track whether user manually navigated away from Blueprint
+    // Track whether user manually navigated away from the Style Guide tab
     private var userHasManuallyNavigated = false
     
     // MARK: - Lifecycle
@@ -191,11 +191,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         self.timeZone = timeZone
         
         // Generate chart identifier for daily vibe persistence
-        self.chartIdentifier = DailyVibeStorage.generateChartIdentifier(
-            birthDate: birthDate,
-            latitude: latitude,
-            longitude: longitude
-        )
+        self.chartIdentifier = "\(birthDate.timeIntervalSince1970)_\(latitude)_\(longitude)"
         
         // Calculate natal and progressed charts
         calculateCharts()
@@ -513,11 +509,13 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         print("🔄 [DEV] Force refresh requested — wiping caches and regenerating")
 
         BlueprintStorage.shared.delete()
-        DailyVibeStorage.shared.cleanupOldEntries(daysToKeep: 0)
-        dailyVibeContent = nil
+        DailyFitFrozenPayloadStorage.shared.removeAll()
+        dailyFitPayload = nil
 
         calculateCharts()
         generateContent()
+
+        setupViewControllers()
 
         print("✅ [DEV] Force refresh complete")
     }
@@ -546,9 +544,10 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         // Recalculate charts with new data
         calculateCharts()
         
-        // Delete existing blueprint so the engine regenerates from the updated chart
+        // Delete existing Style Guide data so the engine regenerates from the updated chart
         BlueprintStorage.shared.delete()
-        dailyVibeContent = nil
+        DailyFitFrozenPayloadStorage.shared.removeAll()
+        dailyFitPayload = nil
         
         // Regenerate content
         generateContent()
@@ -585,7 +584,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         if isAuthenticated {
             print("🔓 Auth state: authenticated — swapping auth gate for Daily Fit")
             
-            // Hydrate: if no local blueprint, try pulling from Supabase (new device / reinstall)
+            // Hydrate: if no local Style Guide, try pulling from Supabase (new device / reinstall)
             if BlueprintStorage.shared.load() == nil {
                 Task {
                     await hydrateBlueprint()
@@ -597,7 +596,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
             
             setupViewControllers()
             
-            // Deferred tab swap: if user hasn't manually navigated away from Blueprint, switch to Daily Fit
+            // Deferred tab swap: if user hasn't manually navigated away from Style Guide, switch to Daily Fit
             if !userHasManuallyNavigated && selectedIndex == 1 {
                 selectedIndex = 0
                 updateTabSelectionIndicator()
@@ -610,21 +609,21 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         }
     }
     
-    /// Attempts to pull a blueprint from Supabase and save it locally.
-    /// If no remote blueprint exists, falls back to local generation.
+    /// Attempts to pull Style Guide data (`CosmicBlueprint`) from Supabase and save it locally.
+    /// If no remote copy exists, falls back to local generation.
     private func hydrateBlueprint() async {
         do {
             if let remote = try await SupabaseSyncService.shared.pullBlueprintFromSupabase() {
                 BlueprintStorage.shared.save(remote)
-                print("✅ Blueprint hydrated from Supabase")
+                print("✅ Style Guide hydrated from Supabase")
             } else {
-                print("ℹ️ No remote blueprint — generating locally")
+                print("ℹ️ No remote Style Guide — generating locally")
                 DispatchQueue.main.async { [weak self] in
                     self?.generateAndPersistBlueprint()
                 }
             }
         } catch {
-            print("⚠️ Blueprint pull failed: \(error.localizedDescription) — generating locally")
+            print("⚠️ Style Guide pull failed: \(error.localizedDescription) — generating locally")
             DispatchQueue.main.async { [weak self] in
                 self?.generateAndPersistBlueprint()
             }
@@ -697,58 +696,42 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         print("🎯 Content Generation Started")
         print("  • Chart ID: \(chartId)")
         print("  • User ID: \(userProfile?.id ?? "None")")
-        print("  • Blueprint persisted: \(BlueprintStorage.shared.load() != nil)")
-        print("  • Daily Fit cached: \(dailyVibeContent != nil)")
+        print("  • Style Guide persisted: \(BlueprintStorage.shared.load() != nil)")
         
-        // Blueprint generation (one-per-life: only compose when no local blueprint exists)
+        // Style Guide generation (one-per-life: only compose when no local CosmicBlueprint exists)
         if BlueprintStorage.shared.load() == nil {
             generateAndPersistBlueprint()
         } else {
-            print("✅ Blueprint already persisted, skipping generation")
+            print("✅ Style Guide already persisted, skipping generation")
         }
         
-        // Daily Fit content
-        if dailyVibeContent == nil {
-            if let userId = userProfile?.id,
-               let existingContent = DailyVibeStorage.shared.loadDailyVibeForUser(
-                userId: userId,
-                for: Date()
-               ) {
-                self.dailyVibeContent = existingContent
-                print("📱 Loaded existing daily fit for user \(userId) today")
-            } else if let existingContent = DailyVibeStorage.shared.loadDailyVibe(
-                for: Date(),
-                chartIdentifier: chartId
-            ) {
-                self.dailyVibeContent = existingContent
-                print("✅ Loaded existing daily vibe for today (legacy storage)")
-            } else {
-                generateAndCacheDailyVibe(chartId: chartId)
-            }
+        // Daily Fit content via new 2-stage pipeline
+        if dailyFitPayload == nil {
+            generateAndCacheDailyVibe(chartId: chartId)
         } else {
-            print("✅ Daily Fit already cached, skipping regeneration")
+            print("✅ Daily Fit payload already cached, skipping regeneration")
         }
         
         print("🎯 Content Generation Complete")
     }
     
-    /// Runs the full Blueprint pipeline: chart → tokens → resolve → narratives → CosmicBlueprint.
+    /// Runs the full Style Guide pipeline: chart → tokens → resolve → narratives → CosmicBlueprint.
     /// Persists locally and pushes to Supabase if authenticated.
     private func generateAndPersistBlueprint() {
         guard let chart = natalChart, let birthDate = birthDate else {
-            print("❌ Cannot generate blueprint — missing natal chart or birth date")
+            print("❌ Cannot generate Style Guide — missing natal chart or birth date")
             return
         }
         
         guard let dataset = BlueprintTokenGenerator.loadDataset() else {
-            print("❌ Cannot generate blueprint — astrological_style_dataset.json not found in bundle")
+            print("❌ Cannot generate Style Guide — bundle resource astrological_style_dataset.json missing (symlink data/style_guide/?)")
             return
         }
         
         let narrativeCache = NarrativeCacheLoader.shared
         if !narrativeCache.isLoaded {
             if !narrativeCache.loadFromBundle() {
-                print("⚠️ Narrative cache not loaded — blueprint will have empty narrative sections")
+                print("⚠️ Narrative cache not loaded — Style Guide will have empty narrative sections")
             }
         }
         
@@ -763,54 +746,87 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         )
         
         BlueprintStorage.shared.save(blueprint)
-        print("✅ Blueprint generated and saved (engine v\(blueprint.engineVersion))")
+        print("✅ Style Guide generated and saved (engine v\(blueprint.engineVersion))")
         
         if CosmicFitAuthService.shared.isAuthenticated {
             Task {
                 do {
                     try await SupabaseSyncService.shared.syncBlueprintToSupabase(blueprint)
                 } catch {
-                    print("⚠️ Blueprint Supabase sync failed: \(error.localizedDescription)")
+                    print("⚠️ Style Guide Supabase sync failed: \(error.localizedDescription)")
                 }
             }
         }
     }
     
-    private func generateAndCacheDailyVibe(chartId: String) {
+    private func generateAndCacheDailyVibe(chartId: String, forDate date: Date = Date()) {
+        let profileKey = userProfile?.id ?? chartId
+        if UserDefaults.standard.bool(forKey: DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date)),
+           let frozen = DailyFitFrozenPayloadStorage.shared.load(date: date, profileKey: profileKey) {
+            dailyFitPayload = frozen
+            return
+        }
+
         guard let natal = natalChart, let progressed = progressedChart else {
-            dailyVibeContent = .placeholder
-            print("✅ Daily Fit placeholder set (missing chart data)")
             return
         }
 
         let transits = NatalChartCalculator.calculateTransits(natalChart: natal)
-        let julianDay = JulianDateCalculator.calculateJulianDate(from: Date())
+        let julianDay = JulianDateCalculator.calculateJulianDate(from: date)
         let moonPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: julianDay)
         let profileHash = userProfile?.id ?? chartId
 
-        let content = DailyVibeGenerator.generateDailyVibe(
+        let snapshot = DailyEnergyEngine.generateSnapshot(
             natalChart: natal,
             progressedChart: progressed,
             transits: transits,
-            weather: todayWeather,
-            moonPhase: moonPhase,
+            moonPhaseDegrees: moonPhase,
             profileHash: profileHash,
-            date: Date()
+            date: date
         )
 
-        dailyVibeContent = content
+        if let blueprint = BlueprintStorage.shared.load() {
+            let payload = BlueprintLensEngine.generatePayload(
+                blueprint: blueprint,
+                snapshot: snapshot
+            )
+            dailyFitPayload = payload
 
-        if let userId = userProfile?.id {
-            DailyVibeStorage.shared.saveDailyVibeForUser(
-                content, userId: userId, for: Date()
+            #if DEBUG
+            BlueprintLensEngine.logDailyFitDiagnostics(
+                snapshot: snapshot, payload: payload, blueprint: blueprint
             )
+            #endif
         } else {
-            DailyVibeStorage.shared.saveDailyVibe(
-                content, for: Date(), chartIdentifier: chartId
-            )
+            print("⚠️ No Style Guide available — Daily Fit cannot be generated")
+        }
+    }
+
+    /// Generates a payload for a given date without caching it on the tab bar controller.
+    private func generateDailyPayload(forDate date: Date) -> DailyFitPayload? {
+        let profileKey = userProfile?.id ?? chartIdentifier ?? ""
+        if UserDefaults.standard.bool(forKey: DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date)),
+           let frozen = DailyFitFrozenPayloadStorage.shared.load(date: date, profileKey: profileKey) {
+            return frozen
         }
 
-        print("✅ Daily Fit generated and cached via DailyVibeGenerator")
+        guard let natal = natalChart, let progressed = progressedChart else { return nil }
+        let transits = NatalChartCalculator.calculateTransits(natalChart: natal)
+        let julianDay = JulianDateCalculator.calculateJulianDate(from: date)
+        let moonPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: julianDay)
+        let profileHash = userProfile?.id ?? chartIdentifier ?? ""
+
+        let snapshot = DailyEnergyEngine.generateSnapshot(
+            natalChart: natal,
+            progressedChart: progressed,
+            transits: transits,
+            moonPhaseDegrees: moonPhase,
+            profileHash: profileHash,
+            date: date
+        )
+
+        guard let blueprint = BlueprintStorage.shared.load() else { return nil }
+        return BlueprintLensEngine.generatePayload(blueprint: blueprint, snapshot: snapshot)
     }
 
     private func extractLocationFromBirthInfo() -> (city: String, country: String) {
@@ -883,7 +899,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
                         self.todayWeather = wx
                         
                         // Regenerate daily content with weather data if needed
-                        if self.dailyVibeContent == nil {
+                        if self.dailyFitPayload == nil {
                             self.generateContent()
                             self.setupViewControllers()
                         }
@@ -910,11 +926,16 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         // Index 0: Daily Fit (authenticated) or Auth Gate (unauthenticated)
         if CosmicFitAuthService.shared.isAuthenticated {
             let dailyFitVC = DailyFitViewController()
-            if let dailyVibeContent = dailyVibeContent {
+            if let payload = dailyFitPayload {
                 dailyFitVC.configure(
-                    with: dailyVibeContent,
+                    with: payload,
                     originalChartViewController: createDebugChartViewController()
                 )
+            }
+
+            dailyFitVC.persistenceProfileKey = userProfile?.id ?? chartIdentifier
+            dailyFitVC.payloadGenerator = { [weak self] date -> DailyFitPayload? in
+                return self?.generateDailyPayload(forDate: date)
             }
             dailyFitVC.tabBarItem = UITabBarItem(
                 title: "Daily Fit",
@@ -934,7 +955,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
             viewControllers.append(authNav)
         }
 
-        // Index 1: Style Guide (Blueprint)
+        // Index 1: Style Guide
         let styleGuideVC = StyleGuideViewController()
         let (city, country) = extractLocationFromBirthInfo()
         styleGuideVC.configure(
@@ -978,7 +999,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
                 todayWeather = wx
                 
                 // Regenerate daily content with weather data if needed
-                if dailyVibeContent == nil {
+                if dailyFitPayload == nil {
                     generateContent()
                     setupViewControllers()
                 }

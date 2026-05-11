@@ -47,10 +47,8 @@ struct PaletteReworkTests {
     }
 
     private static func loadDataset() -> AstrologicalStyleDataset? {
-        let testFile = URL(fileURLWithPath: #filePath)
-        let repoRoot = testFile.deletingLastPathComponent().deletingLastPathComponent()
-        return BlueprintTokenGenerator.loadDataset(
-            from: repoRoot.appendingPathComponent("astrological_style_dataset.json")
+        BlueprintTokenGenerator.loadDataset(
+            from: StyleGuideDataURL.astrologicalStyleDataset(testFilePath: #filePath)
         )
     }
 
@@ -286,7 +284,7 @@ struct PaletteReworkTests {
     @Test("Both fixture charts: 10 consecutive resolves produce byte-identical PaletteSection")
     func resolverDeterminism() throws {
         guard let dataset = Self.loadDataset() else {
-            Issue.record("Failed to load astrological_style_dataset.json")
+            Issue.record("Failed to load data/style_guide/astrological_style_dataset.json")
             return
         }
 
@@ -418,7 +416,7 @@ struct PaletteReworkTests {
     @Test("Dataset ships a non-empty fallback_palette_pool with ≥1 core and ≥1 accent")
     func datasetShipsFallbackPool() {
         guard let dataset = Self.loadDataset() else {
-            Issue.record("Failed to load astrological_style_dataset.json")
+            Issue.record("Failed to load data/style_guide/astrological_style_dataset.json")
             return
         }
         let pool = dataset.fallbackPalettePool ?? []

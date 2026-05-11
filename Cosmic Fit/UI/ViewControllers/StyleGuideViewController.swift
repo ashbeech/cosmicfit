@@ -2,7 +2,7 @@
 //  StyleGuideViewController.swift
 //  Cosmic Fit
 //
-//  Blueprint Style Guide hub — 2×4 grid linking to eight blueprint sections.
+//  Style Guide hub — 2×4 grid linking to eight sections of the user's CosmicBlueprint.
 //
 
 import UIKit
@@ -434,7 +434,7 @@ final class StyleGuideViewController: UIViewController {
     // MARK: - Live Palette Data
 
     /// Attempts to build a live `PaletteGrid` from the current user's
-    /// persisted `CosmicBlueprint`. Returns nil when no valid blueprint is
+    /// persisted `CosmicBlueprint`. Returns nil when no valid Style Guide data is
     /// available (not yet generated, decode failure, empty palette, etc.),
     /// signalling the caller to fall back to `ColourPaletteView.placeholder()`.
     ///
@@ -449,23 +449,23 @@ final class StyleGuideViewController: UIViewController {
     /// for a single-user JSON file) and avoids async complexity.
     private func buildLivePaletteGrid() -> PaletteGrid? {
         guard let blueprint = BlueprintStorage.shared.load() else {
-            print("[Palette] No persisted blueprint — using placeholder grid")
+            print("[Palette] No persisted Style Guide — using placeholder grid")
             return nil
         }
         let section = blueprint.palette
         guard !section.coreColours.isEmpty else {
-            print("[Palette] Blueprint loaded but palette has no core colours — using placeholder grid")
+            print("[Palette] Style Guide loaded but palette has no core colours — using placeholder grid")
             return nil
         }
-        print("[Palette] Live blueprint loaded — \(section.coreColours.count) core, \(section.accentColours.count) accent")
+        print("[Palette] Live Style Guide palette loaded — \(section.coreColours.count) core, \(section.accentColours.count) accent")
         return PaletteGridViewModel.build(from: section)
     }
 
     // MARK: - Section Content Factory
 
-    /// Loads the persisted blueprint once per detail-view tap and routes each
-    /// section to the corresponding `CosmicBlueprint` field. Falls back to
-    /// placeholder copy when no blueprint is available (not yet generated,
+    /// Loads the persisted Style Guide (`CosmicBlueprint`) once per detail-view tap and routes each
+    /// section to the corresponding field. Falls back to
+    /// placeholder copy when no data is available (not yet generated,
     /// narrative cache empty, etc.).
     private func createContent(for section: StyleGuideDetailContent.StyleGuideSection) -> StyleGuideDetailContent {
         let bp = BlueprintStorage.shared.load()

@@ -1,0 +1,8 @@
+# Python dependencies for tools/ (local development only)
+# From repo root: pip install -r tools/requirements.txt
+
+# tools/backfill_narratives.py
+google-generativeai>=0.8.0
+
+# tools/review_tool.py
+flask>=3.0.0

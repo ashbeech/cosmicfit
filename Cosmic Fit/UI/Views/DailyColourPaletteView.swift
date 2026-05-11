@@ -2,58 +2,40 @@
 //  DailyColourPaletteView.swift
 //  Cosmic Fit
 //
-//  A reusable component that displays daily colour palette with top 3 colours and gradient bar
+//  Displays 3 daily colour swatches in a horizontal row, matching the Style Guide swatch style.
 //
 
 import UIKit
 
-/// Displays the daily colour palette with top 3 colours in a specific layout plus a gradient bar
 final class DailyColourPaletteView: UIView {
-    
+
     // MARK: - Properties
-    
-    private let colour1View = UIView()
-    private let colour2View = UIView()
-    private let colour3View = UIView()
-    private let gradientBar = UIView()
-    
-    private var allColours: [UIColor] = []
-    
+
+    private let swatchCornerRadius: CGFloat = 4
+    private let swatchSpacing: CGFloat = 6
+    private var swatchViews: [UIView] = []
+    private var nameLabels: [UILabel] = []
+
     // MARK: - Initialization
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Public Configuration
-    
-    /// Configure the palette with style tokens from the IE (legacy path).
-    func configure(with tokens: [StyleToken]) {
-        let topColours = ColourMapper.getTopColours(from: tokens, count: 3)
 
-        if topColours.count >= 1 { colour1View.backgroundColor = topColours[0].1 }
-        if topColours.count >= 2 { colour2View.backgroundColor = topColours[1].1 }
-        if topColours.count >= 3 { colour3View.backgroundColor = topColours[2].1 }
-
-        allColours = ColourMapper.getAllColours(from: tokens)
-        updateGradientBar()
-    }
-
-    /// Configure the palette directly from V4 hex strings (3 daily colours +
-    /// full gradient from all 12 palette anchors).
     func configure(dailyHexes: [String], allPaletteHexes: [String]) {
         let dailyUIColors = dailyHexes.compactMap { Self.uiColor(fromHex: $0) }
-        if dailyUIColors.count >= 1 { colour1View.backgroundColor = dailyUIColors[0] }
-        if dailyUIColors.count >= 2 { colour2View.backgroundColor = dailyUIColors[1] }
-        if dailyUIColors.count >= 3 { colour3View.backgroundColor = dailyUIColors[2] }
-
-        allColours = allPaletteHexes.compactMap { Self.uiColor(fromHex: $0) }
-        updateGradientBar()
+        for (index, swatch) in swatchViews.enumerated() {
+            if index < dailyUIColors.count {
+                swatch.backgroundColor = dailyUIColors[index]
+            }
+        }
     }
 
     private static func uiColor(fromHex hex: String) -> UIColor? {
@@ -66,84 +48,46 @@ final class DailyColourPaletteView: UIView {
             alpha: 1.0
         )
     }
-    
+
     // MARK: - Private Setup
-    
+
     private func setupUI() {
-        // Configure colour views with rounded corners
-        [colour1View, colour2View, colour3View].forEach { view in
-            view.translatesAutoresizingMaskIntoConstraints = false
-            view.layer.cornerRadius = 12
-            view.clipsToBounds = true
-            view.backgroundColor = CosmicFitTheme.Colours.cosmicGrey // Default
-            addSubview(view)
+        for _ in 0..<3 {
+            let swatch = UIView()
+            swatch.translatesAutoresizingMaskIntoConstraints = false
+            swatch.layer.cornerRadius = swatchCornerRadius
+            swatch.clipsToBounds = true
+            swatch.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
+            addSubview(swatch)
+            swatchViews.append(swatch)
         }
-        
-        // Configure gradient bar
-        gradientBar.translatesAutoresizingMaskIntoConstraints = false
-        gradientBar.layer.cornerRadius = 6
-        gradientBar.clipsToBounds = true
-        addSubview(gradientBar)
-        
+
         setupConstraints()
     }
-    
+
     private func setupConstraints() {
+        guard swatchViews.count == 3 else { return }
+        let s0 = swatchViews[0]
+        let s1 = swatchViews[1]
+        let s2 = swatchViews[2]
+
         NSLayoutConstraint.activate([
-            // Colour 1: Left column, spans 2 rows (most prominent)
-            colour1View.leadingAnchor.constraint(equalTo: leadingAnchor),
-            colour1View.topAnchor.constraint(equalTo: topAnchor),
-            colour1View.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.48), // Slightly less than half
-            colour1View.heightAnchor.constraint(equalToConstant: 140),
-            
-            // Colour 2: Right column, top row
-            colour2View.trailingAnchor.constraint(equalTo: trailingAnchor),
-            colour2View.topAnchor.constraint(equalTo: topAnchor),
-            colour2View.leadingAnchor.constraint(equalTo: colour1View.trailingAnchor, constant: 8),
-            colour2View.heightAnchor.constraint(equalToConstant: 66),
-            
-            // Colour 3: Right column, bottom row
-            colour3View.trailingAnchor.constraint(equalTo: trailingAnchor),
-            colour3View.topAnchor.constraint(equalTo: colour2View.bottomAnchor, constant: 8),
-            colour3View.leadingAnchor.constraint(equalTo: colour1View.trailingAnchor, constant: 8),
-            colour3View.heightAnchor.constraint(equalToConstant: 66),
-            
-            // Gradient bar: Below the colour grid, spanning full width
-            gradientBar.topAnchor.constraint(equalTo: colour1View.bottomAnchor, constant: 12),
-            gradientBar.leadingAnchor.constraint(equalTo: leadingAnchor),
-            gradientBar.trailingAnchor.constraint(equalTo: trailingAnchor),
-            gradientBar.heightAnchor.constraint(equalToConstant: 12),
-            
-            // Container height
-            bottomAnchor.constraint(equalTo: gradientBar.bottomAnchor)
+            s0.topAnchor.constraint(equalTo: topAnchor),
+            s0.leadingAnchor.constraint(equalTo: leadingAnchor),
+            s0.heightAnchor.constraint(equalTo: s0.widthAnchor),
+
+            s1.topAnchor.constraint(equalTo: topAnchor),
+            s1.leadingAnchor.constraint(equalTo: s0.trailingAnchor, constant: swatchSpacing),
+            s1.widthAnchor.constraint(equalTo: s0.widthAnchor),
+            s1.heightAnchor.constraint(equalTo: s0.heightAnchor),
+
+            s2.topAnchor.constraint(equalTo: topAnchor),
+            s2.leadingAnchor.constraint(equalTo: s1.trailingAnchor, constant: swatchSpacing),
+            s2.widthAnchor.constraint(equalTo: s0.widthAnchor),
+            s2.heightAnchor.constraint(equalTo: s0.heightAnchor),
+            s2.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            bottomAnchor.constraint(equalTo: s0.bottomAnchor)
         ])
-    }
-    
-    private func updateGradientBar() {
-        // Remove existing gradient layers
-        gradientBar.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
-        
-        guard !allColours.isEmpty else { return }
-        
-        // Create gradient from all colours
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = allColours.map { $0.cgColor }
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
-        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
-        gradientLayer.cornerRadius = 6
-        
-        // Set frame (will be updated in layoutSubviews)
-        gradientLayer.frame = gradientBar.bounds
-        
-        gradientBar.layer.addSublayer(gradientLayer)
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        // Update gradient layer frame when view bounds change
-        if let gradientLayer = gradientBar.layer.sublayers?.first as? CAGradientLayer {
-            gradientLayer.frame = gradientBar.bounds
-        }
     }
 }

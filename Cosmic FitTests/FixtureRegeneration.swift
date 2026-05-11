@@ -44,11 +44,11 @@ struct FixtureRegeneration {
         }
 
         guard let dataset = Self.loadDataset() else {
-            Issue.record("Failed to load astrological_style_dataset.json")
+            Issue.record("Failed to load data/style_guide/astrological_style_dataset.json")
             return
         }
         guard let narrativeCache = Self.loadNarrativeCache() else {
-            Issue.record("Failed to load blueprint_narrative_cache.json")
+            Issue.record("Failed to load data/style_guide/blueprint_narrative_cache.json")
             return
         }
 
@@ -153,17 +153,13 @@ struct FixtureRegeneration {
     // MARK: - Support
 
     private static func loadDataset() -> AstrologicalStyleDataset? {
-        let testFile = URL(fileURLWithPath: #filePath)
-        let repoRoot = testFile.deletingLastPathComponent().deletingLastPathComponent()
-        return BlueprintTokenGenerator.loadDataset(
-            from: repoRoot.appendingPathComponent("astrological_style_dataset.json")
+        BlueprintTokenGenerator.loadDataset(
+            from: StyleGuideDataURL.astrologicalStyleDataset(testFilePath: #filePath)
         )
     }
 
     private static func loadNarrativeCache() -> NarrativeCacheLoader? {
-        let testFile = URL(fileURLWithPath: #filePath)
-        let repoRoot = testFile.deletingLastPathComponent().deletingLastPathComponent()
-        let cacheURL = repoRoot.appendingPathComponent("blueprint_narrative_cache.json")
+        let cacheURL = StyleGuideDataURL.blueprintNarrativeCache(testFilePath: #filePath)
         let loader = NarrativeCacheLoader()
         guard loader.loadFromURL(cacheURL), loader.clusterCount > 0 else { return nil }
         return loader

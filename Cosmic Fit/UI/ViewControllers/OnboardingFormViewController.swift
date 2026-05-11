@@ -756,7 +756,7 @@ class OnboardingFormViewController: UIViewController {
                                  longitude: profile.longitude,
                                  timeZone: TimeZone(identifier: profile.timeZoneIdentifier) ?? TimeZone.current)
         
-        // New users land on Blueprint (Style Guide, index 1)
+        // New users land on Style Guide (index 1)
         tabBarController.selectedIndex = 1
         
         DispatchQueue.main.async {

@@ -57,9 +57,8 @@ final class NatalChartViewController: UIViewController {
     private var longitude:  Double = 0
     private var timeZone:   TimeZone?
     
-    // Daily vibe management
+    // Daily fit management
     private var chartIdentifier: String?
-    private var cachedDailyVibeContent: DailyVibeContent?
     
     // Helpers
     private let locManager = LocationManager()
@@ -97,12 +96,8 @@ final class NatalChartViewController: UIViewController {
         self.longitude   = longitude
         self.timeZone    = timeZone
         
-        // Generate chart identifier for daily vibe persistence
-        self.chartIdentifier = DailyVibeStorage.generateChartIdentifier(
-            birthDate: birthDate,
-            latitude: latitude,
-            longitude: longitude
-        )
+        // Generate chart identifier for persistence
+        self.chartIdentifier = "\(birthDate.timeIntervalSince1970)_\(latitude)_\(longitude)"
         
         currentAge = NatalChartCalculator.calculateCurrentAge(from: birthDate)
         
@@ -160,19 +155,6 @@ final class NatalChartViewController: UIViewController {
     
     private func handleDateChange() {
         print("📅 NatalChartViewController received date change notification")
-        
-        // Clear cached daily vibe content so new content gets generated
-        cachedDailyVibeContent = nil
-        
-        // If we have a cached daily vibe view controller, notify it to refresh
-        if let navController = navigationController {
-            for viewController in navController.viewControllers {
-                if viewController is DailyVibeInterpretationViewController {
-                    // The daily vibe view controller will handle its own refresh
-                    break
-                }
-            }
-        }
     }
     
     // --------------------------------------------------------------------
@@ -350,104 +332,11 @@ final class NatalChartViewController: UIViewController {
     }
     
     // --------------------------------------------------------------------
-    // MARK: Daily Vibe Management
-    // --------------------------------------------------------------------
-    
-    /// Generate or load daily vibe content for today
-    /// PLACEHOLDER: Live engine disconnected pending Blueprint rebuild.
-    private func getDailyVibeContent() -> DailyVibeContent? {
-        guard let _ = natalChart,
-              let _ = progressedChart,
-              let chartId = chartIdentifier else {
-            print("❌ Missing required data for daily vibe generation")
-            return nil
-        }
-        
-        if let existingContent = DailyVibeStorage.shared.loadDailyVibe(
-            for: Date(),
-            chartIdentifier: chartId
-        ) {
-            print("✅ Loaded existing daily vibe for today")
-            return existingContent
-        }
-        
-        let dailyVibeContent = DailyVibeContent.placeholder
-        
-        DailyVibeStorage.shared.saveDailyVibe(
-            dailyVibeContent,
-            for: Date(),
-            chartIdentifier: chartId
-        )
-        
-        return dailyVibeContent
-    }
-    
-    /// Generate or load daily vibe content with debug information
-    /// PLACEHOLDER: Live engine disconnected pending Blueprint rebuild.
-    private func getDailyVibeContentWithDebug() -> DailyVibeContent? {
-        guard let _ = natalChart,
-              let _ = progressedChart,
-              let chartId = chartIdentifier else {
-            print("❌ Missing required data for daily vibe generation")
-            return nil
-        }
-        
-        if let existingContent = DailyVibeStorage.shared.loadDailyVibe(
-            for: Date(),
-            chartIdentifier: chartId
-        ) {
-            print("✅ Loaded existing daily vibe for today")
-            return existingContent
-        }
-        
-        let dailyVibeContent = DailyVibeContent.placeholder
-        
-        DailyVibeStorage.shared.saveDailyVibe(
-            dailyVibeContent,
-            for: Date(),
-            chartIdentifier: chartId
-        )
-        
-        return dailyVibeContent
-    }
-    
-    // --------------------------------------------------------------------
     // MARK: Actions
     // --------------------------------------------------------------------
     
-    @objc private func showDailyVibeInterpretation() {
-        // Show loading indicator
-        activityIndicator.startAnimating()
-        
-        print("Generating/Loading Daily Vibe interpretation")
-        
-        // Get daily vibe content (load existing or generate new)
-        guard let dailyVibeContent = getDailyVibeContent() else {
-            activityIndicator.stopAnimating()
-            showAlert(message: "Unable to generate daily vibe. Please try again.")
-            return
-        }
-        
-        // Create and push the DailyVibeInterpretationViewController
-        let dailyVibeVC = DailyVibeInterpretationViewController()
-        dailyVibeVC.configure(with: dailyVibeContent)
-        
-        // Stop the activity indicator
-        self.activityIndicator.stopAnimating()
-        
-        // Navigate to daily vibe view
-        if let navController = self.navigationController {
-            print("Pushing Daily Vibe interpretation view controller")
-            navController.pushViewController(dailyVibeVC, animated: true)
-        } else {
-            print("ERROR: No navigation controller available")
-            // Fallback: Present modally if navigation controller isn't available
-            self.present(dailyVibeVC, animated: true)
-        }
-    }
-    
     /// Override the Style Guide interpretation generation to use the debug version
-    /// PLACEHOLDER: Live engine disconnected pending Blueprint rebuild.
+    /// PLACEHOLDER: Live engine disconnected pending Style Guide interpretation wiring.
     @objc func showStyleGuideInterpretationWithDebug() {
         guard let _ = natalChart else {
             showAlert(message: "Chart data is not available. Please try again.")
@@ -456,7 +345,7 @@ final class NatalChartViewController: UIViewController {
         
         activityIndicator.startAnimating()
         
-        let placeholderText = "Blueprint content will be generated by the new interpretation engine. This is a placeholder."
+        let placeholderText = "Style Guide content will be generated by the new interpretation engine. This is a placeholder."
         
         var city = ""
         var country = ""
@@ -503,39 +392,6 @@ final class NatalChartViewController: UIViewController {
         }
     }
     
-    /// Override the Daily Vibe interpretation generation to use the debug version
-    /// PLACEHOLDER: Live engine disconnected pending Blueprint rebuild.
-    @objc func showDailyVibeInterpretationWithDebug() {
-        activityIndicator.startAnimating()
-        
-        guard let _ = natalChart,
-              let _ = progressedChart,
-              let chartId = chartIdentifier else {
-            activityIndicator.stopAnimating()
-            showAlert(message: "Unable to generate daily vibe. Please try again.")
-            return
-        }
-        
-        let dailyVibeContent = DailyVibeContent.placeholder
-        
-        DailyVibeStorage.shared.saveDailyVibe(
-            dailyVibeContent,
-            for: Date(),
-            chartIdentifier: chartId
-        )
-        
-        let dailyVibeVC = DailyVibeInterpretationViewController()
-        dailyVibeVC.configure(with: dailyVibeContent)
-        
-        self.activityIndicator.stopAnimating()
-        
-        if let navController = self.navigationController {
-            navController.pushViewController(dailyVibeVC, animated: true)
-        } else {
-            self.present(dailyVibeVC, animated: true)
-        }
-    }
-    
     /// Add debug menu options to the view controller
     func addDebugMenuOptions() {
         // Create a debug options button
@@ -566,39 +422,12 @@ final class NatalChartViewController: UIViewController {
             }
         ))
         
-        // Debug Daily Vibe option
-        alert.addAction(UIAlertAction(
-            title: "Debug Daily Vibe Generation",
-            style: .default,
-            handler: { [weak self] _ in
-                self?.showDailyVibeInterpretationWithDebug()
-            }
-        ))
-        
         // Debug log level options
         alert.addAction(UIAlertAction(
             title: "Set Debug Level",
             style: .default,
             handler: { [weak self] _ in
                 self?.showDebugLevelOptions()
-            }
-        ))
-        
-        // Debug Daily Vibe Storage option
-        alert.addAction(UIAlertAction(
-            title: "Daily Vibe Storage Info",
-            style: .default,
-            handler: { [weak self] _ in
-                self?.showDailyVibeStorageInfo()
-            }
-        ))
-        
-        // Clear Daily Vibe option
-        alert.addAction(UIAlertAction(
-            title: "Clear Today's Daily Vibe",
-            style: .destructive,
-            handler: { [weak self] _ in
-                self?.clearTodaysDailyVibe()
             }
         ))
         
@@ -663,61 +492,7 @@ final class NatalChartViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    /// Show daily vibe storage information
-    @objc func showDailyVibeStorageInfo() {
-        guard let chartId = chartIdentifier else {
-            showAlert(message: "Chart identifier not available")
-            return
-        }
-        
-        let savedDates = DailyVibeStorage.shared.getSavedDates(for: chartId)
-        let hasTodaysVibe = DailyVibeStorage.shared.hasDailyVibe(for: Date(), chartIdentifier: chartId)
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        
-        var message = "Chart ID: \(chartId)\n\n"
-        message += "Today's vibe exists: \(hasTodaysVibe ? "Yes" : "No")\n\n"
-        message += "Saved daily vibes: \(savedDates.count)\n"
-        
-        if !savedDates.isEmpty {
-            message += "\nRecent dates:\n"
-            for (_, date) in savedDates.prefix(5).enumerated() {
-                message += "• \(dateFormatter.string(from: date))\n"
-            }
-            if savedDates.count > 5 {
-                message += "... and \(savedDates.count - 5) more"
-            }
-        }
-        
-        let alert = UIAlertController(
-            title: "Daily Vibe Storage",
-            message: message,
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
-    
-    /// Clear today's daily vibe
-    @objc func clearTodaysDailyVibe() {
-        guard let chartId = chartIdentifier else {
-            showAlert(message: "Chart identifier not available")
-            return
-        }
-        
-        let hasVibe = DailyVibeStorage.shared.hasDailyVibe(for: Date(), chartIdentifier: chartId)
-        
-        if hasVibe {
-            DailyVibeStorage.shared.deleteDailyVibe(for: Date(), chartIdentifier: chartId)
-            cachedDailyVibeContent = nil
-            showAlert(message: "Today's daily vibe has been cleared. A new one will be generated next time you view it.")
-        } else {
-            showAlert(message: "No daily vibe exists for today.")
-        }
-    }
-    
-    /// PLACEHOLDER: Live engine disconnected pending Blueprint rebuild.
+    /// PLACEHOLDER: Live engine disconnected pending Style Guide interpretation wiring.
     @objc private func showStyleGuideInterpretation() {
         guard let _ = natalChart else {
             showAlert(message: "Chart data is not available. Please try again.")
@@ -726,7 +501,7 @@ final class NatalChartViewController: UIViewController {
         
         activityIndicator.startAnimating()
         
-        let placeholderText = "Blueprint content will be generated by the new interpretation engine. This is a placeholder."
+        let placeholderText = "Style Guide content will be generated by the new interpretation engine. This is a placeholder."
         
         var city = ""
         var country = ""

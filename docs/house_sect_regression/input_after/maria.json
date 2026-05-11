@@ -31,7 +31,7 @@
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-05-08T10:29:44Z",
+  "generatedAt" : "2026-05-11T14:23:18Z",
   "hardware" : {
     "metalsText" : "Hardware on you should feel like an investment rather than a decorative afterthought. You need serious, satisfying weight, the kind of brushed platinum tones that pulls together a heavy winter coat or secures a beautifully constructed leather bag. Flimsy, high-shine chains and noisy zips look nervous next to your natural composure. Lean on solid polished silver tones details with a matte or gently aged finish, ensuring every buckle actually serves a structural purpose. When the metal feels substantial enough to outlast the garment itself, it belongs in your rotation.",
     "recommendedMetals" : [
@@ -44,14 +44,14 @@
     "recommendedStones" : [
       "garnet",
       "onyx",
-      "emerald",
-      "jade",
       "sapphire",
-      "rose quartz",
+      "emerald",
+      "jet",
+      "jade",
       "lapis lazuli",
-      "jet"
+      "rose quartz"
     ],
-    "stonesText" : "You treat jewellery as a matter of density rather than dazzle. Forget fragile, light-catching facets and look for stones that carry serious physical weight. garnet set in thick, brushed gold offers the kind of solid, quiet luxury that suits you best. A heavy cabochon of onyx or a smooth, flat slice of emerald feels infinitely more sophisticated on your skin than overly brilliant cuts. You want pieces that sit cold and substantial on the collarbone or wrist, giving your wardrobe a reliable, tactile finish.",
+    "stonesText" : "You treat jewellery as a matter of density rather than dazzle. Forget fragile, light-catching facets and look for stones that carry serious physical weight. garnet set in thick, brushed gold offers the kind of solid, quiet luxury that suits you best. A heavy cabochon of onyx or a smooth, flat slice of sapphire feels infinitely more sophisticated on your skin than overly brilliant cuts. You want pieces that sit cold and substantial on the collarbone or wrist, giving your wardrobe a reliable, tactile finish.",
     "tipText" : "Substantial weight is the only metric that matters when choosing your jewellery. A flimsy chain or a hollow band will instantly cheapen a perfectly good outfit. Seek out solid, cast pieces in platinum tones that carry a real physical presence on the body, or a heavy ring set with garnet for a quiet finish. A smooth cuff or an impeccably engineered watch strap provides that sense of disciplined luxury your eye naturally seeks. Two substantial items will always beat a tangle of delicate layers."
   },
   "occasions" : {
@@ -340,6 +340,6 @@
   "userInfo" : {
     "birthDate" : "1989-04-28T00:00:00Z",
     "birthLocation" : "Unknown",
-    "generationDate" : "2026-05-08T10:29:44Z"
+    "generationDate" : "2026-05-11T14:23:18Z"
   }
 }

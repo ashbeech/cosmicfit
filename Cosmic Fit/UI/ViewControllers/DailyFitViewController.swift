@@ -39,32 +39,23 @@ class DailyFitViewController: UIViewController {
     private let colourPaletteContainer = DailyColourPaletteView()
     private var colourHeaderDivider: UIView?
     
-    // Pill Sliders Section
-    private let pillSlidersContainer = UIView()
-    
     // Tone Slider Section
     private let toneHeaderLabel = UILabel()
-    private let toneSliderContainer = UIView()
+    private var toneSliderContainer = UIView()
     
-    // Vibe Breakdown Section
+    // Essence Section
     private var vibeHeaderDivider: UIView?
-    private let vibeContainer = VibeBreakdownBarsView()
     
     // Silhouette Section
     private var silhouetteHeaderDivider: UIView?
     private let silhouetteContainer = UIView()
     
     // Bottom Section
-    private let takeawayLabel = UILabel()
     
     // Dividers (stored references for constraints)
     private var topDivider: UIView?
     private var styleBreakdownDivider: UIView?
-    private var bottomDivider: UIView?
     private var finalStarDivider: UIView?
-    
-    // Debug button (kept for debugging)
-    private let debugButton = UIButton(type: .system)
     
     // Calendar button (added to view hierarchy in setupContentSectionBackgrounds)
     private lazy var calendarButton: UIButton = {
@@ -83,12 +74,66 @@ class DailyFitViewController: UIViewController {
     private var ciContext: CIContext? // Reuse CI context for better performance
     
     // Data
-    private var dailyVibeContent: DailyVibeContent?
     private var originalChartViewController: NatalChartViewController?
+
+    // MARK: - DailyFitPayload Pipeline
+    private var dailyFitPayload: DailyFitPayload?
+
+    private var dailyRitualHeaderDivider: UIView?
+    private let dailyRitualLabel = UILabel()
+    private var essenceTriangleView: EssenceTriangleView?
+    private let wardrobeReflectionLabel = UILabel()
+    private let tomorrowTeaseLabel = UILabel()
+    private let tomorrowButton = UIButton(type: .system)
+
+    private var vibrancyScaleContainer = UIView()
+    private var contrastScaleContainer = UIView()
+
+    private var vibrancyIndicator: UILabel?
+    private var vibrancyTrack: UIView?
+    private var vibrancyIndicatorConstraint: NSLayoutConstraint?
+
+    private var contrastIndicator: UILabel?
+    private var contrastTrack: UIView?
+    private var contrastIndicatorConstraint: NSLayoutConstraint?
+
+    private var metalToneIndicator: UILabel?
+    private var metalToneTrack: UIView?
+    private var metalToneIndicatorConstraint: NSLayoutConstraint?
+
+    private var silhouetteSliderData: [(indicator: UILabel, track: UIView, constraint: NSLayoutConstraint?)] = []
+
+    // MARK: - Day Navigation
     
+    /// Which calendar date is currently displayed (today or tomorrow).
+    private var displayDate = Date()
+    /// Wall-clock "today" — updated on midnight rollover.
+    private var todayDate = Date()
+    /// True when showing tomorrow's fit.
+    private var isViewingTomorrow = false
+    /// Cached payload for today.
+    private var todayPayload: DailyFitPayload?
+    /// Cached payload for tomorrow (generated on demand).
+    private var tomorrowPayload: DailyFitPayload?
+    /// Generates a DailyFitPayload for an arbitrary date. Provided by the tab bar controller.
+    var payloadGenerator: ((Date) -> DailyFitPayload?)?
+    /// Chart/profile scope for freezing revealed payloads (matches tab bar `chartIdentifier`).
+    var persistenceProfileKey: String?
+
+    private lazy var dayNavigationBackButton: UIButton = {
+        let btn = UIButton(type: .system)
+        let cfg = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
+        btn.setImage(UIImage(systemName: "chevron.left", withConfiguration: cfg), for: .normal)
+        btn.tintColor = .white
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.alpha = 0
+        btn.isHidden = true
+        btn.addTarget(self, action: #selector(dayNavigationBackTapped), for: .touchUpInside)
+        return btn
+    }()
+
     // MARK: - Card Reveal Properties
     
-    // Card reveal state management
     private var isCardRevealed = false
     private var cardBackImageView = UIImageView()
     private var tapToRevealLabel = UILabel()
@@ -110,35 +155,42 @@ class DailyFitViewController: UIViewController {
     }
     private var currentCardState: CardState = .unrevealed
     
-    // Card reveal key for UserDefaults (per day)
     private var dailyCardRevealKey: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        return "CardRevealed_\(dateFormatter.string(from: Date()))"
+        DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: displayDate)
     }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Apply Cosmic Fit theme
         applyCosmicFitTheme()
         
         // CRITICAL: Set initial alpha BEFORE setupUI checks reveal state
         setInitialContentAlpha()
         
         setupUI()
-        updateContent()
+        setupDayRolloverObservers()
+
+        if dailyFitPayload != nil {
+            updateContentFromPayload()
+        }
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard dailyFitPayload != nil else { return }
+        refreshDiamondScalePositions()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        checkForDayRollover()
+        
         if !isCardRevealed && currentCardState == .unrevealed {
             scrollingRunesBackground.startAnimating()
         }
         
-        // Restore card state when returning from other tabs
         checkCardRevealState()
         
         if isCardRevealed {
@@ -174,32 +226,29 @@ class DailyFitViewController: UIViewController {
     
     // MARK: - Memory Management
     deinit {
-        // Clean up Core Image context
+        NotificationCenter.default.removeObserver(self)
         ciContext = nil
-        
-        // Remove layer filters to prevent memory leaks
         cardBackImageView.layer.filters = nil
-        
-        // Remove tap gesture
         if let gesture = cardTapGesture {
             cardBackImageView.removeGestureRecognizer(gesture)
         }
-        
-        // Stop any ongoing animations
         scrollingRunesBackground.stopAnimating()
-        
-        print("DailyFitViewController deinitialized - memory cleaned up")
     }
     
     // MARK: - Configuration
-    func configure(with dailyVibeContent: DailyVibeContent,
+
+    func configure(with payload: DailyFitPayload,
                    originalChartViewController: NatalChartViewController?) {
-        
-        self.dailyVibeContent = dailyVibeContent
+        self.dailyFitPayload = payload
+        self.todayPayload = payload
         self.originalChartViewController = originalChartViewController
-        
+        self.displayDate = Date()
+        self.todayDate = Date()
+        self.isViewingTomorrow = false
+
         if isViewLoaded {
-            updateContent()
+            updateContentFromPayload()
+            updateDayNavigationUI()
         }
     }
     
@@ -278,12 +327,13 @@ class DailyFitViewController: UIViewController {
         ])
         
         setupTarotCardHeader()
-        setupCardRevealUI() // New method - adds card back and reveal functionality
-        setupContentViewComponents() // New comprehensive content view setup
+        setupCardRevealUI()
+        setupContentViewComponents()
         setupConstraints()
+        setupDayNavigationBackButton()
         
-        // Check if card was already revealed today
         checkCardRevealState()
+        updateDayNavigationUI()
         
         view.bringSubviewToFront(topMaskView)
     }
@@ -387,35 +437,35 @@ class DailyFitViewController: UIViewController {
     
     private func showUnrevealedState(animated: Bool) {
         let applyChanges = {
-            // Show unrevealed elements
             self.cardBackImageView.alpha = 1.0
             self.cardBackImageView.isHidden = false
             self.tapToRevealLabel.alpha = 1.0
             self.tapToRevealLabel.isHidden = false
             self.scrollingRunesBackground.alpha = 1.0
             
-            // Hide revealed elements
             self.tarotCardImageView.alpha = 0.0
             self.backgroundBlurImageView.alpha = 0.0
             self.scrollIndicatorView.alpha = 0.0
+            self.contentBackgroundView?.alpha = 0.0
+            self.calendarButton.alpha = 0.0
             
-            // Hide all new content views
             let allContentViews: [UIView?] = [
                 self.dailyFitLabel, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
                 self.topDivider, self.styleEditHeaderLabel, self.styleEditLabel,
                 self.styleBreakdownDivider, self.colourHeaderDivider, self.colourPaletteContainer,
-                self.pillSlidersContainer, self.toneHeaderLabel, self.toneSliderContainer,
-                self.vibeHeaderDivider, self.vibeContainer, self.silhouetteHeaderDivider, self.silhouetteContainer,
-                self.bottomDivider, self.takeawayLabel, self.finalStarDivider,
-                self.debugButton
+                self.toneSliderContainer,
+                self.vibeHeaderDivider, self.essenceTriangleView, self.silhouetteHeaderDivider, self.silhouetteContainer,
+                self.finalStarDivider,
+                self.dailyRitualHeaderDivider, self.dailyRitualLabel,
+                self.vibrancyScaleContainer, self.contrastScaleContainer,
+                self.wardrobeReflectionHeaderDivider, self.wardrobeReflectionLabel,
+                self.tomorrowTeaseLabel, self.tomorrowButton
             ]
             allContentViews.compactMap { $0 }.forEach { $0.alpha = 0.0 }
             
-            // Ensure container visible
             self.tarotCardContainerView.alpha = 1.0
             self.tarotCardContainerView.transform = .identity
             
-            // Disable scrolling
             self.scrollView.isScrollEnabled = false
         }
         
@@ -425,53 +475,54 @@ class DailyFitViewController: UIViewController {
             applyChanges()
         }
         
-        // Start runes after state change
         scrollingRunesBackground.startAnimating()
         view.backgroundColor = .black
     }
     
     private func showRevealedStateUnified(animated: Bool) {
-        // Stop the runes animation
         scrollingRunesBackground.stopAnimating()
         
+        dayNavigationBackButton.isHidden = true
+        dayNavigationBackButton.alpha = 0
+        
         let applyChanges = {
-            // Hide unrevealed elements
             self.cardBackImageView.alpha = 0.0
             self.cardBackImageView.isHidden = true
             self.tapToRevealLabel.alpha = 0.0
             self.tapToRevealLabel.isHidden = true
             self.scrollingRunesBackground.alpha = 0.0
             
-            // Show revealed elements
             self.tarotCardImageView.alpha = 1.0
             self.backgroundBlurImageView.alpha = 1.0
             self.scrollIndicatorView.alpha = 1.0
             self.scrollIndicatorView.isHidden = false
+            self.calendarButton.alpha = 1.0
             
-            // Show all new content views
             let allContentViews: [UIView?] = [
                 self.dailyFitLabel, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
                 self.topDivider, self.styleEditHeaderLabel, self.styleEditLabel,
                 self.styleBreakdownDivider, self.colourHeaderDivider, self.colourPaletteContainer,
-                self.pillSlidersContainer, self.toneHeaderLabel, self.toneSliderContainer,
-                self.vibeHeaderDivider, self.vibeContainer, self.silhouetteHeaderDivider, self.silhouetteContainer,
-                self.bottomDivider, self.takeawayLabel, self.finalStarDivider,
-                self.debugButton
+                self.toneSliderContainer,
+                self.vibeHeaderDivider, self.essenceTriangleView, self.silhouetteHeaderDivider, self.silhouetteContainer,
+                self.finalStarDivider,
+                self.dailyRitualHeaderDivider, self.dailyRitualLabel,
+                self.vibrancyScaleContainer, self.contrastScaleContainer,
+                self.wardrobeReflectionHeaderDivider, self.wardrobeReflectionLabel,
+                self.tomorrowTeaseLabel, self.tomorrowButton
             ]
             allContentViews.compactMap { $0 }.forEach { $0.alpha = 1.0 }
             
-            // Enable scrolling
             self.scrollView.isScrollEnabled = true
         }
         
         if animated {
             UIView.animate(withDuration: 0.5, animations: applyChanges) { _ in
-                self.setupContentSectionBackgrounds()
+                self.setupContentSectionBackgrounds(animated: true)
                 self.ensureContainerVisibility()
             }
         } else {
             applyChanges()
-            setupContentSectionBackgrounds()
+            setupContentSectionBackgrounds(animated: false)
             ensureContainerVisibility()
             view.layoutIfNeeded()
         }
@@ -629,11 +680,6 @@ class DailyFitViewController: UIViewController {
         return hasHomeIndicator ? 83 : 49
     }
 
-    // MARK: - Add this to your existing viewDidLayoutSubviews method:
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
-    
     private func setupScrollIndicator() {
         // Scroll indicator container
         scrollIndicatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -681,17 +727,373 @@ class DailyFitViewController: UIViewController {
     // MARK: - ContentView Components Setup
     private func setupContentViewComponents() {
         setupHeaderComponents()
-        setupStyleBriefSection()
-        setupStyleBreakdownSection()
-        setupPillSlidersSection()
-        setupToneSlider()
-        setupVibeBreakdownSection()
-        setupSilhouetteSection()
-        setupBottomSection()
-        setupDebugButton()
-        
+        setupNewPipelineContentSections()
+
         // Initially hide all content (will fade in after card reveal)
         setInitialContentAlpha()
+    }
+
+    // MARK: - New Pipeline Content Sections
+
+    private func setupNewPipelineContentSections() {
+        setupStyleParagraphSection()
+        setupDailyRitualSection()
+        setupStyleBreakdownSection()
+        setupNewColourPaletteSection()
+        setupVibrancyContrastSection()
+        setupNewToneSliderSection()
+        setupEssenceSection()
+        setupNewSilhouetteSection()
+        setupWardrobeReflectionSection()
+        setupNewBottomSection()
+    }
+
+    private func setupStyleParagraphSection() {
+        topDivider = createSimpleDivider()
+        topDivider?.alpha = 0.0
+        if let divider = topDivider {
+            contentView.addSubview(divider)
+        }
+
+        styleEditLabel.text = ""
+        CosmicFitTheme.styleBodyLabel(styleEditLabel, fontSize: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
+        styleEditLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
+        styleEditLabel.numberOfLines = 0
+        styleEditLabel.translatesAutoresizingMaskIntoConstraints = false
+        styleEditLabel.alpha = 0.0
+        contentView.addSubview(styleEditLabel)
+    }
+
+    private func setupDailyRitualSection() {
+        dailyRitualHeaderDivider = createOrnamentalDividerWithText("Daily Ritual")
+        dailyRitualHeaderDivider?.alpha = 0.0
+        if let header = dailyRitualHeaderDivider {
+            contentView.addSubview(header)
+        }
+
+        dailyRitualLabel.numberOfLines = 0
+        dailyRitualLabel.translatesAutoresizingMaskIntoConstraints = false
+        dailyRitualLabel.alpha = 0.0
+        CosmicFitTheme.styleBodyLabel(dailyRitualLabel, fontSize: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
+        dailyRitualLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
+        dailyRitualLabel.font = CosmicFitTheme.Typography.DMSerifTextItalicFont(size: CosmicFitTheme.Typography.FontSizes.body)
+        contentView.addSubview(dailyRitualLabel)
+    }
+
+    private func setupNewColourPaletteSection() {
+        colourHeaderDivider = createOrnamentalDividerWithText("Style Palette")
+        colourHeaderDivider?.alpha = 0.0
+        if let divider = colourHeaderDivider {
+            contentView.addSubview(divider)
+        }
+
+        colourPaletteContainer.translatesAutoresizingMaskIntoConstraints = false
+        colourPaletteContainer.alpha = 0.0
+        contentView.addSubview(colourPaletteContainer)
+    }
+
+    private func setupVibrancyContrastSection() {
+        vibrancyScaleContainer = createTitledDiamondScale(
+            title: "Vibrancy", leftLabel: "Subtle", rightLabel: "Vibrant"
+        ) { [weak self] indicator, track in
+            self?.vibrancyIndicator = indicator
+            self?.vibrancyTrack = track
+        }
+        vibrancyScaleContainer.translatesAutoresizingMaskIntoConstraints = false
+        vibrancyScaleContainer.alpha = 0.0
+        contentView.addSubview(vibrancyScaleContainer)
+
+        contrastScaleContainer = createTitledDiamondScale(
+            title: "Contrast", leftLabel: "Low", rightLabel: "High"
+        ) { [weak self] indicator, track in
+            self?.contrastIndicator = indicator
+            self?.contrastTrack = track
+        }
+        contrastScaleContainer.translatesAutoresizingMaskIntoConstraints = false
+        contrastScaleContainer.alpha = 0.0
+        contentView.addSubview(contrastScaleContainer)
+    }
+
+    private func setupNewToneSliderSection() {
+        toneHeaderLabel.isHidden = true
+        toneHeaderLabel.translatesAutoresizingMaskIntoConstraints = false
+        toneHeaderLabel.alpha = 0.0
+
+        toneSliderContainer = createTitledDiamondScale(
+            title: "Tone", leftLabel: "Cool", rightLabel: "Warm"
+        ) { [weak self] indicator, track in
+            self?.metalToneIndicator = indicator
+            self?.metalToneTrack = track
+        }
+        toneSliderContainer.translatesAutoresizingMaskIntoConstraints = false
+        toneSliderContainer.alpha = 0.0
+        contentView.addSubview(toneSliderContainer)
+    }
+
+    private func setupEssenceSection() {
+        vibeHeaderDivider = createOrnamentalDividerWithText("Essence")
+        vibeHeaderDivider?.alpha = 0.0
+        if let divider = vibeHeaderDivider {
+            contentView.addSubview(divider)
+        }
+
+        let triangle = EssenceTriangleView()
+        triangle.translatesAutoresizingMaskIntoConstraints = false
+        triangle.alpha = 0.0
+        contentView.addSubview(triangle)
+        essenceTriangleView = triangle
+    }
+
+    private func setupNewSilhouetteSection() {
+        silhouetteHeaderDivider = createOrnamentalDividerWithText("Silhouette")
+        silhouetteHeaderDivider?.alpha = 0.0
+        if let divider = silhouetteHeaderDivider {
+            contentView.addSubview(divider)
+        }
+
+        silhouetteContainer.translatesAutoresizingMaskIntoConstraints = false
+        silhouetteContainer.alpha = 0.0
+        contentView.addSubview(silhouetteContainer)
+
+        let sliderLabels = [
+            ("Masculine", "Feminine"),
+            ("Angular", "Rounded"),
+            ("Structured", "Draped")
+        ]
+
+        silhouetteSliderData = []
+        var lastSlider: UIView?
+
+        for (leftLabel, rightLabel) in sliderLabels {
+            let (slider, indicator, track) = createSilhouetteSlider(leftLabel: leftLabel, rightLabel: rightLabel)
+            slider.translatesAutoresizingMaskIntoConstraints = false
+            silhouetteContainer.addSubview(slider)
+            silhouetteSliderData.append((indicator: indicator, track: track, constraint: nil))
+
+            NSLayoutConstraint.activate([
+                slider.leadingAnchor.constraint(equalTo: silhouetteContainer.leadingAnchor),
+                slider.trailingAnchor.constraint(equalTo: silhouetteContainer.trailingAnchor),
+            ])
+
+            if let last = lastSlider {
+                slider.topAnchor.constraint(equalTo: last.bottomAnchor, constant: 16).isActive = true
+            } else {
+                slider.topAnchor.constraint(equalTo: silhouetteContainer.topAnchor).isActive = true
+            }
+            lastSlider = slider
+        }
+
+        if let lastSlider = lastSlider {
+            silhouetteContainer.bottomAnchor.constraint(equalTo: lastSlider.bottomAnchor).isActive = true
+        }
+    }
+
+    private var wardrobeReflectionHeaderDivider: UIView?
+
+    private func setupWardrobeReflectionSection() {
+        wardrobeReflectionHeaderDivider = createOrnamentalDividerWithText("Wardrobe Reflection")
+        wardrobeReflectionHeaderDivider?.alpha = 0.0
+        if let header = wardrobeReflectionHeaderDivider {
+            contentView.addSubview(header)
+        }
+
+        wardrobeReflectionLabel.numberOfLines = 0
+        wardrobeReflectionLabel.translatesAutoresizingMaskIntoConstraints = false
+        wardrobeReflectionLabel.alpha = 0.0
+        wardrobeReflectionLabel.font = CosmicFitTheme.Typography.DMSerifTextItalicFont(size: CosmicFitTheme.Typography.FontSizes.body)
+        wardrobeReflectionLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
+        wardrobeReflectionLabel.textAlignment = .center
+        contentView.addSubview(wardrobeReflectionLabel)
+    }
+
+    private func setupNewBottomSection() {
+        finalStarDivider = createStarDivider()
+        finalStarDivider?.alpha = 0.0
+        if let divider = finalStarDivider {
+            contentView.addSubview(divider)
+        }
+
+        tomorrowTeaseLabel.font = CosmicFitTheme.Typography.DMSerifTextItalicFont(size: CosmicFitTheme.Typography.FontSizes.body)
+        tomorrowTeaseLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
+        tomorrowTeaseLabel.textAlignment = .center
+        tomorrowTeaseLabel.numberOfLines = 0
+        tomorrowTeaseLabel.translatesAutoresizingMaskIntoConstraints = false
+        tomorrowTeaseLabel.alpha = 0.0
+        contentView.addSubview(tomorrowTeaseLabel)
+
+        CosmicFitTheme.styleButton(tomorrowButton, style: .secondary)
+        tomorrowButton.translatesAutoresizingMaskIntoConstraints = false
+        tomorrowButton.alpha = 0.0
+        tomorrowButton.addTarget(self, action: #selector(dayNavigationButtonTapped), for: .touchUpInside)
+        contentView.addSubview(tomorrowButton)
+    }
+
+    // MARK: - Day Navigation
+
+    @objc private func dayNavigationButtonTapped() {
+        if isViewingTomorrow {
+            switchToToday()
+        } else {
+            switchToTomorrow()
+        }
+    }
+
+    private func switchToTomorrow() {
+        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: todayDate) ?? todayDate
+
+        if tomorrowPayload == nil {
+            tomorrowPayload = payloadGenerator?(tomorrow)
+        }
+        guard let payload = tomorrowPayload else { return }
+
+        let tomorrowKey = cardRevealKey(for: tomorrow)
+        let alreadyRevealed = UserDefaults.standard.bool(forKey: tomorrowKey)
+
+        if alreadyRevealed {
+            applyDaySwitch(date: tomorrow, payload: payload, isTomorrow: true)
+        } else {
+            performDayFadeTransition {
+                self.applyDaySwitch(date: tomorrow, payload: payload, isTomorrow: true)
+            }
+        }
+    }
+
+    private func switchToToday() {
+        guard let payload = todayPayload else { return }
+        applyDaySwitch(date: todayDate, payload: payload, isTomorrow: false)
+    }
+
+    /// Common work for switching the displayed day.
+    private func applyDaySwitch(date: Date, payload: DailyFitPayload, isTomorrow: Bool) {
+        displayDate = date
+        isViewingTomorrow = isTomorrow
+        dailyFitPayload = payload
+
+        updateContentFromPayload()
+        scrollView.setContentOffset(.zero, animated: false)
+        checkCardRevealState()
+        updateDayNavigationUI()
+    }
+
+    /// Fade-through-dark transition used when moving to an unrevealed day.
+    private func performDayFadeTransition(reconfigure: @escaping () -> Void) {
+        let overlay = UIView(frame: view.bounds)
+        overlay.backgroundColor = UIColor(red: 31/255, green: 25/255, blue: 61/255, alpha: 1.0)
+        overlay.alpha = 0
+        overlay.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(overlay)
+        view.bringSubviewToFront(overlay)
+
+        UIView.animate(withDuration: 0.25, animations: {
+            overlay.alpha = 1.0
+        }) { _ in
+            reconfigure()
+            self.view.layoutIfNeeded()
+
+            UIView.animate(withDuration: 0.25, animations: {
+                overlay.alpha = 0
+            }) { _ in
+                overlay.removeFromSuperview()
+            }
+        }
+    }
+
+    @objc private func dayNavigationBackTapped() {
+        guard isViewingTomorrow, !isCardRevealed else { return }
+        guard let payload = todayPayload else { return }
+
+        performDayFadeTransition {
+            self.applyDaySwitch(date: self.todayDate, payload: payload, isTomorrow: false)
+        }
+    }
+
+    private func updateDayNavigationUI() {
+        if isViewingTomorrow {
+            if isCardRevealed {
+                tomorrowButton.setTitle("SEE TODAY\u{2019}S FIT  \u{2039}", for: .normal)
+                tomorrowTeaseLabel.text = "Today\u{2019}s fit awaits you..."
+                dayNavigationBackButton.isHidden = true
+                dayNavigationBackButton.alpha = 0
+            } else {
+                dayNavigationBackButton.isHidden = false
+                dayNavigationBackButton.alpha = 1
+                tapToRevealLabel.text = "Tap to reveal tomorrow\u{2019}s fit"
+            }
+        } else {
+            tomorrowButton.setTitle("SEE TOMORROW\u{2019}S FIT  \u{203A}", for: .normal)
+            tomorrowTeaseLabel.text = "Tomorrow\u{2019}s energy is already shifting..."
+            dayNavigationBackButton.isHidden = true
+            dayNavigationBackButton.alpha = 0
+            tapToRevealLabel.text = "Tap to turn the card"
+        }
+        view.bringSubviewToFront(dayNavigationBackButton)
+    }
+
+    private func setupDayNavigationBackButton() {
+        view.addSubview(dayNavigationBackButton)
+        NSLayoutConstraint.activate([
+            dayNavigationBackButton.topAnchor.constraint(equalTo: topMaskView.bottomAnchor, constant: 8),
+            dayNavigationBackButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            dayNavigationBackButton.widthAnchor.constraint(equalToConstant: 44),
+            dayNavigationBackButton.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
+
+    private func cardRevealKey(for date: Date) -> String {
+        DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date)
+    }
+
+    // MARK: - Midnight / Day Rollover
+
+    private func setupDayRolloverObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleAppEnteredForeground),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleSignificantTimeChange),
+            name: UIApplication.significantTimeChangeNotification,
+            object: nil
+        )
+    }
+
+    @objc private func handleAppEnteredForeground() {
+        checkForDayRollover()
+    }
+
+    @objc private func handleSignificantTimeChange() {
+        checkForDayRollover()
+    }
+
+    private func checkForDayRollover() {
+        let calendar = Calendar.current
+        guard !calendar.isDate(Date(), inSameDayAs: todayDate) else { return }
+
+        let newToday = Date()
+        let previousTomorrow = calendar.date(byAdding: .day, value: 1, to: todayDate)
+
+        if isViewingTomorrow,
+           let prevTomorrow = previousTomorrow,
+           calendar.isDate(newToday, inSameDayAs: prevTomorrow) {
+            todayPayload = tomorrowPayload
+        } else {
+            todayPayload = payloadGenerator?(newToday)
+        }
+
+        todayDate = newToday
+        tomorrowPayload = nil
+        displayDate = newToday
+        isViewingTomorrow = false
+        dailyFitPayload = todayPayload
+
+        if dailyFitPayload != nil {
+            updateContentFromPayload()
+        }
+        checkCardRevealState()
+        updateDayNavigationUI()
     }
     
     // MARK: - Header Components Setup
@@ -809,409 +1211,246 @@ class DailyFitViewController: UIViewController {
         return container
     }
     
-    // MARK: - Style Brief Section
-    private func setupStyleBriefSection() {
-        // First divider (simple line)
-        topDivider = createSimpleDivider()
-        topDivider?.alpha = 0.0
-        if let divider = topDivider {
-            contentView.addSubview(divider)
-        }
-        
-        // Style Edit header (large, bold, centered)
-        styleEditHeaderLabel = createLargeHeaderLabel("Style Edit")
-        styleEditHeaderLabel?.alpha = 0.0
-        if let header = styleEditHeaderLabel {
-            contentView.addSubview(header)
-        }
-        
-        // Style edit text block
-        styleEditLabel.text = "You know that tidy-but-slightly-off feeling, like when you expect the bus to be late but it's actually right on time? Keep your look polished but slip in one detail that breaks the rules. A blazer with sneakers, sharp trousers with a mischievous print, or a neat shirt layered over something that shouldn't work but does. The mood is about order with a wink."
-        CosmicFitTheme.styleBodyLabel(styleEditLabel, fontSize: CosmicFitTheme.Typography.FontSizes.body, weight: .regular)
-        styleEditLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
-        styleEditLabel.numberOfLines = 0
-        styleEditLabel.translatesAutoresizingMaskIntoConstraints = false
-        styleEditLabel.alpha = 0.0
-        contentView.addSubview(styleEditLabel)
-    }
-    
     // MARK: - Outfit Breakdown Section
     private func setupStyleBreakdownSection() {
-        // Outfit Breakdown header (large, bold, no lines)
         styleBreakdownDivider = createLargeHeaderLabel("Outfit Breakdown")
         styleBreakdownDivider?.alpha = 0.0
         if let divider = styleBreakdownDivider {
             contentView.addSubview(divider)
         }
-        
-        // Colour section ornamental divider
-        colourHeaderDivider = createOrnamentalDividerWithText("Colour")
-        colourHeaderDivider?.alpha = 0.0
-        if let divider = colourHeaderDivider {
-            contentView.addSubview(divider)
-        }
-        
-        // Colour palette component
-        colourPaletteContainer.translatesAutoresizingMaskIntoConstraints = false
-        colourPaletteContainer.alpha = 0.0
-        contentView.addSubview(colourPaletteContainer)
     }
     
-    // MARK: - Pill Sliders Section
-    private func setupPillSlidersSection() {
-        pillSlidersContainer.translatesAutoresizingMaskIntoConstraints = false
-        pillSlidersContainer.alpha = 0.0
-        contentView.addSubview(pillSlidersContainer)
-        
-        let sliderNames = ["Brightness", "Contrast", "Vibrancy"]
-        let sliderValues = [3, 4, 1] // Out of 5 pills each
-        
-        for (index, name) in sliderNames.enumerated() {
-            let column = createPillSliderColumn(title: name, filledPills: sliderValues[index])
-            column.translatesAutoresizingMaskIntoConstraints = false
-            pillSlidersContainer.addSubview(column)
-            
-            NSLayoutConstraint.activate([
-                column.topAnchor.constraint(equalTo: pillSlidersContainer.topAnchor),
-                column.bottomAnchor.constraint(equalTo: pillSlidersContainer.bottomAnchor),
-                column.leadingAnchor.constraint(equalTo: pillSlidersContainer.leadingAnchor, constant: CGFloat(index) * 100),
-                column.widthAnchor.constraint(equalToConstant: 80)
-            ])
-        }
-        
-        NSLayoutConstraint.activate([
-            pillSlidersContainer.widthAnchor.constraint(equalToConstant: 300),
-            pillSlidersContainer.heightAnchor.constraint(equalToConstant: 80)
-        ])
-    }
-    
-    private func createPillSliderColumn(title: String, filledPills: Int) -> UIView {
-        let container = UIView()
-        
-        // Title
-        let titleLabel = UILabel()
-        titleLabel.text = title
-        CosmicFitTheme.styleBodyLabel(titleLabel, fontSize: 14, weight: .semibold)
-        titleLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
-        titleLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
-        titleLabel.textAlignment = .center
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(titleLabel)
-        
-        // Pills stack
-        let pillsStack = UIStackView()
-        pillsStack.axis = .horizontal
-        pillsStack.spacing = 4
-        pillsStack.distribution = .fillEqually
-        pillsStack.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(pillsStack)
-        
-        // Create 5 pills
-        for i in 0..<5 {
-            let pill = UIView()
-            pill.backgroundColor = i < filledPills ? CosmicFitTheme.Colours.cosmicBlue : UIColor.lightGray
-            pill.layer.cornerRadius = 6
-            pill.translatesAutoresizingMaskIntoConstraints = false
-            pillsStack.addArrangedSubview(pill)
-            
-            NSLayoutConstraint.activate([
-                pill.widthAnchor.constraint(equalToConstant: 12),
-                pill.heightAnchor.constraint(equalToConstant: 12)
-            ])
-        }
-        
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: container.topAnchor),
-            titleLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            
-            pillsStack.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-            pillsStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            pillsStack.bottomAnchor.constraint(equalTo: container.bottomAnchor)
-        ])
-        
-        return container
-    }
-    
-    // MARK: - Tone Slider Section
-    private func setupToneSlider() {
-        // Tone section header
-        toneHeaderLabel.text = "Tone"
-        CosmicFitTheme.styleBodyLabel(toneHeaderLabel, fontSize: 14, weight: .semibold)
-        toneHeaderLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
-        toneHeaderLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
-        toneHeaderLabel.translatesAutoresizingMaskIntoConstraints = false
-        toneHeaderLabel.alpha = 0.0
-        contentView.addSubview(toneHeaderLabel)
-        
-        // Tone slider
-        toneSliderContainer.translatesAutoresizingMaskIntoConstraints = false
-        toneSliderContainer.alpha = 0.0
-        contentView.addSubview(toneSliderContainer)
-        
-        let toneSlider = createToneSlider()
-        toneSlider.translatesAutoresizingMaskIntoConstraints = false
-        toneSliderContainer.addSubview(toneSlider)
-        
-        NSLayoutConstraint.activate([
-            toneSlider.topAnchor.constraint(equalTo: toneSliderContainer.topAnchor),
-            toneSlider.leadingAnchor.constraint(equalTo: toneSliderContainer.leadingAnchor),
-            toneSlider.trailingAnchor.constraint(equalTo: toneSliderContainer.trailingAnchor),
-            toneSlider.bottomAnchor.constraint(equalTo: toneSliderContainer.bottomAnchor),
-            toneSliderContainer.heightAnchor.constraint(equalToConstant: 40)
-        ])
-    }
-    
-    private func createToneSlider() -> UIView {
+    // MARK: - New Pipeline Helpers
+
+    private func createDiamondScale(leftLabel: String, rightLabel: String, centreLabel: String? = nil) -> (container: UIView, indicator: UILabel, track: UIView) {
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Cool/Warm labels
-        let coolLabel = UILabel()
-        coolLabel.text = "Cool"
-        CosmicFitTheme.styleBodyLabel(coolLabel, fontSize: 14, weight: .semibold)
-        coolLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
-        coolLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
-        coolLabel.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(coolLabel)
-        
-        let warmLabel = UILabel()
-        warmLabel.text = "Warm"
-        CosmicFitTheme.styleBodyLabel(warmLabel, fontSize: 14, weight: .semibold)
-        warmLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
-        warmLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
-        warmLabel.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(warmLabel)
-        
-        // Slider track
-        let track = UIView()
-        track.backgroundColor = UIColor.lightGray
-        track.layer.cornerRadius = 2
-        track.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(track)
-        
-        // Create spacer views to position indicator at 60%
-        let leftSpacer = UIView()
-        leftSpacer.isHidden = true
-        leftSpacer.translatesAutoresizingMaskIntoConstraints = false
-        track.addSubview(leftSpacer)
-        
-        let rightSpacer = UIView()
-        rightSpacer.isHidden = true
-        rightSpacer.translatesAutoresizingMaskIntoConstraints = false
-        track.addSubview(rightSpacer)
-        
-        // Diamond indicator (positioned at 60% from left)
-        let indicator = UILabel()
-        indicator.text = "♦"
-        indicator.font = UIFont.systemFont(ofSize: 16)
-        indicator.textColor = CosmicFitTheme.Colours.cosmicBlue
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(indicator)
-        
-        NSLayoutConstraint.activate([
-            container.heightAnchor.constraint(equalToConstant: 40),
-            
-            coolLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            coolLabel.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            
-            warmLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            warmLabel.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            
-            track.leadingAnchor.constraint(equalTo: coolLabel.trailingAnchor, constant: 16),
-            track.trailingAnchor.constraint(equalTo: warmLabel.leadingAnchor, constant: -16),
-            track.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            track.heightAnchor.constraint(equalToConstant: 4),
-            
-            // Spacers to divide track into 60% and 40%
-            leftSpacer.leadingAnchor.constraint(equalTo: track.leadingAnchor),
-            leftSpacer.topAnchor.constraint(equalTo: track.topAnchor),
-            leftSpacer.bottomAnchor.constraint(equalTo: track.bottomAnchor),
-            leftSpacer.widthAnchor.constraint(equalTo: track.widthAnchor, multiplier: 0.6),
-            
-            rightSpacer.trailingAnchor.constraint(equalTo: track.trailingAnchor),
-            rightSpacer.topAnchor.constraint(equalTo: track.topAnchor),
-            rightSpacer.bottomAnchor.constraint(equalTo: track.bottomAnchor),
-            rightSpacer.widthAnchor.constraint(equalTo: track.widthAnchor, multiplier: 0.4),
-            rightSpacer.leadingAnchor.constraint(equalTo: leftSpacer.trailingAnchor),
-            
-            // Position indicator at the boundary (60% point)
-            indicator.centerXAnchor.constraint(equalTo: leftSpacer.trailingAnchor),
-            indicator.centerYAnchor.constraint(equalTo: track.centerYAnchor)
-        ])
-        
-        return container
-    }
-    
-    // MARK: - Vibe Breakdown Section
-    private func setupVibeBreakdownSection() {
-        // Vibe ornamental divider
-        vibeHeaderDivider = createOrnamentalDividerWithText("Vibe")
-        vibeHeaderDivider?.alpha = 0.0
-        if let divider = vibeHeaderDivider {
-            contentView.addSubview(divider)
-        }
-        
-        // Vibe breakdown bars component
-        vibeContainer.translatesAutoresizingMaskIntoConstraints = false
-        vibeContainer.alpha = 0.0
-        contentView.addSubview(vibeContainer)
-    }
-    
-    // MARK: - Silhouette Sliders Section
-    private func setupSilhouetteSection() {
-        // Silhouette ornamental divider
-        silhouetteHeaderDivider = createOrnamentalDividerWithText("Silhouette")
-        silhouetteHeaderDivider?.alpha = 0.0
-        if let divider = silhouetteHeaderDivider {
-            contentView.addSubview(divider)
-        }
-        
-        // Create three slider rows
-        let sliderData = [
-            ("Masculine", "Feminine", 0.6),
-            ("Angular", "Curvy", 0.3),
-            ("Structured", "Relaxed", 0.8)
-        ]
-        
-        silhouetteContainer.translatesAutoresizingMaskIntoConstraints = false
-        silhouetteContainer.alpha = 0.0
-        contentView.addSubview(silhouetteContainer)
-        
-        var lastSlider: UIView?
-        
-        for (leftLabel, rightLabel, position) in sliderData {
-            let slider = createBipolarSlider(leftLabel: leftLabel, rightLabel: rightLabel, position: position)
-            slider.translatesAutoresizingMaskIntoConstraints = false
-            silhouetteContainer.addSubview(slider)
-            
-            NSLayoutConstraint.activate([
-                slider.leadingAnchor.constraint(equalTo: silhouetteContainer.leadingAnchor),
-                slider.trailingAnchor.constraint(equalTo: silhouetteContainer.trailingAnchor),
-                slider.heightAnchor.constraint(equalToConstant: 40)
-            ])
-            
-            if let last = lastSlider {
-                slider.topAnchor.constraint(equalTo: last.bottomAnchor, constant: 16).isActive = true
-            } else {
-                slider.topAnchor.constraint(equalTo: silhouetteContainer.topAnchor).isActive = true
-            }
-            
-            lastSlider = slider
-        }
-        
-        if let lastSlider = lastSlider {
-            silhouetteContainer.bottomAnchor.constraint(equalTo: lastSlider.bottomAnchor).isActive = true
-        }
-    }
-    
-    private func createBipolarSlider(leftLabel: String, rightLabel: String, position: Double) -> UIView {
-        let container = UIView()
-        
-        // Left label
+
         let leftLbl = UILabel()
         leftLbl.text = leftLabel
-        CosmicFitTheme.styleBodyLabel(leftLbl, fontSize: 14, weight: .semibold)
         leftLbl.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
         leftLbl.textColor = CosmicFitTheme.Colours.cosmicBlue
         leftLbl.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(leftLbl)
-        
-        // Right label
+
         let rightLbl = UILabel()
         rightLbl.text = rightLabel
-        CosmicFitTheme.styleBodyLabel(rightLbl, fontSize: 14, weight: .semibold)
         rightLbl.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
         rightLbl.textColor = CosmicFitTheme.Colours.cosmicBlue
         rightLbl.textAlignment = .right
         rightLbl.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(rightLbl)
-        
-        // Slider track
+
         let track = UIView()
         track.backgroundColor = UIColor.lightGray
         track.layer.cornerRadius = 2
         track.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(track)
-        
-        // Create spacer views to position indicator
-        let leftSpacer = UIView()
-        leftSpacer.isHidden = true
-        leftSpacer.translatesAutoresizingMaskIntoConstraints = false
-        track.addSubview(leftSpacer)
-        
-        let rightSpacer = UIView()
-        rightSpacer.isHidden = true
-        rightSpacer.translatesAutoresizingMaskIntoConstraints = false
-        track.addSubview(rightSpacer)
-        
-        // Diamond indicator
+
         let indicator = UILabel()
         indicator.text = "♦"
         indicator.font = UIFont.systemFont(ofSize: 14)
         indicator.textColor = CosmicFitTheme.Colours.cosmicBlue
         indicator.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(indicator)
-        
+
+        if let centre = centreLabel {
+            let centreLbl = UILabel()
+            centreLbl.text = centre
+            centreLbl.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 12, weight: .regular)
+            centreLbl.textColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.6)
+            centreLbl.textAlignment = .center
+            centreLbl.translatesAutoresizingMaskIntoConstraints = false
+            container.addSubview(centreLbl)
+            NSLayoutConstraint.activate([
+                centreLbl.centerXAnchor.constraint(equalTo: track.centerXAnchor),
+                centreLbl.topAnchor.constraint(equalTo: track.bottomAnchor, constant: 4)
+            ])
+        }
+
         NSLayoutConstraint.activate([
+            container.heightAnchor.constraint(equalToConstant: 40),
+
             leftLbl.leadingAnchor.constraint(equalTo: container.leadingAnchor),
             leftLbl.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            leftLbl.widthAnchor.constraint(equalToConstant: 70),
-            
+            leftLbl.widthAnchor.constraint(equalToConstant: 60),
+
             rightLbl.trailingAnchor.constraint(equalTo: container.trailingAnchor),
             rightLbl.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            rightLbl.widthAnchor.constraint(equalToConstant: 70),
-            
-            track.leadingAnchor.constraint(equalTo: leftLbl.trailingAnchor, constant: 16),
-            track.trailingAnchor.constraint(equalTo: rightLbl.leadingAnchor, constant: -16),
+            rightLbl.widthAnchor.constraint(equalToConstant: 60),
+
+            track.leadingAnchor.constraint(equalTo: leftLbl.trailingAnchor, constant: 12),
+            track.trailingAnchor.constraint(equalTo: rightLbl.leadingAnchor, constant: -12),
             track.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             track.heightAnchor.constraint(equalToConstant: 4),
-            
-            // Spacers to divide track based on position
-            leftSpacer.leadingAnchor.constraint(equalTo: track.leadingAnchor),
-            leftSpacer.topAnchor.constraint(equalTo: track.topAnchor),
-            leftSpacer.bottomAnchor.constraint(equalTo: track.bottomAnchor),
-            leftSpacer.widthAnchor.constraint(equalTo: track.widthAnchor, multiplier: position),
-            
-            rightSpacer.trailingAnchor.constraint(equalTo: track.trailingAnchor),
-            rightSpacer.topAnchor.constraint(equalTo: track.topAnchor),
-            rightSpacer.bottomAnchor.constraint(equalTo: track.bottomAnchor),
-            rightSpacer.widthAnchor.constraint(equalTo: track.widthAnchor, multiplier: 1.0 - position),
-            rightSpacer.leadingAnchor.constraint(equalTo: leftSpacer.trailingAnchor),
-            
-            // Position indicator at the boundary
-            indicator.centerXAnchor.constraint(equalTo: leftSpacer.trailingAnchor),
+
             indicator.centerYAnchor.constraint(equalTo: track.centerYAnchor)
         ])
-        
-        return container
+
+        return (container, indicator, track)
     }
-    
-    // MARK: - Bottom Section
-    private func setupBottomSection() {
-        // Bottom divider
-        bottomDivider = createSimpleDivider()
-        bottomDivider?.alpha = 0.0
-        if let divider = bottomDivider {
-            contentView.addSubview(divider)
-        }
-        
-        // Takeaway quote
-        takeawayLabel.text = "No one else has to get it. But you do. That's the point."
-        CosmicFitTheme.styleTitleLabel(takeawayLabel, fontSize: CosmicFitTheme.Typography.FontSizes.title3, weight: .medium)
-        takeawayLabel.textAlignment = .center
-        takeawayLabel.numberOfLines = 0
-        takeawayLabel.translatesAutoresizingMaskIntoConstraints = false
-        takeawayLabel.alpha = 0.0
-        contentView.addSubview(takeawayLabel)
-        
-        // Final star divider
-        finalStarDivider = createStarDivider()
-        finalStarDivider?.alpha = 0.0
-        if let divider = finalStarDivider {
-            contentView.addSubview(divider)
+
+    private func createTitledDiamondScale(
+        title: String, leftLabel: String, rightLabel: String,
+        storeRefs: @escaping (UILabel, UIView) -> Void
+    ) -> UIView {
+        let wrapper = UIView()
+        wrapper.translatesAutoresizingMaskIntoConstraints = false
+
+        let titleLbl = UILabel()
+        titleLbl.text = title
+        titleLbl.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 14, weight: .semibold)
+        titleLbl.textColor = CosmicFitTheme.Colours.cosmicBlue
+        titleLbl.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.addSubview(titleLbl)
+
+        let (scaleContainer, indicator, track) = createDiamondScale(leftLabel: leftLabel, rightLabel: rightLabel)
+        scaleContainer.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.addSubview(scaleContainer)
+
+        storeRefs(indicator, track)
+
+        NSLayoutConstraint.activate([
+            titleLbl.topAnchor.constraint(equalTo: wrapper.topAnchor),
+            titleLbl.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor),
+
+            scaleContainer.topAnchor.constraint(equalTo: titleLbl.bottomAnchor, constant: 6),
+            scaleContainer.leadingAnchor.constraint(equalTo: wrapper.leadingAnchor),
+            scaleContainer.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor),
+            scaleContainer.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor),
+        ])
+
+        return wrapper
+    }
+
+    private func createSilhouetteSlider(leftLabel: String, rightLabel: String) -> (container: UIView, indicator: UILabel, track: UIView) {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+
+        let track = UIView()
+        track.backgroundColor = UIColor.lightGray
+        track.layer.cornerRadius = 2
+        track.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(track)
+
+        let indicator = UILabel()
+        indicator.text = "♦"
+        indicator.font = UIFont.systemFont(ofSize: 14)
+        indicator.textColor = CosmicFitTheme.Colours.cosmicBlue
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(indicator)
+
+        let leftLbl = UILabel()
+        leftLbl.text = leftLabel
+        leftLbl.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 12, weight: .regular)
+        leftLbl.textColor = CosmicFitTheme.Colours.cosmicBlue
+        leftLbl.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(leftLbl)
+
+        let rightLbl = UILabel()
+        rightLbl.text = rightLabel
+        rightLbl.font = CosmicFitTheme.Typography.DMSerifTextFont(size: 12, weight: .regular)
+        rightLbl.textColor = CosmicFitTheme.Colours.cosmicBlue
+        rightLbl.textAlignment = .right
+        rightLbl.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(rightLbl)
+
+        NSLayoutConstraint.activate([
+            track.topAnchor.constraint(equalTo: container.topAnchor, constant: 4),
+            track.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            track.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            track.heightAnchor.constraint(equalToConstant: 4),
+
+            indicator.centerYAnchor.constraint(equalTo: track.centerYAnchor),
+
+            leftLbl.topAnchor.constraint(equalTo: track.bottomAnchor, constant: 6),
+            leftLbl.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+
+            rightLbl.topAnchor.constraint(equalTo: track.bottomAnchor, constant: 6),
+            rightLbl.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+
+            container.bottomAnchor.constraint(equalTo: leftLbl.bottomAnchor, constant: 2),
+        ])
+
+        return (container, indicator, track)
+    }
+
+    private func updateDiamondScale(constraint: inout NSLayoutConstraint?, indicator: UILabel?, track: UIView?, value: Double) {
+        guard let indicator = indicator, let track = track else { return }
+        constraint?.isActive = false
+        let trackWidth = track.bounds.width
+        guard trackWidth > 0 else { return }
+        let offset = CGFloat(value) * trackWidth
+        let newConstraint = indicator.centerXAnchor.constraint(equalTo: track.leadingAnchor, constant: offset)
+        newConstraint.isActive = true
+        constraint = newConstraint
+    }
+
+    private func refreshDiamondScalePositions() {
+        guard let payload = dailyFitPayload else { return }
+        updateDiamondScale(constraint: &vibrancyIndicatorConstraint, indicator: vibrancyIndicator, track: vibrancyTrack, value: payload.vibrancy)
+        updateDiamondScale(constraint: &contrastIndicatorConstraint, indicator: contrastIndicator, track: contrastTrack, value: payload.contrast)
+        updateDiamondScale(constraint: &metalToneIndicatorConstraint, indicator: metalToneIndicator, track: metalToneTrack, value: payload.metalTone)
+        updateSilhouetteSliders(with: payload.silhouetteProfile)
+    }
+
+    private func updateSilhouetteSliders(with profile: SilhouetteProfile) {
+        let values = [profile.masculineFeminine, profile.angularRounded, profile.structuredDraped]
+        for (index, value) in values.enumerated() where index < silhouetteSliderData.count {
+            let entry = silhouetteSliderData[index]
+            let track = entry.track
+            let indicator = entry.indicator
+            guard track.bounds.width > 0 else { continue }
+            entry.constraint?.isActive = false
+            let offset = CGFloat(value) * track.bounds.width
+            let newConstraint = indicator.centerXAnchor.constraint(equalTo: track.leadingAnchor, constant: offset)
+            newConstraint.isActive = true
+            silhouetteSliderData[index] = (indicator: indicator, track: track, constraint: newConstraint)
         }
     }
-    
+
+    // MARK: - New Pipeline Update
+
+    private func updateContentFromPayload() {
+        guard let payload = dailyFitPayload else { return }
+
+        loadTarotCardImage(for: payload.tarotCard)
+        tarotTitleLabel.text = payload.tarotCard.displayName.uppercased()
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE, d MMMM yyyy"
+        dateFormatter.locale = Locale(identifier: "en_GB")
+        dateLabel.text = dateFormatter.string(from: payload.generatedAt)
+
+        styleEditLabel.text = payload.styleEditVariant.description
+
+        if let ritual = payload.styleEditVariant.dailyRitual {
+            dailyRitualLabel.text = ritual
+            dailyRitualHeaderDivider?.isHidden = false
+            dailyRitualLabel.isHidden = false
+        } else {
+            dailyRitualHeaderDivider?.isHidden = true
+            dailyRitualLabel.isHidden = true
+        }
+
+        let dailyHexes = payload.dailyPalette.colours.map { $0.hexValue }
+        let allHexes = payload.dailyPalette.allPaletteHexes
+        colourPaletteContainer.configure(dailyHexes: dailyHexes, allPaletteHexes: allHexes)
+
+        essenceTriangleView?.configure(with: payload.essenceProfile)
+
+        if let reflection = payload.styleEditVariant.wardrobeReflection {
+            wardrobeReflectionLabel.text = reflection
+            wardrobeReflectionHeaderDivider?.isHidden = false
+            wardrobeReflectionLabel.isHidden = false
+        } else {
+            wardrobeReflectionHeaderDivider?.isHidden = true
+            wardrobeReflectionLabel.isHidden = true
+        }
+
+        refreshDiamondScalePositions()
+    }
+
     private func createStarDivider() -> UIView {
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
@@ -1257,73 +1496,61 @@ class DailyFitViewController: UIViewController {
         return container
     }
     
-    // MARK: - Debug Button Setup
-    private func setupDebugButton() {
-        debugButton.setTitle("Debug Chart", for: .normal)
-        debugButton.addTarget(self, action: #selector(debugButtonTapped), for: .touchUpInside)
-        debugButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Apply theme to debug button
-        CosmicFitTheme.styleButton(debugButton, style: .secondary)
-        
-        debugButton.alpha = 0.0
-        contentView.addSubview(debugButton)
-    }
-    
     // MARK: - Initial Content Alpha
     private func setInitialContentAlpha() {
-        // All new content starts invisible and fades in after card reveal
-        let allContentViews: [UIView?] = [
+        let allViews: [UIView?] = [
             dailyFitLabel, tarotSymbolLabel, tarotTitleLabel, dateLabel,
             topDivider, styleEditHeaderLabel, styleEditLabel,
             styleBreakdownDivider, colourHeaderDivider, colourPaletteContainer,
-            pillSlidersContainer, toneHeaderLabel, toneSliderContainer,
-            vibeHeaderDivider, vibeContainer, silhouetteHeaderDivider, silhouetteContainer,
-            bottomDivider, takeawayLabel, finalStarDivider,
-            debugButton
+            toneSliderContainer,
+            vibeHeaderDivider, silhouetteHeaderDivider, silhouetteContainer,
+            finalStarDivider,
+            dailyRitualHeaderDivider, dailyRitualLabel,
+            vibrancyScaleContainer, contrastScaleContainer,
+            essenceTriangleView,
+            wardrobeReflectionHeaderDivider, wardrobeReflectionLabel,
+            tomorrowTeaseLabel, tomorrowButton
         ]
-        
-        for view in allContentViews.compactMap({ $0 }) {
+
+        for view in allViews.compactMap({ $0 }) {
             view.alpha = 0.0
         }
     }
     
     // MARK: - UI Setup Constraints (setupConstraints method)
     private func setupConstraints() {
+        setupNewPipelineConstraints()
+    }
+
+    private func setupNewPipelineConstraints() {
         let horizontalMargin: CGFloat = 32
         let sectionSpacing: CGFloat = 24
-        
-        // Use original positioning logic that properly accounts for tab bar
+
         let screenHeight = view.bounds.height
         let tabBarHeight: CGFloat = 83
-        
-        // Position content to start well above tab bar (original logic)
-        // This positions content 75 points up from the bottom of the screen minus tab bar
-        // Which gives approximately 10-15 points above the tab bar as expected
         let contentStartFromBottom = screenHeight - tabBarHeight - 75
-        
-        // Layout constraints with proper vertical flow
+
         var constraints: [NSLayoutConstraint] = []
-        
-        // Header Section - positioned using original bottom-up calculation
+
+        // Header Section
         constraints.append(contentsOf: [
             dailyFitLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: contentStartFromBottom),
             dailyFitLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
             dailyFitLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
-            
+
             tarotSymbolLabel.topAnchor.constraint(equalTo: dailyFitLabel.bottomAnchor, constant: 8),
             tarotSymbolLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            
+
             tarotTitleLabel.topAnchor.constraint(equalTo: tarotSymbolLabel.bottomAnchor, constant: 8),
             tarotTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
             tarotTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
-            
+
             dateLabel.topAnchor.constraint(equalTo: tarotTitleLabel.bottomAnchor, constant: 8),
             dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
             dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
         ])
-        
-        // Top divider (before style brief)
+
+        // Top divider + style paragraph
         if let topDivider = topDivider {
             constraints.append(contentsOf: [
                 topDivider.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: sectionSpacing),
@@ -1331,200 +1558,138 @@ class DailyFitViewController: UIViewController {
                 topDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
                 topDivider.heightAnchor.constraint(equalToConstant: 1)
             ])
+            constraints.append(contentsOf: [
+                styleEditLabel.topAnchor.constraint(equalTo: topDivider.bottomAnchor, constant: sectionSpacing),
+                styleEditLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                styleEditLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
+            ])
         }
-        
-        // Style Edit Section
-        if let styleEditHeader = styleEditHeaderLabel {
-            if let topDivider = topDivider {
-                // Layout with top divider: Date → Top Divider → Style Edit Header → Style Edit
-                constraints.append(contentsOf: [
-                    styleEditHeader.topAnchor.constraint(equalTo: topDivider.bottomAnchor, constant: sectionSpacing * 1.33),
-                    styleEditHeader.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                    styleEditHeader.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
-                ])
-                
-                constraints.append(contentsOf: [
-                    styleEditLabel.topAnchor.constraint(equalTo: styleEditHeader.bottomAnchor, constant: sectionSpacing),
-                    styleEditLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                    styleEditLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
-                ])
-            } else {
-                // Layout without top divider: Date → Style Edit Header → Style Edit
-                constraints.append(contentsOf: [
-                    styleEditHeader.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: sectionSpacing * 2.33),
-                    styleEditHeader.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                    styleEditHeader.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
-                ])
-                
-                constraints.append(contentsOf: [
-                    styleEditLabel.topAnchor.constraint(equalTo: styleEditHeader.bottomAnchor, constant: sectionSpacing),
-                    styleEditLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                    styleEditLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
-                ])
-            }
+
+        // Daily Ritual
+        var lastAnchor: NSLayoutYAxisAnchor = styleEditLabel.bottomAnchor
+        if let ritualHeader = dailyRitualHeaderDivider {
+            constraints.append(contentsOf: [
+                ritualHeader.topAnchor.constraint(equalTo: lastAnchor, constant: sectionSpacing),
+                ritualHeader.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                ritualHeader.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
+
+                dailyRitualLabel.topAnchor.constraint(equalTo: ritualHeader.bottomAnchor, constant: 12),
+                dailyRitualLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                dailyRitualLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
+            ])
+            lastAnchor = dailyRitualLabel.bottomAnchor
         }
-        
-        // Outfit Breakdown Section
+
+        // Outfit Breakdown header
         if let styleBreakdownDivider = styleBreakdownDivider {
             constraints.append(contentsOf: [
-                styleBreakdownDivider.topAnchor.constraint(equalTo: styleEditLabel.bottomAnchor, constant: sectionSpacing * 1.33),
+                styleBreakdownDivider.topAnchor.constraint(equalTo: lastAnchor, constant: sectionSpacing * 1.33),
                 styleBreakdownDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
                 styleBreakdownDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
             ])
+            lastAnchor = styleBreakdownDivider.bottomAnchor
         }
-        
-        // Colour Section
+
+        // Colour / Style Palette
         if let colourHeaderDivider = colourHeaderDivider {
             constraints.append(contentsOf: [
-                colourHeaderDivider.topAnchor.constraint(equalTo: styleBreakdownDivider?.bottomAnchor ?? styleEditLabel.bottomAnchor, constant: sectionSpacing),
+                colourHeaderDivider.topAnchor.constraint(equalTo: lastAnchor, constant: sectionSpacing),
                 colourHeaderDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
                 colourHeaderDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
-                
+
                 colourPaletteContainer.topAnchor.constraint(equalTo: colourHeaderDivider.bottomAnchor, constant: 12),
                 colourPaletteContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
                 colourPaletteContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
             ])
-        } else {
-            constraints.append(contentsOf: [
-                colourPaletteContainer.topAnchor.constraint(equalTo: styleBreakdownDivider?.bottomAnchor ?? styleEditLabel.bottomAnchor, constant: sectionSpacing * 2),
-                colourPaletteContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                colourPaletteContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
-            ])
+            lastAnchor = colourPaletteContainer.bottomAnchor
         }
-        
-        // Pill Sliders Section
+
+        // Vibrancy + Contrast scales
         constraints.append(contentsOf: [
-            pillSlidersContainer.topAnchor.constraint(equalTo: colourPaletteContainer.bottomAnchor, constant: sectionSpacing),
-            pillSlidersContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+            vibrancyScaleContainer.topAnchor.constraint(equalTo: lastAnchor, constant: sectionSpacing),
+            vibrancyScaleContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+            vibrancyScaleContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
+
+            contrastScaleContainer.topAnchor.constraint(equalTo: vibrancyScaleContainer.bottomAnchor, constant: 16),
+            contrastScaleContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+            contrastScaleContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
         ])
-        
-        // Tone Slider Section
+
+        // Tone
         constraints.append(contentsOf: [
-            toneHeaderLabel.topAnchor.constraint(equalTo: pillSlidersContainer.bottomAnchor, constant: sectionSpacing),
-            toneHeaderLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-            toneHeaderLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
-            
-            toneSliderContainer.topAnchor.constraint(equalTo: toneHeaderLabel.bottomAnchor, constant: 8),
+            toneSliderContainer.topAnchor.constraint(equalTo: contrastScaleContainer.bottomAnchor, constant: 16),
             toneSliderContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
             toneSliderContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
         ])
-        
-        // Vibe Breakdown Section
-        if let vibeHeaderDivider = vibeHeaderDivider {
+
+        // Essence triangle
+        if let vibeHeaderDivider = vibeHeaderDivider, let triangle = essenceTriangleView {
             constraints.append(contentsOf: [
                 vibeHeaderDivider.topAnchor.constraint(equalTo: toneSliderContainer.bottomAnchor, constant: sectionSpacing),
                 vibeHeaderDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
                 vibeHeaderDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
-                
-                vibeContainer.topAnchor.constraint(equalTo: vibeHeaderDivider.bottomAnchor, constant: 12),
-                vibeContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                vibeContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
+
+                triangle.topAnchor.constraint(equalTo: vibeHeaderDivider.bottomAnchor, constant: 12),
+                triangle.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+                triangle.widthAnchor.constraint(equalToConstant: 200),
+                triangle.heightAnchor.constraint(equalToConstant: 200)
             ])
         }
-        
-        // Silhouette Section
-        if let silhouetteHeaderDivider = silhouetteHeaderDivider {
+
+        // Silhouette
+        if let silhouetteHeaderDivider = silhouetteHeaderDivider, let triangle = essenceTriangleView {
             constraints.append(contentsOf: [
-                silhouetteHeaderDivider.topAnchor.constraint(equalTo: vibeContainer.bottomAnchor, constant: sectionSpacing),
+                silhouetteHeaderDivider.topAnchor.constraint(equalTo: triangle.bottomAnchor, constant: sectionSpacing),
                 silhouetteHeaderDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
                 silhouetteHeaderDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
-                
+
                 silhouetteContainer.topAnchor.constraint(equalTo: silhouetteHeaderDivider.bottomAnchor, constant: 12),
                 silhouetteContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
                 silhouetteContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
             ])
         }
-        
-        // Bottom Section
-        if let bottomDivider = bottomDivider {
+
+        // Wardrobe Reflection
+        if let reflectionHeader = wardrobeReflectionHeaderDivider {
             constraints.append(contentsOf: [
-                bottomDivider.topAnchor.constraint(equalTo: silhouetteContainer.bottomAnchor, constant: sectionSpacing),
-                bottomDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                bottomDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
-                bottomDivider.heightAnchor.constraint(equalToConstant: 1),
-                
-                takeawayLabel.topAnchor.constraint(equalTo: bottomDivider.bottomAnchor, constant: sectionSpacing),
-                takeawayLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                takeawayLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
+                reflectionHeader.topAnchor.constraint(equalTo: silhouetteContainer.bottomAnchor, constant: sectionSpacing),
+                reflectionHeader.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                reflectionHeader.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
+
+                wardrobeReflectionLabel.topAnchor.constraint(equalTo: reflectionHeader.bottomAnchor, constant: 12),
+                wardrobeReflectionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                wardrobeReflectionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
             ])
         } else {
             constraints.append(contentsOf: [
-                takeawayLabel.topAnchor.constraint(equalTo: silhouetteContainer.bottomAnchor, constant: sectionSpacing * 2),
-                takeawayLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                takeawayLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
+                wardrobeReflectionLabel.topAnchor.constraint(equalTo: silhouetteContainer.bottomAnchor, constant: sectionSpacing),
+                wardrobeReflectionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                wardrobeReflectionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
             ])
-        }
-        
-        // Final star divider
-        if let finalStarDivider = finalStarDivider {
-            constraints.append(contentsOf: [
-                finalStarDivider.topAnchor.constraint(equalTo: takeawayLabel.bottomAnchor, constant: sectionSpacing),
-                finalStarDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                finalStarDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
-                
-                debugButton.topAnchor.constraint(equalTo: finalStarDivider.bottomAnchor, constant: sectionSpacing),
-                debugButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-                debugButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50)
-            ])
-        } else {
-            constraints.append(contentsOf: [
-                debugButton.topAnchor.constraint(equalTo: takeawayLabel.bottomAnchor, constant: sectionSpacing * 2),
-                debugButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-                debugButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50)
-            ])
-        }
-        
-        NSLayoutConstraint.activate(constraints)
-    }
-    
-    private func updateContent() {
-        guard let content = dailyVibeContent else { return }
-        
-        // Load tarot card image
-        loadTarotCardImage(for: content.tarotCard)
-        
-        // Update header with tarot card information
-        if let tarotCard = content.tarotCard {
-            tarotTitleLabel.text = tarotCard.displayName.uppercased()
-            // TODO: Update tarot symbol based on card data
-            // tarotSymbolLabel.text = "♦ \(tarotCard.number ?? "")"
-        } else {
-            tarotTitleLabel.text = "DAILY ENERGY"
-        }
-        
-        // Update date label
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE, d MMMM yyyy"
-        dateFormatter.locale = Locale(identifier: "en_GB")
-        dateLabel.text = dateFormatter.string(from: Date())
-        
-        // Update styleEdit with dynamically selected variant
-        styleEditLabel.text = content.styleEdit
-        
-        // UPDATE: Configure vibe breakdown bars with actual data
-        vibeContainer.configure(with: content.vibeBreakdown)
-        
-        if let v4 = content.v4DailyPalette {
-            colourPaletteContainer.configure(
-                dailyHexes: v4.dailyHexes,
-                allPaletteHexes: v4.allPaletteHexes
-            )
-        } else if !content.paletteColours.isEmpty {
-            colourPaletteContainer.configure(with: content.paletteColours)
-        } else if let tokens = extractTokensFromContent(content) {
-            colourPaletteContainer.configure(with: tokens)
         }
 
-        print("Content updated with new layout structure")
+        // Star divider + Tomorrow section
+        if let finalStarDivider = finalStarDivider {
+            constraints.append(contentsOf: [
+                finalStarDivider.topAnchor.constraint(equalTo: wardrobeReflectionLabel.bottomAnchor, constant: sectionSpacing),
+                finalStarDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                finalStarDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
+
+                tomorrowTeaseLabel.topAnchor.constraint(equalTo: finalStarDivider.bottomAnchor, constant: sectionSpacing),
+                tomorrowTeaseLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
+                tomorrowTeaseLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
+
+                tomorrowButton.topAnchor.constraint(equalTo: tomorrowTeaseLabel.bottomAnchor, constant: 16),
+                tomorrowButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+                tomorrowButton.widthAnchor.constraint(equalToConstant: 240),
+                tomorrowButton.heightAnchor.constraint(equalToConstant: 44),
+                tomorrowButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -50)
+            ])
+        }
+
+        NSLayoutConstraint.activate(constraints)
     }
-    
-    // MARK: - Helper Method for Token Extraction
-    
-    /// Extract StyleTokens from DailyVibeContent
-    private func extractTokensFromContent(_ content: DailyVibeContent) -> [StyleToken]? {
-        return content.styleTokens.isEmpty ? nil : content.styleTokens
-    }
-    
+
     private func loadTarotCardImage(for tarotCard: TarotCard?) {
         guard let tarotCard = tarotCard else {
             print("⚠️ No tarot card provided for image loading")
@@ -1701,7 +1866,12 @@ class DailyFitViewController: UIViewController {
         // Mark as revealed and save state immediately
         isCardRevealed = true
         UserDefaults.standard.set(true, forKey: dailyCardRevealKey)
-        
+        if let payload = dailyFitPayload, let pk = persistenceProfileKey {
+            DailyFitFrozenPayloadStorage.shared.save(
+                payload: payload, date: displayDate, profileKey: pk
+            )
+        }
+
         // Perform 3D flip animation
         perform3DCardFlip()
     }
@@ -1772,32 +1942,31 @@ class DailyFitViewController: UIViewController {
     private func completeCardReveal() {
         let contentFadeDuration: TimeInterval = 0.5
         
-        // Fade in background blur
+        updateDayNavigationUI()
+        
         UIView.animate(withDuration: contentFadeDuration) {
             self.backgroundBlurImageView.alpha = 1.0
         }
         
-        // Header labels will fade in with other content (no separate animation needed)
-        
-        // Show scroll indicator
         UIView.animate(withDuration: contentFadeDuration * 0.6, delay: contentFadeDuration * 0.2) {
             self.scrollIndicatorView.alpha = 1.0
             self.scrollIndicatorView.isHidden = false
         }
         
-        // Fade in all new content views with stagger
         let allContentViews: [UIView?] = [
             dailyFitLabel, tarotSymbolLabel, tarotTitleLabel, dateLabel,
-            topDivider, styleEditHeaderLabel, styleEditLabel,
+            topDivider, styleEditLabel,
+            dailyRitualHeaderDivider, dailyRitualLabel,
             styleBreakdownDivider, colourHeaderDivider, colourPaletteContainer,
-            pillSlidersContainer,
-            toneHeaderLabel, toneSliderContainer,
-            vibeHeaderDivider, vibeContainer,
+            vibrancyScaleContainer, contrastScaleContainer,
+            toneSliderContainer,
+            vibeHeaderDivider, essenceTriangleView,
             silhouetteHeaderDivider, silhouetteContainer,
-            bottomDivider, takeawayLabel, finalStarDivider,
-            debugButton
+            wardrobeReflectionHeaderDivider, wardrobeReflectionLabel,
+            finalStarDivider,
+            tomorrowTeaseLabel, tomorrowButton
         ]
-        
+
         for (index, view) in allContentViews.compactMap({ $0 }).enumerated() {
             let delay = contentFadeDuration * 0.3 + (Double(index) * 0.05)
             UIView.animate(withDuration: contentFadeDuration * 0.7, delay: delay) {
@@ -1805,32 +1974,21 @@ class DailyFitViewController: UIViewController {
             }
         }
         
-        // Enable scrolling
         scrollView.isScrollEnabled = true
-        
-        // Setup content section backgrounds
-        setupContentSectionBackgrounds()
-        
-        // Update state
+        setupContentSectionBackgrounds(animated: true)
         currentCardState = .revealed
-        
-        // Ensure proper final state
         ensureContainerVisibility()
-        
-        print("✨ 3D card flip animation completed")
     }
 
     // MARK: - Content Section Setup
     
-    private func setupContentSectionBackgrounds() {
-        // Remove any existing background
+    private func setupContentSectionBackgrounds(animated: Bool = true) {
         contentBackgroundView?.removeFromSuperview()
         
         // Remove any existing backgrounds from labels
         let allLabels: [UILabel?] = [
             dailyFitLabel, tarotSymbolLabel, tarotTitleLabel, dateLabel,
-            styleEditLabel, toneHeaderLabel,
-            takeawayLabel
+            styleEditLabel
         ]
         
         for label in allLabels.compactMap({ $0 }) {
@@ -1865,68 +2023,70 @@ class DailyFitViewController: UIViewController {
         )
         contentBackgroundTopConstraint?.isActive = true
         
+        let bottomAnchorView: UIView = tomorrowButton
         NSLayoutConstraint.activate([
             backgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            backgroundView.bottomAnchor.constraint(equalTo: debugButton.bottomAnchor, constant: bottomMargin)
+            backgroundView.bottomAnchor.constraint(equalTo: bottomAnchorView.bottomAnchor, constant: bottomMargin)
         ])
         
-        // Force layout
         view.layoutIfNeeded()
         
-        // Animate to final position - use dailyFitLabel as the starting point for content background
         let finalYPosition = dailyFitLabel.frame.origin.y - bottomMargin
         
-        UIView.animate(
-            withDuration: 0.5,
-            delay: 0.2,  // Slight delay after card flip
-            usingSpringWithDamping: 0.85,
-            initialSpringVelocity: 0,
-            options: [.curveEaseOut],
-            animations: {
-                // Fade in
-                backgroundView.alpha = 1.0
-                
-                // Slide up to final position
-                self.contentBackgroundTopConstraint?.constant = finalYPosition
-                self.view.layoutIfNeeded()
-            },
-            completion: { _ in
-                // Ensure proper z-ordering after animation
-                self.contentView.sendSubviewToBack(self.tarotCardImageView)
-                
-                // Ensure all text stays ABOVE content background
-                for label in allLabels.compactMap({ $0 }) {
-                    self.contentView.bringSubviewToFront(label)
-                }
-                // Bring all new content views to front
-                let allContentViews: [UIView?] = [
-                    self.dailyFitLabel, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
-                    self.topDivider, self.styleEditHeaderLabel, self.styleEditLabel,
-                    self.styleBreakdownDivider, self.colourHeaderDivider, self.colourPaletteContainer,
-                    self.pillSlidersContainer, self.toneHeaderLabel, self.toneSliderContainer,
-                    self.vibeHeaderDivider, self.vibeContainer, self.silhouetteHeaderDivider, self.silhouetteContainer,
-                    self.bottomDivider, self.takeawayLabel, self.finalStarDivider
-                ]
-                for view in allContentViews.compactMap({ $0 }) {
-                    self.contentView.bringSubviewToFront(view)
-                }
-                self.contentView.bringSubviewToFront(self.debugButton)
-                
-                // Lifecycle-aware: add calendar button only after contentBackgroundView exists
-                self.calendarButton.removeFromSuperview()
-                self.contentView.addSubview(self.calendarButton)
-                NSLayoutConstraint.activate([
-                    self.calendarButton.topAnchor.constraint(equalTo: backgroundView.topAnchor, constant: 12),
-                    self.calendarButton.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -16),
-                    self.calendarButton.widthAnchor.constraint(equalToConstant: 32),
-                    self.calendarButton.heightAnchor.constraint(equalToConstant: 32),
-                ])
-                self.contentView.bringSubviewToFront(self.calendarButton)
-                
-                print("✨ Content box slide-up animation completed")
+        let applyFinalLayout = {
+            self.contentView.sendSubviewToBack(self.tarotCardImageView)
+            for label in allLabels.compactMap({ $0 }) {
+                self.contentView.bringSubviewToFront(label)
             }
-        )
+            let allContentViews: [UIView?] = [
+                self.dailyFitLabel, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
+                self.topDivider, self.styleEditLabel,
+                self.dailyRitualHeaderDivider, self.dailyRitualLabel,
+                self.styleBreakdownDivider, self.colourHeaderDivider, self.colourPaletteContainer,
+                self.vibrancyScaleContainer, self.contrastScaleContainer,
+                self.toneSliderContainer,
+                self.vibeHeaderDivider, self.essenceTriangleView,
+                self.silhouetteHeaderDivider, self.silhouetteContainer,
+                self.wardrobeReflectionHeaderDivider, self.wardrobeReflectionLabel,
+                self.finalStarDivider,
+                self.tomorrowTeaseLabel, self.tomorrowButton
+            ]
+            for v in allContentViews.compactMap({ $0 }) {
+                self.contentView.bringSubviewToFront(v)
+            }
+            self.calendarButton.removeFromSuperview()
+            self.contentView.addSubview(self.calendarButton)
+            self.calendarButton.alpha = 1.0
+            NSLayoutConstraint.activate([
+                self.calendarButton.topAnchor.constraint(equalTo: backgroundView.topAnchor, constant: 12),
+                self.calendarButton.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -16),
+                self.calendarButton.widthAnchor.constraint(equalToConstant: 32),
+                self.calendarButton.heightAnchor.constraint(equalToConstant: 32),
+            ])
+            self.contentView.bringSubviewToFront(self.calendarButton)
+        }
+        
+        if animated {
+            UIView.animate(
+                withDuration: 0.5,
+                delay: 0.2,
+                usingSpringWithDamping: 0.85,
+                initialSpringVelocity: 0,
+                options: [.curveEaseOut],
+                animations: {
+                    backgroundView.alpha = 1.0
+                    self.contentBackgroundTopConstraint?.constant = finalYPosition
+                    self.view.layoutIfNeeded()
+                },
+                completion: { _ in applyFinalLayout() }
+            )
+        } else {
+            backgroundView.alpha = 1.0
+            contentBackgroundTopConstraint?.constant = finalYPosition
+            view.layoutIfNeeded()
+            applyFinalLayout()
+        }
     }
     
     @objc private func calendarButtonTapped() {
@@ -1934,88 +2094,11 @@ class DailyFitViewController: UIViewController {
         paymentVC.modalPresentationStyle = .pageSheet
         present(paymentVC, animated: true)
     }
-    
-    // MARK: - Actions
-    @objc private func debugButtonTapped() {
-        guard let originalChartVC = originalChartViewController else {
-            print("❌ No original chart view controller available")
-            return
-        }
-        
-        // Print debug information to console
-        print("\n🔮 DEBUG CHART BUTTON TAPPED 🔮")
-        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-        
-        // Print daily vibe content info
-        if let dailyVibe = dailyVibeContent {
-            print("📊 DAILY VIBE DATA:")
-            //print("• Keywords: \(dailyVibe.tarotKeywords)")
-            //print("• Style Edit: \(dailyVibe.styleEdit.prefix(100))...")
-            
-            if let tarotCard = dailyVibe.tarotCard {
-                print("• Card: \(tarotCard.displayName)")
-                print("• Card Description: \(tarotCard.description)")
-            } else {
-                print("• Card: None selected")
-            }
-            
-            print("\n🎨 VIBE BREAKDOWN:")
-            let vibeBreakdown = dailyVibe.vibeBreakdown
-            print("• Classic: \(vibeBreakdown.classic)")
-            print("• Playful: \(vibeBreakdown.playful)")
-            print("• Romantic: \(vibeBreakdown.romantic)")
-            print("• Utility: \(vibeBreakdown.utility)")
-            print("• Drama: \(vibeBreakdown.drama)")
-            print("• Edge: \(vibeBreakdown.edge)")
-            
-            /*
-            print("\n🌈 COLOUR SCORES:")
-            let colourScores = dailyVibe.colourScores
-            print("• Darkness: \(colourScores.darkness)/10")
-            print("• Vibrancy: \(colourScores.vibrancy)/10")
-            print("• Contrast: \(colourScores.contrast)/10")
-            
-            print("\n📐 STRUCTURAL AXES:")
-            print("• Angular/Curvy: \(dailyVibe.angularCurvyScore.score)/10")
-            print("• Layering: \(dailyVibe.layeringScore)/10")
-            
-            if let temp = dailyVibe.temperature, let condition = dailyVibe.weatherCondition {
-                print("\n🌤 WEATHER CONTEXT:")
-                print("• Temperature: \(String(format: "%.1f", temp))°C")
-                print("• Condition: \(condition)")
-            }
-             */
-        }
-        
-        print("\n🌟 Navigating to Full Natal Chart with Debug Menu...")
-        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
-        
-        // Find the tab bar controller in the view hierarchy
-        var currentParent: UIViewController? = parent
-        while currentParent != nil {
-            if let tabBarController = currentParent as? CosmicFitTabBarController {
-                // Wrap the chart view controller in a GenericDetailViewController
-                let detailVC = GenericDetailViewController(contentViewController: originalChartVC)
-                
-                // Present using the tab bar's presentation system
-                tabBarController.presentDetailViewController(detailVC, animated: true)
-                return
-            }
-            currentParent = currentParent?.parent
-        }
-        
-        // Fallback: if no tab bar controller found, present modally
-        print("⚠️ No tab bar controller found - presenting modally")
-        let navController = UINavigationController(rootViewController: originalChartVC)
-        navController.modalPresentationStyle = .fullScreen
-        present(navController, animated: true)
-    }
 }
 
 // MARK: - UIScrollViewDelegate
 extension DailyFitViewController: UIScrollViewDelegate {
     
-    // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard isCardRevealed else { return }
         

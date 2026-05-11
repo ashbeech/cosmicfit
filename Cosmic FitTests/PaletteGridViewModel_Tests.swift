@@ -90,10 +90,10 @@ struct PaletteGridViewModelTests {
     ]
 
     private static let fullCore: [BlueprintColour] = [
-        colour("sage",    "#7AA18C", role: .core),
-        colour("caramel", "#B08254", role: .core),
-        colour("slate",   "#4B5A6E", role: .core),
-        colour("cream",   "#F0EADC", role: .core),
+        colour("sage",     "#7AA18C", role: .core),
+        colour("caramel",  "#B08254", role: .core),
+        colour("slate",    "#4B5A6E", role: .core),
+        colour("warm tan", "#D4C4A0", role: .core),
     ]
 
     private static let fullAccent: [BlueprintColour] = [

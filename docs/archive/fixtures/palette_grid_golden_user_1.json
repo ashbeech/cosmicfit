@@ -1,0 +1,93 @@
+{
+  "sections" : [
+    {
+      "cells" : [
+        {
+          "anchorName" : "clear ivory",
+          "hex" : "#FFFDF0"
+        },
+        {
+          "anchorName" : "bright teal",
+          "hex" : "#009B8D"
+        },
+        {
+          "anchorName" : "slate",
+          "hex" : "#5B6770"
+        },
+        {
+          "anchorName" : "warm navy",
+          "hex" : "#384C70"
+        },
+        {
+          "anchorName" : "luminary signature",
+          "hex" : "#724BA4"
+        },
+        {
+          "anchorName" : "royal blue",
+          "hex" : "#4169E1"
+        },
+        {
+          "anchorName" : "smoked navy",
+          "hex" : "#3B4B5E"
+        },
+        {
+          "anchorName" : "graphite",
+          "hex" : "#4B4F54"
+        },
+        {
+          "anchorName" : "dove grey",
+          "hex" : "#9C9A9A"
+        },
+        {
+          "anchorName" : "clear camel",
+          "hex" : "#C19A6B"
+        },
+        {
+          "anchorName" : "poppy",
+          "hex" : "#E35335"
+        },
+        {
+          "anchorName" : "vivid yellow",
+          "hex" : "#FFE302"
+        },
+        {
+          "anchorName" : "clear black",
+          "hex" : "#0D1014"
+        },
+        {
+
+        },
+        {
+
+        },
+        {
+
+        }
+      ],
+      "columnCount" : 4,
+      "title" : "Core Palette"
+    },
+    {
+      "cells" : [
+        {
+          "anchorName" : "lacquer coral",
+          "hex" : "#E2583E"
+        },
+        {
+          "anchorName" : "acid lime",
+          "hex" : "#B0BF1A"
+        },
+        {
+          "anchorName" : "bright gold",
+          "hex" : "#FFD700"
+        },
+        {
+          "anchorName" : "clear cyan",
+          "hex" : "#00FFFF"
+        }
+      ],
+      "columnCount" : 4,
+      "title" : "Accent Colours"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import Foundation
 
-// MARK: - Convenience for blueprint-to-UI fallback logic
+// MARK: - Convenience for Style Guide (`CosmicBlueprint`) ↔ UI fallback logic
 
 extension String {
     /// Returns `self` if non-empty, otherwise `nil`. Lets callers use
@@ -46,7 +46,7 @@ final class BlueprintStorage {
         if stored < Self.schemaVersion {
             if FileManager.default.fileExists(atPath: fileURL.path) {
                 try? FileManager.default.removeItem(at: fileURL)
-                print("Blueprint wiped — schema version \(stored) → \(Self.schemaVersion)")
+                print("Style Guide data wiped — schema version \(stored) → \(Self.schemaVersion)")
             }
             UserDefaults.standard.set(Self.schemaVersion, forKey: Self.schemaVersionKey)
         }
@@ -60,13 +60,13 @@ final class BlueprintStorage {
             let data = try encoder.encode(blueprint)
             try data.write(to: fileURL, options: .atomic)
             UserDefaults.standard.set(Self.schemaVersion, forKey: Self.schemaVersionKey)
-            print("Blueprint saved to Documents (schema v\(Self.schemaVersion))")
+            print("Style Guide saved to Documents (schema v\(Self.schemaVersion))")
             let post = {
                 NotificationCenter.default.post(name: .blueprintDidUpdate, object: nil)
             }
             if Thread.isMainThread { post() } else { DispatchQueue.main.async(execute: post) }
         } catch {
-            print("Blueprint save failed: \(error.localizedDescription)")
+            print("Style Guide save failed: \(error.localizedDescription)")
         }
     }
 
@@ -78,13 +78,13 @@ final class BlueprintStorage {
             decoder.dateDecodingStrategy = .iso8601
             return try decoder.decode(CosmicBlueprint.self, from: data)
         } catch {
-            print("Blueprint load failed: \(error.localizedDescription)")
+            print("Style Guide load failed: \(error.localizedDescription)")
             return nil
         }
     }
 
     func delete() {
         try? FileManager.default.removeItem(at: fileURL)
-        print("Blueprint deleted from Documents")
+        print("Style Guide data deleted from Documents")
     }
 }

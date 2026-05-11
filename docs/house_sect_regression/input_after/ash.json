@@ -31,35 +31,37 @@
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-05-08T10:29:44Z",
+  "generatedAt" : "2026-05-11T14:23:18Z",
   "hardware" : {
-    "metalsText" : "Your most effective hardware relies on a strict clash of high-tech precision and familiar, heavy warmth. Slick, industrial white gold tones gives you a sharp foundation, looking right at home on the oversized zips of technical outerwear or the chunky fastenings of a utility bag. A completely clinical finish leaves you cold, so you break up those stark details with anodised aluminium tones. Seek out anodised aluminium tones pieces with a battered, nostalgic patina—like a weighty heirloom pendant strung onto a modern synthetic cord, or thick, warm-toned belt buckles. This visual friction keeps your clothes from looking like a uniform, grounding bold shapes in something deeply personal.",
+    "metalsText" : "Your most effective hardware relies on a strict clash of high-tech precision and familiar, heavy warmth. Slick, industrial white gold tones gives you a sharp foundation, looking right at home on the oversized zips of technical outerwear or the chunky fastenings of a utility bag. A completely clinical finish leaves you cold, so you break up those stark details with titanium tones. Seek out titanium tones pieces with a battered, nostalgic patina—like a weighty heirloom pendant strung onto a modern synthetic cord, or thick, warm-toned belt buckles. This visual friction keeps your clothes from looking like a uniform, grounding bold shapes in something deeply personal.",
     "recommendedMetals" : [
       "white gold",
-      "anodised aluminium",
       "titanium",
       "antique silver",
       "aged brass",
       "hammered gold",
+      "hammered titanium",
       "brushed silver",
-      "surgical steel"
+      "anodised aluminium",
+      "surgical steel",
+      "brass"
     ],
     "recommendedStones" : [
+      "turquoise",
+      "amber",
+      "lapis lazuli",
       "labradorite",
       "moonstone",
       "pearl",
       "selenite",
-      "amber",
-      "lapis lazuli",
-      "turquoise",
       "peridot",
       "sapphire",
       "ammolite",
       "fluorite",
       "meteorite"
     ],
-    "stonesText" : "The standard, polite solitaire diamond is never going to hold your attention. You suit stones that feel simultaneously like unearthed artefacts and entirely alien objects. labradorite gives you a striking, electric shock of colour while maintaining a comforting, heavy weight against the collarbone. Pair it with the milky, protective finish of moonstone set in thick, molten silver. The icy depth of pearl works perfectly for this too, offering a fierce spark of heat wrapped in a smooth, nostalgic cabochon cut. These are not quiet gems meant to blend in, but bold centrepieces that demand a second look.",
-    "tipText" : "Your jewellery needs to strike a balance between sentimental armour and industrial design. Look for pieces in white gold tones that feel substantial and slightly odd, like a heavy vintage locket worn on a thick snake chain or a tactical closure on a slouchy bag. You want hardware that feels inherited but distinctly modern, rather than bought straight off a display bust. Skip the flimsy, tangled layering chains entirely. Instead, anchor your look with one dominant ring featuring labradorite or a chunky architectural cuff. It gives your high-energy outfits a necessary centre of gravity."
+    "stonesText" : "The standard, polite solitaire diamond is never going to hold your attention. You suit stones that feel simultaneously like unearthed artefacts and entirely alien objects. turquoise gives you a striking, electric shock of colour while maintaining a comforting, heavy weight against the collarbone. Pair it with the milky, protective finish of amber set in thick, molten silver. The icy depth of lapis lazuli works perfectly for this too, offering a fierce spark of heat wrapped in a smooth, nostalgic cabochon cut. These are not quiet gems meant to blend in, but bold centrepieces that demand a second look.",
+    "tipText" : "Your jewellery needs to strike a balance between sentimental armour and industrial design. Look for pieces in white gold tones that feel substantial and slightly odd, like a heavy vintage locket worn on a thick snake chain or a tactical closure on a slouchy bag. You want hardware that feels inherited but distinctly modern, rather than bought straight off a display bust. Skip the flimsy, tangled layering chains entirely. Instead, anchor your look with one dominant ring featuring turquoise or a chunky architectural cuff. It gives your high-energy outfits a necessary centre of gravity."
   },
   "occasions" : {
     "dailyText" : "Your daily rotation requires a very specific friction to function properly. A part of you wants to retreat into an incredibly familiar, lived-in shell, while the rest of your personality needs to command the street. Master this tension by pairing deeply comforting foundation pieces with unapologetic, unconventional shapes. Look for garments that envelop the body, relying on generous proportions and sweeping lengths that give you ample room to hide. Then, deliberately puncture that safety with an unexpected cut or a stark silhouette that breaks the rules of typical casualwear. You do relaxed beautifully, provided the final result still reads as a completely original thought.\n\nYour comfort instinct gravitates toward emotional belonging through group-appropriate comfort, community softness.",
@@ -347,6 +349,6 @@
   "userInfo" : {
     "birthDate" : "1984-12-11T00:00:00Z",
     "birthLocation" : "London, UK",
-    "generationDate" : "2026-05-08T10:29:44Z"
+    "generationDate" : "2026-05-11T14:23:18Z"
   }
 }

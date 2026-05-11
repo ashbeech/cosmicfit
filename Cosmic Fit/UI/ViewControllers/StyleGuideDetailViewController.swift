@@ -457,7 +457,7 @@ final class StyleGuideDetailViewController: UIViewController {
 
     private static func paragraphFormatted(_ text: String) -> NSAttributedString {
         let style = NSMutableParagraphStyle()
-        style.paragraphSpacing = 14
+        style.paragraphSpacing = 8
         style.lineSpacing = 3
 
         let font = CosmicFitTheme.Typography.DMSerifTextFont(

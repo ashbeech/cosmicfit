@@ -1,4 +1,4 @@
-// DAILY FIT ONLY -- Not in scope for Blueprint rebuild. Do not modify during Blueprint work.
+// DAILY FIT ONLY — isolate changes from Style Guide / CosmicBlueprint work unless intentional.
 //
 //  TarotCard.swift
 //  Cosmic Fit
@@ -26,6 +26,14 @@ struct StyleEditVariant: Codable {
     let description: String
     let energyEmphasis: [String: Double]
     let axesEmphasis: [String: Int]
+    let dailyRitual: String?
+    let wardrobeReflection: String?
+
+    enum CodingKeys: String, CodingKey {
+        case variant, title, description, energyEmphasis, axesEmphasis
+        case dailyRitual
+        case wardrobeReflection
+    }
 }
 
 /// Data model representing a Tarot card with semantic matching capabilities
@@ -273,7 +281,7 @@ struct TarotCard: Codable, Identifiable {
             }
         }*/
         
-        // REMOVED: Step 6 (decay penalty) - now handled by hard-block cooldown in TarotCardSelector
+        // Decay penalty handled by hard-block cooldown in BlueprintLensEngine (Daily Fit lens)
         
         return score
     }

@@ -14,7 +14,7 @@ Place post-integration Blueprint JSON outputs under:
 Then generate bundles (before + after + diffs + invariants):
 
 ```bash
-python3 generate_house_sect_regression.py \
+python3 tools/generate_house_sect_regression.py \
   --fixture ash \
   --before docs/fixtures/blueprint_input_user_1.json \
   --after docs/house_sect_regression/input_after/ash.json
@@ -27,13 +27,13 @@ Repeat for each fixture.
 You can auto-generate all `input_after/*.json` files directly from the runtime engine:
 
 ```bash
-python3 export_input_after_fixtures.py
+python3 tools/export_input_after_fixtures.py
 ```
 
 Custom fixture subset:
 
 ```bash
-python3 export_input_after_fixtures.py --fixtures ash maria
+python3 tools/export_input_after_fixtures.py --fixtures ash maria
 ```
 
 ## Validate snapshot bundles in CI/local
@@ -41,14 +41,14 @@ python3 export_input_after_fixtures.py --fixtures ash maria
 Run bundle generation for each fixture and then scorecard generation:
 
 ```bash
-python3 generate_house_sect_regression.py --fixture ash --before docs/fixtures/blueprint_input_user_1.json --after docs/house_sect_regression/input_after/ash.json
-python3 review_house_sect_regression.py
+python3 tools/generate_house_sect_regression.py --fixture ash --before docs/fixtures/blueprint_input_user_1.json --after docs/house_sect_regression/input_after/ash.json
+python3 tools/review_house_sect_regression.py
 ```
 
 ## Generate manual review scorecard
 
 ```bash
-python3 review_house_sect_regression.py
+python3 tools/review_house_sect_regression.py
 ```
 
 This produces `docs/house_sect_regression/SCORECARD.md` with:

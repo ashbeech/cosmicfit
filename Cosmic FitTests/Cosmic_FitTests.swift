@@ -861,10 +861,7 @@ struct HouseSectIntegrationTests {
     // MARK: - Helpers
 
     private func loadTestDataset() -> AstrologicalStyleDataset? {
-        let testFile = URL(fileURLWithPath: #filePath)
-        let repoRoot = testFile.deletingLastPathComponent().deletingLastPathComponent()
-        let datasetURL = repoRoot.appendingPathComponent("astrological_style_dataset.json")
-        return BlueprintTokenGenerator.loadDataset(from: datasetURL)
+        BlueprintTokenGenerator.loadDataset(from: StyleGuideDataURL.astrologicalStyleDataset(testFilePath: #filePath))
     }
 
     private func makeAnalysis(
@@ -1149,9 +1146,7 @@ struct HardeningEdgeCaseTests {
     }
 
     private func loadDataset() -> AstrologicalStyleDataset? {
-        let testFile = URL(fileURLWithPath: #filePath)
-        let repoRoot = testFile.deletingLastPathComponent().deletingLastPathComponent()
-        return BlueprintTokenGenerator.loadDataset(from: repoRoot.appendingPathComponent("astrological_style_dataset.json"))
+        BlueprintTokenGenerator.loadDataset(from: StyleGuideDataURL.astrologicalStyleDataset(testFilePath: #filePath))
     }
 
     private func loadNarrativeCache(from overrideURL: URL? = nil) -> NarrativeCacheLoader? {
@@ -1159,9 +1154,7 @@ struct HardeningEdgeCaseTests {
         if let overrideURL {
             cacheURL = overrideURL
         } else {
-            let testFile = URL(fileURLWithPath: #filePath)
-            let repoRoot = testFile.deletingLastPathComponent().deletingLastPathComponent()
-            cacheURL = repoRoot.appendingPathComponent("blueprint_narrative_cache.json")
+            cacheURL = StyleGuideDataURL.blueprintNarrativeCache(testFilePath: #filePath)
         }
         let loader = NarrativeCacheLoader()
         guard loader.loadFromURL(cacheURL), loader.clusterCount > 0 else { return nil }
@@ -1478,10 +1471,8 @@ struct PaletteCalibrationDiagnostic {
         guard ProcessInfo.processInfo.environment["PALETTE_CALIBRATION_DIAGNOSTIC"] == "1" else {
             return
         }
-        let testFile = URL(fileURLWithPath: #filePath)
-        let repoRoot = testFile.deletingLastPathComponent().deletingLastPathComponent()
         guard let dataset = BlueprintTokenGenerator.loadDataset(
-            from: repoRoot.appendingPathComponent("astrological_style_dataset.json")
+            from: StyleGuideDataURL.astrologicalStyleDataset(testFilePath: #filePath)
         ) else {
             Issue.record("Failed to load dataset")
             return
@@ -1572,10 +1563,7 @@ struct HardwareAllocationAuditTests {
     ]
 
     private func loadTestDataset() -> AstrologicalStyleDataset? {
-        let testFile = URL(fileURLWithPath: #filePath)
-        let repoRoot = testFile.deletingLastPathComponent().deletingLastPathComponent()
-        let datasetURL = repoRoot.appendingPathComponent("astrological_style_dataset.json")
-        return BlueprintTokenGenerator.loadDataset(from: datasetURL)
+        BlueprintTokenGenerator.loadDataset(from: StyleGuideDataURL.astrologicalStyleDataset(testFilePath: #filePath))
     }
 
     private struct SyntheticUser {
