@@ -447,8 +447,8 @@ struct NatalChartCalculator {
     }
     
     // Calculate transits to natal chart
-    static func calculateTransits(natalChart: NatalChart) -> [TransitAspect] {
-        let currentDate = Date()
+    static func calculateTransits(natalChart: NatalChart, date: Date = Date()) -> [TransitAspect] {
+        let currentDate = date
         let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
         var transitAspects: [TransitAspect] = []
         

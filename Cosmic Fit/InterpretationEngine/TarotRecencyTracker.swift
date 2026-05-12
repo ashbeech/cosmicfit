@@ -175,6 +175,15 @@ class TarotRecencyTracker {
         }
     }
     
+    /// Remove all recency keys across all profiles. Intended for test isolation.
+    func resetAllForTesting() {
+        let prefix = Self.STORAGE_KEY_PREFIX
+        for key in userDefaults.dictionaryRepresentation().keys where key.hasPrefix(prefix) {
+            userDefaults.removeObject(forKey: key)
+        }
+        userDefaults.synchronize()
+    }
+
     /// Clear all recency data for a profile
     /// - Parameter profileHash: User profile identifier
     func clearProfile(profileHash: String) {

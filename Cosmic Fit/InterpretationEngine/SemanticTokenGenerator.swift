@@ -1420,14 +1420,19 @@ class SemanticTokenGenerator {
     }
     
     // Helper methods for elemental and modal analysis
-    private static func getSignElement(sign: Int) -> String {
+    // Contract: sign is 1-based (Aries=1 … Pisces=12).
+    // Fire={1,5,9}, Earth={2,6,10}, Air={3,7,11}, Water={4,8,12}
+    static func getSignElement(sign: Int) -> String {
         let elements = ["fire", "earth", "air", "water"]
-        return elements[sign % 4]
+        guard (1...12).contains(sign) else { return "fire" }
+        return elements[(sign - 1) % 4]
     }
-    
-    private static func getSignModality(sign: Int) -> String {
+
+    // Cardinal={1,4,7,10}, Fixed={2,5,8,11}, Mutable={3,6,9,12}
+    static func getSignModality(sign: Int) -> String {
         let modalities = ["cardinal", "fixed", "mutable"]
-        return modalities[(sign / 4) % 3]
+        guard (1...12).contains(sign) else { return "cardinal" }
+        return modalities[(sign - 1) % 3]
     }
     
     private static func calculateElementalWeights(chart: NatalChartCalculator.NatalChart) -> [String: Double] {
