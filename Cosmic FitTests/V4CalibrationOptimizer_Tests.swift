@@ -32,18 +32,19 @@ final class V4CalibrationOptimizer_Tests: XCTestCase {
     }
 
     func testOptimizeCentroidsAndScales() throws {
-        let fixturesDir = URL(fileURLWithPath: #file)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("docs/fixtures")
+        guard let datasetURL = FixtureLocator.fixtureURL(named: "v4_dataset.json"),
+              let placementsURL = FixtureLocator.fixtureURL(named: "v4_placements.json") else {
+            throw XCTSkip("V4 fixtures not found in docs/fixtures or docs/archive/fixtures")
+        }
+        let fixturesDir = FixtureLocator.primaryFixturesDirectory()
 
         let dataset = try JSONDecoder().decode(
             [V4DatasetRow].self,
-            from: Data(contentsOf: fixturesDir.appendingPathComponent("v4_dataset.json"))
+            from: Data(contentsOf: datasetURL)
         )
         let placements = try JSONDecoder().decode(
             [V4PlacementRow].self,
-            from: Data(contentsOf: fixturesDir.appendingPathComponent("v4_placements.json"))
+            from: Data(contentsOf: placementsURL)
         )
         let placementLookup = Dictionary(uniqueKeysWithValues: placements.map { ($0.id, $0.placements) })
 

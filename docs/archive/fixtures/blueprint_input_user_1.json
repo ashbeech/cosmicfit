@@ -22,7 +22,7 @@
       "How the density of fabric affects your sense of control. Heavier, more opaque garments reinforce the containment you need."
     ],
     "leanInto" : [
-      "Keeping clothes with emotional history in active rotation. A coat from your mother or a scarf from a trip holds real power.",
+      "Keeping clothes with emotional history in active rotation. A coat from a family member or a scarf from a trip holds real power.",
       "Wrapping yourself in soft protective layers as a daily practice. A worn-in cardigan or a heritage shawl is emotional armour.",
       "Treating comfort as a non-negotiable, not a luxury. If a garment makes you tense, it is actively working against you.",
       "Choosing pieces that feel like home. If an outfit does not settle your nervous system, it is not earning its place.",
@@ -33,7 +33,7 @@
   "engineVersion" : "2.0.0",
   "generatedAt" : "2026-04-17T00:00:00Z",
   "hardware" : {
-    "metalsText" : "Your most effective hardware relies on a strict clash of high-tech precision and familiar, heavy warmth. Slick, industrial white gold gives you a sharp foundation, looking right at home on the oversized zips of technical outerwear or the chunky fastenings of a utility bag. A completely clinical finish leaves you cold, so you break up those stark details with antique silver. Seek out antique silver pieces with a battered, nostalgic patina—like a weighty heirloom pendant strung onto a modern synthetic cord, or thick, warm-toned belt buckles. This visual friction keeps your clothes from looking like a uniform, grounding bold shapes in something deeply personal.",
+    "metalsText" : "Your most effective hardware relies on a strict clash of high-tech precision and familiar, heavy warmth. Slick, industrial white gold gives you a sharp foundation, looking right at home on the oversized zips of technical outerwear or the chunky fastenings of a utility bag. A completely clinical finish leaves you cold, so you break up those stark details with antique silver. Seek out antique silver pieces with a battered, nostalgic patina, like a weighty heirloom pendant strung onto a modern synthetic cord, or thick, warm-toned belt buckles. This visual friction keeps your clothes from looking like a uniform, grounding bold shapes in something deeply personal.",
     "recommendedMetals" : [
       "white gold",
       "antique silver",
@@ -332,7 +332,7 @@
     "tipText" : "Your eye for a print naturally gravitates towards something slightly off-kilter but entirely wearable. Take vintage florals and blow up the scale until it reads as a bold, graphic strike rather than a polite repeat. This satisfies your drive for visual volume while retaining a certain familiar ease. Put this loud motif on a comforting, everyday textile like a heavy loopback jersey or a spongy technical knit. The high-tension design brings the heat you crave, while the tactile weight keeps the outfit beautifully anchored."
   },
   "styleCore" : {
-    "narrativeText" : "Your presence thrives on a highly visible tension between the fiercely modern and the deeply familiar. You project an energy that is undeniably forward-looking, yet grounded in pieces that feel emotionally safe to wear. While you draw the eye with unexpected proportions and an unapologetic attitude, your silhouette always retains a distinct element of shelter. You take up space in a room with complete confidence, but there is a clear warmth to your subversion. It is the look of someone pushing the boundaries of taste while keeping themselves entirely protected.\n\nYour natural sense of beauty shows up most powerfully in your daily rituals — daily beauty rituals, functional elegance, beautiful workwear, aesthetic routines. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort."
+    "narrativeText" : "Your presence thrives on a highly visible tension between the fiercely modern and the deeply familiar. You project an energy that is undeniably forward-looking, yet grounded in pieces that feel emotionally safe to wear. While you draw the eye with unexpected proportions and an unapologetic attitude, your silhouette always retains a distinct element of shelter. You take up space in a room with complete confidence, but there is a clear warmth to your subversion. It is the look of someone pushing the boundaries of taste while keeping themselves entirely protected.\n\nYour natural sense of beauty shows up most powerfully in your daily rituals; daily beauty rituals, functional elegance, beautiful workwear, aesthetic routines. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort."
   },
   "textures" : {
     "avoidTextures" : [

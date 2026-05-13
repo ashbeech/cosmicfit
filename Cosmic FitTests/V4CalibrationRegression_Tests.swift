@@ -224,21 +224,13 @@ final class V4CalibrationRegression_Tests: XCTestCase {
     }
 
     private func locateFixture(named name: String) -> URL? {
-        let fixturesDir = URL(fileURLWithPath: #file)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("docs/fixtures")
-        let url = fixturesDir.appendingPathComponent(name)
-        return FileManager.default.fileExists(atPath: url.path) ? url : nil
+        FixtureLocator.fixtureURL(named: name)
     }
 
     // MARK: - Diagnostics
 
     private func writeActualFile(mismatches: [RegressionMismatch]) {
-        let fixturesDir = URL(fileURLWithPath: #file)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("docs/fixtures")
+        let fixturesDir = FixtureLocator.primaryFixturesDirectory()
 
         let entries = mismatches.map { m -> [String: String] in
             ["id": m.id, "field": m.field, "expected": m.expected, "actual": m.actual]
@@ -255,10 +247,7 @@ final class V4CalibrationRegression_Tests: XCTestCase {
     }
 
     private func writeRegeneratedDataset(_ rows: [[String: Any]]) {
-        let fixturesDir = URL(fileURLWithPath: #file)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("docs/fixtures")
+        let fixturesDir = FixtureLocator.primaryFixturesDirectory()
 
         guard let jsonData = try? JSONSerialization.data(
             withJSONObject: rows,

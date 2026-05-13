@@ -396,11 +396,12 @@ struct PaletteGridGoldenSnapshotTests {
         let grid = PaletteGridViewModel.build(from: blueprint.palette)
         let current = try GoldenSnapshotSupport.canonicalJSON(for: grid)
 
-        let goldenURL = GoldenSnapshotSupport.fixturesURL().appendingPathComponent(golden)
+        let writeGoldenURL = GoldenSnapshotSupport.fixturesURL().appendingPathComponent(golden)
+        let goldenURL = FixtureLocator.fixtureURL(named: golden) ?? writeGoldenURL
 
         if GoldenSnapshotSupport.shouldRegenerate {
-            try current.write(to: goldenURL, options: [.atomic])
-            print("[PaletteGridGoldenSnapshotTests] Regenerated golden at \(goldenURL.path).")
+            try current.write(to: writeGoldenURL, options: [.atomic])
+            print("[PaletteGridGoldenSnapshotTests] Regenerated golden at \(writeGoldenURL.path).")
             return
         }
 
@@ -440,15 +441,13 @@ enum GoldenSnapshotSupport {
     }
 
     static func fixturesURL() -> URL {
-        URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("docs")
-            .appendingPathComponent("fixtures")
+        FixtureLocator.primaryFixturesDirectory()
     }
 
     static func loadBlueprint(_ filename: String) throws -> CosmicBlueprint {
-        let url = fixturesURL().appendingPathComponent(filename)
+        guard let url = FixtureLocator.fixtureURL(named: filename) else {
+            throw CocoaError(.fileNoSuchFile)
+        }
         let data = try Data(contentsOf: url)
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
@@ -581,6 +580,144 @@ struct PaletteLiveWiringTests {
             RunLoop.main.run(until: Date().addingTimeInterval(0.05))
         }
         #expect(flag.received, ".blueprintDidUpdate should be posted after save")
+    }
+}
+
+// MARK: - PaletteLibrary signature labelling
+
+struct PaletteLibrarySignatureLabelTests {
+
+    @Test("nearestColourName(forHex:excluding:) skips blocked tokens")
+    func nearestRespectsExclusion() {
+        let oxHex = PaletteLibrary.hex(for: "oxblood")
+        let pick = PaletteLibrary.nearestColourName(forHex: oxHex, excluding: ["oxblood"])
+        #expect(pick.lowercased() != "oxblood")
+    }
+
+    @Test("signaturePairLabels uses distinct names even when both hexes map to the same nearest token")
+    func signaturePairDoesNotDuplicateNames() {
+        let hex = PaletteLibrary.hex(for: "oxblood")
+        let pair = PaletteLibrary.signaturePairLabels(
+            luminaryHex: hex,
+            rulerHex: hex,
+            claimedTemplateNames: []
+        )
+        #expect(pair.luminary.lowercased() != pair.ruler.lowercased())
+    }
+
+    @Test("signaturePairLabels avoids names already claimed by the V4 template bands")
+    func signaturePairAvoidsTemplateTokens() {
+        let oxHex = PaletteLibrary.hex(for: "oxblood")
+        let claimed = Set([
+            "oxblood", "forest teal", "forest green", "dark terracotta",
+            "espresso", "warm charcoal", "deep olive", "bark brown",
+            "antique gold", "aged brass", "copper", "deep amber",
+            "warm cream", "ink brown",
+        ])
+        let pair = PaletteLibrary.signaturePairLabels(
+            luminaryHex: oxHex,
+            rulerHex: oxHex,
+            claimedTemplateNames: claimed
+        )
+        #expect(!claimed.contains(pair.luminary.lowercased()))
+        #expect(!claimed.contains(pair.ruler.lowercased()))
+        #expect(pair.luminary.lowercased() != pair.ruler.lowercased())
+    }
+}
+
+// MARK: - Accent label deduplication
+
+struct AccentLabelDeduplicationTests {
+
+    @Test("Accent displayName colliding with a template name is renamed")
+    func accentVsTemplateCollision() {
+        let deepAutumnNonAccent: Set<String> = [
+            "espresso", "warm charcoal", "deep olive", "bark brown",
+            "oxblood", "forest teal", "forest green", "dark terracotta",
+            "warm cream", "ink brown",
+        ]
+        let slots = [
+            AccentSlot(
+                hex: "#4B1018", displayName: "Oxblood",
+                role: .signature, sourcePlanet: .mars, sourceSign: .scorpio,
+                saturationOverrideApplied: false
+            ),
+            AccentSlot(
+                hex: "#D4A23C", displayName: "Saffron Gold",
+                role: .contrast, sourcePlanet: .sun, sourceSign: .leo,
+                saturationOverrideApplied: false
+            ),
+        ]
+        let labels = PaletteLibrary.deduplicatedAccentLabels(
+            slots: slots,
+            templateNames: Array(deepAutumnNonAccent),
+            claimedTemplateNames: deepAutumnNonAccent
+        )
+        #expect(labels[0].lowercased() != "oxblood",
+                "Accent label should be renamed when it collides with a core template name")
+        #expect(labels[1] == "Saffron Gold",
+                "Non-colliding accent label should be preserved")
+    }
+
+    @Test("Two accents with the same displayName get distinct labels")
+    func accentVsAccentCollision() {
+        let slots = [
+            AccentSlot(
+                hex: "#5A7A4A", displayName: "Warm Sage",
+                role: .signature, sourcePlanet: .venus, sourceSign: .taurus,
+                saturationOverrideApplied: false
+            ),
+            AccentSlot(
+                hex: "#6B8C5A", displayName: "Warm Sage",
+                role: .contrast, sourcePlanet: .mercury, sourceSign: .virgo,
+                saturationOverrideApplied: false
+            ),
+        ]
+        let labels = PaletteLibrary.deduplicatedAccentLabels(
+            slots: slots,
+            templateNames: [],
+            claimedTemplateNames: []
+        )
+        #expect(labels[0].lowercased() != labels[1].lowercased(),
+                "Two accents with the same displayName should receive distinct labels")
+    }
+
+    @Test("Template-path accents also get deduplicated against template names")
+    func templateAccentCollision() {
+        let claimed: Set<String> = ["oxblood", "forest teal"]
+        let names = ["oxblood", "copper"]
+        let labels = PaletteLibrary.deduplicatedAccentLabelsFromTemplate(
+            names: names,
+            claimedTemplateNames: claimed
+        )
+        #expect(labels[0].lowercased() != "oxblood",
+                "Template accent colliding with claimed name should be renamed")
+        #expect(labels[1] == "copper",
+                "Non-colliding template accent should be preserved")
+    }
+
+    @Test("Hex values are unchanged — dedup only affects labels")
+    func hexesUnchanged() {
+        let deepAutumnNonAccent: Set<String> = [
+            "espresso", "warm charcoal", "deep olive", "bark brown",
+            "oxblood", "forest teal", "forest green", "dark terracotta",
+            "warm cream", "ink brown",
+        ]
+        let originalHex = "#4B1018"
+        let slots = [
+            AccentSlot(
+                hex: originalHex, displayName: "Oxblood",
+                role: .signature, sourcePlanet: .mars, sourceSign: .scorpio,
+                saturationOverrideApplied: false
+            ),
+        ]
+        let labels = PaletteLibrary.deduplicatedAccentLabels(
+            slots: slots,
+            templateNames: Array(deepAutumnNonAccent),
+            claimedTemplateNames: deepAutumnNonAccent
+        )
+        #expect(labels.count == 1)
+        #expect(slots[0].hex == originalHex, "Hex must not be modified")
     }
 }
 

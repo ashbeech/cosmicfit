@@ -28,15 +28,16 @@ final class V4CalibrationDiagnostic_Tests: XCTestCase {
     }
 
     func testPrintScoreDistribution() throws {
-        let fixturesDir = URL(fileURLWithPath: #file)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("docs/fixtures")
+        guard let datasetURL = FixtureLocator.fixtureURL(named: "v4_dataset.json"),
+              let placementsURL = FixtureLocator.fixtureURL(named: "v4_placements.json") else {
+            throw XCTSkip("V4 fixtures not found in docs/fixtures or docs/archive/fixtures")
+        }
+        let fixturesDir = FixtureLocator.primaryFixturesDirectory()
 
-        let datasetData = try Data(contentsOf: fixturesDir.appendingPathComponent("v4_dataset.json"))
+        let datasetData = try Data(contentsOf: datasetURL)
         let dataset = try JSONDecoder().decode([V4DatasetRow].self, from: datasetData)
 
-        let placementData = try Data(contentsOf: fixturesDir.appendingPathComponent("v4_placements.json"))
+        let placementData = try Data(contentsOf: placementsURL)
         let placements = try JSONDecoder().decode([V4PlacementRow].self, from: placementData)
 
         let placementLookup = Dictionary(uniqueKeysWithValues: placements.map { ($0.id, $0.placements) })
@@ -137,15 +138,16 @@ final class V4CalibrationDiagnostic_Tests: XCTestCase {
     }
 
     func testDumpPerRowClassification() throws {
-        let fixturesDir = URL(fileURLWithPath: #file)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("docs/fixtures")
+        guard let datasetURL = FixtureLocator.fixtureURL(named: "v4_dataset.json"),
+              let placementsURL = FixtureLocator.fixtureURL(named: "v4_placements.json") else {
+            throw XCTSkip("V4 fixtures not found in docs/fixtures or docs/archive/fixtures")
+        }
+        let fixturesDir = FixtureLocator.primaryFixturesDirectory()
 
-        let datasetData = try Data(contentsOf: fixturesDir.appendingPathComponent("v4_dataset.json"))
+        let datasetData = try Data(contentsOf: datasetURL)
         let dataset = try JSONDecoder().decode([V4DatasetRow].self, from: datasetData)
 
-        let placementData = try Data(contentsOf: fixturesDir.appendingPathComponent("v4_placements.json"))
+        let placementData = try Data(contentsOf: placementsURL)
         let placements = try JSONDecoder().decode([V4PlacementRow].self, from: placementData)
 
         let placementLookup = Dictionary(uniqueKeysWithValues: placements.map { ($0.id, $0.placements) })
@@ -197,14 +199,13 @@ final class V4CalibrationDiagnostic_Tests: XCTestCase {
     // MARK: - Maria & Ash Diagnostic
 
     func testDumpMariaAshScores() throws {
-        let fixturesDir = URL(fileURLWithPath: #file)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("docs/fixtures")
+        let fixturesDir = FixtureLocator.primaryFixturesDirectory()
 
         var report = ""
         for name in ["maria", "ash"] {
-            let url = fixturesDir.appendingPathComponent("v4_locked_placements_\(name).json")
+            guard let url = FixtureLocator.fixtureURL(named: "v4_locked_placements_\(name).json") else {
+                throw XCTSkip("Locked fixture v4_locked_placements_\(name).json not found")
+            }
             let data = try Data(contentsOf: url)
             let input = try JSONDecoder().decode(BirthChartColourInput.self, from: data)
 

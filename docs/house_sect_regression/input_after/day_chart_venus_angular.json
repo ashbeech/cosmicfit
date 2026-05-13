@@ -1,7 +1,7 @@
 {
   "accessory" : {
     "paragraphs" : [
-      "A single, substantial accessory always hits harder than a noisy stack of delicate trinkets. True impact comes from physical weight—a thick leather strap on a significant watch or an architectural ring that sits boldly on the hand. This solitary approach creates an immediate focal point, allowing the heavy crepe and pressed cotton of your clothes to speak for themselves. You get to walk into a room looking entirely finished, without jingling every time you move your wrist.",
+      "A single, substantial accessory always hits harder than a noisy stack of delicate trinkets. True impact comes from physical weight, a thick leather strap on a significant watch or an architectural ring that sits boldly on the hand. This solitary approach creates an immediate focal point, allowing the heavy crepe and pressed cotton of your clothes to speak for themselves. You get to walk into a room looking entirely finished, without jingling every time you move your wrist.",
       "Hardware and leather goods do the heavy lifting in your wardrobe. They supply the necessary tension that pulls a look together. Every item must feel substantial in your hands long before you put it on. A thick strap that fastens with a definitive click or a bag with enough internal framing to sit upright on a table does more than just hold your things. Your watches and rings should carry a noticeable physical weight on the skin. This kind of dense, unyielding finish is never merely decoration. It serves as the visual full stop to everything else you wear.",
       "The physical reality of your accessories matters just as much as their shape. Quality carries a very specific acoustic profile. Notice the satisfying heft of a solid watch settling onto your wrist, or the firm, deliberate snap of a heavy bag clasp. You want thick leather that smells faintly of a proper workshop, cut into belts and wide straps that yield to your movement without losing their tension. Even the sheer density of substantial rings and heavy hardware provides a necessary, grounding friction while you work. That quiet, heavy click of a closure speaks volumes before you even say a word."
     ]
@@ -31,9 +31,9 @@
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-05-11T14:23:19Z",
+  "generatedAt" : "2026-05-13T14:03:16Z",
   "hardware" : {
-    "metalsText" : "Flimsy zips and hollow buttons are an immediate dealbreaker. Hardware is where a garment truly proves its worth, and you naturally gravitate towards metals with literal, physical weight. rose gold tones provides traditional warmth and deep sensory satisfaction, particularly when the finish is lightly brushed rather than blindingly polished. When you want a sharper, more assertive edge on heavy leather belts or structured bags, soft copper tones cuts through beautifully. Every clasp, rivet, and buckle should yield a deeply satisfying mechanical thunk when you snap it shut.",
+    "metalsText" : "Flimsy zips and hollow buttons are an immediate dealbreaker. Hardware is where a garment truly proves its worth, and you naturally gravitate towards metals with literal, physical weight. Rose gold tones provides traditional warmth and deep sensory satisfaction, particularly when the finish is lightly brushed rather than blindingly polished. When you want a sharper, more assertive edge on heavy leather belts or structured bags, soft copper tones cuts through beautifully. Every clasp, rivet, and buckle should yield a deeply satisfying mechanical thunk when you snap it shut.",
     "recommendedMetals" : [
       "rose gold",
       "soft copper",
@@ -350,6 +350,6 @@
   "userInfo" : {
     "birthDate" : "1991-07-15T12:00:00Z",
     "birthLocation" : "Synthetic Fixture",
-    "generationDate" : "2026-05-11T14:23:19Z"
+    "generationDate" : "2026-05-13T14:03:16Z"
   }
 }

@@ -456,10 +456,11 @@ class SemanticTokenGenerator {
     /// Uses Placidus house system for precise cusp calculations
     private static func generateHouseCuspTokens(chart: NatalChartCalculator.NatalChart, weight: Double) -> [StyleToken] {
         var tokens: [StyleToken] = []
+        guard chart.houseCusps.count >= 12 else { return tokens }
         
         // Process each house cusp (1-12)
         for houseNumber in 1...12 {
-            let cuspLongitude = chart.houseCusps[houseNumber]
+            let cuspLongitude = chart.houseCusps[houseNumber - 1]
             let cuspSign = Int(cuspLongitude / 30.0) % 12 + 1
             let signName = CoordinateTransformations.getZodiacSignName(sign: cuspSign)
             

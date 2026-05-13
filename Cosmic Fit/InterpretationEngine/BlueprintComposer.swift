@@ -78,8 +78,17 @@ struct BlueprintComposer {
             narrativesMut["occasions_daily"] = (narrativesMut["occasions_daily"] ?? "") + "\n\n" + append
         }
 
+        let nonAccentTemplateNames = Self.collectNonAccentTemplateNames(colourResult: colourResult)
+        let renamedAccentLabels = Self.resolveAccentLabels(
+            colourResult: colourResult,
+            nonAccentTemplateNames: nonAccentTemplateNames
+        )
+
         var templateContext = NarrativeTemplateRenderer.buildContext(resolved: resolved)
-        let v4Context = NarrativeTemplateRenderer.buildV4PaletteContext(colourResult: colourResult)
+        let v4Context = NarrativeTemplateRenderer.buildV4PaletteContext(
+            colourResult: colourResult,
+            accentLabelOverrides: renamedAccentLabels
+        )
         templateContext.merge(v4Context) { _, v4 in v4 }
 
         for sectionKey in NarrativeTemplateRenderer.groupBSections {
@@ -91,7 +100,8 @@ struct BlueprintComposer {
 
         let paletteSection = buildV4PaletteSection(
             colourResult: colourResult,
-            narrativeText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.paletteNarrative.rawValue] ?? ""
+            narrativeText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.paletteNarrative.rawValue] ?? "",
+            accentLabelOverrides: renamedAccentLabels
         )
 
         logV4PaletteReadout(paletteSection)
@@ -237,11 +247,50 @@ struct BlueprintComposer {
         }
     }
 
+    // MARK: - Accent Label Deduplication
+
+    /// Template names from all non-accent bands (neutrals, core, support,
+    /// anchors). These are fixed by the family template and never renamed.
+    private static func collectNonAccentTemplateNames(
+        colourResult: ColourEngineResult
+    ) -> Set<String> {
+        var names = Set<String>()
+        for n in colourResult.palette.neutrals { names.insert(n.lowercased()) }
+        for n in colourResult.palette.coreColours { names.insert(n.lowercased()) }
+        if let support = colourResult.palette.supportColours {
+            for n in support { names.insert(n.lowercased()) }
+        }
+        names.insert(colourResult.palette.lightAnchor.lowercased())
+        names.insert(colourResult.palette.deepAnchor.lowercased())
+        return names
+    }
+
+    /// Renamed accent labels that avoid collisions with template names
+    /// and with each other.
+    private static func resolveAccentLabels(
+        colourResult: ColourEngineResult,
+        nonAccentTemplateNames: Set<String>
+    ) -> [String] {
+        if !colourResult.accentSlots.isEmpty {
+            return PaletteLibrary.deduplicatedAccentLabels(
+                slots: colourResult.accentSlots,
+                templateNames: Array(nonAccentTemplateNames),
+                claimedTemplateNames: nonAccentTemplateNames
+            )
+        } else {
+            return PaletteLibrary.deduplicatedAccentLabelsFromTemplate(
+                names: colourResult.palette.accentColours,
+                claimedTemplateNames: nonAccentTemplateNames
+            )
+        }
+    }
+
     // MARK: - V4 Palette Builder
 
     private static func buildV4PaletteSection(
         colourResult: ColourEngineResult,
-        narrativeText: String
+        narrativeText: String,
+        accentLabelOverrides: [String]
     ) -> PaletteSection {
         let family = colourResult.family
 
@@ -273,22 +322,13 @@ struct BlueprintComposer {
             )
         }
 
-        func makeSignature(hex: String, band: String, semanticLabel: String) -> BlueprintColour {
-            BlueprintColour(
-                name: PaletteLibrary.nearestColourName(forHex: hex),
-                hexValue: hex,
-                role: .signature,
-                provenance: .v4Template(family: family.rawValue, band: band, index: 0),
-                semanticLabel: semanticLabel
-            )
-        }
-
-        // V4.5: Build accent band from chart-derived AccentSlots
         let accentBand: [BlueprintColour]
         if !colourResult.accentSlots.isEmpty {
             accentBand = colourResult.accentSlots.enumerated().map { index, slot in
-                BlueprintColour(
-                    name: slot.displayName,
+                let label = index < accentLabelOverrides.count
+                    ? accentLabelOverrides[index] : slot.displayName
+                return BlueprintColour(
+                    name: label,
                     hexValue: slot.hex,
                     role: .accent,
                     provenance: .chartDerivedAccent(
@@ -300,26 +340,59 @@ struct BlueprintComposer {
                 )
             }
         } else {
-            accentBand = makeBand(
-                names: colourResult.palette.accentColours, band: "accent", role: .accent
-            )
+            accentBand = accentLabelOverrides.enumerated().map { index, label in
+                let originalName = colourResult.palette.accentColours[index]
+                return BlueprintColour(
+                    name: label,
+                    hexValue: PaletteLibrary.hex(for: originalName),
+                    role: .accent,
+                    provenance: .v4Template(
+                        family: family.rawValue, band: "accent", index: index
+                    )
+                )
+            }
         }
 
+        let neutralsBand = makeBand(names: colourResult.palette.neutrals, band: "neutrals", role: .neutral)
+        let coreBand = makeBand(names: colourResult.palette.coreColours, band: "core", role: .core)
+        let lightAnchorColour = makeAnchor(name: colourResult.palette.lightAnchor, band: "lightAnchor")
+        let deepAnchorColour = makeAnchor(name: colourResult.palette.deepAnchor, band: "deepAnchor")
+
+        var claimedTemplateNames = Set<String>()
+        func claimNames(_ colours: [BlueprintColour]) {
+            for c in colours { claimedTemplateNames.insert(c.name.lowercased()) }
+        }
+        claimNames(neutralsBand)
+        claimNames(coreBand)
+        claimNames(accentBand)
+        if let support = supportBand { claimNames(support) }
+        claimNames([lightAnchorColour, deepAnchorColour])
+
+        let signatureLabels = PaletteLibrary.signaturePairLabels(
+            luminaryHex: colourResult.luminarySignature,
+            rulerHex: colourResult.rulerSignature,
+            claimedTemplateNames: claimedTemplateNames
+        )
+
         return PaletteSection(
-            neutrals: makeBand(names: colourResult.palette.neutrals, band: "neutrals", role: .neutral),
-            coreColours: makeBand(names: colourResult.palette.coreColours, band: "core", role: .core),
+            neutrals: neutralsBand,
+            coreColours: coreBand,
             accentColours: accentBand,
             supportColours: supportBand,
-            lightAnchor: makeAnchor(name: colourResult.palette.lightAnchor, band: "lightAnchor"),
-            deepAnchor: makeAnchor(name: colourResult.palette.deepAnchor, band: "deepAnchor"),
-            luminarySignature: makeSignature(
-                hex: colourResult.luminarySignature,
-                band: "luminarySignature",
+            lightAnchor: lightAnchorColour,
+            deepAnchor: deepAnchorColour,
+            luminarySignature: BlueprintColour(
+                name: signatureLabels.luminary,
+                hexValue: colourResult.luminarySignature,
+                role: .signature,
+                provenance: .v4Template(family: family.rawValue, band: "luminarySignature", index: 0),
                 semanticLabel: "luminary signature"
             ),
-            rulerSignature: makeSignature(
-                hex: colourResult.rulerSignature,
-                band: "rulerSignature",
+            rulerSignature: BlueprintColour(
+                name: signatureLabels.ruler,
+                hexValue: colourResult.rulerSignature,
+                role: .signature,
+                provenance: .v4Template(family: family.rawValue, band: "rulerSignature", index: 0),
                 semanticLabel: "ruler signature"
             ),
             family: colourResult.family,

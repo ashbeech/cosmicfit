@@ -8,9 +8,17 @@
 import UIKit
 
 final class DosAndDontsSectionView: UIView {
+
+    /// Same asset as `EssenceTriangleView` vertex markers (brand div-star, not system/Unicode ornaments).
+    private static let headingStarImageName = "star_icon_placeholder"
+    
+    /// Extra vertical gap between one bullet row and the next (heading → first bullet still uses `stackView.spacing`).
+    private static let bulletToBulletSpacing: CGFloat = 22
     
     private let sectionTitle: String
     private let bulletPoints: [String]
+    /// When true, the heading uses the branded star image (Daily Fit essence diagram); otherwise the ✦ glyph.
+    private let useBrandHeadingStar: Bool
     
     private let stackView: UIStackView = {
         let stack = UIStackView()
@@ -21,9 +29,10 @@ final class DosAndDontsSectionView: UIView {
         return stack
     }()
     
-    init(title: String, bulletPoints: [String]) {
+    init(title: String, bulletPoints: [String], useBrandHeadingStar: Bool = false) {
         self.sectionTitle = title
         self.bulletPoints = bulletPoints
+        self.useBrandHeadingStar = useBrandHeadingStar
         super.init(frame: .zero)
         setupUI()
     }
@@ -49,10 +58,13 @@ final class DosAndDontsSectionView: UIView {
         let headingContainer = createHeadingContainer()
         stackView.addArrangedSubview(headingContainer)
         
-        // Add bullet points
-        for bulletText in bulletPoints {
+        // Add bullet points (tighter under heading, more air between bullets)
+        for (index, bulletText) in bulletPoints.enumerated() {
             let bulletLabel = createBulletPoint(text: bulletText)
             stackView.addArrangedSubview(bulletLabel)
+            if index < bulletPoints.count - 1 {
+                stackView.setCustomSpacing(Self.bulletToBulletSpacing, after: bulletLabel)
+            }
         }
     }
     
@@ -65,11 +77,24 @@ final class DosAndDontsSectionView: UIView {
         let innerContainer = UIView()
         innerContainer.translatesAutoresizingMaskIntoConstraints = false
         
-        // Star icon (✦)
-        let starLabel = UILabel()
-        starLabel.text = "✦"
-        starLabel.translatesAutoresizingMaskIntoConstraints = false
-        CosmicFitTheme.styleSymbolLabel(starLabel, fontSize: CosmicFitTheme.Typography.FontSizes.title3)
+        let starColumn: UIView
+        let starWidth: CGFloat
+        if useBrandHeadingStar {
+            let starImageView = UIImageView()
+            starImageView.image = UIImage(named: Self.headingStarImageName)?.withRenderingMode(.alwaysTemplate)
+            starImageView.tintColor = CosmicFitTheme.Colours.cosmicBlue
+            starImageView.contentMode = .scaleAspectFit
+            starImageView.translatesAutoresizingMaskIntoConstraints = false
+            starColumn = starImageView
+            starWidth = 20
+        } else {
+            let starLabel = UILabel()
+            starLabel.text = "✦"
+            starLabel.translatesAutoresizingMaskIntoConstraints = false
+            CosmicFitTheme.styleSymbolLabel(starLabel, fontSize: CosmicFitTheme.Typography.FontSizes.title3)
+            starColumn = starLabel
+            starWidth = 18
+        }
 
         // Title (italic)
         let titleLabel = UILabel()
@@ -77,9 +102,18 @@ final class DosAndDontsSectionView: UIView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         CosmicFitTheme.styleSubsectionLabel(titleLabel, fontSize: CosmicFitTheme.Typography.FontSizes.title3, italic: true)
         
-        innerContainer.addSubview(starLabel)
+        innerContainer.addSubview(starColumn)
         innerContainer.addSubview(titleLabel)
         outerContainer.addSubview(innerContainer)
+
+        var starConstraints: [NSLayoutConstraint] = [
+            starColumn.leadingAnchor.constraint(equalTo: innerContainer.leadingAnchor),
+            starColumn.centerYAnchor.constraint(equalTo: innerContainer.centerYAnchor),
+            starColumn.widthAnchor.constraint(equalToConstant: starWidth)
+        ]
+        if useBrandHeadingStar {
+            starConstraints.append(starColumn.heightAnchor.constraint(equalToConstant: 20))
+        }
         
         NSLayoutConstraint.activate([
             // Inner container: reduced padding - 10px less on each side
@@ -87,16 +121,10 @@ final class DosAndDontsSectionView: UIView {
             innerContainer.bottomAnchor.constraint(equalTo: outerContainer.bottomAnchor),
             innerContainer.leadingAnchor.constraint(equalTo: outerContainer.leadingAnchor, constant: 10),
             innerContainer.trailingAnchor.constraint(equalTo: outerContainer.trailingAnchor, constant: -10),
-            
-            // Star and title within inner container
-            starLabel.leadingAnchor.constraint(equalTo: innerContainer.leadingAnchor),
-            starLabel.topAnchor.constraint(equalTo: innerContainer.topAnchor),
-            starLabel.bottomAnchor.constraint(equalTo: innerContainer.bottomAnchor),
-            starLabel.widthAnchor.constraint(equalToConstant: 18),
-            
-            titleLabel.leadingAnchor.constraint(equalTo: starLabel.trailingAnchor, constant: 4),
+        ] + starConstraints + [
+            titleLabel.leadingAnchor.constraint(equalTo: starColumn.trailingAnchor, constant: 4),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: innerContainer.trailingAnchor),
-            titleLabel.centerYAnchor.constraint(equalTo: starLabel.centerYAnchor),
+            titleLabel.centerYAnchor.constraint(equalTo: starColumn.centerYAnchor),
             
             innerContainer.heightAnchor.constraint(equalToConstant: 24)
         ])
@@ -115,18 +143,24 @@ final class DosAndDontsSectionView: UIView {
         
         let label = UILabel()
         
-        // Create attributed string with bullet - NO hanging indent
+        let font = CosmicFitTheme.Typography.DMSerifTextFont(
+            size: CosmicFitTheme.Typography.FontSizes.body,
+            weight: .regular
+        )
+        let bulletPrefix = "• "
+        let prefixWidth = ceil((bulletPrefix as NSString).size(withAttributes: [.font: font]).width)
+        
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.firstLineHeadIndent = 0
-        paragraphStyle.headIndent = 0  // All lines align vertically
+        paragraphStyle.headIndent = prefixWidth
         
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .regular),
+            .font: font,
             .foregroundColor: CosmicFitTheme.Colours.cosmicBlue,
             .paragraphStyle: paragraphStyle
         ]
         
-        let bulletText = "• \(text)"
+        let bulletText = bulletPrefix + text
         label.attributedText = NSAttributedString(string: bulletText, attributes: attributes)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping

@@ -500,15 +500,26 @@ final class ColourPaletteView: UIView {
         )
         let lumHex = "#8A3A16"
         let rulHex = "#6B4C1E"
+        var claimedForSignatures = Set<String>()
+        for row in [neutral, core, accent, support].flatMap({ $0 }) {
+            claimedForSignatures.insert(row.name.lowercased())
+        }
+        claimedForSignatures.insert(lightAnchor.name.lowercased())
+        claimedForSignatures.insert(deepAnchor.name.lowercased())
+        let sigLabels = PaletteLibrary.signaturePairLabels(
+            luminaryHex: lumHex,
+            rulerHex: rulHex,
+            claimedTemplateNames: claimedForSignatures
+        )
         let luminarySignature = BlueprintColour(
-            name: PaletteLibrary.nearestColourName(forHex: lumHex),
+            name: sigLabels.luminary,
             hexValue: lumHex,
             role: .signature,
             provenance: provenance,
             semanticLabel: "luminary signature"
         )
         let rulerSignature = BlueprintColour(
-            name: PaletteLibrary.nearestColourName(forHex: rulHex),
+            name: sigLabels.ruler,
             hexValue: rulHex,
             role: .signature,
             provenance: provenance,

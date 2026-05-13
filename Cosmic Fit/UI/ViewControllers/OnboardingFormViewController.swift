@@ -244,6 +244,7 @@ class OnboardingFormViewController: UIViewController {
         // Location autocomplete view
         locationAutocompleteView.translatesAutoresizingMaskIntoConstraints = false
         locationAutocompleteView.delegate = self
+        locationAutocompleteView.applyCosmicFieldStyling()
         locationAutocompleteView.setPlaceholder(placeholders[0])
         }
     

@@ -86,4 +86,46 @@ struct SemanticTokenGenerator_ZodiacMath_Tests {
                     "Sign \(sign) should be water")
         }
     }
+
+    @Test("Style guide token generation handles 12 cusp entries")
+    func testGenerateStyleGuideTokensWithTwelveCusps() {
+        let planetNames = ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]
+        let planetSymbols = ["☉", "☽", "☿", "♀", "♂", "♃", "♄", "♅", "♆", "♇"]
+        let longitudes: [Double] = [15, 45, 75, 105, 135, 165, 195, 225, 255, 285]
+
+        let planets = zip(zip(planetNames, planetSymbols), longitudes).map { tuple in
+            let ((name, symbol), longitude) = tuple
+            let zodiac = CoordinateTransformations.decimalDegreesToZodiac(longitude)
+            return NatalChartCalculator.PlanetPosition(
+                name: name,
+                symbol: symbol,
+                longitude: longitude,
+                latitude: 0.0,
+                zodiacSign: zodiac.sign,
+                zodiacPosition: zodiac.position,
+                isRetrograde: false
+            )
+        }
+
+        let houseCusps = (0..<12).map { Double($0) * 30.0 }
+        let chart = NatalChartCalculator.NatalChart(
+            planets: planets,
+            ascendant: 90.0,
+            midheaven: 180.0,
+            descendant: 270.0,
+            imumCoeli: 0.0,
+            houseCusps: houseCusps,
+            wholeSignHouseCusps: houseCusps,
+            northNode: 0.0,
+            southNode: 180.0,
+            vertex: 90.0,
+            partOfFortune: 120.0,
+            lilith: 240.0,
+            chiron: 300.0,
+            lunarPhase: 180.0
+        )
+
+        let tokens = SemanticTokenGenerator.generateStyleGuideTokens(natal: chart)
+        #expect(!tokens.isEmpty)
+    }
 }

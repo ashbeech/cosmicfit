@@ -43,8 +43,8 @@ struct TarotScoringPathIntegrity_Tests {
         )
 
         let blueprint = makeMinimalBlueprint()
-        let payload = BlueprintLensEngine.generateDailyFit(
-            snapshot: snapshot, blueprint: blueprint
+        let payload = BlueprintLensEngine.generatePayload(
+            blueprint: blueprint, snapshot: snapshot
         )
 
         #expect(!payload.tarotCard.name.isEmpty, "Production path should select a valid tarot card")

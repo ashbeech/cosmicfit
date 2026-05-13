@@ -64,7 +64,7 @@ struct NarrativeTemplateRenderer {
             guard tokenRange.location != NSNotFound else { continue }
             let token = nsTemplate.substring(with: tokenRange)
 
-            let replacement: String
+            var replacement: String
             if let value = context[token], !value.isEmpty {
                 replacement = value
             } else if allPlaceholders.contains(token) {
@@ -73,6 +73,20 @@ struct NarrativeTemplateRenderer {
                 print("[NarrativeTemplateRenderer] Warning: unrecognised placeholder {\(token)}")
                 replacement = ""
             }
+
+            // Sentence-boundary capitalisation: dataset strings are lowercase
+            // (e.g. "heavy brocade") so ". {texture_good_1}" would render as
+            // ". heavy brocade" without this guard.
+            if !replacement.isEmpty, match.range.location >= 2 {
+                let pre = nsTemplate.substring(
+                    with: NSRange(location: match.range.location - 2, length: 2)
+                )
+                if pre == ". " || pre == "? " || pre == "! " {
+                    replacement = replacement.prefix(1).uppercased()
+                        + String(replacement.dropFirst())
+                }
+            }
+
             replacements.append((range: match.range, replacement: replacement))
         }
 
@@ -121,8 +135,13 @@ struct NarrativeTemplateRenderer {
 
     /// Builds V4 palette placeholders from a colour engine result. Merge into
     /// the main context so palette_narrative templates can reference family,
-    /// variables, and all 12 colour names.
-    static func buildV4PaletteContext(colourResult: ColourEngineResult) -> [String: String] {
+    /// variables, and all 12 colour names. When `accentLabelOverrides` is
+    /// non-empty, those labels replace raw `displayName` / template names
+    /// to keep narrative text in sync with deduplicated swatch labels.
+    static func buildV4PaletteContext(
+        colourResult: ColourEngineResult,
+        accentLabelOverrides: [String] = []
+    ) -> [String: String] {
         var ctx: [String: String] = [:]
 
         for (i, name) in colourResult.palette.neutrals.enumerated() {
@@ -132,8 +151,11 @@ struct NarrativeTemplateRenderer {
             ctx["core_colour_\(i + 1)"] = name
         }
 
-        // V4.5: use displayName from accentSlots (never raw hex)
-        if !colourResult.accentSlots.isEmpty {
+        if !accentLabelOverrides.isEmpty {
+            for (i, label) in accentLabelOverrides.enumerated() {
+                ctx["accent_colour_\(i + 1)"] = label
+            }
+        } else if !colourResult.accentSlots.isEmpty {
             for (i, slot) in colourResult.accentSlots.enumerated() {
                 ctx["accent_colour_\(i + 1)"] = slot.displayName
             }

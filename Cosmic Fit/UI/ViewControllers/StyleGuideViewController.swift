@@ -350,14 +350,16 @@ final class StyleGuideViewController: UIViewController {
             ])
         }
 
-        // Bottom divider anchored to last row
+        // Bottom divider anchored to last row — extra scroll tail so the star isn’t clipped
+        // by the tab bar (scrollView extends to `view.bottomAnchor`).
+        let bottomScrollPaddingBelowStarDivider: CGFloat = 100
         let lastLeft = gridButtons.last!.0
         NSLayoutConstraint.activate([
             bottomDividerContainer.topAnchor.constraint(equalTo: lastLeft.bottomAnchor, constant: 40),
             bottomDividerContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             bottomDividerContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             bottomDividerContainer.heightAnchor.constraint(equalToConstant: 30),
-            bottomDividerContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
+            bottomDividerContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -bottomScrollPaddingBelowStarDivider),
 
             bottomDividerLeft.centerYAnchor.constraint(equalTo: bottomDividerContainer.centerYAnchor),
             bottomDividerLeft.leadingAnchor.constraint(equalTo: bottomDividerContainer.leadingAnchor),
@@ -598,7 +600,7 @@ final class StyleGuideViewController: UIViewController {
                 "Using your style to communicate your values without saying a single word.",
                 "Sticking to the three-year test: only buy things you can see yourself loving in 2029."
             ]
-            codeContainer.addArrangedSubview(DosAndDontsSectionView(title: "Lean Into", bulletPoints: leanIntoItems))
+            codeContainer.addArrangedSubview(DosAndDontsSectionView(title: "Lean Into", bulletPoints: leanIntoItems, useBrandHeadingStar: true))
 
             let avoidItems = bp?.code.avoid.nilIfEmpty ?? [
                 "Buying something just because it is a bargain. A deal is only a deal if the item is perfect.",
@@ -606,7 +608,7 @@ final class StyleGuideViewController: UIViewController {
                 "Keeping your best pieces hidden. Your style works best when it is seen and shared.",
                 "Flimsy or disposable fabrics that lack actual integrity."
             ]
-            codeContainer.addArrangedSubview(DosAndDontsSectionView(title: "Avoid", bulletPoints: avoidItems))
+            codeContainer.addArrangedSubview(DosAndDontsSectionView(title: "Avoid", bulletPoints: avoidItems, useBrandHeadingStar: true))
 
             let considerItems = bp?.code.consider.nilIfEmpty ?? [
                 "How your style acts as a conversation starter in your daily environment.",

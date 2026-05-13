@@ -15,11 +15,12 @@ struct VSOP87BundleIntegrity_Tests {
 
     @Test("All VSOP87D data files present in bundle")
     func testAllVSOP87FilesPresent() throws {
-        let bundle = Bundle(for: BundleToken.self)
+        let bundle = Bundle.main
         for filename in Self.requiredFiles {
             let name = (filename as NSString).deletingPathExtension
             let ext = (filename as NSString).pathExtension
             let path = bundle.path(forResource: name, ofType: ext, inDirectory: "VSOP87Data")
+                ?? bundle.path(forResource: name, ofType: ext)
             #expect(path != nil, "Missing VSOP87 data file: \(filename)")
             if let p = path {
                 let data = FileManager.default.contents(atPath: p)
@@ -30,11 +31,14 @@ struct VSOP87BundleIntegrity_Tests {
 
     @Test("VSOP87Parser can compute Earth position for J2000")
     func testParserBasicComputation() throws {
-        // J2000.0 = Julian day 2451545.0
         let coords = VSOP87Parser.calculateHeliocentricCoordinates(planet: .earth, julianDay: 2451545.0)
-        // Earth longitude at J2000 should be ~100° (L0 term gives roughly that)
-        #expect(coords.longitude > 50 && coords.longitude < 200,
-                "Earth longitude at J2000 (\(coords.longitude)°) seems unreasonable")
+        let lonDeg = coords.longitude * 180.0 / .pi
+        // Earth longitude at J2000 should be ~100° (~1.75 rad). Parser returns radians.
+        // Fallback Keplerian gives the same approximate value.
+        #expect(lonDeg > 50 && lonDeg < 200,
+                "Earth longitude at J2000 (\(String(format: "%.1f", lonDeg))°) seems unreasonable")
+        #expect(coords.radius > 0.5 && coords.radius < 1.5,
+                "Earth radius at J2000 (\(coords.radius) AU) seems unreasonable")
     }
 }
 

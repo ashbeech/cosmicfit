@@ -96,8 +96,7 @@ enum ExtendedCalibrationProfiles {
         if let url = bundle.url(forResource: "blueprint_birth_specs", withExtension: "json") {
             return decodeBirthSpecs(from: url)
         }
-        let repoURL = repoRoot()?.appendingPathComponent("docs/fixtures/blueprint_birth_specs.json")
-        if let url = repoURL, FileManager.default.fileExists(atPath: url.path) {
+        if let url = FixtureLocator.fixtureURL(named: "blueprint_birth_specs.json") {
             return decodeBirthSpecs(from: url)
         }
         return nil
@@ -213,13 +212,6 @@ enum ExtendedCalibrationProfiles {
         case .detriment, .fall: return "debilitated"
         case .peregrine: return "neutral"
         }
-    }
-
-    private static func repoRoot() -> URL? {
-        var url = URL(fileURLWithPath: #filePath)
-        url.deleteLastPathComponent() // Cosmic FitTests
-        url.deleteLastPathComponent() // repo root
-        return url
     }
 
     // MARK: - Default accessor (backward-compatible)

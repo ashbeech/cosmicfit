@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDelegate {
+final class CosmicFitTabBarController: UITabBarController {
 
     // MARK: - Properties
     private var chartData: [String: Any] = [:]
@@ -19,6 +19,14 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     
     // Menu bar properties
     private var menuBarView: MenuBarView!
+    /// Fills the status-bar / notch strip so tab content never shows through above `MenuBarView`.
+    private let statusBarBackdropView: UIView = {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
+        v.isUserInteractionEnabled = false
+        return v
+    }()
     private var menuViewController: MenuViewController?
     private var detailContentContainer: UIView!
     private var dimmingView: UIView?
@@ -37,97 +45,6 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
     // User profile property
     private var userProfile: UserProfile?
     
-    private lazy var swipeLeft: UISwipeGestureRecognizer = {
-        let g = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
-        g.direction = .left
-        g.delegate = self
-        g.cancelsTouchesInView = false      // ← do not steal touches
-        g.delaysTouchesBegan = false
-        return g
-    }()
-
-    private lazy var swipeRight: UISwipeGestureRecognizer = {
-        let g = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
-        g.direction = .right
-        g.delegate = self
-        g.cancelsTouchesInView = false      // ← do not steal touches
-        g.delaysTouchesBegan = false
-        return g
-    }()
-
-    private func installSwipeGesturesIfNeeded() {
-        // Attach to the TAB BAR CONTROLLER’S VIEW (not the tab bar, not child VCs)
-        if !(view.gestureRecognizers?.contains(swipeLeft) ?? false) { view.addGestureRecognizer(swipeLeft) }
-        if !(view.gestureRecognizers?.contains(swipeRight) ?? false) { view.addGestureRecognizer(swipeRight) }
-    }
-    
-    private func resetTransitionState() {
-        isCustomTransitioning = false
-        print("🔄 Transition state reset")
-    }
-
-    @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
-        print("🏃‍♂️ Swipe gesture fired - direction: \(gesture.direction.rawValue)")
-        print("🏃‍♂️ Current state - selectedIndex: \(selectedIndex), isCustomTransitioning: \(isCustomTransitioning)")
-        
-        guard !isCustomTransitioning, presentedViewController == nil else {
-            print("❌ Swipe blocked - isCustomTransitioning: \(isCustomTransitioning), presentedViewController: \(presentedViewController != nil)")
-            return
-        }
-        guard let vcs = viewControllers, !vcs.isEmpty else {
-            print("❌ Swipe blocked - no view controllers")
-            return
-        }
-
-        let next: Int = {
-            switch gesture.direction {
-            case .left:  return min(selectedIndex + 1, vcs.count - 1)
-            case .right: return max(selectedIndex - 1, 0)
-            default:     return selectedIndex
-            }
-        }()
-        
-        print("🏃‍♂️ Calculated next index: \(next) from current: \(selectedIndex)")
-        guard next != selectedIndex else {
-            print("❌ Swipe blocked - already at target index")
-            return
-        }
-
-        print("✅ Swipe proceeding - setting isCustomTransitioning = true")
-        isCustomTransitioning = true
-        
-        // Create the animator with the correct direction based on index change
-        let direction: SlideTabTransitionAnimator.SlideDirection = next > selectedIndex ? .left : .right
-        transitionAnimator = SlideTabTransitionAnimator(isPresenting: true, direction: direction)
-        print("🎬 Starting transition via swipe with direction \(direction)")
-        
-        selectedIndex = next
-        
-        // Safety timeout - reset flag after 1 second if transition doesn't complete
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            if self?.isCustomTransitioning == true {
-                print("⚠️ Transition timeout - forcing reset")
-                self?.resetTransitionState()
-            }
-        }
-    }
-
-    // MARK: UIGestureRecognizerDelegate
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        // If the touch begins on the tab bar (or any control), let the tab bar handle it.
-        if touch.view is UIControl { return false }
-        let p = touch.location(in: view)
-        if tabBar.frame.contains(p) { return false }   // ← critical line
-        return true
-    }
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        // Don’t block scroll views inside child controllers.
-        return true
-    }
-    
     // Track whether user manually navigated away from the Style Guide tab
     private var userHasManuallyNavigated = false
     
@@ -142,7 +59,6 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         setupTabMemoryPersistence()
         setupProfileUpdateNotifications()
         setupAuthStateNotifications()
-        installSwipeGesturesIfNeeded()
         setupTabBar()
         hideProfileTabBarItem()
         delegate = self
@@ -160,6 +76,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         
         // Add dividers after layout is complete
         CosmicFitTheme.addTabDividers(tabBar)
+        elevateSystemChromeAboveTabContent()
     }
     
     deinit {
@@ -263,8 +180,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         // Ensure proper z-ordering
         view.bringSubviewToFront(dimmingView!)
         view.bringSubviewToFront(detailContentContainer)
-        view.bringSubviewToFront(tabBar)
-        view.bringSubviewToFront(menuBarView)
+        elevateSystemChromeAboveTabContent()
         
         if animated {
             // Start position: below the visible area
@@ -272,7 +188,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
             viewController.view.transform = CGAffineTransform(translationX: 0, y: containerHeight)
             
             UIView.animate(
-                withDuration: 0.35,
+                withDuration: 0.35 * 0.75,
                 delay: 0,
                 options: [.curveEaseOut],
                 animations: {
@@ -326,7 +242,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
             print("🔍 Dimming view exists: \(dimmingView != nil)")
             
             UIView.animate(
-                withDuration: 0.35,
+                withDuration: 0.35 * 0.75,
                 delay: 0,
                 options: [.curveEaseIn],
                 animations: {
@@ -377,15 +293,28 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         }
         
         view.addSubview(menuBarView)
-        
+        view.insertSubview(statusBarBackdropView, belowSubview: menuBarView)
+
         NSLayoutConstraint.activate([
+            statusBarBackdropView.topAnchor.constraint(equalTo: view.topAnchor),
+            statusBarBackdropView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            statusBarBackdropView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            statusBarBackdropView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+
             menuBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -10),
             menuBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             menuBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             menuBarView.heightAnchor.constraint(equalToConstant: MenuBarView.height),
         ])
-        
-        // Ensure menu bar stays on top
+
+        elevateSystemChromeAboveTabContent()
+    }
+
+    /// Keeps status strip + menu above transitioning tab content (same grey as `MenuBarView`).
+    private func elevateSystemChromeAboveTabContent() {
+        guard statusBarBackdropView.superview != nil, menuBarView != nil else { return }
+        view.bringSubviewToFront(statusBarBackdropView)
+        view.bringSubviewToFront(tabBar)
         view.bringSubviewToFront(menuBarView)
     }
 
@@ -771,7 +700,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
             return
         }
 
-        let transits = NatalChartCalculator.calculateTransits(natalChart: natal)
+        let transits = NatalChartCalculator.calculateTransits(natalChart: natal, date: date)
         let julianDay = JulianDateCalculator.calculateJulianDate(from: date)
         let moonPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: julianDay)
         let profileHash = userProfile?.id ?? chartId
@@ -811,7 +740,7 @@ final class CosmicFitTabBarController: UITabBarController, UIGestureRecognizerDe
         }
 
         guard let natal = natalChart, let progressed = progressedChart else { return nil }
-        let transits = NatalChartCalculator.calculateTransits(natalChart: natal)
+        let transits = NatalChartCalculator.calculateTransits(natalChart: natal, date: date)
         let julianDay = JulianDateCalculator.calculateJulianDate(from: date)
         let moonPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: julianDay)
         let profileHash = userProfile?.id ?? chartIdentifier ?? ""
@@ -1025,10 +954,16 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
             return true
         }
         
-        // Get indices for tab taps (not swipe gestures)
+        // Get indices for tab taps
         guard let fromIndex = viewControllers?.firstIndex(of: selectedViewController!),
-              let toIndex = viewControllers?.firstIndex(of: viewController),
-              fromIndex != toIndex else {
+              let toIndex = viewControllers?.firstIndex(of: viewController) else {
+            return true
+        }
+
+        if fromIndex == toIndex {
+            if let dailyFit = dailyFitViewController(from: viewController) {
+                dailyFit.handleTabBarDailyFitReselect()
+            }
             print("✅ Same tab selected - allowing")
             return true
         }
@@ -1051,7 +986,7 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
         userHasManuallyNavigated = true
         
         updateTabSelectionIndicator()
-        view.bringSubviewToFront(menuBarView)
+        elevateSystemChromeAboveTabContent()
         
         var tabName = "Unknown"
         if viewController is StyleGuideViewController {
@@ -1075,6 +1010,15 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
         }
         
         print("🎨 No custom animator - using default transition")
+        return nil
+    }
+
+    private func dailyFitViewController(from root: UIViewController) -> DailyFitViewController? {
+        if let vc = root as? DailyFitViewController { return vc }
+        if let nav = root as? UINavigationController,
+           let vc = nav.topViewController as? DailyFitViewController {
+            return vc
+        }
         return nil
     }
 }

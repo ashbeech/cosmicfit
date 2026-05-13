@@ -31,14 +31,14 @@ BODIES = [
 ]
 
 # ═══════════════════════════════════════════════════════════════
-# QUALITY STANDARDS — Directive Voice Grammar & Pattern Specificity
+# QUALITY STANDARDS: Directive Voice Grammar & Pattern Specificity
 # ═══════════════════════════════════════════════════════════════
 #
 # CODE DIRECTIVES must read as finished user-facing copy, not compressed
 # internal tokens. Every directive follows a two-part structure:
 #
-#   Part 1 — The Principle (declarative statement of what to do/avoid/consider)
-#   Part 2 — The Proof (vivid test, consequence, or sensory detail)
+#   Part 1: The Principle (declarative statement of what to do/avoid/consider)
+#   Part 2: The Proof (vivid test, consequence, or sensory detail)
 #
 # Example: "Buying for the ten-year test. If it still feels powerful in a
 #           decade, it belongs in your collection."
@@ -58,7 +58,7 @@ BODIES = [
 # "bark-effect weave" or "micro-houndstooth" fail. Concrete entries like
 # "dark-on-dark jacquard" or "micro-houndstooth" pass.
 #
-# Pattern names also need archetype fit — the swatch must belong to that
+# Pattern names also need archetype fit: the swatch must belong to that
 # chart's aesthetic world, not just be technically specific.
 
 DIRECTIVE_MIN_WORDS = {
@@ -474,7 +474,7 @@ VENUS_ENTRIES = {
                 {"name": "ink", "hex": "#1B1B1B"}
             ],
             "accent": [
-                {"name": "deep oxblood", "hex": "#4A0000"},
+                {"name": "deep oxblood", "hex": "#4A1C20"},
                 {"name": "cold forest green", "hex": "#2C5F2D"},
                 {"name": "dark plum", "hex": "#580F41"}
             ],
@@ -494,7 +494,7 @@ VENUS_ENTRIES = {
         },
         "code_leaninto": [
             "Investing in the darkest foundations you can find. If a black does not feel bottomless, keep looking.",
-            "Placing one strategically chosen point of exposure. A slit, a neckline, a single bare wrist — never more than one.",
+            "Placing one strategically chosen point of exposure. A slit, a neckline, a single bare wrist, never more than one.",
             "Letting the cut speak louder than the colour. A sharp shoulder line in ink does more than any bright accent.",
             "Treating quality leather as the structural backbone of your wardrobe. It is armour that ages into something better.",
             "Building dark layers that create depth rather than bulk. Each layer should add a shadow, not a centimetre.",
@@ -855,7 +855,7 @@ MOON_ENTRIES = {
         "silhouette_keywords": ["wrap", "cocoon", "protective layer", "soft shoulder"],
         "occasion_modifiers": {"work": "warmly professional, the trusted colleague", "intimate": "deeply nurturing, enveloping comfort", "daily": "layered protection, emotional armour in soft form"},
         "code_leaninto": [
-            "Keeping clothes with emotional history in active rotation. A coat from your mother or a scarf from a trip holds real power.",
+            "Keeping clothes with emotional history in active rotation. A coat from a family member or a scarf from a trip holds real power.",
             "Wrapping yourself in soft protective layers as a daily practice. A worn-in cardigan or a heritage shawl is emotional armour.",
             "Treating comfort as a non-negotiable, not a luxury. If a garment makes you tense, it is actively working against you.",
             "Choosing pieces that feel like home. If an outfit does not settle your nervous system, it is not earning its place.",
@@ -1002,7 +1002,7 @@ MOON_ENTRIES = {
             "Cheerful colours on days when you feel guarded. Forcing brightness when you need shadow creates an exhausting performance.",
         ],
         "code_consider": [
-            "A black wardrobe with deliberate tonal depth variation. Five shades of black is not boring — it is an entire emotional landscape.",
+            "A black wardrobe with deliberate tonal depth variation. Five shades of black is not boring; it is an entire emotional landscape.",
             "How the weight of a garment affects your sense of security. Heavier fabrics often ground your emotions when you are spiralling.",
         ],
         "opposites": {"textures": ["sheer fabrics", "flimsy chiffon", "see-through materials"], "colours": ["pastel pinks", "cheerful yellows"], "silhouettes": ["exposed and revealing", "cutesy shapes"], "mood": ["exposed", "naive", "unguarded", "frivolous"]}
@@ -1283,7 +1283,7 @@ SUN_ENTRIES = {
         "occasion_modifiers": {"work": "the standard of professionalism", "intimate": "detail-oriented elegance", "daily": "polished even in casual"},
         "code_leaninto": [
             "Prioritising perfect fit over perfect trend in every purchase. A well-tailored basic outranks a poorly fitting designer piece.",
-            "Noticing the details others miss and making them your strength. A perfect cuff roll, a clean hem, a flawless press — these are your signatures.",
+            "Noticing the details others miss and making them your strength. A perfect cuff roll, a clean hem, a flawless press, these are your signatures.",
             "Building on neutral excellence as your foundation. Taupe, sage, and navy carry quiet authority that loud colours cannot match.",
             "Investing in alterations as a standard practice. The twenty minutes a tailor spends transforms an off-the-rack piece into something personal.",
         ],
@@ -1307,9 +1307,9 @@ SUN_ENTRIES = {
         "silhouette_keywords": ["balanced", "proportional", "graceful"],
         "occasion_modifiers": {"work": "diplomatically elegant", "intimate": "romantically harmonious", "daily": "effortlessly beautiful"},
         "code_leaninto": [
-            "Prioritising proportion over volume. A slim trouser with a fluid blouse or a structured top with a flowing skirt — balance is your operating system.",
+            "Prioritising proportion over volume. A slim trouser with a fluid blouse or a structured top with a flowing skirt, balance is your operating system.",
             "Building colour harmony into every outfit as a rule. If the colours do not sing together, the outfit is not finished.",
-            "Treating beauty as your core identity expression. For you, aesthetics are not superficial — they are how you make sense of the world.",
+            "Treating beauty as your core identity expression. For you, aesthetics are not superficial; they are how you make sense of the world.",
             "Investing in pieces that transition seamlessly between contexts. A silk shirt that works at lunch and at dinner is your ideal garment.",
         ],
         "code_avoid": [
@@ -1326,16 +1326,16 @@ SUN_ENTRIES = {
     "sun_scorpio": {
         "style_philosophy": "intense, magnetic, strategically powerful",
         "textures": {"good": ["structured leather", "dense knit", "heavy silk", "matte jersey"], "bad": ["frilly chiffon", "cute prints", "flimsy fabrics"], "sweet_spot_keywords": ["power", "control", "intensity"]},
-        "colours": {"primary": [{"name": "ink", "hex": "#1B1B1B"}, {"name": "deep oxblood", "hex": "#4A0000"}], "accent": [{"name": "dark plum", "hex": "#580F41"}], "avoid": ["candy pastels", "cheerful brights"]},
+        "colours": {"primary": [{"name": "ink", "hex": "#1B1B1B"}, {"name": "deep oxblood", "hex": "#4A1C20"}], "accent": [{"name": "dark plum", "hex": "#580F41"}], "avoid": ["candy pastels", "cheerful brights"]},
         "metals": ["gunmetal", "blackened silver"], "stones": ["obsidian", "garnet", "black tourmaline"],
         "patterns": {"recommended": ["dark-on-dark jacquard", "matte shadow-weave jacquard", "monochrome depth"], "avoid": ["cheerful florals", "whimsical prints"]},
         "silhouette_keywords": ["fitted", "controlled", "sharp"],
         "occasion_modifiers": {"work": "the power behind the scenes", "intimate": "controlled intensity", "daily": "dark purpose in every piece"},
         "code_leaninto": [
-            "Understanding that dark is not basic — dark is power. A full ink palette communicates control that colour cannot replicate.",
+            "Understanding that dark is not basic; dark is power. A full ink palette communicates control that colour cannot replicate.",
             "Practising strategic revelation over total exposure. Show one thing at a time: a wrist, a collarbone, a sharp shoulder. Never everything.",
-            "Treating quality leather as an extension of your identity. A perfectly aged leather jacket is not an accessory — it is a statement of intent.",
-            "Building outfits that reward close inspection. The interest should be in the texture, the cut, and the weight — not in the colour.",
+            "Treating quality leather as an extension of your identity. A perfectly aged leather jacket is not an accessory; it is a statement of intent.",
+            "Building outfits that reward close inspection. The interest should be in the texture, the cut, and the weight, not in the colour.",
         ],
         "code_avoid": [
             "Anything naive, cutesy, or performatively innocent. These registers contradict your natural intensity and will feel like a costume.",
@@ -1547,7 +1547,7 @@ MARS_ENTRIES = {
         ],
         [
             "Comfort-armour pieces that you keep for difficult days. A particular coat or a favourite knit that makes you feel held together.",
-            "The relationship between physical warmth and emotional security. Layering up when you feel exposed is not overdressing — it is self-care.",
+            "The relationship between physical warmth and emotional security. Layering up when you feel exposed is not overdressing; it is self-care.",
         ],
         {"textures": ["exposed sheer fabrics"], "colours": ["aggressive reds"], "silhouettes": ["vulnerable and exposed"], "mood": ["exposed", "unprotected", "vulnerable"]}),
     "mars_leo": make_mars_entry("leo", "confident, commanding, warm authority",
@@ -1580,11 +1580,11 @@ MARS_ENTRIES = {
         {"work": "surgical precision energy", "intimate": "detailed attention", "daily": "every detail matters"},
         [
             "Wielding precision as a form of power. A perfect cuff, an exact hem, and a clean press speak louder than any bold statement.",
-            "Noticing details that others miss and using them strategically. The right button, the right stitch, the right finish — these are your weapons.",
-            "Applying methodical energy to your wardrobe. A systematic approach to dressing — same quality, same standards, every day — is your strength.",
+            "Noticing details that others miss and using them strategically. The right button, the right stitch, the right finish, these are your weapons.",
+            "Applying methodical energy to your wardrobe. A systematic approach to dressing, same quality, same standards, every day, is your strength.",
         ],
         [
-            "Sloppy or careless dressing that contradicts your natural precision. Wrinkles and loose threads are not minor — they are signals.",
+            "Sloppy or careless dressing that contradicts your natural precision. Wrinkles and loose threads are not minor; they are signals.",
             "Buying in haste without examining construction. Your eye for detail demands that you check every seam before committing.",
         ],
         [
@@ -1609,7 +1609,7 @@ MARS_ENTRIES = {
             "Harsh industrial textures that contradict your natural grace. Rough fabrics fight your energy instead of channelling it.",
         ],
         [
-            "Strategic colour psychology as a daily practice. Soft pink for approachability, navy for authority, white for neutrality — choose consciously.",
+            "Strategic colour psychology as a daily practice. Soft pink for approachability, navy for authority, white for neutrality, choose consciously.",
             "The role of proportion in first impressions. Balanced shoulders, a defined waist, and a clean line project confidence without confrontation.",
         ],
         {"textures": ["harsh industrial fabric"], "colours": ["harsh aggressive tones"], "silhouettes": ["blunt aggressive shapes"], "mood": ["blunt", "harsh", "aggressive"]}),
@@ -1621,9 +1621,9 @@ MARS_ENTRIES = {
         ["controlled", "lethal precision", "strategic"],
         {"work": "invisible power", "intimate": "dangerous magnetism", "daily": "dark operational mode"},
         [
-            "Treating darkness as your power uniform. A full black palette is not absence of colour — it is presence of control.",
+            "Treating darkness as your power uniform. A full black palette is not absence of colour; it is presence of control.",
             "Exercising strategic wardrobe control at all times. Every piece in your outfit should be there by deliberate choice, not by accident.",
-            "Building outfits with covert intensity. The interest should be felt up close — in the weight of the leather, the texture of the knit, the quality of the finish.",
+            "Building outfits with covert intensity. The interest should be felt up close, in the weight of the leather, the texture of the knit, the quality of the finish.",
         ],
         [
             "Vulnerability through transparency or exposure. Sheer fabrics and revealing cuts strip away the control you need to function.",
@@ -1775,7 +1775,7 @@ ASC_ENTRIES = {
         [
             "Presenting as someone interesting to talk to before you open your mouth. A clever pattern mix or an unexpected colour pop invites conversation.",
             "Rotating your accessories to keep your first impression fresh. Different earrings, a new scarf, or a swapped watch band costs nothing but changes everything.",
-            "Dressing with visual wit. A playful detail — a printed lining flashed on purpose, a mismatched button — signals intelligence.",
+            "Dressing with visual wit. A playful detail, a printed lining flashed on purpose, a mismatched button, signals intelligence.",
         ],
         [
             "Monotonous presentations that suggest a single-track mind. Your brain runs on multiple channels, and your wardrobe should too.",
@@ -1868,14 +1868,14 @@ ASC_ENTRIES = {
         {"textures": ["rough harsh fabrics"], "colours": ["aggressive dark palettes"], "silhouettes": ["aggressively angular"], "mood": ["aggressive", "harsh", "discordant"]}),
     "ascendant_scorpio": make_asc_entry("scorpio", "first impressions of intensity, mystery, magnetic power",
         ["structured leather", "dense knit", "heavy silk"], ["frilly cute fabrics"], ["intensity", "mystery", "control"],
-        [{"name": "ink", "hex": "#1B1B1B"}, {"name": "deep oxblood", "hex": "#4A0000"}], [{"name": "dark plum", "hex": "#580F41"}], ["cheerful bright tones"],
+        [{"name": "ink", "hex": "#1B1B1B"}, {"name": "deep oxblood", "hex": "#4A1C20"}], [{"name": "dark plum", "hex": "#580F41"}], ["cheerful bright tones"],
         ["gunmetal", "blackened silver"], ["obsidian", "garnet"],
         ["dark-on-dark jacquard weave", "monochrome depth"], ["happy prints"], ["fitted", "sharp", "magnetic"],
         {"work": "intimidating quiet power", "intimate": "dangerous allure", "daily": "mysterious and controlled"},
         [
             "Using mystery as your most powerful first-impression tool. The less people can read from your outfit, the more they want to know.",
             "Wearing dark colours as a shield and a signal. Ink, oxblood, and deep plum communicate control before you say a word.",
-            "Letting your presence do the work. A fitted dark outfit with one sharp detail — a collar, a cuff, a boot — says everything.",
+            "Letting your presence do the work. A fitted dark outfit with one sharp detail, a collar, a cuff, a boot, says everything.",
         ],
         [
             "Transparent or overly friendly presentations that give away your intentions. Your power comes from what people cannot immediately decode.",
@@ -1883,7 +1883,7 @@ ASC_ENTRIES = {
         ],
         [
             "A single dark statement piece as your signature entrance. A structured leather jacket or a perfectly cut dark coat projects instant authority.",
-            "How eye contact and outfit work together. Dark, controlled clothing amplifies the intensity of your gaze — use that deliberately.",
+            "How eye contact and outfit work together. Dark, controlled clothing amplifies the intensity of your gaze, use that deliberately.",
         ],
         {"textures": ["frilly cute fabrics"], "colours": ["cheerful bright tones"], "silhouettes": ["cutesy babydoll", "overly open"], "mood": ["naive", "transparent", "overly friendly"]}),
     "ascendant_sagittarius": make_asc_entry("sagittarius", "first impressions of warmth, worldliness, open confidence",
@@ -1959,7 +1959,7 @@ ASC_ENTRIES = {
         ],
         [
             "Harsh rigid presentations that contradict your gentle creative energy. Stiff suiting and sharp shoulders fight your natural aura.",
-            "Industrial or aggressive colour palettes that strip away your dreamy quality. Your softness is your power — do not armour over it.",
+            "Industrial or aggressive colour palettes that strip away your dreamy quality. Your softness is your power, do not armour over it.",
         ],
         [
             "Sheer layers as a mood setter for your entrance. A chiffon overlay or a gauze wrap creates depth and mystery that rigid fabrics cannot.",
@@ -2067,7 +2067,7 @@ saturn_data = [
      ],
      [
          "Investment glamour pieces that earn their place over years. A quality velvet jacket or a silk pocket square belongs in permanent rotation.",
-         "How restraint amplifies impact. Holding back one element — a simpler shoe, a quieter colour — makes the statement piece land harder.",
+         "How restraint amplifies impact. Holding back one element, a simpler shoe, a quieter colour, makes the statement piece land harder.",
      ],
      {"textures": ["cheap sparkly fabrics"], "colours": ["cheap glitter tones"], "silhouettes": ["flashy without substance"], "mood": ["flashy", "cheap", "ostentatious"]}),
     ("virgo", "exacting precision, mastery of detail", ["pressed fine cotton", "structured silk", "precise tailoring"], ["any imperfect fabric"], ["mastery", "precision"],
@@ -2091,7 +2091,7 @@ saturn_data = [
      [{"name": "soft mauve", "hex": "#E0B0FF"}], [{"name": "slate", "hex": "#708090"}], ["ugly discordant tones"], ["rose gold", "silver"], ["rose quartz", "sapphire"],
      ["balanced damask medallion", "balanced stripe"], ["ugly abstract"], ["graceful structure"], {"work": "elegant authority", "intimate": "structured romance", "daily": "disciplined beauty"},
      [
-         "Recognising that beauty requires discipline to maintain. A harmonious wardrobe does not happen by accident — it is built and curated.",
+         "Recognising that beauty requires discipline to maintain. A harmonious wardrobe does not happen by accident; it is built and curated.",
          "Maintaining proportional balance in every outfit. A structured top with a flowing bottom, or vice versa, is your operating principle.",
          "Treating elegance as a daily non-negotiable, not a special-occasion performance. Even your simplest outfit should have compositional grace.",
      ],
@@ -2114,7 +2114,7 @@ saturn_data = [
      ],
      [
          "Revealing or transparent choices that expose more than you intend. Opacity and density are your allies, not constraints.",
-         "Light or cheerful fabrics that undermine the depth you naturally project. Your darkness is not absence — it is concentration.",
+         "Light or cheerful fabrics that undermine the depth you naturally project. Your darkness is not absence; it is concentration.",
      ],
      [
          "Treating your wardrobe as life armour, maintained and deployed with strategic intent. Every piece serves a protective purpose.",
@@ -2169,7 +2169,7 @@ saturn_data = [
      ],
      [
          "A structured approach to standing out. Planning your unconventional elements with the same care others plan their conventional ones.",
-         "How a signature unconventional detail becomes your trademark. One consistent surprise — an unusual collar, a tech accessory — creates recognition.",
+         "How a signature unconventional detail becomes your trademark. One consistent surprise, an unusual collar, a tech accessory, creates recognition.",
      ],
      {"textures": ["traditional stuffy fabrics"], "colours": ["traditional conservative tones"], "silhouettes": ["conventional safe shapes"], "mood": ["conventional", "traditional", "safe"]}),
     ("pisces", "structured dreaminess, disciplined intuition", ["fluid structured silk", "weighted jersey", "dense chiffon"], ["stiff harsh fabrics"], ["grounding", "flow"],
@@ -2186,7 +2186,7 @@ saturn_data = [
      ],
      [
          "Structured underlayers beneath flowing outer pieces as a daily strategy. A fitted base gives you freedom to drape and wrap on top.",
-         "How a single structured element — a belt, a boot, a jacket — transforms a flowing outfit from vague to intentional.",
+         "How a single structured element, a belt, a boot, a jacket, transforms a flowing outfit from vague to intentional.",
      ],
      {"textures": ["stiff harsh fabrics"], "colours": ["harsh jarring tones"], "silhouettes": ["rigid harsh structure"], "mood": ["harsh", "rigid", "unfeeling"]})
 ]
@@ -3175,7 +3175,7 @@ pluto_entries_raw = {
         ["densest leather", "bonded armour-weight fabric", "power-construction wool", "blackened silk"],
         ["lightweight vulnerable fabrics", "soft passive materials", "cheerful bright synthetics"],
         [{"name": "abyss black", "hex": "#050505"}],
-        [{"name": "oxblood", "hex": "#4A0000"}],
+        [{"name": "oxblood", "hex": "#4A1C20"}],
         ["any bright colour", "anything cheerful, light, or surface-level"],
         ["blackened titanium", "dark steel"], ["obsidian", "black diamond"],
         ["power totemic symbols", "dark serpent-and-sigil jacquard", "power sigils"], ["cheerful florals", "lighthearted patterns of any kind"],
@@ -3807,8 +3807,8 @@ COLOUR_LIBRARY = {
     "power black": {"hex": "#1C1C1C", "associations": ["pluto_capricorn", "pluto"]},
 
     # ── Dark Reds & Burgundies ──
-    "deep oxblood": {"hex": "#4A0000", "associations": ["scorpio", "venus_scorpio", "pluto", "mars"]},
-    "oxblood": {"hex": "#4A0000", "associations": ["scorpio", "pluto", "mars"]},
+    "deep oxblood": {"hex": "#4A1C20", "associations": ["scorpio", "venus_scorpio", "pluto", "mars"]},
+    "oxblood": {"hex": "#4A1C20", "associations": ["scorpio", "pluto", "mars"]},
     "blood red": {"hex": "#660000", "associations": ["mars_scorpio", "scorpio"]},
     "burgundy": {"hex": "#800020", "associations": ["capricorn", "venus_capricorn"]},
     "deep burgundy": {"hex": "#800020", "associations": ["scorpio", "moon_scorpio"]},
@@ -4010,7 +4010,7 @@ if __name__ == "__main__":
         for w in warnings:
             print(f"  {w}")
     else:
-        print("\n✓ Quality gate passed — zero warnings")
+        print("\n✓ Quality gate passed with zero warnings")
 
     output_path = REPO_ROOT / "data" / "style_guide" / "astrological_style_dataset.json"
     with open(output_path, "w") as f:

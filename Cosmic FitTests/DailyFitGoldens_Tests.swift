@@ -51,18 +51,12 @@ private struct GoldenCaseData: Codable {
 // MARK: - Fixture Loader
 
 private func loadGoldenFixture() -> (cases: [GoldenCaseData], baseDate: Date)? {
-    let repoURL: URL = {
-        var url = URL(fileURLWithPath: #filePath)
-        url.deleteLastPathComponent()
-        url.deleteLastPathComponent()
-        return url.appendingPathComponent("docs/fixtures/golden_cases.json")
-    }()
-
     let bundle = Bundle(for: _GoldenBundleToken.self)
     let bundleURL = bundle.url(forResource: "golden_cases", withExtension: "json")
+    let repoURL = FixtureLocator.fixtureURL(named: "golden_cases.json")
 
     let url: URL
-    if FileManager.default.fileExists(atPath: repoURL.path) {
+    if let repoURL {
         url = repoURL
     } else if let b = bundleURL {
         url = b

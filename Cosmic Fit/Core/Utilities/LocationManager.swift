@@ -105,11 +105,8 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
     
     /// Start continuous location updates (for apps that need real-time location)
     func startLocationUpdates() {
-        guard CLLocationManager.locationServicesEnabled() else {
-            print("❌ Location services disabled")
-            return
-        }
-        
+        // Avoid `CLLocationManager.locationServicesEnabled()` here — it can block the main thread
+        // (Xcode warns). If services are off, updates simply won't arrive; errors surface via delegate.
         requestLocationPermissionAndUpdate()
         manager.startUpdatingLocation()
         print("📍 Started continuous location updates")
@@ -145,11 +142,10 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     private func startLocationIfAllowed() {
-        guard CLLocationManager.locationServicesEnabled(),
-              manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways else {
-            return
-        }
-        
+        // Do not call `CLLocationManager.locationServicesEnabled()` on the main queue — it can
+        // block and trigger Xcode's CoreLocation main-thread warning. Authorization is driven by
+        // `locationManagerDidChangeAuthorization(_:)`; this path runs only after we've observed
+        // `.authorizedWhenInUse` / `.authorizedAlways` (see `requestLocationPermissionAndUpdate`).
         if !locationUpdateCallbacks.isEmpty {
             manager.startUpdatingLocation()
             print("📍 Authorized — starting location updates after permission")
@@ -308,9 +304,10 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
         handleLocationError(error)
     }
     
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let status = manager.authorizationStatus
         print("📍 Location authorization changed: \(status.rawValue)")
-        
+
         switch status {
         case .authorizedWhenInUse, .authorizedAlways:
             startLocationIfAllowed()
@@ -321,11 +318,10 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
                 userInfo: [NSLocalizedDescriptionKey: "Location access denied or restricted."]
             )
             handleLocationError(error)
-            
+
         case .notDetermined:
-            // Don't call requestLocation() yet — wait for the user to decide
             break
-            
+
         @unknown default:
             break
         }

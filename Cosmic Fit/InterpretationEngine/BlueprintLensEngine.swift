@@ -203,17 +203,27 @@ enum BlueprintLensEngine {
 
     // MARK: - Recency Penalty
 
-    /// 0.3 if shown in last 3 days, 0.15 if in last 7, 0.0 otherwise.
+    /// Applies stronger near-term suppression + frequency penalty in the recency window.
     private static func recencyPenalty(
         for cardName: String,
         recentSelections: [(cardName: String, daysAgo: Int)]
     ) -> Double {
-        guard let match = recentSelections.first(where: { $0.cardName == cardName }) else {
+        let matches = recentSelections.filter { $0.cardName == cardName }
+        guard let match = matches.first else {
             return 0.0
         }
-        if match.daysAgo <= 3 { return 0.3 }
-        if match.daysAgo <= 7 { return 0.15 }
-        return 0.0
+        var penalty = 0.0
+        if match.daysAgo <= 2 {
+            penalty += 0.45
+        } else if match.daysAgo <= 6 {
+            penalty += 0.25
+        } else if match.daysAgo <= 10 {
+            penalty += 0.12
+        }
+
+        // Escalate if the same card already appeared multiple times recently.
+        penalty += max(0.0, Double(matches.count - 1) * 0.08)
+        return min(penalty, 0.7)
     }
 
     // MARK: - Variant Selection (Rotation-Based)
@@ -557,7 +567,11 @@ enum BlueprintLensEngine {
                 sum + Double(snapshot.vibeProfile.value(for: energy)) / vibeTotal
             }
             let jitter = Double.random(in: 0..<0.001, using: &rng)
-            return (colour, base + jitter)
+            let profileBias = deterministicProfileColourBias(
+                profileHash: snapshot.profileHash,
+                colourHex: colour.hexValue
+            )
+            return (colour, base + jitter + profileBias)
         }
         scored.sort { $0.score > $1.score }
 
@@ -622,6 +636,17 @@ enum BlueprintLensEngine {
             out.append(c)
         }
         return out
+    }
+
+    /// Deterministic per-profile nudge to reduce cross-profile palette collisions.
+    private static func deterministicProfileColourBias(
+        profileHash: String,
+        colourHex: String
+    ) -> Double {
+        let key = "\(profileHash)|\(normalizedPaletteHex(colourHex))"
+        let seed = DailySeedGenerator.intSeed(from: key)
+        let bucket = abs(seed % 1000)
+        return Double(bucket) / 1000.0 * 0.012
     }
 
     /// Flat array of all hex values from the Style Guide palette for the context ring.
