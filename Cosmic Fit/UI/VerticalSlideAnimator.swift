@@ -16,7 +16,7 @@ final class VerticalSlideAnimator: NSObject, UIViewControllerAnimatedTransitioni
     }
     
     private let operation: Operation
-    private let duration: TimeInterval = 0.35
+    private let duration: TimeInterval = 0.35 * 0.75
     
     init(operation: Operation) {
         self.operation = operation

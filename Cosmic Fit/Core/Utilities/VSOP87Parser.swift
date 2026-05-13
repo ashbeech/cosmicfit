@@ -91,6 +91,17 @@ struct VSOP87Parser {
     private static var planetData: [Planet: [String: Component]] { _loaded.data }
     private static var useFallback: Bool { _loaded.fallback }
 
+    // MARK: - Configurable data directory
+
+    /// Override directory for VSOP87 data files. When set, loadComponents reads
+    /// from this directory instead of Bundle.main. Used by the inspector server.
+    private static var _dataDirectory: URL?
+
+    /// Set before calling loadData() to load VSOP87 files from a custom directory.
+    static func setDataDirectory(_ url: URL) {
+        _dataDirectory = url
+    }
+
     // MARK: - Public loading helper
 
     static func loadData() {
@@ -100,8 +111,15 @@ struct VSOP87Parser {
     // MARK: - PRIVATE: File I/O
 
     private static func loadComponents(for planet: Planet) -> [String: Component] {
-        guard let url = Bundle.main.url(forResource: planet.filename, withExtension: nil),
-              let content = try? String(contentsOf: url, encoding: .utf8) else {
+        let url: URL?
+        if let dir = _dataDirectory {
+            let candidate = dir.appendingPathComponent(planet.filename)
+            url = FileManager.default.fileExists(atPath: candidate.path) ? candidate : nil
+        } else {
+            url = Bundle.main.url(forResource: planet.filename, withExtension: nil)
+        }
+        guard let resolvedURL = url,
+              let content = try? String(contentsOf: resolvedURL, encoding: .utf8) else {
             print("Could not open file \(planet.filename)")
             return [:]
         }

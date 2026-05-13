@@ -296,12 +296,22 @@ enum PaletteLibrary {
 
     /// Nearest wardrobe colour token to `hex` in perceptual Lab space (for consistent UI labels).
     static func nearestColourName(forHex hex: String) -> String {
+        nearestColourName(forHex: hex, excluding: [])
+    }
+
+    /// Nearest wardrobe token in Lab space, skipping any names in `excluding`
+    /// (matched case-insensitively). Used so chart signature swatches are not
+    /// labelled with the same token as a template row that already uses a
+    /// different hex.
+    static func nearestColourName(forHex hex: String, excluding: Set<String>) -> String {
+        let blocked = Set(excluding.map { $0.lowercased() })
         guard ColourMath.hexToLab(hex) != nil else {
             return "palette colour"
         }
         var bestName = ""
         var bestDist = Double.infinity
         for (name, candidateHex) in colourNameToHex {
+            guard !blocked.contains(name.lowercased()) else { continue }
             let d = ColourMath.labDistanceSquared(hex, candidateHex)
             if d < bestDist - 1e-9 {
                 bestDist = d
@@ -310,6 +320,68 @@ enum PaletteLibrary {
                 bestName = name
             }
         }
-        return bestName.isEmpty ? "palette colour" : bestName
+        if !bestName.isEmpty { return bestName }
+        if !blocked.isEmpty { return nearestColourName(forHex: hex, excluding: []) }
+        return "palette colour"
+    }
+
+    /// Stable display names for the luminary + ruler signature pair: the second
+    /// label never reuses the first, and neither reuses any `claimedTemplateNames`.
+    static func signaturePairLabels(
+        luminaryHex: String,
+        rulerHex: String,
+        claimedTemplateNames: Set<String>
+    ) -> (luminary: String, ruler: String) {
+        var claimed = Set(claimedTemplateNames.map { $0.lowercased() })
+        let luminary = nearestColourName(forHex: luminaryHex, excluding: claimed)
+        claimed.insert(luminary.lowercased())
+        let ruler = nearestColourName(forHex: rulerHex, excluding: claimed)
+        return (luminary, ruler)
+    }
+
+    /// Deduplicated accent display labels. For each accent slot, if its
+    /// `displayName` (case-insensitive) collides with a name already claimed
+    /// by template bands (or a preceding accent), it is replaced with the
+    /// nearest `colourNameToHex` token for that accent's hex. Returns labels
+    /// in the same order as the input slots.
+    static func deduplicatedAccentLabels(
+        slots: [AccentSlot],
+        templateNames: [String],
+        claimedTemplateNames: Set<String>
+    ) -> [String] {
+        var claimed = Set(claimedTemplateNames.map { $0.lowercased() })
+        return slots.map { slot in
+            let raw = slot.displayName.lowercased()
+            if claimed.contains(raw) {
+                let renamed = nearestColourName(forHex: slot.hex, excluding: claimed)
+                claimed.insert(renamed.lowercased())
+                return renamed
+            } else {
+                claimed.insert(raw)
+                return slot.displayName
+            }
+        }
+    }
+
+    /// Deduplicated labels for template-sourced accent names (fallback path
+    /// when no accent slots are present).
+    static func deduplicatedAccentLabelsFromTemplate(
+        names: [String],
+        claimedTemplateNames: Set<String>
+    ) -> [String] {
+        var claimed = Set(claimedTemplateNames.map { $0.lowercased() })
+        return names.map { name in
+            let raw = name.lowercased()
+            if claimed.contains(raw) {
+                let renamed = nearestColourName(
+                    forHex: hex(for: name), excluding: claimed
+                )
+                claimed.insert(renamed.lowercased())
+                return renamed
+            } else {
+                claimed.insert(raw)
+                return name
+            }
+        }
     }
 }

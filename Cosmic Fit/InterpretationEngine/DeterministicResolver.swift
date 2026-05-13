@@ -1228,12 +1228,14 @@ struct DeterministicResolver {
         library: [String: ColourLibraryEntry]
     ) -> String? {
         let lower = name.lowercased()
-        for (key, entry) in library {
-            if key.lowercased().contains(lower) || lower.contains(key.lowercased()) {
+        for key in library.keys.sorted() {
+            guard let entry = library[key] else { continue }
+            let kl = key.lowercased()
+            if kl.contains(lower) || lower.contains(kl) {
                 return entry.hex
             }
         }
-        return library.values.first?.hex
+        return library.keys.sorted().first.flatMap { library[$0]?.hex }
     }
 
     // MARK: - Sort & Deduplicate Helpers

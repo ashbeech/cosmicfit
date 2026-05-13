@@ -59,10 +59,7 @@ final class V4PlacementGenerator_Tests: XCTestCase {
             throw XCTSkip("Set REGENERATE_V4_PLACEMENTS=1 to run placement generation")
         }
 
-        let fixturesDir = URL(fileURLWithPath: #file)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("docs/fixtures")
+        let fixturesDir = FixtureLocator.primaryFixturesDirectory()
 
         let datasetURL = fixturesDir.appendingPathComponent("v4_dataset.json")
         let datasetData = try Data(contentsOf: datasetURL)
@@ -125,10 +122,7 @@ final class V4PlacementGenerator_Tests: XCTestCase {
             throw XCTSkip("Set REGENERATE_V4_PLACEMENTS=1 to run Maria/Ash fixture generation")
         }
 
-        let fixturesDir = URL(fileURLWithPath: #file)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("docs/fixtures")
+        let fixturesDir = FixtureLocator.primaryFixturesDirectory()
 
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]

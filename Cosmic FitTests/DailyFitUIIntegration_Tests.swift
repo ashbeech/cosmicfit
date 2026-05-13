@@ -213,9 +213,8 @@ struct DailyFitUIIntegrationTests {
         )
 
         let view = DailyColourPaletteView()
-        let dailyHexes = payload.dailyPalette.colours.map { $0.hexValue }
         let allHexes = payload.dailyPalette.allPaletteHexes
-        view.configure(dailyHexes: dailyHexes, allPaletteHexes: allHexes)
+        view.configure(dailyPicks: payload.dailyPalette.colours, allPaletteHexes: allHexes)
     }
 
     // T5.7

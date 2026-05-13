@@ -158,13 +158,11 @@ struct TarotCard: Codable, Identifiable {
         return suit?.rawValue ?? "Unknown"
     }
     
-    /// Calculate match score for this card based on tokens and theme
-    /// - Parameters:
-    ///   - tokens: Array of StyleTokens to match against
-    ///   - theme: Optional theme name for bonus matching
-    ///   - vibeBreakdown: Optional VibeBreakdown for energy alignment
-    ///   - profileHash: User profile identifier for recency tracking
-    /// - Returns: Total match score (higher is better)
+    /// Legacy scoring path — NOT used by production `BlueprintLensEngine` tarot
+    /// selection (which uses cosine similarity on pre-normalised card vectors).
+    /// Kept temporarily for reference; will be removed once Phase 0F cleanup is
+    /// confirmed via `TarotScoringPathIntegrity_Tests`. Do not call.
+    @available(*, deprecated, message: "Dead code — production uses cosine scoring in BlueprintLensEngine")
     func calculateMatchScore(
         for tokens: [StyleToken],
         theme: String? = nil,
@@ -373,9 +371,15 @@ struct TarotCard: Codable, Identifiable {
 // MARK: - VibeBreakdown Extension
 // (Removed duplicate dominantEnergy - now defined in VibeBreakdown.swift with Energy enum)
 
-// MARK: - Style Edit Selector
+// MARK: - Style Edit Selector (DEAD CODE — see Phase 0F audit)
+// Production variant selection uses `TarotVariantRotationTracker` rotation,
+// not cosine similarity on variants. `extractEnergyFromVibe` normalises the
+// 21-point VibeBreakdown against 100 instead of 21, producing wrong weights.
+// Zero call sites outside this file (confirmed via `rg`). Marked deprecated;
+// scheduled for removal after Phase 0F cleanup confirmation.
 
-/// Intelligent selection of styleEdit variants using cosine similarity
+/// Legacy styleEdit variant selector — NOT used in production.
+@available(*, deprecated, message: "Dead code — production uses variant rotation, not cosine selection")
 class StyleEditSelector {
     
     // MARK: - Selection Logic

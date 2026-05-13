@@ -22,6 +22,9 @@ class ProfileViewController: UIViewController {
     private let locationLabel = UILabel()
     
     private let nameTextField = UITextField()
+    /// Shown in the form; wheels live in `inputView` only so scrolling cannot change values.
+    private let birthDateField = UITextField()
+    private let birthTimeField = UITextField()
     private let birthDatePicker = UIDatePicker()
     private let birthTimePicker = UIDatePicker()
     private let locationAutocompleteView = LocationAutocompleteView()
@@ -32,6 +35,9 @@ class ProfileViewController: UIViewController {
     private let signOutButton = UIButton(type: .system)
     private let deleteProfileButton = UIButton(type: .system)
     private let activityIndicator = UIActivityIndicatorView(style: .large)
+    private let mainStack = UIStackView()
+    private let topFormDivider = UIView()
+    private let dangerSectionDivider = UIView()
     
     // Callback for dismissal request
     var onDismissRequested: (() -> Void)?
@@ -43,6 +49,20 @@ class ProfileViewController: UIViewController {
     private var longitude: Double = 0.0
     private var locationName: String = ""
     private var timeZone: TimeZone = TimeZone.current
+    
+    private let birthDateDisplayFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .long
+        f.timeStyle = .none
+        return f
+    }()
+    
+    private let birthTimeDisplayFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .none
+        f.timeStyle = .short
+        return f
+    }()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -78,265 +98,239 @@ class ProfileViewController: UIViewController {
     }
     
     // MARK: - UI Setup
-    private func setupUI() {
-        view.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
-        
-        // Scroll view
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.showsVerticalScrollIndicator = false
-        
-        // Apply theme to scroll view
-        CosmicFitTheme.styleScrollView(scrollView)
-        
-        view.addSubview(scrollView)
-        
-        // Content view
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(contentView)
-        
-        // Title
-        titleLabel.text = "Update Your Profile"
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Apply theme to title
-        CosmicFitTheme.styleTitleLabel(titleLabel, fontSize: CosmicFitTheme.Typography.FontSizes.title1, weight: .bold)
-        
-        contentView.addSubview(titleLabel)
-        
-        // Subtitle
-        subtitleLabel.text = "Edit your birth details to update your cosmic profile"
-        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Apply theme to subtitle
-        CosmicFitTheme.styleBodyLabel(subtitleLabel, fontSize: CosmicFitTheme.Typography.FontSizes.body)
-        
-        subtitleLabel.numberOfLines = 0
-        contentView.addSubview(subtitleLabel)
-        
-        // Name section
-        nameLabel.text = "First Name"
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Apply theme to section labels
-        CosmicFitTheme.styleBodyLabel(nameLabel, fontSize: CosmicFitTheme.Typography.FontSizes.headline, weight: .semibold)
-        
-        contentView.addSubview(nameLabel)
-        
-        nameTextField.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Apply theme to text field
-        CosmicFitTheme.styleTextField(nameTextField)
-        
-        nameTextField.placeholder = "Enter your first name"
-        nameTextField.returnKeyType = .next
-        nameTextField.delegate = self
-        contentView.addSubview(nameTextField)
-        
-        // Date section
-        dateLabel.text = "Birth Date"
-        dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Apply theme to section labels
-        CosmicFitTheme.styleBodyLabel(dateLabel, fontSize: CosmicFitTheme.Typography.FontSizes.headline, weight: .semibold)
-        
-        contentView.addSubview(dateLabel)
-        
-        birthDatePicker.translatesAutoresizingMaskIntoConstraints = false
+    
+    private func styleFieldCaption(_ label: UILabel, text: String) {
+        label.text = text
+        label.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.callout, weight: .semibold)
+        label.textColor = CosmicFitTheme.Colours.cosmicBlue
+        label.numberOfLines = 0
+    }
+    
+    private func verticalFieldStack(label: UILabel, field: UIView, spacing: CGFloat = 8) -> UIStackView {
+        let stack = UIStackView(arrangedSubviews: [label, field])
+        stack.axis = .vertical
+        stack.spacing = spacing
+        stack.alignment = .fill
+        return stack
+    }
+    
+    private func configureBirthDateTimePickersAndFields() {
         birthDatePicker.datePickerMode = .date
         birthDatePicker.preferredDatePickerStyle = .wheels
         birthDatePicker.maximumDate = Date()
-        
-        // Apply theme to date picker
-        CosmicFitTheme.styleDatePicker(birthDatePicker)
-        
         if let hundredYearsAgo = Calendar.current.date(byAdding: .year, value: -100, to: Date()) {
             birthDatePicker.minimumDate = hundredYearsAgo
         }
-        contentView.addSubview(birthDatePicker)
+        CosmicFitTheme.styleDatePicker(birthDatePicker)
+        birthDatePicker.addTarget(self, action: #selector(birthDatePickerValueChanged), for: .valueChanged)
         
-        // Time section
-        timeLabel.text = "Birth Time"
-        timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Apply theme to section labels
-        CosmicFitTheme.styleBodyLabel(timeLabel, fontSize: CosmicFitTheme.Typography.FontSizes.headline, weight: .semibold)
-        
-        contentView.addSubview(timeLabel)
-        
-        birthTimePicker.translatesAutoresizingMaskIntoConstraints = false
         birthTimePicker.datePickerMode = .time
         birthTimePicker.preferredDatePickerStyle = .wheels
-        
-        // Apply theme to time picker
         CosmicFitTheme.styleDatePicker(birthTimePicker)
+        birthTimePicker.addTarget(self, action: #selector(birthTimePickerValueChanged), for: .valueChanged)
         
-        contentView.addSubview(birthTimePicker)
+        birthDateField.translatesAutoresizingMaskIntoConstraints = false
+        birthTimeField.translatesAutoresizingMaskIntoConstraints = false
+        birthDateField.placeholder = "Tap to select date"
+        birthTimeField.placeholder = "Tap to select time"
+        CosmicFitTheme.styleTextField(birthDateField)
+        CosmicFitTheme.styleTextField(birthTimeField)
+        birthDateField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        birthTimeField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        birthDateField.delegate = self
+        birthTimeField.delegate = self
+        birthDateField.autocorrectionType = .no
+        birthTimeField.autocorrectionType = .no
+        birthDateField.spellCheckingType = .no
+        birthTimeField.spellCheckingType = .no
+        birthDateField.textContentType = .none
+        birthTimeField.textContentType = .none
+        birthDateField.returnKeyType = .done
+        birthTimeField.returnKeyType = .done
         
-        // Location section
-        locationLabel.text = "Birth Location"
+        birthDateField.inputView = birthDatePicker
+        birthTimeField.inputView = birthTimePicker
+        
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let flex = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let done = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(birthDateTimePickerDoneTapped))
+        toolbar.setItems([flex, done], animated: false)
+        birthDateField.inputAccessoryView = toolbar
+        birthTimeField.inputAccessoryView = toolbar
+    }
+    
+    private func refreshBirthDateFieldDisplay() {
+        birthDateDisplayFormatter.timeZone = timeZone
+        birthDateField.text = birthDateDisplayFormatter.string(from: birthDatePicker.date)
+    }
+    
+    private func refreshBirthTimeFieldDisplay() {
+        birthTimeDisplayFormatter.timeZone = timeZone
+        birthTimeField.text = birthTimeDisplayFormatter.string(from: birthTimePicker.date)
+    }
+    
+    @objc private func birthDatePickerValueChanged() {
+        refreshBirthDateFieldDisplay()
+    }
+    
+    @objc private func birthTimePickerValueChanged() {
+        refreshBirthTimeFieldDisplay()
+    }
+    
+    @objc private func birthDateTimePickerDoneTapped() {
+        if birthDateField.isFirstResponder {
+            refreshBirthDateFieldDisplay()
+        } else if birthTimeField.isFirstResponder {
+            refreshBirthTimeFieldDisplay()
+        }
+        view.endEditing(true)
+    }
+    
+    private func setupUI() {
+        view.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        CosmicFitTheme.styleScrollView(scrollView)
+        view.addSubview(scrollView)
+        
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+        
+        mainStack.translatesAutoresizingMaskIntoConstraints = false
+        mainStack.axis = .vertical
+        mainStack.spacing = 20
+        mainStack.alignment = .fill
+        contentView.addSubview(mainStack)
+        
+        titleLabel.text = "Update Your Profile"
+        titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 0
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        CosmicFitTheme.styleTitleLabel(titleLabel, fontSize: CosmicFitTheme.Typography.FontSizes.title1, weight: .bold)
+        
+        subtitleLabel.text = "Edit your birth details to refresh your cosmic chart and daily guidance."
+        subtitleLabel.textAlignment = .center
+        subtitleLabel.numberOfLines = 0
+        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        subtitleLabel.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.callout, weight: .regular)
+        subtitleLabel.textColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.72)
+        
+        topFormDivider.translatesAutoresizingMaskIntoConstraints = false
+        topFormDivider.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
+        topFormDivider.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
         locationLabel.translatesAutoresizingMaskIntoConstraints = false
+        styleFieldCaption(nameLabel, text: "First name")
+        styleFieldCaption(dateLabel, text: "Birth date")
+        styleFieldCaption(timeLabel, text: "Birth time")
+        styleFieldCaption(locationLabel, text: "Birth location")
         
-        // Apply theme to section labels
-        CosmicFitTheme.styleBodyLabel(locationLabel, fontSize: CosmicFitTheme.Typography.FontSizes.headline, weight: .semibold)
+        nameTextField.translatesAutoresizingMaskIntoConstraints = false
+        CosmicFitTheme.styleTextField(nameTextField)
+        nameTextField.placeholder = "Enter your first name"
+        nameTextField.returnKeyType = .next
+        nameTextField.delegate = self
+        nameTextField.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        contentView.addSubview(locationLabel)
+        configureBirthDateTimePickersAndFields()
         
-        // Location autocomplete view
         locationAutocompleteView.translatesAutoresizingMaskIntoConstraints = false
         locationAutocompleteView.delegate = self
-        
-        // Apply theme to the text field inside autocomplete view
-        CosmicFitTheme.styleTextField(locationAutocompleteView.textField)
-        locationAutocompleteView.setPlaceholder("Start typing your birth location")
-        
-        contentView.addSubview(locationAutocompleteView)
-        
-        // Set up suggestions overlay so it appears above other elements
+        locationAutocompleteView.applyCosmicFieldStyling()
+        locationAutocompleteView.setPlaceholder("Start typing city, town, or address")
         locationAutocompleteView.setupSuggestionsOverlay(in: contentView)
         
-        // Update button
-        updateButton.setTitle("Update Profile", for: .normal)
+        updateButton.setTitle("Update profile", for: .normal)
         updateButton.addTarget(self, action: #selector(updateButtonTapped), for: .touchUpInside)
         updateButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Apply theme to primary button
         CosmicFitTheme.styleButton(updateButton, style: .primary)
+        updateButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        contentView.addSubview(updateButton)
-
         #if DEBUG
-        forceRefreshButton.setTitle("⟳ Force Refresh All Data", for: .normal)
+        forceRefreshButton.setTitle("⟳ Force refresh all data", for: .normal)
         forceRefreshButton.addTarget(self, action: #selector(forceRefreshTapped), for: .touchUpInside)
         forceRefreshButton.translatesAutoresizingMaskIntoConstraints = false
         CosmicFitTheme.styleButton(forceRefreshButton, style: .secondary)
         forceRefreshButton.layer.borderColor = UIColor.systemOrange.cgColor
         forceRefreshButton.layer.borderWidth = 1.5
         forceRefreshButton.setTitleColor(.systemOrange, for: .normal)
-        contentView.addSubview(forceRefreshButton)
+        forceRefreshButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         #endif
-
-        // Sign Out button (only visible when authenticated)
-        signOutButton.setTitle("Sign Out", for: .normal)
+        
+        signOutButton.setTitle("Sign out", for: .normal)
         signOutButton.addTarget(self, action: #selector(signOutButtonTapped), for: .touchUpInside)
         signOutButton.translatesAutoresizingMaskIntoConstraints = false
         CosmicFitTheme.styleButton(signOutButton, style: .secondary)
         signOutButton.isHidden = !CosmicFitAuthService.shared.isAuthenticated
-        contentView.addSubview(signOutButton)
+        signOutButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        // Delete button
-        deleteProfileButton.setTitle("Delete Profile", for: .normal)
+        deleteProfileButton.setTitle("Delete profile", for: .normal)
         deleteProfileButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         deleteProfileButton.translatesAutoresizingMaskIntoConstraints = false
         CosmicFitTheme.styleButton(deleteProfileButton, style: .secondary)
         deleteProfileButton.backgroundColor = .systemRed
         deleteProfileButton.setTitleColor(.white, for: .normal)
-        contentView.addSubview(deleteProfileButton)
+        deleteProfileButton.layer.borderWidth = 0
+        deleteProfileButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
-        // Activity indicator
+        dangerSectionDivider.translatesAutoresizingMaskIntoConstraints = false
+        dangerSectionDivider.backgroundColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.28)
+        dangerSectionDivider.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.color = .black
+        activityIndicator.color = CosmicFitTheme.Colours.cosmicBlue
         view.addSubview(activityIndicator)
         
-        print("ProfileViewController UI set up with Cosmic Fit theme styling")
+        mainStack.addArrangedSubview(titleLabel)
+        mainStack.addArrangedSubview(subtitleLabel)
+        mainStack.setCustomSpacing(20, after: titleLabel)
+        mainStack.setCustomSpacing(28, after: subtitleLabel)
+        mainStack.addArrangedSubview(topFormDivider)
+        mainStack.setCustomSpacing(28, after: topFormDivider)
+        
+        mainStack.addArrangedSubview(verticalFieldStack(label: nameLabel, field: nameTextField))
+        mainStack.addArrangedSubview(verticalFieldStack(label: dateLabel, field: birthDateField))
+        mainStack.addArrangedSubview(verticalFieldStack(label: timeLabel, field: birthTimeField))
+        mainStack.addArrangedSubview(verticalFieldStack(label: locationLabel, field: locationAutocompleteView))
+        
+        mainStack.setCustomSpacing(28, after: mainStack.arrangedSubviews.last!)
+        
+        mainStack.addArrangedSubview(updateButton)
+        mainStack.setCustomSpacing(34, after: updateButton)
+        mainStack.addArrangedSubview(dangerSectionDivider)
+        mainStack.setCustomSpacing(22, after: dangerSectionDivider)
+        #if DEBUG
+        mainStack.addArrangedSubview(forceRefreshButton)
+        #endif
+        mainStack.addArrangedSubview(signOutButton)
+        mainStack.addArrangedSubview(deleteProfileButton)
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            // Scroll view
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 60), // Space for close button
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 56),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            // Content view
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
             
-            // Title
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
+            mainStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            mainStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
+            mainStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -28),
+            mainStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -28),
             
-            // Subtitle
-            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
-            subtitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            subtitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            
-            // Name section
-            nameLabel.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 40),
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            
-            nameTextField.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10),
-            nameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            nameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            nameTextField.heightAnchor.constraint(equalToConstant: 44),
-            
-            // Date section
-            dateLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 30),
-            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            
-            birthDatePicker.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 10),
-            birthDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            birthDatePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            
-            // Time section
-            timeLabel.topAnchor.constraint(equalTo: birthDatePicker.bottomAnchor, constant: 30),
-            timeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            timeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            
-            birthTimePicker.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 10),
-            birthTimePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            birthTimePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            
-            // Location section
-            locationLabel.topAnchor.constraint(equalTo: birthTimePicker.bottomAnchor, constant: 30),
-            locationLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            locationLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            
-                locationAutocompleteView.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 10),
-            locationAutocompleteView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            locationAutocompleteView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            
-            // Buttons
-            updateButton.topAnchor.constraint(equalTo: locationAutocompleteView.bottomAnchor, constant: 40),
-            updateButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            updateButton.widthAnchor.constraint(equalToConstant: 250),
-            updateButton.heightAnchor.constraint(equalToConstant: 50),
-
-            // Activity indicator
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
-
-        #if DEBUG
-        let anchorAboveSignOut = forceRefreshButton.bottomAnchor
-        NSLayoutConstraint.activate([
-            forceRefreshButton.topAnchor.constraint(equalTo: updateButton.bottomAnchor, constant: 20),
-            forceRefreshButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            forceRefreshButton.widthAnchor.constraint(equalToConstant: 250),
-            forceRefreshButton.heightAnchor.constraint(equalToConstant: 50),
-        ])
-        #else
-        let anchorAboveSignOut = updateButton.bottomAnchor
-        #endif
-
-        NSLayoutConstraint.activate([
-            signOutButton.topAnchor.constraint(equalTo: anchorAboveSignOut, constant: 20),
-            signOutButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            signOutButton.widthAnchor.constraint(equalToConstant: 250),
-            signOutButton.heightAnchor.constraint(equalToConstant: 50),
-
-            deleteProfileButton.topAnchor.constraint(equalTo: signOutButton.bottomAnchor, constant: 20),
-            deleteProfileButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            deleteProfileButton.widthAnchor.constraint(equalToConstant: 250),
-            deleteProfileButton.heightAnchor.constraint(equalToConstant: 50),
-            deleteProfileButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
         ])
     }
     
@@ -371,6 +365,9 @@ class ProfileViewController: UIViewController {
         // Now set the dates - pickers will display them in birth location timezone
         birthDatePicker.date = profile.birthDate
         birthTimePicker.date = profile.birthDate
+        
+        refreshBirthDateFieldDisplay()
+        refreshBirthTimeFieldDisplay()
         
         // Populate form with existing data
         nameTextField.text = profile.firstName
@@ -451,7 +448,7 @@ class ProfileViewController: UIViewController {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
             guard let self else { return }
-            self.forceRefreshButton.setTitle("⟳ Force Refresh All Data", for: .normal)
+            self.forceRefreshButton.setTitle("⟳ Force refresh all data", for: .normal)
             self.forceRefreshButton.isEnabled = true
         }
     }
@@ -687,21 +684,40 @@ extension ProfileViewController: LocationAutocompleteDelegate {
         self.longitude = longitude
         self.timeZone = timeZone
         
+        birthDatePicker.timeZone = timeZone
+        birthTimePicker.timeZone = timeZone
+        refreshBirthDateFieldDisplay()
+        refreshBirthTimeFieldDisplay()
+        
         print("✅ Location selected: \(name)")
         print("📍 Coordinates: \(latitude), \(longitude)")
         print("🕐 Timezone: \(timeZone.identifier)")
     }
     
     func locationAutocompleteDidUpdateText(_ text: String) {
-        // Can add validation feedback here if needed
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            latitude = 0
+            longitude = 0
+            locationName = ""
+        }
     }
 }
 
 // MARK: - UITextFieldDelegate
 extension ProfileViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField === birthDateField || textField === birthTimeField {
+            return false
+        }
+        return true
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == nameTextField {
+        if textField === nameTextField {
             textField.resignFirstResponder()
+        } else if textField === birthDateField || textField === birthTimeField {
+            birthDateTimePickerDoneTapped()
         }
         return true
     }

@@ -26,24 +26,52 @@ class LocationAutocompleteView: UIView {
     private let geocoder = CLGeocoder()
     private var isUpdatingProgrammatically = false // Prevent search trigger on programmatic updates
     
+    /// Single bordered container so the field matches `CosmicFitTheme` inputs (no extra underline inside the box).
+    private let fieldContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        view.layer.cornerRadius = 8
+        view.layer.masksToBounds = true
+        view.layer.borderWidth = 1
+        view.layer.borderColor = CosmicFitTheme.Colours.borderColor.cgColor
+        return view
+    }()
+    
     // MARK: - UI Elements
     let textField: UITextField = {
         let field = UITextField()
         field.translatesAutoresizingMaskIntoConstraints = false
-        field.font = UIFont.systemFont(ofSize: 18)
-        field.textColor = .black
         field.borderStyle = .none
+        field.backgroundColor = .clear
         field.returnKeyType = .done
         field.autocorrectionType = .no
         field.autocapitalizationType = .words
+        field.clearButtonMode = .never
         return field
     }()
     
-    private let divider: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .black
-        return view
+    private lazy var clearTextButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let config = UIImage.SymbolConfiguration(pointSize: 12, weight: .light)
+        button.setImage(UIImage(systemName: "xmark", withConfiguration: config), for: .normal)
+        button.tintColor = CosmicFitTheme.Colours.cosmicBlue
+        button.accessibilityLabel = "Clear location"
+        button.addTarget(self, action: #selector(clearTextTapped), for: .touchUpInside)
+        button.isHidden = true
+        return button
+    }()
+    
+    private let accessoryStack: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.spacing = 6
+        stack.isLayoutMarginsRelativeArrangement = true
+        stack.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 4)
+        return stack
     }()
     
     private let suggestionsTableView: UITableView = {
@@ -66,11 +94,14 @@ class LocationAutocompleteView: UIView {
         let indicator = UIActivityIndicatorView(style: .medium)
         indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.hidesWhenStopped = true
-        indicator.color = .systemGray
+        indicator.color = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.45)
         return indicator
     }()
     
     private var tableViewHeightConstraint: NSLayoutConstraint!
+    private var overlayTopConstraint: NSLayoutConstraint?
+    private var overlayLeadingConstraint: NSLayoutConstraint?
+    private var overlayWidthConstraint: NSLayoutConstraint?
     private let maxVisibleResults = 3
     private let rowHeight: CGFloat = 60
     
@@ -88,9 +119,11 @@ class LocationAutocompleteView: UIView {
     
     // MARK: - UI Setup
     private func setupUI() {
-        addSubview(textField)
-        addSubview(divider)
-        addSubview(activityIndicator)
+        addSubview(fieldContainer)
+        fieldContainer.addSubview(textField)
+        fieldContainer.addSubview(accessoryStack)
+        accessoryStack.addArrangedSubview(activityIndicator)
+        accessoryStack.addArrangedSubview(clearTextButton)
         // Note: suggestionsTableView will be added to parent view as overlay
         
         textField.delegate = self
@@ -107,24 +140,22 @@ class LocationAutocompleteView: UIView {
         tableViewHeightConstraint = suggestionsTableView.heightAnchor.constraint(equalToConstant: 0)
         
         NSLayoutConstraint.activate([
-            // Text field
-            textField.topAnchor.constraint(equalTo: topAnchor),
-            textField.leadingAnchor.constraint(equalTo: leadingAnchor),
-            textField.trailingAnchor.constraint(equalTo: trailingAnchor),
-            textField.heightAnchor.constraint(equalToConstant: 44),
+            fieldContainer.topAnchor.constraint(equalTo: topAnchor),
+            fieldContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
+            fieldContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
+            fieldContainer.bottomAnchor.constraint(equalTo: bottomAnchor),
+            fieldContainer.heightAnchor.constraint(equalToConstant: 50),
             
-            // Divider
-            divider.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: -8),
-            divider.leadingAnchor.constraint(equalTo: leadingAnchor),
-            divider.trailingAnchor.constraint(equalTo: trailingAnchor),
-            divider.heightAnchor.constraint(equalToConstant: 1),
+            textField.leadingAnchor.constraint(equalTo: fieldContainer.leadingAnchor),
+            textField.topAnchor.constraint(equalTo: fieldContainer.topAnchor),
+            textField.bottomAnchor.constraint(equalTo: fieldContainer.bottomAnchor),
+            textField.trailingAnchor.constraint(equalTo: accessoryStack.leadingAnchor),
             
-            // Bottom anchor of the view is the divider when no suggestions
-            divider.bottomAnchor.constraint(equalTo: bottomAnchor),
+            accessoryStack.trailingAnchor.constraint(equalTo: fieldContainer.trailingAnchor),
+            accessoryStack.centerYAnchor.constraint(equalTo: fieldContainer.centerYAnchor),
             
-            // Activity indicator
-            activityIndicator.centerYAnchor.constraint(equalTo: textField.centerYAnchor),
-            activityIndicator.trailingAnchor.constraint(equalTo: textField.trailingAnchor, constant: -8)
+            clearTextButton.widthAnchor.constraint(equalToConstant: 36),
+            clearTextButton.heightAnchor.constraint(equalToConstant: 36)
         ])
         
         // Suggestions table constraints will be set up when attached to parent
@@ -141,35 +172,60 @@ class LocationAutocompleteView: UIView {
     /// Must be called to set up the suggestions overlay in the parent view
     func setupSuggestionsOverlay(in parentView: UIView) {
         self.parentView = parentView
-        parentView.addSubview(suggestionsTableView)
+        if suggestionsTableView.superview !== parentView {
+            suggestionsTableView.removeFromSuperview()
+            parentView.addSubview(suggestionsTableView)
+        }
         
-        // Position suggestions below this view
-        NSLayoutConstraint.activate([
-            suggestionsTableView.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 8),
-            suggestionsTableView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            suggestionsTableView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            tableViewHeightConstraint
-        ])
+        if let overlayTopConstraint,
+           let overlayLeadingConstraint,
+           let overlayWidthConstraint {
+            NSLayoutConstraint.deactivate([overlayTopConstraint, overlayLeadingConstraint, overlayWidthConstraint])
+        }
+        
+        let topConstraint = suggestionsTableView.topAnchor.constraint(equalTo: parentView.topAnchor)
+        let leadingConstraint = suggestionsTableView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor)
+        let widthConstraint = suggestionsTableView.widthAnchor.constraint(equalToConstant: 0)
+        
+        overlayTopConstraint = topConstraint
+        overlayLeadingConstraint = leadingConstraint
+        overlayWidthConstraint = widthConstraint
+        
+        var constraintsToActivate = [topConstraint, leadingConstraint, widthConstraint]
+        if !tableViewHeightConstraint.isActive {
+            constraintsToActivate.append(tableViewHeightConstraint)
+        }
+        NSLayoutConstraint.activate(constraintsToActivate)
+        updateSuggestionsOverlayFrameConstraints()
     }
     
     func setPlaceholder(_ placeholder: String, animated: Bool = false) {
-        if animated {
-            textField.attributedPlaceholder = NSAttributedString(
-                string: placeholder,
-                attributes: [
-                    .foregroundColor: UIColor(white: 0.6, alpha: 1.0),
-                    .font: UIFont.systemFont(ofSize: 18)
-                ]
-            )
-        } else {
-            textField.placeholder = placeholder
-        }
+        let attrs: [NSAttributedString.Key: Any] = [
+            .foregroundColor: CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.6),
+            .font: CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.body)
+        ]
+        textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: attrs)
+        _ = animated // retained for call-site compatibility (onboarding placeholder animation)
+    }
+    
+    /// Call from screens that use Cosmic Fit form styling (replaces applying `styleTextField` to `textField`, which double-borders this view).
+    func applyCosmicFieldStyling() {
+        textField.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.body)
+        textField.textColor = CosmicFitTheme.Colours.cosmicBlue
+        textField.layer.borderWidth = 0
+        let padding = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 50))
+        textField.leftView = padding
+        textField.leftViewMode = .always
+        textField.rightView = nil
+        textField.rightViewMode = .never
+        fieldContainer.layer.borderColor = CosmicFitTheme.Colours.borderColor.cgColor
     }
     
     func setText(_ text: String) {
         isUpdatingProgrammatically = true
         textField.text = text
         isUpdatingProgrammatically = false
+        updateClearButtonVisibility()
     }
     
     func getText() -> String {
@@ -177,7 +233,39 @@ class LocationAutocompleteView: UIView {
     }
     
     // MARK: - Private Methods
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateSuggestionsOverlayFrameConstraints()
+    }
+    
+    private func updateSuggestionsOverlayFrameConstraints() {
+        guard let parentView else { return }
+        guard suggestionsTableView.superview === parentView else { return }
+        
+        let frameInParent = convert(bounds, to: parentView)
+        overlayTopConstraint?.constant = frameInParent.maxY + 8
+        overlayLeadingConstraint?.constant = frameInParent.minX
+        overlayWidthConstraint?.constant = frameInParent.width
+    }
+    
+    @objc private func clearTextTapped() {
+        textField.text = ""
+        updateClearButtonVisibility()
+        searchResults.removeAll()
+        suggestionsTableView.reloadData()
+        hideSuggestions()
+        searchCompleter.queryFragment = ""
+        textFieldDidChange()
+    }
+    
+    private func updateClearButtonVisibility() {
+        let hasText = !(textField.text?.isEmpty ?? true)
+        clearTextButton.isHidden = !hasText
+    }
+    
     @objc private func textFieldDidChange() {
+        updateClearButtonVisibility()
         // Skip if we're updating programmatically after selection
         guard !isUpdatingProgrammatically else { return }
         
@@ -204,6 +292,7 @@ class LocationAutocompleteView: UIView {
         let height = CGFloat(visibleCount) * rowHeight
         
         tableViewHeightConstraint.constant = height
+        updateSuggestionsOverlayFrameConstraints()
         suggestionsTableView.isHidden = false
         
         // Bring to front to ensure it's above other views
@@ -264,6 +353,7 @@ class LocationAutocompleteView: UIView {
                 self.isUpdatingProgrammatically = true
                 self.textField.text = locationName
                 self.isUpdatingProgrammatically = false
+                self.updateClearButtonVisibility()
                 
                 self.hideSuggestions()
                 

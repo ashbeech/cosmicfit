@@ -8,3 +8,13 @@ Cosmic Fit/Config/Prod.xcconfig
 
 # Snapshot debugging artifacts (written by test runners, not part of commit set)
 docs/fixtures/*.actual
+
+# Calibration report runs with PID/UUID disambiguators (non-deterministic names)
+docs/fixtures/*_pid*_*.txt
+docs/fixtures/calibration_runs/
+
+# Avoid duplicate SwiftPM state (workspace owns resolution; nested copy breaks PIF / dependency graph)
+Cosmic Fit.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+
+# Inspector Swift build artifacts
+inspector/.build/

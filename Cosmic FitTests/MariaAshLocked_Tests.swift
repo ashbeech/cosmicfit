@@ -380,11 +380,6 @@ final class MariaAshLocked_Tests: XCTestCase {
     }
 
     private func locateFixture(named name: String) -> URL? {
-        let fixturesDir = URL(fileURLWithPath: #file)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("docs/fixtures")
-        let url = fixturesDir.appendingPathComponent(name)
-        return FileManager.default.fileExists(atPath: url.path) ? url : nil
+        FixtureLocator.fixtureURL(named: name)
     }
 }

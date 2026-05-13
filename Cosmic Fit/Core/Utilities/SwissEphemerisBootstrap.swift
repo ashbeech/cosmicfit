@@ -29,6 +29,18 @@ enum SwissEphemerisBootstrap {
         didInit = true
     }
     
+    /// Initialise with an explicit directory path containing seas_18.se1.
+    /// Used by the inspector server where Bundle.main is not the app bundle.
+    static func initialise(ephemerisDirectoryPath: String) {
+        guard !didInit else { return }
+
+        ephemerisDirectoryPath.withCString { cStr in
+            swe_set_ephe_path(UnsafeMutablePointer(mutating: cStr))
+        }
+
+        didInit = true
+    }
+
     /// Optional — call from `scenePhase == .background` or `applicationWillTerminate`
     static func shutdown() {
         if didInit { swe_close() }

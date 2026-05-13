@@ -328,7 +328,7 @@ final class V4ReferenceAudit_Tests: XCTestCase {
         let report = AuditReport(
             generatedAt: ISO8601DateFormatter().string(from: Date()),
             markdownReferencePath: referenceURL.path,
-            placementsPath: placementsFixtureURL().path,
+            placementsPath: placementsFixtureURL()?.path ?? "missing:v4_placements.json",
             summary: summary,
             rows: audits
         )
@@ -360,10 +360,13 @@ final class V4ReferenceAudit_Tests: XCTestCase {
 
     private func resolveReferenceFixtureURL() throws -> URL {
         let env = ProcessInfo.processInfo.environment["V4_REFERENCE_FIXTURE_PATH"]
-        let candidates: [String] = [
-            env,
-            fixturesDirectoryURL().appendingPathComponent("v4_markdown_reference.json").path,
-        ].compactMap { $0 }
+        var candidates: [String] = []
+        if let env {
+            candidates.append(env)
+        }
+        if let resolved = FixtureLocator.fixtureURL(named: "v4_markdown_reference.json") {
+            candidates.append(resolved.path)
+        }
 
         for candidate in candidates {
             let url = URL(fileURLWithPath: candidate)
@@ -388,20 +391,19 @@ final class V4ReferenceAudit_Tests: XCTestCase {
     // MARK: - Fixture Loading
 
     private func loadPlacements() throws -> [PlacementRow] {
-        let data = try Data(contentsOf: placementsFixtureURL())
+        guard let placementsURL = placementsFixtureURL() else {
+            throw XCTSkip("v4_placements.json not found in docs/fixtures or docs/archive/fixtures")
+        }
+        let data = try Data(contentsOf: placementsURL)
         return try JSONDecoder().decode([PlacementRow].self, from: data)
     }
 
-    private func placementsFixtureURL() -> URL {
-        fixturesDirectoryURL().appendingPathComponent("v4_placements.json")
+    private func placementsFixtureURL() -> URL? {
+        FixtureLocator.fixtureURL(named: "v4_placements.json")
     }
 
     private func fixturesDirectoryURL() -> URL {
-        URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("docs")
-            .appendingPathComponent("fixtures")
+        FixtureLocator.primaryFixturesDirectory()
     }
 
     // MARK: - Report Construction
@@ -409,14 +411,45 @@ final class V4ReferenceAudit_Tests: XCTestCase {
     private func makePresentedSwatches(from result: ColourEngineResult) -> [PresentedSwatch] {
         var swatches: [PresentedSwatch] = []
 
+        var nonAccentNames = Set<String>()
+        for name in result.palette.neutrals { nonAccentNames.insert(name.lowercased()) }
+        for name in result.palette.coreColours { nonAccentNames.insert(name.lowercased()) }
+        if let support = result.palette.supportColours {
+            for name in support { nonAccentNames.insert(name.lowercased()) }
+        }
+        nonAccentNames.insert(result.palette.lightAnchor.lowercased())
+        nonAccentNames.insert(result.palette.deepAnchor.lowercased())
+
+        let accentLabels: [String]
+        if result.accentSlots.isEmpty {
+            accentLabels = PaletteLibrary.deduplicatedAccentLabelsFromTemplate(
+                names: result.palette.accentColours,
+                claimedTemplateNames: nonAccentNames
+            )
+        } else {
+            accentLabels = PaletteLibrary.deduplicatedAccentLabels(
+                slots: result.accentSlots,
+                templateNames: Array(nonAccentNames),
+                claimedTemplateNames: nonAccentNames
+            )
+        }
+
         for (index, name) in result.palette.neutrals.enumerated() {
             swatches.append(makeSwatch(source: "neutral[\(index)]", name: name, hex: PaletteLibrary.hex(for: name)))
         }
         for (index, name) in result.palette.coreColours.enumerated() {
             swatches.append(makeSwatch(source: "core[\(index)]", name: name, hex: PaletteLibrary.hex(for: name)))
         }
-        for (index, name) in result.palette.accentColours.enumerated() {
-            swatches.append(makeSwatch(source: "accent[\(index)]", name: name, hex: PaletteLibrary.hex(for: name)))
+        if result.accentSlots.isEmpty {
+            for (index, label) in accentLabels.enumerated() {
+                let originalName = result.palette.accentColours[index]
+                swatches.append(makeSwatch(source: "accent[\(index)]", name: label, hex: PaletteLibrary.hex(for: originalName)))
+            }
+        } else {
+            for (index, slot) in result.accentSlots.enumerated() {
+                let label = index < accentLabels.count ? accentLabels[index] : slot.displayName
+                swatches.append(makeSwatch(source: "accent[\(index)]", name: label, hex: slot.hex))
+            }
         }
         for (index, name) in (result.palette.supportColours ?? []).enumerated() {
             swatches.append(makeSwatch(source: "support[\(index)]", name: name, hex: PaletteLibrary.hex(for: name)))
@@ -428,16 +461,16 @@ final class V4ReferenceAudit_Tests: XCTestCase {
         swatches.append(makeSwatch(
             source: "deepAnchor", name: result.palette.deepAnchor, hex: PaletteLibrary.hex(for: result.palette.deepAnchor)
         ))
-        swatches.append(makeSwatch(
-            source: "luminarySignature",
-            name: PaletteLibrary.nearestColourName(forHex: result.luminarySignature),
-            hex: result.luminarySignature
-        ))
-        swatches.append(makeSwatch(
-            source: "rulerSignature",
-            name: PaletteLibrary.nearestColourName(forHex: result.rulerSignature),
-            hex: result.rulerSignature
-        ))
+
+        var claimed = Set<String>()
+        for s in swatches { claimed.insert(s.name.lowercased()) }
+        let sig = PaletteLibrary.signaturePairLabels(
+            luminaryHex: result.luminarySignature,
+            rulerHex: result.rulerSignature,
+            claimedTemplateNames: claimed
+        )
+        swatches.append(makeSwatch(source: "luminarySignature", name: sig.luminary, hex: result.luminarySignature))
+        swatches.append(makeSwatch(source: "rulerSignature", name: sig.ruler, hex: result.rulerSignature))
 
         return swatches
     }

@@ -29,17 +29,10 @@ struct PaletteReworkTests {
 
     // MARK: - Fixture Loading
 
-    private static func fixturesURL() -> URL {
-        let testFile = URL(fileURLWithPath: #filePath)
-        return testFile
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("docs")
-            .appendingPathComponent("fixtures")
-    }
-
     private static func loadBlueprint(_ filename: String) throws -> CosmicBlueprint {
-        let url = fixturesURL().appendingPathComponent(filename)
+        guard let url = FixtureLocator.fixtureURL(named: filename) else {
+            throw CocoaError(.fileNoSuchFile)
+        }
         let data = try Data(contentsOf: url)
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601

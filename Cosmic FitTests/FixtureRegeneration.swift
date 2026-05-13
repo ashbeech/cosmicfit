@@ -70,7 +70,10 @@ struct FixtureRegeneration {
     }
 
     private func validateFixtureShape(filename: String) throws {
-        let data = try Data(contentsOf: Self.fixturesURL().appendingPathComponent(filename))
+        guard let fixtureURL = FixtureLocator.fixtureURL(named: filename) else {
+            throw CocoaError(.fileNoSuchFile)
+        }
+        let data = try Data(contentsOf: fixtureURL)
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         let fixture = try decoder.decode(CosmicBlueprint.self, from: data)
@@ -166,9 +169,7 @@ struct FixtureRegeneration {
     }
 
     private static func fixturesURL() -> URL {
-        let testFile = URL(fileURLWithPath: #filePath)
-        let repoRoot = testFile.deletingLastPathComponent().deletingLastPathComponent()
-        return repoRoot.appendingPathComponent("docs").appendingPathComponent("fixtures")
+        FixtureLocator.primaryFixturesDirectory()
     }
 
     private static func isoDate(_ value: String) -> Date {

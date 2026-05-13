@@ -4,21 +4,16 @@ final class PaymentPlaceholderViewController: UIViewController {
 
     // MARK: - UI Components
 
-    private let closeButton: UIButton = {
-        let button = UIButton(type: .system)
-        let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
-        button.setImage(UIImage(systemName: "xmark", withConfiguration: config), for: .normal)
-        button.tintColor = CosmicFitTheme.Colours.cosmicBlue
-        return button
-    }()
-
-    private let iconCluster: UILabel = {
-        let label = UILabel()
-        label.text = "✦ ☾ ✦"
-        label.font = UIFont.systemFont(ofSize: 40)
-        label.textColor = CosmicFitTheme.Colours.cosmicLilac
-        label.textAlignment = .center
-        return label
+    /// Matches `MenuBarView`: inverted mark on cosmic grey reads as the in-app brand lockup.
+    private let logoImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFit
+        iv.image = UIImage(named: "CosmicFitLogo")
+        iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
+        if let filter = CIFilter(name: "CIColorInvert") {
+            iv.layer.filters = [filter as Any]
+        }
+        return iv
     }()
 
     private let headlineLabel: UILabel = {
@@ -39,14 +34,30 @@ final class PaymentPlaceholderViewController: UIViewController {
         return label
     }()
 
-    private let descriptionLabel: UILabel = {
+    private let benefitsIntroLabel: UILabel = {
         let label = UILabel()
-        label.text = "Access every day's Daily Fit forecast. Scroll through your personal style calendar and never wonder what to wear again. Historical guidance, future forecasts, all written in the stars."
-        label.font = CosmicFitTheme.Typography.dmSansFont(size: 16, weight: .regular)
-        label.textColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.7)
+        label.text = "Full access includes"
+        label.font = CosmicFitTheme.Typography.dmSansFont(size: 14, weight: .semibold)
+        label.textColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.75)
         label.textAlignment = .center
-        label.numberOfLines = 0
         return label
+    }()
+
+    private lazy var benefitsStack: UIStackView = {
+        let items = [
+            "Daily Fit for any date — jump to today, last week, or months ahead.",
+            "Your personal style calendar in one scrollable timeline.",
+            "Guidance grounded in your chart, not one-size-fits-all copy.",
+            "Clear outfit direction so you spend less time second-guessing."
+        ]
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 12
+        stack.alignment = .fill
+        for text in items {
+            stack.addArrangedSubview(Self.makeBenefitRow(text: text))
+        }
+        return stack
     }()
 
     private let ctaButton: UIButton = {
@@ -65,32 +76,32 @@ final class PaymentPlaceholderViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         setupLayout()
-        closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
     }
 
     // MARK: - Layout
 
     private func setupLayout() {
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(closeButton)
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false
 
         let stack = UIStackView(arrangedSubviews: [
-            iconCluster, headlineLabel, descriptionLabel, ctaButton
+            logoImageView,
+            headlineLabel,
+            benefitsIntroLabel,
+            benefitsStack,
+            ctaButton
         ])
         stack.axis = .vertical
         stack.spacing = 24
-        stack.setCustomSpacing(16, after: iconCluster)
+        stack.setCustomSpacing(16, after: logoImageView)
         stack.setCustomSpacing(16, after: headlineLabel)
-        stack.setCustomSpacing(32, after: descriptionLabel)
+        stack.setCustomSpacing(10, after: benefitsIntroLabel)
+        stack.setCustomSpacing(28, after: benefitsStack)
         stack.translatesAutoresizingMaskIntoConstraints = false
 
         view.addSubview(stack)
 
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            closeButton.widthAnchor.constraint(equalToConstant: 44),
-            closeButton.heightAnchor.constraint(equalToConstant: 44),
+            logoImageView.heightAnchor.constraint(equalToConstant: 52),
 
             stack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
@@ -98,7 +109,33 @@ final class PaymentPlaceholderViewController: UIViewController {
         ])
     }
 
-    @objc private func closeTapped() {
-        dismiss(animated: true)
+    // MARK: - Benefits row
+
+    private static func makeBenefitRow(text: String) -> UIStackView {
+        let dot = UIView()
+        dot.backgroundColor = CosmicFitTheme.Colours.cosmicOrange
+        dot.layer.cornerRadius = 3
+        dot.translatesAutoresizingMaskIntoConstraints = false
+
+        let label = UILabel()
+        label.text = text
+        label.font = CosmicFitTheme.Typography.dmSansFont(size: 16, weight: .regular)
+        label.textColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.85)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+
+        let row = UIStackView(arrangedSubviews: [dot, label])
+        row.axis = .horizontal
+        row.alignment = .top
+        row.spacing = 12
+        row.isLayoutMarginsRelativeArrangement = true
+        row.layoutMargins = UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 0)
+
+        NSLayoutConstraint.activate([
+            dot.widthAnchor.constraint(equalToConstant: 6),
+            dot.heightAnchor.constraint(equalToConstant: 6),
+        ])
+
+        return row
     }
 }

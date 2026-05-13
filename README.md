@@ -66,7 +66,7 @@ That pulls in **Flask** (`tools/review_tool.py`) and **google-generativeai** (`t
 | Script | Purpose |
 |---|---|
 | **`tools/generate_dataset.py`** | Authoring source for **`data/style_guide/astrological_style_dataset.json`** (planet–sign mappings, aspects, house placements, colour library, etc.) consumed by **`BlueprintTokenGenerator`**. The app bundle loads via **`Cosmic Fit/Resources/`** symlink → same file (see **`data/style_guide/README.md`**). |
-| **`tools/validate_dataset.py`** | Validates that dataset JSON matches the schema checklist (**`docs/fixtures/dataset_schema_checklist.md`**) and the **`BlueprintTokenGenerator`** Codable contract. Run after edits before committing. |
+| **`tools/validate_dataset.py`** | Validates that dataset JSON matches the schema checklist (**`docs/fixtures/dataset_schema_checklist.md`**) and the **`BlueprintTokenGenerator`** Codable contract. Also runs **Part 6A** astrological axiom checks (Venus fire, Moon water, Saturn structure, `code_leaninto` vs `code_avoid` overlap, etc.). Run after edits before committing. |
 
 #### Palette calibration & house/sect regression (Python helpers)
 
@@ -84,6 +84,21 @@ Calibration diagnostics and golden text used by XCTest often live under **`docs/
 | Location | Purpose |
 |---|---|
 | **`Cosmic FitTests/FixtureRegeneration.swift`** | Optional regeneration of **`docs/fixtures/blueprint_input_user_1.json`** and **`blueprint_input_user_2.json`** via the production **`BlueprintComposer`** pipeline. **Default:** validates fixture shape only (safe for CI). **To rewrite files on disk:** set environment variable **`REGENERATE_BLUEPRINT_FIXTURES=1`** when running that test. Output timestamps are pinned for byte-stable diffs. |
+
+#### Cosmic Fit Inspector (local web UI)
+
+A **macOS-only** sibling Swift package under **`inspector/`** that runs the **same** interpretation engine as the iOS app (via symlinks into `Cosmic Fit/`), served by a small **Hummingbird** HTTP server with a **vanilla HTML/CSS/JS** UI. Use it to inspect Style Guide (`CosmicBlueprint`) and Daily Fit (`DailyFitPayload` + `DailyFitDiagnosticReport`) for arbitrary birth inputs or preset charts, change the target calendar day, compare adjacent days, skim provenance/trace accordions, and run lightweight verdict checks — without building or deploying the iOS app.
+
+**Start the server** (from repo root; first run may take a few minutes to resolve SPM deps):
+
+```bash
+cd inspector
+swift run cosmicfit-inspector
+```
+
+Open **http://127.0.0.1:7777** in a browser on the same machine. The server binds **loopback only** (`127.0.0.1:7777`); it is not intended for LAN or public hosting and has no auth.
+
+**Requirements:** macOS 14+, Xcode/Swift toolchain able to build the package. Resources under **`inspector/Resources/`** are symlinks to the shared style dataset, narrative cache, VSOP87 data, and Swiss Ephemeris files (see **`inspector/README.md`** for layout, API summary, presets, and security notes).
 
 #### Supabase (backend authoring)
 
@@ -104,8 +119,18 @@ These opt in to **writing** fixture files under **`docs/fixtures/`** or enabling
 | **`REGENERATE_V4_PLACEMENTS=1`** | `V4PlacementGenerator_Tests` | Runs placement-generation paths that skip by default; used for Maria/Ash-style fixture output. |
 | **`PALETTE_CALIBRATION_DIAGNOSTIC=1`** | `Cosmic_FitTests` (`PaletteCalibrationDiagnostic`) | Enables an opt-in Ash palette / token diagnostic block (otherwise no-ops). |
 | **`V4_REFERENCE_FIXTURE_PATH`** | `V4ReferenceAudit_Tests` | Overrides path to **`v4_markdown_reference.json`** when not beside **`docs/fixtures/`**. |
+| **`CALIBRATION_CI_GATE=1`** | `Cosmic FitTests` (distribution, variation, coherence suites) | **Tier 2:** enables stricter calibration assertions (threshold-style gates). Default `xcodebuild test` runs Tier 1 (diagnostic / softer guards). See **`docs/calibration_plan_closure_summary.md`**. |
+| **`CALIBRATION_REPORT_DIR`** | Any test using **`CalibrationReportHelper.writeReport`** | Absolute path, or path relative to repo root, for calibration **`*.txt`** outputs. If unset, reports go under **`docs/fixtures/`** with unique filenames (PID + UUID). Use in CI to avoid writers clobbering each other. |
 
-For command-line examples and parallel-test caveats, **`docs/test_handoff.md`** focuses on stabilizing **`xcodebuild test`**.
+For command-line examples and parallel-test caveats, see **`docs/archive/test_handoff.md`** (stabilizing **`xcodebuild test`**).
+
+#### Calibration audit closure (distribution tests, VSOP87, astrological soundness)
+
+| Doc | Purpose |
+|---|---|
+| **`docs/calibration_plan_closure_summary.md`** | What was closed against the calibration audit plan, what remains actionable, and copy-paste commands for validation. |
+| **`docs/calibration_signoff.md`** | Sign-off artefact: baseline / threshold policy, Part 6 energy maps and calibration weights, dataset axiom outcomes. |
+| **`docs/calibration_ephemeris_strategy.md`** | Hybrid ephemeris strategy (synthetic charts in default CI vs production ephemeris locally) and Tier 2 policy notes. |
 
 ---
 
@@ -117,6 +142,15 @@ data/
     ├── astrological_style_dataset.json
     ├── blueprint_narrative_cache.json
     └── blueprint_narrative_cache-2-clusters.json
+
+inspector/                           # Local macOS web inspector — same Swift engine as the app (SPM + Hummingbird); see §2.1
+├── Package.swift
+├── README.md                        # Quick start, API, presets, resource symlinks, verdicts
+├── Resources/                       # Symlinks to style_guide JSON, VSOP87, Swiss Ephemeris, presets
+├── Sources/
+│   ├── CosmicFitInspectorLib/       # Engine sources (symlinks) + request/response/engine glue
+│   └── CosmicFitInspectorServer/    # `cosmicfit-inspector` executable + static Web/ UI
+└── Tests/
 
 Cosmic Fit/
 ├── App/
@@ -357,7 +391,7 @@ The `ColourEngineV4` subsystem separately resolves the palette:
 
 ## 5. Test Suite
 
-**20 test files** in `Cosmic FitTests/` (~9,657 lines total). All XCTest.
+**30+ Swift sources** in `Cosmic FitTests/` (test suites plus shared helpers such as **`CalibrationReportHelper`**, **`CalibrationProfiles_Extended`**, **`StyleGuideDataURL`**). All XCTest / Swift Testing.
 
 | Test File | What It Tests | Lines |
 |---|---|---|
@@ -381,10 +415,17 @@ The `ColourEngineV4` subsystem separately resolves the palette:
 | `V4ReferenceAudit_Tests` | Reference audit against known-good outputs | 569 |
 | `VariationSlots_Tests` | Palette variation slot system | 320 |
 | `FixtureRegeneration` | Utility to regenerate test fixtures (not a test suite per se) | 181 |
+| `VSOP87BundleIntegrity_Tests` | VSOP87D files present in app bundle; J2000 Earth smoke test | — |
+| `SemanticTokenGenerator_ZodiacMath_Tests` | 1-based zodiac → element/modality (Phase 0D contract) | — |
+| `BlueprintDistribution_Tests` | Style Guide / blueprint distribution histograms (Parts 3B–3E); **may crash** on some paths until `SemanticTokenGenerator` house/token bounds are fixed — see **`docs/calibration_plan_closure_summary.md`** |
+| `AstrologicalSoundness_Tests` | Part 6: energy-map behaviour + calibration weight invariants + optional soundness report | — |
+| `TarotScoringPathIntegrity_Tests` | Phase 0F: legacy scoring audit + production `generatePayload` smoke | — |
 
 **Test fixtures** live in `docs/fixtures/` — JSON and text files with known-good reference outputs.
 
-**Parallel test runs / flaky clones:** See [`docs/test_handoff.md`](docs/test_handoff.md) for diagnosis, fixes applied, and remaining `UserDefaults`/clone isolation work.
+**Parallel test runs / flaky clones:** See [`docs/archive/test_handoff.md`](docs/archive/test_handoff.md) for diagnosis, fixes applied, and remaining `UserDefaults`/clone isolation work.
+
+**Calibration / distribution testing:** See **`docs/calibration_plan_closure_summary.md`** for env vars, commands, and known gaps (`CALIBRATION_CI_GATE`, `CALIBRATION_REPORT_DIR`).
 
 **UI Tests:** `Cosmic FitUITests/` contains two boilerplate files from Xcode project template — **not meaningfully implemented**.
 
@@ -458,8 +499,8 @@ The `ColourEngineV4` subsystem separately resolves the palette:
 
 | Risk | Details |
 |---|---|
-| **`VSOP87Parser` fatalError fallbacks** | `calculateFallbackHeliocentricCoordinates` and `calculateFallbackGeocentricCoordinates` call `fatalError`. If VSOP87 bundle files fail to load, the app crashes at runtime. No graceful degradation. |
-| **`SemanticTokenGenerator` sign math bug** | `getSignElement` uses `sign % 4` and `getSignModality` uses `(sign / 4) % 3` on 1-based zodiac indices — **incorrect** element/modality derivation. Affects textile/pattern/accessory token branches. |
+| **VSOP87 load failures** | **`VSOP87Parser`** uses a **Keplerian fallback** if VSOP87D files cannot be loaded (no `fatalError` in the VSOP87 parser for missing theory files). **`VSOP87BundleIntegrity_Tests`** preflights bundle resources from **`Bundle.main`**. Separately, **`SwissEphemerisBootstrap`** may still `fatalError` if **`seas_18.se1`** is missing — that is Swiss Ephemeris bootstrap, not VSOP87. |
+| ~~**`SemanticTokenGenerator` sign math bug**~~ | **Resolved** for the Style Guide token path: 1-based zodiac element/modality is covered by **`SemanticTokenGenerator_ZodiacMath_Tests`**. If you change zodiac math, run that suite and re-check Part 3 distribution tests. |
 | **Duplicate `Package.resolved`** | Two copies exist: one under `.xcodeproj` (swift-crypto 4.4.0) and one under `.xcworkspace` (swift-crypto 4.3.1). Different revisions — Xcode may fight over resolution. |
 | **Secrets possibly committed** | `Dev.xcconfig` and `Prod.xcconfig` are gitignored by `.gitignore`, but the checked-in files may contain real Supabase credentials. Verify and rotate if exposed. |
 | **"Daily Vibe" naming drift** | `AppDelegate`, `UserProfileStorage`, and several notifications still reference "Daily Vibe" (the old feature name) while the product is "Daily Fit". Confusing for new developers. |
@@ -476,7 +517,7 @@ The `ColourEngineV4` subsystem separately resolves the palette:
 | **Mixed data flow patterns** | Some paths use `[String: Any]` dictionaries (legacy `calculateNatalChart` return type) while the modern pipeline uses typed structs. The dictionary-based API should be phased out. |
 | **No dependency injection** | `TarotRecencyTracker.shared` / `TarotVariantRotationTracker.shared` are called inside `BlueprintLensEngine` static methods, making those methods harder to test in isolation. |
 | **SemanticTokenGenerator serves two masters** | Generates tokens for both the placeholder interpretation path and the `CosmicBlueprint` composition path. `generateStyleGuideTokens` is only consumed by the placeholder `CosmicFitInterpretationEngine`. |
-| **Tests write to `docs/`** | Several test suites write fixture files and reports to `docs/fixtures/`. CI must allow this or skip — risk of flaky shared state. |
+| **Tests write to `docs/`** | Several test suites write fixture files and reports to `docs/fixtures/`. Set **`CALIBRATION_REPORT_DIR`** in CI to a temp directory to avoid parallel job collisions; report filenames include a run disambiguator (see **`CalibrationReportHelper`**). |
 | **No UI/E2E test coverage** | UITests are boilerplate. No automated user journey tests (onboarding, Daily Fit, Style Guide, auth flow). |
 
 ---
@@ -486,7 +527,7 @@ The `ColourEngineV4` subsystem separately resolves the palette:
 | Strength | Details |
 |---|---|
 | **Deterministic, testable pipeline** | The Daily Fit pipeline is fully deterministic given a seed, making it highly testable. The `DailyFitCalibration` surface centralises all tunable weights. |
-| **Comprehensive test suite** | 20 test files covering the core pipeline from unit tests through snapshot tests to integration tests. Locked reference tests (`MariaAshLocked_Tests`) prevent regressions. |
+| **Comprehensive test suite** | Broad XCTest coverage from unit tests through snapshot tests to integration tests, plus calibration / distribution harnesses under **`Cosmic FitTests/`**. Locked reference tests (`MariaAshLocked_Tests`) prevent regressions. |
 | **Clean type contracts** | `DailyFitTypes.swift` defines well-documented Codable types with backward-compatible decoding (e.g., `EssenceTriangle` → `StyleEssenceProfile` migration). |
 | **Sophisticated colour engine** | ColourEngineV4 is a well-structured 20-file subsystem with clear separation of concerns (family resolution, template mapping, normalisation, accent placement, validation). |
 | **Diagnostic infrastructure** | `DailyFitDiagnostics` generates complete pipeline traces. `BlueprintLensEngine.logDailyFitDiagnostics()` provides rich console output. `generateSnapshotWithTrace()` and `generatePayloadWithTrace()` expose intermediate values. |
@@ -535,6 +576,12 @@ Contains: `userInfo`, `styleCore`, `textures`, `palette`, `occasions`, `hardware
 4. Build target: `Cosmic Fit` (iOS Simulator or device)
 5. Tests: `Cosmic FitTests` target — run via `Cmd+U`
 
+**Optional — Cosmic Fit Inspector (macOS):** `cd inspector && swift run cosmicfit-inspector`, then open **http://127.0.0.1:7777** (see §2.1 and **`inspector/README.md`**).
+
+**Optional — dataset QA (Python):** `python3 tools/validate_dataset.py` (see §2.1).
+
+**Optional — calibration gates from Terminal:** pass **`CALIBRATION_CI_GATE=1`** and optionally **`CALIBRATION_REPORT_DIR`** when running `xcodebuild test` (see §2.2 and **`docs/calibration_plan_closure_summary.md`**).
+
 ---
 
 ## 11. Cleanup Checklist for New Developer
@@ -570,8 +617,8 @@ Contains: `userInfo`, `styleCore`, `textures`, `palette`, `occasions`, `hardware
 - [ ] Delete or rewrite `InterpretationTextLibrary.swift` — confirm `SemanticTokenGenerator` can be refactored to not depend on `TokenGeneration` substructs
 - [ ] Decide fate of `CosmicFitInterpretationEngine.swift` — the Style Guide needs either a real implementation or removal
 - [ ] Reconcile `EngineConfig.swift` and `DerivedAxesConfiguration.swift` with `DailyFitCalibration`
-- [ ] Fix `SemanticTokenGenerator.getSignElement/getSignModality` bug (1-based sign arithmetic)
-- [ ] Replace `VSOP87Parser` `fatalError` fallbacks with `throws` / graceful error handling
+- [x] Fix `SemanticTokenGenerator.getSignElement/getSignModality` for 1-based zodiac indices — covered by **`SemanticTokenGenerator_ZodiacMath_Tests`** (see **`docs/calibration_plan_closure_summary.md`**)
+- [x] VSOP87 missing-file safety — **`VSOP87Parser`** uses Keplerian fallback (no `fatalError` for missing VSOP files); optional future improvement: thread **`throws`** through **`NatalChartCalculator`** for explicit errors instead of silent fallback
 
 ### Phase 4: Repo hygiene
 
@@ -600,7 +647,7 @@ Contains: `userInfo`, `styleCore`, `textures`, `palette`, `occasions`, `hardware
 | InterpretationEngine (top-level) | 30 | ~13,600 |
 | ColourEngineV4 | 20 | ~3,200 |
 | UI | 35 | 13,050 |
-| Tests | 20 | 9,657 |
+| Tests | 33+ Swift files in Cosmic FitTests | (varies) |
 | **Total active Swift** | **122** | **~45,385** |
 
 | Resource | Size |

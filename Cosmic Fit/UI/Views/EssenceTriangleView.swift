@@ -20,7 +20,8 @@ final class EssenceTriangleView: UIView {
 
     private let triangleLayer = CAShapeLayer()
     private let guideLayer = CAShapeLayer()
-    private let dotLayers: [CAShapeLayer] = (0..<3).map { _ in CAShapeLayer() }
+    /// Branded div-star asset (same as Style Guide / menu dividers), not a geometric diamond.
+    private let vertexStarViews: [UIImageView] = (0..<3).map { _ in UIImageView() }
     private var categoryLabels: [UILabel] = []
 
     // MARK: - Initialization
@@ -72,10 +73,14 @@ final class EssenceTriangleView: UIView {
         triangleLayer.lineDashPattern = [2, 3]
         layer.addSublayer(triangleLayer)
 
-        for dotLayer in dotLayers {
-            dotLayer.fillColor = CosmicFitTheme.Colours.cosmicBlue.cgColor
-            dotLayer.strokeColor = UIColor.clear.cgColor
-            layer.addSublayer(dotLayer)
+        let starImage = UIImage(named: "star_icon_placeholder")?.withRenderingMode(.alwaysTemplate)
+        for star in vertexStarViews {
+            star.image = starImage
+            star.tintColor = CosmicFitTheme.Colours.cosmicBlue
+            star.contentMode = .scaleAspectFit
+            star.isHidden = true
+            star.translatesAutoresizingMaskIntoConstraints = false
+            insertSubview(star, at: 0)
         }
     }
 
@@ -111,7 +116,7 @@ final class EssenceTriangleView: UIView {
         guard let visible = profile?.visibleCategories, visible.count == 3 else {
             triangleLayer.path = nil
             guideLayer.path = nil
-            for dl in dotLayers { dl.path = nil }
+            vertexStarViews.forEach { $0.isHidden = true }
             return
         }
 
@@ -144,11 +149,11 @@ final class EssenceTriangleView: UIView {
             let py = centre.y + sin(angle) * radius
             points.append(CGPoint(x: px, y: py))
 
-            let starSize: CGFloat = 18
-            dotLayers[index].path = Self.fourPointStarPath(
-                centre: CGPoint(x: px, y: py), size: starSize
-            ).cgPath
-            dotLayers[index].frame = bounds
+            let starSize: CGFloat = 20
+            let star = vertexStarViews[index]
+            star.bounds = CGRect(x: 0, y: 0, width: starSize, height: starSize)
+            star.center = CGPoint(x: px, y: py)
+            star.isHidden = false
         }
 
         let triPath = UIBezierPath()
@@ -181,7 +186,7 @@ final class EssenceTriangleView: UIView {
             y: (points[0].y + points[1].y + points[2].y) / 3.0
         )
 
-        let starHalf: CGFloat = 9
+        let starHalf: CGFloat = 10
         let padding: CGFloat = 6
         let lineBuffer: CGFloat = 4
 
@@ -194,7 +199,7 @@ final class EssenceTriangleView: UIView {
             (centre, points[2])
         ]
 
-        let starSize: CGFloat = 18
+        let starSize: CGFloat = 20
         let starRects = points.map { p in
             CGRect(x: p.x - starSize / 2, y: p.y - starSize / 2,
                    width: starSize, height: starSize)
@@ -330,29 +335,4 @@ final class EssenceTriangleView: UIView {
         return result
     }
 
-    // MARK: - Star Path
-
-    /// 4-point star path matching the branded star icon.
-    /// `size` is the full tip-to-tip span.
-    private static func fourPointStarPath(centre: CGPoint, size: CGFloat) -> UIBezierPath {
-        let outer = size / 2.0
-        let inner = outer * 0.30
-
-        let path = UIBezierPath()
-        for i in 0..<8 {
-            let angle = CGFloat(i) * .pi / 4.0 - .pi / 2.0
-            let r = i.isMultiple(of: 2) ? outer : inner
-            let pt = CGPoint(
-                x: centre.x + cos(angle) * r,
-                y: centre.y + sin(angle) * r
-            )
-            if i == 0 {
-                path.move(to: pt)
-            } else {
-                path.addLine(to: pt)
-            }
-        }
-        path.close()
-        return path
-    }
 }

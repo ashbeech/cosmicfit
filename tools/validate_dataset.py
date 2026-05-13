@@ -415,7 +415,146 @@ def validate(dataset: dict, strict_house_schema: bool) -> bool:
                 else:
                     report.warn(f"Spot check WARN: {desc}")
 
+    # ─── Part 6A: Astrological Axiom Checks ───
+    validate_astrological_axioms(ps, report)
+
     return report.print_report()
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Part 6A: Astrological Axiom Validation
+# ─────────────────────────────────────────────────────────────────────────────
+
+FIRE_SIGNS = ["aries", "leo", "sagittarius"]
+EARTH_SIGNS = ["taurus", "virgo", "capricorn"]
+AIR_SIGNS = ["gemini", "libra", "aquarius"]
+WATER_SIGNS = ["cancer", "scorpio", "pisces"]
+
+WARM_KEYWORDS = [
+    "warm", "bold", "fiery", "red", "orange", "gold", "crimson", "coral",
+    "amber", "saffron", "scarlet", "rust", "copper", "bronze", "sienna",
+    "energetic", "dynamic", "dramatic", "statement", "vivid",
+]
+COOL_KEYWORDS = [
+    "cool", "muted", "soft", "blue", "silver", "grey", "gray", "lavender",
+    "mint", "teal", "aqua", "ice", "pearl", "pale", "dusty", "quiet",
+    "subtle", "subdued", "understated",
+]
+SOFT_TEXTURE_KEYWORDS = [
+    "soft", "flowing", "draped", "fluid", "silk", "chiffon", "jersey",
+    "cashmere", "satin", "velvet", "gentle", "delicate",
+]
+STRUCTURE_KEYWORDS = [
+    "structure", "structured", "tailored", "sharp", "angular", "architectural",
+    "rigid", "crisp", "fitted", "restrained", "disciplined",
+]
+
+
+def _entry_has_keyword(entry: dict, paths: list[tuple[str, ...]], keywords: list[str]) -> bool:
+    """Check if any of the given keywords appear in the entry at the given paths."""
+    for field_path in paths:
+        obj = entry
+        for key in field_path:
+            if isinstance(obj, dict):
+                obj = obj.get(key, None)
+            else:
+                obj = None
+                break
+        if obj is None:
+            continue
+        items = obj if isinstance(obj, list) else [obj]
+        for item in items:
+            text = item.get("name", "").lower() if isinstance(item, dict) else str(item).lower()
+            for kw in keywords:
+                if kw in text:
+                    return True
+    return False
+
+
+def _code_field_overlap(entry: dict) -> list[str]:
+    """Return any keywords that appear in both code_leaninto and code_avoid."""
+    lean = {k.lower().strip() for k in entry.get("code_leaninto", [])}
+    avoid = {k.lower().strip() for k in entry.get("code_avoid", [])}
+    return sorted(lean & avoid)
+
+
+def validate_astrological_axioms(ps: dict, report: ValidationReport):
+    """Part 6A: Cross-reference dataset entries against astrological axioms."""
+    report.log("Part 6A: Running astrological axiom checks")
+
+    colour_paths = [("colours", "primary"), ("colours", "accent")]
+    silhouette_path = [("silhouette_keywords",)]
+    texture_paths = [("textures", "good")]
+
+    # Axiom 1: Venus in fire sign → warm/bold style keywords (not cool/muted)
+    for sign in FIRE_SIGNS:
+        key = f"venus_{sign}"
+        if key not in ps:
+            continue
+        entry = ps[key]
+        has_warm = _entry_has_keyword(entry, colour_paths + silhouette_path, WARM_KEYWORDS)
+        has_cool_only = (
+            not has_warm
+            and _entry_has_keyword(entry, colour_paths + silhouette_path, COOL_KEYWORDS)
+        )
+        if has_warm:
+            report.log(f"Axiom 1 PASS: {key} has warm/bold keywords")
+        elif has_cool_only:
+            report.warn(f"Axiom 1 WARN: {key} has only cool keywords — Venus in fire should trend warm")
+        else:
+            report.warn(f"Axiom 1 WARN: {key} — no clear warm or cool keywords found")
+
+    # Axiom 2: Moon in water sign → soft textures and flowing silhouettes
+    for sign in WATER_SIGNS:
+        key = f"moon_{sign}"
+        if key not in ps:
+            continue
+        entry = ps[key]
+        has_soft = _entry_has_keyword(entry, texture_paths + silhouette_path, SOFT_TEXTURE_KEYWORDS)
+        if has_soft:
+            report.log(f"Axiom 2 PASS: {key} has soft/flowing texture keywords")
+        else:
+            report.warn(f"Axiom 2 WARN: {key} — Moon in water should emphasize soft textures")
+
+    # Axiom 3: Saturn aspects should add structure/restraint, not drama/excess
+    for sign in SIGNS:
+        key = f"saturn_{sign}"
+        if key not in ps:
+            continue
+        entry = ps[key]
+        has_structure = _entry_has_keyword(entry, silhouette_path + texture_paths, STRUCTURE_KEYWORDS)
+        if has_structure:
+            report.log(f"Axiom 3 PASS: {key} has structure/restraint keywords")
+        else:
+            report.warn(f"Axiom 3 WARN: {key} — Saturn should emphasize structure/restraint")
+
+    # Axiom 4: code_leaninto vs code_avoid — no keyword should appear in both
+    overlap_count = 0
+    for key, entry in ps.items():
+        overlap = _code_field_overlap(entry)
+        if overlap:
+            overlap_count += 1
+            report.error(
+                f"Axiom 4 FAIL: {key} has keywords in both code_leaninto and code_avoid: {overlap}"
+            )
+    if overlap_count == 0:
+        report.log("Axiom 4 PASS: no keywords appear in both code_leaninto and code_avoid")
+
+    # Axiom 5: Venus in earth sign → grounded/textured style (not airy/ethereal)
+    grounded_keywords = [
+        "grounded", "textured", "substantial", "structured", "earthy",
+        "organic", "natural", "leather", "denim", "suede", "wool",
+    ]
+    for sign in EARTH_SIGNS:
+        key = f"venus_{sign}"
+        if key not in ps:
+            continue
+        entry = ps[key]
+        has_grounded = _entry_has_keyword(entry, texture_paths + silhouette_path, grounded_keywords)
+        if has_grounded:
+            report.log(f"Axiom 5 PASS: {key} has grounded/textured keywords")
+        else:
+            report.warn(f"Axiom 5 WARN: {key} — Venus in earth should trend grounded/textured")
 
 
 if __name__ == "__main__":

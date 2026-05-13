@@ -747,22 +747,7 @@ struct DailyFitCalibration_Tests {
 
     let output = lines.joined(separator: "\n")
 
-    let docsDir = URL(fileURLWithPath: #filePath)
-        .deletingLastPathComponent()
-        .deletingLastPathComponent()
-        .appendingPathComponent("docs")
-        .appendingPathComponent("fixtures")
-    try? FileManager.default.createDirectory(at: docsDir, withIntermediateDirectories: true)
-    let outputURL = docsDir.appendingPathComponent("daily_fit_calibration_report.txt")
-    try? output.write(to: outputURL, atomically: true, encoding: .utf8)
-
-    if let hostHome = ProcessInfo.processInfo.environment["SIMULATOR_HOST_HOME"] {
-        let hostDir = URL(fileURLWithPath: hostHome)
-            .appendingPathComponent("dev/mobile_apps/cosmicfit/docs/fixtures")
-        try? FileManager.default.createDirectory(at: hostDir, withIntermediateDirectories: true)
-        let hostURL = hostDir.appendingPathComponent("daily_fit_calibration_report.txt")
-        try? output.write(to: hostURL, atomically: true, encoding: .utf8)
-    }
+    CalibrationReportHelper.writeReport(prefix: "daily_fit_calibration", content: output)
 }
 
     // MARK: - Formatting Helpers

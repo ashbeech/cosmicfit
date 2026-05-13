@@ -15,23 +15,12 @@ struct BlueprintModelTests {
 
     // MARK: - Fixture Loading
 
-    private static func fixturesURL() -> URL {
-        let testFile = URL(fileURLWithPath: #filePath)
-        let repoRoot = testFile
-            .deletingLastPathComponent()  // Cosmic FitTests/
-            .deletingLastPathComponent()  // repo root
-        return repoRoot
-            .appendingPathComponent("docs")
-            .appendingPathComponent("fixtures")
-    }
-
     private static func loadFixture(_ filename: String) throws -> Data {
-        let url = fixturesURL().appendingPathComponent(filename)
-        guard FileManager.default.fileExists(atPath: url.path) else {
+        guard let url = FixtureLocator.fixtureURL(named: filename) else {
             Issue.record("""
-                Fixture not found at \(url.path).
+                Fixture not found: \(filename).
                 Tests load fixtures via #filePath-relative path from the source tree.
-                Ensure the repo checkout contains docs/fixtures/\(filename).
+                Checked: docs/fixtures/\(filename) and docs/archive/fixtures/\(filename).
                 """)
             throw CocoaError(.fileNoSuchFile)
         }

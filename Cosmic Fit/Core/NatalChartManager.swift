@@ -138,20 +138,23 @@ class NatalChartManager {
     }
     
     /// Calculate typed transit aspects (PREFERRED - no dictionary conversion)
-    /// - Parameter natalChart: The base natal chart
+    /// - Parameters:
+    ///   - natalChart: The base natal chart
+    ///   - date: Target date for transit positions (defaults to now)
     /// - Returns: Array of typed TransitAspect structs
-    func calculateTypedTransits(natalChart: NatalChartCalculator.NatalChart) -> [NatalChartCalculator.TransitAspect] {
-        return NatalChartCalculator.calculateTransits(natalChart: natalChart)
+    func calculateTypedTransits(natalChart: NatalChartCalculator.NatalChart, date: Date = Date()) -> [NatalChartCalculator.TransitAspect] {
+        return NatalChartCalculator.calculateTransits(natalChart: natalChart, date: date)
     }
     
-    /// Calculate a transit chart (current planetary positions relative to natal chart)
-    /// - Parameter natalChart: The base natal chart
+    /// Calculate a transit chart (planetary positions relative to natal chart)
+    /// - Parameters:
+    ///   - natalChart: The base natal chart
+    ///   - date: Target date for transit positions (defaults to now)
     /// - Returns: Transit chart data (DEPRECATED - use calculateTypedTransits instead)
-    func calculateTransitChart(natalChart: NatalChartCalculator.NatalChart) -> [String: Any] {
+    func calculateTransitChart(natalChart: NatalChartCalculator.NatalChart, date: Date = Date()) -> [String: Any] {
         var transitData: [String: Any] = [:]
         
-        // Calculate transit aspects
-        let transitAspects = NatalChartCalculator.calculateTransits(natalChart: natalChart)
+        let transitAspects = NatalChartCalculator.calculateTransits(natalChart: natalChart, date: date)
         let formattedAspects = NatalChartCalculator.formatTransitAspects(transitAspects)
         
         // Group aspects by category
