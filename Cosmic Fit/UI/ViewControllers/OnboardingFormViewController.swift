@@ -847,7 +847,7 @@ class OnboardingFormViewController: UIViewController {
                                  longitude: profile.longitude,
                                  timeZone: TimeZone(identifier: profile.timeZoneIdentifier) ?? TimeZone.current)
 
-        tabBarController.selectedIndex = 1
+        tabBarController.selectedIndex = 0
 
         DispatchQueue.main.async {
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate,

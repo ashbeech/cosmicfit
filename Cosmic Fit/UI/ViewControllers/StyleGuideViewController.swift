@@ -148,6 +148,8 @@ final class StyleGuideViewController: UIViewController {
     }()
 
     private var authNudgeBanner: AuthNudgeBannerView?
+
+    private static let freeSections: Set<StyleGuideDetailContent.StyleGuideSection> = [.styleCore, .palette]
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -165,12 +167,41 @@ final class StyleGuideViewController: UIViewController {
             name: .cosmicFitAuthStateChanged,
             object: nil
         )
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleEntitlementChange),
+            name: EntitlementManager.entitlementDidChange,
+            object: nil
+        )
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.delegate = self
         updateNudgeVisibility()
+        updateLockStates()
+    }
+
+    @objc private func handleEntitlementChange() {
+        updateLockStates()
+    }
+
+    private func updateLockStates() {
+        let unlocked = EntitlementManager.shared.hasFullAccess
+        let allButtons: [(StyleGuideGridButton, StyleGuideDetailContent.StyleGuideSection)] = [
+            (styleCoreButton, .styleCore),
+            (texturesButton, .textures),
+            (paletteButton, .palette),
+            (occasionsButton, .occasions),
+            (hardwareButton, .hardware),
+            (codeButton, .code),
+            (accessoryButton, .accessory),
+            (patternButton, .pattern),
+        ]
+        for (button, section) in allButtons {
+            button.isLocked = !unlocked && !Self.freeSections.contains(section)
+        }
     }
     
     deinit {
@@ -192,9 +223,11 @@ final class StyleGuideViewController: UIViewController {
         ])
         
         banner.onTapped = { [weak self] in
-            if let tabBar = self?.tabBarController {
-                tabBar.selectedIndex = 0
-            }
+            let authGateVC = AuthGateViewController()
+            let nav = UINavigationController(rootViewController: authGateVC)
+            nav.navigationBar.isHidden = true
+            nav.modalPresentationStyle = .pageSheet
+            self?.present(nav, animated: true)
         }
         
         self.authNudgeBanner = banner
@@ -427,6 +460,14 @@ final class StyleGuideViewController: UIViewController {
         guard let tabBarController = tabBarController as? CosmicFitTabBarController else {
             return
         }
+
+        if !Self.freeSections.contains(section) && !EntitlementManager.shared.hasFullAccess {
+            let purchaseVC = PurchaseViewController()
+            let detailVC = GenericDetailViewController(contentViewController: purchaseVC)
+            tabBarController.presentDetailViewController(detailVC, animated: true)
+            return
+        }
+
         let detailVC = StyleGuideDetailViewController()
         let content = createContent(for: section)
         detailVC.configure(with: content)
@@ -678,6 +719,10 @@ final class StyleGuideViewController: UIViewController {
 // MARK: - StyleGuideGridButton
 final class StyleGuideGridButton: UIButton {
 
+    var isLocked: Bool = false {
+        didSet { updateLockedAppearance() }
+    }
+
     private let numberLabel: UILabel = {
         let label = UILabel()
         label.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.largeTitle, weight: .bold)
@@ -701,6 +746,16 @@ final class StyleGuideGridButton: UIButton {
         view.alpha = 0.15
         view.isUserInteractionEnabled = false
         return view
+    }()
+
+    private let lockIcon: UIImageView = {
+        let config = UIImage.SymbolConfiguration(pointSize: 12, weight: .semibold)
+        let iv = UIImageView(image: UIImage(systemName: "lock.fill", withConfiguration: config))
+        iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.isHidden = true
+        iv.isUserInteractionEnabled = false
+        return iv
     }()
 
     init(number: String, title: String, backgroundImageName: String) {
@@ -729,6 +784,7 @@ final class StyleGuideGridButton: UIButton {
         addSubview(backgroundPatternView)
         addSubview(numberLabel)
         addSubview(buttonTitleLabel)
+        addSubview(lockIcon)
 
         backgroundPatternView.translatesAutoresizingMaskIntoConstraints = false
         numberLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -746,13 +802,22 @@ final class StyleGuideGridButton: UIButton {
             buttonTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             buttonTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             buttonTitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
+
+            lockIcon.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
+            lockIcon.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12),
         ])
+    }
+
+    private func updateLockedAppearance() {
+        alpha = isLocked ? 0.45 : 1.0
+        lockIcon.isHidden = !isLocked
     }
 
     override var isHighlighted: Bool {
         didSet {
+            let base: CGFloat = isLocked ? 0.45 : 1.0
             UIView.animate(withDuration: 0.1) {
-                self.alpha = self.isHighlighted ? 0.6 : 1.0
+                self.alpha = self.isHighlighted ? base * 0.6 : base
             }
         }
     }

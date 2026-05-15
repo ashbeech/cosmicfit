@@ -33,6 +33,9 @@ class ProfileViewController: UIViewController {
     
     private let locationAutocompleteView = LocationAutocompleteView()
     private let updateButton = UIButton(type: .system)
+    private let signInButton = UIButton(type: .system)
+    private let restorePurchasesButton = UIButton(type: .system)
+    private let manageSubscriptionButton = UIButton(type: .system)
     #if DEBUG
     private let forceRefreshButton = UIButton(type: .system)
     #endif
@@ -322,6 +325,25 @@ class ProfileViewController: UIViewController {
         forceRefreshButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         #endif
         
+        signInButton.setTitle("Sign in to sync your data", for: .normal)
+        signInButton.addTarget(self, action: #selector(signInButtonTapped), for: .touchUpInside)
+        signInButton.translatesAutoresizingMaskIntoConstraints = false
+        CosmicFitTheme.styleButton(signInButton, style: .secondary)
+        signInButton.isHidden = CosmicFitAuthService.shared.isAuthenticated
+        signInButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
+        restorePurchasesButton.setTitle("Restore Purchases", for: .normal)
+        restorePurchasesButton.addTarget(self, action: #selector(restorePurchasesTapped), for: .touchUpInside)
+        restorePurchasesButton.translatesAutoresizingMaskIntoConstraints = false
+        CosmicFitTheme.styleButton(restorePurchasesButton, style: .secondary)
+        restorePurchasesButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
+        manageSubscriptionButton.setTitle("Manage Subscription", for: .normal)
+        manageSubscriptionButton.addTarget(self, action: #selector(manageSubscriptionTapped), for: .touchUpInside)
+        manageSubscriptionButton.translatesAutoresizingMaskIntoConstraints = false
+        CosmicFitTheme.styleButton(manageSubscriptionButton, style: .secondary)
+        manageSubscriptionButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
         signOutButton.setTitle("Sign out", for: .normal)
         signOutButton.addTarget(self, action: #selector(signOutButtonTapped), for: .touchUpInside)
         signOutButton.translatesAutoresizingMaskIntoConstraints = false
@@ -375,6 +397,9 @@ class ProfileViewController: UIViewController {
         mainStack.setCustomSpacing(34, after: updateButton)
         mainStack.addArrangedSubview(dangerSectionDivider)
         mainStack.setCustomSpacing(22, after: dangerSectionDivider)
+        mainStack.addArrangedSubview(signInButton)
+        mainStack.addArrangedSubview(restorePurchasesButton)
+        mainStack.addArrangedSubview(manageSubscriptionButton)
         #if DEBUG
         mainStack.addArrangedSubview(forceRefreshButton)
         #endif
@@ -529,10 +554,44 @@ class ProfileViewController: UIViewController {
     }
     #endif
 
+    @objc private func signInButtonTapped() {
+        let authGateVC = AuthGateViewController()
+        let nav = UINavigationController(rootViewController: authGateVC)
+        nav.navigationBar.isHidden = true
+        nav.modalPresentationStyle = .pageSheet
+        present(nav, animated: true)
+    }
+
+    @objc private func restorePurchasesTapped() {
+        restorePurchasesButton.isEnabled = false
+        restorePurchasesButton.setTitle("Restoring...", for: .normal)
+
+        Task {
+            do {
+                try await StoreKitManager.shared.restorePurchases()
+                if EntitlementManager.shared.hasFullAccess {
+                    showAlert(title: "Restored", message: "Your subscription has been restored.")
+                } else {
+                    showAlert(title: "No Subscription Found", message: "No active subscription found for this Apple ID.")
+                }
+            } catch {
+                showAlert(title: "Restore Failed", message: error.localizedDescription)
+            }
+            restorePurchasesButton.isEnabled = true
+            restorePurchasesButton.setTitle("Restore Purchases", for: .normal)
+        }
+    }
+
+    @objc private func manageSubscriptionTapped() {
+        if let url = URL(string: "https://apps.apple.com/account/subscriptions") {
+            UIApplication.shared.open(url)
+        }
+    }
+
     @objc private func signOutButtonTapped() {
         let alert = UIAlertController(
             title: "Sign Out",
-            message: "You will need to sign in again to access your Daily Fit.",
+            message: "You will need to sign in again to sync your data across devices.",
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))

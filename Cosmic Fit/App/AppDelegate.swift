@@ -37,6 +37,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Migrate profile from UserDefaults to Documents-dir JSON
         UserProfileStorage.shared.migrateFromUserDefaultsIfNeeded()
+        
+        // Subscription bootstrap
+        StoreKitManager.shared.listenForTransactions()
+        Task { await StoreKitManager.shared.loadProducts() }
+        Task { await EntitlementManager.shared.checkEntitlement() }
                 
         window = UIWindow(frame: UIScreen.main.bounds)
         
@@ -102,15 +107,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                  longitude: userProfile.longitude,
                                  timeZone: TimeZone(identifier: userProfile.timeZoneIdentifier) ?? TimeZone.current)
         
-        // Always land on Style Guide tab (index 1) first.
-        // Auth resolves async; tab controller handles deferred swap to Daily Fit.
-        tabBarController.selectedIndex = 1
+        tabBarController.selectedIndex = 0
         
         _ = tabBarController.view
         
         launchScreenVC.setMainViewController(tabBarController)
         
-        print("✅ Returning user detected — landing on Style Guide tab (auth resolving async)")
+        print("✅ Returning user detected — landing on Daily Fit tab")
     }
     
     private func setupWelcomeIntroFlow(launchScreenVC: AnimatedLaunchScreenViewController) {

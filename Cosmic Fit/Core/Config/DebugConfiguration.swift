@@ -10,6 +10,17 @@ import Foundation
 /// Central debug configuration that eliminates duplication
 struct DebugConfiguration {
     
+    // MARK: - Entitlement Override
+    
+    /// When true, `EntitlementManager` bypasses StoreKit and reports full access.
+    /// Set to `true` during feature development so locked sections are accessible.
+    /// Defaults to `false` so the app launches in production-like mode for testing.
+    /// Set to `false` again before sandbox / App Store IAP testing.
+    /// Only compiles under #if DEBUG — zero footprint in release builds.
+    #if DEBUG
+    static var overrideEntitlementUnlocked: Bool = true
+    #endif
+    
     // MARK: - Debug Control
     
     /// Master debug flag - controls all debug functionality

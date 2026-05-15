@@ -152,7 +152,9 @@ final class AuthGateViewController: UIViewController {
     }
 
     @objc private func notNowTapped() {
-        if let tabBar = tabBarController {
+        if presentingViewController != nil {
+            dismiss(animated: true)
+        } else if let tabBar = tabBarController {
             tabBar.selectedIndex = 1
         }
     }
