@@ -10,10 +10,10 @@ Add auto-renewable subscription products to Cosmic Fit so users can unlock the f
 
 Two auto-renewable subscriptions in a single **Subscription Group** (Apple mandates that mutually exclusive durations live in the same group so the user can only hold one active subscription at a time):
 
-| Product ID | Duration | UK Price | Display |
-|---|---|---|---|
-| `com.cosmicfit.fullaccess.monthly` | 1 month | £7.99 | "£7.99/month" |
-| `com.cosmicfit.fullaccess.annual` | 1 year | £49.99 | "£49.99/year — Save 48%" |
+| Product ID                         | Duration | UK Price | Display                  |
+| ---------------------------------- | -------- | -------- | ------------------------ |
+| `com.cosmicfit.fullaccess.monthly` | 1 month  | £7.99    | "£7.99/month"            |
+| `com.cosmicfit.fullaccess.annual`  | 1 year   | £49.99   | "£49.99/year — Save 48%" |
 
 **Savings copy**: Monthly × 12 = £95.88. Annual = £49.99. Saving = £45.89, which is **48%** when rounded to the nearest whole percent (45.89 ÷ 95.88 ≈ 47.9%). Display this as **"Save 48%"** next to the annual option. The actual displayed price and savings label must use the localised `Product.displayPrice` from StoreKit so it renders correctly in every currency; the **percentage must still be computed in code** from `Product.price` values (do not hardcode `48` for non-UK storefronts).
 
@@ -47,28 +47,99 @@ All implementation work lives on the `products` git branch (already created from
 
 ---
 
+## Apple ID vs Cosmic Fit account — restore, persistence, auth (implementer MUST follow)
+
+This section is **normative** for the implementation. It prevents accidental coupling of Supabase auth with App Store entitlements and ensures recovery behaviour matches Apple’s model and review expectations.
+
+### Two parallel identities (do not conflate)
+
+| Identity                                | Role                                                                                                               | Who owns it           |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| **App Store / Apple ID**                | Pays for the subscription; StoreKit exposes entitlements for the Apple ID signed into the App Store on this device | Apple                 |
+| **Cosmic Fit user (guest or Supabase)** | Syncs blueprint/profile data across devices when signed in                                                         | Cosmic Fit + Supabase |
+
+**Purchasing does not require** Cosmic Fit sign-in. **Entitlement must not** be stored in or read from Supabase, UserDefaults keyed by user id, or any server flag in v1. The subscription is **not** “attached” to an email address in your backend for unlocking the app.
+
+### Source of truth (v1)
+
+- **`EntitlementManager.checkEntitlement()`** resolves `hasFullAccess` **only** from StoreKit 2: verified transactions in `Transaction.currentEntitlements` for the known product IDs, per the existing spec (active / grace via Apple’s rules; expired or revoked → no access).
+- **`StoreKitManager.restorePurchases()`** calls `AppStore.sync()`, then **`await EntitlementManager.shared.checkEntitlement()`** — same code path whether invoked from the paywall or from Profile.
+
+**Forbidden:** setting `hasFullAccess` from `CosmicFitAuthService.shared.isAuthenticated`, profile payloads, or any API response. **Forbidden:** persisting “isSubscribed” to Supabase or local storage as the authority for gating (caching StoreKit output for UX is unnecessary in v1; if you ever add caching, it must still be refreshed from StoreKit on launch and after transactions).
+
+### New install, reinstall, same Apple ID (explicit behaviour)
+
+1. User installs the app (new or reinstall), completes onboarding. Local birth/profile data is created/stored as today — **unchanged** by this feature.
+2. On launch, **`checkEntitlement()`** runs. If this device’s App Store account has an **active** subscription for your product IDs, **`hasFullAccess`** becomes `true` **without** the user opening the purchase screen and **without** Cosmic Fit sign-in.
+3. If the user is subscribed but entitlements are not yet visible (e.g. rare timing, network), they can use **Restore** (paywall or Profile) which triggers `AppStore.sync()` and then `checkEntitlement()`.
+
+Document for QA: **same Apple ID** after reinstall should recover access automatically or via Restore; **different Apple ID** cannot “inherit” a subscription from another Apple account (Apple limitation — not a bug).
+
+### Restore purchases — TWO entry points (required)
+
+Apple requires a visible, functional **Restore** affordance; reviewers and users also expect it **outside** the paywall.
+
+| Location                     | Requirement                                                                                                                                                                                                                                                                       |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`PurchaseViewController`** | Keep **“Already subscribed? Restore”** as specified (calls `StoreKitManager.shared.restorePurchases()`).                                                                                                                                                                          |
+| **`ProfileViewController`**  | Add a dedicated row/control: **“Restore purchases”** (copy may be title case per app style). **Always visible** to all users (guest and signed-in). Tapping it must call the **same** `StoreKitManager.shared.restorePurchases()` as the paywall — do not duplicate logic inline. |
+
+**UX for both entry points:**
+
+- Disable the control or show a blocking progress indicator while `restorePurchases()` / sync is in flight; re-enable on completion.
+- On completion, UI already updates via `checkEntitlement()` + `entitlementDidChange`; optionally show a lightweight confirmation: e.g. if `hasFullAccess` became `true`, brief success message; if still `false`, neutral copy such as **“No active subscription found for this Apple ID.”** (Avoid promising a refund or support resolution in-app.)
+- Errors (network, StoreKit): show a clear alert or inline message; do not crash.
+
+**Optional but recommended** on Profile (same area as Restore): a **“Manage subscription”** control that opens `https://apps.apple.com/account/subscriptions` via `UIApplication.shared.open`. This complements the auto-renewal copy on the paywall and reduces support friction. Not a substitute for Restore.
+
+### Sign-in, sign-out, and entitlement (explicit rules)
+
+| Event                                      | Required behaviour                                                                                                                                                                                                                                                                       |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **User signs in**                          | Do **not** grant or revoke subscription based on login. After successful auth (and any existing blueprint hydration), you may call **`await EntitlementManager.shared.checkEntitlement()`** to refresh from StoreKit (usually unchanged). **Never** set `hasFullAccess` from auth state. |
+| **User signs out**                         | Do **not** clear `hasFullAccess` or reset subscription UI solely because `isAuthenticated` became false. Subscription belongs to the **Apple ID**, not the Cosmic Fit session. Locks must reflect StoreKit only.                                                                         |
+| **`handleAuthStateChanged` / tab refresh** | Continue to refresh nudge banner, Profile buttons, and hydration as today. **Do not** remove or bypass StoreKit when updating UI after auth changes.                                                                                                                                     |
+
+**Journey — guest subscribes, then signs in:** Same device, same Apple ID → remains subscribed; sign-in only affects sync. **Journey — signed-in user signs out:** If their Apple ID still has a valid subscription, **paid content stays unlocked** until StoreKit says otherwise.
+
+### Account deletion vs App Store subscription (required product/engineering note)
+
+If the app offers **account deletion** (Supabase / Cosmic Fit profile deletion):
+
+- **Deleting a Cosmic Fit account does NOT cancel** an App Store subscription. The user must cancel in **Settings → Apple ID → Subscriptions** (or the manage-subscriptions URL above).
+- Spec copy for support/legal (and optionally in-account deletion confirmation): make clear that **billing continues until they cancel with Apple**, and that **reinstalling** and signing in with the **same Apple ID** can still unlock features via StoreKit even after profile deletion, as long as the subscription is active.
+- Implementation: deleting server-side user data **must not** delete or corrupt local StoreKit state; do not “fake” revoke `hasFullAccess` on account deletion. After deletion, `checkEntitlement()` should still reflect Apple’s entitlements for the current Apple ID.
+
+If account deletion is **not** in this release, still **do not** tie entitlement revocation to sign-out or profile removal in a way that contradicts StoreKit.
+
+### Onboarding and “local user”
+
+Onboarding continues to collect birth data and build the experience **locally** first. IAP does not change that: free tier and purchase flows work for **guests**. Nothing in this document requires creating a Supabase row before purchase.
+
+---
+
 ## Architecture Overview
 
 ### New Files to Create
 
-| File | Purpose |
-|---|---|
-| `Cosmic Fit/Core/Services/StoreKitManager.swift` | StoreKit 2 product loading, purchasing, transaction listening, restore |
-| `Cosmic Fit/Core/Services/EntitlementManager.swift` | Single source of truth for subscription state; consumed by all UI |
+| File                                                | Purpose                                                                |
+| --------------------------------------------------- | ---------------------------------------------------------------------- |
+| `Cosmic Fit/Core/Services/StoreKitManager.swift`    | StoreKit 2 product loading, purchasing, transaction listening, restore |
+| `Cosmic Fit/Core/Services/EntitlementManager.swift` | Single source of truth for subscription state; consumed by all UI      |
 
 ### Existing Files to Modify
 
-| File | Changes |
-|---|---|
-| `AppDelegate.swift` | Boot `EntitlementManager` + `StoreKitManager` transaction listener on launch; change landing tab to 0 |
-| `PaymentPlaceholderViewController.swift` | Convert from static placeholder to live subscription purchase screen; rename to `PurchaseViewController.swift` |
-| `DailyFitViewController.swift` | Gate tomorrow button behind entitlement; hide calendar button; observe entitlement changes |
-| `StyleGuideViewController.swift` | Gate 6 of 8 section tiles behind entitlement; add lock visual state to `StyleGuideGridButton`; observe entitlement changes |
-| `CosmicFitTabBarController.swift` | Always show `DailyFitViewController` on tab 0 (remove auth gate swap); observe entitlement changes |
-| `OnboardingFormViewController.swift` | Change post-onboarding landing tab from `selectedIndex = 1` to `selectedIndex = 0` |
-| `ProfileViewController.swift` | Add "Sign in to sync" button for unauthenticated users; update sign-out alert copy |
-| `AuthNudgeBannerView.swift` / handler in `StyleGuideViewController.swift` | Change tap handler from tab-switch to modal presentation of `AuthGateViewController` |
-| `DebugConfiguration.swift` | Add `overrideEntitlementUnlocked` flag |
+| File                                                                      | Changes                                                                                                                                                                                                                                                                                                           |
+| ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AppDelegate.swift`                                                       | Boot `EntitlementManager` + `StoreKitManager` transaction listener on launch; change landing tab to 0                                                                                                                                                                                                             |
+| `PaymentPlaceholderViewController.swift`                                  | Convert from static placeholder to live subscription purchase screen; rename to `PurchaseViewController.swift`                                                                                                                                                                                                    |
+| `DailyFitViewController.swift`                                            | Gate tomorrow button behind entitlement; hide calendar button; observe entitlement changes                                                                                                                                                                                                                        |
+| `StyleGuideViewController.swift`                                          | Gate 6 of 8 section tiles behind entitlement; add lock visual state to `StyleGuideGridButton`; observe entitlement changes                                                                                                                                                                                        |
+| `CosmicFitTabBarController.swift`                                         | Always show `DailyFitViewController` on tab 0 (remove auth gate swap); observe entitlement changes                                                                                                                                                                                                                |
+| `OnboardingFormViewController.swift`                                      | Change post-onboarding landing tab from `selectedIndex = 1` to `selectedIndex = 0`                                                                                                                                                                                                                                |
+| `ProfileViewController.swift`                                             | Add "Sign in to sync" for guests; add **always-visible "Restore purchases"** (same `StoreKitManager.restorePurchases()` as paywall); optional **"Manage subscription"** link to Apple’s subscriptions URL; update sign-out alert copy; **do not** tie entitlement to auth state (see Apple ID vs account section) |
+| `AuthNudgeBannerView.swift` / handler in `StyleGuideViewController.swift` | Change tap handler from tab-switch to modal presentation of `AuthGateViewController`                                                                                                                                                                                                                              |
+| `DebugConfiguration.swift`                                                | Add `overrideEntitlementUnlocked` flag                                                                                                                                                                                                                                                                            |
 
 ### No StoreKit Configuration File
 
@@ -102,12 +173,13 @@ final class StoreKitManager {
 **`loadProducts()`** — Calls `Product.products(for:)` with both product IDs. Stores them on `monthlyProduct` / `annualProduct`. Log errors if products are empty (means App Store Connect is misconfigured or IDs don't match).
 
 **`purchase(_ product: Product)`** — Calls `product.purchase()`. Handles the result:
+
 - `.success(.verified(let transaction))`: call `transaction.finish()`, then `EntitlementManager.shared.checkEntitlement()`.
 - `.success(.unverified(_, let error))`: log error, do not grant access.
 - `.userCancelled`: no-op.
 - `.pending`: inform the user that the purchase is pending approval (e.g. Ask to Buy).
 
-**`restorePurchases()`** — Calls `AppStore.sync()`. After completion, call `EntitlementManager.shared.checkEntitlement()`. This is the mechanism behind the "Restore Purchases" button (required by Apple review).
+**`restorePurchases()`** — Calls `AppStore.sync()`. After completion, call `EntitlementManager.shared.checkEntitlement()`. This is the **single** implementation used by **both** the purchase screen’s restore control **and** Profile’s **“Restore purchases”** row (required: two UI entry points, one method — see Apple ID vs account section).
 
 **`listenForTransactions()`** — Starts a long-running `Task` that iterates `Transaction.updates`. For each verified transaction, finishes it and refreshes entitlement. Called once from `AppDelegate` at launch.
 
@@ -156,7 +228,9 @@ final class EntitlementManager {
 
 Posts `entitlementDidChange` notification only when `hasFullAccess` actually changes value (compare old vs new before posting to avoid spurious UI refreshes).
 
-**Important**: `checkEntitlement()` is the single source of truth. No other code should directly set `hasFullAccess`. Every path that may change entitlement state (purchase, restore, transaction listener, app launch) must funnel through this method.
+**Important**: `checkEntitlement()` is the single source of truth. No other code should directly set `hasFullAccess`. Every path that may change entitlement state (purchase, restore from paywall **or Profile**, transaction listener, app launch) must funnel through this method.
+
+**Auth lifecycle (non-source of truth):** Sign-in and sign-out **must not** set `hasFullAccess` from `CosmicFitAuthService`. Optionally invoke `checkEntitlement()` after auth transitions to refresh from StoreKit (see Apple ID vs account section).
 
 **Subscription status display**: For v1, there is no in-app subscription management screen (users manage via iOS Settings). If a future version needs to show "Your plan: Annual, renews 15 June 2027", the verified transaction contains `expirationDate` and `productID` — but do not build this UI in this release.
 
@@ -198,6 +272,7 @@ static var overrideEntitlementUnlocked: Bool = false
 ```
 
 **Behaviour**:
+
 - Default is `false` → app behaves exactly like production (locks enforced, purchase required).
 - Developer sets to `true` in code → all content unlocked, no StoreKit calls needed.
 - The flag is `#if DEBUG` guarded — it does not exist in release/archive builds. No App Store review risk.
@@ -226,11 +301,11 @@ This ensures transaction listening starts immediately (catches pending transacti
 
 ### Daily Fit (Tab 0)
 
-| Content | Free | Subscribed |
-|---|---|---|
-| Today's card reveal + full content | YES | YES |
+| Content                                | Free                          | Subscribed                 |
+| -------------------------------------- | ----------------------------- | -------------------------- |
+| Today's card reveal + full content     | YES                           | YES                        |
 | Tomorrow button ("SEE TOMORROW'S FIT") | NO — presents purchase screen | YES — works as it does now |
-| Calendar button (top-right) | HIDDEN | HIDDEN |
+| Calendar button (top-right)            | HIDDEN                        | HIDDEN                     |
 
 **Calendar button**: The calendar button is a placeholder for a future feature. For this release, **hide it entirely** for all users regardless of subscription state. Set `calendarButton.isHidden = true` in `setupUI()` (or remove it from the view hierarchy). Do not gate it behind entitlement — it has no functional destination. This avoids a confusing "Coming Soon" dead-end for paying subscribers.
 
@@ -248,22 +323,23 @@ This ensures transaction listening starts immediately (catches pending transacti
 
 ### Style Guide (Tab 1) — 8-Section Grid
 
-| # | Section | Free | Subscribed |
-|---|---|---|---|
-| 1 | Style Core | YES | YES |
-| 2 | The Textures | LOCKED | YES |
-| 3 | The Palette | YES | YES |
-| 4 | The Occasions | LOCKED | YES |
-| 5 | The Hardware | LOCKED | YES |
-| 6 | The Code | LOCKED | YES |
-| 7 | The Accessory | LOCKED | YES |
-| 8 | The Pattern | LOCKED | YES |
+| #   | Section       | Free   | Subscribed |
+| --- | ------------- | ------ | ---------- |
+| 1   | Style Core    | YES    | YES        |
+| 2   | The Textures  | LOCKED | YES        |
+| 3   | The Palette   | YES    | YES        |
+| 4   | The Occasions | LOCKED | YES        |
+| 5   | The Hardware  | LOCKED | YES        |
+| 6   | The Code      | LOCKED | YES        |
+| 7   | The Accessory | LOCKED | YES        |
+| 8   | The Pattern   | LOCKED | YES        |
 
 **Why these two free?** Style Core is the emotional hook — personalised narrative about who they are stylistically. The Palette is the visual hook — their personalised colour grid is striking and tangible. Together they prove the product is real and personal. The remaining 6 sections contain the actionable guidance (what to wear, what to avoid, how to dress for occasions) — this is the value worth subscribing for.
 
 **Implementation in `StyleGuideViewController.swift`:**
 
 1. **Define free sections** as a constant:
+
    ```swift
    private static let freeSections: Set<StyleGuideDetailContent.StyleGuideSection> = [.styleCore, .palette]
    ```
@@ -303,6 +379,7 @@ Remove the `if CosmicFitAuthService.shared.isAuthenticated` / `else` branching f
 **Keep the auth-state notification handler** (`handleAuthStateChanged`) but change its behaviour: instead of swapping the tab 0 VC, it should trigger a Supabase blueprint hydration attempt (which it already does) and call `setupViewControllers()` to refresh UI (e.g. to update the auth nudge banner visibility).
 
 **Landing tab on launch**: Change **both** of these to `selectedIndex = 0` (Daily Fit):
+
 - `AppDelegate.setupExistingUserFlow` — currently sets `selectedIndex = 1`
 - `OnboardingFormViewController.navigateToMainApp` — currently sets `selectedIndex = 1`
 
@@ -431,11 +508,11 @@ StoreKitManager.purchase(product)
 4. Style Guide: all 8 tiles are now fully styled and tappable
 5. Subscription renews automatically each year
 
-### Journey 3: Returning subscriber
+### Journey 3: Returning subscriber (same device, reinstall, or new device — same Apple ID)
 
-1. Opens app → `EntitlementManager.checkEntitlement()` finds active subscription in `Transaction.currentEntitlements`
-2. `hasFullAccess = true` immediately
-3. All content unlocked from first frame — no loading or delay
+1. Opens app → `EntitlementManager.checkEntitlement()` finds active subscription in `Transaction.currentEntitlements` for the App Store account on the device (no Cosmic Fit sign-in required).
+2. `hasFullAccess = true` as soon as StoreKit returns current entitlements (typically early in launch).
+3. All content unlocked — UI should reflect subscription state as soon as `entitlementDidChange` fires; avoid flashing paid content as locked if you can show a neutral launch state until the first `checkEntitlement()` completes.
 
 ### Journey 4: Subscription expires / cancelled
 
@@ -445,12 +522,12 @@ StoreKitManager.purchase(product)
 4. UI reverts to locked state: tomorrow button → purchase CTA, locked tiles re-lock
 5. Today's Daily Fit remains fully accessible (free tier)
 
-### Journey 5: Restore on new device
+### Journey 5: New device / delayed entitlement — automatic + Restore
 
-1. User installs on new device → completes onboarding
-2. `EntitlementManager.checkEntitlement()` at launch checks `Transaction.currentEntitlements` — finds active subscription tied to Apple ID
-3. Full access granted immediately
-4. Alternatively: user taps "Already subscribed? Restore" on the purchase screen → `AppStore.sync()` pulls transactions → access restored
+1. User installs on a **new device** (or reinstalls), completes onboarding — still **guest** or signed-in; irrelevant for Apple’s billing.
+2. **`checkEntitlement()`** at launch reads `Transaction.currentEntitlements`. If the user is signed into the **same Apple ID** that subscribed, access is usually granted **without** tapping Restore.
+3. If access is not yet reflected: user opens **Menu → Profile → Restore purchases** **or** opens the purchase screen and taps **“Already subscribed? Restore”** — both call `StoreKitManager.shared.restorePurchases()` → `AppStore.sync()` → `checkEntitlement()`.
+4. If Restore still shows no subscription: user may be on a **different Apple ID** than the one that purchased — clarify in support-style copy, not as an app bug.
 
 ### Journey 6: Guest signs in (auth flow after gate removal)
 
@@ -465,18 +542,23 @@ StoreKitManager.purchase(product)
 
 ## Edge Cases
 
-| Scenario | Handling |
-|---|---|
-| Products fail to load from App Store | Purchase screen shows error state with retry button. Lock states still enforced (no access without confirmed transaction). |
-| Purchase interrupted (app killed mid-flow) | `Transaction.updates` listener catches the unfinished transaction on next launch, finishes it, grants access. |
-| Family Sharing | StoreKit 2 handles this transparently if enabled on the subscription group in App Store Connect. `Transaction.currentEntitlements` includes family-shared subscriptions. |
-| Ask to Buy (child accounts) | `.pending` result from `purchase()`. Show message: "Your purchase is waiting for approval." Entitlement granted when parent approves (caught by `Transaction.updates`). |
-| Refund | Apple may revoke the transaction. `Transaction.updates` emits a revocation event. `checkEntitlement()` will no longer find a valid transaction → `hasFullAccess = false`. |
-| Subscription upgrade (monthly → annual) | Apple handles proration. `Transaction.updates` emits the new transaction. `checkEntitlement()` still finds a valid entitlement. Seamless. |
-| Billing retry / grace period | Apple retries failed payments for up to 60 days. During this period, `Transaction.currentEntitlements` still includes the subscription. `hasFullAccess` remains `true`. No special handling needed — StoreKit 2 manages this transparently. |
-| Offline purchase attempt | StoreKit surfaces the error. Show "Unable to connect to the App Store. Please check your internet connection." |
-| User not signed into App Store | StoreKit prompts for Apple ID sign-in automatically when `purchase()` is called. |
-| Sign-in path after auth gate removal | `AuthGateViewController` is still reachable via: (a) auth nudge banner on Style Guide tab, (b) "Sign in" button on Profile page. Both present it modally. If these are missing, users cannot authenticate. |
+| Scenario                                   | Handling                                                                                                                                                                                                                                    |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Products fail to load from App Store       | Purchase screen shows error state with retry button. Lock states still enforced (no access without confirmed transaction).                                                                                                                  |
+| Purchase interrupted (app killed mid-flow) | `Transaction.updates` listener catches the unfinished transaction on next launch, finishes it, grants access.                                                                                                                               |
+| Family Sharing                             | StoreKit 2 handles this transparently if enabled on the subscription group in App Store Connect. `Transaction.currentEntitlements` includes family-shared subscriptions.                                                                    |
+| Ask to Buy (child accounts)                | `.pending` result from `purchase()`. Show message: "Your purchase is waiting for approval." Entitlement granted when parent approves (caught by `Transaction.updates`).                                                                     |
+| Refund                                     | Apple may revoke the transaction. `Transaction.updates` emits a revocation event. `checkEntitlement()` will no longer find a valid transaction → `hasFullAccess = false`.                                                                   |
+| Subscription upgrade (monthly → annual)    | Apple handles proration. `Transaction.updates` emits the new transaction. `checkEntitlement()` still finds a valid entitlement. Seamless.                                                                                                   |
+| Billing retry / grace period               | Apple retries failed payments for up to 60 days. During this period, `Transaction.currentEntitlements` still includes the subscription. `hasFullAccess` remains `true`. No special handling needed — StoreKit 2 manages this transparently. |
+| Offline purchase attempt                   | StoreKit surfaces the error. Show "Unable to connect to the App Store. Please check your internet connection."                                                                                                                              |
+| User not signed into App Store             | StoreKit prompts for Apple ID sign-in automatically when `purchase()` is called.                                                                                                                                                            |
+| Sign-in path after auth gate removal       | `AuthGateViewController` is still reachable via: (a) auth nudge banner on Style Guide tab, (b) "Sign in" button on Profile page. Both present it modally. If these are missing, users cannot authenticate.                                  |
+| User signs out of Cosmic Fit               | **Do not** revoke `hasFullAccess` based on auth alone. Subscription remains per Apple ID. Refresh UI for auth-specific controls only.                                                                                                       |
+| User signs in after subscribing as guest   | Same Apple ID → subscription unchanged. **Do not** merge or copy entitlement from server; re-run `checkEntitlement()` if helpful.                                                                                                           |
+| User deletes Cosmic Fit / Supabase account | **Does not** cancel App Store billing. **Do not** force `hasFullAccess = false` unless StoreKit no longer shows an active entitlement. Deletion flows should warn about Apple-managed billing (see Apple ID vs account section).            |
+| Restore tapped while already subscribed    | Idempotent: sync completes, `checkEntitlement()` remains true, optional brief “You’re subscribed” confirmation is fine.                                                                                                                     |
+| Profile Restore vs paywall Restore         | **Must** invoke the same `restorePurchases()` implementation (no drift).                                                                                                                                                                    |
 
 ---
 
@@ -487,7 +569,7 @@ StoreKitManager.purchase(product)
 1. In App Store Connect → **Users and Access** → **Sandbox** → create a sandbox tester account
 2. On device: Settings → App Store → sign out of real Apple ID → sign in with sandbox tester when prompted during purchase
 3. Sandbox purchases are free and auto-renew on an accelerated schedule (1 month = 5 minutes, 1 year = 1 hour)
-4. Test: purchase monthly, purchase annual, restore, cancel (via Settings), expiry, re-subscribe
+4. Test: purchase monthly, purchase annual, **restore from paywall and from Profile** (same behaviour), cancel (via Settings), expiry, re-subscribe; **sign out while subscribed** and confirm paid content remains unlocked per StoreKit
 
 ### Debug Override Testing
 
@@ -502,7 +584,10 @@ StoreKitManager.purchase(product)
 - [ ] Both products are in "Ready to Submit" status with localisation + review screenshot
 - [ ] `DebugConfiguration.overrideEntitlementUnlocked` defaults to `false` (verified in source)
 - [ ] Purchase flow works end-to-end in sandbox
-- [ ] Restore Purchases button works
+- [ ] Restore Purchases works from **purchase screen** and from **Profile**
+- [ ] After sign-out, paid content stays unlocked if Apple ID still has an active subscription (StoreKit truth)
+- [ ] After sign-in, entitlement is not “invented” from server — still StoreKit only
+- [ ] Account deletion flow (if present) does not incorrectly revoke access; user warned that Apple subscription is separate
 - [ ] Lock states apply correctly when not subscribed
 - [ ] Lock states clear correctly when subscribed
 - [ ] Terms of Use and Privacy Policy URLs are live and functional
@@ -522,10 +607,10 @@ StoreKitManager.purchase(product)
 
 Apple will reject the app if any of these are missing:
 
-1. **Restore Purchases button** — must be visible and functional on the purchase screen
+1. **Restore Purchases** — must be visible and functional on the **purchase screen** **and** on **Profile** (Menu → Profile). Both must call the same `StoreKitManager.restorePurchases()` / `checkEntitlement()` path. Reviewers often expect restore without hunting the paywall.
 2. **Terms of Use + Privacy Policy links** — must be on or accessible from the purchase screen
 3. **Auto-renewal disclosure** — must state that the subscription auto-renews, the price, and how to cancel
-4. **Subscription management instructions** — must tell users they can manage/cancel in iOS Settings
+4. **Subscription management instructions** — must tell users they can manage/cancel in iOS Settings (paywall copy already specifies this). Optional: Profile **“Manage subscription”** deep link to `https://apps.apple.com/account/subscriptions` for convenience.
 5. **Price fetched from StoreKit** — never hardcode prices. Use `product.displayPrice` so Apple shows the correct localised currency
 6. **Clear description of what's unlocked** — the benefits list must accurately describe what the subscription provides
 7. **No misleading UI** — locked content must be clearly indicated, not hidden or confusing
@@ -534,23 +619,23 @@ Apple will reject the app if any of these are missing:
 
 ## Files Quick Reference
 
-| Concern | Path |
-|---|---|
-| StoreKit manager (NEW) | `Cosmic Fit/Core/Services/StoreKitManager.swift` |
-| Entitlement manager (NEW) | `Cosmic Fit/Core/Services/EntitlementManager.swift` |
-| Purchase screen (REFACTOR + RENAME) | `Cosmic Fit/UI/ViewControllers/PaymentPlaceholderViewController.swift` → rename to `PurchaseViewController.swift` |
-| Daily Fit gating (MODIFY) | `Cosmic Fit/UI/ViewControllers/DailyFitViewController.swift` |
-| Style Guide gating (MODIFY) | `Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift` |
-| Style Guide grid button (MODIFY) | Defined inline in `StyleGuideViewController.swift` (class `StyleGuideGridButton`, line ~679) |
-| Tab bar auth gate removal (MODIFY) | `Cosmic Fit/UI/ViewControllers/CosmicFitTabBarController.swift` |
-| App boot sequence (MODIFY) | `Cosmic Fit/App/AppDelegate.swift` |
-| Onboarding landing tab (MODIFY) | `Cosmic Fit/UI/ViewControllers/OnboardingFormViewController.swift` — change `selectedIndex = 1` to `0` |
-| Profile sign-in button (MODIFY) | `Cosmic Fit/UI/ViewControllers/ProfileViewController.swift` — add auth CTA for guests; update sign-out copy |
-| Auth nudge banner (MODIFY) | `Cosmic Fit/UI/Views/AuthNudgeBannerView.swift` + handler in `StyleGuideViewController.swift` — change tap to present `AuthGateViewController` modally |
-| Auth gate (KEEP — reused as modal) | `Cosmic Fit/UI/ViewControllers/AuthGateViewController.swift` — do NOT delete; no longer used as tab-0 swap |
-| Debug toggle (MODIFY) | `Cosmic Fit/Core/Config/DebugConfiguration.swift` |
-| Blueprint model (READ ONLY) | `Cosmic Fit/InterpretationEngine/BlueprintModels.swift` |
-| Auth service (READ ONLY) | `Cosmic Fit/Core/Services/CosmicFitAuthService.swift` |
+| Concern                                     | Path                                                                                                                                                                                                                |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| StoreKit manager (NEW)                      | `Cosmic Fit/Core/Services/StoreKitManager.swift`                                                                                                                                                                    |
+| Entitlement manager (NEW)                   | `Cosmic Fit/Core/Services/EntitlementManager.swift`                                                                                                                                                                 |
+| Purchase screen (REFACTOR + RENAME)         | `Cosmic Fit/UI/ViewControllers/PaymentPlaceholderViewController.swift` → rename to `PurchaseViewController.swift`                                                                                                   |
+| Daily Fit gating (MODIFY)                   | `Cosmic Fit/UI/ViewControllers/DailyFitViewController.swift`                                                                                                                                                        |
+| Style Guide gating (MODIFY)                 | `Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift`                                                                                                                                                      |
+| Style Guide grid button (MODIFY)            | Defined inline in `StyleGuideViewController.swift` (class `StyleGuideGridButton`, line ~679)                                                                                                                        |
+| Tab bar auth gate removal (MODIFY)          | `Cosmic Fit/UI/ViewControllers/CosmicFitTabBarController.swift`                                                                                                                                                     |
+| App boot sequence (MODIFY)                  | `Cosmic Fit/App/AppDelegate.swift`                                                                                                                                                                                  |
+| Onboarding landing tab (MODIFY)             | `Cosmic Fit/UI/ViewControllers/OnboardingFormViewController.swift` — change `selectedIndex = 1` to `0`                                                                                                              |
+| Profile — sign-in, restore, manage (MODIFY) | `Cosmic Fit/UI/ViewControllers/ProfileViewController.swift` — guest “Sign in to sync”; **always-visible Restore purchases**; optional Manage subscription URL; sign-out copy; **no** entitlement logic tied to auth |
+| Auth nudge banner (MODIFY)                  | `Cosmic Fit/UI/Views/AuthNudgeBannerView.swift` + handler in `StyleGuideViewController.swift` — change tap to present `AuthGateViewController` modally                                                              |
+| Auth gate (KEEP — reused as modal)          | `Cosmic Fit/UI/ViewControllers/AuthGateViewController.swift` — do NOT delete; no longer used as tab-0 swap                                                                                                          |
+| Debug toggle (MODIFY)                       | `Cosmic Fit/Core/Config/DebugConfiguration.swift`                                                                                                                                                                   |
+| Blueprint model (READ ONLY)                 | `Cosmic Fit/InterpretationEngine/BlueprintModels.swift`                                                                                                                                                             |
+| Auth service (READ ONLY)                    | `Cosmic Fit/Core/Services/CosmicFitAuthService.swift`                                                                                                                                                               |
 
 ---
 
@@ -565,8 +650,8 @@ Apple will reject the app if any of these are missing:
 7. **`DailyFitViewController.swift`** — gate tomorrow button behind entitlement; hide calendar button; observe entitlement changes
 8. **`StyleGuideViewController.swift`** + **`StyleGuideGridButton`** — add lock state to tiles; gate `navigateToDetail` behind entitlement; observe entitlement changes
 9. **`CosmicFitTabBarController.swift`** — remove auth gate swap for tab 0; always show `DailyFitViewController`; observe entitlement
-10. **`ProfileViewController.swift`** — add "Sign in to sync" button for unauthenticated users; update sign-out alert copy
+10. **`ProfileViewController.swift`** — add "Sign in to sync" for guests; **add Profile “Restore purchases”** (shared `restorePurchases()`); optional “Manage subscription” link; update sign-out alert copy; verify sign-out does **not** clear StoreKit-derived access
 11. **`AuthNudgeBannerView.swift`** / **`StyleGuideViewController.swift`** — change nudge tap handler to present `AuthGateViewController` modally instead of switching tabs
-12. **Smoke test** — verify sign-in still works via nudge banner and profile; verify sign-out works; verify auth state notifications still refresh UI correctly
+12. **Smoke test** — verify sign-in still works via nudge banner and profile; verify sign-out works; verify auth state notifications still refresh UI correctly; verify **Profile → Restore purchases** and paywall restore both call `restorePurchases()` and refresh locks; verify **sign-out does not lock** paid content if the Apple ID is still subscribed
 13. **Subscription test** — sandbox purchases, restore, lock/unlock, expiry, upgrade, edge cases
 14. **Submit** — ensure App Store Connect products are correct type (auto-renewable, NOT consumable), add screenshots, set to "Ready to Submit"
