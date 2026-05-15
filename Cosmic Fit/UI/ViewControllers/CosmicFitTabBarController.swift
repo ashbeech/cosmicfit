@@ -539,9 +539,8 @@ final class CosmicFitTabBarController: UITabBarController {
         let isAuthenticated = notification.userInfo?["isAuthenticated"] as? Bool ?? false
         
         if isAuthenticated {
-            print("🔓 Auth state: authenticated — swapping auth gate for Daily Fit")
+            print("🔓 Auth state: authenticated — hydrating blueprint if needed")
             
-            // Hydrate: if no local Style Guide, try pulling from Supabase (new device / reinstall)
             if BlueprintStorage.shared.load() == nil {
                 Task {
                     await hydrateBlueprint()
@@ -552,18 +551,12 @@ final class CosmicFitTabBarController: UITabBarController {
             }
             
             setupViewControllers()
-            
-            // Deferred tab swap: if user hasn't manually navigated away from Style Guide, switch to Daily Fit
-            if !userHasManuallyNavigated && selectedIndex == 1 {
-                selectedIndex = 0
-                updateTabSelectionIndicator()
-            }
         } else {
-            print("🔒 Auth state: signed out — swapping Daily Fit for auth gate")
+            print("🔒 Auth state: signed out — refreshing UI (entitlement unchanged)")
             setupViewControllers()
-            selectedIndex = 1
-            updateTabSelectionIndicator()
         }
+
+        Task { await EntitlementManager.shared.checkEntitlement() }
     }
     
     /// Attempts to pull Style Guide data (`CosmicBlueprint`) from Supabase and save it locally.
@@ -912,37 +905,25 @@ final class CosmicFitTabBarController: UITabBarController {
         
         var viewControllers: [UIViewController] = []
         
-        // Index 0: Daily Fit (authenticated) or Auth Gate (unauthenticated)
-        if CosmicFitAuthService.shared.isAuthenticated {
-            let dailyFitVC = DailyFitViewController()
-            if let payload = dailyFitPayload {
-                dailyFitVC.configure(
-                    with: payload,
-                    originalChartViewController: createDebugChartViewController()
-                )
-            }
-
-            dailyFitVC.persistenceProfileKey = userProfile?.id ?? chartIdentifier
-            dailyFitVC.payloadGenerator = { [weak self] date -> DailyFitPayload? in
-                return self?.generateDailyPayload(forDate: date)
-            }
-            dailyFitVC.tabBarItem = UITabBarItem(
-                title: "Daily Fit",
-                image: nil,
-                selectedImage: nil
+        // Index 0: Daily Fit — always shown (no auth gate)
+        let dailyFitVC = DailyFitViewController()
+        if let payload = dailyFitPayload {
+            dailyFitVC.configure(
+                with: payload,
+                originalChartViewController: createDebugChartViewController()
             )
-            viewControllers.append(dailyFitVC)
-        } else {
-            let authGateVC = AuthGateViewController()
-            let authNav = UINavigationController(rootViewController: authGateVC)
-            authNav.navigationBar.isHidden = true
-            authNav.tabBarItem = UITabBarItem(
-                title: "Daily Fit",
-                image: nil,
-                selectedImage: nil
-            )
-            viewControllers.append(authNav)
         }
+
+        dailyFitVC.persistenceProfileKey = userProfile?.id ?? chartIdentifier
+        dailyFitVC.payloadGenerator = { [weak self] date -> DailyFitPayload? in
+            return self?.generateDailyPayload(forDate: date)
+        }
+        dailyFitVC.tabBarItem = UITabBarItem(
+            title: "Daily Fit",
+            image: nil,
+            selectedImage: nil
+        )
+        viewControllers.append(dailyFitVC)
 
         // Index 1: Style Guide
         let styleGuideVC = StyleGuideViewController()

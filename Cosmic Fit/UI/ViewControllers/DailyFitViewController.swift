@@ -189,9 +189,20 @@ class DailyFitViewController: UIViewController {
         setupUI()
         setupDayRolloverObservers()
 
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleEntitlementChange),
+            name: EntitlementManager.entitlementDidChange,
+            object: nil
+        )
+
         if dailyFitPayload != nil {
             updateContentFromPayload()
         }
+    }
+
+    @objc private func handleEntitlementChange() {
+        updateDayNavigationUI()
     }
 
     override func viewDidLayoutSubviews() {
@@ -1121,7 +1132,22 @@ class DailyFitViewController: UIViewController {
         if isViewingTomorrow {
             switchToToday()
         } else {
+            guard EntitlementManager.shared.hasFullAccess else {
+                presentPurchaseScreen()
+                return
+            }
             switchToTomorrow()
+        }
+    }
+
+    private func presentPurchaseScreen() {
+        let purchaseVC = PurchaseViewController()
+        if let tbc = tabBarController as? CosmicFitTabBarController {
+            let detailVC = GenericDetailViewController(contentViewController: purchaseVC)
+            tbc.presentDetailViewController(detailVC, animated: true)
+        } else {
+            purchaseVC.modalPresentationStyle = .pageSheet
+            present(purchaseVC, animated: true)
         }
     }
 
@@ -1235,7 +1261,11 @@ class DailyFitViewController: UIViewController {
             dayNavigationBackButton.isHidden = false
             dayNavigationBackButton.alpha = 1
         } else {
-            tomorrowButton.setTitle("SEE TOMORROW\u{2019}S FIT  \u{203A}", for: .normal)
+            if EntitlementManager.shared.hasFullAccess {
+                tomorrowButton.setTitle("SEE TOMORROW\u{2019}S FIT  \u{203A}", for: .normal)
+            } else {
+                tomorrowButton.setTitle("UNLOCK FULL ACCESS", for: .normal)
+            }
             tomorrowTeaseLabel.text = "Tomorrow\u{2019}s energy is already shifting..."
             dayNavigationBackButton.isHidden = true
             dayNavigationBackButton.alpha = 0
@@ -1323,6 +1353,7 @@ class DailyFitViewController: UIViewController {
         contentView.addSubview(dailyFitLabel)
 
         contentView.addSubview(calendarButton)
+        calendarButton.isHidden = true
         calendarButton.alpha = 0.0
 
         // Tarot glyph row omitted in current design — keep view for future use, collapsed.
@@ -2595,15 +2626,7 @@ class DailyFitViewController: UIViewController {
     }
     
     @objc private func calendarButtonTapped() {
-        let paymentVC = PaymentPlaceholderViewController()
-        if let tbc = tabBarController as? CosmicFitTabBarController {
-            let detailVC = GenericDetailViewController(contentViewController: paymentVC)
-            tbc.presentDetailViewController(detailVC, animated: true)
-        } else {
-            // Fallback for any non-standard embedding during development.
-            paymentVC.modalPresentationStyle = .pageSheet
-            present(paymentVC, animated: true)
-        }
+        // Calendar is hidden for this release — no-op.
     }
 }
 

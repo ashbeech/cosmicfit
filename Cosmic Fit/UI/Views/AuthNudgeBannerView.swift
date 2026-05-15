@@ -7,7 +7,7 @@ final class AuthNudgeBannerView: UIView {
 
     private let label: UILabel = {
         let label = UILabel()
-        label.text = "Unlock your daily style forecast"
+        label.text = "Sign in to sync your data"
         label.font = CosmicFitTheme.Typography.dmSansFont(size: 14, weight: .medium)
         label.textColor = .white
         return label
