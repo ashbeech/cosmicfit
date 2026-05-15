@@ -21,6 +21,7 @@ final class SupabaseSyncService {
             let latitude: Double
             let longitude: Double
             let timezone_identifier: String
+            let birth_time_is_unknown: Bool
         }
 
         let payload = ProfilePayload(
@@ -30,7 +31,8 @@ final class SupabaseSyncService {
             birth_location: profile.birthLocation,
             latitude: profile.latitude,
             longitude: profile.longitude,
-            timezone_identifier: profile.timeZoneIdentifier
+            timezone_identifier: profile.timeZoneIdentifier,
+            birth_time_is_unknown: profile.birthTimeIsUnknown
         )
 
         try await supabase
@@ -92,6 +94,7 @@ final class SupabaseSyncService {
             let latitude: Double?
             let longitude: Double?
             let timezone_identifier: String?
+            let birth_time_is_unknown: Bool?
         }
 
         let response: RemoteProfile = try await supabase
@@ -120,6 +123,7 @@ final class SupabaseSyncService {
             latitude: lat,
             longitude: lon,
             timeZoneIdentifier: tzId,
+            birthTimeIsUnknown: response.birth_time_is_unknown ?? false,
             createdAt: Date(),
             lastModified: Date()
         )
@@ -175,9 +179,16 @@ final class SupabaseSyncService {
             }
         } else {
             do {
+                let epochAtStart = await MainActor.run { BlueprintStorage.remoteBlueprintPullEpoch }
                 if let remote = try await pullBlueprintFromSupabase() {
-                    BlueprintStorage.shared.save(remote)
-                    print("✅ Blueprint pulled from Supabase during full sync")
+                    await MainActor.run {
+                        if epochAtStart == BlueprintStorage.remoteBlueprintPullEpoch {
+                            BlueprintStorage.shared.save(remote)
+                            print("✅ Blueprint pulled from Supabase during full sync")
+                        } else {
+                            print("ℹ️ Blueprint pull from Supabase skipped — local blueprint changed during fetch")
+                        }
+                    }
                 }
             } catch {
                 print("⚠️ Blueprint pull failed: \(error.localizedDescription)")

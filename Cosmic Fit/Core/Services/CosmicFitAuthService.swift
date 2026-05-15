@@ -176,5 +176,8 @@ final class CosmicFitAuthService {
         print("⚠️ Different user detected — purging local data")
         UserProfileStorage.shared.deleteUserProfile()
         BlueprintStorage.shared.delete()
+        Task { @MainActor in
+            BlueprintStorage.bumpRemoteBlueprintPullEpoch()
+        }
     }
 }

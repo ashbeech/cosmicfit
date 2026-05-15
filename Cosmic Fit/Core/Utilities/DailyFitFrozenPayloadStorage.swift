@@ -16,6 +16,19 @@ enum DailyFitRevealPersistence {
         fmt.dateFormat = "yyyy-MM-dd"
         return "CardRevealed_\(fmt.string(from: date))"
     }
+
+    /// Clears persisted "card revealed" flags for each calendar day from `start` through `end`
+    /// (inclusive), using `Calendar.current` start-of-day boundaries. Used when birth chart
+    /// inputs change so Daily Fit is not constrained by stale reveal state.
+    static func clearRevealFlags(from start: Date, through end: Date, calendar: Calendar = .current) {
+        var day = calendar.startOfDay(for: start)
+        let last = calendar.startOfDay(for: end)
+        while day <= last {
+            UserDefaults.standard.removeObject(forKey: revealedFlagKey(forCalendarDay: day))
+            guard let next = calendar.date(byAdding: .day, value: 1, to: day) else { break }
+            day = next
+        }
+    }
 }
 
 final class DailyFitFrozenPayloadStorage {
@@ -44,15 +57,18 @@ final class DailyFitFrozenPayloadStorage {
         return directoryURL.appendingPathComponent("\(sanitizedProfileKey(profileKey))_\(day).json")
     }
 
-    func save(payload: DailyFitPayload, date: Date, profileKey: String) {
+    @discardableResult
+    func save(payload: DailyFitPayload, date: Date, profileKey: String) -> Bool {
         do {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .iso8601
             encoder.outputFormatting = []
             let data = try encoder.encode(payload)
             try data.write(to: fileURL(date: date, profileKey: profileKey), options: .atomic)
+            return true
         } catch {
             print("⚠️ Daily Fit frozen save failed: \(error.localizedDescription)")
+            return false
         }
     }
 

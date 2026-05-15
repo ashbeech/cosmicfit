@@ -16,11 +16,12 @@ struct UserProfile: Codable {
     let latitude: Double
     let longitude: Double
     let timeZoneIdentifier: String
+    let birthTimeIsUnknown: Bool
     let createdAt: Date
     let lastModified: Date
     
     // Primary initializer for new profiles
-    init(firstName: String, birthDate: Date, birthLocation: String, latitude: Double, longitude: Double, timeZone: TimeZone) {
+    init(firstName: String, birthDate: Date, birthLocation: String, latitude: Double, longitude: Double, timeZone: TimeZone, birthTimeIsUnknown: Bool = false) {
         self.id = UUID().uuidString
         self.firstName = firstName
         self.birthDate = birthDate
@@ -28,12 +29,13 @@ struct UserProfile: Codable {
         self.latitude = latitude
         self.longitude = longitude
         self.timeZoneIdentifier = timeZone.identifier
+        self.birthTimeIsUnknown = birthTimeIsUnknown
         self.createdAt = Date()
         self.lastModified = Date()
     }
     
     // Internal initializer for updates (preserves ID and creation date)
-    init(id: String, firstName: String, birthDate: Date, birthLocation: String, latitude: Double, longitude: Double, timeZoneIdentifier: String, createdAt: Date, lastModified: Date) {
+    init(id: String, firstName: String, birthDate: Date, birthLocation: String, latitude: Double, longitude: Double, timeZoneIdentifier: String, birthTimeIsUnknown: Bool = false, createdAt: Date, lastModified: Date) {
         self.id = id
         self.firstName = firstName
         self.birthDate = birthDate
@@ -41,8 +43,24 @@ struct UserProfile: Codable {
         self.latitude = latitude
         self.longitude = longitude
         self.timeZoneIdentifier = timeZoneIdentifier
+        self.birthTimeIsUnknown = birthTimeIsUnknown
         self.createdAt = createdAt
         self.lastModified = lastModified
+    }
+    
+    // Backward-compatible decoding: old JSON files lack birthTimeIsUnknown
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        firstName = try container.decode(String.self, forKey: .firstName)
+        birthDate = try container.decode(Date.self, forKey: .birthDate)
+        birthLocation = try container.decode(String.self, forKey: .birthLocation)
+        latitude = try container.decode(Double.self, forKey: .latitude)
+        longitude = try container.decode(Double.self, forKey: .longitude)
+        timeZoneIdentifier = try container.decode(String.self, forKey: .timeZoneIdentifier)
+        birthTimeIsUnknown = try container.decodeIfPresent(Bool.self, forKey: .birthTimeIsUnknown) ?? false
+        createdAt = try container.decode(Date.self, forKey: .createdAt)
+        lastModified = try container.decode(Date.self, forKey: .lastModified)
     }
     
     // Validation helper

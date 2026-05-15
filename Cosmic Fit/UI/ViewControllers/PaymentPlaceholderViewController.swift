@@ -52,10 +52,10 @@ final class PaymentPlaceholderViewController: UIViewController {
         ]
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = 12
+        stack.spacing = DosAndDontsSectionView.bulletToBulletSpacing
         stack.alignment = .fill
         for text in items {
-            stack.addArrangedSubview(Self.makeBenefitRow(text: text))
+            stack.addArrangedSubview(DosAndDontsSectionView.bulletPointRow(text: text))
         }
         return stack
     }()
@@ -107,35 +107,5 @@ final class PaymentPlaceholderViewController: UIViewController {
             stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
             stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
         ])
-    }
-
-    // MARK: - Benefits row
-
-    private static func makeBenefitRow(text: String) -> UIStackView {
-        let dot = UIView()
-        dot.backgroundColor = CosmicFitTheme.Colours.cosmicOrange
-        dot.layer.cornerRadius = 3
-        dot.translatesAutoresizingMaskIntoConstraints = false
-
-        let label = UILabel()
-        label.text = text
-        label.font = CosmicFitTheme.Typography.dmSansFont(size: 16, weight: .regular)
-        label.textColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.85)
-        label.textAlignment = .left
-        label.numberOfLines = 0
-
-        let row = UIStackView(arrangedSubviews: [dot, label])
-        row.axis = .horizontal
-        row.alignment = .top
-        row.spacing = 12
-        row.isLayoutMarginsRelativeArrangement = true
-        row.layoutMargins = UIEdgeInsets(top: 2, left: 0, bottom: 0, right: 0)
-
-        NSLayoutConstraint.activate([
-            dot.widthAnchor.constraint(equalToConstant: 6),
-            dot.heightAnchor.constraint(equalToConstant: 6),
-        ])
-
-        return row
     }
 }

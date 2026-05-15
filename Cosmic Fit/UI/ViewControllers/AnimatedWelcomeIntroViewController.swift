@@ -23,11 +23,10 @@ class AnimatedWelcomeIntroViewController: UIViewController {
     private let yourStyleLabel = UILabel()
     private let yourEnergyLabel = UILabel()
     private let yourStoryLabel = UILabel()
-    private let spacerView = UIView()
-    private let waitingLabel1 = UILabel()
-    private let waitingLabel2 = UILabel()
+    private let waitingLabel = UILabel()
     private let letsBeginLabel = UILabel()
-    private let dividerView = UIView()
+    private let leadingDividerView = UIView()
+    private let trailingDividerView = UIView()
     private let sparkleIcon = UILabel()
     
     // MARK: - Properties
@@ -131,145 +130,144 @@ class AnimatedWelcomeIntroViewController: UIViewController {
     
     private func setupSecondPage() {
         secondPageView.translatesAutoresizingMaskIntoConstraints = false
-        secondPageView.backgroundColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1.0)
+        secondPageView.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         view.addSubview(secondPageView)
-        
-        // Setup labels
+
         setupSecondPageLabels()
-        
-        // Constraints for second page
+
         NSLayoutConstraint.activate([
             secondPageView.topAnchor.constraint(equalTo: view.topAnchor),
             secondPageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             secondPageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             secondPageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        
+
         setupSecondPageConstraints()
     }
-    
+
     private func setupSecondPageLabels() {
-        // Your style
-        yourStyleLabel.text = "Your style."
+        let serifSize: CGFloat = 36
+
+        yourStyleLabel.attributedText = makeYourLineAttributedText("style.", size: serifSize)
         yourStyleLabel.translatesAutoresizingMaskIntoConstraints = false
-        yourStyleLabel.font = UIFont.systemFont(ofSize: 48, weight: .medium)
-        yourStyleLabel.textColor = .black
+        yourStyleLabel.numberOfLines = 1
         yourStyleLabel.alpha = 0.0
         secondPageView.addSubview(yourStyleLabel)
-        
-        // Your energy
-        yourEnergyLabel.text = "Your energy."
+
+        yourEnergyLabel.attributedText = makeYourLineAttributedText("energy.", size: serifSize)
         yourEnergyLabel.translatesAutoresizingMaskIntoConstraints = false
-        yourEnergyLabel.font = UIFont.systemFont(ofSize: 48, weight: .medium)
-        yourEnergyLabel.textColor = .black
+        yourEnergyLabel.numberOfLines = 1
         yourEnergyLabel.alpha = 0.0
         secondPageView.addSubview(yourEnergyLabel)
-        
-        // Your story
-        yourStoryLabel.text = "Your story."
+
+        yourStoryLabel.attributedText = makeYourLineAttributedText("story.", size: serifSize)
         yourStoryLabel.translatesAutoresizingMaskIntoConstraints = false
-        yourStoryLabel.font = UIFont.systemFont(ofSize: 48, weight: .medium)
-        yourStoryLabel.textColor = .black
+        yourStoryLabel.numberOfLines = 1
         yourStoryLabel.alpha = 0.0
         secondPageView.addSubview(yourStoryLabel)
-        
-        // Spacer
-        spacerView.translatesAutoresizingMaskIntoConstraints = false
-        secondPageView.addSubview(spacerView)
-        
-        // Waiting text
-        waitingLabel1.text = "It's all waiting"
-        waitingLabel1.translatesAutoresizingMaskIntoConstraints = false
-        waitingLabel1.font = UIFont.systemFont(ofSize: 36, weight: .medium)
-        waitingLabel1.textColor = .black
-        waitingLabel1.alpha = 0.0
-        secondPageView.addSubview(waitingLabel1)
-        
-        waitingLabel2.text = "to be revealed."
-        waitingLabel2.translatesAutoresizingMaskIntoConstraints = false
-        waitingLabel2.font = UIFont.systemFont(ofSize: 36, weight: .medium)
-        waitingLabel2.textColor = .black
-        waitingLabel2.alpha = 0.0
-        secondPageView.addSubview(waitingLabel2)
-        
-        // Let's begin
-        letsBeginLabel.text = "Let's begin."
+
+        waitingLabel.text = "It’s all waiting\nto be revealed."
+        waitingLabel.translatesAutoresizingMaskIntoConstraints = false
+        waitingLabel.font = serifFont(size: serifSize, italic: false)
+        waitingLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
+        waitingLabel.numberOfLines = 0
+        waitingLabel.alpha = 0.0
+        secondPageView.addSubview(waitingLabel)
+
+        letsBeginLabel.text = "Let’s begin."
         letsBeginLabel.translatesAutoresizingMaskIntoConstraints = false
-        letsBeginLabel.font = UIFont.systemFont(ofSize: 36, weight: .semibold)
-        letsBeginLabel.textColor = .black
+        letsBeginLabel.font = serifFont(size: serifSize, italic: false)
+        letsBeginLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
         letsBeginLabel.alpha = 0.0
         secondPageView.addSubview(letsBeginLabel)
-        
-        // Divider
-        dividerView.translatesAutoresizingMaskIntoConstraints = false
-        dividerView.backgroundColor = .black
-        dividerView.alpha = 0.0
-        secondPageView.addSubview(dividerView)
-        
-        // Sparkle icon
+
+        leadingDividerView.translatesAutoresizingMaskIntoConstraints = false
+        leadingDividerView.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
+        leadingDividerView.alpha = 0.0
+        secondPageView.addSubview(leadingDividerView)
+
+        trailingDividerView.translatesAutoresizingMaskIntoConstraints = false
+        trailingDividerView.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
+        trailingDividerView.alpha = 0.0
+        secondPageView.addSubview(trailingDividerView)
+
         sparkleIcon.text = "✦"
         sparkleIcon.translatesAutoresizingMaskIntoConstraints = false
-        sparkleIcon.font = UIFont.systemFont(ofSize: 24)
-        sparkleIcon.textColor = .black
+        sparkleIcon.font = UIFont.systemFont(ofSize: 22, weight: .regular)
+        sparkleIcon.textColor = CosmicFitTheme.Colours.cosmicBlue
         sparkleIcon.alpha = 0.0
         secondPageView.addSubview(sparkleIcon)
     }
-    
+
     private func setupSecondPageConstraints() {
+        let horizontalInset: CGFloat = 36
+
         NSLayoutConstraint.activate([
-            yourStyleLabel.topAnchor.constraint(equalTo: secondPageView.safeAreaLayoutGuide.topAnchor, constant: 100),
-            yourStyleLabel.leadingAnchor.constraint(equalTo: secondPageView.leadingAnchor, constant: 40),
-            yourStyleLabel.trailingAnchor.constraint(equalTo: secondPageView.trailingAnchor, constant: -40),
-            
-            yourEnergyLabel.topAnchor.constraint(equalTo: yourStyleLabel.bottomAnchor, constant: 20),
-            yourEnergyLabel.leadingAnchor.constraint(equalTo: secondPageView.leadingAnchor, constant: 40),
-            yourEnergyLabel.trailingAnchor.constraint(equalTo: secondPageView.trailingAnchor, constant: -40),
-            
-            yourStoryLabel.topAnchor.constraint(equalTo: yourEnergyLabel.bottomAnchor, constant: 20),
-            yourStoryLabel.leadingAnchor.constraint(equalTo: secondPageView.leadingAnchor, constant: 40),
-            yourStoryLabel.trailingAnchor.constraint(equalTo: secondPageView.trailingAnchor, constant: -40),
-            
-            spacerView.topAnchor.constraint(equalTo: yourStoryLabel.bottomAnchor),
-            spacerView.leadingAnchor.constraint(equalTo: secondPageView.leadingAnchor),
-            spacerView.trailingAnchor.constraint(equalTo: secondPageView.trailingAnchor),
-            spacerView.heightAnchor.constraint(equalToConstant: 80),
-            
-            waitingLabel1.topAnchor.constraint(equalTo: spacerView.bottomAnchor),
-            waitingLabel1.leadingAnchor.constraint(equalTo: secondPageView.leadingAnchor, constant: 40),
-            waitingLabel1.trailingAnchor.constraint(equalTo: secondPageView.trailingAnchor, constant: -40),
-            
-            waitingLabel2.topAnchor.constraint(equalTo: waitingLabel1.bottomAnchor, constant: 10),
-            waitingLabel2.leadingAnchor.constraint(equalTo: secondPageView.leadingAnchor, constant: 40),
-            waitingLabel2.trailingAnchor.constraint(equalTo: secondPageView.trailingAnchor, constant: -40),
-            
-            letsBeginLabel.topAnchor.constraint(equalTo: waitingLabel2.bottomAnchor, constant: 60),
-            letsBeginLabel.leadingAnchor.constraint(equalTo: secondPageView.leadingAnchor, constant: 40),
-            letsBeginLabel.trailingAnchor.constraint(equalTo: secondPageView.trailingAnchor, constant: -40),
-            
-            dividerView.centerYAnchor.constraint(equalTo: sparkleIcon.centerYAnchor),
-            dividerView.leadingAnchor.constraint(equalTo: secondPageView.leadingAnchor, constant: 40),
-            dividerView.trailingAnchor.constraint(equalTo: sparkleIcon.leadingAnchor, constant: -20),
-            dividerView.heightAnchor.constraint(equalToConstant: 1),
-            
-            sparkleIcon.centerYAnchor.constraint(equalTo: letsBeginLabel.bottomAnchor, constant: 60),
+            yourStyleLabel.centerYAnchor.constraint(equalTo: secondPageView.centerYAnchor, constant: -120),
+            yourStyleLabel.leadingAnchor.constraint(equalTo: secondPageView.leadingAnchor, constant: horizontalInset),
+            yourStyleLabel.trailingAnchor.constraint(lessThanOrEqualTo: secondPageView.trailingAnchor, constant: -horizontalInset),
+
+            yourEnergyLabel.topAnchor.constraint(equalTo: yourStyleLabel.bottomAnchor, constant: 8),
+            yourEnergyLabel.leadingAnchor.constraint(equalTo: yourStyleLabel.leadingAnchor),
+            yourEnergyLabel.trailingAnchor.constraint(lessThanOrEqualTo: secondPageView.trailingAnchor, constant: -horizontalInset),
+
+            yourStoryLabel.topAnchor.constraint(equalTo: yourEnergyLabel.bottomAnchor, constant: 8),
+            yourStoryLabel.leadingAnchor.constraint(equalTo: yourStyleLabel.leadingAnchor),
+            yourStoryLabel.trailingAnchor.constraint(lessThanOrEqualTo: secondPageView.trailingAnchor, constant: -horizontalInset),
+
+            waitingLabel.topAnchor.constraint(equalTo: yourStoryLabel.bottomAnchor, constant: 36),
+            waitingLabel.leadingAnchor.constraint(equalTo: yourStyleLabel.leadingAnchor),
+            waitingLabel.trailingAnchor.constraint(lessThanOrEqualTo: secondPageView.trailingAnchor, constant: -horizontalInset),
+
+            letsBeginLabel.topAnchor.constraint(equalTo: waitingLabel.bottomAnchor, constant: 28),
+            letsBeginLabel.leadingAnchor.constraint(equalTo: yourStyleLabel.leadingAnchor),
+            letsBeginLabel.trailingAnchor.constraint(lessThanOrEqualTo: secondPageView.trailingAnchor, constant: -horizontalInset),
+
+            sparkleIcon.topAnchor.constraint(equalTo: letsBeginLabel.bottomAnchor, constant: 56),
             sparkleIcon.centerXAnchor.constraint(equalTo: secondPageView.centerXAnchor),
-            
-            dividerView.centerYAnchor.constraint(equalTo: sparkleIcon.centerYAnchor)
+
+            leadingDividerView.centerYAnchor.constraint(equalTo: sparkleIcon.centerYAnchor),
+            leadingDividerView.leadingAnchor.constraint(equalTo: secondPageView.leadingAnchor, constant: horizontalInset),
+            leadingDividerView.trailingAnchor.constraint(equalTo: sparkleIcon.leadingAnchor, constant: -16),
+            leadingDividerView.heightAnchor.constraint(equalToConstant: 1),
+
+            trailingDividerView.centerYAnchor.constraint(equalTo: sparkleIcon.centerYAnchor),
+            trailingDividerView.leadingAnchor.constraint(equalTo: sparkleIcon.trailingAnchor, constant: 16),
+            trailingDividerView.trailingAnchor.constraint(equalTo: secondPageView.trailingAnchor, constant: -horizontalInset),
+            trailingDividerView.heightAnchor.constraint(equalToConstant: 1)
         ])
-        
-        // Add trailing divider
-        let trailingDivider = UIView()
-        trailingDivider.translatesAutoresizingMaskIntoConstraints = false
-        trailingDivider.backgroundColor = .black
-        trailingDivider.alpha = 0.0
-        secondPageView.addSubview(trailingDivider)
-        
-        NSLayoutConstraint.activate([
-            trailingDivider.centerYAnchor.constraint(equalTo: sparkleIcon.centerYAnchor),
-            trailingDivider.leadingAnchor.constraint(equalTo: sparkleIcon.trailingAnchor, constant: 20),
-            trailingDivider.trailingAnchor.constraint(equalTo: secondPageView.trailingAnchor, constant: -40),
-            trailingDivider.heightAnchor.constraint(equalToConstant: 1)
-        ])
+    }
+
+    // MARK: - Typography helpers
+    private func serifFont(size: CGFloat, italic: Bool) -> UIFont {
+        let fontName = italic ? "DMSerifText-Italic" : "DMSerifText-Regular"
+        if let font = UIFont(name: fontName, size: size) {
+            return font
+        }
+        if italic {
+            if let pt = UIFont(name: "PTSerif-Italic", size: size) { return pt }
+            return UIFont.italicSystemFont(ofSize: size)
+        }
+        if let pt = UIFont(name: "PTSerif-Regular", size: size) { return pt }
+        return UIFont.systemFont(ofSize: size, weight: .semibold)
+    }
+
+    private func makeYourLineAttributedText(_ trailing: String, size: CGFloat) -> NSAttributedString {
+        let attributed = NSMutableAttributedString(
+            string: "Your",
+            attributes: [
+                .font: serifFont(size: size, italic: true),
+                .foregroundColor: CosmicFitTheme.Colours.cosmicBlue
+            ]
+        )
+        attributed.append(NSAttributedString(
+            string: " \(trailing)",
+            attributes: [
+                .font: serifFont(size: size, italic: false),
+                .foregroundColor: CosmicFitTheme.Colours.cosmicBlue
+            ]
+        ))
+        return attributed
     }
     
     private func setupTapGesture() {
@@ -295,25 +293,24 @@ class AnimatedWelcomeIntroViewController: UIViewController {
     }
     
     private func startCascadingTextAnimation() {
-        let labels = [
+        let elements: [UIView] = [
             yourStyleLabel,
             yourEnergyLabel,
             yourStoryLabel,
-            waitingLabel1,
-            waitingLabel2,
+            waitingLabel,
             letsBeginLabel,
-            dividerView,
-            sparkleIcon
+            sparkleIcon,
+            leadingDividerView,
+            trailingDividerView
         ]
-        
-        for (index, element) in labels.enumerated() {
+
+        for (index, element) in elements.enumerated() {
             let delay = Double(index) * 0.3
-            
+
             UIView.animate(withDuration: 0.5, delay: delay, options: [.curveEaseOut]) {
                 element.alpha = 1.0
             } completion: { _ in
-                if index == labels.count - 1 {
-                    // Animation completed
+                if index == elements.count - 1 {
                     self.animationCompleted = true
                     self.canAdvance = true
                 }

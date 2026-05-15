@@ -52,6 +52,17 @@
 				Resources/VSOP87Data/VSOP87D.ear,
 			);
 		};
+		5EF1A0012F0A10000066807C /* Exceptions for "Cosmic Fit" folder in "Copy Bundle Resources" phase from "Cosmic Fit" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 5EB2E4CD2DC75C8A00644BAD /* Resources */;
+			membershipExceptions = (
+				Resources/.synthid_backups,
+				Resources/.synthid_baseline,
+				Resources/.synthid_candidates,
+				Resources/.synthid_originals_backup,
+				Resources/.synthid_originals_candidates,
+			);
+		};
 /* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -59,6 +70,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				5EA8104F2DCAACF70092DE9B /* Exceptions for "Cosmic Fit" folder in "Link Binary With Libraries" phase from "Cosmic Fit" target */,
+				5EF1A0012F0A10000066807C /* Exceptions for "Cosmic Fit" folder in "Copy Bundle Resources" phase from "Cosmic Fit" target */,
 			);
 			explicitFileTypes = {
 				Resources/VSOP87Data/VSOP87D.ear = compiled;
@@ -482,6 +494,15 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 653BNKDSZS;
 				ENABLE_PREVIEWS = YES;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					"Resources/.synthid_backups/*",
+					"Resources/.synthid_baseline/*",
+					"Resources/.synthid_candidates/*",
+					"Resources/.synthid_candidates/**/*",
+					"Resources/.synthid_originals_backup/*",
+					"Resources/.synthid_originals_candidates/*",
+					"Resources/.synthid_originals_candidates/**/*",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Cosmic-Fit-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Cosmic Fit";
@@ -516,6 +537,15 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 653BNKDSZS;
 				ENABLE_PREVIEWS = YES;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					"Resources/.synthid_backups/*",
+					"Resources/.synthid_baseline/*",
+					"Resources/.synthid_candidates/*",
+					"Resources/.synthid_candidates/**/*",
+					"Resources/.synthid_originals_backup/*",
+					"Resources/.synthid_originals_candidates/*",
+					"Resources/.synthid_originals_candidates/**/*",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Cosmic-Fit-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Cosmic Fit";

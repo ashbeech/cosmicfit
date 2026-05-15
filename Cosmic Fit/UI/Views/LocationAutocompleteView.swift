@@ -37,6 +37,9 @@ class LocationAutocompleteView: UIView {
         view.layer.borderColor = CosmicFitTheme.Colours.borderColor.cgColor
         return view
     }()
+
+    /// Optional underline shown beneath the field when the onboarding underline styling is applied.
+    private let underlineView = UIView()
     
     // MARK: - UI Elements
     let textField: UITextField = {
@@ -219,6 +222,37 @@ class LocationAutocompleteView: UIView {
         textField.rightView = nil
         textField.rightViewMode = .never
         fieldContainer.layer.borderColor = CosmicFitTheme.Colours.borderColor.cgColor
+        fieldContainer.layer.borderWidth = 1
+    }
+
+    /// Style the field for the multi-step onboarding flow: no bordered box, just an underline beneath
+    /// the input. Keeps the autocomplete dropdown and the trailing 'x' clear button shared with the
+    /// profile edit screen.
+    func applyOnboardingUnderlineStyling() {
+        textField.font = CosmicFitTheme.Typography.dmSansFont(size: 18, weight: .regular)
+        textField.textColor = CosmicFitTheme.Colours.cosmicBlue
+        textField.layer.borderWidth = 0
+        textField.leftView = nil
+        textField.leftViewMode = .never
+        textField.rightView = nil
+        textField.rightViewMode = .never
+        fieldContainer.layer.borderWidth = 0
+        fieldContainer.layer.cornerRadius = 0
+        fieldContainer.backgroundColor = .clear
+        showUnderlineDecoration()
+    }
+
+    private func showUnderlineDecoration() {
+        underlineView.removeFromSuperview()
+        underlineView.translatesAutoresizingMaskIntoConstraints = false
+        underlineView.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
+        addSubview(underlineView)
+        NSLayoutConstraint.activate([
+            underlineView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            underlineView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            underlineView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            underlineView.heightAnchor.constraint(equalToConstant: 1)
+        ])
     }
     
     func setText(_ text: String) {

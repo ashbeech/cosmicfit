@@ -1,0 +1,119 @@
+Processing 1 images in /Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_originals_backup
+Settings: strength=[0.04, 0.04, 0.04], steps=28, max_tile=1024, overlap=256
+Output directory: /Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_originals_candidates/test_3x004_1024_256
+Loading SD 1.5 img2img pipeline (stable-diffusion-v1-5/stable-diffusion-v1-5) on mps...
+Loading pipeline components...:   0%|          | 0/6 [00:00<?, ?it/s]Loading pipeline components...:  17%|█▋        | 1/6 [00:00<00:00,  6.24it/s]
+Loading weights:   0%|          | 0/196 [00:00<?, ?it/s][ALoading weights: 100%|██████████| 196/196 [00:00<00:00, 4594.34it/s]
+Loading pipeline components...:  83%|████████▎ | 5/6 [00:00<00:00, 16.76it/s]Loading pipeline components...: 100%|██████████| 6/6 [00:00<00:00, 16.48it/s]
+
+[ 1/1] Death-final.png...
+[pass 1/3 s=0.04] tile 1/12 (0:1024, 0:1024)...   0%|          | 0/1 [00:00<?, ?it/s]  0%|          | 0/1 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/remove_synthid_originals.py", line 168, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/remove_synthid_originals.py", line 144, in main
+    out_rgb = img2img_denoise(
+        rgb,
+    ...<4 lines>...
+        overlap=args.tile_overlap,
+    )
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/remove_synthid_diffusion.py", line 257, in img2img_denoise
+    result = _tiled_denoise_pass(
+        pipe, result, strengths[p], num_steps, guidance_scale,
+        max_tile, overlap, pass_label,
+    )
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/remove_synthid_diffusion.py", line 190, in _tiled_denoise_pass
+    denoised_tile = _denoise_tile(pipe, tile, strength, num_steps, guidance_scale)
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/remove_synthid_diffusion.py", line 139, in _denoise_tile
+    result = pipe(
+        prompt="",
+    ...<3 lines>...
+        guidance_scale=guidance_scale,
+    )
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion_img2img.py", line 1103, in __call__
+    noise_pred = self.unet(
+                 ~~~~~~~~~^
+        latent_model_input,
+        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        return_dict=False,
+        ^^^^^^^^^^^^^^^^^^
+    )[0]
+    ^
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/diffusers/utils/peft_utils.py", line 315, in wrapper
+    result = forward_fn(self, *args, **kwargs)
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/diffusers/models/unets/unet_2d_condition.py", line 1145, in forward
+    sample, res_samples = downsample_block(
+                          ~~~~~~~~~~~~~~~~^
+        hidden_states=sample,
+        ^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        **additional_residuals,
+        ^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/diffusers/models/unets/unet_2d_blocks.py", line 1270, in forward
+    hidden_states = attn(
+                    ~~~~^
+        hidden_states,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        return_dict=False,
+        ^^^^^^^^^^^^^^^^^^
+    )[0]
+    ^
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/diffusers/models/transformers/transformer_2d.py", line 427, in forward
+    hidden_states = block(
+        hidden_states,
+    ...<5 lines>...
+        class_labels=class_labels,
+    )
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/diffusers/models/attention.py", line 1005, in forward
+    attn_output = self.attn1(
+        norm_hidden_states,
+    ...<2 lines>...
+        **cross_attention_kwargs,
+    )
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/diffusers/models/attention_processor.py", line 607, in forward
+    return self.processor(
+           ~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<3 lines>...
+        **cross_attention_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ash/dev/mobile_apps/cosmicfit/scripts/.venv/lib/python3.13/site-packages/diffusers/models/attention_processor.py", line 2767, in __call__
+    hidden_states = F.scaled_dot_product_attention(
+        query, key, value, attn_mask=attention_mask, dropout_p=0.0, is_causal=False
+    )
+RuntimeError: Invalid buffer size: 8.00 GiB

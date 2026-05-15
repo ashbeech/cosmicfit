@@ -600,7 +600,7 @@ final class StyleGuideViewController: UIViewController {
                 "Using your style to communicate your values without saying a single word.",
                 "Sticking to the three-year test: only buy things you can see yourself loving in 2029."
             ]
-            codeContainer.addArrangedSubview(DosAndDontsSectionView(title: "Lean Into", bulletPoints: leanIntoItems, useBrandHeadingStar: true))
+            codeContainer.addArrangedSubview(DosAndDontsSectionView(title: "Lean Into", bulletPoints: leanIntoItems))
 
             let avoidItems = bp?.code.avoid.nilIfEmpty ?? [
                 "Buying something just because it is a bargain. A deal is only a deal if the item is perfect.",
@@ -608,7 +608,7 @@ final class StyleGuideViewController: UIViewController {
                 "Keeping your best pieces hidden. Your style works best when it is seen and shared.",
                 "Flimsy or disposable fabrics that lack actual integrity."
             ]
-            codeContainer.addArrangedSubview(DosAndDontsSectionView(title: "Avoid", bulletPoints: avoidItems, useBrandHeadingStar: true))
+            codeContainer.addArrangedSubview(DosAndDontsSectionView(title: "Avoid", bulletPoints: avoidItems))
 
             let considerItems = bp?.code.consider.nilIfEmpty ?? [
                 "How your style acts as a conversation starter in your daily environment.",

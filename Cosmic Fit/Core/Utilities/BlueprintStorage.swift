@@ -25,6 +25,16 @@ extension Notification.Name {
 final class BlueprintStorage {
     static let shared = BlueprintStorage()
 
+    /// Incremented when local blueprint data is intentionally wiped or recomposed.
+    /// Async `pullBlueprintFromSupabase` callers capture the value before awaiting and
+    /// refuse to save if it changed, avoiding a stale remote blueprint overwriting a
+    /// fresh compose (e.g. birth date/place updated while hydration was in flight).
+    @MainActor static private(set) var remoteBlueprintPullEpoch: UInt64 = 0
+
+    @MainActor static func bumpRemoteBlueprintPullEpoch() {
+        remoteBlueprintPullEpoch &+= 1
+    }
+
     /// Bump this when the PaletteSection (or any persisted model) shape changes
     /// in a way that requires regeneration. On load, if the stored version
     /// doesn't match, the file is deleted and nil is returned.

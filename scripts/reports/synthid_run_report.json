@@ -1,0 +1,667 @@
+{
+  "run_id": "20260515T103322Z",
+  "timestamp_utc": "2026-05-15T10:33:26.285805Z",
+  "mode": "img2img_diffusion",
+  "scope": "full",
+  "config": {
+    "model": "stable-diffusion-v1-5/stable-diffusion-v1-5",
+    "assets_dir": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets",
+    "baseline_dir": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline",
+    "backup_dir": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_backups",
+    "candidate_dir": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z",
+    "strength": 0.04,
+    "steps": 28,
+    "passes": 3,
+    "guidance_scale": 1.0,
+    "max_tile": 768,
+    "tile_overlap": 128,
+    "min_psnr": 20.0,
+    "min_ssim": 0.5,
+    "dry_run": true,
+    "canary_manifest": null
+  },
+  "summary": {
+    "total_selected": 79,
+    "promoted": 0,
+    "skipped_quality_gate": 0,
+    "failed": 79
+  },
+  "google_checker_validation": {
+    "status": "pending_manual_validation",
+    "note": "Upload canary outputs to Google checker and update results in the report before approving full run."
+  },
+  "records": [
+    {
+      "image": "00-TheFool.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/00-TheFool.imageset/00-TheFool.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/00-TheFool.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/00-TheFool.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "01-TheMagician.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/01-TheMagician.imageset/01-TheMagician.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/01-TheMagician.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/01-TheMagician.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "02-TheHighPriestess.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/02-TheHighPriestess.imageset/02-TheHighPriestess.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/02-TheHighPriestess.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/02-TheHighPriestess.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "03-TheEmpress.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/03-TheEmpress.imageset/03-TheEmpress.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/03-TheEmpress.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/03-TheEmpress.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "04-TheEmperor.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/04-TheEmperor.imageset/04-TheEmperor.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/04-TheEmperor.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/04-TheEmperor.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "05-TheHierophant.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/05-TheHierophant.imageset/05-TheHierophant.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/05-TheHierophant.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/05-TheHierophant.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "06-TheLovers.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/06-TheLovers.imageset/06-TheLovers.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/06-TheLovers.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/06-TheLovers.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "07-TheChariot.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/07-TheChariot.imageset/07-TheChariot.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/07-TheChariot.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/07-TheChariot.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "08-Strength.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/08-Strength.imageset/08-Strength.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/08-Strength.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/08-Strength.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "09-TheHermit.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/09-TheHermit.imageset/09-TheHermit.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/09-TheHermit.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/09-TheHermit.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "10-WheelOfFortune.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/10-WheelOfFortune.imageset/10-WheelOfFortune.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/10-WheelOfFortune.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/10-WheelOfFortune.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "11-Justice.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/11-Justice.imageset/11-Justice.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/11-Justice.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/11-Justice.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "12-TheHangedMan.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/12-TheHangedMan.imageset/12-TheHangedMan.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/12-TheHangedMan.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/12-TheHangedMan.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "13-Death.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/13-Death.imageset/13-Death.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/13-Death.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/13-Death.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "14-Temperance.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/14-Temperance.imageset/14-Temperance.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/14-Temperance.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/14-Temperance.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "15-TheDevil.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/15-TheDevil.imageset/15-TheDevil.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/15-TheDevil.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/15-TheDevil.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "16-TheTower.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/16-TheTower.imageset/16-TheTower.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/16-TheTower.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/16-TheTower.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "17-TheStar.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/17-TheStar.imageset/17-TheStar.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/17-TheStar.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/17-TheStar.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "18-TheMoon.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/18-TheMoon.imageset/18-TheMoon.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/18-TheMoon.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/18-TheMoon.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "19-TheSun.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/19-TheSun.imageset/19-TheSun.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/19-TheSun.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/19-TheSun.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "20-Judgement.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/20-Judgement.imageset/20-Judgement.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/20-Judgement.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/20-Judgement.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "21-TheWorld.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/21-TheWorld.imageset/21-TheWorld.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/21-TheWorld.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/21-TheWorld.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "CardBacks.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/CardBacks.imageset/CardBacks.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/CardBacks.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/CardBacks.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Cups01.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Cups01.imageset/Cups01.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Cups01.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Cups01.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Cups02.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Cups02.imageset/Cups02.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Cups02.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Cups02.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Cups03.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Cups03.imageset/Cups03.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Cups03.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Cups03.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Cups04.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Cups04.imageset/Cups04.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Cups04.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Cups04.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Cups05.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Cups05.imageset/Cups05.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Cups05.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Cups05.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Cups06.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Cups06.imageset/Cups06.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Cups06.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Cups06.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Cups07.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Cups07.imageset/Cups07.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Cups07.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Cups07.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Cups08.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Cups08.imageset/Cups08.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Cups08.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Cups08.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Cups09.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Cups09.imageset/Cups09.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Cups09.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Cups09.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Cups10.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Cups10.imageset/Cups10.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Cups10.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Cups10.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Cups11.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Cups11.imageset/Cups11.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Cups11.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Cups11.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Cups12.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Cups12.imageset/Cups12.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Cups12.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Cups12.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Cups13.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Cups13.imageset/Cups13.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Cups13.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Cups13.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Cups14.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Cups14.imageset/Cups14.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Cups14.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Cups14.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Pentacles01.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Pentacles01.imageset/Pentacles01.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Pentacles01.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Pentacles01.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Pentacles02.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Pentacles02.imageset/Pentacles02.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Pentacles02.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Pentacles02.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Pentacles03.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Pentacles03.imageset/Pentacles03.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Pentacles03.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Pentacles03.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Pentacles04.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Pentacles04.imageset/Pentacles04.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Pentacles04.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Pentacles04.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Pentacles05.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Pentacles05.imageset/Pentacles05.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Pentacles05.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Pentacles05.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Pentacles06.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Pentacles06.imageset/Pentacles06.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Pentacles06.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Pentacles06.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Pentacles07.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Pentacles07.imageset/Pentacles07.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Pentacles07.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Pentacles07.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Pentacles08.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Pentacles08.imageset/Pentacles08.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Pentacles08.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Pentacles08.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Pentacles09.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Pentacles09.imageset/Pentacles09.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Pentacles09.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Pentacles09.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Pentacles10.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Pentacles10.imageset/Pentacles10.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Pentacles10.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Pentacles10.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Pentacles11.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Pentacles11.imageset/Pentacles11.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Pentacles11.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Pentacles11.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Pentacles12.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Pentacles12.imageset/Pentacles12.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Pentacles12.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Pentacles12.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Pentacles13.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Pentacles13.imageset/Pentacles13.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Pentacles13.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Pentacles13.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Pentacles14.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Pentacles14.imageset/Pentacles14.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Pentacles14.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Pentacles14.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Swords01.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Swords01.imageset/Swords01.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Swords01.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Swords01.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Swords02.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Swords02.imageset/Swords02.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Swords02.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Swords02.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Swords03.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Swords03.imageset/Swords03.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Swords03.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Swords03.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Swords04.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Swords04.imageset/Swords04.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Swords04.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Swords04.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Swords05.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Swords05.imageset/Swords05.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Swords05.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Swords05.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Swords06.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Swords06.imageset/Swords06.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Swords06.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Swords06.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Swords07.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Swords07.imageset/Swords07.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Swords07.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Swords07.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Swords08.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Swords08.imageset/Swords08.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Swords08.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Swords08.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Swords09.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Swords09.imageset/Swords09.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Swords09.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Swords09.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Swords10.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Swords10.imageset/Swords10.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Swords10.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Swords10.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Swords11.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Swords11.imageset/Swords11.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Swords11.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Swords11.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Swords12.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Swords12.imageset/Swords12.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Swords12.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Swords12.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Swords13.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Swords13.imageset/Swords13.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Swords13.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Swords13.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Swords14.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Swords14.imageset/Swords14.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Swords14.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Swords14.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Wands01.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Wands01.imageset/Wands01.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Wands01.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Wands01.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Wands02.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Wands02.imageset/Wands02.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Wands02.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Wands02.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Wands03.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Wands03.imageset/Wands03.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Wands03.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Wands03.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Wands04.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Wands04.imageset/Wands04.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Wands04.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Wands04.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Wands05.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Wands05.imageset/Wands05.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Wands05.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Wands05.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Wands06.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Wands06.imageset/Wands06.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Wands06.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Wands06.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Wands07.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Wands07.imageset/Wands07.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Wands07.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Wands07.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Wands08.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Wands08.imageset/Wands08.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Wands08.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Wands08.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Wands09.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Wands09.imageset/Wands09.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Wands09.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Wands09.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Wands10.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Wands10.imageset/Wands10.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Wands10.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Wands10.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Wands11.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Wands11.imageset/Wands11.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Wands11.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Wands11.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Wands12.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Wands12.imageset/Wands12.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Wands12.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Wands12.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Wands13.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Wands13.imageset/Wands13.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Wands13.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Wands13.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    },
+    {
+      "image": "Wands14.png",
+      "asset_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets/Cards/Wands14.imageset/Wands14.png",
+      "baseline_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_baseline/Wands14.png",
+      "candidate_path": "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_candidates/20260515T103322Z/Wands14.png",
+      "status": "failed",
+      "error": "[Errno 32] Broken pipe"
+    }
+  ]
+}

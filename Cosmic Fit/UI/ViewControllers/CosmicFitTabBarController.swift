@@ -437,12 +437,14 @@ final class CosmicFitTabBarController: UITabBarController {
     @objc private func handleDevForceRefresh() {
         print("🔄 [DEV] Force refresh requested — wiping caches and regenerating")
 
+        BlueprintStorage.bumpRemoteBlueprintPullEpoch()
         BlueprintStorage.shared.delete()
         DailyFitFrozenPayloadStorage.shared.removeAll()
         dailyFitPayload = nil
 
         calculateCharts()
         generateContent()
+        BlueprintStorage.bumpRemoteBlueprintPullEpoch()
 
         setupViewControllers()
 
@@ -455,33 +457,59 @@ final class CosmicFitTabBarController: UITabBarController {
         
         print("🔄 Profile updated - refreshing app data")
         
-        // Update stored profile
+        let priorProfile = self.userProfile
         userProfile = updatedProfile
         
-        // Update class properties with new profile data
         self.birthDate = updatedProfile.birthDate
         self.latitude = updatedProfile.latitude
         self.longitude = updatedProfile.longitude
         self.timeZone = TimeZone(identifier: updatedProfile.timeZoneIdentifier) ?? TimeZone.current
         
-        // Update birthInfo string
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .short
         self.birthInfo = "\(dateFormatter.string(from: updatedProfile.birthDate)) at \(updatedProfile.birthLocation) (Lat: \(String(format: "%.4f", updatedProfile.latitude)), Long: \(String(format: "%.4f", updatedProfile.longitude)))"
         
-        // Recalculate charts with new data
         calculateCharts()
-        
-        // Delete existing Style Guide data so the engine regenerates from the updated chart
-        BlueprintStorage.shared.delete()
-        DailyFitFrozenPayloadStorage.shared.removeAll()
-        dailyFitPayload = nil
-        
-        // Regenerate content
-        generateContent()
-        
-        // Regenerate view controllers with new data
+
+        let birthInputsChanged: Bool = {
+            guard let prior = priorProfile else { return true }
+            return prior.birthDate != updatedProfile.birthDate
+                || prior.latitude != updatedProfile.latitude
+                || prior.longitude != updatedProfile.longitude
+                || prior.timeZoneIdentifier != updatedProfile.timeZoneIdentifier
+                || prior.birthTimeIsUnknown != updatedProfile.birthTimeIsUnknown
+        }()
+
+        if birthInputsChanged {
+            chartIdentifier = "\(updatedProfile.birthDate.timeIntervalSince1970)_\(updatedProfile.latitude)_\(updatedProfile.longitude)"
+
+            if let tz = self.timeZone {
+                chartData = NatalChartManager.shared.calculateNatalChart(
+                    date: updatedProfile.birthDate,
+                    latitude: updatedProfile.latitude,
+                    longitude: updatedProfile.longitude,
+                    timeZone: tz
+                )
+            }
+
+            BlueprintStorage.bumpRemoteBlueprintPullEpoch()
+            BlueprintStorage.shared.delete()
+            DailyFitFrozenPayloadStorage.shared.removeAll()
+            let cal = Calendar.current
+            let revealStart = cal.date(byAdding: .day, value: -2, to: Date()) ?? Date()
+            let revealEnd = cal.date(byAdding: .day, value: 2, to: Date()) ?? Date()
+            DailyFitRevealPersistence.clearRevealFlags(from: revealStart, through: revealEnd)
+            dailyFitPayload = nil
+
+            generateAndPersistBlueprint()
+            BlueprintStorage.bumpRemoteBlueprintPullEpoch()
+
+            if let chartId = chartIdentifier {
+                generateAndCacheDailyVibe(chartId: chartId)
+            }
+        }
+
         setupViewControllers()
         
         print("✅ App data refreshed with updated profile")
@@ -541,19 +569,31 @@ final class CosmicFitTabBarController: UITabBarController {
     /// Attempts to pull Style Guide data (`CosmicBlueprint`) from Supabase and save it locally.
     /// If no remote copy exists, falls back to local generation.
     private func hydrateBlueprint() async {
+        let epochAtStart = await MainActor.run { BlueprintStorage.remoteBlueprintPullEpoch }
         do {
             if let remote = try await SupabaseSyncService.shared.pullBlueprintFromSupabase() {
-                BlueprintStorage.shared.save(remote)
-                print("✅ Style Guide hydrated from Supabase")
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    guard epochAtStart == BlueprintStorage.remoteBlueprintPullEpoch else {
+                        print("ℹ️ Style Guide hydration skipped — local blueprint changed during remote fetch")
+                        if BlueprintStorage.shared.load() == nil {
+                            print("ℹ️ Composing Style Guide locally after superseded remote fetch")
+                            self.generateAndPersistBlueprint()
+                        }
+                        return
+                    }
+                    BlueprintStorage.shared.save(remote)
+                    print("✅ Style Guide hydrated from Supabase")
+                }
             } else {
-                print("ℹ️ No remote Style Guide — generating locally")
-                DispatchQueue.main.async { [weak self] in
+                await MainActor.run { [weak self] in
+                    print("ℹ️ No remote Style Guide — generating locally")
                     self?.generateAndPersistBlueprint()
                 }
             }
         } catch {
-            print("⚠️ Style Guide pull failed: \(error.localizedDescription) — generating locally")
-            DispatchQueue.main.async { [weak self] in
+            await MainActor.run { [weak self] in
+                print("⚠️ Style Guide pull failed: \(error.localizedDescription) — generating locally")
                 self?.generateAndPersistBlueprint()
             }
         }
@@ -690,10 +730,22 @@ final class CosmicFitTabBarController: UITabBarController {
     
     private func generateAndCacheDailyVibe(chartId: String, forDate date: Date = Date()) {
         let profileKey = userProfile?.id ?? chartId
-        if UserDefaults.standard.bool(forKey: DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date)),
+        let revealKey = DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date)
+        let wasRevealed = UserDefaults.standard.bool(forKey: revealKey)
+
+        if wasRevealed,
            let frozen = DailyFitFrozenPayloadStorage.shared.load(date: date, profileKey: profileKey) {
             dailyFitPayload = frozen
             return
+        }
+
+        // Stale flag: UserDefaults says "revealed" but the frozen file is missing
+        // or failed to decode. Clear the flag so the regenerated payload is treated
+        // as a fresh (unrevealed) card, then freeze immediately after generation so
+        // the next launch is stable.
+        if wasRevealed {
+            print("⚠️ Stale reveal flag for \(revealKey) — frozen payload missing. Clearing flag and regenerating.")
+            UserDefaults.standard.removeObject(forKey: revealKey)
         }
 
         guard let natal = natalChart, let progressed = progressedChart else {
@@ -734,9 +786,17 @@ final class CosmicFitTabBarController: UITabBarController {
     /// Generates a payload for a given date without caching it on the tab bar controller.
     private func generateDailyPayload(forDate date: Date) -> DailyFitPayload? {
         let profileKey = userProfile?.id ?? chartIdentifier ?? ""
-        if UserDefaults.standard.bool(forKey: DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date)),
+        let revealKey = DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date)
+        let wasRevealed = UserDefaults.standard.bool(forKey: revealKey)
+
+        if wasRevealed,
            let frozen = DailyFitFrozenPayloadStorage.shared.load(date: date, profileKey: profileKey) {
             return frozen
+        }
+
+        if wasRevealed {
+            print("⚠️ Stale reveal flag for \(revealKey) — frozen payload missing. Clearing flag and regenerating.")
+            UserDefaults.standard.removeObject(forKey: revealKey)
         }
 
         guard let natal = natalChart, let progressed = progressedChart else { return nil }

@@ -1,0 +1,6 @@
+# Canary set: Major Arcana only (spread across the trump sequence).
+00-TheFool.png
+01-TheMagician.png
+04-TheEmperor.png
+13-Death.png
+21-TheWorld.png

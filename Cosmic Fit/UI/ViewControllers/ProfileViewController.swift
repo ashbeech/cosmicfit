@@ -27,6 +27,10 @@ class ProfileViewController: UIViewController {
     private let birthTimeField = UITextField()
     private let birthDatePicker = UIDatePicker()
     private let birthTimePicker = UIDatePicker()
+    private let unknownTimeCheckbox = UIButton(type: .system)
+    private let unknownTimeLabel = UILabel()
+    private var birthTimeIsUnknown: Bool = false
+    
     private let locationAutocompleteView = LocationAutocompleteView()
     private let updateButton = UIButton(type: .system)
     #if DEBUG
@@ -158,6 +162,63 @@ class ProfileViewController: UIViewController {
         toolbar.setItems([flex, done], animated: false)
         birthDateField.inputAccessoryView = toolbar
         birthTimeField.inputAccessoryView = toolbar
+        
+        configureUnknownTimeControls()
+    }
+    
+    private func configureUnknownTimeControls() {
+        unknownTimeCheckbox.translatesAutoresizingMaskIntoConstraints = false
+        let uncheckedImage = makeCheckboxImage(filled: false)
+        let checkedImage = makeCheckboxImage(filled: true)
+        unknownTimeCheckbox.setImage(uncheckedImage, for: .normal)
+        unknownTimeCheckbox.setImage(uncheckedImage, for: .highlighted)
+        unknownTimeCheckbox.setImage(checkedImage, for: .selected)
+        unknownTimeCheckbox.setImage(checkedImage, for: [.selected, .highlighted])
+        unknownTimeCheckbox.tintColor = CosmicFitTheme.Colours.cosmicBlue
+        unknownTimeCheckbox.addTarget(self, action: #selector(unknownTimeToggled), for: .touchUpInside)
+        
+        unknownTimeLabel.translatesAutoresizingMaskIntoConstraints = false
+        unknownTimeLabel.text = "I don't know my time"
+        unknownTimeLabel.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.callout, weight: .regular)
+        unknownTimeLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
+    }
+    
+    private func makeCheckboxImage(filled: Bool) -> UIImage? {
+        let size = CGSize(width: 22, height: 22)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { context in
+            let cgContext = context.cgContext
+            let rect = CGRect(origin: .zero, size: size).insetBy(dx: 1, dy: 1)
+            let path = UIBezierPath(roundedRect: rect, cornerRadius: 2)
+            cgContext.setStrokeColor(CosmicFitTheme.Colours.cosmicBlue.cgColor)
+            cgContext.setLineWidth(1.5)
+            path.stroke()
+            
+            if filled {
+                cgContext.setStrokeColor(CosmicFitTheme.Colours.cosmicBlue.cgColor)
+                cgContext.setLineWidth(2.0)
+                cgContext.setLineCap(.round)
+                cgContext.move(to: CGPoint(x: rect.minX + 4, y: rect.midY))
+                cgContext.addLine(to: CGPoint(x: rect.midX - 1, y: rect.maxY - 4))
+                cgContext.addLine(to: CGPoint(x: rect.maxX - 3, y: rect.minY + 4))
+                cgContext.strokePath()
+            }
+        }.withRenderingMode(.alwaysOriginal)
+    }
+    
+    @objc private func unknownTimeToggled() {
+        unknownTimeCheckbox.isSelected.toggle()
+        birthTimeIsUnknown = unknownTimeCheckbox.isSelected
+        updateBirthTimeFieldState()
+    }
+    
+    private func updateBirthTimeFieldState() {
+        birthTimeField.isEnabled = !birthTimeIsUnknown
+        birthTimeField.alpha = birthTimeIsUnknown ? 0.4 : 1.0
+        timeLabel.alpha = birthTimeIsUnknown ? 0.4 : 1.0
+        if birthTimeIsUnknown, birthTimeField.isFirstResponder {
+            birthTimeField.resignFirstResponder()
+        }
     }
     
     private func refreshBirthDateFieldDisplay() {
@@ -296,6 +357,16 @@ class ProfileViewController: UIViewController {
         mainStack.addArrangedSubview(verticalFieldStack(label: nameLabel, field: nameTextField))
         mainStack.addArrangedSubview(verticalFieldStack(label: dateLabel, field: birthDateField))
         mainStack.addArrangedSubview(verticalFieldStack(label: timeLabel, field: birthTimeField))
+        
+        let unknownTimeRow = UIStackView(arrangedSubviews: [unknownTimeCheckbox, unknownTimeLabel])
+        unknownTimeRow.axis = .horizontal
+        unknownTimeRow.spacing = 10
+        unknownTimeRow.alignment = .center
+        unknownTimeCheckbox.widthAnchor.constraint(equalToConstant: 26).isActive = true
+        unknownTimeCheckbox.heightAnchor.constraint(equalToConstant: 26).isActive = true
+        mainStack.addArrangedSubview(unknownTimeRow)
+        mainStack.setCustomSpacing(8, after: mainStack.arrangedSubviews[mainStack.arrangedSubviews.count - 2])
+        
         mainStack.addArrangedSubview(verticalFieldStack(label: locationLabel, field: locationAutocompleteView))
         
         mainStack.setCustomSpacing(28, after: mainStack.arrangedSubviews.last!)
@@ -375,6 +446,10 @@ class ProfileViewController: UIViewController {
         latitude = profile.latitude
         longitude = profile.longitude
         locationName = profile.birthLocation
+        
+        birthTimeIsUnknown = profile.birthTimeIsUnknown
+        unknownTimeCheckbox.isSelected = birthTimeIsUnknown
+        updateBirthTimeFieldState()
         
         #if DEBUG
         let localFormatter = DateFormatter()
@@ -517,8 +592,8 @@ class ProfileViewController: UIViewController {
         combinedComponents.year = dateComponents.year
         combinedComponents.month = dateComponents.month
         combinedComponents.day = dateComponents.day
-        combinedComponents.hour = timeComponents.hour
-        combinedComponents.minute = timeComponents.minute
+        combinedComponents.hour = birthTimeIsUnknown ? 12 : timeComponents.hour
+        combinedComponents.minute = birthTimeIsUnknown ? 0 : timeComponents.minute
         combinedComponents.second = 0
         
         // Create final date
@@ -538,6 +613,7 @@ class ProfileViewController: UIViewController {
             latitude: latitude,
             longitude: longitude,
             timeZoneIdentifier: timeZone.identifier,
+            birthTimeIsUnknown: birthTimeIsUnknown,
             createdAt: currentProfile.createdAt,
             lastModified: Date()
         )
