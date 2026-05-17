@@ -17,7 +17,7 @@ struct DebugConfiguration {
     /// Defaults to `false` so the app launches in production-like mode for testing.
     /// Only compiles under #if DEBUG — zero footprint in release builds.
     #if DEBUG
-    static var overrideEntitlementUnlocked: Bool = false
+    static var overrideEntitlementUnlocked: Bool = true
     #endif
     
     // MARK: - Debug Control

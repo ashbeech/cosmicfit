@@ -136,9 +136,13 @@ class DailyFitViewController: UIViewController {
 
     private lazy var dayNavigationBackButton: UIButton = {
         let btn = UIButton(type: .system)
-        let cfg = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-        btn.setImage(UIImage(systemName: "chevron.left", withConfiguration: cfg), for: .normal)
-        btn.tintColor = .white
+        var config = UIButton.Configuration.plain()
+        config.image = CosmicNavigationArrow.image(direction: .left, pointSize: 22)
+        config.contentInsets = .zero
+        config.baseForegroundColor = .white
+        btn.configuration = config
+        btn.contentHorizontalAlignment = .leading
+        btn.contentVerticalAlignment = .center
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.alpha = 0
         btn.isHidden = true
@@ -151,7 +155,7 @@ class DailyFitViewController: UIViewController {
     private var isCardRevealed = false
     private var cardBackImageView = UIImageView()
     private var tapToRevealLabel = UILabel()
-    /// Vertical band from the card foot to the tab bar (or safe bottom) — caption is centred here for today/tomorrow unrevealed.
+    /// Vertical band from the card foot to the **visible** bottom of the scroll view — caption is centred in the on-screen gap (not mixed `view`/`contentView` space, which skewed the label toward the tab bar).
     private let tapToRevealVerticalAlignGuide = UILayoutGuide()
     private var backgroundBlurImageView = UIImageView()
     /// Semi-transparent layer on top of the blurred card wallpaper so the sharp tarot reads clearly.
@@ -448,8 +452,10 @@ class DailyFitViewController: UIViewController {
         // Sibling of the card container (not inside it) so halo/shadow bounds stay card-sized.
         contentView.addSubview(tapToRevealLabel)
 
-        // Guide on `view` — bottom pinned to safeArea (which stops at tab bar top for opaque bars).
-        view.addLayoutGuide(tapToRevealVerticalAlignGuide)
+        // Guide on `scrollView`: top = card foot (content), bottom = visible viewport bottom (`frameLayoutGuide`).
+        // Previously the guide lived on `view` with bottom = `safeAreaLayoutGuide.bottom`, which mixed coordinate
+        // spaces with `contentView` and pushed "Tap to reveal…" too close to the tab bar.
+        scrollView.addLayoutGuide(tapToRevealVerticalAlignGuide)
         
         // Add tap gesture to card back
         cardTapGesture = UITapGestureRecognizer(target: self, action: #selector(cardTapped))
@@ -467,9 +473,9 @@ class DailyFitViewController: UIViewController {
             cardBackImageView.bottomAnchor.constraint(equalTo: tarotCardContainerView.bottomAnchor),
 
             tapToRevealVerticalAlignGuide.topAnchor.constraint(equalTo: tarotCardContainerView.bottomAnchor),
-            tapToRevealVerticalAlignGuide.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            tapToRevealVerticalAlignGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tapToRevealVerticalAlignGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tapToRevealVerticalAlignGuide.bottomAnchor.constraint(equalTo: scrollView.frameLayoutGuide.bottomAnchor),
+            tapToRevealVerticalAlignGuide.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor),
+            tapToRevealVerticalAlignGuide.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor),
 
             tapToRevealLabel.centerYAnchor.constraint(equalTo: tapToRevealVerticalAlignGuide.centerYAnchor),
             tapToRevealLabel.centerXAnchor.constraint(equalTo: tarotCardContainerView.centerXAnchor),
@@ -1121,6 +1127,10 @@ class DailyFitViewController: UIViewController {
             size: CosmicFitTheme.Typography.FontSizes.footnote, weight: .medium
         )
         tomorrowButton.translatesAutoresizingMaskIntoConstraints = false
+        tomorrowButton.titleLabel?.numberOfLines = 1
+        tomorrowButton.titleLabel?.lineBreakMode = .byClipping
+        tomorrowButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        tomorrowButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         tomorrowButton.alpha = 0.0
         tomorrowButton.addTarget(self, action: #selector(dayNavigationButtonTapped), for: .touchUpInside)
         contentView.addSubview(tomorrowButton)
@@ -1140,15 +1150,24 @@ class DailyFitViewController: UIViewController {
         }
     }
 
-    private func presentPurchaseScreen() {
-        let purchaseVC = PurchaseViewController()
+    private func presentDetailScreen(_ contentViewController: UIViewController) {
         if let tbc = tabBarController as? CosmicFitTabBarController {
-            let detailVC = GenericDetailViewController(contentViewController: purchaseVC)
+            let detailVC = GenericDetailViewController(contentViewController: contentViewController)
             tbc.presentDetailViewController(detailVC, animated: true)
         } else {
-            purchaseVC.modalPresentationStyle = .pageSheet
-            present(purchaseVC, animated: true)
+            contentViewController.modalPresentationStyle = .pageSheet
+            present(contentViewController, animated: true)
         }
+    }
+
+    private func presentPurchaseScreen() {
+        presentDetailScreen(PurchaseViewController())
+    }
+
+    private func presentStyleCalendarUnlockScreen() {
+        let mode: StyleCalendarUnlockViewController.PresentationMode =
+            EntitlementManager.shared.hasFullAccess ? .subscribedComingSoon : .unlockPreview
+        presentDetailScreen(StyleCalendarUnlockViewController(mode: mode))
     }
 
     private func switchToTomorrow() {
@@ -1189,6 +1208,7 @@ class DailyFitViewController: UIViewController {
     /// Neither page is ever faded to a solid colour, so there is no "background reveal".
     private func performDayBlurTransition(reconfigure: @escaping () -> Void) {
         let halfDuration: TimeInterval = 0.25 * 0.75
+        let fadeOutBackButton = isViewingTomorrow && !dayNavigationBackButton.isHidden && dayNavigationBackButton.alpha > 0
 
         // Snapshot the current state so the reconfigure happens invisibly behind the veil.
         let snapshotBefore = view.snapshotView(afterScreenUpdates: false)
@@ -1207,7 +1227,16 @@ class DailyFitViewController: UIViewController {
         }
         view.insertSubview(blurView, belowSubview: topMaskView)
         view.bringSubviewToFront(topMaskView)
-        view.bringSubviewToFront(dayNavigationBackButton)
+        if !fadeOutBackButton {
+            view.bringSubviewToFront(dayNavigationBackButton)
+        }
+
+        if fadeOutBackButton {
+            dayNavigationBackButton.isUserInteractionEnabled = false
+            UIView.animate(withDuration: halfDuration, delay: 0, options: .curveEaseIn) {
+                self.dayNavigationBackButton.alpha = 0
+            }
+        }
 
         let blurInAnimator = UIViewPropertyAnimator(duration: halfDuration, curve: .easeIn) {
             blurView.effect = UIBlurEffect(style: .regular)
@@ -1226,7 +1255,6 @@ class DailyFitViewController: UIViewController {
             // Drop the "before" snapshot so the same blur view now renders the new content.
             snapshotBefore?.removeFromSuperview()
             self.view.bringSubviewToFront(self.topMaskView)
-            self.view.bringSubviewToFront(self.dayNavigationBackButton)
 
             let blurOutAnimator = UIViewPropertyAnimator(duration: halfDuration, curve: .easeOut) {
                 blurView.effect = nil
@@ -1253,32 +1281,60 @@ class DailyFitViewController: UIViewController {
     private func updateDayNavigationUI() {
         if isViewingTomorrow {
             if isCardRevealed {
-                tomorrowButton.setTitle("\u{2039}  SEE TODAY\u{2019}S FIT", for: .normal)
+                CosmicNavigationArrow.apply(
+                    to: tomorrowButton,
+                    title: "SEE TODAY\u{2019}S FIT",
+                    arrow: .left,
+                    pointSize: 11
+                )
                 tomorrowTeaseLabel.text = "Today\u{2019}s fit awaits you..."
             } else {
                 tapToRevealLabel.text = "Tap to reveal tomorrow\u{2019}s fit"
             }
             dayNavigationBackButton.isHidden = false
             dayNavigationBackButton.alpha = 1
+            dayNavigationBackButton.isUserInteractionEnabled = true
         } else {
             if EntitlementManager.shared.hasFullAccess {
-                tomorrowButton.setTitle("SEE TOMORROW\u{2019}S FIT  \u{203A}", for: .normal)
+                CosmicNavigationArrow.apply(
+                    to: tomorrowButton,
+                    title: "SEE TOMORROW\u{2019}S FIT",
+                    arrow: .right,
+                    pointSize: 11
+                )
             } else {
-                tomorrowButton.setTitle("UNLOCK FULL ACCESS", for: .normal)
+                var config = tomorrowButton.configuration ?? UIButton.Configuration.plain()
+                var titleAttributes = AttributeContainer()
+                titleAttributes.font = CosmicFitTheme.Typography.dmSansFont(
+                    size: CosmicFitTheme.Typography.FontSizes.footnote,
+                    weight: .medium
+                )
+                config.attributedTitle = AttributedString("UNLOCK FULL ACCESS", attributes: titleAttributes)
+                config.image = nil
+                config.titleLineBreakMode = .byClipping
+                config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 14, bottom: 8, trailing: 14)
+                config.baseForegroundColor = CosmicFitTheme.Colours.cosmicBlue
+                tomorrowButton.configuration = config
             }
             tomorrowTeaseLabel.text = "Tomorrow\u{2019}s energy is already shifting..."
             dayNavigationBackButton.isHidden = true
             dayNavigationBackButton.alpha = 0
+            dayNavigationBackButton.isUserInteractionEnabled = true
             tapToRevealLabel.text = "Tap to reveal today\u{2019}s fit"
         }
-        view.bringSubviewToFront(dayNavigationBackButton)
+        if isViewingTomorrow {
+            view.bringSubviewToFront(dayNavigationBackButton)
+        }
     }
 
     private func setupDayNavigationBackButton() {
         view.addSubview(dayNavigationBackButton)
         NSLayoutConstraint.activate([
             dayNavigationBackButton.topAnchor.constraint(equalTo: topMaskView.bottomAnchor, constant: 8),
-            dayNavigationBackButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            dayNavigationBackButton.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: MenuBarView.logoLeadingInset
+            ),
             dayNavigationBackButton.widthAnchor.constraint(equalToConstant: 44),
             dayNavigationBackButton.heightAnchor.constraint(equalToConstant: 44)
         ])
@@ -1353,7 +1409,6 @@ class DailyFitViewController: UIViewController {
         contentView.addSubview(dailyFitLabel)
 
         contentView.addSubview(calendarButton)
-        calendarButton.isHidden = true
         calendarButton.alpha = 0.0
 
         // Tarot glyph row omitted in current design — keep view for future use, collapsed.
@@ -2191,8 +2246,15 @@ class DailyFitViewController: UIViewController {
 
                 tomorrowButton.topAnchor.constraint(equalTo: tomorrowTeaseLabel.bottomAnchor, constant: 20),
                 tomorrowButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-                tomorrowButton.widthAnchor.constraint(equalToConstant: 200),
-                tomorrowButton.heightAnchor.constraint(equalToConstant: 38),
+                tomorrowButton.leadingAnchor.constraint(
+                    greaterThanOrEqualTo: contentView.leadingAnchor,
+                    constant: horizontalMargin
+                ),
+                tomorrowButton.trailingAnchor.constraint(
+                    lessThanOrEqualTo: contentView.trailingAnchor,
+                    constant: -horizontalMargin
+                ),
+                tomorrowButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 38),
                 tomorrowButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Self.contentBottomPaddingBelowTomorrow)
             ])
         }
@@ -2626,7 +2688,7 @@ class DailyFitViewController: UIViewController {
     }
     
     @objc private func calendarButtonTapped() {
-        // Calendar is hidden for this release — no-op.
+        presentStyleCalendarUnlockScreen()
     }
 }
 
