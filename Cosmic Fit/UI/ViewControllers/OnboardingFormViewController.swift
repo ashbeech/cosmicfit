@@ -136,9 +136,13 @@ class OnboardingFormViewController: UIViewController {
         scrollView.addSubview(contentView)
 
         backButton.translatesAutoresizingMaskIntoConstraints = false
-        backButton.setTitle("< Back", for: .normal)
+        backButton.setTitle("Back", for: .normal)
         backButton.setTitleColor(CosmicFitTheme.Colours.cosmicBlue, for: .normal)
         backButton.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(size: 18, weight: .bold)
+        backButton.setImage(CosmicNavigationArrow.image(direction: .left, pointSize: 18), for: .normal)
+        backButton.tintColor = CosmicFitTheme.Colours.cosmicBlue
+        backButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 6)
+        backButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         backButton.contentHorizontalAlignment = .leading
         backButton.isHidden = true

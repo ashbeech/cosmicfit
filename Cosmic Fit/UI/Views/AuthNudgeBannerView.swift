@@ -13,9 +13,8 @@ final class AuthNudgeBannerView: UIView {
         return label
     }()
 
-    private let chevron: UIImageView = {
-        let config = UIImage.SymbolConfiguration(pointSize: 12, weight: .semibold)
-        let iv = UIImageView(image: UIImage(systemName: "chevron.right", withConfiguration: config))
+    private let navigationArrow: UIImageView = {
+        let iv = UIImageView(image: CosmicNavigationArrow.image(direction: .right, pointSize: 14))
         iv.tintColor = .white.withAlphaComponent(0.7)
         iv.contentMode = .scaleAspectFit
         return iv
@@ -45,11 +44,11 @@ final class AuthNudgeBannerView: UIView {
         layer.shadowRadius = 8
 
         label.translatesAutoresizingMaskIntoConstraints = false
-        chevron.translatesAutoresizingMaskIntoConstraints = false
+        navigationArrow.translatesAutoresizingMaskIntoConstraints = false
         dismissButton.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(label)
-        addSubview(chevron)
+        addSubview(navigationArrow)
         addSubview(dismissButton)
 
         NSLayoutConstraint.activate([
@@ -58,10 +57,10 @@ final class AuthNudgeBannerView: UIView {
             label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             label.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            chevron.leadingAnchor.constraint(equalTo: label.trailingAnchor, constant: 6),
-            chevron.centerYAnchor.constraint(equalTo: centerYAnchor),
+            navigationArrow.leadingAnchor.constraint(equalTo: label.trailingAnchor, constant: 6),
+            navigationArrow.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            dismissButton.leadingAnchor.constraint(greaterThanOrEqualTo: chevron.trailingAnchor, constant: 8),
+            dismissButton.leadingAnchor.constraint(greaterThanOrEqualTo: navigationArrow.trailingAnchor, constant: 8),
             dismissButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             dismissButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             dismissButton.widthAnchor.constraint(equalToConstant: 32),
