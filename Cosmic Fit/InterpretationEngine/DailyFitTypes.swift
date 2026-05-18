@@ -355,10 +355,42 @@ struct DailyFitCalibration: Equatable {
         let transitBoost: Double
     }
 
+    /// Axis evaluation tuning: sigmoid spread and jitter range.
+    struct AxisTuning: Equatable {
+        /// Multiplier inside tanh(raw × spread). Higher = more extreme axis values.
+        let sigmoidSpread: Double
+        /// Symmetric jitter applied per axis from seeded RNG.
+        let jitterRange: Double
+
+        static let `default` = AxisTuning(sigmoidSpread: 1.4, jitterRange: 0.18)
+    }
+
+    /// Stage 2 output sensitivity: palette, scales, silhouette coefficients.
+    struct Stage2Sensitivity: Equatable {
+        /// Palette colour scoring jitter ceiling.
+        let paletteJitter: Double
+        /// Vibrancy modulation coefficient (push-pull × this).
+        let vibrancyCoeff: Double
+        /// Contrast modulation coefficient (vis-0.5 × this).
+        let contrastCoeff: Double
+        /// Silhouette axis modulation multiplier (applied to each axis term).
+        let silhouetteAxisScale: Double
+        /// Metal tone transit nudge per hit.
+        let metalNudgePerHit: Double
+
+        static let `default` = Stage2Sensitivity(
+            paletteJitter: 0.08, vibrancyCoeff: 0.35,
+            contrastCoeff: 0.40, silhouetteAxisScale: 2.0,
+            metalNudgePerHit: 0.10
+        )
+    }
+
     let sourceWeights: SourceWeights
     let signEnergyMap: SignEnergyMap
     let planetAxisMap: PlanetAxisMap
     let selectionWeights: SelectionWeights
+    let axisTuning: AxisTuning
+    let stage2Sensitivity: Stage2Sensitivity
 }
 
 // MARK: - Default Calibration
@@ -370,8 +402,8 @@ extension DailyFitCalibration {
     /// weights from DerivedAxesEvaluator axis evaluation functions.
     static let `default`: DailyFitCalibration = {
         let source = SourceWeights(
-            natal: 0.40, transits: 0.25, lunarPhase: 0.15,
-            progressed: 0.15, currentSun: 0.05
+            natal: 0.28, transits: 0.35, lunarPhase: 0.22,
+            progressed: 0.10, currentSun: 0.05
         )
 
         let signs = SignEnergyMap(multipliers: [
@@ -410,7 +442,9 @@ extension DailyFitCalibration {
             sourceWeights: source,
             signEnergyMap: signs,
             planetAxisMap: planets,
-            selectionWeights: selection
+            selectionWeights: selection,
+            axisTuning: .default,
+            stage2Sensitivity: .default
         )
     }()
 }

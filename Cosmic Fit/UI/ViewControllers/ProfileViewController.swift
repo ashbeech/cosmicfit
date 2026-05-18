@@ -80,6 +80,13 @@ class ProfileViewController: UIViewController {
         setupConstraints()
         setupKeyboardDismissal()
         loadCurrentUserData()
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateAuthUI),
+            name: .cosmicFitAuthStateChanged,
+            object: nil
+        )
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -591,16 +598,25 @@ class ProfileViewController: UIViewController {
     @objc private func signOutButtonTapped() {
         let alert = UIAlertController(
             title: "Sign Out",
-            message: "You will need to sign in again to sync your data across devices.",
+            message: "You'll return to the home screen. Sign in again to access your account.",
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Sign Out", style: .destructive) { _ in
-            Task {
-                try? await CosmicFitAuthService.shared.signOut()
+        alert.addAction(UIAlertAction(title: "Sign Out", style: .destructive) { [weak self] _ in
+            guard let window = self?.view.window else { return }
+            Task { try? await CosmicFitAuthService.shared.signOut() }
+            let landingVC = SignedOutLandingViewController()
+            UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve) {
+                window.rootViewController = landingVC
             }
         })
         present(alert, animated: true)
+    }
+
+    @objc private func updateAuthUI() {
+        let isAuth = CosmicFitAuthService.shared.isAuthenticated
+        signInButton.isHidden = isAuth
+        signOutButton.isHidden = !isAuth
     }
     
     @objc private func deleteButtonTapped() {

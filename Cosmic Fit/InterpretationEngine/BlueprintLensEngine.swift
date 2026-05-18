@@ -264,12 +264,12 @@ enum BlueprintLensEngine {
             snapshot: snapshot,
             calibration: calibration
         )
-        let palette = selectDailyPalette(from: blueprint.palette, snapshot: snapshot)
-        let vibrancy = deriveVibrancy(from: blueprint.palette, snapshot: snapshot)
-        let contrast = deriveContrast(from: blueprint.palette, snapshot: snapshot)
-        let metalTone = deriveMetalTone(from: blueprint, snapshot: snapshot)
+        let palette = selectDailyPalette(from: blueprint.palette, snapshot: snapshot, calibration: calibration)
+        let vibrancy = deriveVibrancy(from: blueprint.palette, snapshot: snapshot, calibration: calibration)
+        let contrast = deriveContrast(from: blueprint.palette, snapshot: snapshot, calibration: calibration)
+        let metalTone = deriveMetalTone(from: blueprint, snapshot: snapshot, calibration: calibration)
         let essence = deriveStyleEssenceProfile(from: snapshot)
-        let silhouette = deriveSilhouetteProfile(from: blueprint, snapshot: snapshot)
+        let silhouette = deriveSilhouetteProfile(from: blueprint, snapshot: snapshot, calibration: calibration)
         let textures = selectDailyTextures(from: blueprint.textures, snapshot: snapshot)
         let pattern = selectDailyPattern(from: blueprint.pattern, snapshot: snapshot)
 
@@ -352,10 +352,10 @@ enum BlueprintLensEngine {
             let variant = selectVariant(for: fallback, profileHash: snapshot.profileHash)
             let emptyPayload = DailyFitPayload(
                 tarotCard: fallback, styleEditVariant: variant,
-                dailyPalette: selectDailyPalette(from: blueprint.palette, snapshot: snapshot),
+                dailyPalette: selectDailyPalette(from: blueprint.palette, snapshot: snapshot, calibration: calibration),
                 vibrancy: 0.5, contrast: 0.5, metalTone: 0.5,
                 essenceProfile: deriveStyleEssenceProfile(from: snapshot),
-                silhouetteProfile: deriveSilhouetteProfile(from: blueprint, snapshot: snapshot),
+                silhouetteProfile: deriveSilhouetteProfile(from: blueprint, snapshot: snapshot, calibration: calibration),
                 vibeBreakdown: snapshot.vibeProfile, axes: snapshot.axes,
                 dominantTransits: snapshot.dominantTransits,
                 lunarContext: snapshot.lunarContext, dailyTextures: [], dailyPattern: nil,
@@ -385,7 +385,7 @@ enum BlueprintLensEngine {
         if let s = blueprint.palette.supportColours { candidates.append(contentsOf: s) }
         if let l = blueprint.palette.luminarySignature { candidates.append(l) }
         if let r = blueprint.palette.rulerSignature { candidates.append(r) }
-        let palette = selectDailyPalette(from: blueprint.palette, snapshot: snapshot)
+        let palette = selectDailyPalette(from: blueprint.palette, snapshot: snapshot, calibration: calibration)
         let paletteHexSet = Set(palette.colours.map(\.hexValue))
         let preSwapTopHexes = Set(candidates.prefix(3).map(\.hexValue))
         let diversitySwap = paletteHexSet != preSwapTopHexes && candidates.count >= 4
@@ -395,7 +395,7 @@ enum BlueprintLensEngine {
         let scoredColours: [(String, String, Double)] = candidates.map { colour in
             let aligned = roleEnergyAlignment[colour.role] ?? [.classic, .romantic]
             let base = aligned.reduce(0.0) { sum, energy in sum + Double(snapshot.vibeProfile.value(for: energy)) / vibeTotal }
-            let jitter = Double.random(in: 0..<0.001, using: &rng)
+            let jitter = Double.random(in: 0..<calibration.stage2Sensitivity.paletteJitter, using: &rng)
             return (colour.name, colour.role.rawValue, base + jitter)
         }
 
@@ -410,7 +410,7 @@ enum BlueprintLensEngine {
         let vibe = snapshot.vibeProfile
         let vibPush = Double(vibe.value(for: .drama) + vibe.value(for: .edge)) / 21.0
         let vibPull = Double(vibe.value(for: .utility) + vibe.value(for: .classic)) / 21.0
-        let vibMod = (vibPush - vibPull) * 0.15
+        let vibMod = (vibPush - vibPull) * calibration.stage2Sensitivity.vibrancyCoeff
         let vibrancy = max(0.0, min(1.0, vibBaseline + vibMod))
 
         // Contrast trace
@@ -422,10 +422,10 @@ enum BlueprintLensEngine {
         case nil:     conBaseline = 0.50
         }
         let visNorm = snapshot.axes.visibility / 10.0
-        let conMod = (visNorm - 0.5) * 0.20
+        let conMod = (visNorm - 0.5) * calibration.stage2Sensitivity.contrastCoeff
         let contrast = max(0.0, min(1.0, conBaseline + conMod))
 
-        let metalTone = deriveMetalTone(from: blueprint, snapshot: snapshot)
+        let metalTone = deriveMetalTone(from: blueprint, snapshot: snapshot, calibration: calibration)
         let tempVal: Double
         switch blueprint.palette.variables?.temperature {
         case .cool:    tempVal = 0.2
@@ -444,7 +444,7 @@ enum BlueprintLensEngine {
         let mtMod = metalTone - mtBaseline
 
         let essence = deriveStyleEssenceProfile(from: snapshot)
-        let silhouette = deriveSilhouetteProfile(from: blueprint, snapshot: snapshot)
+        let silhouette = deriveSilhouetteProfile(from: blueprint, snapshot: snapshot, calibration: calibration)
         let positives = blueprint.code.leanInto + blueprint.code.consider
         let negatives = blueprint.code.avoid
         let mfBase = keywordBaseline(positives: positives, negatives: negatives, leftKeywords: mfLeft, rightKeywords: mfRight)
@@ -522,7 +522,8 @@ enum BlueprintLensEngine {
     ///   drama 5+  → 2 statement, 1 grounding  (bold day, still anchored)
     private static func selectDailyPalette(
         from palette: PaletteSection,
-        snapshot: DailyEnergySnapshot
+        snapshot: DailyEnergySnapshot,
+        calibration: DailyFitCalibration = .default
     ) -> DailyPaletteSelection {
         var candidates: [BlueprintColour] = []
         candidates.append(contentsOf: palette.coreColours)
@@ -566,7 +567,7 @@ enum BlueprintLensEngine {
             let base = aligned.reduce(0.0) { sum, energy in
                 sum + Double(snapshot.vibeProfile.value(for: energy)) / vibeTotal
             }
-            let jitter = Double.random(in: 0..<0.001, using: &rng)
+            let jitter = Double.random(in: 0..<calibration.stage2Sensitivity.paletteJitter, using: &rng)
             let profileBias = deterministicProfileColourBias(
                 profileHash: snapshot.profileHash,
                 colourHex: colour.hexValue
@@ -677,7 +678,8 @@ enum BlueprintLensEngine {
     /// Soft Summer stays muted, Deep Autumn stays vibrant — both vary daily.
     private static func deriveVibrancy(
         from palette: PaletteSection,
-        snapshot: DailyEnergySnapshot
+        snapshot: DailyEnergySnapshot,
+        calibration: DailyFitCalibration = .default
     ) -> Double {
         let baseline: Double
         switch palette.variables?.saturation {
@@ -689,7 +691,7 @@ enum BlueprintLensEngine {
         let vibe = snapshot.vibeProfile
         let push = Double(vibe.value(for: .drama) + vibe.value(for: .edge)) / 21.0
         let pull = Double(vibe.value(for: .utility) + vibe.value(for: .classic)) / 21.0
-        let modulation = (push - pull) * 0.15
+        let modulation = (push - pull) * calibration.stage2Sensitivity.vibrancyCoeff
         return max(0.0, min(1.0, baseline + modulation))
     }
 
@@ -699,7 +701,8 @@ enum BlueprintLensEngine {
     /// modulated by the visibility axis.
     private static func deriveContrast(
         from palette: PaletteSection,
-        snapshot: DailyEnergySnapshot
+        snapshot: DailyEnergySnapshot,
+        calibration: DailyFitCalibration = .default
     ) -> Double {
         let baseline: Double
         switch palette.variables?.contrast {
@@ -709,7 +712,7 @@ enum BlueprintLensEngine {
         case nil:     baseline = 0.50
         }
         let visNorm = snapshot.axes.visibility / 10.0
-        let modulation = (visNorm - 0.5) * 0.20
+        let modulation = (visNorm - 0.5) * calibration.stage2Sensitivity.contrastCoeff
         return max(0.0, min(1.0, baseline + modulation))
     }
 
@@ -729,7 +732,8 @@ enum BlueprintLensEngine {
     /// modulated by fire/water transits and lunar phase.
     private static func deriveMetalTone(
         from blueprint: CosmicBlueprint,
-        snapshot: DailyEnergySnapshot
+        snapshot: DailyEnergySnapshot,
+        calibration: DailyFitCalibration = .default
     ) -> Double {
         let tempVal: Double
         switch blueprint.palette.variables?.temperature {
@@ -757,8 +761,8 @@ enum BlueprintLensEngine {
             if firePlanets.contains(transit.transitPlanet) { fireHits += 1 }
             if waterPlanets.contains(transit.transitPlanet) { waterHits += 1 }
         }
-        let fireNudge = min(Double(fireHits) * 0.05, 0.10)
-        let waterNudge = min(Double(waterHits) * 0.05, 0.10)
+        let fireNudge = min(Double(fireHits) * calibration.stage2Sensitivity.metalNudgePerHit, 0.10)
+        let waterNudge = min(Double(waterHits) * calibration.stage2Sensitivity.metalNudgePerHit, 0.10)
 
         let phase = snapshot.lunarContext.phaseName.lowercased()
         let lunarNudge: Double
@@ -883,7 +887,8 @@ enum BlueprintLensEngine {
     /// modulation (~25%) from action/visibility/strategy axes.
     private static func deriveSilhouetteProfile(
         from blueprint: CosmicBlueprint,
-        snapshot: DailyEnergySnapshot
+        snapshot: DailyEnergySnapshot,
+        calibration: DailyFitCalibration = .default
     ) -> SilhouetteProfile {
         let positives = blueprint.code.leanInto + blueprint.code.consider
         let negatives = blueprint.code.avoid
@@ -904,14 +909,15 @@ enum BlueprintLensEngine {
         let visNorm = snapshot.axes.visibility / 10.0
         let actNorm = snapshot.axes.action / 10.0
         let strNorm = snapshot.axes.strategy / 10.0
+        let s = calibration.stage2Sensitivity.silhouetteAxisScale
 
         return SilhouetteProfile(
             masculineFeminine: max(0.0, min(1.0,
-                mfBase + (visNorm - 0.5) * 0.25)),
+                mfBase + (visNorm - 0.5) * 0.25 * s)),
             angularRounded: max(0.0, min(1.0,
-                arBase + (actNorm - 0.5) * -0.20)),
+                arBase + (actNorm - 0.5) * -0.20 * s)),
             structuredDraped: max(0.0, min(1.0,
-                sdBase + (strNorm - 0.5) * -0.25))
+                sdBase + (strNorm - 0.5) * -0.25 * s))
         )
     }
 

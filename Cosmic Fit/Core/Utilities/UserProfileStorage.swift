@@ -80,6 +80,7 @@ class UserProfileStorage {
     private let userProfileKey = "CosmicFitUserProfile"
     private let hasSeenWelcomeKey = "CosmicFitHasSeenWelcome"
     private let migrationDoneKey = "CosmicFitProfileMigratedToFile"
+    private let onboardingPendingAuthKey = "CosmicFitOnboardingPendingAuth"
     
     private var profileFileURL: URL {
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -185,6 +186,20 @@ class UserProfileStorage {
     
     func resetWelcomeFlag() {
         userDefaults.removeObject(forKey: hasSeenWelcomeKey)
+    }
+    
+    // MARK: - Onboarding Pending Auth
+    
+    func isOnboardingPendingAuth() -> Bool {
+        return userDefaults.bool(forKey: onboardingPendingAuthKey)
+    }
+    
+    func setOnboardingPendingAuth(_ pending: Bool) {
+        userDefaults.set(pending, forKey: onboardingPendingAuthKey)
+    }
+    
+    func clearOnboardingPendingAuth() {
+        userDefaults.removeObject(forKey: onboardingPendingAuthKey)
     }
     
     // MARK: - Private Methods

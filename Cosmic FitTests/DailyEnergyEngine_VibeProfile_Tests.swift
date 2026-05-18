@@ -348,7 +348,9 @@ struct DailyEnergyEngine_VibeProfile_Tests {
             sourceWeights: .init(natal: 0.15, transits: 0.0, lunarPhase: 0.70, progressed: 0.10, currentSun: 0.05),
             signEnergyMap: DailyFitCalibration.default.signEnergyMap,
             planetAxisMap: DailyFitCalibration.default.planetAxisMap,
-            selectionWeights: DailyFitCalibration.default.selectionWeights
+            selectionWeights: DailyFitCalibration.default.selectionWeights,
+            axisTuning: .default,
+            stage2Sensitivity: .default
         )
 
         let newMoonVibe = DailyEnergyEngine.generateVibeProfile(
@@ -381,13 +383,17 @@ struct DailyEnergyEngine_VibeProfile_Tests {
             sourceWeights: .init(natal: 1.0, transits: 0.0, lunarPhase: 0.0, progressed: 0.0, currentSun: 0.0),
             signEnergyMap: DailyFitCalibration.default.signEnergyMap,
             planetAxisMap: DailyFitCalibration.default.planetAxisMap,
-            selectionWeights: DailyFitCalibration.default.selectionWeights
+            selectionWeights: DailyFitCalibration.default.selectionWeights,
+            axisTuning: .default,
+            stage2Sensitivity: .default
         )
         let transitsOnly = DailyFitCalibration(
             sourceWeights: .init(natal: 0.0, transits: 1.0, lunarPhase: 0.0, progressed: 0.0, currentSun: 0.0),
             signEnergyMap: DailyFitCalibration.default.signEnergyMap,
             planetAxisMap: DailyFitCalibration.default.planetAxisMap,
-            selectionWeights: DailyFitCalibration.default.selectionWeights
+            selectionWeights: DailyFitCalibration.default.selectionWeights,
+            axisTuning: .default,
+            stage2Sensitivity: .default
         )
 
         let natalVibe = DailyEnergyEngine.generateVibeProfile(

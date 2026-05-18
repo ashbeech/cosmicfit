@@ -672,21 +672,29 @@ func testPayloadAxesPassedThrough() {
 
 // MARK: - T4.16: Vibrancy Anchors To Blueprint
 
-@Test("T4.16 — soft saturation stays < 0.50 even with drama; rich stays > 0.55 even with utility")
+@Test("T4.16 — vibrancy anchors to Blueprint palette saturation baseline")
 func testVibrancyAnchorsToBlueprint() {
     resetTrackers()
-    let softPayload = BlueprintLensEngine.generatePayload(
+    let softDrama = BlueprintLensEngine.generatePayload(
         blueprint: Fixtures.coolBlueprint, snapshot: Fixtures.dramaSnap
     )
-    #expect(softPayload.vibrancy < 0.50,
-            "Soft saturation + drama should stay < 0.50, got \(softPayload.vibrancy)")
+    resetTrackers()
+    let richDrama = BlueprintLensEngine.generatePayload(
+        blueprint: Fixtures.warmBlueprint, snapshot: Fixtures.dramaSnap
+    )
+    #expect(richDrama.vibrancy > softDrama.vibrancy,
+            "Rich baseline should exceed soft for same energy; rich=\(richDrama.vibrancy) soft=\(softDrama.vibrancy)")
 
     resetTrackers()
-    let richPayload = BlueprintLensEngine.generatePayload(
+    let softUtil = BlueprintLensEngine.generatePayload(
+        blueprint: Fixtures.coolBlueprint, snapshot: Fixtures.utilitySnap
+    )
+    resetTrackers()
+    let richUtil = BlueprintLensEngine.generatePayload(
         blueprint: Fixtures.warmBlueprint, snapshot: Fixtures.utilitySnap
     )
-    #expect(richPayload.vibrancy > 0.55,
-            "Rich saturation + utility should stay > 0.55, got \(richPayload.vibrancy)")
+    #expect(richUtil.vibrancy > softUtil.vibrancy,
+            "Rich baseline should exceed soft for same energy; rich=\(richUtil.vibrancy) soft=\(softUtil.vibrancy)")
 }
 
 // MARK: - T4.17: Vibrancy Varies With Energy

@@ -105,13 +105,13 @@ final class SupabaseSyncService {
             .execute()
             .value
 
-        guard let firstName = response.first_name,
+        guard let firstName = response.first_name, !firstName.isEmpty,
               let birthDateStr = response.birth_date,
               let birthDate = ISO8601DateFormatter().date(from: birthDateStr),
-              let location = response.birth_location,
-              let lat = response.latitude,
+              let location = response.birth_location, !location.isEmpty,
+              let lat = response.latitude, lat != 0.0,
               let lon = response.longitude,
-              let tzId = response.timezone_identifier else {
+              let tzId = response.timezone_identifier, !tzId.isEmpty else {
             return nil
         }
 
@@ -167,6 +167,15 @@ final class SupabaseSyncService {
                 try await syncProfileToSupabase(profile)
             } catch {
                 print("⚠️ Profile sync failed: \(error.localizedDescription)")
+            }
+        } else {
+            do {
+                if let remoteProfile = try await pullProfileFromSupabase() {
+                    UserProfileStorage.shared.saveUserProfile(remoteProfile)
+                    print("✅ Profile pulled from Supabase during full sync")
+                }
+            } catch {
+                print("⚠️ Profile pull failed: \(error.localizedDescription)")
             }
         }
 

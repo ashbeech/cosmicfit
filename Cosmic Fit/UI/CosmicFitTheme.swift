@@ -336,20 +336,34 @@ struct CosmicFitTheme {
             button.backgroundColor = Colours.cosmicOrange
             button.setTitleColor(.white, for: .normal)
             button.titleLabel?.font = Typography.dmSansFont(size: Typography.FontSizes.headline, weight: .semibold)
+            button.layer.cornerRadius = 8
+        case .onboardingAction:
+            button.backgroundColor = Colours.cosmicBlue
+            button.setTitleColor(.white, for: .normal)
+            button.titleLabel?.font = Typography.dmSansFont(size: 18, weight: .medium)
+            button.layer.cornerRadius = 6
         case .secondary:
             button.backgroundColor = Colours.cosmicGrey
             button.setTitleColor(Colours.cosmicBlue, for: .normal)
             button.titleLabel?.font = Typography.dmSansFont(size: Typography.FontSizes.headline, weight: .medium)
             button.layer.borderColor = Colours.cosmicBlue.cgColor
             button.layer.borderWidth = 1.0
+            button.layer.cornerRadius = 8
         case .text:
             button.backgroundColor = UIColor.clear
             button.setTitleColor(Colours.cosmicOrange, for: .normal)
             button.titleLabel?.font = Typography.dmSansFont(size: Typography.FontSizes.body, weight: .medium)
+            button.layer.cornerRadius = 8
         }
-        
-        button.layer.cornerRadius = 8
+
         button.layer.masksToBounds = true
+    }
+
+    /// Light spinner for `.onboardingAction` buttons (cosmicBlue background).
+    static func styleActivityIndicatorOnOnboardingAction(_ indicator: UIActivityIndicatorView) {
+        indicator.style = .medium
+        indicator.color = .white
+        indicator.hidesWhenStopped = true
     }
     
     /// Apply theme to date picker
@@ -398,9 +412,10 @@ struct CosmicFitTheme {
 
 // MARK: - Button Styles
 enum ButtonStyle {
-    case primary    // Cosmic Orange background
-    case secondary  // Cosmic Grey background with border
-    case text       // Text only, no background
+    case primary           // Cosmic Orange background
+    case onboardingAction  // cosmicBlue + white text on light backgrounds (onboarding Next, auth actions)
+    case secondary         // Cosmic Grey background with border
+    case text              // Text only, no background
 }
 
 // MARK: - Theme Application Extension

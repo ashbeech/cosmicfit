@@ -6,10 +6,89 @@ const ZODIAC_GLYPHS = ['','♈','♉','♊','♋','♌','♍','♎','♏','♐',
 
 let state = { data: null, prevData: null, presets: [], lastBirthFingerprint: null };
 
+// UK calendar dates (dd/mm/yyyy) — API still uses ISO yyyy-mm-dd
+function formatDateUK(isoDate) {
+  const [y, m, d] = isoDate.split('-');
+  if (!y || !m || !d) return '';
+  return `${d}/${m}/${y}`;
+}
+
+function parseDateUK(text) {
+  const raw = (text || '').trim();
+  if (!raw) return null;
+  const uk = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (uk) {
+    const day = parseInt(uk[1], 10);
+    const month = parseInt(uk[2], 10);
+    const year = parseInt(uk[3], 10);
+    if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+    const iso = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const check = new Date(`${iso}T12:00:00Z`);
+    if (check.getUTCFullYear() !== year || check.getUTCMonth() + 1 !== month || check.getUTCDate() !== day) {
+      return null;
+    }
+    return iso;
+  }
+  const iso = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (iso) return raw;
+  return null;
+}
+
+function setResolvedLocation(result) {
+  const label = result.label || document.getElementById('location-input').value.trim();
+  document.getElementById('location-input').value = label;
+  document.getElementById('latitude').value = String(result.latitude);
+  document.getElementById('longitude').value = String(result.longitude);
+  document.getElementById('latitude').dataset.resolvedLabel = label;
+  document.getElementById('timezone-id').value = result.timeZoneId;
+  document.getElementById('tz-chip').textContent = result.timeZoneId;
+  const chip = document.getElementById('location-coords');
+  chip.textContent = `${result.latitude.toFixed(4)}, ${result.longitude.toFixed(4)}`;
+  chip.classList.remove('unresolved');
+}
+
+function clearResolvedLocation() {
+  document.getElementById('latitude').value = '';
+  document.getElementById('longitude').value = '';
+  delete document.getElementById('latitude').dataset.resolvedLabel;
+  const chip = document.getElementById('location-coords');
+  chip.textContent = 'Not resolved — pick a suggestion or Submit to geocode';
+  chip.classList.add('unresolved');
+}
+
+async function resolveBirthLocation() {
+  const label = document.getElementById('location-input').value.trim();
+  if (!label) throw new Error('Location is required');
+
+  const latEl = document.getElementById('latitude');
+  const lat = parseFloat(latEl.value);
+  const lon = parseFloat(document.getElementById('longitude').value);
+  if (latEl.dataset.resolvedLabel === label && Number.isFinite(lat) && Number.isFinite(lon)) {
+    return {
+      label,
+      latitude: lat,
+      longitude: lon,
+      timeZoneId: document.getElementById('timezone-id').value
+    };
+  }
+
+  const res = await fetch(`/api/geocode?q=${encodeURIComponent(label)}`);
+  if (!res.ok) throw new Error(`Geocode failed (${res.status})`);
+  const data = await res.json();
+  if (!data.results?.length) {
+    throw new Error(`Could not resolve coordinates for "${label}". Pick a location from the suggestions list.`);
+  }
+  const best = data.results[0];
+  setResolvedLocation(best);
+  return best;
+}
+
 // ── Init ──
 
 document.addEventListener('DOMContentLoaded', async () => {
   setTodayUTC();
+  const locLabel = document.getElementById('location-input').value.trim();
+  document.getElementById('latitude').dataset.resolvedLabel = locLabel;
   await loadPresets();
   wireEvents();
 });
@@ -19,7 +98,7 @@ function setTodayUTC() {
   const yyyy = now.getUTCFullYear();
   const mm = String(now.getUTCMonth() + 1).padStart(2, '0');
   const dd = String(now.getUTCDate()).padStart(2, '0');
-  document.getElementById('target-date').value = `${yyyy}-${mm}-${dd}`;
+  document.getElementById('target-date').value = formatDateUK(`${yyyy}-${mm}-${dd}`);
 }
 
 async function loadPresets() {
@@ -73,11 +152,7 @@ function wireEvents() {
             div.className = 'result-item';
             div.textContent = r.label;
             div.addEventListener('click', () => {
-              locInput.value = r.label;
-              document.getElementById('latitude').value = r.latitude.toFixed(4);
-              document.getElementById('longitude').value = r.longitude.toFixed(4);
-              document.getElementById('timezone-id').value = r.timeZoneId;
-              document.getElementById('tz-chip').textContent = r.timeZoneId;
+              setResolvedLocation(r);
               locResults.classList.remove('visible');
               document.getElementById('preset-select').value = 'custom';
             });
@@ -93,8 +168,12 @@ function wireEvents() {
     if (!e.target.closest('.location-group')) locResults.classList.remove('visible');
   });
 
-  // Mark as custom when user edits any field
-  for (const id of ['birth-date', 'birth-time', 'latitude', 'longitude', 'location-input']) {
+  locInput.addEventListener('input', () => {
+    document.getElementById('preset-select').value = 'custom';
+    clearResolvedLocation();
+  });
+
+  for (const id of ['birth-date', 'birth-time', 'target-date']) {
     document.getElementById(id).addEventListener('input', () => {
       document.getElementById('preset-select').value = 'custom';
     });
@@ -108,14 +187,15 @@ function applyPreset() {
 
   const bd = preset.birthDateUTC.slice(0, 10);
   const bt = preset.birthDateUTC.slice(11, 16);
-  document.getElementById('birth-date').value = bd;
+  document.getElementById('birth-date').value = formatDateUK(bd);
   document.getElementById('birth-time').value = bt;
   document.getElementById('unknown-time').checked = false;
-  document.getElementById('location-input').value = preset.label;
-  document.getElementById('latitude').value = preset.latitude.toFixed(4);
-  document.getElementById('longitude').value = preset.longitude.toFixed(4);
-  document.getElementById('timezone-id').value = preset.timeZoneId;
-  document.getElementById('tz-chip').textContent = preset.timeZoneId;
+  setResolvedLocation({
+    label: preset.label,
+    latitude: preset.latitude,
+    longitude: preset.longitude,
+    timeZoneId: preset.timeZoneId
+  });
 }
 
 // ── Submit ──
@@ -126,7 +206,17 @@ async function doSubmit(dateOnly = false) {
   showLoading(true);
   hideError();
 
-  const body = buildRequest();
+  let body;
+  try {
+    await resolveBirthLocation();
+    body = buildRequest();
+  } catch (e) {
+    showError(e.message);
+    btn.disabled = false;
+    showLoading(false);
+    return;
+  }
+
   const birthFp = `${body.birth.dateISO}|${body.birth.latitude}|${body.birth.longitude}|${body.birth.timeZoneId}`;
   const isDateOnlyChange = dateOnly && state.lastBirthFingerprint === birthFp;
   if (isDateOnlyChange) {
@@ -171,22 +261,36 @@ async function doSubmit(dateOnly = false) {
 }
 
 function buildRequest() {
-  const date = document.getElementById('birth-date').value;
+  const birthDateISO = parseDateUK(document.getElementById('birth-date').value);
+  if (!birthDateISO) {
+    throw new Error('Birth date must be dd/mm/yyyy (e.g. 11/12/1984)');
+  }
+  const targetDateISO = parseDateUK(document.getElementById('target-date').value);
+  if (!targetDateISO) {
+    throw new Error('Daily Fit target date must be dd/mm/yyyy (UTC calendar day)');
+  }
+
   const time = document.getElementById('birth-time').value || '00:00';
   const unknownTime = document.getElementById('unknown-time').checked;
-  const dateISO = `${date}T${time}:00Z`;
+  const dateISO = `${birthDateISO}T${time}:00Z`;
+
+  const latitude = parseFloat(document.getElementById('latitude').value);
+  const longitude = parseFloat(document.getElementById('longitude').value);
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+    throw new Error('Location coordinates are missing — pick a suggestion or Submit to geocode');
+  }
 
   return {
     preset: document.getElementById('preset-select').value,
     birth: {
       dateISO,
       unknownTime,
-      latitude: parseFloat(document.getElementById('latitude').value),
-      longitude: parseFloat(document.getElementById('longitude').value),
+      latitude,
+      longitude,
       timeZoneId: document.getElementById('timezone-id').value,
-      locationLabel: document.getElementById('location-input').value
+      locationLabel: document.getElementById('location-input').value.trim()
     },
-    targetDate: document.getElementById('target-date').value,
+    targetDate: targetDateISO,
     options: { composeBlueprint: true, includeProgressed: true }
   };
 }
@@ -205,7 +309,8 @@ async function onCompareToggle() {
 }
 
 async function loadPreviousDay() {
-  const targetDate = document.getElementById('target-date').value;
+  const targetDate = parseDateUK(document.getElementById('target-date').value);
+  if (!targetDate) return;
   const prev = new Date(targetDate + 'T00:00:00Z');
   prev.setUTCDate(prev.getUTCDate() - 1);
   const prevStr = prev.toISOString().slice(0, 10);

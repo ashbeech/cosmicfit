@@ -85,7 +85,26 @@ body {
   border-color: var(--accent);
 }
 
-.coord-input { width: 90px; }
+.date-input { width: 118px; font-variant-numeric: tabular-nums; }
+
+.label-hint {
+  font-size: 9px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.coords-chip {
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.coords-chip.unresolved {
+  color: var(--partial);
+}
 
 .location-group { position: relative; }
 .location-group input[type="text"] { width: 180px; }

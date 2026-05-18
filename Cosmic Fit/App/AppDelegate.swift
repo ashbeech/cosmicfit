@@ -33,7 +33,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Auth bootstrap: init service, listen, check session async
         _ = CosmicFitAuthService.shared
         CosmicFitAuthService.shared.listenForAuthChanges()
-        Task { await CosmicFitAuthService.shared.checkSession() }
         
         // Migrate profile from UserDefaults to Documents-dir JSON
         UserProfileStorage.shared.migrateFromUserDefaultsIfNeeded()
@@ -47,13 +46,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let launchScreenVC = AnimatedLaunchScreenViewController()
         
-        if UserProfileStorage.shared.hasCompleteUserProfile() {
-            setupExistingUserFlow(launchScreenVC: launchScreenVC)
-        } else {
-            if UserProfileStorage.shared.hasSeenWelcome() {
-                setupOnboardingFormFlow(launchScreenVC: launchScreenVC)
-            } else {
-                setupWelcomeIntroFlow(launchScreenVC: launchScreenVC)
+        // Check session synchronously-ish before routing (Keychain read is fast)
+        Task {
+            await CosmicFitAuthService.shared.checkSession()
+            await MainActor.run {
+                self.performLaunchRouting(launchScreenVC: launchScreenVC)
             }
         }
         
@@ -75,6 +72,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return AuthDeepLinkRouter.shared.handle(url: url)
     }
     
+    private func performLaunchRouting(launchScreenVC: AnimatedLaunchScreenViewController) {
+        if UserProfileStorage.shared.hasCompleteUserProfile() {
+            if UserProfileStorage.shared.isOnboardingPendingAuth() {
+                setupOnboardingFormFlow(launchScreenVC: launchScreenVC, initialPage: 4)
+            } else if CosmicFitAuthService.shared.isAuthenticated {
+                setupExistingUserFlow(launchScreenVC: launchScreenVC)
+            } else {
+                setupSignedOutLandingFlow(launchScreenVC: launchScreenVC)
+            }
+        } else {
+            if UserProfileStorage.shared.hasSeenWelcome() {
+                setupOnboardingFormFlow(launchScreenVC: launchScreenVC)
+            } else {
+                setupWelcomeIntroFlow(launchScreenVC: launchScreenVC)
+            }
+        }
+    }
+
     private func setupExistingUserFlow(launchScreenVC: AnimatedLaunchScreenViewController) {
         guard let userProfile = UserProfileStorage.shared.loadUserProfile() else {
             print("❌ Profile exists but corrupted - fallback to onboarding")
@@ -132,8 +147,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("📱 First time user - showing animated welcome intro")
     }
     
-    private func setupOnboardingFormFlow(launchScreenVC: AnimatedLaunchScreenViewController) {
-        let onboardingFormVC = OnboardingFormViewController()
+    private func setupOnboardingFormFlow(launchScreenVC: AnimatedLaunchScreenViewController, initialPage: Int = 1) {
+        let onboardingFormVC = OnboardingFormViewController(initialPage: initialPage)
         let navigationController = UINavigationController(rootViewController: onboardingFormVC)
         navigationController.navigationBar.isHidden = true
         
@@ -145,7 +160,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         launchScreenVC.setMainViewController(navigationController)
         
-        print("📱 User needs profile completion - showing onboarding form")
+        print("📱 User needs profile completion - showing onboarding form (page \(initialPage))")
+    }
+
+    private func setupSignedOutLandingFlow(launchScreenVC: AnimatedLaunchScreenViewController) {
+        let landingVC = SignedOutLandingViewController()
+        landingVC.view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
+        _ = landingVC.view
+        launchScreenVC.setMainViewController(landingVC)
+        print("📱 Signed-out user with profile — showing landing")
+    }
+
+    static func makeConfiguredTabBarController() -> CosmicFitTabBarController? {
+        guard let userProfile = UserProfileStorage.shared.loadUserProfile() else {
+            return nil
+        }
+
+        let chartData = NatalChartManager.shared.calculateNatalChart(
+            date: userProfile.birthDate,
+            latitude: userProfile.latitude,
+            longitude: userProfile.longitude,
+            timeZone: TimeZone(identifier: userProfile.timeZoneIdentifier) ?? TimeZone.current
+        )
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .short
+        let birthInfo = "\(dateFormatter.string(from: userProfile.birthDate)) at \(userProfile.birthLocation) (Lat: \(String(format: "%.4f", userProfile.latitude)), Long: \(String(format: "%.4f", userProfile.longitude)))"
+
+        let tabBarController = CosmicFitTabBarController()
+        tabBarController.configure(with: chartData,
+                                 birthInfo: birthInfo,
+                                 birthDate: userProfile.birthDate,
+                                 latitude: userProfile.latitude,
+                                 longitude: userProfile.longitude,
+                                 timeZone: TimeZone(identifier: userProfile.timeZoneIdentifier) ?? TimeZone.current)
+        tabBarController.selectedIndex = 0
+        return tabBarController
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {

@@ -32,6 +32,28 @@ final class AuthGateViewController: UIViewController {
         return label
     }()
 
+    private let emailFieldContainer: UIView = {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.backgroundColor = CosmicFitTheme.Colours.transparentBackground
+        container.layer.borderColor = CosmicFitTheme.Colours.borderColor.cgColor
+        container.layer.borderWidth = 1.0
+        container.layer.cornerRadius = 8
+        container.clipsToBounds = true
+        return container
+    }()
+
+    private let emailFieldRow: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.spacing = 0
+        stack.isLayoutMarginsRelativeArrangement = true
+        stack.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 4)
+        return stack
+    }()
+
     private let emailTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Enter your email"
@@ -40,9 +62,21 @@ final class AuthGateViewController: UIViewController {
         tf.autocorrectionType = .no
         tf.textContentType = .emailAddress
         tf.returnKeyType = .done
+        tf.clearButtonMode = .never
         CosmicFitTheme.styleTextField(tf)
-        tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
         return tf
+    }()
+
+    private lazy var clearEmailButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let config = UIImage.SymbolConfiguration(pointSize: 12, weight: .light)
+        button.setImage(UIImage(systemName: "xmark", withConfiguration: config), for: .normal)
+        button.tintColor = CosmicFitTheme.Colours.cosmicBlue
+        button.accessibilityLabel = "Clear email"
+        button.addTarget(self, action: #selector(clearEmailTapped), for: .touchUpInside)
+        button.isHidden = true
+        return button
     }()
 
     private let errorLabel: UILabel = {
@@ -58,7 +92,7 @@ final class AuthGateViewController: UIViewController {
     private let sendCodeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Send code", for: .normal)
-        CosmicFitTheme.styleButton(button, style: .primary)
+        CosmicFitTheme.styleButton(button, style: .onboardingAction)
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         return button
     }()
@@ -73,10 +107,13 @@ final class AuthGateViewController: UIViewController {
 
     private let activityIndicator: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView(style: .medium)
-        ai.hidesWhenStopped = true
-        ai.color = CosmicFitTheme.Colours.cosmicBlue
+        CosmicFitTheme.styleActivityIndicatorOnOnboardingAction(ai)
         return ai
     }()
+
+    // MARK: - Callbacks
+
+    var onAuthenticationSuccess: (() -> Void)?
 
     // MARK: - Lifecycle
 
@@ -87,17 +124,30 @@ final class AuthGateViewController: UIViewController {
         sendCodeButton.addTarget(self, action: #selector(sendCodeTapped), for: .touchUpInside)
         notNowButton.addTarget(self, action: #selector(notNowTapped), for: .touchUpInside)
         emailTextField.delegate = self
+        emailTextField.addTarget(self, action: #selector(emailFieldDidChange), for: .editingChanged)
 
         let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if CosmicFitAuthService.shared.isAuthenticated {
+            clearEmailField()
+        }
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if let pending = AuthDeepLinkRouter.shared.consumePendingLink() {
             emailTextField.text = pending.email
+            updateClearEmailButtonVisibility()
             let otpVC = OTPVerifyViewController(email: pending.email, prefillCode: pending.code)
+            otpVC.onVerified = { [weak self] in
+                self?.clearEmailField()
+                self?.onAuthenticationSuccess?()
+            }
             navigationController?.pushViewController(otpVC, animated: true)
         }
     }
@@ -105,14 +155,16 @@ final class AuthGateViewController: UIViewController {
     // MARK: - Layout
 
     private func setupLayout() {
+        setupEmailFieldContainer()
+
         let stack = UIStackView(arrangedSubviews: [
-            headlineLabel, subtitleLabel, emailTextField, errorLabel, sendCodeButton
+            headlineLabel, subtitleLabel, emailFieldContainer, errorLabel, sendCodeButton
         ])
         stack.axis = .vertical
         stack.spacing = 20
         stack.setCustomSpacing(12, after: headlineLabel)
         stack.setCustomSpacing(32, after: subtitleLabel)
-        stack.setCustomSpacing(8, after: emailTextField)
+        stack.setCustomSpacing(8, after: emailFieldContainer)
         stack.setCustomSpacing(16, after: errorLabel)
         stack.translatesAutoresizingMaskIntoConstraints = false
 
@@ -136,7 +188,50 @@ final class AuthGateViewController: UIViewController {
         ])
     }
 
+    private func setupEmailFieldContainer() {
+        emailTextField.layer.borderWidth = 0
+        emailTextField.backgroundColor = .clear
+        emailTextField.rightView = nil
+        emailTextField.rightViewMode = .never
+
+        emailFieldContainer.addSubview(emailFieldRow)
+        emailFieldRow.addArrangedSubview(emailTextField)
+        emailFieldRow.addArrangedSubview(clearEmailButton)
+
+        NSLayoutConstraint.activate([
+            emailFieldContainer.heightAnchor.constraint(equalToConstant: 50),
+
+            emailFieldRow.topAnchor.constraint(equalTo: emailFieldContainer.topAnchor),
+            emailFieldRow.leadingAnchor.constraint(equalTo: emailFieldContainer.leadingAnchor),
+            emailFieldRow.trailingAnchor.constraint(equalTo: emailFieldContainer.trailingAnchor),
+            emailFieldRow.bottomAnchor.constraint(equalTo: emailFieldContainer.bottomAnchor),
+
+            emailTextField.heightAnchor.constraint(equalTo: emailFieldContainer.heightAnchor),
+            clearEmailButton.widthAnchor.constraint(equalToConstant: 36),
+            clearEmailButton.heightAnchor.constraint(equalToConstant: 36),
+        ])
+    }
+
     // MARK: - Actions
+
+    @objc private func clearEmailTapped() {
+        clearEmailField()
+    }
+
+    @objc private func emailFieldDidChange() {
+        updateClearEmailButtonVisibility()
+    }
+
+    private func clearEmailField() {
+        emailTextField.text = ""
+        errorLabel.isHidden = true
+        updateClearEmailButtonVisibility()
+    }
+
+    private func updateClearEmailButtonVisibility() {
+        let hasText = !(emailTextField.text?.isEmpty ?? true)
+        clearEmailButton.isHidden = !hasText
+    }
 
     @objc private func sendCodeTapped() {
         guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -168,6 +263,10 @@ final class AuthGateViewController: UIViewController {
             do {
                 try await CosmicFitAuthService.shared.sendOTP(email: email)
                 let otpVC = OTPVerifyViewController(email: email)
+                otpVC.onVerified = { [weak self] in
+                    self?.clearEmailField()
+                    self?.onAuthenticationSuccess?()
+                }
                 navigationController?.pushViewController(otpVC, animated: true)
             } catch {
                 print("❌ sendOTP error: \(error)")

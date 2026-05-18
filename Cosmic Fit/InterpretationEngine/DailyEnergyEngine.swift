@@ -467,8 +467,8 @@ enum DailyEnergyEngine {
 
             raw -= axisBaseline(axis, calibration: calibration)
             raw += moonMods[axis] ?? 0.0
-            raw += Double.random(in: -0.1...0.1, using: &rng)
-            scores[axis] = scaleToAxis(raw)
+            raw += Double.random(in: -calibration.axisTuning.jitterRange...calibration.axisTuning.jitterRange, using: &rng)
+            scores[axis] = scaleToAxis(raw, spread: calibration.axisTuning.sigmoidSpread)
         }
 
         return DerivedAxes(
@@ -508,9 +508,9 @@ enum DailyEnergyEngine {
     }
 
     /// Sigmoid mapping: tanh maps any real to (-1,1), then scaled to 1–10.
-    /// Spread factor 2.0 ensures typical raw-score variation reaches extremes.
-    private static func scaleToAxis(_ rawScore: Double) -> Double {
-        let normalised = tanh(rawScore * 2.0)
+    /// Spread factor controls how aggressively raw scores reach extremes.
+    private static func scaleToAxis(_ rawScore: Double, spread: Double = 2.0) -> Double {
+        let normalised = tanh(rawScore * spread)
         return 1.0 + (normalised + 1.0) * 4.5
     }
 

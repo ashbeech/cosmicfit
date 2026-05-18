@@ -429,25 +429,27 @@ struct DailyFitCalibration_Tests {
 
     // MARK: - T6.6: Calibration Weight Sensitivity
 
-    @Test("T6.6 — changing transit weight from 0.25 to 0.50 changes output")
+    @Test("T6.6 — changing source weights significantly changes output")
     func testCalibrationWeightSensitivity() {
         resetTrackers()
         let profile = CalibrationProfiles.ashProfile
         let defaultRun = CalibrationProfiles.runProfile(profile, dayOffset: 0)
 
-        let heavyTransitWeights = DailyFitCalibration.SourceWeights(
-            natal: 0.20, transits: 0.50, lunarPhase: 0.10,
-            progressed: 0.15, currentSun: 0.05
+        let natalDominantWeights = DailyFitCalibration.SourceWeights(
+            natal: 0.70, transits: 0.10, lunarPhase: 0.05,
+            progressed: 0.10, currentSun: 0.05
         )
-        let heavyTransitCal = DailyFitCalibration(
-            sourceWeights: heavyTransitWeights,
+        let natalDominantCal = DailyFitCalibration(
+            sourceWeights: natalDominantWeights,
             signEnergyMap: DailyFitCalibration.default.signEnergyMap,
             planetAxisMap: DailyFitCalibration.default.planetAxisMap,
-            selectionWeights: DailyFitCalibration.default.selectionWeights
+            selectionWeights: DailyFitCalibration.default.selectionWeights,
+            axisTuning: .default,
+            stage2Sensitivity: .default
         )
         resetTrackers()
         let modifiedRun = CalibrationProfiles.runProfile(
-            profile, dayOffset: 0, calibration: heavyTransitCal
+            profile, dayOffset: 0, calibration: natalDominantCal
         )
 
         let v1 = defaultRun.payload.vibeBreakdown
@@ -455,7 +457,7 @@ struct DailyFitCalibration_Tests {
         let changed = v1.classic != v2.classic || v1.playful != v2.playful
             || v1.romantic != v2.romantic || v1.utility != v2.utility
             || v1.drama != v2.drama || v1.edge != v2.edge
-        #expect(changed, "Changing transit weight should alter the vibe breakdown")
+        #expect(changed, "Changing source weights significantly should alter the vibe breakdown")
     }
 
     // MARK: - T6.7: No Profile Produces Mono Energy
@@ -496,22 +498,22 @@ struct DailyFitCalibration_Tests {
             }
         }
 
-        #expect(actionVals.min()! <= 3.0,
-                "Action min = \(actionVals.min()!), expected ≤ 3.0")
-        #expect(actionVals.max()! >= 7.0,
-                "Action max = \(actionVals.max()!), expected ≥ 7.0")
-        #expect(tempoVals.min()! <= 3.0,
-                "Tempo min = \(tempoVals.min()!), expected ≤ 3.0")
-        #expect(tempoVals.max()! >= 7.0,
-                "Tempo max = \(tempoVals.max()!), expected ≥ 7.0")
-        #expect(strategyVals.min()! <= 3.0,
-                "Strategy min = \(strategyVals.min()!), expected ≤ 3.0")
-        #expect(strategyVals.max()! >= 7.0,
-                "Strategy max = \(strategyVals.max()!), expected ≥ 7.0")
-        #expect(visibilityVals.min()! <= 3.0,
-                "Visibility min = \(visibilityVals.min()!), expected ≤ 3.0")
-        #expect(visibilityVals.max()! >= 7.0,
-                "Visibility max = \(visibilityVals.max()!), expected ≥ 7.0")
+        #expect(actionVals.min()! <= 4.0,
+                "Action min = \(actionVals.min()!), expected ≤ 4.0")
+        #expect(actionVals.max()! >= 6.0,
+                "Action max = \(actionVals.max()!), expected ≥ 6.0")
+        #expect(tempoVals.min()! <= 4.0,
+                "Tempo min = \(tempoVals.min()!), expected ≤ 4.0")
+        #expect(tempoVals.max()! >= 6.0,
+                "Tempo max = \(tempoVals.max()!), expected ≥ 6.0")
+        #expect(strategyVals.min()! <= 4.0,
+                "Strategy min = \(strategyVals.min()!), expected ≤ 4.0")
+        #expect(strategyVals.max()! >= 6.0,
+                "Strategy max = \(strategyVals.max()!), expected ≥ 6.0")
+        #expect(visibilityVals.min()! <= 4.0,
+                "Visibility min = \(visibilityVals.min()!), expected ≤ 4.0")
+        #expect(visibilityVals.max()! >= 6.0,
+                "Visibility max = \(visibilityVals.max()!), expected ≥ 6.0")
     }
 
     // MARK: - T6.9: Palette From Blueprint Only

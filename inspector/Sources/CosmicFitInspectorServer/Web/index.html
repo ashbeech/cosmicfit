@@ -20,8 +20,8 @@
         <span id="display-name" class="name-chip">--</span>
       </div>
       <div class="control-group">
-        <label for="birth-date">Birth Date</label>
-        <input type="date" id="birth-date" value="1984-12-11">
+        <label for="birth-date">Birth Date <span class="label-hint">(dd/mm/yyyy)</span></label>
+        <input type="text" id="birth-date" class="date-input" placeholder="dd/mm/yyyy" value="11/12/1984" inputmode="numeric" autocomplete="off">
       </div>
       <div class="control-group">
         <label for="birth-time">Birth Time</label>
@@ -34,14 +34,12 @@
         <label for="location-input">Location</label>
         <input type="text" id="location-input" placeholder="City, Country" value="London, UK" autocomplete="off">
         <div id="location-results" class="autocomplete-dropdown"></div>
+        <span id="location-coords" class="coords-chip" title="Resolved latitude, longitude">51.5074, -0.1278</span>
+        <input type="hidden" id="latitude" value="51.5074">
+        <input type="hidden" id="longitude" value="-0.1278">
       </div>
       <div class="control-group">
-        <label>Coords</label>
-        <input type="number" id="latitude" step="0.0001" value="51.5074" class="coord-input">
-        <input type="number" id="longitude" step="0.0001" value="-0.1278" class="coord-input">
-      </div>
-      <div class="control-group">
-        <label for="timezone-id">TZ</label>
+        <label>TZ</label>
         <span id="tz-chip" class="tz-chip">Europe/London</span>
         <input type="hidden" id="timezone-id" value="Europe/London">
       </div>
@@ -49,8 +47,8 @@
     </div>
     <div class="strip-row strip-row-secondary">
       <div class="control-group">
-        <label for="target-date">Daily Fit Target Date</label>
-        <input type="date" id="target-date">
+        <label for="target-date">Daily Fit Target Date <span class="label-hint">(dd/mm/yyyy, UTC)</span></label>
+        <input type="text" id="target-date" class="date-input" placeholder="dd/mm/yyyy" inputmode="numeric" autocomplete="off">
         <button id="today-btn" class="small-btn">Today (UTC)</button>
       </div>
       <label class="checkbox-label">

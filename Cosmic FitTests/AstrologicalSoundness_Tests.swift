@@ -129,12 +129,12 @@ struct AstrologicalSoundness_Tests {
         #expect(cal.sourceWeights.isNormalised, "Source weights not normalised")
     }
 
-    @Test("6C.2 — Natal weight is the largest source")
-    func testNatalWeightDominates() {
+    @Test("6C.2 — Transit weight is the largest source (daily variation priority)")
+    func testTransitWeightDominates() {
         let cal = DailyFitCalibration.default
-        #expect(cal.sourceWeights.natal > cal.sourceWeights.transits, "Natal should > transits")
-        #expect(cal.sourceWeights.natal > cal.sourceWeights.lunarPhase, "Natal should > lunar")
-        #expect(cal.sourceWeights.natal > cal.sourceWeights.progressed, "Natal should > progressed")
+        #expect(cal.sourceWeights.transits > cal.sourceWeights.natal, "Transits should > natal")
+        #expect(cal.sourceWeights.transits > cal.sourceWeights.lunarPhase, "Transits should > lunar")
+        #expect(cal.sourceWeights.transits > cal.sourceWeights.progressed, "Transits should > progressed")
     }
 
     @Test("6C.3 — All 12 signs have energy multipliers")

@@ -54,7 +54,7 @@ final class OTPVerifyViewController: UIViewController {
     private let verifyButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Verify", for: .normal)
-        CosmicFitTheme.styleButton(button, style: .primary)
+        CosmicFitTheme.styleButton(button, style: .onboardingAction)
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         return button
     }()
@@ -69,12 +69,13 @@ final class OTPVerifyViewController: UIViewController {
 
     private let activityIndicator: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView(style: .medium)
-        ai.hidesWhenStopped = true
-        ai.color = CosmicFitTheme.Colours.cosmicBlue
+        CosmicFitTheme.styleActivityIndicatorOnOnboardingAction(ai)
         return ai
     }()
 
     // MARK: - Init
+
+    var onVerified: (() -> Void)?
 
     init(email: String, prefillCode: String? = nil) {
         self.email = email
@@ -173,7 +174,11 @@ final class OTPVerifyViewController: UIViewController {
         Task {
             do {
                 try await CosmicFitAuthService.shared.verifyOTP(email: email, code: code)
-                Task { await SupabaseSyncService.shared.performFullSync() }
+                if let onVerified {
+                    onVerified()
+                } else {
+                    Task { await SupabaseSyncService.shared.performFullSync() }
+                }
             } catch {
                 showError("Incorrect code. Please try again.")
             }

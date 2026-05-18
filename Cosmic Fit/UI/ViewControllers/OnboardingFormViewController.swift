@@ -52,6 +52,11 @@ class OnboardingFormViewController: UIViewController {
 
     private let locationAutocompleteView = LocationAutocompleteView()
 
+    // Page 4 email input views
+    private let emailTextField = UITextField()
+    private let emailDivider = UIView()
+    private let emailSparkleLabel = UILabel()
+
     // MARK: - Properties
     private var currentPage: Int = 1 {
         didSet {
@@ -63,10 +68,25 @@ class OnboardingFormViewController: UIViewController {
     private var isNameValid = false
     private var isBirthDataValid = false
     private var isLocationValid = false
+    private var isEmailValid = false
 
-    private let totalPages = 3
+    private var totalPages: Int { postAuthMode ? 3 : 4 }
+    private let postAuthMode: Bool
     private var geocoder = CLGeocoder()
     private var stepImageWidthConstraint: NSLayoutConstraint?
+    private let initialPage: Int
+
+    init(initialPage: Int = 1, postAuthMode: Bool = false) {
+        self.postAuthMode = postAuthMode
+        self.initialPage = max(1, min(postAuthMode ? 3 : 4, initialPage))
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        self.postAuthMode = false
+        self.initialPage = 1
+        super.init(coder: coder)
+    }
 
     // MARK: - Placeholder Animation Properties
     private var placeholderTimer: Timer?
@@ -96,7 +116,13 @@ class OnboardingFormViewController: UIViewController {
         setupUI()
         setupConstraints()
         setupKeyboardHandling()
-        updatePageContent()
+
+        if initialPage == 4 && !postAuthMode {
+            restoreFormStateFromProfile()
+            UserProfileStorage.shared.setOnboardingPendingAuth(true)
+        }
+
+        currentPage = initialPage
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -105,6 +131,8 @@ class OnboardingFormViewController: UIViewController {
             hasAppearedOnce = true
             if currentPage == 1 {
                 nameTextField.becomeFirstResponder()
+            } else if currentPage == 4 {
+                emailTextField.becomeFirstResponder()
             }
         }
     }
@@ -136,15 +164,21 @@ class OnboardingFormViewController: UIViewController {
         scrollView.addSubview(contentView)
 
         backButton.translatesAutoresizingMaskIntoConstraints = false
-        backButton.setTitle("Back", for: .normal)
         backButton.setTitleColor(CosmicFitTheme.Colours.cosmicBlue, for: .normal)
-        backButton.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(size: 18, weight: .bold)
-        backButton.setImage(CosmicNavigationArrow.image(direction: .left, pointSize: 18), for: .normal)
-        backButton.tintColor = CosmicFitTheme.Colours.cosmicBlue
-        backButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -2, bottom: 0, right: 6)
-        backButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
-        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        CosmicNavigationArrow.apply(
+            to: backButton,
+            title: "Back",
+            arrow: .left,
+            pointSize: 18,
+            imagePadding: 10,
+            font: CosmicFitTheme.Typography.dmSansFont(size: 18, weight: .bold)
+        )
+        if var backConfig = backButton.configuration {
+            backConfig.contentInsets = .zero
+            backButton.configuration = backConfig
+        }
         backButton.contentHorizontalAlignment = .leading
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         backButton.isHidden = true
         contentView.addSubview(backButton)
 
@@ -169,10 +203,7 @@ class OnboardingFormViewController: UIViewController {
         contentView.addSubview(inputContainerView)
 
         actionButton.translatesAutoresizingMaskIntoConstraints = false
-        actionButton.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
-        actionButton.setTitleColor(.white, for: .normal)
-        actionButton.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(size: 18, weight: .medium)
-        actionButton.layer.cornerRadius = 6
+        CosmicFitTheme.styleButton(actionButton, style: .onboardingAction)
         actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
         contentView.addSubview(actionButton)
 
@@ -445,6 +476,7 @@ class OnboardingFormViewController: UIViewController {
         case 1: isValid = isNameValid
         case 2: isValid = isBirthDataValid
         case 3: isValid = isLocationValid
+        case 4: isValid = isEmailValid
         default: isValid = false
         }
 
@@ -458,6 +490,7 @@ class OnboardingFormViewController: UIViewController {
         case 1: checkNameValid()
         case 2: checkBirthValid()
         case 3: checkLocationValid()
+        case 4: checkEmailValid()
         default: break
         }
         updateButtonState()
@@ -479,9 +512,20 @@ class OnboardingFormViewController: UIViewController {
         isLocationValid = !location.isEmpty && location.count >= 3 && latitude != 0.0 && longitude != 0.0
     }
 
+    private func checkEmailValid() {
+        let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() ?? ""
+        let pattern = #"^[^\s@]+@[^\s@]+\.[^\s@]+$"#
+        isEmailValid = email.range(of: pattern, options: .regularExpression) != nil
+    }
+
     // MARK: - Field Change Handlers
     @objc private func nameFieldChanged() {
         checkNameValid()
+        updateButtonState()
+    }
+
+    @objc private func emailFieldChanged() {
+        checkEmailValid()
         updateButtonState()
     }
 
@@ -535,6 +579,7 @@ class OnboardingFormViewController: UIViewController {
         case 1: setupNamePage()
         case 2: setupBirthPage()
         case 3: setupLocationPage()
+        case 4: setupEmailPage()
         default: break
         }
     }
@@ -641,9 +686,11 @@ class OnboardingFormViewController: UIViewController {
     }
 
     private func setupLocationPage() {
-        titleLabel.text = "And lastly, where were you born?"
+        titleLabel.text = postAuthMode
+            ? "And lastly, where were you born?"
+            : "Where were you born?"
         descriptionLabel.text = ""
-        actionButton.setTitle("Done", for: .normal)
+        actionButton.setTitle(postAuthMode ? "Finish" : "Next >", for: .normal)
 
         inputContainerView.addSubview(locationAutocompleteView)
 
@@ -662,6 +709,61 @@ class OnboardingFormViewController: UIViewController {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.startPlaceholderAnimation()
+        }
+
+        validateCurrentPage()
+    }
+
+    private func setupEmailPage() {
+        titleLabel.text = "What's your email?"
+        descriptionLabel.text = "Save your chart and sync across devices."
+        actionButton.setTitle("Finish", for: .normal)
+
+        emailTextField.translatesAutoresizingMaskIntoConstraints = false
+        emailTextField.attributedPlaceholder = makePlaceholder("Email address")
+        emailTextField.font = CosmicFitTheme.Typography.dmSansFont(size: 18, weight: .regular)
+        emailTextField.textColor = CosmicFitTheme.Colours.cosmicBlue
+        emailTextField.borderStyle = .none
+        emailTextField.returnKeyType = .done
+        emailTextField.autocorrectionType = .no
+        emailTextField.spellCheckingType = .no
+        emailTextField.autocapitalizationType = .none
+        emailTextField.keyboardType = .emailAddress
+        emailTextField.textContentType = .emailAddress
+        emailTextField.delegate = self
+        emailTextField.addTarget(self, action: #selector(emailFieldChanged), for: .editingChanged)
+
+        emailDivider.translatesAutoresizingMaskIntoConstraints = false
+        emailDivider.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
+
+        emailSparkleLabel.translatesAutoresizingMaskIntoConstraints = false
+        emailSparkleLabel.text = "✦"
+        emailSparkleLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        emailSparkleLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
+        emailSparkleLabel.textAlignment = .center
+
+        inputContainerView.addSubview(emailTextField)
+        inputContainerView.addSubview(emailDivider)
+        inputContainerView.addSubview(emailSparkleLabel)
+
+        NSLayoutConstraint.activate([
+            emailTextField.topAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: 24),
+            emailTextField.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
+            emailTextField.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+            emailTextField.heightAnchor.constraint(equalToConstant: 36),
+
+            emailDivider.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 6),
+            emailDivider.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
+            emailDivider.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+            emailDivider.heightAnchor.constraint(equalToConstant: 1),
+            emailDivider.bottomAnchor.constraint(equalTo: inputContainerView.bottomAnchor),
+
+            emailSparkleLabel.centerYAnchor.constraint(equalTo: emailDivider.centerYAnchor),
+            emailSparkleLabel.trailingAnchor.constraint(equalTo: emailDivider.trailingAnchor)
+        ])
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            self.emailTextField.becomeFirstResponder()
         }
 
         validateCurrentPage()
@@ -722,9 +824,20 @@ class OnboardingFormViewController: UIViewController {
             }
         case 3:
             if isLocationValid {
-                processLocationAndComplete()
+                if postAuthMode {
+                    finishPostAuth()
+                } else {
+                    UserProfileStorage.shared.setOnboardingPendingAuth(true)
+                    fadeToPage(4)
+                }
             } else {
                 showAlert(title: "Location Required", message: "Please select your birth location from the suggestions.")
+            }
+        case 4:
+            if isEmailValid {
+                finishWithEmail()
+            } else {
+                showAlert(title: "Email Required", message: "Please enter a valid email address.")
             }
         default:
             break
@@ -773,10 +886,155 @@ class OnboardingFormViewController: UIViewController {
 
     // MARK: - Location Processing
     private func processLocationAndComplete() {
-        saveProfileAndComplete()
+        // Legacy — page 3 now advances to page 4 via actionButtonTapped
     }
 
-    private func saveProfileAndComplete() {
+    // MARK: - Page 4 Finish Sequence
+
+    private func finishWithEmail() {
+        let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() ?? ""
+        guard !email.isEmpty else { return }
+
+        view.endEditing(true)
+        setLoadingState(true)
+
+        let profile = buildUserProfile()
+        guard let profile else {
+            setLoadingState(false)
+            showAlert(title: "Error", message: "Could not process birth date and time.")
+            return
+        }
+
+        UserProfileStorage.shared.saveUserProfile(profile)
+
+        Task {
+            do {
+                try await CosmicFitAuthService.shared.signUpWithProfile(email: email, profile: profile)
+                UserProfileStorage.shared.clearOnboardingPendingAuth()
+                await SupabaseSyncService.shared.performFullSync()
+                await MainActor.run {
+                    self.setLoadingState(false)
+                    self.navigateToMainApp(with: profile)
+                }
+            } catch CosmicFitAuthError.emailAlreadyRegistered {
+                await MainActor.run {
+                    self.setLoadingState(false)
+                    self.handleEmailExists(email: email, profile: profile)
+                }
+            } catch {
+                await MainActor.run {
+                    self.setLoadingState(false)
+                    self.showRetryAlert(email: email, profile: profile, error: error)
+                }
+            }
+        }
+    }
+
+    // MARK: - Post-Auth Finish (pages 1-3 only, already authenticated)
+
+    private func finishPostAuth() {
+        view.endEditing(true)
+        setLoadingState(true)
+
+        let profile = buildUserProfile()
+        guard let profile else {
+            setLoadingState(false)
+            showAlert(title: "Error", message: "Could not process birth date and time.")
+            return
+        }
+
+        UserProfileStorage.shared.saveUserProfile(profile)
+
+        Task {
+            do {
+                try await SupabaseSyncService.shared.syncProfileToSupabase(profile)
+            } catch {
+                print("⚠️ Post-auth profile sync failed (will retry on next sync): \(error.localizedDescription)")
+            }
+            await MainActor.run {
+                self.setLoadingState(false)
+                self.navigateToMainApp(with: profile)
+            }
+        }
+    }
+
+    private func handleEmailExists(email: String, profile: UserProfile) {
+        let alert = UIAlertController(
+            title: "Account Exists",
+            message: "An account with this email already exists. We'll send you a verification code to sign in.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Send Code", style: .default) { [weak self] _ in
+            self?.sendOTPAndShowVerify(email: email, profile: profile)
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(alert, animated: true)
+    }
+
+    private func sendOTPAndShowVerify(email: String, profile: UserProfile) {
+        setLoadingState(true)
+        Task {
+            do {
+                try await CosmicFitAuthService.shared.sendOTP(email: email)
+                await MainActor.run {
+                    self.setLoadingState(false)
+                    self.presentOTPVerify(email: email, profile: profile)
+                }
+            } catch {
+                await MainActor.run {
+                    self.setLoadingState(false)
+                    self.showAlert(title: "Error", message: "Could not send verification code. Please try again.")
+                }
+            }
+        }
+    }
+
+    private func presentOTPVerify(email: String, profile: UserProfile) {
+        let otpVC = OTPVerifyViewController(email: email)
+        otpVC.onVerified = { [weak self] in
+            guard let self else { return }
+            UserProfileStorage.shared.clearOnboardingPendingAuth()
+            Task {
+                await SupabaseSyncService.shared.performFullSync()
+                await MainActor.run {
+                    self.dismiss(animated: true) {
+                        self.navigateToMainApp(with: profile)
+                    }
+                }
+            }
+        }
+        let nav = UINavigationController(rootViewController: otpVC)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
+    }
+
+    private func showRetryAlert(email: String, profile: UserProfile, error: Error) {
+        let alert = UIAlertController(
+            title: "Connection Error",
+            message: "Could not create your account. Please check your connection and try again.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Retry", style: .default) { [weak self] _ in
+            self?.finishWithEmail()
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(alert, animated: true)
+    }
+
+    private func setLoadingState(_ loading: Bool) {
+        actionButton.isEnabled = !loading
+        actionButton.alpha = loading ? 0.55 : 1.0
+        if !postAuthMode {
+            emailTextField.isEnabled = !loading
+        }
+        if loading {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+    }
+
+    private func buildUserProfile() -> UserProfile? {
         let deviceCalendar = Calendar.current
         let dateComponents = deviceCalendar.dateComponents([.year, .month, .day], from: birthDate)
         let timeComponents = deviceCalendar.dateComponents([.hour, .minute], from: birthTime)
@@ -796,8 +1054,7 @@ class OnboardingFormViewController: UIViewController {
         combinedComponents.second = 0
 
         guard let finalBirthDateTime = birthLocationCalendar.date(from: combinedComponents) else {
-            showAlert(title: "Error", message: "Could not process birth date and time.")
-            return
+            return nil
         }
 
         #if DEBUG
@@ -809,7 +1066,7 @@ class OnboardingFormViewController: UIViewController {
         )
         #endif
 
-        let profile = UserProfile(
+        return UserProfile(
             id: UUID().uuidString,
             firstName: firstName,
             birthDate: finalBirthDateTime,
@@ -821,6 +1078,24 @@ class OnboardingFormViewController: UIViewController {
             createdAt: Date(),
             lastModified: Date()
         )
+    }
+
+    private func restoreFormStateFromProfile() {
+        guard let profile = UserProfileStorage.shared.loadUserProfile() else { return }
+        firstName = profile.firstName
+        birthDate = profile.birthDate
+        birthLocation = profile.birthLocation
+        latitude = profile.latitude
+        longitude = profile.longitude
+        timeZone = TimeZone(identifier: profile.timeZoneIdentifier) ?? TimeZone.current
+        hasUnknownTime = profile.birthTimeIsUnknown
+    }
+
+    private func saveProfileAndComplete() {
+        guard let profile = buildUserProfile() else {
+            showAlert(title: "Error", message: "Could not process birth date and time.")
+            return
+        }
 
         if UserProfileStorage.shared.saveUserProfile(profile) {
             print("✅ Profile saved successfully")
@@ -982,6 +1257,11 @@ extension OnboardingFormViewController: UITextFieldDelegate {
             }
         } else if textField === dateField || textField === timeField {
             pickerDoneTapped()
+        } else if textField === emailTextField {
+            textField.resignFirstResponder()
+            if isEmailValid {
+                actionButtonTapped()
+            }
         }
         return true
     }
