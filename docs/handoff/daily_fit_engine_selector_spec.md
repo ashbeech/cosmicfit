@@ -19,6 +19,7 @@ This spec defines:
 - **Inspector:** header dropdown + API field + session persistence
 - **App:** build-time config via `.env` / xcconfig / Info.plist, plus optional DEBUG runtime override
 - **Frozen payloads, tarot recency, and compare cache** behaviour when the active engine changes
+- **Repository docs (P9):** root `README.md` section for onboarding (why, design, Inspector + app usage) — see `docs/handoff/phase-9.md`
 
 **Non-goals:**
 
@@ -79,7 +80,7 @@ Do **not** remove default parameters from public engine APIs. Existing call site
 
 ### Phase discipline
 
-Implement **P0 → P8 in order**. Do not combine phases. Do not start P5 (Profile picker) before P1 (config) is merged and tested.
+Implement **P0 → P9 in order** (P6, P7, P8 optional; **P9 required** for repo handoff documentation after P0–P5). Do not combine phases. Do not start P5 (Profile picker) before P1 (config) is merged and tested.
 
 ---
 
@@ -700,6 +701,7 @@ iOS remains source of truth until a dedicated sync step exists; manifest is **de
 | **P6** | Compare-two-engines column in inspector (optional) | Required for P0–P5 completion |
 | **P7** | `DailyFitEngineMode` + `stage1_experimental` when Stage 1 code exists | Register experimental without mode implementation |
 | **P8** | `.env` → xcconfig sync script (optional) | Overwrite unrelated xcconfig keys |
+| **P9** | Root **`README.md`**: why Daily Fit engine versioning exists, design summary, Inspector + app usage, CI notes, link to this spec | Rewrite unrelated README sections; duplicate full spec in README |
 
 ---
 
@@ -719,9 +721,16 @@ iOS remains source of truth until a dedicated sync step exists; manifest is **de
 | P1 | `Cosmic Fit/UI/ViewControllers/CosmicFitTabBarController.swift` | Pass `effectiveCalibration` only |
 | P2 | `DailyFitFrozenPayloadStorage.swift`, `DailyFitTypes.swift` | Filename + optional payload field |
 | P3 | `TarotRecencyTracker.swift`, `TarotVariantRotationTracker.swift` | Key suffix with engine id |
+| P3 | `BlueprintLensEngine.swift` | Wiring only — thread effective/request engine id into tracker call sites |
+| P3 | `inspector/.../InspectorEngine.swift` | Pass request `dailyFitEngineId` into diagnostics / tracker paths |
 | P3 | `inspector/.../VerdictRunner.swift` | Pass engine id into `checkTarotRecency` so recency verdict uses namespaced tracker keys |
 | P4 | `BlueprintLensEngine.swift`, `DailyFitDiagnostics.swift` | Diagnostics accuracy |
-| P5 | `ProfileViewController.swift` | DEBUG picker + banner hook only |
+| P4 | `Cosmic Fit/UI/ViewControllers/CosmicFitTabBarController.swift` | DEBUG path only — pass `effectiveCalibration` into `logDailyFitDiagnostics` |
+| P5 | `ProfileViewController.swift` | DEBUG engine picker only |
+| P5 | `Cosmic Fit/UI/ViewControllers/CosmicFitTabBarController.swift` | DEBUG Daily Fit tab banner (tab badge / debug subtitle) — **not** `DailyFitViewController` |
+| P7 | `DailyFitEngineRegistry.swift` | Register `stage1_experimental` + `DailyFitEngineMode` on descriptor |
+| P7 | `DailyEnergyEngine.swift`, `BlueprintLensEngine.swift` | Mode branches at ≤2 central entry points only |
+| P9 | `README.md` (repo root) | Daily Fit engine versioning guide — §4.1.1-style section + §2.1/§2.2 cross-refs (see `phase-9.md`) |
 
 ### 17.2 MUST NOT modify (unless separate approved spec)
 
@@ -739,8 +748,9 @@ iOS remains source of truth until a dedicated sync step exists; manifest is **de
 | File | Condition |
 |------|-----------|
 | `DailyFitTypes.swift` | Add optional `dailyFitEngineId` on `DailyFitPayload` (P2); do not restructure types |
-| `inspector/README.md`, root `README.md` | Document config only |
-| New test files | Registry unit tests, inspector engine id tests |
+| `inspector/README.md` | Document config only (minimal factual updates; P9 owns root README) |
+| `Cosmic FitTests/DailyFitEngineRegistry_Tests.swift` | P0 registry unit tests (§15) |
+| New test files | Inspector engine id / compare-cache tests (P0) |
 
 ### 17.4 Symlink rule (inspector)
 
@@ -900,8 +910,9 @@ Use this as a PR description template. **All boxes must be checked.**
 
 ### Documentation
 
-- [ ] `inspector/README.md` updated if behaviour visible to users
+- [ ] `inspector/README.md` updated if behaviour visible to users (any phase)
 - [ ] `.env.example` documents `DAILY_FIT_ENGINE_ID` (P1+)
+- [ ] Root `README.md` includes Daily Fit engine versioning section with why / design / usage (P9+)
 
 ---
 
