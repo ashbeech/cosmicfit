@@ -71,8 +71,13 @@ public actor InspectorEngine {
         )
         let displayName = DisplayNameGenerator.name(forProfileHash: profileHash)
 
+        let engineDescriptor = resolveDailyFitEngine(from: request)
+
         if request.options?.resetTarotHistory == true {
-            TarotRecencyTracker.shared.clearProfile(profileHash: profileHash)
+            TarotRecencyTracker.shared.clearProfile(
+                profileHash: profileHash,
+                dailyFitEngineId: engineDescriptor.id
+            )
         }
 
         let natalChart = NatalChartCalculator.calculateNatalChart(
@@ -126,16 +131,27 @@ public actor InspectorEngine {
             moonPhaseDegrees: moonPhase,
             profileHash: profileHash,
             blueprint: bp,
-            date: targetDate
+            date: targetDate,
+            calibration: engineDescriptor.calibration,
+            dailyFitEngineId: engineDescriptor.id
         )
 
-        let verdicts = VerdictRunner.run(payload: payload, report: report, profileHash: profileHash, targetDate: targetDate)
+        let verdicts = VerdictRunner.run(
+            payload: payload,
+            report: report,
+            profileHash: profileHash,
+            targetDate: targetDate,
+            dailyFitEngineId: engineDescriptor.id
+        )
 
         return InspectorResponse(
             meta: ResponseMeta(
                 engineVersion: Self.engineVersion,
                 computedAt: Date(),
-                profileHash: profileHash
+                profileHash: profileHash,
+                dailyFitEngineId: engineDescriptor.id,
+                dailyFitEngineDisplayName: engineDescriptor.displayName,
+                dailyFitEngineFingerprint: engineDescriptor.fingerprint
             ),
             profile: ProfileInfo(displayName: displayName, birth: birth),
             natal: NatalChartDTO(from: natalChart),
@@ -150,8 +166,22 @@ public actor InspectorEngine {
         blueprintCache.removeValue(forKey: hash)
     }
 
-    public func clearTarotHistory(profileHash: String) {
-        TarotRecencyTracker.shared.clearProfile(profileHash: profileHash)
+    public func clearTarotHistory(profileHash: String, dailyFitEngineId: String) {
+        TarotRecencyTracker.shared.clearProfile(
+            profileHash: profileHash,
+            dailyFitEngineId: dailyFitEngineId
+        )
+    }
+
+    private func resolveDailyFitEngine(from request: InspectorRequest) -> DailyFitEngineDescriptor {
+        let requestedId = request.options?.dailyFitEngineId ?? InspectorDefaults.dailyFitEngineId
+        if let descriptor = DailyFitEngineRegistry.descriptor(for: requestedId) {
+            return descriptor
+        }
+        #if DEBUG
+        print("[InspectorEngine] Unknown dailyFitEngineId '\(requestedId)'; falling back to production")
+        #endif
+        return DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)!
     }
 }
 

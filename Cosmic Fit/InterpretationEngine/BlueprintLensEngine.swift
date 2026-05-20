@@ -12,18 +12,30 @@ import Foundation
 /// Takes a DailyEnergySnapshot (Stage 1 output) and selects what the user sees.
 enum BlueprintLensEngine {
 
+    // MARK: - Engine id resolution (P3 namespacing)
+
+    private static func dailyFitEngineId(
+        for calibration: DailyFitCalibration,
+        mode: DailyFitEngineMode = .standard
+    ) -> String {
+        DailyFitEngineRegistry.engineId(for: calibration, mode: mode)
+    }
+
     // MARK: - Public API
 
     /// Select a tarot card and style-edit variant for the day.
     /// Records the selection in recency and rotation trackers.
     static func selectTarotAndStyleEdit(
         snapshot: DailyEnergySnapshot,
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        dailyFitEngineId explicitEngineId: String? = nil
     ) -> (tarotCard: TarotCard, styleEditVariant: StyleEditVariant) {
+        let engineId = explicitEngineId ?? dailyFitEngineId(for: calibration)
         let allCards = loadAndNormaliseCards()
         let recentSelections = TarotRecencyTracker.shared.getRecentSelections(
             profileHash: snapshot.profileHash,
-            referenceDate: snapshot.generatedAt
+            referenceDate: snapshot.generatedAt,
+            dailyFitEngineId: engineId
         )
         let weights = calibration.selectionWeights
         let vibeVector = buildVibeVector(from: snapshot.vibeProfile)
@@ -63,7 +75,7 @@ enum BlueprintLensEngine {
                 description: "", reversedKeywords: [],
                 symbolism: [], styleEdits: nil
             )
-            let variant = selectVariant(for: fallback, profileHash: snapshot.profileHash)
+            let variant = selectVariant(for: fallback, profileHash: snapshot.profileHash, dailyFitEngineId: engineId)
             return (fallback, variant)
         }
 
@@ -79,10 +91,11 @@ enum BlueprintLensEngine {
         TarotRecencyTracker.shared.storeCardSelection(
             selected.name,
             profileHash: snapshot.profileHash,
-            date: snapshot.generatedAt
+            date: snapshot.generatedAt,
+            dailyFitEngineId: engineId
         )
 
-        let variant = selectVariant(for: selected, profileHash: snapshot.profileHash)
+        let variant = selectVariant(for: selected, profileHash: snapshot.profileHash, dailyFitEngineId: engineId)
         return (selected, variant)
     }
 
@@ -239,7 +252,7 @@ enum BlueprintLensEngine {
     /// Selects the next style-edit variant by rotation, not by scoring.
     /// Falls back to a minimal placeholder if the card has no `styleEdits`.
     private static func selectVariant(
-        for card: TarotCard, profileHash: String
+        for card: TarotCard, profileHash: String, dailyFitEngineId: String
     ) -> StyleEditVariant {
         guard let edits = card.styleEdits, !edits.isEmpty else {
             return StyleEditVariant(
@@ -253,7 +266,7 @@ enum BlueprintLensEngine {
             )
         }
         let index = TarotVariantRotationTracker.shared.nextVariantIndex(
-            forCard: card.name, profileHash: profileHash
+            forCard: card.name, profileHash: profileHash, dailyFitEngineId: dailyFitEngineId
         )
         let safeIndex = index % edits.count
         return edits[safeIndex]
@@ -266,18 +279,25 @@ enum BlueprintLensEngine {
     static func generatePayload(
         blueprint: CosmicBlueprint,
         snapshot: DailyEnergySnapshot,
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        mode: DailyFitEngineMode = .standard,
+        dailyFitEngineId engineId: String? = nil
     ) -> DailyFitPayload {
+        let effectiveMode = DailyFitEngineRegistry.resolvedMode(explicit: mode, engineId: engineId)
+        let resolvedEngineId = DailyFitEngineRegistry.engineId(for: calibration, mode: effectiveMode)
         let (tarotCard, styleEditVariant) = selectTarotAndStyleEdit(
             snapshot: snapshot,
-            calibration: calibration
+            calibration: calibration,
+            dailyFitEngineId: resolvedEngineId
         )
         let palette = selectDailyPalette(from: blueprint.palette, snapshot: snapshot, calibration: calibration)
         let vibrancy = deriveVibrancy(from: blueprint.palette, snapshot: snapshot, calibration: calibration)
         let contrast = deriveContrast(from: blueprint.palette, snapshot: snapshot, calibration: calibration)
         let metalTone = deriveMetalTone(from: blueprint, snapshot: snapshot, calibration: calibration)
-        let essence = deriveStyleEssenceProfile(from: snapshot)
-        let silhouette = deriveSilhouetteProfile(from: blueprint, snapshot: snapshot, calibration: calibration)
+        let essence = resolveEssenceProfile(from: snapshot, mode: effectiveMode)
+        let silhouette = deriveSilhouetteProfile(
+            from: blueprint, snapshot: snapshot, calibration: calibration, mode: effectiveMode
+        )
         let textures = selectDailyTextures(from: blueprint.textures, snapshot: snapshot)
         let pattern = selectDailyPattern(from: blueprint.pattern, snapshot: snapshot)
 
@@ -296,11 +316,10 @@ enum BlueprintLensEngine {
             lunarContext: snapshot.lunarContext,
             dailyTextures: textures,
             dailyPattern: pattern,
-            generatedAt: snapshot.generatedAt
+            generatedAt: snapshot.generatedAt,
+            dailyFitEngineId: resolvedEngineId
         )
     }
-
-    // MARK: - Diagnostic Hook (Phase 6)
 
     /// Internal-only payload generation that also returns intermediate traces.
     struct PayloadTrace {
@@ -321,11 +340,17 @@ enum BlueprintLensEngine {
     static func generatePayloadWithTrace(
         blueprint: CosmicBlueprint,
         snapshot: DailyEnergySnapshot,
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        mode: DailyFitEngineMode = .standard,
+        dailyFitEngineId engineId: String? = nil
     ) -> (payload: DailyFitPayload, trace: PayloadTrace) {
+        let effectiveMode = DailyFitEngineRegistry.resolvedMode(explicit: mode, engineId: engineId)
+        let resolvedEngineId = DailyFitEngineRegistry.engineId(for: calibration, mode: effectiveMode)
         let allCards = loadAndNormaliseCards()
         let recentSelections = TarotRecencyTracker.shared.getRecentSelections(
-            profileHash: snapshot.profileHash, referenceDate: snapshot.generatedAt
+            profileHash: snapshot.profileHash,
+            referenceDate: snapshot.generatedAt,
+            dailyFitEngineId: resolvedEngineId
         )
         let weights = calibration.selectionWeights
         let vibeVector = buildVibeVector(from: snapshot.vibeProfile)
@@ -357,17 +382,20 @@ enum BlueprintLensEngine {
                 description: "", reversedKeywords: [],
                 symbolism: [], styleEdits: nil
             )
-            let variant = selectVariant(for: fallback, profileHash: snapshot.profileHash)
+            let variant = selectVariant(for: fallback, profileHash: snapshot.profileHash, dailyFitEngineId: resolvedEngineId)
             let emptyPayload = DailyFitPayload(
                 tarotCard: fallback, styleEditVariant: variant,
                 dailyPalette: selectDailyPalette(from: blueprint.palette, snapshot: snapshot, calibration: calibration),
                 vibrancy: 0.5, contrast: 0.5, metalTone: 0.5,
-                essenceProfile: deriveStyleEssenceProfile(from: snapshot),
-                silhouetteProfile: deriveSilhouetteProfile(from: blueprint, snapshot: snapshot, calibration: calibration),
+                essenceProfile: resolveEssenceProfile(from: snapshot, mode: effectiveMode),
+                silhouetteProfile: deriveSilhouetteProfile(
+                    from: blueprint, snapshot: snapshot, calibration: calibration, mode: effectiveMode
+                ),
                 vibeBreakdown: snapshot.vibeProfile, axes: snapshot.axes,
                 dominantTransits: snapshot.dominantTransits,
                 lunarContext: snapshot.lunarContext, dailyTextures: [], dailyPattern: nil,
-                generatedAt: snapshot.generatedAt
+                generatedAt: snapshot.generatedAt,
+                dailyFitEngineId: resolvedEngineId
             )
             let emptyTrace = PayloadTrace(
                 tarotScores: [], variantRotationIndex: 0,
@@ -381,9 +409,16 @@ enum BlueprintLensEngine {
             )
             return (emptyPayload, emptyTrace)
         }
-        TarotRecencyTracker.shared.storeCardSelection(selected.name, profileHash: snapshot.profileHash, date: snapshot.generatedAt)
-        let variantIdx = TarotVariantRotationTracker.shared.peekNextVariantIndex(forCard: selected.name, profileHash: snapshot.profileHash)
-        let variant = selectVariant(for: selected, profileHash: snapshot.profileHash)
+        TarotRecencyTracker.shared.storeCardSelection(
+            selected.name,
+            profileHash: snapshot.profileHash,
+            date: snapshot.generatedAt,
+            dailyFitEngineId: resolvedEngineId
+        )
+        let variantIdx = TarotVariantRotationTracker.shared.peekNextVariantIndex(
+            forCard: selected.name, profileHash: snapshot.profileHash, dailyFitEngineId: resolvedEngineId
+        )
+        let variant = selectVariant(for: selected, profileHash: snapshot.profileHash, dailyFitEngineId: resolvedEngineId)
 
         // Palette trace
         var candidates: [BlueprintColour] = []
@@ -451,8 +486,10 @@ enum BlueprintLensEngine {
         let mtBaseline = tempVal * 0.6 + metalLean * 0.4
         let mtMod = metalTone - mtBaseline
 
-        let essence = deriveStyleEssenceProfile(from: snapshot)
-        let silhouette = deriveSilhouetteProfile(from: blueprint, snapshot: snapshot, calibration: calibration)
+        let essence = resolveEssenceProfile(from: snapshot, mode: effectiveMode)
+        let silhouette = deriveSilhouetteProfile(
+            from: blueprint, snapshot: snapshot, calibration: calibration, mode: effectiveMode
+        )
         let positives = blueprint.code.leanInto + blueprint.code.consider
         let negatives = blueprint.code.avoid
         let mfBase = keywordBaseline(positives: positives, negatives: negatives, leftKeywords: mfLeft, rightKeywords: mfRight)
@@ -487,7 +524,8 @@ enum BlueprintLensEngine {
             silhouetteProfile: silhouette, vibeBreakdown: snapshot.vibeProfile,
             axes: snapshot.axes, dominantTransits: snapshot.dominantTransits,
             lunarContext: snapshot.lunarContext, dailyTextures: textures,
-            dailyPattern: pattern, generatedAt: snapshot.generatedAt
+            dailyPattern: pattern, generatedAt: snapshot.generatedAt,
+            dailyFitEngineId: resolvedEngineId
         )
         let trace = PayloadTrace(
             tarotScores: Array(topScoreEntries),
@@ -787,6 +825,19 @@ enum BlueprintLensEngine {
 
     // MARK: - Style Essence Profile (14-Category Radar)
 
+    /// Single dispatch point for mode-dependent essence derivation.
+    static func resolveEssenceProfile(
+        from snapshot: DailyEnergySnapshot,
+        mode: DailyFitEngineMode
+    ) -> StyleEssenceProfile {
+        switch mode {
+        case .stage1Experimental:
+            return deriveStyleEssenceProfileStage1Experimental(from: snapshot)
+        case .standard:
+            return deriveStyleEssenceProfile(from: snapshot)
+        }
+    }
+
     /// Energy-weight matrix: each of the 14 style categories has weighted
     /// affinity to the 6 base energies. Weights per row need not sum to 1;
     /// they express relative sensitivity.
@@ -822,26 +873,14 @@ enum BlueprintLensEngine {
         .edgy:        ["action": 0.10],
     ]
 
-    /// Score all 14 style-essence categories from the snapshot's vibe profile
-    /// and axes, then select the top 3. Pure energy readout — not
-    /// constrained by Blueprint.
-    static func deriveStyleEssenceProfile(
-        from snapshot: DailyEnergySnapshot
-    ) -> StyleEssenceProfile {
-        let v = snapshot.vibeProfile
-        let vibeTotal = 21.0
-        let normVibe: [Energy: Double] = Dictionary(
-            uniqueKeysWithValues: Energy.allCases.map {
-                ($0, Double(v.value(for: $0)) / vibeTotal)
-            }
-        )
-        let axesNorm: [String: Double] = [
-            "action": snapshot.axes.action / 10.0,
-            "tempo": snapshot.axes.tempo / 10.0,
-            "strategy": snapshot.axes.strategy / 10.0,
-            "visibility": snapshot.axes.visibility / 10.0,
-        ]
-
+    /// Score all 14 style-essence categories from normalized vibe and optional axis inputs.
+    private static func scoreEssenceCategories(
+        normVibe: [Energy: Double],
+        axesNorm: [String: Double]?,
+        axisDeltaNorm: [String: Double]?,
+        dominantTransits: [DailyTransitSummary],
+        stage1Mode: Bool
+    ) -> [StyleEssenceScore] {
         var scores: [StyleEssenceScore] = []
         for category in StyleEssenceCategory.allCases {
             let weights = essenceCategoryWeights[category] ?? [:]
@@ -851,24 +890,141 @@ enum BlueprintLensEngine {
             }
             if let axisMods = essenceAxisModifiers[category] {
                 for (axis, modifier) in axisMods {
-                    let axisVal = axesNorm[axis] ?? 0.5
-                    raw += modifier * (axisVal - 0.5)
+                    if let delta = axisDeltaNorm?[axis] {
+                        raw += modifier * stage1AxisEssenceMultiplier * delta
+                    } else {
+                        let axisVal = axesNorm?[axis] ?? 0.5
+                        let scale = stage1Mode ? stage1AxisEssenceMultiplier : 1.0
+                        raw += modifier * scale * (axisVal - 0.5)
+                    }
+                }
+            }
+            if stage1Mode {
+                for transit in dominantTransits.prefix(2) {
+                    if let boosted = stage1TransitEssenceCategories[transit.transitPlanet],
+                       boosted == category {
+                        raw += transit.strength * stage1TransitEssenceBoost
+                    }
                 }
             }
             scores.append(StyleEssenceScore(
                 category: category,
-                score: max(0.0, min(1.0, raw))
+                score: max(0.0, raw)
             ))
         }
+        return scores
+    }
 
-        let sorted = scores.sorted { $0.score > $1.score }
-        let topThree = Array(sorted.prefix(3))
-
-        return StyleEssenceProfile(
-            allScores: scores,
-            visibleCategories: topThree
+    private static func normalizedVibeMap(_ vibe: VibeBreakdown) -> [Energy: Double] {
+        let vibeTotal = 21.0
+        return Dictionary(
+            uniqueKeysWithValues: Energy.allCases.map {
+                ($0, Double(vibe.value(for: $0)) / vibeTotal)
+            }
         )
     }
+
+    private static func finalizeEssenceScores(_ scores: [StyleEssenceScore]) -> StyleEssenceProfile {
+        let peak = scores.map(\.score).max() ?? 1.0
+        let scale = peak > 0 ? 1.0 / peak : 1.0
+        let normalised = scores.map {
+            StyleEssenceScore(category: $0.category, score: min(1.0, $0.score * scale))
+        }
+        let sorted = normalised.sorted { $0.score > $1.score }
+        return StyleEssenceProfile(
+            allScores: normalised,
+            visibleCategories: Array(sorted.prefix(3))
+        )
+    }
+
+    /// Score all 14 style-essence categories from the snapshot's vibe profile
+    /// and axes, then select the top 3. Pure energy readout — not
+    /// constrained by Blueprint.
+    static func deriveStyleEssenceProfile(
+        from snapshot: DailyEnergySnapshot
+    ) -> StyleEssenceProfile {
+        let axesNorm: [String: Double] = [
+            "action": snapshot.axes.action / 10.0,
+            "tempo": snapshot.axes.tempo / 10.0,
+            "strategy": snapshot.axes.strategy / 10.0,
+            "visibility": snapshot.axes.visibility / 10.0,
+        ]
+        let scores = scoreEssenceCategories(
+            normVibe: normalizedVibeMap(snapshot.vibeProfile),
+            axesNorm: axesNorm,
+            axisDeltaNorm: nil,
+            dominantTransits: snapshot.dominantTransits,
+            stage1Mode: false
+        )
+        let clamped = scores.map {
+            StyleEssenceScore(category: $0.category, score: min(1.0, $0.score))
+        }
+        let sorted = clamped.sorted { $0.score > $1.score }
+        return StyleEssenceProfile(
+            allScores: clamped,
+            visibleCategories: Array(sorted.prefix(3))
+        )
+    }
+
+    /// Axis modifier scale for stage1Experimental essence (stage1Experimental mode only).
+    private static let stage1AxisEssenceMultiplier = 1.6
+    /// Transit boost per matching dominant transit for stage1Experimental essence.
+    private static let stage1TransitEssenceBoost = 0.35
+    /// Amplifies sky−chart vibe delta before essence category scoring (Stage 1).
+    private static let stage1EssenceVibeDeltaAmplification = 4.0
+
+    /// Stage 1 experimental: today's outside-energy essence, with chart anchor for contrast.
+    static func deriveStyleEssenceProfileStage1Experimental(
+        from snapshot: DailyEnergySnapshot
+    ) -> StyleEssenceProfile {
+        let chartVibe = snapshot.chartVibeProfile ?? snapshot.vibeProfile
+        let skyVibe = snapshot.skyVibeProfile ?? snapshot.vibeProfile
+        let chartNorm = normalizedVibeMap(chartVibe)
+        let skyNorm = normalizedVibeMap(skyVibe)
+        var deltaNorm: [Energy: Double] = [:]
+        for energy in Energy.allCases {
+            deltaNorm[energy] = stage1EssenceVibeDeltaAmplification
+                * ((skyNorm[energy] ?? 0) - (chartNorm[energy] ?? 0))
+        }
+
+        let axisDeltaNorm: [String: Double]? = snapshot.chartAxes.map { chart in
+            [
+                "action": (snapshot.axes.action - chart.action) / 9.0,
+                "tempo": (snapshot.axes.tempo - chart.tempo) / 9.0,
+                "strategy": (snapshot.axes.strategy - chart.strategy) / 9.0,
+                "visibility": (snapshot.axes.visibility - chart.visibility) / 9.0,
+            ]
+        }
+        let todayScores = scoreEssenceCategories(
+            normVibe: deltaNorm,
+            axesNorm: nil,
+            axisDeltaNorm: axisDeltaNorm,
+            dominantTransits: snapshot.dominantTransits,
+            stage1Mode: true
+        )
+        var profile = finalizeEssenceScores(todayScores)
+
+        let chartScores = scoreEssenceCategories(
+            normVibe: chartNorm,
+            axesNorm: nil,
+            axisDeltaNorm: nil,
+            dominantTransits: [],
+            stage1Mode: false
+        )
+        let chartProfile = finalizeEssenceScores(chartScores)
+        profile = StyleEssenceProfile(
+            allScores: profile.allScores,
+            visibleCategories: profile.visibleCategories,
+            chartAnchorScores: chartProfile.allScores
+        )
+        return profile
+    }
+
+    private static let stage1TransitEssenceCategories: [String: StyleEssenceCategory] = [
+        "Mars": .drama, "Venus": .romantic, "Sun": .magnetic,
+        "Moon": .sensual, "Mercury": .playful, "Jupiter": .maximalist,
+        "Saturn": .minimal, "Uranus": .edgy, "Neptune": .sensual, "Pluto": .edgy,
+    ]
 
     // MARK: - Silhouette Profile Derivation
 
@@ -896,7 +1052,8 @@ enum BlueprintLensEngine {
     private static func deriveSilhouetteProfile(
         from blueprint: CosmicBlueprint,
         snapshot: DailyEnergySnapshot,
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        mode: DailyFitEngineMode = .standard
     ) -> SilhouetteProfile {
         let positives = blueprint.code.leanInto + blueprint.code.consider
         let negatives = blueprint.code.avoid
@@ -914,10 +1071,21 @@ enum BlueprintLensEngine {
             leftKeywords: sdLeft, rightKeywords: sdRight
         )
 
+        let s = calibration.stage2Sensitivity.silhouetteAxisScale
+        if mode == .stage1Experimental, let chartAxes = snapshot.chartAxes {
+            let visDelta = (snapshot.axes.visibility - chartAxes.visibility) / 9.0
+            let actDelta = (snapshot.axes.action - chartAxes.action) / 9.0
+            let strDelta = (snapshot.axes.strategy - chartAxes.strategy) / 9.0
+            return SilhouetteProfile(
+                masculineFeminine: max(0.0, min(1.0, mfBase + visDelta * 0.45 * s)),
+                angularRounded: max(0.0, min(1.0, arBase + actDelta * -0.36 * s)),
+                structuredDraped: max(0.0, min(1.0, sdBase + strDelta * -0.45 * s))
+            )
+        }
+
         let visNorm = snapshot.axes.visibility / 10.0
         let actNorm = snapshot.axes.action / 10.0
         let strNorm = snapshot.axes.strategy / 10.0
-        let s = calibration.stage2Sensitivity.silhouetteAxisScale
 
         return SilhouetteProfile(
             masculineFeminine: max(0.0, min(1.0,
@@ -1060,7 +1228,8 @@ enum BlueprintLensEngine {
     static func logDailyFitDiagnostics(
         snapshot: DailyEnergySnapshot,
         payload: DailyFitPayload,
-        blueprint: CosmicBlueprint
+        blueprint: CosmicBlueprint,
+        calibration: DailyFitCalibration = .default
     ) {
         let p = "[DailyFitDiag]"
         let f2 = { (v: Double) -> String in String(format: "%.2f", v) }
@@ -1072,13 +1241,16 @@ enum BlueprintLensEngine {
 
         print("\(p) ╔══════════════════════════════════════════════════════════════")
         print("\(p) ║  DAILY FIT PIPELINE — FULL DIAGNOSTIC")
+        let engineId = dailyFitEngineId(for: calibration)
+        let fingerprint = DailyFitEngineRegistry.fingerprint(for: calibration)
         print("\(p) ║  \(dateStr)  ·  seed \(snapshot.dailySeed)")
+        print("\(p) ║  engine \(engineId)  ·  fingerprint \(fingerprint.prefix(12))…")
         print("\(p) ╚══════════════════════════════════════════════════════════════")
 
         // ── 1. ENERGY SNAPSHOT (Stage 1 Output) ──
         print("\(p)")
         print("\(p) ── 1. ENERGY SNAPSHOT ──────────────────────────────────────")
-        let cal = DailyFitCalibration.default
+        let cal = calibration
         let sw = cal.sourceWeights
         print("\(p) Source weights: natal=\(f2(sw.natal)) transits=\(f2(sw.transits)) lunar=\(f2(sw.lunarPhase)) progressed=\(f2(sw.progressed)) currentSun=\(f2(sw.currentSun))")
         let vibe = snapshot.vibeProfile
@@ -1130,11 +1302,13 @@ enum BlueprintLensEngine {
         print("\(p) ── 2. TAROT CARD SELECTION ─────────────────────────────────")
         let allCards = loadAndNormaliseCards()
         let recentSelections = TarotRecencyTracker.shared.getRecentSelections(
-            profileHash: snapshot.profileHash, referenceDate: snapshot.generatedAt
+            profileHash: snapshot.profileHash,
+            referenceDate: snapshot.generatedAt,
+            dailyFitEngineId: engineId
         )
         let vibeVector = buildVibeVector(from: snapshot.vibeProfile)
         let axesVector = buildAxesVector(from: snapshot.axes)
-        let weights = DailyFitCalibration.default.selectionWeights
+        let weights = calibration.selectionWeights
 
         var scoredForLog: [(name: String, vibe: Double, axis: Double, transit: Double, recency: Double, total: Double)] = []
         for (card, normAxes) in allCards {
@@ -1202,12 +1376,13 @@ enum BlueprintLensEngine {
         }
         let vibPush = Double(vibe.value(for: .drama) + vibe.value(for: .edge)) / 21.0
         let vibPull = Double(vibe.value(for: .utility) + vibe.value(for: .classic)) / 21.0
-        let vibMod = (vibPush - vibPull) * 0.15
+        let vibCoeff = cal.stage2Sensitivity.vibrancyCoeff
+        let vibMod = (vibPush - vibPull) * vibCoeff
 
         print("\(p) Vibrancy:")
         print("\(p)   Style Guide saturation: \(satLabel) → baseline=\(f2(vibBaseline))")
         print("\(p)   Push (drama+edge)/21 = \(f3(vibPush))   Pull (utility+classic)/21 = \(f3(vibPull))")
-        print("\(p)   Modulation: (\(f3(vibPush)) - \(f3(vibPull))) × 0.15 = \(f3(vibMod))")
+        print("\(p)   Modulation: (\(f3(vibPush)) - \(f3(vibPull))) × \(f2(vibCoeff)) = \(f3(vibMod))")
         print("\(p)   Final: \(f2(vibBaseline)) + \(f3(vibMod)) = \(f3(payload.vibrancy))")
 
         let conBaseline: Double
@@ -1218,12 +1393,13 @@ enum BlueprintLensEngine {
         case nil:     conBaseline = 0.50
         }
         let visNorm = axes.visibility / 10.0
-        let conMod = (visNorm - 0.5) * 0.20
+        let conCoeff = cal.stage2Sensitivity.contrastCoeff
+        let conMod = (visNorm - 0.5) * conCoeff
 
         print("\(p) Contrast:")
         print("\(p)   Style Guide contrast: \(conLabel) → baseline=\(f2(conBaseline))")
         print("\(p)   Visibility axis normalised: \(f3(visNorm))")
-        print("\(p)   Modulation: (\(f3(visNorm)) - 0.5) × 0.20 = \(f3(conMod))")
+        print("\(p)   Modulation: (\(f3(visNorm)) - 0.5) × \(f2(conCoeff)) = \(f3(conMod))")
         print("\(p)   Final: \(f2(conBaseline)) + \(f3(conMod)) = \(f3(payload.contrast))")
 
         let tempVal: Double

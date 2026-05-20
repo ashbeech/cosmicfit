@@ -11,6 +11,8 @@ swift run cosmicfit-inspector
 
 Then open **http://127.0.0.1:7777** in your browser.
 
+The header **Engine** dropdown selects the Daily Fit preset (`dailyFitEngineId`); override the server default with `DAILY_FIT_ENGINE_ID=legacy_baseline swift run cosmicfit-inspector` if needed. See the root **`README.md`** §4.1.1 for preset design and app usage.
+
 The first build takes a few minutes (fetching SPM dependencies). Subsequent builds are incremental.
 
 ## Security
@@ -89,6 +91,15 @@ Four real-ephemeris presets are defined in `Resources/presets.json`:
 
 Set `composeBlueprint: false` for date-only changes (uses cached blueprint).
 
+### Compare modes
+
+| Mode | UI | Behaviour |
+|------|-----|-----------|
+| **Compare days** | “Compare days” + day count | Same `dailyFitEngineId` (header dropdown), multiple UTC dates in a horizontal carousel |
+| **Compare engines** | “Compare engines” + A vs B selects | Same target UTC date, two registry engine ids side-by-side in Daily Fit, Trace, and Verdicts |
+
+The two modes are mutually exclusive. Each `POST /api/inspect` still sends `options.dailyFitEngineId`; engine compare issues one request per column so tarot recency stays namespaced per engine (P3). Labels show **date (UTC) · engine id** on each pane.
+
 ## Verdicts
 
 The inspector runs four automated checks on every response:
@@ -96,7 +107,7 @@ The inspector runs four automated checks on every response:
 1. **source_contributions_normalised** — sum ≈ 1.0 (tolerance 0.005)
 2. **vibrancy_contrast_metal_in_range** — all in [0, 1]
 3. **palette_three_unique** — exactly 3 distinct daily colours
-4. **tarot_recency** — uses the same `TarotRecencyTracker` as the app (isolated in `UserDefaults` suite `com.cosmicfit.inspector`)
+4. **tarot_recency** — uses the same `TarotRecencyTracker` as the app (isolated in `UserDefaults` suite `com.cosmicfit.inspector`). Recency and variant-rotation keys are namespaced by `dailyFitEngineId`, so switching the engine dropdown does not share tarot history between presets. Use `options.resetTarotHistory: true` to clear recency for the active engine only.
 
 ### Extending Verdicts
 

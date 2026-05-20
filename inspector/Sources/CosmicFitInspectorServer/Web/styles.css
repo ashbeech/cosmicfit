@@ -156,6 +156,29 @@ body {
   white-space: nowrap;
 }
 
+.engine-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.engine-chip {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-family: var(--mono);
+  white-space: nowrap;
+}
+
+.engine-chip.experimental {
+  border-color: var(--partial);
+  color: var(--partial);
+  border-style: dashed;
+}
+
 .tz-chip {
   background: var(--surface2);
   border: 1px solid var(--border);
@@ -616,6 +639,28 @@ main {
   margin-left: 2px;
 }
 
+.compare-engines-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.compare-engines-controls.hidden {
+  display: none;
+}
+
+.compare-engines-controls select {
+  min-width: 8.5em;
+  max-width: 12em;
+  font-size: 12px;
+}
+
+.compare-engine-vs {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
 /* Compare carousel */
 .compare-split {
   display: flex;
@@ -670,6 +715,19 @@ main {
 .compare-pane-target .compare-pane-label {
   background: rgba(124, 111, 247, 0.14);
   color: var(--accent-light);
+}
+
+.compare-split-engines .compare-pane {
+  flex: 1 1 0;
+  min-width: min(360px, 44vw);
+}
+
+.compare-pane-engine .compare-pane-label {
+  background: rgba(124, 111, 247, 0.1);
+}
+
+.compare-pane-engine:nth-child(2) .compare-pane-label {
+  background: rgba(136, 136, 160, 0.12);
 }
 
 .compare-pane-content {

@@ -13,38 +13,35 @@ enum DailyEnergyEngine {
         transits: [NatalChartCalculator.TransitAspect],
         moonPhaseDegrees: Double,
         date: Date,
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        mode: DailyFitEngineMode = .standard
     ) -> VibeBreakdown {
-        var rawScores: [Energy: Double] = [:]
-        for energy in Energy.allCases { rawScores[energy] = 0.0 }
-
-        let weights = calibration.sourceWeights
-
-        // Step 1: Accumulate raw energy scores from each source
-        accumulateChartContribution(
-            chart: natalChart, weight: weights.natal, into: &rawScores
-        )
-        accumulateChartContribution(
-            chart: progressedChart, weight: weights.progressed, into: &rawScores
-        )
-        accumulateTransitContribution(
-            transits: transits, weight: weights.transits, into: &rawScores
-        )
-        accumulateLunarContribution(
-            moonPhaseDegrees: moonPhaseDegrees, weight: weights.lunarPhase, into: &rawScores
-        )
-        accumulateCurrentSunContribution(
-            date: date, weight: weights.currentSun, into: &rawScores
-        )
-
-        // Step 2: Apply sun-sign multipliers
-        let sunSign = extractSunSignName(from: natalChart)
-        for energy in Energy.allCases {
-            let multiplier = calibration.signEnergyMap.multiplier(forSign: sunSign, energy: energy)
-            rawScores[energy]! *= multiplier
+        if mode == .stage1Experimental {
+            return generateVibeProfileStage1Amplified(
+                natalChart: natalChart,
+                progressedChart: progressedChart,
+                transits: transits,
+                moonPhaseDegrees: moonPhaseDegrees,
+                date: date,
+                calibration: calibration
+            )
         }
 
-        // Step 3: Normalise to 21 integer points
+        var rawScores = emptyEnergyScores()
+        accumulateWeightedVibeScores(
+            into: &rawScores,
+            weights: calibration.sourceWeights,
+            natalChart: natalChart,
+            progressedChart: progressedChart,
+            transits: transits,
+            moonPhaseDegrees: moonPhaseDegrees,
+            date: date
+        )
+        applySignMultipliers(
+            to: &rawScores,
+            sunSign: extractSunSignName(from: natalChart),
+            calibration: calibration
+        )
         return normaliseToTwentyOne(rawScores)
     }
 
@@ -58,21 +55,62 @@ enum DailyEnergyEngine {
         moonPhaseDegrees: Double,
         profileHash: String,
         date: Date = Date(),
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        mode: DailyFitEngineMode = .standard,
+        dailyFitEngineId engineId: String? = nil
     ) -> DailyEnergySnapshot {
+        let effectiveMode = DailyFitEngineRegistry.resolvedMode(explicit: mode, engineId: engineId)
+        let resolvedEngineId = DailyFitEngineRegistry.engineId(for: calibration, mode: effectiveMode)
+
         let vibeProfile = generateVibeProfile(
             natalChart: natalChart, progressedChart: progressedChart,
             transits: transits, moonPhaseDegrees: moonPhaseDegrees,
-            date: date, calibration: calibration
+            date: date, calibration: calibration, mode: effectiveMode
         )
-        let dailySeed = DailySeedGenerator.generateDailySeed(
-            profileHash: profileHash, for: date
+        let dailySeed = dailySeed(
+            profileHash: profileHash,
+            date: date,
+            engineId: resolvedEngineId,
+            mode: effectiveMode
         )
         let axes = evaluateAxes(
             natalChart: natalChart, progressedChart: progressedChart,
             transits: transits, moonPhaseDegrees: moonPhaseDegrees,
-            dailySeed: dailySeed, calibration: calibration
+            dailySeed: dailySeed, calibration: calibration,
+            mode: effectiveMode
         )
+
+        var chartVibe: VibeBreakdown?
+        var skyVibe: VibeBreakdown?
+        var chartAxes: DerivedAxes?
+        if effectiveMode == .stage1Experimental {
+            chartVibe = generatePartialVibeProfile(
+                natalChart: natalChart,
+                progressedChart: progressedChart,
+                transits: transits,
+                moonPhaseDegrees: moonPhaseDegrees,
+                date: date,
+                weights: stage1ChartSourceWeights,
+                calibration: calibration,
+                shouldApplySignMultipliers: true
+            )
+            skyVibe = generatePartialVibeProfile(
+                natalChart: natalChart,
+                progressedChart: progressedChart,
+                transits: transits,
+                moonPhaseDegrees: moonPhaseDegrees,
+                date: date,
+                weights: stage1SkySourceWeights,
+                calibration: calibration,
+                shouldApplySignMultipliers: false
+            )
+            chartAxes = evaluateChartAnchorAxes(
+                natalChart: natalChart,
+                progressedChart: progressedChart,
+                calibration: DailyFitCalibration.default
+            )
+        }
+
         return DailyEnergySnapshot(
             vibeProfile: vibeProfile,
             axes: axes,
@@ -80,7 +118,10 @@ enum DailyEnergyEngine {
             lunarContext: buildLunarContext(moonPhaseDegrees: moonPhaseDegrees),
             dailySeed: dailySeed,
             profileHash: profileHash,
-            generatedAt: date
+            generatedAt: date,
+            chartVibeProfile: chartVibe,
+            skyVibeProfile: skyVibe,
+            chartAxes: chartAxes
         )
     }
 
@@ -201,6 +242,182 @@ enum DailyEnergyEngine {
         }
     }
 
+    // MARK: - Stage 1 experimental (delta amplification)
+
+    /// Production anchor weights — stable natal character before sky amplification.
+    private static let stage1AnchorSourceWeights = DailyFitCalibration.default.sourceWeights
+
+    /// Multiplier applied to (daily − anchor) raw vibe scores before quantisation.
+    private static let stage1VibeDeltaAmplification = 2.75
+
+    /// Multiplier applied to (daily − anchor) axis values in 1–10 space.
+    private static let stage1AxisDeltaAmplification = 2.25
+
+    private static func emptyEnergyScores() -> [Energy: Double] {
+        Dictionary(uniqueKeysWithValues: Energy.allCases.map { ($0, 0.0) })
+    }
+
+    private static func accumulateWeightedVibeScores(
+        into scores: inout [Energy: Double],
+        weights: DailyFitCalibration.SourceWeights,
+        natalChart: NatalChartCalculator.NatalChart,
+        progressedChart: NatalChartCalculator.NatalChart,
+        transits: [NatalChartCalculator.TransitAspect],
+        moonPhaseDegrees: Double,
+        date: Date
+    ) {
+        accumulateChartContribution(chart: natalChart, weight: weights.natal, into: &scores)
+        accumulateChartContribution(chart: progressedChart, weight: weights.progressed, into: &scores)
+        accumulateTransitContribution(transits: transits, weight: weights.transits, into: &scores)
+        accumulateLunarContribution(moonPhaseDegrees: moonPhaseDegrees, weight: weights.lunarPhase, into: &scores)
+        accumulateCurrentSunContribution(date: date, weight: weights.currentSun, into: &scores)
+    }
+
+    private static func applySignMultipliers(
+        to scores: inout [Energy: Double],
+        sunSign: String,
+        calibration: DailyFitCalibration
+    ) {
+        for energy in Energy.allCases {
+            let multiplier = calibration.signEnergyMap.multiplier(forSign: sunSign, energy: energy)
+            scores[energy]! *= multiplier
+        }
+    }
+
+    /// Chart-only source mix for Stage 1 anchor reads.
+    private static let stage1ChartSourceWeights = DailyFitCalibration.SourceWeights(
+        natal: 0.85, transits: 0, lunarPhase: 0, progressed: 0.15, currentSun: 0
+    )
+
+    /// Sky-only source mix for Stage 1 daily outside-energy reads.
+    private static let stage1SkySourceWeights = DailyFitCalibration.SourceWeights(
+        natal: 0, transits: 0.50, lunarPhase: 0.35, progressed: 0, currentSun: 0.15
+    )
+
+    /// Vibe from a partial source mix (chart-only or sky-only slices).
+    private static func generatePartialVibeProfile(
+        natalChart: NatalChartCalculator.NatalChart,
+        progressedChart: NatalChartCalculator.NatalChart,
+        transits: [NatalChartCalculator.TransitAspect],
+        moonPhaseDegrees: Double,
+        date: Date,
+        weights: DailyFitCalibration.SourceWeights,
+        calibration: DailyFitCalibration,
+        shouldApplySignMultipliers: Bool
+    ) -> VibeBreakdown {
+        var rawScores = emptyEnergyScores()
+        accumulateWeightedVibeScores(
+            into: &rawScores,
+            weights: weights,
+            natalChart: natalChart,
+            progressedChart: progressedChart,
+            transits: transits,
+            moonPhaseDegrees: moonPhaseDegrees,
+            date: date
+        )
+        if shouldApplySignMultipliers {
+            applySignMultipliers(
+                to: &rawScores,
+                sunSign: extractSunSignName(from: natalChart),
+                calibration: calibration
+            )
+        }
+        return normaliseToTwentyOne(rawScores)
+    }
+
+    /// Natal+progressed axes without transits, moon, or jitter — chart baseline.
+    private static func evaluateChartAnchorAxes(
+        natalChart: NatalChartCalculator.NatalChart,
+        progressedChart: NatalChartCalculator.NatalChart,
+        calibration: DailyFitCalibration
+    ) -> DerivedAxes {
+        let moonMods = moonPhaseAxisModulations(0)
+        var scores = [String: Double]()
+        for axis in axisNames {
+            let raw = computeAxisRawScore(
+                axis: axis,
+                natalChart: natalChart,
+                progressedChart: progressedChart,
+                transits: [],
+                moonMods: moonMods,
+                calibration: calibration,
+                includeTransits: false,
+                includeMoon: false,
+                jitter: 0
+            )
+            scores[axis] = scaleToAxis(raw, spread: calibration.axisTuning.sigmoidSpread)
+        }
+        return DerivedAxes(
+            action: scores["action"]!, tempo: scores["tempo"]!,
+            strategy: scores["strategy"]!, visibility: scores["visibility"]!
+        )
+    }
+
+    /// Stage 1 sandbox: amplify how far today's sky moves the needle from production anchor.
+    private static func generateVibeProfileStage1Amplified(
+        natalChart: NatalChartCalculator.NatalChart,
+        progressedChart: NatalChartCalculator.NatalChart,
+        transits: [NatalChartCalculator.TransitAspect],
+        moonPhaseDegrees: Double,
+        date: Date,
+        calibration: DailyFitCalibration
+    ) -> VibeBreakdown {
+        var anchor = emptyEnergyScores()
+        var daily = emptyEnergyScores()
+        accumulateWeightedVibeScores(
+            into: &anchor,
+            weights: stage1AnchorSourceWeights,
+            natalChart: natalChart,
+            progressedChart: progressedChart,
+            transits: transits,
+            moonPhaseDegrees: moonPhaseDegrees,
+            date: date
+        )
+        accumulateWeightedVibeScores(
+            into: &daily,
+            weights: calibration.sourceWeights,
+            natalChart: natalChart,
+            progressedChart: progressedChart,
+            transits: transits,
+            moonPhaseDegrees: moonPhaseDegrees,
+            date: date
+        )
+        let sunSign = extractSunSignName(from: natalChart)
+        applySignMultipliers(to: &anchor, sunSign: sunSign, calibration: calibration)
+        applySignMultipliers(to: &daily, sunSign: sunSign, calibration: calibration)
+
+        var amplified = emptyEnergyScores()
+        for energy in Energy.allCases {
+            let anchorScore = anchor[energy]!
+            let dailyScore = daily[energy]!
+            amplified[energy] = max(0.0, anchorScore + stage1VibeDeltaAmplification * (dailyScore - anchorScore))
+        }
+        return normaliseToTwentyOne(amplified)
+    }
+
+    private static func dailySeed(
+        profileHash: String,
+        date: Date,
+        engineId: String,
+        mode: DailyFitEngineMode
+    ) -> Int {
+        let descriptor = DailyFitEngineRegistry.descriptor(for: engineId)
+        let policy = descriptor?.dailySeedPolicy ?? .sharedProfileDate
+        if policy == .includesEngineId, mode == .stage1Experimental {
+            let dateString = stage1SeedDateFormatter.string(from: date)
+            return DailySeedGenerator.intSeed(from: "\(profileHash)_\(dateString)_\(engineId)")
+        }
+        return DailySeedGenerator.generateDailySeed(profileHash: profileHash, for: date)
+    }
+
+    private static let stage1SeedDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.locale = Locale(identifier: "en_GB")
+        return formatter
+    }()
+
     // MARK: - Normalisation (Largest-Remainder Method)
 
     private static func normaliseToTwentyOne(_ rawScores: [Energy: Double]) -> VibeBreakdown {
@@ -289,8 +506,11 @@ enum DailyEnergyEngine {
         moonPhaseDegrees: Double,
         profileHash: String,
         date: Date = Date(),
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        mode: DailyFitEngineMode = .standard,
+        dailyFitEngineId engineId: String? = nil
     ) -> (snapshot: DailyEnergySnapshot, trace: SnapshotTrace) {
+        let effectiveMode = DailyFitEngineRegistry.resolvedMode(explicit: mode, engineId: engineId)
         let weights = calibration.sourceWeights
         var rawScores: [Energy: Double] = [:]
         for energy in Energy.allCases { rawScores[energy] = 0.0 }
@@ -314,18 +534,51 @@ enum DailyEnergyEngine {
                 + lunarScores[energy]! + progressedScores[energy]! + currentSunScores[energy]!
         }
         let rawDict = Dictionary(uniqueKeysWithValues: rawScores.map { ($0.key.rawValue, $0.value) })
-        let sunSign = extractSunSignName(from: natalChart)
+        let vibeProfile = generateVibeProfile(
+            natalChart: natalChart, progressedChart: progressedChart,
+            transits: transits, moonPhaseDegrees: moonPhaseDegrees,
+            date: date, calibration: calibration, mode: effectiveMode
+        )
         var postMultiplier = rawScores
+        let sunSign = extractSunSignName(from: natalChart)
         for energy in Energy.allCases {
             postMultiplier[energy]! *= calibration.signEnergyMap.multiplier(forSign: sunSign, energy: energy)
         }
+        if effectiveMode == .stage1Experimental {
+            var anchor = emptyEnergyScores()
+            var daily = postMultiplier
+            accumulateWeightedVibeScores(
+                into: &anchor,
+                weights: stage1AnchorSourceWeights,
+                natalChart: natalChart,
+                progressedChart: progressedChart,
+                transits: transits,
+                moonPhaseDegrees: moonPhaseDegrees,
+                date: date
+            )
+            applySignMultipliers(to: &anchor, sunSign: sunSign, calibration: calibration)
+            for energy in Energy.allCases {
+                let anchorScore = anchor[energy]!
+                let dailyScore = daily[energy]!
+                postMultiplier[energy] = max(
+                    0.0,
+                    anchorScore + stage1VibeDeltaAmplification * (dailyScore - anchorScore)
+                )
+            }
+        }
         let postDict = Dictionary(uniqueKeysWithValues: postMultiplier.map { ($0.key.rawValue, $0.value) })
-        let vibeProfile = normaliseToTwentyOne(postMultiplier)
-        let dailySeed = DailySeedGenerator.generateDailySeed(profileHash: profileHash, for: date)
+        let resolvedEngineId = DailyFitEngineRegistry.engineId(for: calibration, mode: effectiveMode)
+        let dailySeed = dailySeed(
+            profileHash: profileHash,
+            date: date,
+            engineId: resolvedEngineId,
+            mode: effectiveMode
+        )
         let axes = evaluateAxes(
             natalChart: natalChart, progressedChart: progressedChart,
             transits: transits, moonPhaseDegrees: moonPhaseDegrees,
-            dailySeed: dailySeed, calibration: calibration
+            dailySeed: dailySeed, calibration: calibration,
+            mode: effectiveMode
         )
         let totalRaw = rawScores.values.reduce(0.0, +)
         let natalTotal = natalScores.values.reduce(0.0, +)
@@ -341,11 +594,46 @@ enum DailyEnergyEngine {
             "progressed": progTotal / denom,
             "currentSun": sunTotal / denom,
         ]
+
+        var chartVibe: VibeBreakdown?
+        var skyVibe: VibeBreakdown?
+        var chartAxes: DerivedAxes?
+        if effectiveMode == .stage1Experimental {
+            chartVibe = generatePartialVibeProfile(
+                natalChart: natalChart,
+                progressedChart: progressedChart,
+                transits: transits,
+                moonPhaseDegrees: moonPhaseDegrees,
+                date: date,
+                weights: stage1ChartSourceWeights,
+                calibration: calibration,
+                shouldApplySignMultipliers: true
+            )
+            skyVibe = generatePartialVibeProfile(
+                natalChart: natalChart,
+                progressedChart: progressedChart,
+                transits: transits,
+                moonPhaseDegrees: moonPhaseDegrees,
+                date: date,
+                weights: stage1SkySourceWeights,
+                calibration: calibration,
+                shouldApplySignMultipliers: false
+            )
+            chartAxes = evaluateChartAnchorAxes(
+                natalChart: natalChart,
+                progressedChart: progressedChart,
+                calibration: DailyFitCalibration.default
+            )
+        }
+
         let snapshot = DailyEnergySnapshot(
             vibeProfile: vibeProfile, axes: axes,
             dominantTransits: extractDominantTransits(from: transits),
             lunarContext: buildLunarContext(moonPhaseDegrees: moonPhaseDegrees),
-            dailySeed: dailySeed, profileHash: profileHash, generatedAt: date
+            dailySeed: dailySeed, profileHash: profileHash, generatedAt: date,
+            chartVibeProfile: chartVibe,
+            skyVibeProfile: skyVibe,
+            chartAxes: chartAxes
         )
         let rawAxisDict = axisNames.reduce(into: [String: Double]()) { result, axis in
             var raw = 0.0
@@ -432,49 +720,119 @@ enum DailyEnergyEngine {
         transits: [NatalChartCalculator.TransitAspect],
         moonPhaseDegrees: Double,
         dailySeed: Int,
-        calibration: DailyFitCalibration
+        calibration: DailyFitCalibration,
+        mode: DailyFitEngineMode = .standard
     ) -> DerivedAxes {
-        let sw = calibration.sourceWeights
         var rng = SeededRandomGenerator(seed: dailySeed)
         let moonMods = moonPhaseAxisModulations(moonPhaseDegrees)
         var scores = [String: Double]()
 
         for axis in axisNames {
-            var raw = 0.0
-
-            for planet in natalChart.planets {
-                let w = calibration.planetAxisMap.weight(forPlanet: planet.name, axis: axis)
-                let em = axisElementModifiers[axis]?[
-                    signElement(forZodiacSign: planet.zodiacSign)
-                ] ?? 1.0
-                raw += w * em * sw.natal
-            }
-
-            for planet in progressedChart.planets {
-                let w = calibration.planetAxisMap.weight(forPlanet: planet.name, axis: axis)
-                let em = axisElementModifiers[axis]?[
-                    signElement(forZodiacSign: planet.zodiacSign)
-                ] ?? 1.0
-                raw += w * em * sw.progressed
-            }
-
-            for transit in transits {
-                let w = calibration.planetAxisMap.weight(
-                    forPlanet: transit.transitPlanet, axis: axis
+            let jitter = Double.random(
+                in: -calibration.axisTuning.jitterRange...calibration.axisTuning.jitterRange,
+                using: &rng
+            )
+            if mode == .stage1Experimental {
+                let anchorRaw = computeAxisRawScore(
+                    axis: axis,
+                    natalChart: natalChart,
+                    progressedChart: progressedChart,
+                    transits: transits,
+                    moonMods: moonMods,
+                    calibration: DailyFitCalibration.default,
+                    includeTransits: false,
+                    includeMoon: false,
+                    jitter: 0
                 )
-                raw += w * max(0.0, 1.0 - transit.orb / 10.0) * sw.transits
+                let dailyRaw = computeAxisRawScore(
+                    axis: axis,
+                    natalChart: natalChart,
+                    progressedChart: progressedChart,
+                    transits: transits,
+                    moonMods: moonMods,
+                    calibration: calibration,
+                    includeTransits: true,
+                    includeMoon: true,
+                    jitter: jitter
+                )
+                let anchorValue = scaleToAxis(
+                    anchorRaw,
+                    spread: DailyFitCalibration.default.axisTuning.sigmoidSpread
+                )
+                let dailyValue = scaleToAxis(
+                    dailyRaw,
+                    spread: calibration.axisTuning.sigmoidSpread
+                )
+                let amplified = anchorValue
+                    + stage1AxisDeltaAmplification * (dailyValue - anchorValue)
+                scores[axis] = max(1.0, min(10.0, amplified))
+            } else {
+                let raw = computeAxisRawScore(
+                    axis: axis,
+                    natalChart: natalChart,
+                    progressedChart: progressedChart,
+                    transits: transits,
+                    moonMods: moonMods,
+                    calibration: calibration,
+                    includeTransits: true,
+                    includeMoon: true,
+                    jitter: jitter
+                )
+                scores[axis] = scaleToAxis(raw, spread: calibration.axisTuning.sigmoidSpread)
             }
-
-            raw -= axisBaseline(axis, calibration: calibration)
-            raw += moonMods[axis] ?? 0.0
-            raw += Double.random(in: -calibration.axisTuning.jitterRange...calibration.axisTuning.jitterRange, using: &rng)
-            scores[axis] = scaleToAxis(raw, spread: calibration.axisTuning.sigmoidSpread)
         }
 
         return DerivedAxes(
             action: scores["action"]!, tempo: scores["tempo"]!,
             strategy: scores["strategy"]!, visibility: scores["visibility"]!
         )
+    }
+
+    private static func computeAxisRawScore(
+        axis: String,
+        natalChart: NatalChartCalculator.NatalChart,
+        progressedChart: NatalChartCalculator.NatalChart,
+        transits: [NatalChartCalculator.TransitAspect],
+        moonMods: [String: Double],
+        calibration: DailyFitCalibration,
+        includeTransits: Bool,
+        includeMoon: Bool,
+        jitter: Double
+    ) -> Double {
+        let sw = calibration.sourceWeights
+        var raw = 0.0
+
+        for planet in natalChart.planets {
+            let w = calibration.planetAxisMap.weight(forPlanet: planet.name, axis: axis)
+            let em = axisElementModifiers[axis]?[
+                signElement(forZodiacSign: planet.zodiacSign)
+            ] ?? 1.0
+            raw += w * em * sw.natal
+        }
+
+        for planet in progressedChart.planets {
+            let w = calibration.planetAxisMap.weight(forPlanet: planet.name, axis: axis)
+            let em = axisElementModifiers[axis]?[
+                signElement(forZodiacSign: planet.zodiacSign)
+            ] ?? 1.0
+            raw += w * em * sw.progressed
+        }
+
+        if includeTransits {
+            for transit in transits {
+                let w = calibration.planetAxisMap.weight(
+                    forPlanet: transit.transitPlanet, axis: axis
+                )
+                raw += w * max(0.0, 1.0 - transit.orb / 10.0) * sw.transits
+            }
+        }
+
+        raw -= axisBaseline(axis, calibration: calibration)
+        if includeMoon {
+            raw += moonMods[axis] ?? 0.0
+        }
+        raw += jitter
+        return raw
     }
 
     /// Baseline = sum of all planet axis weights × combined chart source weight.

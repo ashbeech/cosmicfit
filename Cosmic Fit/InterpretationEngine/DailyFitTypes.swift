@@ -39,7 +39,7 @@ struct LunarContext: Codable, Equatable {
 
 /// Pure astrological distillation for a given day and user. No style decisions.
 struct DailyEnergySnapshot: Codable {
-    /// Six-energy vibe profile (21-point budget). Source: natal + transits + lunar + progressed.
+    /// Blended vibe profile (21-point budget) used for tarot/palette selection.
     let vibeProfile: VibeBreakdown
     /// Four orthogonal style-manifestation axes, each 1–10. Source: planet weights.
     let axes: DerivedAxes
@@ -53,6 +53,36 @@ struct DailyEnergySnapshot: Codable {
     let profileHash: String
     /// Timestamp of generation. Set from the supplied date parameter, NOT Date().
     let generatedAt: Date
+    /// Natal+progressed vibe only (Stage 1): chart anchor — who you are.
+    let chartVibeProfile: VibeBreakdown?
+    /// Transits+lunar+current-sun vibe only (Stage 1): today's outside energy.
+    let skyVibeProfile: VibeBreakdown?
+    /// Natal+progressed axes only (Stage 1): chart anchor for silhouette/essence delta.
+    let chartAxes: DerivedAxes?
+
+    init(
+        vibeProfile: VibeBreakdown,
+        axes: DerivedAxes,
+        dominantTransits: [DailyTransitSummary],
+        lunarContext: LunarContext,
+        dailySeed: Int,
+        profileHash: String,
+        generatedAt: Date,
+        chartVibeProfile: VibeBreakdown? = nil,
+        skyVibeProfile: VibeBreakdown? = nil,
+        chartAxes: DerivedAxes? = nil
+    ) {
+        self.vibeProfile = vibeProfile
+        self.axes = axes
+        self.dominantTransits = dominantTransits
+        self.lunarContext = lunarContext
+        self.dailySeed = dailySeed
+        self.profileHash = profileHash
+        self.generatedAt = generatedAt
+        self.chartVibeProfile = chartVibeProfile
+        self.skyVibeProfile = skyVibeProfile
+        self.chartAxes = chartAxes
+    }
 }
 
 // MARK: - Stage 2 Nested Types
@@ -98,10 +128,22 @@ struct StyleEssenceScore: Codable, Equatable {
 
 /// Full 14-category essence profile with top-3 selection.
 struct StyleEssenceProfile: Codable, Equatable {
-    /// All 14 categories with their daily scores.
+    /// All 14 categories with their daily scores (today's signal in Stage 1 sky-forward mode).
     let allScores: [StyleEssenceScore]
     /// Top 3 categories by score — the ones rendered on the radar chart.
     let visibleCategories: [StyleEssenceScore]
+    /// Chart-anchor scores (Stage 1 only): baseline essence from natal chart. nil in production.
+    let chartAnchorScores: [StyleEssenceScore]?
+
+    init(
+        allScores: [StyleEssenceScore],
+        visibleCategories: [StyleEssenceScore],
+        chartAnchorScores: [StyleEssenceScore]? = nil
+    ) {
+        self.allScores = allScores
+        self.visibleCategories = visibleCategories
+        self.chartAnchorScores = chartAnchorScores
+    }
 }
 
 /// Legacy three-vertex essence. Retained only for backward-compatible Codable
@@ -182,12 +224,21 @@ struct DailyFitPayload: Codable {
     /// Timestamp of generation. Set from the supplied date parameter, NOT Date().
     let generatedAt: Date
 
+    /// Engine preset id stamped when frozen (optional in JSON; missing → production).
+    let dailyFitEngineId: String?
+
+    /// Stored id for freeze/load checks; missing field decodes as production.
+    var resolvedDailyFitEngineId: String {
+        dailyFitEngineId ?? DailyFitEngineRegistry.productionId
+    }
+
     // MARK: - Backward-Compatible Decoding
 
     private enum CodingKeys: String, CodingKey {
         case tarotCard, styleEditVariant, dailyPalette, vibrancy, contrast, metalTone
         case essenceProfile, silhouetteProfile, vibeBreakdown, axes
         case dominantTransits, lunarContext, dailyTextures, dailyPattern, generatedAt
+        case dailyFitEngineId
         case essenceTriangle
     }
 
@@ -207,6 +258,7 @@ struct DailyFitPayload: Codable {
         dailyTextures = try c.decode([String].self, forKey: .dailyTextures)
         dailyPattern = try c.decodeIfPresent(String.self, forKey: .dailyPattern)
         generatedAt = try c.decode(Date.self, forKey: .generatedAt)
+        dailyFitEngineId = try c.decodeIfPresent(String.self, forKey: .dailyFitEngineId)
 
         if let newProfile = try? c.decode(StyleEssenceProfile.self, forKey: .essenceProfile) {
             essenceProfile = newProfile
@@ -234,6 +286,7 @@ struct DailyFitPayload: Codable {
         try c.encode(dailyTextures, forKey: .dailyTextures)
         try c.encodeIfPresent(dailyPattern, forKey: .dailyPattern)
         try c.encode(generatedAt, forKey: .generatedAt)
+        try c.encodeIfPresent(dailyFitEngineId, forKey: .dailyFitEngineId)
     }
 
     init(tarotCard: TarotCard, styleEditVariant: StyleEditVariant,
@@ -244,7 +297,8 @@ struct DailyFitPayload: Codable {
          vibeBreakdown: VibeBreakdown, axes: DerivedAxes,
          dominantTransits: [DailyTransitSummary],
          lunarContext: LunarContext, dailyTextures: [String],
-         dailyPattern: String?, generatedAt: Date) {
+         dailyPattern: String?, generatedAt: Date,
+         dailyFitEngineId: String? = nil) {
         self.tarotCard = tarotCard
         self.styleEditVariant = styleEditVariant
         self.dailyPalette = dailyPalette
@@ -260,6 +314,29 @@ struct DailyFitPayload: Codable {
         self.dailyTextures = dailyTextures
         self.dailyPattern = dailyPattern
         self.generatedAt = generatedAt
+        self.dailyFitEngineId = dailyFitEngineId
+    }
+
+    /// Copy with engine id stamped at freeze time (generation paths omit this field).
+    func withDailyFitEngineId(_ engineId: String) -> DailyFitPayload {
+        DailyFitPayload(
+            tarotCard: tarotCard,
+            styleEditVariant: styleEditVariant,
+            dailyPalette: dailyPalette,
+            vibrancy: vibrancy,
+            contrast: contrast,
+            metalTone: metalTone,
+            essenceProfile: essenceProfile,
+            silhouetteProfile: silhouetteProfile,
+            vibeBreakdown: vibeBreakdown,
+            axes: axes,
+            dominantTransits: dominantTransits,
+            lunarContext: lunarContext,
+            dailyTextures: dailyTextures,
+            dailyPattern: dailyPattern,
+            generatedAt: generatedAt,
+            dailyFitEngineId: engineId
+        )
     }
 }
 

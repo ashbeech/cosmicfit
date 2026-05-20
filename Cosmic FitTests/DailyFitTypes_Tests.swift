@@ -267,6 +267,17 @@ struct DailyFitTypesTests {
         #expect(decoded.dailyTextures == original.dailyTextures)
         #expect(decoded.dailyPattern == original.dailyPattern)
         #expect(decoded.generatedAt == original.generatedAt)
+        #expect(decoded.dailyFitEngineId == nil)
+        #expect(decoded.resolvedDailyFitEngineId == DailyFitEngineRegistry.productionId)
+    }
+
+    @Test("T0.2b: dailyFitEngineId round-trips when present")
+    func testDailyFitPayloadEngineIdCodableRoundTrip() throws {
+        let original = DailyFitPayload.fixture().withDailyFitEngineId(DailyFitEngineRegistry.legacyBaselineId)
+        let data = try makeEncoder().encode(original)
+        let decoded = try makeDecoder().decode(DailyFitPayload.self, from: data)
+        #expect(decoded.dailyFitEngineId == DailyFitEngineRegistry.legacyBaselineId)
+        #expect(decoded.resolvedDailyFitEngineId == DailyFitEngineRegistry.legacyBaselineId)
     }
 
     // MARK: T0.3 — DailyTransitSummary Codable round-trip

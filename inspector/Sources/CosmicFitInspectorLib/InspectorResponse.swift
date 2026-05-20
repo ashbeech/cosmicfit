@@ -14,6 +14,9 @@ public struct ResponseMeta: Encodable {
     public let engineVersion: String
     public let computedAt: Date
     public let profileHash: String
+    public let dailyFitEngineId: String
+    public let dailyFitEngineDisplayName: String
+    public let dailyFitEngineFingerprint: String
 }
 
 public struct ProfileInfo: Encodable {

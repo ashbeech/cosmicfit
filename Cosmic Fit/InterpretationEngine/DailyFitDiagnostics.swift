@@ -116,6 +116,10 @@ struct PatternDecision: Codable {
 struct CalibrationSummary: Codable {
     let sourceWeights: [String: Double]
     let selectionWeights: [String: Double]
+    let axisTuning: [String: Double]
+    let stage2Sensitivity: [String: Double]
+    let dailyFitEngineId: String
+    let fingerprint: String
 }
 
 // MARK: - Report Generator
@@ -132,19 +136,22 @@ enum DailyFitDiagnostics {
         profileHash: String,
         blueprint: CosmicBlueprint,
         date: Date = Date(),
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        dailyFitEngineId: String? = nil
     ) -> (payload: DailyFitPayload, report: DailyFitDiagnosticReport) {
 
         // Stage 1: energy snapshot with trace
         let (snapshot, s1Trace) = DailyEnergyEngine.generateSnapshotWithTrace(
             natalChart: natalChart, progressedChart: progressedChart,
             transits: transits, moonPhaseDegrees: moonPhaseDegrees,
-            profileHash: profileHash, date: date, calibration: calibration
+            profileHash: profileHash, date: date, calibration: calibration,
+            dailyFitEngineId: dailyFitEngineId
         )
 
         // Stage 2: payload with trace
         let (payload, s2Trace) = BlueprintLensEngine.generatePayloadWithTrace(
-            blueprint: blueprint, snapshot: snapshot, calibration: calibration
+            blueprint: blueprint, snapshot: snapshot, calibration: calibration,
+            dailyFitEngineId: dailyFitEngineId
         )
 
         let contributions = SourceContributionBreakdown(
@@ -190,20 +197,7 @@ enum DailyFitDiagnostics {
             selectedPattern: payload.dailyPattern
         )
 
-        let sw = calibration.sourceWeights
-        let sel = calibration.selectionWeights
-        let calSnap = CalibrationSummary(
-            sourceWeights: [
-                "natal": sw.natal, "transits": sw.transits,
-                "lunarPhase": sw.lunarPhase, "progressed": sw.progressed,
-                "currentSun": sw.currentSun,
-            ],
-            selectionWeights: [
-                "vibeWeight": sel.vibeWeight,
-                "axisWeight": sel.axisWeight,
-                "transitBoost": sel.transitBoost,
-            ]
-        )
+        let calSnap = calibrationSummary(for: calibration, dailyFitEngineId: dailyFitEngineId)
 
         let report = DailyFitDiagnosticReport(
             timestamp: date,
@@ -252,5 +246,55 @@ enum DailyFitDiagnostics {
         )
 
         return (payload, report)
+    }
+
+    static func calibrationSummary(
+        for calibration: DailyFitCalibration,
+        dailyFitEngineId explicitEngineId: String? = nil
+    ) -> CalibrationSummary {
+        let sw = calibration.sourceWeights
+        let sel = calibration.selectionWeights
+        let at = calibration.axisTuning
+        let s2 = calibration.stage2Sensitivity
+        let engineId: String
+        if let explicitEngineId {
+            engineId = explicitEngineId
+        } else {
+            var inferred = DailyFitEngineRegistry.productionId
+            for descriptor in DailyFitEngineRegistry.allDescriptors {
+                if descriptor.calibration == calibration {
+                    inferred = descriptor.id
+                    break
+                }
+            }
+            engineId = inferred
+        }
+        let fingerprint = DailyFitEngineRegistry.descriptor(for: engineId)?.fingerprint
+            ?? DailyFitEngineRegistry.fingerprint(for: calibration)
+        return CalibrationSummary(
+            sourceWeights: [
+                "natal": sw.natal, "transits": sw.transits,
+                "lunarPhase": sw.lunarPhase, "progressed": sw.progressed,
+                "currentSun": sw.currentSun,
+            ],
+            selectionWeights: [
+                "vibeWeight": sel.vibeWeight,
+                "axisWeight": sel.axisWeight,
+                "transitBoost": sel.transitBoost,
+            ],
+            axisTuning: [
+                "sigmoidSpread": at.sigmoidSpread,
+                "jitterRange": at.jitterRange,
+            ],
+            stage2Sensitivity: [
+                "paletteJitter": s2.paletteJitter,
+                "vibrancyCoeff": s2.vibrancyCoeff,
+                "contrastCoeff": s2.contrastCoeff,
+                "silhouetteAxisScale": s2.silhouetteAxisScale,
+                "metalNudgePerHit": s2.metalNudgePerHit,
+            ],
+            dailyFitEngineId: engineId,
+            fingerprint: fingerprint
+        )
     }
 }

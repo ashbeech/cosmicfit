@@ -37,6 +37,10 @@ class ProfileViewController: UIViewController {
     private let restorePurchasesButton = UIButton(type: .system)
     private let manageSubscriptionButton = UIButton(type: .system)
     #if DEBUG
+    private let engineLabel = UILabel()
+    private let engineField = UITextField()
+    private let enginePicker = UIPickerView()
+    private let engineFootnoteLabel = UILabel()
     private let forceRefreshButton = UIButton(type: .system)
     #endif
     private let signOutButton = UIButton(type: .system)
@@ -94,6 +98,10 @@ class ProfileViewController: UIViewController {
         
         // Ensure navigation bar is visible
         navigationController?.navigationBar.isHidden = false
+
+        #if DEBUG
+        syncDailyFitEnginePickerSelection()
+        #endif
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -322,6 +330,7 @@ class ProfileViewController: UIViewController {
         updateButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         #if DEBUG
+        configureDailyFitEnginePickerControls()
         forceRefreshButton.setTitle("⟳ Force refresh all data", for: .normal)
         forceRefreshButton.addTarget(self, action: #selector(forceRefreshTapped), for: .touchUpInside)
         forceRefreshButton.translatesAutoresizingMaskIntoConstraints = false
@@ -408,6 +417,9 @@ class ProfileViewController: UIViewController {
         mainStack.addArrangedSubview(restorePurchasesButton)
         mainStack.addArrangedSubview(manageSubscriptionButton)
         #if DEBUG
+        mainStack.addArrangedSubview(verticalFieldStack(label: engineLabel, field: engineField))
+        mainStack.addArrangedSubview(engineFootnoteLabel)
+        mainStack.setCustomSpacing(8, after: engineFootnoteLabel)
         mainStack.addArrangedSubview(forceRefreshButton)
         #endif
         mainStack.addArrangedSubview(signOutButton)
@@ -545,6 +557,76 @@ class ProfileViewController: UIViewController {
     }
     
     #if DEBUG
+    private func configureDailyFitEnginePickerControls() {
+        styleFieldCaption(engineLabel, text: "Daily Fit engine (debug)")
+
+        engineField.translatesAutoresizingMaskIntoConstraints = false
+        engineField.placeholder = "Select engine preset"
+        CosmicFitTheme.styleTextField(engineField)
+        engineField.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        engineField.delegate = self
+        engineField.autocorrectionType = .no
+        engineField.spellCheckingType = .no
+        engineField.textContentType = .none
+
+        enginePicker.dataSource = self
+        enginePicker.delegate = self
+        engineField.inputView = enginePicker
+
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let flex = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let done = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(enginePickerDoneTapped))
+        toolbar.setItems([flex, done], animated: false)
+        engineField.inputAccessoryView = toolbar
+
+        engineFootnoteLabel.translatesAutoresizingMaskIntoConstraints = false
+        engineFootnoteLabel.numberOfLines = 0
+        engineFootnoteLabel.font = CosmicFitTheme.Typography.dmSansFont(
+            size: CosmicFitTheme.Typography.FontSizes.footnote,
+            weight: .regular
+        )
+        engineFootnoteLabel.textColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.72)
+        engineFootnoteLabel.text = """
+        Applies to this install (not per profile). Release builds always use production.
+        """
+
+        syncDailyFitEnginePickerSelection()
+    }
+
+    private func syncDailyFitEnginePickerSelection() {
+        let descriptors = DailyFitEngineRegistry.allDescriptors
+        let effectiveId = DailyFitEngineConfig.effectiveEngineId
+        let row = descriptors.firstIndex(where: { $0.id == effectiveId }) ?? 0
+        enginePicker.selectRow(row, inComponent: 0, animated: false)
+        engineField.text = descriptors[row].displayName
+    }
+
+    @objc private func enginePickerDoneTapped() {
+        applyDailyFitEngineSelectionFromPicker()
+        engineField.resignFirstResponder()
+    }
+
+    private func applyDailyFitEngineSelectionFromPicker() {
+        let descriptors = DailyFitEngineRegistry.allDescriptors
+        let row = enginePicker.selectedRow(inComponent: 0)
+        guard descriptors.indices.contains(row) else { return }
+
+        let selected = descriptors[row]
+        let previousId = DailyFitEngineConfig.effectiveEngineId
+
+        if selected.id == DailyFitEngineConfig.buildTimeEngineId {
+            DailyFitEngineConfig.runtimeOverrideEngineId = nil
+        } else {
+            DailyFitEngineConfig.runtimeOverrideEngineId = selected.id
+        }
+
+        syncDailyFitEnginePickerSelection()
+
+        guard DailyFitEngineConfig.effectiveEngineId != previousId else { return }
+        NotificationCenter.default.post(name: .dailyFitEngineOverrideChanged, object: nil)
+    }
+
     @objc private func forceRefreshTapped() {
         forceRefreshButton.isEnabled = false
         forceRefreshButton.setTitle("Refreshing…", for: .normal)
@@ -861,10 +943,21 @@ extension ProfileViewController: UITextFieldDelegate {
         if textField === birthDateField || textField === birthTimeField {
             return false
         }
+        #if DEBUG
+        if textField === engineField {
+            return false
+        }
+        #endif
         return true
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        #if DEBUG
+        if textField === engineField {
+            enginePickerDoneTapped()
+            return true
+        }
+        #endif
         if textField === nameTextField {
             textField.resignFirstResponder()
         } else if textField === birthDateField || textField === birthTimeField {
@@ -873,3 +966,24 @@ extension ProfileViewController: UITextFieldDelegate {
         return true
     }
 }
+
+#if DEBUG
+// MARK: - Daily Fit engine picker (P5)
+extension ProfileViewController: UIPickerViewDataSource, UIPickerViewDelegate {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int { 1 }
+
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        DailyFitEngineRegistry.allDescriptors.count
+    }
+
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        DailyFitEngineRegistry.allDescriptors[row].displayName
+    }
+
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let descriptors = DailyFitEngineRegistry.allDescriptors
+        guard descriptors.indices.contains(row) else { return }
+        engineField.text = descriptors[row].displayName
+    }
+}
+#endif

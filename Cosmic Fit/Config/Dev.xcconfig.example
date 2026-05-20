@@ -9,3 +9,9 @@
 
 SUPABASE_URL = https:/$()/YOUR_PROJECT_REF.supabase.co
 SUPABASE_PUBLISHABLE_KEY = your_supabase_anon_key_here
+
+// Daily Fit engine preset (see docs/handoff/daily_fit_engine_selector_spec.md)
+DAILY_FIT_ENGINE_ID = production
+
+// When you create Prod.xcconfig, set the same line:
+// DAILY_FIT_ENGINE_ID = production
