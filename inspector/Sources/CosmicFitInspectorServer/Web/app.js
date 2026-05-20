@@ -1,10 +1,25 @@
 // Cosmic Fit Inspector — Frontend
 'use strict';
 
+import {
+  deleteProfile,
+  getProfile,
+  listProfiles,
+  newProfileId,
+  putProfile,
+  readSession,
+  writeSession
+} from './storage.js';
+
 const ZODIAC_SIGNS = ['','Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
 const ZODIAC_GLYPHS = ['','♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
 
-let state = { data: null, prevData: null, presets: [], lastBirthFingerprint: null };
+let state = { data: null, compareCache: {}, compareDayCount: 2, presets: [], lastBirthFingerprint: null };
+
+const COMPARE_MIN_DAYS = 2;
+const COMPARE_MAX_DAYS = 14;
+let persistTimer = null;
+let restoringSession = false;
 
 // UK calendar dates (dd/mm/yyyy) — API still uses ISO yyyy-mm-dd
 function formatDateUK(isoDate) {
@@ -45,6 +60,7 @@ function setResolvedLocation(result) {
   const chip = document.getElementById('location-coords');
   chip.textContent = `${result.latitude.toFixed(4)}, ${result.longitude.toFixed(4)}`;
   chip.classList.remove('unresolved');
+  schedulePersistSession();
 }
 
 function clearResolvedLocation() {
@@ -54,6 +70,7 @@ function clearResolvedLocation() {
   const chip = document.getElementById('location-coords');
   chip.textContent = 'Not resolved — pick a suggestion or Submit to geocode';
   chip.classList.add('unresolved');
+  schedulePersistSession();
 }
 
 async function resolveBirthLocation() {
@@ -83,14 +100,258 @@ async function resolveBirthLocation() {
   return best;
 }
 
+// ── Session persistence ──
+
+function readFormInputs() {
+  const latEl = document.getElementById('latitude');
+  const lat = parseFloat(latEl.value);
+  const lon = parseFloat(document.getElementById('longitude').value);
+  return {
+    preset: document.getElementById('preset-select').value,
+    birthDate: document.getElementById('birth-date').value,
+    birthTime: document.getElementById('birth-time').value || '00:00',
+    unknownTime: document.getElementById('unknown-time').checked,
+    locationLabel: document.getElementById('location-input').value.trim(),
+    latitude: Number.isFinite(lat) ? lat : null,
+    longitude: Number.isFinite(lon) ? lon : null,
+    timezoneId: document.getElementById('timezone-id').value,
+    resolvedLocationLabel: latEl.dataset.resolvedLabel || '',
+    targetDate: document.getElementById('target-date').value,
+    compareToggle: document.getElementById('compare-toggle').checked,
+    compareDayCount: getCompareDayCount(),
+    activeProfileId: document.getElementById('saved-profile-select').value || ''
+  };
+}
+
+function applyFormInputs(inputs, { persist = true, skipProfileSelect = false } = {}) {
+  if (!inputs) return;
+  restoringSession = true;
+
+  document.getElementById('preset-select').value = inputs.preset || 'custom';
+  document.getElementById('birth-date').value = inputs.birthDate || '';
+  document.getElementById('birth-time').value = inputs.birthTime || '00:00';
+  document.getElementById('unknown-time').checked = !!inputs.unknownTime;
+  document.getElementById('target-date').value = inputs.targetDate || '';
+  document.getElementById('compare-toggle').checked = !!inputs.compareToggle;
+  state.compareDayCount = clampCompareDayCount(inputs.compareDayCount ?? COMPARE_MIN_DAYS);
+  syncCompareDaysUI();
+
+  if (inputs.locationLabel && Number.isFinite(inputs.latitude) && Number.isFinite(inputs.longitude)) {
+    setResolvedLocation({
+      label: inputs.locationLabel,
+      latitude: inputs.latitude,
+      longitude: inputs.longitude,
+      timeZoneId: inputs.timezoneId || 'UTC'
+    });
+    if (inputs.resolvedLocationLabel) {
+      document.getElementById('latitude').dataset.resolvedLabel = inputs.resolvedLocationLabel;
+    }
+  } else if (inputs.locationLabel) {
+    document.getElementById('location-input').value = inputs.locationLabel;
+    clearResolvedLocation();
+  }
+
+  if (!skipProfileSelect) {
+    const sel = document.getElementById('saved-profile-select');
+    const profileId = inputs.activeProfileId || '';
+    if (profileId && [...sel.options].some(o => o.value === profileId)) {
+      sel.value = profileId;
+    } else {
+      sel.value = '';
+    }
+  }
+
+  updateDeleteProfileButton();
+  restoringSession = false;
+  if (persist) schedulePersistSession();
+}
+
+function schedulePersistSession() {
+  if (restoringSession) return;
+  clearTimeout(persistTimer);
+  persistTimer = setTimeout(() => {
+    writeSession({ inputs: readFormInputs(), savedAt: Date.now() });
+  }, 200);
+}
+
+async function restoreSession() {
+  const session = readSession();
+  if (session?.inputs) {
+    applyFormInputs(session.inputs, { persist: false, skipProfileSelect: true });
+    const sel = document.getElementById('saved-profile-select');
+    const profileId = session.inputs.activeProfileId || '';
+    if (profileId && [...sel.options].some(o => o.value === profileId)) {
+      sel.value = profileId;
+    }
+    updateDeleteProfileButton();
+    return;
+  }
+
+  const locLabel = document.getElementById('location-input').value.trim();
+  if (locLabel) {
+    document.getElementById('latitude').dataset.resolvedLabel = locLabel;
+  }
+  if (!document.getElementById('target-date').value) {
+    setTodayUTC();
+  }
+}
+
+function clearSavedProfileSelection() {
+  document.getElementById('saved-profile-select').value = '';
+  updateDeleteProfileButton();
+  schedulePersistSession();
+}
+
+function updateDeleteProfileButton() {
+  const id = document.getElementById('saved-profile-select').value;
+  document.getElementById('delete-profile-btn').disabled = !id;
+}
+
+async function refreshSavedProfilesSelect(selectedId = null) {
+  const sel = document.getElementById('saved-profile-select');
+  const profiles = await listProfiles();
+  const current = selectedId ?? sel.value;
+  sel.innerHTML = '<option value="">—</option>';
+  for (const p of profiles) {
+    const opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = p.name;
+    sel.appendChild(opt);
+  }
+  if (current && profiles.some(p => p.id === current)) {
+    sel.value = current;
+  } else if (!selectedId) {
+    sel.value = '';
+  }
+  updateDeleteProfileButton();
+}
+
+async function onSavedProfileChange() {
+  const id = document.getElementById('saved-profile-select').value;
+  if (!id) {
+    schedulePersistSession();
+    updateDeleteProfileButton();
+    return;
+  }
+  const profile = await getProfile(id);
+  if (!profile?.inputs) return;
+  applyFormInputs({
+    ...profile.inputs,
+    preset: 'custom',
+    activeProfileId: id
+  });
+}
+
+function birthFingerprintFromRequest(body) {
+  const b = body.birth;
+  return `${b.birthDate}|${b.birthTime}|${b.latitude}|${b.longitude}|${b.timeZoneId}|${b.unknownTime}`;
+}
+
+async function syncSavedProfileNameAfterSubmit() {
+  const activeId = document.getElementById('saved-profile-select').value;
+  if (!activeId || !state.data?.profile?.displayName) return;
+
+  const profile = await getProfile(activeId);
+  if (!profile) return;
+
+  const displayName = state.data.profile.displayName;
+  const inputs = readFormInputs();
+  inputs.activeProfileId = activeId;
+  inputs.preset = 'custom';
+
+  if (profile.name === displayName && profile.inputs?.birthDate === inputs.birthDate) {
+    return;
+  }
+
+  profile.name = displayName;
+  profile.updatedAt = Date.now();
+  profile.inputs = inputs;
+  await putProfile(profile);
+  await refreshSavedProfilesSelect(activeId);
+}
+
+async function saveCurrentProfile() {
+  const inputs = readFormInputs();
+  if (!inputs.birthDate || !inputs.locationLabel) {
+    showError('Enter birth date and location before saving a profile.');
+    return;
+  }
+  hideError();
+
+  let body;
+  try {
+    await resolveBirthLocation();
+    body = buildRequest();
+  } catch (e) {
+    showError(e.message);
+    return;
+  }
+
+  const birthFp = birthFingerprintFromRequest(body);
+  if (!state.data || state.lastBirthFingerprint !== birthFp) {
+    showError('Submit first — the saved profile name matches the engine-generated display name.');
+    return;
+  }
+
+  const name = state.data.profile.displayName;
+  const profiles = await listProfiles();
+  const activeId = document.getElementById('saved-profile-select').value;
+  const existingByName = profiles.find(p => p.name === name);
+  const existingById = activeId ? profiles.find(p => p.id === activeId) : null;
+  const now = Date.now();
+
+  let profile;
+  if (existingById) {
+    profile = {
+      ...existingById,
+      name,
+      updatedAt: now,
+      inputs: { ...inputs, preset: 'custom', activeProfileId: existingById.id }
+    };
+  } else if (existingByName) {
+    profile = {
+      ...existingByName,
+      updatedAt: now,
+      inputs: { ...inputs, preset: 'custom', activeProfileId: existingByName.id }
+    };
+  } else {
+    profile = {
+      id: newProfileId(),
+      name,
+      createdAt: now,
+      updatedAt: now,
+      inputs: { ...inputs, preset: 'custom', activeProfileId: '' }
+    };
+    profile.inputs.activeProfileId = profile.id;
+  }
+
+  await putProfile(profile);
+  await refreshSavedProfilesSelect(profile.id);
+  document.getElementById('saved-profile-select').value = profile.id;
+  updateDeleteProfileButton();
+  schedulePersistSession();
+  document.getElementById('status-indicator').textContent = `Saved profile “${name}”`;
+}
+
+async function deleteSelectedProfile() {
+  const id = document.getElementById('saved-profile-select').value;
+  if (!id) return;
+  const profile = await getProfile(id);
+  await deleteProfile(id);
+  document.getElementById('saved-profile-select').value = '';
+  await refreshSavedProfilesSelect('');
+  schedulePersistSession();
+  document.getElementById('status-indicator').textContent = `Deleted profile “${profile?.name || 'profile'}”`;
+}
+
 // ── Init ──
 
 document.addEventListener('DOMContentLoaded', async () => {
-  setTodayUTC();
-  const locLabel = document.getElementById('location-input').value.trim();
-  document.getElementById('latitude').dataset.resolvedLabel = locLabel;
   await loadPresets();
+  await refreshSavedProfilesSelect();
   wireEvents();
+  syncCompareDaysUI();
+  await restoreSession();
 });
 
 function setTodayUTC() {
@@ -99,6 +360,7 @@ function setTodayUTC() {
   const mm = String(now.getUTCMonth() + 1).padStart(2, '0');
   const dd = String(now.getUTCDate()).padStart(2, '0');
   document.getElementById('target-date').value = formatDateUK(`${yyyy}-${mm}-${dd}`);
+  schedulePersistSession();
 }
 
 async function loadPresets() {
@@ -118,18 +380,44 @@ async function loadPresets() {
 function wireEvents() {
   document.getElementById('submit-btn').addEventListener('click', () => doSubmit(false));
   document.getElementById('today-btn').addEventListener('click', () => { setTodayUTC(); if (state.data) doSubmit(true); });
-  document.getElementById('preset-select').addEventListener('change', applyPreset);
-  document.getElementById('compare-toggle').addEventListener('change', onCompareToggle);
+  document.getElementById('preset-select').addEventListener('change', () => { applyPreset(); schedulePersistSession(); });
+  document.getElementById('saved-profile-select').addEventListener('change', onSavedProfileChange);
+  document.getElementById('save-profile-btn').addEventListener('click', saveCurrentProfile);
+  document.getElementById('delete-profile-btn').addEventListener('click', deleteSelectedProfile);
+  document.getElementById('compare-toggle').addEventListener('change', () => { onCompareToggle(); schedulePersistSession(); });
+  document.getElementById('compare-days-down').addEventListener('click', () => { onCompareDayCountChange(-1); });
+  document.getElementById('compare-days-up').addEventListener('click', () => { onCompareDayCountChange(1); });
   document.getElementById('drawer-close').addEventListener('click', closeDrawer);
-  document.getElementById('target-date').addEventListener('change', () => { if (state.data) doSubmit(true); });
+  document.getElementById('target-date').addEventListener('change', () => {
+    schedulePersistSession();
+    if (state.data) doSubmit(true);
+  });
+  document.getElementById('birth-time').addEventListener('change', () => {
+    document.getElementById('preset-select').value = 'custom';
+    clearSavedProfileSelection();
+    schedulePersistSession();
+  });
+  document.getElementById('unknown-time').addEventListener('change', () => {
+    document.getElementById('preset-select').value = 'custom';
+    clearSavedProfileSelection();
+    schedulePersistSession();
+  });
 
   document.querySelectorAll('.card-header').forEach(h => {
-    h.addEventListener('click', () => {
+    h.addEventListener('click', (e) => {
+      if (e.target.closest('.export-btn')) return;
       const bodyId = h.dataset.toggle;
       const body = document.getElementById(bodyId);
       if (body) body.classList.toggle('collapsed');
       const icon = h.querySelector('.toggle-icon');
       if (icon) icon.textContent = body.classList.contains('collapsed') ? '▶' : '▼';
+    });
+  });
+
+  document.querySelectorAll('[data-export]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      exportSection(btn.dataset.export);
     });
   });
 
@@ -155,6 +443,7 @@ function wireEvents() {
               setResolvedLocation(r);
               locResults.classList.remove('visible');
               document.getElementById('preset-select').value = 'custom';
+              clearSavedProfileSelection();
             });
             locResults.appendChild(div);
           }
@@ -170,14 +459,18 @@ function wireEvents() {
 
   locInput.addEventListener('input', () => {
     document.getElementById('preset-select').value = 'custom';
+    clearSavedProfileSelection();
     clearResolvedLocation();
   });
 
-  for (const id of ['birth-date', 'birth-time', 'target-date']) {
+  for (const id of ['birth-date', 'birth-time']) {
     document.getElementById(id).addEventListener('input', () => {
       document.getElementById('preset-select').value = 'custom';
+      clearSavedProfileSelection();
+      schedulePersistSession();
     });
   }
+  document.getElementById('target-date').addEventListener('input', schedulePersistSession);
 }
 
 function applyPreset() {
@@ -196,6 +489,7 @@ function applyPreset() {
     longitude: preset.longitude,
     timeZoneId: preset.timeZoneId
   });
+  clearSavedProfileSelection();
 }
 
 // ── Submit ──
@@ -217,14 +511,16 @@ async function doSubmit(dateOnly = false) {
     return;
   }
 
-  const birthFp = `${body.birth.dateISO}|${body.birth.latitude}|${body.birth.longitude}|${body.birth.timeZoneId}`;
+  const birthFp = birthFingerprintFromRequest(body);
   const isDateOnlyChange = dateOnly && state.lastBirthFingerprint === birthFp;
+  const birthChanged = state.lastBirthFingerprint !== null && state.lastBirthFingerprint !== birthFp;
   if (isDateOnlyChange) {
     body.options.composeBlueprint = false;
   }
-
-  // Target age warning
-  const birthYear = parseInt(body.birth.dateISO.slice(0, 4), 10);
+  if (birthChanged) {
+    body.options.resetTarotHistory = true;
+  }
+  const birthYear = parseInt(body.birth.birthDate.slice(0, 4), 10);
   const targetYear = parseInt(body.targetDate.slice(0, 4), 10);
   const targetAge = targetYear - birthYear;
   if (targetAge > 50) {
@@ -244,13 +540,16 @@ async function doSubmit(dateOnly = false) {
     }
     state.data = await res.json();
     state.lastBirthFingerprint = birthFp;
+    clearCompareCache();
     const elapsed = ((performance.now() - t0) / 1000).toFixed(2);
     const mode = isDateOnlyChange ? 'date-only' : 'full';
     document.getElementById('status-indicator').textContent = `Computed in ${elapsed}s (${mode})`;
     render(state.data);
+    schedulePersistSession();
+    await syncSavedProfileNameAfterSubmit();
 
     if (document.getElementById('compare-toggle').checked) {
-      await loadPreviousDay();
+      await loadCompareRange();
     }
   } catch (e) {
     showError(e.message);
@@ -260,19 +559,18 @@ async function doSubmit(dateOnly = false) {
   }
 }
 
-function buildRequest() {
+function buildRequest({ composeBlueprint = true, resetTarotHistory = false, profileId = null } = {}) {
   const birthDateISO = parseDateUK(document.getElementById('birth-date').value);
   if (!birthDateISO) {
     throw new Error('Birth date must be dd/mm/yyyy (e.g. 11/12/1984)');
   }
   const targetDateISO = parseDateUK(document.getElementById('target-date').value);
   if (!targetDateISO) {
-    throw new Error('Daily Fit target date must be dd/mm/yyyy (UTC calendar day)');
+    throw new Error('Daily Fit target date must be dd/mm/yyyy');
   }
 
   const time = document.getElementById('birth-time').value || '00:00';
   const unknownTime = document.getElementById('unknown-time').checked;
-  const dateISO = `${birthDateISO}T${time}:00Z`;
 
   const latitude = parseFloat(document.getElementById('latitude').value);
   const longitude = parseFloat(document.getElementById('longitude').value);
@@ -283,7 +581,8 @@ function buildRequest() {
   return {
     preset: document.getElementById('preset-select').value,
     birth: {
-      dateISO,
+      birthDate: birthDateISO,
+      birthTime: unknownTime ? null : time,
       unknownTime,
       latitude,
       longitude,
@@ -291,56 +590,253 @@ function buildRequest() {
       locationLabel: document.getElementById('location-input').value.trim()
     },
     targetDate: targetDateISO,
-    options: { composeBlueprint: true, includeProgressed: true }
+    options: {
+      composeBlueprint,
+      includeProgressed: true,
+      resetTarotHistory,
+      profileId
+    }
   };
 }
 
 // ── Compare ──
 
-async function onCompareToggle() {
-  const diffCard = document.getElementById('diff-card');
-  if (document.getElementById('compare-toggle').checked && state.data) {
-    diffCard.classList.remove('hidden');
-    await loadPreviousDay();
+function clampCompareDayCount(n) {
+  return Math.min(COMPARE_MAX_DAYS, Math.max(COMPARE_MIN_DAYS, Number(n) || COMPARE_MIN_DAYS));
+}
+
+function getCompareDayCount() {
+  return clampCompareDayCount(state.compareDayCount);
+}
+
+function syncCompareDaysUI() {
+  const toggle = document.getElementById('compare-toggle');
+  const controls = document.getElementById('compare-span-controls');
+  const valueEl = document.getElementById('compare-days-value');
+  const count = getCompareDayCount();
+  state.compareDayCount = count;
+  if (valueEl) valueEl.textContent = String(count);
+  if (controls) controls.classList.toggle('hidden', !toggle?.checked);
+  const down = document.getElementById('compare-days-down');
+  const up = document.getElementById('compare-days-up');
+  if (down) down.disabled = count <= COMPARE_MIN_DAYS;
+  if (up) up.disabled = count >= COMPARE_MAX_DAYS;
+}
+
+function clearCompareCache() {
+  state.compareCache = {};
+}
+
+function targetDateISO() {
+  return parseDateUK(document.getElementById('target-date').value);
+}
+
+function offsetDateISO(baseISO, dayOffset) {
+  const d = new Date(`${baseISO}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + dayOffset);
+  return d.toISOString().slice(0, 10);
+}
+
+function getCompareDateRange() {
+  const target = targetDateISO();
+  if (!target) return [];
+  const count = getCompareDayCount();
+  const dates = [];
+  for (let i = 0; i < count; i += 1) {
+    dates.push(offsetDateISO(target, i));
+  }
+  return dates;
+}
+
+function compareActive() {
+  if (!document.getElementById('compare-toggle').checked || !state.data) return false;
+  const range = getCompareDateRange();
+  if (range.length < 2) return false;
+  return range.slice(1).every(iso => !!state.compareCache[iso]);
+}
+
+function inspectDataForCompareDate(iso) {
+  const target = targetDateISO();
+  if (iso === target) return state.data;
+  return state.compareCache[iso] || null;
+}
+
+function compareCarouselHtml(paneHtmlFns) {
+  const dates = getCompareDateRange();
+  let html = '<div class="compare-split" role="region" aria-label="Day compare carousel">';
+  paneHtmlFns.forEach((paneHtmlFn, i) => {
+    const iso = dates[i];
+    const label = formatDateUK(iso);
+    const isTarget = i === 0;
+    const paneCls = isTarget ? 'compare-pane compare-pane-target' : 'compare-pane compare-pane-forward';
+    const prefix = isTarget ? 'Target · ' : '';
+    html += `<div class="${paneCls}">
+      <div class="compare-pane-label">${prefix}${esc(label)} UTC</div>
+      <div class="compare-pane-content">${paneHtmlFn()}</div>
+    </div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function mountCompareSection(bodyId, { buildPanes, staticNote = null }) {
+  const el = document.getElementById(bodyId);
+  const panes = buildPanes();
+  const targetPaneHtml = panes[0]?.html ?? (() => '');
+
+  if (staticNote && compareActive()) {
+    el.innerHTML = `<p class="compare-static-note">${staticNote}</p>${targetPaneHtml()}`;
+  } else if (compareActive() && panes.length > 1) {
+    el.innerHTML = compareCarouselHtml(panes.map(p => p.html));
+    const carousel = el.querySelector('.compare-split');
+    if (carousel) carousel.scrollLeft = 0;
   } else {
-    diffCard.classList.add('hidden');
-    state.prevData = null;
+    el.innerHTML = targetPaneHtml();
+  }
+  postRenderSection(el);
+}
+
+function updateCompareStatus() {
+  if (!compareActive()) return;
+  const dates = getCompareDateRange();
+  if (dates.length < 2) return;
+  const first = formatDateUK(dates[0]);
+  const last = formatDateUK(dates[dates.length - 1]);
+  const count = dates.length;
+  document.getElementById('status-indicator').textContent = count === 2
+    ? `Compare: ${first} vs ${last} (UTC)`
+    : `Compare: ${first} → ${last} (${count} days, UTC)`;
+}
+
+async function fetchInspectForDate(dateISO) {
+  const body = buildRequest({ composeBlueprint: false });
+  body.targetDate = dateISO;
+  const res = await fetch('/api/inspect', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+async function onCompareToggle() {
+  syncCompareDaysUI();
+  if (document.getElementById('compare-toggle').checked) {
+    if (!state.data) {
+      showError('Submit first, then enable compare.');
+      document.getElementById('compare-toggle').checked = false;
+      syncCompareDaysUI();
+      return;
+    }
+    hideError();
+    await loadCompareRange();
+  } else {
+    clearCompareCache();
+    hideError();
+    if (state.data) renderAllSections(state.data);
   }
 }
 
-async function loadPreviousDay() {
-  const targetDate = parseDateUK(document.getElementById('target-date').value);
-  if (!targetDate) return;
-  const prev = new Date(targetDate + 'T00:00:00Z');
-  prev.setUTCDate(prev.getUTCDate() - 1);
-  const prevStr = prev.toISOString().slice(0, 10);
+async function onCompareDayCountChange(delta) {
+  const next = clampCompareDayCount(getCompareDayCount() + delta);
+  if (next === getCompareDayCount()) return;
+  state.compareDayCount = next;
+  syncCompareDaysUI();
+  schedulePersistSession();
+  if (document.getElementById('compare-toggle').checked && state.data) {
+    await loadCompareRange();
+  }
+}
 
-  const body = buildRequest();
-  body.targetDate = prevStr;
-  body.options.composeBlueprint = false;
+async function loadCompareRange() {
+  const target = targetDateISO();
+  if (!target) {
+    showError('Set a Daily Fit target date before comparing.');
+    document.getElementById('compare-toggle').checked = false;
+    syncCompareDaysUI();
+    return false;
+  }
+  if (!state.data) return false;
+
+  const dates = getCompareDateRange();
+  const toFetch = dates.slice(1).filter(iso => !state.compareCache[iso]);
+
+  if (toFetch.length === 0) {
+    if (state.data) {
+      renderAllSections(state.data);
+      updateCompareStatus();
+    }
+    return true;
+  }
 
   try {
-    const res = await fetch('/api/inspect', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-    if (res.ok) {
-      state.prevData = await res.json();
-      renderDiff(state.prevData, state.data);
+    await resolveBirthLocation();
+  } catch (e) {
+    showError(`Compare failed: ${e.message}`);
+    document.getElementById('compare-toggle').checked = false;
+    syncCompareDaysUI();
+    return false;
+  }
+
+  showLoading(true);
+  try {
+    // Chronological order so TarotRecencyTracker sees prior days in this batch
+    // (matches opening the app once per UTC day).
+    for (const iso of toFetch) {
+      const data = await fetchInspectForDate(iso);
+      state.compareCache[iso] = data;
     }
-  } catch (e) { console.warn('Diff load failed', e); }
+    if (state.data) {
+      renderAllSections(state.data);
+      updateCompareStatus();
+    }
+    return true;
+  } catch (e) {
+    clearCompareCache();
+    showError(`Compare failed: ${e.message}`);
+    document.getElementById('compare-toggle').checked = false;
+    syncCompareDaysUI();
+    if (state.data) renderAllSections(state.data);
+    return false;
+  } finally {
+    showLoading(false);
+  }
+}
+
+function postRenderSection(root) {
+  root.querySelectorAll('[data-drill]').forEach(node => {
+    node.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (node.dataset.drill) openDrill(node.dataset.drill);
+    });
+  });
+  root.querySelectorAll('.accordion-header').forEach(h => {
+    h.addEventListener('click', () => h.nextElementSibling.classList.toggle('open'));
+  });
 }
 
 // ── Render ──
 
 function render(data) {
+  renderAllSections(data);
+}
+
+function renderAllSections(data) {
   document.getElementById('display-name').textContent = data.profile.displayName;
   renderNatal(data.natal);
   renderBlueprint(data.blueprint);
   renderDailyFit(data.dailyFit);
   renderTrace(data.dailyFit.diagnostics);
   renderVerdicts(data.verdicts);
+  updateExportButtons();
 }
 
-function renderNatal(natal) {
-  const el = document.getElementById('natal-body');
+function buildNatalHtml(natal) {
+  if (!natal) return '<p class="text-muted">No natal chart data.</p>';
   let html = '<table class="data-table"><thead><tr><th>Planet</th><th>Sign</th><th>Longitude</th><th>Position</th><th>Retro</th></tr></thead><tbody>';
   for (const p of natal.planets) {
     const sign = ZODIAC_SIGNS[p.zodiacSign] || '?';
@@ -369,12 +865,30 @@ function renderNatal(natal) {
   html += '<div class="tag-list">';
   natal.houseCusps.forEach((c, i) => { html += `<span class="tag">H${i + 1}: ${c.toFixed(1)}°</span>`; });
   html += '</div></div>';
-  el.innerHTML = html;
+  return html;
 }
 
-function renderBlueprint(bp) {
-  const el = document.getElementById('blueprint-body');
-  if (!bp) { el.innerHTML = '<p class="text-muted">No blueprint computed.</p>'; return; }
+function buildComparePanes(renderForData) {
+  if (!compareActive()) {
+    return [{ html: () => renderForData(state.data, true) }];
+  }
+  const range = getCompareDateRange();
+  return range.map((iso, i) => {
+    const isTarget = i === 0;
+    const data = inspectDataForCompareDate(iso);
+    return { html: () => renderForData(data, isTarget) };
+  });
+}
+
+function renderNatal(natal) {
+  mountCompareSection('natal-body', {
+    staticNote: 'Natal chart is unchanged day-to-day — shown once below.',
+    buildPanes: () => [{ html: () => buildNatalHtml(natal) }]
+  });
+}
+
+function buildBlueprintHtml(bp) {
+  if (!bp) return '<p class="text-muted">No blueprint computed.</p>';
 
   let html = '';
 
@@ -467,18 +981,25 @@ function renderBlueprint(bp) {
     html += '</div>';
   }
 
-  el.innerHTML = html;
-  el.querySelectorAll('[data-drill]').forEach(el => el.addEventListener('click', (e) => openDrill(e.target.dataset.drill)));
+  return html;
 }
 
-function renderDailyFit(df) {
-  const el = document.getElementById('dailyfit-body');
+function renderBlueprint(bp) {
+  mountCompareSection('blueprint-body', {
+    staticNote: 'Style Guide is frozen per profile — unchanged day-to-day.',
+    buildPanes: () => [{ html: () => buildBlueprintHtml(bp) }]
+  });
+}
+
+function buildDailyFitHtml(df, allowDrill = true) {
+  if (!df?.payload) return '<p class="text-muted">No Daily Fit data.</p>';
   const p = df.payload;
+  const drill = allowDrill ? 'drillable' : '';
   let html = '';
 
   // Tarot
   html += `<div class="subsection"><div class="subsection-title">Tarot Card</div>
-    <span class="drillable" data-drill="tarot">${esc(p.tarotCard?.name || 'Unknown')}</span></div>`;
+    <span class="${drill}" data-drill="tarot">${esc(p.tarotCard?.name || 'Unknown')}</span></div>`;
 
   // Style Edit
   if (p.styleEditVariant) {
@@ -493,7 +1014,7 @@ function renderDailyFit(df) {
   html += '<div class="subsection"><div class="subsection-title">Daily Palette</div><div class="swatch-row">';
   for (const c of (p.dailyPalette?.colours || [])) {
     html += `<div class="swatch">
-      <div class="swatch-color drillable" style="background:${c.hexValue}" data-drill="colour:${c.name}"></div>
+      <div class="swatch-color ${drill}" style="background:${c.hexValue}" data-drill="colour:${c.name}"></div>
       <span class="swatch-name">${esc(c.name)}</span>
       <span class="swatch-hex">${c.hexValue}</span>
       <span class="swatch-name">${c.role}</span>
@@ -503,16 +1024,16 @@ function renderDailyFit(df) {
 
   // Scale bars
   html += '<div class="subsection"><div class="subsection-title">Scales</div>';
-  html += scaleBar('Vibrancy', p.vibrancy, 'vibrancy');
-  html += scaleBar('Contrast', p.contrast, 'contrast');
-  html += scaleBar('Metal Tone', p.metalTone, 'metalTone', 'Cool', 'Warm');
+  html += scaleBar('Vibrancy', p.vibrancy, allowDrill ? 'vibrancy' : null);
+  html += scaleBar('Contrast', p.contrast, allowDrill ? 'contrast' : null);
+  html += scaleBar('Metal Tone', p.metalTone, allowDrill ? 'metalTone' : null, 'Cool', 'Warm');
   html += '</div>';
 
   // Essence
   if (p.essenceProfile?.visibleCategories) {
     html += '<div class="subsection"><div class="subsection-title">Style Essence (Top 3)</div><div class="tag-list">';
     for (const e of p.essenceProfile.visibleCategories) {
-      html += `<span class="tag drillable" data-drill="essence:${e.category}">${esc(e.category)} (${(e.score * 100).toFixed(0)}%)</span>`;
+      html += `<span class="tag ${drill}" data-drill="essence:${e.category}">${esc(e.category)} (${(e.score * 100).toFixed(0)}%)</span>`;
     }
     html += '</div></div>';
   }
@@ -549,7 +1070,7 @@ function renderDailyFit(df) {
     html += '<div class="subsection"><div class="subsection-title">Dominant Transits</div>';
     html += '<table class="data-table"><thead><tr><th>Transit</th><th>Natal</th><th>Aspect</th><th>Strength</th></tr></thead><tbody>';
     for (const t of p.dominantTransits) {
-      html += `<tr class="drillable" data-drill="transit:${t.transitPlanet}"><td>${esc(t.transitPlanet)}</td><td>${esc(t.natalPlanet)}</td><td>${esc(t.aspect)}</td><td>${(t.strength * 100).toFixed(0)}%</td></tr>`;
+      html += `<tr class="${drill}" data-drill="transit:${t.transitPlanet}"><td>${esc(t.transitPlanet)}</td><td>${esc(t.natalPlanet)}</td><td>${esc(t.aspect)}</td><td>${(t.strength * 100).toFixed(0)}%</td></tr>`;
     }
     html += '</tbody></table></div>';
   }
@@ -563,13 +1084,17 @@ function renderDailyFit(df) {
       <span class="tag">${p.lunarContext.phaseDegrees.toFixed(1)}°</span></div>`;
   }
 
-  el.innerHTML = html;
-  el.querySelectorAll('.drillable').forEach(el => el.addEventListener('click', (e) => openDrill(e.target.dataset.drill)));
+  return html;
 }
 
-function renderTrace(diag) {
-  const el = document.getElementById('trace-body');
-  if (!diag) { el.innerHTML = '<p>No diagnostics available.</p>'; return; }
+function renderDailyFit(df) {
+  mountCompareSection('dailyfit-body', {
+    buildPanes: () => buildComparePanes((data, allowDrill) => buildDailyFitHtml(data?.dailyFit, allowDrill))
+  });
+}
+
+function buildTraceHtml(diag) {
+  if (!diag) return '<p>No diagnostics available.</p>';
 
   let html = '';
 
@@ -663,19 +1188,17 @@ function renderTrace(diag) {
 
   // Full JSON
   html += accordion('Full Diagnostic JSON', () => `<pre class="json-block">${esc(JSON.stringify(diag, null, 2))}</pre>`);
+  return html;
+}
 
-  el.innerHTML = html;
-  el.querySelectorAll('.accordion-header').forEach(h => {
-    h.addEventListener('click', () => {
-      const body = h.nextElementSibling;
-      body.classList.toggle('open');
-    });
+function renderTrace(diag) {
+  mountCompareSection('trace-body', {
+    buildPanes: () => buildComparePanes((data, _allowDrill) => buildTraceHtml(data?.dailyFit?.diagnostics))
   });
 }
 
-function renderVerdicts(verdicts) {
-  const el = document.getElementById('verdict-body');
-  if (!verdicts?.length) { el.innerHTML = '<p>No verdicts.</p>'; return; }
+function buildVerdictsHtml(verdicts) {
+  if (!verdicts?.length) return '<p>No verdicts.</p>';
   let html = '';
   for (const v of verdicts) {
     const icon = v.status === 'pass' ? '✅' : v.status === 'partial' ? '⚠️' : '❌';
@@ -686,35 +1209,13 @@ function renderVerdicts(verdicts) {
       <span class="verdict-detail">Expected: ${esc(v.expected)} | Actual: ${esc(v.actual)}</span>
     </div>`;
   }
-  el.innerHTML = html;
-}
-
-function renderDiff(prev, curr) {
-  const el = document.getElementById('diff-body');
-  if (!prev || !curr) { el.innerHTML = '<p>No comparison data.</p>'; return; }
-  document.getElementById('diff-card').classList.remove('hidden');
-
-  const pp = prev.dailyFit.payload;
-  const cp = curr.dailyFit.payload;
-  let html = '<div class="diff-container">';
-  html += `<div class="diff-column"><h4>Previous Day</h4>${diffPayloadSummary(pp)}</div>`;
-  html += `<div class="diff-column"><h4>Current Day</h4>${diffPayloadSummary(cp)}</div>`;
-  html += '</div>';
-  el.innerHTML = html;
-}
-
-function diffPayloadSummary(p) {
-  let html = `<div><strong>Tarot:</strong> ${esc(p.tarotCard?.name || '?')}</div>`;
-  html += '<div class="swatch-row" style="margin:4px 0">';
-  for (const c of (p.dailyPalette?.colours || [])) {
-    html += `<div class="swatch"><div class="swatch-color" style="background:${c.hexValue}"></div><span class="swatch-name">${esc(c.name)}</span></div>`;
-  }
-  html += '</div>';
-  html += `<div>Vibrancy: ${p.vibrancy?.toFixed(3)} | Contrast: ${p.contrast?.toFixed(3)} | Metal: ${p.metalTone?.toFixed(3)}</div>`;
-  if (p.essenceProfile?.visibleCategories) {
-    html += `<div>Essence: ${p.essenceProfile.visibleCategories.map(e => e.category).join(', ')}</div>`;
-  }
   return html;
+}
+
+function renderVerdicts(verdicts) {
+  mountCompareSection('verdict-body', {
+    buildPanes: () => buildComparePanes((data, _allowDrill) => buildVerdictsHtml(data?.verdicts))
+  });
 }
 
 // ── Drill-down Drawer ──
@@ -837,6 +1338,381 @@ function openDrill(key) {
 
 function closeDrawer() {
   document.getElementById('drill-drawer').classList.add('hidden');
+}
+
+// ── Markdown export ──
+
+const EXPORT_SECTION_LABELS = {
+  natal: 'Natal Chart',
+  dailyfit: 'Daily Fit',
+  trace: 'Trace & Provenance',
+  verdicts: 'Verdicts'
+};
+
+function updateExportButtons() {
+  const data = state.data;
+  const flags = {
+    natal: !!(data?.natal),
+    dailyfit: !!(data?.dailyFit),
+    trace: !!(data?.dailyFit?.diagnostics),
+    verdicts: !!(data && Array.isArray(data.verdicts))
+  };
+  document.querySelectorAll('[data-export]').forEach(btn => {
+    btn.disabled = !flags[btn.dataset.export];
+  });
+}
+
+function exportSection(section) {
+  if (!state.data) return;
+  const markdown = buildSectionMarkdown(section);
+  if (!markdown) return;
+  downloadMarkdown(exportFilename(section), markdown);
+  flashExportStatus(EXPORT_SECTION_LABELS[section] || section);
+}
+
+function flashExportStatus(label) {
+  const el = document.getElementById('status-indicator');
+  const prev = el.textContent;
+  el.textContent = `Exported ${label} (.md)`;
+  setTimeout(() => {
+    if (el.textContent === `Exported ${label} (.md)`) el.textContent = prev;
+  }, 2500);
+}
+
+function exportFilename(section) {
+  const name = slugify(state.data.profile.displayName);
+  const target = parseDateUK(document.getElementById('target-date').value) || 'unknown-date';
+  return `cosmicfit_${name}_${section}_${target}.md`;
+}
+
+function slugify(text) {
+  return (text || 'profile').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'profile';
+}
+
+function downloadMarkdown(filename, content) {
+  const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function buildSectionMarkdown(section) {
+  const data = state.data;
+  if (!data) return null;
+
+  const builders = {
+    natal: () => markdownNatal(data.natal),
+    dailyfit: () => markdownDailyFit(data.dailyFit),
+    trace: () => markdownTrace(data.dailyFit?.diagnostics),
+    verdicts: () => markdownVerdicts(data.verdicts)
+  };
+  const body = builders[section]?.();
+  if (body == null) return null;
+
+  return [
+    markdownExportHeader(EXPORT_SECTION_LABELS[section] || section),
+    markdownInputsBlock(),
+    '---',
+    '',
+    body
+  ].join('\n');
+}
+
+function markdownExportHeader(sectionLabel) {
+  const data = state.data;
+  const meta = data.meta || {};
+  const computedAt = meta.computedAt ? new Date(meta.computedAt).toISOString() : new Date().toISOString();
+  return [
+    `# Cosmic Fit Inspector — ${sectionLabel}`,
+    '',
+    `- **Exported:** ${computedAt}`,
+    `- **Display name:** ${data.profile.displayName}`,
+    `- **Profile hash:** ${meta.profileHash || '—'}`,
+    `- **Engine version:** ${meta.engineVersion || '—'}`,
+    ''
+  ].join('\n');
+}
+
+function markdownInputsBlock() {
+  const birth = state.data.profile?.birth;
+  const targetUK = document.getElementById('target-date').value;
+  const targetISO = parseDateUK(targetUK);
+  const rows = [
+    ['Preset', document.getElementById('preset-select').value],
+    ['Birth date', document.getElementById('birth-date').value],
+    ['Birth time', document.getElementById('birth-time').value || '00:00'],
+    ['Birth time unknown', document.getElementById('unknown-time').checked ? 'yes' : 'no'],
+    ['Location', document.getElementById('location-input').value.trim()],
+    ['Latitude', document.getElementById('latitude').value],
+    ['Longitude', document.getElementById('longitude').value],
+    ['Timezone', document.getElementById('timezone-id').value],
+    ['Daily Fit target (UK)', targetUK],
+    ['Daily Fit target (ISO day)', targetISO || '—']
+  ];
+  if (birth) {
+    rows.push(['Birth date (API)', birth.birthDate]);
+    rows.push(['Birth time (API)', birth.birthTime ?? '—']);
+  }
+  return '## Profile inputs\n\n' + mdTable(['Field', 'Value'], rows);
+}
+
+function markdownNatal(natal) {
+  if (!natal) return '_No natal chart data._\n';
+  let md = '## Natal Chart\n\n';
+
+  const planetRows = natal.planets.map(p => {
+    const sign = ZODIAC_SIGNS[p.zodiacSign] || '?';
+    const glyph = ZODIAC_GLYPHS[p.zodiacSign] || '';
+    return [
+      `${p.symbol} ${p.name}`,
+      `${glyph} ${sign}`,
+      p.longitude.toFixed(4),
+      p.zodiacPosition,
+      p.isRetrograde ? '℞' : ''
+    ];
+  });
+  md += '### Planets\n\n' + mdTable(['Planet', 'Sign', 'Longitude', 'Position', 'Retro'], planetRows);
+
+  md += '### Angles & Points\n\n' + mdTable(['Point', 'Value'], [
+    ['Ascendant', `${natal.ascendant.toFixed(4)}° ${signFromDeg(natal.ascendant)}`],
+    ['Midheaven (MC)', `${natal.midheaven.toFixed(4)}° ${signFromDeg(natal.midheaven)}`],
+    ['Descendant', `${natal.descendant.toFixed(4)}°`],
+    ['IC', `${natal.imumCoeli.toFixed(4)}°`],
+    ['North Node', `${natal.northNode.toFixed(4)}°`],
+    ['South Node', `${natal.southNode.toFixed(4)}°`],
+    ['Lunar Phase', `${natal.lunarPhase.toFixed(2)}°`]
+  ]);
+
+  const cuspRows = natal.houseCusps.map((c, i) => [`House ${i + 1}`, `${c.toFixed(1)}°`]);
+  md += '### House Cusps (Placidus)\n\n' + mdTable(['House', 'Cusp'], cuspRows);
+
+  if (natal.wholeSignHouseCusps?.length) {
+    const wsRows = natal.wholeSignHouseCusps.map((c, i) => [`House ${i + 1}`, `${c.toFixed(1)}°`]);
+    md += '### House Cusps (Whole Sign)\n\n' + mdTable(['House', 'Cusp'], wsRows);
+  }
+
+  return md;
+}
+
+function markdownDailyFit(dailyFit) {
+  if (!dailyFit?.payload) return '_No Daily Fit data._\n';
+  const p = dailyFit.payload;
+  let md = '## Daily Fit\n\n';
+
+  md += '### Tarot\n\n';
+  md += `- **Card:** ${p.tarotCard?.name || 'Unknown'}\n\n`;
+
+  if (p.styleEditVariant) {
+    md += '### Style Edit\n\n';
+    md += `- **Title:** ${p.styleEditVariant.title || ''}\n`;
+    if (p.styleEditVariant.dailyRitual) md += `\n${p.styleEditVariant.dailyRitual}\n\n`;
+    if (p.styleEditVariant.wardrobeReflection) {
+      md += `\n_${p.styleEditVariant.wardrobeReflection}_\n\n`;
+    }
+  }
+
+  const paletteRows = (p.dailyPalette?.colours || []).map(c => [c.name, c.hexValue, c.role]);
+  md += '### Daily Palette\n\n' + mdTable(['Colour', 'Hex', 'Role'], paletteRows);
+
+  md += '### Scales\n\n' + mdTable(['Scale', 'Value'], [
+    ['Vibrancy', fmtNum(p.vibrancy)],
+    ['Contrast', fmtNum(p.contrast)],
+    ['Metal tone', fmtNum(p.metalTone)]
+  ]);
+
+  if (p.essenceProfile?.visibleCategories?.length) {
+    const essenceRows = p.essenceProfile.visibleCategories.map(e => [
+      e.category,
+      `${(e.score * 100).toFixed(0)}%`
+    ]);
+    md += '### Style Essence (Top 3)\n\n' + mdTable(['Category', 'Score'], essenceRows);
+  }
+
+  if (p.silhouetteProfile) {
+    const sp = p.silhouetteProfile;
+    md += '### Silhouette Profile\n\n' + mdTable(['Axis', 'Value'], [
+      ['Masculine / Feminine', fmtNum(sp.masculineFeminine)],
+      ['Angular / Rounded', fmtNum(sp.angularRounded)],
+      ['Structured / Draped', fmtNum(sp.structuredDraped)]
+    ]);
+  }
+
+  if (p.vibeBreakdown) {
+    const vibeRows = Object.entries(p.vibeBreakdown)
+      .filter(([k]) => k !== 'total')
+      .map(([k, v]) => [k, String(v)]);
+    md += '### Vibe Breakdown\n\n' + mdTable(['Vibe', 'Score'], vibeRows);
+    if (p.vibeBreakdown.total != null) {
+      md += `**Total:** ${p.vibeBreakdown.total}\n\n`;
+    }
+  }
+
+  if (p.dailyTextures?.length) {
+    md += `### Daily Textures\n\n${p.dailyTextures.map(t => `- ${t}`).join('\n')}\n\n`;
+  }
+  if (p.dailyPattern) {
+    md += `### Daily Pattern\n\n- ${p.dailyPattern}\n\n`;
+  }
+
+  if (p.dominantTransits?.length) {
+    const transitRows = p.dominantTransits.map(t => [
+      t.transitPlanet,
+      t.natalPlanet,
+      t.aspect,
+      `${(t.strength * 100).toFixed(0)}%`
+    ]);
+    md += '### Dominant Transits\n\n' + mdTable(['Transit', 'Natal', 'Aspect', 'Strength'], transitRows);
+  }
+
+  if (p.lunarContext) {
+    const lc = p.lunarContext;
+    md += '### Lunar Context\n\n' + mdTable(['Field', 'Value'], [
+      ['Phase', lc.phaseName],
+      ['Waxing / Waning', lc.isWaxing ? 'Waxing' : 'Waning'],
+      ['Element', lc.element],
+      ['Phase degrees', `${lc.phaseDegrees.toFixed(1)}°`]
+    ]);
+  }
+
+  md += '### Full Daily Fit payload (JSON)\n\n' + mdJsonBlock(p);
+  return md;
+}
+
+function markdownVerdicts(verdicts) {
+  let md = '## Verdicts\n\n';
+  if (!verdicts?.length) {
+    md += '_No verdict rows for this run._\n';
+    return md;
+  }
+
+  const rows = verdicts.map(v => {
+    const icon = v.status === 'pass' ? 'pass' : v.status === 'partial' ? 'partial' : 'fail';
+    return [v.id, icon, v.expected, v.actual, v.docRef || ''];
+  });
+  md += mdTable(['ID', 'Status', 'Expected', 'Actual', 'Doc ref'], rows);
+  return md;
+}
+
+function markdownTrace(diag) {
+  if (!diag) return '_No trace / diagnostics data._\n';
+  let md = '## Trace & Provenance\n\n';
+
+  if (diag.sourceContributions) {
+    const sc = diag.sourceContributions;
+    md += '### Source Contributions\n\n' + mdTable(['Source', 'Share'], [
+      ['Natal', pct(sc.natalShare)],
+      ['Transits', pct(sc.transitShare)],
+      ['Lunar', pct(sc.lunarShare)],
+      ['Progressed', pct(sc.progressedShare)],
+      ['Current Sun', pct(sc.currentSunShare)]
+    ]);
+  }
+
+  if (diag.rawEnergyScores) {
+    md += '### Raw Energy Scores\n\n' + mdObjectTable(diag.rawEnergyScores);
+  }
+  if (diag.postMultiplierScores) {
+    md += '### Post-Multiplier Energy Scores\n\n' + mdObjectTable(diag.postMultiplierScores);
+  }
+  if (diag.rawAxisScores) {
+    md += '### Raw Axis Scores\n\n' + mdObjectTable(diag.rawAxisScores);
+  }
+
+  if (diag.tarotCardScores?.length) {
+    const sorted = [...diag.tarotCardScores].sort((a, b) => b.totalScore - a.totalScore).slice(0, 15);
+    const rows = sorted.map(s => [
+      s.cardName + (s.cardName === diag.selectedTarotCard ? ' ★' : ''),
+      s.vibeScore.toFixed(3),
+      s.axisScore.toFixed(3),
+      s.transitBoost.toFixed(3),
+      s.recencyPenalty.toFixed(3),
+      s.totalScore.toFixed(3)
+    ]);
+    md += '### Tarot Card Scores (Top 15)\n\n';
+    md += `- **Selected:** ${diag.selectedTarotCard || '—'}\n`;
+    md += `- **Variant index:** ${diag.variantRotationIndex ?? '—'}\n`;
+    md += `- **Style edit:** ${diag.selectedStyleEdit || '—'}\n\n`;
+    md += mdTable(['Card', 'Vibe', 'Axis', 'Transit', 'Recency', 'Total'], rows);
+  }
+
+  if (diag.paletteSelectionTrace) {
+    const pt = diag.paletteSelectionTrace;
+    md += '### Palette Selection Trace\n\n';
+    md += `- **Candidates:** ${pt.candidateCount}\n`;
+    md += `- **Diversity swap:** ${pt.diversitySwapApplied ? 'Yes' : 'No'}\n\n`;
+    const rows = (pt.topScoredColours || []).map(c => [c.name, c.role, c.score.toFixed(4)]);
+    md += mdTable(['Colour', 'Role', 'Score'], rows);
+  }
+
+  if (diag.textureSelectionTrace?.scores?.length) {
+    const rows = diag.textureSelectionTrace.scores.map(s => [s.name, s.score.toFixed(4)]);
+    md += '### Texture Trace\n\n' + mdTable(['Texture', 'Score'], rows);
+  }
+
+  if (diag.patternDecision) {
+    const pd = diag.patternDecision;
+    md += '### Pattern Decision\n\n' + mdTable(['Field', 'Value'], [
+      ['Gate passed', pd.gateCheckPassed ? 'Yes' : 'No'],
+      ['Visibility', pd.visibilityValue.toFixed(3)],
+      ['Dominant energy', pd.dominantEnergy],
+      ['Selected pattern', pd.selectedPattern || 'None']
+    ]);
+  }
+
+  for (const [label, key] of [['Vibrancy', 'vibrancyTrace'], ['Contrast', 'contrastTrace'], ['Metal Tone', 'metalToneTrace']]) {
+    const trace = diag[key];
+    if (!trace) continue;
+    md += `### ${label} Derivation\n\n`;
+    md += mdTable(['Field', 'Value'], [
+      ['Blueprint baseline', trace.blueprintBaseline.toFixed(3)],
+      ['Modulation', trace.modulation.toFixed(3)],
+      ['Final', trace.finalValue.toFixed(3)]
+    ]);
+  }
+
+  if (diag.calibrationSnapshot) {
+    const cs = diag.calibrationSnapshot;
+    md += '### Calibration Snapshot\n\n';
+    if (cs.sourceWeights) md += '**Source weights**\n\n' + mdObjectTable(cs.sourceWeights);
+    if (cs.selectionWeights) md += '**Selection weights**\n\n' + mdObjectTable(cs.selectionWeights);
+  }
+
+  md += '### Full Diagnostic JSON\n\n' + mdJsonBlock(diag);
+  return md;
+}
+
+function mdTable(headers, rows) {
+  if (!rows.length) return '_No data_\n\n';
+  const head = `| ${headers.join(' | ')} |`;
+  const sep = `| ${headers.map(() => '---').join(' | ')} |`;
+  const body = rows.map(r => `| ${r.map(c => mdCell(c)).join(' | ')} |`).join('\n');
+  return `${head}\n${sep}\n${body}\n\n`;
+}
+
+function mdObjectTable(obj) {
+  const rows = Object.entries(obj).map(([k, v]) => [k, typeof v === 'number' ? v.toFixed(4) : String(v)]);
+  return mdTable(['Key', 'Value'], rows);
+}
+
+function mdCell(value) {
+  return String(value ?? '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
+}
+
+function mdJsonBlock(obj) {
+  return '```json\n' + JSON.stringify(obj, null, 2) + '\n```\n\n';
+}
+
+function fmtNum(n) {
+  return typeof n === 'number' ? n.toFixed(3) : '—';
+}
+
+function pct(n) {
+  return typeof n === 'number' ? `${(n * 100).toFixed(1)}%` : '—';
 }
 
 // ── Helpers ──

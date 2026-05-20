@@ -74,7 +74,8 @@ Four real-ephemeris presets are defined in `Resources/presets.json`:
 ```json
 {
   "birth": {
-    "dateISO": "1984-12-11T00:00:00Z",
+    "birthDate": "1984-12-11",
+    "birthTime": "00:00",
     "unknownTime": false,
     "latitude": 51.5074,
     "longitude": -0.1278,
@@ -95,7 +96,7 @@ The inspector runs four automated checks on every response:
 1. **source_contributions_normalised** — sum ≈ 1.0 (tolerance 0.005)
 2. **vibrancy_contrast_metal_in_range** — all in [0, 1]
 3. **palette_three_unique** — exactly 3 distinct daily colours
-4. **tarot_recency** — not repeated within 7 days per profile (history at `~/.cosmicfit-inspector/tarot-history.json`)
+4. **tarot_recency** — uses the same `TarotRecencyTracker` as the app (isolated in `UserDefaults` suite `com.cosmicfit.inspector`)
 
 ### Extending Verdicts
 

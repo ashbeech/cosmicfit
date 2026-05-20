@@ -15,6 +15,19 @@
           <option value="custom">Custom</option>
         </select>
       </div>
+      <div class="control-group">
+        <label for="saved-profile-select">Saved profiles</label>
+        <select id="saved-profile-select">
+          <option value="">—</option>
+        </select>
+      </div>
+      <div class="control-group saved-profile-actions">
+        <label class="label-spacer">&nbsp;</label>
+        <div class="btn-row">
+          <button type="button" id="save-profile-btn" class="small-btn" title="Save current inputs using the engine display name (Submit first)">Save</button>
+          <button type="button" id="delete-profile-btn" class="small-btn" disabled title="Delete selected saved profile">Delete</button>
+        </div>
+      </div>
       <div class="control-group name-chip-group">
         <label>Name</label>
         <span id="display-name" class="name-chip">--</span>
@@ -47,13 +60,21 @@
     </div>
     <div class="strip-row strip-row-secondary">
       <div class="control-group">
-        <label for="target-date">Daily Fit Target Date <span class="label-hint">(dd/mm/yyyy, UTC)</span></label>
+        <label for="target-date">Daily Fit Target Date <span class="label-hint">(dd/mm/yyyy, local calendar day)</span></label>
         <input type="text" id="target-date" class="date-input" placeholder="dd/mm/yyyy" inputmode="numeric" autocomplete="off">
         <button id="today-btn" class="small-btn">Today (UTC)</button>
       </div>
-      <label class="checkbox-label">
-        <input type="checkbox" id="compare-toggle"> Compare to previous day
-      </label>
+      <div class="compare-controls">
+        <label class="checkbox-label" title="Horizontal day carousel in Daily Fit, Trace, and Verdicts starting at your target UTC date">
+          <input type="checkbox" id="compare-toggle"> Compare days
+        </label>
+        <div id="compare-span-controls" class="compare-span-controls hidden" title="Number of UTC days in the compare carousel (target → future)">
+          <button type="button" id="compare-days-down" class="small-btn compare-step-btn" aria-label="Fewer days">−</button>
+          <span id="compare-days-value" class="compare-days-value">2</span>
+          <button type="button" id="compare-days-up" class="small-btn compare-step-btn" aria-label="More days">+</button>
+          <span class="compare-span-hint">days</span>
+        </div>
+      </div>
       <div id="status-indicator" class="status"></div>
     </div>
   </header>
@@ -64,7 +85,10 @@
 
     <!-- Natal Chart -->
     <section class="card" id="natal-card">
-      <h2 class="card-header" data-toggle="natal-body">Natal Chart <span class="toggle-icon">▼</span></h2>
+      <h2 class="card-header" data-toggle="natal-body">
+        <span class="card-header-title">Natal Chart <span class="toggle-icon">▼</span></span>
+        <button type="button" class="export-btn" data-export="natal" disabled title="Download this section as Markdown">Export MD</button>
+      </h2>
       <div id="natal-body" class="card-body"></div>
     </section>
 
@@ -79,27 +103,31 @@
 
     <!-- Daily Fit -->
     <section class="card" id="dailyfit-card">
-      <h2 class="card-header" data-toggle="dailyfit-body">Daily Fit <span class="toggle-icon">▼</span></h2>
+      <h2 class="card-header" data-toggle="dailyfit-body">
+        <span class="card-header-title">Daily Fit <span class="toggle-icon">▼</span></span>
+        <button type="button" class="export-btn" data-export="dailyfit" disabled title="Download this section as Markdown">Export MD</button>
+      </h2>
       <div id="dailyfit-body" class="card-body"></div>
     </section>
 
     <!-- Trace & Provenance -->
     <section class="card" id="trace-card">
-      <h2 class="card-header" data-toggle="trace-body">Trace &amp; Provenance <span class="toggle-icon">▼</span></h2>
+      <h2 class="card-header" data-toggle="trace-body">
+        <span class="card-header-title">Trace &amp; Provenance <span class="toggle-icon">▼</span></span>
+        <button type="button" class="export-btn" data-export="trace" disabled title="Download this section as Markdown">Export MD</button>
+      </h2>
       <div id="trace-body" class="card-body"></div>
     </section>
 
     <!-- Verdicts -->
     <section class="card" id="verdict-card">
-      <h2 class="card-header" data-toggle="verdict-body">Verdicts <span class="toggle-icon">▼</span></h2>
+      <h2 class="card-header" data-toggle="verdict-body">
+        <span class="card-header-title">Verdicts <span class="toggle-icon">▼</span></span>
+        <button type="button" class="export-btn" data-export="verdicts" disabled title="Download this section as Markdown">Export MD</button>
+      </h2>
       <div id="verdict-body" class="card-body"></div>
     </section>
 
-    <!-- Day Diff (hidden by default) -->
-    <section class="card hidden" id="diff-card">
-      <h2 class="card-header" data-toggle="diff-body">Day Comparison <span class="toggle-icon">▼</span></h2>
-      <div id="diff-body" class="card-body"></div>
-    </section>
   </main>
 
   <!-- Drill-down drawer -->
@@ -111,6 +139,6 @@
     <div id="drawer-content" class="drawer-content"></div>
   </aside>
 
-  <script src="/app.js"></script>
+  <script type="module" src="/app.js"></script>
 </body>
 </html>

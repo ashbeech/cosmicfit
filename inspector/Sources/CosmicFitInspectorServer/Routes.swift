@@ -85,6 +85,10 @@ func buildRouter(engine: InspectorEngine) -> Router<BasicRequestContext> {
         serveStaticFile(named: "app.js", contentType: "application/javascript")
     }
 
+    router.get("/storage.js") { _, _ -> Response in
+        serveStaticFile(named: "storage.js", contentType: "application/javascript")
+    }
+
     return router
 }
 

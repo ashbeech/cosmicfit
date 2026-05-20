@@ -40,11 +40,16 @@ public enum ResourcePaths {
         resourcesDirectory.appendingPathComponent("presets.json")
     }
 
+    public static var tarotCardsURL: URL {
+        resourcesDirectory.appendingPathComponent("TarotCards.json")
+    }
+
     public static func validateResources() -> [String] {
         var missing: [String] = []
         let required: [(String, URL)] = [
             ("astrological_style_dataset.json", astrologicalStyleDatasetURL),
             ("blueprint_narrative_cache.json", blueprintNarrativeCacheURL),
+            ("TarotCards.json", tarotCardsURL),
             ("seas_18.se1", resourcesDirectory.appendingPathComponent("seas_18.se1")),
         ]
         for (label, url) in required {

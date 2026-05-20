@@ -18,9 +18,18 @@ public actor InspectorEngine {
     public func bootstrap() throws {
         guard !isBootstrapped else { return }
 
+        let inspectorDefaults = UserDefaults(suiteName: "com.cosmicfit.inspector") ?? .standard
+        TarotRecencyTracker.shared = TarotRecencyTracker(userDefaults: inspectorDefaults)
+        TarotVariantRotationTracker.shared = TarotVariantRotationTracker(defaults: inspectorDefaults)
+
         SwissEphemerisBootstrap.initialise(ephemerisDirectoryPath: ResourcePaths.swissEphemerisDirectory.path)
         VSOP87Parser.setDataDirectory(ResourcePaths.vsop87DataDirectory)
         VSOP87Parser.loadData()
+        BlueprintLensEngine.setTarotCardsURL(ResourcePaths.tarotCardsURL)
+
+        guard FileManager.default.fileExists(atPath: ResourcePaths.tarotCardsURL.path) else {
+            throw InspectorError.missingResource("TarotCards.json")
+        }
 
         guard let ds = BlueprintTokenGenerator.loadDataset(from: ResourcePaths.astrologicalStyleDatasetURL) else {
             throw InspectorError.missingResource("astrological_style_dataset.json")
@@ -45,48 +54,59 @@ public actor InspectorEngine {
         }
 
         let birth = request.birth
-        let profileHash = DisplayNameGenerator.profileHash(
-            dateISO: birth.dateISO, latitude: birth.latitude, longitude: birth.longitude,
-            timeZoneId: birth.timeZoneId, unknownTime: birth.unknownTime
+        let birthDate = BirthInstantResolver.resolve(
+            birthDate: birth.birthDate ?? "",
+            birthTime: birth.birthTime,
+            unknownTime: birth.unknownTime,
+            timeZoneId: birth.timeZoneId,
+            legacyDateISO: birth.dateISO
+        )
+        let tz = TimeZone(identifier: birth.timeZoneId) ?? TimeZone(secondsFromGMT: 0)!
+
+        let profileHash = AppProfileIdentity.profileHash(
+            birthDate: birthDate,
+            latitude: birth.latitude,
+            longitude: birth.longitude,
+            profileId: request.options?.profileId
         )
         let displayName = DisplayNameGenerator.name(forProfileHash: profileHash)
 
-        let birthDate = parseBirthDate(birth)
-        let tz = TimeZone(identifier: birth.timeZoneId) ?? TimeZone(secondsFromGMT: 0)!
+        if request.options?.resetTarotHistory == true {
+            TarotRecencyTracker.shared.clearProfile(profileHash: profileHash)
+        }
 
         let natalChart = NatalChartCalculator.calculateNatalChart(
             birthDate: birthDate, latitude: birth.latitude,
             longitude: birth.longitude, timeZone: tz
         )
 
-        let targetDate = parseTargetDate(request.targetDate)
+        let targetDate = DailyFitDateResolver.targetInstant(from: request.targetDate)
 
         var progressedChart: NatalChartCalculator.NatalChart? = nil
         let includeProgressed = request.options?.includeProgressed ?? true
         if includeProgressed {
-            let age = Calendar.current.dateComponents([.year], from: birthDate, to: targetDate).year ?? 30
-            let clampedAge = max(0, age)
+            // App uses today's age for all daily-fit dates, not target-date age.
+            let currentAge = NatalChartCalculator.calculateCurrentAge(from: birthDate)
             progressedChart = NatalChartCalculator.calculateProgressedChart(
-                birthDate: birthDate, targetAge: clampedAge,
+                birthDate: birthDate, targetAge: currentAge,
                 latitude: birth.latitude, longitude: birth.longitude,
                 timeZone: tz, progressAnglesMethod: .solarArc
             )
         }
 
-        let shouldCompose = request.options?.composeBlueprint ?? true
-        var blueprint: CosmicBlueprint? = nil
-        if shouldCompose {
-            if let cached = blueprintCache[profileHash] {
-                blueprint = cached
-            } else {
-                let composed = BlueprintComposer.compose(
-                    chart: natalChart, birthDate: birthDate,
-                    birthLocation: birth.locationLabel,
-                    dataset: dataset, narrativeCache: narrativeCache
-                )
-                blueprintCache[profileHash] = composed
-                blueprint = composed
+        let composeBlueprint = request.options?.composeBlueprint ?? true
+        var blueprint: CosmicBlueprint? = blueprintCache[profileHash]
+        if blueprint == nil {
+            guard composeBlueprint else {
+                throw InspectorError.blueprintRequired
             }
+            let composed = BlueprintComposer.compose(
+                chart: natalChart, birthDate: birthDate,
+                birthLocation: birth.locationLabel,
+                dataset: dataset, narrativeCache: narrativeCache
+            )
+            blueprintCache[profileHash] = composed
+            blueprint = composed
         }
 
         guard let bp = blueprint else {
@@ -98,6 +118,7 @@ public actor InspectorEngine {
         let julianDay = JulianDateCalculator.calculateJulianDate(from: targetDate)
         let moonPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: julianDay)
 
+        // Same diagnostic pipeline as inspector tests; Stage 1/2 math matches app `generateSnapshot` + `generatePayload`.
         let (payload, report) = DailyFitDiagnostics.generateReport(
             natalChart: natalChart,
             progressedChart: progChart,
@@ -108,7 +129,7 @@ public actor InspectorEngine {
             date: targetDate
         )
 
-        let verdicts = VerdictRunner.run(payload: payload, report: report)
+        let verdicts = VerdictRunner.run(payload: payload, report: report, profileHash: profileHash, targetDate: targetDate)
 
         return InspectorResponse(
             meta: ResponseMeta(
@@ -129,32 +150,8 @@ public actor InspectorEngine {
         blueprintCache.removeValue(forKey: hash)
     }
 
-    // MARK: - Date Parsing
-
-    private func parseBirthDate(_ birth: BirthInput) -> Date {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        if let d = formatter.date(from: birth.dateISO) { return d }
-        formatter.formatOptions = [.withInternetDateTime]
-        if let d = formatter.date(from: birth.dateISO) { return d }
-
-        let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd"
-        df.timeZone = TimeZone(identifier: birth.timeZoneId) ?? TimeZone(secondsFromGMT: 0)
-        if let d = df.date(from: birth.dateISO) {
-            if birth.unknownTime {
-                return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: d) ?? d
-            }
-            return d
-        }
-        return Date()
-    }
-
-    private func parseTargetDate(_ dateStr: String) -> Date {
-        let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd"
-        df.timeZone = TimeZone(secondsFromGMT: 0)
-        return df.date(from: dateStr) ?? Date()
+    public func clearTarotHistory(profileHash: String) {
+        TarotRecencyTracker.shared.clearProfile(profileHash: profileHash)
     }
 }
 

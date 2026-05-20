@@ -106,6 +106,15 @@ body {
   color: var(--partial);
 }
 
+.label-spacer { visibility: hidden; }
+
+.saved-profile-actions .btn-row {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-row .small-btn { white-space: nowrap; }
+
 .location-group { position: relative; }
 .location-group input[type="text"] { width: 180px; }
 
@@ -239,12 +248,46 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   padding: 14px 18px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   user-select: none;
   transition: background 0.15s;
+}
+
+.card-header-title {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.export-btn {
+  flex-shrink: 0;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.export-btn:hover:not(:disabled) {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.export-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
 }
 
 .card-header:hover { background: var(--surface2); }
@@ -526,7 +569,124 @@ main {
   font-size: 13px;
 }
 
-/* Diff view */
+/* Compare carousel controls */
+.compare-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.compare-span-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.compare-span-controls.hidden {
+  display: none;
+}
+
+.compare-step-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.compare-step-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.compare-days-value {
+  min-width: 1.5em;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--mono);
+  color: var(--text);
+}
+
+.compare-span-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: 2px;
+}
+
+/* Compare carousel */
+.compare-split {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.compare-split::-webkit-scrollbar {
+  height: 8px;
+}
+
+.compare-split::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.compare-pane {
+  flex: 0 0 min(400px, 88vw);
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface2);
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+
+.compare-pane-forward .compare-pane-label {
+  background: rgba(136, 136, 160, 0.12);
+}
+
+.compare-pane-target {
+  border-color: rgba(124, 111, 247, 0.45);
+}
+
+.compare-pane-label {
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: rgba(124, 111, 247, 0.08);
+  border-bottom: 1px solid var(--border);
+}
+
+.compare-pane-target .compare-pane-label {
+  background: rgba(124, 111, 247, 0.14);
+  color: var(--accent-light);
+}
+
+.compare-pane-content {
+  padding: 14px;
+}
+
+.compare-static-note {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: rgba(124, 111, 247, 0.08);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* Legacy diff (removed from UI) */
 .diff-container {
   display: grid;
   grid-template-columns: 1fr 1fr;

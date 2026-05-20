@@ -4,13 +4,15 @@ enum VerdictRunner {
 
     static func run(
         payload: DailyFitPayload,
-        report: DailyFitDiagnosticReport
+        report: DailyFitDiagnosticReport,
+        profileHash: String,
+        targetDate: Date
     ) -> [VerdictRow] {
         var results: [VerdictRow] = []
         results.append(checkSourceContributions(report))
         results.append(checkScaleRanges(payload))
         results.append(checkPaletteUnique(payload))
-        results.append(checkTarotRecency(report))
+        results.append(checkTarotRecency(report: report, profileHash: profileHash, targetDate: targetDate))
         return results
     }
 
@@ -63,49 +65,37 @@ enum VerdictRunner {
         )
     }
 
-    // MARK: - Check 4: Tarot recency (7-day ring)
+    // MARK: - Check 4: Tarot recency (engine tracker)
 
-    private static func checkTarotRecency(_ report: DailyFitDiagnosticReport) -> VerdictRow {
+    private static func checkTarotRecency(
+        report: DailyFitDiagnosticReport,
+        profileHash: String,
+        targetDate: Date
+    ) -> VerdictRow {
         let selected = report.selectedTarotCard
-        let profileId = report.profileIdentifier
-        let historyDir = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent(".cosmicfit-inspector")
-        let historyFile = historyDir.appendingPathComponent("tarot-history.json")
+        let prior = TarotRecencyTracker.shared.getRecentSelections(
+            profileHash: profileHash,
+            referenceDate: targetDate
+        ).filter { $0.daysAgo > 0 }
 
-        var history: [String: [String]] = [:]
-        if let data = try? Data(contentsOf: historyFile),
-           let decoded = try? JSONDecoder().decode([String: [String]].self, from: data) {
-            history = decoded
-        }
-
-        let ring = history[profileId] ?? []
-        let recentCount = ring.count
-        let last3 = Array(ring.suffix(3))
-        let last7 = Array(ring.suffix(7))
-        let inLast3 = last3.contains(selected)
-        let inLast7 = last7.contains(selected)
+        let inLast3 = prior.contains { $0.cardName == selected && $0.daysAgo <= 3 }
+        let inLast7 = prior.contains { $0.cardName == selected && $0.daysAgo <= 7 }
+        let historyDepth = prior.count
 
         let status: String
         if inLast3 { status = "fail" }
         else if inLast7 { status = "partial" }
         else { status = "pass" }
 
-        // Update ring
-        var updatedRing = ring
-        updatedRing.append(selected)
-        if updatedRing.count > 14 { updatedRing = Array(updatedRing.suffix(14)) }
-        history[profileId] = updatedRing
-
-        try? FileManager.default.createDirectory(at: historyDir, withIntermediateDirectories: true)
-        if let encoded = try? JSONEncoder().encode(history) {
-            try? encoded.write(to: historyFile, options: .atomic)
-        }
+        var detail = "\(selected) (history depth: \(historyDepth))"
+        if inLast3 { detail += " — within 3d" }
+        else if inLast7 { detail += " — within 7d" }
 
         return VerdictRow(
             id: "tarot_recency",
             status: status,
             expected: "not in previous 7 days (3d = fail)",
-            actual: "\(selected) (history depth: \(recentCount))" + (inLast3 ? " — within 3d" : inLast7 ? " — within 7d" : ""),
+            actual: detail,
             docRef: "docs/test_green_handoff.md#tarot-recency"
         )
     }

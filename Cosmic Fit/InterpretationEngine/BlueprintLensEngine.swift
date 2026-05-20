@@ -89,12 +89,20 @@ enum BlueprintLensEngine {
     // MARK: - Card Loading & Normalisation
 
     private static var cachedCards: [(card: TarotCard, normAxes: [String: Double])]?
+    private static var tarotCardsURLOverride: URL?
+
+    /// Used by the inspector server where Bundle.main does not include TarotCards.json.
+    static func setTarotCardsURL(_ url: URL) {
+        tarotCardsURLOverride = url
+        cachedCards = nil
+    }
 
     static func loadAndNormaliseCards() -> [(card: TarotCard, normAxes: [String: Double])] {
         if let cached = cachedCards { return cached }
 
-        guard let url = Bundle.main.url(forResource: "TarotCards", withExtension: "json"),
-              let data = try? Data(contentsOf: url) else {
+        let url = tarotCardsURLOverride
+            ?? Bundle.main.url(forResource: "TarotCards", withExtension: "json")
+        guard let url, let data = try? Data(contentsOf: url) else {
             return []
         }
         guard let cards = try? JSONDecoder().decode([TarotCard].self, from: data) else {

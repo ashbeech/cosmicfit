@@ -18,10 +18,17 @@ public struct PresetProfile: Codable {
     }
 
     public var birthInput: BirthInput {
-        BirthInput(
-            dateISO: birthDateUTC, unknownTime: false,
-            latitude: latitude, longitude: longitude,
-            timeZoneId: timeZoneId, locationLabel: label
+        let datePart = String(birthDateUTC.prefix(10))
+        let timePart = birthDateUTC.count >= 16 ? String(birthDateUTC.dropFirst(11).prefix(5)) : "00:00"
+        return BirthInput(
+            birthDate: datePart,
+            birthTime: timePart,
+            dateISO: nil,
+            unknownTime: false,
+            latitude: latitude,
+            longitude: longitude,
+            timeZoneId: timeZoneId,
+            locationLabel: label
         )
     }
 }
