@@ -109,6 +109,8 @@ class TarotRecencyTracker {
         referenceDate: Date = Date(),
         dailyFitEngineId: String = DailyFitEngineRegistry.productionId
     ) -> [(cardName: String, daysAgo: Int)] {
+        migrateLegacyNamespaceIfNeeded(profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
+
         var recentSelections: [(String, Int)] = []
         let calendar = Calendar.current
         
@@ -287,12 +289,28 @@ class TarotRecencyTracker {
     
     /// Get list of dates for a profile
     private func getProfileDates(profileHash: String, dailyFitEngineId: String) -> [Date] {
+        migrateLegacyNamespaceIfNeeded(profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
+
         let key = profileDateListKey(profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
         guard let dateStrings = userDefaults.stringArray(forKey: key) else {
             return []
         }
         
         return dateStrings.compactMap { dateFormatter.date(from: $0) }
+    }
+
+    /// Pre–engine-versioning → `production` key namespace (follow-up PR; see `TarotEngineNamespaceMigration`).
+    private func migrateLegacyNamespaceIfNeeded(profileHash: String, dailyFitEngineId: String) {
+        guard dailyFitEngineId == DailyFitEngineRegistry.productionId else { return }
+        TarotEngineNamespaceMigration.migrateProductionRecencyIfNeeded(
+            profileHash: profileHash,
+            userDefaults: userDefaults,
+            dateFormatter: dateFormatter
+        )
+        TarotEngineNamespaceMigration.migrateProductionVariantRotationIfNeeded(
+            profileHash: profileHash,
+            userDefaults: userDefaults
+        )
     }
     
     /// Save list of dates for a profile
