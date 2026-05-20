@@ -182,12 +182,21 @@ struct DailyFitPayload: Codable {
     /// Timestamp of generation. Set from the supplied date parameter, NOT Date().
     let generatedAt: Date
 
+    /// Engine preset id stamped when frozen (optional in JSON; missing → production).
+    let dailyFitEngineId: String?
+
+    /// Stored id for freeze/load checks; missing field decodes as production.
+    var resolvedDailyFitEngineId: String {
+        dailyFitEngineId ?? DailyFitEngineRegistry.productionId
+    }
+
     // MARK: - Backward-Compatible Decoding
 
     private enum CodingKeys: String, CodingKey {
         case tarotCard, styleEditVariant, dailyPalette, vibrancy, contrast, metalTone
         case essenceProfile, silhouetteProfile, vibeBreakdown, axes
         case dominantTransits, lunarContext, dailyTextures, dailyPattern, generatedAt
+        case dailyFitEngineId
         case essenceTriangle
     }
 
@@ -207,6 +216,7 @@ struct DailyFitPayload: Codable {
         dailyTextures = try c.decode([String].self, forKey: .dailyTextures)
         dailyPattern = try c.decodeIfPresent(String.self, forKey: .dailyPattern)
         generatedAt = try c.decode(Date.self, forKey: .generatedAt)
+        dailyFitEngineId = try c.decodeIfPresent(String.self, forKey: .dailyFitEngineId)
 
         if let newProfile = try? c.decode(StyleEssenceProfile.self, forKey: .essenceProfile) {
             essenceProfile = newProfile
@@ -234,6 +244,7 @@ struct DailyFitPayload: Codable {
         try c.encode(dailyTextures, forKey: .dailyTextures)
         try c.encodeIfPresent(dailyPattern, forKey: .dailyPattern)
         try c.encode(generatedAt, forKey: .generatedAt)
+        try c.encodeIfPresent(dailyFitEngineId, forKey: .dailyFitEngineId)
     }
 
     init(tarotCard: TarotCard, styleEditVariant: StyleEditVariant,
@@ -244,7 +255,8 @@ struct DailyFitPayload: Codable {
          vibeBreakdown: VibeBreakdown, axes: DerivedAxes,
          dominantTransits: [DailyTransitSummary],
          lunarContext: LunarContext, dailyTextures: [String],
-         dailyPattern: String?, generatedAt: Date) {
+         dailyPattern: String?, generatedAt: Date,
+         dailyFitEngineId: String? = nil) {
         self.tarotCard = tarotCard
         self.styleEditVariant = styleEditVariant
         self.dailyPalette = dailyPalette
@@ -260,6 +272,29 @@ struct DailyFitPayload: Codable {
         self.dailyTextures = dailyTextures
         self.dailyPattern = dailyPattern
         self.generatedAt = generatedAt
+        self.dailyFitEngineId = dailyFitEngineId
+    }
+
+    /// Copy with engine id stamped at freeze time (generation paths omit this field).
+    func withDailyFitEngineId(_ engineId: String) -> DailyFitPayload {
+        DailyFitPayload(
+            tarotCard: tarotCard,
+            styleEditVariant: styleEditVariant,
+            dailyPalette: dailyPalette,
+            vibrancy: vibrancy,
+            contrast: contrast,
+            metalTone: metalTone,
+            essenceProfile: essenceProfile,
+            silhouetteProfile: silhouetteProfile,
+            vibeBreakdown: vibeBreakdown,
+            axes: axes,
+            dominantTransits: dominantTransits,
+            lunarContext: lunarContext,
+            dailyTextures: dailyTextures,
+            dailyPattern: dailyPattern,
+            generatedAt: generatedAt,
+            dailyFitEngineId: engineId
+        )
     }
 }
 

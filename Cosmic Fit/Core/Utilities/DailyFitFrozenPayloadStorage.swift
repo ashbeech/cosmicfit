@@ -35,9 +35,17 @@ final class DailyFitFrozenPayloadStorage {
 
     static let shared = DailyFitFrozenPayloadStorage()
 
-    private init() {}
+    private let rootDirectoryURL: URL?
+
+    init(rootDirectoryURL: URL? = nil) {
+        self.rootDirectoryURL = rootDirectoryURL
+    }
 
     private var directoryURL: URL {
+        if let rootDirectoryURL {
+            try? FileManager.default.createDirectory(at: rootDirectoryURL, withIntermediateDirectories: true)
+            return rootDirectoryURL
+        }
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let dir = docs.appendingPathComponent("DailyFitFrozen", isDirectory: true)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
@@ -48,23 +56,39 @@ final class DailyFitFrozenPayloadStorage {
         profileKey.replacingOccurrences(of: "/", with: "_")
     }
 
-    private func fileURL(date: Date, profileKey: String) -> URL {
+    private func calendarDayString(from date: Date) -> String {
         let fmt = DateFormatter()
         fmt.locale = Locale(identifier: "en_GB_POSIX")
         fmt.timeZone = TimeZone.current
         fmt.dateFormat = "yyyy-MM-dd"
-        let day = fmt.string(from: date)
+        return fmt.string(from: date)
+    }
+
+    private func legacyFileURL(date: Date, profileKey: String) -> URL {
+        let day = calendarDayString(from: date)
         return directoryURL.appendingPathComponent("\(sanitizedProfileKey(profileKey))_\(day).json")
+    }
+
+    private func namespacedFileURL(date: Date, profileKey: String, engineId: String) -> URL {
+        let day = calendarDayString(from: date)
+        return directoryURL.appendingPathComponent(
+            "\(sanitizedProfileKey(profileKey))_\(engineId)_\(day).json"
+        )
     }
 
     @discardableResult
     func save(payload: DailyFitPayload, date: Date, profileKey: String) -> Bool {
+        let engineId = DailyFitEngineConfig.effectiveEngineId
+        let stamped = payload.withDailyFitEngineId(engineId)
         do {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .iso8601
             encoder.outputFormatting = []
-            let data = try encoder.encode(payload)
-            try data.write(to: fileURL(date: date, profileKey: profileKey), options: .atomic)
+            let data = try encoder.encode(stamped)
+            try data.write(
+                to: namespacedFileURL(date: date, profileKey: profileKey, engineId: engineId),
+                options: .atomic
+            )
             return true
         } catch {
             print("⚠️ Daily Fit frozen save failed: \(error.localizedDescription)")
@@ -73,17 +97,24 @@ final class DailyFitFrozenPayloadStorage {
     }
 
     func load(date: Date, profileKey: String) -> DailyFitPayload? {
-        let url = fileURL(date: date, profileKey: profileKey)
-        guard FileManager.default.fileExists(atPath: url.path) else { return nil }
-        do {
-            let data = try Data(contentsOf: url)
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            return try decoder.decode(DailyFitPayload.self, from: data)
-        } catch {
-            print("⚠️ Daily Fit frozen load failed: \(error.localizedDescription)")
-            return nil
+        let effectiveId = DailyFitEngineConfig.effectiveEngineId
+        purgeStaleArtifacts(date: date, profileKey: profileKey, effectiveEngineId: effectiveId)
+
+        let namespacedURL = namespacedFileURL(date: date, profileKey: profileKey, engineId: effectiveId)
+        if FileManager.default.fileExists(atPath: namespacedURL.path),
+           let payload = decodePayload(from: namespacedURL),
+           payload.resolvedDailyFitEngineId == effectiveId {
+            return payload
         }
+
+        let legacyURL = legacyFileURL(date: date, profileKey: profileKey)
+        if FileManager.default.fileExists(atPath: legacyURL.path),
+           let payload = decodePayload(from: legacyURL),
+           payload.resolvedDailyFitEngineId == effectiveId {
+            return payload
+        }
+
+        return nil
     }
 
     /// Removes every frozen payload (e.g. dev refresh or Style Guide data wipe).
@@ -93,6 +124,101 @@ final class DailyFitFrozenPayloadStorage {
         ) else { return }
         for url in urls where url.pathExtension == "json" {
             try? FileManager.default.removeItem(at: url)
+        }
+    }
+
+    // MARK: - Engine mismatch invalidation (P2)
+
+    /// Clears reveal flags and deletes frozen files when stored engine ≠ effective engine.
+    /// Invoked from `load` so launch-time tab bar paths invalidate without extra tab bar logic.
+    private func purgeStaleArtifacts(date: Date, profileKey: String, effectiveEngineId: String) {
+        let day = calendarDayString(from: date)
+        let profilePrefix = sanitizedProfileKey(profileKey)
+        var didPurge = false
+
+        let legacyURL = legacyFileURL(date: date, profileKey: profileKey)
+        if FileManager.default.fileExists(atPath: legacyURL.path) {
+            let storedId = decodePayload(from: legacyURL)?.resolvedDailyFitEngineId
+                ?? DailyFitEngineRegistry.productionId
+            if storedId != effectiveEngineId {
+                try? FileManager.default.removeItem(at: legacyURL)
+                didPurge = true
+            }
+        }
+
+        if let urls = try? FileManager.default.contentsOfDirectory(
+            at: directoryURL, includingPropertiesForKeys: nil
+        ) {
+            for url in urls where url.pathExtension == "json" {
+                let name = url.lastPathComponent
+                guard name.hasPrefix("\(profilePrefix)_"), name.contains("_\(day).json") else { continue }
+                if let fileEngineId = engineIdFromNamespacedFilename(name),
+                   fileEngineId != effectiveEngineId {
+                    try? FileManager.default.removeItem(at: url)
+                    didPurge = true
+                }
+            }
+        }
+
+        let revealKey = DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date)
+        if UserDefaults.standard.bool(forKey: revealKey),
+           !hasValidFrozenPayload(date: date, profileKey: profileKey, effectiveEngineId: effectiveEngineId) {
+            UserDefaults.standard.removeObject(forKey: revealKey)
+            didPurge = true
+        }
+
+        if didPurge {
+            #if DEBUG
+            print("[DailyFitFrozenPayloadStorage] Purged stale freeze for \(profilePrefix) on \(day) (effective: \(effectiveEngineId))")
+            #endif
+        }
+    }
+
+    private func hasValidFrozenPayload(date: Date, profileKey: String, effectiveEngineId: String) -> Bool {
+        let namespacedURL = namespacedFileURL(date: date, profileKey: profileKey, engineId: effectiveEngineId)
+        if FileManager.default.fileExists(atPath: namespacedURL.path),
+           let payload = decodePayload(from: namespacedURL),
+           payload.resolvedDailyFitEngineId == effectiveEngineId {
+            return true
+        }
+
+        let legacyURL = legacyFileURL(date: date, profileKey: profileKey)
+        if FileManager.default.fileExists(atPath: legacyURL.path),
+           let payload = decodePayload(from: legacyURL),
+           payload.resolvedDailyFitEngineId == effectiveEngineId {
+            return true
+        }
+
+        return false
+    }
+
+    private func engineIdFromNamespacedFilename(_ filename: String) -> String? {
+        guard filename.hasSuffix(".json") else { return nil }
+        let stem = String(filename.dropLast(5))
+        guard stem.count > 11 else { return nil }
+        let dateSuffix = String(stem.suffix(10))
+        guard dateSuffix.range(of: #"^\d{4}-\d{2}-\d{2}$"#, options: .regularExpression) != nil else {
+            return nil
+        }
+        let withoutDate = String(stem.dropLast(11))
+        for descriptor in DailyFitEngineRegistry.allDescriptors {
+            let suffix = "_\(descriptor.id)"
+            if withoutDate.hasSuffix(suffix) {
+                return descriptor.id
+            }
+        }
+        return nil
+    }
+
+    private func decodePayload(from url: URL) -> DailyFitPayload? {
+        do {
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            return try decoder.decode(DailyFitPayload.self, from: data)
+        } catch {
+            print("⚠️ Daily Fit frozen load failed: \(error.localizedDescription)")
+            return nil
         }
     }
 }

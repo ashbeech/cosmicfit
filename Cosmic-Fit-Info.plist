@@ -29,6 +29,8 @@
 	<string>$(SUPABASE_URL)</string>
 	<key>SUPABASE_PUBLISHABLE_KEY</key>
 	<string>$(SUPABASE_PUBLISHABLE_KEY)</string>
+	<key>DAILY_FIT_ENGINE_ID</key>
+	<string>$(DAILY_FIT_ENGINE_ID)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>PTSerif-Regular.ttf</string>

@@ -14,12 +14,84 @@ import {
 const ZODIAC_SIGNS = ['','Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
 const ZODIAC_GLYPHS = ['','♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
 
-let state = { data: null, compareCache: {}, compareDayCount: 2, presets: [], lastBirthFingerprint: null };
+let state = {
+  data: null,
+  compareCache: {},
+  compareDayCount: 2,
+  presets: [],
+  dailyFitEngines: [],
+  serverDefaultEngineId: 'production',
+  lastBirthFingerprint: null
+};
 
 const COMPARE_MIN_DAYS = 2;
 const COMPARE_MAX_DAYS = 14;
 let persistTimer = null;
 let restoringSession = false;
+
+function currentDailyFitEngineId() {
+  return document.getElementById('engine-select')?.value || state.serverDefaultEngineId || 'production';
+}
+
+function compareCacheKey(dateISO, engineId = currentDailyFitEngineId()) {
+  return `${engineId}:${dateISO}`;
+}
+
+function compareEngineAId() {
+  return document.getElementById('compare-engine-a')?.value || 'production';
+}
+
+function compareEngineBId() {
+  return document.getElementById('compare-engine-b')?.value || 'legacy_baseline';
+}
+
+function setSelectValueIfKnown(selectId, value) {
+  const sel = document.getElementById(selectId);
+  if (!sel || !value) return;
+  if ([...sel.options].some(o => o.value === value)) {
+    sel.value = value;
+  }
+}
+
+function populateCompareEngineSelects() {
+  for (const id of ['compare-engine-a', 'compare-engine-b']) {
+    const sel = document.getElementById(id);
+    if (!sel) continue;
+    const prev = sel.value;
+    sel.innerHTML = '';
+    for (const engine of state.dailyFitEngines) {
+      const opt = document.createElement('option');
+      opt.value = engine.id;
+      opt.textContent = engine.displayName;
+      opt.title = engine.summary || '';
+      sel.appendChild(opt);
+    }
+    if (prev && [...sel.options].some(o => o.value === prev)) {
+      sel.value = prev;
+    }
+  }
+  setSelectValueIfKnown('compare-engine-a', 'production');
+  setSelectValueIfKnown('compare-engine-b', 'legacy_baseline');
+}
+
+function reconcileCompareCacheWithEngine(engineId) {
+  const prefix = `${engineId}:`;
+  const keys = Object.keys(state.compareCache);
+  if (keys.some(k => !k.startsWith(prefix))) {
+    clearCompareCache();
+  }
+}
+
+function syncEngineChip() {
+  const sel = document.getElementById('engine-select');
+  const chip = document.getElementById('engine-chip');
+  if (!sel || !chip) return;
+  const engineId = currentDailyFitEngineId();
+  const meta = state.dailyFitEngines.find(e => e.id === engineId);
+  chip.textContent = engineId;
+  chip.classList.toggle('experimental', !!(meta?.isExperimental));
+  chip.title = meta?.summary || 'Daily Fit preset (not Style Guide engine version)';
+}
 
 // UK calendar dates (dd/mm/yyyy) — API still uses ISO yyyy-mm-dd
 function formatDateUK(isoDate) {
@@ -107,6 +179,7 @@ function readFormInputs() {
   const lat = parseFloat(latEl.value);
   const lon = parseFloat(document.getElementById('longitude').value);
   return {
+    dailyFitEngineId: currentDailyFitEngineId(),
     preset: document.getElementById('preset-select').value,
     birthDate: document.getElementById('birth-date').value,
     birthTime: document.getElementById('birth-time').value || '00:00',
@@ -119,6 +192,9 @@ function readFormInputs() {
     targetDate: document.getElementById('target-date').value,
     compareToggle: document.getElementById('compare-toggle').checked,
     compareDayCount: getCompareDayCount(),
+    compareEnginesToggle: document.getElementById('compare-engines-toggle').checked,
+    compareEngineAId: compareEngineAId(),
+    compareEngineBId: compareEngineBId(),
     activeProfileId: document.getElementById('saved-profile-select').value || ''
   };
 }
@@ -128,6 +204,13 @@ function applyFormInputs(inputs, { persist = true, skipProfileSelect = false } =
   restoringSession = true;
 
   document.getElementById('preset-select').value = inputs.preset || 'custom';
+  if (inputs.dailyFitEngineId) {
+    const engineSel = document.getElementById('engine-select');
+    if ([...engineSel.options].some(o => o.value === inputs.dailyFitEngineId)) {
+      engineSel.value = inputs.dailyFitEngineId;
+    }
+  }
+  syncEngineChip();
   document.getElementById('birth-date').value = inputs.birthDate || '';
   document.getElementById('birth-time').value = inputs.birthTime || '00:00';
   document.getElementById('unknown-time').checked = !!inputs.unknownTime;
@@ -135,6 +218,10 @@ function applyFormInputs(inputs, { persist = true, skipProfileSelect = false } =
   document.getElementById('compare-toggle').checked = !!inputs.compareToggle;
   state.compareDayCount = clampCompareDayCount(inputs.compareDayCount ?? COMPARE_MIN_DAYS);
   syncCompareDaysUI();
+  document.getElementById('compare-engines-toggle').checked = !!inputs.compareEnginesToggle;
+  setSelectValueIfKnown('compare-engine-a', inputs.compareEngineAId);
+  setSelectValueIfKnown('compare-engine-b', inputs.compareEngineBId);
+  syncCompareEnginesUI();
 
   if (inputs.locationLabel && Number.isFinite(inputs.latitude) && Number.isFinite(inputs.longitude)) {
     setResolvedLocation({
@@ -177,7 +264,25 @@ function schedulePersistSession() {
 async function restoreSession() {
   const session = readSession();
   if (session?.inputs) {
-    applyFormInputs(session.inputs, { persist: false, skipProfileSelect: true });
+    let inputs = { ...session.inputs };
+    const knownIds = new Set((state.dailyFitEngines || []).map(e => e.id));
+    const defaultId = state.serverDefaultEngineId || 'production';
+    if (inputs.dailyFitEngineId && !knownIds.has(inputs.dailyFitEngineId)) {
+      inputs.dailyFitEngineId = 'production';
+      document.getElementById('status-indicator').textContent =
+        'Unknown engine id in saved session; using production';
+      writeSession({ inputs, savedAt: session.savedAt ?? Date.now() });
+    } else if (!inputs.dailyFitEngineId) {
+      inputs.dailyFitEngineId = defaultId;
+    }
+    if (inputs.compareEngineAId && !knownIds.has(inputs.compareEngineAId)) {
+      inputs.compareEngineAId = 'production';
+    }
+    if (inputs.compareEngineBId && !knownIds.has(inputs.compareEngineBId)) {
+      inputs.compareEngineBId = 'legacy_baseline';
+    }
+    applyFormInputs(inputs, { persist: false, skipProfileSelect: true });
+    reconcileCompareCacheWithEngine(inputs.dailyFitEngineId || 'production');
     const sel = document.getElementById('saved-profile-select');
     const profileId = session.inputs.activeProfileId || '';
     if (profileId && [...sel.options].some(o => o.value === profileId)) {
@@ -348,9 +453,12 @@ async function deleteSelectedProfile() {
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadPresets();
+  await loadDailyFitEngines();
+  populateCompareEngineSelects();
   await refreshSavedProfilesSelect();
   wireEvents();
   syncCompareDaysUI();
+  syncCompareEnginesUI();
   await restoreSession();
 });
 
@@ -361,6 +469,36 @@ function setTodayUTC() {
   const dd = String(now.getUTCDate()).padStart(2, '0');
   document.getElementById('target-date').value = formatDateUK(`${yyyy}-${mm}-${dd}`);
   schedulePersistSession();
+}
+
+async function loadDailyFitEngines() {
+  try {
+    const [healthRes, enginesRes] = await Promise.all([
+      fetch('/api/health'),
+      fetch('/api/daily-fit-engines')
+    ]);
+    if (healthRes.ok) {
+      const health = await healthRes.json();
+      state.serverDefaultEngineId = health.dailyFitEngineDefault || 'production';
+    }
+    state.dailyFitEngines = enginesRes.ok ? await enginesRes.json() : [];
+    const sel = document.getElementById('engine-select');
+    sel.innerHTML = '';
+    for (const engine of state.dailyFitEngines) {
+      const opt = document.createElement('option');
+      opt.value = engine.id;
+      opt.textContent = engine.displayName;
+      opt.title = engine.summary || '';
+      sel.appendChild(opt);
+    }
+    if (!sel.value) {
+      sel.value = state.serverDefaultEngineId || 'production';
+    }
+    syncEngineChip();
+    populateCompareEngineSelects();
+  } catch (e) {
+    console.warn('Failed to load daily fit engines', e);
+  }
 }
 
 async function loadPresets() {
@@ -379,6 +517,7 @@ async function loadPresets() {
 
 function wireEvents() {
   document.getElementById('submit-btn').addEventListener('click', () => doSubmit(false));
+  document.getElementById('engine-select').addEventListener('change', () => onEngineChange());
   document.getElementById('today-btn').addEventListener('click', () => { setTodayUTC(); if (state.data) doSubmit(true); });
   document.getElementById('preset-select').addEventListener('change', () => { applyPreset(); schedulePersistSession(); });
   document.getElementById('saved-profile-select').addEventListener('change', onSavedProfileChange);
@@ -387,6 +526,9 @@ function wireEvents() {
   document.getElementById('compare-toggle').addEventListener('change', () => { onCompareToggle(); schedulePersistSession(); });
   document.getElementById('compare-days-down').addEventListener('click', () => { onCompareDayCountChange(-1); });
   document.getElementById('compare-days-up').addEventListener('click', () => { onCompareDayCountChange(1); });
+  document.getElementById('compare-engines-toggle').addEventListener('change', () => { onCompareEnginesToggle(); schedulePersistSession(); });
+  document.getElementById('compare-engine-a').addEventListener('change', () => { onCompareEnginePairChange(); schedulePersistSession(); });
+  document.getElementById('compare-engine-b').addEventListener('change', () => { onCompareEnginePairChange(); schedulePersistSession(); });
   document.getElementById('drawer-close').addEventListener('click', closeDrawer);
   document.getElementById('target-date').addEventListener('change', () => {
     schedulePersistSession();
@@ -492,6 +634,18 @@ function applyPreset() {
   clearSavedProfileSelection();
 }
 
+async function onEngineChange() {
+  syncEngineChip();
+  schedulePersistSession();
+  const hadData = !!state.data;
+  clearCompareCache();
+  state.data = null;
+  updateExportButtons();
+  if (hadData) {
+    await doSubmit(false);
+  }
+}
+
 // ── Submit ──
 
 async function doSubmit(dateOnly = false) {
@@ -548,7 +702,9 @@ async function doSubmit(dateOnly = false) {
     schedulePersistSession();
     await syncSavedProfileNameAfterSubmit();
 
-    if (document.getElementById('compare-toggle').checked) {
+    if (document.getElementById('compare-engines-toggle').checked) {
+      await loadEngineCompare();
+    } else if (document.getElementById('compare-toggle').checked) {
       await loadCompareRange();
     }
   } catch (e) {
@@ -594,7 +750,8 @@ function buildRequest({ composeBlueprint = true, resetTarotHistory = false, prof
       composeBlueprint,
       includeProgressed: true,
       resetTarotHistory,
-      profileId
+      profileId,
+      dailyFitEngineId: currentDailyFitEngineId()
     }
   };
 }
@@ -623,6 +780,12 @@ function syncCompareDaysUI() {
   if (up) up.disabled = count >= COMPARE_MAX_DAYS;
 }
 
+function syncCompareEnginesUI() {
+  const toggle = document.getElementById('compare-engines-toggle');
+  const controls = document.getElementById('compare-engines-controls');
+  if (controls) controls.classList.toggle('hidden', !toggle?.checked);
+}
+
 function clearCompareCache() {
   state.compareCache = {};
 }
@@ -649,16 +812,36 @@ function getCompareDateRange() {
 }
 
 function compareActive() {
+  if (document.getElementById('compare-engines-toggle')?.checked) return false;
   if (!document.getElementById('compare-toggle').checked || !state.data) return false;
   const range = getCompareDateRange();
   if (range.length < 2) return false;
-  return range.slice(1).every(iso => !!state.compareCache[iso]);
+  return range.slice(1).every(iso => !!state.compareCache[compareCacheKey(iso)]);
+}
+
+function engineCompareActive() {
+  if (!document.getElementById('compare-engines-toggle')?.checked || !state.data) return false;
+  const target = targetDateISO();
+  if (!target) return false;
+  const engineA = compareEngineAId();
+  const engineB = compareEngineBId();
+  if (!engineA || !engineB || engineA === engineB) return false;
+  return !!inspectDataForEngine(engineA, target) && !!inspectDataForEngine(engineB, target);
+}
+
+function inspectDataForEngine(engineId, dateISO = targetDateISO()) {
+  if (!dateISO) return null;
+  if (engineId === currentDailyFitEngineId() && state.data) {
+    const metaEngine = state.data.meta?.dailyFitEngineId;
+    if (!metaEngine || metaEngine === engineId) return state.data;
+  }
+  return state.compareCache[compareCacheKey(dateISO, engineId)] || null;
 }
 
 function inspectDataForCompareDate(iso) {
   const target = targetDateISO();
   if (iso === target) return state.data;
-  return state.compareCache[iso] || null;
+  return state.compareCache[compareCacheKey(iso)] || null;
 }
 
 function compareCarouselHtml(paneHtmlFns) {
@@ -667,11 +850,12 @@ function compareCarouselHtml(paneHtmlFns) {
   paneHtmlFns.forEach((paneHtmlFn, i) => {
     const iso = dates[i];
     const label = formatDateUK(iso);
+    const engineId = currentDailyFitEngineId();
     const isTarget = i === 0;
     const paneCls = isTarget ? 'compare-pane compare-pane-target' : 'compare-pane compare-pane-forward';
     const prefix = isTarget ? 'Target · ' : '';
     html += `<div class="${paneCls}">
-      <div class="compare-pane-label">${prefix}${esc(label)} UTC</div>
+      <div class="compare-pane-label">${prefix}${esc(label)} UTC · ${esc(engineId)}</div>
       <div class="compare-pane-content">${paneHtmlFn()}</div>
     </div>`;
   });
@@ -679,13 +863,30 @@ function compareCarouselHtml(paneHtmlFns) {
   return html;
 }
 
-function mountCompareSection(bodyId, { buildPanes, staticNote = null }) {
+function compareEnginesSplitHtml(panes) {
+  const target = targetDateISO();
+  const label = formatDateUK(target);
+  let html = '<div class="compare-split compare-split-engines" role="region" aria-label="Engine compare">';
+  for (const pane of panes) {
+    html += `<div class="compare-pane compare-pane-engine">
+      <div class="compare-pane-label">${esc(label)} UTC · ${esc(pane.engineId)}</div>
+      <div class="compare-pane-content">${pane.html()}</div>
+    </div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+function mountCompareSection(bodyId, { buildPanes, buildEngineComparePanes = null, staticNote = null }) {
   const el = document.getElementById(bodyId);
   const panes = buildPanes();
   const targetPaneHtml = panes[0]?.html ?? (() => '');
 
-  if (staticNote && compareActive()) {
+  if (staticNote && (compareActive() || engineCompareActive())) {
     el.innerHTML = `<p class="compare-static-note">${staticNote}</p>${targetPaneHtml()}`;
+  } else if (engineCompareActive() && buildEngineComparePanes) {
+    const enginePanes = buildEngineComparePanes();
+    el.innerHTML = compareEnginesSplitHtml(enginePanes);
   } else if (compareActive() && panes.length > 1) {
     el.innerHTML = compareCarouselHtml(panes.map(p => p.html));
     const carousel = el.querySelector('.compare-split');
@@ -703,14 +904,20 @@ function updateCompareStatus() {
   const first = formatDateUK(dates[0]);
   const last = formatDateUK(dates[dates.length - 1]);
   const count = dates.length;
+  const engineId = currentDailyFitEngineId();
   document.getElementById('status-indicator').textContent = count === 2
-    ? `Compare: ${first} vs ${last} (UTC)`
-    : `Compare: ${first} → ${last} (${count} days, UTC)`;
+    ? `Compare: ${first} vs ${last} (UTC) · ${engineId}`
+    : `Compare: ${first} → ${last} (${count} days, UTC) · ${engineId}`;
 }
 
 async function fetchInspectForDate(dateISO) {
+  return fetchInspectForEngine(dateISO, currentDailyFitEngineId());
+}
+
+async function fetchInspectForEngine(dateISO, engineId) {
   const body = buildRequest({ composeBlueprint: false });
   body.targetDate = dateISO;
+  body.options.dailyFitEngineId = engineId;
   const res = await fetch('/api/inspect', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -723,9 +930,22 @@ async function fetchInspectForDate(dateISO) {
   return res.json();
 }
 
+function disableCompareEnginesMode() {
+  const toggle = document.getElementById('compare-engines-toggle');
+  if (toggle) toggle.checked = false;
+  syncCompareEnginesUI();
+}
+
+function disableCompareDaysMode() {
+  const toggle = document.getElementById('compare-toggle');
+  if (toggle) toggle.checked = false;
+  syncCompareDaysUI();
+}
+
 async function onCompareToggle() {
   syncCompareDaysUI();
   if (document.getElementById('compare-toggle').checked) {
+    disableCompareEnginesMode();
     if (!state.data) {
       showError('Submit first, then enable compare.');
       document.getElementById('compare-toggle').checked = false;
@@ -739,6 +959,37 @@ async function onCompareToggle() {
     hideError();
     if (state.data) renderAllSections(state.data);
   }
+}
+
+async function onCompareEnginesToggle() {
+  syncCompareEnginesUI();
+  if (document.getElementById('compare-engines-toggle').checked) {
+    disableCompareDaysMode();
+    if (!state.data) {
+      showError('Submit first, then enable engine compare.');
+      document.getElementById('compare-engines-toggle').checked = false;
+      syncCompareEnginesUI();
+      return;
+    }
+    hideError();
+    await loadEngineCompare();
+  } else {
+    clearCompareCache();
+    hideError();
+    if (state.data) renderAllSections(state.data);
+  }
+}
+
+async function onCompareEnginePairChange() {
+  if (!document.getElementById('compare-engines-toggle').checked || !state.data) return;
+  const engineA = compareEngineAId();
+  const engineB = compareEngineBId();
+  if (engineA === engineB) {
+    showError('Pick two different engines to compare.');
+    return;
+  }
+  hideError();
+  await loadEngineCompare();
 }
 
 async function onCompareDayCountChange(delta) {
@@ -763,7 +1014,7 @@ async function loadCompareRange() {
   if (!state.data) return false;
 
   const dates = getCompareDateRange();
-  const toFetch = dates.slice(1).filter(iso => !state.compareCache[iso]);
+  const toFetch = dates.slice(1).filter(iso => !state.compareCache[compareCacheKey(iso)]);
 
   if (toFetch.length === 0) {
     if (state.data) {
@@ -788,7 +1039,7 @@ async function loadCompareRange() {
     // (matches opening the app once per UTC day).
     for (const iso of toFetch) {
       const data = await fetchInspectForDate(iso);
-      state.compareCache[iso] = data;
+      state.compareCache[compareCacheKey(iso)] = data;
     }
     if (state.data) {
       renderAllSections(state.data);
@@ -805,6 +1056,78 @@ async function loadCompareRange() {
   } finally {
     showLoading(false);
   }
+}
+
+async function loadEngineCompare() {
+  const target = targetDateISO();
+  if (!target) {
+    showError('Set a Daily Fit target date before comparing engines.');
+    document.getElementById('compare-engines-toggle').checked = false;
+    syncCompareEnginesUI();
+    return false;
+  }
+  if (!state.data) return false;
+
+  const engineA = compareEngineAId();
+  const engineB = compareEngineBId();
+  if (engineA === engineB) {
+    showError('Pick two different engines to compare.');
+    document.getElementById('compare-engines-toggle').checked = false;
+    syncCompareEnginesUI();
+    return false;
+  }
+
+  const toFetch = [];
+  if (!inspectDataForEngine(engineA, target)) toFetch.push({ iso: target, engineId: engineA });
+  if (!inspectDataForEngine(engineB, target)) toFetch.push({ iso: target, engineId: engineB });
+
+  if (toFetch.length === 0) {
+    if (state.data) {
+      renderAllSections(state.data);
+      updateEngineCompareStatus();
+    }
+    return true;
+  }
+
+  try {
+    await resolveBirthLocation();
+  } catch (e) {
+    showError(`Engine compare failed: ${e.message}`);
+    document.getElementById('compare-engines-toggle').checked = false;
+    syncCompareEnginesUI();
+    return false;
+  }
+
+  showLoading(true);
+  try {
+    for (const { iso, engineId } of toFetch) {
+      const data = await fetchInspectForEngine(iso, engineId);
+      state.compareCache[compareCacheKey(iso, engineId)] = data;
+    }
+    if (state.data) {
+      renderAllSections(state.data);
+      updateEngineCompareStatus();
+    }
+    return true;
+  } catch (e) {
+    clearCompareCache();
+    showError(`Engine compare failed: ${e.message}`);
+    document.getElementById('compare-engines-toggle').checked = false;
+    syncCompareEnginesUI();
+    if (state.data) renderAllSections(state.data);
+    return false;
+  } finally {
+    showLoading(false);
+  }
+}
+
+function updateEngineCompareStatus() {
+  if (!engineCompareActive()) return;
+  const target = formatDateUK(targetDateISO());
+  const engineA = compareEngineAId();
+  const engineB = compareEngineBId();
+  document.getElementById('status-indicator').textContent =
+    `Engine compare: ${target} UTC · ${engineA} vs ${engineB}`;
 }
 
 function postRenderSection(root) {
@@ -878,6 +1201,18 @@ function buildComparePanes(renderForData) {
     const data = inspectDataForCompareDate(iso);
     return { html: () => renderForData(data, isTarget) };
   });
+}
+
+function buildEngineComparePanes(renderForData) {
+  if (!engineCompareActive()) {
+    return [{ html: () => renderForData(state.data, true) }];
+  }
+  const engineA = compareEngineAId();
+  const engineB = compareEngineBId();
+  return [engineA, engineB].map((engineId, i) => ({
+    engineId,
+    html: () => renderForData(inspectDataForEngine(engineId), i === 0)
+  }));
 }
 
 function renderNatal(natal) {
@@ -1089,7 +1424,8 @@ function buildDailyFitHtml(df, allowDrill = true) {
 
 function renderDailyFit(df) {
   mountCompareSection('dailyfit-body', {
-    buildPanes: () => buildComparePanes((data, allowDrill) => buildDailyFitHtml(data?.dailyFit, allowDrill))
+    buildPanes: () => buildComparePanes((data, allowDrill) => buildDailyFitHtml(data?.dailyFit, allowDrill)),
+    buildEngineComparePanes: () => buildEngineComparePanes((data, allowDrill) => buildDailyFitHtml(data?.dailyFit, allowDrill))
   });
 }
 
@@ -1180,11 +1516,7 @@ function buildTraceHtml(diag) {
   });
 
   // Calibration
-  html += accordion('Calibration Snapshot', () => {
-    const cs = diag.calibrationSnapshot;
-    if (!cs) return 'N/A';
-    return '<strong>Source Weights:</strong>' + kv(cs.sourceWeights) + '<strong>Selection Weights:</strong>' + kv(cs.selectionWeights);
-  });
+  html += accordion('Calibration Snapshot', () => formatCalibrationSnapshotHtml(diag.calibrationSnapshot));
 
   // Full JSON
   html += accordion('Full Diagnostic JSON', () => `<pre class="json-block">${esc(JSON.stringify(diag, null, 2))}</pre>`);
@@ -1193,7 +1525,8 @@ function buildTraceHtml(diag) {
 
 function renderTrace(diag) {
   mountCompareSection('trace-body', {
-    buildPanes: () => buildComparePanes((data, _allowDrill) => buildTraceHtml(data?.dailyFit?.diagnostics))
+    buildPanes: () => buildComparePanes((data, _allowDrill) => buildTraceHtml(data?.dailyFit?.diagnostics)),
+    buildEngineComparePanes: () => buildEngineComparePanes((data, _allowDrill) => buildTraceHtml(data?.dailyFit?.diagnostics))
   });
 }
 
@@ -1214,7 +1547,8 @@ function buildVerdictsHtml(verdicts) {
 
 function renderVerdicts(verdicts) {
   mountCompareSection('verdict-body', {
-    buildPanes: () => buildComparePanes((data, _allowDrill) => buildVerdictsHtml(data?.verdicts))
+    buildPanes: () => buildComparePanes((data, _allowDrill) => buildVerdictsHtml(data?.verdicts)),
+    buildEngineComparePanes: () => buildEngineComparePanes((data, _allowDrill) => buildVerdictsHtml(data?.verdicts))
   });
 }
 
@@ -1434,6 +1768,8 @@ function markdownExportHeader(sectionLabel) {
     `- **Display name:** ${data.profile.displayName}`,
     `- **Profile hash:** ${meta.profileHash || '—'}`,
     `- **Engine version:** ${meta.engineVersion || '—'}`,
+    `- **Daily Fit engine:** ${meta.dailyFitEngineDisplayName || meta.dailyFitEngineId || '—'} (\`${meta.dailyFitEngineId || '—'}\`)`,
+    `- **Daily Fit fingerprint:** ${meta.dailyFitEngineFingerprint || '—'}`,
     ''
   ].join('\n');
 }
@@ -1443,6 +1779,7 @@ function markdownInputsBlock() {
   const targetUK = document.getElementById('target-date').value;
   const targetISO = parseDateUK(targetUK);
   const rows = [
+    ['Daily Fit engine', currentDailyFitEngineId()],
     ['Preset', document.getElementById('preset-select').value],
     ['Birth date', document.getElementById('birth-date').value],
     ['Birth time', document.getElementById('birth-time').value || '00:00'],
@@ -1676,10 +2013,7 @@ function markdownTrace(diag) {
   }
 
   if (diag.calibrationSnapshot) {
-    const cs = diag.calibrationSnapshot;
-    md += '### Calibration Snapshot\n\n';
-    if (cs.sourceWeights) md += '**Source weights**\n\n' + mdObjectTable(cs.sourceWeights);
-    if (cs.selectionWeights) md += '**Selection weights**\n\n' + mdObjectTable(cs.selectionWeights);
+    md += formatCalibrationSnapshotMarkdown(diag.calibrationSnapshot);
   }
 
   md += '### Full Diagnostic JSON\n\n' + mdJsonBlock(diag);
@@ -1741,6 +2075,35 @@ function accordion(title, contentFn) {
     <div class="accordion-header">${title} <span class="toggle-icon">▶</span></div>
     <div class="accordion-body">${contentFn()}</div>
   </div>`;
+}
+
+function formatCalibrationSnapshotHtml(cs) {
+  if (!cs) return 'N/A';
+  let html = '';
+  if (cs.dailyFitEngineId) {
+    html += `<div style="margin-bottom:8px"><strong>Engine:</strong> ${esc(cs.dailyFitEngineId)}</div>`;
+  }
+  if (cs.fingerprint) {
+    html += `<div style="margin-bottom:8px"><strong>Fingerprint:</strong> <code>${esc(cs.fingerprint)}</code></div>`;
+  }
+  if (cs.sourceWeights) html += '<strong>Source Weights:</strong>' + kv(cs.sourceWeights);
+  if (cs.selectionWeights) html += '<strong>Selection Weights:</strong>' + kv(cs.selectionWeights);
+  if (cs.axisTuning) html += '<strong>Axis Tuning:</strong>' + kv(cs.axisTuning);
+  if (cs.stage2Sensitivity) html += '<strong>Stage 2 Sensitivity:</strong>' + kv(cs.stage2Sensitivity);
+  return html || 'N/A';
+}
+
+function formatCalibrationSnapshotMarkdown(cs) {
+  if (!cs) return '';
+  let md = '### Calibration Snapshot\n\n';
+  if (cs.dailyFitEngineId) md += `- **Engine:** ${cs.dailyFitEngineId}\n`;
+  if (cs.fingerprint) md += `- **Fingerprint:** \`${cs.fingerprint}\`\n`;
+  if (cs.dailyFitEngineId || cs.fingerprint) md += '\n';
+  if (cs.sourceWeights) md += '**Source weights**\n\n' + mdObjectTable(cs.sourceWeights);
+  if (cs.selectionWeights) md += '**Selection weights**\n\n' + mdObjectTable(cs.selectionWeights);
+  if (cs.axisTuning) md += '**Axis tuning**\n\n' + mdObjectTable(cs.axisTuning);
+  if (cs.stage2Sensitivity) md += '**Stage 2 sensitivity**\n\n' + mdObjectTable(cs.stage2Sensitivity);
+  return md;
 }
 
 function kv(obj) {

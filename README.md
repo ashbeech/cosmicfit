@@ -89,6 +89,8 @@ Calibration diagnostics and golden text used by XCTest often live under **`docs/
 
 A **macOS-only** sibling Swift package under **`inspector/`** that runs the **same** interpretation engine as the iOS app (via symlinks into `Cosmic Fit/`), served by a small **Hummingbird** HTTP server with a **vanilla HTML/CSS/JS** UI. Use it to inspect Style Guide (`CosmicBlueprint`) and Daily Fit (`DailyFitPayload` + `DailyFitDiagnosticReport`) for arbitrary birth inputs or preset charts, change the target calendar day, compare adjacent days, skim provenance/trace accordions, and run lightweight verdict checks — without building or deploying the iOS app.
 
+The header **Engine** dropdown selects the active Daily Fit preset (`dailyFitEngineId`). The value is sent on every `POST /api/inspect` in `options.dailyFitEngineId` and persisted in browser session storage. Compare panes label each result with **date (UTC) · engine id**. See **§4.1.1** for why presets exist and how they differ from Style Guide versioning. When starting the server, you can optionally set **`DAILY_FIT_ENGINE_ID`** in the environment (e.g. `DAILY_FIT_ENGINE_ID=legacy_baseline swift run cosmicfit-inspector`) as the default for requests that omit an explicit engine id.
+
 **Start the server** (from repo root; first run may take a few minutes to resolve SPM deps):
 
 ```bash
@@ -121,6 +123,7 @@ These opt in to **writing** fixture files under **`docs/fixtures/`** or enabling
 | **`V4_REFERENCE_FIXTURE_PATH`** | `V4ReferenceAudit_Tests` | Overrides path to **`v4_markdown_reference.json`** when not beside **`docs/fixtures/`**. |
 | **`CALIBRATION_CI_GATE=1`** | `Cosmic FitTests` (distribution, variation, coherence suites) | **Tier 2:** enables stricter calibration assertions (threshold-style gates). Default `xcodebuild test` runs Tier 1 (diagnostic / softer guards). See **`docs/calibration_plan_closure_summary.md`**. |
 | **`CALIBRATION_REPORT_DIR`** | Any test using **`CalibrationReportHelper.writeReport`** | Absolute path, or path relative to repo root, for calibration **`*.txt`** outputs. If unset, reports go under **`docs/fixtures/`** with unique filenames (PID + UUID). Use in CI to avoid writers clobbering each other. |
+| **`DAILY_FIT_ENGINE_ID`** | Optional local / dedicated jobs only | Selects the iOS app build default or inspector server default preset (`production`, `legacy_baseline`, etc.). **Do not set in default CI** — tests pass explicit `calibration:` unless testing `DailyFitEngineConfig`. See **§4.1.1**. |
 
 For command-line examples and parallel-test caveats, see **`docs/archive/test_handoff.md`** (stabilizing **`xcodebuild test`**).
 
@@ -169,6 +172,7 @@ Cosmic Fit/
 │   │   └── JulianDateCalculator.swift # Calendar ↔ Julian Day conversions
 │   ├── Config/
 │   │   ├── DebugConfiguration.swift   # Debug flag toggle and conditional logging
+│   │   ├── DailyFitEngineConfig.swift # Resolves active Daily Fit preset from plist + DEBUG override (see §4.1.1)
 │   │   └── SupabaseConfig.swift       # Reads Supabase URL/key from Info.plist
 │   ├── Services/
 │   │   ├── CosmicFitAuthService.swift # Supabase OTP auth, session management, auth state notifications
@@ -187,6 +191,7 @@ Cosmic Fit/
 │       └── DebugLogger.swift          # Structured logging with subsystem tags
 ├── InterpretationEngine/
 │   ├── DailyFitTypes.swift            # Foundation types: DailyEnergySnapshot, DailyFitPayload, StyleEssenceProfile, SilhouetteProfile, DailyFitCalibration, etc.
+│   ├── DailyFitEngineRegistry.swift   # Canonical Daily Fit engine preset list + calibration fingerprints (see §4.1.1)
 │   ├── DailyEnergyEngine.swift        # Stage 1: natal+transits+lunar+progressed → VibeBreakdown (21-point budget) + DerivedAxes
 │   ├── BlueprintLensEngine.swift      # Stage 2 Daily Fit: snapshot + CosmicBlueprint → DailyFitPayload (tarot, palette, textures, etc.)
 │   ├── DailyFitDiagnostics.swift      # Diagnostic report generator (captures full pipeline trace)
@@ -349,6 +354,38 @@ Selects and derives everything the UI renders:
 | **Silhouette profile** (3 bipolar scales) | Style Guide keyword scan baseline (~75%) + axes modulation (~25%) |
 | **Textures** (2–3) | Style Guide textures scored by axis-keyword affinity |
 | **Pattern** (optional) | Gated: visibility ≥ 6.0 AND dominant energy is drama/playful/edge |
+
+#### 4.1.1 Daily Fit engine presets (version selector)
+
+**Why:** Run multiple calibration presets (e.g. `production` vs `legacy_baseline`) for A/B tuning and regression without forking the repo or editing `DailyFitCalibration.default` until a preset is promoted.
+
+**What it is not:** Not Style Guide / `BlueprintComposer` `engineVersion` (see **§4.2**). Not user-facing in Release — App Store builds always run `production`.
+
+**Design (short):**
+
+- Single **`DailyFitEngineRegistry`** — canonical preset list + SHA-256 calibration fingerprints.
+- Same chart, transit, and lunar inputs; different **`DailyFitCalibration`** passed into `DailyEnergyEngine` / `BlueprintLensEngine`.
+- **Inspector:** per-request `options.dailyFitEngineId`; compare cache keyed by `dailyFitEngineId:dateISO`.
+- **App:** build-time `DAILY_FIT_ENGINE_ID` via xcconfig → Info.plist → `DailyFitEngineConfig`; DEBUG Profile engine picker (no rebuild); Daily Fit tab debug subtitle when non-production.
+- **Frozen payloads** and **tarot recency** state are namespaced per engine id.
+
+**Presets shipped in the registry:**
+
+| `dailyFitEngineId` | Purpose |
+|---|---|
+| `production` | Current shipped `.default` calibration |
+| `legacy_baseline` | Pre–Stage 2 source/selection weights (regression comparison) |
+| `stage1_experimental` | Stage 1 algorithm variant (`DailyFitEngineMode`); DEBUG/inspector only |
+
+**How to use — Inspector:** Header **Engine** dropdown; compare labels show date + engine id. Tarot recency is per engine — use `options.resetTarotHistory: true` when switching presets (inspector may auto-reset on engine change). See **`inspector/README.md`**.
+
+**How to use — iOS DEBUG:** `.env` documents the value → copy/sync to `Dev.xcconfig` as `DAILY_FIT_ENGINE_ID = production` → rebuild; or Profile engine picker without rebuild; non-production shows in the Daily Fit tab bar subtitle.
+
+**How to use — iOS Release:** Always `production`; non-production plist values are ignored.
+
+**CI / tests:** Do not set `DAILY_FIT_ENGINE_ID` in default CI. Unit tests pass explicit `calibration:` unless testing the config type directly.
+
+**Further reading:** [`docs/handoff/daily_fit_engine_selector_spec.md`](docs/handoff/daily_fit_engine_selector_spec.md), [`docs/handoff/daily_fit_stage2_calibration_handoff.md`](docs/handoff/daily_fit_stage2_calibration_handoff.md) (calibration tuning).
 
 ### 4.2 Style Guide pipeline (`CosmicBlueprint`)
 
@@ -562,16 +599,18 @@ Contains: `userInfo`, `styleCore`, `textures`, `palette`, `occasions`, `hardware
 |---|---|---|
 | `Cosmic Fit/Config/Dev.xcconfig` | Supabase URL + API key (dev) | Yes |
 | `Cosmic Fit/Config/Prod.xcconfig` | Supabase URL + API key (prod) | Yes |
-| `.env` | Python tooling env vars | Yes |
-| `Dev.xcconfig.example` | Template for dev config | No (committed) |
-| `.env.example` | Template for Python env | No (committed) |
+| `.env` | Python tooling env vars (includes `DAILY_FIT_ENGINE_ID` for documentation) | Yes |
+| `Dev.xcconfig.example` | Template for dev config (Supabase + `DAILY_FIT_ENGINE_ID`) | No (committed) |
+| `.env.example` | Template for Python env + Daily Fit engine preset | No (committed) |
+
+**Optional — Daily Fit engine id sync:** iOS reads `DAILY_FIT_ENGINE_ID` from xcconfig → Info.plist at build time (not from `.env` at runtime). After editing `DAILY_FIT_ENGINE_ID` in `.env`, run `./tools/sync_env_to_xcconfig.sh` to patch **only** that key in `Dev.xcconfig` / `Prod.xcconfig` (Supabase keys are untouched). Rebuild the app to apply. Not required for local dev — you can set the xcconfig line manually.
 
 ---
 
 ## 10. Build & Run
 
 1. Open `Cosmic Fit.xcworkspace` (not the `.xcodeproj`)
-2. Copy `Dev.xcconfig.example` → `Dev.xcconfig` and fill in Supabase credentials
+2. Copy `Dev.xcconfig.example` → `Dev.xcconfig` and fill in Supabase credentials. Keep `DAILY_FIT_ENGINE_ID = production` unless you are deliberately testing another preset (see **§4.1.1**). The same key is documented in `.env.example`.
 3. SPM dependencies resolve automatically on first open
 4. Build target: `Cosmic Fit` (iOS Simulator or device)
 5. Tests: `Cosmic FitTests` target — run via `Cmd+U`

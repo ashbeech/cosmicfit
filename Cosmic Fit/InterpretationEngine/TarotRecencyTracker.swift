@@ -53,12 +53,18 @@ class TarotRecencyTracker {
     ///   - cardName: Name of the selected Tarot card
     ///   - profileHash: User profile identifier
     ///   - date: Date of selection (defaults to today)
-    func storeCardSelection(_ cardName: String, profileHash: String, date: Date = Date()) {
-        let key = storageKey(profileHash: profileHash, date: date)
+    ///   - dailyFitEngineId: Daily Fit engine preset id (§9.1 namespacing)
+    func storeCardSelection(
+        _ cardName: String,
+        profileHash: String,
+        date: Date = Date(),
+        dailyFitEngineId: String = DailyFitEngineRegistry.productionId
+    ) {
+        let key = storageKey(profileHash: profileHash, date: date, dailyFitEngineId: dailyFitEngineId)
         userDefaults.set(cardName, forKey: key)
         
         // Update the list of dates for this profile
-        updateProfileDateList(profileHash: profileHash, date: date)
+        updateProfileDateList(profileHash: profileHash, date: date, dailyFitEngineId: dailyFitEngineId)
         
         // CRITICAL: Force synchronization to ensure persistence
         userDefaults.synchronize()
@@ -73,8 +79,16 @@ class TarotRecencyTracker {
     ///   - profileHash: User profile identifier
     ///   - referenceDate: Date to calculate from (defaults to today)
     /// - Returns: Set of card names within cooldown period
-    func getCooldownCards(profileHash: String, referenceDate: Date = Date()) -> Set<String> {
-        let recentSelections = getRecentSelections(profileHash: profileHash, referenceDate: referenceDate)
+    func getCooldownCards(
+        profileHash: String,
+        referenceDate: Date = Date(),
+        dailyFitEngineId: String = DailyFitEngineRegistry.productionId
+    ) -> Set<String> {
+        let recentSelections = getRecentSelections(
+            profileHash: profileHash,
+            referenceDate: referenceDate,
+            dailyFitEngineId: dailyFitEngineId
+        )
         
         let cooldownCards = Set(recentSelections
             .filter { $0.daysAgo <= Self.COOLDOWN_DAYS }
@@ -93,12 +107,16 @@ class TarotRecencyTracker {
     ///   - profileHash: User profile identifier
     ///   - referenceDate: Date to calculate recency from (defaults to today)
     /// - Returns: Array of (cardName, daysAgo) tuples for the last 7 days
-    func getRecentSelections(profileHash: String, referenceDate: Date = Date()) -> [(cardName: String, daysAgo: Int)] {
+    func getRecentSelections(
+        profileHash: String,
+        referenceDate: Date = Date(),
+        dailyFitEngineId: String = DailyFitEngineRegistry.productionId
+    ) -> [(cardName: String, daysAgo: Int)] {
         var recentSelections: [(String, Int)] = []
         let calendar = Calendar.current
         
         // Get dates for this profile
-        let profileDates = getProfileDates(profileHash: profileHash)
+        let profileDates = getProfileDates(profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
         
         print("🔍 RECENCY CHECK: Found \(profileDates.count) stored dates for profile \(profileHash)")
         
@@ -114,7 +132,7 @@ class TarotRecencyTracker {
             }
             
             // Get card name for this date
-            let key = storageKey(profileHash: profileHash, date: date)
+            let key = storageKey(profileHash: profileHash, date: date, dailyFitEngineId: dailyFitEngineId)
             if let cardName = userDefaults.string(forKey: key) {
                 recentSelections.append((cardName, daysDifference))
                 print("🔍   • Found: '\(cardName)' from \(daysDifference) days ago (key: '\(key)')")
@@ -128,13 +146,16 @@ class TarotRecencyTracker {
     /// Get the card selected yesterday for a profile
     /// - Parameter profileHash: User profile identifier
     /// - Returns: Card name if one was selected yesterday, nil otherwise
-    func getYesterdayCard(profileHash: String) -> String? {
+    func getYesterdayCard(
+        profileHash: String,
+        dailyFitEngineId: String = DailyFitEngineRegistry.productionId
+    ) -> String? {
         let calendar = Calendar.current
         guard let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) else {
             return nil
         }
         
-        let key = storageKey(profileHash: profileHash, date: yesterday)
+        let key = storageKey(profileHash: profileHash, date: yesterday, dailyFitEngineId: dailyFitEngineId)
         let card = userDefaults.string(forKey: key)
         
         if let card = card {
@@ -146,20 +167,23 @@ class TarotRecencyTracker {
     
     /// Clean up old entries beyond the recency window
     /// - Parameter profileHash: User profile identifier
-    func cleanupOldEntries(profileHash: String) {
+    func cleanupOldEntries(
+        profileHash: String,
+        dailyFitEngineId: String = DailyFitEngineRegistry.productionId
+    ) {
         let calendar = Calendar.current
         guard let cutoffDate = calendar.date(byAdding: .day, value: -Self.RECENCY_WINDOW_DAYS, to: Date()) else {
             return
         }
         
-        let profileDates = getProfileDates(profileHash: profileHash)
+        let profileDates = getProfileDates(profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
         var remainingDates: [Date] = []
         var removedCount = 0
         
         for date in profileDates {
             if date < cutoffDate {
                 // Remove old entry
-                let key = storageKey(profileHash: profileHash, date: date)
+                let key = storageKey(profileHash: profileHash, date: date, dailyFitEngineId: dailyFitEngineId)
                 userDefaults.removeObject(forKey: key)
                 removedCount += 1
             } else {
@@ -169,7 +193,7 @@ class TarotRecencyTracker {
         
         // Update profile date list
         if removedCount > 0 {
-            saveProfileDates(profileHash: profileHash, dates: remainingDates)
+            saveProfileDates(profileHash: profileHash, dates: remainingDates, dailyFitEngineId: dailyFitEngineId)
             userDefaults.synchronize()
             print("🧹 Cleaned up \(removedCount) old Tarot entries for profile \(profileHash)")
         }
@@ -186,16 +210,19 @@ class TarotRecencyTracker {
 
     /// Clear all recency data for a profile
     /// - Parameter profileHash: User profile identifier
-    func clearProfile(profileHash: String) {
-        let profileDates = getProfileDates(profileHash: profileHash)
+    func clearProfile(
+        profileHash: String,
+        dailyFitEngineId: String = DailyFitEngineRegistry.productionId
+    ) {
+        let profileDates = getProfileDates(profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
         
         for date in profileDates {
-            let key = storageKey(profileHash: profileHash, date: date)
+            let key = storageKey(profileHash: profileHash, date: date, dailyFitEngineId: dailyFitEngineId)
             userDefaults.removeObject(forKey: key)
         }
         
         // Clear date list
-        let dateListKey = profileDateListKey(profileHash: profileHash)
+        let dateListKey = profileDateListKey(profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
         userDefaults.removeObject(forKey: dateListKey)
         
         userDefaults.synchronize()
@@ -204,11 +231,17 @@ class TarotRecencyTracker {
     
     /// Debug method to show recent history for a profile
     /// - Parameter profileHash: User profile identifier
-    func debugShowHistory(profileHash: String) {
+    func debugShowHistory(
+        profileHash: String,
+        dailyFitEngineId: String = DailyFitEngineRegistry.productionId
+    ) {
         print("\n📜 TAROT RECENCY HISTORY FOR PROFILE: \(profileHash)")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
         
-        let recentSelections = getRecentSelections(profileHash: profileHash)
+        let recentSelections = getRecentSelections(
+            profileHash: profileHash,
+            dailyFitEngineId: dailyFitEngineId
+        )
         
         if recentSelections.isEmpty {
             print("  No recent selections found")
@@ -246,21 +279,21 @@ class TarotRecencyTracker {
     
     // MARK: - Private Methods
     
-    /// Generate storage key for a specific profile and date
-    /// Format: "tarot.recency.{profileHash}.{yyyy-MM-dd}"
-    private func storageKey(profileHash: String, date: Date) -> String {
+    /// Generate storage key for a specific profile, engine, and date
+    /// Format: "tarot.recency.{engineId}.{profileHash}.{yyyy-MM-dd}"
+    private func storageKey(profileHash: String, date: Date, dailyFitEngineId: String) -> String {
         let dateString = dateFormatter.string(from: date)
-        return "\(Self.STORAGE_KEY_PREFIX).\(profileHash).\(dateString)"
+        return "\(Self.STORAGE_KEY_PREFIX).\(dailyFitEngineId).\(profileHash).\(dateString)"
     }
     
     /// Generate key for profile date list
-    private func profileDateListKey(profileHash: String) -> String {
-        return "\(Self.STORAGE_KEY_PREFIX).dates.\(profileHash)"
+    private func profileDateListKey(profileHash: String, dailyFitEngineId: String) -> String {
+        return "\(Self.STORAGE_KEY_PREFIX).dates.\(dailyFitEngineId).\(profileHash)"
     }
     
     /// Get list of dates for a profile
-    private func getProfileDates(profileHash: String) -> [Date] {
-        let key = profileDateListKey(profileHash: profileHash)
+    private func getProfileDates(profileHash: String, dailyFitEngineId: String) -> [Date] {
+        let key = profileDateListKey(profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
         guard let dateStrings = userDefaults.stringArray(forKey: key) else {
             return []
         }
@@ -269,16 +302,16 @@ class TarotRecencyTracker {
     }
     
     /// Save list of dates for a profile
-    private func saveProfileDates(profileHash: String, dates: [Date]) {
-        let key = profileDateListKey(profileHash: profileHash)
+    private func saveProfileDates(profileHash: String, dates: [Date], dailyFitEngineId: String) {
+        let key = profileDateListKey(profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
         let dateStrings = dates.map { dateFormatter.string(from: $0) }
         userDefaults.set(dateStrings, forKey: key)
         userDefaults.synchronize()
     }
     
     /// Update the date list for a profile to include a new date
-    private func updateProfileDateList(profileHash: String, date: Date) {
-        var dates = getProfileDates(profileHash: profileHash)
+    private func updateProfileDateList(profileHash: String, date: Date, dailyFitEngineId: String) {
+        var dates = getProfileDates(profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
         
         // Check if date already exists
         let calendar = Calendar.current
@@ -286,7 +319,7 @@ class TarotRecencyTracker {
         
         if !dateExists {
             dates.append(date)
-            saveProfileDates(profileHash: profileHash, dates: dates)
+            saveProfileDates(profileHash: profileHash, dates: dates, dailyFitEngineId: dailyFitEngineId)
         }
     }
 }

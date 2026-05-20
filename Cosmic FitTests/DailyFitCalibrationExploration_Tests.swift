@@ -11,43 +11,6 @@ import Testing
 import Foundation
 @testable import Cosmic_Fit
 
-// MARK: - Calibration Presets Under Test
-
-private enum CalibrationPresets {
-
-    /// New production defaults (A+ source + E axis + H/J Stage 2 sensitivity).
-    static let production: DailyFitCalibration = .default
-
-    /// Legacy baseline — the original production weights before the Stage 2 update.
-    /// Preserved for regression comparison.
-    static let legacyBaseline: DailyFitCalibration = {
-        let source = DailyFitCalibration.SourceWeights(
-            natal: 0.40, transits: 0.25, lunarPhase: 0.15,
-            progressed: 0.15, currentSun: 0.05
-        )
-        let selection = DailyFitCalibration.SelectionWeights(
-            vibeWeight: 0.50, axisWeight: 0.35, transitBoost: 0.15
-        )
-        return DailyFitCalibration(
-            sourceWeights: source,
-            signEnergyMap: DailyFitCalibration.default.signEnergyMap,
-            planetAxisMap: DailyFitCalibration.default.planetAxisMap,
-            selectionWeights: selection,
-            axisTuning: DailyFitCalibration.AxisTuning(sigmoidSpread: 2.0, jitterRange: 0.1),
-            stage2Sensitivity: DailyFitCalibration.Stage2Sensitivity(
-                paletteJitter: 0.001, vibrancyCoeff: 0.15,
-                contrastCoeff: 0.20, silhouetteAxisScale: 1.0,
-                metalNudgePerHit: 0.05
-            )
-        )
-    }()
-
-    static let allPresets: [(name: String, calibration: DailyFitCalibration)] = [
-        ("LEGACY_BASELINE", legacyBaseline),
-        ("PRODUCTION", production),
-    ]
-}
-
 // MARK: - Shared Test Infrastructure
 
 private enum ExplorationProfiles {
@@ -390,16 +353,18 @@ struct DailyFitCalibrationExploration_Tests {
         allOutput.append("║  Generated: \(Date())")
         allOutput.append("║  Days: \(Self.totalDays) (14 weeks from \(dayFormatter.string(from: ExplorationProfiles.fixedBaseDate)))")
         allOutput.append("║  Profiles: \(ExplorationProfiles.allProfiles.count)")
-        allOutput.append("║  Presets: \(CalibrationPresets.allPresets.count)")
+        allOutput.append("║  Presets: \(DailyFitEngineRegistry.allDescriptors.count)")
         allOutput.append("╚══════════════════════════════════════════════════════════════════════════════════")
         allOutput.append("")
 
         // Print preset configurations for reference
         allOutput.append("━━━ PRESET CONFIGURATIONS ━━━")
-        for (name, cal) in CalibrationPresets.allPresets {
+        for descriptor in DailyFitEngineRegistry.allDescriptors {
+            let presetName = descriptor.id.uppercased()
+            let cal = descriptor.calibration
+            allOutput.append("  \(presetName):")
             let sw = cal.sourceWeights
             let sel = cal.selectionWeights
-            allOutput.append("  \(name):")
             allOutput.append("    Source: natal=\(sw.natal) transit=\(sw.transits) lunar=\(sw.lunarPhase) progressed=\(sw.progressed) sun=\(sw.currentSun)")
             allOutput.append("    Selection: vibe=\(sel.vibeWeight) axis=\(sel.axisWeight) transitBoost=\(sel.transitBoost)")
             let at = cal.axisTuning
@@ -409,7 +374,9 @@ struct DailyFitCalibrationExploration_Tests {
         }
         allOutput.append("")
 
-        for (presetName, calibration) in CalibrationPresets.allPresets {
+        for descriptor in DailyFitEngineRegistry.allDescriptors {
+            let presetName = descriptor.id.uppercased()
+            let calibration = descriptor.calibration
             allOutput.append("╔══════════════════════════════════════════════════════════════════════════════════")
             allOutput.append("║  PRESET: \(presetName)")
             allOutput.append("╚══════════════════════════════════════════════════════════════════════════════════")
@@ -631,7 +598,7 @@ struct DailyFitCalibrationExploration_Tests {
         lines.append("")
         lines.append("AVERAGES PER PRESET:")
         lines.append("")
-        let presetNames = CalibrationPresets.allPresets.map(\.name)
+        let presetNames = DailyFitEngineRegistry.allDescriptors.map { $0.id.uppercased() }
         let avgHeader = "Preset                  | Tarot | Dom.Chg | Vibe%  | PalChurn | Vib.σ   | Con.σ   | Met.σ   | Sil.MF.σ| Sil.AR.σ| Sil.SD.σ| Vars"
         lines.append(avgHeader)
         lines.append(String(repeating: "─", count: avgHeader.count))

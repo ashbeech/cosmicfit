@@ -9,6 +9,13 @@
 <body>
   <header id="control-strip">
     <div class="strip-row">
+      <div class="control-group engine-group">
+        <label for="engine-select">Engine</label>
+        <div class="engine-row">
+          <select id="engine-select"></select>
+          <span id="engine-chip" class="engine-chip" title="Daily Fit preset (not Style Guide engine version)">production</span>
+        </div>
+      </div>
       <div class="control-group">
         <label for="preset-select">Preset</label>
         <select id="preset-select">
@@ -73,6 +80,14 @@
           <span id="compare-days-value" class="compare-days-value">2</span>
           <button type="button" id="compare-days-up" class="small-btn compare-step-btn" aria-label="More days">+</button>
           <span class="compare-span-hint">days</span>
+        </div>
+        <label class="checkbox-label" title="Side-by-side Daily Fit, Trace, and Verdicts for two engine presets on the same UTC target date (separate tarot state per engine)">
+          <input type="checkbox" id="compare-engines-toggle"> Compare engines
+        </label>
+        <div id="compare-engines-controls" class="compare-engines-controls hidden" title="Pick two registry engine ids for the same target UTC day">
+          <select id="compare-engine-a" aria-label="Engine column A"></select>
+          <span class="compare-engine-vs">vs</span>
+          <select id="compare-engine-b" aria-label="Engine column B"></select>
         </div>
       </div>
       <div id="status-indicator" class="status"></div>

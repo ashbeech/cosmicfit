@@ -21,8 +21,12 @@ final class TarotVariantRotationTracker {
 
     /// Returns the next variant index (0, 1, or 2) for the given card and
     /// user profile, then advances the stored rotation.
-    func nextVariantIndex(forCard cardName: String, profileHash: String) -> Int {
-        let key = storageKey(cardName: cardName, profileHash: profileHash)
+    func nextVariantIndex(
+        forCard cardName: String,
+        profileHash: String,
+        dailyFitEngineId: String = DailyFitEngineRegistry.productionId
+    ) -> Int {
+        let key = storageKey(cardName: cardName, profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
         let current = defaults.object(forKey: key) as? Int ?? -1
         let next = (current + 1) % 3
         defaults.set(next, forKey: key)
@@ -30,8 +34,12 @@ final class TarotVariantRotationTracker {
     }
 
     /// Peek at the next index without advancing. Useful for tests.
-    func peekNextVariantIndex(forCard cardName: String, profileHash: String) -> Int {
-        let key = storageKey(cardName: cardName, profileHash: profileHash)
+    func peekNextVariantIndex(
+        forCard cardName: String,
+        profileHash: String,
+        dailyFitEngineId: String = DailyFitEngineRegistry.productionId
+    ) -> Int {
+        let key = storageKey(cardName: cardName, profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
         let current = defaults.object(forKey: key) as? Int ?? -1
         return (current + 1) % 3
     }
@@ -44,7 +52,7 @@ final class TarotVariantRotationTracker {
         }
     }
 
-    private func storageKey(cardName: String, profileHash: String) -> String {
-        "variantRotation_\(profileHash)_\(cardName)"
+    private func storageKey(cardName: String, profileHash: String, dailyFitEngineId: String) -> String {
+        "variantRotation_\(dailyFitEngineId)_\(profileHash)_\(cardName)"
     }
 }

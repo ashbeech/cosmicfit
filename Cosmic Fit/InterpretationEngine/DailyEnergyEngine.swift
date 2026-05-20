@@ -13,7 +13,8 @@ enum DailyEnergyEngine {
         transits: [NatalChartCalculator.TransitAspect],
         moonPhaseDegrees: Double,
         date: Date,
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        mode: DailyFitEngineMode = .standard
     ) -> VibeBreakdown {
         var rawScores: [Energy: Double] = [:]
         for energy in Energy.allCases { rawScores[energy] = 0.0 }
@@ -44,6 +45,10 @@ enum DailyEnergyEngine {
             rawScores[energy]! *= multiplier
         }
 
+        if mode == .stage1Experimental {
+            applyStage1TransitVibeNudge(transits: transits, into: &rawScores)
+        }
+
         // Step 3: Normalise to 21 integer points
         return normaliseToTwentyOne(rawScores)
     }
@@ -58,15 +63,23 @@ enum DailyEnergyEngine {
         moonPhaseDegrees: Double,
         profileHash: String,
         date: Date = Date(),
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        mode: DailyFitEngineMode = .standard,
+        dailyFitEngineId engineId: String? = nil
     ) -> DailyEnergySnapshot {
+        let effectiveMode = DailyFitEngineRegistry.resolvedMode(explicit: mode, engineId: engineId)
+        let resolvedEngineId = DailyFitEngineRegistry.engineId(for: calibration, mode: effectiveMode)
+
         let vibeProfile = generateVibeProfile(
             natalChart: natalChart, progressedChart: progressedChart,
             transits: transits, moonPhaseDegrees: moonPhaseDegrees,
-            date: date, calibration: calibration
+            date: date, calibration: calibration, mode: effectiveMode
         )
-        let dailySeed = DailySeedGenerator.generateDailySeed(
-            profileHash: profileHash, for: date
+        let dailySeed = dailySeed(
+            profileHash: profileHash,
+            date: date,
+            engineId: resolvedEngineId,
+            mode: effectiveMode
         )
         let axes = evaluateAxes(
             natalChart: natalChart, progressedChart: progressedChart,
@@ -201,6 +214,46 @@ enum DailyEnergyEngine {
         }
     }
 
+    // MARK: - Stage 1 experimental (central mode branch helpers)
+
+    /// Boosts raw vibe scores from the tightest transit before quantisation (Stage 1 redesign).
+    private static func applyStage1TransitVibeNudge(
+        transits: [NatalChartCalculator.TransitAspect],
+        into rawScores: inout [Energy: Double]
+    ) {
+        guard let tightest = transits.min(by: { abs($0.orb) < abs($1.orb) }),
+              let baseEnergies = planetEnergyBase[tightest.transitPlanet] else {
+            return
+        }
+        let strength = max(0.0, 1.0 - abs(tightest.orb) / 10.0)
+        for energy in Energy.allCases {
+            rawScores[energy]! += (baseEnergies[energy] ?? 0.0) * strength * 0.35
+        }
+    }
+
+    private static func dailySeed(
+        profileHash: String,
+        date: Date,
+        engineId: String,
+        mode: DailyFitEngineMode
+    ) -> Int {
+        let descriptor = DailyFitEngineRegistry.descriptor(for: engineId)
+        let policy = descriptor?.dailySeedPolicy ?? .sharedProfileDate
+        if policy == .includesEngineId, mode == .stage1Experimental {
+            let dateString = stage1SeedDateFormatter.string(from: date)
+            return DailySeedGenerator.intSeed(from: "\(profileHash)_\(dateString)_\(engineId)")
+        }
+        return DailySeedGenerator.generateDailySeed(profileHash: profileHash, for: date)
+    }
+
+    private static let stage1SeedDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.locale = Locale(identifier: "en_GB")
+        return formatter
+    }()
+
     // MARK: - Normalisation (Largest-Remainder Method)
 
     private static func normaliseToTwentyOne(_ rawScores: [Energy: Double]) -> VibeBreakdown {
@@ -289,8 +342,11 @@ enum DailyEnergyEngine {
         moonPhaseDegrees: Double,
         profileHash: String,
         date: Date = Date(),
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        mode: DailyFitEngineMode = .standard,
+        dailyFitEngineId engineId: String? = nil
     ) -> (snapshot: DailyEnergySnapshot, trace: SnapshotTrace) {
+        let effectiveMode = DailyFitEngineRegistry.resolvedMode(explicit: mode, engineId: engineId)
         let weights = calibration.sourceWeights
         var rawScores: [Energy: Double] = [:]
         for energy in Energy.allCases { rawScores[energy] = 0.0 }
@@ -319,9 +375,18 @@ enum DailyEnergyEngine {
         for energy in Energy.allCases {
             postMultiplier[energy]! *= calibration.signEnergyMap.multiplier(forSign: sunSign, energy: energy)
         }
+        if effectiveMode == .stage1Experimental {
+            applyStage1TransitVibeNudge(transits: transits, into: &postMultiplier)
+        }
         let postDict = Dictionary(uniqueKeysWithValues: postMultiplier.map { ($0.key.rawValue, $0.value) })
         let vibeProfile = normaliseToTwentyOne(postMultiplier)
-        let dailySeed = DailySeedGenerator.generateDailySeed(profileHash: profileHash, for: date)
+        let resolvedEngineId = DailyFitEngineRegistry.engineId(for: calibration, mode: effectiveMode)
+        let dailySeed = dailySeed(
+            profileHash: profileHash,
+            date: date,
+            engineId: resolvedEngineId,
+            mode: effectiveMode
+        )
         let axes = evaluateAxes(
             natalChart: natalChart, progressedChart: progressedChart,
             transits: transits, moonPhaseDegrees: moonPhaseDegrees,

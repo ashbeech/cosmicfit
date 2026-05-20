@@ -430,6 +430,12 @@ final class CosmicFitTabBarController: UITabBarController {
             name: .devForceRefreshRequested,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleDailyFitEngineOverrideChanged),
+            name: .dailyFitEngineOverrideChanged,
+            object: nil
+        )
         #endif
     }
 
@@ -449,6 +455,50 @@ final class CosmicFitTabBarController: UITabBarController {
         setupViewControllers()
 
         print("✅ [DEV] Force refresh complete")
+    }
+
+    @objc private func handleDailyFitEngineOverrideChanged() {
+        guard let chartId = chartIdentifier else { return }
+        let profileKey = userProfile?.id ?? chartId
+        let today = Date()
+        let engineId = DailyFitEngineConfig.effectiveEngineId
+
+        print("🔄 [DEV] Daily Fit engine override changed — invalidating today (\(engineId))")
+
+        _ = DailyFitFrozenPayloadStorage.shared.load(date: today, profileKey: profileKey)
+
+        dailyFitPayload = nil
+        generateAndCacheDailyVibe(chartId: chartId, forDate: today)
+        refreshDailyFitViewControllerIfNeeded()
+        updateDailyFitEngineDebugBanner()
+
+        print("✅ [DEV] Daily Fit regenerated under engine \(engineId)")
+    }
+
+    private func refreshDailyFitViewControllerIfNeeded() {
+        guard let payload = dailyFitPayload,
+              let dailyFitVC = viewControllers?.first as? DailyFitViewController else {
+            return
+        }
+        dailyFitVC.configure(
+            with: payload,
+            originalChartViewController: createDebugChartViewController()
+        )
+    }
+
+    private func updateDailyFitEngineDebugBanner() {
+        guard let items = tabBar.items, !items.isEmpty else { return }
+        let item = items[0]
+        let engineId = DailyFitEngineConfig.effectiveEngineId
+
+        if engineId != DailyFitEngineRegistry.productionId,
+           let descriptor = DailyFitEngineRegistry.descriptor(for: engineId) {
+            item.title = "Daily Fit\nEngine: \(descriptor.displayName) (debug)"
+            item.badgeValue = nil
+        } else {
+            item.title = "Daily Fit"
+            item.badgeValue = nil
+        }
     }
     #endif
 
@@ -749,6 +799,8 @@ final class CosmicFitTabBarController: UITabBarController {
         let julianDay = JulianDateCalculator.calculateJulianDate(from: date)
         let moonPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: julianDay)
         let profileHash = userProfile?.id ?? chartId
+        let cal = DailyFitEngineConfig.effectiveCalibration
+        let engineId = DailyFitEngineConfig.effectiveEngineId
 
         let snapshot = DailyEnergyEngine.generateSnapshot(
             natalChart: natal,
@@ -756,19 +808,24 @@ final class CosmicFitTabBarController: UITabBarController {
             transits: transits,
             moonPhaseDegrees: moonPhase,
             profileHash: profileHash,
-            date: date
+            date: date,
+            calibration: cal,
+            dailyFitEngineId: engineId
         )
 
         if let blueprint = BlueprintStorage.shared.load() {
             let payload = BlueprintLensEngine.generatePayload(
                 blueprint: blueprint,
-                snapshot: snapshot
+                snapshot: snapshot,
+                calibration: cal,
+                dailyFitEngineId: engineId
             )
             dailyFitPayload = payload
 
             #if DEBUG
             BlueprintLensEngine.logDailyFitDiagnostics(
-                snapshot: snapshot, payload: payload, blueprint: blueprint
+                snapshot: snapshot, payload: payload, blueprint: blueprint,
+                calibration: cal
             )
             #endif
         } else {
@@ -797,6 +854,8 @@ final class CosmicFitTabBarController: UITabBarController {
         let julianDay = JulianDateCalculator.calculateJulianDate(from: date)
         let moonPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: julianDay)
         let profileHash = userProfile?.id ?? chartIdentifier ?? ""
+        let cal = DailyFitEngineConfig.effectiveCalibration
+        let engineId = DailyFitEngineConfig.effectiveEngineId
 
         let snapshot = DailyEnergyEngine.generateSnapshot(
             natalChart: natal,
@@ -804,11 +863,18 @@ final class CosmicFitTabBarController: UITabBarController {
             transits: transits,
             moonPhaseDegrees: moonPhase,
             profileHash: profileHash,
-            date: date
+            date: date,
+            calibration: cal,
+            dailyFitEngineId: engineId
         )
 
         guard let blueprint = BlueprintStorage.shared.load() else { return nil }
-        return BlueprintLensEngine.generatePayload(blueprint: blueprint, snapshot: snapshot)
+        return BlueprintLensEngine.generatePayload(
+            blueprint: blueprint,
+            snapshot: snapshot,
+            calibration: cal,
+            dailyFitEngineId: engineId
+        )
     }
 
     private func extractLocationFromBirthInfo() -> (city: String, country: String) {
@@ -953,6 +1019,9 @@ final class CosmicFitTabBarController: UITabBarController {
         
         DispatchQueue.main.async { [weak self] in
             self?.updateTabSelectionIndicator()
+            #if DEBUG
+            self?.updateDailyFitEngineDebugBanner()
+            #endif
         }
         
         print("✅ View controllers setup — auth: \(CosmicFitAuthService.shared.isAuthenticated), selection: \(selectedIndex)")
@@ -1063,3 +1132,10 @@ extension CosmicFitTabBarController: UITabBarControllerDelegate {
         return nil
     }
 }
+
+#if DEBUG
+extension Notification.Name {
+    /// DEBUG: Posted when Profile engine picker changes `DailyFitEngineConfig.runtimeOverrideEngineId`.
+    static let dailyFitEngineOverrideChanged = Notification.Name("dailyFitEngineOverrideChanged")
+}
+#endif

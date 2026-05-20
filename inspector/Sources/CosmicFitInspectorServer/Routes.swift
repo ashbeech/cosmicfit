@@ -15,8 +15,25 @@ func buildRouter(engine: InspectorEngine) -> Router<BasicRequestContext> {
     // MARK: - Health
 
     router.get("/api/health") { _, _ -> Response in
-        let payload: [String: String] = ["ok": "true", "engineVersion": InspectorEngine.engineVersion]
+        let payload: [String: String] = [
+            "ok": "true",
+            "engineVersion": InspectorEngine.engineVersion,
+            "dailyFitEngineDefault": InspectorDefaults.dailyFitEngineId,
+            "dailyFitEngineCount": String(InspectorDefaults.dailyFitEngineCount),
+        ]
         let body = try jsonEncoder.encode(payload)
+        return Response(
+            status: .ok,
+            headers: [.contentType: "application/json"],
+            body: .init(byteBuffer: .init(data: body))
+        )
+    }
+
+    // MARK: - Daily Fit Engines
+
+    router.get("/api/daily-fit-engines") { _, _ -> Response in
+        let engines = InspectorDefaults.dailyFitEngineListings()
+        let body = try jsonEncoder.encode(engines)
         return Response(
             status: .ok,
             headers: [.contentType: "application/json"],

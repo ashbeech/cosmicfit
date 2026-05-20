@@ -6,13 +6,19 @@ enum VerdictRunner {
         payload: DailyFitPayload,
         report: DailyFitDiagnosticReport,
         profileHash: String,
-        targetDate: Date
+        targetDate: Date,
+        dailyFitEngineId: String = DailyFitEngineRegistry.productionId
     ) -> [VerdictRow] {
         var results: [VerdictRow] = []
         results.append(checkSourceContributions(report))
         results.append(checkScaleRanges(payload))
         results.append(checkPaletteUnique(payload))
-        results.append(checkTarotRecency(report: report, profileHash: profileHash, targetDate: targetDate))
+        results.append(checkTarotRecency(
+            report: report,
+            profileHash: profileHash,
+            targetDate: targetDate,
+            dailyFitEngineId: dailyFitEngineId
+        ))
         return results
     }
 
@@ -70,12 +76,14 @@ enum VerdictRunner {
     private static func checkTarotRecency(
         report: DailyFitDiagnosticReport,
         profileHash: String,
-        targetDate: Date
+        targetDate: Date,
+        dailyFitEngineId: String
     ) -> VerdictRow {
         let selected = report.selectedTarotCard
         let prior = TarotRecencyTracker.shared.getRecentSelections(
             profileHash: profileHash,
-            referenceDate: targetDate
+            referenceDate: targetDate,
+            dailyFitEngineId: dailyFitEngineId
         ).filter { $0.daysAgo > 0 }
 
         let inLast3 = prior.contains { $0.cardName == selected && $0.daysAgo <= 3 }

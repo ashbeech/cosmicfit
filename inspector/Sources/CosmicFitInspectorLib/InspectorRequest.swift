@@ -28,4 +28,6 @@ public struct InspectOptions: Codable {
     public let profileId: String?
     /// Clears tarot recency + variant rotation for the resolved profile hash before computing.
     public let resetTarotHistory: Bool?
+    /// Daily Fit engine preset slug (e.g. `production`, `legacy_baseline`).
+    public let dailyFitEngineId: String?
 }
