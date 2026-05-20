@@ -26,6 +26,8 @@ final class TarotVariantRotationTracker {
         profileHash: String,
         dailyFitEngineId: String = DailyFitEngineRegistry.productionId
     ) -> Int {
+        migrateLegacyNamespaceIfNeeded(profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
+
         let key = storageKey(cardName: cardName, profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
         let current = defaults.object(forKey: key) as? Int ?? -1
         let next = (current + 1) % 3
@@ -39,6 +41,8 @@ final class TarotVariantRotationTracker {
         profileHash: String,
         dailyFitEngineId: String = DailyFitEngineRegistry.productionId
     ) -> Int {
+        migrateLegacyNamespaceIfNeeded(profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
+
         let key = storageKey(cardName: cardName, profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
         let current = defaults.object(forKey: key) as? Int ?? -1
         return (current + 1) % 3
@@ -54,5 +58,13 @@ final class TarotVariantRotationTracker {
 
     private func storageKey(cardName: String, profileHash: String, dailyFitEngineId: String) -> String {
         "variantRotation_\(dailyFitEngineId)_\(profileHash)_\(cardName)"
+    }
+
+    private func migrateLegacyNamespaceIfNeeded(profileHash: String, dailyFitEngineId: String) {
+        guard dailyFitEngineId == DailyFitEngineRegistry.productionId else { return }
+        TarotEngineNamespaceMigration.migrateProductionVariantRotationIfNeeded(
+            profileHash: profileHash,
+            userDefaults: defaults
+        )
     }
 }
