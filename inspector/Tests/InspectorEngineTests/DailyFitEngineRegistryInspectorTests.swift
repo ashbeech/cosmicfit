@@ -20,8 +20,20 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
         let descriptor = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.stage1ExperimentalId)!
         XCTAssertEqual(descriptor.mode, .stage1Experimental)
         XCTAssertEqual(descriptor.dailySeedPolicy, .includesEngineId)
-        XCTAssertEqual(DailyFitEngineRegistry.calibration(for: DailyFitEngineRegistry.stage1ExperimentalId),
-                       DailyFitCalibration.default)
+        let stage1Calibration = DailyFitEngineRegistry.calibration(
+            for: DailyFitEngineRegistry.stage1ExperimentalId
+        )
+        XCTAssertNotEqual(stage1Calibration, DailyFitCalibration.default)
+        XCTAssertGreaterThan(
+            stage1Calibration.sourceWeights.transits,
+            DailyFitCalibration.default.sourceWeights.transits
+        )
+    }
+
+    func testStage1ExperimentalFingerprintDiffersFromProduction() {
+        let production = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)!
+        let stage1 = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.stage1ExperimentalId)!
+        XCTAssertNotEqual(stage1.fingerprint, production.fingerprint)
     }
 
     func testProductionAndLegacyFingerprintsDiffer() {

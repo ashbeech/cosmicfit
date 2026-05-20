@@ -141,14 +141,37 @@ enum DailyFitEngineRegistry {
         dailySeedPolicy: .sharedProfileDate
     )
 
-    /// Stage 1 redesign candidate: transit vibe nudges + fractional essence (§5.4). S2 seed policy.
+    /// Stage 1 sky-forward sandbox: chart anchor + amplified outside-energy delta (§5.4).
+    private static let stage1ExperimentalCalibration: DailyFitCalibration = {
+        let source = DailyFitCalibration.SourceWeights(
+            natal: 0.16, transits: 0.44, lunarPhase: 0.30,
+            progressed: 0.07, currentSun: 0.03
+        )
+        let selection = DailyFitCalibration.SelectionWeights(
+            vibeWeight: 0.40, axisWeight: 0.30, transitBoost: 0.30
+        )
+        return DailyFitCalibration(
+            sourceWeights: source,
+            signEnergyMap: DailyFitCalibration.default.signEnergyMap,
+            planetAxisMap: DailyFitCalibration.default.planetAxisMap,
+            selectionWeights: selection,
+            axisTuning: DailyFitCalibration.AxisTuning(sigmoidSpread: 2.0, jitterRange: 0.40),
+            stage2Sensitivity: DailyFitCalibration.Stage2Sensitivity(
+                paletteJitter: 0.15, vibrancyCoeff: 0.45,
+                contrastCoeff: 0.45, silhouetteAxisScale: 1.25,
+                metalNudgePerHit: 0.10
+            )
+        )
+    }()
+
+    /// Stage 1 redesign candidate: sky-forward daily signal from chart anchor (§5.4). S2 seed policy.
     private static let stage1ExperimentalDescriptor = DailyFitEngineDescriptor(
         id: stage1ExperimentalId,
-        displayName: "Stage 1 Experimental",
-        summary: "Transit-weighted vibe nudges and axis-heavy essence scoring (DEBUG/inspector)",
+        displayName: "Stage 1 Experimental (Sky Forward)",
+        summary: "Sky-forward daily read — chart anchor vs today's outside energy (DEBUG/inspector)",
         isExperimental: true,
-        calibration: .default,
-        fingerprint: fingerprint(for: .default),
+        calibration: stage1ExperimentalCalibration,
+        fingerprint: fingerprint(for: stage1ExperimentalCalibration),
         mode: .stage1Experimental,
         dailySeedPolicy: .includesEngineId
     )

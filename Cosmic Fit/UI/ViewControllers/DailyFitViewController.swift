@@ -178,7 +178,7 @@ class DailyFitViewController: UIViewController {
     private var currentCardState: CardState = .unrevealed
     
     private var dailyCardRevealKey: String {
-        DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: displayDate)
+        DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: displayDate, engineId: DailyFitEngineConfig.effectiveEngineId)
     }
     
     // MARK: - Lifecycle
@@ -1341,7 +1341,7 @@ class DailyFitViewController: UIViewController {
     }
 
     private func cardRevealKey(for date: Date) -> String {
-        DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date)
+        DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date, engineId: DailyFitEngineConfig.effectiveEngineId)
     }
 
     // MARK: - Midnight / Day Rollover

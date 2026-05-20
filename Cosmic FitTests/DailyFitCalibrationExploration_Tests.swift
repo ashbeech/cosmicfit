@@ -243,7 +243,8 @@ private enum ExplorationProfiles {
     static func runDay(
         profile: ProfileDef,
         dayOffset: Int,
-        calibration: DailyFitCalibration
+        calibration: DailyFitCalibration,
+        dailyFitEngineId: String? = nil
     ) -> DayResult {
         let date = fixedBaseDate.addingTimeInterval(Double(dayOffset) * 86400)
         let t = transitsForDay(dayOffset)
@@ -256,7 +257,8 @@ private enum ExplorationProfiles {
             profileHash: profile.hash,
             blueprint: calibrationBlueprint,
             date: date,
-            calibration: calibration
+            calibration: calibration,
+            dailyFitEngineId: dailyFitEngineId
         )
 
         let vibe = payload.vibeBreakdown
@@ -390,7 +392,8 @@ struct DailyFitCalibrationExploration_Tests {
                     let r = ExplorationProfiles.runDay(
                         profile: profile,
                         dayOffset: day,
-                        calibration: calibration
+                        calibration: calibration,
+                        dailyFitEngineId: descriptor.id
                     )
                     results.append(r)
                 }

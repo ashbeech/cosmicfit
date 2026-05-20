@@ -465,6 +465,7 @@ final class CosmicFitTabBarController: UITabBarController {
 
         print("🔄 [DEV] Daily Fit engine override changed — invalidating today (\(engineId))")
 
+        DailyFitFrozenPayloadStorage.shared.invalidatePurgeCache()
         _ = DailyFitFrozenPayloadStorage.shared.load(date: today, profileKey: profileKey)
 
         dailyFitPayload = nil
@@ -773,7 +774,7 @@ final class CosmicFitTabBarController: UITabBarController {
     
     private func generateAndCacheDailyVibe(chartId: String, forDate date: Date = Date()) {
         let profileKey = userProfile?.id ?? chartId
-        let revealKey = DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date)
+        let revealKey = DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date, engineId: DailyFitEngineConfig.effectiveEngineId)
         let wasRevealed = UserDefaults.standard.bool(forKey: revealKey)
 
         if wasRevealed,
@@ -836,7 +837,7 @@ final class CosmicFitTabBarController: UITabBarController {
     /// Generates a payload for a given date without caching it on the tab bar controller.
     private func generateDailyPayload(forDate date: Date) -> DailyFitPayload? {
         let profileKey = userProfile?.id ?? chartIdentifier ?? ""
-        let revealKey = DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date)
+        let revealKey = DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date, engineId: DailyFitEngineConfig.effectiveEngineId)
         let wasRevealed = UserDefaults.standard.bool(forKey: revealKey)
 
         if wasRevealed,

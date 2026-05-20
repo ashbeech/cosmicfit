@@ -66,9 +66,6 @@ class TarotRecencyTracker {
         // Update the list of dates for this profile
         updateProfileDateList(profileHash: profileHash, date: date, dailyFitEngineId: dailyFitEngineId)
         
-        // CRITICAL: Force synchronization to ensure persistence
-        userDefaults.synchronize()
-        
         // ENHANCED: Log exact stored key/value for verification
         let storedValue = userDefaults.string(forKey: key) ?? "nil"
         print("💾 STORED: key='\(key)' value='\(storedValue)'")
@@ -194,7 +191,6 @@ class TarotRecencyTracker {
         // Update profile date list
         if removedCount > 0 {
             saveProfileDates(profileHash: profileHash, dates: remainingDates, dailyFitEngineId: dailyFitEngineId)
-            userDefaults.synchronize()
             print("🧹 Cleaned up \(removedCount) old Tarot entries for profile \(profileHash)")
         }
     }
@@ -205,7 +201,6 @@ class TarotRecencyTracker {
         for key in userDefaults.dictionaryRepresentation().keys where key.hasPrefix(prefix) {
             userDefaults.removeObject(forKey: key)
         }
-        userDefaults.synchronize()
     }
 
     /// Clear all recency data for a profile
@@ -225,7 +220,6 @@ class TarotRecencyTracker {
         let dateListKey = profileDateListKey(profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
         userDefaults.removeObject(forKey: dateListKey)
         
-        userDefaults.synchronize()
         print("🗑️ Cleared all Tarot recency data for profile \(profileHash)")
     }
     
@@ -306,7 +300,6 @@ class TarotRecencyTracker {
         let key = profileDateListKey(profileHash: profileHash, dailyFitEngineId: dailyFitEngineId)
         let dateStrings = dates.map { dateFormatter.string(from: $0) }
         userDefaults.set(dateStrings, forKey: key)
-        userDefaults.synchronize()
     }
     
     /// Update the date list for a profile to include a new date
@@ -342,7 +335,6 @@ extension TarotRecencyTracker {
             
             // Remove old key
             userDefaults.removeObject(forKey: "LastSelectedTarotCard")
-            userDefaults.synchronize()
         }
         
         // Also migrate any old "LastTarot::" prefixed keys
@@ -364,7 +356,7 @@ extension TarotRecencyTracker {
         }
         
         if !oldFormatKeys.isEmpty {
-            userDefaults.synchronize()
+            print("🔄 Migrated \(oldFormatKeys.count) old format keys for profile \(profileHash)")
         }
     }
 }

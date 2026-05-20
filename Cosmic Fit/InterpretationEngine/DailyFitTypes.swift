@@ -39,7 +39,7 @@ struct LunarContext: Codable, Equatable {
 
 /// Pure astrological distillation for a given day and user. No style decisions.
 struct DailyEnergySnapshot: Codable {
-    /// Six-energy vibe profile (21-point budget). Source: natal + transits + lunar + progressed.
+    /// Blended vibe profile (21-point budget) used for tarot/palette selection.
     let vibeProfile: VibeBreakdown
     /// Four orthogonal style-manifestation axes, each 1–10. Source: planet weights.
     let axes: DerivedAxes
@@ -53,6 +53,36 @@ struct DailyEnergySnapshot: Codable {
     let profileHash: String
     /// Timestamp of generation. Set from the supplied date parameter, NOT Date().
     let generatedAt: Date
+    /// Natal+progressed vibe only (Stage 1): chart anchor — who you are.
+    let chartVibeProfile: VibeBreakdown?
+    /// Transits+lunar+current-sun vibe only (Stage 1): today's outside energy.
+    let skyVibeProfile: VibeBreakdown?
+    /// Natal+progressed axes only (Stage 1): chart anchor for silhouette/essence delta.
+    let chartAxes: DerivedAxes?
+
+    init(
+        vibeProfile: VibeBreakdown,
+        axes: DerivedAxes,
+        dominantTransits: [DailyTransitSummary],
+        lunarContext: LunarContext,
+        dailySeed: Int,
+        profileHash: String,
+        generatedAt: Date,
+        chartVibeProfile: VibeBreakdown? = nil,
+        skyVibeProfile: VibeBreakdown? = nil,
+        chartAxes: DerivedAxes? = nil
+    ) {
+        self.vibeProfile = vibeProfile
+        self.axes = axes
+        self.dominantTransits = dominantTransits
+        self.lunarContext = lunarContext
+        self.dailySeed = dailySeed
+        self.profileHash = profileHash
+        self.generatedAt = generatedAt
+        self.chartVibeProfile = chartVibeProfile
+        self.skyVibeProfile = skyVibeProfile
+        self.chartAxes = chartAxes
+    }
 }
 
 // MARK: - Stage 2 Nested Types
@@ -98,10 +128,22 @@ struct StyleEssenceScore: Codable, Equatable {
 
 /// Full 14-category essence profile with top-3 selection.
 struct StyleEssenceProfile: Codable, Equatable {
-    /// All 14 categories with their daily scores.
+    /// All 14 categories with their daily scores (today's signal in Stage 1 sky-forward mode).
     let allScores: [StyleEssenceScore]
     /// Top 3 categories by score — the ones rendered on the radar chart.
     let visibleCategories: [StyleEssenceScore]
+    /// Chart-anchor scores (Stage 1 only): baseline essence from natal chart. nil in production.
+    let chartAnchorScores: [StyleEssenceScore]?
+
+    init(
+        allScores: [StyleEssenceScore],
+        visibleCategories: [StyleEssenceScore],
+        chartAnchorScores: [StyleEssenceScore]? = nil
+    ) {
+        self.allScores = allScores
+        self.visibleCategories = visibleCategories
+        self.chartAnchorScores = chartAnchorScores
+    }
 }
 
 /// Legacy three-vertex essence. Retained only for backward-compatible Codable

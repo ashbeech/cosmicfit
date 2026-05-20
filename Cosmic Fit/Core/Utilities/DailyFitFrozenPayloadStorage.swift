@@ -9,12 +9,19 @@
 import Foundation
 
 enum DailyFitRevealPersistence {
-    static func revealedFlagKey(forCalendarDay date: Date) -> String {
+    static func revealedFlagKey(
+        forCalendarDay date: Date,
+        engineId: String = DailyFitEngineRegistry.productionId
+    ) -> String {
         let fmt = DateFormatter()
         fmt.locale = Locale(identifier: "en_GB_POSIX")
         fmt.timeZone = TimeZone.current
         fmt.dateFormat = "yyyy-MM-dd"
-        return "CardRevealed_\(fmt.string(from: date))"
+        let day = fmt.string(from: date)
+        if engineId == DailyFitEngineRegistry.productionId {
+            return "CardRevealed_\(day)"
+        }
+        return "CardRevealed_\(engineId)_\(day)"
     }
 
     /// Clears persisted "card revealed" flags for each calendar day from `start` through `end`
@@ -25,6 +32,11 @@ enum DailyFitRevealPersistence {
         let last = calendar.startOfDay(for: end)
         while day <= last {
             UserDefaults.standard.removeObject(forKey: revealedFlagKey(forCalendarDay: day))
+            for descriptor in DailyFitEngineRegistry.allDescriptors where descriptor.id != DailyFitEngineRegistry.productionId {
+                UserDefaults.standard.removeObject(
+                    forKey: revealedFlagKey(forCalendarDay: day, engineId: descriptor.id)
+                )
+            }
             guard let next = calendar.date(byAdding: .day, value: 1, to: day) else { break }
             day = next
         }
@@ -36,6 +48,7 @@ final class DailyFitFrozenPayloadStorage {
     static let shared = DailyFitFrozenPayloadStorage()
 
     private let rootDirectoryURL: URL?
+    private var lastPurgedEngineId: String?
 
     init(rootDirectoryURL: URL? = nil) {
         self.rootDirectoryURL = rootDirectoryURL
@@ -98,7 +111,10 @@ final class DailyFitFrozenPayloadStorage {
 
     func load(date: Date, profileKey: String) -> DailyFitPayload? {
         let effectiveId = DailyFitEngineConfig.effectiveEngineId
-        purgeStaleArtifacts(date: date, profileKey: profileKey, effectiveEngineId: effectiveId)
+        if lastPurgedEngineId != effectiveId {
+            purgeStaleArtifacts(date: date, profileKey: profileKey, effectiveEngineId: effectiveId)
+            lastPurgedEngineId = effectiveId
+        }
 
         let namespacedURL = namespacedFileURL(date: date, profileKey: profileKey, engineId: effectiveId)
         if FileManager.default.fileExists(atPath: namespacedURL.path),
@@ -125,6 +141,12 @@ final class DailyFitFrozenPayloadStorage {
         for url in urls where url.pathExtension == "json" {
             try? FileManager.default.removeItem(at: url)
         }
+        lastPurgedEngineId = nil
+    }
+
+    /// Forces the next `load` to re-run purge logic (e.g. after engine override change).
+    func invalidatePurgeCache() {
+        lastPurgedEngineId = nil
     }
 
     // MARK: - Engine mismatch invalidation (P2)
@@ -160,11 +182,15 @@ final class DailyFitFrozenPayloadStorage {
             }
         }
 
-        let revealKey = DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date)
-        if UserDefaults.standard.bool(forKey: revealKey),
-           !hasValidFrozenPayload(date: date, profileKey: profileKey, effectiveEngineId: effectiveEngineId) {
-            UserDefaults.standard.removeObject(forKey: revealKey)
-            didPurge = true
+        let noValidFrozen = !hasValidFrozenPayload(date: date, profileKey: profileKey, effectiveEngineId: effectiveEngineId)
+        var revealKeysToCheck = Set<String>()
+        revealKeysToCheck.insert(DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date, engineId: effectiveEngineId))
+        revealKeysToCheck.insert(DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date, engineId: DailyFitEngineRegistry.productionId))
+        for key in revealKeysToCheck {
+            if UserDefaults.standard.bool(forKey: key), noValidFrozen {
+                UserDefaults.standard.removeObject(forKey: key)
+                didPurge = true
+            }
         }
 
         if didPurge {

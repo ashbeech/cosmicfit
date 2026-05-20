@@ -41,12 +41,22 @@ struct DailyFitEngineRegistry_Tests {
         #expect(production.fingerprint != legacy.fingerprint)
     }
 
-    @Test("stage1_experimental uses stage1Experimental mode and S2 seed policy")
+    @Test("stage1_experimental fingerprint differs from production")
+    func stage1FingerprintDiffersFromProduction() {
+        let production = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)!
+        let stage1 = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.stage1ExperimentalId)!
+        #expect(stage1.fingerprint != production.fingerprint)
+    }
+
+    @Test("stage1_experimental uses sky-forward calibration, stage1Experimental mode, and S2 seed policy")
     func stage1ExperimentalDescriptor() {
-        let descriptor = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.stage1ExperimentalId)
-        #expect(descriptor?.mode == .stage1Experimental)
-        #expect(descriptor?.dailySeedPolicy == .includesEngineId)
-        #expect(descriptor?.calibration == DailyFitCalibration.default)
+        let descriptor = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.stage1ExperimentalId)!
+        #expect(descriptor.mode == .stage1Experimental)
+        #expect(descriptor.dailySeedPolicy == .includesEngineId)
+        #expect(descriptor.calibration != DailyFitCalibration.default)
+        #expect(descriptor.calibration.sourceWeights.transits > DailyFitCalibration.default.sourceWeights.transits)
+        #expect(descriptor.calibration.stage2Sensitivity.paletteJitter
+            > DailyFitCalibration.default.stage2Sensitivity.paletteJitter)
         #expect(DailyFitEngineRegistry.mode(for: DailyFitEngineRegistry.stage1ExperimentalId)
             == .stage1Experimental)
     }
@@ -58,20 +68,23 @@ struct DailyFitEngineRegistry_Tests {
 
         let profile = DailyFitEngineRegistryTestSupport.ashProfile
         let date = DailyFitEngineRegistryTestSupport.fixedBaseDate
+        let stage1Calibration = DailyFitEngineRegistry.calibration(
+            for: DailyFitEngineRegistry.stage1ExperimentalId
+        )
 
         TarotCalibrationTestSupport.resetTrackersForProfile()
         let productionPayload = DailyFitEngineRegistryTestSupport.generatePayload(
             profile: profile,
             date: date,
             calibration: DailyFitCalibration.default,
-            mode: .standard
+            engineId: DailyFitEngineRegistry.productionId
         )
 
         TarotCalibrationTestSupport.resetTrackersForProfile()
         let stage1Payload = DailyFitEngineRegistryTestSupport.generatePayload(
             profile: profile,
             date: date,
-            calibration: DailyFitCalibration.default,
+            calibration: stage1Calibration,
             engineId: DailyFitEngineRegistry.stage1ExperimentalId
         )
 
@@ -84,7 +97,11 @@ struct DailyFitEngineRegistry_Tests {
         let essenceDiffers = productionPayload.essenceProfile.visibleCategories.map(\.category)
             != stage1Payload.essenceProfile.visibleCategories.map(\.category)
         let tarotDiffers = productionPayload.tarotCard.name != stage1Payload.tarotCard.name
-        #expect(vibeDiffers || essenceDiffers || tarotDiffers)
+        let paletteDiffers = productionPayload.dailyPalette.colours.map(\.name)
+            != stage1Payload.dailyPalette.colours.map(\.name)
+        let scalesDiffer = productionPayload.vibrancy != stage1Payload.vibrancy
+            || productionPayload.contrast != stage1Payload.contrast
+        #expect(vibeDiffers || essenceDiffers || tarotDiffers || paletteDiffers || scalesDiffer)
     }
 
     @Test("Standard mode with production calibration is bit-identical to default-mode snapshot")
