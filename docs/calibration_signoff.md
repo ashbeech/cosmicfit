@@ -85,6 +85,8 @@ CALIBRATION_CI_GATE=1 xcodebuild test -workspace "Cosmic Fit.xcworkspace" \
 | Earth | Classic, Utility | Yes — automated test `testEarthElementEnergy` passes (classic+utility >= 6) |
 | Air | Playful | Yes — automated test `testAirElementEnergy` passes (playful >= 3) |
 
+**Daily weather stacking dedupe (implemented):** When natal Sun `signEnergyMap` multiplier for an energy exceeds **1.30**, matching `elementBoosts` are skipped during chart and current-sun accumulation (`DailyFitCalibration.elementBoostDedupeThreshold`, default `1.30`). Set to `nil` to restore legacy double stacking. Threshold is strict (`>` not `≥`), so cells at exactly 1.30 (e.g. Virgo utility, Libra playful) still receive element boosts.
+
 ### 2.3 Automated Test Evidence
 
 All 7 energy map tests in `AstrologicalSoundness_Tests` (6B.1–6B.7) pass. See test run evidence below.
@@ -156,3 +158,39 @@ All 5 calibration weight tests in `AstrologicalSoundness_Tests` (6C.1–6C.5) pa
 | saturn_taurus — consider adding "structured" to silhouette keywords | Dataset maintainer | Optional, low priority |
 
 **Residual risk:** None blocking. All automated checks pass. Human sign-off for energy maps and calibration weights is recorded in this document.
+
+---
+
+## 7. Sign Energy Map Revision (2026-05-22)
+
+**P0 product decision:** Option A for `stage1_experimental` — daily sky vibe skips natal Sun `signEnergyMap`; chart anchor keeps multipliers. Production / legacy keep full-mix filtering (Option B architecture).
+
+**Implementation:**
+- `SignMultiplierPolicy` on `DailyFitCalibration` (`applyToDailyVibe`, `applyToChartAnchor`)
+- Phase 1 audit tuning: 13 cells in `DailyFitCalibration.default.signEnergyMap` (D5 table)
+- Inspector diagnostics + UI label honesty when daily policy is OFF
+- Leo preset in `inspector/Resources/presets.json`
+
+**Phase 1 cell deltas (production + stage1 chart anchor):**
+
+| Sign | Energy | Old → New |
+|------|--------|-----------|
+| Aries | classic | 0.90 → 0.95 |
+| Aries | drama | 1.40 → 1.35 |
+| Cancer | utility | 1.20 → 1.05 |
+| Leo | utility | 0.90 → 0.95 |
+| Leo | drama | 1.50 → 1.35 |
+| Virgo | utility | 1.40 → 1.30 |
+| Libra | playful | 1.20 → 1.30 |
+| Libra | edge | 0.90 → 0.95 |
+| Scorpio | romantic | 0.90 → 0.95 |
+| Scorpio | utility | 1.10 → 1.00 |
+| Scorpio | drama | 1.50 → 1.35 |
+| Aquarius | utility | 1.10 → 1.00 |
+| Pisces | edge | 1.20 → 1.25 |
+
+**Not implemented (deferred):** Phase 2 ceiling caps — pending explicit approval.
+
+**Implemented:** `elementBoosts` stacking dedupe (`elementBoostDedupeThreshold: 1.30` on `.default`).
+
+**Validation:** `python3 tools/sign_energy_inspector_harness.py` → `docs/fixtures/sign_audit_downstream_post_phase1.txt`

@@ -24,6 +24,13 @@ print("╔═══════════════════════�
 print("║  Cosmic Fit Inspector                        ║")
 print("║  http://127.0.0.1:7777                       ║")
 print("║  Press Ctrl+C to stop                        ║")
+print("╠──────────────────────────────────────────────╣")
+print("║  Built: \(BuildStamp.timestamp)")
+for listing in InspectorDefaults.dailyFitEngineListings() {
+    let tag = listing.isExperimental ? " (exp)" : ""
+    let short = String(listing.fingerprint.prefix(12))
+    print("║  ▸ \(listing.id)\(tag): \(short)…")
+}
 print("╚══════════════════════════════════════════════╝")
 
 try await app.runService()

@@ -353,6 +353,36 @@ struct DailyFitTypesTests {
         }
     }
 
+    @Test("T0.10b: Phase 1 sign map tuning cells match audit D5")
+    func testPhase1SignMapCells() {
+        let map = DailyFitCalibration.default.signEnergyMap
+        #expect(map.multiplier(forSign: "Aries", energy: .classic) == 0.95)
+        #expect(map.multiplier(forSign: "Aries", energy: .drama) == 1.35)
+        #expect(map.multiplier(forSign: "Cancer", energy: .utility) == 1.05)
+        #expect(map.multiplier(forSign: "Leo", energy: .utility) == 0.95)
+        #expect(map.multiplier(forSign: "Leo", energy: .drama) == 1.35)
+        #expect(map.multiplier(forSign: "Virgo", energy: .utility) == 1.30)
+        #expect(map.multiplier(forSign: "Libra", energy: .playful) == 1.30)
+        #expect(map.multiplier(forSign: "Libra", energy: .edge) == 0.95)
+        #expect(map.multiplier(forSign: "Scorpio", energy: .romantic) == 0.95)
+        #expect(map.multiplier(forSign: "Scorpio", energy: .utility) == 1.00)
+        #expect(map.multiplier(forSign: "Scorpio", energy: .drama) == 1.35)
+        #expect(map.multiplier(forSign: "Aquarius", energy: .utility) == 1.00)
+        #expect(map.multiplier(forSign: "Pisces", energy: .edge) == 1.25)
+    }
+
+    @Test("T0.10c: Sign multiplier policy defaults")
+    func testSignMultiplierPolicyDefaults() {
+        #expect(DailyFitCalibration.default.signMultiplierPolicy == .productionDefault)
+        let stage1 = DailyFitEngineRegistry.calibration(for: DailyFitEngineRegistry.stage1ExperimentalId)
+        #expect(stage1.signMultiplierPolicy == .stage1OptionA)
+    }
+
+    @Test("T0.10d: Element boost dedupe threshold default")
+    func testElementBoostDedupeThresholdDefault() {
+        #expect(DailyFitCalibration.default.elementBoostDedupeThreshold == 1.30)
+    }
+
     // MARK: T0.11 — Selection weights sum to one
 
     @Test("T0.11: Default calibration selection weights sum to 1.0 (within 0.001)")
@@ -440,5 +470,38 @@ struct DailyFitTypesTests {
         #expect(payload.silhouetteProfile.masculineFeminine == 0.6)
         #expect(payload.silhouetteProfile.angularRounded == 0.45)
         #expect(payload.silhouetteProfile.structuredDraped == 0.3)
+    }
+
+    // MARK: T0.19 — DailyNarrativeBrief Codable round-trip
+
+    @Test("T0.19: DailyNarrativeBrief encodes, decodes, and preserves Equatable equality")
+    func testNarrativeBriefCodableRoundTrip() throws {
+        let brief = DailyNarrativeBrief(
+            anchorCategories: [.romantic, .classic, .polished],
+            weatherCategories: [.maximalist, .drama, .edgy],
+            relationship: .stretch,
+            resolvedTheme: "Polished Drama",
+            instruction: "Your base is romantic, classic, and polished. Today's sky asks you to intensify.",
+            avoid: "Do not let the outfit become chaotic or costume-like.",
+            foundationControls: ["silhouette", "polish", "wearability", "comfort"],
+            accentControls: ["colour pop", "texture", "accessory", "contrast", "styling twist"],
+            essenceCaption: "Today's adapt signal: dramatic, edgy, and maximalist.",
+            paletteCaption: "Use palette for the accent.",
+            scalesCaption: "Scales reflect today's sky intensity."
+        )
+        let payload = DailyFitPayload.fixture().withNarrativeBrief(brief)
+        let data = try makeEncoder().encode(payload)
+        let decoded = try makeDecoder().decode(DailyFitPayload.self, from: data)
+        #expect(decoded.narrativeBrief == brief)
+    }
+
+    // MARK: T0.20 — DailyFitPayload decodes without narrativeBrief (legacy)
+
+    @Test("T0.20: Payload without narrativeBrief decodes as nil (legacy freeze support)")
+    func testLegacyPayloadDecodesNilBrief() throws {
+        let payload = DailyFitPayload.fixture()
+        let data = try makeEncoder().encode(payload)
+        let decoded = try makeDecoder().decode(DailyFitPayload.self, from: data)
+        #expect(decoded.narrativeBrief == nil)
     }
 }

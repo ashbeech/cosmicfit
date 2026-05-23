@@ -34,5 +34,14 @@
     "longitude": -0.1278,
     "timeZoneId": "Europe/London",
     "elementDominance": "water"
+  },
+  {
+    "id": "leo",
+    "label": "Leo Sun — London dawn (Fire / visibility stress)",
+    "birthDateUTC": "1988-08-10T04:00:00Z",
+    "latitude": 51.5074,
+    "longitude": -0.1278,
+    "timeZoneId": "Europe/London",
+    "elementDominance": "fire"
   }
 ]

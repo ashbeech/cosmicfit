@@ -19,11 +19,11 @@ Cosmic Fit/Resources/Assets.xcassets/Cards/<name>.imageset/<name>.png
 - Card images are **1041×1741 RGBA** (~12 tiles per image at 512px tiles)
 - Processing takes ~40s per image
 - The full 79-image batch was run but interrupted at 57/79. Needs completing.
-- Backups: `Cosmic Fit/Resources/.synthid_backups/` and `.synthid_baseline/`
+- Backups: `Resources/.synthid_backups/` and `Resources/.synthid_baseline/`
 
 ### What Doesn't Work Yet (Originals — 27 images)
 
-The **originals** in `Cosmic Fit/Resources/originals/` are **larger** (mostly 1696×2528 RGB, some 2048×2048) and the same settings fail Gemini's SynthID check.
+The **originals** in `Resources/originals/` are **larger** (mostly 1696×2528 RGB, some 2048×2048) and the same settings fail Gemini's SynthID check.
 
 **Tested and failed on originals:**
 
@@ -73,10 +73,13 @@ Wrapper for the flat `originals/` directory. Imports `img2img_denoise` from the 
 - `scripts/config/synthid_canary.txt` — canary manifest (5 Major Arcana cards)
 - `scripts/reports/synthid_run_report.json` — last run report
 
-### Backups
-- `Cosmic Fit/Resources/.synthid_backups/` — original card backups
-- `Cosmic Fit/Resources/.synthid_baseline/` — immutable baseline for PSNR/SSIM
-- `Cosmic Fit/Resources/.synthid_originals_backup/` — original originals backups
+### Backups (repo root `Resources/`, outside Xcode bundle)
+
+- `Resources/.synthid_backups/` — original card backups (restore source for `--restore-first`)
+- `Resources/.synthid_baseline/` — immutable baseline for PSNR/SSIM
+- `Resources/.synthid_candidates/` — card candidate runs (timestamped subdirs)
+- `Resources/.synthid_originals_backup/` — original originals backups
+- `Resources/.synthid_originals_candidates/` — originals test runs (`--output-dir`)
 
 ## Three Options to Try Next
 
@@ -131,15 +134,15 @@ python remove_synthid_originals.py \
 
 1. Always restore from backup before a new test:
    ```bash
-   cp "Cosmic Fit/Resources/.synthid_originals_backup/Death-final.png" \
-      "Cosmic Fit/Resources/originals/Death-final.png"
+   cp "Resources/.synthid_originals_backup/Death-final.png" \
+      "Resources/originals/Death-final.png"
    ```
 
 2. Use `--output-dir` so originals stay untouched:
    ```bash
    python remove_synthid_originals.py \
      --only Death-final.png \
-     --output-dir "Cosmic Fit/Resources/.synthid_originals_candidates/test_name"
+     --output-dir "Resources/.synthid_originals_candidates/test_name"
    ```
 
 3. Upload the output to Google's SynthID checker

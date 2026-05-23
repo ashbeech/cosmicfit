@@ -6,14 +6,16 @@ A locally-hosted web tool for inspecting, debugging, and comparing Cosmic Fit's 
 
 ```bash
 cd inspector
-swift run cosmicfit-inspector
+./run-inspector.sh
 ```
 
 Then open **http://127.0.0.1:7777** in your browser.
 
-The header **Engine** dropdown selects the Daily Fit preset (`dailyFitEngineId`); override the server default with `DAILY_FIT_ENGINE_ID=legacy_baseline swift run cosmicfit-inspector` if needed. See the root **`README.md`** §4.1.1 for preset design and app usage.
+The header **Engine** dropdown selects the Daily Fit preset (`dailyFitEngineId`); override the server default with `DAILY_FIT_ENGINE_ID=legacy_baseline ./run-inspector.sh` if needed. See the root **`README.md`** §2.1 and §4.1.1 for preset design, symlink rebuild behaviour, and build-stamp verification.
 
-The first build takes a few minutes (fetching SPM dependencies). Subsequent builds are incremental.
+**Do not use bare `swift run cosmicfit-inspector` when testing engine changes** — SPM often misses edits to symlinked sources under `Cosmic Fit/`. The run script kills any stale server on port 7777, refreshes `BuildStamp.swift`, deletes `.build/build.db`, rebuilds (~10s), and starts the server. Confirm the **Built:** timestamp in the terminal banner, UI header, or Markdown export metadata.
+
+The first build takes a few minutes (fetching SPM dependencies). Subsequent runs via `./run-inspector.sh` are much faster.
 
 ## Security
 
@@ -65,7 +67,7 @@ Four real-ephemeris presets are defined in `Resources/presets.json`:
 
 | Method | Path | Description |
 |--------|------|-------------|
-| `GET` | `/api/health` | Health check + engine version |
+| `GET` | `/api/health` | Health check, engine version, **`buildStamp`** (UTC binary build time) |
 | `GET` | `/api/presets` | List preset profiles |
 | `POST` | `/api/inspect` | Full pipeline (natal + blueprint + daily fit + verdicts) |
 | `GET` | `/api/geocode?q=...` | Forward geocoding via CLGeocoder |

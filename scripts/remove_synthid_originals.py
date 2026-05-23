@@ -25,11 +25,12 @@ from remove_synthid_diffusion import (
     _get_pipeline,
     img2img_denoise,
 )
+from synthid_profiles import profile_for_image, profile_summary
 
-ORIGINALS_DIR = (
-    "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/originals"
-)
-BACKUP_DIR = os.path.join(os.path.dirname(ORIGINALS_DIR), ".synthid_originals_backup")
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ORIGINALS_DIR = os.path.join(REPO_ROOT, "Resources", "originals")
+BACKUP_DIR = os.path.join(REPO_ROOT, "Resources", ".synthid_originals_backup")
+ORIGINALS_CANDIDATES_DIR = os.path.join(REPO_ROOT, "Resources", ".synthid_originals_candidates")
 
 SUPPORTED_EXTS = {".png", ".jpg", ".jpeg"}
 
@@ -80,15 +81,21 @@ def main() -> int:
 
     parser = argparse.ArgumentParser(description="De-SynthID the originals directory")
     parser.add_argument(
-        "--strength", type=float, nargs="+", default=[0.04, 0.05],
-        help="Per-pass strength values (e.g. --strength 0.04 0.05)",
+        "--profile",
+        default="auto",
+        choices=["auto", "large_original", "batch_legacy", "card", "silk"],
+        help="Image-adaptive profile (default: auto). Manual flags below override when profile is not auto.",
     )
-    parser.add_argument("--steps", type=int, default=28)
-    parser.add_argument("--guidance-scale", type=float, default=1.0)
-    parser.add_argument("--max-tile", type=int, default=768,
-                        help="Tile size in px (768 for large originals)")
-    parser.add_argument("--tile-overlap", type=int, default=128,
-                        help="Tile overlap in px")
+    parser.add_argument(
+        "--strength", type=float, nargs="+", default=None,
+        help="Per-pass strength values (overrides profile when set)",
+    )
+    parser.add_argument("--steps", type=int, default=None)
+    parser.add_argument("--guidance-scale", type=float, default=None)
+    parser.add_argument("--max-tile", type=int, default=None,
+                        help="Tile size in px (overrides profile when set)")
+    parser.add_argument("--tile-overlap", type=int, default=None,
+                        help="Tile overlap in px (overrides profile when set)")
     parser.add_argument("--originals-dir", default=ORIGINALS_DIR)
     parser.add_argument("--backup-dir", default=BACKUP_DIR)
     parser.add_argument(
@@ -104,7 +111,8 @@ def main() -> int:
         default=None,
         help=(
             "Write outputs here (same basenames). Does not modify originals; "
-            "skips backup. The directory is created if missing."
+            f"skips backup. The directory is created if missing. "
+            f"Typical test path: {ORIGINALS_CANDIDATES_DIR}/<run_name>"
         ),
     )
     args = parser.parse_args()
@@ -123,8 +131,7 @@ def main() -> int:
     out_root: str | None = args.output_dir
 
     print(f"Processing {len(images)} images in {args.originals_dir}")
-    print(f"Settings: strength={args.strength}, steps={args.steps}, "
-          f"max_tile={args.max_tile}, overlap={args.tile_overlap}")
+    print(f"Profile mode: {args.profile}")
     if out_root:
         os.makedirs(out_root, exist_ok=True)
         print(f"Output directory: {out_root}")
@@ -141,13 +148,26 @@ def main() -> int:
         print(f"\n[{idx:2d}/{len(images)}] {basename}...", flush=True)
 
         rgb, alpha, orig_mode = load_image(path)
+        h, w = rgb.shape[:2]
+        profile = profile_for_image(w, h, basename=basename, profile_name=args.profile)
+        summary = profile_summary(profile, w, h)
+        strength = args.strength if args.strength is not None else profile.strength
+        steps = args.steps if args.steps is not None else profile.steps
+        guidance = args.guidance_scale if args.guidance_scale is not None else profile.guidance_scale
+        max_tile = args.max_tile if args.max_tile is not None else profile.max_tile
+        overlap = args.tile_overlap if args.tile_overlap is not None else profile.tile_overlap
+        print(
+            f"  profile={summary['name']} strength={strength} steps={steps} "
+            f"tile={max_tile} overlap={overlap} (~{summary['estimated_total_tile_runs']} runs)",
+            flush=True,
+        )
         out_rgb = img2img_denoise(
             rgb,
-            strength=args.strength,
-            num_steps=args.steps,
-            guidance_scale=args.guidance_scale,
-            max_tile=args.max_tile,
-            overlap=args.tile_overlap,
+            strength=strength,
+            num_steps=steps,
+            guidance_scale=guidance,
+            max_tile=max_tile,
+            overlap=overlap,
         )
         dest = os.path.join(out_root, basename) if out_root else path
         if out_root:

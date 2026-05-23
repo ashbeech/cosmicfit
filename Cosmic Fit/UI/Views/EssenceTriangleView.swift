@@ -9,20 +9,22 @@
 
 import UIKit
 
-/// Renders the daily style-essence radar: a dotted-line triangle whose
-/// vertices are the top-3 scoring categories, with branded star icons
-/// at each vertex and adaptively-placed labels.
+/// Renders the daily style-essence radar: weather triangle (solid) with optional
+/// chart-anchor ghost layer (dashed) on stage-1 experimental days.
 final class EssenceTriangleView: UIView {
 
     // MARK: - Properties
 
     private var profile: StyleEssenceProfile?
+    private var presentation: EssencePresentationDirective?
 
     private let triangleLayer = CAShapeLayer()
+    private let anchorTriangleLayer = CAShapeLayer()
     private let guideLayer = CAShapeLayer()
     /// Branded div-star asset (same as Style Guide / menu dividers), not a geometric diamond.
     private let vertexStarViews: [UIImageView] = (0..<3).map { _ in UIImageView() }
     private var categoryLabels: [UILabel] = []
+    private var anchorLabels: [UILabel] = []
 
     // MARK: - Initialization
 
@@ -37,10 +39,16 @@ final class EssenceTriangleView: UIView {
 
     // MARK: - Public API
 
-    func configure(with profile: StyleEssenceProfile) {
+    func configure(with profile: StyleEssenceProfile, presentation: EssencePresentationDirective? = nil) {
         self.profile = profile
+        self.presentation = presentation
         rebuildLabels()
         setNeedsLayout()
+    }
+
+    @available(*, deprecated, message: "Use configure(with:presentation:)")
+    func configure(with profile: StyleEssenceProfile) {
+        configure(with: profile, presentation: nil)
     }
 
     @available(*, deprecated, message: "Use configure(with: StyleEssenceProfile)")
@@ -67,6 +75,12 @@ final class EssenceTriangleView: UIView {
         guideLayer.lineDashPattern = [1, 2]
         layer.addSublayer(guideLayer)
 
+        anchorTriangleLayer.fillColor = UIColor.clear.cgColor
+        anchorTriangleLayer.strokeColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.15).cgColor
+        anchorTriangleLayer.lineWidth = 1.0
+        anchorTriangleLayer.lineDashPattern = [3, 4]
+        layer.addSublayer(anchorTriangleLayer)
+
         triangleLayer.fillColor = UIColor.clear.cgColor
         triangleLayer.strokeColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.5).cgColor
         triangleLayer.lineWidth = 1.0
@@ -86,7 +100,9 @@ final class EssenceTriangleView: UIView {
 
     private func rebuildLabels() {
         categoryLabels.forEach { $0.removeFromSuperview() }
+        anchorLabels.forEach { $0.removeFromSuperview() }
         categoryLabels = []
+        anchorLabels = []
 
         guard let visible = profile?.visibleCategories else { return }
         for entry in visible {
@@ -108,6 +124,29 @@ final class EssenceTriangleView: UIView {
             addSubview(label)
             categoryLabels.append(label)
         }
+
+        if presentation?.showAnchorGhost == true,
+           let anchorScores = profile?.chartAnchorScores {
+            let anchorTop3 = anchorScores.sorted { $0.score > $1.score }.prefix(3)
+            let weatherCategories = Set(visible.map(\.category))
+            for entry in anchorTop3 where !weatherCategories.contains(entry.category) {
+                let ghostSize = CosmicFitTheme.Typography.FontSizes.caption1 - 2
+                let label = UILabel()
+                label.font = CosmicFitTheme.Typography.dmSansFont(size: ghostSize, weight: .medium)
+                label.textColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.35)
+                label.textAlignment = .center
+                label.attributedText = NSAttributedString(
+                    string: entry.category.label,
+                    attributes: [
+                        .kern: 1.0 as CGFloat,
+                        .font: label.font!,
+                        .foregroundColor: label.textColor!
+                    ]
+                )
+                addSubview(label)
+                anchorLabels.append(label)
+            }
+        }
     }
 
     // MARK: - Drawing
@@ -115,6 +154,7 @@ final class EssenceTriangleView: UIView {
     private func drawChart() {
         guard let visible = profile?.visibleCategories, visible.count == 3 else {
             triangleLayer.path = nil
+            anchorTriangleLayer.path = nil
             guideLayer.path = nil
             vertexStarViews.forEach { $0.isHidden = true }
             return
@@ -139,7 +179,7 @@ final class EssenceTriangleView: UIView {
         let maxScore = visible.map(\.score).max() ?? 1.0
         let scaleFactor = maxScore > 0 ? 1.0 / maxScore : 1.0
 
-        var points: [CGPoint] = []
+        var weatherPoints: [CGPoint] = []
         for (index, entry) in visible.enumerated() {
             let angle = CGFloat(entry.category.angle)
             let normalised = entry.score * scaleFactor
@@ -147,7 +187,7 @@ final class EssenceTriangleView: UIView {
             let radius = clampedNorm * maxRadius
             let px = centre.x + cos(angle) * radius
             let py = centre.y + sin(angle) * radius
-            points.append(CGPoint(x: px, y: py))
+            weatherPoints.append(CGPoint(x: px, y: py))
 
             let starSize: CGFloat = 20
             let star = vertexStarViews[index]
@@ -157,22 +197,50 @@ final class EssenceTriangleView: UIView {
         }
 
         let triPath = UIBezierPath()
-        triPath.move(to: points[0])
-        for i in 1..<points.count {
-            triPath.addLine(to: points[i])
+        triPath.move(to: weatherPoints[0])
+        for i in 1..<weatherPoints.count {
+            triPath.addLine(to: weatherPoints[i])
         }
         triPath.close()
         triangleLayer.path = triPath.cgPath
         triangleLayer.frame = bounds
 
-        positionLabels(visible: visible, points: points, centre: centre, maxRadius: maxRadius)
+        if presentation?.showAnchorGhost == true,
+           let anchorScores = profile?.chartAnchorScores {
+            let anchorTop3 = anchorScores.sorted { $0.score > $1.score }.prefix(3)
+            let anchorMax = anchorTop3.map(\.score).max() ?? 1.0
+            let anchorScale = anchorMax > 0 ? 1.0 / anchorMax : 1.0
+            var anchorPoints: [CGPoint] = []
+            for entry in anchorTop3 {
+                let angle = CGFloat(entry.category.angle)
+                let normalised = entry.score * anchorScale
+                let clampedNorm = max(CGFloat(normalised), CGFloat(minRadiusFraction))
+                let radius = clampedNorm * maxRadius
+                anchorPoints.append(CGPoint(
+                    x: centre.x + cos(angle) * radius,
+                    y: centre.y + sin(angle) * radius
+                ))
+            }
+            if anchorPoints.count == 3 {
+                let anchorPath = UIBezierPath()
+                anchorPath.move(to: anchorPoints[0])
+                anchorPath.addLine(to: anchorPoints[1])
+                anchorPath.addLine(to: anchorPoints[2])
+                anchorPath.close()
+                anchorTriangleLayer.path = anchorPath.cgPath
+                anchorTriangleLayer.frame = bounds
+            } else {
+                anchorTriangleLayer.path = nil
+            }
+        } else {
+            anchorTriangleLayer.path = nil
+        }
+
+        positionLabels(visible: visible, points: weatherPoints, centre: centre, maxRadius: maxRadius)
     }
 
     // MARK: - Adaptive Label Placement
 
-    /// Places each label by evaluating candidate positions around its star
-    /// vertex and choosing the one that avoids triangle edges, guide spokes,
-    /// star icons, other labels, and the view bounds.
     private func positionLabels(
         visible: [StyleEssenceScore],
         points: [CGPoint],
@@ -209,7 +277,7 @@ final class EssenceTriangleView: UIView {
         let step = (2 * CGFloat.pi) / CGFloat(candidateCount)
         var placedRects: [CGRect] = []
 
-        for (index, _) in visible.enumerated() where index < categoryLabels.count {
+        for (index, entry) in visible.enumerated() where index < categoryLabels.count {
             let label = categoryLabels[index]
             label.sizeToFit()
 
@@ -283,6 +351,12 @@ final class EssenceTriangleView: UIView {
 
             placedRects.append(CGRect(x: lx - halfW, y: ly - halfH,
                                       width: halfW * 2, height: halfH * 2))
+
+            if index < anchorLabels.count {
+                let ghost = anchorLabels[index]
+                ghost.sizeToFit()
+                ghost.center = CGPoint(x: lx, y: ly + halfH + 10)
+            }
         }
     }
 
@@ -328,11 +402,4 @@ final class EssenceTriangleView: UIView {
         min(a.x, b.x) <= c.x && c.x <= max(a.x, b.x) &&
         min(a.y, b.y) <= c.y && c.y <= max(a.y, b.y)
     }
-
-    private func normaliseAngle(_ a: CGFloat) -> CGFloat {
-        var result = a.truncatingRemainder(dividingBy: 2 * .pi)
-        if result < 0 { result += 2 * .pi }
-        return result
-    }
-
 }

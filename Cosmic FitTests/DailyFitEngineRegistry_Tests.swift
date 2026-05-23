@@ -54,7 +54,8 @@ struct DailyFitEngineRegistry_Tests {
         #expect(descriptor.mode == .stage1Experimental)
         #expect(descriptor.dailySeedPolicy == .includesEngineId)
         #expect(descriptor.calibration != DailyFitCalibration.default)
-        #expect(descriptor.calibration.sourceWeights.transits > DailyFitCalibration.default.sourceWeights.transits)
+        #expect(descriptor.calibration.axisTuning.sigmoidSpread == 0.8)
+        #expect(descriptor.calibration.stage2Sensitivity.paletteSelectionStrategy == .pureSkyScoring)
         #expect(descriptor.calibration.stage2Sensitivity.paletteJitter
             > DailyFitCalibration.default.stage2Sensitivity.paletteJitter)
         #expect(DailyFitEngineRegistry.mode(for: DailyFitEngineRegistry.stage1ExperimentalId)
@@ -143,6 +144,221 @@ struct DailyFitEngineRegistry_Tests {
         #expect(implicit.axes.strategy == explicit.axes.strategy)
         #expect(implicit.axes.visibility == explicit.axes.visibility)
         #expect(implicit.dailySeed == explicit.dailySeed)
+    }
+
+    @Test("stage1_experimental uses Option A sign multiplier policy")
+    func stage1SignMultiplierPolicy() {
+        let stage1 = DailyFitEngineRegistry.calibration(
+            for: DailyFitEngineRegistry.stage1ExperimentalId
+        )
+        #expect(stage1.signMultiplierPolicy == .stage1OptionA)
+        #expect(stage1.signMultiplierPolicy.applyToDailyVibe == false)
+        #expect(stage1.signMultiplierPolicy.applyToChartAnchor == true)
+    }
+
+    @Test("production and legacy use productionDefault sign multiplier policy")
+    func productionSignMultiplierPolicy() {
+        #expect(DailyFitCalibration.default.signMultiplierPolicy == .productionDefault)
+        let legacy = DailyFitEngineRegistry.calibration(for: DailyFitEngineRegistry.legacyBaselineId)
+        #expect(legacy.signMultiplierPolicy == .productionDefault)
+    }
+
+    @Test("stage1 sky payload skips sign multipliers; chart anchor keeps them")
+    func stage1SkyPathSkipsSignMultipliers() {
+        let profile = DailyFitEngineRegistryTestSupport.ashProfile
+        let date = DailyFitEngineRegistryTestSupport.fixedBaseDate
+        let natal = DailyFitEngineRegistryTestSupport.chart(signs: profile.natalSigns)
+        let progressed = DailyFitEngineRegistryTestSupport.chart(signs: profile.progressedSigns)
+        let transits = [
+            NatalChartCalculator.TransitAspect(
+                transitPlanet: "Mars", transitPlanetSymbol: "•",
+                natalPlanet: "Sun", natalPlanetSymbol: "•",
+                aspectType: "conjunction", aspectSymbol: "•",
+                orb: 1.0, applying: true,
+                effectiveFrom: date,
+                effectiveTo: date.addingTimeInterval(86400 * 3),
+                description: "Mars conjunction Sun",
+                category: .shortTerm
+            )
+        ]
+        let calibration = DailyFitEngineRegistry.calibration(
+            for: DailyFitEngineRegistry.stage1ExperimentalId
+        )
+
+        let snapshot = DailyEnergyEngine.generateSnapshot(
+            natalChart: natal,
+            progressedChart: progressed,
+            transits: transits,
+            moonPhaseDegrees: 45.0,
+            profileHash: profile.hash,
+            date: date,
+            calibration: calibration,
+            mode: .stage1Experimental,
+            dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
+        )
+
+        #expect(snapshot.vibeProfile == snapshot.skyVibeProfile)
+        #expect(snapshot.chartVibeProfile != nil)
+
+        let (_, trace) = DailyEnergyEngine.generateSnapshotWithTrace(
+            natalChart: natal,
+            progressedChart: progressed,
+            transits: transits,
+            moonPhaseDegrees: 45.0,
+            profileHash: profile.hash,
+            date: date,
+            calibration: calibration,
+            mode: .stage1Experimental,
+            dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
+        )
+
+        #expect(trace.postMultiplierScores == trace.rawScores)
+        for energy in Energy.allCases {
+            #expect(trace.signMultipliers[energy.rawValue] == 1.0)
+        }
+
+        let chartAnchorOffCal = DailyFitCalibration(
+            sourceWeights: calibration.sourceWeights,
+            signEnergyMap: calibration.signEnergyMap,
+            signMultiplierPolicy: .off,
+            planetAxisMap: calibration.planetAxisMap,
+            selectionWeights: calibration.selectionWeights,
+            axisTuning: calibration.axisTuning,
+            stage2Sensitivity: calibration.stage2Sensitivity
+        )
+        let snapshotNoChartMult = DailyEnergyEngine.generateSnapshot(
+            natalChart: natal,
+            progressedChart: progressed,
+            transits: transits,
+            moonPhaseDegrees: 45.0,
+            profileHash: profile.hash,
+            date: date,
+            calibration: chartAnchorOffCal,
+            mode: .stage1Experimental,
+            dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
+        )
+        let chartDiffers = Energy.allCases.contains {
+            snapshot.chartVibeProfile!.value(for: $0)
+                != snapshotNoChartMult.chartVibeProfile!.value(for: $0)
+        }
+        #expect(chartDiffers, "Chart anchor should still apply sign multipliers when policy enables it")
+    }
+
+    @Test("stage1 diagnostics report honest daily sign-multiplier policy")
+    func stage1DiagnosticsHonesty() {
+        let profile = DailyFitEngineRegistryTestSupport.ashProfile
+        let date = DailyFitEngineRegistryTestSupport.fixedBaseDate
+        let natal = DailyFitEngineRegistryTestSupport.chart(signs: profile.natalSigns)
+        let progressed = DailyFitEngineRegistryTestSupport.chart(signs: profile.progressedSigns)
+        let calibration = DailyFitEngineRegistry.calibration(
+            for: DailyFitEngineRegistry.stage1ExperimentalId
+        )
+
+        let (_, report) = DailyFitDiagnostics.generateReport(
+            natalChart: natal,
+            progressedChart: progressed,
+            transits: [],
+            moonPhaseDegrees: 45.0,
+            profileHash: profile.hash,
+            blueprint: DailyFitEngineRegistryTestSupport.minimalBlueprint,
+            date: date,
+            calibration: calibration,
+            dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
+        )
+
+        #expect(report.postMultiplierScores == report.rawEnergyScores)
+        #expect(report.stage1Attribution?.signMultipliersAppliedToDailyVibe == false)
+        #expect(report.calibrationSnapshot.signMultiplierPolicy["applyToDailyVibe"] == false)
+        #expect(report.calibrationSnapshot.signMultiplierPolicy["applyToChartAnchor"] == true)
+        #expect(report.stage1Attribution?.chartAnchorSignMultiplierApplied?["drama"] == 1.35)
+        #expect(report.stage1AxisAttribution?.byAxis.count == 4)
+    }
+
+    @Test("production daily path applies non-neutral sign multipliers in trace")
+    func productionDailySignMultipliersInTrace() {
+        let profile = DailyFitEngineRegistryTestSupport.ashProfile
+        let date = DailyFitEngineRegistryTestSupport.fixedBaseDate
+        let natal = DailyFitEngineRegistryTestSupport.chart(signs: profile.natalSigns)
+        let progressed = DailyFitEngineRegistryTestSupport.chart(signs: profile.progressedSigns)
+
+        let (_, report) = DailyFitDiagnostics.generateReport(
+            natalChart: natal,
+            progressedChart: progressed,
+            transits: [],
+            moonPhaseDegrees: 45.0,
+            profileHash: profile.hash,
+            blueprint: DailyFitEngineRegistryTestSupport.minimalBlueprint,
+            date: date,
+            calibration: .default,
+            dailyFitEngineId: DailyFitEngineRegistry.productionId
+        )
+
+        #expect(report.stage1Attribution?.signMultipliersAppliedToDailyVibe == true)
+        #expect(report.postMultiplierScores != report.rawEnergyScores)
+        let dramaMult = report.stage1Attribution?.signMultiplierApplied["drama"] ?? 0
+        #expect(dramaMult == 1.35)
+    }
+
+    @Test("stage1 sky payload ignores signEnergyMap on daily path")
+    func stage1SkyPayloadIgnoresSignMapOnDailyPath() {
+        let profile = DailyFitEngineRegistryTestSupport.ashProfile
+        let date = DailyFitEngineRegistryTestSupport.fixedBaseDate
+        let natal = DailyFitEngineRegistryTestSupport.chart(signs: profile.natalSigns)
+        let progressed = DailyFitEngineRegistryTestSupport.chart(signs: profile.progressedSigns)
+        let transits = [
+            NatalChartCalculator.TransitAspect(
+                transitPlanet: "Mars", transitPlanetSymbol: "•",
+                natalPlanet: "Sun", natalPlanetSymbol: "•",
+                aspectType: "conjunction", aspectSymbol: "•",
+                orb: 1.0, applying: true,
+                effectiveFrom: date,
+                effectiveTo: date.addingTimeInterval(86400 * 3),
+                description: "Mars conjunction Sun",
+                category: .shortTerm
+            )
+        ]
+        let stage1Calibration = DailyFitEngineRegistry.calibration(
+            for: DailyFitEngineRegistry.stage1ExperimentalId
+        )
+        var extremeMap = stage1Calibration.signEnergyMap.multipliers
+        extremeMap["Leo"] = Dictionary(uniqueKeysWithValues: Energy.allCases.map { ($0, 2.0) })
+        let extremeCalibration = DailyFitCalibration(
+            sourceWeights: stage1Calibration.sourceWeights,
+            signEnergyMap: DailyFitCalibration.SignEnergyMap(multipliers: extremeMap),
+            signMultiplierPolicy: .stage1OptionA,
+            planetAxisMap: stage1Calibration.planetAxisMap,
+            selectionWeights: stage1Calibration.selectionWeights,
+            axisTuning: stage1Calibration.axisTuning,
+            stage2Sensitivity: stage1Calibration.stage2Sensitivity
+        )
+
+        let baseline = DailyEnergyEngine.generateSnapshot(
+            natalChart: natal,
+            progressedChart: progressed,
+            transits: transits,
+            moonPhaseDegrees: 45.0,
+            profileHash: profile.hash,
+            date: date,
+            calibration: stage1Calibration,
+            mode: .stage1Experimental,
+            dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
+        )
+        let extreme = DailyEnergyEngine.generateSnapshot(
+            natalChart: natal,
+            progressedChart: progressed,
+            transits: transits,
+            moonPhaseDegrees: 45.0,
+            profileHash: profile.hash,
+            date: date,
+            calibration: extremeCalibration,
+            mode: .stage1Experimental,
+            dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
+        )
+
+        #expect(baseline.vibeProfile == extreme.vibeProfile)
+        #expect(baseline.skyVibeProfile == extreme.skyVibeProfile)
+        #expect(baseline.vibeProfile.totalPoints == 21)
+        #expect(baseline.chartVibeProfile != extreme.chartVibeProfile)
     }
 
     @Test("legacy_baseline produces different Daily Fit output than production on fixed fixture")
@@ -256,7 +472,7 @@ private enum DailyFitEngineRegistryTestSupport {
         )
     }
 
-    private static let minimalBlueprint: CosmicBlueprint = {
+    static let minimalBlueprint: CosmicBlueprint = {
         func colour(_ name: String, _ hex: String, _ role: ColourRole) -> BlueprintColour {
             BlueprintColour(
                 name: name, hexValue: hex, role: role,

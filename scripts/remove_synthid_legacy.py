@@ -18,12 +18,10 @@ from PIL import Image
 from scipy.ndimage import gaussian_filter, map_coordinates
 
 
-DEFAULT_ASSETS_DIR = (
-    "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets"
-)
-DEFAULT_BACKUP_DIR = (
-    "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_backups"
-)
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_ROOT = os.path.dirname(_SCRIPT_DIR)
+DEFAULT_ASSETS_DIR = os.path.join(REPO_ROOT, "Cosmic Fit", "Resources", "Assets.xcassets")
+DEFAULT_BACKUP_DIR = os.path.join(REPO_ROOT, "Resources", ".synthid_backups")
 
 
 def find_card_images(assets_dir: str) -> list[str]:

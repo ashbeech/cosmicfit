@@ -3,6 +3,7 @@ import Foundation
 public actor InspectorEngine {
 
     private var blueprintCache: [String: CosmicBlueprint] = [:]
+    private var blueprintDiagnosticsCache: [String: BlueprintDiagnosticReport] = [:]
     private var dataset: AstrologicalStyleDataset?
     private var narrativeCache: NarrativeCacheLoader?
     private var isBootstrapped = false
@@ -101,17 +102,20 @@ public actor InspectorEngine {
 
         let composeBlueprint = request.options?.composeBlueprint ?? true
         var blueprint: CosmicBlueprint? = blueprintCache[profileHash]
+        var blueprintDiagnostics: BlueprintDiagnosticReport? = blueprintDiagnosticsCache[profileHash]
         if blueprint == nil {
             guard composeBlueprint else {
                 throw InspectorError.blueprintRequired
             }
-            let composed = BlueprintComposer.compose(
+            let composed = BlueprintComposer.composeFull(
                 chart: natalChart, birthDate: birthDate,
                 birthLocation: birth.locationLabel,
                 dataset: dataset, narrativeCache: narrativeCache
             )
-            blueprintCache[profileHash] = composed
-            blueprint = composed
+            blueprintCache[profileHash] = composed.blueprint
+            blueprintDiagnosticsCache[profileHash] = composed.diagnostics
+            blueprint = composed.blueprint
+            blueprintDiagnostics = composed.diagnostics
         }
 
         guard let bp = blueprint else {
@@ -157,6 +161,7 @@ public actor InspectorEngine {
             natal: NatalChartDTO(from: natalChart),
             progressed: progressedChart.map { NatalChartDTO(from: $0) },
             blueprint: bp,
+            blueprintDiagnostics: blueprintDiagnostics,
             dailyFit: DailyFitResult(payload: payload, diagnostics: report),
             verdicts: verdicts
         )
@@ -164,6 +169,7 @@ public actor InspectorEngine {
 
     public func invalidateBlueprint(forHash hash: String) {
         blueprintCache.removeValue(forKey: hash)
+        blueprintDiagnosticsCache.removeValue(forKey: hash)
     }
 
     public func clearTarotHistory(profileHash: String, dailyFitEngineId: String) {

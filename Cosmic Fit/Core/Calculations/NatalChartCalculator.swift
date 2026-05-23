@@ -438,6 +438,38 @@ struct NatalChartCalculator {
         let effectiveTo: Date
         let description: String
         let category: TransitCategory
+        /// Zodiac sign index (1–12) of the transiting planet at aspect time.
+        let transitZodiacSign: Int?
+
+        init(
+            transitPlanet: String,
+            transitPlanetSymbol: String,
+            natalPlanet: String,
+            natalPlanetSymbol: String,
+            aspectType: String,
+            aspectSymbol: String,
+            orb: Double,
+            applying: Bool,
+            effectiveFrom: Date,
+            effectiveTo: Date,
+            description: String,
+            category: TransitCategory,
+            transitZodiacSign: Int? = nil
+        ) {
+            self.transitPlanet = transitPlanet
+            self.transitPlanetSymbol = transitPlanetSymbol
+            self.natalPlanet = natalPlanet
+            self.natalPlanetSymbol = natalPlanetSymbol
+            self.aspectType = aspectType
+            self.aspectSymbol = aspectSymbol
+            self.orb = orb
+            self.applying = applying
+            self.effectiveFrom = effectiveFrom
+            self.effectiveTo = effectiveTo
+            self.description = description
+            self.category = category
+            self.transitZodiacSign = transitZodiacSign
+        }
     }
     
     enum TransitCategory: String, Codable {
@@ -847,7 +879,8 @@ struct NatalChartCalculator {
                     effectiveFrom: effectiveFrom,
                     effectiveTo: effectiveTo,
                     description: description + "\n" + detailedInfo,
-                    category: category
+                    category: category,
+                    transitZodiacSign: transitSign
                 )
             } else {
                 DebugLogger.debug("   ❌ \(transitPlanet) → \(natalPlanet): No aspect within \(maxOrb)° orb")
@@ -1005,7 +1038,8 @@ struct NatalChartCalculator {
                     effectiveFrom: effectiveFrom,
                     effectiveTo: effectiveTo,
                     description: description + "\n" + detailedInfo,
-                    category: category
+                    category: category,
+                    transitZodiacSign: transitSign
                 )
             } else {
                 DebugLogger.debug("   ❌ \(transitPlanet) → \(natalAngle): No aspect within \(maxOrb)° orb")

@@ -1,0 +1,1322 @@
+[
+  {
+    "preset": "fire",
+    "engine": "production",
+    "date": "2026-05-09",
+    "sunSign": "Aries",
+    "rawEnergyScores": {
+      "classic": 3.5881896922428984,
+      "drama": 4.219800421958729,
+      "edge": 4.531122292877537,
+      "playful": 4.028423581353677,
+      "romantic": 4.219094518727235,
+      "utility": 2.2657069757598824
+    },
+    "postMultiplierScores": {
+      "classic": 3.408780207630753,
+      "drama": 5.696730569644284,
+      "edge": 5.4373467514530445,
+      "playful": 5.236950655759781,
+      "romantic": 4.219094518727235,
+      "utility": 2.2657069757598824
+    },
+    "finalVibeBreakdown": {
+      "classic": 3,
+      "playful": 4,
+      "romantic": 3,
+      "utility": 2,
+      "drama": 5,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 0.95,
+      "drama": 1.35,
+      "edge": 1.2,
+      "playful": 1.3,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": true,
+    "dominantEnergy": "drama"
+  },
+  {
+    "preset": "fire",
+    "engine": "stage1_experimental",
+    "date": "2026-05-09",
+    "sunSign": "Aries",
+    "rawEnergyScores": {
+      "classic": 2.1713259706496904,
+      "drama": 2.471762206160997,
+      "edge": 2.7691349711030018,
+      "playful": 2.390064462871675,
+      "romantic": 2.6698294181385007,
+      "utility": 1.3038383160189642
+    },
+    "postMultiplierScores": {
+      "classic": 2.1713259706496904,
+      "drama": 2.471762206160997,
+      "edge": 2.7691349711030018,
+      "playful": 2.390064462871675,
+      "romantic": 2.6698294181385007,
+      "utility": 1.3038383160189642
+    },
+    "finalVibeBreakdown": {
+      "classic": 3,
+      "playful": 4,
+      "romantic": 4,
+      "utility": 2,
+      "drama": 4,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1,
+      "edge": 1,
+      "playful": 1,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": false,
+    "chartAnchorSignMultiplierApplied": {
+      "classic": 0.95,
+      "drama": 1.35,
+      "edge": 1.2,
+      "playful": 1.3,
+      "romantic": 1,
+      "utility": 1
+    },
+    "dominantEnergy": "playful"
+  },
+  {
+    "preset": "fire",
+    "engine": "production",
+    "date": "2026-05-15",
+    "sunSign": "Aries",
+    "rawEnergyScores": {
+      "classic": 2.083565835306781,
+      "drama": 3.1981959771319373,
+      "edge": 4.022130217220256,
+      "playful": 2.634075941223701,
+      "romantic": 2.1896602461939625,
+      "utility": 1.6792560695340844
+    },
+    "postMultiplierScores": {
+      "classic": 1.979387543541442,
+      "drama": 4.317564569128115,
+      "edge": 4.826556260664307,
+      "playful": 3.424298723590811,
+      "romantic": 2.1896602461939625,
+      "utility": 1.6792560695340844
+    },
+    "finalVibeBreakdown": {
+      "classic": 2,
+      "playful": 4,
+      "romantic": 2,
+      "utility": 2,
+      "drama": 5,
+      "edge": 6
+    },
+    "signMultiplierApplied": {
+      "classic": 0.95,
+      "drama": 1.35,
+      "edge": 1.2,
+      "playful": 1.3,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": true,
+    "dominantEnergy": "edge"
+  },
+  {
+    "preset": "fire",
+    "engine": "stage1_experimental",
+    "date": "2026-05-15",
+    "sunSign": "Aries",
+    "rawEnergyScores": {
+      "classic": 1.00802321569532,
+      "drama": 1.719901888427575,
+      "edge": 2.5162834884906586,
+      "playful": 1.3941018627788342,
+      "romantic": 1.1095192234718783,
+      "utility": 0.9956590972862508
+    },
+    "postMultiplierScores": {
+      "classic": 1.00802321569532,
+      "drama": 1.719901888427575,
+      "edge": 2.5162834884906586,
+      "playful": 1.3941018627788342,
+      "romantic": 1.1095192234718783,
+      "utility": 0.9956590972862508
+    },
+    "finalVibeBreakdown": {
+      "classic": 3,
+      "playful": 3,
+      "romantic": 3,
+      "utility": 2,
+      "drama": 4,
+      "edge": 6
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1,
+      "edge": 1,
+      "playful": 1,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": false,
+    "chartAnchorSignMultiplierApplied": {
+      "classic": 0.95,
+      "drama": 1.35,
+      "edge": 1.2,
+      "playful": 1.3,
+      "romantic": 1,
+      "utility": 1
+    },
+    "dominantEnergy": "edge"
+  },
+  {
+    "preset": "fire",
+    "engine": "production",
+    "date": "2026-05-22",
+    "sunSign": "Aries",
+    "rawEnergyScores": {
+      "classic": 4.195519638679655,
+      "drama": 4.421724271500662,
+      "edge": 4.663383074918963,
+      "playful": 4.256938094237782,
+      "romantic": 3.1765559209025898,
+      "utility": 2.5431400238209476
+    },
+    "postMultiplierScores": {
+      "classic": 3.985743656745672,
+      "drama": 5.969327766525894,
+      "edge": 5.596059689902756,
+      "playful": 5.534019522509117,
+      "romantic": 3.1765559209025898,
+      "utility": 2.5431400238209476
+    },
+    "finalVibeBreakdown": {
+      "classic": 3,
+      "playful": 4,
+      "romantic": 3,
+      "utility": 2,
+      "drama": 5,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 0.95,
+      "drama": 1.35,
+      "edge": 1.2,
+      "playful": 1.3,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": true,
+    "dominantEnergy": "drama"
+  },
+  {
+    "preset": "fire",
+    "engine": "stage1_experimental",
+    "date": "2026-05-22",
+    "sunSign": "Aries",
+    "rawEnergyScores": {
+      "classic": 2.4608473609616577,
+      "drama": 2.6159935272623756,
+      "edge": 2.9800355297040206,
+      "playful": 2.6975748292174635,
+      "romantic": 1.8144447054066115,
+      "utility": 1.4962904932054384
+    },
+    "postMultiplierScores": {
+      "classic": 2.4608473609616577,
+      "drama": 2.6159935272623756,
+      "edge": 2.9800355297040206,
+      "playful": 2.6975748292174635,
+      "romantic": 1.8144447054066115,
+      "utility": 1.4962904932054384
+    },
+    "finalVibeBreakdown": {
+      "classic": 4,
+      "playful": 4,
+      "romantic": 3,
+      "utility": 2,
+      "drama": 4,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1,
+      "edge": 1,
+      "playful": 1,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": false,
+    "chartAnchorSignMultiplierApplied": {
+      "classic": 0.95,
+      "drama": 1.35,
+      "edge": 1.2,
+      "playful": 1.3,
+      "romantic": 1,
+      "utility": 1
+    },
+    "dominantEnergy": "classic"
+  },
+  {
+    "preset": "earth",
+    "engine": "production",
+    "date": "2026-05-09",
+    "sunSign": "Taurus",
+    "rawEnergyScores": {
+      "classic": 3.2417188780985597,
+      "drama": 3.815122257816508,
+      "edge": 3.34945658312191,
+      "playful": 3.2108815217141737,
+      "romantic": 3.5144248481171787,
+      "utility": 1.9402086926971356
+    },
+    "postMultiplierScores": {
+      "classic": 4.86257831714784,
+      "drama": 3.2428539191440318,
+      "edge": 3.34945658312191,
+      "playful": 2.8897933695427565,
+      "romantic": 4.5687523025523324,
+      "utility": 2.3282504312365626
+    },
+    "finalVibeBreakdown": {
+      "classic": 5,
+      "playful": 3,
+      "romantic": 5,
+      "utility": 2,
+      "drama": 3,
+      "edge": 3
+    },
+    "signMultiplierApplied": {
+      "classic": 1.5,
+      "drama": 0.85,
+      "edge": 1,
+      "playful": 0.9,
+      "romantic": 1.3,
+      "utility": 1.2
+    },
+    "signMultipliersAppliedToDailyVibe": true,
+    "dominantEnergy": "classic"
+  },
+  {
+    "preset": "earth",
+    "engine": "stage1_experimental",
+    "date": "2026-05-09",
+    "sunSign": "Taurus",
+    "rawEnergyScores": {
+      "classic": 1.9852753891180193,
+      "drama": 2.16270637463084,
+      "edge": 1.9079451784204122,
+      "playful": 1.7653915631291728,
+      "romantic": 2.152208224845604,
+      "utility": 1.102053828117002
+    },
+    "postMultiplierScores": {
+      "classic": 1.9852753891180193,
+      "drama": 2.16270637463084,
+      "edge": 1.9079451784204122,
+      "playful": 1.7653915631291728,
+      "romantic": 2.152208224845604,
+      "utility": 1.102053828117002
+    },
+    "finalVibeBreakdown": {
+      "classic": 4,
+      "playful": 3,
+      "romantic": 4,
+      "utility": 2,
+      "drama": 4,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1,
+      "edge": 1,
+      "playful": 1,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": false,
+    "chartAnchorSignMultiplierApplied": {
+      "classic": 1.5,
+      "drama": 0.85,
+      "edge": 1,
+      "playful": 0.9,
+      "romantic": 1.3,
+      "utility": 1.2
+    },
+    "dominantEnergy": "classic"
+  },
+  {
+    "preset": "earth",
+    "engine": "production",
+    "date": "2026-05-15",
+    "sunSign": "Taurus",
+    "rawEnergyScores": {
+      "classic": 2.829162028474839,
+      "drama": 3.3628334799872457,
+      "edge": 3.617499765169205,
+      "playful": 3.020204604170358,
+      "romantic": 2.671128299423535,
+      "utility": 1.873035859194025
+    },
+    "postMultiplierScores": {
+      "classic": 4.243743042712259,
+      "drama": 2.858408457989159,
+      "edge": 3.617499765169205,
+      "playful": 2.718184143753322,
+      "romantic": 3.4724667892505954,
+      "utility": 2.24764303103283
+    },
+    "finalVibeBreakdown": {
+      "classic": 5,
+      "playful": 3,
+      "romantic": 4,
+      "utility": 2,
+      "drama": 3,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 1.5,
+      "drama": 0.85,
+      "edge": 1,
+      "playful": 0.9,
+      "romantic": 1.3,
+      "utility": 1.2
+    },
+    "signMultipliersAppliedToDailyVibe": true,
+    "dominantEnergy": "classic"
+  },
+  {
+    "preset": "earth",
+    "engine": "stage1_experimental",
+    "date": "2026-05-15",
+    "sunSign": "Taurus",
+    "rawEnergyScores": {
+      "classic": 1.6020204965296476,
+      "drama": 1.8175001047527954,
+      "edge": 2.2101188798827653,
+      "playful": 1.6291937648835892,
+      "romantic": 1.4391392614930008,
+      "utility": 1.1647875184719227
+    },
+    "postMultiplierScores": {
+      "classic": 1.6020204965296476,
+      "drama": 1.8175001047527954,
+      "edge": 2.2101188798827653,
+      "playful": 1.6291937648835892,
+      "romantic": 1.4391392614930008,
+      "utility": 1.1647875184719227
+    },
+    "finalVibeBreakdown": {
+      "classic": 3,
+      "playful": 3,
+      "romantic": 3,
+      "utility": 3,
+      "drama": 4,
+      "edge": 5
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1,
+      "edge": 1,
+      "playful": 1,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": false,
+    "chartAnchorSignMultiplierApplied": {
+      "classic": 1.5,
+      "drama": 0.85,
+      "edge": 1,
+      "playful": 0.9,
+      "romantic": 1.3,
+      "utility": 1.2
+    },
+    "dominantEnergy": "edge"
+  },
+  {
+    "preset": "earth",
+    "engine": "production",
+    "date": "2026-05-22",
+    "sunSign": "Taurus",
+    "rawEnergyScores": {
+      "classic": 3.99009513959874,
+      "drama": 4.23740508883226,
+      "edge": 4.271574110762993,
+      "playful": 4.372158412356396,
+      "romantic": 3.2775827256371564,
+      "utility": 2.5788585243649758
+    },
+    "postMultiplierScores": {
+      "classic": 5.98514270939811,
+      "drama": 3.6017943255074205,
+      "edge": 4.271574110762993,
+      "playful": 3.9349425711207564,
+      "romantic": 4.260857543328304,
+      "utility": 3.094630229237971
+    },
+    "finalVibeBreakdown": {
+      "classic": 5,
+      "playful": 3,
+      "romantic": 3,
+      "utility": 3,
+      "drama": 3,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 1.5,
+      "drama": 0.85,
+      "edge": 1,
+      "playful": 0.9,
+      "romantic": 1.3,
+      "utility": 1.2
+    },
+    "signMultipliersAppliedToDailyVibe": true,
+    "dominantEnergy": "classic"
+  },
+  {
+    "preset": "earth",
+    "engine": "stage1_experimental",
+    "date": "2026-05-22",
+    "sunSign": "Taurus",
+    "rawEnergyScores": {
+      "classic": 2.3755441473324344,
+      "drama": 2.4643369682135168,
+      "edge": 2.6830291267354696,
+      "playful": 2.739160770730757,
+      "romantic": 1.872320994502731,
+      "utility": 1.5525179935940299
+    },
+    "postMultiplierScores": {
+      "classic": 2.3755441473324344,
+      "drama": 2.4643369682135168,
+      "edge": 2.6830291267354696,
+      "playful": 2.739160770730757,
+      "romantic": 1.872320994502731,
+      "utility": 1.5525179935940299
+    },
+    "finalVibeBreakdown": {
+      "classic": 4,
+      "playful": 4,
+      "romantic": 3,
+      "utility": 2,
+      "drama": 4,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1,
+      "edge": 1,
+      "playful": 1,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": false,
+    "chartAnchorSignMultiplierApplied": {
+      "classic": 1.5,
+      "drama": 0.85,
+      "edge": 1,
+      "playful": 0.9,
+      "romantic": 1.3,
+      "utility": 1.2
+    },
+    "dominantEnergy": "classic"
+  },
+  {
+    "preset": "air",
+    "engine": "production",
+    "date": "2026-05-09",
+    "sunSign": "Aquarius",
+    "rawEnergyScores": {
+      "classic": 2.7115158342861485,
+      "drama": 4.54027687355093,
+      "edge": 4.0722098384680985,
+      "playful": 3.4154222700811734,
+      "romantic": 2.9762295207063674,
+      "utility": 1.852772490329401
+    },
+    "postMultiplierScores": {
+      "classic": 2.3047884591432264,
+      "drama": 4.54027687355093,
+      "edge": 6.108314757702148,
+      "playful": 4.098506724097408,
+      "romantic": 2.6786065686357308,
+      "utility": 1.852772490329401
+    },
+    "finalVibeBreakdown": {
+      "classic": 2,
+      "playful": 4,
+      "romantic": 3,
+      "utility": 2,
+      "drama": 4,
+      "edge": 6
+    },
+    "signMultiplierApplied": {
+      "classic": 0.85,
+      "drama": 1,
+      "edge": 1.5,
+      "playful": 1.2,
+      "romantic": 0.9,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": true,
+    "dominantEnergy": "edge"
+  },
+  {
+    "preset": "air",
+    "engine": "stage1_experimental",
+    "date": "2026-05-09",
+    "sunSign": "Aquarius",
+    "rawEnergyScores": {
+      "classic": 1.6265589292520108,
+      "drama": 2.66281681444114,
+      "edge": 2.417768932239118,
+      "playful": 1.8843492405341717,
+      "romantic": 1.7892115624093095,
+      "utility": 1.0495993978543343
+    },
+    "postMultiplierScores": {
+      "classic": 1.6265589292520108,
+      "drama": 2.66281681444114,
+      "edge": 2.417768932239118,
+      "playful": 1.8843492405341717,
+      "romantic": 1.7892115624093095,
+      "utility": 1.0495993978543343
+    },
+    "finalVibeBreakdown": {
+      "classic": 3,
+      "playful": 4,
+      "romantic": 3,
+      "utility": 2,
+      "drama": 5,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1,
+      "edge": 1,
+      "playful": 1,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": false,
+    "chartAnchorSignMultiplierApplied": {
+      "classic": 0.85,
+      "drama": 1,
+      "edge": 1.5,
+      "playful": 1.2,
+      "romantic": 0.9,
+      "utility": 1
+    },
+    "dominantEnergy": "drama"
+  },
+  {
+    "preset": "air",
+    "engine": "production",
+    "date": "2026-05-15",
+    "sunSign": "Aquarius",
+    "rawEnergyScores": {
+      "classic": 2.7209631421843814,
+      "drama": 4.324339577158183,
+      "edge": 3.742843991548891,
+      "playful": 3.3111754685846404,
+      "romantic": 2.731697327251448,
+      "utility": 1.6607017593376567
+    },
+    "postMultiplierScores": {
+      "classic": 2.312818670856724,
+      "drama": 4.324339577158183,
+      "edge": 5.6142659873233365,
+      "playful": 3.9734105623015683,
+      "romantic": 2.4585275945263034,
+      "utility": 1.6607017593376567
+    },
+    "finalVibeBreakdown": {
+      "classic": 2,
+      "playful": 4,
+      "romantic": 3,
+      "utility": 2,
+      "drama": 4,
+      "edge": 6
+    },
+    "signMultiplierApplied": {
+      "classic": 0.85,
+      "drama": 1,
+      "edge": 1.5,
+      "playful": 1.2,
+      "romantic": 0.9,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": true,
+    "dominantEnergy": "edge"
+  },
+  {
+    "preset": "air",
+    "engine": "stage1_experimental",
+    "date": "2026-05-15",
+    "sunSign": "Aquarius",
+    "rawEnergyScores": {
+      "classic": 1.5447355777507488,
+      "drama": 2.486433031303462,
+      "edge": 2.2932218987253985,
+      "playful": 1.8098872394652192,
+      "romantic": 1.5038314242272248,
+      "utility": 1.0231203042888026
+    },
+    "postMultiplierScores": {
+      "classic": 1.5447355777507488,
+      "drama": 2.486433031303462,
+      "edge": 2.2932218987253985,
+      "playful": 1.8098872394652192,
+      "romantic": 1.5038314242272248,
+      "utility": 1.0231203042888026
+    },
+    "finalVibeBreakdown": {
+      "classic": 3,
+      "playful": 4,
+      "romantic": 3,
+      "utility": 2,
+      "drama": 5,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1,
+      "edge": 1,
+      "playful": 1,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": false,
+    "chartAnchorSignMultiplierApplied": {
+      "classic": 0.85,
+      "drama": 1,
+      "edge": 1.5,
+      "playful": 1.2,
+      "romantic": 0.9,
+      "utility": 1
+    },
+    "dominantEnergy": "drama"
+  },
+  {
+    "preset": "air",
+    "engine": "production",
+    "date": "2026-05-22",
+    "sunSign": "Aquarius",
+    "rawEnergyScores": {
+      "classic": 3.6913273856429516,
+      "drama": 4.850942911680676,
+      "edge": 4.25644001924073,
+      "playful": 4.2177456288403965,
+      "romantic": 3.1038167537635157,
+      "utility": 2.233229020379164
+    },
+    "postMultiplierScores": {
+      "classic": 3.1376282777965088,
+      "drama": 4.850942911680676,
+      "edge": 6.384660028861095,
+      "playful": 5.061294754608475,
+      "romantic": 2.7934350783871644,
+      "utility": 2.233229020379164
+    },
+    "finalVibeBreakdown": {
+      "classic": 3,
+      "playful": 4,
+      "romantic": 2,
+      "utility": 2,
+      "drama": 4,
+      "edge": 6
+    },
+    "signMultiplierApplied": {
+      "classic": 0.85,
+      "drama": 1,
+      "edge": 1.5,
+      "playful": 1.2,
+      "romantic": 0.9,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": true,
+    "dominantEnergy": "edge"
+  },
+  {
+    "preset": "air",
+    "engine": "stage1_experimental",
+    "date": "2026-05-22",
+    "sunSign": "Aquarius",
+    "rawEnergyScores": {
+      "classic": 2.1821386087925845,
+      "drama": 2.884721127390956,
+      "edge": 2.6657904899338547,
+      "playful": 2.601723068219329,
+      "romantic": 1.7696310145929872,
+      "utility": 1.315639776461307
+    },
+    "postMultiplierScores": {
+      "classic": 2.1821386087925845,
+      "drama": 2.884721127390956,
+      "edge": 2.6657904899338547,
+      "playful": 2.601723068219329,
+      "romantic": 1.7696310145929872,
+      "utility": 1.315639776461307
+    },
+    "finalVibeBreakdown": {
+      "classic": 3,
+      "playful": 4,
+      "romantic": 3,
+      "utility": 2,
+      "drama": 5,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1,
+      "edge": 1,
+      "playful": 1,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": false,
+    "chartAnchorSignMultiplierApplied": {
+      "classic": 0.85,
+      "drama": 1,
+      "edge": 1.5,
+      "playful": 1.2,
+      "romantic": 0.9,
+      "utility": 1
+    },
+    "dominantEnergy": "drama"
+  },
+  {
+    "preset": "water",
+    "engine": "production",
+    "date": "2026-05-09",
+    "sunSign": "Scorpio",
+    "rawEnergyScores": {
+      "classic": 3.7085384262541883,
+      "drama": 4.237139959666965,
+      "edge": 3.984683391865259,
+      "playful": 3.650748694691991,
+      "romantic": 3.9257489769173515,
+      "utility": 2.5439386320146236
+    },
+    "postMultiplierScores": {
+      "classic": 3.7085384262541883,
+      "drama": 5.720138945550404,
+      "edge": 5.180088409424837,
+      "playful": 3.1031363904881926,
+      "romantic": 3.7294615280714836,
+      "utility": 2.5439386320146236
+    },
+    "finalVibeBreakdown": {
+      "classic": 3,
+      "playful": 3,
+      "romantic": 3,
+      "utility": 2,
+      "drama": 5,
+      "edge": 5
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1.35,
+      "edge": 1.3,
+      "playful": 0.85,
+      "romantic": 0.95,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": true,
+    "dominantEnergy": "drama"
+  },
+  {
+    "preset": "water",
+    "engine": "stage1_experimental",
+    "date": "2026-05-09",
+    "sunSign": "Scorpio",
+    "rawEnergyScores": {
+      "classic": 2.270146494943469,
+      "drama": 2.4641475902383085,
+      "edge": 2.3888214703799475,
+      "playful": 2.136725258113328,
+      "romantic": 2.4345826025600137,
+      "utility": 1.5090037847723508
+    },
+    "postMultiplierScores": {
+      "classic": 2.270146494943469,
+      "drama": 2.4641475902383085,
+      "edge": 2.3888214703799475,
+      "playful": 2.136725258113328,
+      "romantic": 2.4345826025600137,
+      "utility": 1.5090037847723508
+    },
+    "finalVibeBreakdown": {
+      "classic": 4,
+      "playful": 3,
+      "romantic": 4,
+      "utility": 2,
+      "drama": 4,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1,
+      "edge": 1,
+      "playful": 1,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": false,
+    "chartAnchorSignMultiplierApplied": {
+      "classic": 1,
+      "drama": 1.35,
+      "edge": 1.3,
+      "playful": 0.85,
+      "romantic": 0.95,
+      "utility": 1
+    },
+    "dominantEnergy": "classic"
+  },
+  {
+    "preset": "water",
+    "engine": "production",
+    "date": "2026-05-15",
+    "sunSign": "Scorpio",
+    "rawEnergyScores": {
+      "classic": 3.018876516392795,
+      "drama": 3.7234405652007427,
+      "edge": 3.787076017807726,
+      "playful": 2.8618822244580553,
+      "romantic": 2.8144100835686023,
+      "utility": 2.1721013679718983
+    },
+    "postMultiplierScores": {
+      "classic": 3.018876516392795,
+      "drama": 5.026644763021003,
+      "edge": 4.923198823150043,
+      "playful": 2.432599890789347,
+      "romantic": 2.6736895793901723,
+      "utility": 2.1721013679718983
+    },
+    "finalVibeBreakdown": {
+      "classic": 3,
+      "playful": 3,
+      "romantic": 3,
+      "utility": 2,
+      "drama": 5,
+      "edge": 5
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1.35,
+      "edge": 1.3,
+      "playful": 0.85,
+      "romantic": 0.95,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": true,
+    "dominantEnergy": "drama"
+  },
+  {
+    "preset": "water",
+    "engine": "stage1_experimental",
+    "date": "2026-05-15",
+    "sunSign": "Scorpio",
+    "rawEnergyScores": {
+      "classic": 1.6889594164710442,
+      "drama": 2.075076594191007,
+      "edge": 2.358387631767423,
+      "playful": 1.5732492079462297,
+      "romantic": 1.5300548215966199,
+      "utility": 1.3541200247418317
+    },
+    "postMultiplierScores": {
+      "classic": 1.6889594164710442,
+      "drama": 2.075076594191007,
+      "edge": 2.358387631767423,
+      "playful": 1.5732492079462297,
+      "romantic": 1.5300548215966199,
+      "utility": 1.3541200247418317
+    },
+    "finalVibeBreakdown": {
+      "classic": 3,
+      "playful": 3,
+      "romantic": 3,
+      "utility": 3,
+      "drama": 4,
+      "edge": 5
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1,
+      "edge": 1,
+      "playful": 1,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": false,
+    "chartAnchorSignMultiplierApplied": {
+      "classic": 1,
+      "drama": 1.35,
+      "edge": 1.3,
+      "playful": 0.85,
+      "romantic": 0.95,
+      "utility": 1
+    },
+    "dominantEnergy": "edge"
+  },
+  {
+    "preset": "water",
+    "engine": "production",
+    "date": "2026-05-22",
+    "sunSign": "Scorpio",
+    "rawEnergyScores": {
+      "classic": 4.852835926971126,
+      "drama": 4.457275032330338,
+      "edge": 4.438280135624082,
+      "playful": 4.119324001171926,
+      "romantic": 3.3367639551387454,
+      "utility": 3.230041768034532
+    },
+    "postMultiplierScores": {
+      "classic": 4.852835926971126,
+      "drama": 6.017321293645956,
+      "edge": 5.769764176311307,
+      "playful": 3.5014254009961374,
+      "romantic": 3.169925757381808,
+      "utility": 3.230041768034532
+    },
+    "finalVibeBreakdown": {
+      "classic": 4,
+      "playful": 3,
+      "romantic": 2,
+      "utility": 2,
+      "drama": 5,
+      "edge": 5
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1.35,
+      "edge": 1.3,
+      "playful": 0.85,
+      "romantic": 0.95,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": true,
+    "dominantEnergy": "drama"
+  },
+  {
+    "preset": "water",
+    "engine": "stage1_experimental",
+    "date": "2026-05-22",
+    "sunSign": "Scorpio",
+    "rawEnergyScores": {
+      "classic": 2.9432161383127107,
+      "drama": 2.6213869278550006,
+      "edge": 2.8292477159219636,
+      "playful": 2.615707619884708,
+      "romantic": 1.903164729861009,
+      "utility": 1.9933631676437127
+    },
+    "postMultiplierScores": {
+      "classic": 2.9432161383127107,
+      "drama": 2.6213869278550006,
+      "edge": 2.8292477159219636,
+      "playful": 2.615707619884708,
+      "romantic": 1.903164729861009,
+      "utility": 1.9933631676437127
+    },
+    "finalVibeBreakdown": {
+      "classic": 4,
+      "playful": 4,
+      "romantic": 2,
+      "utility": 3,
+      "drama": 4,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1,
+      "edge": 1,
+      "playful": 1,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": false,
+    "chartAnchorSignMultiplierApplied": {
+      "classic": 1,
+      "drama": 1.35,
+      "edge": 1.3,
+      "playful": 0.85,
+      "romantic": 0.95,
+      "utility": 1
+    },
+    "dominantEnergy": "classic"
+  },
+  {
+    "preset": "leo",
+    "engine": "production",
+    "date": "2026-05-09",
+    "sunSign": "Leo",
+    "rawEnergyScores": {
+      "classic": 3.5609374199983144,
+      "drama": 4.191158115552101,
+      "edge": 3.9545567188729778,
+      "playful": 3.53696136679623,
+      "romantic": 3.7922551102338304,
+      "utility": 2.288929981221743
+    },
+    "postMultiplierScores": {
+      "classic": 3.204843677998483,
+      "drama": 5.658063455995337,
+      "edge": 3.9545567188729778,
+      "playful": 4.598049776835099,
+      "romantic": 3.7922551102338304,
+      "utility": 2.174483482160656
+    },
+    "finalVibeBreakdown": {
+      "classic": 3,
+      "playful": 4,
+      "romantic": 3,
+      "utility": 2,
+      "drama": 5,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 0.9,
+      "drama": 1.35,
+      "edge": 1,
+      "playful": 1.3,
+      "romantic": 1,
+      "utility": 0.95
+    },
+    "signMultipliersAppliedToDailyVibe": true,
+    "dominantEnergy": "drama"
+  },
+  {
+    "preset": "leo",
+    "engine": "stage1_experimental",
+    "date": "2026-05-09",
+    "sunSign": "Leo",
+    "rawEnergyScores": {
+      "classic": 2.2332886333321293,
+      "drama": 2.3705891301562643,
+      "edge": 2.3601595610997466,
+      "playful": 2.0075914524734992,
+      "romantic": 2.3520869835003553,
+      "utility": 1.3611404627774366
+    },
+    "postMultiplierScores": {
+      "classic": 2.2332886333321293,
+      "drama": 2.3705891301562643,
+      "edge": 2.3601595610997466,
+      "playful": 2.0075914524734992,
+      "romantic": 2.3520869835003553,
+      "utility": 1.3611404627774366
+    },
+    "finalVibeBreakdown": {
+      "classic": 4,
+      "playful": 3,
+      "romantic": 4,
+      "utility": 2,
+      "drama": 4,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1,
+      "edge": 1,
+      "playful": 1,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": false,
+    "chartAnchorSignMultiplierApplied": {
+      "classic": 0.9,
+      "drama": 1.35,
+      "edge": 1,
+      "playful": 1.3,
+      "romantic": 1,
+      "utility": 0.95
+    },
+    "dominantEnergy": "classic"
+  },
+  {
+    "preset": "leo",
+    "engine": "production",
+    "date": "2026-05-15",
+    "sunSign": "Leo",
+    "rawEnergyScores": {
+      "classic": 3.141033971728469,
+      "drama": 3.946596529552828,
+      "edge": 3.8820663960113087,
+      "playful": 3.2068648912802042,
+      "romantic": 2.7982748623470632,
+      "utility": 2.045350833567
+    },
+    "postMultiplierScores": {
+      "classic": 2.826930574555622,
+      "drama": 5.327905314896318,
+      "edge": 3.8820663960113087,
+      "playful": 4.168924358664266,
+      "romantic": 2.7982748623470632,
+      "utility": 1.9430832918886498
+    },
+    "finalVibeBreakdown": {
+      "classic": 3,
+      "playful": 4,
+      "romantic": 3,
+      "utility": 2,
+      "drama": 5,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 0.9,
+      "drama": 1.35,
+      "edge": 1,
+      "playful": 1.3,
+      "romantic": 1,
+      "utility": 0.95
+    },
+    "signMultipliersAppliedToDailyVibe": true,
+    "dominantEnergy": "drama"
+  },
+  {
+    "preset": "leo",
+    "engine": "stage1_experimental",
+    "date": "2026-05-15",
+    "sunSign": "Leo",
+    "rawEnergyScores": {
+      "classic": 1.8447861702822406,
+      "drama": 2.1737594258710677,
+      "edge": 2.4190950447699824,
+      "playful": 1.7718082556763368,
+      "romantic": 1.5313868064383784,
+      "utility": 1.2978696430240475
+    },
+    "postMultiplierScores": {
+      "classic": 1.8447861702822406,
+      "drama": 2.1737594258710677,
+      "edge": 2.4190950447699824,
+      "playful": 1.7718082556763368,
+      "romantic": 1.5313868064383784,
+      "utility": 1.2978696430240475
+    },
+    "finalVibeBreakdown": {
+      "classic": 4,
+      "playful": 3,
+      "romantic": 3,
+      "utility": 2,
+      "drama": 4,
+      "edge": 5
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1,
+      "edge": 1,
+      "playful": 1,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": false,
+    "chartAnchorSignMultiplierApplied": {
+      "classic": 0.9,
+      "drama": 1.35,
+      "edge": 1,
+      "playful": 1.3,
+      "romantic": 1,
+      "utility": 0.95
+    },
+    "dominantEnergy": "edge"
+  },
+  {
+    "preset": "leo",
+    "engine": "production",
+    "date": "2026-05-22",
+    "sunSign": "Leo",
+    "rawEnergyScores": {
+      "classic": 3.7335570229249897,
+      "drama": 4.16902436116968,
+      "edge": 4.325363678070299,
+      "playful": 3.9117240713205725,
+      "romantic": 2.662167673535235,
+      "utility": 2.5400111626362487
+    },
+    "postMultiplierScores": {
+      "classic": 3.3602013206324908,
+      "drama": 5.628182887579069,
+      "edge": 4.325363678070299,
+      "playful": 5.085241292716744,
+      "romantic": 2.662167673535235,
+      "utility": 2.413010604504436
+    },
+    "finalVibeBreakdown": {
+      "classic": 3,
+      "playful": 5,
+      "romantic": 2,
+      "utility": 2,
+      "drama": 5,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 0.9,
+      "drama": 1.35,
+      "edge": 1,
+      "playful": 1.3,
+      "romantic": 1,
+      "utility": 0.95
+    },
+    "signMultipliersAppliedToDailyVibe": true,
+    "dominantEnergy": "playful"
+  },
+  {
+    "preset": "leo",
+    "engine": "stage1_experimental",
+    "date": "2026-05-22",
+    "sunSign": "Leo",
+    "rawEnergyScores": {
+      "classic": 2.212302635422611,
+      "drama": 2.35477930559739,
+      "edge": 2.741450246240689,
+      "playful": 2.4195648128480283,
+      "romantic": 1.4341673858585011,
+      "utility": 1.5347698780735106
+    },
+    "postMultiplierScores": {
+      "classic": 2.212302635422611,
+      "drama": 2.35477930559739,
+      "edge": 2.741450246240689,
+      "playful": 2.4195648128480283,
+      "romantic": 1.4341673858585011,
+      "utility": 1.5347698780735106
+    },
+    "finalVibeBreakdown": {
+      "classic": 4,
+      "playful": 4,
+      "romantic": 2,
+      "utility": 3,
+      "drama": 4,
+      "edge": 4
+    },
+    "signMultiplierApplied": {
+      "classic": 1,
+      "drama": 1,
+      "edge": 1,
+      "playful": 1,
+      "romantic": 1,
+      "utility": 1
+    },
+    "signMultipliersAppliedToDailyVibe": false,
+    "chartAnchorSignMultiplierApplied": {
+      "classic": 0.9,
+      "drama": 1.35,
+      "edge": 1,
+      "playful": 1.3,
+      "romantic": 1,
+      "utility": 0.95
+    },
+    "dominantEnergy": "classic"
+  }
+]

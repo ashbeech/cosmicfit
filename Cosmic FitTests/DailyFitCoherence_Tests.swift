@@ -527,4 +527,12 @@ struct DailyFitCoherence_Tests {
         // Lunar context populated
         #expect(!p.lunarContext.phaseName.isEmpty, "Lunar phase name is empty")
     }
+
+    @Test("Narrative brief nil for production coherence runs")
+    func testNarrativeBriefNilForProduction() {
+        TarotCalibrationTestSupport.installIsolatedTrackers()
+        let run = CoherenceProfiles.runProfile(CoherenceProfiles.ashProfile, dayOffset: 0)
+        #expect(run.payload.narrativeBrief == nil,
+                "Production mode should not produce a narrative brief")
+    }
 }

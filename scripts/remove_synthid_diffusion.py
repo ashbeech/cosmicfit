@@ -65,19 +65,15 @@ def _get_pipeline():
     return pipe, device
 
 
-DEFAULT_ASSETS_DIR = (
-    "/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/Assets.xcassets"
-)
-DEFAULT_RESOURCES_DIR = os.path.dirname(DEFAULT_ASSETS_DIR)
-DEFAULT_BACKUP_DIR = os.path.join(DEFAULT_RESOURCES_DIR, ".synthid_backups")
-DEFAULT_BASELINE_DIR = os.path.join(DEFAULT_RESOURCES_DIR, ".synthid_baseline")
-DEFAULT_CANDIDATE_DIR = os.path.join(DEFAULT_RESOURCES_DIR, ".synthid_candidates")
-DEFAULT_REPORT_PATH = (
-    "/Users/ash/dev/mobile_apps/cosmicfit/scripts/reports/synthid_run_report.json"
-)
-DEFAULT_CANARY_PATH = (
-    "/Users/ash/dev/mobile_apps/cosmicfit/scripts/config/synthid_canary.txt"
-)
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_ROOT = os.path.dirname(_SCRIPT_DIR)
+DEFAULT_ASSETS_DIR = os.path.join(REPO_ROOT, "Cosmic Fit", "Resources", "Assets.xcassets")
+TOOL_RESOURCES_DIR = os.path.join(REPO_ROOT, "Resources")
+DEFAULT_BACKUP_DIR = os.path.join(TOOL_RESOURCES_DIR, ".synthid_backups")
+DEFAULT_BASELINE_DIR = os.path.join(TOOL_RESOURCES_DIR, ".synthid_baseline")
+DEFAULT_CANDIDATE_DIR = os.path.join(TOOL_RESOURCES_DIR, ".synthid_candidates")
+DEFAULT_REPORT_PATH = os.path.join(_SCRIPT_DIR, "reports", "synthid_run_report.json")
+DEFAULT_CANARY_PATH = os.path.join(_SCRIPT_DIR, "config", "synthid_canary.txt")
 
 
 @dataclass
@@ -159,11 +155,14 @@ def _tiled_denoise_pass(
     max_tile: int,
     overlap: int,
     pass_label: str = "",
+    on_tile_progress=None,
 ) -> np.ndarray:
     """Single tiled img2img pass over the full image."""
     h_orig, w_orig = image_rgb.shape[:2]
 
     if h_orig <= max_tile and w_orig <= max_tile:
+        if on_tile_progress:
+            on_tile_progress(1, 1)
         return _denoise_tile(pipe, image_rgb, strength, num_steps, guidance_scale)
 
     step = max_tile - overlap
@@ -187,6 +186,8 @@ def _tiled_denoise_pass(
             tile = image_rgb[y1:y2, x1:x2].copy()
             label = f"{pass_label}tile {tile_idx}/{total_tiles} ({y1}:{y2}, {x1}:{x2})"
             print(f"{label}...", end=" ", flush=True)
+            if on_tile_progress:
+                on_tile_progress(tile_idx, total_tiles)
             denoised_tile = _denoise_tile(pipe, tile, strength, num_steps, guidance_scale)
 
             # Build feathering weight mask for blending overlaps.
@@ -231,6 +232,7 @@ def img2img_denoise(
     passes: int = 2,
     max_tile: int = 512,
     overlap: int = 96,
+    on_progress=None,
 ) -> np.ndarray:
     """
     Full SD 1.5 img2img denoise with tiling and multi-pass support.
@@ -254,9 +256,15 @@ def img2img_denoise(
 
     for p in range(passes):
         pass_label = f"[pass {p + 1}/{passes} s={strengths[p]}] " if passes > 1 else ""
+
+        def _tile_cb(tile_idx: int, tile_total: int, pass_idx: int = p) -> None:
+            if on_progress:
+                on_progress(pass_idx + 1, passes, tile_idx, tile_total)
+
         result = _tiled_denoise_pass(
             pipe, result, strengths[p], num_steps, guidance_scale,
             max_tile, overlap, pass_label,
+            on_tile_progress=_tile_cb if on_progress else None,
         )
 
     return result

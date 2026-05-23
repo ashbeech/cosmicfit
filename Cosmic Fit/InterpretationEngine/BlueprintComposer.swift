@@ -25,6 +25,24 @@ struct BlueprintComposer {
         dataset: AstrologicalStyleDataset,
         narrativeCache: NarrativeCacheLoader
     ) -> CosmicBlueprint {
+        composeFull(
+            chart: chart,
+            birthDate: birthDate,
+            birthLocation: birthLocation,
+            dataset: dataset,
+            narrativeCache: narrativeCache
+        ).blueprint
+    }
+
+    /// Same pipeline as `compose`, but also returns structured palette-engine diagnostics
+    /// for inspector drill-down (FamilyDecisionTrace, chart input, accent slots).
+    static func composeFull(
+        chart: NatalChartCalculator.NatalChart,
+        birthDate: Date,
+        birthLocation: String,
+        dataset: AstrologicalStyleDataset,
+        narrativeCache: NarrativeCacheLoader
+    ) -> BlueprintComposeResult {
         let analysis = ChartAnalyser.analyse(chart: chart)
 
         // V4 colour engine — the only palette path
@@ -123,7 +141,7 @@ struct BlueprintComposer {
 
         let now = Date()
 
-        return CosmicBlueprint(
+        let blueprint = CosmicBlueprint(
             userInfo: BlueprintUserInfo(
                 birthDate: birthDate,
                 birthLocation: birthLocation,
@@ -174,6 +192,13 @@ struct BlueprintComposer {
             generatedAt: now,
             engineVersion: engineVersion
         )
+
+        let diagnostics = BlueprintDiagnostics.report(
+            from: colourResult,
+            adaptedInput: adapted
+        )
+
+        return BlueprintComposeResult(blueprint: blueprint, diagnostics: diagnostics)
     }
 
     // MARK: - Palette console readout

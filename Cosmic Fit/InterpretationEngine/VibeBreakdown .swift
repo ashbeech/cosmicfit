@@ -21,7 +21,7 @@ public enum Energy: String, CaseIterable, Codable {
 
 // MARK: - Vibe Breakdown Structure
 
-struct VibeBreakdown: Codable {
+struct VibeBreakdown: Codable, Equatable {
     let classic: Int
     let playful: Int
     let romantic: Int
@@ -55,6 +55,28 @@ struct VibeBreakdown: Codable {
     var dominantEnergy: Energy {
         let scored: [(Energy, Int)] = Energy.allCases.map { ($0, value(for: $0)) }
         return scored.max(by: { $0.1 < $1.1 })?.0 ?? .classic
+    }
+
+    /// Dominant energy with raw-score tie-breaking. When two energies share
+    /// the same integer points, the one with the higher raw (pre-normalisation)
+    /// score wins instead of relying on enum declaration order.
+    func dominantEnergy(rawTieBreak rawScores: [Energy: Double]) -> Energy {
+        let scored: [(Energy, Int)] = Energy.allCases.map { ($0, value(for: $0)) }
+        let sorted = scored.sorted { lhs, rhs in
+            if lhs.1 != rhs.1 { return lhs.1 > rhs.1 }
+            return (rawScores[lhs.0] ?? 0) > (rawScores[rhs.0] ?? 0)
+        }
+        return sorted.first?.0 ?? .classic
+    }
+
+    /// Secondary energy with raw-score tie-breaking.
+    func secondaryEnergy(rawTieBreak rawScores: [Energy: Double]) -> Energy {
+        let scored: [(Energy, Int)] = Energy.allCases.map { ($0, value(for: $0)) }
+        let sorted = scored.sorted { lhs, rhs in
+            if lhs.1 != rhs.1 { return lhs.1 > rhs.1 }
+            return (rawScores[lhs.0] ?? 0) > (rawScores[rhs.0] ?? 0)
+        }
+        return sorted.count > 1 ? sorted[1].0 : .classic
     }
     
     var dominantEnergyName: String {

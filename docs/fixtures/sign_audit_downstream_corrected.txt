@@ -1,0 +1,56 @@
+Daily Fit Sign Energy Downstream Audit (corrected counterfactual)
+Generated: 2026-05-22
+Window: 2026-05-09 .. 2026-05-22 UTC (14 days)
+Presets: fire(Aries), earth(Taurus), air(Aquarius), water(Scorpio)
+Birth source: inspector/Resources/presets.json (required — generic birth invalidates Sun sign)
+
+Counterfactual formula:
+  neutral Sun = normaliseToTwentyOne(rawEnergyScores)
+  production    = normaliseToTwentyOne(rawEnergyScores * signEnergyMap[natal Sun])
+
+NOTE: sign_audit_downstream_production.txt is STALE — it used raw/signMultiplier division.
+      Use this file and the tables in daily_fit_sign_energy_audit_report.md D4.
+
+--- SUMMARY ---
+
+Preset          Sun         Prod dominant (14d)              Neutral CF dominant (14d)           Flip    Avg L1
+fire            Aries       drama 11, playful 3              edge 7, classic 5, playful 2        13/14   2.57
+earth           Taurus      classic 13, edge 1             playful 5, edge 5, classic 3, drama 1  10/14   4.86
+air             Aquarius    edge 14                        drama 11, classic 2, playful 1        14/14   3.29
+water           Scorpio     drama 14                       classic 9, drama 3, playful 2         11/14   4.00
+
+Scorpio: production dominant = drama on 14/14 days WITH multipliers.
+         flip 11/14 because neutral-Sun also picks drama on 3 days (tied tops).
+
+--- PRODUCTION vs stage1_experimental (dominant label differs) ---
+
+Aries       14/14
+Taurus      11/14
+Aquarius    14/14
+Scorpio     13/14
+
+--- EXAMPLE TRACES (2026-05-09) ---
+
+Aries:
+  raw dominant: edge
+  post-mult: drama 4.18->5.85, edge 4.27->5.12
+  final (with mult): drama 5, edge 4  -> dominant drama
+  neutral CF: drama 4, edge 4, romantic 4, playful 4 (tie)
+
+Taurus:
+  raw dominant: drama
+  post-mult: classic 3.14->4.71, drama 3.74->3.18
+  final (with mult): classic 5, romantic 5  -> dominant classic
+  neutral CF: drama 4, edge 4, playful 4, romantic 4 (tie)
+
+Aquarius:
+  raw dominant: drama
+  post-mult: edge 4.07->6.11
+  final (with mult): edge 6  -> dominant edge
+  neutral CF: drama 5, edge 4  -> dominant drama
+
+Scorpio:
+  raw dominant: drama
+  post-mult: drama 4.24->6.36, edge 3.98->5.18
+  final (with mult): drama 6  -> dominant drama
+  neutral CF: classic 4, romantic 4, drama 4, edge 4 (tie)

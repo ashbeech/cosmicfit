@@ -24,9 +24,10 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
             for: DailyFitEngineRegistry.stage1ExperimentalId
         )
         XCTAssertNotEqual(stage1Calibration, DailyFitCalibration.default)
-        XCTAssertGreaterThan(
-            stage1Calibration.sourceWeights.transits,
-            DailyFitCalibration.default.sourceWeights.transits
+        XCTAssertEqual(stage1Calibration.axisTuning.sigmoidSpread, 0.8)
+        XCTAssertEqual(
+            stage1Calibration.stage2Sensitivity.paletteSelectionStrategy,
+            .pureSkyScoring
         )
     }
 
@@ -71,6 +72,37 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
         XCTAssertEqual(response.meta.dailyFitEngineFingerprint, descriptor.fingerprint)
     }
 
+    func testInspectResponseIncludesBlueprintDiagnostics() async throws {
+        let engine = InspectorEngine()
+        try await engine.bootstrap()
+
+        let presets = PresetCatalog.loadPresets()
+        try XCTSkipIf(presets.isEmpty, "presets.json required for inspect integration test")
+
+        let preset = presets[0]
+        let request = InspectorRequest(
+            preset: preset.id,
+            birth: preset.birthInput,
+            targetDate: "2026-05-10",
+            options: InspectOptions(
+                composeBlueprint: true,
+                includeProgressed: true,
+                profileId: nil,
+                resetTarotHistory: true,
+                dailyFitEngineId: DailyFitEngineRegistry.productionId
+            )
+        )
+
+        let response = try await engine.resolve(request: request)
+
+        XCTAssertNotNil(response.blueprintDiagnostics)
+        XCTAssertNotNil(response.blueprintDiagnostics?.familyDecisionTrace.family)
+        XCTAssertNotNil(response.blueprintDiagnostics?.familyDecisionTrace.cluster)
+        XCTAssertFalse(
+            response.blueprintDiagnostics?.familyDecisionTrace.normalizedDrivers.drivers.isEmpty ?? true
+        )
+    }
+
     func testInspectOmitsEngineIdUsesProduction() async throws {
         let engine = InspectorEngine()
         try await engine.bootstrap()
@@ -98,6 +130,164 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
         XCTAssertEqual(response.meta.dailyFitEngineId, DailyFitEngineRegistry.productionId)
         XCTAssertEqual(response.meta.dailyFitEngineDisplayName, production.displayName)
         XCTAssertEqual(response.meta.dailyFitEngineFingerprint, production.fingerprint)
+    }
+
+    func testInspectResponseIncludesStage1Attribution() async throws {
+        let engine = InspectorEngine()
+        try await engine.bootstrap()
+
+        let presets = PresetCatalog.loadPresets()
+        try XCTSkipIf(presets.isEmpty, "presets.json required for inspect integration test")
+
+        let preset = presets[0]
+        let request = InspectorRequest(
+            preset: preset.id,
+            birth: preset.birthInput,
+            targetDate: "2026-05-10",
+            options: InspectOptions(
+                composeBlueprint: true,
+                includeProgressed: true,
+                profileId: nil,
+                resetTarotHistory: true,
+                dailyFitEngineId: DailyFitEngineRegistry.productionId
+            )
+        )
+
+        let response = try await engine.resolve(request: request)
+        let attribution = response.dailyFit.diagnostics.stage1Attribution
+        XCTAssertNotNil(attribution, "stage1Attribution must be populated")
+        XCTAssertEqual(attribution?.byEnergy.count, 6, "Should have one breakdown per energy")
+        XCTAssertEqual(attribution?.engineMode, "standard")
+        XCTAssertEqual(attribution?.signMultipliersAppliedToDailyVibe, true)
+        let hasNonNeutralMultiplier = attribution?.signMultiplierApplied.values.contains { $0 != 1.0 } ?? false
+        XCTAssertTrue(hasNonNeutralMultiplier, "Production daily path should apply non-neutral sign multipliers")
+
+        for breakdown in attribution?.byEnergy ?? [] {
+            XCTAssertFalse(breakdown.entries.isEmpty, "Energy \(breakdown.energy) should have attribution entries")
+            XCTAssertGreaterThan(breakdown.totalRaw, 0, "Energy \(breakdown.energy) should have positive total")
+        }
+    }
+
+    func testStage1AttributionDiffersAcrossEngines() async throws {
+        let engine = InspectorEngine()
+        try await engine.bootstrap()
+
+        let presets = PresetCatalog.loadPresets()
+        try XCTSkipIf(presets.isEmpty, "presets.json required for inspect integration test")
+
+        let preset = presets[0]
+
+        let prodRequest = InspectorRequest(
+            preset: preset.id,
+            birth: preset.birthInput,
+            targetDate: "2026-05-10",
+            options: InspectOptions(
+                composeBlueprint: true,
+                includeProgressed: true,
+                profileId: nil,
+                resetTarotHistory: true,
+                dailyFitEngineId: DailyFitEngineRegistry.productionId
+            )
+        )
+        let prodResponse = try await engine.resolve(request: prodRequest)
+
+        let stage1Request = InspectorRequest(
+            preset: preset.id,
+            birth: preset.birthInput,
+            targetDate: "2026-05-10",
+            options: InspectOptions(
+                composeBlueprint: true,
+                includeProgressed: true,
+                profileId: nil,
+                resetTarotHistory: true,
+                dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
+            )
+        )
+        let stage1Response = try await engine.resolve(request: stage1Request)
+
+        let prodAttr = prodResponse.dailyFit.diagnostics.stage1Attribution
+        let stage1Attr = stage1Response.dailyFit.diagnostics.stage1Attribution
+        XCTAssertNotNil(prodAttr)
+        XCTAssertNotNil(stage1Attr)
+        XCTAssertEqual(prodAttr?.engineMode, "standard")
+        XCTAssertEqual(stage1Attr?.engineMode, "stage1Experimental")
+        XCTAssertNotEqual(prodAttr, stage1Attr, "Different calibrations should produce different attribution")
+    }
+
+    func testStage1AttributionSkipsDailySignMultipliers() async throws {
+        let engine = InspectorEngine()
+        try await engine.bootstrap()
+
+        let presets = PresetCatalog.loadPresets()
+        try XCTSkipIf(presets.isEmpty, "presets.json required for inspect integration test")
+
+        let preset = presets[0]
+        let request = InspectorRequest(
+            preset: preset.id,
+            birth: preset.birthInput,
+            targetDate: "2026-05-10",
+            options: InspectOptions(
+                composeBlueprint: true,
+                includeProgressed: true,
+                profileId: nil,
+                resetTarotHistory: true,
+                dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
+            )
+        )
+
+        let response = try await engine.resolve(request: request)
+        let attribution = response.dailyFit.diagnostics.stage1Attribution
+        let diagnostics = response.dailyFit.diagnostics
+
+        XCTAssertNotNil(attribution)
+        XCTAssertEqual(attribution?.engineMode, "stage1Experimental")
+        XCTAssertEqual(attribution?.signMultipliersAppliedToDailyVibe, false)
+        XCTAssertEqual(diagnostics.postMultiplierScores, diagnostics.rawEnergyScores)
+        for value in attribution?.signMultiplierApplied.values ?? Dictionary<String, Double>().values {
+            XCTAssertEqual(value, 1.0, accuracy: 0.0001)
+        }
+        XCTAssertEqual(
+            diagnostics.calibrationSnapshot.signMultiplierPolicy["applyToDailyVibe"],
+            false
+        )
+        XCTAssertEqual(
+            diagnostics.calibrationSnapshot.signMultiplierPolicy["applyToChartAnchor"],
+            true
+        )
+        let chartMults = attribution?.chartAnchorSignMultiplierApplied ?? [:]
+        XCTAssertEqual(chartMults["drama"] ?? 0, 1.35, accuracy: 0.0001)
+    }
+
+    func testInspectResponseIncludesStage1AxisAttribution() async throws {
+        let engine = InspectorEngine()
+        try await engine.bootstrap()
+
+        let presets = PresetCatalog.loadPresets()
+        try XCTSkipIf(presets.isEmpty, "presets.json required for inspect integration test")
+
+        let preset = presets[0]
+        let request = InspectorRequest(
+            preset: preset.id,
+            birth: preset.birthInput,
+            targetDate: "2026-05-22",
+            options: InspectOptions(
+                composeBlueprint: true,
+                includeProgressed: true,
+                profileId: nil,
+                resetTarotHistory: true,
+                dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
+            )
+        )
+
+        let response = try await engine.resolve(request: request)
+        let axisAttr = response.dailyFit.diagnostics.stage1AxisAttribution
+        XCTAssertNotNil(axisAttr, "stage1AxisAttribution must be populated")
+        XCTAssertEqual(axisAttr?.engineMode, "stage1Experimental")
+        XCTAssertEqual(axisAttr?.byAxis.count, 4, "Should have one breakdown per axis")
+
+        let visibility = axisAttr?.byAxis.first { $0.axis == "visibility" }
+        XCTAssertNotNil(visibility)
+        XCTAssertFalse(visibility?.entries.isEmpty ?? true, "Visibility axis should have transit contributors")
     }
 }
 

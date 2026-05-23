@@ -325,6 +325,27 @@ private enum Fixtures {
         )
     )
 
+    // MARK: Calibration Fixtures
+
+    /// Production-equivalent calibration with coreAnchoredRanking for testing.
+    static let coreAnchoredCalibration: DailyFitCalibration = {
+        var s2 = DailyFitCalibration.Stage2Sensitivity(
+            paletteJitter: 0.08, vibrancyCoeff: 0.35,
+            contrastCoeff: 0.40, silhouetteAxisScale: 2.0,
+            metalNudgePerHit: 0.10,
+            paletteSelectionStrategy: .coreAnchoredRanking
+        )
+        return DailyFitCalibration(
+            sourceWeights: DailyFitCalibration.default.sourceWeights,
+            signEnergyMap: DailyFitCalibration.default.signEnergyMap,
+            signMultiplierPolicy: DailyFitCalibration.default.signMultiplierPolicy,
+            planetAxisMap: DailyFitCalibration.default.planetAxisMap,
+            selectionWeights: DailyFitCalibration.default.selectionWeights,
+            axisTuning: DailyFitCalibration.default.axisTuning,
+            stage2Sensitivity: s2
+        )
+    }()
+
     // MARK: Helpers
 
     static func allBlueprintHexValues(
@@ -867,4 +888,121 @@ func testVibrancyContrastMetalToneInRange() {
     #expect(p.contrast >= 0.0 && p.contrast <= 1.0)
     #expect(p.metalTone >= 0.0 && p.metalTone <= 1.0)
 }
+// MARK: - T4.27: coreAnchoredRanking — at least 1 core colour in every pick set
+
+@Test("T4.27 — coreAnchoredRanking always includes at least 1 core colour")
+func testCoreAnchoredRankingAlwaysHasCore() {
+    resetTrackers()
+    let snapshots = [
+        Fixtures.dramaSnap, Fixtures.classicSnap,
+        Fixtures.balancedSnap, Fixtures.lowDramaSnap,
+        Fixtures.moderateDramaSnap, Fixtures.utilitySnap,
+    ]
+    for snap in snapshots {
+        resetTrackers()
+        let p = BlueprintLensEngine.generatePayload(
+            blueprint: Fixtures.warmBlueprint,
+            snapshot: snap,
+            calibration: Fixtures.coreAnchoredCalibration
+        )
+        let coreCount = p.dailyPalette.colours.filter { $0.role == "core" }.count
+        #expect(coreCount >= 1,
+                "coreAnchoredRanking must pick ≥1 core, got \(coreCount): \(p.dailyPalette.colours.map { "\($0.name) (\($0.role))" })")
+    }
+}
+
+// MARK: - T4.28: coreAnchoredRanking — never all statement/accent/signature
+
+@Test("T4.28 — coreAnchoredRanking never picks 3 accent/signature/statement colours")
+func testCoreAnchoredRankingNeverAllStatement() {
+    resetTrackers()
+    let statementRoles: Set<String> = ["accent", "signature", "statement"]
+    let p = BlueprintLensEngine.generatePayload(
+        blueprint: Fixtures.warmBlueprint,
+        snapshot: Fixtures.dramaSnap,
+        calibration: Fixtures.coreAnchoredCalibration
+    )
+    let statementCount = p.dailyPalette.colours.filter {
+        statementRoles.contains($0.role)
+    }.count
+    #expect(statementCount < 3,
+            "coreAnchoredRanking should never have 3 statement colours, got \(statementCount)")
+}
+
+// MARK: - T4.29: coreAnchoredRanking — 3 unique hexes
+
+@Test("T4.29 — coreAnchoredRanking produces 3 unique hexes")
+func testCoreAnchoredRankingNoDuplicateHexes() {
+    resetTrackers()
+    let p = BlueprintLensEngine.generatePayload(
+        blueprint: Fixtures.duplicateSignatureHexBlueprint,
+        snapshot: Fixtures.dramaSnap,
+        calibration: Fixtures.coreAnchoredCalibration
+    )
+    let hexes = p.dailyPalette.colours.map {
+        $0.hexValue.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+    }
+    #expect(Set(hexes).count == 3, "Duplicate hex in coreAnchoredRanking picks: \(hexes)")
+}
+
+// MARK: - T4.30: coreAnchoredRanking — drama vs classic produce different palettes
+
+@Test("T4.30 — coreAnchoredRanking: drama vs classic snapshots produce different palettes")
+func testCoreAnchoredRankingDifferentSnapshotsDiffer() {
+    resetTrackers()
+    let p1 = BlueprintLensEngine.generatePayload(
+        blueprint: Fixtures.warmBlueprint,
+        snapshot: Fixtures.dramaSnap,
+        calibration: Fixtures.coreAnchoredCalibration
+    )
+    resetTrackers()
+    let p2 = BlueprintLensEngine.generatePayload(
+        blueprint: Fixtures.warmBlueprint,
+        snapshot: Fixtures.classicSnap,
+        calibration: Fixtures.coreAnchoredCalibration
+    )
+    let hexes1 = Set(p1.dailyPalette.colours.map(\.hexValue))
+    let hexes2 = Set(p2.dailyPalette.colours.map(\.hexValue))
+    #expect(hexes1 != hexes2,
+            "Expected different palettes for drama vs classic under coreAnchoredRanking")
+}
+
+// MARK: - T4.31: production preset still uses dramaSlots
+
+@Test("T4.31 — production calibration defaults to dramaSlots strategy")
+func testProductionDefaultIsDramaSlots() {
+    let prodCal = DailyFitCalibration.default
+    #expect(prodCal.stage2Sensitivity.paletteSelectionStrategy == .dramaSlots)
+
+    let prodDescriptor = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)
+    #expect(prodDescriptor?.calibration.stage2Sensitivity.paletteSelectionStrategy == .dramaSlots)
+}
+
+// MARK: - T4.32: stage1_experimental preset uses pureSkyScoring
+
+@Test("T4.32 — stage1_experimental calibration uses pureSkyScoring strategy")
+func testStage1ExperimentalIsPureSkyScoring() {
+    let descriptor = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.stage1ExperimentalId)
+    #expect(descriptor?.calibration.stage2Sensitivity.paletteSelectionStrategy == .pureSkyScoring)
+    #expect(descriptor?.calibration.axisTuning.sigmoidSpread == 0.8)
+}
+
+// MARK: - T4.33: coreAnchoredRanking — picks from blueprint pool
+
+@Test("T4.33 — coreAnchoredRanking: every colour hex exists in the Blueprint")
+func testCoreAnchoredRankingColoursFromBlueprint() {
+    resetTrackers()
+    let bp = Fixtures.warmBlueprint
+    let p = BlueprintLensEngine.generatePayload(
+        blueprint: bp,
+        snapshot: Fixtures.dramaSnap,
+        calibration: Fixtures.coreAnchoredCalibration
+    )
+    let allHex = Fixtures.allBlueprintHexValues(bp)
+    for pick in p.dailyPalette.colours {
+        #expect(allHex.contains(pick.hexValue),
+                "\(pick.name) hex \(pick.hexValue) not in Blueprint palette")
+    }
+}
+
 } // BlueprintLensEngine_Payload_Tests

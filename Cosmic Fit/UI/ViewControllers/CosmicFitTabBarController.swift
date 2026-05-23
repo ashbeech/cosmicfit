@@ -815,7 +815,7 @@ final class CosmicFitTabBarController: UITabBarController {
         )
 
         if let blueprint = BlueprintStorage.shared.load() {
-            let payload = BlueprintLensEngine.generatePayload(
+            let payload = DailyFitPipeline.generate(
                 blueprint: blueprint,
                 snapshot: snapshot,
                 calibration: cal,
@@ -870,7 +870,7 @@ final class CosmicFitTabBarController: UITabBarController {
         )
 
         guard let blueprint = BlueprintStorage.shared.load() else { return nil }
-        return BlueprintLensEngine.generatePayload(
+        return DailyFitPipeline.generate(
             blueprint: blueprint,
             snapshot: snapshot,
             calibration: cal,

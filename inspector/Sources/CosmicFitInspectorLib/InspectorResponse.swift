@@ -6,6 +6,7 @@ public struct InspectorResponse: Encodable {
     let natal: NatalChartDTO
     let progressed: NatalChartDTO?
     let blueprint: CosmicBlueprint?
+    let blueprintDiagnostics: BlueprintDiagnosticReport?
     let dailyFit: DailyFitResult
     let verdicts: [VerdictRow]
 }

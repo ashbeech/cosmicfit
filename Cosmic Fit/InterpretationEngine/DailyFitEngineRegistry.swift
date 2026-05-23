@@ -108,6 +108,7 @@ enum DailyFitEngineRegistry {
         return DailyFitCalibration(
             sourceWeights: source,
             signEnergyMap: DailyFitCalibration.default.signEnergyMap,
+            signMultiplierPolicy: .productionDefault,
             planetAxisMap: DailyFitCalibration.default.planetAxisMap,
             selectionWeights: selection,
             axisTuning: DailyFitCalibration.AxisTuning(sigmoidSpread: 2.0, jitterRange: 0.1),
@@ -153,14 +154,17 @@ enum DailyFitEngineRegistry {
         return DailyFitCalibration(
             sourceWeights: source,
             signEnergyMap: DailyFitCalibration.default.signEnergyMap,
+            signMultiplierPolicy: .stage1OptionA,
             planetAxisMap: DailyFitCalibration.default.planetAxisMap,
             selectionWeights: selection,
-            axisTuning: DailyFitCalibration.AxisTuning(sigmoidSpread: 2.0, jitterRange: 0.40),
+            axisTuning: DailyFitCalibration.AxisTuning(sigmoidSpread: 0.8, jitterRange: 0.40),
             stage2Sensitivity: DailyFitCalibration.Stage2Sensitivity(
-                paletteJitter: 0.15, vibrancyCoeff: 0.45,
-                contrastCoeff: 0.45, silhouetteAxisScale: 1.25,
-                metalNudgePerHit: 0.10
-            )
+                paletteJitter: 0.20, vibrancyCoeff: 0.55,
+                contrastCoeff: 0.55, silhouetteAxisScale: 1.25,
+                metalNudgePerHit: 0.12,
+                paletteSelectionStrategy: .pureSkyScoring
+            ),
+            narrativeSelection: .stage1Default
         )
     }()
 
@@ -200,6 +204,19 @@ enum DailyFitEngineRegistry {
         }
         parts.append("signEnergyMap:{\(signParts.joined(separator: ";"))}")
 
+        let policy = calibration.signMultiplierPolicy
+        parts.append(String(
+            format: "signMultiplierPolicy:applyToDailyVibe=%d,applyToChartAnchor=%d",
+            policy.applyToDailyVibe ? 1 : 0,
+            policy.applyToChartAnchor ? 1 : 0
+        ))
+
+        if let threshold = calibration.elementBoostDedupeThreshold {
+            parts.append(String(format: "elementBoostDedupeThreshold=%.6f", threshold))
+        } else {
+            parts.append("elementBoostDedupeThreshold=off")
+        }
+
         var planetParts: [String] = []
         for planet in calibration.planetAxisMap.weights.keys.sorted() {
             guard let axes = calibration.planetAxisMap.weights[planet] else { continue }
@@ -224,9 +241,20 @@ enum DailyFitEngineRegistry {
 
         let s2 = calibration.stage2Sensitivity
         parts.append(String(
-            format: "stage2Sensitivity:paletteJitter=%.6f,vibrancyCoeff=%.6f,contrastCoeff=%.6f,silhouetteAxisScale=%.6f,metalNudgePerHit=%.6f",
-            s2.paletteJitter, s2.vibrancyCoeff, s2.contrastCoeff, s2.silhouetteAxisScale, s2.metalNudgePerHit
+            format: "stage2Sensitivity:paletteJitter=%.6f,vibrancyCoeff=%.6f,contrastCoeff=%.6f,silhouetteAxisScale=%.6f,metalNudgePerHit=%.6f,paletteStrategy=%@",
+            s2.paletteJitter, s2.vibrancyCoeff, s2.contrastCoeff, s2.silhouetteAxisScale, s2.metalNudgePerHit,
+            s2.paletteSelectionStrategy.rawValue
         ))
+
+        if let ns = calibration.narrativeSelection {
+            parts.append(String(
+                format: "narrativeSelection:categoryBoostWeight=%.6f,rolePreferenceBonus=%.6f,categoryEnergyWeight=%.6f,narrativePaletteJitter=%.6f,softenVibrancyCap=%.6f,softenContrastCap=%.6f,softenBaselineBlend=%.6f,intenseAnchorRestrainedWeatherBlend=%.6f",
+                ns.categoryBoostWeight, ns.rolePreferenceBonus, ns.categoryEnergyWeight, ns.narrativePaletteJitter,
+                ns.softenVibrancyCap, ns.softenContrastCap, ns.softenBaselineBlend, ns.intenseAnchorRestrainedWeatherBlend
+            ))
+        } else {
+            parts.append("narrativeSelection=off")
+        }
 
         return parts.joined(separator: "|")
     }

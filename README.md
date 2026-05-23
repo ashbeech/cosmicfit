@@ -79,6 +79,12 @@ That pulls in **Flask** (`tools/review_tool.py`) and **google-generativeai** (`t
 
 Calibration diagnostics and golden text used by XCTest often live under **`docs/fixtures/`** (e.g. `v4_*`, `*_calibration_*`, per-row classification JSON). Treat that tree as **test and tuning artefacts**, not app runtime.
 
+#### SynthID removal (single image)
+
+| Script | Purpose |
+|---|---|
+| **`tools/synthid_drop_tool.py`** | Local Flask UI to run **one** image through the same de-SynthID settings as **`scripts/run_full_synthid_removal.sh`** (`0.04` × 3 passes, 768px tiles, 128 overlap). Requires **`scripts/.venv`** plus **`pip install flask`** in that venv. Usage: `cd scripts && source .venv/bin/activate && python ../tools/synthid_drop_tool.py --port 8421`. All synthid tooling I/O lives under repo-root **`Resources/`** (not the Xcode bundle): `originals/`, `originals_desynthid/`, `.synthid_*` backups/candidates, and `synthid_drop_*` for the single-image UI. Batch card promotion still writes into **`Cosmic Fit/Resources/Assets.xcassets/Cards/`**. |
+
 #### Swift test harness — blueprint fixture regeneration
 
 | Location | Purpose |
@@ -89,16 +95,34 @@ Calibration diagnostics and golden text used by XCTest often live under **`docs/
 
 A **macOS-only** sibling Swift package under **`inspector/`** that runs the **same** interpretation engine as the iOS app (via symlinks into `Cosmic Fit/`), served by a small **Hummingbird** HTTP server with a **vanilla HTML/CSS/JS** UI. Use it to inspect Style Guide (`CosmicBlueprint`) and Daily Fit (`DailyFitPayload` + `DailyFitDiagnosticReport`) for arbitrary birth inputs or preset charts, change the target calendar day, compare adjacent days, skim provenance/trace accordions, and run lightweight verdict checks — without building or deploying the iOS app.
 
-The header **Engine** dropdown selects the active Daily Fit preset (`dailyFitEngineId`). The value is sent on every `POST /api/inspect` in `options.dailyFitEngineId` and persisted in browser session storage. Compare panes label each result with **date (UTC) · engine id**. See **§4.1.1** for why presets exist and how they differ from Style Guide versioning. When starting the server, you can optionally set **`DAILY_FIT_ENGINE_ID`** in the environment (e.g. `DAILY_FIT_ENGINE_ID=legacy_baseline swift run cosmicfit-inspector`) as the default for requests that omit an explicit engine id.
+The header **Engine** dropdown selects the active Daily Fit preset (`dailyFitEngineId`). The value is sent on every `POST /api/inspect` in `options.dailyFitEngineId` and persisted in browser session storage. Compare panes label each result with **date (UTC) · engine id**. See **§4.1.1** for why presets exist and how they differ from Style Guide versioning. When starting the server, you can optionally set **`DAILY_FIT_ENGINE_ID`** in the environment (e.g. `DAILY_FIT_ENGINE_ID=legacy_baseline ./run-inspector.sh`) as the default for requests that omit an explicit engine id.
 
-**Start the server** (from repo root; first run may take a few minutes to resolve SPM deps):
+**Start the server** (always use the run script after engine changes):
 
 ```bash
 cd inspector
-swift run cosmicfit-inspector
+./run-inspector.sh
 ```
 
 Open **http://127.0.0.1:7777** in a browser on the same machine. The server binds **loopback only** (`127.0.0.1:7777`); it is not intended for LAN or public hosting and has no auth.
+
+**Why not `swift run cosmicfit-inspector` alone?** The inspector compiles engine code via **symlinks** into `Cosmic Fit/` (e.g. `InterpretationEngine/`, `Calculations/`). Swift Package Manager’s incremental build often **does not detect edits to symlink targets**, so `swift build` can skip recompiling changed engine files and serve a stale binary. The run script fixes this by:
+
+1. Killing any existing process on port **7777** (avoids an old server still serving stale results)
+2. Writing a fresh **`BuildStamp.swift`** (UTC timestamp baked into the binary)
+3. Deleting **`.build/build.db`** so SPM re-scans source mtimes through symlinks (~10s rebuild, not a full clean)
+4. Building and launching the inspector
+
+**Verifying you have the latest code:**
+
+| Where | What to check |
+|---|---|
+| **Terminal banner** on startup | `Built: <UTC timestamp>` plus short engine fingerprints |
+| **Inspector UI** (header) | `Built: …` chip (from `GET /api/health`) |
+| **Markdown export** metadata | `Inspector build: …` line |
+| **`GET /api/health`** | `buildStamp` field |
+
+If you edit engine code and the build stamp does not change after restarting with `./run-inspector.sh`, something is wrong — do not trust Daily Fit output until it does. A full nuclear reset is `cd inspector && rm -rf .build && ./run-inspector.sh` (~45s first rebuild).
 
 **Requirements:** macOS 14+, Xcode/Swift toolchain able to build the package. Resources under **`inspector/Resources/`** are symlinks to the shared style dataset, narrative cache, VSOP87 data, and Swiss Ephemeris files (see **`inspector/README.md`** for layout, API summary, presets, and security notes).
 
@@ -149,10 +173,11 @@ data/
 inspector/                           # Local macOS web inspector — same Swift engine as the app (SPM + Hummingbird); see §2.1
 ├── Package.swift
 ├── README.md                        # Quick start, API, presets, resource symlinks, verdicts
+├── run-inspector.sh                 # Preferred start script — kills stale server, invalidates SPM cache, rebuilds, runs
 ├── Resources/                       # Symlinks to style_guide JSON, VSOP87, Swiss Ephemeris, presets
 ├── Sources/
 │   ├── CosmicFitInspectorLib/       # Engine sources (symlinks) + request/response/engine glue
-│   └── CosmicFitInspectorServer/    # `cosmicfit-inspector` executable + static Web/ UI
+│   └── CosmicFitInspectorServer/    # `cosmicfit-inspector` executable + static Web/ UI + BuildStamp.swift (generated)
 └── Tests/
 
 Cosmic Fit/
@@ -375,9 +400,11 @@ Selects and derives everything the UI renders:
 |---|---|
 | `production` | Current shipped `.default` calibration |
 | `legacy_baseline` | Pre–Stage 2 source/selection weights (regression comparison) |
-| `stage1_experimental` | Stage 1 algorithm variant (`DailyFitEngineMode`); DEBUG/inspector only |
+| `stage1_experimental` | Stage 1 algorithm variant (`DailyFitEngineMode`); DEBUG/inspector only. **Sign multiplier policy Option A:** daily sky OFF, chart anchor ON. |
 
-**How to use — Inspector:** Header **Engine** dropdown; compare labels show date + engine id. Tarot recency is per engine — use `options.resetTarotHistory: true` when switching presets (inspector may auto-reset on engine change). See **`inspector/README.md`**.
+**Sign-energy calibration (2026-05-22):** `SignMultiplierPolicy` controls where natal Sun `signEnergyMap` applies. Phase 1 audit tuned 13 cells in `.default.signEnergyMap`. Validate with `python3 tools/sign_energy_inspector_harness.py` (inspector running). See [`docs/fixtures/daily_fit_sign_energy_audit_report.md`](docs/fixtures/daily_fit_sign_energy_audit_report.md).
+
+**How to use — Inspector:** Start with **`cd inspector && ./run-inspector.sh`** (see §2.1 — do not rely on bare `swift run` after engine edits). Header **Engine** dropdown; compare labels show date + engine id. Confirm **`Built:`** in the UI header or export metadata matches your restart time. Tarot recency is per engine — use `options.resetTarotHistory: true` when switching presets (inspector may auto-reset on engine change). See **`inspector/README.md`**.
 
 **How to use — iOS DEBUG:** `.env` documents the value → copy/sync to `Dev.xcconfig` as `DAILY_FIT_ENGINE_ID = production` → rebuild; or Profile engine picker without rebuild; non-production shows in the Daily Fit tab bar subtitle.
 
@@ -615,7 +642,7 @@ Contains: `userInfo`, `styleCore`, `textures`, `palette`, `occasions`, `hardware
 4. Build target: `Cosmic Fit` (iOS Simulator or device)
 5. Tests: `Cosmic FitTests` target — run via `Cmd+U`
 
-**Optional — Cosmic Fit Inspector (macOS):** `cd inspector && swift run cosmicfit-inspector`, then open **http://127.0.0.1:7777** (see §2.1 and **`inspector/README.md`**).
+**Optional — Cosmic Fit Inspector (macOS):** `cd inspector && ./run-inspector.sh`, then open **http://127.0.0.1:7777** (see §2.1 and **`inspector/README.md`**). After changing engine code under `Cosmic Fit/InterpretationEngine/`, always restart via the script so symlinked sources are recompiled.
 
 **Optional — dataset QA (Python):** `python3 tools/validate_dataset.py` (see §2.1).
 

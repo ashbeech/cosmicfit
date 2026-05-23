@@ -12,6 +12,6 @@ Upload these **five** promoted Major Arcana assets to Google's checker:
 4. `Cosmic Fit/Resources/Assets.xcassets/Cards/13-Death.imageset/13-Death.png` (PSNR 28.25, SSIM 0.6943)
 5. `Cosmic Fit/Resources/Assets.xcassets/Cards/21-TheWorld.imageset/21-TheWorld.png` (PSNR 31.91, SSIM 0.8540)
 
-Candidates (same pixels): `Cosmic Fit/Resources/.synthid_candidates/20260514T103833Z/`
+Candidates (same pixels): `Resources/.synthid_candidates/20260514T103833Z/`
 
 After validating, update `scripts/reports/synthid_run_report.json` field `google_checker_validation`, then run full set with `--approve-full` using the same thresholds.

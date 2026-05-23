@@ -28,7 +28,8 @@ enum BlueprintLensEngine {
     static func selectTarotAndStyleEdit(
         snapshot: DailyEnergySnapshot,
         calibration: DailyFitCalibration = .default,
-        dailyFitEngineId explicitEngineId: String? = nil
+        dailyFitEngineId explicitEngineId: String? = nil,
+        narrativeIntent: NarrativeIntent? = nil
     ) -> (tarotCard: TarotCard, styleEditVariant: StyleEditVariant) {
         let engineId = explicitEngineId ?? dailyFitEngineId(for: calibration)
         let allCards = loadAndNormaliseCards()
@@ -40,6 +41,7 @@ enum BlueprintLensEngine {
         let weights = calibration.selectionWeights
         let vibeVector = buildVibeVector(from: snapshot.vibeProfile)
         let axesVector = buildAxesVector(from: snapshot.axes)
+        let tuning = calibration.narrativeSelection
 
         var scoredCards: [(card: TarotCard, normAxes: [String: Double], score: Double)] = []
 
@@ -57,10 +59,20 @@ enum BlueprintLensEngine {
             let recency = recencyPenalty(
                 for: card.name, recentSelections: recentSelections
             )
-            let total = (vibeScore * weights.vibeWeight)
+            var total = (vibeScore * weights.vibeWeight)
                       + (axisScore * weights.axisWeight)
                       + (transit * weights.transitBoost)
                       - recency
+
+            if let intent = narrativeIntent, let tuning = calibration.narrativeSelection {
+                let cardVector = NarrativeSelectionDirectives.energyDictionary(from: card.energyAffinity)
+                var boost = NarrativeSelectionDirectives.cosineSimilarity(cardVector, intent.tarot.targetEnergyVector)
+                if intent.relationship == NarrativeRelationship.contrast {
+                    boost *= 1.2
+                }
+                total += boost * tuning.categoryBoostWeight
+            }
+
             scoredCards.append((card, normAxes, total))
         }
 
@@ -75,7 +87,11 @@ enum BlueprintLensEngine {
                 description: "", reversedKeywords: [],
                 symbolism: [], styleEdits: nil
             )
-            let variant = selectVariant(for: fallback, profileHash: snapshot.profileHash, dailyFitEngineId: engineId)
+            let variant = selectVariant(
+                for: fallback, profileHash: snapshot.profileHash,
+                dailyFitEngineId: engineId, narrativeIntent: narrativeIntent,
+                dailySeed: snapshot.dailySeed
+            ).variant
             return (fallback, variant)
         }
 
@@ -95,7 +111,11 @@ enum BlueprintLensEngine {
             dailyFitEngineId: engineId
         )
 
-        let variant = selectVariant(for: selected, profileHash: snapshot.profileHash, dailyFitEngineId: engineId)
+        let variant = selectVariant(
+            for: selected, profileHash: snapshot.profileHash,
+            dailyFitEngineId: engineId, narrativeIntent: narrativeIntent,
+            dailySeed: snapshot.dailySeed
+        ).variant
         return (selected, variant)
     }
 
@@ -249,27 +269,77 @@ enum BlueprintLensEngine {
 
     // MARK: - Variant Selection (Rotation-Based)
 
-    /// Selects the next style-edit variant by rotation, not by scoring.
-    /// Falls back to a minimal placeholder if the card has no `styleEdits`.
+    struct VariantSelectionResult {
+        let variant: StyleEditVariant
+        let wasScored: Bool
+        let rotationIndex: Int
+    }
+
+    /// Selects style-edit variant by narrative intent scoring (stage-1) or rotation fallback.
     private static func selectVariant(
-        for card: TarotCard, profileHash: String, dailyFitEngineId: String
-    ) -> StyleEditVariant {
+        for card: TarotCard,
+        profileHash: String,
+        dailyFitEngineId: String,
+        narrativeIntent: NarrativeIntent?,
+        dailySeed: Int
+    ) -> VariantSelectionResult {
         guard let edits = card.styleEdits, !edits.isEmpty else {
-            return StyleEditVariant(
-                variant: "I",
-                title: card.name,
-                description: "Style guidance inspired by \(card.name).",
-                energyEmphasis: [:],
-                axesEmphasis: [:],
-                dailyRitual: nil,
-                wardrobeReflection: nil
+            return VariantSelectionResult(
+                variant: StyleEditVariant(
+                    variant: "I",
+                    title: card.name,
+                    description: "Style guidance inspired by \(card.name).",
+                    energyEmphasis: [:],
+                    axesEmphasis: [:],
+                    dailyRitual: nil,
+                    wardrobeReflection: nil
+                ),
+                wasScored: false,
+                rotationIndex: 0
             )
         }
+
+        if let intent = narrativeIntent {
+            let target = intent.tarot.targetEnergyVector
+            var scored: [(index: Int, score: Double)] = []
+            for (index, edit) in edits.enumerated() {
+                let vec = NarrativeSelectionDirectives.energyDictionary(from: edit.energyEmphasis)
+                let score = NarrativeSelectionDirectives.cosineSimilarity(vec, target)
+                scored.append((index, score))
+            }
+            scored.sort { $0.score > $1.score }
+
+            var selectedIndex = scored.first?.index ?? 0
+            if scored.count >= 2, abs(scored[0].score - scored[1].score) < 0.01 {
+                selectedIndex = scored[dailySeed % edits.count].index
+            }
+
+            if intent.relationship == NarrativeRelationship.soften, scored.count >= 3 {
+                let top3 = scored.prefix(3)
+                if let minDrama = top3.min(by: {
+                    ($0.index < edits.count ? edits[$0.index].energyEmphasis["drama"] ?? 0.5 : 0.5)
+                    < ($1.index < edits.count ? edits[$1.index].energyEmphasis["drama"] ?? 0.5 : 0.5)
+                }) {
+                    selectedIndex = minDrama.index
+                }
+            }
+
+            return VariantSelectionResult(
+                variant: edits[selectedIndex],
+                wasScored: true,
+                rotationIndex: selectedIndex
+            )
+        }
+
         let index = TarotVariantRotationTracker.shared.nextVariantIndex(
             forCard: card.name, profileHash: profileHash, dailyFitEngineId: dailyFitEngineId
         )
         let safeIndex = index % edits.count
-        return edits[safeIndex]
+        return VariantSelectionResult(
+            variant: edits[safeIndex],
+            wasScored: false,
+            rotationIndex: safeIndex
+        )
     }
 
     // MARK: - Phase 4: Full Payload Assembly
@@ -281,25 +351,45 @@ enum BlueprintLensEngine {
         snapshot: DailyEnergySnapshot,
         calibration: DailyFitCalibration = .default,
         mode: DailyFitEngineMode = .standard,
-        dailyFitEngineId engineId: String? = nil
+        dailyFitEngineId engineId: String? = nil,
+        precomputedEssence: StyleEssenceProfile? = nil,
+        precomputedSilhouette: SilhouetteProfile? = nil,
+        narrativeIntent: NarrativeIntent? = nil
     ) -> DailyFitPayload {
         let effectiveMode = DailyFitEngineRegistry.resolvedMode(explicit: mode, engineId: engineId)
         let resolvedEngineId = DailyFitEngineRegistry.engineId(for: calibration, mode: effectiveMode)
+        let essence = precomputedEssence ?? resolveEssenceProfile(from: snapshot, mode: effectiveMode)
         let (tarotCard, styleEditVariant) = selectTarotAndStyleEdit(
             snapshot: snapshot,
             calibration: calibration,
-            dailyFitEngineId: resolvedEngineId
+            dailyFitEngineId: resolvedEngineId,
+            narrativeIntent: narrativeIntent
         )
-        let palette = selectDailyPalette(from: blueprint.palette, snapshot: snapshot, calibration: calibration)
-        let vibrancy = deriveVibrancy(from: blueprint.palette, snapshot: snapshot, calibration: calibration)
-        let contrast = deriveContrast(from: blueprint.palette, snapshot: snapshot, calibration: calibration)
-        let metalTone = deriveMetalTone(from: blueprint, snapshot: snapshot, calibration: calibration)
-        let essence = resolveEssenceProfile(from: snapshot, mode: effectiveMode)
-        let silhouette = deriveSilhouetteProfile(
+        let palette = selectDailyPalette(
+            from: blueprint.palette,
+            snapshot: snapshot,
+            calibration: calibration,
+            narrativeIntent: narrativeIntent
+        )
+        let scaleDirective = narrativeIntent?.scales
+        let vibrancy = deriveVibrancy(
+            from: blueprint.palette, snapshot: snapshot, calibration: calibration,
+            mode: effectiveMode, scaleDirective: scaleDirective
+        )
+        let contrast = deriveContrast(
+            from: blueprint.palette, snapshot: snapshot, calibration: calibration,
+            mode: effectiveMode, scaleDirective: scaleDirective
+        )
+        let metalTone = deriveMetalTone(
             from: blueprint, snapshot: snapshot, calibration: calibration, mode: effectiveMode
         )
-        let textures = selectDailyTextures(from: blueprint.textures, snapshot: snapshot)
-        let pattern = selectDailyPattern(from: blueprint.pattern, snapshot: snapshot)
+        let silhouette = precomputedSilhouette ?? deriveSilhouetteProfile(
+            from: blueprint, snapshot: snapshot, calibration: calibration, mode: effectiveMode
+        )
+        let textures = selectDailyTextures(from: blueprint.textures, snapshot: snapshot, mode: effectiveMode)
+        let pattern = selectDailyPattern(
+            from: blueprint.pattern, snapshot: snapshot, mode: effectiveMode
+        )
 
         return DailyFitPayload(
             tarotCard: tarotCard,
@@ -325,7 +415,12 @@ enum BlueprintLensEngine {
     struct PayloadTrace {
         let tarotScores: [(cardName: String, vibeScore: Double, axisScore: Double, transitBoost: Double, recencyPenalty: Double, totalScore: Double)]
         let variantRotationIndex: Int
-        let paletteTrace: (candidateCount: Int, scoredColours: [(name: String, role: String, score: Double)], diversitySwapApplied: Bool)
+        let tarotVariantWasScored: Bool
+        let tarotCategoryBoostApplied: Bool
+        let paletteTrace: (candidateCount: Int, scoredColours: [(name: String, role: String, score: Double)], diversitySwapApplied: Bool, selectionStrategy: String, coreAnchorSwapApplied: Bool)
+        let paletteStatementSlotCount: Int
+        let paletteSelectionPath: String
+        let narrativeBiasApplied: Bool
         let textureTrace: (available: [String], scores: [(name: String, score: Double)])
         let patternTrace: (gatePassed: Bool, visibilityValue: Double, dominantEnergy: String)
         let vibrancyBaseline: Double
@@ -342,10 +437,14 @@ enum BlueprintLensEngine {
         snapshot: DailyEnergySnapshot,
         calibration: DailyFitCalibration = .default,
         mode: DailyFitEngineMode = .standard,
-        dailyFitEngineId engineId: String? = nil
+        dailyFitEngineId engineId: String? = nil,
+        precomputedEssence: StyleEssenceProfile? = nil,
+        precomputedSilhouette: SilhouetteProfile? = nil,
+        narrativeIntent: NarrativeIntent? = nil
     ) -> (payload: DailyFitPayload, trace: PayloadTrace) {
         let effectiveMode = DailyFitEngineRegistry.resolvedMode(explicit: mode, engineId: engineId)
         let resolvedEngineId = DailyFitEngineRegistry.engineId(for: calibration, mode: effectiveMode)
+        let tuning = calibration.narrativeSelection
         let allCards = loadAndNormaliseCards()
         let recentSelections = TarotRecencyTracker.shared.getRecentSelections(
             profileHash: snapshot.profileHash,
@@ -355,13 +454,20 @@ enum BlueprintLensEngine {
         let weights = calibration.selectionWeights
         let vibeVector = buildVibeVector(from: snapshot.vibeProfile)
         let axesVector = buildAxesVector(from: snapshot.axes)
+        let tarotCategoryBoostApplied = narrativeIntent != nil && calibration.narrativeSelection != nil
         var scoredCards: [(card: TarotCard, normAxes: [String: Double], vibeScore: Double, axisScore: Double, tBoost: Double, rPenalty: Double, total: Double)] = []
         for (card, normAxes) in allCards {
             let vibeScore = cosineSimilarity(card.energyAffinity, vibeVector)
             let axisScore = normAxes.isEmpty ? 0.5 : cosineSimilarity(normAxes, axesVector)
             let tBoost = transitBoost(for: card, dominantTransits: snapshot.dominantTransits)
             let rPenalty = recencyPenalty(for: card.name, recentSelections: recentSelections)
-            let total = (vibeScore * weights.vibeWeight) + (axisScore * weights.axisWeight) + (tBoost * weights.transitBoost) - rPenalty
+            var total = (vibeScore * weights.vibeWeight) + (axisScore * weights.axisWeight) + (tBoost * weights.transitBoost) - rPenalty
+            if tarotCategoryBoostApplied, let intent = narrativeIntent, let tuning = calibration.narrativeSelection {
+                let cardVector = NarrativeSelectionDirectives.energyDictionary(from: card.energyAffinity)
+                var boost = NarrativeSelectionDirectives.cosineSimilarity(cardVector, intent.tarot.targetEnergyVector)
+                if intent.relationship == NarrativeRelationship.contrast { boost *= 1.2 }
+                total += boost * tuning.categoryBoostWeight
+            }
             scoredCards.append((card, normAxes, vibeScore, axisScore, tBoost, rPenalty, total))
         }
         scoredCards.sort { $0.total > $1.total }
@@ -382,15 +488,24 @@ enum BlueprintLensEngine {
                 description: "", reversedKeywords: [],
                 symbolism: [], styleEdits: nil
             )
-            let variant = selectVariant(for: fallback, profileHash: snapshot.profileHash, dailyFitEngineId: resolvedEngineId)
+            let variantResult = selectVariant(
+                for: fallback, profileHash: snapshot.profileHash,
+                dailyFitEngineId: resolvedEngineId, narrativeIntent: narrativeIntent,
+                dailySeed: snapshot.dailySeed
+            )
+            let essence = precomputedEssence ?? resolveEssenceProfile(from: snapshot, mode: effectiveMode)
+            let silhouette = precomputedSilhouette ?? deriveSilhouetteProfile(
+                from: blueprint, snapshot: snapshot, calibration: calibration, mode: effectiveMode
+            )
             let emptyPayload = DailyFitPayload(
-                tarotCard: fallback, styleEditVariant: variant,
-                dailyPalette: selectDailyPalette(from: blueprint.palette, snapshot: snapshot, calibration: calibration),
-                vibrancy: 0.5, contrast: 0.5, metalTone: 0.5,
-                essenceProfile: resolveEssenceProfile(from: snapshot, mode: effectiveMode),
-                silhouetteProfile: deriveSilhouetteProfile(
-                    from: blueprint, snapshot: snapshot, calibration: calibration, mode: effectiveMode
+                tarotCard: fallback, styleEditVariant: variantResult.variant,
+                dailyPalette: selectDailyPalette(
+                    from: blueprint.palette, snapshot: snapshot,
+                    calibration: calibration, narrativeIntent: narrativeIntent
                 ),
+                vibrancy: 0.5, contrast: 0.5, metalTone: 0.5,
+                essenceProfile: essence,
+                silhouetteProfile: silhouette,
                 vibeBreakdown: snapshot.vibeProfile, axes: snapshot.axes,
                 dominantTransits: snapshot.dominantTransits,
                 lunarContext: snapshot.lunarContext, dailyTextures: [], dailyPattern: nil,
@@ -398,8 +513,13 @@ enum BlueprintLensEngine {
                 dailyFitEngineId: resolvedEngineId
             )
             let emptyTrace = PayloadTrace(
-                tarotScores: [], variantRotationIndex: 0,
-                paletteTrace: (0, [], false),
+                tarotScores: [], variantRotationIndex: variantResult.rotationIndex,
+                tarotVariantWasScored: variantResult.wasScored,
+                tarotCategoryBoostApplied: tarotCategoryBoostApplied,
+                paletteTrace: (0, [], false, calibration.stage2Sensitivity.paletteSelectionStrategy.rawValue, false),
+                paletteStatementSlotCount: 0,
+                paletteSelectionPath: narrativeIntent != nil ? "narrativeSlots" : "pureSkyScoring",
+                narrativeBiasApplied: narrativeIntent != nil,
                 textureTrace: ([], []),
                 patternTrace: (false, 0, "classic"),
                 vibrancyBaseline: 0.5, vibrancyModulation: 0,
@@ -415,31 +535,42 @@ enum BlueprintLensEngine {
             date: snapshot.generatedAt,
             dailyFitEngineId: resolvedEngineId
         )
-        let variantIdx = TarotVariantRotationTracker.shared.peekNextVariantIndex(
-            forCard: selected.name, profileHash: snapshot.profileHash, dailyFitEngineId: resolvedEngineId
+        let variantResult = selectVariant(
+            for: selected, profileHash: snapshot.profileHash,
+            dailyFitEngineId: resolvedEngineId, narrativeIntent: narrativeIntent,
+            dailySeed: snapshot.dailySeed
         )
-        let variant = selectVariant(for: selected, profileHash: snapshot.profileHash, dailyFitEngineId: resolvedEngineId)
+        let variant = variantResult.variant
+        let variantIdx = variantResult.rotationIndex
 
         // Palette trace
-        var candidates: [BlueprintColour] = []
-        candidates.append(contentsOf: blueprint.palette.coreColours)
-        candidates.append(contentsOf: blueprint.palette.accentColours)
-        if let n = blueprint.palette.neutrals { candidates.append(contentsOf: n) }
-        if let s = blueprint.palette.supportColours { candidates.append(contentsOf: s) }
-        if let l = blueprint.palette.luminarySignature { candidates.append(l) }
-        if let r = blueprint.palette.rulerSignature { candidates.append(r) }
-        let palette = selectDailyPalette(from: blueprint.palette, snapshot: snapshot, calibration: calibration)
+        let candidates = buildPaletteCandidates(from: blueprint.palette)
+        let paletteResult = selectDailyPaletteWithTrace(
+            from: blueprint.palette, snapshot: snapshot, calibration: calibration,
+            narrativeIntent: narrativeIntent
+        )
+        let palette = paletteResult.selection
         let paletteHexSet = Set(palette.colours.map(\.hexValue))
         let preSwapTopHexes = Set(candidates.prefix(3).map(\.hexValue))
         let diversitySwap = paletteHexSet != preSwapTopHexes && candidates.count >= 4
+        let strategy = calibration.stage2Sensitivity.paletteSelectionStrategy
 
-        var rng = SeededRandomGenerator(seed: snapshot.dailySeed)
-        let vibeTotal = 21.0
-        let scoredColours: [(String, String, Double)] = candidates.map { colour in
-            let aligned = roleEnergyAlignment[colour.role] ?? [.classic, .romantic]
-            let base = aligned.reduce(0.0) { sum, energy in sum + Double(snapshot.vibeProfile.value(for: energy)) / vibeTotal }
-            let jitter = Double.random(in: 0..<calibration.stage2Sensitivity.paletteJitter, using: &rng)
-            return (colour.name, colour.role.rawValue, base + jitter)
+        let scored = scorePaletteCandidates(candidates, snapshot: snapshot, calibration: calibration)
+        let scoredColours: [(String, String, Double)] = scored.map { ($0.colour.name, $0.colour.role.rawValue, $0.score) }
+
+        let coreAnchorSwapped: Bool
+        if strategy == .coreAnchoredRanking {
+            let rawTop3Hexes: Set<String> = {
+                var hexes = Set<String>()
+                for item in scored {
+                    if hexes.count >= 3 { break }
+                    hexes.insert(normalizedPaletteHex(item.colour.hexValue))
+                }
+                return hexes
+            }()
+            coreAnchorSwapped = paletteHexSet != rawTop3Hexes
+        } else {
+            coreAnchorSwapped = false
         }
 
         // Vibrancy trace
@@ -450,11 +581,17 @@ enum BlueprintLensEngine {
         case .rich:  vibBaseline = 0.75
         case nil:    vibBaseline = 0.50
         }
-        let vibe = snapshot.vibeProfile
-        let vibPush = Double(vibe.value(for: .drama) + vibe.value(for: .edge)) / 21.0
-        let vibPull = Double(vibe.value(for: .utility) + vibe.value(for: .classic)) / 21.0
+        let traceVibe = (effectiveMode == .stage1Experimental)
+            ? (snapshot.skyVibeProfile ?? snapshot.vibeProfile)
+            : snapshot.vibeProfile
+        let vibPush = Double(traceVibe.value(for: .drama) + traceVibe.value(for: .edge)) / 21.0
+        let vibPull = Double(traceVibe.value(for: .utility) + traceVibe.value(for: .classic)) / 21.0
         let vibMod = (vibPush - vibPull) * calibration.stage2Sensitivity.vibrancyCoeff
-        let vibrancy = max(0.0, min(1.0, vibBaseline + vibMod))
+        let scaleDirective = narrativeIntent?.scales
+        let vibrancy = deriveVibrancy(
+            from: blueprint.palette, snapshot: snapshot, calibration: calibration,
+            mode: effectiveMode, scaleDirective: scaleDirective
+        )
 
         // Contrast trace
         let conBaseline: Double
@@ -466,9 +603,14 @@ enum BlueprintLensEngine {
         }
         let visNorm = snapshot.axes.visibility / 10.0
         let conMod = (visNorm - 0.5) * calibration.stage2Sensitivity.contrastCoeff
-        let contrast = max(0.0, min(1.0, conBaseline + conMod))
+        let contrast = deriveContrast(
+            from: blueprint.palette, snapshot: snapshot, calibration: calibration,
+            mode: effectiveMode, scaleDirective: scaleDirective
+        )
 
-        let metalTone = deriveMetalTone(from: blueprint, snapshot: snapshot, calibration: calibration)
+        let metalTone = deriveMetalTone(
+            from: blueprint, snapshot: snapshot, calibration: calibration, mode: effectiveMode
+        )
         let tempVal: Double
         switch blueprint.palette.variables?.temperature {
         case .cool:    tempVal = 0.2
@@ -486,8 +628,8 @@ enum BlueprintLensEngine {
         let mtBaseline = tempVal * 0.6 + metalLean * 0.4
         let mtMod = metalTone - mtBaseline
 
-        let essence = resolveEssenceProfile(from: snapshot, mode: effectiveMode)
-        let silhouette = deriveSilhouetteProfile(
+        let essence = precomputedEssence ?? resolveEssenceProfile(from: snapshot, mode: effectiveMode)
+        let silhouette = precomputedSilhouette ?? deriveSilhouetteProfile(
             from: blueprint, snapshot: snapshot, calibration: calibration, mode: effectiveMode
         )
         let positives = blueprint.code.leanInto + blueprint.code.consider
@@ -496,7 +638,7 @@ enum BlueprintLensEngine {
         let arBase = keywordBaseline(positives: positives, negatives: negatives, leftKeywords: arLeft, rightKeywords: arRight)
         let sdBase = keywordBaseline(positives: positives, negatives: negatives, leftKeywords: sdLeft, rightKeywords: sdRight)
 
-        let textures = selectDailyTextures(from: blueprint.textures, snapshot: snapshot)
+        let textures = selectDailyTextures(from: blueprint.textures, snapshot: snapshot, mode: effectiveMode)
         let axesNorm: [String: Double] = [
             "action": snapshot.axes.action / 10.0, "tempo": snapshot.axes.tempo / 10.0,
             "strategy": snapshot.axes.strategy / 10.0, "visibility": snapshot.axes.visibility / 10.0,
@@ -513,9 +655,16 @@ enum BlueprintLensEngine {
             return (texture, score)
         }
 
-        let dominant = snapshot.vibeProfile.dominantEnergy
+        let dominant: Energy
+        if effectiveMode == .stage1Experimental, let raw = snapshot.vibeRawScores {
+            dominant = snapshot.vibeProfile.dominantEnergy(rawTieBreak: raw)
+        } else {
+            dominant = snapshot.vibeProfile.dominantEnergy
+        }
         let gatePassed = snapshot.axes.visibility >= 6.0 && (dominant == .drama || dominant == .playful || dominant == .edge)
-        let pattern = selectDailyPattern(from: blueprint.pattern, snapshot: snapshot)
+        let pattern = selectDailyPattern(
+            from: blueprint.pattern, snapshot: snapshot, mode: effectiveMode
+        )
 
         let payload = DailyFitPayload(
             tarotCard: selected, styleEditVariant: variant,
@@ -530,7 +679,12 @@ enum BlueprintLensEngine {
         let trace = PayloadTrace(
             tarotScores: Array(topScoreEntries),
             variantRotationIndex: variantIdx,
-            paletteTrace: (candidates.count, scoredColours, diversitySwap),
+            tarotVariantWasScored: variantResult.wasScored,
+            tarotCategoryBoostApplied: tarotCategoryBoostApplied,
+            paletteTrace: (candidates.count, scoredColours, diversitySwap, strategy.rawValue, coreAnchorSwapped),
+            paletteStatementSlotCount: paletteResult.statementSlotCount,
+            paletteSelectionPath: paletteResult.selectionPath,
+            narrativeBiasApplied: narrativeIntent != nil,
             textureTrace: (blueprint.textures.recommendedTextures, textureScores),
             patternTrace: (gatePassed, snapshot.axes.visibility, dominant.rawValue),
             vibrancyBaseline: vibBaseline, vibrancyModulation: vibMod,
@@ -562,36 +716,33 @@ enum BlueprintLensEngine {
     /// Select 3 colours from the Style Guide palette, influenced by today's energy.
     /// Every colour in the output MUST come from the user's PaletteSection.
     ///
-    /// Drama-driven slot allocation:
-    ///   drama 0–3 → 0 statement, 3 grounding  (quiet day, no accents)
-    ///   drama   4 → 1 statement, 2 grounding  (moderate pop)
-    ///   drama 5+  → 2 statement, 1 grounding  (bold day, still anchored)
+    /// Strategy is controlled by `calibration.stage2Sensitivity.paletteSelectionStrategy`:
+    ///   `.dramaSlots`           — drama-driven statement/grounding slot quotas (production)
+    ///   `.coreAnchoredRanking`  — pure score ranking with at-least-one-core anchor
     private static func selectDailyPalette(
         from palette: PaletteSection,
         snapshot: DailyEnergySnapshot,
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        narrativeIntent: NarrativeIntent? = nil
     ) -> DailyPaletteSelection {
-        var candidates: [BlueprintColour] = []
-        candidates.append(contentsOf: palette.coreColours)
-        candidates.append(contentsOf: palette.accentColours)
-        if let neutrals = palette.neutrals {
-            candidates.append(contentsOf: neutrals)
-        }
-        if let support = palette.supportColours {
-            candidates.append(contentsOf: support)
-        }
-        if let lum = palette.luminarySignature {
-            candidates.append(lum)
-        }
-        if let ruler = palette.rulerSignature {
-            candidates.append(ruler)
-        }
+        selectDailyPaletteWithTrace(
+            from: palette, snapshot: snapshot, calibration: calibration, narrativeIntent: narrativeIntent
+        ).selection
+    }
 
-        // Luminary + ruler signatures can resolve to the same hex after LCH clamping
-        // into the family envelope; template bands can also repeat a hex. Daily picks
-        // must never repeat the same colour twice.
-        candidates = dedupeCandidatesByHexPreservingOrder(candidates)
+    private struct PaletteSelectionResult {
+        let selection: DailyPaletteSelection
+        let statementSlotCount: Int
+        let selectionPath: String
+    }
 
+    private static func selectDailyPaletteWithTrace(
+        from palette: PaletteSection,
+        snapshot: DailyEnergySnapshot,
+        calibration: DailyFitCalibration = .default,
+        narrativeIntent: NarrativeIntent? = nil
+    ) -> PaletteSelectionResult {
+        let candidates = buildPaletteCandidates(from: palette)
         let allHexes = buildAllPaletteHexes(from: palette)
 
         guard candidates.count >= 3 else {
@@ -599,19 +750,93 @@ enum BlueprintLensEngine {
                 DailyColourPick(name: $0.name, hexValue: $0.hexValue,
                                 role: $0.role.rawValue)
             }
-            return DailyPaletteSelection(
-                colours: Array(picks.prefix(3)),
-                allPaletteHexes: allHexes
+            return PaletteSelectionResult(
+                selection: DailyPaletteSelection(
+                    colours: Array(picks.prefix(3)),
+                    allPaletteHexes: allHexes
+                ),
+                statementSlotCount: 0,
+                selectionPath: calibration.stage2Sensitivity.paletteSelectionStrategy.rawValue
             )
         }
 
-        var rng = SeededRandomGenerator(seed: snapshot.dailySeed)
-        let vibeTotal = 21.0
+        let strategy = calibration.stage2Sensitivity.paletteSelectionStrategy
+        let selected: [(colour: BlueprintColour, score: Double)]
+        var statementSlotCount = 0
+        var selectionPath = strategy.rawValue
 
+        switch strategy {
+        case .dramaSlots:
+            let scored = scorePaletteCandidates(candidates, snapshot: snapshot, calibration: calibration)
+            selected = selectViaDramaSlots(scored: scored, snapshot: snapshot)
+        case .coreAnchoredRanking:
+            let scored = scorePaletteCandidates(candidates, snapshot: snapshot, calibration: calibration)
+            selected = selectViaCoreAnchoredRanking(scored: scored)
+        case .pureSkyScoring:
+            let vibeSource = snapshot.skyVibeProfile ?? snapshot.vibeProfile
+            let baseScored = scorePaletteCandidates(
+                candidates, snapshot: snapshot, calibration: calibration, vibeSource: vibeSource
+            )
+            if let intent = narrativeIntent, let tuning = calibration.narrativeSelection {
+                var rng = SeededRandomGenerator(seed: snapshot.dailySeed)
+                let narrativeScored = NarrativeSelectionDirectives.applyNarrativePaletteScoring(
+                    baseScored: baseScored,
+                    intent: intent,
+                    tuning: tuning,
+                    roleEnergyAlignment: roleEnergyAlignment,
+                    seededJitter: { _ in Double.random(in: 0..<1.0, using: &rng) }
+                )
+                let slotResult = NarrativeSelectionDirectives.selectViaNarrativeSlots(
+                    scored: narrativeScored,
+                    intent: intent,
+                    normalizeHex: normalizedPaletteHex
+                )
+                selected = slotResult.selected
+                statementSlotCount = slotResult.statementSlotCount
+                selectionPath = "narrativeSlots"
+            } else {
+                selected = selectViaPureSkyScoring(scored: baseScored)
+                selectionPath = "pureSkyScoring"
+            }
+        }
+
+        let picks = selected.map {
+            DailyColourPick(name: $0.colour.name, hexValue: $0.colour.hexValue,
+                            role: $0.colour.role.rawValue)
+        }
+        return PaletteSelectionResult(
+            selection: DailyPaletteSelection(colours: picks, allPaletteHexes: allHexes),
+            statementSlotCount: statementSlotCount,
+            selectionPath: selectionPath
+        )
+    }
+
+    /// Build the deduped candidate pool from the Style Guide palette.
+    private static func buildPaletteCandidates(from palette: PaletteSection) -> [BlueprintColour] {
+        var candidates: [BlueprintColour] = []
+        candidates.append(contentsOf: palette.coreColours)
+        candidates.append(contentsOf: palette.accentColours)
+        if let neutrals = palette.neutrals { candidates.append(contentsOf: neutrals) }
+        if let support = palette.supportColours { candidates.append(contentsOf: support) }
+        if let lum = palette.luminarySignature { candidates.append(lum) }
+        if let ruler = palette.rulerSignature { candidates.append(ruler) }
+        return dedupeCandidatesByHexPreservingOrder(candidates)
+    }
+
+    /// Score every candidate colour against today's vibe profile.
+    private static func scorePaletteCandidates(
+        _ candidates: [BlueprintColour],
+        snapshot: DailyEnergySnapshot,
+        calibration: DailyFitCalibration,
+        vibeSource: VibeBreakdown? = nil
+    ) -> [(colour: BlueprintColour, score: Double)] {
+        var rng = SeededRandomGenerator(seed: snapshot.dailySeed)
+        let vibe = vibeSource ?? snapshot.vibeProfile
+        let vibeTotal = 21.0
         var scored: [(colour: BlueprintColour, score: Double)] = candidates.map { colour in
             let aligned = roleEnergyAlignment[colour.role] ?? [.classic, .romantic]
             let base = aligned.reduce(0.0) { sum, energy in
-                sum + Double(snapshot.vibeProfile.value(for: energy)) / vibeTotal
+                sum + Double(vibe.value(for: energy)) / vibeTotal
             }
             let jitter = Double.random(in: 0..<calibration.stage2Sensitivity.paletteJitter, using: &rng)
             let profileBias = deterministicProfileColourBias(
@@ -621,7 +846,14 @@ enum BlueprintLensEngine {
             return (colour, base + jitter + profileBias)
         }
         scored.sort { $0.score > $1.score }
+        return scored
+    }
 
+    /// Drama-driven slot allocation (original production algorithm).
+    private static func selectViaDramaSlots(
+        scored: [(colour: BlueprintColour, score: Double)],
+        snapshot: DailyEnergySnapshot
+    ) -> [(colour: BlueprintColour, score: Double)] {
         let statementPool = scored.filter { statementRoles.contains($0.colour.role) }
         let groundingPool = scored.filter { !statementRoles.contains($0.colour.role) }
 
@@ -643,9 +875,7 @@ enum BlueprintLensEngine {
         selected.append(contentsOf: groundingPool.prefix(actualGrounding))
 
         if selected.count < 3 {
-            let usedHexes = Set(selected.map {
-                normalizedPaletteHex($0.colour.hexValue)
-            })
+            let usedHexes = Set(selected.map { normalizedPaletteHex($0.colour.hexValue) })
             for item in scored {
                 if selected.count >= 3 { break }
                 let key = normalizedPaletteHex(item.colour.hexValue)
@@ -654,12 +884,51 @@ enum BlueprintLensEngine {
                 }
             }
         }
+        return selected
+    }
 
-        let picks = selected.map {
-            DailyColourPick(name: $0.colour.name, hexValue: $0.colour.hexValue,
-                            role: $0.colour.role.rawValue)
+    /// Pure score ranking with an at-least-one-core anchor guarantee.
+    private static func selectViaCoreAnchoredRanking(
+        scored: [(colour: BlueprintColour, score: Double)]
+    ) -> [(colour: BlueprintColour, score: Double)] {
+        var top3: [(colour: BlueprintColour, score: Double)] = []
+        var usedHexes = Set<String>()
+        for item in scored {
+            if top3.count >= 3 { break }
+            let key = normalizedPaletteHex(item.colour.hexValue)
+            guard !usedHexes.contains(key) else { continue }
+            usedHexes.insert(key)
+            top3.append(item)
         }
-        return DailyPaletteSelection(colours: picks, allPaletteHexes: allHexes)
+
+        let hasCore = top3.contains { $0.colour.role == .core }
+        if !hasCore {
+            let bestCore = scored.first {
+                $0.colour.role == .core && !usedHexes.contains(normalizedPaletteHex($0.colour.hexValue))
+            }
+            if let core = bestCore, let lowestIdx = top3.indices.max(by: { top3[$0].score > top3[$1].score }) {
+                top3[lowestIdx] = core
+            }
+        }
+
+        top3.sort { $0.score > $1.score }
+        return top3
+    }
+
+    /// Pure top-3 by score — no role guarantees (Stage 1 pureSkyScoring).
+    private static func selectViaPureSkyScoring(
+        scored: [(colour: BlueprintColour, score: Double)]
+    ) -> [(colour: BlueprintColour, score: Double)] {
+        var top3: [(colour: BlueprintColour, score: Double)] = []
+        var usedHexes = Set<String>()
+        for item in scored {
+            if top3.count >= 3 { break }
+            let key = normalizedPaletteHex(item.colour.hexValue)
+            guard !usedHexes.contains(key) else { continue }
+            usedHexes.insert(key)
+            top3.append(item)
+        }
+        return top3
     }
 
     /// Normalises hex for equality (trim, `#`, uppercase).
@@ -725,7 +994,9 @@ enum BlueprintLensEngine {
     private static func deriveVibrancy(
         from palette: PaletteSection,
         snapshot: DailyEnergySnapshot,
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        mode: DailyFitEngineMode = .standard,
+        scaleDirective: ScaleDirective? = nil
     ) -> Double {
         let baseline: Double
         switch palette.variables?.saturation {
@@ -734,21 +1005,46 @@ enum BlueprintLensEngine {
         case .rich:  baseline = 0.75
         case nil:    baseline = 0.50
         }
-        let vibe = snapshot.vibeProfile
-        let push = Double(vibe.value(for: .drama) + vibe.value(for: .edge)) / 21.0
-        let pull = Double(vibe.value(for: .utility) + vibe.value(for: .classic)) / 21.0
-        let modulation = (push - pull) * calibration.stage2Sensitivity.vibrancyCoeff
-        return max(0.0, min(1.0, baseline + modulation))
+        let vibe = (mode == .stage1Experimental)
+            ? (snapshot.skyVibeProfile ?? snapshot.vibeProfile)
+            : snapshot.vibeProfile
+
+        var final: Double
+        if mode == .stage1Experimental {
+            let push = Double(vibe.value(for: .drama) + vibe.value(for: .edge)) / 21.0
+            let pull = Double(vibe.value(for: .utility) + vibe.value(for: .classic) + vibe.value(for: .romantic)) / 21.0
+            let vibeModulation = (push - pull) * 0.80
+            let tempoMod = (snapshot.axes.tempo / 10.0 - 0.5) * 0.30
+            final = baseline + vibeModulation + tempoMod
+        } else {
+            let push = Double(vibe.value(for: .drama) + vibe.value(for: .edge)) / 21.0
+            let pull = Double(vibe.value(for: .utility) + vibe.value(for: .classic)) / 21.0
+            let modulation = (push - pull) * calibration.stage2Sensitivity.vibrancyCoeff
+            final = baseline + modulation
+        }
+
+        if let directive = scaleDirective {
+            if let cap = directive.vibrancyCap {
+                final = min(final, cap)
+            }
+            if directive.pullTowardBaseline {
+                final = baseline * directive.baselineBlend + final * (1.0 - directive.baselineBlend)
+            }
+        }
+
+        return max(0.0, min(1.0, final))
     }
 
     // MARK: - Contrast Derivation
 
     /// Blueprint-anchored contrast: baseline from ContrastLevel enum,
-    /// modulated by the visibility axis.
+    /// modulated by axes. Stage 1 uses visibility + strategy blend for more variation.
     private static func deriveContrast(
         from palette: PaletteSection,
         snapshot: DailyEnergySnapshot,
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        mode: DailyFitEngineMode = .standard,
+        scaleDirective: ScaleDirective? = nil
     ) -> Double {
         let baseline: Double
         switch palette.variables?.contrast {
@@ -757,9 +1053,27 @@ enum BlueprintLensEngine {
         case .high:   baseline = 0.75
         case nil:     baseline = 0.50
         }
-        let visNorm = snapshot.axes.visibility / 10.0
-        let modulation = (visNorm - 0.5) * calibration.stage2Sensitivity.contrastCoeff
-        return max(0.0, min(1.0, baseline + modulation))
+        let coeff = calibration.stage2Sensitivity.contrastCoeff
+        let modulation: Double
+        if mode == .stage1Experimental {
+            let visNorm = snapshot.axes.visibility / 10.0
+            let strNorm = snapshot.axes.strategy / 10.0
+            modulation = ((visNorm - 0.5) * 0.6 + (strNorm - 0.5) * 0.4) * coeff
+        } else {
+            let visNorm = snapshot.axes.visibility / 10.0
+            modulation = (visNorm - 0.5) * coeff
+        }
+
+        var final = baseline + modulation
+        if let directive = scaleDirective {
+            if let cap = directive.contrastCap {
+                final = min(final, cap)
+            }
+            if directive.pullTowardBaseline {
+                final = baseline * directive.baselineBlend + final * (1.0 - directive.baselineBlend)
+            }
+        }
+        return max(0.0, min(1.0, final))
     }
 
     // MARK: - Metal Tone Derivation
@@ -779,7 +1093,8 @@ enum BlueprintLensEngine {
     private static func deriveMetalTone(
         from blueprint: CosmicBlueprint,
         snapshot: DailyEnergySnapshot,
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        mode: DailyFitEngineMode = .standard
     ) -> Double {
         let tempVal: Double
         switch blueprint.palette.variables?.temperature {
@@ -807,8 +1122,9 @@ enum BlueprintLensEngine {
             if firePlanets.contains(transit.transitPlanet) { fireHits += 1 }
             if waterPlanets.contains(transit.transitPlanet) { waterHits += 1 }
         }
-        let fireNudge = min(Double(fireHits) * calibration.stage2Sensitivity.metalNudgePerHit, 0.10)
-        let waterNudge = min(Double(waterHits) * calibration.stage2Sensitivity.metalNudgePerHit, 0.10)
+        let nudgeCap = mode == .stage1Experimental ? 0.30 : 0.10
+        let fireNudge = min(Double(fireHits) * calibration.stage2Sensitivity.metalNudgePerHit, nudgeCap)
+        let waterNudge = min(Double(waterHits) * calibration.stage2Sensitivity.metalNudgePerHit, nudgeCap)
 
         let phase = snapshot.lunarContext.phaseName.lowercased()
         let lunarNudge: Double
@@ -820,7 +1136,15 @@ enum BlueprintLensEngine {
             lunarNudge = 0.0
         }
 
-        return max(0.0, min(1.0, baseline + fireNudge - waterNudge + lunarNudge))
+        let lunarMetalMod: Double
+        if mode == .stage1Experimental {
+            let fraction = snapshot.lunarContext.phaseDegrees / 360.0
+            lunarMetalMod = (fraction - 0.5) * 0.15
+        } else {
+            lunarMetalMod = 0.0
+        }
+
+        return max(0.0, min(1.0, baseline + fireNudge - waterNudge + lunarNudge + lunarMetalMod))
     }
 
     // MARK: - Style Essence Profile (14-Category Radar)
@@ -836,6 +1160,10 @@ enum BlueprintLensEngine {
         case .standard:
             return deriveStyleEssenceProfile(from: snapshot)
         }
+    }
+
+    static func essenceCategoryWeights(for category: StyleEssenceCategory) -> [Energy: Double] {
+        essenceCategoryWeights[category] ?? [:]
     }
 
     /// Energy-weight matrix: each of the 14 style categories has weighted
@@ -900,10 +1228,14 @@ enum BlueprintLensEngine {
                 }
             }
             if stage1Mode {
-                for transit in dominantTransits.prefix(2) {
+                var boostedCategories = Set<StyleEssenceCategory>()
+                for transit in dominantTransits.prefix(3) {
                     if let boosted = stage1TransitEssenceCategories[transit.transitPlanet],
-                       boosted == category {
-                        raw += transit.strength * stage1TransitEssenceBoost
+                       boosted == category,
+                       !boostedCategories.contains(boosted) {
+                        let cappedStrength = min(transit.strength, 0.50)
+                        raw += cappedStrength * stage1TransitEssenceBoost
+                        boostedCategories.insert(boosted)
                     }
                 }
             }
@@ -971,7 +1303,7 @@ enum BlueprintLensEngine {
     /// Transit boost per matching dominant transit for stage1Experimental essence.
     private static let stage1TransitEssenceBoost = 0.35
     /// Amplifies sky−chart vibe delta before essence category scoring (Stage 1).
-    private static let stage1EssenceVibeDeltaAmplification = 4.0
+    private static let stage1EssenceVibeDeltaAmplification = 1.8
 
     /// Stage 1 experimental: today's outside-energy essence, with chart anchor for contrast.
     static func deriveStyleEssenceProfileStage1Experimental(
@@ -1049,7 +1381,7 @@ enum BlueprintLensEngine {
     /// Blueprint-dominated silhouette with small axes modulation.
     /// Baseline (~75%) from CodeSection keyword scanning;
     /// modulation (~25%) from action/visibility/strategy axes.
-    private static func deriveSilhouetteProfile(
+    static func deriveSilhouetteProfile(
         from blueprint: CosmicBlueprint,
         snapshot: DailyEnergySnapshot,
         calibration: DailyFitCalibration = .default,
@@ -1071,17 +1403,24 @@ enum BlueprintLensEngine {
             leftKeywords: sdLeft, rightKeywords: sdRight
         )
 
-        let s = calibration.stage2Sensitivity.silhouetteAxisScale
-        if mode == .stage1Experimental, let chartAxes = snapshot.chartAxes {
-            let visDelta = (snapshot.axes.visibility - chartAxes.visibility) / 9.0
-            let actDelta = (snapshot.axes.action - chartAxes.action) / 9.0
-            let strDelta = (snapshot.axes.strategy - chartAxes.strategy) / 9.0
+        if mode == .stage1Experimental {
+            let skyVis = snapshot.axes.visibility
+            let skyAct = snapshot.axes.action
+            let skyStr = snapshot.axes.strategy
+            let mf = 0.5 + tanh((skyVis - 5.5) / 4.5) * 0.45
+            let ar = 0.5 + tanh((skyAct - 5.5) / 4.5) * 0.45
+            let sd = 0.5 + tanh((skyStr - 5.5) / 4.5) * 0.45
             return SilhouetteProfile(
-                masculineFeminine: max(0.0, min(1.0, mfBase + visDelta * 0.45 * s)),
-                angularRounded: max(0.0, min(1.0, arBase + actDelta * -0.36 * s)),
-                structuredDraped: max(0.0, min(1.0, sdBase + strDelta * -0.45 * s))
+                masculineFeminine: mf,
+                angularRounded: ar,
+                structuredDraped: sd,
+                chartAnchorMF: mfBase,
+                chartAnchorAR: arBase,
+                chartAnchorSD: sdBase
             )
         }
+
+        let s = calibration.stage2Sensitivity.silhouetteAxisScale
 
         let visNorm = snapshot.axes.visibility / 10.0
         let actNorm = snapshot.axes.action / 10.0
@@ -1141,13 +1480,20 @@ enum BlueprintLensEngine {
         "jersey":    ["action": 0.7, "tempo": 0.7],
         "chiffon":   ["visibility": 0.6, "tempo": 0.5],
         "corduroy":  ["strategy": 0.6, "action": 0.4],
+        "knit":      ["strategy": 0.6, "tempo": 0.4],
+        "flannel":   ["action": 0.5, "strategy": 0.5],
+        "bonded":    ["strategy": 0.7, "action": 0.5],
+        "stretch":   ["tempo": 0.7, "action": 0.5],
+        "matte":     ["strategy": 0.5, "visibility": 0.3],
     ]
 
     /// Select 2–3 textures from the Blueprint's recommended list based on axes.
     /// Every texture in the output comes from the Blueprint — no invented values.
+    /// Stage 1 experimental adds sky-vibe energy modulation for day-to-day variation.
     private static func selectDailyTextures(
         from textures: TexturesSection,
-        snapshot: DailyEnergySnapshot
+        snapshot: DailyEnergySnapshot,
+        mode: DailyFitEngineMode = .standard
     ) -> [String] {
         let axesNorm: [String: Double] = [
             "action":     snapshot.axes.action / 10.0,
@@ -1156,25 +1502,82 @@ enum BlueprintLensEngine {
             "visibility": snapshot.axes.visibility / 10.0,
         ]
 
+        let skyVibe = mode == .stage1Experimental
+            ? (snapshot.skyVibeProfile ?? snapshot.vibeProfile)
+            : nil
+
         var scored: [(String, Double)] = textures.recommendedTextures.map { texture in
             let lower = texture.lowercased()
             var score = 0.5
             for (keyword, affinities) in textureAxisAffinity {
                 if lower.contains(keyword) {
+                    let weightSum = affinities.values.reduce(0.0, +)
+                    guard weightSum > 0 else { break }
                     score = affinities.reduce(0.0) {
                         $0 + $1.value * (axesNorm[$1.key] ?? 0.5)
-                    }
+                    } / weightSum
                     break
                 }
             }
+            if let vibe = skyVibe {
+                score += textureVibeBonus(lower: lower, vibe: vibe)
+            }
             return (texture, score)
         }
-        scored.sort { $0.1 > $1.1 }
+
+        if mode == .stage1Experimental, let topScore = scored.max(by: { $0.1 < $1.1 })?.1, topScore > 0 {
+            let threshold = topScore * 0.85
+            let tiedGroup = scored.filter { $0.1 >= threshold }
+            if tiedGroup.count > 1 {
+                var rng = SeededRandomGenerator(seed: snapshot.dailySeed &+ 7)
+                let shuffled = tiedGroup.shuffled(using: &rng)
+                let rest = scored.filter { $0.1 < threshold }
+                scored = shuffled + rest.sorted { $0.1 > $1.1 }
+            } else {
+                scored.sort { $0.1 > $1.1 }
+            }
+        } else {
+            scored.sort { $0.1 > $1.1 }
+        }
 
         guard scored.count >= 2 else { return scored.map(\.0) }
         let takeThree = scored.count >= 3
             && scored[2].1 >= scored[1].1 * 0.8
         return Array(scored.prefix(takeThree ? 3 : 2)).map(\.0)
+    }
+
+    private static let textureEnergyAffinity: [String: [Energy: Double]] = [
+        "silk":      [.romantic: 0.3, .drama: 0.2],
+        "velvet":    [.drama: 0.4, .romantic: 0.2],
+        "cashmere":  [.classic: 0.3, .romantic: 0.2],
+        "linen":     [.utility: 0.3, .playful: 0.2],
+        "leather":   [.edge: 0.4, .drama: 0.2],
+        "denim":     [.utility: 0.3, .edge: 0.2],
+        "wool":      [.classic: 0.3, .utility: 0.2],
+        "cotton":    [.utility: 0.3, .playful: 0.2],
+        "suede":     [.romantic: 0.3, .classic: 0.1],
+        "tweed":     [.classic: 0.4, .utility: 0.2],
+        "satin":     [.romantic: 0.3, .drama: 0.3],
+        "jersey":    [.playful: 0.3, .utility: 0.2],
+        "chiffon":   [.romantic: 0.3, .playful: 0.2],
+        "corduroy":  [.classic: 0.3, .edge: 0.1],
+        "knit":      [.classic: 0.3, .utility: 0.2],
+        "flannel":   [.utility: 0.3, .classic: 0.2],
+        "bonded":    [.utility: 0.3, .edge: 0.2],
+        "stretch":   [.playful: 0.3, .utility: 0.2],
+        "matte":     [.utility: 0.2, .classic: 0.2],
+    ]
+
+    private static func textureVibeBonus(lower: String, vibe: VibeBreakdown) -> Double {
+        let total = 21.0
+        for (keyword, affinities) in textureEnergyAffinity {
+            if lower.contains(keyword) {
+                return affinities.reduce(0.0) {
+                    $0 + $1.value * (Double(vibe.value(for: $1.key)) / total)
+                }
+            }
+        }
+        return 0.0
     }
 
     // MARK: - Daily Pattern Selection
@@ -1191,9 +1594,15 @@ enum BlueprintLensEngine {
     /// Gate: visibility ≥ 6.0 AND dominant energy is Drama, Playful, or Edge.
     private static func selectDailyPattern(
         from patterns: PatternSection,
-        snapshot: DailyEnergySnapshot
+        snapshot: DailyEnergySnapshot,
+        mode: DailyFitEngineMode = .standard
     ) -> String? {
-        let dominant = snapshot.vibeProfile.dominantEnergy
+        let dominant: Energy
+        if mode == .stage1Experimental, let raw = snapshot.vibeRawScores {
+            dominant = snapshot.vibeProfile.dominantEnergy(rawTieBreak: raw)
+        } else {
+            dominant = snapshot.vibeProfile.dominantEnergy
+        }
         guard snapshot.axes.visibility >= 6.0,
               dominant == .drama || dominant == .playful || dominant == .edge
         else { return nil }
@@ -1208,6 +1617,13 @@ enum BlueprintLensEngine {
             return (pattern, score)
         }
         scored.sort { $0.1 > $1.1 }
+
+        if mode == .stage1Experimental, let topScore = scored.first?.1, topScore > 0 {
+            let topPatterns = scored.filter { $0.1 >= topScore * 0.8 }
+            var rng = SeededRandomGenerator(seed: snapshot.dailySeed)
+            let idx = Int.random(in: 0..<topPatterns.count, using: &rng)
+            return topPatterns[idx].0
+        }
 
         let topScore = scored[0].1
         let tied = scored.filter { $0.1 == topScore }
@@ -1347,12 +1763,18 @@ enum BlueprintLensEngine {
         print("\(p)")
         print("\(p) ── 3. COLOUR PALETTE ───────────────────────────────────────")
         print("\(p) Style Guide palette family: \(blueprint.palette.family?.rawValue ?? "(none)")")
+        let paletteStrategy = cal.stage2Sensitivity.paletteSelectionStrategy
+        print("\(p) Strategy: \(paletteStrategy.rawValue)")
         let drama = snapshot.vibeProfile.value(for: .drama)
-        let slotLabel: String
-        if drama <= 3 { slotLabel = "0 statement / 3 grounding (quiet)" }
-        else if drama <= 4 { slotLabel = "1 statement / 2 grounding (moderate)" }
-        else { slotLabel = "2 statement / 1 grounding (bold)" }
-        print("\(p) Drama=\(drama) → slot allocation: \(slotLabel)")
+        if paletteStrategy == .dramaSlots {
+            let slotLabel: String
+            if drama <= 3 { slotLabel = "0 statement / 3 grounding (quiet)" }
+            else if drama <= 4 { slotLabel = "1 statement / 2 grounding (moderate)" }
+            else { slotLabel = "2 statement / 1 grounding (bold)" }
+            print("\(p) Drama=\(drama) → slot allocation: \(slotLabel)")
+        } else {
+            print("\(p) Drama=\(drama) (no slot allocation — pure ranking)")
+        }
         print("\(p) Daily picks (\(payload.dailyPalette.colours.count)):")
         for (i, colour) in payload.dailyPalette.colours.enumerated() {
             print("\(p)   \(i + 1). \(colour.name.padding(toLength: 20, withPad: " ", startingAt: 0)) \(colour.hexValue)  role=\(colour.role)")

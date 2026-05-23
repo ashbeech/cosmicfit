@@ -157,10 +157,12 @@ struct AstrologicalSoundness_Tests {
     func testSignEnergyCoherence() {
         let cal = DailyFitCalibration.default
 
-        // Leo should have highest drama multiplier among fire signs
+        // Leo and Aries drama both Phase-1 capped at 1.35
         let leoDrama = cal.signEnergyMap.multiplier(forSign: "Leo", energy: .drama)
         let ariesDrama = cal.signEnergyMap.multiplier(forSign: "Aries", energy: .drama)
-        #expect(leoDrama >= ariesDrama, "Leo drama (\(leoDrama)) should >= Aries drama (\(ariesDrama))")
+        #expect(leoDrama == 1.35)
+        #expect(ariesDrama == 1.35)
+        #expect(leoDrama == ariesDrama)
 
         // Taurus should have high classic
         let taurusClassic = cal.signEnergyMap.multiplier(forSign: "Taurus", energy: .classic)

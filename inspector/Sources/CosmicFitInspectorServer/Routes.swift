@@ -20,6 +20,7 @@ func buildRouter(engine: InspectorEngine) -> Router<BasicRequestContext> {
             "engineVersion": InspectorEngine.engineVersion,
             "dailyFitEngineDefault": InspectorDefaults.dailyFitEngineId,
             "dailyFitEngineCount": String(InspectorDefaults.dailyFitEngineCount),
+            "buildStamp": BuildStamp.timestamp,
         ]
         let body = try jsonEncoder.encode(payload)
         return Response(

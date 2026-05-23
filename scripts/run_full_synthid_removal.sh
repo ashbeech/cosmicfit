@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 #
 # Full SynthID removal: originals (27 images) + cards (79 images)
-# Proven settings: 0.04 × 3 passes, 768 tiles, 128 overlap, 28 steps
+# Proven settings: auto-adaptive profiles (see scripts/synthid_profiles.py)
+# Large originals: up to 1024px tiles, 50 steps, strength 0.04/0.05/0.05
+# Cards: explicit 0.04 × 3, 768 tiles (batch legacy for cards phase)
 #
 # Usage:
 #   cd /Users/ash/dev/mobile_apps/cosmicfit/scripts
@@ -13,6 +15,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$SCRIPT_DIR"
 source .venv/bin/activate
 
@@ -22,8 +25,8 @@ STEPS=28
 MAX_TILE=768
 TILE_OVERLAP=128
 
-ORIGINALS_BACKUP="/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/.synthid_originals_backup"
-ORIGINALS_OUTPUT="/Users/ash/dev/mobile_apps/cosmicfit/Cosmic Fit/Resources/originals_desynthid"
+ORIGINALS_BACKUP="${REPO_ROOT}/Resources/.synthid_originals_backup"
+ORIGINALS_OUTPUT="${REPO_ROOT}/Resources/originals_desynthid"
 
 echo "============================================================"
 echo "FULL SYNTHID REMOVAL"
@@ -40,10 +43,7 @@ mkdir -p "$ORIGINALS_OUTPUT"
 
 python remove_synthid_originals.py \
   --originals-dir "$ORIGINALS_BACKUP" \
-  --strength $STRENGTH $STRENGTH $STRENGTH \
-  --steps $STEPS \
-  --max-tile $MAX_TILE \
-  --tile-overlap $TILE_OVERLAP \
+  --profile auto \
   --output-dir "$ORIGINALS_OUTPUT"
 
 echo ""

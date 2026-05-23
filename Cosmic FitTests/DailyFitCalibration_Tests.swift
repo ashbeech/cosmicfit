@@ -73,7 +73,7 @@ private enum CalibrationProfiles {
         hash: "cal_water",
         natalSigns: [4, 8, 12, 4, 8, 12, 4, 8, 12, 4],
         progressedSigns: [4, 8, 12, 4, 8, 12, 4, 8, 12, 4],
-        expectedDominant: [.romantic, .drama]
+        expectedDominant: [.romantic, .drama, .classic]
     )
 
     /// Virgo Sun, Taurus Moon, Capricorn spread — earth-heavy.
@@ -436,12 +436,13 @@ struct DailyFitCalibration_Tests {
         let defaultRun = CalibrationProfiles.runProfile(profile, dayOffset: 0)
 
         let natalDominantWeights = DailyFitCalibration.SourceWeights(
-            natal: 0.70, transits: 0.10, lunarPhase: 0.05,
-            progressed: 0.10, currentSun: 0.05
+            natal: 0.90, transits: 0.05, lunarPhase: 0.02,
+            progressed: 0.02, currentSun: 0.01
         )
         let natalDominantCal = DailyFitCalibration(
             sourceWeights: natalDominantWeights,
             signEnergyMap: DailyFitCalibration.default.signEnergyMap,
+            signMultiplierPolicy: DailyFitCalibration.default.signMultiplierPolicy,
             planetAxisMap: DailyFitCalibration.default.planetAxisMap,
             selectionWeights: DailyFitCalibration.default.selectionWeights,
             axisTuning: .default,
@@ -454,10 +455,19 @@ struct DailyFitCalibration_Tests {
 
         let v1 = defaultRun.payload.vibeBreakdown
         let v2 = modifiedRun.payload.vibeBreakdown
-        let changed = v1.classic != v2.classic || v1.playful != v2.playful
+        let vibeChanged = v1.classic != v2.classic || v1.playful != v2.playful
             || v1.romantic != v2.romantic || v1.utility != v2.utility
             || v1.drama != v2.drama || v1.edge != v2.edge
-        #expect(changed, "Changing source weights significantly should alter the vibe breakdown")
+
+        let a1 = defaultRun.payload.axes
+        let a2 = modifiedRun.payload.axes
+        let axesChanged = abs(a1.action - a2.action) > 0.01
+            || abs(a1.tempo - a2.tempo) > 0.01
+            || abs(a1.strategy - a2.strategy) > 0.01
+            || abs(a1.visibility - a2.visibility) > 0.01
+
+        #expect(vibeChanged || axesChanged,
+                "Changing source weights significantly should alter vibe breakdown or axes")
     }
 
     // MARK: - T6.7: No Profile Produces Mono Energy

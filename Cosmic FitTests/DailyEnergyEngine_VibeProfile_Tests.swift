@@ -347,6 +347,7 @@ struct DailyEnergyEngine_VibeProfile_Tests {
         let lunarSensitive = DailyFitCalibration(
             sourceWeights: .init(natal: 0.15, transits: 0.0, lunarPhase: 0.70, progressed: 0.10, currentSun: 0.05),
             signEnergyMap: DailyFitCalibration.default.signEnergyMap,
+            signMultiplierPolicy: DailyFitCalibration.default.signMultiplierPolicy,
             planetAxisMap: DailyFitCalibration.default.planetAxisMap,
             selectionWeights: DailyFitCalibration.default.selectionWeights,
             axisTuning: .default,
@@ -382,6 +383,7 @@ struct DailyEnergyEngine_VibeProfile_Tests {
         let natalOnly = DailyFitCalibration(
             sourceWeights: .init(natal: 1.0, transits: 0.0, lunarPhase: 0.0, progressed: 0.0, currentSun: 0.0),
             signEnergyMap: DailyFitCalibration.default.signEnergyMap,
+            signMultiplierPolicy: DailyFitCalibration.default.signMultiplierPolicy,
             planetAxisMap: DailyFitCalibration.default.planetAxisMap,
             selectionWeights: DailyFitCalibration.default.selectionWeights,
             axisTuning: .default,
@@ -390,6 +392,7 @@ struct DailyEnergyEngine_VibeProfile_Tests {
         let transitsOnly = DailyFitCalibration(
             sourceWeights: .init(natal: 0.0, transits: 1.0, lunarPhase: 0.0, progressed: 0.0, currentSun: 0.0),
             signEnergyMap: DailyFitCalibration.default.signEnergyMap,
+            signMultiplierPolicy: DailyFitCalibration.default.signMultiplierPolicy,
             planetAxisMap: DailyFitCalibration.default.planetAxisMap,
             selectionWeights: DailyFitCalibration.default.selectionWeights,
             axisTuning: .default,
@@ -457,5 +460,67 @@ struct DailyEnergyEngine_VibeProfile_Tests {
             let val = vibe.value(for: energy)
             #expect(val >= 0 && val <= 10)
         }
+    }
+
+    // T1.13: elementBoosts dedupe when natal Sun sign map already strong
+    @Test("Element boost dedupe lowers drama when Leo sign map exceeds threshold")
+    func testElementBoostDedupeWhenSignMapStrong() {
+        let chart = ChartFixtures.chart(sunSign: 5, spreadElement: "Fire")
+        let dedupeOn = natalOnlyCalibration(elementBoostDedupeThreshold: 1.30, signMultipliers: .off)
+        let dedupeOff = natalOnlyCalibration(elementBoostDedupeThreshold: nil, signMultipliers: .off)
+
+        let (_, traceOn) = DailyEnergyEngine.generateSnapshotWithTrace(
+            natalChart: chart, progressedChart: chart, transits: [],
+            moonPhaseDegrees: 90.0, profileHash: "element-dedupe-on",
+            date: fixedDate, calibration: dedupeOn
+        )
+        let (_, traceOff) = DailyEnergyEngine.generateSnapshotWithTrace(
+            natalChart: chart, progressedChart: chart, transits: [],
+            moonPhaseDegrees: 90.0, profileHash: "element-dedupe-off",
+            date: fixedDate, calibration: dedupeOff
+        )
+
+        let dramaOn = traceOn.rawScores["drama"] ?? 0
+        let dramaOff = traceOff.rawScores["drama"] ?? 0
+        #expect(dramaOn < dramaOff, "Fire drama boosts should be skipped when Leo drama map is 1.35")
+    }
+
+    @Test("Element boost dedupe uses strict greater-than threshold")
+    func testElementBoostDedupeExactThresholdBoundary() {
+        // Virgo utility map = 1.30 exactly; Earth utility element boost should remain.
+        let chart = ChartFixtures.chart(sunSign: 6, spreadElement: "Earth")
+        let dedupeOn = natalOnlyCalibration(elementBoostDedupeThreshold: 1.30, signMultipliers: .off)
+        let dedupeOff = natalOnlyCalibration(elementBoostDedupeThreshold: nil, signMultipliers: .off)
+
+        let (_, traceOn) = DailyEnergyEngine.generateSnapshotWithTrace(
+            natalChart: chart, progressedChart: chart, transits: [],
+            moonPhaseDegrees: 90.0, profileHash: "utility-dedupe-on",
+            date: fixedDate, calibration: dedupeOn
+        )
+        let (_, traceOff) = DailyEnergyEngine.generateSnapshotWithTrace(
+            natalChart: chart, progressedChart: chart, transits: [],
+            moonPhaseDegrees: 90.0, profileHash: "utility-dedupe-off",
+            date: fixedDate, calibration: dedupeOff
+        )
+
+        let utilityOn = traceOn.rawScores["utility"] ?? 0
+        let utilityOff = traceOff.rawScores["utility"] ?? 0
+        #expect(utilityOn == utilityOff, "Utility at exactly 1.30 should not suppress Earth utility boosts")
+    }
+
+    private func natalOnlyCalibration(
+        elementBoostDedupeThreshold: Double?,
+        signMultipliers: DailyFitCalibration.SignMultiplierPolicy
+    ) -> DailyFitCalibration {
+        DailyFitCalibration(
+            sourceWeights: .init(natal: 1.0, transits: 0.0, lunarPhase: 0.0, progressed: 0.0, currentSun: 0.0),
+            signEnergyMap: DailyFitCalibration.default.signEnergyMap,
+            signMultiplierPolicy: signMultipliers,
+            planetAxisMap: DailyFitCalibration.default.planetAxisMap,
+            selectionWeights: DailyFitCalibration.default.selectionWeights,
+            axisTuning: .default,
+            stage2Sensitivity: .default,
+            elementBoostDedupeThreshold: elementBoostDedupeThreshold
+        )
     }
 }
