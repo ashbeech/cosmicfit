@@ -564,6 +564,12 @@ async function loadDailyFitEngines() {
       const health = await healthRes.json();
       state.serverDefaultEngineId =
         health.dailyFitEngineDefault || state.serverDefaultEngineId;
+      state.buildStamp = health.buildStamp || null;
+      const stampEl = document.getElementById("build-stamp");
+      if (stampEl && state.buildStamp) {
+        stampEl.textContent = "Built: " + state.buildStamp;
+        stampEl.title = "Inspector binary build timestamp";
+      }
     }
     state.dailyFitEngines = enginesRes.ok ? await enginesRes.json() : [];
     const sel = document.getElementById("engine-select");
@@ -652,6 +658,20 @@ function wireEvents() {
   document
     .getElementById("drawer-close")
     .addEventListener("click", closeDrawer);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeDrawer();
+  });
+  document.addEventListener("click", (e) => {
+    if (!document.body.classList.contains("drawer-open")) return;
+    const drawer = document.getElementById("drill-drawer");
+    if (
+      drawer &&
+      !drawer.contains(e.target) &&
+      !e.target.closest("[data-drill]")
+    ) {
+      closeDrawer();
+    }
+  });
   document.getElementById("target-date").addEventListener("change", () => {
     schedulePersistSession();
     if (state.data) doSubmit(true);
@@ -1015,7 +1035,7 @@ function compareCarouselHtml(paneHtmlFns) {
       ? "compare-pane compare-pane-target"
       : "compare-pane compare-pane-forward";
     const prefix = isTarget ? "Target · " : "";
-    html += `<div class="${paneCls}">
+    html += `<div class="${paneCls}" data-date-iso="${esc(iso)}" data-engine-id="${esc(engineId)}">
       <div class="compare-pane-label">${prefix}${esc(label)} UTC · ${esc(engineId)}</div>
       <div class="compare-pane-content">${paneHtmlFn()}</div>
     </div>`;
@@ -1030,7 +1050,7 @@ function compareEnginesSplitHtml(panes) {
   let html =
     '<div class="compare-split compare-split-engines" role="region" aria-label="Engine compare">';
   for (const pane of panes) {
-    html += `<div class="compare-pane compare-pane-engine">
+    html += `<div class="compare-pane compare-pane-engine" data-date-iso="${esc(target)}" data-engine-id="${esc(pane.engineId)}">
       <div class="compare-pane-label">${esc(label)} UTC · ${esc(pane.engineId)}</div>
       <div class="compare-pane-content">${pane.html()}</div>
     </div>`;
@@ -1301,11 +1321,17 @@ function updateEngineCompareStatus() {
     `Engine compare: ${target} UTC · ${engineA} vs ${engineB}`;
 }
 
+let activeDrillNode = null;
+
 function postRenderSection(root) {
   root.querySelectorAll("[data-drill]").forEach((node) => {
     node.addEventListener("click", (e) => {
       e.stopPropagation();
-      if (node.dataset.drill) openDrill(node.dataset.drill);
+      if (!node.dataset.drill) return;
+      if (activeDrillNode) activeDrillNode.classList.remove("drill-active");
+      activeDrillNode = node;
+      node.classList.add("drill-active");
+      openDrill(node.dataset.drill, resolveDrillContext(node));
     });
   });
   root.querySelectorAll(".accordion-header").forEach((h) => {
@@ -1375,10 +1401,9 @@ function buildComparePanes(renderForData) {
     return [{ html: () => renderForData(state.data, true) }];
   }
   const range = getCompareDateRange();
-  return range.map((iso, i) => {
-    const isTarget = i === 0;
+  return range.map((iso) => {
     const data = inspectDataForCompareDate(iso);
-    return { html: () => renderForData(data, isTarget) };
+    return { html: () => renderForData(data, !!data) };
   });
 }
 
@@ -1388,10 +1413,13 @@ function buildEngineComparePanes(renderForData) {
   }
   const engineA = compareEngineAId();
   const engineB = compareEngineBId();
-  return [engineA, engineB].map((engineId, i) => ({
-    engineId,
-    html: () => renderForData(inspectDataForEngine(engineId), i === 0),
-  }));
+  return [engineA, engineB].map((engineId) => {
+    const data = inspectDataForEngine(engineId);
+    return {
+      engineId,
+      html: () => renderForData(data, !!data),
+    };
+  });
 }
 
 function renderNatal(natal) {
@@ -1426,7 +1454,7 @@ function buildBlueprintHtml(bp) {
       html += '<div class="swatch-row">';
       for (const c of colours) {
         html += `<div class="swatch">
-          <div class="swatch-color" style="background:${c.hexValue}" title="${c.name} (${c.hexValue})" data-drill="palette:${c.name}"></div>
+          <div class="swatch-color drillable" style="background:${c.hexValue}" title="${c.name} (${c.hexValue})" data-drill="blueprint-colour:${c.name}"></div>
           <span class="swatch-name">${esc(c.name)}</span>
           <span class="swatch-hex">${c.hexValue}</span>
         </div>`;
@@ -1445,20 +1473,31 @@ function buildBlueprintHtml(bp) {
   html += '<div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap">';
   for (const [label, c] of special) {
     if (c) {
-      html += `<div class="swatch"><div class="swatch-color" style="background:${c.hexValue}" title="${c.name}"></div>
+      html += `<div class="swatch"><div class="swatch-color drillable" style="background:${c.hexValue}" title="${c.name}" data-drill="blueprint-colour:${c.name}"></div>
         <span class="swatch-name">${label}</span><span class="swatch-hex">${c.hexValue}</span></div>`;
     }
   }
   html += "</div></div>";
+
+  if (bp.palette?.family || bp.palette?.cluster) {
+    html += '<div class="subsection"><div class="subsection-title">Palette Engine</div><div class="tag-list">';
+    if (bp.palette.family)
+      html += `<span class="tag drillable" data-drill="blueprint-meta:family">${esc(String(bp.palette.family))}</span>`;
+    if (bp.palette.cluster)
+      html += `<span class="tag drillable" data-drill="blueprint-meta:cluster">${esc(String(bp.palette.cluster))}</span>`;
+    if (bp.palette.secondaryPull)
+      html += `<span class="tag drillable" data-drill="blueprint-meta:secondaryPull">Pull: ${esc(String(bp.palette.secondaryPull))}</span>`;
+    html += "</div></div>";
+  }
 
   // Textures
   if (bp.textures) {
     html +=
       '<div class="subsection"><div class="subsection-title">Textures</div>';
     if (bp.textures.recommendedTextures?.length)
-      html += `<div><strong>Recommended:</strong> <div class="tag-list">${bp.textures.recommendedTextures.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div></div>`;
+      html += `<div><strong>Recommended:</strong> <div class="tag-list">${bp.textures.recommendedTextures.map((t) => `<span class="tag drillable" data-drill="blueprint-texture:${esc(t)}">${esc(t)}</span>`).join("")}</div></div>`;
     if (bp.textures.avoidTextures?.length)
-      html += `<div style="margin-top:6px"><strong>Avoid:</strong> <div class="tag-list">${bp.textures.avoidTextures.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div></div>`;
+      html += `<div style="margin-top:6px"><strong>Avoid:</strong> <div class="tag-list">${bp.textures.avoidTextures.map((t) => `<span class="tag drillable" data-drill="blueprint-texture:${esc(t)}">${esc(t)}</span>`).join("")}</div></div>`;
     if (bp.textures.goodText)
       html += `<p class="narrative-text" style="margin-top:6px">${esc(bp.textures.goodText)}</p>`;
     html += "</div>";
@@ -1495,7 +1534,7 @@ function buildBlueprintHtml(bp) {
     html +=
       '<div class="subsection"><div class="subsection-title">Patterns</div>';
     if (bp.pattern.recommendedPatterns?.length)
-      html += `<div class="tag-list">${bp.pattern.recommendedPatterns.map((p) => `<span class="tag">${esc(p)}</span>`).join("")}</div>`;
+      html += `<div class="tag-list">${bp.pattern.recommendedPatterns.map((p) => `<span class="tag drillable" data-drill="blueprint-pattern:${esc(p)}">${esc(p)}</span>`).join("")}</div>`;
     if (bp.pattern.narrativeText)
       html += `<p class="narrative-text" style="margin-top:6px">${esc(bp.pattern.narrativeText)}</p>`;
     html += "</div>";
@@ -1537,7 +1576,7 @@ function buildDailyFitHtml(df, allowDrill = true) {
   // Style Edit
   if (p.styleEditVariant) {
     html += `<div class="subsection"><div class="subsection-title">Style Edit</div>
-      <strong>${esc(p.styleEditVariant.title || "")}</strong>`;
+      <strong class="${drill}" data-drill="styleEdit">${esc(p.styleEditVariant.title || "")}</strong>`;
     if (p.styleEditVariant.dailyRitual)
       html += `<p class="narrative-text">${esc(p.styleEditVariant.dailyRitual)}</p>`;
     if (p.styleEditVariant.wardrobeReflection)
@@ -1581,21 +1620,21 @@ function buildDailyFitHtml(df, allowDrill = true) {
     html += scaleBar(
       "M / F",
       p.silhouetteProfile.masculineFeminine,
-      null,
+      allowDrill ? "silhouette:mf" : null,
       "Masculine",
       "Feminine",
     );
     html += scaleBar(
       "A / R",
       p.silhouetteProfile.angularRounded,
-      null,
+      allowDrill ? "silhouette:ar" : null,
       "Angular",
       "Rounded",
     );
     html += scaleBar(
       "S / D",
       p.silhouetteProfile.structuredDraped,
-      null,
+      allowDrill ? "silhouette:sd" : null,
       "Structured",
       "Draped",
     );
@@ -1603,14 +1642,14 @@ function buildDailyFitHtml(df, allowDrill = true) {
   }
 
   // Vibe Breakdown (6 energies)
-  html += buildVibeBreakdownHtml(p.vibeBreakdown);
+  html += buildVibeBreakdownHtml(p.vibeBreakdown, allowDrill);
 
   // Textures & Pattern
   if (p.dailyTextures?.length) {
-    html += `<div class="subsection"><div class="subsection-title">Daily Textures</div><div class="tag-list">${p.dailyTextures.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div></div>`;
+    html += `<div class="subsection"><div class="subsection-title">Daily Textures</div><div class="tag-list">${p.dailyTextures.map((t) => `<span class="tag ${drill}" data-drill="texture:${esc(t)}">${esc(t)}</span>`).join("")}</div></div>`;
   }
   if (p.dailyPattern) {
-    html += `<div class="subsection"><div class="subsection-title">Daily Pattern</div><span class="tag">${esc(p.dailyPattern)}</span></div>`;
+    html += `<div class="subsection"><div class="subsection-title">Daily Pattern</div><span class="tag ${drill}" data-drill="pattern">${esc(p.dailyPattern)}</span></div>`;
   }
 
   // Transits
@@ -1628,10 +1667,10 @@ function buildDailyFitHtml(df, allowDrill = true) {
   // Lunar
   if (p.lunarContext) {
     html += `<div class="subsection"><div class="subsection-title">Lunar Context</div>
-      <span class="tag">${esc(p.lunarContext.phaseName)}</span>
-      <span class="tag">${p.lunarContext.isWaxing ? "Waxing" : "Waning"}</span>
-      <span class="tag">${esc(p.lunarContext.element)}</span>
-      <span class="tag">${p.lunarContext.phaseDegrees.toFixed(1)}°</span></div>`;
+      <span class="tag ${drill}" data-drill="lunar">${esc(p.lunarContext.phaseName)}</span>
+      <span class="tag ${drill}" data-drill="lunar">${p.lunarContext.isWaxing ? "Waxing" : "Waning"}</span>
+      <span class="tag ${drill}" data-drill="lunar">${esc(p.lunarContext.element)}</span>
+      <span class="tag ${drill}" data-drill="lunar">${p.lunarContext.phaseDegrees.toFixed(1)}°</span></div>`;
   }
 
   return html;
@@ -1650,10 +1689,14 @@ function renderDailyFit(df) {
   });
 }
 
-function buildTraceHtml(diag) {
-  if (!diag) return "<p>No diagnostics available.</p>";
+function buildTraceHtml(diag, blueprintDiag = null) {
+  if (!diag && !blueprintDiag) return "<p>No diagnostics available.</p>";
 
   let html = "";
+
+  html += buildBlueprintDiagnosticsAccordion(blueprintDiag);
+
+  if (!diag) return html;
 
   // Source Contributions
   html += accordion("Source Contributions", () => {
@@ -1669,10 +1712,55 @@ function buildTraceHtml(diag) {
 
   // Energy Scores
   html += accordion("Raw Energy Scores", () => kv(diag.rawEnergyScores));
-  html += accordion("Post-Multiplier Energy Scores", () =>
+  html += accordion(postMultiplierScoresLabel(diag), () =>
     kv(diag.postMultiplierScores),
   );
   html += accordion("Raw Axis Scores", () => kv(diag.rawAxisScores));
+
+  // Stage 1 Attribution (Phase 3)
+  if (diag.stage1Attribution?.byEnergy?.length) {
+    html += accordion("Stage 1 · Per-input Energy Attribution", () => {
+      const attr = diag.stage1Attribution;
+      let t = `<p style="margin-bottom:8px">Engine mode: <strong>${esc(attr.engineMode)}</strong></p>`;
+      for (const bd of attr.byEnergy) {
+        t += `<details style="margin:6px 0"><summary><strong>${esc(vibeEnergyDisplayName(bd.energy))}</strong> — raw: ${Number(bd.totalRaw).toFixed(4)}, ${esc(postMultiplierShortLabel(diag))}: ${Number(bd.totalPostMultiplier).toFixed(4)}</summary>`;
+        t += renderEnergyAttributionTable(bd, null, diag);
+        t += "</details>";
+      }
+      const mults = attr.signMultiplierApplied;
+      const appliedToDaily = attr.signMultipliersAppliedToDailyVibe !== false;
+      if (mults && Object.keys(mults).length) {
+        const multTitle = appliedToDaily
+          ? "Sun-sign multipliers"
+          : "Sun-sign multipliers (not applied to daily vibe)";
+        t += `<details style="margin:6px 0"><summary><strong>${multTitle}</strong></summary>`;
+        if (!appliedToDaily) {
+          t += '<p style="font-size:0.85em;margin:4px 0">Daily sky payload skips natal Sun signEnergyMap. Chart anchor still uses multipliers when policy enables it.</p>';
+        }
+        t += '<table class="data-table"><thead><tr><th>Energy</th><th>Multiplier</th></tr></thead><tbody>';
+        for (const [k, v] of Object.entries(mults).sort((a, b) => b[1] - a[1])) {
+          t += `<tr><td>${esc(vibeEnergyDisplayName(k))}</td><td>${Number(v).toFixed(3)}</td></tr>`;
+        }
+        t += "</tbody></table></details>";
+      }
+      t += renderChartAnchorMultipliersTable(attr.chartAnchorSignMultiplierApplied);
+      return t;
+    });
+  }
+
+  if (diag.stage1AxisAttribution?.byAxis?.length) {
+    html += accordion("Stage 1 · Per-input Axis Attribution", () => {
+      const attr = diag.stage1AxisAttribution;
+      let t = `<p style="margin-bottom:8px">Engine mode: <strong>${esc(attr.engineMode)}</strong> · sigmoid spread: ${Number(attr.sigmoidSpread).toFixed(2)}</p>`;
+      for (const bd of attr.byAxis) {
+        const name = AXIS_DISPLAY_NAMES[bd.axis] || bd.axis;
+        t += `<details style="margin:6px 0"><summary><strong>${esc(name)}</strong> — raw: ${Number(bd.rawScore).toFixed(4)}, final: ${Number(bd.finalAxisValue).toFixed(2)}</summary>`;
+        t += renderAxisAttributionTable(bd);
+        t += "</details>";
+      }
+      return t;
+    });
+  }
 
   // Tarot Scores
   html += accordion("Tarot Card Scores (Top 15)", () => {
@@ -1697,7 +1785,7 @@ function buildTraceHtml(diag) {
   html += accordion("Palette Selection Trace", () => {
     const pt = diag.paletteSelectionTrace;
     if (!pt) return "N/A";
-    let t = `<p>Candidates: ${pt.candidateCount} | Diversity swap: ${pt.diversitySwapApplied ? "Yes" : "No"}</p>`;
+    let t = `<p>Strategy: <strong>${pt.selectionStrategy || "dramaSlots"}</strong> | Candidates: ${pt.candidateCount} | Diversity swap: ${pt.diversitySwapApplied ? "Yes" : "No"}${pt.coreAnchorSwapApplied ? " | Core anchor swap: Yes" : ""}</p>`;
     t +=
       '<table class="data-table"><thead><tr><th>Colour</th><th>Role</th><th>Score</th></tr></thead><tbody>';
     for (const c of pt.topScoredColours || []) {
@@ -1764,11 +1852,11 @@ function renderTrace(diag) {
   mountCompareSection("trace-body", {
     buildPanes: () =>
       buildComparePanes((data, _allowDrill) =>
-        buildTraceHtml(data?.dailyFit?.diagnostics),
+        buildTraceHtml(data?.dailyFit?.diagnostics, data?.blueprintDiagnostics),
       ),
     buildEngineComparePanes: () =>
       buildEngineComparePanes((data, _allowDrill) =>
-        buildTraceHtml(data?.dailyFit?.diagnostics),
+        buildTraceHtml(data?.dailyFit?.diagnostics, data?.blueprintDiagnostics),
       ),
   });
 }
@@ -1804,132 +1892,1132 @@ function renderVerdicts(verdicts) {
 
 // ── Drill-down Drawer ──
 
-function openDrill(key) {
-  if (!state.data) return;
+function resolveDrillContext(clickNode) {
+  const pane = clickNode?.closest?.(".compare-pane");
+  const dateISO = pane?.dataset?.dateIso || targetDateISO();
+  const engineId = pane?.dataset?.engineId || currentDailyFitEngineId();
+  let data = state.data;
+  if (dateISO !== targetDateISO() || engineId !== currentDailyFitEngineId()) {
+    data = inspectDataForEngine(engineId, dateISO) || state.data;
+  }
+  return { data, dateISO, engineId };
+}
+
+function renderDerivationTimeline(steps) {
+  return steps
+    .map(
+      (step, i) => `<div class="derivation-step">
+      <div class="derivation-step-header">
+        <span class="derivation-step-num">${step.number ?? i + 1}</span>
+        <span class="derivation-step-title">${esc(step.title)}</span>
+      </div>
+      ${step.description ? `<p class="derivation-step-desc">${esc(step.description)}</p>` : ""}
+      <div class="derivation-step-body">${step.body}</div>
+    </div>`,
+    )
+    .join("");
+}
+
+function renderDrillMeta(ctx) {
+  if (!ctx?.dateISO) return "";
+  return `<p class="drill-meta">${esc(formatDateUK(ctx.dateISO))} UTC · ${esc(ctx.engineId || currentDailyFitEngineId())}</p>`;
+}
+
+function renderSourceContributionsTable(sc) {
+  if (!sc) return "<p>No source contribution data.</p>";
+  return `<table class="data-table"><tbody>
+    <tr><td>Natal chart</td><td>${pct(sc.natalShare)}</td></tr>
+    <tr><td>Transits</td><td>${pct(sc.transitShare)}</td></tr>
+    <tr><td>Lunar</td><td>${pct(sc.lunarShare)}</td></tr>
+    <tr><td>Progressed</td><td>${pct(sc.progressedShare)}</td></tr>
+    <tr><td>Current Sun</td><td>${pct(sc.currentSunShare)}</td></tr>
+  </tbody></table>`;
+}
+
+function renderEnergyScoresTable(scores, highlightKey = null) {
+  if (!scores) return "<p>No energy scores.</p>";
+  let html = '<table class="data-table"><thead><tr><th>Energy</th><th>Score</th></tr></thead><tbody>';
+  for (const [k, v] of Object.entries(scores).sort((a, b) => b[1] - a[1])) {
+    const hi = highlightKey && k === highlightKey ? ' style="background:rgba(124,111,247,0.15)"' : "";
+    html += `<tr${hi}><td>${esc(k)}</td><td>${Number(v).toFixed(4)}</td></tr>`;
+  }
+  html += "</tbody></table>";
+  return html;
+}
+
+// ── Phase 3: Per-input energy attribution helpers ──
+
+const ESSENCE_ENERGY_MAP = {
+  edgy: ["edge", "drama"],
+  romantic: ["romantic", "classic"],
+  classic: ["classic", "utility"],
+  utility: ["utility", "classic"],
+  drama: ["drama", "edge"],
+  playful: ["playful", "drama"],
+  polished: ["classic", "utility"],
+  effortless: ["playful", "utility"],
+  sensual: ["romantic", "drama"],
+  magnetic: ["drama", "romantic"],
+  grounded: ["utility", "classic"],
+  eclectic: ["playful", "edge"],
+  minimal: ["utility", "classic"],
+  maximalist: ["drama", "playful"],
+};
+
+function renderEnergyAttributionTable(breakdown, highlightEnergy = null, diag = null) {
+  if (!breakdown?.entries?.length)
+    return "<p>No per-input attribution data available.</p>";
+
+  const entries = breakdown.entries.slice(0, 15);
+  let html =
+    '<table class="data-table"><thead><tr><th>Source</th><th>Input</th><th>Raw</th><th>Weighted</th></tr></thead><tbody>';
+  for (const e of entries) {
+    const hi =
+      highlightEnergy && e.energy === highlightEnergy
+        ? ' style="background:rgba(124,111,247,0.12)"'
+        : "";
+    html += `<tr${hi}><td>${esc(e.source)}</td><td>${esc(e.label)}</td><td>${Number(e.rawContribution).toFixed(4)}</td><td>${Number(e.weightedContribution).toFixed(4)}</td></tr>`;
+  }
+  html += "</tbody></table>";
+
+  if (breakdown.totalRaw != null) {
+    const secondLabel = diag ? postMultiplierShortLabel(diag) : "Post-multiplier";
+    html += `<p style="margin-top:4px;font-size:0.85em">Total raw: ${Number(breakdown.totalRaw).toFixed(4)} · ${esc(secondLabel)}: ${Number(breakdown.totalPostMultiplier).toFixed(4)}</p>`;
+  }
+  return html;
+}
+
+function renderEnergyAttributionForTransit(attribution, transitPlanet) {
+  if (!attribution?.byEnergy) return "<p>No attribution data.</p>";
+
+  const rows = [];
+  for (const bd of attribution.byEnergy) {
+    const matching = (bd.entries || []).filter(
+      (e) => e.source === "transit" && e.label.startsWith(transitPlanet + " "),
+    );
+    const total = matching.reduce((s, e) => s + e.weightedContribution, 0);
+    if (total !== 0 || matching.length > 0) {
+      rows.push({ energy: bd.energy, total, entries: matching });
+    }
+  }
+
+  if (!rows.length) return `<p>No transit entries found for ${esc(transitPlanet)}.</p>`;
+
+  rows.sort((a, b) => Math.abs(b.total) - Math.abs(a.total));
+
+  let html =
+    '<table class="data-table"><thead><tr><th>Energy</th><th>Contribution</th><th>Details</th></tr></thead><tbody>';
+  for (const r of rows) {
+    const details = r.entries
+      .map((e) => `${esc(e.label)}: ${Number(e.weightedContribution).toFixed(4)}`)
+      .join("<br>");
+    html += `<tr><td>${esc(vibeEnergyDisplayName(r.energy))}</td><td><strong>${Number(r.total).toFixed(4)}</strong></td><td style="font-size:0.85em">${details || "—"}</td></tr>`;
+  }
+  html += "</tbody></table>";
+  return html;
+}
+
+// Silhouette / scale axes: which Stage 1 axis drives each slider.
+const SILHOUETTE_AXIS_CONFIG = {
+  mf: {
+    label: "Masculine / Feminine",
+    drivingAxis: "visibility",
+    semantic:
+      "How visible or expressive the day's energy feels — higher visibility nudges toward feminine presentation (softer, more seen).",
+    stage1Formula: (axisVal) =>
+      `0.5 + tanh((${axisVal} − 5.5) / 4.5) × 0.45`,
+  },
+  ar: {
+    label: "Angular / Rounded",
+    drivingAxis: "action",
+    semantic:
+      "Pace and forward drive — higher action nudges toward angular, sharp silhouettes.",
+    stage1Formula: (axisVal) =>
+      `0.5 + tanh((${axisVal} − 5.5) / 4.5) × 0.45`,
+  },
+  sd: {
+    label: "Structured / Draped",
+    drivingAxis: "strategy",
+    semantic:
+      "Planning vs flow — higher strategy nudges toward structured, tailored lines.",
+    stage1Formula: (axisVal) =>
+      `0.5 + tanh((${axisVal} − 5.5) / 4.5) × 0.45`,
+  },
+};
+
+const AXIS_DISPLAY_NAMES = {
+  action: "Action",
+  tempo: "Tempo",
+  strategy: "Strategy",
+  visibility: "Visibility",
+};
+
+function renderAxisAttributionTable(breakdown, maxRows = 15) {
+  if (!breakdown?.entries?.length) {
+    return "<p>No per-input axis attribution data available.</p>";
+  }
+  const entries = breakdown.entries.slice(0, maxRows);
+  let html =
+    '<table class="data-table"><thead><tr><th>Source</th><th>Input</th><th>Contribution</th></tr></thead><tbody>';
+  for (const e of entries) {
+    html += `<tr><td>${esc(e.source)}</td><td>${esc(e.label)}</td><td>${Number(e.contribution).toFixed(4)}</td></tr>`;
+  }
+  html += "</tbody></table>";
+  html += `<p style="margin-top:4px;font-size:0.85em">Raw axis score (pre-sigmoid): <strong>${Number(breakdown.rawScore).toFixed(4)}</strong> → final axis (1–10): <strong>${Number(breakdown.finalAxisValue).toFixed(2)}</strong></p>`;
+  return html;
+}
+
+function buildStage1AxisAttributionStep(ctx, axisKey) {
+  const diag = ctx.data?.dailyFit?.diagnostics;
+  const attr = diag?.stage1AxisAttribution;
+  if (!attr?.byAxis?.length) return null;
+  const bd = attr.byAxis.find((b) => b.axis === axisKey);
+  if (!bd) return null;
+  return {
+    title: `Per-input attribution · ${AXIS_DISPLAY_NAMES[axisKey] || axisKey} axis`,
+    description:
+      "Each row is a transit, planet placement, lunar nudge, or jitter term that pushed this axis before the silhouette formula runs.",
+    body: renderAxisAttributionTable(bd),
+  };
+}
+
+function buildStage1AttributionSteps(ctx, highlightEnergy = null) {
+  const diag = ctx.data?.dailyFit?.diagnostics;
+  const attribution = diag?.stage1Attribution;
+  if (!attribution?.byEnergy?.length) return [];
+
+  const steps = [];
+
+  if (highlightEnergy) {
+    const bd = attribution.byEnergy.find((b) => b.energy === highlightEnergy);
+    if (bd) {
+      steps.push({
+        title: `Per-input attribution · ${vibeEnergyDisplayName(highlightEnergy)}`,
+        description: `Top contributors to ${vibeEnergyDisplayName(highlightEnergy)} energy from all sources.`,
+        body: renderEnergyAttributionTable(bd, highlightEnergy, diag),
+      });
+    }
+  } else {
+    for (const bd of attribution.byEnergy) {
+      steps.push({
+        title: `Attribution · ${vibeEnergyDisplayName(bd.energy)}`,
+        body: renderEnergyAttributionTable(bd, null, diag),
+      });
+    }
+  }
+
+  const mults = attribution.signMultiplierApplied;
+  const appliedToDaily = attribution.signMultipliersAppliedToDailyVibe !== false;
+  if (mults && Object.keys(mults).length) {
+    let multHtml = '<table class="data-table"><thead><tr><th>Energy</th><th>Multiplier</th></tr></thead><tbody>';
+    for (const [k, v] of Object.entries(mults).sort((a, b) => b[1] - a[1])) {
+      const hi = highlightEnergy && k === highlightEnergy ? ' style="background:rgba(124,111,247,0.12)"' : "";
+      multHtml += `<tr${hi}><td>${esc(vibeEnergyDisplayName(k))}</td><td>${Number(v).toFixed(3)}</td></tr>`;
+    }
+    multHtml += "</tbody></table>";
+    multHtml += `<p style="margin-top:4px;font-size:0.85em">Engine mode: ${esc(attribution.engineMode)}</p>`;
+    if (!appliedToDaily) {
+      multHtml += '<p style="margin-top:4px;font-size:0.85em">Not applied to daily vibe (sky path). Post-multiplier trace equals raw on the payload path.</p>';
+    }
+    steps.push({
+      title: appliedToDaily ? "Sun-sign multipliers" : "Sun-sign multipliers (not applied to daily vibe)",
+      description: appliedToDaily
+        ? "Applied after accumulation — converts raw scores to post-multiplier scores."
+        : "Chart-anchor reference only — daily sky bars use unfiltered accumulation.",
+      body: multHtml,
+    });
+  }
+
+  const chartMults = attribution.chartAnchorSignMultiplierApplied;
+  if (chartMults && Object.keys(chartMults).length) {
+    steps.push({
+      title: "Chart-anchor Sun-sign multipliers",
+      description: "Applied on chartVibeProfile comparison slice only — not on daily sky payload bars.",
+      body: renderChartAnchorMultipliersBody(chartMults),
+    });
+  }
+
+  return steps;
+}
+
+function findBlueprintColour(name, blueprint) {
+  if (!blueprint?.palette) return null;
+  const bands = [
+    ["Neutrals", blueprint.palette.neutrals],
+    ["Core", blueprint.palette.coreColours],
+    ["Accents", blueprint.palette.accentColours],
+    ["Support", blueprint.palette.supportColours],
+  ];
+  for (const [band, colours] of bands) {
+    const match = colours?.find((c) => c.name === name);
+    if (match) return { colour: match, band };
+  }
+  const specials = [
+    ["Light Anchor", blueprint.palette.lightAnchor],
+    ["Deep Anchor", blueprint.palette.deepAnchor],
+    ["Luminary Signature", blueprint.palette.luminarySignature],
+    ["Ruler Signature", blueprint.palette.rulerSignature],
+  ];
+  for (const [band, colour] of specials) {
+    if (colour?.name === name) return { colour, band };
+  }
+  return null;
+}
+
+function formatColourProvenanceRows(p) {
+  if (!p) return [["Provenance", "Unknown"]];
+  const rows = [["Kind", p.kind || "unknown"]];
+  for (const [k, v] of Object.entries(p)) {
+    if (k === "kind") continue;
+    rows.push([
+      k.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase()),
+      typeof v === "number" ? v.toFixed(4) : String(v ?? "—"),
+    ]);
+  }
+  return rows;
+}
+
+function provenanceTable(p) {
+  const rows = formatColourProvenanceRows(p);
+  let html = '<table class="data-table"><tbody>';
+  for (const [label, value] of rows) {
+    html += `<tr><td>${esc(label)}</td><td>${esc(value)}</td></tr>`;
+  }
+  html += "</tbody></table>";
+  return html;
+}
+
+function renderPaletteMetaTable(palette) {
+  if (!palette) return "<p>No palette metadata.</p>";
+  let html = '<table class="data-table"><tbody>';
+  if (palette.family) html += `<tr><td>Family</td><td>${esc(String(palette.family))}</td></tr>`;
+  if (palette.cluster) html += `<tr><td>Cluster</td><td>${esc(String(palette.cluster))}</td></tr>`;
+  if (palette.secondaryPull)
+    html += `<tr><td>Secondary pull</td><td>${esc(String(palette.secondaryPull))}</td></tr>`;
+  if (palette.overrideFlags) {
+    for (const [k, v] of Object.entries(palette.overrideFlags)) {
+      html += `<tr><td>${esc(k)}</td><td>${esc(String(v))}</td></tr>`;
+    }
+  }
+  if (palette.variables) {
+    for (const [k, v] of Object.entries(palette.variables)) {
+      html += `<tr><td>${esc(k)}</td><td>${typeof v === "number" ? v.toFixed(3) : esc(String(v))}</td></tr>`;
+    }
+  }
+  html += "</tbody></table>";
+  return html;
+}
+
+function blueprintDiagnostics(ctx) {
+  return ctx?.data?.blueprintDiagnostics || null;
+}
+
+function renderChartInputTable(input, boundaryFlags = []) {
+  if (!input) return "<p>No chart input.</p>";
+  const rows = [
+    ["Ascendant", input.ascendant],
+    ["Venus", input.venus],
+    ["Sun", input.sun],
+    ["Moon", input.moon],
+    ["Mercury", input.mercury],
+    ["Mars", input.mars],
+    ["Saturn", input.saturn],
+    ["Jupiter", input.jupiter],
+    ["Pluto", input.pluto],
+  ];
+  let html =
+    '<table class="data-table"><thead><tr><th>Driver</th><th>Sign</th><th>Degree</th></tr></thead><tbody>';
+  for (const [label, placement] of rows) {
+    if (!placement) continue;
+    const deg =
+      placement.degree != null ? `${Number(placement.degree).toFixed(1)}°` : "—";
+    html += `<tr><td>${esc(label)}</td><td>${esc(placement.sign || "—")}</td><td>${deg}</td></tr>`;
+  }
+  html += "</tbody></table>";
+  if (boundaryFlags?.length) {
+    html += `<p style="margin-top:8px"><strong>Sign-boundary flags</strong> (&lt;1° from cusp):</p>`;
+    html += '<table class="data-table"><tbody>';
+    for (const flag of boundaryFlags) {
+      html += `<tr><td>${esc(flag.driverKey)}</td><td>${esc(flag.sign)}</td><td>${Number(flag.degreeFromCusp).toFixed(2)}°</td></tr>`;
+    }
+    html += "</tbody></table>";
+  }
+  return html;
+}
+
+function renderRawVariableScoresTable(scores, label = "Variable") {
+  if (!scores) return "<p>No raw scores.</p>";
+  const rows = [
+    ["Depth", scores.depth],
+    ["Warmth", scores.warmth],
+    ["Saturation", scores.saturation],
+    ["Contrast", scores.contrast],
+    ["Structure", scores.structure],
+  ];
+  let html = `<table class="data-table"><thead><tr><th>${esc(label)}</th><th>Score</th></tr></thead><tbody>`;
+  for (const [name, value] of rows) {
+    html += `<tr><td>${esc(name)}</td><td>${Number(value).toFixed(0)}</td></tr>`;
+  }
+  html += "</tbody></table>";
+  return html;
+}
+
+function renderNormalizedDriversTable(normalized) {
+  if (!normalized?.drivers?.length) return "<p>No normalized drivers.</p>";
+  let html =
+    '<table class="data-table"><thead><tr><th>Driver</th><th>Sign</th><th>Weight</th></tr></thead><tbody>';
+  for (const d of [...normalized.drivers].sort((a, b) => b.weight - a.weight)) {
+    html += `<tr><td>${esc(d.key)}</td><td>${esc(d.sign)}</td><td>${d.weight}</td></tr>`;
+  }
+  html += "</tbody></table>";
+  if (normalized.hasPluto) {
+    html += `<p style="margin-top:8px">Pluto included: <strong>${esc(normalized.plutoSign || "—")}</strong></p>`;
+  }
+  return html;
+}
+
+function renderDerivedVariablesTable(vars) {
+  if (!vars) return "<p>No derived variables.</p>";
+  let html = '<table class="data-table"><tbody>';
+  for (const [k, v] of Object.entries(vars)) {
+    html += `<tr><td>${esc(k)}</td><td>${esc(String(v))}</td></tr>`;
+  }
+  html += "</tbody></table>";
+  return html;
+}
+
+function renderOverrideFlagsTable(flags) {
+  if (!flags) return "<p>No override flags.</p>";
+  const active = Object.entries(flags).filter(([, v]) => v === true);
+  if (!active.length) return "<p>No chart overrides applied.</p>";
+  let html = '<table class="data-table"><tbody>';
+  for (const [k, v] of active) {
+    html += `<tr><td>${esc(k)}</td><td>${esc(String(v))}</td></tr>`;
+  }
+  html += "</tbody></table>";
+  return html;
+}
+
+function renderFamilyOutcomeTable(trace, highlightField = null) {
+  if (!trace) return "<p>No family decision data.</p>";
+  const rows = [
+    ["Family", trace.family],
+    ["Cluster", trace.cluster],
+    ["Secondary pull", trace.secondaryPull || "—"],
+  ];
+  let html = '<table class="data-table"><tbody>';
+  for (const [label, value] of rows) {
+    const hi =
+      highlightField &&
+      label.toLowerCase().replace(/\s+/g, "") === highlightField.toLowerCase()
+        ? ' style="background:rgba(124,111,247,0.15)"'
+        : "";
+    html += `<tr${hi}><td>${esc(label)}</td><td>${esc(String(value ?? "—"))}</td></tr>`;
+  }
+  html += "</tbody></table>";
+  return html;
+}
+
+function renderVariationTraceTable(variation) {
+  if (!variation?.substitutions?.length) {
+    return `<p>No per-user substitutions${variation?.pullFamily ? ` (pull: ${esc(variation.pullFamily)}, strength ${variation.pullStrength})` : ""}.</p>`;
+  }
+  let html =
+    '<table class="data-table"><thead><tr><th>Band</th><th>Slot</th><th>Original</th><th>Replaced</th><th>From family</th></tr></thead><tbody>';
+  for (const sub of variation.substitutions) {
+    html += `<tr><td>${esc(sub.band)}</td><td>${sub.slotIndex}</td><td>${esc(sub.originalColour)}</td><td>${esc(sub.replacedWith)}</td><td>${esc(sub.fromFamily)}</td></tr>`;
+  }
+  html += "</tbody></table>";
+  return html;
+}
+
+function renderAccentSlotsTable(accentSlots, highlightPlanet = null) {
+  if (!accentSlots?.length) return "<p>No accent slot trace.</p>";
+  let html =
+    '<table class="data-table"><thead><tr><th>Role</th><th>Label</th><th>Hex</th><th>Planet</th><th>Sign</th><th>Sat. override</th></tr></thead><tbody>';
+  for (const slot of accentSlots) {
+    const hi =
+      highlightPlanet && slot.sourcePlanet === highlightPlanet
+        ? ' style="background:rgba(124,111,247,0.15)"'
+        : "";
+    html += `<tr${hi}><td>${esc(slot.role)}</td><td>${esc(slot.displayName)}</td><td>${esc(slot.hex)}</td><td>${esc(slot.sourcePlanet)}</td><td>${esc(slot.sourceSign)}</td><td>${slot.saturationOverrideApplied ? "Yes" : "No"}</td></tr>`;
+  }
+  html += "</tbody></table>";
+  return html;
+}
+
+function buildFamilyDecisionTraceSteps(ctx, options = {}) {
+  const diag = blueprintDiagnostics(ctx);
+  const trace = diag?.familyDecisionTrace;
+  if (!trace) return [];
+
+  const { highlightField = null, highlightPlanet = null } = options;
+  const steps = [
+    {
+      title: "Chart input → colour drivers",
+      description: "Planetary signs fed into the V4 colour engine.",
+      body: renderChartInputTable(diag.chartInput, diag.boundaryFlags),
+    },
+    {
+      title: "Weighted driver normalization",
+      description: "Core and outer placements after sign-weight aggregation.",
+      body: renderNormalizedDriversTable(trace.normalizedDrivers),
+    },
+    {
+      title: "Raw variable scores",
+      description: "Integer scores before and after chart modifiers.",
+      body:
+        renderRawVariableScoresTable(trace.rawScoresBeforeModifiers, "Before modifiers") +
+        '<p style="margin-top:8px"><strong>After modifiers:</strong></p>' +
+        renderRawVariableScoresTable(trace.rawScoresAfterModifiers, "After modifiers"),
+    },
+    {
+      title: "Derived variables & overrides",
+      description: "Enum variables mapped from raw scores; chart-specific overrides applied.",
+      body:
+        '<p><strong>Before overrides:</strong></p>' +
+        renderDerivedVariablesTable(trace.variablesBeforeOverrides) +
+        '<p style="margin-top:8px"><strong>Override flags:</strong></p>' +
+        renderOverrideFlagsTable(trace.overrideFlags) +
+        '<p style="margin-top:8px"><strong>After overrides (canonical):</strong></p>' +
+        renderDerivedVariablesTable(trace.variablesAfterOverrides),
+    },
+    {
+      title: "Family & cluster selection",
+      description: "Final palette family, cluster, and optional secondary pull.",
+      body: renderFamilyOutcomeTable(trace, highlightField),
+    },
+  ];
+
+  if (trace.variation?.substitutions?.length || trace.variation?.pullFamily) {
+    steps.push({
+      title: "Per-user variation",
+      body: renderVariationTraceTable(trace.variation),
+    });
+  }
+
+  if (diag.accentSlots?.length) {
+    steps.push({
+      title: "Chart-derived accent slots",
+      description: "V4.5 accent resolution from planetary signs.",
+      body: renderAccentSlotsTable(diag.accentSlots, highlightPlanet),
+    });
+  }
+
+  return steps;
+}
+
+function buildBlueprintDiagnosticsAccordion(diag) {
+  if (!diag?.familyDecisionTrace) return "";
+  const ctx = { data: { blueprintDiagnostics: diag } };
+  return accordion("Style Guide · Colour Engine Decision Tree", () =>
+    renderDerivationTimeline(buildFamilyDecisionTraceSteps(ctx)),
+  );
+}
+
+function renderBlueprintColourDrill(name, ctx) {
+  const bp = ctx.data?.blueprint;
+  const found = findBlueprintColour(name, bp);
+  const decisionSteps = buildFamilyDecisionTraceSteps(ctx, {
+    highlightPlanet:
+      found?.colour?.provenance?.kind === "chartDerivedAccent"
+        ? found.colour.provenance.sourcePlanet
+        : null,
+  });
+  const steps = [
+    ...decisionSteps,
+    {
+      title: "Output · palette context",
+      description: "Fixed per profile — derived from natal chart at blueprint compose time.",
+      body: renderPaletteMetaTable(bp?.palette),
+    },
+  ];
+  if (found) {
+    steps.push({
+      title: "Output · colour placement",
+      body: `<table class="data-table"><tbody>
+        <tr><td>Name</td><td>${esc(found.colour.name)}</td></tr>
+        <tr><td>Hex</td><td>${esc(found.colour.hexValue)}</td></tr>
+        <tr><td>Band</td><td>${esc(found.band)}</td></tr>
+        <tr><td>Role</td><td>${esc(found.colour.role || "—")}</td></tr>
+      </tbody></table>`,
+    });
+    steps.push({
+      title: "Output · chart & engine provenance",
+      description: "How the colour engine grounded this swatch in planetary/chart input.",
+      body: provenanceTable(found.colour.provenance),
+    });
+  } else {
+    steps.push({
+      title: "Colour not found",
+      body: `<p>No Style Guide swatch named <strong>${esc(name)}</strong>.</p>`,
+    });
+  }
+  return {
+    title: `Style Guide · ${name}`,
+    html: renderDrillMeta(ctx) + renderDerivationTimeline(steps),
+  };
+}
+
+function renderDailyColourDrill(name, ctx) {
+  const diag = ctx.data?.dailyFit?.diagnostics;
+  const payload = ctx.data?.dailyFit?.payload;
+  const pt = diag?.paletteSelectionTrace;
+  const selected = (pt?.selectedColours || payload?.dailyPalette?.colours || []).find(
+    (c) => c.name === name,
+  );
+  const steps = [
+    {
+      title: "Stage 1 · Sky inputs",
+      description: "Weighted mix of natal, transits, lunar, progressed, and current Sun.",
+      body: renderSourceContributionsTable(diag?.sourceContributions),
+    },
+    {
+      title: "Stage 1 · Energy scores",
+      description: "Accumulated energies that feed Stage 2 palette scoring.",
+      body: payloadEnergyScoresSection(diag, { includeRaw: true }),
+    },
+    {
+      title: "Stage 2 · Candidate pool",
+      body: `<table class="data-table"><tbody>
+        <tr><td>Strategy</td><td>${esc(pt?.selectionStrategy || "dramaSlots")}</td></tr>
+        <tr><td>Candidates evaluated</td><td>${pt?.candidateCount ?? "—"}</td></tr>
+        <tr><td>Diversity swap</td><td>${pt?.diversitySwapApplied ? "Yes" : "No"}</td></tr>
+        <tr><td>Core anchor swap</td><td>${pt?.coreAnchorSwapApplied ? "Yes" : "No"}</td></tr>
+      </tbody></table>`,
+    },
+    {
+      title: "Stage 2 · Scoring & selection",
+      description: "Top scored candidates; highlighted row is this colour if present.",
+      body: (() => {
+        let html =
+          '<table class="data-table"><thead><tr><th>Colour</th><th>Role</th><th>Score</th></tr></thead><tbody>';
+        for (const c of pt?.topScoredColours || []) {
+          const hi = c.name === name ? ' style="background:rgba(124,111,247,0.15)"' : "";
+          html += `<tr${hi}><td>${esc(c.name)}</td><td>${esc(c.role)}</td><td>${c.score.toFixed(4)}</td></tr>`;
+        }
+        html += "</tbody></table>";
+        if (selected) {
+          html += `<p style="margin-top:8px"><strong>Selected role:</strong> ${esc(selected.role)}</p>`;
+        }
+        return html;
+      })(),
+    },
+  ];
+  return {
+    title: `Daily Palette · ${name}`,
+    html: renderDrillMeta(ctx) + renderDerivationTimeline(steps),
+  };
+}
+
+function renderScaleDrill(type, ctx) {
+  const diag = ctx.data?.dailyFit?.diagnostics;
+  const trace = diag?.[`${type}Trace`];
+  const label = type.charAt(0).toUpperCase() + type.slice(1);
+  const contrastAxis = "visibility";
+  const steps = [
+    {
+      title: "Stage 1 · Input mix",
+      body: renderSourceContributionsTable(diag?.sourceContributions),
+    },
+    {
+      title: "Stage 1 · Final axis scores",
+      description: "All four axes after sigmoid (1–10). Contrast uses visibility; vibrancy uses vibe energies.",
+      body: (() => {
+        const fa = diag?.finalAxes;
+        if (!fa) return renderEnergyScoresTable(diag?.rawAxisScores);
+        return `<table class="data-table"><tbody>
+          <tr><td>Action</td><td>${Number(fa.action).toFixed(2)}</td></tr>
+          <tr><td>Tempo</td><td>${Number(fa.tempo).toFixed(2)}</td></tr>
+          <tr><td>Strategy</td><td>${Number(fa.strategy).toFixed(2)}</td></tr>
+          <tr><td>Visibility</td><td>${Number(fa.visibility).toFixed(2)}</td></tr>
+        </tbody></table>`;
+      })(),
+    },
+  ];
+  if (type === "contrast") {
+    const axisStep = buildStage1AxisAttributionStep(ctx, contrastAxis);
+    if (axisStep) steps.push(axisStep);
+  } else if (type === "vibrancy") {
+    steps.push(...buildStage1AttributionSteps(ctx));
+  }
+  steps.push({
+    title: "Stage 2 · Style Guide baseline → modulation → final",
+    body: trace
+      ? `<table class="data-table"><tbody>
+            <tr><td>Blueprint baseline</td><td>${trace.blueprintBaseline.toFixed(4)}</td></tr>
+            <tr><td>Energy modulation</td><td>${trace.modulation.toFixed(4)}</td></tr>
+            <tr><td>Final value</td><td><strong>${trace.finalValue.toFixed(4)}</strong></td></tr>
+          </tbody></table>`
+      : "<p>No trace data.</p>",
+  });
+  return {
+    title: `${label} derivation`,
+    html: renderDrillMeta(ctx) + renderDerivationTimeline(steps),
+  };
+}
+
+function renderEssenceDrill(category, ctx) {
+  const diag = ctx.data?.dailyFit?.diagnostics;
+  const payload = ctx.data?.dailyFit?.payload;
+  const ep = diag?.essenceProfile || payload?.essenceProfile;
+  const today = (ep?.allScores || []).find((e) => e.category === category);
+  const anchor = (ep?.chartAnchorScores || []).find((e) => e.category === category);
+  const visible = new Set((ep?.visibleCategories || []).map((e) => e.category));
+  const steps = [
+    {
+      title: "Stage 1 · Input mix",
+      body: renderSourceContributionsTable(diag?.sourceContributions),
+    },
+    {
+      title: "Category scores",
+      body: `<table class="data-table"><tbody>
+        <tr><td>Category</td><td>${esc(category.toUpperCase())}</td></tr>
+        <tr><td>Today</td><td>${today ? pct(today.score) : "—"}</td></tr>
+        <tr><td>Chart anchor</td><td>${anchor ? pct(anchor.score) : "—"}</td></tr>
+        <tr><td>Visible today (top 3)</td><td>${visible.has(category) ? "Yes ★" : "No"}</td></tr>
+      </tbody></table>`,
+    },
+  ];
+
+  const dominantEnergies = ESSENCE_ENERGY_MAP[category];
+  const attribution = diag?.stage1Attribution;
+  if (dominantEnergies?.length && attribution?.byEnergy?.length) {
+    let attrHtml = `<p style="margin-bottom:6px"><strong>${esc(category.charAt(0).toUpperCase() + category.slice(1))}</strong> is driven primarily by: ${dominantEnergies.map(e => esc(vibeEnergyDisplayName(e))).join(", ")}</p>`;
+    for (const energy of dominantEnergies) {
+      const bd = attribution.byEnergy.find((b) => b.energy === energy);
+      if (bd) {
+        attrHtml += `<p style="margin-top:8px"><strong>${esc(vibeEnergyDisplayName(energy))} contributors:</strong></p>`;
+        attrHtml += renderEnergyAttributionTable(bd, energy);
+      }
+    }
+    steps.push({
+      title: "Per-input attribution (dominant energies)",
+      description: "Which inputs drive the energies that feed this essence category.",
+      body: attrHtml,
+    });
+  }
+
+  steps.push({
+    title: "All 14 categories",
+    body: buildEssenceProfileHtml(ep, false),
+  });
+
+  return {
+    title: `Style Essence · ${category}`,
+    html: renderDrillMeta(ctx) + renderDerivationTimeline(steps),
+  };
+}
+
+function renderSilhouetteDrill(axis, ctx) {
+  const diag = ctx.data?.dailyFit?.diagnostics;
+  const payload = ctx.data?.dailyFit?.payload;
+  const st = diag?.silhouetteTrace;
+  const sp = payload?.silhouetteProfile;
+  const cfg = SILHOUETTE_AXIS_CONFIG[axis] || SILHOUETTE_AXIS_CONFIG.mf;
+  const drivingAxis = cfg.drivingAxis;
+  const axisVal =
+    diag?.finalAxes?.[drivingAxis] ?? payload?.axes?.[drivingAxis];
+  const chartAnchor =
+    axis === "mf"
+      ? sp?.chartAnchorMF ?? st?.baselineMF
+      : axis === "ar"
+        ? sp?.chartAnchorAR ?? st?.baselineAR
+        : sp?.chartAnchorSD ?? st?.baselineSD;
+  const finalVal =
+    axis === "mf"
+      ? (st?.finalMF ?? sp?.masculineFeminine)
+      : axis === "ar"
+        ? (st?.finalAR ?? sp?.angularRounded)
+        : (st?.finalSD ?? sp?.structuredDraped);
+  const engineMode = diag?.stage1AxisAttribution?.engineMode
+    || diag?.stage1Attribution?.engineMode
+    || payload?.dailyFitEngineId
+    || "—";
+  const isStage1 = String(engineMode).includes("stage1") || String(engineMode).includes("experimental");
+
+  const steps = [
+    {
+      title: "What this slider means",
+      description: cfg.semantic,
+      body: `<table class="data-table"><tbody>
+        <tr><td>Slider</td><td>${esc(cfg.label)}</td></tr>
+        <tr><td>Driven by axis</td><td><strong>${esc(AXIS_DISPLAY_NAMES[drivingAxis] || drivingAxis)}</strong> (${drivingAxis})</td></tr>
+        <tr><td>Engine</td><td>${esc(engineMode)}</td></tr>
+      </tbody></table>`,
+    },
+    {
+      title: "Stage 1 · Sky input mix (energies)",
+      description: "Aggregate share of natal / transits / lunar / progressed / Sun feeding today's vibe scores.",
+      body: renderSourceContributionsTable(diag?.sourceContributions),
+    },
+  ];
+
+  const axisStep = buildStage1AxisAttributionStep(ctx, drivingAxis);
+  if (axisStep) steps.push(axisStep);
+
+  steps.push({
+    title: "Stage 1 · Axis → slider formula",
+    description: isStage1
+      ? "Stage 1 experimental: slider is centred at 0.5 and shaped only by today's sky axis (not the Style Guide keyword anchor)."
+      : "Standard: Style Guide keyword baseline plus a small axis nudge.",
+    body: (() => {
+      let html = `<table class="data-table"><tbody>
+        <tr><td>${esc(AXIS_DISPLAY_NAMES[drivingAxis])} axis (1–10)</td><td><strong>${axisVal != null ? Number(axisVal).toFixed(2) : "—"}</strong></td></tr>`;
+      if (chartAnchor != null) {
+        html += `<tr><td>Chart anchor (Code keywords)</td><td>${fmtNum(chartAnchor)} <span style="font-size:0.85em;color:var(--muted)">reference only in stage1</span></td></tr>`;
+      }
+      html += `<tr><td>Final slider (0–1)</td><td><strong>${fmtNum(finalVal)}</strong></td></tr>`;
+      html += "</tbody></table>";
+      if (isStage1 && axisVal != null) {
+        html += `<p style="margin-top:8px;font-size:0.9em"><strong>Formula:</strong> ${esc(cfg.stage1Formula(Number(axisVal).toFixed(2)))}</p>`;
+      }
+      return html;
+    })(),
+  });
+
+  steps.push({
+    title: "All silhouette axes",
+    body: `<table class="data-table"><tbody>
+        <tr><td>M / F</td><td>${fmtNum(sp?.masculineFeminine)}</td></tr>
+        <tr><td>A / R</td><td>${fmtNum(sp?.angularRounded)}</td></tr>
+        <tr><td>S / D</td><td>${fmtNum(sp?.structuredDraped)}</td></tr>
+      </tbody></table>`,
+  });
+
+  return {
+    title: `Silhouette · ${cfg.label}`,
+    html: renderDrillMeta(ctx) + renderDerivationTimeline(steps),
+  };
+}
+
+function renderTransitDrill(name, ctx) {
+  const diag = ctx.data?.dailyFit?.diagnostics;
+  const payload = ctx.data?.dailyFit?.payload;
+  const transit = (payload?.dominantTransits || []).find((t) => t.transitPlanet === name);
+  const attribution = diag?.stage1Attribution;
+  const steps = [
+    {
+      title: "Stage 1 · Input mix",
+      description: "Transit share of today's energy snapshot.",
+      body: renderSourceContributionsTable(diag?.sourceContributions),
+    },
+    {
+      title: "Selected transit",
+      body: transit
+        ? `<table class="data-table"><tbody>
+            <tr><td>Transiting</td><td>${esc(transit.transitPlanet)}</td></tr>
+            <tr><td>Natal</td><td>${esc(transit.natalPlanet)}</td></tr>
+            <tr><td>Aspect</td><td>${esc(transit.aspect)}</td></tr>
+            <tr><td>Strength</td><td>${pct(transit.strength)}</td></tr>
+          </tbody></table>`
+        : `<p>Transit <strong>${esc(name)}</strong> not in dominant set.</p>`,
+    },
+  ];
+
+  if (attribution?.byEnergy?.length) {
+    steps.push({
+      title: `Energy impact of ${name}`,
+      description: `Per-energy contribution of all ${name} transit aspects.`,
+      body: renderEnergyAttributionForTransit(attribution, name),
+    });
+  }
+
+  steps.push({
+    title: "All transit summaries",
+    body: (() => {
+      let html =
+        '<table class="data-table"><thead><tr><th>Transit</th><th>Natal</th><th>Aspect</th><th>Strength</th></tr></thead><tbody>';
+      for (const t of diag?.transitSummaries || []) {
+        const hi = t.transitPlanet === name ? ' style="background:rgba(124,111,247,0.15)"' : "";
+        html += `<tr${hi}><td>${esc(t.transitPlanet)}</td><td>${esc(t.natalPlanet)}</td><td>${esc(t.aspect)}</td><td>${pct(t.strength)}</td></tr>`;
+      }
+      html += "</tbody></table>";
+      return html;
+    })(),
+  });
+
+  return {
+    title: `Transit · ${name}`,
+    html: renderDrillMeta(ctx) + renderDerivationTimeline(steps),
+  };
+}
+
+function renderTarotDrill(ctx) {
+  const diag = ctx.data?.dailyFit?.diagnostics;
+  const sorted = [...(diag?.tarotCardScores || [])].sort(
+    (a, b) => b.totalScore - a.totalScore,
+  );
+  const steps = [
+    {
+      title: "Stage 1 · Energy context",
+      body:
+        renderSourceContributionsTable(diag?.sourceContributions) +
+        '<p style="margin-top:8px"><strong>Daily payload energies:</strong></p>' +
+        renderEnergyScoresTable(diag?.postMultiplierScores),
+    },
+    {
+      title: "Stage 2 · Card scoring",
+      description: "All cards ranked by vibe + axis + transit boost − recency penalty.",
+      body: (() => {
+        let html =
+          '<table class="data-table"><thead><tr><th>Card</th><th>Total</th><th>Vibe</th><th>Axis</th><th>Boost</th><th>Penalty</th></tr></thead><tbody>';
+        for (const s of sorted) {
+          const hi = s.cardName === diag?.selectedTarotCard ? ' style="background:rgba(124,111,247,0.15)"' : "";
+          html += `<tr${hi}><td>${esc(s.cardName)}</td><td><strong>${s.totalScore.toFixed(3)}</strong></td>
+            <td>${s.vibeScore.toFixed(3)}</td><td>${s.axisScore.toFixed(3)}</td>
+            <td>${s.transitBoost.toFixed(3)}</td><td>${s.recencyPenalty.toFixed(3)}</td></tr>`;
+        }
+        html += "</tbody></table>";
+        return html;
+      })(),
+    },
+    {
+      title: "Selection output",
+      body: `<table class="data-table"><tbody>
+        <tr><td>Selected card</td><td><strong>${esc(diag?.selectedTarotCard || "—")}</strong></td></tr>
+        <tr><td>Variant rotation</td><td>${diag?.variantRotationIndex ?? "—"}</td></tr>
+        <tr><td>Style edit</td><td>${esc(diag?.selectedStyleEdit || "—")}</td></tr>
+      </tbody></table>`,
+    },
+  ];
+  return {
+    title: "Tarot selection",
+    html: renderDrillMeta(ctx) + renderDerivationTimeline(steps),
+  };
+}
+
+function renderTextureDrill(name, ctx) {
+  const diag = ctx.data?.dailyFit?.diagnostics;
+  const tt = diag?.textureSelectionTrace;
+  const steps = [
+    {
+      title: "Stage 1 · Energy context",
+      body: payloadEnergyScoresSection(diag),
+    },
+    {
+      title: "Texture scoring",
+      body: (() => {
+        let html =
+          '<table class="data-table"><thead><tr><th>Texture</th><th>Score</th></tr></thead><tbody>';
+        for (const s of tt?.scores || []) {
+          const hi = s.name === name ? ' style="background:rgba(124,111,247,0.15)"' : "";
+          html += `<tr${hi}><td>${esc(s.name)}</td><td>${s.score.toFixed(4)}</td></tr>`;
+        }
+        html += "</tbody></table>";
+        html += `<p style="margin-top:8px"><strong>Selected:</strong> ${esc((tt?.selected || []).join(", ") || "—")}</p>`;
+        return html;
+      })(),
+    },
+  ];
+  return {
+    title: `Texture · ${name}`,
+    html: renderDrillMeta(ctx) + renderDerivationTimeline(steps),
+  };
+}
+
+function renderPatternDrill(ctx) {
+  const diag = ctx.data?.dailyFit?.diagnostics;
+  const pd = diag?.patternDecision;
+  const steps = [
+    {
+      title: "Stage 1 · Dominant energy",
+      body: payloadEnergyScoresSection(diag, { highlight: pd?.dominantEnergy }),
+    },
+    {
+      title: "Pattern gate & selection",
+      body: pd
+        ? `<table class="data-table"><tbody>
+            <tr><td>Gate passed</td><td>${pd.gateCheckPassed ? "Yes" : "No"}</td></tr>
+            <tr><td>Visibility</td><td>${pd.visibilityValue.toFixed(3)}</td></tr>
+            <tr><td>Dominant energy</td><td>${esc(pd.dominantEnergy)}</td></tr>
+            <tr><td>Selected pattern</td><td><strong>${esc(pd.selectedPattern || "None")}</strong></td></tr>
+          </tbody></table>`
+        : "<p>No pattern decision data.</p>",
+    },
+  ];
+  return {
+    title: "Daily pattern",
+    html: renderDrillMeta(ctx) + renderDerivationTimeline(steps),
+  };
+}
+
+function renderVibeDrill(energy, ctx) {
+  const diag = ctx.data?.dailyFit?.diagnostics;
+  const payload = ctx.data?.dailyFit?.payload;
+  const raw = diag?.rawEnergyScores?.[energy];
+  const post = diag?.postMultiplierScores?.[energy];
+  const final = payload?.vibeBreakdown?.[energy];
+  const postLabel = signMultipliersAppliedToDailyVibe(diag)
+    ? "Post-multiplier"
+    : "Pre-normalisation (no sign mult on daily vibe)";
+  const steps = [
+    {
+      title: "Stage 1 · Input mix",
+      body: renderSourceContributionsTable(diag?.sourceContributions),
+    },
+    {
+      title: "Energy pipeline",
+      body: `<table class="data-table"><tbody>
+        <tr><td>Energy</td><td>${esc(vibeEnergyDisplayName(energy))}</td></tr>
+        <tr><td>Raw score</td><td>${raw != null ? Number(raw).toFixed(4) : "—"}</td></tr>
+        <tr><td>${esc(postLabel)}</td><td>${post != null ? Number(post).toFixed(4) : "—"}</td></tr>
+        <tr><td>Final vibe points (/21)</td><td><strong>${final != null ? Number(final).toFixed(1) : "—"}</strong></td></tr>
+      </tbody></table>`,
+    },
+    ...buildStage1AttributionSteps(ctx, energy),
+    {
+      title: "All six energies",
+      body: payloadEnergyScoresSection(diag),
+    },
+  ];
+  return {
+    title: `Vibe · ${vibeEnergyDisplayName(energy)}`,
+    html: renderDrillMeta(ctx) + renderDerivationTimeline(steps),
+  };
+}
+
+function renderLunarDrill(ctx) {
+  const diag = ctx.data?.dailyFit?.diagnostics;
+  const payload = ctx.data?.dailyFit?.payload;
+  const lunar = payload?.lunarContext || diag?.lunarContext;
+  const steps = [
+    {
+      title: "Stage 1 · Lunar weight",
+      body: renderSourceContributionsTable(diag?.sourceContributions),
+    },
+    {
+      title: "Lunar context",
+      body: lunar
+        ? `<table class="data-table"><tbody>
+            <tr><td>Phase</td><td>${esc(lunar.phaseName)}</td></tr>
+            <tr><td>Waxing / Waning</td><td>${lunar.isWaxing ? "Waxing" : "Waning"}</td></tr>
+            <tr><td>Element</td><td>${esc(lunar.element)}</td></tr>
+            <tr><td>Phase degrees</td><td>${lunar.phaseDegrees.toFixed(1)}°</td></tr>
+          </tbody></table>`
+        : "<p>No lunar context.</p>",
+    },
+  ];
+  return {
+    title: "Lunar context",
+    html: renderDrillMeta(ctx) + renderDerivationTimeline(steps),
+  };
+}
+
+function renderStyleEditDrill(ctx) {
+  const diag = ctx.data?.dailyFit?.diagnostics;
+  const payload = ctx.data?.dailyFit?.payload;
+  const variant = payload?.styleEditVariant;
+  const steps = [
+    {
+      title: "Tarot-driven rotation",
+      body: `<table class="data-table"><tbody>
+        <tr><td>Selected tarot</td><td>${esc(diag?.selectedTarotCard || "—")}</td></tr>
+        <tr><td>Variant index</td><td>${diag?.variantRotationIndex ?? "—"}</td></tr>
+        <tr><td>Style edit id</td><td>${esc(diag?.selectedStyleEdit || "—")}</td></tr>
+      </tbody></table>`,
+    },
+    {
+      title: "Rendered variant",
+      body: variant
+        ? `<p><strong>${esc(variant.title || "")}</strong></p>
+           ${variant.dailyRitual ? `<p>${esc(variant.dailyRitual)}</p>` : ""}
+           ${variant.wardrobeReflection ? `<p><em>${esc(variant.wardrobeReflection)}</em></p>` : ""}`
+        : "<p>No style edit variant.</p>",
+    },
+  ];
+  return {
+    title: "Style edit",
+    html: renderDrillMeta(ctx) + renderDerivationTimeline(steps),
+  };
+}
+
+function renderBlueprintMetaDrill(field, ctx) {
+  const palette = ctx.data?.blueprint?.palette;
+  const highlightMap = {
+    family: "family",
+    cluster: "cluster",
+    secondaryPull: "secondarypull",
+  };
+  const steps = buildFamilyDecisionTraceSteps(ctx, {
+    highlightField: highlightMap[field] || field,
+  });
+  steps.push({
+    title: "Output · palette metadata",
+    description: "Serialized fields on the Style Guide palette section.",
+    body: renderPaletteMetaTable(palette),
+  });
+  return {
+    title: `Style Guide · ${field}`,
+    html: renderDrillMeta(ctx) + renderDerivationTimeline(steps),
+  };
+}
+
+function renderBlueprintTagDrill(kind, value, ctx) {
+  const bp = ctx.data?.blueprint;
+  const steps = buildFamilyDecisionTraceSteps(ctx);
+  steps.push({
+    title: "Output · Style Guide context",
+    body: renderPaletteMetaTable(bp?.palette),
+  });
+  steps.push({
+    title: `${kind} in blueprint`,
+    body: `<p><strong>${esc(value)}</strong> is part of the fixed Style Guide ${kind} recommendation set for this profile.</p>
+           <p class="derivation-step-desc">Per-texture/per-pattern scoring traces are not yet serialized in the API — see Daily Fit texture/pattern drill-down for scored daily selections.</p>`,
+  });
+  return {
+    title: `Style Guide · ${value}`,
+    html: renderDrillMeta(ctx) + renderDerivationTimeline(steps),
+  };
+}
+
+function openDrill(key, ctx = null) {
+  const context = ctx || { data: state.data, dateISO: targetDateISO(), engineId: currentDailyFitEngineId() };
+  if (!context.data) return;
   const drawer = document.getElementById("drill-drawer");
   const title = document.getElementById("drawer-title");
   const content = document.getElementById("drawer-content");
   drawer.classList.remove("hidden");
+  document.body.classList.add("drawer-open");
 
-  const diag = state.data.dailyFit.diagnostics;
-  const payload = state.data.dailyFit.payload;
   const [type, ...rest] = key.split(":");
   const name = rest.join(":");
+  let result = { title: key, html: "" };
 
-  if (type === "tarot") {
-    title.textContent = "Tarot Selection Detail";
-    const sorted = [...(diag.tarotCardScores || [])].sort(
-      (a, b) => b.totalScore - a.totalScore,
-    );
-    let html = `<p><strong>Selected:</strong> ${esc(diag.selectedTarotCard)}</p>`;
-    html += `<p><strong>Variant Index:</strong> ${diag.variantRotationIndex}</p>`;
-    html += `<p><strong>Style Edit:</strong> ${esc(diag.selectedStyleEdit)}</p>`;
-    html +=
-      '<table class="data-table"><thead><tr><th>Card</th><th>Total</th><th>Vibe</th><th>Axis</th><th>Boost</th><th>Penalty</th></tr></thead><tbody>';
-    for (const s of sorted) {
-      const isSel = s.cardName === diag.selectedTarotCard;
-      html += `<tr${isSel ? ' style="background:rgba(124,111,247,0.15)"' : ""}><td>${esc(s.cardName)}</td>
-        <td><strong>${s.totalScore.toFixed(3)}</strong></td><td>${s.vibeScore.toFixed(3)}</td>
-        <td>${s.axisScore.toFixed(3)}</td><td>${s.transitBoost.toFixed(3)}</td><td>${s.recencyPenalty.toFixed(3)}</td></tr>`;
-    }
-    html += "</tbody></table>";
-    content.innerHTML = html;
-  } else if (type === "colour" || type === "palette") {
-    title.textContent = `Palette Detail: ${name}`;
-    const pt = diag.paletteSelectionTrace;
-    let html = `<p><strong>Candidates evaluated:</strong> ${pt?.candidateCount || "?"}</p>`;
-    html += `<p><strong>Diversity swap:</strong> ${pt?.diversitySwapApplied ? "Yes" : "No"}</p>`;
-    html += '<h4 style="margin:12px 0 6px">Top Scored Candidates</h4>';
-    html +=
-      '<table class="data-table"><thead><tr><th>Colour</th><th>Role</th><th>Score</th></tr></thead><tbody>';
-    for (const c of pt?.topScoredColours || []) {
-      const highlight = c.name === name;
-      html += `<tr${highlight ? ' style="background:rgba(124,111,247,0.15)"' : ""}><td>${esc(c.name)}</td><td>${c.role}</td><td>${c.score.toFixed(4)}</td></tr>`;
-    }
-    html += "</tbody></table>";
-    content.innerHTML = html;
-  } else if (
-    type === "vibrancy" ||
-    type === "contrast" ||
-    type === "metalTone"
-  ) {
-    const traceKey = type + "Trace";
-    const trace = diag[traceKey];
-    title.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} Derivation`;
-    let html = "";
-    if (trace) {
-      html += `<table class="data-table"><tbody>
-        <tr><td>Blueprint Baseline</td><td>${trace.blueprintBaseline.toFixed(4)}</td></tr>
-        <tr><td>Energy Modulation</td><td>${trace.modulation.toFixed(4)}</td></tr>
-        <tr><td>Final Value</td><td>${trace.finalValue.toFixed(4)}</td></tr>
-      </tbody></table>`;
-      html += '<h4 style="margin:12px 0 6px">Contributing Factors</h4>';
-      html += "<p>Source contributions that fed this scale:</p>";
-      const sc = diag.sourceContributions;
-      html += `<table class="data-table"><tbody>
-        <tr><td>Natal</td><td>${(sc.natalShare * 100).toFixed(1)}%</td></tr>
-        <tr><td>Transit</td><td>${(sc.transitShare * 100).toFixed(1)}%</td></tr>
-        <tr><td>Lunar</td><td>${(sc.lunarShare * 100).toFixed(1)}%</td></tr>
-        <tr><td>Progressed</td><td>${(sc.progressedShare * 100).toFixed(1)}%</td></tr>
-      </tbody></table>`;
-    } else {
-      html = "<p>No trace data available.</p>";
-    }
-    content.innerHTML = html;
-  } else if (type === "essence") {
-    title.textContent = "Style Essence Detail";
-    const ep = diag.essenceProfile || payload.essenceProfile;
-    content.innerHTML = buildEssenceProfileHtml(ep, false);
-  } else if (type === "silhouette") {
-    title.textContent = "Silhouette Derivation";
-    const st = diag.silhouetteTrace;
-    let html = "";
-    if (st) {
-      html += `<table class="data-table"><tbody>
-        <tr><td>M/F Blueprint Baseline</td><td>${st.mfBaseline?.toFixed(3) || "N/A"}</td></tr>
-        <tr><td>M/F Modulation</td><td>${st.mfModulation?.toFixed(3) || "N/A"}</td></tr>
-        <tr><td>M/F Final</td><td>${st.mfFinal?.toFixed(3) || "N/A"}</td></tr>
-        <tr><td>A/R Blueprint Baseline</td><td>${st.arBaseline?.toFixed(3) || "N/A"}</td></tr>
-        <tr><td>A/R Modulation</td><td>${st.arModulation?.toFixed(3) || "N/A"}</td></tr>
-        <tr><td>A/R Final</td><td>${st.arFinal?.toFixed(3) || "N/A"}</td></tr>
-        <tr><td>S/D Blueprint Baseline</td><td>${st.sdBaseline?.toFixed(3) || "N/A"}</td></tr>
-        <tr><td>S/D Modulation</td><td>${st.sdModulation?.toFixed(3) || "N/A"}</td></tr>
-        <tr><td>S/D Final</td><td>${st.sdFinal?.toFixed(3) || "N/A"}</td></tr>
-      </tbody></table>`;
-    } else {
-      html = "<p>No silhouette trace data.</p>";
-    }
-    content.innerHTML = html;
-  } else if (type === "transit") {
-    title.textContent = `Transit Detail: ${name}`;
-    const transit = (payload.dominantTransits || []).find(
-      (t) => t.transitPlanet === name,
-    );
-    let html = "";
-    if (transit) {
-      html += `<table class="data-table"><tbody>
-        <tr><td>Transiting Planet</td><td>${esc(transit.transitPlanet)}</td></tr>
-        <tr><td>Natal Planet</td><td>${esc(transit.natalPlanet)}</td></tr>
-        <tr><td>Aspect</td><td>${esc(transit.aspect)}</td></tr>
-        <tr><td>Strength</td><td>${(transit.strength * 100).toFixed(1)}%</td></tr>
-      </tbody></table>`;
-    }
-    html += '<h4 style="margin:12px 0 6px">All Transit Summaries</h4>';
-    html +=
-      '<table class="data-table"><thead><tr><th>Transit</th><th>Natal</th><th>Aspect</th><th>Strength</th></tr></thead><tbody>';
-    for (const t of diag.transitSummaries || []) {
-      html += `<tr><td>${esc(t.transitPlanet)}</td><td>${esc(t.natalPlanet)}</td><td>${esc(t.aspect)}</td><td>${(t.strength * 100).toFixed(0)}%</td></tr>`;
-    }
-    html += "</tbody></table>";
-    content.innerHTML = html;
-  } else {
-    title.textContent = key;
-    content.innerHTML = `<pre class="json-block">${esc(JSON.stringify(state.data, null, 2))}</pre>`;
-  }
+  if (type === "blueprint-colour") result = renderBlueprintColourDrill(name, context);
+  else if (type === "colour") result = renderDailyColourDrill(name, context);
+  else if (type === "palette") result = renderDailyColourDrill(name, context);
+  else if (type === "tarot") result = renderTarotDrill(context);
+  else if (type === "vibrancy" || type === "contrast" || type === "metalTone")
+    result = renderScaleDrill(type, context);
+  else if (type === "essence") result = renderEssenceDrill(name, context);
+  else if (type === "silhouette") result = renderSilhouetteDrill(name || "mf", context);
+  else if (type === "transit") result = renderTransitDrill(name, context);
+  else if (type === "texture") result = renderTextureDrill(name, context);
+  else if (type === "pattern") result = renderPatternDrill(context);
+  else if (type === "vibe") result = renderVibeDrill(name, context);
+  else if (type === "lunar") result = renderLunarDrill(context);
+  else if (type === "styleEdit") result = renderStyleEditDrill(context);
+  else if (type === "blueprint-meta") result = renderBlueprintMetaDrill(name, context);
+  else if (type === "blueprint-texture" || type === "blueprint-pattern")
+    result = renderBlueprintTagDrill(type.replace("blueprint-", ""), name, context);
+  else
+    result = {
+      title: key,
+      html: `<pre class="json-block">${esc(JSON.stringify(context.data, null, 2))}</pre>`,
+    };
+
+  title.textContent = result.title;
+  content.innerHTML = result.html;
 }
 
 function closeDrawer() {
   document.getElementById("drill-drawer").classList.add("hidden");
+  document.body.classList.remove("drawer-open");
+  if (activeDrillNode) {
+    activeDrillNode.classList.remove("drill-active");
+    activeDrillNode = null;
+  }
 }
 
 // ── Markdown export ──
@@ -2098,6 +3186,7 @@ function markdownExportHeader(sectionLabel) {
     `- **Engine version:** ${meta.engineVersion || "—"}`,
     `- **Daily Fit engine:** ${meta.dailyFitEngineDisplayName || meta.dailyFitEngineId || "—"} (\`${meta.dailyFitEngineId || "—"}\`)`,
     `- **Daily Fit fingerprint:** ${meta.dailyFitEngineFingerprint || "—"}`,
+    `- **Inspector build:** ${state.buildStamp || "—"}`,
     "",
   ].join("\n");
 }
@@ -2468,7 +3557,7 @@ function markdownTrace(diag, dayLabel = null) {
   }
   if (diag.postMultiplierScores) {
     md +=
-      "### Post-Multiplier Energy Scores\n\n" +
+      `### ${postMultiplierScoresLabel(diag)}\n\n` +
       mdObjectTable(diag.postMultiplierScores);
   }
   if (diag.rawAxisScores) {
@@ -2501,7 +3590,10 @@ function markdownTrace(diag, dayLabel = null) {
     const pt = diag.paletteSelectionTrace;
     md += "### Palette Selection Trace\n\n";
     md += `- **Candidates:** ${pt.candidateCount}\n`;
-    md += `- **Diversity swap:** ${pt.diversitySwapApplied ? "Yes" : "No"}\n\n`;
+    md += `- **Strategy:** ${pt.selectionStrategy || "dramaSlots"}\n`;
+    md += `- **Diversity swap:** ${pt.diversitySwapApplied ? "Yes" : "No"}\n`;
+    if (pt.coreAnchorSwapApplied) md += `- **Core anchor swap:** Yes\n`;
+    md += "\n";
     const rows = (pt.topScoredColours || []).map((c) => [
       c.name,
       c.role,
@@ -2549,6 +3641,49 @@ function markdownTrace(diag, dayLabel = null) {
         ["Final", trace.finalValue.toFixed(3)],
       ],
     );
+  }
+
+  if (diag.narrativeTrace) {
+    const nt = diag.narrativeTrace;
+    md += "### Narrative Resolution\n\n";
+    md += mdTable(
+      ["Field", "Value"],
+      [
+        ["Anchor top-3", (nt.anchorTop3 || []).join(", ")],
+        ["Weather top-3", (nt.weatherTop3 || []).join(", ")],
+        ["Overlap count", String(nt.overlapCount)],
+        ["Relationship", nt.chosenRelationship],
+        ["Template key", nt.templateKey],
+        ["Silhouette Δ M/F", nt.silhouetteDeltaMF != null ? nt.silhouetteDeltaMF.toFixed(3) : "—"],
+        ["Silhouette Δ A/R", nt.silhouetteDeltaAR != null ? nt.silhouetteDeltaAR.toFixed(3) : "—"],
+        ["Silhouette Δ S/D", nt.silhouetteDeltaSD != null ? nt.silhouetteDeltaSD.toFixed(3) : "—"],
+      ],
+    );
+  }
+
+  if (diag.narrativeIntentTrace || diag.narrativeCoherenceTrace) {
+    md += "### Narrative selection\n\n";
+    const nit = diag.narrativeIntentTrace;
+    const nct = diag.narrativeCoherenceTrace;
+    const pt = diag.paletteSelectionTrace;
+    if (nit) {
+      md += `- Relationship: ${nit.relationship}\n`;
+      md += `- Anchor: ${(nit.anchorTop3 || []).join(", ")}\n`;
+      md += `- Weather: ${(nit.weatherTop3 || []).join(", ")}\n`;
+      if (nit.coherenceGap) md += `- Coherence gap: ${nit.coherenceGap}\n`;
+    }
+    if (pt?.narrativeBiasApplied) {
+      const slotCount = pt.statementSlotsUsed ?? "—";
+      const accentMatch = nct?.paletteAccentRoleMatch ? "pass" : "fail";
+      md += `- Palette bias: applied (${slotCount} statement slot${slotCount === 1 ? "" : "s"}, accent role match: ${accentMatch})\n`;
+    } else {
+      md += `- Palette bias: not applied\n`;
+    }
+    if (nct) {
+      md += `- Tarot variant: ${nct.tarotVariantScored ? "scored (not rotation)" : "rotation fallback"}\n`;
+      md += `- Coherence: ${nct.overallPass ? "pass" : "fail (palette statement slots: " + nct.paletteStatementSlotCount + ")"}\n`;
+    }
+    md += "\n";
   }
 
   if (diag.calibrationSnapshot) {
@@ -2638,8 +3773,9 @@ function rankedVibeEntries(vibeBreakdown) {
   })).sort((a, b) => b.value - a.value);
 }
 
-function buildVibeBreakdownHtml(vibeBreakdown) {
+function buildVibeBreakdownHtml(vibeBreakdown, allowDrill = false) {
   if (!vibeBreakdown) return "";
+  const drill = allowDrill ? "drillable" : "";
   const ranked = rankedVibeEntries(vibeBreakdown);
   const dominant = ranked[0]?.key;
   const secondary = ranked[1]?.key;
@@ -2656,11 +3792,11 @@ function buildVibeBreakdownHtml(vibeBreakdown) {
     if (key === dominant) markers.push("dominant");
     if (key === secondary) markers.push("secondary");
     const suffix = markers.length ? ` (${markers.join(", ")})` : "";
-    html += scaleBar(
-      `${vibeEnergyDisplayName(key)}${suffix}`,
-      value / 21.0,
-      null,
-    );
+    html += `<div class="scale-bar-container ${drill}" data-drill="vibe:${key}">
+      <span class="scale-bar-label">${vibeEnergyDisplayName(key)}${suffix}</span>
+      <div class="scale-bar-track"><div class="scale-bar-fill" style="width:${Math.max(0, Math.min(100, (value / 21.0) * 100))}%"></div></div>
+      <span class="scale-bar-value">${value.toFixed(1)} / 21</span>
+    </div>`;
   }
   html += "</div>";
   return html;
@@ -2755,6 +3891,65 @@ function accordion(title, contentFn) {
   </div>`;
 }
 
+function signMultiplierPolicyFromDiagnostics(diag) {
+  return diag?.calibrationSnapshot?.signMultiplierPolicy ?? null;
+}
+
+function signMultipliersAppliedToDailyVibe(diag) {
+  const attr = diag?.stage1Attribution;
+  if (typeof attr?.signMultipliersAppliedToDailyVibe === "boolean") {
+    return attr.signMultipliersAppliedToDailyVibe;
+  }
+  const policy = signMultiplierPolicyFromDiagnostics(diag);
+  if (typeof policy?.applyToDailyVibe === "boolean") {
+    return policy.applyToDailyVibe;
+  }
+  return true;
+}
+
+function postMultiplierScoresLabel(diag) {
+  return signMultipliersAppliedToDailyVibe(diag)
+    ? "Post-Multiplier Energy Scores"
+    : "Pre-normalisation scores (sign multipliers not applied to daily vibe)";
+}
+
+function postMultiplierShortLabel(diag) {
+  return signMultipliersAppliedToDailyVibe(diag) ? "Post-mult" : "Pre-norm (daily path)";
+}
+
+function payloadEnergyScoresSection(diag, options = {}) {
+  const { highlight = null, includeRaw = false } = options;
+  let html = "";
+  if (includeRaw) {
+    html += '<p style="margin-top:8px"><strong>Raw (sky accumulation):</strong></p>';
+    html += renderEnergyScoresTable(diag?.rawEnergyScores, highlight);
+  }
+  html += `<p style="margin-top:8px"><strong>${esc(postMultiplierScoresLabel(diag))}:</strong></p>`;
+  html += renderEnergyScoresTable(diag?.postMultiplierScores, highlight);
+  return html;
+}
+
+function renderChartAnchorMultipliersTable(mults) {
+  if (!mults || !Object.keys(mults).length) return "";
+  let html =
+    '<details style="margin:6px 0"><summary><strong>Chart-anchor Sun-sign multipliers</strong></summary>';
+  html += renderChartAnchorMultipliersBody(mults);
+  html += "</details>";
+  return html;
+}
+
+function renderChartAnchorMultipliersBody(mults) {
+  if (!mults || !Object.keys(mults).length) return "";
+  let html =
+    '<p style="font-size:0.85em;margin:4px 0">Reference frame for chartVibeProfile — not applied to daily sky payload bars.</p>';
+  html += '<table class="data-table"><thead><tr><th>Energy</th><th>Multiplier</th></tr></thead><tbody>';
+  for (const [k, v] of Object.entries(mults).sort((a, b) => b[1] - a[1])) {
+    html += `<tr><td>${esc(vibeEnergyDisplayName(k))}</td><td>${Number(v).toFixed(3)}</td></tr>`;
+  }
+  html += "</tbody></table>";
+  return html;
+}
+
 function formatCalibrationSnapshotHtml(cs) {
   if (!cs) return "N/A";
   let html = "";
@@ -2763,6 +3958,11 @@ function formatCalibrationSnapshotHtml(cs) {
   }
   if (cs.fingerprint) {
     html += `<div style="margin-bottom:8px"><strong>Fingerprint:</strong> <code>${esc(cs.fingerprint)}</code></div>`;
+  }
+  if (cs.signMultiplierPolicy) {
+    const daily = cs.signMultiplierPolicy.applyToDailyVibe ? "ON" : "OFF";
+    const anchor = cs.signMultiplierPolicy.applyToChartAnchor ? "ON" : "OFF";
+    html += `<div style="margin-bottom:8px"><strong>Sign multiplier policy:</strong> daily vibe ${daily}, chart anchor ${anchor}</div>`;
   }
   if (cs.sourceWeights)
     html += "<strong>Source Weights:</strong>" + kv(cs.sourceWeights);
@@ -2780,6 +3980,11 @@ function formatCalibrationSnapshotMarkdown(cs) {
   let md = "### Calibration Snapshot\n\n";
   if (cs.dailyFitEngineId) md += `- **Engine:** ${cs.dailyFitEngineId}\n`;
   if (cs.fingerprint) md += `- **Fingerprint:** \`${cs.fingerprint}\`\n`;
+  if (cs.signMultiplierPolicy) {
+    const daily = cs.signMultiplierPolicy.applyToDailyVibe ? "ON" : "OFF";
+    const anchor = cs.signMultiplierPolicy.applyToChartAnchor ? "ON" : "OFF";
+    md += `- **Sign multiplier policy:** daily vibe ${daily}, chart anchor ${anchor}\n`;
+  }
   if (cs.dailyFitEngineId || cs.fingerprint) md += "\n";
   if (cs.sourceWeights)
     md += "**Source weights**\n\n" + mdObjectTable(cs.sourceWeights);

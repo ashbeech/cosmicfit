@@ -295,4 +295,26 @@ struct DailyFitUIIntegrationTests {
         #expect(payload.silhouetteProfile.angularRounded >= 0.0 && payload.silhouetteProfile.angularRounded <= 1.0)
         #expect(payload.silhouetteProfile.structuredDraped >= 0.0 && payload.silhouetteProfile.structuredDraped <= 1.0)
     }
+
+    // T5.12
+    @Test("DailyFitPipeline does not attach narrative brief for stage1_experimental")
+    func testPipelineNoBriefForStage1() {
+        let payload = DailyFitPipeline.generate(
+            blueprint: Fixtures.warmBlueprint,
+            snapshot: Fixtures.balancedSnapshot,
+            dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
+        )
+        #expect(payload.narrativeBrief == nil)
+    }
+
+    // T5.13
+    @Test("DailyFitPipeline returns nil brief for production engine")
+    func testPipelineNilBriefForProduction() {
+        let payload = DailyFitPipeline.generate(
+            blueprint: Fixtures.warmBlueprint,
+            snapshot: Fixtures.balancedSnapshot,
+            dailyFitEngineId: DailyFitEngineRegistry.productionId
+        )
+        #expect(payload.narrativeBrief == nil)
+    }
 }

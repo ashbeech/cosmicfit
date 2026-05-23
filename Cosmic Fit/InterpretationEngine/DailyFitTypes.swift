@@ -59,6 +59,8 @@ struct DailyEnergySnapshot: Codable {
     let skyVibeProfile: VibeBreakdown?
     /// Natal+progressed axes only (Stage 1): chart anchor for silhouette/essence delta.
     let chartAxes: DerivedAxes?
+    /// Raw (pre-normalisation) vibe scores for tie-breaking when integer points are equal.
+    let vibeRawScores: [Energy: Double]?
 
     init(
         vibeProfile: VibeBreakdown,
@@ -70,7 +72,8 @@ struct DailyEnergySnapshot: Codable {
         generatedAt: Date,
         chartVibeProfile: VibeBreakdown? = nil,
         skyVibeProfile: VibeBreakdown? = nil,
-        chartAxes: DerivedAxes? = nil
+        chartAxes: DerivedAxes? = nil,
+        vibeRawScores: [Energy: Double]? = nil
     ) {
         self.vibeProfile = vibeProfile
         self.axes = axes
@@ -82,6 +85,7 @@ struct DailyEnergySnapshot: Codable {
         self.chartVibeProfile = chartVibeProfile
         self.skyVibeProfile = skyVibeProfile
         self.chartAxes = chartAxes
+        self.vibeRawScores = vibeRawScores
     }
 }
 
@@ -163,6 +167,26 @@ struct SilhouetteProfile: Codable, Equatable {
     let angularRounded: Double
     /// 0.0 = Structured, 1.0 = Draped
     let structuredDraped: Double
+    /// Style Guide keyword baseline (Stage 1 inspector reference only).
+    var chartAnchorMF: Double?
+    var chartAnchorAR: Double?
+    var chartAnchorSD: Double?
+
+    init(
+        masculineFeminine: Double,
+        angularRounded: Double,
+        structuredDraped: Double,
+        chartAnchorMF: Double? = nil,
+        chartAnchorAR: Double? = nil,
+        chartAnchorSD: Double? = nil
+    ) {
+        self.masculineFeminine = masculineFeminine
+        self.angularRounded = angularRounded
+        self.structuredDraped = structuredDraped
+        self.chartAnchorMF = chartAnchorMF
+        self.chartAnchorAR = chartAnchorAR
+        self.chartAnchorSD = chartAnchorSD
+    }
 }
 
 /// A single colour pick for the daily palette.
@@ -224,6 +248,9 @@ struct DailyFitPayload: Codable {
     /// Timestamp of generation. Set from the supplied date parameter, NOT Date().
     let generatedAt: Date
 
+    /// Resolved narrative brief (Stage 1 only). nil for production engine.
+    let narrativeBrief: DailyNarrativeBrief?
+
     /// Engine preset id stamped when frozen (optional in JSON; missing → production).
     let dailyFitEngineId: String?
 
@@ -238,7 +265,7 @@ struct DailyFitPayload: Codable {
         case tarotCard, styleEditVariant, dailyPalette, vibrancy, contrast, metalTone
         case essenceProfile, silhouetteProfile, vibeBreakdown, axes
         case dominantTransits, lunarContext, dailyTextures, dailyPattern, generatedAt
-        case dailyFitEngineId
+        case dailyFitEngineId, narrativeBrief
         case essenceTriangle
     }
 
@@ -259,6 +286,7 @@ struct DailyFitPayload: Codable {
         dailyPattern = try c.decodeIfPresent(String.self, forKey: .dailyPattern)
         generatedAt = try c.decode(Date.self, forKey: .generatedAt)
         dailyFitEngineId = try c.decodeIfPresent(String.self, forKey: .dailyFitEngineId)
+        narrativeBrief = try c.decodeIfPresent(DailyNarrativeBrief.self, forKey: .narrativeBrief)
 
         if let newProfile = try? c.decode(StyleEssenceProfile.self, forKey: .essenceProfile) {
             essenceProfile = newProfile
@@ -287,6 +315,7 @@ struct DailyFitPayload: Codable {
         try c.encodeIfPresent(dailyPattern, forKey: .dailyPattern)
         try c.encode(generatedAt, forKey: .generatedAt)
         try c.encodeIfPresent(dailyFitEngineId, forKey: .dailyFitEngineId)
+        try c.encodeIfPresent(narrativeBrief, forKey: .narrativeBrief)
     }
 
     init(tarotCard: TarotCard, styleEditVariant: StyleEditVariant,
@@ -298,7 +327,8 @@ struct DailyFitPayload: Codable {
          dominantTransits: [DailyTransitSummary],
          lunarContext: LunarContext, dailyTextures: [String],
          dailyPattern: String?, generatedAt: Date,
-         dailyFitEngineId: String? = nil) {
+         dailyFitEngineId: String? = nil,
+         narrativeBrief: DailyNarrativeBrief? = nil) {
         self.tarotCard = tarotCard
         self.styleEditVariant = styleEditVariant
         self.dailyPalette = dailyPalette
@@ -315,6 +345,7 @@ struct DailyFitPayload: Codable {
         self.dailyPattern = dailyPattern
         self.generatedAt = generatedAt
         self.dailyFitEngineId = dailyFitEngineId
+        self.narrativeBrief = narrativeBrief
     }
 
     /// Copy with engine id stamped at freeze time (generation paths omit this field).
@@ -335,7 +366,31 @@ struct DailyFitPayload: Codable {
             dailyTextures: dailyTextures,
             dailyPattern: dailyPattern,
             generatedAt: generatedAt,
-            dailyFitEngineId: engineId
+            dailyFitEngineId: engineId,
+            narrativeBrief: narrativeBrief
+        )
+    }
+
+    /// Copy with narrative brief attached (pipeline use only).
+    func withNarrativeBrief(_ brief: DailyNarrativeBrief?) -> DailyFitPayload {
+        DailyFitPayload(
+            tarotCard: tarotCard,
+            styleEditVariant: styleEditVariant,
+            dailyPalette: dailyPalette,
+            vibrancy: vibrancy,
+            contrast: contrast,
+            metalTone: metalTone,
+            essenceProfile: essenceProfile,
+            silhouetteProfile: silhouetteProfile,
+            vibeBreakdown: vibeBreakdown,
+            axes: axes,
+            dominantTransits: dominantTransits,
+            lunarContext: lunarContext,
+            dailyTextures: dailyTextures,
+            dailyPattern: dailyPattern,
+            generatedAt: generatedAt,
+            dailyFitEngineId: dailyFitEngineId,
+            narrativeBrief: brief
         )
     }
 }
@@ -373,6 +428,64 @@ extension StyleEssenceProfile {
     }()
 }
 
+// MARK: - Narrative Resolver Types
+
+/// How chart identity and sky weather relate on a given day.
+enum NarrativeRelationship: String, Codable, Equatable, CaseIterable {
+    case reinforce
+    case stretch
+    case soften
+    case contrast
+}
+
+/// Deprecated v1 copy container; decode-only for legacy freezes. Not generated or displayed.
+struct DailyNarrativeBrief: Codable, Equatable {
+    let anchorCategories: [StyleEssenceCategory]
+    let weatherCategories: [StyleEssenceCategory]
+    let relationship: NarrativeRelationship
+    let resolvedTheme: String
+    let instruction: String
+    let avoid: String
+    let foundationControls: [String]
+    let accentControls: [String]
+    let essenceCaption: String?
+    let paletteCaption: String?
+    let scalesCaption: String?
+}
+
+/// Diagnostic trace for narrative resolution decisions.
+struct NarrativeTrace: Codable, Equatable {
+    let anchorTop3: [String]
+    let weatherTop3: [String]
+    let overlapCount: Int
+    let silhouetteDeltaMF: Double?
+    let silhouetteDeltaAR: Double?
+    let silhouetteDeltaSD: Double?
+    let chosenRelationship: NarrativeRelationship
+    let templateKey: String
+}
+
+/// Inspector trace for narrative selection bias (trace export only).
+struct NarrativeIntentTrace: Codable, Equatable {
+    let relationship: String
+    let anchorTop3: [String]
+    let weatherTop3: [String]
+    let accentCategory: String
+    let foundationCategory: String
+    let overlapCount: Int
+    let themeLexiconKey: String?
+    let coherenceGap: String?
+}
+
+/// Post-selection coherence heuristic for QA (trace export only).
+struct NarrativeCoherenceTrace: Codable, Equatable {
+    let paletteAccentRoleMatch: Bool
+    let paletteStatementSlotCount: Int
+    let tarotCategoryBoostApplied: Bool
+    let tarotVariantScored: Bool
+    let overallPass: Bool
+}
+
 // MARK: - Calibration Surface
 
 /// Single config surface for every tunable weight in the Daily Fit pipeline.
@@ -397,6 +510,24 @@ struct DailyFitCalibration: Equatable {
         var isNormalised: Bool {
             abs((natal + transits + lunarPhase + progressed + currentSun) - 1.0) < 0.001
         }
+    }
+
+    /// Controls where natal Sun `signEnergyMap` multipliers are applied.
+    struct SignMultiplierPolicy: Equatable {
+        /// Standard full-mix path and stage1 sky payload (`vibeProfile` / `skyVibeProfile`).
+        let applyToDailyVibe: Bool
+        /// stage1 chart anchor comparison slice only (`chartVibeProfile`).
+        let applyToChartAnchor: Bool
+
+        static let productionDefault = SignMultiplierPolicy(
+            applyToDailyVibe: true, applyToChartAnchor: false
+        )
+        static let stage1OptionA = SignMultiplierPolicy(
+            applyToDailyVibe: false, applyToChartAnchor: true
+        )
+        static let off = SignMultiplierPolicy(
+            applyToDailyVibe: false, applyToChartAnchor: false
+        )
     }
 
     /// Per-sign energy multipliers. Each sign maps to all six Energy values.
@@ -442,6 +573,16 @@ struct DailyFitCalibration: Equatable {
         static let `default` = AxisTuning(sigmoidSpread: 1.4, jitterRange: 0.18)
     }
 
+    /// How 3 daily palette colours are selected from the Style Guide pool.
+    enum PaletteSelectionStrategy: String, Equatable {
+        /// Drama-driven statement/grounding slot quotas (production default).
+        case dramaSlots
+        /// Pure score ranking with at-least-one-core anchor.
+        case coreAnchoredRanking
+        /// Pure top-3 by sky vibe score (Stage 1 experimental).
+        case pureSkyScoring
+    }
+
     /// Stage 2 output sensitivity: palette, scales, silhouette coefficients.
     struct Stage2Sensitivity: Equatable {
         /// Palette colour scoring jitter ceiling.
@@ -454,6 +595,20 @@ struct DailyFitCalibration: Equatable {
         let silhouetteAxisScale: Double
         /// Metal tone transit nudge per hit.
         let metalNudgePerHit: Double
+        /// Which palette selection algorithm to use.
+        let paletteSelectionStrategy: PaletteSelectionStrategy
+
+        init(paletteJitter: Double, vibrancyCoeff: Double,
+             contrastCoeff: Double, silhouetteAxisScale: Double,
+             metalNudgePerHit: Double,
+             paletteSelectionStrategy: PaletteSelectionStrategy = .dramaSlots) {
+            self.paletteJitter = paletteJitter
+            self.vibrancyCoeff = vibrancyCoeff
+            self.contrastCoeff = contrastCoeff
+            self.silhouetteAxisScale = silhouetteAxisScale
+            self.metalNudgePerHit = metalNudgePerHit
+            self.paletteSelectionStrategy = paletteSelectionStrategy
+        }
 
         static let `default` = Stage2Sensitivity(
             paletteJitter: 0.08, vibrancyCoeff: 0.35,
@@ -462,12 +617,62 @@ struct DailyFitCalibration: Equatable {
         )
     }
 
+    /// Stage-1 narrative selection tunables (§15.6). nil on production presets.
+    struct NarrativeSelectionTuning: Equatable {
+        let categoryBoostWeight: Double
+        let rolePreferenceBonus: Double
+        let categoryEnergyWeight: Double
+        let narrativePaletteJitter: Double
+        let softenVibrancyCap: Double
+        let softenContrastCap: Double
+        let softenBaselineBlend: Double
+        let intenseAnchorRestrainedWeatherBlend: Double
+
+        static let stage1Default = NarrativeSelectionTuning(
+            categoryBoostWeight: 0.15,
+            rolePreferenceBonus: 0.12,
+            categoryEnergyWeight: 0.18,
+            narrativePaletteJitter: 0.06,
+            softenVibrancyCap: 0.72,
+            softenContrastCap: 0.70,
+            softenBaselineBlend: 0.70,
+            intenseAnchorRestrainedWeatherBlend: 0.50
+        )
+    }
+
     let sourceWeights: SourceWeights
     let signEnergyMap: SignEnergyMap
+    let signMultiplierPolicy: SignMultiplierPolicy
+    /// When natal Sun `signEnergyMap` multiplier for an energy exceeds this value,
+    /// matching `elementBoosts` are skipped (daily weather stacking dedupe). `nil` = legacy stacking.
+    let elementBoostDedupeThreshold: Double?
     let planetAxisMap: PlanetAxisMap
     let selectionWeights: SelectionWeights
     let axisTuning: AxisTuning
     let stage2Sensitivity: Stage2Sensitivity
+    let narrativeSelection: NarrativeSelectionTuning?
+
+    init(
+        sourceWeights: SourceWeights,
+        signEnergyMap: SignEnergyMap,
+        signMultiplierPolicy: SignMultiplierPolicy,
+        planetAxisMap: PlanetAxisMap,
+        selectionWeights: SelectionWeights,
+        axisTuning: AxisTuning,
+        stage2Sensitivity: Stage2Sensitivity,
+        elementBoostDedupeThreshold: Double? = 1.30,
+        narrativeSelection: NarrativeSelectionTuning? = nil
+    ) {
+        self.sourceWeights = sourceWeights
+        self.signEnergyMap = signEnergyMap
+        self.signMultiplierPolicy = signMultiplierPolicy
+        self.planetAxisMap = planetAxisMap
+        self.selectionWeights = selectionWeights
+        self.axisTuning = axisTuning
+        self.stage2Sensitivity = stage2Sensitivity
+        self.elementBoostDedupeThreshold = elementBoostDedupeThreshold
+        self.narrativeSelection = narrativeSelection
+    }
 }
 
 // MARK: - Default Calibration
@@ -484,18 +689,18 @@ extension DailyFitCalibration {
         )
 
         let signs = SignEnergyMap(multipliers: [
-            "Aries":       [.classic: 0.9,  .playful: 1.3,  .romantic: 1.0, .utility: 1.0, .drama: 1.4,  .edge: 1.2],
+            "Aries":       [.classic: 0.95, .playful: 1.3,  .romantic: 1.0, .utility: 1.0, .drama: 1.35, .edge: 1.2],
             "Taurus":      [.classic: 1.5,  .playful: 0.9,  .romantic: 1.3, .utility: 1.2, .drama: 0.85, .edge: 1.0],
             "Gemini":      [.classic: 0.85, .playful: 1.5,  .romantic: 1.0, .utility: 1.0, .drama: 1.0,  .edge: 1.2],
-            "Cancer":      [.classic: 1.1,  .playful: 1.0,  .romantic: 1.4, .utility: 1.2, .drama: 0.95, .edge: 1.0],
-            "Leo":         [.classic: 0.9,  .playful: 1.3,  .romantic: 1.0, .utility: 0.9, .drama: 1.5,  .edge: 1.0],
-            "Virgo":       [.classic: 1.5,  .playful: 0.95, .romantic: 0.9, .utility: 1.4, .drama: 0.85, .edge: 1.0],
-            "Libra":       [.classic: 1.3,  .playful: 1.2,  .romantic: 1.4, .utility: 1.0, .drama: 0.95, .edge: 0.9],
-            "Scorpio":     [.classic: 1.0,  .playful: 0.85, .romantic: 0.9, .utility: 1.1, .drama: 1.5,  .edge: 1.3],
+            "Cancer":      [.classic: 1.1,  .playful: 1.0,  .romantic: 1.4, .utility: 1.05, .drama: 0.95, .edge: 1.0],
+            "Leo":         [.classic: 0.9,  .playful: 1.3,  .romantic: 1.0, .utility: 0.95, .drama: 1.35, .edge: 1.0],
+            "Virgo":       [.classic: 1.5,  .playful: 0.95, .romantic: 0.9, .utility: 1.30, .drama: 0.85, .edge: 1.0],
+            "Libra":       [.classic: 1.3,  .playful: 1.30, .romantic: 1.4, .utility: 1.0, .drama: 0.95, .edge: 0.95],
+            "Scorpio":     [.classic: 1.0,  .playful: 0.85, .romantic: 0.95, .utility: 1.00, .drama: 1.35, .edge: 1.3],
             "Sagittarius": [.classic: 0.9,  .playful: 1.4,  .romantic: 1.0, .utility: 1.0, .drama: 1.2,  .edge: 1.2],
             "Capricorn":   [.classic: 1.5,  .playful: 0.85, .romantic: 0.95, .utility: 1.4, .drama: 1.0, .edge: 1.0],
-            "Aquarius":    [.classic: 0.85, .playful: 1.2,  .romantic: 0.9, .utility: 1.1, .drama: 1.0,  .edge: 1.5],
-            "Pisces":      [.classic: 0.9,  .playful: 1.1,  .romantic: 1.5, .utility: 1.0, .drama: 1.0,  .edge: 1.2],
+            "Aquarius":    [.classic: 0.85, .playful: 1.2,  .romantic: 0.9, .utility: 1.00, .drama: 1.0,  .edge: 1.5],
+            "Pisces":      [.classic: 0.9,  .playful: 1.1,  .romantic: 1.5, .utility: 1.0, .drama: 1.0,  .edge: 1.25],
         ])
 
         let planets = PlanetAxisMap(weights: [
@@ -518,6 +723,7 @@ extension DailyFitCalibration {
         return DailyFitCalibration(
             sourceWeights: source,
             signEnergyMap: signs,
+            signMultiplierPolicy: .productionDefault,
             planetAxisMap: planets,
             selectionWeights: selection,
             axisTuning: .default,

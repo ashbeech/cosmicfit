@@ -28,6 +28,12 @@ struct DailyFitDiagnosticReport: Codable {
     let lunarContext: LunarContext
     let dailySeed: Int
 
+    // Stage 1 per-input energy attribution (Phase 3)
+    let stage1Attribution: Stage1AttributionTrace?
+
+    // Stage 1 per-input axis attribution (visibility/action/tempo/strategy drivers)
+    let stage1AxisAttribution: Stage1AxisAttributionTrace?
+
     // Stage 2 trace
     let tarotCardScores: [TarotScoreEntry]
     let selectedTarotCard: String
@@ -46,6 +52,80 @@ struct DailyFitDiagnosticReport: Codable {
 
     // Calibration used
     let calibrationSnapshot: CalibrationSummary
+
+    // Narrative selection (Stage 1 only — trace export, no user copy)
+    let narrativeTrace: NarrativeTrace?
+    let narrativeIntentTrace: NarrativeIntentTrace?
+    let narrativeCoherenceTrace: NarrativeCoherenceTrace?
+}
+
+// MARK: - Phase 3: Per-Input Energy Attribution
+
+/// A specific input's contribution to one energy.
+struct EnergyAttributionEntry: Codable, Equatable {
+    /// "natal" | "progressed" | "transit" | "lunar" | "currentSun"
+    let source: String
+    /// Human-readable label, e.g. "Mars square Moon", "Venus in Scorpio", "Waxing Gibbous"
+    let label: String
+    /// Energy.rawValue
+    let energy: String
+    /// Before source weight application
+    let rawContribution: Double
+    /// After source weight (+ aspect modifiers for transits)
+    let weightedContribution: Double
+}
+
+/// Per-energy rollup with top contributors.
+struct EnergyAttributionBreakdown: Codable, Equatable {
+    let energy: String
+    let totalRaw: Double
+    let totalPostMultiplier: Double
+    /// Sorted by abs(weightedContribution) descending.
+    let entries: [EnergyAttributionEntry]
+}
+
+/// Full Stage 1 attribution trace across all 6 energies.
+struct Stage1AttributionTrace: Codable, Equatable {
+    /// One breakdown per energy (6 entries).
+    let byEnergy: [EnergyAttributionBreakdown]
+    /// Sun-sign multiplier applied to each energy after accumulation (daily payload path).
+    let signMultiplierApplied: [String: Double]
+    /// Whether sign multipliers were applied to the daily vibe payload path.
+    let signMultipliersAppliedToDailyVibe: Bool
+    /// Natal Sun signEnergyMap for chart-anchor slice when policy enables it (stage1 only).
+    let chartAnchorSignMultiplierApplied: [String: Double]?
+    /// Which weight profile was used: "standard" or "stage1Experimental"
+    let engineMode: String
+}
+
+// MARK: - Phase 5: Per-Input Axis Attribution
+
+/// One line item: a specific input's contribution to one axis raw score (pre-sigmoid).
+struct AxisAttributionEntry: Codable, Equatable {
+    /// "transit" | "natal" | "progressed" | "lunar" | "jitter" | "baseline"
+    let source: String
+    /// Human-readable label, e.g. "Mars square Venus (Aries, Fire)"
+    let label: String
+    /// action | tempo | strategy | visibility
+    let axis: String
+    /// Signed contribution to raw axis score before sigmoid scaling.
+    let contribution: Double
+}
+
+/// Per-axis rollup with top contributors.
+struct AxisAttributionBreakdown: Codable, Equatable {
+    let axis: String
+    let rawScore: Double
+    let finalAxisValue: Double
+    /// Sorted by abs(contribution) descending.
+    let entries: [AxisAttributionEntry]
+}
+
+/// Full Stage 1 axis attribution trace (feeds silhouette, contrast, tarot axis match).
+struct Stage1AxisAttributionTrace: Codable, Equatable {
+    let byAxis: [AxisAttributionBreakdown]
+    let engineMode: String
+    let sigmoidSpread: Double
 }
 
 // MARK: - Nested Diagnostic Types
@@ -98,6 +178,11 @@ struct PaletteTrace: Codable {
     let topScoredColours: [ScoredColourEntry]
     let selectedColours: [DailyColourPick]
     let diversitySwapApplied: Bool
+    let selectionStrategy: String?
+    let coreAnchorSwapApplied: Bool?
+    let narrativeBiasApplied: Bool?
+    let statementSlotsUsed: Int?
+    let selectionPath: String?
 }
 
 struct TextureTrace: Codable {
@@ -118,8 +203,57 @@ struct CalibrationSummary: Codable {
     let selectionWeights: [String: Double]
     let axisTuning: [String: Double]
     let stage2Sensitivity: [String: Double]
+    let signMultiplierPolicy: [String: Bool]
     let dailyFitEngineId: String
     let fingerprint: String
+}
+
+// MARK: - Attribution Builder
+
+extension Stage1AttributionTrace {
+
+    /// Builds a structured trace from flat attribution entries collected during
+    /// `generateSnapshotWithTrace`. Groups by energy, sorts by magnitude, caps per energy.
+    static func build(
+        entries: [EnergyAttributionEntry],
+        signMultipliers: [String: Double],
+        postMultiplierScores: [String: Double],
+        engineMode: String,
+        signMultipliersAppliedToDailyVibe: Bool,
+        chartAnchorSignMultipliers: [String: Double]? = nil,
+        maxEntriesPerEnergy: Int = 20
+    ) -> Stage1AttributionTrace {
+        var grouped: [String: [EnergyAttributionEntry]] = [:]
+        for entry in entries {
+            grouped[entry.energy, default: []].append(entry)
+        }
+
+        var breakdowns: [EnergyAttributionBreakdown] = []
+        for energy in Energy.allCases {
+            let key = energy.rawValue
+            var energyEntries = grouped[key] ?? []
+            energyEntries.sort { abs($0.weightedContribution) > abs($1.weightedContribution) }
+            if energyEntries.count > maxEntriesPerEnergy {
+                energyEntries = Array(energyEntries.prefix(maxEntriesPerEnergy))
+            }
+            let totalRaw = energyEntries.reduce(0.0) { $0 + $1.rawContribution }
+            let totalPost = postMultiplierScores[key] ?? 0.0
+            breakdowns.append(EnergyAttributionBreakdown(
+                energy: key,
+                totalRaw: totalRaw,
+                totalPostMultiplier: totalPost,
+                entries: energyEntries
+            ))
+        }
+
+        return Stage1AttributionTrace(
+            byEnergy: breakdowns,
+            signMultiplierApplied: signMultipliers,
+            signMultipliersAppliedToDailyVibe: signMultipliersAppliedToDailyVibe,
+            chartAnchorSignMultiplierApplied: chartAnchorSignMultipliers,
+            engineMode: engineMode
+        )
+    }
 }
 
 // MARK: - Report Generator
@@ -148,8 +282,8 @@ enum DailyFitDiagnostics {
             dailyFitEngineId: dailyFitEngineId
         )
 
-        // Stage 2: payload with trace
-        let (payload, s2Trace) = BlueprintLensEngine.generatePayloadWithTrace(
+        // Stage 2: payload with trace (via pipeline)
+        let (payload, s2Trace, narrativeTrace, narrativeIntentTrace, narrativeCoherenceTrace) = DailyFitPipeline.generateWithTrace(
             blueprint: blueprint, snapshot: snapshot, calibration: calibration,
             dailyFitEngineId: dailyFitEngineId
         )
@@ -178,7 +312,12 @@ enum DailyFitDiagnostics {
             candidateCount: s2Trace.paletteTrace.candidateCount,
             topScoredColours: Array(paletteColours),
             selectedColours: payload.dailyPalette.colours,
-            diversitySwapApplied: s2Trace.paletteTrace.diversitySwapApplied
+            diversitySwapApplied: s2Trace.paletteTrace.diversitySwapApplied,
+            selectionStrategy: s2Trace.paletteTrace.selectionStrategy,
+            coreAnchorSwapApplied: s2Trace.paletteTrace.coreAnchorSwapApplied,
+            narrativeBiasApplied: s2Trace.narrativeBiasApplied,
+            statementSlotsUsed: s2Trace.paletteStatementSlotCount,
+            selectionPath: s2Trace.paletteSelectionPath
         )
 
         let texScores = s2Trace.textureTrace.scores
@@ -199,6 +338,21 @@ enum DailyFitDiagnostics {
 
         let calSnap = calibrationSummary(for: calibration, dailyFitEngineId: dailyFitEngineId)
 
+        let stage1Attribution = Stage1AttributionTrace.build(
+            entries: s1Trace.attributionEntries,
+            signMultipliers: s1Trace.signMultipliers,
+            postMultiplierScores: s1Trace.postMultiplierScores,
+            engineMode: s1Trace.engineMode,
+            signMultipliersAppliedToDailyVibe: calibration.signMultiplierPolicy.applyToDailyVibe,
+            chartAnchorSignMultipliers: s1Trace.chartAnchorSignMultipliers
+        )
+
+        let stage1AxisAttribution = Stage1AxisAttributionTrace(
+            byAxis: s1Trace.axisAttribution,
+            engineMode: s1Trace.engineMode,
+            sigmoidSpread: calibration.axisTuning.sigmoidSpread
+        )
+
         let report = DailyFitDiagnosticReport(
             timestamp: date,
             profileIdentifier: profileHash,
@@ -211,6 +365,8 @@ enum DailyFitDiagnostics {
             transitSummaries: snapshot.dominantTransits,
             lunarContext: snapshot.lunarContext,
             dailySeed: snapshot.dailySeed,
+            stage1Attribution: stage1Attribution,
+            stage1AxisAttribution: stage1AxisAttribution,
             tarotCardScores: tarotEntries,
             selectedTarotCard: payload.tarotCard.name,
             variantRotationIndex: s2Trace.variantRotationIndex,
@@ -242,7 +398,10 @@ enum DailyFitDiagnostics {
                 finalAR: payload.silhouetteProfile.angularRounded,
                 finalSD: payload.silhouetteProfile.structuredDraped
             ),
-            calibrationSnapshot: calSnap
+            calibrationSnapshot: calSnap,
+            narrativeTrace: narrativeTrace,
+            narrativeIntentTrace: narrativeIntentTrace,
+            narrativeCoherenceTrace: narrativeCoherenceTrace
         )
 
         return (payload, report)
@@ -271,6 +430,7 @@ enum DailyFitDiagnostics {
         }
         let fingerprint = DailyFitEngineRegistry.descriptor(for: engineId)?.fingerprint
             ?? DailyFitEngineRegistry.fingerprint(for: calibration)
+        let policy = calibration.signMultiplierPolicy
         return CalibrationSummary(
             sourceWeights: [
                 "natal": sw.natal, "transits": sw.transits,
@@ -292,6 +452,10 @@ enum DailyFitDiagnostics {
                 "contrastCoeff": s2.contrastCoeff,
                 "silhouetteAxisScale": s2.silhouetteAxisScale,
                 "metalNudgePerHit": s2.metalNudgePerHit,
+            ],
+            signMultiplierPolicy: [
+                "applyToDailyVibe": policy.applyToDailyVibe,
+                "applyToChartAnchor": policy.applyToChartAnchor,
             ],
             dailyFitEngineId: engineId,
             fingerprint: fingerprint

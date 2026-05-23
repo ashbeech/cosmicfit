@@ -41,7 +41,20 @@ body {
   display: flex;
   align-items: flex-end;
   gap: 12px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.strip-row::-webkit-scrollbar {
+  height: 6px;
+}
+
+.strip-row::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
 }
 
 .strip-row-secondary {
@@ -54,6 +67,15 @@ body {
   display: flex;
   flex-direction: column;
   gap: 3px;
+  flex-shrink: 0;
+}
+
+.inline-fields {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
 
 .control-group label {
@@ -179,6 +201,15 @@ body {
   border-style: dashed;
 }
 
+.build-stamp {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-family: var(--mono);
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
 .tz-chip {
   background: var(--surface2);
   border: 1px solid var(--border);
@@ -209,6 +240,8 @@ body {
   cursor: pointer;
   transition: background 0.15s;
   align-self: flex-end;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .submit-btn:hover { background: var(--accent-light); }
@@ -231,6 +264,11 @@ body {
   color: var(--text-muted);
   margin-left: auto;
   font-family: var(--mono);
+  flex-shrink: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Main Output */
@@ -550,7 +588,7 @@ main {
   position: fixed;
   top: 0;
   right: 0;
-  width: 400px;
+  width: min(440px, 92vw);
   height: 100vh;
   background: var(--surface);
   border-left: 1px solid var(--border);
@@ -559,6 +597,14 @@ main {
   flex-direction: column;
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s;
+}
+
+body.drawer-open::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 250;
 }
 
 .drawer.hidden { transform: translateX(100%); display: flex !important; }
@@ -597,13 +643,20 @@ main {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
+.compare-controls .checkbox-label {
+  white-space: nowrap;
 }
 
 .compare-span-controls {
   display: flex;
   align-items: center;
   gap: 4px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .compare-span-controls.hidden {
@@ -643,6 +696,8 @@ main {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .compare-engines-controls.hidden {
@@ -769,10 +824,100 @@ main {
 
 .drillable:hover { color: var(--accent-light); }
 
+.drill-active,
+.swatch-color.drill-active {
+  outline: 2px solid var(--accent-light);
+  outline-offset: 2px;
+}
+
+.swatch-color.drillable {
+  cursor: pointer;
+}
+
+.scale-bar-container.drillable {
+  cursor: pointer;
+  border-radius: var(--radius);
+  padding: 2px 4px;
+  margin: -2px -4px;
+}
+
+.scale-bar-container.drillable:hover {
+  background: rgba(124, 111, 247, 0.08);
+}
+
+.tag.drillable {
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.tag.drillable:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+/* Derivation drill-down timeline */
+.drill-meta {
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.derivation-step {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  overflow: hidden;
+  background: var(--surface2);
+}
+
+.derivation-step-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(124, 111, 247, 0.08);
+  border-bottom: 1px solid var(--border);
+}
+
+.derivation-step-num {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.derivation-step-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.derivation-step-desc {
+  padding: 8px 12px 0;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.derivation-step-body {
+  padding: 10px 12px 12px;
+  font-size: 12px;
+}
+
+.derivation-step-body .data-table {
+  font-size: 11px;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
-  .strip-row { flex-direction: column; align-items: stretch; }
-  .control-group { flex-direction: row; align-items: center; gap: 8px; }
   .drawer { width: 100%; }
   .diff-container { grid-template-columns: 1fr; }
 }

@@ -130,4 +130,43 @@ struct DailyFitFrozenPayloadStorage_Tests {
         #expect(decoded.dailyFitEngineId == nil)
         #expect(decoded.resolvedDailyFitEngineId == DailyFitEngineRegistry.productionId)
     }
+
+    @Test("Frozen payload preserves narrativeBrief through save/load cycle")
+    func frozenPayloadPreservesNarrativeBrief() throws {
+        let (storage, dir) = try makeTempStorage()
+        defer { cleanup(dir) }
+
+        let brief = DailyNarrativeBrief(
+            anchorCategories: [.romantic, .classic, .polished],
+            weatherCategories: [.maximalist, .drama, .edgy],
+            relationship: .stretch,
+            resolvedTheme: "Polished Drama",
+            instruction: "Keep the base refined, add one bold detail.",
+            avoid: "Do not let the outfit become chaotic.",
+            foundationControls: ["silhouette", "polish", "wearability", "comfort"],
+            accentControls: ["colour pop", "texture", "accessory", "contrast", "styling twist"],
+            essenceCaption: "Adapt signal: dramatic.",
+            paletteCaption: "Let drama show in colour.",
+            scalesCaption: "Sky intensity on top of polish."
+        )
+        let date = Date(timeIntervalSince1970: 1_800_000_000)
+        let payload = DailyFitPayload.fixture(generatedAt: date).withNarrativeBrief(brief)
+
+        #expect(storage.save(payload: payload, date: date, profileKey: "brief-test"))
+
+        let loaded = storage.load(date: date, profileKey: "brief-test")
+        #expect(loaded?.narrativeBrief == brief)
+    }
+
+    @Test("Legacy frozen payload without narrativeBrief decodes as nil brief")
+    func legacyFrozenDecodesNilBrief() throws {
+        let payload = DailyFitPayload.fixture()
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let data = try encoder.encode(payload)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let decoded = try decoder.decode(DailyFitPayload.self, from: data)
+        #expect(decoded.narrativeBrief == nil)
+    }
 }

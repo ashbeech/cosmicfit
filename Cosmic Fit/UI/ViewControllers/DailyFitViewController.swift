@@ -34,7 +34,7 @@ class DailyFitViewController: UIViewController {
     // Style Edit Section
     private var styleEditHeaderLabel: UIView?
     private let styleEditLabel = UILabel()
-    
+
     // Style Breakdown Section
     private let colourPaletteContainer = DailyColourPaletteView()
     private var colourHeaderDivider: UIView?
@@ -88,6 +88,9 @@ class DailyFitViewController: UIViewController {
     private var postTarotParagraphDividerConstraints: [NSLayoutConstraint] = []
     private var dailyRitualBlockConstraints: [NSLayoutConstraint] = []
     private var postDailyRitualDividerConstraints: [NSLayoutConstraint] = []
+    private var styleEditAfterTopDividerConstraint: NSLayoutConstraint?
+    private var vibeHeaderAfterToneConstraint: NSLayoutConstraint?
+    private var silhouetteHeaderAfterTriangleConstraint: NSLayoutConstraint?
     private var essenceTriangleView: EssenceTriangleView?
     private let wardrobeReflectionLabel = UILabel()
     private let tomorrowTeaseLabel = UILabel()
@@ -520,12 +523,14 @@ class DailyFitViewController: UIViewController {
             
             let allContentViews: [UIView?] = [
                 self.dailyFitLabel, self.calendarButton, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
-                self.topDivider, self.styleEditHeaderLabel, self.styleEditLabel,
+                self.topDivider,
+                self.styleEditHeaderLabel, self.styleEditLabel,
                 self.postTarotParagraphDivider,
                 self.postDailyRitualDivider,
                 self.styleBreakdownDivider, self.colourHeaderDivider, self.colourPaletteContainer,
                 self.toneSliderContainer,
-                self.vibeHeaderDivider, self.essenceTriangleView, self.silhouetteHeaderDivider, self.silhouetteContainer,
+                self.vibeHeaderDivider, self.essenceTriangleView,
+                self.silhouetteHeaderDivider, self.silhouetteContainer,
                 self.finalStarDivider,
                 self.dailyRitualHeaderDivider, self.dailyRitualLabel,
                 self.vibrancyScaleContainer, self.contrastScaleContainer,
@@ -578,12 +583,14 @@ class DailyFitViewController: UIViewController {
             
             let allContentViews: [UIView?] = [
                 self.dailyFitLabel, self.calendarButton, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
-                self.topDivider, self.styleEditHeaderLabel, self.styleEditLabel,
+                self.topDivider,
+                self.styleEditHeaderLabel, self.styleEditLabel,
                 self.postTarotParagraphDivider,
                 self.postDailyRitualDivider,
                 self.styleBreakdownDivider, self.colourHeaderDivider, self.colourPaletteContainer,
                 self.toneSliderContainer,
-                self.vibeHeaderDivider, self.essenceTriangleView, self.silhouetteHeaderDivider, self.silhouetteContainer,
+                self.vibeHeaderDivider, self.essenceTriangleView,
+                self.silhouetteHeaderDivider, self.silhouetteContainer,
                 self.finalStarDivider,
                 self.dailyRitualHeaderDivider, self.dailyRitualLabel,
                 self.vibrancyScaleContainer, self.contrastScaleContainer,
@@ -1946,7 +1953,12 @@ class DailyFitViewController: UIViewController {
         let allHexes = payload.dailyPalette.allPaletteHexes
         colourPaletteContainer.configure(dailyPicks: payload.dailyPalette.colours, allPaletteHexes: allHexes)
 
-        essenceTriangleView?.configure(with: payload.essenceProfile)
+        let presentation: EssencePresentationDirective? = {
+            guard payload.dailyFitEngineId == DailyFitEngineRegistry.stage1ExperimentalId,
+                  payload.essenceProfile.chartAnchorScores != nil else { return nil }
+            return EssencePresentationDirective(showAnchorGhost: true)
+        }()
+        essenceTriangleView?.configure(with: payload.essenceProfile, presentation: presentation)
 
         if let reflection = payload.styleEditVariant.wardrobeReflection {
             wardrobeReflectionLabel.text = reflection
@@ -2011,7 +2023,8 @@ class DailyFitViewController: UIViewController {
     private func setInitialContentAlpha() {
         let allViews: [UIView?] = [
             dailyFitLabel, calendarButton, tarotSymbolLabel, tarotTitleLabel, dateLabel,
-            topDivider, styleEditHeaderLabel, styleEditLabel,
+            topDivider,
+            styleEditHeaderLabel, styleEditLabel,
             postTarotParagraphDivider,
             styleBreakdownDivider, colourHeaderDivider, colourPaletteContainer,
             toneSliderContainer,
@@ -2099,8 +2112,12 @@ class DailyFitViewController: UIViewController {
                 topDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
                 topDivider.heightAnchor.constraint(equalToConstant: 1)
             ])
+
+            styleEditAfterTopDividerConstraint = styleEditLabel.topAnchor.constraint(
+                equalTo: topDivider.bottomAnchor, constant: sectionSpacing
+            )
             constraints.append(contentsOf: [
-                styleEditLabel.topAnchor.constraint(equalTo: topDivider.bottomAnchor, constant: sectionSpacing),
+                styleEditAfterTopDividerConstraint!,
                 styleEditLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: styleParagraphHorizontalInset),
                 styleEditLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -styleParagraphHorizontalInset)
             ])
@@ -2188,8 +2205,11 @@ class DailyFitViewController: UIViewController {
 
         // Essence triangle
         if let vibeHeaderDivider = vibeHeaderDivider, let triangle = essenceTriangleView {
+            vibeHeaderAfterToneConstraint = vibeHeaderDivider.topAnchor.constraint(
+                equalTo: toneSliderContainer.bottomAnchor, constant: metalToneToEssenceGap
+            )
             constraints.append(contentsOf: [
-                vibeHeaderDivider.topAnchor.constraint(equalTo: toneSliderContainer.bottomAnchor, constant: metalToneToEssenceGap),
+                vibeHeaderAfterToneConstraint!,
                 vibeHeaderDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
                 vibeHeaderDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
 
@@ -2202,8 +2222,11 @@ class DailyFitViewController: UIViewController {
 
         // Silhouette
         if let silhouetteHeaderDivider = silhouetteHeaderDivider, let triangle = essenceTriangleView {
+            silhouetteHeaderAfterTriangleConstraint = silhouetteHeaderDivider.topAnchor.constraint(
+                equalTo: triangle.bottomAnchor, constant: sectionSpacing
+            )
             constraints.append(contentsOf: [
-                silhouetteHeaderDivider.topAnchor.constraint(equalTo: triangle.bottomAnchor, constant: sectionSpacing),
+                silhouetteHeaderAfterTriangleConstraint!,
                 silhouetteHeaderDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
                 silhouetteHeaderDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
 

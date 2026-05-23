@@ -56,11 +56,6 @@
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
 			buildPhase = 5EB2E4CD2DC75C8A00644BAD /* Resources */;
 			membershipExceptions = (
-				Resources/.synthid_backups,
-				Resources/.synthid_baseline,
-				Resources/.synthid_candidates,
-				Resources/.synthid_originals_backup,
-				Resources/.synthid_originals_candidates,
 			);
 		};
 /* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
@@ -494,15 +489,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 653BNKDSZS;
 				ENABLE_PREVIEWS = YES;
-				EXCLUDED_SOURCE_FILE_NAMES = (
-					"Resources/.synthid_backups/*",
-					"Resources/.synthid_baseline/*",
-					"Resources/.synthid_candidates/*",
-					"Resources/.synthid_candidates/**/*",
-					"Resources/.synthid_originals_backup/*",
-					"Resources/.synthid_originals_candidates/*",
-					"Resources/.synthid_originals_candidates/**/*",
-				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Cosmic-Fit-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Cosmic Fit";
@@ -537,15 +523,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 653BNKDSZS;
 				ENABLE_PREVIEWS = YES;
-				EXCLUDED_SOURCE_FILE_NAMES = (
-					"Resources/.synthid_backups/*",
-					"Resources/.synthid_baseline/*",
-					"Resources/.synthid_candidates/*",
-					"Resources/.synthid_candidates/**/*",
-					"Resources/.synthid_originals_backup/*",
-					"Resources/.synthid_originals_candidates/*",
-					"Resources/.synthid_originals_candidates/**/*",
-				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Cosmic-Fit-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Cosmic Fit";

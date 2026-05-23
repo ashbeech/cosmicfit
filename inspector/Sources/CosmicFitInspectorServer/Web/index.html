@@ -45,10 +45,12 @@
       </div>
       <div class="control-group">
         <label for="birth-time">Birth Time</label>
-        <input type="time" id="birth-time" value="00:00">
-        <label class="checkbox-label">
-          <input type="checkbox" id="unknown-time"> Unknown
-        </label>
+        <div class="inline-fields">
+          <input type="time" id="birth-time" value="00:00">
+          <label class="checkbox-label">
+            <input type="checkbox" id="unknown-time"> Unknown
+          </label>
+        </div>
       </div>
       <div class="control-group location-group">
         <label for="location-input">Location</label>
@@ -68,8 +70,10 @@
     <div class="strip-row strip-row-secondary">
       <div class="control-group">
         <label for="target-date">Daily Fit Target Date <span class="label-hint">(dd/mm/yyyy, local calendar day)</span></label>
-        <input type="text" id="target-date" class="date-input" placeholder="dd/mm/yyyy" inputmode="numeric" autocomplete="off">
-        <button id="today-btn" class="small-btn">Today (UTC)</button>
+        <div class="inline-fields">
+          <input type="text" id="target-date" class="date-input" placeholder="dd/mm/yyyy" inputmode="numeric" autocomplete="off">
+          <button id="today-btn" class="small-btn">Today (UTC)</button>
+        </div>
       </div>
       <div class="compare-controls">
         <label class="checkbox-label" title="Horizontal day carousel in Daily Fit, Trace, and Verdicts starting at your target UTC date">
@@ -91,6 +95,7 @@
         </div>
       </div>
       <div id="status-indicator" class="status"></div>
+      <span id="build-stamp" class="build-stamp" title="Inspector binary build timestamp"></span>
     </div>
   </header>
 
