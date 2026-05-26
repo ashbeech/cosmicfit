@@ -7,6 +7,7 @@
 
 import Testing
 import Foundation
+import UIKit
 @testable import Cosmic_Fit
 
 // MARK: - Fixtures
@@ -232,6 +233,102 @@ struct DailyFitUIIntegrationTests {
         #expect(size.height > 0)
     }
 
+    @Test("EssenceTriangleView places anchor ghost labels at anchor vertices")
+    @MainActor func testEssenceTriangleViewAnchorGhostLabelPlacement() throws {
+        var allScores = StyleEssenceCategory.allCases.map {
+            StyleEssenceScore(category: $0, score: 0.01)
+        }
+        let weatherTop3: [StyleEssenceCategory] = [.maximalist, .drama, .edgy]
+        for (index, category) in weatherTop3.enumerated() {
+            let score = 0.30 - Double(index) * 0.05
+            if let idx = allScores.firstIndex(where: { $0.category == category }) {
+                allScores[idx] = StyleEssenceScore(category: category, score: score)
+            }
+        }
+        let visibleCategories = weatherTop3.enumerated().map { index, category in
+            StyleEssenceScore(category: category, score: 0.30 - Double(index) * 0.05)
+        }
+
+        var chartAnchorScores = StyleEssenceCategory.allCases.map {
+            StyleEssenceScore(category: $0, score: 0.01)
+        }
+        let anchorTop3: [StyleEssenceCategory] = [.polished, .romantic, .classic]
+        for (index, category) in anchorTop3.enumerated() {
+            let score = 0.30 - Double(index) * 0.05
+            if let idx = chartAnchorScores.firstIndex(where: { $0.category == category }) {
+                chartAnchorScores[idx] = StyleEssenceScore(category: category, score: score)
+            }
+        }
+
+        let profile = StyleEssenceProfile(
+            allScores: allScores,
+            visibleCategories: visibleCategories,
+            chartAnchorScores: chartAnchorScores
+        )
+
+        let view = EssenceTriangleView(frame: CGRect(x: 0, y: 0, width: 220, height: 220))
+        view.configure(
+            with: profile,
+            presentation: EssencePresentationDirective(showAnchorGhost: true)
+        )
+        view.layoutIfNeeded()
+
+        let centre = CGPoint(x: view.bounds.midX, y: view.bounds.midY)
+        let labelInset: CGFloat = 28
+        let maxRadius = min(view.bounds.width, view.bounds.height) / 2.0 - labelInset
+        let minRadiusFraction: CGFloat = 0.25
+        let anchorMax = anchorTop3.enumerated().map { 0.30 - Double($0.offset) * 0.05 }.max() ?? 1.0
+        let anchorScale = anchorMax > 0 ? 1.0 / anchorMax : 1.0
+
+        func expectedAnchorPoint(for category: StyleEssenceCategory) -> CGPoint {
+            let score = chartAnchorScores.first { $0.category == category }!.score
+            let angle = CGFloat(category.angle)
+            let normalised = score * anchorScale
+            let clampedNorm = max(CGFloat(normalised), minRadiusFraction)
+            let radius = clampedNorm * maxRadius
+            return CGPoint(
+                x: centre.x + cos(angle) * radius,
+                y: centre.y + sin(angle) * radius
+            )
+        }
+
+        let weatherLabels = weatherTop3.map(\.label)
+        let ghostLabels = anchorTop3.map(\.label)
+
+        for ghostLabel in ghostLabels {
+            let label = view.subviews.compactMap { $0 as? UILabel }
+                .first { $0.text == ghostLabel }
+            #expect(label != nil, "Missing ghost label \(ghostLabel)")
+
+            let category = StyleEssenceCategory.allCases.first { $0.label == ghostLabel }!
+            let anchorPoint = expectedAnchorPoint(for: category)
+            let labelCenter = label!.center
+
+            let distanceToAnchor = hypot(labelCenter.x - anchorPoint.x, labelCenter.y - anchorPoint.y)
+            #expect(distanceToAnchor < 60, "\(ghostLabel) should sit near its anchor vertex")
+
+            for weatherLabel in weatherLabels {
+                let weatherCategory = StyleEssenceCategory.allCases.first { $0.label == weatherLabel }!
+                let weatherScore = visibleCategories.first { $0.category == weatherCategory }!.score
+                let weatherMax = visibleCategories.map(\.score).max() ?? 1.0
+                let weatherScale = weatherMax > 0 ? 1.0 / weatherMax : 1.0
+                let angle = CGFloat(weatherCategory.angle)
+                let normalised = weatherScore * weatherScale
+                let clampedNorm = max(CGFloat(normalised), minRadiusFraction)
+                let radius = clampedNorm * maxRadius
+                let weatherPoint = CGPoint(
+                    x: centre.x + cos(angle) * radius,
+                    y: centre.y + sin(angle) * radius
+                )
+                let distanceToWeather = hypot(labelCenter.x - weatherPoint.x, labelCenter.y - weatherPoint.y)
+                #expect(
+                    distanceToAnchor < distanceToWeather,
+                    "\(ghostLabel) should be closer to its anchor vertex than weather vertex \(weatherLabel)"
+                )
+            }
+        }
+    }
+
     // T5.8
     @Test("Full end-to-end pipeline produces valid payload")
     func testFullPipelineEndToEnd() {
@@ -316,5 +413,52 @@ struct DailyFitUIIntegrationTests {
             dailyFitEngineId: DailyFitEngineRegistry.productionId
         )
         #expect(payload.narrativeBrief == nil)
+    }
+
+    // U1 — Personal scale: payload with presentation uses displayPosition
+    @Test("Payload with scalePresentation provides valid displayPositions")
+    func testPayloadWithPresentationUsesDisplayPosition() {
+        let payload = BlueprintLensEngine.generatePayload(
+            blueprint: Fixtures.warmBlueprint,
+            snapshot: Fixtures.balancedSnapshot
+        )
+        let sp = payload.scalePresentation
+        #expect(sp != nil, "scalePresentation should be populated on new payloads")
+        guard let sp = sp else { return }
+
+        #expect(sp.vibrancy.displayPosition >= 0.0 && sp.vibrancy.displayPosition <= 1.0)
+        #expect(sp.contrast.displayPosition >= 0.0 && sp.contrast.displayPosition <= 1.0)
+        #expect(sp.metalTone.displayPosition >= 0.0 && sp.metalTone.displayPosition <= 1.0)
+
+        #expect(sp.vibrancy.baselinePosition >= 0.0 && sp.vibrancy.baselinePosition <= 1.0)
+        #expect(sp.contrast.baselinePosition >= 0.0 && sp.contrast.baselinePosition <= 1.0)
+        #expect(sp.metalTone.baselinePosition >= 0.0 && sp.metalTone.baselinePosition <= 1.0)
+
+        // Absolute values must be unchanged
+        #expect(sp.vibrancy.value == payload.vibrancy)
+        #expect(sp.contrast.value == payload.contrast)
+        #expect(sp.metalTone.value == payload.metalTone)
+    }
+
+    // U2 — Legacy payload: falls back to absolute (no scalePresentation)
+    @Test("Legacy payload without scalePresentation decodes and has nil presentation")
+    func testLegacyPayloadFallback() throws {
+        let payload = BlueprintLensEngine.generatePayload(
+            blueprint: Fixtures.warmBlueprint,
+            snapshot: Fixtures.balancedSnapshot
+        )
+        let encoder = JSONEncoder()
+        var json = try JSONSerialization.jsonObject(with: encoder.encode(payload)) as! [String: Any]
+
+        // Simulate legacy: strip scalePresentation
+        json.removeValue(forKey: "scalePresentation")
+
+        let legacyData = try JSONSerialization.data(withJSONObject: json)
+        let decoded = try JSONDecoder().decode(DailyFitPayload.self, from: legacyData)
+
+        #expect(decoded.scalePresentation == nil, "Legacy payloads must have nil scalePresentation")
+        #expect(decoded.vibrancy == payload.vibrancy, "Absolute vibrancy must survive round-trip")
+        #expect(decoded.contrast == payload.contrast, "Absolute contrast must survive round-trip")
+        #expect(decoded.metalTone == payload.metalTone, "Absolute metalTone must survive round-trip")
     }
 }

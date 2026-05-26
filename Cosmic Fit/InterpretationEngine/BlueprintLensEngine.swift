@@ -8,6 +8,33 @@
 
 import Foundation
 
+/// Shared scale sensitivity constants for Stage-1 Experimental mode.
+/// Single source of truth for both derivation (BlueprintLensEngine) and
+/// envelope bounds (PersonalScaleEnvelopeCalculator).
+enum Stage1ScaleSensitivity {
+    // Vibrancy — vibe push/pull and tempo axis modulation scales
+    static let vibeScale: Double = 0.80
+    static let tempoScale: Double = 0.30
+    static let tempoNormMin: Double = 0.1
+    static let tempoNormMax: Double = 1.0
+
+    // Contrast — axis blend weights for Stage 1 two-axis formula
+    static let contrastVisWeight: Double = 0.6
+    static let contrastStrWeight: Double = 0.4
+    /// Mathematical max of |(visNorm-0.5)*visW + (strNorm-0.5)*strW| for envelope bounds.
+    /// visNorm ∈ [0.1, 1.0] → (visNorm-0.5) max = 0.5; same for strNorm.
+    /// Max positive blend = 0.5*0.6 + 0.5*0.4 = 0.50.
+    static let contrastMaxBlendNorm: Double = 0.50
+
+    // Metal tone — transit and lunar nudge bounds
+    static let metalNudgeCap: Double = 0.30
+    static let metalNudgeCapStandard: Double = 0.10
+    static let lunarNamedPhaseNudge: Double = 0.03
+    static let lunarDegreeScale: Double = 0.15
+    /// Maximum absolute contribution from lunar degree mod: |((0 or 1) - 0.5) * lunarDegreeScale|
+    static var lunarDegreeMaxAbs: Double { lunarDegreeScale * 0.5 }
+}
+
 /// Stage 2 engine. Stateless — all methods are static.
 /// Takes a DailyEnergySnapshot (Stage 1 output) and selects what the user sees.
 enum BlueprintLensEngine {
@@ -25,12 +52,38 @@ enum BlueprintLensEngine {
 
     /// Select a tarot card and style-edit variant for the day.
     /// Records the selection in recency and rotation trackers.
+    /// When narrativeIntent is non-nil, uses joint (card, variant) bridge selection.
     static func selectTarotAndStyleEdit(
         snapshot: DailyEnergySnapshot,
         calibration: DailyFitCalibration = .default,
         dailyFitEngineId explicitEngineId: String? = nil,
         narrativeIntent: NarrativeIntent? = nil
     ) -> (tarotCard: TarotCard, styleEditVariant: StyleEditVariant) {
+        let result = selectTarotAndStyleEditWithBridgeTrace(
+            snapshot: snapshot,
+            calibration: calibration,
+            dailyFitEngineId: explicitEngineId,
+            narrativeIntent: narrativeIntent
+        )
+        return (result.card, result.variant)
+    }
+
+    struct TarotSelectionResult {
+        let card: TarotCard
+        let variant: StyleEditVariant
+        let variantWasScored: Bool
+        let rotationIndex: Int
+        let bridgeTrace: NarrativeBridgeTrace?
+        let categoryBoostApplied: Bool
+    }
+
+    /// Unified tarot+variant selection used by both generatePayload and generatePayloadWithTrace.
+    static func selectTarotAndStyleEditWithBridgeTrace(
+        snapshot: DailyEnergySnapshot,
+        calibration: DailyFitCalibration = .default,
+        dailyFitEngineId explicitEngineId: String? = nil,
+        narrativeIntent: NarrativeIntent? = nil
+    ) -> TarotSelectionResult {
         let engineId = explicitEngineId ?? dailyFitEngineId(for: calibration)
         let allCards = loadAndNormaliseCards()
         let recentSelections = TarotRecencyTracker.shared.getRecentSelections(
@@ -38,42 +91,51 @@ enum BlueprintLensEngine {
             referenceDate: snapshot.generatedAt,
             dailyFitEngineId: engineId
         )
+
+        // Stage-1 narrative bridge path: joint (card, variant) selection
+        if let intent = narrativeIntent, calibration.narrativeSelection != nil {
+            let bridgeResult = NarrativeTarotBridgeSelector.select(
+                snapshot: snapshot,
+                allCards: allCards,
+                recentSelections: recentSelections,
+                intent: intent,
+                calibration: calibration,
+                dailySeed: snapshot.dailySeed
+            )
+
+            TarotRecencyTracker.shared.storeCardSelection(
+                bridgeResult.candidate.card.name,
+                profileHash: snapshot.profileHash,
+                date: snapshot.generatedAt,
+                dailyFitEngineId: engineId
+            )
+
+            return TarotSelectionResult(
+                card: bridgeResult.candidate.card,
+                variant: bridgeResult.candidate.variant,
+                variantWasScored: true,
+                rotationIndex: bridgeResult.candidate.variantIndex,
+                bridgeTrace: bridgeResult.bridgeTrace,
+                categoryBoostApplied: true
+            )
+        }
+
+        // Production / nil-intent path: existing card-first selection (unchanged)
         let weights = calibration.selectionWeights
         let vibeVector = buildVibeVector(from: snapshot.vibeProfile)
         let axesVector = buildAxesVector(from: snapshot.axes)
-        let tuning = calibration.narrativeSelection
 
         var scoredCards: [(card: TarotCard, normAxes: [String: Double], score: Double)] = []
 
         for (card, normAxes) in allCards {
-            let vibeScore = cosineSimilarity(card.energyAffinity, vibeVector)
-            let axisScore: Double
-            if normAxes.isEmpty {
-                axisScore = 0.5
-            } else {
-                axisScore = cosineSimilarity(normAxes, axesVector)
-            }
-            let transit = transitBoost(
-                for: card, dominantTransits: snapshot.dominantTransits
+            let breakdown = TarotCardScoring.scoreCard(
+                card: card, normAxes: normAxes,
+                vibeVector: vibeVector, axesVector: axesVector,
+                weights: weights,
+                recentSelections: recentSelections,
+                dominantTransits: snapshot.dominantTransits
             )
-            let recency = recencyPenalty(
-                for: card.name, recentSelections: recentSelections
-            )
-            var total = (vibeScore * weights.vibeWeight)
-                      + (axisScore * weights.axisWeight)
-                      + (transit * weights.transitBoost)
-                      - recency
-
-            if let intent = narrativeIntent, let tuning = calibration.narrativeSelection {
-                let cardVector = NarrativeSelectionDirectives.energyDictionary(from: card.energyAffinity)
-                var boost = NarrativeSelectionDirectives.cosineSimilarity(cardVector, intent.tarot.targetEnergyVector)
-                if intent.relationship == NarrativeRelationship.contrast {
-                    boost *= 1.2
-                }
-                total += boost * tuning.categoryBoostWeight
-            }
-
-            scoredCards.append((card, normAxes, total))
+            scoredCards.append((card, normAxes, breakdown.total))
         }
 
         scoredCards.sort { $0.score > $1.score }
@@ -87,12 +149,16 @@ enum BlueprintLensEngine {
                 description: "", reversedKeywords: [],
                 symbolism: [], styleEdits: nil
             )
-            let variant = selectVariant(
+            let variantResult = selectVariant(
                 for: fallback, profileHash: snapshot.profileHash,
-                dailyFitEngineId: engineId, narrativeIntent: narrativeIntent,
+                dailyFitEngineId: engineId, narrativeIntent: nil,
                 dailySeed: snapshot.dailySeed
-            ).variant
-            return (fallback, variant)
+            )
+            return TarotSelectionResult(
+                card: fallback, variant: variantResult.variant,
+                variantWasScored: false, rotationIndex: 0,
+                bridgeTrace: nil, categoryBoostApplied: false
+            )
         }
 
         let selected: TarotCard
@@ -111,12 +177,16 @@ enum BlueprintLensEngine {
             dailyFitEngineId: engineId
         )
 
-        let variant = selectVariant(
+        let variantResult = selectVariant(
             for: selected, profileHash: snapshot.profileHash,
-            dailyFitEngineId: engineId, narrativeIntent: narrativeIntent,
+            dailyFitEngineId: engineId, narrativeIntent: nil,
             dailySeed: snapshot.dailySeed
-        ).variant
-        return (selected, variant)
+        )
+        return TarotSelectionResult(
+            card: selected, variant: variantResult.variant,
+            variantWasScored: false, rotationIndex: variantResult.rotationIndex,
+            bridgeTrace: nil, categoryBoostApplied: false
+        )
     }
 
     // MARK: - Card Loading & Normalisation
@@ -204,67 +274,20 @@ enum BlueprintLensEngine {
         return dot / denom
     }
 
-    // MARK: - Transit Boost
+    // MARK: - Transit Boost / Recency Penalty (forwarded to TarotCardScoring)
 
-    /// Planet-to-energy affinity map (mirrored from DailyEnergyEngine.planetEnergyBase).
-    private static let planetEnergyAffinities: [String: [String: Double]] = [
-        "Sun":     ["drama": 0.3, "classic": 0.3, "playful": 0.2, "edge": 0.1, "romantic": 0.1],
-        "Moon":    ["romantic": 0.4, "classic": 0.2, "playful": 0.2, "drama": 0.1, "utility": 0.1],
-        "Mercury": ["playful": 0.3, "utility": 0.3, "classic": 0.2, "edge": 0.2],
-        "Venus":   ["romantic": 0.4, "classic": 0.3, "playful": 0.2, "drama": 0.1],
-        "Mars":    ["drama": 0.3, "edge": 0.3, "utility": 0.2, "playful": 0.2],
-        "Jupiter": ["drama": 0.3, "playful": 0.3, "romantic": 0.2, "classic": 0.2],
-        "Saturn":  ["classic": 0.4, "utility": 0.4, "drama": 0.1, "edge": 0.1],
-        "Uranus":  ["edge": 0.5, "playful": 0.2, "drama": 0.2, "utility": 0.1],
-        "Neptune": ["romantic": 0.4, "edge": 0.3, "drama": 0.2, "playful": 0.1],
-        "Pluto":   ["drama": 0.4, "edge": 0.3, "romantic": 0.1, "utility": 0.1, "classic": 0.1],
-    ]
-
-    /// Sum of alignment between each dominant transit's planet energies
-    /// and the card's energy affinities, weighted by transit strength. Capped at 1.0.
     private static func transitBoost(
         for card: TarotCard,
         dominantTransits: [DailyTransitSummary]
     ) -> Double {
-        guard !dominantTransits.isEmpty else { return 0.0 }
-        var total = 0.0
-        for transit in dominantTransits {
-            guard let planetEnergies = planetEnergyAffinities[transit.transitPlanet] else {
-                continue
-            }
-            var alignment = 0.0
-            for (energy, planetAff) in planetEnergies {
-                let cardAff = card.energyAffinity[energy] ?? 0.0
-                alignment += planetAff * cardAff
-            }
-            total += alignment * transit.strength
-        }
-        return min(total, 1.0)
+        TarotCardScoring.transitBoost(for: card, dominantTransits: dominantTransits)
     }
 
-    // MARK: - Recency Penalty
-
-    /// Applies stronger near-term suppression + frequency penalty in the recency window.
     private static func recencyPenalty(
         for cardName: String,
         recentSelections: [(cardName: String, daysAgo: Int)]
     ) -> Double {
-        let matches = recentSelections.filter { $0.cardName == cardName }
-        guard let match = matches.first else {
-            return 0.0
-        }
-        var penalty = 0.0
-        if match.daysAgo <= 2 {
-            penalty += 0.45
-        } else if match.daysAgo <= 6 {
-            penalty += 0.25
-        } else if match.daysAgo <= 10 {
-            penalty += 0.12
-        }
-
-        // Escalate if the same card already appeared multiple times recently.
-        penalty += max(0.0, Double(matches.count - 1) * 0.08)
-        return min(penalty, 0.7)
+        TarotCardScoring.recencyPenalty(for: cardName, recentSelections: recentSelections)
     }
 
     // MARK: - Variant Selection (Rotation-Based)
@@ -359,12 +382,14 @@ enum BlueprintLensEngine {
         let effectiveMode = DailyFitEngineRegistry.resolvedMode(explicit: mode, engineId: engineId)
         let resolvedEngineId = DailyFitEngineRegistry.engineId(for: calibration, mode: effectiveMode)
         let essence = precomputedEssence ?? resolveEssenceProfile(from: snapshot, mode: effectiveMode)
-        let (tarotCard, styleEditVariant) = selectTarotAndStyleEdit(
+        let tarotResult = selectTarotAndStyleEditWithBridgeTrace(
             snapshot: snapshot,
             calibration: calibration,
             dailyFitEngineId: resolvedEngineId,
             narrativeIntent: narrativeIntent
         )
+        let tarotCard = tarotResult.card
+        let styleEditVariant = tarotResult.variant
         let palette = selectDailyPalette(
             from: blueprint.palette,
             snapshot: snapshot,
@@ -391,6 +416,15 @@ enum BlueprintLensEngine {
             from: blueprint.pattern, snapshot: snapshot, mode: effectiveMode
         )
 
+        let presentation = PersonalScaleEnvelopeCalculator.makePresentation(
+            blueprint: blueprint,
+            calibration: calibration,
+            mode: effectiveMode,
+            vibrancy: vibrancy,
+            contrast: contrast,
+            metalTone: metalTone
+        )
+
         return DailyFitPayload(
             tarotCard: tarotCard,
             styleEditVariant: styleEditVariant,
@@ -407,7 +441,8 @@ enum BlueprintLensEngine {
             dailyTextures: textures,
             dailyPattern: pattern,
             generatedAt: snapshot.generatedAt,
-            dailyFitEngineId: resolvedEngineId
+            dailyFitEngineId: resolvedEngineId,
+            scalePresentation: presentation
         )
     }
 
@@ -417,6 +452,7 @@ enum BlueprintLensEngine {
         let variantRotationIndex: Int
         let tarotVariantWasScored: Bool
         let tarotCategoryBoostApplied: Bool
+        let narrativeBridgeTrace: NarrativeBridgeTrace?
         let paletteTrace: (candidateCount: Int, scoredColours: [(name: String, role: String, score: Double)], diversitySwapApplied: Bool, selectionStrategy: String, coreAnchorSwapApplied: Bool)
         let paletteStatementSlotCount: Int
         let paletteSelectionPath: String
@@ -444,7 +480,20 @@ enum BlueprintLensEngine {
     ) -> (payload: DailyFitPayload, trace: PayloadTrace) {
         let effectiveMode = DailyFitEngineRegistry.resolvedMode(explicit: mode, engineId: engineId)
         let resolvedEngineId = DailyFitEngineRegistry.engineId(for: calibration, mode: effectiveMode)
-        let tuning = calibration.narrativeSelection
+
+        // Unified tarot+variant selection (single source of truth for both paths)
+        let tarotResult = selectTarotAndStyleEditWithBridgeTrace(
+            snapshot: snapshot,
+            calibration: calibration,
+            dailyFitEngineId: resolvedEngineId,
+            narrativeIntent: narrativeIntent
+        )
+        let selected = tarotResult.card
+        let variant = tarotResult.variant
+        let variantIdx = tarotResult.rotationIndex
+        let tarotCategoryBoostApplied = tarotResult.categoryBoostApplied
+
+        // Build tarot score trace for inspector (card-level scores only, same formula)
         let allCards = loadAndNormaliseCards()
         let recentSelections = TarotRecencyTracker.shared.getRecentSelections(
             profileHash: snapshot.profileHash,
@@ -454,32 +503,26 @@ enum BlueprintLensEngine {
         let weights = calibration.selectionWeights
         let vibeVector = buildVibeVector(from: snapshot.vibeProfile)
         let axesVector = buildAxesVector(from: snapshot.axes)
-        let tarotCategoryBoostApplied = narrativeIntent != nil && calibration.narrativeSelection != nil
-        var scoredCards: [(card: TarotCard, normAxes: [String: Double], vibeScore: Double, axisScore: Double, tBoost: Double, rPenalty: Double, total: Double)] = []
+        let traceIntent: NarrativeIntent? = tarotCategoryBoostApplied ? narrativeIntent : nil
+        let traceTuning: DailyFitCalibration.NarrativeSelectionTuning? = tarotCategoryBoostApplied ? calibration.narrativeSelection : nil
+        var scoredCards: [(card: TarotCard, breakdown: TarotCardScoring.ScoreBreakdown)] = []
         for (card, normAxes) in allCards {
-            let vibeScore = cosineSimilarity(card.energyAffinity, vibeVector)
-            let axisScore = normAxes.isEmpty ? 0.5 : cosineSimilarity(normAxes, axesVector)
-            let tBoost = transitBoost(for: card, dominantTransits: snapshot.dominantTransits)
-            let rPenalty = recencyPenalty(for: card.name, recentSelections: recentSelections)
-            var total = (vibeScore * weights.vibeWeight) + (axisScore * weights.axisWeight) + (tBoost * weights.transitBoost) - rPenalty
-            if tarotCategoryBoostApplied, let intent = narrativeIntent, let tuning = calibration.narrativeSelection {
-                let cardVector = NarrativeSelectionDirectives.energyDictionary(from: card.energyAffinity)
-                var boost = NarrativeSelectionDirectives.cosineSimilarity(cardVector, intent.tarot.targetEnergyVector)
-                if intent.relationship == NarrativeRelationship.contrast { boost *= 1.2 }
-                total += boost * tuning.categoryBoostWeight
-            }
-            scoredCards.append((card, normAxes, vibeScore, axisScore, tBoost, rPenalty, total))
+            let breakdown = TarotCardScoring.scoreCard(
+                card: card, normAxes: normAxes,
+                vibeVector: vibeVector, axesVector: axesVector,
+                weights: weights,
+                recentSelections: recentSelections,
+                dominantTransits: snapshot.dominantTransits,
+                intent: traceIntent, tuning: traceTuning
+            )
+            scoredCards.append((card, breakdown))
         }
-        scoredCards.sort { $0.total > $1.total }
+        scoredCards.sort { $0.breakdown.total > $1.breakdown.total }
         let topScoreEntries = scoredCards.prefix(10).map {
-            (cardName: $0.card.name, vibeScore: $0.vibeScore, axisScore: $0.axisScore, transitBoost: $0.tBoost, recencyPenalty: $0.rPenalty, totalScore: $0.total)
+            (cardName: $0.card.name, vibeScore: $0.breakdown.vibeScore, axisScore: $0.breakdown.axisScore, transitBoost: $0.breakdown.transitBoost, recencyPenalty: $0.breakdown.recencyPenalty, totalScore: $0.breakdown.total)
         }
-        let selected: TarotCard
-        if scoredCards.count >= 2, abs(scoredCards[0].total - scoredCards[1].total) < 0.01 {
-            selected = scoredCards[snapshot.dailySeed % 2].card
-        } else if let first = scoredCards.first {
-            selected = first.card
-        } else {
+
+        guard !allCards.isEmpty else {
             let fallback = TarotCard(
                 name: "The Fool", imagePath: "Cards/00-TheFool",
                 arcana: .major, suit: nil, number: nil,
@@ -488,17 +531,22 @@ enum BlueprintLensEngine {
                 description: "", reversedKeywords: [],
                 symbolism: [], styleEdits: nil
             )
-            let variantResult = selectVariant(
-                for: fallback, profileHash: snapshot.profileHash,
-                dailyFitEngineId: resolvedEngineId, narrativeIntent: narrativeIntent,
-                dailySeed: snapshot.dailySeed
+            let fallbackVariant = StyleEditVariant(
+                variant: "I", title: fallback.name,
+                description: "Style guidance inspired by \(fallback.name).",
+                energyEmphasis: [:], axesEmphasis: [:],
+                dailyRitual: nil, wardrobeReflection: nil
             )
             let essence = precomputedEssence ?? resolveEssenceProfile(from: snapshot, mode: effectiveMode)
             let silhouette = precomputedSilhouette ?? deriveSilhouetteProfile(
                 from: blueprint, snapshot: snapshot, calibration: calibration, mode: effectiveMode
             )
+            let emptyPresentation = PersonalScaleEnvelopeCalculator.makePresentation(
+                blueprint: blueprint, calibration: calibration,
+                mode: effectiveMode, vibrancy: 0.5, contrast: 0.5, metalTone: 0.5
+            )
             let emptyPayload = DailyFitPayload(
-                tarotCard: fallback, styleEditVariant: variantResult.variant,
+                tarotCard: fallback, styleEditVariant: fallbackVariant,
                 dailyPalette: selectDailyPalette(
                     from: blueprint.palette, snapshot: snapshot,
                     calibration: calibration, narrativeIntent: narrativeIntent
@@ -510,12 +558,14 @@ enum BlueprintLensEngine {
                 dominantTransits: snapshot.dominantTransits,
                 lunarContext: snapshot.lunarContext, dailyTextures: [], dailyPattern: nil,
                 generatedAt: snapshot.generatedAt,
-                dailyFitEngineId: resolvedEngineId
+                dailyFitEngineId: resolvedEngineId,
+                scalePresentation: emptyPresentation
             )
             let emptyTrace = PayloadTrace(
-                tarotScores: [], variantRotationIndex: variantResult.rotationIndex,
-                tarotVariantWasScored: variantResult.wasScored,
-                tarotCategoryBoostApplied: tarotCategoryBoostApplied,
+                tarotScores: [], variantRotationIndex: 0,
+                tarotVariantWasScored: false,
+                tarotCategoryBoostApplied: false,
+                narrativeBridgeTrace: nil,
                 paletteTrace: (0, [], false, calibration.stage2Sensitivity.paletteSelectionStrategy.rawValue, false),
                 paletteStatementSlotCount: 0,
                 paletteSelectionPath: narrativeIntent != nil ? "narrativeSlots" : "pureSkyScoring",
@@ -529,19 +579,6 @@ enum BlueprintLensEngine {
             )
             return (emptyPayload, emptyTrace)
         }
-        TarotRecencyTracker.shared.storeCardSelection(
-            selected.name,
-            profileHash: snapshot.profileHash,
-            date: snapshot.generatedAt,
-            dailyFitEngineId: resolvedEngineId
-        )
-        let variantResult = selectVariant(
-            for: selected, profileHash: snapshot.profileHash,
-            dailyFitEngineId: resolvedEngineId, narrativeIntent: narrativeIntent,
-            dailySeed: snapshot.dailySeed
-        )
-        let variant = variantResult.variant
-        let variantIdx = variantResult.rotationIndex
 
         // Palette trace
         let candidates = buildPaletteCandidates(from: blueprint.palette)
@@ -638,6 +675,15 @@ enum BlueprintLensEngine {
         let arBase = keywordBaseline(positives: positives, negatives: negatives, leftKeywords: arLeft, rightKeywords: arRight)
         let sdBase = keywordBaseline(positives: positives, negatives: negatives, leftKeywords: sdLeft, rightKeywords: sdRight)
 
+        let presentationForTrace = PersonalScaleEnvelopeCalculator.makePresentation(
+            blueprint: blueprint,
+            calibration: calibration,
+            mode: effectiveMode,
+            vibrancy: vibrancy,
+            contrast: contrast,
+            metalTone: metalTone
+        )
+
         let textures = selectDailyTextures(from: blueprint.textures, snapshot: snapshot, mode: effectiveMode)
         let axesNorm: [String: Double] = [
             "action": snapshot.axes.action / 10.0, "tempo": snapshot.axes.tempo / 10.0,
@@ -674,13 +720,15 @@ enum BlueprintLensEngine {
             axes: snapshot.axes, dominantTransits: snapshot.dominantTransits,
             lunarContext: snapshot.lunarContext, dailyTextures: textures,
             dailyPattern: pattern, generatedAt: snapshot.generatedAt,
-            dailyFitEngineId: resolvedEngineId
+            dailyFitEngineId: resolvedEngineId,
+            scalePresentation: presentationForTrace
         )
         let trace = PayloadTrace(
             tarotScores: Array(topScoreEntries),
             variantRotationIndex: variantIdx,
-            tarotVariantWasScored: variantResult.wasScored,
+            tarotVariantWasScored: tarotResult.variantWasScored,
             tarotCategoryBoostApplied: tarotCategoryBoostApplied,
+            narrativeBridgeTrace: tarotResult.bridgeTrace,
             paletteTrace: (candidates.count, scoredColours, diversitySwap, strategy.rawValue, coreAnchorSwapped),
             paletteStatementSlotCount: paletteResult.statementSlotCount,
             paletteSelectionPath: paletteResult.selectionPath,
@@ -1013,8 +1061,8 @@ enum BlueprintLensEngine {
         if mode == .stage1Experimental {
             let push = Double(vibe.value(for: .drama) + vibe.value(for: .edge)) / 21.0
             let pull = Double(vibe.value(for: .utility) + vibe.value(for: .classic) + vibe.value(for: .romantic)) / 21.0
-            let vibeModulation = (push - pull) * 0.80
-            let tempoMod = (snapshot.axes.tempo / 10.0 - 0.5) * 0.30
+            let vibeModulation = (push - pull) * Stage1ScaleSensitivity.vibeScale
+            let tempoMod = (snapshot.axes.tempo / 10.0 - 0.5) * Stage1ScaleSensitivity.tempoScale
             final = baseline + vibeModulation + tempoMod
         } else {
             let push = Double(vibe.value(for: .drama) + vibe.value(for: .edge)) / 21.0
@@ -1058,7 +1106,7 @@ enum BlueprintLensEngine {
         if mode == .stage1Experimental {
             let visNorm = snapshot.axes.visibility / 10.0
             let strNorm = snapshot.axes.strategy / 10.0
-            modulation = ((visNorm - 0.5) * 0.6 + (strNorm - 0.5) * 0.4) * coeff
+            modulation = ((visNorm - 0.5) * Stage1ScaleSensitivity.contrastVisWeight + (strNorm - 0.5) * Stage1ScaleSensitivity.contrastStrWeight) * coeff
         } else {
             let visNorm = snapshot.axes.visibility / 10.0
             modulation = (visNorm - 0.5) * coeff
@@ -1122,16 +1170,18 @@ enum BlueprintLensEngine {
             if firePlanets.contains(transit.transitPlanet) { fireHits += 1 }
             if waterPlanets.contains(transit.transitPlanet) { waterHits += 1 }
         }
-        let nudgeCap = mode == .stage1Experimental ? 0.30 : 0.10
+        let nudgeCap = mode == .stage1Experimental
+            ? Stage1ScaleSensitivity.metalNudgeCap
+            : Stage1ScaleSensitivity.metalNudgeCapStandard
         let fireNudge = min(Double(fireHits) * calibration.stage2Sensitivity.metalNudgePerHit, nudgeCap)
         let waterNudge = min(Double(waterHits) * calibration.stage2Sensitivity.metalNudgePerHit, nudgeCap)
 
         let phase = snapshot.lunarContext.phaseName.lowercased()
         let lunarNudge: Double
         if phase.contains("full") {
-            lunarNudge = -0.03
+            lunarNudge = -Stage1ScaleSensitivity.lunarNamedPhaseNudge
         } else if phase.contains("new") {
-            lunarNudge = 0.03
+            lunarNudge = Stage1ScaleSensitivity.lunarNamedPhaseNudge
         } else {
             lunarNudge = 0.0
         }
@@ -1139,7 +1189,7 @@ enum BlueprintLensEngine {
         let lunarMetalMod: Double
         if mode == .stage1Experimental {
             let fraction = snapshot.lunarContext.phaseDegrees / 360.0
-            lunarMetalMod = (fraction - 0.5) * 0.15
+            lunarMetalMod = (fraction - 0.5) * Stage1ScaleSensitivity.lunarDegreeScale
         } else {
             lunarMetalMod = 0.0
         }
@@ -1728,12 +1778,14 @@ enum BlueprintLensEngine {
 
         var scoredForLog: [(name: String, vibe: Double, axis: Double, transit: Double, recency: Double, total: Double)] = []
         for (card, normAxes) in allCards {
-            let vibeScore = cosineSimilarity(card.energyAffinity, vibeVector)
-            let axisScore = normAxes.isEmpty ? 0.5 : cosineSimilarity(normAxes, axesVector)
-            let tBoost = transitBoost(for: card, dominantTransits: snapshot.dominantTransits)
-            let rPenalty = recencyPenalty(for: card.name, recentSelections: recentSelections)
-            let total = (vibeScore * weights.vibeWeight) + (axisScore * weights.axisWeight) + (tBoost * weights.transitBoost) - rPenalty
-            scoredForLog.append((card.name, vibeScore, axisScore, tBoost, rPenalty, total))
+            let bd = TarotCardScoring.scoreCard(
+                card: card, normAxes: normAxes,
+                vibeVector: vibeVector, axesVector: axesVector,
+                weights: weights,
+                recentSelections: recentSelections,
+                dominantTransits: snapshot.dominantTransits
+            )
+            scoredForLog.append((card.name, bd.vibeScore, bd.axisScore, bd.transitBoost, bd.recencyPenalty, bd.total))
         }
         scoredForLog.sort { $0.total > $1.total }
 

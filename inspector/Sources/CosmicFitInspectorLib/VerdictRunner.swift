@@ -19,6 +19,7 @@ enum VerdictRunner {
             targetDate: targetDate,
             dailyFitEngineId: dailyFitEngineId
         ))
+        results.append(checkDisplayPositionRange(report))
         return results
     }
 
@@ -105,6 +106,33 @@ enum VerdictRunner {
             expected: "not in previous 7 days (3d = fail)",
             actual: detail,
             docRef: "docs/test_green_handoff.md#tarot-recency"
+        )
+    }
+
+    // MARK: - Check 5: Display positions in [0, 1] (non-blocking)
+
+    private static func checkDisplayPositionRange(_ report: DailyFitDiagnosticReport) -> VerdictRow {
+        guard let sp = report.personalScalePresentation else {
+            return VerdictRow(
+                id: "display_position_in_range",
+                status: "info",
+                expected: "all displayPosition ∈ [0, 1]",
+                actual: "no scalePresentation (legacy payload)",
+                docRef: nil
+            )
+        }
+        let allOk = (0...1).contains(sp.vibrancy.displayPosition) &&
+                    (0...1).contains(sp.contrast.displayPosition) &&
+                    (0...1).contains(sp.metalTone.displayPosition)
+        let actual = "vib=\(String(format: "%.3f", sp.vibrancy.displayPosition)) " +
+                     "con=\(String(format: "%.3f", sp.contrast.displayPosition)) " +
+                     "met=\(String(format: "%.3f", sp.metalTone.displayPosition))"
+        return VerdictRow(
+            id: "display_position_in_range",
+            status: allOk ? "pass" : "warn",
+            expected: "all displayPosition ∈ [0, 1]",
+            actual: actual,
+            docRef: nil
         )
     }
 }

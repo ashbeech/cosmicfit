@@ -82,11 +82,21 @@ enum AsteroidCalculator {
     /// Geocentric position of one asteroid at the given Julian Day (UT).
     static func position(of asteroid: Asteroid, at julianDayUT: Double) -> Position {
         queryQueue.sync {
-            var xx   = [Double](repeating: 0, count: 6) // output array
+            var xx   = [Double](repeating: 0, count: 6)
             var serr = [CChar](repeating: 0, count: 256)
             
-            let iflag: Int32 = SEFLG_SWIEPH            // Swiss ephemeris, true ecliptic
-            swe_calc_ut(julianDayUT, asteroid.seId, iflag, &xx, &serr)
+            let ret = swe_calc_ut(julianDayUT, asteroid.seId, SEFLG_SWIEPH, &xx, &serr)
+            
+            let needsFallback = ret < 0 || (xx[0] == 0 && xx[1] == 0 && xx[2] == 0)
+            
+            if needsFallback {
+                var xxm = [Double](repeating: 0, count: 6)
+                var serrm = [CChar](repeating: 0, count: 256)
+                let retm = swe_calc_ut(julianDayUT, asteroid.seId, SEFLG_MOSEPH, &xxm, &serrm)
+                if retm >= 0 && !(xxm[0] == 0 && xxm[1] == 0 && xxm[2] == 0) {
+                    return Position(longitude: xxm[0], latitude: xxm[1], distanceAU: xxm[2])
+                }
+            }
             
             return Position(longitude: xx[0], latitude: xx[1], distanceAU: xx[2])
         }

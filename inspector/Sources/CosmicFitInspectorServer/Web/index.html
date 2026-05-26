@@ -65,6 +65,17 @@
         <span id="tz-chip" class="tz-chip">Europe/London</span>
         <input type="hidden" id="timezone-id" value="Europe/London">
       </div>
+      <div class="control-group">
+        <label for="profile-id">Profile ID <span class="label-hint">(optional)</span></label>
+        <input type="text" id="profile-id" class="profile-id-input" placeholder="UUID from app" autocomplete="off">
+      </div>
+      <div class="control-group">
+        <label for="device-lat">Device Location <span class="label-hint">(optional, for transit angles)</span></label>
+        <div class="device-location-row">
+          <input type="text" id="device-lat" class="device-location-input" placeholder="Lat" autocomplete="off">
+          <input type="text" id="device-lon" class="device-location-input" placeholder="Lon" autocomplete="off">
+        </div>
+      </div>
       <button id="submit-btn" class="submit-btn">Submit</button>
     </div>
     <div class="strip-row strip-row-secondary">

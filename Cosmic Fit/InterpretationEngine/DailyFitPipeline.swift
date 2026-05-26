@@ -93,7 +93,8 @@ enum DailyFitPipeline {
             tuning: tuning,
             tarotVariantWasScored: s2Trace.tarotVariantWasScored,
             tarotCategoryBoostApplied: s2Trace.tarotCategoryBoostApplied,
-            statementSlotCount: s2Trace.paletteStatementSlotCount
+            statementSlotCount: s2Trace.paletteStatementSlotCount,
+            bridgeTrace: s2Trace.narrativeBridgeTrace
         )
 
         return (

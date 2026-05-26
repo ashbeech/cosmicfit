@@ -248,6 +248,9 @@ struct DailyFitPayload: Codable {
     /// Timestamp of generation. Set from the supplied date parameter, NOT Date().
     let generatedAt: Date
 
+    /// User-relative scale metadata for UI presentation. nil on legacy frozen payloads.
+    let scalePresentation: PersonalScalePresentation?
+
     /// Resolved narrative brief (Stage 1 only). nil for production engine.
     let narrativeBrief: DailyNarrativeBrief?
 
@@ -265,7 +268,7 @@ struct DailyFitPayload: Codable {
         case tarotCard, styleEditVariant, dailyPalette, vibrancy, contrast, metalTone
         case essenceProfile, silhouetteProfile, vibeBreakdown, axes
         case dominantTransits, lunarContext, dailyTextures, dailyPattern, generatedAt
-        case dailyFitEngineId, narrativeBrief
+        case dailyFitEngineId, narrativeBrief, scalePresentation
         case essenceTriangle
     }
 
@@ -286,6 +289,7 @@ struct DailyFitPayload: Codable {
         dailyPattern = try c.decodeIfPresent(String.self, forKey: .dailyPattern)
         generatedAt = try c.decode(Date.self, forKey: .generatedAt)
         dailyFitEngineId = try c.decodeIfPresent(String.self, forKey: .dailyFitEngineId)
+        scalePresentation = try c.decodeIfPresent(PersonalScalePresentation.self, forKey: .scalePresentation)
         narrativeBrief = try c.decodeIfPresent(DailyNarrativeBrief.self, forKey: .narrativeBrief)
 
         if let newProfile = try? c.decode(StyleEssenceProfile.self, forKey: .essenceProfile) {
@@ -315,6 +319,7 @@ struct DailyFitPayload: Codable {
         try c.encodeIfPresent(dailyPattern, forKey: .dailyPattern)
         try c.encode(generatedAt, forKey: .generatedAt)
         try c.encodeIfPresent(dailyFitEngineId, forKey: .dailyFitEngineId)
+        try c.encodeIfPresent(scalePresentation, forKey: .scalePresentation)
         try c.encodeIfPresent(narrativeBrief, forKey: .narrativeBrief)
     }
 
@@ -328,6 +333,7 @@ struct DailyFitPayload: Codable {
          lunarContext: LunarContext, dailyTextures: [String],
          dailyPattern: String?, generatedAt: Date,
          dailyFitEngineId: String? = nil,
+         scalePresentation: PersonalScalePresentation? = nil,
          narrativeBrief: DailyNarrativeBrief? = nil) {
         self.tarotCard = tarotCard
         self.styleEditVariant = styleEditVariant
@@ -345,6 +351,7 @@ struct DailyFitPayload: Codable {
         self.dailyPattern = dailyPattern
         self.generatedAt = generatedAt
         self.dailyFitEngineId = dailyFitEngineId
+        self.scalePresentation = scalePresentation
         self.narrativeBrief = narrativeBrief
     }
 
@@ -367,6 +374,7 @@ struct DailyFitPayload: Codable {
             dailyPattern: dailyPattern,
             generatedAt: generatedAt,
             dailyFitEngineId: engineId,
+            scalePresentation: scalePresentation,
             narrativeBrief: narrativeBrief
         )
     }
@@ -390,6 +398,7 @@ struct DailyFitPayload: Codable {
             dailyPattern: dailyPattern,
             generatedAt: generatedAt,
             dailyFitEngineId: dailyFitEngineId,
+            scalePresentation: scalePresentation,
             narrativeBrief: brief
         )
     }
@@ -483,7 +492,25 @@ struct NarrativeCoherenceTrace: Codable, Equatable {
     let paletteStatementSlotCount: Int
     let tarotCategoryBoostApplied: Bool
     let tarotVariantScored: Bool
+    let variantBridgeSimilarity: Double?
+    let bridgePass: Bool?
     let overallPass: Bool
+}
+
+/// Inspector-only QA for tarot style-edit bridge quality (trace export).
+struct NarrativeBridgeTrace: Codable, Equatable {
+    let selectedCardName: String
+    let selectedVariantTitle: String
+    let selectedVariantIndex: Int
+    let variantBridgeSimilarity: Double
+    let bestPairTotalScore: Double
+    let runnerUpPairTotalScore: Double
+    let bridgeMargin: Double
+    let bestVariantSimilarityInPool: Double
+    let funnelCardCount: Int
+    let pairsEvaluated: Int
+    let contrastWeatherWins: Bool?
+    let bridgePass: Bool
 }
 
 // MARK: - Calibration Surface
@@ -628,6 +655,13 @@ struct DailyFitCalibration: Equatable {
         let softenBaselineBlend: Double
         let intenseAnchorRestrainedWeatherBlend: Double
 
+        // Tarot bridge tunables (§5.4)
+        let variantBridgeWeight: Double
+        let bridgeCandidatePoolSize: Int
+        let minVariantBridgeSimilarity: Double
+        let minBridgeMargin: Double
+        let pairScoreTieEpsilon: Double
+
         static let stage1Default = NarrativeSelectionTuning(
             categoryBoostWeight: 0.15,
             rolePreferenceBonus: 0.12,
@@ -636,7 +670,12 @@ struct DailyFitCalibration: Equatable {
             softenVibrancyCap: 0.72,
             softenContrastCap: 0.70,
             softenBaselineBlend: 0.70,
-            intenseAnchorRestrainedWeatherBlend: 0.50
+            intenseAnchorRestrainedWeatherBlend: 0.50,
+            variantBridgeWeight: 0.25,
+            bridgeCandidatePoolSize: 15,
+            minVariantBridgeSimilarity: 0.50,
+            minBridgeMargin: 0.01,
+            pairScoreTieEpsilon: 0.01
         )
     }
 

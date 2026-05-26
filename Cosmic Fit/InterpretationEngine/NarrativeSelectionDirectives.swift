@@ -287,7 +287,8 @@ enum NarrativeSelectionDirectives {
         tuning: DailyFitCalibration.NarrativeSelectionTuning,
         tarotVariantWasScored: Bool,
         tarotCategoryBoostApplied: Bool,
-        statementSlotCount: Int
+        statementSlotCount: Int,
+        bridgeTrace: NarrativeBridgeTrace? = nil
     ) -> NarrativeCoherenceTrace {
         let selectedRoles = payload.dailyPalette.colours.compactMap { ColourRole(rawValue: $0.role) }
         let paletteAccentRoleMatch = selectedRoles.contains { accentRoles.contains($0) }
@@ -306,11 +307,18 @@ enum NarrativeSelectionDirectives {
 
         pass = pass && tarotVariantWasScored
 
+        // Phase 1: bridgePass is traced but does NOT fail overallPass yet.
+        // Phase 2 (enable enforcement) requires Ash sign-off after contrast-day review.
+        let variantBridgeSimilarity = bridgeTrace?.variantBridgeSimilarity
+        let bridgePass = bridgeTrace?.bridgePass
+
         return NarrativeCoherenceTrace(
             paletteAccentRoleMatch: paletteAccentRoleMatch,
             paletteStatementSlotCount: statementSlotCount,
             tarotCategoryBoostApplied: tarotCategoryBoostApplied,
             tarotVariantScored: tarotVariantWasScored,
+            variantBridgeSimilarity: variantBridgeSimilarity,
+            bridgePass: bridgePass,
             overallPass: pass
         )
     }

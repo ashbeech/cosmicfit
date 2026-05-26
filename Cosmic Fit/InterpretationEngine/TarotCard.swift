@@ -20,7 +20,7 @@ struct CardAxes {
 }
 
 /// Represents a single styleEdit variant for a Tarot card
-struct StyleEditVariant: Codable {
+struct StyleEditVariant: Codable, Equatable {
     let variant: String
     let title: String
     let description: String
@@ -37,7 +37,7 @@ struct StyleEditVariant: Codable {
 }
 
 /// Data model representing a Tarot card with semantic matching capabilities
-struct TarotCard: Codable, Identifiable {
+struct TarotCard: Codable, Identifiable, Equatable {
     let name: String               // e.g., "The Chariot", "Three of Cups"
     let imagePath: String          // Path for Assets.xcassets (e.g., "Cards/00-TheFool")
     let arcana: ArcanaType         // Major or Minor

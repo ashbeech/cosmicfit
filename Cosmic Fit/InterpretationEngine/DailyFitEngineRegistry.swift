@@ -248,9 +248,10 @@ enum DailyFitEngineRegistry {
 
         if let ns = calibration.narrativeSelection {
             parts.append(String(
-                format: "narrativeSelection:categoryBoostWeight=%.6f,rolePreferenceBonus=%.6f,categoryEnergyWeight=%.6f,narrativePaletteJitter=%.6f,softenVibrancyCap=%.6f,softenContrastCap=%.6f,softenBaselineBlend=%.6f,intenseAnchorRestrainedWeatherBlend=%.6f",
+                format: "narrativeSelection:categoryBoostWeight=%.6f,rolePreferenceBonus=%.6f,categoryEnergyWeight=%.6f,narrativePaletteJitter=%.6f,softenVibrancyCap=%.6f,softenContrastCap=%.6f,softenBaselineBlend=%.6f,intenseAnchorRestrainedWeatherBlend=%.6f,variantBridgeWeight=%.6f,bridgeCandidatePoolSize=%d,minVariantBridgeSimilarity=%.6f,minBridgeMargin=%.6f,pairScoreTieEpsilon=%.6f",
                 ns.categoryBoostWeight, ns.rolePreferenceBonus, ns.categoryEnergyWeight, ns.narrativePaletteJitter,
-                ns.softenVibrancyCap, ns.softenContrastCap, ns.softenBaselineBlend, ns.intenseAnchorRestrainedWeatherBlend
+                ns.softenVibrancyCap, ns.softenContrastCap, ns.softenBaselineBlend, ns.intenseAnchorRestrainedWeatherBlend,
+                ns.variantBridgeWeight, ns.bridgeCandidatePoolSize, ns.minVariantBridgeSimilarity, ns.minBridgeMargin, ns.pairScoreTieEpsilon
             ))
         } else {
             parts.append("narrativeSelection=off")

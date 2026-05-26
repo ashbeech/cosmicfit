@@ -28,6 +28,9 @@ class AnimatedLaunchScreenViewController: UIViewController {
     
     // MARK: - Properties
     private var mainViewController: UIViewController?
+    private var minimumAnimationElapsed = false
+    private var hasTransitioned = false
+    private let minimumAnimationDuration: TimeInterval = 2.0
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -208,9 +211,9 @@ class AnimatedLaunchScreenViewController: UIViewController {
     private func startAnimations() {
         startLogoAnimation()
         
-        // Transition to main app after 2 seconds total
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            self.transitionToMainApp()
+        DispatchQueue.main.asyncAfter(deadline: .now() + minimumAnimationDuration) {
+            self.minimumAnimationElapsed = true
+            self.attemptTransitionToMainApp()
         }
     }
     
@@ -353,18 +356,16 @@ class AnimatedLaunchScreenViewController: UIViewController {
     // MARK: - Transition
     func setMainViewController(_ viewController: UIViewController) {
         self.mainViewController = viewController
+        attemptTransitionToMainApp()
     }
     
-    private func transitionToMainApp() {
+    private func attemptTransitionToMainApp() {
+        guard !hasTransitioned else { return }
+        guard minimumAnimationElapsed else { return }
+        guard let mainViewController = mainViewController else { return }
         
-        guard let mainViewController = mainViewController else {
-            // This should never happen - AppDelegate always sets mainViewController
-            print("❌ CRITICAL: No main view controller set in AnimatedLaunchScreenViewController")
-            assertionFailure("AnimatedLaunchScreenViewController.mainViewController must be set by AppDelegate before animation completes")
-            return
-        }
+        hasTransitioned = true
         
-        // Transition to the provided main view controller
         mainViewController.modalTransitionStyle = .crossDissolve
         mainViewController.modalPresentationStyle = .fullScreen
         self.present(mainViewController, animated: true)

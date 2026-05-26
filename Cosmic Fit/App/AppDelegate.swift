@@ -46,12 +46,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let launchScreenVC = AnimatedLaunchScreenViewController()
         
-        // Check session synchronously-ish before routing (Keychain read is fast)
-        Task {
-            await CosmicFitAuthService.shared.checkSession()
-            await MainActor.run {
-                self.performLaunchRouting(launchScreenVC: launchScreenVC)
+        if needsAuthCheckForLaunchRouting {
+            Task {
+                await CosmicFitAuthService.shared.checkSession()
+                await MainActor.run {
+                    self.performLaunchRouting(launchScreenVC: launchScreenVC)
+                }
             }
+        } else {
+            performLaunchRouting(launchScreenVC: launchScreenVC)
         }
         
         setupGlobalAppearance()
@@ -72,6 +75,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return AuthDeepLinkRouter.shared.handle(url: url)
     }
     
+    private var needsAuthCheckForLaunchRouting: Bool {
+        UserProfileStorage.shared.hasCompleteUserProfile()
+            && !UserProfileStorage.shared.isOnboardingPendingAuth()
+    }
+
     private func performLaunchRouting(launchScreenVC: AnimatedLaunchScreenViewController) {
         if UserProfileStorage.shared.hasCompleteUserProfile() {
             if UserProfileStorage.shared.isOnboardingPendingAuth() {

@@ -479,7 +479,7 @@ struct NatalChartCalculator {
     }
     
     // Calculate transits to natal chart
-    static func calculateTransits(natalChart: NatalChart, date: Date = Date()) -> [TransitAspect] {
+    static func calculateTransits(natalChart: NatalChart, date: Date = Date(), overrideDeviceLocation: CLLocationCoordinate2D? = nil) -> [TransitAspect] {
         let currentDate = date
         let currentJulianDay = JulianDateCalculator.calculateJulianDate(from: currentDate)
         var transitAspects: [TransitAspect] = []
@@ -492,7 +492,7 @@ struct NatalChartCalculator {
         let transitPositions = calculateCurrentPlanetaryPositions(julianDay: currentJulianDay)
         
         // Get device location for Moon and angle transits
-        let deviceLocation = LocationManager.shared.deviceLocation
+        let deviceLocation = overrideDeviceLocation ?? LocationManager.shared.deviceLocation
         if let deviceCoord = deviceLocation {
             DebugLogger.info("📍 Using device location for Moon/Angle transits: \(String(format: "%.6f", deviceCoord.latitude)), \(String(format: "%.6f", deviceCoord.longitude))")
         } else {

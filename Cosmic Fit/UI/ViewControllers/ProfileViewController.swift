@@ -42,6 +42,7 @@ class ProfileViewController: UIViewController {
     private let enginePicker = UIPickerView()
     private let engineFootnoteLabel = UILabel()
     private let forceRefreshButton = UIButton(type: .system)
+    private var isDevForceRefreshInProgress = false
     #endif
     private let signOutButton = UIButton(type: .system)
     private let deleteProfileButton = UIButton(type: .system)
@@ -91,6 +92,19 @@ class ProfileViewController: UIViewController {
             name: .cosmicFitAuthStateChanged,
             object: nil
         )
+
+        #if DEBUG
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleDevForceRefreshStateChanged(_:)),
+            name: .devForceRefreshStateChanged,
+            object: nil
+        )
+        #endif
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -628,17 +642,27 @@ class ProfileViewController: UIViewController {
     }
 
     @objc private func forceRefreshTapped() {
+        guard !isDevForceRefreshInProgress else { return }
+        isDevForceRefreshInProgress = true
         forceRefreshButton.isEnabled = false
         forceRefreshButton.setTitle("Refreshing…", for: .normal)
 
         BlueprintStorage.shared.delete()
 
         NotificationCenter.default.post(name: .devForceRefreshRequested, object: nil)
+    }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-            guard let self else { return }
-            self.forceRefreshButton.setTitle("⟳ Force refresh all data", for: .normal)
-            self.forceRefreshButton.isEnabled = true
+    @objc private func handleDevForceRefreshStateChanged(_ notification: Notification) {
+        guard let isRefreshing = notification.userInfo?["isRefreshing"] as? Bool else { return }
+        isDevForceRefreshInProgress = isRefreshing
+        if isRefreshing {
+            forceRefreshButton.isEnabled = false
+            forceRefreshButton.setTitle("Refreshing…", for: .normal)
+        } else {
+            forceRefreshButton.setTitle("⟳ Force refresh all data", for: .normal)
+            forceRefreshButton.isEnabled = true
+            view.isUserInteractionEnabled = true
+            scrollView.isUserInteractionEnabled = true
         }
     }
     #endif

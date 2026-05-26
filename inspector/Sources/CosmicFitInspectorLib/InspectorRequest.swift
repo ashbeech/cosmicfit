@@ -30,4 +30,8 @@ public struct InspectOptions: Codable {
     public let resetTarotHistory: Bool?
     /// Daily Fit engine preset slug (e.g. `production`, `legacy_baseline`).
     public let dailyFitEngineId: String?
+    /// Device location latitude for transit angle calculations (mirrors app GPS).
+    public let deviceLatitude: Double?
+    /// Device location longitude for transit angle calculations (mirrors app GPS).
+    public let deviceLongitude: Double?
 }

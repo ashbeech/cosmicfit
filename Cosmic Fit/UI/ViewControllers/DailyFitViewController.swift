@@ -157,6 +157,16 @@ class DailyFitViewController: UIViewController {
     
     private var isCardRevealed = false
     private var cardBackImageView = UIImageView()
+    /// Iridescent motion-driven sheen on the card back. Set up at view
+    /// init time and given its mask image immediately so the holographic
+    /// effect is present from the very first frame the card back is
+    /// visible (no asymmetric "image first, sheen later" appearance).
+    private let cardBackSheenView = MotionSheenView()
+    /// Iridescent motion-driven sheen on the revealed card front. Mask
+    /// image is set in `loadTarotCardImage(for:)` in lockstep with the
+    /// imageView's `image` property so card art and sheen always paint
+    /// in unison.
+    private let cardFrontSheenView = MotionSheenView()
     private var tapToRevealLabel = UILabel()
     /// Vertical band from the card foot to the **visible** bottom of the scroll view — caption is centred in the on-screen gap (not mixed `view`/`contentView` space, which skewed the label toward the tab bar).
     private let tapToRevealVerticalAlignGuide = UILayoutGuide()
@@ -432,11 +442,18 @@ class DailyFitViewController: UIViewController {
         cardBackImageView.translatesAutoresizingMaskIntoConstraints = false
         cardBackImageView.contentMode = .scaleAspectFit
         cardBackImageView.clipsToBounds = false
-        cardBackImageView.image = UIImage(named: "CardBacks")
+        let cardBackImage = UIImage(named: "CardBacks")
+        cardBackImageView.image = cardBackImage
         cardBackImageView.layer.cornerRadius = 24
         cardBackImageView.isUserInteractionEnabled = true
         
         tarotCardContainerView.addSubview(cardBackImageView)
+
+        // Iridescent sheen for the card back. Subview of the imageView so
+        // it inherits the 3D flip transform applied during reveal, and is
+        // given its mask image immediately so it paints in unison with
+        // the back artwork on first appearance.
+        attachSheen(cardBackSheenView, to: cardBackImageView, image: cardBackImage)
         
         // UNREVEALED STATE: Tap to reveal label
         tapToRevealLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -695,8 +712,39 @@ class DailyFitViewController: UIViewController {
             tarotCardImageView.bottomAnchor.constraint(equalTo: tarotCardContainerView.bottomAnchor),
         ])
 
+        // Iridescent sheen overlay for the revealed card front. Added now
+        // so the layer hierarchy and motion subscription are ready before
+        // any image arrives — the mask image is supplied later in
+        // `loadTarotCardImage(for:)` at the same instant the imageView's
+        // `image` is set, guaranteeing card art and sheen paint together.
+        attachSheen(cardFrontSheenView, to: tarotCardImageView, image: nil)
+
         // Start the runes animation
         scrollingRunesBackground.startAnimating()
+    }
+
+    // MARK: - Motion sheen helpers
+
+    /// Adds a `MotionSheenView` as a subview of `host`, pinned to its
+    /// bounds so it inherits both layout and any 3D transforms applied
+    /// during the card flip. Sets the mask image right away so the
+    /// iridescent effect paints in unison with the card art rather than
+    /// arriving a frame late (which would visually unmoor the sheen
+    /// from the physical card).
+    private func attachSheen(_ sheen: MotionSheenView, to host: UIImageView, image: UIImage?) {
+        guard sheen.superview !== host else {
+            sheen.cardImage = image
+            return
+        }
+        sheen.translatesAutoresizingMaskIntoConstraints = false
+        host.addSubview(sheen)
+        NSLayoutConstraint.activate([
+            sheen.topAnchor.constraint(equalTo: host.topAnchor),
+            sheen.leadingAnchor.constraint(equalTo: host.leadingAnchor),
+            sheen.trailingAnchor.constraint(equalTo: host.trailingAnchor),
+            sheen.bottomAnchor.constraint(equalTo: host.bottomAnchor)
+        ])
+        sheen.cardImage = image
     }
 
     /// Glow tint: lightest of the day's Style Palette picks (Lab *L*), softened for a halo on dark UI.
@@ -1896,19 +1944,31 @@ class DailyFitViewController: UIViewController {
         (vibrancyTrack as? GradientTrackView)?.updateColors([UIColor.gray, accentColor])
     }
 
-    /// Snap a 0–1 value to the nearest of three stops: 0.0 (cool), 0.5 (mixed), 1.0 (warm).
-    private static func snapToThreePositions(_ value: Double) -> Double {
-        if value < 0.25 { return 0.0 }
-        if value > 0.75 { return 1.0 }
+    /// Snap a 0–1 value to Cool (0.0) / Mixed (0.5) / Warm (1.0) using equal tertiles.
+    /// Boundaries: [0, 1/3) = Cool, [1/3, 2/3] = Mixed, (2/3, 1] = Warm.
+    /// Used for both personal displayPosition and legacy absolute metal tone.
+    static func snapMetalToThreePositions(_ value: Double) -> Double {
+        if value < 1.0 / 3.0 { return 0.0 }
+        if value > 2.0 / 3.0 { return 1.0 }
         return 0.5
     }
 
     private func refreshDiamondScalePositions() {
         guard let payload = dailyFitPayload else { return }
-        updateDiamondScale(constraint: &vibrancyIndicatorConstraint, indicator: vibrancyIndicator, track: vibrancyTrack, value: payload.vibrancy)
-        updateDiamondScale(constraint: &contrastIndicatorConstraint, indicator: contrastIndicator, track: contrastTrack, value: payload.contrast)
-        let snappedMetal = Self.snapToThreePositions(payload.metalTone)
-        updateDiamondScale(constraint: &metalToneIndicatorConstraint, indicator: metalToneIndicator, track: metalToneTrack, value: snappedMetal)
+
+        if let sp = payload.scalePresentation {
+            updateDiamondScale(constraint: &vibrancyIndicatorConstraint, indicator: vibrancyIndicator, track: vibrancyTrack, value: sp.vibrancy.displayPosition)
+            updateDiamondScale(constraint: &contrastIndicatorConstraint, indicator: contrastIndicator, track: contrastTrack, value: sp.contrast.displayPosition)
+            let snappedMetal = Self.snapMetalToThreePositions(sp.metalTone.displayPosition)
+            updateDiamondScale(constraint: &metalToneIndicatorConstraint, indicator: metalToneIndicator, track: metalToneTrack, value: snappedMetal)
+        } else {
+            // Legacy fallback: absolute positioning, same tertile snap
+            updateDiamondScale(constraint: &vibrancyIndicatorConstraint, indicator: vibrancyIndicator, track: vibrancyTrack, value: payload.vibrancy)
+            updateDiamondScale(constraint: &contrastIndicatorConstraint, indicator: contrastIndicator, track: contrastTrack, value: payload.contrast)
+            let snappedMetal = Self.snapMetalToThreePositions(payload.metalTone)
+            updateDiamondScale(constraint: &metalToneIndicatorConstraint, indicator: metalToneIndicator, track: metalToneTrack, value: snappedMetal)
+        }
+
         updateSilhouetteSliders(with: payload.silhouetteProfile)
     }
 
@@ -1953,12 +2013,7 @@ class DailyFitViewController: UIViewController {
         let allHexes = payload.dailyPalette.allPaletteHexes
         colourPaletteContainer.configure(dailyPicks: payload.dailyPalette.colours, allPaletteHexes: allHexes)
 
-        let presentation: EssencePresentationDirective? = {
-            guard payload.dailyFitEngineId == DailyFitEngineRegistry.stage1ExperimentalId,
-                  payload.essenceProfile.chartAnchorScores != nil else { return nil }
-            return EssencePresentationDirective(showAnchorGhost: true)
-        }()
-        essenceTriangleView?.configure(with: payload.essenceProfile, presentation: presentation)
+        essenceTriangleView?.configure(with: payload.essenceProfile, presentation: nil)
 
         if let reflection = payload.styleEditVariant.wardrobeReflection {
             wardrobeReflectionLabel.text = reflection
@@ -2301,6 +2356,7 @@ class DailyFitViewController: UIViewController {
     private func loadTarotCardImage(for tarotCard: TarotCard?) {
         guard let tarotCard = tarotCard else {
             print("⚠️ No tarot card provided for image loading")
+            cardFrontSheenView.cardImage = nil
             return
         }
         
@@ -2309,7 +2365,13 @@ class DailyFitViewController: UIViewController {
         let imageName = tarotCard.imagePath.replacingOccurrences(of: "Cards/", with: "")
         
         if let image = UIImage(named: imageName) {
+            // CRITICAL: assign the sheen mask in the same synchronous beat
+            // as the imageView's image, so the card art and the iridescent
+            // sheen become visible together on the very next paint. Any
+            // gap here would let the image flash bare for a frame and
+            // destroy the illusion that the sheen is part of the card.
             tarotCardImageView.image = image
+            cardFrontSheenView.cardImage = image
             originalCardImage = image
             
             // Create blurred background version for the full-screen background
@@ -2388,14 +2450,23 @@ class DailyFitViewController: UIViewController {
         
         tarotCardImageView.backgroundColor = colour
         tarotCardImageView.image = nil
+        // No real card art = no sheen. The motion driver auto-pauses
+        // when no `MotionSheenView` has a non-nil `cardImage` and is in
+        // a window.
+        cardFrontSheenView.cardImage = nil
         
         // Create elegant text overlay
         createCardNameOverlay(for: card)
     }
     
     private func createCardNameOverlay(for card: TarotCard) {
-        // Remove any existing overlay labels
-        tarotCardImageView.subviews.forEach { $0.removeFromSuperview() }
+        // Remove any existing overlay labels — but preserve the sheen
+        // overlay so the holographic effect survives the fallback path
+        // (re-entering this code on subsequent loads must not orphan the
+        // sheen view).
+        tarotCardImageView.subviews
+            .filter { !($0 is MotionSheenView) }
+            .forEach { $0.removeFromSuperview() }
         
         let label = UILabel()
         label.text = card.displayName

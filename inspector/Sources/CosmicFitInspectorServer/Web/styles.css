@@ -108,6 +108,9 @@ body {
 }
 
 .date-input { width: 118px; font-variant-numeric: tabular-nums; }
+.profile-id-input { width: 260px; font-family: var(--mono, monospace); font-size: 12px; }
+.device-location-row { display: flex; gap: 6px; }
+.device-location-input { width: 120px; font-variant-numeric: tabular-nums; font-size: 12px; }
 
 .label-hint {
   font-size: 9px;

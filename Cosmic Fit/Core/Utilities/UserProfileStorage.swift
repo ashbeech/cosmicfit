@@ -232,4 +232,7 @@ extension Notification.Name {
 
     /// DEBUG: Posted to force-regenerate blueprint, clear daily vibes, and refresh all UI.
     static let devForceRefreshRequested = Notification.Name("devForceRefreshRequested")
+
+    /// DEBUG: Posted when dev force refresh starts/finishes; `userInfo["isRefreshing"]` is `Bool`.
+    static let devForceRefreshStateChanged = Notification.Name("devForceRefreshStateChanged")
 }

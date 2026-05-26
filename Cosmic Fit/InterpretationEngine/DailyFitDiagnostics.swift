@@ -50,6 +50,9 @@ struct DailyFitDiagnosticReport: Codable {
     let essenceProfile: StyleEssenceProfile
     let silhouetteTrace: SilhouetteDerivationTrace
 
+    // Personal scale envelope presentation (display remapping)
+    let personalScalePresentation: PersonalScalePresentation?
+
     // Calibration used
     let calibrationSnapshot: CalibrationSummary
 
@@ -57,6 +60,7 @@ struct DailyFitDiagnosticReport: Codable {
     let narrativeTrace: NarrativeTrace?
     let narrativeIntentTrace: NarrativeIntentTrace?
     let narrativeCoherenceTrace: NarrativeCoherenceTrace?
+    let narrativeBridgeTrace: NarrativeBridgeTrace?
 }
 
 // MARK: - Phase 3: Per-Input Energy Attribution
@@ -398,10 +402,12 @@ enum DailyFitDiagnostics {
                 finalAR: payload.silhouetteProfile.angularRounded,
                 finalSD: payload.silhouetteProfile.structuredDraped
             ),
+            personalScalePresentation: payload.scalePresentation,
             calibrationSnapshot: calSnap,
             narrativeTrace: narrativeTrace,
             narrativeIntentTrace: narrativeIntentTrace,
-            narrativeCoherenceTrace: narrativeCoherenceTrace
+            narrativeCoherenceTrace: narrativeCoherenceTrace,
+            narrativeBridgeTrace: s2Trace.narrativeBridgeTrace
         )
 
         return (payload, report)

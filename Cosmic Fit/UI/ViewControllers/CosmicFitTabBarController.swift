@@ -47,6 +47,12 @@ final class CosmicFitTabBarController: UITabBarController {
     
     // Track whether user manually navigated away from the Style Guide tab
     private var userHasManuallyNavigated = false
+    /// True while `setupViewControllers()` is rebuilding tab VCs; prevents delegate
+    /// side-effects (e.g. premature detail dismissal triggered by `shouldSelect`).
+    private var isReconfiguringTabs = false
+    #if DEBUG
+    private var isDevForceRefreshInProgress = false
+    #endif
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -441,20 +447,47 @@ final class CosmicFitTabBarController: UITabBarController {
 
     #if DEBUG
     @objc private func handleDevForceRefresh() {
-        print("🔄 [DEV] Force refresh requested — wiping caches and regenerating")
+        guard !isDevForceRefreshInProgress else {
+            print("ℹ️ [DEV] Force refresh ignored — refresh already in progress")
+            return
+        }
 
-        BlueprintStorage.bumpRemoteBlueprintPullEpoch()
-        BlueprintStorage.shared.delete()
-        DailyFitFrozenPayloadStorage.shared.removeAll()
-        dailyFitPayload = nil
+        isDevForceRefreshInProgress = true
+        NotificationCenter.default.post(
+            name: .devForceRefreshStateChanged,
+            object: nil,
+            userInfo: ["isRefreshing": true]
+        )
 
-        calculateCharts()
-        generateContent()
-        BlueprintStorage.bumpRemoteBlueprintPullEpoch()
+        Task { @MainActor in
+            defer {
+                isDevForceRefreshInProgress = false
+                NotificationCenter.default.post(
+                    name: .devForceRefreshStateChanged,
+                    object: nil,
+                    userInfo: ["isRefreshing": false]
+                )
+            }
 
-        setupViewControllers()
+            print("🔄 [DEV] Force refresh requested — wiping caches and regenerating")
 
-        print("✅ [DEV] Force refresh complete")
+            BlueprintStorage.bumpRemoteBlueprintPullEpoch()
+            BlueprintStorage.shared.delete()
+            DailyFitFrozenPayloadStorage.shared.removeAll()
+            dailyFitPayload = nil
+
+            // Yield between expensive phases so the profile detail UI can
+            // continue drawing and processing touches while refresh runs.
+            await Task.yield()
+            calculateCharts()
+            await Task.yield()
+            generateContent()
+            await Task.yield()
+            BlueprintStorage.bumpRemoteBlueprintPullEpoch()
+            setupViewControllers()
+
+            print("✅ [DEV] Force refresh complete")
+        }
     }
 
     @objc private func handleDailyFitEngineOverrideChanged() {
@@ -1010,14 +1043,37 @@ final class CosmicFitTabBarController: UITabBarController {
         )
         viewControllers.append(styleGuideVC)
         
+        // Capture the open detail VC before setting viewControllers, because
+        // UITabBarController's setter can strip manually-added children.
+        let openDetailVC = children.first(where: {
+            $0 is StyleGuideDetailViewController || $0 is GenericDetailViewController
+        })
+
+        isReconfiguringTabs = true
         self.viewControllers = viewControllers
+        isReconfiguringTabs = false
         
         if currentSelectedIndex < viewControllers.count {
             selectedIndex = currentSelectedIndex
         } else {
             selectedIndex = 0
         }
-        
+
+        // Re-adopt the detail VC if it was orphaned by the viewControllers setter.
+        if let detailVC = openDetailVC, detailVC.parent == nil {
+            addChild(detailVC)
+            detailVC.didMove(toParent: self)
+        }
+
+        // Ensure overlay z-order: dimming → detail container → system chrome.
+        if !detailContentContainer.isHidden {
+            if let dimming = dimmingView {
+                view.bringSubviewToFront(dimming)
+            }
+            view.bringSubviewToFront(detailContentContainer)
+            elevateSystemChromeAboveTabContent()
+        }
+
         DispatchQueue.main.async { [weak self] in
             self?.updateTabSelectionIndicator()
             #if DEBUG
@@ -1054,6 +1110,9 @@ final class CosmicFitTabBarController: UITabBarController {
 extension CosmicFitTabBarController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        // Don't dismiss detail or block selection during a programmatic tab rebuild.
+        guard !isReconfiguringTabs else { return true }
+
         // CRITICAL: Dismiss any open detail pages before tab switch
         if !detailContentContainer.isHidden {
             dismissDetailViewController(animated: false)

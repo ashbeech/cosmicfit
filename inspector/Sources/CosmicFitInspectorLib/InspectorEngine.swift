@@ -1,4 +1,5 @@
 import Foundation
+import CoreLocation
 
 public actor InspectorEngine {
 
@@ -123,7 +124,12 @@ public actor InspectorEngine {
         }
 
         let progChart = progressedChart ?? natalChart
-        let transits = NatalChartCalculator.calculateTransits(natalChart: natalChart, date: targetDate)
+        let fallbackDeviceLat = InspectorDefaults.defaultDeviceLatitude
+        let fallbackDeviceLon = InspectorDefaults.defaultDeviceLongitude
+        let deviceLat = request.options?.deviceLatitude ?? fallbackDeviceLat
+        let deviceLon = request.options?.deviceLongitude ?? fallbackDeviceLon
+        let deviceCoord = CLLocationCoordinate2D(latitude: deviceLat, longitude: deviceLon)
+        let transits = NatalChartCalculator.calculateTransits(natalChart: natalChart, date: targetDate, overrideDeviceLocation: deviceCoord)
         let julianDay = JulianDateCalculator.calculateJulianDate(from: targetDate)
         let moonPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: julianDay)
 

@@ -349,12 +349,7 @@ struct AstronomicalCalculator {
 #if canImport(CSwissEphemeris)
         
         print("Natal Chart House Cusps: Using Swiss Ephem")
-        // 1 · Tell Swiss Ephemeris where the .se1… files live
-        if let path = Bundle.main.resourcePath {
-            path.withCString { cStr in
-                swe_set_ephe_path(UnsafeMutablePointer(mutating: cStr))
-            }
-        }
+        // Ephemeris path is set once during SwissEphemerisBootstrap.initialise()
         
         // 2 · Prepare buffers
         var ascmc = [Double](repeating: 0.0, count: 10)   // ASC, MC, etc.

@@ -24,7 +24,7 @@ final class EssenceTriangleView: UIView {
     /// Branded div-star asset (same as Style Guide / menu dividers), not a geometric diamond.
     private let vertexStarViews: [UIImageView] = (0..<3).map { _ in UIImageView() }
     private var categoryLabels: [UILabel] = []
-    private var anchorLabels: [UILabel] = []
+    private var anchorGhostLabels: [(label: UILabel, entry: StyleEssenceScore)] = []
 
     // MARK: - Initialization
 
@@ -100,9 +100,9 @@ final class EssenceTriangleView: UIView {
 
     private func rebuildLabels() {
         categoryLabels.forEach { $0.removeFromSuperview() }
-        anchorLabels.forEach { $0.removeFromSuperview() }
+        anchorGhostLabels.map(\.label).forEach { $0.removeFromSuperview() }
         categoryLabels = []
-        anchorLabels = []
+        anchorGhostLabels = []
 
         guard let visible = profile?.visibleCategories else { return }
         for entry in visible {
@@ -125,28 +125,51 @@ final class EssenceTriangleView: UIView {
             categoryLabels.append(label)
         }
 
-        if presentation?.showAnchorGhost == true,
-           let anchorScores = profile?.chartAnchorScores {
-            let anchorTop3 = anchorScores.sorted { $0.score > $1.score }.prefix(3)
-            let weatherCategories = Set(visible.map(\.category))
-            for entry in anchorTop3 where !weatherCategories.contains(entry.category) {
-                let ghostSize = CosmicFitTheme.Typography.FontSizes.caption1 - 2
-                let label = UILabel()
-                label.font = CosmicFitTheme.Typography.dmSansFont(size: ghostSize, weight: .medium)
-                label.textColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.35)
-                label.textAlignment = .center
-                label.attributedText = NSAttributedString(
-                    string: entry.category.label,
-                    attributes: [
-                        .kern: 1.0 as CGFloat,
-                        .font: label.font!,
-                        .foregroundColor: label.textColor!
-                    ]
-                )
-                addSubview(label)
-                anchorLabels.append(label)
-            }
+        for entry in anchorGhostEntries(excludingWeather: visible) {
+            let ghostSize = CosmicFitTheme.Typography.FontSizes.caption1 - 2
+            let label = UILabel()
+            label.font = CosmicFitTheme.Typography.dmSansFont(size: ghostSize, weight: .medium)
+            label.textColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.35)
+            label.textAlignment = .center
+            label.attributedText = NSAttributedString(
+                string: entry.category.label,
+                attributes: [
+                    .kern: 1.0 as CGFloat,
+                    .font: label.font!,
+                    .foregroundColor: label.textColor!
+                ]
+            )
+            addSubview(label)
+            anchorGhostLabels.append((label: label, entry: entry))
         }
+    }
+
+    private func anchorTop3Entries() -> [StyleEssenceScore] {
+        guard let anchorScores = profile?.chartAnchorScores else { return [] }
+        return Array(anchorScores.sorted { $0.score > $1.score }.prefix(3))
+    }
+
+    private func anchorGhostEntries(excludingWeather weather: [StyleEssenceScore]) -> [StyleEssenceScore] {
+        guard presentation?.showAnchorGhost == true else { return [] }
+        let weatherCategories = Set(weather.map(\.category))
+        return anchorTop3Entries().filter { !weatherCategories.contains($0.category) }
+    }
+
+    private func radarPoint(
+        for entry: StyleEssenceScore,
+        centre: CGPoint,
+        maxRadius: CGFloat,
+        scale: Double,
+        minRadiusFraction: CGFloat
+    ) -> CGPoint {
+        let angle = CGFloat(entry.category.angle)
+        let normalised = entry.score * scale
+        let clampedNorm = max(CGFloat(normalised), minRadiusFraction)
+        let radius = clampedNorm * maxRadius
+        return CGPoint(
+            x: centre.x + cos(angle) * radius,
+            y: centre.y + sin(angle) * radius
+        )
     }
 
     // MARK: - Drawing
@@ -205,21 +228,18 @@ final class EssenceTriangleView: UIView {
         triangleLayer.path = triPath.cgPath
         triangleLayer.frame = bounds
 
-        if presentation?.showAnchorGhost == true,
-           let anchorScores = profile?.chartAnchorScores {
-            let anchorTop3 = anchorScores.sorted { $0.score > $1.score }.prefix(3)
+        if presentation?.showAnchorGhost == true {
+            let anchorTop3 = anchorTop3Entries()
             let anchorMax = anchorTop3.map(\.score).max() ?? 1.0
             let anchorScale = anchorMax > 0 ? 1.0 / anchorMax : 1.0
-            var anchorPoints: [CGPoint] = []
-            for entry in anchorTop3 {
-                let angle = CGFloat(entry.category.angle)
-                let normalised = entry.score * anchorScale
-                let clampedNorm = max(CGFloat(normalised), CGFloat(minRadiusFraction))
-                let radius = clampedNorm * maxRadius
-                anchorPoints.append(CGPoint(
-                    x: centre.x + cos(angle) * radius,
-                    y: centre.y + sin(angle) * radius
-                ))
+            let anchorPoints = anchorTop3.map {
+                radarPoint(
+                    for: $0,
+                    centre: centre,
+                    maxRadius: maxRadius,
+                    scale: anchorScale,
+                    minRadiusFraction: minRadiusFraction
+                )
             }
             if anchorPoints.count == 3 {
                 let anchorPath = UIBezierPath()
@@ -232,132 +252,219 @@ final class EssenceTriangleView: UIView {
             } else {
                 anchorTriangleLayer.path = nil
             }
+
+            let ghostEntries = anchorGhostEntries(excludingWeather: visible)
+            let ghostPoints = ghostEntries.map {
+                radarPoint(
+                    for: $0,
+                    centre: centre,
+                    maxRadius: maxRadius,
+                    scale: anchorScale,
+                    minRadiusFraction: minRadiusFraction
+                )
+            }
+            positionLabels(
+                visible: visible,
+                weatherPoints: weatherPoints,
+                ghostEntries: ghostEntries,
+                ghostPoints: ghostPoints,
+                anchorPoints: anchorPoints.count == 3 ? anchorPoints : [],
+                centre: centre
+            )
         } else {
             anchorTriangleLayer.path = nil
+            positionLabels(
+                visible: visible,
+                weatherPoints: weatherPoints,
+                ghostEntries: [],
+                ghostPoints: [],
+                anchorPoints: [],
+                centre: centre
+            )
         }
-
-        positionLabels(visible: visible, points: weatherPoints, centre: centre, maxRadius: maxRadius)
     }
 
     // MARK: - Adaptive Label Placement
 
     private func positionLabels(
         visible: [StyleEssenceScore],
-        points: [CGPoint],
-        centre: CGPoint,
-        maxRadius: CGFloat
+        weatherPoints: [CGPoint],
+        ghostEntries: [StyleEssenceScore],
+        ghostPoints: [CGPoint],
+        anchorPoints: [CGPoint],
+        centre: CGPoint
     ) {
-        guard points.count == 3 else { return }
+        guard weatherPoints.count == 3 else { return }
 
-        let centroid = CGPoint(
-            x: (points[0].x + points[1].x + points[2].x) / 3.0,
-            y: (points[0].y + points[1].y + points[2].y) / 3.0
+        let weatherCentroid = CGPoint(
+            x: (weatherPoints[0].x + weatherPoints[1].x + weatherPoints[2].x) / 3.0,
+            y: (weatherPoints[0].y + weatherPoints[1].y + weatherPoints[2].y) / 3.0
         )
 
         let starHalf: CGFloat = 10
         let padding: CGFloat = 6
         let lineBuffer: CGFloat = 4
-
-        let segments: [(CGPoint, CGPoint)] = [
-            (points[0], points[1]),
-            (points[1], points[2]),
-            (points[2], points[0]),
-            (centre, points[0]),
-            (centre, points[1]),
-            (centre, points[2])
-        ]
-
         let starSize: CGFloat = 20
-        let starRects = points.map { p in
-            CGRect(x: p.x - starSize / 2, y: p.y - starSize / 2,
-                   width: starSize, height: starSize)
+
+        var avoidanceSegments: [(CGPoint, CGPoint)] = [
+            (weatherPoints[0], weatherPoints[1]),
+            (weatherPoints[1], weatherPoints[2]),
+            (weatherPoints[2], weatherPoints[0])
+        ]
+        for point in weatherPoints {
+            avoidanceSegments.append((centre, point))
         }
+        if anchorPoints.count == 3 {
+            avoidanceSegments.append(contentsOf: [
+                (anchorPoints[0], anchorPoints[1]),
+                (anchorPoints[1], anchorPoints[2]),
+                (anchorPoints[2], anchorPoints[0])
+            ])
+        }
+        for point in ghostPoints {
+            avoidanceSegments.append((centre, point))
+        }
+
+        let starRects = weatherPoints.map { point in
+            CGRect(
+                x: point.x - starSize / 2,
+                y: point.y - starSize / 2,
+                width: starSize,
+                height: starSize
+            )
+        }
+
+        var placedRects: [CGRect] = []
+
+        for index in visible.indices where index < categoryLabels.count {
+            let label = categoryLabels[index]
+            let point = weatherPoints[index]
+            let placedRect = placeLabel(
+                label,
+                atVertex: point,
+                outwardFrom: weatherCentroid,
+                starHalf: starHalf,
+                padding: padding,
+                lineBuffer: lineBuffer,
+                segments: avoidanceSegments,
+                starRects: starRects,
+                placedRects: placedRects
+            )
+            placedRects.append(placedRect)
+        }
+
+        guard ghostEntries.count == ghostPoints.count,
+              ghostEntries.count == anchorGhostLabels.count else { return }
+
+        for (index, ghost) in anchorGhostLabels.enumerated() {
+            guard ghost.entry.category == ghostEntries[index].category else { continue }
+            let point = ghostPoints[index]
+            let placedRect = placeLabel(
+                ghost.label,
+                atVertex: point,
+                outwardFrom: centre,
+                starHalf: 0,
+                padding: padding,
+                lineBuffer: lineBuffer,
+                segments: avoidanceSegments,
+                starRects: starRects,
+                placedRects: placedRects
+            )
+            placedRects.append(placedRect)
+        }
+    }
+
+    @discardableResult
+    private func placeLabel(
+        _ label: UILabel,
+        atVertex point: CGPoint,
+        outwardFrom reference: CGPoint,
+        starHalf: CGFloat,
+        padding: CGFloat,
+        lineBuffer: CGFloat,
+        segments: [(CGPoint, CGPoint)],
+        starRects: [CGRect],
+        placedRects: [CGRect]
+    ) -> CGRect {
+        label.sizeToFit()
+
+        let halfW = label.bounds.width / 2
+        let halfH = label.bounds.height / 2
+
+        var outDx = point.x - reference.x
+        var outDy = point.y - reference.y
+        let outLen = hypot(outDx, outDy)
+        if outLen > 0.001 { outDx /= outLen; outDy /= outLen }
+        let preferredAngle = atan2(outDy, outDx)
 
         let candidateCount = 24
         let step = (2 * CGFloat.pi) / CGFloat(candidateCount)
-        var placedRects: [CGRect] = []
 
-        for (index, entry) in visible.enumerated() where index < categoryLabels.count {
-            let label = categoryLabels[index]
-            label.sizeToFit()
+        var bestCenter = CGPoint(
+            x: point.x + outDx * (starHalf + padding + halfW),
+            y: point.y + outDy * (starHalf + padding + halfH)
+        )
+        var bestPenalty: CGFloat = .greatestFiniteMagnitude
 
-            let point = points[index]
-            let halfW = label.bounds.width / 2
-            let halfH = label.bounds.height / 2
+        for i in 0..<candidateCount {
+            let angle = preferredAngle + CGFloat(i) * step
+            let cosA = cos(angle)
+            let sinA = sin(angle)
+            let absCos = abs(cosA)
+            let absSin = abs(sinA)
 
-            var outDx = point.x - centroid.x
-            var outDy = point.y - centroid.y
-            let outLen = hypot(outDx, outDy)
-            if outLen > 0.001 { outDx /= outLen; outDy /= outLen }
-            let preferredAngle = atan2(outDy, outDx)
+            let dFromX = absCos > 0.01
+                ? (starHalf + halfW + padding) / absCos
+                : CGFloat.greatestFiniteMagnitude
+            let dFromY = absSin > 0.01
+                ? (starHalf + halfH + padding) / absSin
+                : CGFloat.greatestFiniteMagnitude
+            let clearance = min(dFromX, dFromY)
 
-            var bestCenter = CGPoint(x: point.x + outDx * (starHalf + padding + halfW),
-                                     y: point.y + outDy * (starHalf + padding + halfH))
-            var bestPenalty: CGFloat = .greatestFiniteMagnitude
+            let cx = point.x + cosA * clearance
+            let cy = point.y + sinA * clearance
+            let candidateRect = CGRect(
+                x: cx - halfW,
+                y: cy - halfH,
+                width: halfW * 2,
+                height: halfH * 2
+            )
 
-            for i in 0..<candidateCount {
-                let angle = preferredAngle + CGFloat(i) * step
-                let cosA = cos(angle)
-                let sinA = sin(angle)
-                let absCos = abs(cosA)
-                let absSin = abs(sinA)
+            var penalty: CGFloat = 0
 
-                let dFromX = absCos > 0.01
-                    ? (starHalf + halfW + padding) / absCos
-                    : CGFloat.greatestFiniteMagnitude
-                let dFromY = absSin > 0.01
-                    ? (starHalf + halfH + padding) / absSin
-                    : CGFloat.greatestFiniteMagnitude
-                let clearance = min(dFromX, dFromY)
-
-                let cx = point.x + cosA * clearance
-                let cy = point.y + sinA * clearance
-                let candidateRect = CGRect(x: cx - halfW, y: cy - halfH,
-                                           width: halfW * 2, height: halfH * 2)
-
-                var penalty: CGFloat = 0
-
-                if candidateRect.minX < 2 || candidateRect.maxX > bounds.width - 2 ||
-                   candidateRect.minY < 2 || candidateRect.maxY > bounds.height - 2 {
-                    penalty += 10000
-                }
-
-                for sr in starRects where candidateRect.intersects(sr) {
-                    penalty += 500
-                }
-
-                let inflated = candidateRect.insetBy(dx: -lineBuffer, dy: -lineBuffer)
-                for seg in segments where Self.rectIntersectsSegment(inflated, seg.0, seg.1) {
-                    penalty += 200
-                }
-
-                let labelBuffer = candidateRect.insetBy(dx: -3, dy: -3)
-                for pr in placedRects where labelBuffer.intersects(pr) {
-                    penalty += 300
-                }
-
-                let wrappedDiff = min(CGFloat(i) * step, 2 * .pi - CGFloat(i) * step)
-                penalty += wrappedDiff * 10
-
-                if penalty < bestPenalty {
-                    bestPenalty = penalty
-                    bestCenter = CGPoint(x: cx, y: cy)
-                }
+            if candidateRect.minX < 2 || candidateRect.maxX > bounds.width - 2 ||
+               candidateRect.minY < 2 || candidateRect.maxY > bounds.height - 2 {
+                penalty += 10000
             }
 
-            let lx = max(halfW + 2, min(bounds.width - halfW - 2, bestCenter.x))
-            let ly = max(halfH + 2, min(bounds.height - halfH - 2, bestCenter.y))
-            label.center = CGPoint(x: lx, y: ly)
+            for starRect in starRects where candidateRect.intersects(starRect) {
+                penalty += 500
+            }
 
-            placedRects.append(CGRect(x: lx - halfW, y: ly - halfH,
-                                      width: halfW * 2, height: halfH * 2))
+            let inflated = candidateRect.insetBy(dx: -lineBuffer, dy: -lineBuffer)
+            for segment in segments where Self.rectIntersectsSegment(inflated, segment.0, segment.1) {
+                penalty += 200
+            }
 
-            if index < anchorLabels.count {
-                let ghost = anchorLabels[index]
-                ghost.sizeToFit()
-                ghost.center = CGPoint(x: lx, y: ly + halfH + 10)
+            let labelBuffer = candidateRect.insetBy(dx: -3, dy: -3)
+            for placedRect in placedRects where labelBuffer.intersects(placedRect) {
+                penalty += 800
+            }
+
+            let wrappedDiff = min(CGFloat(i) * step, 2 * .pi - CGFloat(i) * step)
+            penalty += wrappedDiff * 10
+
+            if penalty < bestPenalty {
+                bestPenalty = penalty
+                bestCenter = CGPoint(x: cx, y: cy)
             }
         }
+
+        let lx = max(halfW + 2, min(bounds.width - halfW - 2, bestCenter.x))
+        let ly = max(halfH + 2, min(bounds.height - halfH - 2, bestCenter.y))
+        label.center = CGPoint(x: lx, y: ly)
+
+        return CGRect(x: lx - halfW, y: ly - halfH, width: halfW * 2, height: halfH * 2)
     }
 
     // MARK: - Geometry Helpers

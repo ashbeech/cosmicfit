@@ -520,3 +520,197 @@ struct DailyNarrative14DayValidation_Tests {
         }
     }
 }
+
+// MARK: - Personal Scale Envelope Integration (§10.2)
+
+@Suite
+struct PersonalScaleEnvelope_Integration_Tests {
+
+    // MARK: I1 — generatePayload includes scalePresentation
+
+    @Test("I1: generatePayload includes scalePresentation — non-nil, three scales")
+    func payloadHasScalePresentation() {
+        let date = SkyForwardV2Support.date(year: 2026, month: 5, day: 23)
+        let payload = SkyForwardV2Support.generateBriarPayload(for: date)
+        let sp = payload.scalePresentation
+        #expect(sp != nil, "scalePresentation must be populated on new payloads")
+        #expect(sp?.vibrancy.kind == .vibrancy)
+        #expect(sp?.contrast.kind == .contrast)
+        #expect(sp?.metalTone.kind == .metalTone)
+        #expect(sp?.vibrancy.value == payload.vibrancy)
+        #expect(sp?.contrast.value == payload.contrast)
+        #expect(sp?.metalTone.value == payload.metalTone)
+    }
+
+    // MARK: I4 — Metal tone: structural capability + pipeline integration
+
+    @Test("I4a: All blueprint configurations produce non-degenerate metal envelope (all 3 positions reachable)")
+    func metalEnvelopeStructuralCapability() {
+        // For any non-degenerate envelope, displayPosition spans [0, 1] by definition
+        // (value CAN equal floor → dp=0, value CAN equal ceiling → dp=1).
+        // With tertile snap, dp < 1/3 → Cool, dp > 2/3 → Warm, else Mixed.
+        // So all 3 positions are reachable IFF envelope is non-degenerate (width > 0).
+        // We verify this for varied user profiles: warm/cool/neutral + different metal sets.
+        let cal = SkyForwardV2Support.stage1Calibration
+
+        func makeBlueprint(temperature: Temperature, metals: [String]) -> CosmicBlueprint {
+            func colour(_ name: String, _ hex: String, _ role: ColourRole) -> BlueprintColour {
+                BlueprintColour(name: name, hexValue: hex, role: role,
+                                provenance: .v4Template(family: "Test", band: role.rawValue, index: 0))
+            }
+            let palette = PaletteSection(
+                neutrals: [colour("Grey", "#808080", .neutral)],
+                coreColours: [colour("Navy", "#000080", .core)],
+                accentColours: [colour("Teal", "#008080", .accent)],
+                supportColours: nil,
+                family: .trueWinter, cluster: .deepCoolControlled,
+                variables: DerivedVariables(
+                    depth: .medium, temperature: temperature,
+                    saturation: .muted, contrast: .medium, surface: .structured
+                ),
+                secondaryPull: nil, overrideFlags: OverrideFlags(), narrativeText: ""
+            )
+            return CosmicBlueprint(
+                userInfo: BlueprintUserInfo(birthDate: Date(timeIntervalSince1970: 0),
+                                           birthLocation: "Test", generationDate: Date()),
+                styleCore: StyleCoreSection(narrativeText: ""),
+                textures: TexturesSection(goodText: "", badText: "", sweetSpotText: "",
+                                          recommendedTextures: [], avoidTextures: [], sweetSpotKeywords: []),
+                palette: palette,
+                occasions: OccasionsSection(workText: "", intimateText: "", dailyText: ""),
+                hardware: HardwareSection(metalsText: "", stonesText: "", tipText: "",
+                                          recommendedMetals: metals, recommendedStones: []),
+                code: CodeSection(leanInto: [], avoid: [], consider: []),
+                accessory: AccessorySection(paragraphs: []),
+                pattern: PatternSection(narrativeText: "", tipText: "",
+                                        recommendedPatterns: [], avoidPatterns: []),
+                generatedAt: Date(), engineVersion: "4.7"
+            )
+        }
+
+        let configs: [(Temperature, [String], String)] = [
+            (.cool, ["silver", "platinum"], "cool+all-cool-metals"),
+            (.cool, ["gold", "brass"], "cool+all-warm-metals"),
+            (.neutral, ["gold", "silver"], "neutral+mixed-metals"),
+            (.neutral, [], "neutral+no-metals"),
+            (.warm, ["gold", "brass", "copper"], "warm+all-warm-metals"),
+            (.warm, ["silver"], "warm+cool-metal"),
+        ]
+
+        for (temp, metals, label) in configs {
+            let bp = makeBlueprint(temperature: temp, metals: metals)
+            let env = PersonalScaleEnvelopeCalculator.makePresentation(
+                blueprint: bp, calibration: cal, mode: .stage1Experimental,
+                vibrancy: 0.5, contrast: 0.5, metalTone: 0.5
+            ).metalTone
+
+            let width = env.ceiling - env.floor
+            #expect(width > 0.001,
+                    "Metal envelope must be non-degenerate for \(label); width=\(String(format: "%.3f", width))")
+        }
+    }
+
+    @Test("I4b: Extreme metal inputs produce all 3 snap positions (Cool/Mixed/Warm)")
+    func metalExtremeInputsReachAllThreeSnaps() {
+        let cal = SkyForwardV2Support.stage1Calibration
+        let bp = SkyForwardV2Support.briarBlueprint
+        let env = PersonalScaleEnvelopeCalculator.makePresentation(
+            blueprint: bp, calibration: cal, mode: .stage1Experimental,
+            vibrancy: 0.5, contrast: 0.5, metalTone: 0.5
+        ).metalTone
+
+        // Value at floor → displayPosition = 0 → Cool
+        let dpFloor = PersonalScaleEnvelopeCalculator.computeDisplayPosition(
+            value: env.floor, floor: env.floor, ceiling: env.ceiling
+        )
+        #expect(DailyFitViewController.snapMetalToThreePositions(dpFloor) == 0.0,
+                "Floor value must snap to Cool")
+
+        // Value at ceiling → displayPosition = 1 → Warm
+        let dpCeiling = PersonalScaleEnvelopeCalculator.computeDisplayPosition(
+            value: env.ceiling, floor: env.floor, ceiling: env.ceiling
+        )
+        #expect(DailyFitViewController.snapMetalToThreePositions(dpCeiling) == 1.0,
+                "Ceiling value must snap to Warm")
+
+        // Value at midpoint → displayPosition = 0.5 → Mixed
+        let midValue = (env.floor + env.ceiling) / 2.0
+        let dpMid = PersonalScaleEnvelopeCalculator.computeDisplayPosition(
+            value: midValue, floor: env.floor, ceiling: env.ceiling
+        )
+        #expect(DailyFitViewController.snapMetalToThreePositions(dpMid) == 0.5,
+                "Midpoint value must snap to Mixed")
+    }
+
+    @Test("I4c: Pipeline displayPosition used directly — 14-day Briar shows variation")
+    func metalPipelineDisplayPositionVariation() {
+        let start = SkyForwardV2Support.date(year: 2026, month: 5, day: 23)
+        var rawDisplayPositions: [Double] = []
+        var snappedPositions: Set<Double> = []
+
+        for offset in 0..<14 {
+            let date = start.addingTimeInterval(Double(offset) * 86400)
+            let payload = SkyForwardV2Support.generateBriarPayload(for: date)
+            guard let sp = payload.scalePresentation else {
+                Issue.record("scalePresentation must be non-nil")
+                return
+            }
+            let dp = sp.metalTone.displayPosition
+            rawDisplayPositions.append(dp)
+            snappedPositions.insert(DailyFitViewController.snapMetalToThreePositions(dp))
+        }
+
+        // The pipeline's own displayPosition must be used (not recomputed) and vary
+        let distinctRaw = Set(rawDisplayPositions.map { String(format: "%.3f", $0) }).count
+        #expect(distinctRaw >= 3,
+                "Raw metal displayPosition should show ≥3 distinct values over 14 days; got \(distinctRaw)")
+        // Snapped positions: ≥2 is valid (specific sky patterns determine which 3 appear)
+        #expect(snappedPositions.count >= 2,
+                "Snapped metal should show ≥2 distinct positions over 14 days; got \(snappedPositions)")
+    }
+
+    // MARK: I5 — Briar 14-day contrast ≥ 3 distinct display positions
+
+    @Test("I5: Briar 14-day contrast — at least 3 distinct display positions")
+    func briar14DayContrastDistinctPositions() {
+        let bp = SkyForwardV2Support.briarBlueprint
+        let cal = SkyForwardV2Support.stage1Calibration
+        let refEnv = PersonalScaleEnvelopeCalculator.makePresentation(
+            blueprint: bp, calibration: cal, mode: .stage1Experimental,
+            vibrancy: 0.5, contrast: 0.5, metalTone: 0.5
+        ).contrast
+        let start = SkyForwardV2Support.date(year: 2026, month: 5, day: 23)
+        var contrastPositions = Set<String>()
+        var minDisplay = 1.0
+        var maxDisplay = 0.0
+
+        for offset in 0..<14 {
+            let date = start.addingTimeInterval(Double(offset) * 86400)
+            let payload = SkyForwardV2Support.generateBriarPayload(for: date)
+            let dp = PersonalScaleEnvelopeCalculator.computeDisplayPosition(
+                value: payload.contrast, floor: refEnv.floor, ceiling: refEnv.ceiling
+            )
+            contrastPositions.insert(String(format: "%.3f", dp))
+            minDisplay = min(minDisplay, dp)
+            maxDisplay = max(maxDisplay, dp)
+        }
+
+        #expect(contrastPositions.count >= 3,
+                "Need ≥ 3 distinct contrast display positions; got \(contrastPositions.count)")
+        #expect(minDisplay < maxDisplay,
+                "Min display \(minDisplay) must be < max display \(maxDisplay)")
+    }
+
+    // MARK: Absolute values unchanged
+
+    @Test("Absolute vibrancy/contrast/metalTone unchanged — fingerprint stable for fixed inputs")
+    func absoluteValuesUnchanged() {
+        let date = SkyForwardV2Support.date(year: 2026, month: 5, day: 23)
+        let p1 = SkyForwardV2Support.generateBriarPayload(for: date)
+        let p2 = SkyForwardV2Support.generateBriarPayload(for: date)
+        #expect(p1.vibrancy == p2.vibrancy)
+        #expect(p1.contrast == p2.contrast)
+        #expect(p1.metalTone == p2.metalTone)
+        #expect(SkyForwardV2Support.payloadFingerprint(p1) == SkyForwardV2Support.payloadFingerprint(p2))
+    }
+}

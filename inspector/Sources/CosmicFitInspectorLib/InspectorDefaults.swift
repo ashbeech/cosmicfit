@@ -27,6 +27,11 @@ public enum InspectorDefaults {
         DailyFitEngineRegistry.allDescriptors.count
     }
 
+    // Temporary parity default: match test device GPS from app logs.
+    // Can be removed once inspector device-location controls are always supplied.
+    public static let defaultDeviceLatitude: Double = 53.91278879084434
+    public static let defaultDeviceLongitude: Double = -0.1653861958493343
+
     public static func dailyFitEngineListings() -> [DailyFitEngineListing] {
         DailyFitEngineRegistry.allDescriptors.map {
             DailyFitEngineListing(

@@ -504,4 +504,62 @@ struct DailyFitTypesTests {
         let decoded = try makeDecoder().decode(DailyFitPayload.self, from: data)
         #expect(decoded.narrativeBrief == nil)
     }
+
+    // MARK: I2 — PersonalScalePresentation Codable round-trip
+
+    @Test("I2: PersonalScalePresentation survives encode/decode round-trip")
+    func testScalePresentationCodableRoundTrip() throws {
+        let presentation = PersonalScalePresentation(
+            vibrancy: PersonalScaleEnvelope(
+                kind: .vibrancy, floor: 0.0, ceiling: 0.72,
+                baseline: 0.25, value: 0.4,
+                displayPosition: 0.556, baselinePosition: 0.347
+            ),
+            contrast: PersonalScaleEnvelope(
+                kind: .contrast, floor: 0.379, ceiling: 0.621,
+                baseline: 0.50, value: 0.55,
+                displayPosition: 0.707, baselinePosition: 0.5
+            ),
+            metalTone: PersonalScaleEnvelope(
+                kind: .metalTone, floor: 0.189, ceiling: 0.999,
+                baseline: 0.594, value: 0.6,
+                displayPosition: 0.507, baselinePosition: 0.5
+            )
+        )
+        let payload = DailyFitPayload.fixture()
+        let payloadWithPresentation = DailyFitPayload(
+            tarotCard: payload.tarotCard,
+            styleEditVariant: payload.styleEditVariant,
+            dailyPalette: payload.dailyPalette,
+            vibrancy: payload.vibrancy,
+            contrast: payload.contrast,
+            metalTone: payload.metalTone,
+            essenceProfile: payload.essenceProfile,
+            silhouetteProfile: payload.silhouetteProfile,
+            vibeBreakdown: payload.vibeBreakdown,
+            axes: payload.axes,
+            dominantTransits: payload.dominantTransits,
+            lunarContext: payload.lunarContext,
+            dailyTextures: payload.dailyTextures,
+            dailyPattern: payload.dailyPattern,
+            generatedAt: payload.generatedAt,
+            scalePresentation: presentation
+        )
+        let data = try makeEncoder().encode(payloadWithPresentation)
+        let decoded = try makeDecoder().decode(DailyFitPayload.self, from: data)
+        #expect(decoded.scalePresentation == presentation)
+        #expect(decoded.scalePresentation?.vibrancy.displayPosition == presentation.vibrancy.displayPosition)
+        #expect(decoded.scalePresentation?.contrast.floor == presentation.contrast.floor)
+        #expect(decoded.scalePresentation?.metalTone.baseline == presentation.metalTone.baseline)
+    }
+
+    // MARK: I3 — Legacy JSON decode without scalePresentation
+
+    @Test("I3: Legacy JSON without scalePresentation decodes as nil")
+    func testLegacyPayloadDecodesNilPresentation() throws {
+        let payload = DailyFitPayload.fixture()
+        let data = try makeEncoder().encode(payload)
+        let decoded = try makeDecoder().decode(DailyFitPayload.self, from: data)
+        #expect(decoded.scalePresentation == nil)
+    }
 }

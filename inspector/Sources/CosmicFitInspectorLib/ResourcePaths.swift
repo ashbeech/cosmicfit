@@ -51,6 +51,8 @@ public enum ResourcePaths {
             ("blueprint_narrative_cache.json", blueprintNarrativeCacheURL),
             ("TarotCards.json", tarotCardsURL),
             ("seas_18.se1", resourcesDirectory.appendingPathComponent("seas_18.se1")),
+            ("sepl_18.se1", resourcesDirectory.appendingPathComponent("sepl_18.se1")),
+            ("semo_18.se1", resourcesDirectory.appendingPathComponent("semo_18.se1")),
         ]
         for (label, url) in required {
             if !FileManager.default.fileExists(atPath: url.path) {

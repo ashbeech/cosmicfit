@@ -54,6 +54,10 @@ let state = {
 
 const COMPARE_MIN_DAYS = 2;
 const COMPARE_MAX_DAYS = 14;
+const DEFAULT_DEVICE_LOCATION = Object.freeze({
+  latitude: 53.91278879084434,
+  longitude: -0.1653861958493343,
+});
 let persistTimer = null;
 let restoringSession = false;
 
@@ -63,6 +67,19 @@ function defaultEngineId() {
 
 function currentDailyFitEngineId() {
   return document.getElementById("engine-select")?.value || defaultEngineId();
+}
+
+function applyDefaultDeviceLocationIfBlank() {
+  const latInput = document.getElementById("device-lat");
+  const lonInput = document.getElementById("device-lon");
+  if (!latInput || !lonInput) return;
+
+  if (!latInput.value.trim()) {
+    latInput.value = String(DEFAULT_DEVICE_LOCATION.latitude);
+  }
+  if (!lonInput.value.trim()) {
+    lonInput.value = String(DEFAULT_DEVICE_LOCATION.longitude);
+  }
 }
 
 function compareCacheKey(dateISO, engineId = currentDailyFitEngineId()) {
@@ -248,6 +265,9 @@ function readFormInputs() {
     compareEngineBId: compareEngineBId(),
     activeProfileId:
       document.getElementById("saved-profile-select").value || "",
+    profileId: document.getElementById("profile-id").value.trim() || "",
+    deviceLat: document.getElementById("device-lat").value.trim() || "",
+    deviceLon: document.getElementById("device-lon").value.trim() || "",
   };
 }
 
@@ -303,6 +323,10 @@ function applyFormInputs(
     clearResolvedLocation();
   }
 
+  document.getElementById("profile-id").value = inputs.profileId || "";
+  document.getElementById("device-lat").value = inputs.deviceLat || "";
+  document.getElementById("device-lon").value = inputs.deviceLon || "";
+
   if (!skipProfileSelect) {
     const sel = document.getElementById("saved-profile-select");
     const profileId = inputs.activeProfileId || "";
@@ -350,6 +374,7 @@ async function restoreSession() {
       inputs.compareEngineBId = fallbackB;
     }
     applyFormInputs(inputs, { persist: false, skipProfileSelect: true });
+    applyDefaultDeviceLocationIfBlank();
     reconcileCompareCacheWithEngine(inputs.dailyFitEngineId || defaultId);
     const sel = document.getElementById("saved-profile-select");
     const profileId = session.inputs.activeProfileId || "";
@@ -367,6 +392,7 @@ async function restoreSession() {
   if (!document.getElementById("target-date").value) {
     setTodayUTC();
   }
+  applyDefaultDeviceLocationIfBlank();
 }
 
 function clearSavedProfileSelection() {
@@ -434,7 +460,8 @@ async function syncSavedProfileNameAfterSubmit() {
 
   if (
     profile.name === displayName &&
-    profile.inputs?.birthDate === inputs.birthDate
+    profile.inputs?.birthDate === inputs.birthDate &&
+    (profile.inputs?.profileId || "") === (inputs.profileId || "")
   ) {
     return;
   }
@@ -766,6 +793,10 @@ function wireEvents() {
   document
     .getElementById("target-date")
     .addEventListener("input", schedulePersistSession);
+
+  document.getElementById("profile-id").addEventListener("input", () => {
+    schedulePersistSession();
+  });
 }
 
 function applyPreset() {
@@ -875,8 +906,9 @@ async function doSubmit(dateOnly = false) {
 function buildRequest({
   composeBlueprint = true,
   resetTarotHistory = false,
-  profileId = null,
 } = {}) {
+  applyDefaultDeviceLocationIfBlank();
+
   const birthDateISO = parseDateUK(document.getElementById("birth-date").value);
   if (!birthDateISO) {
     throw new Error("Birth date must be dd/mm/yyyy (e.g. 11/12/1984)");
@@ -899,6 +931,13 @@ function buildRequest({
     );
   }
 
+  const profileIdValue = document.getElementById("profile-id").value.trim() || null;
+
+  const deviceLatStr = document.getElementById("device-lat").value.trim();
+  const deviceLonStr = document.getElementById("device-lon").value.trim();
+  const deviceLatitude = deviceLatStr ? parseFloat(deviceLatStr) : null;
+  const deviceLongitude = deviceLonStr ? parseFloat(deviceLonStr) : null;
+
   return {
     preset: document.getElementById("preset-select").value,
     birth: {
@@ -915,8 +954,10 @@ function buildRequest({
       composeBlueprint,
       includeProgressed: true,
       resetTarotHistory,
-      profileId,
+      profileId: profileIdValue,
       dailyFitEngineId: currentDailyFitEngineId(),
+      deviceLatitude: Number.isFinite(deviceLatitude) ? deviceLatitude : null,
+      deviceLongitude: Number.isFinite(deviceLongitude) ? deviceLongitude : null,
     },
   };
 }
@@ -1823,13 +1864,18 @@ function buildTraceHtml(diag, blueprintDiag = null) {
   // Scale Traces
   html += accordion("Scale Derivation Traces", () => {
     let t = "";
-    for (const [label, trace] of [
-      ["Vibrancy", diag.vibrancyTrace],
-      ["Contrast", diag.contrastTrace],
-      ["Metal Tone", diag.metalToneTrace],
+    for (const [label, trace, envKey] of [
+      ["Vibrancy", diag.vibrancyTrace, "vibrancy"],
+      ["Contrast", diag.contrastTrace, "contrast"],
+      ["Metal Tone", diag.metalToneTrace, "metalTone"],
     ]) {
       if (trace) {
-        t += `<div style="margin:6px 0"><strong>${label}:</strong> baseline=${trace.blueprintBaseline.toFixed(3)}, modulation=${trace.modulation.toFixed(3)}, final=${trace.finalValue.toFixed(3)}</div>`;
+        t += `<div style="margin:6px 0"><strong>${label}:</strong> baseline=${trace.blueprintBaseline.toFixed(3)}, modulation=${trace.modulation.toFixed(3)}, final=${trace.finalValue.toFixed(3)}`;
+        const env = diag.personalScalePresentation?.[envKey];
+        if (env) {
+          t += ` | <em>personal:</em> floor=${env.floor.toFixed(3)}, ceiling=${env.ceiling.toFixed(3)}, display=${env.displayPosition.toFixed(3)}, baselineTick=${env.baselinePosition.toFixed(3)}`;
+        }
+        t += `</div>`;
       }
     }
     return t;
@@ -3208,6 +3254,9 @@ function markdownInputsBlock() {
     ["Latitude", document.getElementById("latitude").value],
     ["Longitude", document.getElementById("longitude").value],
     ["Timezone", document.getElementById("timezone-id").value],
+    ["Profile ID", document.getElementById("profile-id").value.trim() || "(auto)"],
+    ["Device location (lat)", document.getElementById("device-lat").value.trim() || "(none)"],
+    ["Device location (lon)", document.getElementById("device-lon").value.trim() || "(none)"],
     ["Daily Fit target (UK)", targetUK],
     ["Daily Fit target (ISO day)", targetISO || "—"],
   ];
@@ -3625,22 +3674,30 @@ function markdownTrace(diag, dayLabel = null) {
       );
   }
 
-  for (const [label, key] of [
-    ["Vibrancy", "vibrancyTrace"],
-    ["Contrast", "contrastTrace"],
-    ["Metal Tone", "metalToneTrace"],
+  for (const [label, key, envKey] of [
+    ["Vibrancy", "vibrancyTrace", "vibrancy"],
+    ["Contrast", "contrastTrace", "contrast"],
+    ["Metal Tone", "metalToneTrace", "metalTone"],
   ]) {
     const trace = diag[key];
     if (!trace) continue;
+    const rows = [
+      ["Blueprint baseline", trace.blueprintBaseline.toFixed(3)],
+      ["Modulation", trace.modulation.toFixed(3)],
+      ["Final (absolute)", trace.finalValue.toFixed(3)],
+    ];
+    const env = diag.personalScalePresentation?.[envKey];
+    if (env) {
+      rows.push(
+        ["Personal floor", env.floor.toFixed(3)],
+        ["Personal ceiling", env.ceiling.toFixed(3)],
+        ["Personal baseline", env.baseline.toFixed(3)],
+        ["Display position", env.displayPosition.toFixed(3)],
+        ["Baseline tick position", env.baselinePosition.toFixed(3)],
+      );
+    }
     md += `### ${label} Derivation\n\n`;
-    md += mdTable(
-      ["Field", "Value"],
-      [
-        ["Blueprint baseline", trace.blueprintBaseline.toFixed(3)],
-        ["Modulation", trace.modulation.toFixed(3)],
-        ["Final", trace.finalValue.toFixed(3)],
-      ],
-    );
+    md += mdTable(["Field", "Value"], rows);
   }
 
   if (diag.narrativeTrace) {
@@ -3683,6 +3740,21 @@ function markdownTrace(diag, dayLabel = null) {
       md += `- Tarot variant: ${nct.tarotVariantScored ? "scored (not rotation)" : "rotation fallback"}\n`;
       md += `- Coherence: ${nct.overallPass ? "pass" : "fail (palette statement slots: " + nct.paletteStatementSlotCount + ")"}\n`;
     }
+    md += "\n";
+  }
+
+  if (diag.narrativeBridgeTrace) {
+    md += "### Narrative bridge\n\n";
+    const bt = diag.narrativeBridgeTrace;
+    md += `- Selected: ${bt.selectedCardName} / ${bt.selectedVariantTitle} (variant index ${bt.selectedVariantIndex})\n`;
+    md += `- Variant similarity: ${bt.variantBridgeSimilarity.toFixed(2)}\n`;
+    md += `- Best similarity in pool: ${bt.bestVariantSimilarityInPool.toFixed(2)}\n`;
+    md += `- Pair margin: ${bt.bridgeMargin.toFixed(3)}\n`;
+    if (bt.contrastWeatherWins != null) {
+      md += `- Contrast weather wins: ${bt.contrastWeatherWins ? "yes" : "no"}\n`;
+    }
+    md += `- Bridge pass: ${bt.bridgePass ? "pass" : "fail"}\n`;
+    md += `- Funnel cards: ${bt.funnelCardCount}, pairs evaluated: ${bt.pairsEvaluated}\n`;
     md += "\n";
   }
 

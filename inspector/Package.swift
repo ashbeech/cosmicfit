@@ -20,6 +20,7 @@ let package = Package(
             path: "Sources/CosmicFitInspectorLib",
             linkerSettings: [
                 .linkedFramework("CoreLocation"),
+                .linkedFramework("MapKit"),
             ]
         ),
         .executableTarget(
