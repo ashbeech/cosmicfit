@@ -82,19 +82,17 @@ enum BirthInstantResolver {
 
 enum DailyFitDateResolver {
 
-    /// Anchor each yyyy-MM-dd target on local noon — stable "calendar day" instant.
-    /// Exception: if the target is today, use Date() to match the app's wall-clock
-    /// behavior (the app always passes Date() to calculateTransits).
+    /// Anchor each yyyy-MM-dd target on local noon in the device's current
+    /// timezone — a stable "calendar day" instant that mirrors the app's
+    /// `DailyFitSkyAnchor.instant(forCalendarDay:)`. Both the app and the
+    /// inspector use this same anchor so transit/lunar/snapshot inputs (and
+    /// therefore Daily Fit outputs) align byte-for-byte for any target day.
     static func targetInstant(from dateString: String) -> Date {
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd"
         df.timeZone = Calendar.current.timeZone
         df.locale = Locale(identifier: "en_US_POSIX")
         guard let day = df.date(from: dateString) else { return Date() }
-
-        if Calendar.current.isDateInToday(day) {
-            return Date()
-        }
 
         return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: day) ?? day
     }

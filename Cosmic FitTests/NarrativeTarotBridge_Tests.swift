@@ -18,7 +18,7 @@ struct NarrativeTarotBridge_Tests {
         defer { TarotCalibrationTestSupport.resetTrackersForProfile() }
 
         let date = SkyForwardV2Support.date(year: 2026, month: 5, day: 26)
-        let (_, trace, _, _, _) = generateBriarTrace(for: date)
+        let (_, trace, _, _, _, _) = generateBriarTrace(for: date)
 
         #expect(trace.narrativeBridgeTrace != nil)
         #expect(trace.narrativeBridgeTrace!.pairsEvaluated > 0)
@@ -37,7 +37,7 @@ struct NarrativeTarotBridge_Tests {
 
         for offset in 0..<14 {
             let date = start.addingTimeInterval(Double(offset) * 86400)
-            let (payload, trace, _, _, _) = generateBriarTrace(for: date)
+            let (payload, trace, _, _, _, _) = generateBriarTrace(for: date)
 
             guard let bridgeTrace = trace.narrativeBridgeTrace else { continue }
 
@@ -66,7 +66,7 @@ struct NarrativeTarotBridge_Tests {
         defer { TarotCalibrationTestSupport.resetTrackersForProfile() }
 
         let date = SkyForwardV2Support.date(year: 2026, month: 5, day: 26)
-        let (_, trace, _, _, _) = generateBriarTrace(for: date)
+        let (_, trace, _, _, _, _) = generateBriarTrace(for: date)
 
         guard let bt = trace.narrativeBridgeTrace else {
             Issue.record("Expected non-nil narrativeBridgeTrace")
@@ -101,7 +101,7 @@ struct NarrativeTarotBridge_Tests {
             mode: .standard,
             dailyFitEngineId: DailyFitEngineRegistry.productionId
         )
-        let (_, trace, narrativeTrace, _, _) = DailyFitPipeline.generateWithTrace(
+        let (_, trace, narrativeTrace, _, _, _) = DailyFitPipeline.generateWithTrace(
             blueprint: SkyForwardV2Support.briarBlueprint,
             snapshot: snapshot,
             calibration: DailyFitCalibration.default,
@@ -203,7 +203,7 @@ struct NarrativeTarotBridge_Tests {
                 mode: .stage1Experimental,
                 dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
             )
-            let (_, _, narrativeTrace, _, _) = DailyFitPipeline.generateWithTrace(
+            let (_, _, narrativeTrace, _, _, _) = DailyFitPipeline.generateWithTrace(
                 blueprint: SkyForwardV2Support.briarBlueprint,
                 snapshot: snapshot,
                 calibration: SkyForwardV2Support.stage1Calibration,
@@ -231,7 +231,7 @@ struct NarrativeTarotBridge_Tests {
         let start = SkyForwardV2Support.date(year: 2026, month: 5, day: 23)
         for offset in 0..<14 {
             let date = start.addingTimeInterval(Double(offset) * 86400)
-            let (_, trace, _, _, _) = generateBriarTrace(for: date)
+            let (_, trace, _, _, _, _) = generateBriarTrace(for: date)
             #expect(trace.narrativeBridgeTrace != nil,
                     "Day \(offset) missing bridge trace")
             #expect((trace.narrativeBridgeTrace?.pairsEvaluated ?? 0) > 0,
@@ -252,7 +252,7 @@ struct NarrativeTarotBridge_Tests {
 
         for offset in 0..<14 {
             let date = start.addingTimeInterval(Double(offset) * 86400)
-            let (payload, trace, narrativeTrace, intentTrace, _) = generateBriarTrace(for: date)
+            let (payload, trace, narrativeTrace, intentTrace, _, _) = generateBriarTrace(for: date)
             let bt = trace.narrativeBridgeTrace!
             let templateKey = narrativeTrace?.templateKey ?? "—"
             let contrastWW = bt.contrastWeatherWins.map { $0 ? "yes" : "no" } ?? "—"
@@ -291,7 +291,8 @@ struct NarrativeTarotBridge_Tests {
         BlueprintLensEngine.PayloadTrace,
         NarrativeTrace?,
         NarrativeIntentTrace?,
-        NarrativeCoherenceTrace?
+        NarrativeCoherenceTrace?,
+        EssenceConflictTrace?
     ) {
         let base = SkyForwardV2Support.date(year: 2026, month: 5, day: 21)
         let dayOffset = Int(date.timeIntervalSince(base) / 86400)

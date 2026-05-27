@@ -513,6 +513,21 @@ struct NarrativeBridgeTrace: Codable, Equatable {
     let bridgePass: Bool
 }
 
+/// Record of a single essence category suppressed to avoid contradictory narrative.
+struct EssenceConflictSuppression: Codable, Equatable {
+    let suppressedCategory: String
+    let suppressedScore: Double
+    let keptCategory: String
+    let replacementCategory: String?
+    let replacementScore: Double?
+    let reason: String
+}
+
+/// Trace of essence conflict resolution applied to the visible top 3 (Stage 1 only).
+struct EssenceConflictTrace: Codable, Equatable {
+    let suppressions: [EssenceConflictSuppression]
+}
+
 // MARK: - Calibration Surface
 
 /// Single config surface for every tunable weight in the Daily Fit pipeline.

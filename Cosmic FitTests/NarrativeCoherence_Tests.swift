@@ -15,7 +15,7 @@ struct NarrativeCoherence_Briar_Tests {
     @Test("Briar 2026-05-26 reinforce: shared drama top-1, coherence pass")
     func briarReinforceDay() {
         let date = SkyForwardV2Support.date(year: 2026, month: 5, day: 26)
-        let (_, _, trace, intentTrace, coherence) = generateBriarTrace(for: date)
+        let (_, _, trace, intentTrace, coherence, _) = generateBriarTrace(for: date)
 
         #expect(trace?.chosenRelationship == .reinforce)
         #expect(trace?.weatherTop3.first == StyleEssenceCategory.drama.rawValue
@@ -28,7 +28,7 @@ struct NarrativeCoherence_Briar_Tests {
     @Test("Briar 2026-05-23 is reinforce when anchor/weather share drama top-1")
     func briarMay23Reinforce() {
         let date = SkyForwardV2Support.date(year: 2026, month: 5, day: 23)
-        let (_, _, trace, intentTrace, coherence) = generateBriarTrace(for: date)
+        let (_, _, trace, intentTrace, coherence, _) = generateBriarTrace(for: date)
 
         #expect(trace?.chosenRelationship == .reinforce)
         #expect(intentTrace?.coherenceGap == nil)
@@ -39,7 +39,7 @@ struct NarrativeCoherence_Briar_Tests {
     @Test("Briar 2026-05-23 trace snapshot for sign-off")
     func briarMay23TraceSnapshot() {
         let date = SkyForwardV2Support.date(year: 2026, month: 5, day: 23)
-        let (_, _, trace, intentTrace, coherence) = generateBriarTrace(for: date)
+        let (_, _, trace, intentTrace, coherence, _) = generateBriarTrace(for: date)
 
         let lines = [
             "Briar 2026-05-23 narrative trace (stage1_experimental pipeline)",
@@ -64,7 +64,7 @@ struct NarrativeCoherence_Briar_Tests {
         var gapDays = 0
         for offset in 0..<14 {
             let date = start.addingTimeInterval(Double(offset) * 86400)
-            let (_, _, _, intentTrace, _) = generateBriarTrace(for: date)
+            let (_, _, _, intentTrace, _, _) = generateBriarTrace(for: date)
             if intentTrace?.coherenceGap == "intenseAnchorRestrainedWeather" {
                 gapDays += 1
             }
@@ -78,7 +78,8 @@ struct NarrativeCoherence_Briar_Tests {
         BlueprintLensEngine.PayloadTrace,
         NarrativeTrace?,
         NarrativeIntentTrace?,
-        NarrativeCoherenceTrace?
+        NarrativeCoherenceTrace?,
+        EssenceConflictTrace?
     ) {
         let base = SkyForwardV2Support.date(year: 2026, month: 5, day: 21)
         let dayOffset = Int(date.timeIntervalSince(base) / 86400)

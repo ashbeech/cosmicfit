@@ -102,6 +102,9 @@ class DailyFitViewController: UIViewController {
     private static let contentBackgroundTailBelowTomorrowButton: CGFloat = 88
     /// Slightly taller tarot slot so `scaleAspectFit` art (especially `CardBacks`) is not nipped at the foot.
     private static let tarotCardSlotExtraHeight: CGFloat = 5
+    /// Fine-tune for the card centre between menu bar and tab bar (contentView coords).
+    /// Was +10; raised 15 pt so the card sits higher on iPhone 14 Pro-class layouts.
+    private static let tarotCardCenterYNudge: CGFloat = -5
 
     private var vibrancyScaleContainer = UIView()
     private var contrastScaleContainer = UIView()
@@ -167,18 +170,42 @@ class DailyFitViewController: UIViewController {
     /// imageView's `image` property so card art and sheen always paint
     /// in unison.
     private let cardFrontSheenView = MotionSheenView()
+    /// Subtle inverted-tilt 3D parallax on the card container. Created
+    /// lazily in `viewWillAppear` and torn down in `viewWillDisappear`
+    /// so the gyro is only running while the card is on-screen. Writes
+    /// to `tarotCardContainerView.layer.transform`; the flip animation
+    /// uses `sublayerTransform` on the same layer plus inner-image-view
+    /// transforms, so the two effects compose cleanly.
+    private var cardParallax: MotionParallaxBinding?
     private var tapToRevealLabel = UILabel()
-    /// Vertical band from the card foot to the **visible** bottom of the scroll view — caption is centred in the on-screen gap (not mixed `view`/`contentView` space, which skewed the label toward the tab bar).
-    private let tapToRevealVerticalAlignGuide = UILayoutGuide()
     private var backgroundBlurImageView = UIImageView()
     /// Semi-transparent layer on top of the blurred card wallpaper so the sharp tarot reads clearly.
     private let revealedBackgroundDimmingView = UIView()
     private var cardTapGesture: UITapGestureRecognizer?
     
     private let tarotCardContainerView = UIView()
+    /// Sibling view that hosts ONLY the card's halo (the soft outer
+    /// glow + breath animation). Lives on its own layer, so it never
+    /// inherits the parallax 3D transform written to the card
+    /// container — the shadow rendering doesn't follow `m34`
+    /// perspective faithfully, which made the halo "slide down away
+    /// from the card" during over-scroll. Keeping the halo on a 2D
+    /// sibling also lets us drive an independent scale + fade off
+    /// the rubber-band without touching the card's own transform.
+    private let tarotCardGlowView = UIView()
     private var cardContainerCenterYConstraint: NSLayoutConstraint?
     private var cardContainerWidthConstraint: NSLayoutConstraint?
     private var cardContainerHeightConstraint: NSLayoutConstraint?
+    /// Top inset of `contentView` inside `scrollView`. The constant
+    /// depends on `view.safeAreaInsets.top`, which is `0` at
+    /// `viewDidLoad` (view not yet in the window hierarchy) and only
+    /// becomes valid once the first layout pass runs. We keep a
+    /// reference so the constant can be refreshed in
+    /// `viewDidLayoutSubviews`, otherwise the contentView (and the
+    /// card it hosts) stays anchored to a stale, zero-safe-area
+    /// origin — which in turn drives "Tap to reveal…" too low,
+    /// behind the tab bar.
+    private var contentViewTopConstraint: NSLayoutConstraint?
     
     private let scrollingRunesBackground = ScrollingRunesBackgroundView()
     
@@ -224,9 +251,73 @@ class DailyFitViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        // Refresh constraint constants whose initial values were
+        // computed against `view.safeAreaInsets`/tab-bar metrics that
+        // weren't valid at `viewDidLoad`. Otherwise the card (and the
+        // "Tap to reveal…" caption that centres against its bottom)
+        // can paint anchored to a stale, zero-safe-area origin and
+        // sit too low — visibly behind the tab bar — until the next
+        // cold launch happens to set up under correct insets.
+        updateLayoutDependentConstants()
+        updateContentPanelTopIfNeeded()
         updateTarotCardOuterGlow()
         guard dailyFitPayload != nil else { return }
         refreshDiamondScalePositions()
+    }
+
+    /// Re-derives the safe-area-dependent constants for the
+    /// `contentView` top inset and the tarot card's vertical centre,
+    /// applying them only when they meaningfully differ from the
+    /// current values. The guard avoids layout feedback loops and a
+    /// stream of no-op writes on every layout pass.
+    ///
+    /// The constant writes are wrapped in `performWithoutAnimation` so
+    /// that if `viewDidLayoutSubviews` happens to fire while we are
+    /// inside someone else's `UIView.animate { … layoutIfNeeded() }`
+    /// — e.g. the content-panel slide-up in
+    /// `setupContentSectionBackgrounds` — our background safe-area
+    /// settling is never captured by that animation. Without this,
+    /// shifting `contentViewTopConstraint` by ~47pt mid-reveal
+    /// dragged the whole content tree (including the panel itself)
+    /// through the slide-up, swallowing the visible "pop up" entirely.
+    private func updateLayoutDependentConstants() {
+        let newContentViewOffset = view.safeAreaInsets.top + 83
+
+        let menuBarBottom = calculateMenuBarBottom()
+        let tabBarTop = calculateTabBarTop()
+        let availableHeight = tabBarTop - menuBarBottom
+        let centerYInView = menuBarBottom + (availableHeight / 2)
+        let newCardCenter = centerYInView - newContentViewOffset + Self.tarotCardCenterYNudge
+
+        UIView.performWithoutAnimation {
+            if let topConstraint = contentViewTopConstraint,
+               abs(topConstraint.constant - newContentViewOffset) > 0.5 {
+                topConstraint.constant = newContentViewOffset
+            }
+            if let centerYConstraint = cardContainerCenterYConstraint,
+               abs(centerYConstraint.constant - newCardCenter) > 0.5 {
+                centerYConstraint.constant = newCardCenter
+            }
+        }
+    }
+
+    /// Keeps the white content panel's top edge at the correct resting
+    /// position once safe-area insets are known. `setupContentSectionBackgrounds`
+    /// computes `finalYPosition` using `view.safeAreaInsets.top`, but on
+    /// first launch that value is 0 (view not yet in the window). This
+    /// method re-derives the correct constant on every layout pass so the
+    /// panel lands with its rounded top visible above the tab bar regardless
+    /// of when the initial setup ran.
+    private func updateContentPanelTopIfNeeded() {
+        guard isCardRevealed,
+              let constraint = contentBackgroundTopConstraint,
+              dailyFitLabel.frame.origin.y > 0 else { return }
+
+        let contentPanelTopInset: CGFloat = 44
+        let correct = dailyFitLabel.frame.origin.y - contentPanelTopInset - view.safeAreaInsets.top
+        if abs(constraint.constant - correct) > 0.5 {
+            constraint.constant = correct
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -249,6 +340,12 @@ class DailyFitViewController: UIViewController {
             // Ensure container is properly positioned and visible
             tarotCardContainerView.alpha = 1.0
             tarotCardContainerView.transform = .identity
+            // Reset halo over-scroll state when we re-enter the
+            // revealed view, otherwise a previous pull's scale + fade
+            // (last written by `scrollViewDidScroll`) could persist
+            // on the next appearance until the user scrolls again.
+            tarotCardGlowView.transform = .identity
+            tarotCardGlowView.alpha = 1.0
             tarotCardImageView.alpha = 1.0
             
             view.layoutIfNeeded()
@@ -260,6 +357,14 @@ class DailyFitViewController: UIViewController {
         view.bringSubviewToFront(topMaskView)
         if isViewingTomorrow {
             view.bringSubviewToFront(dayNavigationBackButton)
+        }
+
+        // Activate the inverted-tilt 3D parallax on the card container
+        // while this tab is visible. Created here (rather than in
+        // `viewDidLoad`) so the gyro/accelerometer are only running
+        // while the card is actually on-screen.
+        if cardParallax == nil {
+            cardParallax = MotionParallaxBinding(host: tarotCardContainerView)
         }
     }
     
@@ -280,6 +385,11 @@ class DailyFitViewController: UIViewController {
         super.viewWillDisappear(animated)
         scrollingRunesBackground.stopAnimating()
         stopTarotCardGlowBreathingAnimation()
+        // Tear down parallax so the gyro/accelerometer stop while the
+        // tab is hidden; deinit on `MotionParallaxBinding` also resets
+        // the host's `layer.transform` to identity, preventing a
+        // stale tilt from being baked in when we re-appear.
+        cardParallax = nil
     }
     
     // MARK: - Memory Management
@@ -359,13 +469,23 @@ class DailyFitViewController: UIViewController {
         // Clip scrollView at menu bar level
         scrollView.clipsToBounds = true
 
+        // Captured so the constant can be refreshed once the real
+        // `view.safeAreaInsets.top` is known (see
+        // `updateLayoutDependentConstants`). At `viewDidLoad` time the
+        // view isn't in the window yet, so the insets read as zero and
+        // a one-shot inline `constant:` would freeze that wrong value.
+        contentViewTopConstraint = contentView.topAnchor.constraint(
+            equalTo: scrollView.topAnchor,
+            constant: view.safeAreaInsets.top + 83
+        )
+
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
+
             // ContentView starts with padding for menu bar + safe area
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: view.safeAreaInsets.top + 83),
+            contentViewTopConstraint!,
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
@@ -472,11 +592,6 @@ class DailyFitViewController: UIViewController {
         // Sibling of the card container (not inside it) so halo/shadow bounds stay card-sized.
         contentView.addSubview(tapToRevealLabel)
 
-        // Guide on `scrollView`: top = card foot (content), bottom = visible viewport bottom (`frameLayoutGuide`).
-        // Previously the guide lived on `view` with bottom = `safeAreaLayoutGuide.bottom`, which mixed coordinate
-        // spaces with `contentView` and pushed "Tap to reveal…" too close to the tab bar.
-        scrollView.addLayoutGuide(tapToRevealVerticalAlignGuide)
-        
         // Add tap gesture to card back
         cardTapGesture = UITapGestureRecognizer(target: self, action: #selector(cardTapped))
         cardBackImageView.addGestureRecognizer(cardTapGesture!)
@@ -492,12 +607,28 @@ class DailyFitViewController: UIViewController {
             cardBackImageView.trailingAnchor.constraint(equalTo: tarotCardContainerView.trailingAnchor),
             cardBackImageView.bottomAnchor.constraint(equalTo: tarotCardContainerView.bottomAnchor),
 
-            tapToRevealVerticalAlignGuide.topAnchor.constraint(equalTo: tarotCardContainerView.bottomAnchor),
-            tapToRevealVerticalAlignGuide.bottomAnchor.constraint(equalTo: scrollView.frameLayoutGuide.bottomAnchor),
-            tapToRevealVerticalAlignGuide.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor),
-            tapToRevealVerticalAlignGuide.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor),
-
-            tapToRevealLabel.centerYAnchor.constraint(equalTo: tapToRevealVerticalAlignGuide.centerYAnchor),
+            // Pin the caption's bottom to a fixed offset above the safe-area
+            // bottom (= tab bar top) instead of centring it between the card
+            // foot and the viewport bottom. The previous centring was a
+            // weighted average of two anchors whose Y positions both depended
+            // on `view.safeAreaInsets` and `calculateTabBarTop()` — which is
+            // computed with the buggy double-subtraction (safe-area bottom
+            // *and* tab-bar height) and was further sensitive to whether the
+            // constraint constants had been refreshed yet at the moment the
+            // first paint happened. The net result was a caption that drifted
+            // anywhere between ~30 pt clear of the tab bar and ~5 pt under
+            // it, depending on when in the lifecycle the layout settled.
+            //
+            // `view.safeAreaLayoutGuide.bottomAnchor` is managed by UIKit
+            // and tracks the tab bar top automatically as soon as the safe
+            // area becomes valid, so the caption now lands at the same
+            // y-offset above the tab bar on every launch and every tab/day
+            // switch, regardless of whether the card constraint constants
+            // have caught up to the current safe-area metrics.
+            tapToRevealLabel.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                constant: -32
+            ),
             tapToRevealLabel.centerXAnchor.constraint(equalTo: tarotCardContainerView.centerXAnchor),
             tapToRevealLabel.leadingAnchor.constraint(equalTo: tarotCardContainerView.leadingAnchor),
             tapToRevealLabel.trailingAnchor.constraint(equalTo: tarotCardContainerView.trailingAnchor),
@@ -558,7 +689,14 @@ class DailyFitViewController: UIViewController {
             
             self.tarotCardContainerView.alpha = 1.0
             self.tarotCardContainerView.transform = .identity
-            
+            // Mirror the card container reset on the halo sibling —
+            // see `viewWillAppear` for the rationale; without this,
+            // returning to the unrevealed state with leftover
+            // over-scroll scale/fade from a prior revealed session
+            // would briefly show a faded, oversized halo.
+            self.tarotCardGlowView.transform = .identity
+            self.tarotCardGlowView.alpha = 1.0
+
             self.scrollView.isScrollEnabled = false
         }
         
@@ -583,7 +721,14 @@ class DailyFitViewController: UIViewController {
     
     private func showRevealedStateUnified(animated: Bool) {
         scrollingRunesBackground.stopAnimating()
-        
+
+        // Reset halo over-scroll state on every transition into the
+        // revealed view; `scrollViewDidScroll` is the only writer and
+        // it bails for unrevealed cards, so a previous pull's scale +
+        // fade would otherwise persist into the next reveal.
+        tarotCardGlowView.transform = .identity
+        tarotCardGlowView.alpha = 1.0
+
         let applyChanges = {
             self.cardBackImageView.alpha = 0.0
             self.cardBackImageView.isHidden = true
@@ -660,6 +805,20 @@ class DailyFitViewController: UIViewController {
         tarotCardContainerView.translatesAutoresizingMaskIntoConstraints = false
         tarotCardContainerView.clipsToBounds = false
         tarotCardContainerView.backgroundColor = .clear
+        // Push the container back along z so the parallax `m34`
+        // perspective can tilt corners "forward" in 3D without ever
+        // letting them pop in front of sibling layers (the content
+        // panel, headers, etc.). With ~5° max rotation on a ~600 pt
+        // card, the forward extent is ~26 pt; -50 is a comfortable
+        // safety margin so the rotated layer always stays behind
+        // siblings whose `zPosition` defaults to 0. Subview-array
+        // ordering still controls sibling z when zPositions match,
+        // so the unrevealed state's `bringSubviewToFront` calls
+        // continue to work for siblings that are also at -50; in
+        // practice the only competing views in the unrevealed state
+        // are the runes background and `tapToRevealLabel`, both of
+        // which read fine in front of the card cover.
+        tarotCardContainerView.layer.zPosition = -50
         contentView.addSubview(tarotCardContainerView)
         
         // Calculate card dimensions with padding around it
@@ -679,7 +838,7 @@ class DailyFitViewController: UIViewController {
 
         // Convert to contentView coordinates
         let contentViewOffset = view.safeAreaInsets.top + 83
-        let cardCenterYFromContentTop = centerYInView - contentViewOffset + 10  // Add 25px offset to nudge down
+        let cardCenterYFromContentTop = centerYInView - contentViewOffset + Self.tarotCardCenterYNudge
 
         // Position the card's center
         cardContainerCenterYConstraint = tarotCardContainerView.centerYAnchor.constraint(
@@ -695,7 +854,25 @@ class DailyFitViewController: UIViewController {
         NSLayoutConstraint.activate([
             tarotCardContainerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
         ])
-        
+
+        // Halo sibling: pinned to the card container's geometry and
+        // inserted *below* it in the subview list so the shadow halo
+        // composites behind the card art. We also push it further
+        // back in `zPosition` than the card (which sits at -50) so
+        // the parallax-rotated card layer always renders in front,
+        // even when the rotation pulls a corner forward in 3D.
+        tarotCardGlowView.translatesAutoresizingMaskIntoConstraints = false
+        tarotCardGlowView.backgroundColor = .clear
+        tarotCardGlowView.isUserInteractionEnabled = false
+        tarotCardGlowView.layer.zPosition = -100
+        contentView.insertSubview(tarotCardGlowView, belowSubview: tarotCardContainerView)
+        NSLayoutConstraint.activate([
+            tarotCardGlowView.centerXAnchor.constraint(equalTo: tarotCardContainerView.centerXAnchor),
+            tarotCardGlowView.centerYAnchor.constraint(equalTo: tarotCardContainerView.centerYAnchor),
+            tarotCardGlowView.widthAnchor.constraint(equalTo: tarotCardContainerView.widthAnchor),
+            tarotCardGlowView.heightAnchor.constraint(equalTo: tarotCardContainerView.heightAnchor)
+        ])
+
         // Setup the actual tarot card image view (revealed state)
         tarotCardImageView.translatesAutoresizingMaskIntoConstraints = false
         tarotCardImageView.contentMode = .scaleAspectFit
@@ -799,16 +976,41 @@ class DailyFitViewController: UIViewController {
     /// Same ×(4/3) as opacity leg so radius breath slows with the glow.
     private static let tarotCardGlowRadiusBreathHalfPeriod: CFTimeInterval = 0.72 * (4.0 / 3.0)
 
+    /// Points of top-rubber-band pull at which the halo's "dissipate"
+    /// effect saturates. Below this, scale + fade ease in linearly;
+    /// at and above, the halo holds at its terminal scale/alpha so a
+    /// long pull doesn't grow the effect without bound.
+    private static let tarotCardGlowOverscrollSaturation: CGFloat = 120
+    /// Additional scale at saturation (1.0 + this = peak scale). Tuned
+    /// so the halo visibly spreads around the card without crowding
+    /// the screen edges or pulling the shadow into hard banding.
+    private static let tarotCardGlowOverscrollMaxScale: CGFloat = 0.55
+    /// Fraction of alpha removed at saturation. Anchored well clear of
+    /// 1.0 so the halo never fully disappears — even at peak pull a
+    /// soft remnant still reads as the card's own light.
+    private static let tarotCardGlowOverscrollFadeDepth: CGFloat = 0.8
+
     /// Soft outer glow around the rounded tarot card; colour follows the day's light palette tone.
-    /// Always applied on `tarotCardContainerView` so unrevealed and revealed share the same layer behaviour (UIImageView shadows + pulse are unreliable on device).
+    /// Hosted on `tarotCardGlowView` (a sibling pinned to the card's
+    /// geometry, never given a 3D transform) so the halo no longer
+    /// rides the card container's `m34` parallax — which previously
+    /// caused the shadow to slide down away from the card during
+    /// rubber-band over-scroll because CALayer's shadow rendering
+    /// does not honour perspective transforms.
     private func updateTarotCardOuterGlow() {
         let cornerRadius: CGFloat = 24
         let containerBounds = tarotCardContainerView.bounds
         guard containerBounds.width > 1, containerBounds.height > 1 else { return }
 
         stripTarotOuterGlow(from: cardBackImageView, breathKey: Self.tarotCardBackGlowBreathKey)
+        // Defensive: clear any legacy shadow that may still be on the
+        // card container itself (older code paths applied the glow
+        // here). Without this, the old halo would double-render
+        // behind the new sibling halo and continue exhibiting the
+        // 3D-drift bug.
+        stripTarotOuterGlow(from: tarotCardContainerView, breathKey: Self.tarotCardContainerGlowBreathKey)
         applyTarotOuterGlow(
-            to: tarotCardContainerView,
+            to: tarotCardGlowView,
             bounds: containerBounds,
             cornerRadius: cornerRadius,
             breathKey: Self.tarotCardContainerGlowBreathKey
@@ -866,7 +1068,10 @@ class DailyFitViewController: UIViewController {
     }
 
     private func stopTarotCardGlowBreathingAnimation() {
-        stopTarotGlowBreath(on: tarotCardContainerView.layer)
+        // Halo now lives on its own sibling view; the card container
+        // never hosts a breath animation any more (see
+        // `updateTarotCardOuterGlow`).
+        stopTarotGlowBreath(on: tarotCardGlowView.layer)
         stripTarotOuterGlow(from: cardBackImageView, breathKey: Self.tarotCardBackGlowBreathKey)
     }
 
@@ -887,27 +1092,20 @@ class DailyFitViewController: UIViewController {
     }
 
     private func calculateTabBarTop() -> CGFloat {
-        // Get actual tab bar height dynamically
-        let actualTabBarHeight = getActualTabBarHeight()
-        
-        // Tab bar top is at: total height - bottom safe area - tab bar height
-        return view.bounds.height - view.safeAreaInsets.bottom - actualTabBarHeight
-    }
-
-    private func getActualTabBarHeight() -> CGFloat {
-        // Try to get the actual tab bar height from the tab bar controller
-        if let tabBarController = tabBarController {
-            // If the tab bar has been laid out, use its actual frame
-            if tabBarController.tabBar.frame.height > 0 {
-                return tabBarController.tabBar.frame.height
-            }
-        }
-        
-        // Fallback calculation based on safe area
-        // Modern iPhones: 49pt tab bar + 34pt home indicator = 83pt total
-        // Older iPhones: 49pt tab bar + 0pt = 49pt total
-        let hasHomeIndicator = view.safeAreaInsets.bottom > 0
-        return hasHomeIndicator ? 83 : 49
+        // For a child VC of `UITabBarController`, `view.safeAreaInsets.bottom`
+        // already reports the full tab-bar inset (49 pt items + 34 pt home
+        // indicator overlap on modern iPhones, or 49 pt on older devices),
+        // so `view.bounds.height - safeAreaInsets.bottom` IS the tab bar's
+        // top edge in this view's coordinate space.
+        //
+        // The previous implementation also subtracted `tabBar.frame.height`
+        // here, which double-counted the tab bar (once via the safe-area
+        // inset, again via the explicit subtraction) and shifted the card
+        // up by ~49–83 pt depending on iOS's reported tab-bar frame. That
+        // in turn cascaded into the "Tap to reveal…" caption sitting on
+        // top of the tab bar whenever the constraint constants were
+        // refreshed mid-lifecycle.
+        return view.bounds.height - view.safeAreaInsets.bottom
     }
 
     private func setupScrollIndicator() {
@@ -1129,14 +1327,21 @@ class DailyFitViewController: UIViewController {
         }
     }
 
-    /// PT Serif bold italic when the descriptor can combine `PTSerif-Italic` with bold; otherwise italic PT Serif at `size`.
-    private func preferredWardrobeReflectionBoldItalicFont(size: CGFloat) -> UIFont {
-        guard let italic = UIFont(name: "PTSerif-Italic", size: size) else {
-            return UIFont.italicSystemFont(ofSize: size)
+    /// PT Serif bold italic — synthesised from `PTSerif-Italic` when no dedicated bold-italic face is bundled.
+    private func preferredBoldItalicSerifFont(size: CGFloat) -> UIFont {
+        if let italic = UIFont(name: "PTSerif-Italic", size: size) {
+            if let boldItalicDescriptor = italic.fontDescriptor.withSymbolicTraits([.traitBold, .traitItalic]) {
+                return UIFont(descriptor: boldItalicDescriptor, size: size)
+            }
+            var traits = (italic.fontDescriptor.object(forKey: .traits) as? [UIFontDescriptor.TraitKey: Any]) ?? [:]
+            traits[.weight] = UIFont.Weight.bold
+            return UIFont(descriptor: italic.fontDescriptor.addingAttributes([.traits: traits]), size: size)
         }
-        let traits: UIFontDescriptor.SymbolicTraits = [.traitBold, .traitItalic]
-        guard let descriptor = italic.fontDescriptor.withSymbolicTraits(traits) else { return italic }
-        return UIFont(descriptor: descriptor, size: size)
+        if let serifDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).withDesign(.serif),
+           let boldItalicDescriptor = serifDescriptor.withSymbolicTraits([.traitBold, .traitItalic]) {
+            return UIFont(descriptor: boldItalicDescriptor, size: size)
+        }
+        return UIFont.italicSystemFont(ofSize: size)
     }
 
     private var wardrobeReflectionHeaderDivider: UIView?
@@ -1153,7 +1358,7 @@ class DailyFitViewController: UIViewController {
         wardrobeReflectionLabel.alpha = 0.0
         let wardrobeBody = CosmicFitTheme.Typography.FontSizes.body
         // Slightly larger than tease copy (body / regular) so the reflection reads as the hero line.
-        wardrobeReflectionLabel.font = preferredWardrobeReflectionBoldItalicFont(size: wardrobeBody + 2)
+        wardrobeReflectionLabel.font = preferredBoldItalicSerifFont(size: wardrobeBody + 2)
         wardrobeReflectionLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
         wardrobeReflectionLabel.textAlignment = .center
         contentView.addSubview(wardrobeReflectionLabel)
@@ -1166,10 +1371,7 @@ class DailyFitViewController: UIViewController {
             contentView.addSubview(divider)
         }
 
-        tomorrowTeaseLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(
-            size: CosmicFitTheme.Typography.FontSizes.body,
-            weight: .regular
-        )
+        tomorrowTeaseLabel.font = preferredBoldItalicSerifFont(size: CosmicFitTheme.Typography.FontSizes.body)
         tomorrowTeaseLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
         tomorrowTeaseLabel.textAlignment = .center
         tomorrowTeaseLabel.numberOfLines = 0
@@ -1594,8 +1796,13 @@ class DailyFitViewController: UIViewController {
     
     // MARK: - New Pipeline Helpers
 
-    /// Point size for the black / white-stroke diamond on Vibrancy, Contrast, Metal Tone, and Silhouette tracks.
-    private static let sharedScaleDiamondMarkerFontSize: CGFloat = 18
+    /// Point size for the black / white-stroke diamond on Vibrancy,
+    /// Contrast, Metal Tone, and Silhouette tracks. Drives the marker's
+    /// rendered width *and* height — the ♦ glyph scales uniformly with
+    /// font size, and `styleDiamondScaleIndicator` derives the white
+    /// stroke width from this value (-0.14 × size) so the outline grows
+    /// in proportion. Single source of truth for every slider's marker.
+    private static let sharedScaleDiamondMarkerFontSize: CGFloat = 24
 
     /// Black diamond with white stroke (matches Daily Fit scale marker designs).
     private func styleDiamondScaleIndicator(_ label: UILabel, fontSize: CGFloat) {
@@ -2041,17 +2248,20 @@ class DailyFitViewController: UIViewController {
         CosmicFitTheme.styleDivider(rightDivider)
         rightDivider.translatesAutoresizingMaskIntoConstraints = false
         
-        let star = UILabel()
-        star.text = "✦"
-        star.font = UIFont.systemFont(ofSize: 20)
-        star.textColor = CosmicFitTheme.Colours.cosmicBlue
-        star.textAlignment = .center
-        star.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
-        star.translatesAutoresizingMaskIntoConstraints = false
+        // Brand div-star asset — same image used by the Essence triangle
+        // vertex markers and every other divider/header sparkle across
+        // the app (Menu, Style Guide, FAQ, Dos & Don'ts). Keeps the
+        // divider iconography consistent rather than mixing a Unicode
+        // ornament here with the branded asset elsewhere.
+        let starImageView = UIImageView()
+        starImageView.image = UIImage(named: "star_icon_placeholder")?.withRenderingMode(.alwaysTemplate)
+        starImageView.tintColor = CosmicFitTheme.Colours.cosmicBlue
+        starImageView.contentMode = .scaleAspectFit
+        starImageView.translatesAutoresizingMaskIntoConstraints = false
         
         container.addSubview(leftDivider)
         container.addSubview(rightDivider)
-        container.addSubview(star)
+        container.addSubview(starImageView)
         
         NSLayoutConstraint.activate([
             container.heightAnchor.constraint(equalToConstant: 30),
@@ -2059,16 +2269,17 @@ class DailyFitViewController: UIViewController {
             leftDivider.leadingAnchor.constraint(equalTo: container.leadingAnchor),
             leftDivider.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             leftDivider.heightAnchor.constraint(equalToConstant: 1),
-            leftDivider.trailingAnchor.constraint(equalTo: star.leadingAnchor, constant: -12),
+            leftDivider.trailingAnchor.constraint(equalTo: starImageView.leadingAnchor, constant: -12),
             
-            rightDivider.leadingAnchor.constraint(equalTo: star.trailingAnchor, constant: 12),
+            rightDivider.leadingAnchor.constraint(equalTo: starImageView.trailingAnchor, constant: 12),
             rightDivider.trailingAnchor.constraint(equalTo: container.trailingAnchor),
             rightDivider.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             rightDivider.heightAnchor.constraint(equalToConstant: 1),
             
-            star.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            star.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            star.widthAnchor.constraint(equalToConstant: 24)
+            starImageView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            starImageView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            starImageView.heightAnchor.constraint(equalToConstant: 20),
+            starImageView.widthAnchor.constraint(equalToConstant: 20)
         ])
         
         return container
@@ -2700,7 +2911,13 @@ class DailyFitViewController: UIViewController {
         backgroundView.layer.cornerRadius = 22
         backgroundView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         backgroundView.clipsToBounds = true
-        contentView.insertSubview(backgroundView, aboveSubview: tarotCardImageView)
+        // `tarotCardImageView` is a descendant of `tarotCardContainerView`,
+        // not a direct sibling of `contentView` — passing it as the
+        // sibling reference is "undefined behaviour" per UIKit docs.
+        // Use the real sibling (`tarotCardContainerView`) so the panel
+        // is reliably inserted above the card layer in the subview
+        // array on every call, which the reveal slide-up depends on.
+        contentView.insertSubview(backgroundView, aboveSubview: tarotCardContainerView)
         
         self.contentBackgroundView = backgroundView
         
@@ -2729,11 +2946,40 @@ class DailyFitViewController: UIViewController {
         ])
         
         view.layoutIfNeeded()
-        
-        let finalYPosition = dailyFitLabel.frame.origin.y - contentPanelTopInset
-        
+
+        // `dailyFitLabel.frame.origin.y` is in `contentView`'s local coord
+        // space, derived from `contentStartFromBottom = screenHeight -
+        // tabBarHeight - 75` — a constant that was hand-tuned back when
+        // `contentViewTopConstraint` was frozen at its `viewDidLoad` value
+        // (i.e. `view.safeAreaInsets.top == 0`, so `contentView.top` sat at
+        // view-coord 83 instead of the correct ~130). Now that
+        // `updateLayoutDependentConstants()` refreshes `contentViewTopConstraint`
+        // with the real safe-area inset, the same `finalYPosition` lands the
+        // panel ~47 pt lower in view coords — exactly far enough to push its
+        // rounded top behind the tab bar, which is the regression visible in
+        // the user's "incorrect" screenshot.
+        //
+        // Subtracting `view.safeAreaInsets.top` here cancels that shift and
+        // restores the original visual: the panel slides up to peek ~36 pt
+        // above the tab bar as a "there's more below — scroll" affordance,
+        // without re-introducing the stale-constraint bug fixed earlier.
+        let finalYPosition = dailyFitLabel.frame.origin.y
+            - contentPanelTopInset
+            - view.safeAreaInsets.top
+
         let applyFinalLayout = {
-            self.contentView.sendSubviewToBack(self.tarotCardImageView)
+            // Push the card container — not the inner image view —
+            // to the back of `contentView`'s subview array so the
+            // content panel composites in front when scrolled. The
+            // previous version targeted `tarotCardImageView`, which
+            // is a descendant rather than a direct sibling and so
+            // reduced to a no-op. Z-ordering against the parallax's
+            // 3D-rotated layer is enforced by the container's
+            // negative `zPosition`; this call keeps the subview
+            // array in the same order as the rendering, which makes
+            // `bringSubviewToFront` semantics for the unrevealed
+            // state predictable.
+            self.contentView.sendSubviewToBack(self.tarotCardContainerView)
             for label in allLabels.compactMap({ $0 }) {
                 self.contentView.bringSubviewToFront(label)
             }
@@ -2795,9 +3041,47 @@ extension DailyFitViewController: UIScrollViewDelegate {
         let yOffset = scrollView.contentOffset.y
         
         let cardTranslation = yOffset * 0.5
-        
-        tarotCardContainerView.transform = CGAffineTransform(translationX: 0, y: cardTranslation)
-        
+
+        // Route the scroll-driven translation through the parallax
+        // binding so it can be composed with the motion-driven
+        // rotation into a single `layer.transform` write per frame.
+        // Writing to `tarotCardContainerView.transform` directly here
+        // would clobber the parallax rotation on alternating frames
+        // (scroll fires every display sync, motion fires every 60 Hz
+        // motion update) and read as a visible jitter during scroll.
+        let translation3D = CATransform3DMakeTranslation(0, cardTranslation, 0)
+        if let parallax = cardParallax {
+            parallax.hostBaseTransform = translation3D
+        } else {
+            tarotCardContainerView.layer.transform = translation3D
+        }
+
+        // Halo: track the card's translation so the glow stays
+        // anchored behind the card (no independent Y drift), then —
+        // only on top-rubber-band — scale outward and fade. The
+        // expansion reads as the halo "dissipating" while the card
+        // is pulled toward the camera; opposite-direction scaling
+        // because the card visually compresses forward through
+        // parallax while the halo spreads radially outward. Cap on
+        // `normalizedPull` so the effect saturates rather than
+        // running away on a long pull, and uniform `scaleX = scaleY`
+        // so the halo never squashes anisotropically.
+        let overscrollPull = max(0, -yOffset)
+        let normalizedPull = min(1.0, overscrollPull / Self.tarotCardGlowOverscrollSaturation)
+        let glowScale = 1 + normalizedPull * Self.tarotCardGlowOverscrollMaxScale
+        let glowAlpha = 1 - normalizedPull * Self.tarotCardGlowOverscrollFadeDepth
+        // Matrix order is `scale · translate`: scale is applied to
+        // the local point first (anchor 0.5,0.5 ⇒ centre maps to
+        // itself), then translate offsets the whole result by
+        // `cardTranslation`. The chain `translation.scaledBy(...)`
+        // produces exactly this product, so the halo's centre lands
+        // at `cardTranslation` regardless of `glowScale` — i.e. the
+        // halo never drifts past the card just because it grew.
+        let glowTransform = CGAffineTransform(translationX: 0, y: cardTranslation)
+            .scaledBy(x: glowScale, y: glowScale)
+        tarotCardGlowView.transform = glowTransform
+        tarotCardGlowView.alpha = glowAlpha
+
         // Scroll indicator fade
         let arrowOpacity = max(0, 1.0 - (yOffset / 30))
         scrollIndicatorView.alpha = arrowOpacity

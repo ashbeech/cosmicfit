@@ -26,6 +26,13 @@ final class EssenceTriangleView: UIView {
     private var categoryLabels: [UILabel] = []
     private var anchorGhostLabels: [(label: UILabel, entry: StyleEssenceScore)] = []
 
+    /// Side length (points) of each vertex's star asset. Single source
+    /// of truth — `drawChart` sizes the imageView with this, and
+    /// `positionLabels` feeds the same value into the label avoidance
+    /// geometry so labels never crash into the star artwork. Edit
+    /// here to shrink/grow stars without touching layout code.
+    private static let vertexStarSize: CGFloat = 14
+
     // MARK: - Initialization
 
     override init(frame: CGRect) {
@@ -212,7 +219,7 @@ final class EssenceTriangleView: UIView {
             let py = centre.y + sin(angle) * radius
             weatherPoints.append(CGPoint(x: px, y: py))
 
-            let starSize: CGFloat = 20
+            let starSize = Self.vertexStarSize
             let star = vertexStarViews[index]
             star.bounds = CGRect(x: 0, y: 0, width: starSize, height: starSize)
             star.center = CGPoint(x: px, y: py)
@@ -301,10 +308,10 @@ final class EssenceTriangleView: UIView {
             y: (weatherPoints[0].y + weatherPoints[1].y + weatherPoints[2].y) / 3.0
         )
 
-        let starHalf: CGFloat = 10
+        let starSize = Self.vertexStarSize
+        let starHalf = starSize / 2
         let padding: CGFloat = 6
         let lineBuffer: CGFloat = 4
-        let starSize: CGFloat = 20
 
         var avoidanceSegments: [(CGPoint, CGPoint)] = [
             (weatherPoints[0], weatherPoints[1]),

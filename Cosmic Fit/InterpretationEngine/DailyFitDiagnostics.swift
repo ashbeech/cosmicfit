@@ -61,6 +61,7 @@ struct DailyFitDiagnosticReport: Codable {
     let narrativeIntentTrace: NarrativeIntentTrace?
     let narrativeCoherenceTrace: NarrativeCoherenceTrace?
     let narrativeBridgeTrace: NarrativeBridgeTrace?
+    let essenceConflictTrace: EssenceConflictTrace?
 }
 
 // MARK: - Phase 3: Per-Input Energy Attribution
@@ -287,7 +288,7 @@ enum DailyFitDiagnostics {
         )
 
         // Stage 2: payload with trace (via pipeline)
-        let (payload, s2Trace, narrativeTrace, narrativeIntentTrace, narrativeCoherenceTrace) = DailyFitPipeline.generateWithTrace(
+        let (payload, s2Trace, narrativeTrace, narrativeIntentTrace, narrativeCoherenceTrace, essenceConflictTrace) = DailyFitPipeline.generateWithTrace(
             blueprint: blueprint, snapshot: snapshot, calibration: calibration,
             dailyFitEngineId: dailyFitEngineId
         )
@@ -407,7 +408,8 @@ enum DailyFitDiagnostics {
             narrativeTrace: narrativeTrace,
             narrativeIntentTrace: narrativeIntentTrace,
             narrativeCoherenceTrace: narrativeCoherenceTrace,
-            narrativeBridgeTrace: s2Trace.narrativeBridgeTrace
+            narrativeBridgeTrace: s2Trace.narrativeBridgeTrace,
+            essenceConflictTrace: essenceConflictTrace
         )
 
         return (payload, report)

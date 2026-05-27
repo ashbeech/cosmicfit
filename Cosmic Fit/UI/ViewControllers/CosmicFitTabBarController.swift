@@ -829,8 +829,9 @@ final class CosmicFitTabBarController: UITabBarController {
             return
         }
 
-        let transits = NatalChartCalculator.calculateTransits(natalChart: natal, date: date)
-        let julianDay = JulianDateCalculator.calculateJulianDate(from: date)
+        let skyAnchor = DailyFitSkyAnchor.instant(forCalendarDay: date)
+        let transits = NatalChartCalculator.calculateTransits(natalChart: natal, date: skyAnchor)
+        let julianDay = JulianDateCalculator.calculateJulianDate(from: skyAnchor)
         let moonPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: julianDay)
         let profileHash = userProfile?.id ?? chartId
         let cal = DailyFitEngineConfig.effectiveCalibration
@@ -842,7 +843,7 @@ final class CosmicFitTabBarController: UITabBarController {
             transits: transits,
             moonPhaseDegrees: moonPhase,
             profileHash: profileHash,
-            date: date,
+            date: skyAnchor,
             calibration: cal,
             dailyFitEngineId: engineId
         )
@@ -857,9 +858,26 @@ final class CosmicFitTabBarController: UITabBarController {
             dailyFitPayload = payload
 
             #if DEBUG
+            let mode = DailyFitEngineRegistry.resolvedMode(engineId: engineId)
+            var debugConflictTrace: EssenceConflictTrace?
+            if mode == .stage1Experimental {
+                let rawEssence = BlueprintLensEngine.resolveEssenceProfile(from: snapshot, mode: mode)
+                let tuning = cal.narrativeSelection ?? .stage1Default
+                let silhouette = BlueprintLensEngine.deriveSilhouetteProfile(
+                    from: blueprint, snapshot: snapshot, calibration: cal, mode: mode
+                )
+                if let intent = NarrativeIntentEngine.resolve(
+                    essence: rawEssence, snapshot: snapshot, mode: mode,
+                    silhouetteProfile: silhouette, tuning: tuning
+                )?.intent {
+                    debugConflictTrace = NarrativeSelectionDirectives.resolveEssenceConflicts(
+                        profile: rawEssence, intent: intent
+                    ).trace
+                }
+            }
             BlueprintLensEngine.logDailyFitDiagnostics(
                 snapshot: snapshot, payload: payload, blueprint: blueprint,
-                calibration: cal
+                calibration: cal, essenceConflictTrace: debugConflictTrace
             )
             #endif
         } else {
@@ -884,8 +902,9 @@ final class CosmicFitTabBarController: UITabBarController {
         }
 
         guard let natal = natalChart, let progressed = progressedChart else { return nil }
-        let transits = NatalChartCalculator.calculateTransits(natalChart: natal, date: date)
-        let julianDay = JulianDateCalculator.calculateJulianDate(from: date)
+        let skyAnchor = DailyFitSkyAnchor.instant(forCalendarDay: date)
+        let transits = NatalChartCalculator.calculateTransits(natalChart: natal, date: skyAnchor)
+        let julianDay = JulianDateCalculator.calculateJulianDate(from: skyAnchor)
         let moonPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: julianDay)
         let profileHash = userProfile?.id ?? chartIdentifier ?? ""
         let cal = DailyFitEngineConfig.effectiveCalibration
@@ -897,7 +916,7 @@ final class CosmicFitTabBarController: UITabBarController {
             transits: transits,
             moonPhaseDegrees: moonPhase,
             profileHash: profileHash,
-            date: date,
+            date: skyAnchor,
             calibration: cal,
             dailyFitEngineId: engineId
         )

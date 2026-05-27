@@ -104,9 +104,7 @@ enum NarrativeIntentEngine {
 
     // MARK: - Relationship Classification
 
-    private static let oppositions: [(StyleEssenceCategory, StyleEssenceCategory)] = [
-        (.minimal, .maximalist), (.polished, .edgy), (.classic, .eclectic), (.grounded, .playful)
-    ]
+    private static let oppositions = essenceOppositions
 
     private static func classifyRelationship(
         anchorTop3: [StyleEssenceCategory],

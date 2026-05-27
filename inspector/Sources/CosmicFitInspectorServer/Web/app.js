@@ -1654,6 +1654,21 @@ function buildDailyFitHtml(df, allowDrill = true) {
   // Essence (all 14 categories; top 3 highlighted)
   html += buildEssenceProfileHtml(p.essenceProfile, allowDrill);
 
+  // Essence conflict resolution trace (Stage 1 only)
+  const ect = df.diagnostics?.essenceConflictTrace;
+  if (ect?.suppressions?.length) {
+    html += '<div class="subsection" style="border-left:3px solid var(--warn,#c9a227);padding-left:8px">';
+    html += '<div class="subsection-title">Essence Conflict Resolution</div>';
+    for (const s of ect.suppressions) {
+      html += `<p style="margin:4px 0"><strong>${esc(s.suppressedCategory.toUpperCase())}</strong> (score ${(s.suppressedScore * 100).toFixed(1)}%) suppressed — conflicts with <strong>${esc(s.keptCategory.toUpperCase())}</strong>`;
+      if (s.replacementCategory) {
+        html += ` → promoted <strong>${esc(s.replacementCategory.toUpperCase())}</strong> (score ${((s.replacementScore || 0) * 100).toFixed(1)}%)`;
+      }
+      html += `</p>`;
+    }
+    html += '</div>';
+  }
+
   // Silhouette
   if (p.silhouetteProfile) {
     html +=
@@ -3739,6 +3754,18 @@ function markdownTrace(diag, dayLabel = null) {
     if (nct) {
       md += `- Tarot variant: ${nct.tarotVariantScored ? "scored (not rotation)" : "rotation fallback"}\n`;
       md += `- Coherence: ${nct.overallPass ? "pass" : "fail (palette statement slots: " + nct.paletteStatementSlotCount + ")"}\n`;
+    }
+    md += "\n";
+  }
+
+  if (diag.essenceConflictTrace?.suppressions?.length) {
+    md += "### Essence conflict resolution\n\n";
+    for (const s of diag.essenceConflictTrace.suppressions) {
+      md += `- **${s.suppressedCategory.toUpperCase()}** (${(s.suppressedScore * 100).toFixed(1)}%) suppressed — conflicts with **${s.keptCategory.toUpperCase()}**`;
+      if (s.replacementCategory) {
+        md += ` → promoted **${s.replacementCategory.toUpperCase()}** (${((s.replacementScore || 0) * 100).toFixed(1)}%)`;
+      }
+      md += `\n`;
     }
     md += "\n";
   }

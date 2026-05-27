@@ -2,8 +2,12 @@
 //  CosmicNavigationArrow.swift
 //  Cosmic Fit
 //
-//  Left/right navigation arrows: a vertical half of the brand div-star (`star_icon_placeholder`),
-//  filled and tintable. Right arrows use the star’s right half (mirror of the left).
+//  Left/right navigation arrows: a vertical half of the Daily Fit
+//  silhouette/vibrancy/contrast slider diamond glyph (`♦`), filled and
+//  tintable. Right arrows use the diamond's right half, left arrows use
+//  the left half. Visually identical to halving the diamond markers on
+//  the Daily Fit scale sliders so the navigation arrows feel like part
+//  of the same vocabulary as the rest of the screen's iconography.
 //
 
 import UIKit
@@ -15,44 +19,57 @@ enum CosmicNavigationArrow {
         case right
     }
 
-    private static let starImageName = "star_icon_placeholder"
+    /// Glyph used for the full diamond. The renderer clips it down to
+    /// the requested half. `♦` (U+2666 BLACK DIAMOND SUIT) is the same
+    /// character used by `styleDiamondScaleIndicator` on the Daily Fit
+    /// scale markers, which is what keeps the arrow shape locked to
+    /// those sliders without us having to re-author a vector path.
+    private static let diamondGlyph = "♦"
 
-    /// Applied to all rendered arrow sizes (25% larger than the nominal `pointSize`).
+    /// Applied to all rendered arrow sizes (25% larger than the nominal
+    /// `pointSize`). Preserves the established visual weight of the
+    /// previous half-star arrow at each callsite so the API behaves the
+    /// same despite the shape change.
     private static let sizeMultiplier: CGFloat = 1.25
 
-    /// Squash on Y so the half-star tips are less tall (25% shorter).
-    private static let verticalCompression: CGFloat = 0.75
-
-    /// Renders a filled template half-star at the given height.
+    /// Renders a filled, template, half-diamond at the given height.
+    /// `pointSize` is the nominal target arrow height; the underlying
+    /// glyph is drawn slightly larger (see `sizeMultiplier`) so the
+    /// arrow keeps a presence beside its button title.
     static func image(direction: Direction, pointSize: CGFloat) -> UIImage {
-        guard let star = UIImage(named: starImageName) else {
-            assertionFailure("Missing asset: \(starImageName)")
-            return UIImage()
-        }
+        let glyphPointSize = pointSize * sizeMultiplier
 
-        let naturalHeight = pointSize * sizeMultiplier
-        let outputHeight = naturalHeight * verticalCompression
-        let fullWidth = naturalHeight * (star.size.width / star.size.height)
-        let halfWidth = fullWidth / 2
-        let outputSize = CGSize(width: halfWidth, height: outputHeight)
+        // Foreground colour is irrelevant — `.alwaysTemplate` below
+        // discards RGB and uses only the alpha channel as a mask that
+        // gets tinted to the button's `baseForegroundColor` at draw
+        // time. Drawing in black keeps the intermediate bitmap simple.
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: glyphPointSize),
+            .foregroundColor: UIColor.black
+        ]
+        let attributed = NSAttributedString(string: diamondGlyph, attributes: attributes)
+
+        let glyphSize = attributed.size()
+        let fullWidth = ceil(glyphSize.width)
+        let fullHeight = ceil(glyphSize.height)
+        let halfWidth = ceil(fullWidth / 2.0)
+        let outputSize = CGSize(width: halfWidth, height: fullHeight)
 
         let format = UIGraphicsImageRendererFormat()
         format.scale = UIScreen.main.scale
         let renderer = UIGraphicsImageRenderer(size: outputSize, format: format)
 
-        let image = renderer.image { context in
-            let cg = context.cgContext
-            cg.translateBy(x: 0, y: outputHeight)
-            cg.scaleBy(x: 1, y: -verticalCompression)
-
-            let drawRect: CGRect
+        let image = renderer.image { _ in
+            // Draw the full glyph, then let the bitmap's bounds clip
+            // away whichever half we don't want.
+            let drawOrigin: CGPoint
             switch direction {
             case .left:
-                drawRect = CGRect(x: 0, y: 0, width: fullWidth, height: naturalHeight)
+                drawOrigin = .zero
             case .right:
-                drawRect = CGRect(x: -halfWidth, y: 0, width: fullWidth, height: naturalHeight)
+                drawOrigin = CGPoint(x: -halfWidth, y: 0)
             }
-            star.withRenderingMode(.alwaysTemplate).draw(in: drawRect)
+            attributed.draw(at: drawOrigin)
         }
 
         return image.withRenderingMode(.alwaysTemplate)

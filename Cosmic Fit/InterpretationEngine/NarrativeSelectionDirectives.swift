@@ -45,6 +45,14 @@ struct EssencePresentationDirective: Equatable {
     let showAnchorGhost: Bool
 }
 
+// MARK: - Opposition Pairs
+
+/// Archetypal opposition pairs: categories that contradict each other when
+/// shown together in the user-facing essence top 3.
+let essenceOppositions: [(StyleEssenceCategory, StyleEssenceCategory)] = [
+    (.minimal, .maximalist), (.polished, .edgy), (.classic, .eclectic), (.grounded, .playful)
+]
+
 // MARK: - Role Preference Maps (§15.2)
 
 enum NarrativeSelectionDirectives {
@@ -334,6 +342,77 @@ enum NarrativeSelectionDirectives {
             themeLexiconKey: intent.themeLexiconKey,
             coherenceGap: intent.coherenceGap
         )
+    }
+
+    // MARK: - Essence Conflict Resolution (Stage 1 only)
+
+    /// When an opposition pair (e.g. minimal + maximalist) appears in the
+    /// visible top 3, the user sees contradictory styling instructions.
+    /// This resolver keeps the side that matches the day's narrative intent
+    /// and promotes the next-highest non-conflicting category.
+    static func resolveEssenceConflicts(
+        profile: StyleEssenceProfile,
+        intent: NarrativeIntent
+    ) -> (resolved: StyleEssenceProfile, trace: EssenceConflictTrace?) {
+        var visible = profile.visibleCategories
+        let visibleCategories = Set(visible.map(\.category))
+        let weatherSet = Set(intent.weatherTop3)
+
+        var suppressions: [EssenceConflictSuppression] = []
+
+        for (a, b) in essenceOppositions {
+            guard visibleCategories.contains(a), visibleCategories.contains(b) else { continue }
+
+            let keep: StyleEssenceCategory
+            let suppress: StyleEssenceCategory
+
+            let aInWeather = weatherSet.contains(a)
+            let bInWeather = weatherSet.contains(b)
+
+            if aInWeather && !bInWeather {
+                keep = a; suppress = b
+            } else if bInWeather && !aInWeather {
+                keep = b; suppress = a
+            } else {
+                let aScore = visible.first(where: { $0.category == a })?.score ?? 0
+                let bScore = visible.first(where: { $0.category == b })?.score ?? 0
+                if aScore >= bScore { keep = a; suppress = b } else { keep = b; suppress = a }
+            }
+
+            guard let suppressIdx = visible.firstIndex(where: { $0.category == suppress }) else { continue }
+            let suppressedScore = visible[suppressIdx].score
+
+            let conflicting = Set([a, b])
+            let alreadyVisible = Set(visible.map(\.category))
+            let replacement = profile.allScores
+                .sorted { $0.score > $1.score }
+                .first { !alreadyVisible.contains($0.category) && !conflicting.contains($0.category) }
+
+            if let replacement {
+                visible[suppressIdx] = replacement
+            } else {
+                visible.remove(at: suppressIdx)
+            }
+
+            suppressions.append(EssenceConflictSuppression(
+                suppressedCategory: suppress.rawValue,
+                suppressedScore: suppressedScore,
+                keptCategory: keep.rawValue,
+                replacementCategory: replacement?.category.rawValue,
+                replacementScore: replacement?.score,
+                reason: "opposition pair (\(a.rawValue) ↔ \(b.rawValue))"
+            ))
+        }
+
+        guard !suppressions.isEmpty else { return (profile, nil) }
+
+        let resolved = StyleEssenceProfile(
+            allScores: profile.allScores,
+            visibleCategories: visible,
+            chartAnchorScores: profile.chartAnchorScores
+        )
+        let trace = EssenceConflictTrace(suppressions: suppressions)
+        return (resolved, trace)
     }
 
     // MARK: - Private Helpers

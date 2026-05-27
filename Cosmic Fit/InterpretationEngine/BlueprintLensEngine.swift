@@ -1695,7 +1695,8 @@ enum BlueprintLensEngine {
         snapshot: DailyEnergySnapshot,
         payload: DailyFitPayload,
         blueprint: CosmicBlueprint,
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        essenceConflictTrace: EssenceConflictTrace? = nil
     ) {
         let p = "[DailyFitDiag]"
         let f2 = { (v: Double) -> String in String(format: "%.2f", v) }
@@ -1910,6 +1911,16 @@ enum BlueprintLensEngine {
             print("\(p) \(marker) #\(String(i + 1).padding(toLength: 2, withPad: " ", startingAt: 0)) \(entry.category.label.padding(toLength: 12, withPad: " ", startingAt: 0)) \(bar) \(f3(entry.score))")
         }
         print("\(p) Top 3 displayed: \(ep.visibleCategories.map { "\($0.category.label)=\(f3($0.score))" }.joined(separator: "  ·  "))")
+
+        // Essence conflict resolution trace (Stage 1 only)
+        if let conflictTrace = essenceConflictTrace {
+            for s in conflictTrace.suppressions {
+                print("\(p) ⚠️ CONFLICT RESOLVED: \(s.suppressedCategory.uppercased()) (score=\(f3(s.suppressedScore))) suppressed — conflicts with \(s.keptCategory.uppercased()) [\(s.reason)]")
+                if let rep = s.replacementCategory, let repScore = s.replacementScore {
+                    print("\(p)   → Promoted \(rep.uppercased()) (score=\(f3(repScore))) into top 3")
+                }
+            }
+        }
 
         // ── 6. SILHOUETTE PROFILE ──
         print("\(p)")

@@ -384,18 +384,146 @@ final class MotionSheenView: UIView {
     }
 }
 
+// MARK: - Motion-driven card parallax
+
+/// Subtly counter-rotates a host view in 3D in response to device motion,
+/// giving the impression that the host is a physical object held in space
+/// rather than a flat region of the screen — like an Apple Pay card that
+/// "floats" above the wallet, leaning against the user's tilt.
+///
+/// Pair with `MotionSheenView` so the iridescent sheen and the parallax
+/// share a single calibrated baseline and the same gimbal-lock-free
+/// motion source. Designed to be safe to use on the same view that runs
+/// the back→front 3D flip animation: the flip operates on the inner
+/// image views' `layer.transform` and on the host's `sublayerTransform`,
+/// while parallax writes to the host's own `layer.transform` — different
+/// properties, so they compose cleanly without overwriting each other.
+///
+/// Usage:
+/// ```
+/// // Hold a strong reference for the lifetime you want parallax active.
+/// parallax = MotionParallaxBinding(host: cardContainer)
+/// // Drop the reference (or set to nil) to stop and reset to identity.
+/// parallax = nil
+/// ```
+public final class MotionParallaxBinding {
+
+    fileprivate weak var hostView: UIView?
+
+    /// Maximum rotation magnitude (radians) reached at extreme tilts.
+    /// `tanh` easing means the rotation grows linearly near zero and
+    /// asymptotes smoothly into this clamp at the extremes — the user
+    /// never sees a hard cap, just the parallax slowing as it nears
+    /// the saturation point. Default ~3.7°: gentle and understated.
+    public var maxAngleRadians: Double = 0.065
+
+    /// How aggressively `tanh` saturates. Larger values reach near-clamp
+    /// rotation with smaller device tilts. Tuned so the bulk of the
+    /// motion happens within natural hand-held tilt ranges.
+    public var inputGain: Double = 1.6
+
+    /// Camera-plane distance for the perspective transform. Smaller =
+    /// more pronounced 3D foreshortening. Set high enough that the
+    /// effect reads as subtle depth rather than a billboard pivot.
+    public var perspectiveDistance: Double = 900
+
+    /// Additional transform applied beneath the parallax rotation.
+    /// Use this when another system needs to write to the host's
+    /// `layer.transform` (most commonly a scroll-driven parallax
+    /// translation): instead of letting the two writers race and
+    /// overwrite each other on alternating frames — which reads as a
+    /// scroll-time jitter — the caller pushes its transform through
+    /// here and the binding composes it with the parallax rotation
+    /// every tick. Always written and read on the main thread.
+    public var hostBaseTransform: CATransform3D = CATransform3DIdentity {
+        didSet {
+            // Re-render with the most recent tilt so callers don't
+            // have to wait for the next motion sample to see the
+            // new base transform reflected on screen.
+            applyComposedTransform()
+        }
+    }
+
+    /// Latest tilt vector delivered by `MotionSheenDriver`. Cached so
+    /// `applyComposedTransform` can rebuild the layer transform when
+    /// `hostBaseTransform` changes between motion ticks.
+    private var lastTiltX: Double = 0
+    private var lastTiltY: Double = 0
+
+    public init(host: UIView) {
+        self.hostView = host
+        MotionSheenDriver.shared.subscribe(self)
+    }
+
+    deinit {
+        MotionSheenDriver.shared.unsubscribe(self)
+        // Restore identity transform so the host doesn't keep a stale
+        // parallax tilt baked in after the binding goes away.
+        hostView?.layer.transform = CATransform3DIdentity
+    }
+
+    fileprivate func applyTilt(x: Double, y: Double) {
+        lastTiltX = x
+        lastTiltY = y
+        applyComposedTransform()
+    }
+
+    private func applyComposedTransform() {
+        guard let host = hostView else { return }
+
+        // `tanh` produces a smooth, monotonic mapping from any real
+        // input to (-1, 1) — linear near zero, asymptotic at the
+        // extremes. That's exactly the easing we want: full
+        // responsiveness for normal tilts, gentle slowing near the
+        // clamps so the parallax never feels like it hits a wall.
+        let easedX = tanh(lastTiltX * inputGain)
+        let easedY = tanh(lastTiltY * inputGain)
+
+        // Inverted: device tilt one way, card leans the opposite way,
+        // simulating an object that's anchored in space relative to
+        // the user's eye while the device frame moves around it.
+        let angleX = -easedY * maxAngleRadians
+        let angleY = -easedX * maxAngleRadians
+
+        // Bake perspective into the rotation matrix so a 3D rotation
+        // reads as actual depth rather than a flat affine squash. We
+        // deliberately do NOT touch the host's `sublayerTransform`:
+        // the card flip animation owns that, and splitting these two
+        // properties between parallax and flip is what lets them
+        // coexist without fighting.
+        var rotation = CATransform3DIdentity
+        rotation.m34 = -1.0 / CGFloat(perspectiveDistance)
+        rotation = CATransform3DRotate(rotation, CGFloat(angleX), 1, 0, 0)
+        rotation = CATransform3DRotate(rotation, CGFloat(angleY), 0, 1, 0)
+
+        // Compose: rotation applied first (in the layer's local
+        // space), then the caller's base transform (e.g. a scroll
+        // translation in screen space) on top. `Concat(a, b) = a · b`
+        // in column-vector convention, so this means "apply rotation,
+        // then base".
+        let composed = CATransform3DConcat(rotation, hostBaseTransform)
+
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        host.layer.transform = composed
+        CATransaction.commit()
+    }
+}
+
 // MARK: - Shared CoreMotion driver
 
 /// Single shared motion source that fans out smoothed tilt samples to
-/// any active `MotionSheenView`. Subscribers are held weakly; when the
-/// last subscriber is gone, motion updates are fully stopped so we are
-/// not draining the gyro/accelerometer in the background.
+/// any active `MotionSheenView` and `MotionParallaxBinding`. Subscribers
+/// are held weakly; when the last subscriber is gone, motion updates
+/// are fully stopped so we are not draining the gyro/accelerometer in
+/// the background.
 private final class MotionSheenDriver {
 
     static let shared = MotionSheenDriver()
 
     private let manager = CMMotionManager()
     private let subscribers = NSHashTable<MotionSheenView>.weakObjects()
+    private let parallaxSubscribers = NSHashTable<MotionParallaxBinding>.weakObjects()
 
     /// Calibrated baseline of the device attitude, expressed as the
     /// rotation matrix from body frame to the (arbitrary, but fixed)
@@ -449,7 +577,27 @@ private final class MotionSheenDriver {
 
     func unsubscribe(_ view: MotionSheenView) {
         subscribers.remove(view)
-        if subscribers.allObjects.isEmpty {
+        stopIfNoSubscribers()
+    }
+
+    func subscribe(_ binding: MotionParallaxBinding) {
+        if !parallaxSubscribers.contains(binding) {
+            parallaxSubscribers.add(binding)
+        }
+        // Push the most recent smoothed tilt immediately so the host
+        // view starts at the correct parallax angle on first frame
+        // (avoids a one-frame snap from identity).
+        binding.applyTilt(x: smoothedX, y: smoothedY)
+        startIfNeeded()
+    }
+
+    func unsubscribe(_ binding: MotionParallaxBinding) {
+        parallaxSubscribers.remove(binding)
+        stopIfNoSubscribers()
+    }
+
+    private func stopIfNoSubscribers() {
+        if subscribers.allObjects.isEmpty && parallaxSubscribers.allObjects.isEmpty {
             stop()
         }
     }
@@ -521,6 +669,9 @@ private final class MotionSheenDriver {
         let y = smoothedY
         for subscriber in subscribers.allObjects {
             subscriber.applyTilt(x: x, y: y)
+        }
+        for binding in parallaxSubscribers.allObjects {
+            binding.applyTilt(x: x, y: y)
         }
     }
 }

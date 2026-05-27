@@ -441,7 +441,7 @@ struct DailyNarrative14DayValidation_Tests {
 
         for offset in 0..<14 {
             let date = start.addingTimeInterval(Double(offset) * 86400)
-            let (_, _, narrativeTrace, intentTrace, _) = generateBriarWithTrace(for: date)
+            let (_, _, narrativeTrace, intentTrace, _, _) = generateBriarWithTrace(for: date)
             if narrativeTrace == nil || intentTrace == nil {
                 missingTraceDays += 1
             }
@@ -459,7 +459,8 @@ struct DailyNarrative14DayValidation_Tests {
         BlueprintLensEngine.PayloadTrace,
         NarrativeTrace?,
         NarrativeIntentTrace?,
-        NarrativeCoherenceTrace?
+        NarrativeCoherenceTrace?,
+        EssenceConflictTrace?
     ) {
         let base = SkyForwardV2Support.date(year: 2026, month: 5, day: 21)
         let dayOffset = Int(date.timeIntervalSince(base) / 86400)
@@ -491,7 +492,7 @@ struct DailyNarrative14DayValidation_Tests {
 
         for offset in 0..<14 {
             let date = start.addingTimeInterval(Double(offset) * 86400)
-            let (_, _, narrativeTrace, _, _) = generateBriarWithTrace(for: date)
+            let (_, _, narrativeTrace, _, _, _) = generateBriarWithTrace(for: date)
             if let relationship = narrativeTrace?.chosenRelationship {
                 relationships.insert(relationship)
             }

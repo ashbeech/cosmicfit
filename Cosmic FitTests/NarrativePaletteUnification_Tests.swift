@@ -70,7 +70,7 @@ struct NarrativePaletteUnification_Tests {
             mode: .stage1Experimental,
             dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
         )
-        let (payload, s2Trace, narrativeTrace, intentTrace, coherence) = DailyFitPipeline.generateWithTrace(
+        let (payload, s2Trace, narrativeTrace, intentTrace, coherence, _) = DailyFitPipeline.generateWithTrace(
             blueprint: SkyForwardV2Support.briarBlueprint,
             snapshot: snapshot,
             calibration: SkyForwardV2Support.stage1Calibration,

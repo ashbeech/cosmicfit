@@ -103,6 +103,14 @@ struct CosmicFitTheme {
             // Fallback to system italic
             return UIFont.italicSystemFont(ofSize: size)
         }
+
+        /// PT Serif bold italic — requires bundled `PTSerif-BoldItalic.ttf`.
+        static func DMSerifTextBoldItalicFont(size: CGFloat) -> UIFont {
+            if let customFont = UIFont(name: "PTSerif-BoldItalic", size: size) {
+                return customFont
+            }
+            return DMSerifTextItalicFont(size: size)
+        }
         
         /// DM Sans font for body text (replaces SF Pro Display)
         static func dmSansFont(size: CGFloat, weight: UIFont.Weight = .regular) -> UIFont {

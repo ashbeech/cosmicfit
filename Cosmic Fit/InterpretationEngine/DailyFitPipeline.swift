@@ -17,20 +17,30 @@ enum DailyFitPipeline {
         dailyFitEngineId engineId: String? = nil
     ) -> DailyFitPayload {
         let mode = DailyFitEngineRegistry.resolvedMode(engineId: engineId)
-        let essence = BlueprintLensEngine.resolveEssenceProfile(from: snapshot, mode: mode)
+        let rawEssence = BlueprintLensEngine.resolveEssenceProfile(from: snapshot, mode: mode)
         let silhouette = BlueprintLensEngine.deriveSilhouetteProfile(
             from: blueprint, snapshot: snapshot, calibration: calibration, mode: mode
         )
         let tuning = calibration.narrativeSelection ?? .stage1Default
         let narrativeResolution = mode == .stage1Experimental
             ? NarrativeIntentEngine.resolve(
-                essence: essence,
+                essence: rawEssence,
                 snapshot: snapshot,
                 mode: mode,
                 silhouetteProfile: silhouette,
                 tuning: tuning
             )
             : nil
+
+        let essence: StyleEssenceProfile
+        if let intent = narrativeResolution?.intent {
+            essence = NarrativeSelectionDirectives.resolveEssenceConflicts(
+                profile: rawEssence, intent: intent
+            ).resolved
+        } else {
+            essence = rawEssence
+        }
+
         return BlueprintLensEngine.generatePayload(
             blueprint: blueprint,
             snapshot: snapshot,
@@ -54,23 +64,37 @@ enum DailyFitPipeline {
         trace: BlueprintLensEngine.PayloadTrace,
         narrativeTrace: NarrativeTrace?,
         narrativeIntentTrace: NarrativeIntentTrace?,
-        narrativeCoherenceTrace: NarrativeCoherenceTrace?
+        narrativeCoherenceTrace: NarrativeCoherenceTrace?,
+        essenceConflictTrace: EssenceConflictTrace?
     ) {
         let mode = DailyFitEngineRegistry.resolvedMode(engineId: engineId)
-        let essence = BlueprintLensEngine.resolveEssenceProfile(from: snapshot, mode: mode)
+        let rawEssence = BlueprintLensEngine.resolveEssenceProfile(from: snapshot, mode: mode)
         let silhouette = BlueprintLensEngine.deriveSilhouetteProfile(
             from: blueprint, snapshot: snapshot, calibration: calibration, mode: mode
         )
         let tuning = calibration.narrativeSelection ?? .stage1Default
         let narrativeResolution = mode == .stage1Experimental
             ? NarrativeIntentEngine.resolve(
-                essence: essence,
+                essence: rawEssence,
                 snapshot: snapshot,
                 mode: mode,
                 silhouetteProfile: silhouette,
                 tuning: tuning
             )
             : nil
+
+        let essence: StyleEssenceProfile
+        let essenceConflictTrace: EssenceConflictTrace?
+        if let intent = narrativeResolution?.intent {
+            let result = NarrativeSelectionDirectives.resolveEssenceConflicts(
+                profile: rawEssence, intent: intent
+            )
+            essence = result.resolved
+            essenceConflictTrace = result.trace
+        } else {
+            essence = rawEssence
+            essenceConflictTrace = nil
+        }
 
         let (payload, s2Trace) = BlueprintLensEngine.generatePayloadWithTrace(
             blueprint: blueprint,
@@ -84,7 +108,7 @@ enum DailyFitPipeline {
         )
 
         guard let resolution = narrativeResolution else {
-            return (payload, s2Trace, nil, nil, nil)
+            return (payload, s2Trace, nil, nil, nil, nil)
         }
 
         let coherence = NarrativeSelectionDirectives.computeCoherenceTrace(
@@ -102,7 +126,8 @@ enum DailyFitPipeline {
             s2Trace,
             resolution.trace,
             NarrativeSelectionDirectives.narrativeIntentTrace(from: resolution.intent, trace: resolution.trace),
-            coherence
+            coherence,
+            essenceConflictTrace
         )
     }
 }

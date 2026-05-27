@@ -18,7 +18,7 @@ struct NarrativeTarotUnification_Tests {
         defer { TarotCalibrationTestSupport.resetTrackersForProfile() }
 
         let date = SkyForwardV2Support.date(year: 2026, month: 5, day: 26)
-        let (_, trace, _, _, coherence) = generateBriarTrace(for: date)
+        let (_, trace, _, _, coherence, _) = generateBriarTrace(for: date)
 
         #expect(trace.tarotVariantWasScored == true)
         #expect(coherence?.tarotVariantScored == true)
@@ -27,7 +27,7 @@ struct NarrativeTarotUnification_Tests {
     @Test("Stage-1 Briar: narrative tarot category boost applied")
     func stage1CategoryBoostApplied() {
         let date = SkyForwardV2Support.date(year: 2026, month: 5, day: 26)
-        let (_, _, _, _, coherence) = generateBriarTrace(for: date)
+        let (_, _, _, _, coherence, _) = generateBriarTrace(for: date)
 
         #expect(coherence?.tarotCategoryBoostApplied == true)
     }
@@ -49,7 +49,7 @@ struct NarrativeTarotUnification_Tests {
             mode: .standard,
             dailyFitEngineId: DailyFitEngineRegistry.productionId
         )
-        let (_, trace, narrativeTrace, _, coherence) = DailyFitPipeline.generateWithTrace(
+        let (_, trace, narrativeTrace, _, coherence, _) = DailyFitPipeline.generateWithTrace(
             blueprint: SkyForwardV2Support.briarBlueprint,
             snapshot: snapshot,
             calibration: DailyFitCalibration.default,
@@ -66,7 +66,8 @@ struct NarrativeTarotUnification_Tests {
         BlueprintLensEngine.PayloadTrace,
         NarrativeTrace?,
         NarrativeIntentTrace?,
-        NarrativeCoherenceTrace?
+        NarrativeCoherenceTrace?,
+        EssenceConflictTrace?
     ) {
         let base = SkyForwardV2Support.date(year: 2026, month: 5, day: 21)
         let dayOffset = Int(date.timeIntervalSince(base) / 86400)
