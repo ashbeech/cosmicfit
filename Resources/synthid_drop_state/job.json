@@ -1,17 +1,17 @@
 {
-  "id": "18226848-67a2-47b6-b8f1-d7b9fc087976",
-  "status": "processing",
-  "message": "Pass 1/3 \u00b7 tile 1/15 (2.2%)",
+  "id": "3ddce2b6-5a29-4e1c-a3ad-cadd8c9f1742",
+  "status": "done",
+  "message": "Complete",
   "basename": "The-Devil-final-v2.png",
   "inbox_basename": "The-Devil-final-v2.png",
   "output_basename": "The-Devil-final-v2.png",
   "inbox_path": "/Users/ash/dev/mobile_apps/cosmicfit/Resources/synthid_drop_inbox/The-Devil-final-v2.png",
   "output_path": "/Users/ash/dev/mobile_apps/cosmicfit/Resources/synthid_drop_desynthid/The-Devil-final-v2.png",
-  "started_at": "2026-05-23T08:19:13.087170+00:00",
+  "started_at": "2026-05-27T21:34:43.761496+00:00",
   "profile_name": "auto",
-  "worker_pid": 97691,
+  "worker_pid": 60539,
   "log_path": "/Users/ash/dev/mobile_apps/cosmicfit/Resources/synthid_drop_state/job.log",
-  "updated_at": "2026-05-23T08:19:26.516814+00:00",
+  "updated_at": "2026-05-27T23:32:53.439847+00:00",
   "profile": {
     "name": "large_original",
     "description": "Large original (1696\u00d72528, long edge 2528px): 768px tiles, 145px overlap, 50 steps, strength 0.04/0.05/0.05 (768px cap for 16 GB Mac VRAM)",
@@ -31,10 +31,7 @@
     "height": 2528
   },
   "progress": {
-    "pass": 1,
-    "passes": 3,
-    "tile": 1,
-    "tiles": 15,
-    "percent": 2.2
-  }
+    "percent": 100
+  },
+  "finished_at": "2026-05-27T23:32:53.439777+00:00"
 }

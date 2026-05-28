@@ -129,7 +129,6 @@ class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate
     }
     
     func dismissSelf() {
-        print("YEEESSSS!!!")
         var currentParent: UIViewController? = parent
         while currentParent != nil {
             if let tabBarController = currentParent as? CosmicFitTabBarController {

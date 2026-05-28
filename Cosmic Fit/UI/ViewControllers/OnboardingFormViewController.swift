@@ -24,6 +24,7 @@ class OnboardingFormViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let backButton = UIButton(type: .system)
+    private let signInButton = UIButton(type: .system)
     private let stepImageView = UIImageView()
     private let titleLabel = UILabel()
     private let descriptionLabel = UILabel()
@@ -75,6 +76,7 @@ class OnboardingFormViewController: UIViewController {
     private var geocoder = CLGeocoder()
     private var stepImageWidthConstraint: NSLayoutConstraint?
     private let initialPage: Int
+    private let underlineToSparkleGap: CGFloat = 4
 
     init(initialPage: Int = 1, postAuthMode: Bool = false) {
         self.postAuthMode = postAuthMode
@@ -181,6 +183,15 @@ class OnboardingFormViewController: UIViewController {
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         backButton.isHidden = true
         contentView.addSubview(backButton)
+
+        if !postAuthMode {
+            signInButton.translatesAutoresizingMaskIntoConstraints = false
+            signInButton.setTitle("Sign in instead?", for: .normal)
+            signInButton.setTitleColor(CosmicFitTheme.Colours.cosmicBlue, for: .normal)
+            signInButton.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(size: 18, weight: .medium)
+            signInButton.addTarget(self, action: #selector(signInButtonTapped), for: .touchUpInside)
+            view.addSubview(signInButton)
+        }
 
         stepImageView.translatesAutoresizingMaskIntoConstraints = false
         stepImageView.contentMode = .scaleAspectFit
@@ -447,6 +458,13 @@ class OnboardingFormViewController: UIViewController {
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+
+        if !postAuthMode {
+            NSLayoutConstraint.activate([
+                signInButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
+                signInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -36)
+            ])
+        }
     }
 
     private func setupKeyboardHandling() {
@@ -601,12 +619,12 @@ class OnboardingFormViewController: UIViewController {
 
             nameDivider.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 6),
             nameDivider.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
-            nameDivider.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+            nameDivider.trailingAnchor.constraint(equalTo: nameSparkleLabel.leadingAnchor, constant: -underlineToSparkleGap),
             nameDivider.heightAnchor.constraint(equalToConstant: 1),
             nameDivider.bottomAnchor.constraint(equalTo: inputContainerView.bottomAnchor),
 
             nameSparkleLabel.centerYAnchor.constraint(equalTo: nameDivider.centerYAnchor),
-            nameSparkleLabel.trailingAnchor.constraint(equalTo: nameDivider.trailingAnchor)
+            nameSparkleLabel.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor)
         ])
 
         if hasAppearedOnce {
@@ -754,12 +772,12 @@ class OnboardingFormViewController: UIViewController {
 
             emailDivider.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 6),
             emailDivider.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
-            emailDivider.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+            emailDivider.trailingAnchor.constraint(equalTo: emailSparkleLabel.leadingAnchor, constant: -underlineToSparkleGap),
             emailDivider.heightAnchor.constraint(equalToConstant: 1),
             emailDivider.bottomAnchor.constraint(equalTo: inputContainerView.bottomAnchor),
 
             emailSparkleLabel.centerYAnchor.constraint(equalTo: emailDivider.centerYAnchor),
-            emailSparkleLabel.trailingAnchor.constraint(equalTo: emailDivider.trailingAnchor)
+            emailSparkleLabel.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor)
         ])
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
@@ -842,6 +860,119 @@ class OnboardingFormViewController: UIViewController {
         default:
             break
         }
+    }
+
+    @objc private func signInButtonTapped() {
+        view.endEditing(true)
+        let authGate = AuthGateViewController()
+        authGate.onAuthenticationSuccess = { [weak self] in
+            self?.handleSignInSuccess()
+        }
+        let nav = UINavigationController(rootViewController: authGate)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
+    }
+
+    private func handleSignInSuccess() {
+        UserProfileStorage.shared.clearOnboardingPendingAuth()
+        dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            if UserProfileStorage.shared.loadUserProfile() != nil {
+                self.navigateToMainAppFromSignIn()
+            } else {
+                self.restoreProfileAfterSignIn()
+            }
+        }
+    }
+
+    private func navigateToMainAppFromSignIn() {
+        Task {
+            await SupabaseSyncService.shared.performFullSync()
+            await MainActor.run {
+                guard let tabBar = AppDelegate.makeConfiguredTabBarController(),
+                      let window = self.view.window else { return }
+                UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve) {
+                    window.rootViewController = tabBar
+                }
+            }
+        }
+    }
+
+    private func restoreProfileAfterSignIn() {
+        let loadingAlert = UIAlertController(
+            title: nil,
+            message: "Restoring your chart data...",
+            preferredStyle: .alert
+        )
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.startAnimating()
+        loadingAlert.view.addSubview(indicator)
+        NSLayoutConstraint.activate([
+            indicator.centerYAnchor.constraint(equalTo: loadingAlert.view.centerYAnchor),
+            indicator.leadingAnchor.constraint(equalTo: loadingAlert.view.leadingAnchor, constant: 20)
+        ])
+        present(loadingAlert, animated: true)
+
+        Task {
+            do {
+                let profile = try await SupabaseSyncService.shared.pullProfileFromSupabase()
+                if let profile {
+                    UserProfileStorage.shared.saveUserProfile(profile)
+                }
+                await MainActor.run {
+                    loadingAlert.dismiss(animated: true) {
+                        if UserProfileStorage.shared.loadUserProfile() != nil {
+                            self.navigateToMainAppFromSignIn()
+                        } else {
+                            self.navigateToPostAuthOnboarding()
+                        }
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    loadingAlert.dismiss(animated: true) {
+                        if UserProfileStorage.shared.loadUserProfile() != nil {
+                            self.navigateToMainAppFromSignIn()
+                            return
+                        }
+                        if self.isProfileMissingError(error) {
+                            self.navigateToPostAuthOnboarding()
+                        } else {
+                            self.showRestoreFailedAlert()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func navigateToPostAuthOnboarding() {
+        let onboardingVC = OnboardingFormViewController(postAuthMode: true)
+        let nav = UINavigationController(rootViewController: onboardingVC)
+        nav.navigationBar.isHidden = true
+        guard let window = view.window else { return }
+        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve) {
+            window.rootViewController = nav
+        }
+    }
+
+    private func showRestoreFailedAlert() {
+        let alert = UIAlertController(
+            title: "Couldn't Restore Data",
+            message: "We couldn't restore your chart data. Please check your connection and try again.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Retry", style: .default) { [weak self] _ in
+            self?.restoreProfileAfterSignIn()
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(alert, animated: true)
+    }
+
+    private func isProfileMissingError(_ error: Error) -> Bool {
+        let description = "\(error)"
+        return description.contains("PGRST116") || description.contains("406")
     }
 
     @objc private func unknownTimeToggled() {
@@ -1026,6 +1157,8 @@ class OnboardingFormViewController: UIViewController {
         actionButton.alpha = loading ? 0.55 : 1.0
         if !postAuthMode {
             emailTextField.isEnabled = !loading
+            signInButton.isEnabled = !loading
+            signInButton.alpha = loading ? 0.3 : 1.0
         }
         if loading {
             activityIndicator.startAnimating()
