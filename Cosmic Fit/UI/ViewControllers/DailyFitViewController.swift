@@ -96,6 +96,18 @@ class DailyFitViewController: UIViewController {
     private let tomorrowTeaseLabel = UILabel()
     private let tomorrowButton = UIButton(type: .system)
 
+    /// Captured so `updateLayoutDependentConstants` can keep the
+    /// "Tap to reveal…" caption pinned the right distance above the
+    /// tab bar even when `view.safeAreaLayoutGuide.bottomAnchor`
+    /// temporarily collapses during slide-tab transitions (the same
+    /// reparenting that broke the card's vertical centre — see
+    /// `calculateTabBarTop()` for the full story).
+    private var tapToRevealBottomConstraint: NSLayoutConstraint?
+    /// Fixed distance between the caption's bottom and the tab bar's
+    /// top edge, mirroring the prior `-32` constant on the safe-area
+    /// anchor.
+    private static let tapToRevealBottomGapAboveTabBar: CGFloat = 32
+
     /// Scroll `contentView` extends this far below the day-navigation CTA (cosmic grey + small blur tail).
     private static let contentBottomPaddingBelowTomorrow: CGFloat = 100
     /// Cosmic grey panel extends this far below the CTA; remainder of bottom padding shows blurred card.
@@ -143,13 +155,16 @@ class DailyFitViewController: UIViewController {
     private lazy var dayNavigationBackButton: UIButton = {
         let btn = UIButton(type: .system)
         var config = UIButton.Configuration.plain()
-        config.image = CosmicNavigationArrow.image(direction: .left, pointSize: 22)
+        config.image = CosmicNavigationArrow.image(direction: .left, pointSize: 19.3)
         config.contentInsets = .zero
         config.baseForegroundColor = .white
         btn.configuration = config
         btn.contentHorizontalAlignment = .leading
         btn.contentVerticalAlignment = .center
         btn.translatesAutoresizingMaskIntoConstraints = false
+        // White with difference blending inverts against the scrolled content:
+        // light backgrounds render the arrow dark, dark backgrounds keep it bright.
+        btn.layer.compositingFilter = "differenceBlendMode"
         btn.alpha = 0
         btn.isHidden = true
         btn.addTarget(self, action: #selector(dayNavigationBackTapped), for: .touchUpInside)
@@ -179,6 +194,28 @@ class DailyFitViewController: UIViewController {
     private var cardParallax: MotionParallaxBinding?
     private var tapToRevealLabel = UILabel()
     private var backgroundBlurImageView = UIImageView()
+    /// Stored so `viewDidLayoutSubviews` can grow it as the scroll
+    /// `contentSize` does, guaranteeing the blur's bottom edge always
+    /// extends past the tab bar by at least the worst-case parallax
+    /// shift. Without this, a long daily-fit reading translates the
+    /// blur far enough up that its bottom rises above the tab bar at
+    /// max scroll and exposes the solid `cosmicBlue` fill underneath.
+    private var backgroundBlurBottomConstraint: NSLayoutConstraint?
+    /// Resting bottom inset of `backgroundBlurImageView` below
+    /// `view.bottom`. Used as the floor for the dynamically grown
+    /// bottom constraint — we never shrink past this even when content
+    /// happens to be short.
+    private static let backgroundBlurBottomBaseExtension: CGFloat = 200
+    /// Same shift factor used in `scrollViewDidScroll` for the blur
+    /// parallax (`-cardTranslation * 0.2`, with `cardTranslation = yOffset * 0.5`),
+    /// i.e. `0.5 * 0.2 = 0.1`. Hoisted to a constant so the layout-side
+    /// over-extension calculation cannot drift out of sync with the
+    /// scroll-side translation.
+    private static let backgroundBlurParallaxFactor: CGFloat = 0.1
+    /// Extra padding past the worst-case parallax shift; absorbs
+    /// rounding and any one-frame race between contentSize settling
+    /// and the layout pass updating the constraint.
+    private static let backgroundBlurSafetyMargin: CGFloat = 32
     /// Semi-transparent layer on top of the blurred card wallpaper so the sharp tarot reads clearly.
     private let revealedBackgroundDimmingView = UIView()
     private var cardTapGesture: UITapGestureRecognizer?
@@ -260,9 +297,38 @@ class DailyFitViewController: UIViewController {
         // cold launch happens to set up under correct insets.
         updateLayoutDependentConstants()
         updateContentPanelTopIfNeeded()
+        updateBackgroundBlurBottomExtensionIfNeeded()
         updateTarotCardOuterGlow()
+        updateDayNavigationBackButtonScrollPosition()
         guard dailyFitPayload != nil else { return }
         refreshDiamondScalePositions()
+    }
+
+    /// Sizes `backgroundBlurImageView`'s bottom over-extension to the
+    /// worst-case parallax shift implied by the current scroll
+    /// `contentSize`. The blur is translated upward by
+    /// `yOffset * backgroundBlurParallaxFactor` (see
+    /// `scrollViewDidScroll`); at max scroll that shift equals
+    /// `maxValidOffset * backgroundBlurParallaxFactor`. If the
+    /// constraint's constant is smaller than that shift plus a safety
+    /// margin, the blur's bottom edge rises above the tab bar at the
+    /// natural scroll limit and exposes the solid `cosmicBlue` fill.
+    ///
+    /// We never shrink past `backgroundBlurBottomBaseExtension` (the
+    /// rest-state buffer) and we only write the constraint when it
+    /// would change by more than a half point, mirroring the guard in
+    /// `updateLayoutDependentConstants` so successive layout passes
+    /// don't churn out no-op writes.
+    private func updateBackgroundBlurBottomExtensionIfNeeded() {
+        guard let bottomConstraint = backgroundBlurBottomConstraint else { return }
+        let maxValidOffset = max(0, scrollView.contentSize.height - scrollView.bounds.height + scrollView.adjustedContentInset.bottom)
+        let maxParallaxShift = maxValidOffset * Self.backgroundBlurParallaxFactor
+        let required = maxParallaxShift + Self.backgroundBlurSafetyMargin
+        let newConstant = max(Self.backgroundBlurBottomBaseExtension, required)
+        guard abs(bottomConstraint.constant - newConstant) > 0.5 else { return }
+        UIView.performWithoutAnimation {
+            bottomConstraint.constant = newConstant
+        }
     }
 
     /// Re-derives the safe-area-dependent constants for the
@@ -288,6 +354,7 @@ class DailyFitViewController: UIViewController {
         let availableHeight = tabBarTop - menuBarBottom
         let centerYInView = menuBarBottom + (availableHeight / 2)
         let newCardCenter = centerYInView - newContentViewOffset + Self.tarotCardCenterYNudge
+        let newTapToRevealBottom = tabBarTop - Self.tapToRevealBottomGapAboveTabBar
 
         UIView.performWithoutAnimation {
             if let topConstraint = contentViewTopConstraint,
@@ -297,6 +364,10 @@ class DailyFitViewController: UIViewController {
             if let centerYConstraint = cardContainerCenterYConstraint,
                abs(centerYConstraint.constant - newCardCenter) > 0.5 {
                 centerYConstraint.constant = newCardCenter
+            }
+            if let tapBottom = tapToRevealBottomConstraint,
+               abs(tapBottom.constant - newTapToRevealBottom) > 0.5 {
+                tapBottom.constant = newTapToRevealBottom
             }
         }
     }
@@ -353,10 +424,12 @@ class DailyFitViewController: UIViewController {
             print("Card container and content restored on tab return")
         }
         
-        // CRITICAL: Ensure topMaskView stays above scroll content; keep day-back above scroll when visible.
+        // CRITICAL: Keep the top mask above scroll content and the day-back button just beneath it,
+        // so the button can slide behind the nav strip when it starts tracking the header row.
         view.bringSubviewToFront(topMaskView)
         if isViewingTomorrow {
-            view.bringSubviewToFront(dayNavigationBackButton)
+            positionDayNavigationBackButtonInChromeStack()
+            updateDayNavigationBackButtonScrollPosition()
         }
 
         // Activate the inverted-tilt 3D parallax on the card container
@@ -515,7 +588,8 @@ class DailyFitViewController: UIViewController {
         
         view.bringSubviewToFront(topMaskView)
         if isViewingTomorrow {
-            view.bringSubviewToFront(dayNavigationBackButton)
+            positionDayNavigationBackButtonInChromeStack()
+            updateDayNavigationBackButtonScrollPosition()
         }
     }
     
@@ -531,14 +605,28 @@ class DailyFitViewController: UIViewController {
         // CRITICAL: Add to main view (not contentView) to ensure it's behind everything
         view.insertSubview(backgroundBlurImageView, at: 0) // Insert at bottom of view hierarchy
         
-        // EXTENDED constraints - background extends beyond screen bounds to cover scroll area
-        let extraHeight: CGFloat = 200 // Extra height above and below to cover scroll transforms
-        
+        // EXTENDED constraints - background extends beyond screen
+        // bounds to cover the parallax shift. The bottom constraint is
+        // stored and updated in `viewDidLayoutSubviews` once the scroll
+        // `contentSize` is known, because the maximum parallax shift
+        // (and therefore the required over-extension below the tab bar)
+        // scales with content length. Long daily-fit readings would
+        // otherwise translate the blur up so far that its bottom edge
+        // rose above the tab bar, leaving the solid `cosmicBlue` fill
+        // visible underneath. The top stays fixed because top
+        // rubber-band moves the blur DOWN — never opening a gap there.
+        let extraHeight = Self.backgroundBlurBottomBaseExtension
+        let bottomConstraint = backgroundBlurImageView.bottomAnchor.constraint(
+            equalTo: view.bottomAnchor,
+            constant: extraHeight
+        )
+        backgroundBlurBottomConstraint = bottomConstraint
+
         NSLayoutConstraint.activate([
             backgroundBlurImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: -extraHeight),
             backgroundBlurImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backgroundBlurImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundBlurImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: extraHeight)
+            bottomConstraint
         ])
 
         revealedBackgroundDimmingView.translatesAutoresizingMaskIntoConstraints = false
@@ -601,34 +689,37 @@ class DailyFitViewController: UIViewController {
         let minCaptionHeight = tapToRevealLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 44)
         minCaptionHeight.priority = .defaultHigh
 
+        // Pin the caption's bottom to `view.topAnchor` with a manually
+        // managed constant equal to the tab bar's top edge in this
+        // view's coords, minus a small visual gap. We *can't* anchor
+        // to `view.safeAreaLayoutGuide.bottomAnchor` here even though
+        // that would be the obvious choice — UIKit derives that guide
+        // from `view.bounds.height - safeAreaInsets.bottom`, and
+        // during a `SlideTabTransitionAnimator` transition the view
+        // is reparented out from under the tab bar, which collapses
+        // `safeAreaInsets.bottom` to 0 (or just the home-indicator
+        // 34pt) while `bounds.height` stretches to the full screen
+        // height. The safe-area guide then sits ~50–83pt below the
+        // real tab bar top, dragging the caption partway under the
+        // tab bar where the user sees it as "having drifted down".
+        // `view.topAnchor` is stable across all that reparenting, so
+        // anchoring there and writing the resolved offset by hand
+        // (via `updateLayoutDependentConstants`) keeps the caption at
+        // the correct 32pt above the tab bar in every layout pass —
+        // same fix shape as `calculateTabBarTop()`.
+        let initialTapBottom = calculateTabBarTop() - Self.tapToRevealBottomGapAboveTabBar
+        tapToRevealBottomConstraint = tapToRevealLabel.bottomAnchor.constraint(
+            equalTo: view.topAnchor,
+            constant: initialTapBottom
+        )
+        tapToRevealBottomConstraint?.isActive = true
+
         NSLayoutConstraint.activate([
             cardBackImageView.topAnchor.constraint(equalTo: tarotCardContainerView.topAnchor),
             cardBackImageView.leadingAnchor.constraint(equalTo: tarotCardContainerView.leadingAnchor),
             cardBackImageView.trailingAnchor.constraint(equalTo: tarotCardContainerView.trailingAnchor),
             cardBackImageView.bottomAnchor.constraint(equalTo: tarotCardContainerView.bottomAnchor),
 
-            // Pin the caption's bottom to a fixed offset above the safe-area
-            // bottom (= tab bar top) instead of centring it between the card
-            // foot and the viewport bottom. The previous centring was a
-            // weighted average of two anchors whose Y positions both depended
-            // on `view.safeAreaInsets` and `calculateTabBarTop()` — which is
-            // computed with the buggy double-subtraction (safe-area bottom
-            // *and* tab-bar height) and was further sensitive to whether the
-            // constraint constants had been refreshed yet at the moment the
-            // first paint happened. The net result was a caption that drifted
-            // anywhere between ~30 pt clear of the tab bar and ~5 pt under
-            // it, depending on when in the lifecycle the layout settled.
-            //
-            // `view.safeAreaLayoutGuide.bottomAnchor` is managed by UIKit
-            // and tracks the tab bar top automatically as soon as the safe
-            // area becomes valid, so the caption now lands at the same
-            // y-offset above the tab bar on every launch and every tab/day
-            // switch, regardless of whether the card constraint constants
-            // have caught up to the current safe-area metrics.
-            tapToRevealLabel.bottomAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.bottomAnchor,
-                constant: -32
-            ),
             tapToRevealLabel.centerXAnchor.constraint(equalTo: tarotCardContainerView.centerXAnchor),
             tapToRevealLabel.leadingAnchor.constraint(equalTo: tarotCardContainerView.leadingAnchor),
             tapToRevealLabel.trailingAnchor.constraint(equalTo: tarotCardContainerView.trailingAnchor),
@@ -1092,19 +1183,48 @@ class DailyFitViewController: UIViewController {
     }
 
     private func calculateTabBarTop() -> CGFloat {
-        // For a child VC of `UITabBarController`, `view.safeAreaInsets.bottom`
-        // already reports the full tab-bar inset (49 pt items + 34 pt home
-        // indicator overlap on modern iPhones, or 49 pt on older devices),
-        // so `view.bounds.height - safeAreaInsets.bottom` IS the tab bar's
-        // top edge in this view's coordinate space.
+        // Query the tab bar's actual on-screen position via window
+        // coordinates rather than deriving it from
+        // `view.bounds.height - safeAreaInsets.bottom`.
         //
-        // The previous implementation also subtracted `tabBar.frame.height`
-        // here, which double-counted the tab bar (once via the safe-area
-        // inset, again via the explicit subtraction) and shifted the card
-        // up by ~49–83 pt depending on iOS's reported tab-bar frame. That
-        // in turn cascaded into the "Tap to reveal…" caption sitting on
-        // top of the tab bar whenever the constraint constants were
-        // refreshed mid-lifecycle.
+        // Why the safe-area-based derivation isn't safe here:
+        // `SlideTabTransitionAnimator` does `containerView.addSubview(toVC.view)`
+        // mid-transition, which reparents this VC's view out from under
+        // the tab bar. While reparented, `view.bounds.height` stretches
+        // to the transition container's full screen height (~852pt on
+        // iPhone 14 Pro) while `safeAreaInsets.bottom` collapses to 0
+        // (or just the 34pt home-indicator inset) because the tab bar
+        // is no longer an ancestor. `bounds.height - safeAreaInsets.bottom`
+        // then reports 852 or 818 instead of the real 769, and any
+        // `viewDidLayoutSubviews` pass that fires during the transition
+        // writes the wrong `cardContainerCenterYConstraint.constant`
+        // (`333.5` or `316.5` instead of `292` on iPhone 14 Pro). The
+        // bad constant persists after the transition completes — the
+        // settled post-transition mode (bounds=852, bottom=34) also
+        // resolves to a wrong value — until something else (presenting
+        // the menu / account sub-page) bounces the view back to the
+        // "natural" mode (bounds=769, bottom=0) and the layout pass
+        // re-converges to 292.
+        //
+        // The tab bar's own position in the window is stable across
+        // all of this: it doesn't move during a tab transition. So
+        // computing `tabBarTop_in_window - viewTop_in_window` gives
+        // the correct relative position in this view's coordinate
+        // space regardless of which container the view currently
+        // sits inside.
+        if let tabBar = tabBarController?.tabBar,
+           let window = view.window ?? tabBar.window {
+            let tabBarTopInWindow = tabBar.convert(CGPoint.zero, to: window).y
+            let viewOriginInWindow = view.convert(CGPoint.zero, to: window).y
+            return tabBarTopInWindow - viewOriginInWindow
+        }
+        // Fallback for the brief window where the view (or the tab
+        // bar) isn't attached to a UIWindow yet — e.g. very first
+        // `viewDidLayoutSubviews` after `viewDidLoad`, before the
+        // tab bar controller has finished moving the VC into its
+        // hierarchy. The derived value is wrong here too, but it
+        // will be corrected on the next layout pass once the view
+        // is in a window.
         return view.bounds.height - view.safeAreaInsets.bottom
     }
 
@@ -1424,7 +1544,24 @@ class DailyFitViewController: UIViewController {
     private func presentStyleCalendarUnlockScreen() {
         let mode: StyleCalendarUnlockViewController.PresentationMode =
             EntitlementManager.shared.hasFullAccess ? .subscribedComingSoon : .unlockPreview
-        presentDetailScreen(StyleCalendarUnlockViewController(mode: mode))
+        let calendarVC = StyleCalendarUnlockViewController(
+            mode: mode,
+            isViewingTomorrow: isViewingTomorrow,
+            todayDate: todayDate
+        )
+        calendarVC.onDaySelected = { [weak self] goToTomorrow in
+            guard let self = self else { return }
+            if let tbc = self.tabBarController as? CosmicFitTabBarController {
+                tbc.dismissDetailViewController(animated: true) {
+                    if goToTomorrow {
+                        self.switchToTomorrow()
+                    } else {
+                        self.switchToToday()
+                    }
+                }
+            }
+        }
+        presentDetailScreen(calendarVC)
     }
 
     private func switchToTomorrow() {
@@ -1484,9 +1621,7 @@ class DailyFitViewController: UIViewController {
         }
         view.insertSubview(blurView, belowSubview: topMaskView)
         view.bringSubviewToFront(topMaskView)
-        if !fadeOutBackButton {
-            view.bringSubviewToFront(dayNavigationBackButton)
-        }
+        positionDayNavigationBackButtonInChromeStack()
 
         if fadeOutBackButton {
             dayNavigationBackButton.isUserInteractionEnabled = false
@@ -1542,7 +1677,7 @@ class DailyFitViewController: UIViewController {
                     to: tomorrowButton,
                     title: "SEE TODAY\u{2019}S FIT",
                     arrow: .left,
-                    pointSize: 11
+                    pointSize: 6
                 )
                 tomorrowTeaseLabel.text = "Today\u{2019}s fit awaits you..."
             } else {
@@ -1557,7 +1692,7 @@ class DailyFitViewController: UIViewController {
                     to: tomorrowButton,
                     title: "SEE TOMORROW\u{2019}S FIT",
                     arrow: .right,
-                    pointSize: 11
+                    pointSize: 6
                 )
             } else {
                 var config = tomorrowButton.configuration ?? UIButton.Configuration.plain()
@@ -1580,12 +1715,15 @@ class DailyFitViewController: UIViewController {
             tapToRevealLabel.text = "Tap to reveal today\u{2019}s fit"
         }
         if isViewingTomorrow {
-            view.bringSubviewToFront(dayNavigationBackButton)
+            positionDayNavigationBackButtonInChromeStack()
+            updateDayNavigationBackButtonScrollPosition()
+        } else {
+            dayNavigationBackButton.transform = .identity
         }
     }
 
     private func setupDayNavigationBackButton() {
-        view.addSubview(dayNavigationBackButton)
+        view.insertSubview(dayNavigationBackButton, belowSubview: topMaskView)
         NSLayoutConstraint.activate([
             dayNavigationBackButton.topAnchor.constraint(equalTo: topMaskView.bottomAnchor, constant: 8),
             dayNavigationBackButton.leadingAnchor.constraint(
@@ -1595,6 +1733,30 @@ class DailyFitViewController: UIViewController {
             dayNavigationBackButton.widthAnchor.constraint(equalToConstant: 44),
             dayNavigationBackButton.heightAnchor.constraint(equalToConstant: 44)
         ])
+    }
+
+    private func positionDayNavigationBackButtonInChromeStack() {
+        view.insertSubview(dayNavigationBackButton, belowSubview: topMaskView)
+    }
+
+    private func updateDayNavigationBackButtonScrollPosition() {
+        guard isViewingTomorrow,
+              !dayNavigationBackButton.isHidden,
+              dayNavigationBackButton.superview != nil,
+              calendarButton.superview != nil else {
+            dayNavigationBackButton.transform = .identity
+            return
+        }
+
+        let stickyCenterY = dayNavigationBackButton.center.y
+        let calendarCenterY = calendarButton.convert(
+            CGPoint(x: calendarButton.bounds.midX, y: calendarButton.bounds.midY),
+            to: view
+        ).y
+        // Stick in the top-left until the scrolling calendar icon reaches the same
+        // vertical center, then track that header row upward at the same pace.
+        let translationY = min(0, calendarCenterY - stickyCenterY)
+        dayNavigationBackButton.transform = CGAffineTransform(translationX: 0, y: translationY)
     }
 
     private func cardRevealKey(for date: Date) -> String {
@@ -2940,8 +3102,8 @@ class DailyFitViewController: UIViewController {
             backgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             backgroundView.bottomAnchor.constraint(
-                equalTo: tomorrowButton.bottomAnchor,
-                constant: Self.contentBackgroundTailBelowTomorrowButton
+                equalTo: contentView.bottomAnchor,
+                constant: view.bounds.height
             )
         ])
         
@@ -3039,6 +3201,7 @@ extension DailyFitViewController: UIScrollViewDelegate {
         guard isCardRevealed else { return }
         
         let yOffset = scrollView.contentOffset.y
+        updateDayNavigationBackButtonScrollPosition()
         
         let cardTranslation = yOffset * 0.5
 
@@ -3092,8 +3255,26 @@ extension DailyFitViewController: UIScrollViewDelegate {
             scrollIndicatorView.isHidden = false
         }
         
-        // Background blur - reduced parallax movement since we have extended bounds
-        let blurParallax = CGAffineTransform(translationX: 0, y: -cardTranslation * 0.2)
+        // Background blur. The y-offset driving the parallax is
+        // clamped to the max valid scroll position so bottom
+        // rubber-band over-scroll cannot keep pulling the blurred
+        // card up — that previously exposed the solid cosmic-blue
+        // fill under its bottom edge as an ugly seam between the blur
+        // and the tab bar. The light content panel above still
+        // travels with the raw scroll offset and retains its
+        // bounce/snap behaviour.
+        //
+        // The blur's bottom over-extension is sized in
+        // `updateBackgroundBlurBottomExtensionIfNeeded` to absorb
+        // exactly this maximum shift, so at the natural scroll limit
+        // the blur is still flush with (and slightly past) the tab
+        // bar's top. The translation factor matches
+        // `backgroundBlurParallaxFactor` (0.5 * 0.2 = 0.1); they are
+        // multiplied apart here for readability but must agree.
+        let maxValidOffset = max(0, scrollView.contentSize.height - scrollView.bounds.height + scrollView.adjustedContentInset.bottom)
+        let clampedOffsetForBlur = min(yOffset, maxValidOffset)
+        let blurCardTranslation = clampedOffsetForBlur * 0.5
+        let blurParallax = CGAffineTransform(translationX: 0, y: -blurCardTranslation * 0.2)
         backgroundBlurImageView.transform = blurParallax
         revealedBackgroundDimmingView.transform = blurParallax
     }
