@@ -135,6 +135,15 @@ class DailyFitViewController: UIViewController {
 
     private var silhouetteSliderData: [(indicator: UILabel, track: UIView, constraint: NSLayoutConstraint?)] = []
 
+    /// Six scale markers: vibrancy, contrast, metal tone, and three silhouette sliders.
+    private static let dailyFitSliderCount = 6
+    private static let sliderEntranceAnimationDuration: TimeInterval = 0.5
+    private static let sliderEntranceAnimationStagger: TimeInterval = 0.04
+    private var sliderTargetValues = [Double](repeating: 0, count: dailyFitSliderCount)
+    private var sliderEntranceAnimationsPlayed = [Bool](repeating: false, count: dailyFitSliderCount)
+    private var sliderEntranceAnimationsInFlight = Set<Int>()
+    private var sliderEntranceAnimationGeneration = 0
+
     // MARK: - Day Navigation
     
     /// Which calendar date is currently displayed (today or tomorrow).
@@ -257,6 +266,17 @@ class DailyFitViewController: UIViewController {
     private var dailyCardRevealKey: String {
         DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: displayDate, engineId: DailyFitEngineConfig.effectiveEngineId)
     }
+
+    private var dailySliderEntranceKey: String {
+        DailyFitRevealPersistence.sliderEntranceAnimationFlagKey(
+            forCalendarDay: displayDate,
+            engineId: DailyFitEngineConfig.effectiveEngineId
+        )
+    }
+
+    private var hasPersistedSliderEntranceForCurrentDay: Bool {
+        UserDefaults.standard.bool(forKey: dailySliderEntranceKey)
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -302,6 +322,7 @@ class DailyFitViewController: UIViewController {
         updateDayNavigationBackButtonScrollPosition()
         guard dailyFitPayload != nil else { return }
         refreshDiamondScalePositions()
+        updateSliderEntranceAnimationsIfNeeded()
     }
 
     /// Sizes `backgroundBlurImageView`'s bottom over-extension to the
@@ -884,6 +905,7 @@ class DailyFitViewController: UIViewController {
         isCardRevealed = UserDefaults.standard.bool(forKey: dailyCardRevealKey)
         
         if isCardRevealed {
+            syncSliderEntranceStateForCurrentDay()
             setCardState(.revealed, animated: false)
         } else {
             setCardState(.unrevealed, animated: false)
@@ -1590,9 +1612,9 @@ class DailyFitViewController: UIViewController {
         isViewingTomorrow = isTomorrow
         dailyFitPayload = payload
 
+        checkCardRevealState()
         updateContentFromPayload()
         scrollView.setContentOffset(.zero, animated: false)
-        checkCardRevealState()
         updateDayNavigationUI()
     }
 
@@ -2326,33 +2348,156 @@ class DailyFitViewController: UIViewController {
         guard let payload = dailyFitPayload else { return }
 
         if let sp = payload.scalePresentation {
-            updateDiamondScale(constraint: &vibrancyIndicatorConstraint, indicator: vibrancyIndicator, track: vibrancyTrack, value: sp.vibrancy.displayPosition)
-            updateDiamondScale(constraint: &contrastIndicatorConstraint, indicator: contrastIndicator, track: contrastTrack, value: sp.contrast.displayPosition)
-            let snappedMetal = Self.snapMetalToThreePositions(sp.metalTone.displayPosition)
-            updateDiamondScale(constraint: &metalToneIndicatorConstraint, indicator: metalToneIndicator, track: metalToneTrack, value: snappedMetal)
+            sliderTargetValues[0] = sp.vibrancy.displayPosition
+            sliderTargetValues[1] = sp.contrast.displayPosition
+            sliderTargetValues[2] = Self.snapMetalToThreePositions(sp.metalTone.displayPosition)
         } else {
-            // Legacy fallback: absolute positioning, same tertile snap
-            updateDiamondScale(constraint: &vibrancyIndicatorConstraint, indicator: vibrancyIndicator, track: vibrancyTrack, value: payload.vibrancy)
-            updateDiamondScale(constraint: &contrastIndicatorConstraint, indicator: contrastIndicator, track: contrastTrack, value: payload.contrast)
-            let snappedMetal = Self.snapMetalToThreePositions(payload.metalTone)
-            updateDiamondScale(constraint: &metalToneIndicatorConstraint, indicator: metalToneIndicator, track: metalToneTrack, value: snappedMetal)
+            sliderTargetValues[0] = payload.vibrancy
+            sliderTargetValues[1] = payload.contrast
+            sliderTargetValues[2] = Self.snapMetalToThreePositions(payload.metalTone)
         }
 
-        updateSilhouetteSliders(with: payload.silhouetteProfile)
+        let silhouetteValues = [
+            payload.silhouetteProfile.masculineFeminine,
+            payload.silhouetteProfile.angularRounded,
+            payload.silhouetteProfile.structuredDraped
+        ]
+        for (offset, value) in silhouetteValues.enumerated() where offset < 3 {
+            sliderTargetValues[3 + offset] = value
+        }
+
+        applyAllSliderMarkerPositionsFromState()
     }
 
-    private func updateSilhouetteSliders(with profile: SilhouetteProfile) {
-        let values = [profile.masculineFeminine, profile.angularRounded, profile.structuredDraped]
-        for (index, value) in values.enumerated() where index < silhouetteSliderData.count {
-            let entry = silhouetteSliderData[index]
-            let track = entry.track
-            let indicator = entry.indicator
-            guard track.bounds.width > 0 else { continue }
-            entry.constraint?.isActive = false
-            let offset = CGFloat(value) * track.bounds.width
-            let newConstraint = indicator.centerXAnchor.constraint(equalTo: track.leadingAnchor, constant: offset)
-            newConstraint.isActive = true
-            silhouetteSliderData[index] = (indicator: indicator, track: track, constraint: newConstraint)
+    private func syncSliderEntranceStateForCurrentDay(preparingForFirstReveal: Bool = false) {
+        sliderEntranceAnimationGeneration += 1
+        sliderEntranceAnimationsInFlight.removeAll()
+
+        if preparingForFirstReveal {
+            sliderEntranceAnimationsPlayed = [Bool](repeating: false, count: Self.dailyFitSliderCount)
+        } else if hasPersistedSliderEntranceForCurrentDay {
+            sliderEntranceAnimationsPlayed = [Bool](repeating: true, count: Self.dailyFitSliderCount)
+        } else {
+            sliderEntranceAnimationsPlayed = [Bool](repeating: false, count: Self.dailyFitSliderCount)
+        }
+
+        applyAllSliderMarkerPositionsFromState()
+    }
+
+    private func persistSliderEntranceForCurrentDay() {
+        UserDefaults.standard.set(true, forKey: dailySliderEntranceKey)
+    }
+
+    private func markSliderEntranceAnimationCompleteIfNeeded() {
+        guard sliderEntranceAnimationsPlayed.allSatisfy({ $0 }) else { return }
+        persistSliderEntranceForCurrentDay()
+    }
+
+    private func applyAllSliderMarkerPositionsFromState() {
+        for index in 0..<Self.dailyFitSliderCount {
+            guard !sliderEntranceAnimationsInFlight.contains(index) else { continue }
+            let value = sliderEntranceAnimationsPlayed[index] ? sliderTargetValues[index] : 0
+            applySliderMarkerPosition(index: index, value: value)
+        }
+    }
+
+    private func applySliderMarkerPosition(index: Int, value: Double) {
+        switch index {
+        case 0:
+            updateDiamondScale(
+                constraint: &vibrancyIndicatorConstraint,
+                indicator: vibrancyIndicator,
+                track: vibrancyTrack,
+                value: value
+            )
+        case 1:
+            updateDiamondScale(
+                constraint: &contrastIndicatorConstraint,
+                indicator: contrastIndicator,
+                track: contrastTrack,
+                value: value
+            )
+        case 2:
+            updateDiamondScale(
+                constraint: &metalToneIndicatorConstraint,
+                indicator: metalToneIndicator,
+                track: metalToneTrack,
+                value: value
+            )
+        case 3...5:
+            let silhouetteIndex = index - 3
+            guard silhouetteIndex < silhouetteSliderData.count else { return }
+            var entry = silhouetteSliderData[silhouetteIndex]
+            updateDiamondScale(
+                constraint: &entry.constraint,
+                indicator: entry.indicator,
+                track: entry.track,
+                value: value
+            )
+            silhouetteSliderData[silhouetteIndex] = entry
+        default:
+            break
+        }
+    }
+
+    private func sliderTrackView(for index: Int) -> UIView? {
+        switch index {
+        case 0: return vibrancyTrack
+        case 1: return contrastTrack
+        case 2: return metalToneTrack
+        case 3...5:
+            let silhouetteIndex = index - 3
+            guard silhouetteIndex < silhouetteSliderData.count else { return nil }
+            return silhouetteSliderData[silhouetteIndex].track
+        default:
+            return nil
+        }
+    }
+
+    private func isSliderTrackVisibleInScrollView(_ track: UIView) -> Bool {
+        guard track.bounds.width > 0 else { return false }
+        let trackFrame = track.convert(track.bounds, to: scrollView)
+        let visibleMinY = scrollView.contentOffset.y
+        let visibleMaxY = scrollView.contentOffset.y + scrollView.bounds.height - scrollView.adjustedContentInset.bottom
+        return trackFrame.maxY > visibleMinY && trackFrame.minY < visibleMaxY
+    }
+
+    private func updateSliderEntranceAnimationsIfNeeded() {
+        guard isCardRevealed, !hasPersistedSliderEntranceForCurrentDay else { return }
+
+        var pendingIndices: [Int] = []
+        for index in 0..<Self.dailyFitSliderCount {
+            guard !sliderEntranceAnimationsPlayed[index],
+                  !sliderEntranceAnimationsInFlight.contains(index),
+                  let track = sliderTrackView(for: index),
+                  isSliderTrackVisibleInScrollView(track) else { continue }
+            pendingIndices.append(index)
+        }
+
+        guard !pendingIndices.isEmpty else { return }
+
+        let generation = sliderEntranceAnimationGeneration
+        for (staggerIndex, index) in pendingIndices.enumerated() {
+            let target = sliderTargetValues[index]
+            sliderEntranceAnimationsInFlight.insert(index)
+            applySliderMarkerPosition(index: index, value: 0)
+
+            let delay = Self.sliderEntranceAnimationStagger * Double(staggerIndex)
+            UIView.animate(
+                withDuration: Self.sliderEntranceAnimationDuration,
+                delay: delay,
+                options: [.curveEaseIn, .beginFromCurrentState],
+                animations: {
+                    self.applySliderMarkerPosition(index: index, value: target)
+                    self.view.layoutIfNeeded()
+                },
+                completion: { finished in
+                    guard finished, generation == self.sliderEntranceAnimationGeneration else { return }
+                    self.sliderEntranceAnimationsInFlight.remove(index)
+                    self.sliderEntranceAnimationsPlayed[index] = true
+                    self.markSliderEntranceAnimationCompleteIfNeeded()
+                }
+            )
         }
     }
 
@@ -3042,6 +3187,7 @@ class DailyFitViewController: UIViewController {
         currentCardState = .revealed
         ensureContainerVisibility()
         view.layoutIfNeeded()
+        syncSliderEntranceStateForCurrentDay(preparingForFirstReveal: true)
         updateTarotCardOuterGlow()
     }
 
@@ -3202,6 +3348,7 @@ extension DailyFitViewController: UIScrollViewDelegate {
         
         let yOffset = scrollView.contentOffset.y
         updateDayNavigationBackButtonScrollPosition()
+        updateSliderEntranceAnimationsIfNeeded()
         
         let cardTranslation = yOffset * 0.5
 

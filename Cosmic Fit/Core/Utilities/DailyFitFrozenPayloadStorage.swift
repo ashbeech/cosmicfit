@@ -24,6 +24,21 @@ enum DailyFitRevealPersistence {
         return "CardRevealed_\(engineId)_\(day)"
     }
 
+    static func sliderEntranceAnimationFlagKey(
+        forCalendarDay date: Date,
+        engineId: String = DailyFitEngineRegistry.productionId
+    ) -> String {
+        let fmt = DateFormatter()
+        fmt.locale = Locale(identifier: "en_GB_POSIX")
+        fmt.timeZone = TimeZone.current
+        fmt.dateFormat = "yyyy-MM-dd"
+        let day = fmt.string(from: date)
+        if engineId == DailyFitEngineRegistry.productionId {
+            return "SliderEntrancePlayed_\(day)"
+        }
+        return "SliderEntrancePlayed_\(engineId)_\(day)"
+    }
+
     /// Clears persisted "card revealed" flags for each calendar day from `start` through `end`
     /// (inclusive), using `Calendar.current` start-of-day boundaries. Used when birth chart
     /// inputs change so Daily Fit is not constrained by stale reveal state.
@@ -32,9 +47,13 @@ enum DailyFitRevealPersistence {
         let last = calendar.startOfDay(for: end)
         while day <= last {
             UserDefaults.standard.removeObject(forKey: revealedFlagKey(forCalendarDay: day))
+            UserDefaults.standard.removeObject(forKey: sliderEntranceAnimationFlagKey(forCalendarDay: day))
             for descriptor in DailyFitEngineRegistry.allDescriptors where descriptor.id != DailyFitEngineRegistry.productionId {
                 UserDefaults.standard.removeObject(
                     forKey: revealedFlagKey(forCalendarDay: day, engineId: descriptor.id)
+                )
+                UserDefaults.standard.removeObject(
+                    forKey: sliderEntranceAnimationFlagKey(forCalendarDay: day, engineId: descriptor.id)
                 )
             }
             guard let next = calendar.date(byAdding: .day, value: 1, to: day) else { break }
@@ -186,7 +205,16 @@ final class DailyFitFrozenPayloadStorage {
         var revealKeysToCheck = Set<String>()
         revealKeysToCheck.insert(DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date, engineId: effectiveEngineId))
         revealKeysToCheck.insert(DailyFitRevealPersistence.revealedFlagKey(forCalendarDay: date, engineId: DailyFitEngineRegistry.productionId))
+        var sliderEntranceKeysToCheck = Set<String>()
+        sliderEntranceKeysToCheck.insert(DailyFitRevealPersistence.sliderEntranceAnimationFlagKey(forCalendarDay: date, engineId: effectiveEngineId))
+        sliderEntranceKeysToCheck.insert(DailyFitRevealPersistence.sliderEntranceAnimationFlagKey(forCalendarDay: date, engineId: DailyFitEngineRegistry.productionId))
         for key in revealKeysToCheck {
+            if UserDefaults.standard.bool(forKey: key), noValidFrozen {
+                UserDefaults.standard.removeObject(forKey: key)
+                didPurge = true
+            }
+        }
+        for key in sliderEntranceKeysToCheck {
             if UserDefaults.standard.bool(forKey: key), noValidFrozen {
                 UserDefaults.standard.removeObject(forKey: key)
                 didPurge = true
