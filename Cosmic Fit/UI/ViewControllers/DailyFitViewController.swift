@@ -137,12 +137,18 @@ class DailyFitViewController: UIViewController {
 
     /// Six scale markers: vibrancy, contrast, metal tone, and three silhouette sliders.
     private static let dailyFitSliderCount = 6
-    private static let sliderEntranceAnimationDuration: TimeInterval = 0.5
-    private static let sliderEntranceAnimationStagger: TimeInterval = 0.04
+    private static let sliderEntranceAnimationDuration: TimeInterval = 0.38
+    private static let sliderEntranceAnimationStagger: TimeInterval = 0.03
     private var sliderTargetValues = [Double](repeating: 0, count: dailyFitSliderCount)
     private var sliderEntranceAnimationsPlayed = [Bool](repeating: false, count: dailyFitSliderCount)
     private var sliderEntranceAnimationsInFlight = Set<Int>()
     private var sliderEntranceAnimationGeneration = 0
+    /// Single gate for the scroll-driven entrance. Opened only at the moment the
+    /// revealed content becomes visible to the user (see `armSliderEntranceAnimationIfNeeded`),
+    /// and closed on every day-switch / reveal-state resync. Scroll can only start
+    /// the entrance while this is open, so no stray scroll or layout pass during a
+    /// reveal/day transition can fire (or silently consume) the animation early.
+    private var sliderEntranceReady = false
 
     // MARK: - Day Navigation
     
@@ -322,7 +328,6 @@ class DailyFitViewController: UIViewController {
         updateDayNavigationBackButtonScrollPosition()
         guard dailyFitPayload != nil else { return }
         refreshDiamondScalePositions()
-        updateSliderEntranceAnimationsIfNeeded()
     }
 
     /// Sizes `backgroundBlurImageView`'s bottom over-extension to the
@@ -473,6 +478,11 @@ class DailyFitViewController: UIViewController {
 
         // Restart tarot halo breath if layout did not run (e.g. quick tab switch).
         updateTarotCardOuterGlow()
+
+        // Cold launch / tab return into an already-revealed day: layout is final
+        // here, so arming now lets the entrance play as the user scrolls. No-op
+        // once the day's entrance is persisted, and harmless while unrevealed.
+        armSliderEntranceAnimationIfNeeded()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -801,6 +811,7 @@ class DailyFitViewController: UIViewController {
             
             self.tarotCardContainerView.alpha = 1.0
             self.tarotCardContainerView.transform = .identity
+            self.cardParallax?.hostBaseTransform = CATransform3DIdentity
             // Mirror the card container reset on the halo sibling —
             // see `viewWillAppear` for the rationale; without this,
             // returning to the unrevealed state with leftover
@@ -903,9 +914,9 @@ class DailyFitViewController: UIViewController {
     
     private func checkCardRevealState() {
         isCardRevealed = UserDefaults.standard.bool(forKey: dailyCardRevealKey)
-        
+        syncSliderEntranceStateForCurrentDay()
+
         if isCardRevealed {
-            syncSliderEntranceStateForCurrentDay()
             setCardState(.revealed, animated: false)
         } else {
             setCardState(.unrevealed, animated: false)
@@ -1616,6 +1627,13 @@ class DailyFitViewController: UIViewController {
         updateContentFromPayload()
         scrollView.setContentOffset(.zero, animated: false)
         updateDayNavigationUI()
+        // Switching into an already-revealed day goes through `setCardState`,
+        // which short-circuits when the previous day was also revealed — so
+        // `showRevealedStateUnified` never fires. Arm here (after the scroll
+        // resets to the top) so re-visiting a revealed-but-not-yet-animated day
+        // still plays the entrance. No-op for unrevealed days (the tap reveal
+        // arms via `completeCardReveal`) and for days already persisted.
+        armSliderEntranceAnimationIfNeeded()
     }
 
     /// Cross-blur transition used when moving between days.
@@ -2369,19 +2387,42 @@ class DailyFitViewController: UIViewController {
         applyAllSliderMarkerPositionsFromState()
     }
 
-    private func syncSliderEntranceStateForCurrentDay(preparingForFirstReveal: Bool = false) {
+    /// Resets per-day entrance bookkeeping and snaps markers to their resting state
+    /// (left edge when the day hasn't animated yet, target once persisted). Always
+    /// closes the `sliderEntranceReady` gate: the gate is re-opened only by
+    /// `armSliderEntranceAnimationIfNeeded` once the revealed content is on screen.
+    private func syncSliderEntranceStateForCurrentDay() {
         sliderEntranceAnimationGeneration += 1
         sliderEntranceAnimationsInFlight.removeAll()
+        sliderEntranceReady = false
 
-        if preparingForFirstReveal {
-            sliderEntranceAnimationsPlayed = [Bool](repeating: false, count: Self.dailyFitSliderCount)
-        } else if hasPersistedSliderEntranceForCurrentDay {
-            sliderEntranceAnimationsPlayed = [Bool](repeating: true, count: Self.dailyFitSliderCount)
-        } else {
-            sliderEntranceAnimationsPlayed = [Bool](repeating: false, count: Self.dailyFitSliderCount)
-        }
+        let alreadyAnimatedToday = hasPersistedSliderEntranceForCurrentDay
+        sliderEntranceAnimationsPlayed = [Bool](repeating: alreadyAnimatedToday, count: Self.dailyFitSliderCount)
 
         applyAllSliderMarkerPositionsFromState()
+    }
+
+    /// Opens the entrance gate the moment a freshly revealed (or freshly shown)
+    /// day's content is visible. Re-pins every marker to the left and arms the
+    /// scroll trigger so each slider glides to position as it scrolls into view.
+    /// No-op once the day's entrance is persisted, so it only ever runs on the
+    /// first reveal of a given day.
+    private func armSliderEntranceAnimationIfNeeded() {
+        guard isCardRevealed, !hasPersistedSliderEntranceForCurrentDay else { return }
+
+        sliderEntranceAnimationGeneration += 1
+        sliderEntranceAnimationsInFlight.removeAll()
+        sliderEntranceAnimationsPlayed = [Bool](repeating: false, count: Self.dailyFitSliderCount)
+        applyAllSliderMarkerPositionsFromState()
+        // Commit the left-edge reset to the presentation layer now, so a marker
+        // carried over at the previous day's position can't leak into the
+        // entrance animation's start frame (see `updateSliderEntranceAnimationsIfNeeded`).
+        view.layoutIfNeeded()
+        sliderEntranceReady = true
+
+        // Play immediately for any slider already on screen (short content / small
+        // device); otherwise this is a no-op until the first scroll reveals one.
+        updateSliderEntranceAnimationsIfNeeded()
     }
 
     private func persistSliderEntranceForCurrentDay() {
@@ -2463,7 +2504,7 @@ class DailyFitViewController: UIViewController {
     }
 
     private func updateSliderEntranceAnimationsIfNeeded() {
-        guard isCardRevealed, !hasPersistedSliderEntranceForCurrentDay else { return }
+        guard sliderEntranceReady, !hasPersistedSliderEntranceForCurrentDay else { return }
 
         var pendingIndices: [Int] = []
         for index in 0..<Self.dailyFitSliderCount {
@@ -2477,11 +2518,23 @@ class DailyFitViewController: UIViewController {
         guard !pendingIndices.isEmpty else { return }
 
         let generation = sliderEntranceAnimationGeneration
-        for (staggerIndex, index) in pendingIndices.enumerated() {
-            let target = sliderTargetValues[index]
+
+        // Pin every pending marker to the left edge and FLUSH it to the
+        // presentation layer before animating. Without this flush the marker's
+        // on-screen position can still be a stale prior frame (e.g. the previous
+        // day's target, carried over because these indicator labels are reused
+        // across days). `.beginFromCurrentState` would then read that stale
+        // presentation as the start point and animate target→target — i.e. snap
+        // with no visible glide. Committing the 0-offset first guarantees the
+        // entrance always starts from the true left edge.
+        for index in pendingIndices {
             sliderEntranceAnimationsInFlight.insert(index)
             applySliderMarkerPosition(index: index, value: 0)
+        }
+        view.layoutIfNeeded()
 
+        for (staggerIndex, index) in pendingIndices.enumerated() {
+            let target = sliderTargetValues[index]
             let delay = Self.sliderEntranceAnimationStagger * Double(staggerIndex)
             UIView.animate(
                 withDuration: Self.sliderEntranceAnimationDuration,
@@ -3184,10 +3237,19 @@ class DailyFitViewController: UIViewController {
         
         scrollView.isScrollEnabled = true
         setupContentSectionBackgrounds(animated: true)
-        currentCardState = .revealed
         ensureContainerVisibility()
         view.layoutIfNeeded()
-        syncSliderEntranceStateForCurrentDay(preparingForFirstReveal: true)
+        currentCardState = .revealed
+        // Fresh reveal always starts at the top with the sliders below the fold,
+        // so arming here lets each one animate as the user scrolls down to it.
+        scrollView.setContentOffset(.zero, animated: false)
+        // A flip reveal only happens on a day's genuine first reveal (`cardTapped`
+        // guards on `!isCardRevealed`). Clear any stale persisted entrance flag
+        // first: it can survive from a prior session whose frozen payload was
+        // later invalidated — leaving the flag set while the day is re-revealed
+        // from scratch — which would otherwise suppress this first entrance.
+        UserDefaults.standard.removeObject(forKey: dailySliderEntranceKey)
+        armSliderEntranceAnimationIfNeeded()
         updateTarotCardOuterGlow()
     }
 
@@ -3209,10 +3271,13 @@ class DailyFitViewController: UIViewController {
             label.layoutMargins = UIEdgeInsets.zero
         }
         
-        // Create single content container with theme background
+        // Create single content container with theme background.
+        // Fully opaque from the start: the panel begins parked off-screen below
+        // the fold (`startingYPosition`), so it's hidden by position, not alpha.
+        // The reveal then *slides* it up into place rather than fading it in.
         let backgroundView = UIView()
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
-        backgroundView.alpha = 0  // Start invisible
+        backgroundView.alpha = 1.0
         
         // Apply theme content background, then large rounded top corners only (design sheet).
         CosmicFitTheme.styleContentBackground(backgroundView)
@@ -3321,14 +3386,12 @@ class DailyFitViewController: UIViewController {
                 initialSpringVelocity: 0,
                 options: [.curveEaseOut],
                 animations: {
-                    backgroundView.alpha = 1.0
                     self.contentBackgroundTopConstraint?.constant = finalYPosition
                     self.view.layoutIfNeeded()
                 },
                 completion: { _ in applyFinalLayout() }
             )
         } else {
-            backgroundView.alpha = 1.0
             contentBackgroundTopConstraint?.constant = finalYPosition
             view.layoutIfNeeded()
             applyFinalLayout()
