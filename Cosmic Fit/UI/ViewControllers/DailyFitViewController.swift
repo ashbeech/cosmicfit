@@ -17,6 +17,7 @@ class DailyFitViewController: UIViewController {
     
     private var contentBackgroundView: UIView?
     private var contentBackgroundTopConstraint: NSLayoutConstraint?
+    private var isAnimatingContentPanelReveal = false
     
     // Tarot card header
     private let tarotCardImageView = UIImageView()
@@ -407,6 +408,7 @@ class DailyFitViewController: UIViewController {
     /// of when the initial setup ran.
     private func updateContentPanelTopIfNeeded() {
         guard isCardRevealed,
+              !isAnimatingContentPanelReveal,
               let constraint = contentBackgroundTopConstraint,
               dailyFitLabel.frame.origin.y > 0 else { return }
 
@@ -891,7 +893,6 @@ class DailyFitViewController: UIViewController {
             UIView.animate(withDuration: 0.5, animations: applyChanges) { _ in
                 self.setupContentSectionBackgrounds(animated: true)
                 self.ensureContainerVisibility()
-                self.view.layoutIfNeeded()
                 self.updateTarotCardOuterGlow()
                 self.updateDayNavigationUI()
             }
@@ -2539,7 +2540,7 @@ class DailyFitViewController: UIViewController {
             UIView.animate(
                 withDuration: Self.sliderEntranceAnimationDuration,
                 delay: delay,
-                options: [.curveEaseIn, .beginFromCurrentState],
+                options: [.curveEaseOut, .beginFromCurrentState],
                 animations: {
                     self.applySliderMarkerPosition(index: index, value: target)
                     self.view.layoutIfNeeded()
@@ -3238,7 +3239,6 @@ class DailyFitViewController: UIViewController {
         scrollView.isScrollEnabled = true
         setupContentSectionBackgrounds(animated: true)
         ensureContainerVisibility()
-        view.layoutIfNeeded()
         currentCardState = .revealed
         // Fresh reveal always starts at the top with the sliders below the fold,
         // so arming here lets each one animate as the user scrolls down to it.
@@ -3257,6 +3257,9 @@ class DailyFitViewController: UIViewController {
     
     private func setupContentSectionBackgrounds(animated: Bool = true) {
         contentBackgroundView?.removeFromSuperview()
+        if animated {
+            isAnimatingContentPanelReveal = true
+        }
         
         // Remove any existing backgrounds from labels
         let allLabels: [UILabel?] = [
@@ -3389,9 +3392,13 @@ class DailyFitViewController: UIViewController {
                     self.contentBackgroundTopConstraint?.constant = finalYPosition
                     self.view.layoutIfNeeded()
                 },
-                completion: { _ in applyFinalLayout() }
+                completion: { _ in
+                    self.isAnimatingContentPanelReveal = false
+                    applyFinalLayout()
+                }
             )
         } else {
+            isAnimatingContentPanelReveal = false
             contentBackgroundTopConstraint?.constant = finalYPosition
             view.layoutIfNeeded()
             applyFinalLayout()
