@@ -9,8 +9,8 @@ final class StoreKitManager {
 
     private var transactionListener: Task<Void, Error>?
 
-    static let monthlyProductID = "com.cosmicfit.fullaccess.monthly"
-    static let annualProductID  = "com.cosmicfit.fullaccess.annual"
+    static let monthlyProductID = "com.cosmicfit.full.monthly"
+    static let annualProductID  = "com.cosmicfit.full.annual"
 
     enum PurchaseError: LocalizedError {
         case productNotFound

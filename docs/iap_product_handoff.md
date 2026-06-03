@@ -12,28 +12,24 @@ Two auto-renewable subscriptions in a single **Subscription Group** (Apple manda
 
 | Product ID                         | Duration | UK Price | Display                  |
 | ---------------------------------- | -------- | -------- | ------------------------ |
-| `com.cosmicfit.fullaccess.monthly` | 1 month  | £7.99    | "£7.99/month"            |
-| `com.cosmicfit.fullaccess.annual`  | 1 year   | £49.99   | "£49.99/year — Save 48%" |
+| `com.cosmicfit.full.monthly` | 1 month  | £7.99    | "£7.99/month"            |
+| `com.cosmicfit.full.annual`  | 1 year   | £49.99   | "£49.99/year — Save 48%" |
 
 **Savings copy**: Monthly × 12 = £95.88. Annual = £49.99. Saving = £45.89, which is **48%** when rounded to the nearest whole percent (45.89 ÷ 95.88 ≈ 47.9%). Display this as **"Save 48%"** next to the annual option. The actual displayed price and savings label must use the localised `Product.displayPrice` from StoreKit so it renders correctly in every currency; the **percentage must still be computed in code** from `Product.price` values (do not hardcode `48` for non-UK storefronts).
 
-### CRITICAL — Product Type Check
+### Product Type (resolved)
 
-The products have been created in App Store Connect as **Consumable**. This is incorrect for subscriptions. Before any code work begins, the implementing developer must verify the product type in App Store Connect:
+Products were originally created in App Store Connect as **Consumable**. These were deleted and replaced with **Auto-Renewable Subscriptions** inside a **Subscription Group** ("Cosmic Fit Full Access"). The original `fullaccess` product IDs could not be reused; the current IDs are `com.cosmicfit.full.monthly` and `com.cosmicfit.full.annual`, referenced only via constants in `StoreKitManager`.
 
-- If they are listed as **Consumable**, they must be **deleted and recreated** as **Auto-Renewable Subscriptions** within a **Subscription Group** (e.g. group name: "Cosmic Fit Full Access").
-- Consumable products are single-use (like game coins) and cannot provide ongoing entitlements or be managed via subscription management.
-- Auto-Renewable Subscription is the only product type that supports monthly/annual billing, grace periods, family sharing eligibility, and App Store subscription management.
-
-**Product ID reuse is unreliable.** Apple may take 24+ hours to release a deleted product ID, and in some cases IDs are permanently reserved. **Assume new IDs will be needed.** The fallback IDs are `com.cosmicfit.access.monthly` and `com.cosmicfit.access.annual`. If the original IDs happen to work after deletion, use those instead — but the code must reference the IDs via the constants in `StoreKitManager` so changing them is a one-line edit either way.
+No StoreKit 1 or consumable-specific code was ever in the Swift codebase (the app launched with StoreKit 2). No legacy cleanup was needed beyond the App Store Connect product-type change.
 
 ### Subscription Group Setup in App Store Connect
 
 1. Go to **Monetization > Subscriptions** (not In-App Purchases)
 2. Create a **Subscription Group**: "Cosmic Fit Full Access"
 3. Add two subscriptions within that group:
-   - Monthly: Reference Name "Monthly Full Access", Product ID `com.cosmicfit.fullaccess.monthly`, Duration 1 Month, Price Tier = £7.99
-   - Annual: Reference Name "Annual Full Access", Product ID `com.cosmicfit.fullaccess.annual`, Duration 1 Year, Price Tier = £49.99
+   - Monthly: Reference Name "Monthly Full Access", Product ID `com.cosmicfit.full.monthly`, Duration 1 Month, Price Tier = £7.99
+   - Annual: Reference Name "Annual Full Access", Product ID `com.cosmicfit.full.annual`, Duration 1 Year, Price Tier = £49.99
 4. For each subscription, add localisation (Display Name, Description)
 5. Add a review screenshot before submission (can be deferred until the purchase UI is built)
 
@@ -161,8 +157,8 @@ final class StoreKitManager {
 
     private var transactionListener: Task<Void, Error>?
 
-    static let monthlyProductID = "com.cosmicfit.fullaccess.monthly"
-    static let annualProductID = "com.cosmicfit.fullaccess.annual"
+    static let monthlyProductID = "com.cosmicfit.full.monthly"
+    static let annualProductID = "com.cosmicfit.full.annual"
 
     private init() {}
 }
@@ -655,3 +651,155 @@ Apple will reject the app if any of these are missing:
 12. **Smoke test** — verify sign-in still works via nudge banner and profile; verify sign-out works; verify auth state notifications still refresh UI correctly; verify **Profile → Restore purchases** and paywall restore both call `restorePurchases()` and refresh locks; verify **sign-out does not lock** paid content if the Apple ID is still subscribed
 13. **Subscription test** — sandbox purchases, restore, lock/unlock, expiry, upgrade, edge cases
 14. **Submit** — ensure App Store Connect products are correct type (auto-renewable, NOT consumable), add screenshots, set to "Ready to Submit"
+
+---
+
+## App Store Server Notifications (V2)
+
+### Overview
+
+Apple sends webhook POSTs for subscription lifecycle events (new purchase, renewal, cancellation, refund, billing retry, etc.) to a URL you configure in App Store Connect. This is backend audit/reconciliation only — **client entitlement remains StoreKit 2 on-device** and is not replaced by server state.
+
+### URLs
+
+| Slot | URL |
+|------|-----|
+| **Production Server URL** | `https://fkzxcxycyvzutbvgjzwu.supabase.co/functions/v1/app-store-notifications` |
+| **Sandbox Server URL** | Same URL (handler branches on `environment` in the verified payload) |
+
+Version: **Notification Version 2** (selected in ASC).
+
+### Identifiers
+
+| Identifier | Value | Where used |
+|------------|-------|------------|
+| **Bundle ID** | `com.thisisbullish.cosmicfit` | Checked against every incoming notification; reject mismatches |
+| **App Apple ID** | Numeric ID from ASC (set as secret `APP_APPLE_ID`) | Checked on production payloads when present |
+| **Product IDs** | `com.cosmicfit.full.monthly`, `com.cosmicfit.full.annual` | Transaction payloads validated against allowlist |
+
+### Security
+
+1. **JWS verification**: every incoming `signedPayload` (and nested `signedTransactionInfo`) is verified via the x5c certificate chain pinned to Apple Root CA - G3. No payload is trusted or stored without passing verification.
+2. **Bundle ID / App Apple ID / Product ID allowlists**: reject any verified notification that doesn't match this app.
+3. **No Supabase JWT**: Apple does not send `apikey` / Bearer tokens. The Edge Function has `verify_jwt = false` in `config.toml`.
+4. **Service role only DB access**: the `subscription_events` table has RLS enabled with no policies, so only the Edge Function (service role) can write.
+5. **Redacted logging**: full JWS, raw POST body, and API keys are never logged. Structured log lines include only `notificationUUID`, `notificationType`, `subtype`, `environment`, `productId`, `originalTransactionId`.
+
+### HTTP response semantics
+
+| Condition | Status | Apple behavior |
+|-----------|--------|----------------|
+| Invalid method / missing body / bad JSON | 400 | No retry |
+| JWS verify fail / wrong bundle / wrong product | 400 | No retry |
+| Verified + inserted (or duplicate UUID) | 200 | Ack |
+| Verified + unknown `notificationType` | 200 | Ack + audit row |
+| Verified + transient DB failure | **500** | Apple retries |
+| Config missing (`APP_STORE_BUNDLE_ID` not set) | **500** | Apple retries |
+
+### Code
+
+| File | Purpose |
+|------|---------|
+| `supabase/functions/app-store-notifications/index.ts` | HTTP handler |
+| `supabase/functions/_shared/app-store-jws.ts` | JWS verify, cert chain, allowlist checks |
+| `supabase/migrations/002_subscription_events.sql` | `subscription_events` table |
+| `supabase/config.toml` | `[functions.app-store-notifications] verify_jwt = false` |
+
+### Deploy
+
+```bash
+supabase db push                                          # apply 002 migration
+supabase secrets set APP_STORE_BUNDLE_ID=com.thisisbullish.cosmicfit
+supabase secrets set APP_APPLE_ID=<numeric-id-from-asc>
+supabase functions deploy app-store-notifications
+```
+
+### Post-deploy validation
+
+Run `supabase/functions/app-store-notifications/test-matrix.sh <url>` for automated HTTP-level checks. Then:
+
+1. ASC → Send Test Notification → verify 200 + row in `subscription_events`
+2. Sandbox purchase → SUBSCRIBED event received
+3. Sandbox renewal → DID_RENEW event received
+4. Query: `SELECT * FROM subscription_events ORDER BY received_at DESC LIMIT 10`
+
+### Ops runbook
+
+**Rotate secrets**: `supabase secrets set APP_STORE_BUNDLE_ID=... APP_APPLE_ID=...` → redeploy function.
+
+**Pause notifications**: clear the URL in ASC → App Store Server Notifications. Apple stops sending.
+
+**Investigate a subscription**: `SELECT * FROM subscription_events WHERE original_transaction_id = '<id>' ORDER BY received_at`.
+
+**Redeploy after code change**: `supabase functions deploy app-store-notifications` (migration only needs re-push if schema changed).
+
+**Alerts (recommended)**: monitor Edge Function 5xx rate, spike in 400 verification failures, and zero notifications over 24h when live subscription activity is expected.
+
+### StoreKit-only policy (unchanged)
+
+This webhook does **not** change how the iOS app gates access. `EntitlementManager.checkEntitlement()` remains the single source of truth, reading from `Transaction.currentEntitlements`. The webhook exists for backend audit, support tooling, and future reconciliation. Do not wire `hasFullAccess` to Supabase or server state without revising this policy.
+
+### Phase 2 (implemented — requires 003 migration)
+
+**`subscription_status` table**: keyed by `original_transaction_id`, updated via `upsert_subscription_status()` — a Postgres function with a monotonic guard (`WHERE EXCLUDED.last_event_signed_at > subscription_status.last_event_signed_at`). Out-of-order events (e.g. stale EXPIRED arriving after a newer DID_RENEW) are silently ignored.
+
+**Notification type mapping** (in handler):
+
+| Notification type | Subtype | Status |
+|-------------------|---------|--------|
+| SUBSCRIBED, DID_RENEW, RENEWAL_EXTENDED | — | active |
+| DID_CHANGE_RENEWAL_STATUS | AUTO_RENEW_DISABLED | active (still valid until expiry) |
+| DID_CHANGE_RENEWAL_STATUS | other | expired |
+| DID_FAIL_TO_RENEW | GRACE_PERIOD | grace_period |
+| DID_FAIL_TO_RENEW | other | billing_retry |
+| GRACE_PERIOD_EXPIRED | — | billing_retry |
+| REFUND | — | refunded |
+| REVOKE | — | revoked |
+| EXPIRED | — | expired |
+| Unknown types | — | No status change; audit row only |
+
+**Migration**: `supabase/migrations/003_subscription_status.sql`. Deploy with `supabase db push`.
+
+**Status upsert failure is non-fatal**: the audit row in `subscription_events` is already persisted; a warning is logged but the handler returns 200.
+
+**Future**: App Store Server API reconciliation job (requires `.p8` API key secrets: `APP_STORE_CONNECT_ISSUER_ID`, `APP_STORE_CONNECT_KEY_ID`, `APP_STORE_CONNECT_PRIVATE_KEY`).
+
+### Observability
+
+**Structured log fields** (emitted by handler for every verified notification): `notificationUUID`, `notificationType`, `subtype`, `environment`, `productId`, `originalTransactionId`. Filter on `event: "app_store_notification_*"`.
+
+**Recommended alerts** (configure in Supabase dashboard or external monitoring):
+
+- Edge Function 5xx rate > 5% over 10 minutes
+- `app_store_notification_rejected` (400) spike: > 10 in 5 minutes
+- Zero `app_store_notification_verified` events in 24h when live subscription activity is expected
+- `app_store_status_upsert_error` count > 0
+
+**Support queries**:
+
+```sql
+-- All events for a subscription
+SELECT notification_type, subtype, environment, product_id, event_signed_at, received_at
+FROM subscription_events
+WHERE original_transaction_id = '<id>'
+ORDER BY received_at;
+
+-- Current status for a subscription
+SELECT * FROM subscription_status
+WHERE original_transaction_id = '<id>';
+
+-- Events in the last 24h
+SELECT notification_type, count(*), max(received_at)
+FROM subscription_events
+WHERE received_at > now() - interval '24 hours'
+GROUP BY notification_type
+ORDER BY count(*) DESC;
+
+-- Active subscriptions
+SELECT original_transaction_id, product_id, environment, last_notification_type, updated_at
+FROM subscription_status
+WHERE status = 'active'
+ORDER BY updated_at DESC;
+```
+
+**Retention**: consider pruning `subscription_events` older than 24 months via pg_cron once data volume warrants it. `subscription_status` rows are small and should be kept indefinitely.
