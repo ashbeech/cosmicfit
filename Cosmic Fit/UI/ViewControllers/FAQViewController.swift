@@ -75,7 +75,7 @@ class FAQViewController: UIViewController {
         eyebrowLabel.numberOfLines = 0
         let eyebrowAttrs: [NSAttributedString.Key: Any] = [
             .font: CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold),
-            .foregroundColor: CosmicFitTheme.Colours.darkerCosmicGrey,
+            .foregroundColor: CosmicFitTheme.Colours.cosmicBlue,
             .kern: 1.75
         ]
         eyebrowLabel.attributedText = NSAttributedString(string: "COSMIC FIT", attributes: eyebrowAttrs)
@@ -177,11 +177,11 @@ class FAQViewController: UIViewController {
             ),
             (
                 question: "How does the birth chart connect to style?",
-                answer: "Your natal chart reveals your core energy patterns—how you show up in the world, what makes you feel confident, and where you naturally shine. We translate those cosmic themes into tangible style elements: fabrics, colours, silhouettes, and styling approaches that align with your innate energy."
+                answer: "Your natal chart reveals your core energy patterns; how you show up in the world, what makes you feel confident, and where you naturally shine. We translate those cosmic themes into tangible style elements: fabrics, colours, silhouettes, and styling approaches that align with your innate energy."
             ),
             (
                 question: "What's the \"Daily Fit\"?",
-                answer: "Each day, the planets move into new positions, creating fresh energetic weather. Your Daily Fit is a personalized outfit interpretation based on how that day's sky interacts with your birth chart—styling advice that honors both who you are and what the moment calls for. You can focus on today and, when you want to plan ahead, preview tomorrow from the same screen."
+                answer: "Each day, the planets move into new positions, creating fresh energetic weather. Your Daily Fit is a personalized outfit interpretation based on how that day's sky interacts with your birth chart; styling advice that honors both who you are and what the moment calls for. You can focus on today and, when you want to plan ahead, preview tomorrow from the same screen."
             ),
             (
                 question: "Do I need to know astrology to use this?",
@@ -196,36 +196,28 @@ class FAQViewController: UIViewController {
                 answer: "Yes. Go to your Profile page to update your birth details. Keep in mind that changing your birth time or location will affect your chart and may shift your style recommendations."
             ),
             (
-                question: "Is this just for women?",
-                answer: "Not at all. Cosmic Fit is for anyone interested in aligning their personal style with their Style Guide, regardless of gender. The guidance adapts to your unique chart and can be interpreted across any style spectrum."
-            ),
-            (
                 question: "What if I don't like the outfit suggestion?",
-                answer: "Your Daily Fit is meant to inspire, not dictate. Think of it as a creative prompt. You might take just one element—a colour, a texture, an accessory choice—and build from there. The goal is alignment with your energy, not rigid adherence to a specific look."
+                answer: "Your Daily Fit is meant to inspire, not dictate. Think of it as a creative prompt. You might take just one element, such as a colour, a texture, or an accessory choice, and build from there. The goal is alignment with your energy, not rigid adherence to a specific look."
             ),
             (
                 question: "How often does my Daily Fit change?",
-                answer: "Each calendar day gets a new Daily Fit as the transits shift against your chart. Open today's reading anytime, and use tomorrow's preview on the Daily Fit screen when you want to plan ahead—both update with the date, not continuously through the day."
+                answer: "Each calendar day gets a new Daily Fit as the transits shift against your chart. Open today's reading anytime, and use tomorrow's preview on the Daily Fit screen when you want to plan ahead; both update with the date, not continuously through the day."
             ),
             (
                 question: "Can I see past Daily Fits?",
-                answer: "There isn't a history or calendar view yet—Daily Fit is built around today, with an optional look at tomorrow. We're exploring ways to revisit past days in a future update so you can track patterns in your cosmic style over time."
+                answer: "There isn't a history or calendar view yet; Daily Fit is built around today, with an optional look at tomorrow. We're exploring ways to revisit past days in a future update so you can track patterns in your cosmic style over time."
             ),
             (
                 question: "What's the difference between the Daily Fit and my Style Guide?",
-                answer: "Your Style Guide is your foundational style DNA—timeless guidance drawn from your birth chart and stable from day to day. If you change birth details in Profile, the chart (and Style Guide) can refresh to match. Your Daily Fit is how that foundation meets the current sky: a tarot-led prompt, palette, and notes for the specific day. One is your core reference; the other is today's expression of it."
+                answer: "Your Style Guide is your foundational style DNA, timeless guidance drawn from your birth chart and stable from day to day. If you change birth details in Profile, the chart (and Style Guide) can refresh to match. Your Daily Fit is how that foundation meets the current sky: a tarot-led prompt, palette, and notes for the specific day. One is your core reference; the other is today's expression of it."
             ),
             (
                 question: "What does the Essence section show?",
-                answer: "Essence maps fourteen style energies (for example Classic, Playful, Magnetic, Minimal). For each day we highlight the top three—the radar triangle's shape shows their relative strength compared to each other, not a percentage readout. Think of it as a quick mood board for the outfit's attitude."
+                answer: "Essence maps fourteen style energies (for example Classic, Playful, Magnetic, Minimal). For each day we highlight the top three; the radar triangle's shape shows their relative strength compared to each other, not a percentage readout. Think of it as a quick mood board for the outfit's attitude."
             ),
             (
                 question: "Can I share my Daily Fit or Style Guide?",
-                answer: "There's no in-app share button yet, but screenshots work well. Everyone's chart is different, so what the app suggests for you on a given day may not match what it would suggest for a friend—sharing is still a fun way to compare notes on how you each styled the day."
-            ),
-            (
-                question: "Does Cosmic Fit replace a personal stylist?",
-                answer: "Not exactly—it's a different tool. A human stylist brings expertise, shopping knowledge, and hands-on help. Cosmic Fit adds the energetic and intuitive layer. Use both if you can—they enhance each other."
+                answer: "There's no in-app share button yet, but screenshots work well. Everyone's chart is different, so what the app suggests for you on a given day may not match what it would suggest for a friend; sharing is still a fun way to compare notes on how you each styled the day."
             )
         ]
 
