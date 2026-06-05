@@ -28,7 +28,7 @@ class DailyFitViewController: UIViewController {
     // MARK: - New ContentView Components
     // Header Section
     private let dailyFitLabel = UILabel()
-    private let tarotSymbolLabel = UILabel()
+    private let tarotNumeralImageView = UIImageView()
     private let tarotTitleLabel = UILabel()
     private let dateLabel = UILabel()
     
@@ -108,6 +108,10 @@ class DailyFitViewController: UIViewController {
     /// top edge, mirroring the prior `-32` constant on the safe-area
     /// anchor.
     private static let tapToRevealBottomGapAboveTabBar: CGFloat = 32
+    /// Rounded content panel peeks this far above the tab bar at rest.
+    private static let contentPanelPeekAboveTabBar: CGFloat = 36
+    /// Header row top sits this far below the tab bar top at scroll offset 0.
+    private static let headerRowHideBelowTabBarTop: CGFloat = 9
 
     /// Scroll `contentView` extends this far below the day-navigation CTA (cosmic grey + small blur tail).
     private static let contentBottomPaddingBelowTomorrow: CGFloat = 100
@@ -259,6 +263,9 @@ class DailyFitViewController: UIViewController {
     /// origin — which in turn drives "Tap to reveal…" too low,
     /// behind the tab bar.
     private var contentViewTopConstraint: NSLayoutConstraint?
+    /// Refreshed in `updateLayoutDependentConstants` so the header row
+    /// stays tucked just below the tab bar at scroll offset 0.
+    private var dailyFitLabelTopConstraint: NSLayoutConstraint?
     
     private let scrollingRunesBackground = ScrollingRunesBackgroundView()
     
@@ -383,10 +390,16 @@ class DailyFitViewController: UIViewController {
         let newCardCenter = centerYInView - newContentViewOffset + Self.tarotCardCenterYNudge
         let newTapToRevealBottom = tabBarTop - Self.tapToRevealBottomGapAboveTabBar
 
+        let newDailyFitHeaderTop = calculateDailyFitHeaderTopOffset()
+
         UIView.performWithoutAnimation {
             if let topConstraint = contentViewTopConstraint,
                abs(topConstraint.constant - newContentViewOffset) > 0.5 {
                 topConstraint.constant = newContentViewOffset
+            }
+            if let headerTop = dailyFitLabelTopConstraint,
+               abs(headerTop.constant - newDailyFitHeaderTop) > 0.5 {
+                headerTop.constant = newDailyFitHeaderTop
             }
             if let centerYConstraint = cardContainerCenterYConstraint,
                abs(centerYConstraint.constant - newCardCenter) > 0.5 {
@@ -409,11 +422,9 @@ class DailyFitViewController: UIViewController {
     private func updateContentPanelTopIfNeeded() {
         guard isCardRevealed,
               !isAnimatingContentPanelReveal,
-              let constraint = contentBackgroundTopConstraint,
-              dailyFitLabel.frame.origin.y > 0 else { return }
+              let constraint = contentBackgroundTopConstraint else { return }
 
-        let contentPanelTopInset: CGFloat = 44
-        let correct = dailyFitLabel.frame.origin.y - contentPanelTopInset - view.safeAreaInsets.top
+        let correct = calculateContentPanelTopOffset()
         if abs(constraint.constant - correct) > 0.5 {
             constraint.constant = correct
         }
@@ -794,7 +805,7 @@ class DailyFitViewController: UIViewController {
             self.calendarButton.alpha = 0.0
             
             let allContentViews: [UIView?] = [
-                self.dailyFitLabel, self.calendarButton, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
+                self.dailyFitLabel, self.calendarButton, self.tarotNumeralImageView, self.tarotTitleLabel, self.dateLabel,
                 self.topDivider,
                 self.styleEditHeaderLabel, self.styleEditLabel,
                 self.postTarotParagraphDivider,
@@ -869,7 +880,7 @@ class DailyFitViewController: UIViewController {
             self.calendarButton.alpha = 1.0
             
             let allContentViews: [UIView?] = [
-                self.dailyFitLabel, self.calendarButton, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
+                self.dailyFitLabel, self.calendarButton, self.tarotNumeralImageView, self.tarotTitleLabel, self.dateLabel,
                 self.topDivider,
                 self.styleEditHeaderLabel, self.styleEditLabel,
                 self.postTarotParagraphDivider,
@@ -1260,6 +1271,24 @@ class DailyFitViewController: UIViewController {
         // will be corrected on the next layout pass once the view
         // is in a window.
         return view.bounds.height - view.safeAreaInsets.bottom
+    }
+
+    private func contentViewTopOffset() -> CGFloat {
+        view.safeAreaInsets.top + 83
+    }
+
+    /// `contentView` Y for the "DAILY FIT" / calendar header row so its
+    /// top edge sits just below the tab bar at scroll offset 0.
+    private func calculateDailyFitHeaderTopOffset() -> CGFloat {
+        let tabBarTop = calculateTabBarTop()
+        return tabBarTop + Self.headerRowHideBelowTabBarTop - contentViewTopOffset()
+    }
+
+    /// `contentView` Y for the white sheet's top edge at rest — peeks
+    /// above the tab bar without tracking the header row position.
+    private func calculateContentPanelTopOffset() -> CGFloat {
+        let tabBarTop = calculateTabBarTop()
+        return tabBarTop - Self.contentPanelPeekAboveTabBar - contentViewTopOffset()
     }
 
     private func setupScrollIndicator() {
@@ -1871,12 +1900,10 @@ class DailyFitViewController: UIViewController {
         contentView.addSubview(calendarButton)
         calendarButton.alpha = 0.0
 
-        // Tarot glyph row omitted in current design — keep view for future use, collapsed.
-        tarotSymbolLabel.text = "♦ VII"
-        tarotSymbolLabel.isHidden = true
-        tarotSymbolLabel.translatesAutoresizingMaskIntoConstraints = false
-        tarotSymbolLabel.alpha = 0.0
-        contentView.addSubview(tarotSymbolLabel)
+        tarotNumeralImageView.contentMode = .scaleAspectFit
+        tarotNumeralImageView.translatesAutoresizingMaskIntoConstraints = false
+        tarotNumeralImageView.alpha = 0.0
+        contentView.addSubview(tarotNumeralImageView)
 
         // Tarot card title — large serif caps
         tarotTitleLabel.text = "THE CHARIOT"
@@ -2561,6 +2588,7 @@ class DailyFitViewController: UIViewController {
         guard let payload = dailyFitPayload else { return }
 
         loadTarotCardImage(for: payload.tarotCard)
+        loadTarotNumeral(for: payload.tarotCard)
         tarotTitleLabel.text = payload.tarotCard.displayName.uppercased()
 
         applyDailyFitDateLabel(for: payload.generatedAt)
@@ -2649,7 +2677,7 @@ class DailyFitViewController: UIViewController {
     // MARK: - Initial Content Alpha
     private func setInitialContentAlpha() {
         let allViews: [UIView?] = [
-            dailyFitLabel, calendarButton, tarotSymbolLabel, tarotTitleLabel, dateLabel,
+            dailyFitLabel, calendarButton, tarotNumeralImageView, tarotTitleLabel, dateLabel,
             topDivider,
             styleEditHeaderLabel, styleEditLabel,
             postTarotParagraphDivider,
@@ -2698,17 +2726,20 @@ class DailyFitViewController: UIViewController {
         /// Extra air above Essence after Vibrancy / Contrast / Metal Tone; base matches `sectionSpacing`, +10pt scaled with Dynamic Type.
         let metalToneToEssenceGap = sectionSpacing + UIFontMetrics(forTextStyle: .body).scaledValue(for: 10)
 
-        let screenHeight = view.bounds.height
-        let tabBarHeight: CGFloat = 83
-        let contentStartFromBottom = screenHeight - tabBarHeight - 75
-
         var constraints: [NSLayoutConstraint] = []
 
         // Header — "DAILY FIT" uses full width for true centering; calendar sits on the trailing edge (overlaps label bounds).
-        let headerRowToTarotTitle: CGFloat = 28
+        let dailyFitToNumeral = CosmicFitTheme.HeaderGlyphLayout.spacingAbove
+        let tarotNumeralHeight = CosmicFitTheme.HeaderGlyphLayout.height
+        let tarotNumeralWidth = CosmicFitTheme.HeaderGlyphLayout.width
+        let tarotNumeralToTitle = CosmicFitTheme.HeaderGlyphLayout.spacingBelow
         let tarotTitleToDate: CGFloat = 16
+        dailyFitLabelTopConstraint = dailyFitLabel.topAnchor.constraint(
+            equalTo: contentView.topAnchor,
+            constant: calculateDailyFitHeaderTopOffset()
+        )
         constraints.append(contentsOf: [
-            dailyFitLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: contentStartFromBottom),
+            dailyFitLabelTopConstraint!,
             dailyFitLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
             dailyFitLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
 
@@ -2717,14 +2748,14 @@ class DailyFitViewController: UIViewController {
             calendarButton.widthAnchor.constraint(equalToConstant: 32),
             calendarButton.heightAnchor.constraint(equalToConstant: 32),
 
-            tarotTitleLabel.topAnchor.constraint(equalTo: dailyFitLabel.bottomAnchor, constant: headerRowToTarotTitle),
+            tarotNumeralImageView.topAnchor.constraint(equalTo: dailyFitLabel.bottomAnchor, constant: dailyFitToNumeral),
+            tarotNumeralImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            tarotNumeralImageView.widthAnchor.constraint(equalToConstant: tarotNumeralWidth),
+            tarotNumeralImageView.heightAnchor.constraint(equalToConstant: tarotNumeralHeight),
+
+            tarotTitleLabel.topAnchor.constraint(equalTo: tarotNumeralImageView.bottomAnchor, constant: tarotNumeralToTitle),
             tarotTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
             tarotTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
-
-            tarotSymbolLabel.bottomAnchor.constraint(equalTo: tarotTitleLabel.topAnchor),
-            tarotSymbolLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            tarotSymbolLabel.widthAnchor.constraint(equalToConstant: 1),
-            tarotSymbolLabel.heightAnchor.constraint(equalToConstant: 0),
 
             dateLabel.topAnchor.constraint(equalTo: tarotTitleLabel.bottomAnchor, constant: tarotTitleToDate),
             dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
@@ -2923,6 +2954,17 @@ class DailyFitViewController: UIViewController {
         postDailyRitualDividerConstraints.forEach { $0.isActive = hasRitual }
         styleBreakdownAfterDailyRitualConstraint?.isActive = hasRitual
         styleBreakdownAfterStyleParagraphConstraint?.isActive = !hasRitual
+    }
+
+    private func loadTarotNumeral(for tarotCard: TarotCard) {
+        guard let assetName = tarotCard.tarotNumeralAssetName,
+              let image = UIImage(named: assetName) else {
+            tarotNumeralImageView.image = nil
+            tarotNumeralImageView.isHidden = true
+            return
+        }
+        tarotNumeralImageView.image = image
+        tarotNumeralImageView.isHidden = false
     }
 
     private func loadTarotCardImage(for tarotCard: TarotCard?) {
@@ -3214,7 +3256,7 @@ class DailyFitViewController: UIViewController {
         }
         
         let allContentViews: [UIView?] = [
-            dailyFitLabel, calendarButton, tarotSymbolLabel, tarotTitleLabel, dateLabel,
+            dailyFitLabel, calendarButton, tarotNumeralImageView, tarotTitleLabel, dateLabel,
             topDivider, styleEditLabel,
             postTarotParagraphDivider,
             dailyRitualHeaderDivider, dailyRitualLabel,
@@ -3263,7 +3305,7 @@ class DailyFitViewController: UIViewController {
         
         // Remove any existing backgrounds from labels
         let allLabels: [UILabel?] = [
-            dailyFitLabel, tarotSymbolLabel, tarotTitleLabel, dateLabel,
+            dailyFitLabel, tarotTitleLabel, dateLabel,
             styleEditLabel
         ]
         
@@ -3273,6 +3315,10 @@ class DailyFitViewController: UIViewController {
             label.clipsToBounds = false
             label.layoutMargins = UIEdgeInsets.zero
         }
+
+        tarotNumeralImageView.backgroundColor = .clear
+        tarotNumeralImageView.layer.cornerRadius = 0
+        tarotNumeralImageView.clipsToBounds = false
         
         // Create single content container with theme background.
         // Fully opaque from the start: the panel begins parked off-screen below
@@ -3297,9 +3343,6 @@ class DailyFitViewController: UIViewController {
         
         self.contentBackgroundView = backgroundView
         
-        /// Inset from top of `dailyFitLabel` when pinning the panel top (shows blurred card strip above sheet).
-        let contentPanelTopInset: CGFloat = 44
-        
         // Calculate starting position (behind tab bar)
         let tabBarHeight = tabBarController?.tabBar.frame.height ?? 83
         let screenHeight = view.bounds.height
@@ -3323,25 +3366,10 @@ class DailyFitViewController: UIViewController {
         
         view.layoutIfNeeded()
 
-        // `dailyFitLabel.frame.origin.y` is in `contentView`'s local coord
-        // space, derived from `contentStartFromBottom = screenHeight -
-        // tabBarHeight - 75` — a constant that was hand-tuned back when
-        // `contentViewTopConstraint` was frozen at its `viewDidLoad` value
-        // (i.e. `view.safeAreaInsets.top == 0`, so `contentView.top` sat at
-        // view-coord 83 instead of the correct ~130). Now that
-        // `updateLayoutDependentConstants()` refreshes `contentViewTopConstraint`
-        // with the real safe-area inset, the same `finalYPosition` lands the
-        // panel ~47 pt lower in view coords — exactly far enough to push its
-        // rounded top behind the tab bar, which is the regression visible in
-        // the user's "incorrect" screenshot.
-        //
-        // Subtracting `view.safeAreaInsets.top` here cancels that shift and
-        // restores the original visual: the panel slides up to peek ~36 pt
-        // above the tab bar as a "there's more below — scroll" affordance,
-        // without re-introducing the stale-constraint bug fixed earlier.
-        let finalYPosition = dailyFitLabel.frame.origin.y
-            - contentPanelTopInset
-            - view.safeAreaInsets.top
+        // Panel rest position is independent of the header row so the sheet
+        // can peek above the tab bar while "DAILY FIT" / calendar stay tucked
+        // just below the fold until the user scrolls.
+        let finalYPosition = calculateContentPanelTopOffset()
 
         let applyFinalLayout = {
             // Push the card container — not the inner image view —
@@ -3360,7 +3388,7 @@ class DailyFitViewController: UIViewController {
                 self.contentView.bringSubviewToFront(label)
             }
             let allContentViews: [UIView?] = [
-                self.dailyFitLabel, self.calendarButton, self.tarotSymbolLabel, self.tarotTitleLabel, self.dateLabel,
+                self.dailyFitLabel, self.calendarButton, self.tarotNumeralImageView, self.tarotTitleLabel, self.dateLabel,
                 self.topDivider, self.styleEditLabel,
                 self.postTarotParagraphDivider,
                 self.dailyRitualHeaderDivider, self.dailyRitualLabel,

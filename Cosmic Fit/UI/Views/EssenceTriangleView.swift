@@ -20,7 +20,6 @@ final class EssenceTriangleView: UIView {
 
     private let triangleLayer = CAShapeLayer()
     private let anchorTriangleLayer = CAShapeLayer()
-    private let guideLayer = CAShapeLayer()
     /// Branded div-star asset (same as Style Guide / menu dividers), not a geometric diamond.
     private let vertexStarViews: [UIImageView] = (0..<3).map { _ in UIImageView() }
     private var categoryLabels: [UILabel] = []
@@ -76,12 +75,6 @@ final class EssenceTriangleView: UIView {
     // MARK: - Setup
 
     private func setupLayers() {
-        guideLayer.fillColor = UIColor.clear.cgColor
-        guideLayer.strokeColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.12).cgColor
-        guideLayer.lineWidth = 0.5
-        guideLayer.lineDashPattern = [1, 2]
-        layer.addSublayer(guideLayer)
-
         anchorTriangleLayer.fillColor = UIColor.clear.cgColor
         anchorTriangleLayer.strokeColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.15).cgColor
         anchorTriangleLayer.lineWidth = 1.0
@@ -162,21 +155,66 @@ final class EssenceTriangleView: UIView {
         return anchorTop3Entries().filter { !weatherCategories.contains($0.category) }
     }
 
-    private func radarPoint(
-        for entry: StyleEssenceScore,
-        centre: CGPoint,
-        maxRadius: CGFloat,
-        scale: Double,
-        minRadiusFraction: CGFloat
-    ) -> CGPoint {
+    /// Lowest normalised radius a vertex may have, so a weak-scoring category
+    /// never collapses onto the centre and flattens the triangle.
+    private static let minRadiusFraction: CGFloat = 0.25
+
+    /// Reserved margin (points) around the chart so vertex stars and the
+    /// outward-placed labels stay inside `bounds` after the fit.
+    private static let chartMargin: CGFloat = 28
+
+    /// A vertex in normalised radar space: origin-centred, radius `0...1`.
+    /// Only the *shape* (relative angles + radii, which encode the data) lives
+    /// here. Absolute position and on-screen size are resolved separately by
+    /// `ChartFit`, so layout never depends on which categories happened to win.
+    private func rawRadarPoint(for entry: StyleEssenceScore, scale: Double) -> CGPoint {
         let angle = CGFloat(entry.category.angle)
-        let normalised = entry.score * scale
-        let clampedNorm = max(CGFloat(normalised), minRadiusFraction)
-        let radius = clampedNorm * maxRadius
-        return CGPoint(
-            x: centre.x + cos(angle) * radius,
-            y: centre.y + sin(angle) * radius
-        )
+        let clampedNorm = max(CGFloat(entry.score * scale), Self.minRadiusFraction)
+        return CGPoint(x: cos(angle) * clampedNorm, y: sin(angle) * clampedNorm)
+    }
+
+    /// Uniform similarity transform that maps a set of normalised-space points
+    /// so their combined bounding box is centred in `targetRect` and scaled —
+    /// preserving aspect ratio — to fill it.
+    ///
+    /// This is what guarantees the requested behaviour: the diagram is always
+    /// centred regardless of triangle shape, and is enlarged to a consistent
+    /// footprint whenever the day's categories cluster into a small or
+    /// off-centre arrangement. Aspect ratio is preserved (single scale factor)
+    /// so the triangle is never stretched/skewed; a genuinely thin spread of
+    /// categories stays thin, but is still centred and as large as it can be.
+    private struct ChartFit {
+        let scale: CGFloat
+        let sourceCentre: CGPoint
+        let targetCentre: CGPoint
+
+        func apply(_ point: CGPoint) -> CGPoint {
+            CGPoint(
+                x: (point.x - sourceCentre.x) * scale + targetCentre.x,
+                y: (point.y - sourceCentre.y) * scale + targetCentre.y
+            )
+        }
+
+        init(points: [CGPoint], targetRect: CGRect) {
+            guard let first = points.first else {
+                scale = 1
+                sourceCentre = .zero
+                targetCentre = CGPoint(x: targetRect.midX, y: targetRect.midY)
+                return
+            }
+            var minX = first.x, maxX = first.x
+            var minY = first.y, maxY = first.y
+            for point in points {
+                minX = min(minX, point.x); maxX = max(maxX, point.x)
+                minY = min(minY, point.y); maxY = max(maxY, point.y)
+            }
+            // Guard against a degenerate (collinear) spread in either axis.
+            let spanX = max(maxX - minX, 0.0001)
+            let spanY = max(maxY - minY, 0.0001)
+            scale = min(targetRect.width / spanX, targetRect.height / spanY)
+            sourceCentre = CGPoint(x: (minX + maxX) / 2, y: (minY + maxY) / 2)
+            targetCentre = CGPoint(x: targetRect.midX, y: targetRect.midY)
+        }
     }
 
     // MARK: - Drawing
@@ -185,44 +223,39 @@ final class EssenceTriangleView: UIView {
         guard let visible = profile?.visibleCategories, visible.count == 3 else {
             triangleLayer.path = nil
             anchorTriangleLayer.path = nil
-            guideLayer.path = nil
             vertexStarViews.forEach { $0.isHidden = true }
             return
         }
 
-        let centre = CGPoint(x: bounds.midX, y: bounds.midY)
-        let labelInset: CGFloat = 28
-        let maxRadius = min(bounds.width, bounds.height) / 2.0 - labelInset
-        let minRadiusFraction = 0.25
+        let viewCentre = CGPoint(x: bounds.midX, y: bounds.midY)
+        let targetRect = bounds.insetBy(dx: Self.chartMargin, dy: Self.chartMargin)
 
-        let guidePath = UIBezierPath()
-        for entry in visible {
-            let angle = CGFloat(entry.category.angle)
-            let edgeX = centre.x + cos(angle) * maxRadius
-            let edgeY = centre.y + sin(angle) * maxRadius
-            guidePath.move(to: centre)
-            guidePath.addLine(to: CGPoint(x: edgeX, y: edgeY))
-        }
-        guideLayer.path = guidePath.cgPath
-        guideLayer.frame = bounds
+        // --- Shape in normalised space (independent of placement/size) ---
+        let weatherMax = visible.map(\.score).max() ?? 1.0
+        let weatherScale = weatherMax > 0 ? 1.0 / weatherMax : 1.0
+        let weatherRaw = visible.map { rawRadarPoint(for: $0, scale: weatherScale) }
 
-        let maxScore = visible.map(\.score).max() ?? 1.0
-        let scaleFactor = maxScore > 0 ? 1.0 / maxScore : 1.0
+        let showGhost = presentation?.showAnchorGhost == true
+        let anchorTop3 = showGhost ? anchorTop3Entries() : []
+        let anchorMax = anchorTop3.map(\.score).max() ?? 1.0
+        let anchorScale = anchorMax > 0 ? 1.0 / anchorMax : 1.0
+        let anchorRaw = anchorTop3.map { rawRadarPoint(for: $0, scale: anchorScale) }
 
-        var weatherPoints: [CGPoint] = []
-        for (index, entry) in visible.enumerated() {
-            let angle = CGFloat(entry.category.angle)
-            let normalised = entry.score * scaleFactor
-            let clampedNorm = max(CGFloat(normalised), CGFloat(minRadiusFraction))
-            let radius = clampedNorm * maxRadius
-            let px = centre.x + cos(angle) * radius
-            let py = centre.y + sin(angle) * radius
-            weatherPoints.append(CGPoint(x: px, y: py))
+        let ghostEntries = showGhost ? anchorGhostEntries(excludingWeather: visible) : []
+        let ghostRaw = ghostEntries.map { rawRadarPoint(for: $0, scale: anchorScale) }
 
-            let starSize = Self.vertexStarSize
+        // --- Resolve placement + size once, for everything that will be drawn ---
+        // All layers share a single fit so their relationship is preserved while
+        // the whole composition is centred and scaled to fill the square.
+        let fit = ChartFit(points: weatherRaw + anchorRaw + ghostRaw, targetRect: targetRect)
+        let weatherPoints = weatherRaw.map(fit.apply)
+        let anchorPoints = anchorRaw.map(fit.apply)
+        let ghostPoints = ghostRaw.map(fit.apply)
+
+        for (index, point) in weatherPoints.enumerated() {
             let star = vertexStarViews[index]
-            star.bounds = CGRect(x: 0, y: 0, width: starSize, height: starSize)
-            star.center = CGPoint(x: px, y: py)
+            star.bounds = CGRect(x: 0, y: 0, width: Self.vertexStarSize, height: Self.vertexStarSize)
+            star.center = point
             star.isHidden = false
         }
 
@@ -235,60 +268,26 @@ final class EssenceTriangleView: UIView {
         triangleLayer.path = triPath.cgPath
         triangleLayer.frame = bounds
 
-        if presentation?.showAnchorGhost == true {
-            let anchorTop3 = anchorTop3Entries()
-            let anchorMax = anchorTop3.map(\.score).max() ?? 1.0
-            let anchorScale = anchorMax > 0 ? 1.0 / anchorMax : 1.0
-            let anchorPoints = anchorTop3.map {
-                radarPoint(
-                    for: $0,
-                    centre: centre,
-                    maxRadius: maxRadius,
-                    scale: anchorScale,
-                    minRadiusFraction: minRadiusFraction
-                )
-            }
-            if anchorPoints.count == 3 {
-                let anchorPath = UIBezierPath()
-                anchorPath.move(to: anchorPoints[0])
-                anchorPath.addLine(to: anchorPoints[1])
-                anchorPath.addLine(to: anchorPoints[2])
-                anchorPath.close()
-                anchorTriangleLayer.path = anchorPath.cgPath
-                anchorTriangleLayer.frame = bounds
-            } else {
-                anchorTriangleLayer.path = nil
-            }
-
-            let ghostEntries = anchorGhostEntries(excludingWeather: visible)
-            let ghostPoints = ghostEntries.map {
-                radarPoint(
-                    for: $0,
-                    centre: centre,
-                    maxRadius: maxRadius,
-                    scale: anchorScale,
-                    minRadiusFraction: minRadiusFraction
-                )
-            }
-            positionLabels(
-                visible: visible,
-                weatherPoints: weatherPoints,
-                ghostEntries: ghostEntries,
-                ghostPoints: ghostPoints,
-                anchorPoints: anchorPoints.count == 3 ? anchorPoints : [],
-                centre: centre
-            )
+        if anchorPoints.count == 3 {
+            let anchorPath = UIBezierPath()
+            anchorPath.move(to: anchorPoints[0])
+            anchorPath.addLine(to: anchorPoints[1])
+            anchorPath.addLine(to: anchorPoints[2])
+            anchorPath.close()
+            anchorTriangleLayer.path = anchorPath.cgPath
+            anchorTriangleLayer.frame = bounds
         } else {
             anchorTriangleLayer.path = nil
-            positionLabels(
-                visible: visible,
-                weatherPoints: weatherPoints,
-                ghostEntries: [],
-                ghostPoints: [],
-                anchorPoints: [],
-                centre: centre
-            )
         }
+
+        positionLabels(
+            visible: visible,
+            weatherPoints: weatherPoints,
+            ghostEntries: ghostEntries,
+            ghostPoints: ghostPoints,
+            anchorPoints: anchorPoints.count == 3 ? anchorPoints : [],
+            centre: viewCentre
+        )
     }
 
     // MARK: - Adaptive Label Placement
@@ -318,18 +317,12 @@ final class EssenceTriangleView: UIView {
             (weatherPoints[1], weatherPoints[2]),
             (weatherPoints[2], weatherPoints[0])
         ]
-        for point in weatherPoints {
-            avoidanceSegments.append((centre, point))
-        }
         if anchorPoints.count == 3 {
             avoidanceSegments.append(contentsOf: [
                 (anchorPoints[0], anchorPoints[1]),
                 (anchorPoints[1], anchorPoints[2]),
                 (anchorPoints[2], anchorPoints[0])
             ])
-        }
-        for point in ghostPoints {
-            avoidanceSegments.append((centre, point))
         }
 
         let starRects = weatherPoints.map { point in

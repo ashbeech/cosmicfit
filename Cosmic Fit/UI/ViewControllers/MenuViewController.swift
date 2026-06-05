@@ -10,6 +10,18 @@ import MessageUI
 
 final class MenuViewController: UIViewController, MFMailComposeViewControllerDelegate {
     
+    private static let socialIconPointSize: CGFloat = 28 * 4 / 3
+    
+    private static func socialIconImage(named assetName: String) -> UIImage? {
+        guard let image = UIImage(named: assetName)?.withRenderingMode(.alwaysTemplate) else { return nil }
+        let size = CGSize(width: socialIconPointSize, height: socialIconPointSize)
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = UIScreen.main.scale
+        return UIGraphicsImageRenderer(size: size, format: format).image { _ in
+            image.draw(in: CGRect(origin: .zero, size: size))
+        }.withRenderingMode(.alwaysTemplate)
+    }
+    
     // MARK: - Properties
     var onDismiss: (() -> Void)?
     var onNavigateToProfile: (() -> Void)?
@@ -37,11 +49,22 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
         return button
     }()
     
+    private let cfLogoImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFit
+        iv.image = UIImage(named: "CosmicFitLogo")
+        iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
+        
+        let filter = CIFilter(name: "CIColorInvert")
+        iv.layer.filters = [filter as Any]
+        
+        return iv
+    }()
+    
     private let logoImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.image = UIImage(named: "menu_glyph")
-        iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
         return iv
     }()
     
@@ -81,24 +104,22 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
     private let socialIconsStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.spacing = 24
+        stack.spacing = 32
         stack.alignment = .center
-        stack.distribution = .fillEqually
+        stack.distribution = .fill
         return stack
     }()
     
     private let tiktokButton: UIButton = {
         let button = UIButton(type: .system)
-        let config = UIImage.SymbolConfiguration(pointSize: 28, weight: .regular)
-        button.setImage(UIImage(systemName: "music.note", withConfiguration: config), for: .normal)
+        button.setImage(socialIconImage(named: "tiktok_glyph"), for: .normal)
         button.tintColor = CosmicFitTheme.Colours.cosmicBlue
         return button
     }()
     
     private let instagramButton: UIButton = {
         let button = UIButton(type: .system)
-        let config = UIImage.SymbolConfiguration(pointSize: 28, weight: .regular)
-        button.setImage(UIImage(systemName: "camera", withConfiguration: config), for: .normal)
+        button.setImage(socialIconImage(named: "instagram_glyph"), for: .normal)
         button.tintColor = CosmicFitTheme.Colours.cosmicBlue
         return button
     }()
@@ -145,6 +166,8 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
         view.addSubview(contentView)
         
         contentView.addSubview(closeButton)
+        contentView.addSubview(cfLogoImageView)
+        cfLogoImageView.isUserInteractionEnabled = true
         contentView.addSubview(logoImageView)
         contentView.addSubview(menuStackView)
         contentView.addSubview(socialIconsStackView)
@@ -167,6 +190,7 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
         blurEffectView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
         closeButton.translatesAutoresizingMaskIntoConstraints = false
+        cfLogoImageView.translatesAutoresizingMaskIntoConstraints = false
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         menuStackView.translatesAutoresizingMaskIntoConstraints = false
         socialIconsStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -194,12 +218,18 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
             closeButton.widthAnchor.constraint(equalToConstant: 44),
             closeButton.heightAnchor.constraint(equalToConstant: 44),
             
-            // Logo (centered near top)
-            logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
-            logoImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            logoImageView.widthAnchor.constraint(equalToConstant: 100),
-            logoImageView.heightAnchor.constraint(equalToConstant: 100),
+            // CF logo — matches top nav position and size
+            cfLogoImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: MenuBarView.logoLeadingInset),
+            cfLogoImageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: MenuBarView.logoCenterYOffsetFromSafeAreaTop),
+            cfLogoImageView.widthAnchor.constraint(equalToConstant: MenuBarView.logoSize),
+            cfLogoImageView.heightAnchor.constraint(equalToConstant: MenuBarView.logoSize),
             
+            // Logo sits above the menu stack with design-matched spacing
+            logoImageView.bottomAnchor.constraint(equalTo: menuStackView.topAnchor, constant: -36),
+            logoImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            logoImageView.heightAnchor.constraint(equalToConstant: 60),
+            logoImageView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
+
             // Menu stack (centered vertically)
             menuStackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             menuStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -209,6 +239,10 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
             // Social icons
             socialIconsStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             socialIconsStackView.bottomAnchor.constraint(equalTo: bottomDividerContainer.topAnchor, constant: -40),
+            tiktokButton.widthAnchor.constraint(equalToConstant: Self.socialIconPointSize),
+            tiktokButton.heightAnchor.constraint(equalToConstant: Self.socialIconPointSize),
+            instagramButton.widthAnchor.constraint(equalToConstant: Self.socialIconPointSize),
+            instagramButton.heightAnchor.constraint(equalToConstant: Self.socialIconPointSize),
             
             // Bottom divider (above safe area)
             bottomDividerContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
@@ -237,6 +271,9 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
     
     private func setupActions() {
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        cfLogoImageView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(closeButtonTapped))
+        )
         accountButton.addTarget(self, action: #selector(accountButtonTapped), for: .touchUpInside)
         faqsButton.addTarget(self, action: #selector(faqsButtonTapped), for: .touchUpInside)
         helpButton.addTarget(self, action: #selector(helpButtonTapped), for: .touchUpInside)

@@ -273,23 +273,58 @@ struct DailyFitUIIntegrationTests {
         )
         view.layoutIfNeeded()
 
-        let centre = CGPoint(x: view.bounds.midX, y: view.bounds.midY)
-        let labelInset: CGFloat = 28
-        let maxRadius = min(view.bounds.width, view.bounds.height) / 2.0 - labelInset
+        // Mirror EssenceTriangleView's geometry: build each vertex in normalised
+        // radar space, then apply the same centre-and-fill fit the view uses so
+        // the diagram is centred and scaled to fill its allotted square.
         let minRadiusFraction: CGFloat = 0.25
+        let chartMargin: CGFloat = 28
+        let targetRect = view.bounds.insetBy(dx: chartMargin, dy: chartMargin)
+
+        let weatherMax = visibleCategories.map(\.score).max() ?? 1.0
+        let weatherScale = weatherMax > 0 ? 1.0 / weatherMax : 1.0
         let anchorMax = anchorTop3.enumerated().map { 0.30 - Double($0.offset) * 0.05 }.max() ?? 1.0
         let anchorScale = anchorMax > 0 ? 1.0 / anchorMax : 1.0
 
+        func rawPoint(for category: StyleEssenceCategory, score: Double, scale: Double) -> CGPoint {
+            let angle = CGFloat(category.angle)
+            let clampedNorm = max(CGFloat(score * scale), minRadiusFraction)
+            return CGPoint(x: cos(angle) * clampedNorm, y: sin(angle) * clampedNorm)
+        }
+
+        // The fit spans every drawn vertex (weather + anchor + ghost).
+        var fitPoints: [CGPoint] = []
+        for category in weatherTop3 {
+            let score = visibleCategories.first { $0.category == category }!.score
+            fitPoints.append(rawPoint(for: category, score: score, scale: weatherScale))
+        }
+        for category in anchorTop3 {
+            let score = chartAnchorScores.first { $0.category == category }!.score
+            // anchor + ghost share the same raw vertex here (disjoint from weather).
+            let raw = rawPoint(for: category, score: score, scale: anchorScale)
+            fitPoints.append(raw)
+            fitPoints.append(raw)
+        }
+
+        let minX = fitPoints.map(\.x).min()!
+        let maxX = fitPoints.map(\.x).max()!
+        let minY = fitPoints.map(\.y).min()!
+        let maxY = fitPoints.map(\.y).max()!
+        let spanX = max(maxX - minX, 0.0001)
+        let spanY = max(maxY - minY, 0.0001)
+        let fitScale = min(targetRect.width / spanX, targetRect.height / spanY)
+        let sourceCentre = CGPoint(x: (minX + maxX) / 2, y: (minY + maxY) / 2)
+        let targetCentre = CGPoint(x: targetRect.midX, y: targetRect.midY)
+
+        func fit(_ point: CGPoint) -> CGPoint {
+            CGPoint(
+                x: (point.x - sourceCentre.x) * fitScale + targetCentre.x,
+                y: (point.y - sourceCentre.y) * fitScale + targetCentre.y
+            )
+        }
+
         func expectedAnchorPoint(for category: StyleEssenceCategory) -> CGPoint {
             let score = chartAnchorScores.first { $0.category == category }!.score
-            let angle = CGFloat(category.angle)
-            let normalised = score * anchorScale
-            let clampedNorm = max(CGFloat(normalised), minRadiusFraction)
-            let radius = clampedNorm * maxRadius
-            return CGPoint(
-                x: centre.x + cos(angle) * radius,
-                y: centre.y + sin(angle) * radius
-            )
+            return fit(rawPoint(for: category, score: score, scale: anchorScale))
         }
 
         let weatherLabels = weatherTop3.map(\.label)
@@ -310,16 +345,7 @@ struct DailyFitUIIntegrationTests {
             for weatherLabel in weatherLabels {
                 let weatherCategory = StyleEssenceCategory.allCases.first { $0.label == weatherLabel }!
                 let weatherScore = visibleCategories.first { $0.category == weatherCategory }!.score
-                let weatherMax = visibleCategories.map(\.score).max() ?? 1.0
-                let weatherScale = weatherMax > 0 ? 1.0 / weatherMax : 1.0
-                let angle = CGFloat(weatherCategory.angle)
-                let normalised = weatherScore * weatherScale
-                let clampedNorm = max(CGFloat(normalised), minRadiusFraction)
-                let radius = clampedNorm * maxRadius
-                let weatherPoint = CGPoint(
-                    x: centre.x + cos(angle) * radius,
-                    y: centre.y + sin(angle) * radius
-                )
+                let weatherPoint = fit(rawPoint(for: weatherCategory, score: weatherScore, scale: weatherScale))
                 let distanceToWeather = hypot(labelCenter.x - weatherPoint.x, labelCenter.y - weatherPoint.y)
                 #expect(
                     distanceToAnchor < distanceToWeather,

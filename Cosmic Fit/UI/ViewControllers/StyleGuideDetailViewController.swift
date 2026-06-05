@@ -104,7 +104,7 @@ final class StyleGuideDetailViewController: UIViewController {
             string: "YOUR COSMIC STYLE GUIDE",
             attributes: [
                 .font: CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold),
-                .foregroundColor: CosmicFitTheme.Colours.darkerCosmicGrey,
+                .foregroundColor: CosmicFitTheme.Colours.cosmicBlue,
                 .kern: 1.75
             ]
         )
@@ -286,13 +286,19 @@ final class StyleGuideDetailViewController: UIViewController {
             headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             headerLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            // Icon
-            iconImageView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 20),
+            iconImageView.topAnchor.constraint(
+                equalTo: headerLabel.bottomAnchor,
+                constant: CosmicFitTheme.HeaderGlyphLayout.spacingAbove
+            ),
             iconImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            iconImageView.heightAnchor.constraint(equalToConstant: 60),
+            iconImageView.widthAnchor.constraint(equalToConstant: CosmicFitTheme.HeaderGlyphLayout.width),
+            iconImageView.heightAnchor.constraint(equalToConstant: CosmicFitTheme.HeaderGlyphLayout.height),
             
             // Title Label
-            titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(
+                equalTo: iconImageView.bottomAnchor,
+                constant: CosmicFitTheme.HeaderGlyphLayout.spacingBelow
+            ),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             

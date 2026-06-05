@@ -37,7 +37,7 @@ final class StyleGuideViewController: UIViewController {
             string: "ABOUT YOU",
             attributes: [
                 .font: CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold),
-                .foregroundColor: CosmicFitTheme.Colours.darkerCosmicGrey,
+                .foregroundColor: CosmicFitTheme.Colours.cosmicBlue,
                 .kern: 1.75
             ]
         )
@@ -48,8 +48,7 @@ final class StyleGuideViewController: UIViewController {
     private let iconImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
-        iv.image = UIImage(named: "cb_icon_placeholder")
-        iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
+        iv.image = UIImage(named: "style_guide_glyph")
         return iv
     }()
 
@@ -83,42 +82,42 @@ final class StyleGuideViewController: UIViewController {
     private let styleCoreButton = StyleGuideGridButton(
         number: "1.",
         title: "Style Core",
-        backgroundImageName: "grid_bg_1_placeholder"
+        backgroundImageName: "style_core_glyph"
     )
     private let texturesButton = StyleGuideGridButton(
         number: "2.",
         title: "The Textures",
-        backgroundImageName: "grid_bg_2_placeholder"
+        backgroundImageName: "textures_glyph"
     )
     private let paletteButton = StyleGuideGridButton(
         number: "3.",
         title: "The Palette",
-        backgroundImageName: "grid_bg_3_placeholder"
+        backgroundImageName: "palette_glyph"
     )
     private let occasionsButton = StyleGuideGridButton(
         number: "4.",
         title: "The Occasions",
-        backgroundImageName: "grid_bg_4_placeholder"
+        backgroundImageName: "occasion_glyph"
     )
     private let hardwareButton = StyleGuideGridButton(
         number: "5.",
         title: "The Hardware",
-        backgroundImageName: "grid_bg_1_placeholder"
+        backgroundImageName: "hardware_glyph"
     )
     private let codeButton = StyleGuideGridButton(
         number: "6.",
         title: "The Code",
-        backgroundImageName: "grid_bg_2_placeholder"
+        backgroundImageName: "code_glyph"
     )
     private let accessoryButton = StyleGuideGridButton(
         number: "7.",
         title: "The Accessory",
-        backgroundImageName: "grid_bg_3_placeholder"
+        backgroundImageName: "accessory_glyph"
     )
     private let patternButton = StyleGuideGridButton(
         number: "8.",
         title: "The Pattern",
-        backgroundImageName: "grid_bg_4_placeholder"
+        backgroundImageName: "pattern_glyph"
     )
 
     private let bottomDividerContainer: UIView = {
@@ -334,12 +333,18 @@ final class StyleGuideViewController: UIViewController {
             aboutYouLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
             aboutYouLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
 
-            iconImageView.topAnchor.constraint(equalTo: aboutYouLabel.bottomAnchor, constant: 20),
+            iconImageView.topAnchor.constraint(
+                equalTo: aboutYouLabel.bottomAnchor,
+                constant: CosmicFitTheme.HeaderGlyphLayout.spacingAbove
+            ),
             iconImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            iconImageView.widthAnchor.constraint(equalToConstant: 40),
-            iconImageView.heightAnchor.constraint(equalToConstant: 40),
+            iconImageView.widthAnchor.constraint(equalToConstant: CosmicFitTheme.HeaderGlyphLayout.width),
+            iconImageView.heightAnchor.constraint(equalToConstant: CosmicFitTheme.HeaderGlyphLayout.height),
 
-            mainHeadingLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 20),
+            mainHeadingLabel.topAnchor.constraint(
+                equalTo: iconImageView.bottomAnchor,
+                constant: CosmicFitTheme.HeaderGlyphLayout.spacingBelow
+            ),
             mainHeadingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             mainHeadingLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
 
@@ -540,7 +545,7 @@ final class StyleGuideViewController: UIViewController {
             return StyleGuideDetailContent(
                 sectionType: .textures,
                 title: "The Textures",
-                iconImageName: "fabric_guide_glyph",
+                iconImageName: "textures_glyph",
                 textSections: [
                     StyleGuideDetailContent.TextSection(subheading: "The Good", bodyText: good),
                     StyleGuideDetailContent.TextSection(subheading: "The Bad", bodyText: bad),
@@ -583,7 +588,7 @@ final class StyleGuideViewController: UIViewController {
             return StyleGuideDetailContent(
                 sectionType: .palette,
                 title: "The Palette",
-                iconImageName: "colour_guide_glyph",
+                iconImageName: "palette_glyph",
                 textSections: textSections,
                 customComponent: paletteContainer
             )
@@ -599,7 +604,7 @@ final class StyleGuideViewController: UIViewController {
             return StyleGuideDetailContent(
                 sectionType: .occasions,
                 title: "The Occasions",
-                iconImageName: "style_core_glyph",
+                iconImageName: "occasion_glyph",
                 textSections: [
                     StyleGuideDetailContent.TextSection(subheading: "At Work", bodyText: work),
                     StyleGuideDetailContent.TextSection(subheading: "Intimate Energy", bodyText: intimate),
@@ -619,7 +624,7 @@ final class StyleGuideViewController: UIViewController {
             return StyleGuideDetailContent(
                 sectionType: .hardware,
                 title: "The Hardware",
-                iconImageName: "style_core_glyph",
+                iconImageName: "hardware_glyph",
                 textSections: [
                     StyleGuideDetailContent.TextSection(subheading: "The Metals", bodyText: metals),
                     StyleGuideDetailContent.TextSection(subheading: "The Stones", bodyText: stones),
@@ -661,7 +666,7 @@ final class StyleGuideViewController: UIViewController {
             return StyleGuideDetailContent(
                 sectionType: .code,
                 title: "The Code",
-                iconImageName: "dos_donts_glyph",
+                iconImageName: "code_glyph",
                 textSections: [],
                 customComponent: codeContainer
             )
@@ -677,7 +682,7 @@ final class StyleGuideViewController: UIViewController {
             return StyleGuideDetailContent(
                 sectionType: .accessory,
                 title: "The Accessory",
-                iconImageName: "style_core_glyph",
+                iconImageName: "accessory_glyph",
                 textSections: paragraphs.map {
                     StyleGuideDetailContent.TextSection(subheading: nil, bodyText: $0)
                 },
@@ -708,7 +713,7 @@ final class StyleGuideViewController: UIViewController {
             return StyleGuideDetailContent(
                 sectionType: .pattern,
                 title: "The Pattern",
-                iconImageName: "style_core_glyph",
+                iconImageName: "pattern_glyph",
                 textSections: textSections,
                 customComponent: nil
             )
@@ -740,12 +745,13 @@ final class StyleGuideGridButton: UIButton {
         return label
     }()
 
-    private let backgroundPatternView: UIView = {
-        let view = UIView()
-        view.clipsToBounds = true
-        view.alpha = 0.15
-        view.isUserInteractionEnabled = false
-        return view
+    private let backgroundPatternView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+        imageView.alpha = 0.1
+        imageView.isUserInteractionEnabled = false
+        return imageView
     }()
 
     private let lockIcon: UIImageView = {
@@ -764,9 +770,7 @@ final class StyleGuideGridButton: UIButton {
         buttonTitleLabel.text = title
         numberLabel.isUserInteractionEnabled = false
         buttonTitleLabel.isUserInteractionEnabled = false
-        if let glyphImage = UIImage(named: backgroundImageName) {
-            backgroundPatternView.backgroundColor = UIColor(patternImage: glyphImage)
-        }
+        backgroundPatternView.image = UIImage(named: backgroundImageName)
         setupUI()
     }
 
@@ -790,12 +794,24 @@ final class StyleGuideGridButton: UIButton {
         numberLabel.translatesAutoresizingMaskIntoConstraints = false
         buttonTitleLabel.translatesAutoresizingMaskIntoConstraints = false
 
-        NSLayoutConstraint.activate([
-            backgroundPatternView.topAnchor.constraint(equalTo: topAnchor),
-            backgroundPatternView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            backgroundPatternView.trailingAnchor.constraint(equalTo: trailingAnchor),
+        var glyphConstraints: [NSLayoutConstraint] = [
+            backgroundPatternView.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+            backgroundPatternView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4),
             backgroundPatternView.bottomAnchor.constraint(equalTo: buttonTitleLabel.topAnchor, constant: -10),
+            backgroundPatternView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
+        ]
 
+        if let image = backgroundPatternView.image, image.size.height > 0 {
+            let aspectRatio = image.size.width / image.size.height
+            glyphConstraints.append(
+                backgroundPatternView.widthAnchor.constraint(
+                    equalTo: backgroundPatternView.heightAnchor,
+                    multiplier: aspectRatio
+                )
+            )
+        }
+
+        NSLayoutConstraint.activate(glyphConstraints + [
             numberLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
             numberLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
 

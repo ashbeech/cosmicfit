@@ -11,8 +11,11 @@ final class MenuBarView: UIView {
     
     // MARK: - Properties
     static let height: CGFloat = 60
+    static let logoSize: CGFloat = 30
     /// Leading inset for the CF logo — match other chrome aligned to the logo’s left edge.
     static let logoLeadingInset: CGFloat = 16
+    /// Logo center Y relative to safe-area top (bar top is −10, logo is vertically centered in the bar).
+    static let logoCenterYOffsetFromSafeAreaTop: CGFloat = height / 2 - 10
     var onMenuTapped: (() -> Void)?
     
     // MARK: - UI Components
@@ -66,8 +69,8 @@ final class MenuBarView: UIView {
             // Logo on left with padding
             logoImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Self.logoLeadingInset),
             logoImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            logoImageView.heightAnchor.constraint(equalToConstant: contentHeight),
-            logoImageView.widthAnchor.constraint(equalToConstant: contentHeight),
+            logoImageView.heightAnchor.constraint(equalToConstant: Self.logoSize),
+            logoImageView.widthAnchor.constraint(equalToConstant: Self.logoSize),
             
             // Menu button on right with padding
             menuButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),

@@ -46,20 +46,13 @@ Deno.serve(async (req) => {
       allowedProductIds: ALLOWED_PRODUCT_IDS,
     });
   } catch (err) {
-    if (err instanceof VerificationError) {
-      console.error(JSON.stringify({
-        level: "warn",
-        event: "app_store_notification_rejected",
-        reason: err.message,
-      }));
-      return errorResponse("VERIFICATION_FAILED", err.message, 400);
-    }
+    const message = err instanceof Error ? err.message : "Verification failed";
     console.error(JSON.stringify({
-      level: "error",
-      event: "app_store_notification_verify_error",
-      error: (err as Error).message,
+      level: "warn",
+      event: "app_store_notification_rejected",
+      reason: message,
     }));
-    return errorResponse("INTERNAL_ERROR", "Verification failed", 500);
+    return errorResponse("VERIFICATION_FAILED", message, 400);
   }
 
   console.log(JSON.stringify({

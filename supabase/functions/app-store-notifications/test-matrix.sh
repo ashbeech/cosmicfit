@@ -16,10 +16,10 @@ check() {
   local label="$1" expected_status="$2" actual_status="$3"
   if [ "$actual_status" -eq "$expected_status" ]; then
     echo "  PASS  $label (HTTP $actual_status)"
-    ((PASS++))
+    PASS=$((PASS + 1))
   else
     echo "  FAIL  $label — expected $expected_status, got $actual_status"
-    ((FAIL++))
+    FAIL=$((FAIL + 1))
   fi
 }
 

@@ -48,6 +48,15 @@ struct CosmicFitTheme {
         /// Divider colour
         static let dividerColor = cosmicBlue.withAlphaComponent(0.3)
     }
+
+    // MARK: - Header glyph layout
+    /// Shared spacing and frame for section glyphs (Daily Fit numerals, Style Guide sub-pages).
+    struct HeaderGlyphLayout {
+        static let spacingAbove: CGFloat = 26
+        static let spacingBelow: CGFloat = 22
+        static let width: CGFloat = 72
+        static let height: CGFloat = 52
+    }
     
     // MARK: - Typography
     struct Typography {

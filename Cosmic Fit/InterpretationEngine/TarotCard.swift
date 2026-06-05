@@ -157,6 +157,25 @@ struct TarotCard: Codable, Identifiable, Equatable {
         }
         return suit?.rawValue ?? "Unknown"
     }
+
+    /// Index into the Tarot Numerals glyph set (Major: 0 = Fool … 21 = World; Minor: pip/court number 1–14).
+    var tarotNumeralIndex: Int? {
+        switch arcana {
+        case .major:
+            let imageName = imagePath.replacingOccurrences(of: "Cards/", with: "")
+            guard let prefix = imageName.split(separator: "-").first,
+                  let index = Int(prefix) else { return nil }
+            return index
+        case .minor:
+            return number
+        }
+    }
+
+    /// Asset catalog name for the stylized Roman numeral glyph (e.g. `tarot_numeral_7`).
+    var tarotNumeralAssetName: String? {
+        guard let index = tarotNumeralIndex else { return nil }
+        return "tarot_numeral_\(index)"
+    }
     
     /// Legacy scoring path — NOT used by production `BlueprintLensEngine` tarot
     /// selection (which uses cosine similarity on pre-normalised card vectors).

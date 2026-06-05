@@ -1,23 +1,15 @@
 {
-  "images" : [
+  "images": [
     {
-      "filename" : "menu-glyph@x1.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "menu-glyph@x2.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "menu-glyph@x3.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename": "menu_glyph.svg",
+      "idiom": "universal"
     }
   ],
-  "info" : {
-    "author" : "xcode",
-    "version" : 1
+  "info": {
+    "author": "xcode",
+    "version": 1
+  },
+  "properties": {
+    "preserves-vector-representation": true
   }
 }
