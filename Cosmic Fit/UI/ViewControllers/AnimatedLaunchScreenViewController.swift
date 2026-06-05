@@ -27,16 +27,31 @@ class AnimatedLaunchScreenViewController: UIViewController {
     private var columnTracks: [UIView] = []
     
     private let logoContainer = UIView()
-    private let logoPart1 = UIImageView()
-    private let logoPart2 = UIImageView()
-    private let logoPart3 = UIImageView()
-    private let logoPart4 = UIImageView()
+    private let logoMark = CosmicFitLogoMarkView()
+    private var logoCenterYConstraint: NSLayoutConstraint?
+
+    // Aspect ratio (width / height) of the "Cosmic Fit" vertical lockup artwork.
+    private let logoAspectRatio: CGFloat = 681.09 / 413.05
     
     // MARK: - Properties
     private var mainViewController: UIViewController?
     private var minimumAnimationElapsed = false
     private var hasTransitioned = false
-    private let minimumAnimationDuration: TimeInterval = 2.0
+
+    /// UserDefaults key recording that the full anticipation intro has played once.
+    private static let hasShownIntroKey = "hasShownAnimatedLaunchIntro"
+
+    /// True only the very first time the launch screen is shown after install.
+    /// Subsequent launches get a quick fade so daily users aren't slowed down.
+    private let isFirstLaunch: Bool =
+        !UserDefaults.standard.bool(forKey: AnimatedLaunchScreenViewController.hasShownIntroKey)
+
+    /// How long the launch screen stays up before transitioning to the app.
+    /// First launch holds a little after the slow reveal for anticipation; later
+    /// launches transition the instant the fast reveal finishes — no extra wait.
+    private var minimumAnimationDuration: TimeInterval {
+        isFirstLaunch ? 3.9 : 1.21
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -44,6 +59,15 @@ class AnimatedLaunchScreenViewController: UIViewController {
         setupUI()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        // Nudge the lockup down by a quarter of its own height so it sits
+        // visually centred rather than slightly high on screen.
+        let logoHeight = view.bounds.width * 0.88 / logoAspectRatio
+        logoCenterYConstraint?.constant = logoHeight / 5
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         startAnimations()
@@ -138,60 +162,26 @@ class AnimatedLaunchScreenViewController: UIViewController {
         // Logo container for centering
         logoContainer.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logoContainer)
-        
-        // Setup logo parts
-        logoPart1.image = UIImage(named: "logo-animation-part-1")
-        logoPart1.contentMode = .scaleAspectFit
-        logoPart1.translatesAutoresizingMaskIntoConstraints = false
-        logoPart1.alpha = 0 // Start invisible
-        logoContainer.addSubview(logoPart1)
-        
-        logoPart2.image = UIImage(named: "logo-animation-part-2")
-        logoPart2.contentMode = .scaleAspectFit
-        logoPart2.translatesAutoresizingMaskIntoConstraints = false
-        logoPart2.alpha = 0 // Start invisible
-        logoContainer.addSubview(logoPart2)
-        
-        logoPart3.image = UIImage(named: "logo-animation-part-3")
-        logoPart3.contentMode = .scaleAspectFit
-        logoPart3.translatesAutoresizingMaskIntoConstraints = false
-        logoPart3.alpha = 0 // Start invisible
-        logoContainer.addSubview(logoPart3)
-        
-        logoPart4.image = UIImage(named: "logo-animation-part-4")
-        logoPart4.contentMode = .scaleAspectFit
-        logoPart4.translatesAutoresizingMaskIntoConstraints = false
-        logoPart4.alpha = 0 // Start invisible
-        logoContainer.addSubview(logoPart4)
-        
-        // Layout constraints - all logo parts centered and same size
+
+        // Vector "Cosmic Fit" lockup whose stars and letters each fade in separately
+        logoMark.translatesAutoresizingMaskIntoConstraints = false
+        logoContainer.addSubview(logoMark)
+
+        logoCenterYConstraint = logoContainer.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+
         NSLayoutConstraint.activate([
-            // Logo container centered in view
+            // Logo container centred horizontally; vertical offset applied in layout.
             logoContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoContainer.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            logoContainer.widthAnchor.constraint(equalToConstant: 200),
-            logoContainer.heightAnchor.constraint(equalToConstant: 200),
-            
-            // All logo parts fill the container
-            logoPart1.topAnchor.constraint(equalTo: logoContainer.topAnchor),
-            logoPart1.leadingAnchor.constraint(equalTo: logoContainer.leadingAnchor),
-            logoPart1.trailingAnchor.constraint(equalTo: logoContainer.trailingAnchor),
-            logoPart1.bottomAnchor.constraint(equalTo: logoContainer.bottomAnchor),
-            
-            logoPart2.topAnchor.constraint(equalTo: logoContainer.topAnchor),
-            logoPart2.leadingAnchor.constraint(equalTo: logoContainer.leadingAnchor),
-            logoPart2.trailingAnchor.constraint(equalTo: logoContainer.trailingAnchor),
-            logoPart2.bottomAnchor.constraint(equalTo: logoContainer.bottomAnchor),
-            
-            logoPart3.topAnchor.constraint(equalTo: logoContainer.topAnchor),
-            logoPart3.leadingAnchor.constraint(equalTo: logoContainer.leadingAnchor),
-            logoPart3.trailingAnchor.constraint(equalTo: logoContainer.trailingAnchor),
-            logoPart3.bottomAnchor.constraint(equalTo: logoContainer.bottomAnchor),
-            
-            logoPart4.topAnchor.constraint(equalTo: logoContainer.topAnchor),
-            logoPart4.leadingAnchor.constraint(equalTo: logoContainer.leadingAnchor),
-            logoPart4.trailingAnchor.constraint(equalTo: logoContainer.trailingAnchor),
-            logoPart4.bottomAnchor.constraint(equalTo: logoContainer.bottomAnchor)
+            logoCenterYConstraint!,
+            logoContainer.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.88),
+            logoContainer.heightAnchor.constraint(equalTo: logoContainer.widthAnchor,
+                                                  multiplier: 1.0 / logoAspectRatio),
+
+            // Logo mark fills the container
+            logoMark.topAnchor.constraint(equalTo: logoContainer.topAnchor),
+            logoMark.leadingAnchor.constraint(equalTo: logoContainer.leadingAnchor),
+            logoMark.trailingAnchor.constraint(equalTo: logoContainer.trailingAnchor),
+            logoMark.bottomAnchor.constraint(equalTo: logoContainer.bottomAnchor)
         ])
     }
     
@@ -210,26 +200,35 @@ class AnimatedLaunchScreenViewController: UIViewController {
         // START BACKGROUND FADE-IN immediately
         self.startBackgroundGradualFadeIn()
         
-        // Part 1: Fade in over 0.5 seconds (halved time)
-        UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseInOut], animations: {
-            self.logoPart1.alpha = 1.0
-        }) { _ in
+        // Same three-phase sequential reveal in both cases — the star inside
+        // "Cosmic" first, then "Cosmic", then "Fit", sweeping left-to-right within
+        // each phase. Subsequent launches just play it much faster.
+        let groups = [
+            CosmicFitLogoMarkView.ElementGroup.cosmicStar,
+            CosmicFitLogoMarkView.ElementGroup.cosmicLetters,
+            CosmicFitLogoMarkView.ElementGroup.fit
+        ]
+
+        if isFirstLaunch {
+            // First ever launch: slow, anticipatory pacing.
+            logoMark.animateGroupedReveal(
+                groups: groups,
+                groupDuration: 1.0,
+                groupStagger: 0.85,
+                elementStagger: 0.12,
+                startDelay: 0.35)
+
+            // Remember we've played the full intro so later launches stay quick.
+            UserDefaults.standard.set(true, forKey: Self.hasShownIntroKey)
+        } else {
+            // Every subsequent launch: identical sequencing, compressed to ~1s.
+            logoMark.animateGroupedReveal(
+                groups: groups,
+                groupDuration: 0.4,
+                groupStagger: 0.28,
+                elementStagger: 0.05,
+                startDelay: 0.1)
         }
-        
-        // Part 2: Starts after part 1, fades in over 0.5 seconds (overlapping with part 3)
-        UIView.animate(withDuration: 1.0, delay: 0.25, options: [.curveEaseInOut], animations: {
-            self.logoPart2.alpha = 1.0
-        }, completion: nil)
-        
-        // Part 3: Starts while part 2 is still fading in, overlaps with part 4
-        UIView.animate(withDuration: 1.0, delay: 0.33, options: [.curveEaseInOut], animations: {
-            self.logoPart3.alpha = 1.0
-        }, completion: nil)
-        
-        // Part 4: Starts while part 3 is still fading in
-        UIView.animate(withDuration: 1.0, delay: 0.44, options: [.curveEaseInOut], animations: {
-            self.logoPart4.alpha = 1.0
-        }, completion: nil)
     }
     
     private func startBackgroundGradualFadeIn() {
