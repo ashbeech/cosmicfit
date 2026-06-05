@@ -81,7 +81,7 @@ final class StyleGuideViewController: UIViewController {
     // MARK: - Grid Buttons (8 tiles, 2×4)
     private let styleCoreButton = StyleGuideGridButton(
         number: "1.",
-        title: "Style Core",
+        title: "The Blueprint",
         backgroundImageName: "style_core_glyph"
     )
     private let texturesButton = StyleGuideGridButton(
@@ -335,15 +335,15 @@ final class StyleGuideViewController: UIViewController {
 
             iconImageView.topAnchor.constraint(
                 equalTo: aboutYouLabel.bottomAnchor,
-                constant: CosmicFitTheme.HeaderGlyphLayout.spacingAbove
+                constant: CosmicFitTheme.StyleGuideHubGlyphLayout.spacingAbove
             ),
             iconImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            iconImageView.widthAnchor.constraint(equalToConstant: CosmicFitTheme.HeaderGlyphLayout.width),
-            iconImageView.heightAnchor.constraint(equalToConstant: CosmicFitTheme.HeaderGlyphLayout.height),
+            iconImageView.widthAnchor.constraint(equalToConstant: CosmicFitTheme.StyleGuideHubGlyphLayout.width),
+            iconImageView.heightAnchor.constraint(equalToConstant: CosmicFitTheme.StyleGuideHubGlyphLayout.height),
 
             mainHeadingLabel.topAnchor.constraint(
                 equalTo: iconImageView.bottomAnchor,
-                constant: CosmicFitTheme.HeaderGlyphLayout.spacingBelow
+                constant: CosmicFitTheme.StyleGuideHubGlyphLayout.spacingBelow
             ),
             mainHeadingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             mainHeadingLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
@@ -526,7 +526,7 @@ final class StyleGuideViewController: UIViewController {
 
             return StyleGuideDetailContent(
                 sectionType: .styleCore,
-                title: "Style Core",
+                title: "The Blueprint",
                 iconImageName: "style_core_glyph",
                 textSections: [
                     StyleGuideDetailContent.TextSection(subheading: nil, bodyText: body)

@@ -54,8 +54,22 @@ struct CosmicFitTheme {
     struct HeaderGlyphLayout {
         static let spacingAbove: CGFloat = 26
         static let spacingBelow: CGFloat = 22
-        static let width: CGFloat = 72
-        static let height: CGFloat = 52
+        static let width: CGFloat = 60
+        static let height: CGFloat = 44
+    }
+
+    /// Style Guide hub header (`style_guide_glyph` is 86×44 — wider than section glyphs).
+    /// Frame width is derived from height so the rendered mark matches sub-page glyph height.
+    struct StyleGuideHubGlyphLayout {
+        private static let assetAspect: CGFloat = 86 / 44
+        static let height = HeaderGlyphLayout.height
+        static let width = height * assetAspect
+        static let spacingAbove = HeaderGlyphLayout.spacingAbove
+        /// Sub-pages place `title1` (28pt) below the glyph; the hub uses `pageTitle` (48pt)
+        /// with tight line height, so extra gap keeps the visual rhythm consistent.
+        static let spacingBelow = HeaderGlyphLayout.spacingBelow
+            + (Typography.FontSizes.pageTitle - Typography.FontSizes.title1) / 2
+            + 6
     }
     
     // MARK: - Typography
@@ -63,7 +77,7 @@ struct CosmicFitTheme {
         
         /// Font sizes following iOS Human Interface Guidelines
         struct FontSizes {
-            static let largeTitle: CGFloat = 34
+            static let largeTitle: CGFloat = 35
             static let title1: CGFloat = 28
             static let title2: CGFloat = 22
             static let title3: CGFloat = 20
