@@ -337,7 +337,7 @@ function applyFormInputs(
     }
   }
 
-  updateDeleteProfileButton();
+  syncSavedProfileControlsFromSelection();
   restoringSession = false;
   if (persist) schedulePersistSession();
 }
@@ -381,7 +381,7 @@ async function restoreSession() {
     if (profileId && [...sel.options].some((o) => o.value === profileId)) {
       sel.value = profileId;
     }
-    updateDeleteProfileButton();
+    await syncSavedProfileControlsFromSelection();
     return;
   }
 
@@ -397,13 +397,49 @@ async function restoreSession() {
 
 function clearSavedProfileSelection() {
   document.getElementById("saved-profile-select").value = "";
-  updateDeleteProfileButton();
+  updateSavedProfileControls();
   schedulePersistSession();
 }
 
-function updateDeleteProfileButton() {
+function savedProfileNameInput() {
+  return document.getElementById("saved-profile-name");
+}
+
+function updateSavedProfileControls(selectedProfile = null) {
   const id = document.getElementById("saved-profile-select").value;
-  document.getElementById("delete-profile-btn").disabled = !id;
+  const hasSelection = !!id;
+  document.getElementById("delete-profile-btn").disabled = !hasSelection;
+  document.getElementById("rename-profile-btn").disabled = !hasSelection;
+
+  const nameInput = savedProfileNameInput();
+  nameInput.disabled = !hasSelection;
+  if (!hasSelection) {
+    nameInput.value = "";
+    return;
+  }
+
+  if (selectedProfile) {
+    nameInput.value = selectedProfile.name || "";
+  }
+}
+
+function profileNameFromLabelInput(fallbackName) {
+  const label = savedProfileNameInput().value.trim();
+  return label || fallbackName;
+}
+
+function isCustomProfileName(name, displayName) {
+  return !!name && name !== displayName;
+}
+
+async function syncSavedProfileControlsFromSelection() {
+  const id = document.getElementById("saved-profile-select").value;
+  if (!id) {
+    updateSavedProfileControls();
+    return;
+  }
+  const profile = await getProfile(id);
+  updateSavedProfileControls(profile);
 }
 
 async function refreshSavedProfilesSelect(selectedId = null) {
@@ -422,18 +458,23 @@ async function refreshSavedProfilesSelect(selectedId = null) {
   } else if (!selectedId) {
     sel.value = "";
   }
-  updateDeleteProfileButton();
+  const active = profiles.find((p) => p.id === sel.value) || null;
+  updateSavedProfileControls(active);
 }
 
 async function onSavedProfileChange() {
   const id = document.getElementById("saved-profile-select").value;
   if (!id) {
     schedulePersistSession();
-    updateDeleteProfileButton();
+    updateSavedProfileControls();
     return;
   }
   const profile = await getProfile(id);
-  if (!profile?.inputs) return;
+  if (!profile?.inputs) {
+    updateSavedProfileControls(profile);
+    return;
+  }
+  updateSavedProfileControls(profile);
   applyFormInputs({
     ...profile.inputs,
     preset: "custom",
@@ -458,15 +499,16 @@ async function syncSavedProfileNameAfterSubmit() {
   inputs.activeProfileId = activeId;
   inputs.preset = "custom";
 
-  if (
-    profile.name === displayName &&
+  const inputsUnchanged =
     profile.inputs?.birthDate === inputs.birthDate &&
-    (profile.inputs?.profileId || "") === (inputs.profileId || "")
-  ) {
+    (profile.inputs?.profileId || "") === (inputs.profileId || "");
+  if (inputsUnchanged && (profile.customName || profile.name === displayName)) {
     return;
   }
 
-  profile.name = displayName;
+  if (!profile.customName) {
+    profile.name = displayName;
+  }
   profile.updatedAt = Date.now();
   profile.inputs = inputs;
   await putProfile(profile);
@@ -498,7 +540,9 @@ async function saveCurrentProfile() {
     return;
   }
 
-  const name = state.data.profile.displayName;
+  const displayName = state.data.profile.displayName;
+  const name = profileNameFromLabelInput(displayName);
+  const customName = isCustomProfileName(name, displayName);
   const profiles = await listProfiles();
   const activeId = document.getElementById("saved-profile-select").value;
   const existingByName = profiles.find((p) => p.name === name);
@@ -512,12 +556,15 @@ async function saveCurrentProfile() {
     profile = {
       ...existingById,
       name,
+      customName: customName || existingById.customName,
       updatedAt: now,
       inputs: { ...inputs, preset: "custom", activeProfileId: existingById.id },
     };
   } else if (existingByName) {
     profile = {
       ...existingByName,
+      name,
+      customName: customName || existingByName.customName,
       updatedAt: now,
       inputs: {
         ...inputs,
@@ -529,6 +576,7 @@ async function saveCurrentProfile() {
     profile = {
       id: newProfileId(),
       name,
+      customName,
       createdAt: now,
       updatedAt: now,
       inputs: { ...inputs, preset: "custom", activeProfileId: "" },
@@ -539,10 +587,33 @@ async function saveCurrentProfile() {
   await putProfile(profile);
   await refreshSavedProfilesSelect(profile.id);
   document.getElementById("saved-profile-select").value = profile.id;
-  updateDeleteProfileButton();
+  updateSavedProfileControls(profile);
   schedulePersistSession();
   document.getElementById("status-indicator").textContent =
     `Saved profile “${name}”`;
+}
+
+async function renameSelectedProfile() {
+  const id = document.getElementById("saved-profile-select").value;
+  const name = savedProfileNameInput().value.trim();
+  if (!id) return;
+  if (!name) {
+    showError("Enter a profile label before renaming.");
+    return;
+  }
+  hideError();
+
+  const profile = await getProfile(id);
+  if (!profile) return;
+
+  const displayName = state.data?.profile?.displayName || profile.name;
+  profile.name = name;
+  profile.customName = isCustomProfileName(name, displayName);
+  profile.updatedAt = Date.now();
+  await putProfile(profile);
+  await refreshSavedProfilesSelect(id);
+  document.getElementById("status-indicator").textContent =
+    `Renamed profile to “${name}”`;
 }
 
 async function deleteSelectedProfile() {
@@ -656,8 +727,17 @@ function wireEvents() {
     .getElementById("save-profile-btn")
     .addEventListener("click", saveCurrentProfile);
   document
+    .getElementById("rename-profile-btn")
+    .addEventListener("click", renameSelectedProfile);
+  document
     .getElementById("delete-profile-btn")
     .addEventListener("click", deleteSelectedProfile);
+  savedProfileNameInput().addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !savedProfileNameInput().disabled) {
+      e.preventDefault();
+      renameSelectedProfile();
+    }
+  });
   document.getElementById("compare-toggle").addEventListener("change", () => {
     onCompareToggle();
     schedulePersistSession();

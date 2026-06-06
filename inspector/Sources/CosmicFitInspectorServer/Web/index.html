@@ -28,10 +28,15 @@
           <option value="">—</option>
         </select>
       </div>
+      <div class="control-group">
+        <label for="saved-profile-name">Profile label</label>
+        <input type="text" id="saved-profile-name" class="saved-profile-name-input" placeholder="Name in saved list" disabled autocomplete="off" title="Custom label for the selected saved profile">
+      </div>
       <div class="control-group saved-profile-actions">
         <label class="label-spacer">&nbsp;</label>
         <div class="btn-row">
-          <button type="button" id="save-profile-btn" class="small-btn" title="Save current inputs using the engine display name (Submit first)">Save</button>
+          <button type="button" id="rename-profile-btn" class="small-btn" disabled title="Apply label to selected saved profile">Rename</button>
+          <button type="button" id="save-profile-btn" class="small-btn" title="Save current inputs (Submit first; uses label if set, else engine display name)">Save</button>
           <button type="button" id="delete-profile-btn" class="small-btn" disabled title="Delete selected saved profile">Delete</button>
         </div>
       </div>
