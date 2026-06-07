@@ -205,6 +205,14 @@ class DailyFitViewController: UIViewController {
     /// imageView's `image` property so card art and sheen always paint
     /// in unison.
     private let cardFrontSheenView = MotionSheenView()
+    /// Rounds the revealed card front to the *actual* aspect-fit art rect
+    /// rather than the imageView's layer bounds. Because the slot is a
+    /// touch taller than the art (`scaleAspectFit` letterboxes it), a
+    /// plain `layer.cornerRadius` rounds empty space above/below the card
+    /// and leaves the art's own square black corners poking out. This
+    /// mask tracks the fitted image rect so the rounding lands exactly on
+    /// the card edge. Updated in `updateTarotCardImageMask()`.
+    private let tarotCardImageMaskLayer = CAShapeLayer()
     /// Subtle inverted-tilt 3D parallax on the card container. Created
     /// lazily in `viewWillAppear` and torn down in `viewWillDisappear`
     /// so the gyro is only running while the card is on-screen. Writes
@@ -540,8 +548,7 @@ class DailyFitViewController: UIViewController {
     // MARK: - UI Setup
     private func setupUI() {
         
-        // Always start with black background
-        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
+        view.backgroundColor = .black
         
         // ADD FULL-SCREEN SCROLLING RUNES BACKGROUND HERE - behind everything
         scrollingRunesBackground.translatesAutoresizingMaskIntoConstraints = false
@@ -561,8 +568,7 @@ class DailyFitViewController: UIViewController {
         // Setup background blur image view (behind everything) - will show blurred tarot card as background
         setupBackgroundBlur()
         
-        // ADDITIONAL: Ensure no black shows through during any state
-        view.backgroundColor = UIColor(red: 31/255, green: 25/255, blue: 61/255, alpha: 1.0) // Dark purple fallback instead of pure black
+        view.backgroundColor = .black
         
         // Setup scroll view with delegate for animation (PRESERVE existing scroll system)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -1014,7 +1020,9 @@ class DailyFitViewController: UIViewController {
         tarotCardImageView.contentMode = .scaleAspectFit
         tarotCardImageView.clipsToBounds = true
         tarotCardImageView.backgroundColor = CosmicFitTheme.Colours.cosmicLilac // Themed placeholder
-        tarotCardImageView.layer.cornerRadius = 24
+        // Rounded corners come from `tarotCardImageMaskLayer` (fitted to the
+        // actual art rect), not `layer.cornerRadius` — see the property doc.
+        tarotCardImageView.layer.mask = tarotCardImageMaskLayer
         tarotCardImageView.alpha = 0.0
         tarotCardContainerView.addSubview(tarotCardImageView)
         
@@ -1133,7 +1141,47 @@ class DailyFitViewController: UIViewController {
     /// caused the shadow to slide down away from the card during
     /// rubber-band over-scroll because CALayer's shadow rendering
     /// does not honour perspective transforms.
+    /// Rounds the card front to the actual displayed (aspect-fit) art rect.
+    /// `scaleAspectFit` letterboxes the art inside a slightly taller slot,
+    /// so a layer-bounds corner radius would round empty padding and leave
+    /// the art's square black corners visible. Here we compute the fitted
+    /// image rect and lay a rounded-rect mask exactly over it.
+    private func updateTarotCardImageMask() {
+        let bounds = tarotCardImageView.bounds
+        guard bounds.width > 1, bounds.height > 1 else { return }
+
+        let cornerRadius: CGFloat = 18
+        let fittedRect: CGRect
+
+        if let imageSize = tarotCardImageView.image?.size,
+           imageSize.width > 0, imageSize.height > 0 {
+            let scale = min(bounds.width / imageSize.width,
+                            bounds.height / imageSize.height)
+            let fittedW = imageSize.width * scale
+            let fittedH = imageSize.height * scale
+            fittedRect = CGRect(
+                x: (bounds.width - fittedW) / 2,
+                y: (bounds.height - fittedH) / 2,
+                width: fittedW,
+                height: fittedH
+            )
+        } else {
+            // No image yet (placeholder fill): round the whole slot.
+            fittedRect = bounds
+        }
+
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        tarotCardImageMaskLayer.frame = bounds
+        tarotCardImageMaskLayer.path = UIBezierPath(
+            roundedRect: fittedRect,
+            cornerRadius: cornerRadius
+        ).cgPath
+        CATransaction.commit()
+    }
+
     private func updateTarotCardOuterGlow() {
+        updateTarotCardImageMask()
         let cornerRadius: CGFloat = 24
         let containerBounds = tarotCardContainerView.bounds
         guard containerBounds.width > 1, containerBounds.height > 1 else { return }
@@ -1480,7 +1528,7 @@ class DailyFitViewController: UIViewController {
         let sliderLabels = [
             ("Masculine", "Feminine"),
             ("Angular", "Rounded"),
-            ("Structured", "Draped")
+            ("Structured", "Relaxed")
         ]
 
         silhouetteSliderData = []
@@ -2987,6 +3035,9 @@ class DailyFitViewController: UIViewController {
             tarotCardImageView.image = image
             cardFrontSheenView.cardImage = image
             originalCardImage = image
+            // Re-fit the rounded mask to this image's aspect ratio so the
+            // card-edge rounding lands on the art, not the letterbox gap.
+            updateTarotCardImageMask()
             
             // Create blurred background version for the full-screen background
             createBlurredBackground(from: image)
@@ -3207,12 +3258,21 @@ class DailyFitViewController: UIViewController {
         UIView.animate(withDuration: duration * 0.3) {
             self.scrollingRunesBackground.alpha = 0.0
         }
-        
+
+        // Drive the halo to follow the card's apparent width through the
+        // flip: the card rotates about its vertical (Y) axis, so its
+        // visible width collapses to a sliver at 90° and re-expands. We
+        // scale the glow's x by |cos(angle)| sampled along the SAME eased
+        // timing as the flip (.curveEaseOut), so the halo squeezes thin
+        // quickly as the card turns edge-on, then eases back out with the
+        // front face settling — instead of hanging static behind the card.
+        animateGlowFlipSqueeze(duration: duration)
+
         // NOW perform the flip: rotate BOTH cards together by 180°
         UIView.animate(
             withDuration: duration,
             delay: 0,
-            options: [.curveEaseIn],
+            options: [.curveEaseOut],
             animations: {
                 // Rotate card back from 0° to 180° (faces away)
                 self.cardBackImageView.layer.transform = CATransform3DMakeRotation(.pi, 0, 1, 0)
@@ -3238,6 +3298,61 @@ class DailyFitViewController: UIViewController {
                 self.completeCardReveal()
             }
         )
+    }
+
+    /// Squeezes the outer halo's width to follow the flipping card.
+    /// Samples `|cos(θ)|` (θ: 0→π = the card's rotation) at the eased
+    /// flip timing (.curveEaseOut) so the glow compresses quickly as the
+    /// card turns edge-on, then re-expands as the front face settles.
+    private func animateGlowFlipSqueeze(duration: TimeInterval) {
+        let steps = 40
+        var values: [NSNumber] = []
+        var keyTimes: [NSNumber] = []
+        for i in 0...steps {
+            let t = Double(i) / Double(steps)
+            let eased = Self.cubicBezierEaseOut(t)
+            let angle = eased * Double.pi
+            // Floor keeps a faint sliver of light at the edge-on midpoint
+            // rather than the halo vanishing entirely.
+            let scaleX = max(0.04, abs(cos(angle)))
+            values.append(NSNumber(value: scaleX))
+            keyTimes.append(NSNumber(value: t))
+        }
+
+        let scaleAnim = CAKeyframeAnimation(keyPath: "transform.scale.x")
+        scaleAnim.values = values
+        scaleAnim.keyTimes = keyTimes
+        scaleAnim.duration = duration
+        scaleAnim.calculationMode = .linear
+        scaleAnim.isRemovedOnCompletion = true
+        tarotCardGlowView.layer.add(scaleAnim, forKey: "glowFlipScale")
+    }
+
+    /// Evaluates UIView `.curveEaseOut` (CAMediaTimingFunction easeOut:
+    /// control points (0, 0) and (0.58, 1)) at time fraction `t`.
+    private static func cubicBezierEaseOut(_ t: Double) -> Double {
+        cubicBezierY(atX: t, c1x: 0.0, c1y: 0.0, c2x: 0.58, c2y: 1.0)
+    }
+
+    /// Cubic-bezier y for a given wall-clock fraction `t` (x), via Newton-Raphson.
+    private static func cubicBezierY(atX t: Double, c1x: Double, c1y: Double, c2x: Double, c2y: Double) -> Double {
+        guard t > 0 else { return 0 }
+        guard t < 1 else { return 1 }
+        func axis(_ u: Double, _ p1: Double, _ p2: Double) -> Double {
+            let mu = 1 - u
+            return 3 * mu * mu * u * p1 + 3 * mu * u * u * p2 + u * u * u
+        }
+        var u = t
+        for _ in 0..<8 {
+            let x = axis(u, c1x, c2x) - t
+            let dx = 3 * (1 - u) * (1 - u) * c1x
+                + 6 * (1 - u) * u * (c2x - c1x)
+                + 3 * u * u * (1 - c2x)
+            if abs(dx) < 1e-7 { break }
+            u -= x / dx
+            u = min(1, max(0, u))
+        }
+        return axis(u, c1y, c2y)
     }
 
     private func completeCardReveal() {

@@ -2,213 +2,305 @@
 //  ScrollingRunesBackgroundView.swift
 //  Cosmic Fit
 //
-//  Reusable full-screen view with 3 scrolling rune columns
+//  Reusable full-screen view with 5 scrolling rune columns
 //  Unified implementation for both launch screen and Daily Fit page
 //
 
 import UIKit
 
 class ScrollingRunesBackgroundView: UIView {
-    
-    // MARK: - UI Elements
-    private let runeColumn1 = UIImageView()
-    private let runeColumn2 = UIImageView()
-    private let runeColumn3 = UIImageView()
-    
-    private let runeColumn1Duplicate = UIImageView()
-    private let runeColumn2Duplicate = UIImageView()
-    private let runeColumn3Duplicate = UIImageView()
-    
+
     // MARK: - Properties
+    private let columnCount = 5
+    private let runeImage = UIImage(named: "logo-animation-background")
+    private var runeAspectRatio: CGFloat {
+        guard let size = runeImage?.size, size.width > 0 else { return 1.0 }
+        return size.height / size.width
+    }
+
+    private var columnClips: [UIView] = []
+    private var columnTracks: [UIView] = []
     private var isAnimating = false
-    private let scrollDuration: TimeInterval = 20.0
-    private var heightConstraints: [NSLayoutConstraint] = []
-    
+    private static let scrollSpeed: CGFloat = 42.0
+
+    // MARK: - Edge fade overlays
+     private let topFadeView = UIView()
+    private let bottomFadeView = UIView()
+    private var topStripLayers: [CAGradientLayer] = []
+    private var bottomStripLayers: [CAGradientLayer] = []
+    private var fadeBreathingActive = false
+    private static let breathHalfPeriod: CFTimeInterval = 1.05 * (4.0 / 3.0)
+    /// Launch fades sit lighter than Daily Fit — half the base overlay opacity.
+    private static let breathOpacityMid: Float = 0.66
+    private static let breathOpacityDelta: Float = 0.20
+    private static let breathKey = "edgeFadeBreath"
+    private static let waveStripWidth: CGFloat = 24.0
+    private static let waveCrests: Double = 1.0
+
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupUI()
     }
-    
+
     // MARK: - Setup
     private func setupUI() {
         clipsToBounds = true
         backgroundColor = .clear
-        
-        guard let runeImage = UIImage(named: "logo-animation-background") else {
+
+        guard runeImage != nil else {
             print("⚠️ Could not load logo-animation-background image")
             return
         }
-        
-        // Setup all columns with identical configuration
-        setupColumn(runeColumn1, duplicate: runeColumn1Duplicate, image: runeImage)
-        setupColumn(runeColumn2, duplicate: runeColumn2Duplicate, image: runeImage)
-        setupColumn(runeColumn3, duplicate: runeColumn3Duplicate, image: runeImage)
-        
-        // Layout constraints - 3 equal columns, but DON'T set height yet
-        let allImageViews = [runeColumn1, runeColumn1Duplicate, runeColumn2,
-                             runeColumn2Duplicate, runeColumn3, runeColumn3Duplicate]
-        
+
+        let widthMultiplier = 1.0 / CGFloat(columnCount)
+        var constraints: [NSLayoutConstraint] = []
+        var previousClip: UIView?
+
+        for _ in 0..<columnCount {
+            let clip = UIView()
+            clip.translatesAutoresizingMaskIntoConstraints = false
+            clip.clipsToBounds = true
+            clip.alpha = 0
+            addSubview(clip)
+
+            let leadingAnchor = previousClip?.trailingAnchor ?? self.leadingAnchor
+            constraints.append(contentsOf: [
+                clip.topAnchor.constraint(equalTo: topAnchor),
+                clip.bottomAnchor.constraint(equalTo: bottomAnchor),
+                clip.leadingAnchor.constraint(equalTo: leadingAnchor),
+                clip.widthAnchor.constraint(equalTo: widthAnchor, multiplier: widthMultiplier)
+            ])
+
+            columnClips.append(clip)
+            previousClip = clip
+        }
+
+        NSLayoutConstraint.activate(constraints)
+
+        setupEdgeFades()
+    }
+
+    private func setupEdgeFades() {
+        for fadeView in [topFadeView, bottomFadeView] {
+            fadeView.translatesAutoresizingMaskIntoConstraints = false
+            fadeView.isUserInteractionEnabled = false
+            fadeView.alpha = 0
+            addSubview(fadeView)
+        }
+
         NSLayoutConstraint.activate([
-            // First column (LEFT)
-            runeColumn1.topAnchor.constraint(equalTo: topAnchor),
-            runeColumn1.leadingAnchor.constraint(equalTo: leadingAnchor),
-            runeColumn1.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
-            
-            runeColumn1Duplicate.topAnchor.constraint(equalTo: topAnchor),
-            runeColumn1Duplicate.leadingAnchor.constraint(equalTo: leadingAnchor),
-            runeColumn1Duplicate.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
-            
-            // Second column (MIDDLE)
-            runeColumn2.topAnchor.constraint(equalTo: topAnchor),
-            runeColumn2.leadingAnchor.constraint(equalTo: runeColumn1.trailingAnchor),
-            runeColumn2.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
-            
-            runeColumn2Duplicate.topAnchor.constraint(equalTo: topAnchor),
-            runeColumn2Duplicate.leadingAnchor.constraint(equalTo: runeColumn1.trailingAnchor),
-            runeColumn2Duplicate.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
-            
-            // Third column (RIGHT)
-            runeColumn3.topAnchor.constraint(equalTo: topAnchor),
-            runeColumn3.leadingAnchor.constraint(equalTo: runeColumn2.trailingAnchor),
-            runeColumn3.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0),
-            
-            runeColumn3Duplicate.topAnchor.constraint(equalTo: topAnchor),
-            runeColumn3Duplicate.leadingAnchor.constraint(equalTo: runeColumn2.trailingAnchor),
-            runeColumn3Duplicate.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.0/3.0)
+            topFadeView.topAnchor.constraint(equalTo: topAnchor),
+            topFadeView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            topFadeView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            topFadeView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.4),
+
+            bottomFadeView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            bottomFadeView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            bottomFadeView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            bottomFadeView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.33),
         ])
-        
-        // Store height constraints to update later
-        for imageView in allImageViews {
-            let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 0)
-            heightConstraint.isActive = true
-            heightConstraints.append(heightConstraint)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let rebuiltTop = layoutFadeStrips(in: topFadeView, strips: &topStripLayers, blackAtTop: true)
+        let rebuiltBottom = layoutFadeStrips(in: bottomFadeView, strips: &bottomStripLayers, blackAtTop: false)
+        // A size change (e.g. rotation) drops the per-strip animations, so
+        // re-arm the travelling wave if it should currently be running.
+        if (rebuiltTop || rebuiltBottom) && isAnimating {
+            startEdgeFadeBreathing()
         }
     }
-    
-    private func setupColumn(_ imageView: UIImageView, duplicate: UIImageView, image: UIImage) {
-        imageView.image = image
-        imageView.contentMode = .scaleToFill
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.alpha = 0 // Start invisible
-        addSubview(imageView)
-        
-        duplicate.image = image
-        duplicate.contentMode = .scaleToFill
-        duplicate.translatesAutoresizingMaskIntoConstraints = false
-        duplicate.alpha = 0 // Start invisible
-        addSubview(duplicate)
+
+    /// Builds (if needed) and positions the strip stack for one fade band.
+    /// Returns true when the strips were rebuilt (count changed).
+    @discardableResult
+    private func layoutFadeStrips(in fadeView: UIView, strips: inout [CAGradientLayer], blackAtTop: Bool) -> Bool {
+        let bounds = fadeView.bounds
+        guard bounds.width > 0, bounds.height > 0 else { return false }
+
+        let count = max(2, Int(ceil(bounds.width / Self.waveStripWidth)))
+        var rebuilt = false
+
+        if strips.count != count {
+            strips.forEach { $0.removeFromSuperlayer() }
+            strips.removeAll()
+            for _ in 0..<count {
+                let gradient = CAGradientLayer()
+                gradient.colors = blackAtTop
+                    ? [UIColor.black.cgColor, UIColor.clear.cgColor]
+                    : [UIColor.clear.cgColor, UIColor.black.cgColor]
+                gradient.locations = [0.0, 1.0]
+                gradient.startPoint = CGPoint(x: 0.5, y: 0.0)
+                gradient.endPoint = CGPoint(x: 0.5, y: 1.0)
+                gradient.opacity = Self.breathOpacityMid
+                fadeView.layer.addSublayer(gradient)
+                strips.append(gradient)
+            }
+            rebuilt = true
+        }
+
+        let stripWidth = bounds.width / CGFloat(count)
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        for (index, gradient) in strips.enumerated() {
+            // +0.5 overlap avoids hairline seams between adjacent strips.
+            gradient.frame = CGRect(x: CGFloat(index) * stripWidth,
+                                    y: 0,
+                                    width: stripWidth + 0.5,
+                                    height: bounds.height)
+        }
+        CATransaction.commit()
+
+        return rebuilt
     }
-    
+
+    private func buildColumnTracks() {
+        guard columnTracks.isEmpty else { return }
+
+        for clip in columnClips {
+            let columnWidth = clip.bounds.width
+            let columnHeight = clip.bounds.height
+            guard columnWidth > 0, columnHeight > 0 else { continue }
+
+            let tileHeight = columnWidth * runeAspectRatio
+            guard tileHeight > 0 else { continue }
+
+            let tileCount = Int(ceil(columnHeight / tileHeight)) + 2
+
+            let track = UIView(frame: clip.bounds)
+            for i in 0..<tileCount {
+                let tile = UIImageView(image: runeImage)
+                tile.contentMode = .scaleToFill
+                tile.frame = CGRect(x: 0,
+                                    y: CGFloat(i - 1) * tileHeight,
+                                    width: columnWidth,
+                                    height: tileHeight)
+                track.addSubview(tile)
+            }
+
+            clip.addSubview(track)
+            columnTracks.append(track)
+        }
+    }
+
     // MARK: - Public Methods
     func startAnimating(visibleHeight: CGFloat? = nil) {
         guard !isAnimating else { return }
         isAnimating = true
-        
-        // Ensure layout is complete
+
         layoutIfNeeded()
-        
-        // Use provided height if available, otherwise use bounds
-        let containerHeight = visibleHeight ?? bounds.height
-        
-        // UPDATE: Set the image view heights to match the container height
-        for constraint in heightConstraints {
-            constraint.constant = containerHeight
-        }
-        layoutIfNeeded()
-        
-        // Reset all transforms to start fresh
-        runeColumn1.transform = .identity
-        runeColumn1Duplicate.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
-        runeColumn2.transform = .identity
-        runeColumn2Duplicate.transform = CGAffineTransform(translationX: 0, y: containerHeight)
-        runeColumn3.transform = .identity
-        runeColumn3Duplicate.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
-        
-        // Fade in
+        buildColumnTracks()
+
         UIView.animate(withDuration: 0.5) {
-            self.runeColumn1.alpha = 1.0
-            self.runeColumn1Duplicate.alpha = 1.0
-            self.runeColumn2.alpha = 1.0
-            self.runeColumn2Duplicate.alpha = 1.0
-            self.runeColumn3.alpha = 1.0
-            self.runeColumn3Duplicate.alpha = 1.0
+            for clip in self.columnClips {
+                clip.alpha = 1.0
+            }
+            self.topFadeView.alpha = 0.75
+            self.bottomFadeView.alpha = 0.75
         }
-        
-        // Start scrolling animations
-        animateScroll(imageView: runeColumn1, duplicate: runeColumn1Duplicate, direction: .down, containerHeight: containerHeight)
-        animateScroll(imageView: runeColumn2, duplicate: runeColumn2Duplicate, direction: .up, containerHeight: containerHeight)
-        animateScroll(imageView: runeColumn3, duplicate: runeColumn3Duplicate, direction: .down, containerHeight: containerHeight)
+
+        for index in 0..<columnTracks.count {
+            let track = columnTracks[index]
+            let columnWidth = columnClips[index].bounds.width
+            let tileHeight = columnWidth * runeAspectRatio
+            guard tileHeight > 0 else { continue }
+
+            let direction: ScrollDirection = (index % 2 == 0) ? .down : .up
+            let duration = TimeInterval(tileHeight / Self.scrollSpeed)
+            animateScroll(track: track, direction: direction, tileHeight: tileHeight, duration: duration)
+        }
+
+        startEdgeFadeBreathing()
     }
-    
+
     func stopAnimating() {
         guard isAnimating else { return }
         isAnimating = false
-        
-        // Remove all animations
-        runeColumn1.layer.removeAllAnimations()
-        runeColumn1Duplicate.layer.removeAllAnimations()
-        runeColumn2.layer.removeAllAnimations()
-        runeColumn2Duplicate.layer.removeAllAnimations()
-        runeColumn3.layer.removeAllAnimations()
-        runeColumn3Duplicate.layer.removeAllAnimations()
-        
-        // Fade out
+
+        for track in columnTracks {
+            track.layer.removeAllAnimations()
+        }
+        stopEdgeFadeBreathing()
+
         UIView.animate(withDuration: 0.33) {
-            self.runeColumn1.alpha = 0
-            self.runeColumn1Duplicate.alpha = 0
-            self.runeColumn2.alpha = 0
-            self.runeColumn2Duplicate.alpha = 0
-            self.runeColumn3.alpha = 0
-            self.runeColumn3Duplicate.alpha = 0
+            for clip in self.columnClips {
+                clip.alpha = 0
+            }
+            self.topFadeView.alpha = 0
+            self.bottomFadeView.alpha = 0
         }
     }
-    
+
+    // MARK: - Edge fade breathing
+    private func startEdgeFadeBreathing() {
+        let now = CACurrentMediaTime()
+        animateWave(across: topStripLayers, startTime: now)
+        animateWave(across: bottomStripLayers, startTime: now)
+    }
+
+    /// Drives one fade band's strips with a shared opacity oscillation whose
+    /// phase advances with x position. The per-strip `beginTime` offset makes
+    /// the identical waveform appear to flow sideways as a continuous wave.
+    private func animateWave(across strips: [CAGradientLayer], startTime: CFTimeInterval) {
+        guard !strips.isEmpty else { return }
+        let fullCycle = Self.breathHalfPeriod * 2.0
+
+        for (index, gradient) in strips.enumerated() {
+            gradient.removeAnimation(forKey: Self.breathKey)
+
+            let fraction = Double(index) / Double(strips.count)
+            let phaseOffset = fraction * Self.waveCrests * fullCycle
+
+            let anim = CABasicAnimation(keyPath: "opacity")
+            anim.fromValue = Self.breathOpacityMid - Self.breathOpacityDelta
+            anim.toValue = Self.breathOpacityMid + Self.breathOpacityDelta
+            anim.duration = Self.breathHalfPeriod
+            anim.autoreverses = true
+            anim.repeatCount = .infinity
+            anim.isRemovedOnCompletion = false
+            anim.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            // Shift each strip back in time so it lags its neighbour, turning
+            // the in-place pulse into a wave that travels across the band.
+            anim.beginTime = startTime - phaseOffset
+            gradient.add(anim, forKey: Self.breathKey)
+        }
+    }
+
+    private func stopEdgeFadeBreathing() {
+        for gradient in topStripLayers + bottomStripLayers {
+            gradient.removeAnimation(forKey: Self.breathKey)
+            gradient.opacity = Self.breathOpacityMid
+        }
+    }
+
     // MARK: - Private Animation
     private enum ScrollDirection {
         case up, down
     }
-    
-    private func animateScroll(imageView: UIImageView, duplicate: UIImageView, direction: ScrollDirection, containerHeight: CGFloat) {
-        // Create seamless looping animations using CABasicAnimation
+
+    private func animateScroll(track: UIView, direction: ScrollDirection, tileHeight: CGFloat, duration: TimeInterval) {
         let animation = CABasicAnimation(keyPath: "transform.translation.y")
-        animation.duration = scrollDuration
+        animation.duration = duration
         animation.repeatCount = .infinity
         animation.isRemovedOnCompletion = false
         animation.timingFunction = CAMediaTimingFunction(name: .linear)
-        
-        let duplicateAnimation = CABasicAnimation(keyPath: "transform.translation.y")
-        duplicateAnimation.duration = scrollDuration
-        duplicateAnimation.repeatCount = .infinity
-        duplicateAnimation.isRemovedOnCompletion = false
-        duplicateAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
-        
+
         switch direction {
         case .down:
-            // Main view: animate from 0 to +height
             animation.fromValue = 0
-            animation.toValue = containerHeight
-            
-            // Duplicate: starts at -height, animates to 0
-            duplicateAnimation.fromValue = -containerHeight
-            duplicateAnimation.toValue = 0
-            
+            animation.toValue = tileHeight
         case .up:
-            // Main view: animate from 0 to -height
             animation.fromValue = 0
-            animation.toValue = -containerHeight
-            
-            // Duplicate: starts at +height, animates to 0
-            duplicateAnimation.fromValue = containerHeight
-            duplicateAnimation.toValue = 0
+            animation.toValue = -tileHeight
         }
-        
-        imageView.layer.add(animation, forKey: "scrollAnimation")
-        duplicate.layer.add(duplicateAnimation, forKey: "scrollAnimation")
+
+        track.layer.add(animation, forKey: "scrollAnimation")
     }
 }
