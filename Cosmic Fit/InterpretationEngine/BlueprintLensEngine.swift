@@ -1940,7 +1940,7 @@ enum BlueprintLensEngine {
         print("\(p)     Baseline (keyword scan): \(f3(mfBase))  +  (vis \(f2(visNorm)) - 0.5) × 0.25 = \(f3(sp.masculineFeminine))")
         print("\(p)   Angular ← → Rounded:")
         print("\(p)     Baseline (keyword scan): \(f3(arBase))  +  (act \(f2(actNorm)) - 0.5) × -0.20 = \(f3(sp.angularRounded))")
-        print("\(p)   Structured ← → Draped:")
+        print("\(p)   Structured ← → Relaxed:")
         print("\(p)     Baseline (keyword scan): \(f3(sdBase))  +  (str \(f2(strNorm)) - 0.5) × -0.25 = \(f3(sp.structuredDraped))")
 
         // ── 7. TEXTURES ──

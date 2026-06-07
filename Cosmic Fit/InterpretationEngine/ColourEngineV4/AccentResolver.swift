@@ -2,21 +2,21 @@
 //  AccentResolver.swift
 //  Cosmic Fit
 //
-//  V4.7 — Chart-derived accent colour resolution. Accent slots surface
-//  placements whose colour story is underrepresented by the core palette,
-//  then pick candidates that maximise hue novelty while staying
-//  harmonious within the family's perceptual envelope.
+//  V4.8 — Chart-derived accent colour resolution with hard hue-separation
+//  gates. Accent slots surface placements whose colour story is
+//  underrepresented by the core palette, then pick candidates that
+//  maximise hue novelty while staying harmonious within the family's
+//  perceptual envelope.
 //
-//  Key changes from V4.6:
-//    • Source selection prefers placements in counter-temperature elements
-//      (air/water for warm families, earth/fire for cool) so accents
-//      showcase the chart's "other side" rather than doubling the core.
-//    • Scoring replaces family-arc hue bonus with a hue-novelty bonus:
-//      candidates in hue zones already occupied by the core palette are
-//      penalised, candidates in fresh hue territory are rewarded.
-//    • Expression table (SignAccentExpressions) provides temperature-
-//      harmonious candidates for every sign, including blue/teal
-//      variants for air/water signs at warm temperature.
+//  Key changes from V4.7:
+//    • Hard hue-angle gate with relaxation ladder (40° → 30° → 20° → 10° → 0°)
+//      replaces soft-score-only approach. Accents must occupy a distinct hue
+//      zone from both the core palette and previously chosen accents.
+//    • Chosen accent hues are tracked and fed into each subsequent iteration,
+//      preventing accent-to-accent hue doubling.
+//    • Core hue set is chroma-filtered (C ≥ 10) so that near-neutral colours
+//      with noisy hue angles don't generate phantom occupancy.
+//    • Lab distance gate retained as secondary guard (ΔE ≥ 8).
 //
 
 import Foundation
@@ -37,6 +37,8 @@ enum AccentResolver {
 
         let coreHues = personalPaletteHexes.compactMap { hex -> Double? in
             guard let lab = ColourMath.hexToLab(hex) else { return nil }
+            let C = sqrt(lab.a * lab.a + lab.b * lab.b)
+            guard C >= hueSetChromaFloor else { return nil }
             let h = atan2(lab.b, lab.a) * 180.0 / .pi
             return h < 0 ? h + 360.0 : h
         }
@@ -44,6 +46,7 @@ enum AccentResolver {
         let roles: [AccentRole] = [.signature, .contrast]
         let slotCount = roles.count
         var chosenHexes: [String] = []
+        var chosenHues: [Double] = []
         var slots: [AccentSlot] = []
 
         for (i, (planet, sign)) in sources.prefix(slotCount).enumerated() {
@@ -56,9 +59,14 @@ enum AccentResolver {
                 corePaletteHexes: personalPaletteHexes,
                 coreHues: coreHues,
                 chosenHexes: chosenHexes,
+                chosenHues: chosenHues,
                 chromaFloor: env.chroma.min
             )
             chosenHexes.append(slot.hex)
+            if let lab = ColourMath.hexToLab(slot.hex) {
+                let h = atan2(lab.b, lab.a) * 180.0 / .pi
+                chosenHues.append(h < 0 ? h + 360.0 : h)
+            }
             slots.append(slot)
         }
 
@@ -194,6 +202,12 @@ enum AccentResolver {
         return min(raw, 360 - raw)
     }
 
+    // MARK: - Configuration
+
+    private static let hueSetChromaFloor: Double = 10.0
+    private static let hueThresholdLadder: [Double] = [40, 30, 20, 10, 0]
+    private static let pairwiseLabThreshold: Double = 64.0 // ΔE ≥ 8 squared
+
     // MARK: - Candidate Selection
 
     private static func selectBestCandidate(
@@ -204,39 +218,45 @@ enum AccentResolver {
         corePaletteHexes: [String],
         coreHues: [Double],
         chosenHexes: [String],
+        chosenHues: [Double],
         chromaFloor: Double
     ) -> AccentSlot {
-        let pairwiseThreshold: Double = 64.0 // ΔE ≥ 8 squared
-
         let avoidanceSet = corePaletteHexes + chosenHexes
-        var scored: [(expr: SignExpression, score: Double, hex: String)] = candidates.map { expr in
+        let allAvoidHues = coreHues + chosenHues
+
+        var scored: [(expr: SignExpression, score: Double, hex: String, hue: Double)] = candidates.map { expr in
             let hex = ColourMath.lchToHex(L: expr.L, C: expr.C, h: expr.h)
             let score = spikeScore(
                 candidateHex: hex,
                 candidateHue: expr.h,
                 candidateChroma: expr.C,
                 corePaletteHexes: avoidanceSet,
-                coreHues: coreHues,
+                coreHues: allAvoidHues,
                 chromaFloor: chromaFloor
             )
-            return (expr, score, hex)
+            return (expr, score, hex, expr.h)
         }
 
         scored.sort { $0.score > $1.score }
 
-        for entry in scored {
-            let passesDiv = chosenHexes.allSatisfy { chosen in
-                ColourMath.labDistanceSquared(entry.hex, chosen) >= pairwiseThreshold
-            }
-            if passesDiv {
-                return AccentSlot(
-                    hex: entry.hex,
-                    displayName: entry.expr.name,
-                    role: role,
-                    sourcePlanet: planet,
-                    sourceSign: sign,
-                    saturationOverrideApplied: false
-                )
+        for threshold in hueThresholdLadder {
+            for entry in scored {
+                let passesLab = chosenHexes.allSatisfy { chosen in
+                    ColourMath.labDistanceSquared(entry.hex, chosen) >= pairwiseLabThreshold
+                }
+                let passesHue = allAvoidHues.allSatisfy { avoidHue in
+                    shortestAngularDistance(entry.hue, avoidHue) >= threshold
+                }
+                if passesLab && passesHue {
+                    return AccentSlot(
+                        hex: entry.hex,
+                        displayName: entry.expr.name,
+                        role: role,
+                        sourcePlanet: planet,
+                        sourceSign: sign,
+                        saturationOverrideApplied: false
+                    )
+                }
             }
         }
 

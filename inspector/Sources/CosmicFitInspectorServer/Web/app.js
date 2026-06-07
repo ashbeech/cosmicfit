@@ -1772,7 +1772,7 @@ function buildDailyFitHtml(df, allowDrill = true) {
       p.silhouetteProfile.structuredDraped,
       allowDrill ? "silhouette:sd" : null,
       "Structured",
-      "Draped",
+      "Relaxed",
     );
     html += "</div>";
   }
@@ -2177,7 +2177,7 @@ const SILHOUETTE_AXIS_CONFIG = {
       `0.5 + tanh((${axisVal} − 5.5) / 4.5) × 0.45`,
   },
   sd: {
-    label: "Structured / Draped",
+    label: "Structured / Relaxed",
     drivingAxis: "strategy",
     semantic:
       "Planning vs flow — higher strategy nudges toward structured, tailored lines.",
@@ -3590,7 +3590,7 @@ function markdownDailyFit(dailyFit, dayLabel = null) {
         [
           ["Masculine / Feminine", fmtNum(sp.masculineFeminine)],
           ["Angular / Rounded", fmtNum(sp.angularRounded)],
-          ["Structured / Draped", fmtNum(sp.structuredDraped)],
+          ["Structured / Relaxed", fmtNum(sp.structuredDraped)],
         ],
       );
   }

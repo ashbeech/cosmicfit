@@ -313,6 +313,60 @@ final class MariaAshLocked_Tests: XCTestCase {
         }
     }
 
+    func testAccentToAccentHueSeparation() throws {
+        let minAccentHueAngle: Double = 20.0
+
+        for (label, input) in [("Ash", try ashInput), ("Maria", try mariaInput)] {
+            let result = ColourEngine.evaluateStrict(input: input)
+            let accentHues: [Double] = result.accentSlots.compactMap { slot in
+                guard let lab = ColourMath.hexToLab(slot.hex) else { return nil }
+                let h = atan2(lab.b, lab.a) * 180.0 / .pi
+                return h < 0 ? h + 360.0 : h
+            }
+            for i in 0..<accentHues.count {
+                for j in (i+1)..<accentHues.count {
+                    let raw = abs(accentHues[i] - accentHues[j]).truncatingRemainder(dividingBy: 360)
+                    let dist = min(raw, 360 - raw)
+                    XCTAssertGreaterThanOrEqual(dist, minAccentHueAngle,
+                        "\(label) accent[\(i)] vs [\(j)]: hue separation only \(String(format: "%.1f", dist))° (need ≥\(minAccentHueAngle)°)")
+                }
+            }
+        }
+    }
+
+    func testAccentHueSeparationFromCorePalette() throws {
+        let chromaFloor: Double = 10.0
+
+        for (label, input) in [("Ash", try ashInput), ("Maria", try mariaInput)] {
+            let result = ColourEngine.evaluateStrict(input: input)
+            let coreHexes = (result.palette.neutrals + result.palette.coreColours).map {
+                PaletteLibrary.hex(for: $0)
+            }
+            let coreHues: [Double] = coreHexes.compactMap { hex in
+                guard let lab = ColourMath.hexToLab(hex) else { return nil }
+                let C = sqrt(lab.a * lab.a + lab.b * lab.b)
+                guard C >= chromaFloor else { return nil }
+                let h = atan2(lab.b, lab.a) * 180.0 / .pi
+                return h < 0 ? h + 360.0 : h
+            }
+            var totalMinDist: Double = 0
+            for (_, slot) in result.accentSlots.enumerated() {
+                guard let lab = ColourMath.hexToLab(slot.hex) else { continue }
+                let rawH = atan2(lab.b, lab.a) * 180.0 / .pi
+                let accentHue = rawH < 0 ? rawH + 360.0 : rawH
+                var minDist: Double = 180.0
+                for coreHue in coreHues {
+                    let raw = abs(accentHue - coreHue).truncatingRemainder(dividingBy: 360)
+                    minDist = min(minDist, min(raw, 360 - raw))
+                }
+                totalMinDist += minDist
+            }
+            let avgMinDist = totalMinDist / Double(result.accentSlots.count)
+            XCTAssertGreaterThanOrEqual(avgMinDist, 10.0,
+                "\(label) average accent-to-core hue separation is only \(String(format: "%.1f", avgMinDist))° — expected ≥10° on average across accents")
+        }
+    }
+
     func testAshAndMariaGetDifferentAccentHexes() throws {
         let ashResult = ColourEngine.evaluateStrict(input: try ashInput)
         let mariaResult = ColourEngine.evaluateStrict(input: try mariaInput)

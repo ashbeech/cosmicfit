@@ -1,0 +1,46 @@
+Stage1 Experimental — Essence Rate-of-Change Diagnostics
+Engine: stage1_experimental
+Daily window:   2026-06-06 .. 2026-08-04 (60 days)
+Monthly window: 2026-06-01 .. 2027-05-01 (12 months)
+Presets: fire, earth, air, water, leo
+
+=== DAILY rate of change (consecutive days) ===
+preset   top1flip  top3chg      L1   jacc  #top1  #cats_top3
+fire        0.203    0.203  0.2935  0.898      3           7
+earth       0.322    0.644  0.3984  0.624      5           9
+air         0.203    0.678  0.4217  0.615      4           8
+water       0.237    0.644  0.3674  0.653      3           9
+leo          0.22    0.475  0.3392  0.758      3           7
+
+=== MONTHLY rate of change (1st of each month) ===
+preset   top1flip  top3chg      L1  #top1  #cats_top3
+fire        0.364    0.545   0.471      3           6
+earth       0.455    0.727  0.4332      2           6
+air         0.545    0.909  0.7996      3           7
+water       0.455    0.545  0.4104      3           6
+leo         0.455    0.818  0.4737      3           6
+
+=== ROOT CAUSE: dominant transit planets over the daily window ===
+fire: Neptune(60d→sensual/slow), Pluto(60d→edgy/slow), Saturn(56d→minimal/slow), Uranus(4d→edgy/slow)
+   anchor top3 (natal): drama, maximalist, edgy
+   visible essences seen: eclectic, edgy, effortless, magnetic, maximalist, minimal, sensual
+earth: Jupiter(52d→maximalist/slow), Uranus(35d→edgy/slow), Pluto(28d→edgy/slow), Mars(26d→drama/medium), Saturn(12d→minimal/slow), Neptune(10d→sensual/slow), Sun(4d→magnetic/fast), Chiron(1d→-/?), Venus(1d→romantic/fast)
+   anchor top3 (natal): romantic, sensual, classic
+   visible essences seen: drama, eclectic, edgy, effortless, magnetic, maximalist, minimal, polished, sensual
+air: Pluto(60d→edgy/slow), Neptune(60d→sensual/slow), Uranus(57d→edgy/slow), Saturn(3d→minimal/slow)
+   anchor top3 (natal): edgy, drama, eclectic
+   visible essences seen: edgy, grounded, magnetic, maximalist, minimal, polished, romantic, sensual
+water: Pluto(60d→edgy/slow), Uranus(60d→edgy/slow), Neptune(47d→sensual/slow), Jupiter(9d→maximalist/slow), Saturn(4d→minimal/slow)
+   anchor top3 (natal): drama, maximalist, edgy
+   visible essences seen: eclectic, edgy, effortless, grounded, magnetic, maximalist, minimal, sensual, utility
+leo: Pluto(60d→edgy/slow), Neptune(60d→sensual/slow), Uranus(55d→edgy/slow), Saturn(4d→minimal/slow)
+   anchor top3 (natal): maximalist, drama, playful
+   visible essences seen: eclectic, edgy, effortless, grounded, magnetic, minimal, sensual
+
+=== Per-category daily volatility (stddev of normalised score, daily window) ===
+preset     edgy  roman  class  utili  drama  playf  polis  effor  sensu  magne  groun  eclec  minim  maxim
+fire     0.0455 0.0228 0.0115 0.0185 0.0131    0.0 0.0184 0.0201 0.0435 0.0245 0.0166 0.0247 0.0671 0.0276
+earth    0.1013 0.0031    0.0    0.0 0.0964 0.0171 0.0269 0.0227 0.0769 0.0371 0.0206 0.0337 0.0836 0.1139
+air      0.0589 0.0318 0.0298 0.0206 0.0321    0.0  0.037 0.0241 0.1064 0.0375 0.0454 0.0208 0.0647 0.0384
+water    0.0516 0.0187 0.0047 0.0194 0.0195    0.0 0.0242 0.0358 0.1114 0.0365 0.0269 0.0347 0.0386 0.0869
+leo      0.0516 0.0109 0.0173 0.0101 0.0224    0.0 0.0259 0.0246 0.0698 0.0325 0.0363 0.0226 0.0682 0.0268
