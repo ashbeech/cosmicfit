@@ -99,9 +99,9 @@ final class MotionSheenView: UIView {
 
     /// Base opacity of the rainbow tint when intensity = 1. Low enough
     /// that the underlying card art remains the dominant visual.
-    private static let irisBaseOpacity: Float = 0.33 * (2.0 / 3.0)
+    private static let irisBaseOpacity: Float = 0.28 * (2.0 / 3.0)
     /// Base opacity of the specular highlight when intensity = 1.
-    private static let highlightBaseOpacity: Float = 0.22 * (2.0 / 3.0)
+    private static let highlightBaseOpacity: Float = 0.1 * (2.0 / 3.0)
 
     /// Total radians of phase rotation as the device tilts edge-to-edge.
     /// One rainbow loop = 2π; we move through ~1.6 loops between

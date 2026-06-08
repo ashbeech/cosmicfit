@@ -25,6 +25,22 @@ class AnimatedLaunchScreenViewController: UIViewController {
     // One clip view per column; each holds a "track" that is tiled vertically and scrolls
     private var columnClips: [UIView] = []
     private var columnTracks: [UIView] = []
+
+    // Edge fade overlays. Each band is split into thin vertical strips whose
+    // opacity oscillation is phase-shifted by x, so the pulse flows sideways
+    // as a continuous waveform instead of the whole band breathing in unison.
+    private let topFadeView = UIView()
+    private let bottomFadeView = UIView()
+    private var topStripLayers: [CAGradientLayer] = []
+    private var bottomStripLayers: [CAGradientLayer] = []
+    private var fadeBreathingActive = false
+    private static let breathHalfPeriod: CFTimeInterval = 1.05 * (4.0 / 3.0)
+    /// Launch fades sit lighter than Daily Fit — half the base overlay opacity.
+    private static let breathOpacityMid: Float = 0.5
+    private static let breathOpacityDelta: Float = 0.22
+    private static let breathKey = "edgeFadeBreath"
+    private static let waveStripWidth: CGFloat = 24.0
+    private static let waveCrests: Double = 0.5
     
     private let logoContainer = UIView()
     private let logoMark = CosmicFitLogoMarkView()
@@ -66,6 +82,58 @@ class AnimatedLaunchScreenViewController: UIViewController {
         // visually centred rather than slightly high on screen.
         let logoHeight = view.bounds.width * 0.88 / logoAspectRatio
         logoCenterYConstraint?.constant = logoHeight / 5
+
+        updateGradientFrames()
+    }
+
+    private func updateGradientFrames() {
+        let rebuiltTop = layoutFadeStrips(in: topFadeView, strips: &topStripLayers, blackAtTop: true)
+        let rebuiltBottom = layoutFadeStrips(in: bottomFadeView, strips: &bottomStripLayers, blackAtTop: false)
+        if (rebuiltTop || rebuiltBottom) && fadeBreathingActive {
+            startEdgeFadeBreathing()
+        }
+    }
+
+    /// Builds (if needed) and positions the strip stack for one fade band.
+    /// Returns true when the strips were rebuilt (count changed).
+    @discardableResult
+    private func layoutFadeStrips(in fadeView: UIView, strips: inout [CAGradientLayer], blackAtTop: Bool) -> Bool {
+        let bounds = fadeView.bounds
+        guard bounds.width > 0, bounds.height > 0 else { return false }
+
+        let count = max(2, Int(ceil(bounds.width / Self.waveStripWidth)))
+        var rebuilt = false
+
+        if strips.count != count {
+            strips.forEach { $0.removeFromSuperlayer() }
+            strips.removeAll()
+            for _ in 0..<count {
+                let gradient = CAGradientLayer()
+                gradient.colors = blackAtTop
+                    ? [UIColor.black.cgColor, UIColor.clear.cgColor]
+                    : [UIColor.clear.cgColor, UIColor.black.cgColor]
+                gradient.locations = [0.0, 1.0]
+                gradient.startPoint = CGPoint(x: 0.5, y: 0.0)
+                gradient.endPoint = CGPoint(x: 0.5, y: 1.0)
+                gradient.opacity = Self.breathOpacityMid
+                fadeView.layer.addSublayer(gradient)
+                strips.append(gradient)
+            }
+            rebuilt = true
+        }
+
+        let stripWidth = bounds.width / CGFloat(count)
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        for (index, gradient) in strips.enumerated() {
+            gradient.frame = CGRect(x: CGFloat(index) * stripWidth,
+                                    y: 0,
+                                    width: stripWidth + 0.5,
+                                    height: bounds.height)
+        }
+        CATransaction.commit()
+
+        return rebuilt
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -75,8 +143,7 @@ class AnimatedLaunchScreenViewController: UIViewController {
     
     // MARK: - UI Setup
     private func setupUI() {
-        // Start with complete black background
-        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
+        view.backgroundColor = .black
         
         setupBackgroundRunes()
         setupLogoElements()
@@ -122,6 +189,29 @@ class AnimatedLaunchScreenViewController: UIViewController {
         }
         
         NSLayoutConstraint.activate(constraints)
+
+        setupEdgeFades()
+    }
+
+    private func setupEdgeFades() {
+        for fadeView in [topFadeView, bottomFadeView] {
+            fadeView.translatesAutoresizingMaskIntoConstraints = false
+            fadeView.isUserInteractionEnabled = false
+            fadeView.alpha = 0
+            view.addSubview(fadeView)
+        }
+
+        NSLayoutConstraint.activate([
+            topFadeView.topAnchor.constraint(equalTo: view.topAnchor),
+            topFadeView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topFadeView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            topFadeView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5),
+
+            bottomFadeView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            bottomFadeView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomFadeView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomFadeView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5),
+        ])
     }
     
     /// Fills each column clip with vertically-tiled copies of the rune image at its
@@ -235,12 +325,16 @@ class AnimatedLaunchScreenViewController: UIViewController {
         // Start scrolling immediately but invisibly
         startBackgroundScrolling()
         
-        // Fade in all background columns
+        // Fade in all background columns and edge fades
         UIView.animate(withDuration: 0.5, delay: 0.0, options: [.curveEaseInOut], animations: {
             for clip in self.columnClips {
                 clip.alpha = 1.0
             }
+            self.topFadeView.alpha = 1.0
+            self.bottomFadeView.alpha = 1.0
         }, completion: nil)
+
+        startEdgeFadeBreathing()
     }
     
     private func startBackgroundScrolling() {
@@ -288,6 +382,40 @@ class AnimatedLaunchScreenViewController: UIViewController {
         }
         
         track.layer.add(animation, forKey: "scrollAnimation")
+    }
+
+    // MARK: - Edge fade breathing
+    private func startEdgeFadeBreathing() {
+        fadeBreathingActive = true
+        let now = CACurrentMediaTime()
+        animateWave(across: topStripLayers, startTime: now)
+        animateWave(across: bottomStripLayers, startTime: now)
+    }
+
+    /// Drives one fade band's strips with a shared opacity oscillation whose
+    /// phase advances with x position, so the identical waveform appears to
+    /// flow sideways across the band as a continuous wave.
+    private func animateWave(across strips: [CAGradientLayer], startTime: CFTimeInterval) {
+        guard !strips.isEmpty else { return }
+        let fullCycle = Self.breathHalfPeriod * 2.0
+
+        for (index, gradient) in strips.enumerated() {
+            gradient.removeAnimation(forKey: Self.breathKey)
+
+            let fraction = Double(index) / Double(strips.count)
+            let phaseOffset = fraction * Self.waveCrests * fullCycle
+
+            let anim = CABasicAnimation(keyPath: "opacity")
+            anim.fromValue = Self.breathOpacityMid - Self.breathOpacityDelta
+            anim.toValue = Self.breathOpacityMid + Self.breathOpacityDelta
+            anim.duration = Self.breathHalfPeriod
+            anim.autoreverses = true
+            anim.repeatCount = .infinity
+            anim.isRemovedOnCompletion = false
+            anim.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            anim.beginTime = startTime - phaseOffset
+            gradient.add(anim, forKey: Self.breathKey)
+        }
     }
     
     // MARK: - Transition

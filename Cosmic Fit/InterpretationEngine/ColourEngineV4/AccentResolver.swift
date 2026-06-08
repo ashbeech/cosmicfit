@@ -2,26 +2,48 @@
 //  AccentResolver.swift
 //  Cosmic Fit
 //
-//  V4.7 — Chart-derived accent colour resolution. Accent slots surface
-//  placements whose colour story is underrepresented by the core palette,
-//  then pick candidates that maximise hue novelty while staying
-//  harmonious within the family's perceptual envelope.
+//  V4.9 — Chart-derived accent colour resolution with core-hue skip rule.
+//  Accents cannot occupy a core hue zone unless every underrepresented
+//  placement has been exhausted. If a placement's entire candidate pool
+//  overlaps core hues, skip to the next underrepresented placement.
 //
-//  Key changes from V4.6:
-//    • Source selection prefers placements in counter-temperature elements
-//      (air/water for warm families, earth/fire for cool) so accents
-//      showcase the chart's "other side" rather than doubling the core.
-//    • Scoring replaces family-arc hue bonus with a hue-novelty bonus:
-//      candidates in hue zones already occupied by the core palette are
-//      penalised, candidates in fresh hue territory are rewarded.
-//    • Expression table (SignAccentExpressions) provides temperature-
-//      harmonious candidates for every sign, including blue/teal
-//      variants for air/water signs at warm temperature.
+//  Key changes from V4.8:
+//    • Core-hue gate (hard floor at 20°) separated from accent-to-accent
+//      gate (relaxation ladder). Core gate never relaxes during normal
+//      selection — the resolver skips the source instead.
+//    • Two-phase source traversal: underrepresented first, then represented.
+//      Terminal fallback may break core gate only after all sources exhausted.
+//    • AccentSource struct replaces raw tuples for deterministic traversal.
+//    • hasAnyCoreHueViableCandidate pre-check avoids entering selection
+//      when entire pool overlaps core.
 //
 
 import Foundation
 
 enum AccentResolver {
+
+    // MARK: - Configuration
+
+    private static let hueSetChromaFloor: Double = 10.0
+    private static let coreHueMinimumAngle: Double = 20.0
+    private static let accentHueThresholdLadder: [Double] = [40, 30, 20, 10, 0]
+    private static let pairwiseLabThreshold: Double = 64.0 // ΔE ≥ 8 squared
+
+    // MARK: - Source Metadata
+
+    struct AccentSource {
+        let planet: DriverKey
+        let sign: V4ZodiacSign
+        let isUnderrepresented: Bool
+        let rank: Int
+    }
+
+    // MARK: - Selection Mode
+
+    private enum SelectionMode {
+        case strictCoreGate
+        case terminalFallback
+    }
 
     // MARK: - Public API
 
@@ -33,33 +55,101 @@ enum AccentResolver {
         let temperature = FamilyProfiles.variables(for: family).temperature
         let env = SignArchetypes.envelope(for: family)
 
-        let sources = selectAccentSources(input: input, temperature: temperature)
-
         let coreHues = personalPaletteHexes.compactMap { hex -> Double? in
             guard let lab = ColourMath.hexToLab(hex) else { return nil }
+            let C = sqrt(lab.a * lab.a + lab.b * lab.b)
+            guard C >= hueSetChromaFloor else { return nil }
             let h = atan2(lab.b, lab.a) * 180.0 / .pi
             return h < 0 ? h + 360.0 : h
         }
 
+        let rankedSources = selectAccentSources(input: input, temperature: temperature)
+        let underrepresented = rankedSources.filter { $0.isUnderrepresented }
+        let represented = rankedSources.filter { !$0.isUnderrepresented }
+
         let roles: [AccentRole] = [.signature, .contrast]
-        let slotCount = roles.count
         var chosenHexes: [String] = []
+        var chosenHues: [Double] = []
+        var usedSigns: Set<V4ZodiacSign> = []
         var slots: [AccentSlot] = []
 
-        for (i, (planet, sign)) in sources.prefix(slotCount).enumerated() {
-            let candidates = SignAccentExpressions.candidates(for: sign, temperature: temperature)
-            let slot = selectBestCandidate(
-                candidates: candidates,
-                role: roles[i],
-                planet: planet,
-                sign: sign,
-                corePaletteHexes: personalPaletteHexes,
-                coreHues: coreHues,
-                chosenHexes: chosenHexes,
-                chromaFloor: env.chroma.min
-            )
-            chosenHexes.append(slot.hex)
+        for role in roles {
+            var selected: AccentSlot? = nil
+
+            // Phase 1: underrepresented sources (hard core gate)
+            for src in underrepresented {
+                if usedSigns.contains(src.sign) { continue }
+                let candidates = SignAccentExpressions.candidates(for: src.sign, temperature: temperature)
+                if candidates.isEmpty { continue }
+                if !hasAnyCoreHueViableCandidate(candidates: candidates, coreHues: coreHues) { continue }
+
+                selected = selectBestCandidate(
+                    candidates: candidates,
+                    role: role,
+                    planet: src.planet,
+                    sign: src.sign,
+                    corePaletteHexes: personalPaletteHexes,
+                    coreHues: coreHues,
+                    chosenHexes: chosenHexes,
+                    chosenHues: chosenHues,
+                    chromaFloor: env.chroma.min,
+                    mode: .strictCoreGate
+                )
+                if selected != nil { break }
+            }
+
+            // Phase 2: represented sources (hard core gate)
+            if selected == nil {
+                for src in represented {
+                    if usedSigns.contains(src.sign) { continue }
+                    let candidates = SignAccentExpressions.candidates(for: src.sign, temperature: temperature)
+                    if candidates.isEmpty { continue }
+                    if !hasAnyCoreHueViableCandidate(candidates: candidates, coreHues: coreHues) { continue }
+
+                    selected = selectBestCandidate(
+                        candidates: candidates,
+                        role: role,
+                        planet: src.planet,
+                        sign: src.sign,
+                        corePaletteHexes: personalPaletteHexes,
+                        coreHues: coreHues,
+                        chosenHexes: chosenHexes,
+                        chosenHues: chosenHues,
+                        chromaFloor: env.chroma.min,
+                        mode: .strictCoreGate
+                    )
+                    if selected != nil { break }
+                }
+            }
+
+            // Phase 3: terminal fallback (may break core gate)
+            if selected == nil {
+                let fallbackSource = firstAvailableSource(from: rankedSources, excluding: usedSigns)
+                    ?? rankedSources[0]
+                let candidates = SignAccentExpressions.candidates(for: fallbackSource.sign, temperature: temperature)
+
+                selected = selectBestCandidate(
+                    candidates: candidates,
+                    role: role,
+                    planet: fallbackSource.planet,
+                    sign: fallbackSource.sign,
+                    corePaletteHexes: personalPaletteHexes,
+                    coreHues: coreHues,
+                    chosenHexes: chosenHexes,
+                    chosenHues: chosenHues,
+                    chromaFloor: env.chroma.min,
+                    mode: .terminalFallback
+                )
+            }
+
+            let slot = selected!
             slots.append(slot)
+            chosenHexes.append(slot.hex)
+            if let lab = ColourMath.hexToLab(slot.hex) {
+                let h = atan2(lab.b, lab.a) * 180.0 / .pi
+                chosenHues.append(h < 0 ? h + 360.0 : h)
+            }
+            usedSigns.insert(slot.sourceSign)
         }
 
         return slots
@@ -76,16 +166,12 @@ enum AccentResolver {
         return totals
     }
 
-    // MARK: - Source Selection (underrepresented-first)
+    // MARK: - Source Selection
 
-    /// Identifies which chart placements sit in elements the core palette
-    /// does NOT already express (counter-temperature), then ranks by
-    /// driver weight. Deduplicates by sign so each accent slot surfaces
-    /// a distinct zodiac colour story.
     private static func selectAccentSources(
         input: BirthChartColourInput,
         temperature: Temperature
-    ) -> [(DriverKey, V4ZodiacSign)] {
+    ) -> [AccentSource] {
         let coreElements = coreCoveredElements(for: temperature)
 
         struct Placement {
@@ -117,27 +203,21 @@ enum AccentResolver {
             return a.key.rawValue < b.key.rawValue
         }
 
-        var sources: [(DriverKey, V4ZodiacSign)] = []
+        var sources: [AccentSource] = []
         var usedSigns: Set<V4ZodiacSign> = []
 
-        for p in placements {
+        for (rank, p) in placements.enumerated() {
             guard !usedSigns.contains(p.sign) else { continue }
-            sources.append((p.key, p.sign))
+            sources.append(AccentSource(
+                planet: p.key, sign: p.sign,
+                isUnderrepresented: p.isUnderrepresented, rank: rank
+            ))
             usedSigns.insert(p.sign)
-            if sources.count >= 4 { break }
-        }
-
-        while sources.count < 4 {
-            sources.append((.sun, input.sun.sign))
         }
 
         return sources
     }
 
-    /// Elements whose colour story the family's core template already
-    /// tells. Warm families express earth/fire (reds, browns, golds,
-    /// greens); cool families express water/air (blues, teals, violets).
-    /// Accents should prioritise the *other* group.
     private static func coreCoveredElements(
         for temperature: Temperature
     ) -> Set<V4ZodiacSign.Element> {
@@ -148,18 +228,44 @@ enum AccentResolver {
         }
     }
 
+    private static func firstAvailableSource(
+        from sources: [AccentSource],
+        excluding usedSigns: Set<V4ZodiacSign>
+    ) -> AccentSource? {
+        sources.first { !usedSigns.contains($0.sign) }
+    }
+
+    // MARK: - Gate Helpers
+
+    private static func passesCoreHueGate(candidateHue: Double, coreHues: [Double]) -> Bool {
+        coreHues.allSatisfy { coreHue in
+            shortestAngularDistance(candidateHue, coreHue) >= coreHueMinimumAngle
+        }
+    }
+
+    private static func passesAccentHueGate(candidateHue: Double, chosenHues: [Double], threshold: Double) -> Bool {
+        chosenHues.allSatisfy { accentHue in
+            shortestAngularDistance(candidateHue, accentHue) >= threshold
+        }
+    }
+
+    private static func hasAnyCoreHueViableCandidate(candidates: [SignExpression], coreHues: [Double]) -> Bool {
+        if coreHues.isEmpty { return true }
+        return candidates.contains { expr in
+            let hex = ColourMath.lchToHex(L: expr.L, C: expr.C, h: expr.h)
+            let hue = labHue(forHex: hex) ?? expr.h
+            return passesCoreHueGate(candidateHue: hue, coreHues: coreHues)
+        }
+    }
+
+    private static func labHue(forHex hex: String) -> Double? {
+        guard let lab = ColourMath.hexToLab(hex) else { return nil }
+        let h = atan2(lab.b, lab.a) * 180.0 / .pi
+        return h < 0 ? h + 360.0 : h
+    }
+
     // MARK: - Spike Scorer (hue novelty)
 
-    /// Scores a candidate accent against the assembled core palette.
-    ///
-    ///   score = minΔE(candidate, avoidanceSet)
-    ///         + hueNoveltyBonus(candidate vs coreHues)
-    ///         − chromaPenalty(if chroma < floor)
-    ///
-    /// The hue novelty bonus rewards candidates whose hue angle is far
-    /// from any colour already in the palette, penalising "hue doubling"
-    /// even when raw Lab distance is high (e.g. a light gold vs dark
-    /// terracotta — different lightness but same warm hue zone).
     private static func spikeScore(
         candidateHex: String,
         candidateHue: Double,
@@ -204,50 +310,79 @@ enum AccentResolver {
         corePaletteHexes: [String],
         coreHues: [Double],
         chosenHexes: [String],
-        chromaFloor: Double
-    ) -> AccentSlot {
-        let pairwiseThreshold: Double = 64.0 // ΔE ≥ 8 squared
-
+        chosenHues: [Double],
+        chromaFloor: Double,
+        mode: SelectionMode
+    ) -> AccentSlot? {
         let avoidanceSet = corePaletteHexes + chosenHexes
-        var scored: [(expr: SignExpression, score: Double, hex: String)] = candidates.map { expr in
+        let allHuesForScoring = coreHues + chosenHues
+
+        var scored: [(expr: SignExpression, score: Double, hex: String, hue: Double)] = candidates.map { expr in
             let hex = ColourMath.lchToHex(L: expr.L, C: expr.C, h: expr.h)
+            let hue = labHue(forHex: hex) ?? expr.h
             let score = spikeScore(
                 candidateHex: hex,
-                candidateHue: expr.h,
+                candidateHue: hue,
                 candidateChroma: expr.C,
                 corePaletteHexes: avoidanceSet,
-                coreHues: coreHues,
+                coreHues: allHuesForScoring,
                 chromaFloor: chromaFloor
             )
-            return (expr, score, hex)
+            return (expr, score, hex, hue)
         }
 
         scored.sort { $0.score > $1.score }
 
-        for entry in scored {
-            let passesDiv = chosenHexes.allSatisfy { chosen in
-                ColourMath.labDistanceSquared(entry.hex, chosen) >= pairwiseThreshold
-            }
-            if passesDiv {
-                return AccentSlot(
-                    hex: entry.hex,
-                    displayName: entry.expr.name,
-                    role: role,
-                    sourcePlanet: planet,
-                    sourceSign: sign,
-                    saturationOverrideApplied: false
+        for accentThreshold in accentHueThresholdLadder {
+            for entry in scored {
+                let passesLab = chosenHexes.allSatisfy { chosen in
+                    ColourMath.labDistanceSquared(entry.hex, chosen) >= pairwiseLabThreshold
+                }
+                let passesAccentHue = passesAccentHueGate(
+                    candidateHue: entry.hue, chosenHues: chosenHues, threshold: accentThreshold
                 )
+                let passesCoreHue = passesCoreHueGate(candidateHue: entry.hue, coreHues: coreHues)
+
+                switch mode {
+                case .strictCoreGate:
+                    if passesLab && passesAccentHue && passesCoreHue {
+                        return AccentSlot(
+                            hex: entry.hex,
+                            displayName: entry.expr.name,
+                            role: role,
+                            sourcePlanet: planet,
+                            sourceSign: sign,
+                            saturationOverrideApplied: false
+                        )
+                    }
+                case .terminalFallback:
+                    if passesLab && passesAccentHue {
+                        return AccentSlot(
+                            hex: entry.hex,
+                            displayName: entry.expr.name,
+                            role: role,
+                            sourcePlanet: planet,
+                            sourceSign: sign,
+                            saturationOverrideApplied: false
+                        )
+                    }
+                }
             }
         }
 
-        let best = scored[0]
-        return AccentSlot(
-            hex: best.hex,
-            displayName: best.expr.name,
-            role: role,
-            sourcePlanet: planet,
-            sourceSign: sign,
-            saturationOverrideApplied: false
-        )
+        switch mode {
+        case .strictCoreGate:
+            return nil
+        case .terminalFallback:
+            let best = scored[0]
+            return AccentSlot(
+                hex: best.hex,
+                displayName: best.expr.name,
+                role: role,
+                sourcePlanet: planet,
+                sourceSign: sign,
+                saturationOverrideApplied: false
+            )
+        }
     }
 }

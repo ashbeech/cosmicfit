@@ -1,0 +1,2610 @@
+{
+  "generated": "2026-06-06T14:55:41.436999+01:00",
+  "window": {
+    "start": "2026-06-06",
+    "end": "2026-07-05",
+    "days": 30
+  },
+  "engines": [
+    "production",
+    "stage1_experimental"
+  ],
+  "presets": [
+    "fire",
+    "earth",
+    "air",
+    "water",
+    "leo"
+  ],
+  "metrics": {
+    "production": {
+      "fire": {
+        "n_days": 30,
+        "n_pairs": 29,
+        "top1_flip_rate": 0.0,
+        "top3_change_rate": 0.138,
+        "avg_top3_jaccard": 0.931,
+        "avg_l1_delta": 0.0107,
+        "max_l1_delta": 0.0588,
+        "avg_top1_dwell": 30.0,
+        "max_top1_dwell": 30,
+        "distinct_top1": 1,
+        "top1_distribution": {
+          "maximalist": 30
+        }
+      },
+      "earth": {
+        "n_days": 30,
+        "n_pairs": 29,
+        "top1_flip_rate": 0.517,
+        "top3_change_rate": 0.31,
+        "avg_top3_jaccard": 0.845,
+        "avg_l1_delta": 0.0183,
+        "max_l1_delta": 0.0551,
+        "avg_top1_dwell": 1.88,
+        "max_top1_dwell": 4,
+        "distinct_top1": 3,
+        "top1_distribution": {
+          "sensual": 12,
+          "polished": 10,
+          "maximalist": 8
+        }
+      },
+      "air": {
+        "n_days": 30,
+        "n_pairs": 29,
+        "top1_flip_rate": 0.0,
+        "top3_change_rate": 0.0,
+        "avg_top3_jaccard": 1.0,
+        "avg_l1_delta": 0.0087,
+        "max_l1_delta": 0.053,
+        "avg_top1_dwell": 30.0,
+        "max_top1_dwell": 30,
+        "distinct_top1": 1,
+        "top1_distribution": {
+          "maximalist": 30
+        }
+      },
+      "water": {
+        "n_days": 30,
+        "n_pairs": 29,
+        "top1_flip_rate": 0.0,
+        "top3_change_rate": 0.207,
+        "avg_top3_jaccard": 0.897,
+        "avg_l1_delta": 0.02,
+        "max_l1_delta": 0.0518,
+        "avg_top1_dwell": 30.0,
+        "max_top1_dwell": 30,
+        "distinct_top1": 1,
+        "top1_distribution": {
+          "maximalist": 30
+        }
+      },
+      "leo": {
+        "n_days": 30,
+        "n_pairs": 29,
+        "top1_flip_rate": 0.0,
+        "top3_change_rate": 0.103,
+        "avg_top3_jaccard": 0.948,
+        "avg_l1_delta": 0.0047,
+        "max_l1_delta": 0.0518,
+        "avg_top1_dwell": 30.0,
+        "max_top1_dwell": 30,
+        "distinct_top1": 1,
+        "top1_distribution": {
+          "maximalist": 30
+        }
+      }
+    },
+    "stage1_experimental": {
+      "fire": {
+        "n_days": 30,
+        "n_pairs": 29,
+        "top1_flip_rate": 0.172,
+        "top3_change_rate": 0.172,
+        "avg_top3_jaccard": 0.914,
+        "avg_l1_delta": 0.2823,
+        "max_l1_delta": 0.4977,
+        "avg_top1_dwell": 5.0,
+        "max_top1_dwell": 14,
+        "distinct_top1": 2,
+        "top1_distribution": {
+          "sensual": 27,
+          "edgy": 3
+        }
+      },
+      "earth": {
+        "n_days": 30,
+        "n_pairs": 29,
+        "top1_flip_rate": 0.31,
+        "top3_change_rate": 0.655,
+        "avg_top3_jaccard": 0.631,
+        "avg_l1_delta": 0.353,
+        "max_l1_delta": 0.9926,
+        "avg_top1_dwell": 3.0,
+        "max_top1_dwell": 15,
+        "distinct_top1": 3,
+        "top1_distribution": {
+          "maximalist": 20,
+          "edgy": 5,
+          "drama": 5
+        }
+      },
+      "air": {
+        "n_days": 30,
+        "n_pairs": 29,
+        "top1_flip_rate": 0.034,
+        "top3_change_rate": 0.655,
+        "avg_top3_jaccard": 0.61,
+        "avg_l1_delta": 0.439,
+        "max_l1_delta": 1.0149,
+        "avg_top1_dwell": 15.0,
+        "max_top1_dwell": 29,
+        "distinct_top1": 2,
+        "top1_distribution": {
+          "edgy": 29,
+          "polished": 1
+        }
+      },
+      "water": {
+        "n_days": 30,
+        "n_pairs": 29,
+        "top1_flip_rate": 0.172,
+        "top3_change_rate": 0.586,
+        "avg_top3_jaccard": 0.676,
+        "avg_l1_delta": 0.3778,
+        "max_l1_delta": 1.1562,
+        "avg_top1_dwell": 5.0,
+        "max_top1_dwell": 14,
+        "distinct_top1": 3,
+        "top1_distribution": {
+          "sensual": 18,
+          "maximalist": 8,
+          "edgy": 4
+        }
+      },
+      "leo": {
+        "n_days": 30,
+        "n_pairs": 29,
+        "top1_flip_rate": 0.172,
+        "top3_change_rate": 0.414,
+        "avg_top3_jaccard": 0.793,
+        "avg_l1_delta": 0.3155,
+        "max_l1_delta": 0.5884,
+        "avg_top1_dwell": 5.0,
+        "max_top1_dwell": 16,
+        "distinct_top1": 2,
+        "top1_distribution": {
+          "sensual": 25,
+          "edgy": 5
+        }
+      }
+    }
+  },
+  "series": {
+    "production": {
+      "fire": [
+        {
+          "date": "2026-06-06",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-07",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-08",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-09",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-10",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-11",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-12",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-13",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-14",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-15",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-16",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-17",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-18",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-19",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-20",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-21",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-22",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-23",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-24",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-25",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-26",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-27",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-28",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-29",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-30",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-07-01",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-07-02",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-07-03",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-07-04",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-07-05",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        }
+      ],
+      "earth": [
+        {
+          "date": "2026-06-06",
+          "visible": [
+            "sensual",
+            "polished",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-07",
+          "visible": [
+            "polished",
+            "sensual",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-08",
+          "visible": [
+            "sensual",
+            "polished",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-09",
+          "visible": [
+            "sensual",
+            "polished",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-10",
+          "visible": [
+            "maximalist",
+            "sensual",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-11",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "sensual"
+          ]
+        },
+        {
+          "date": "2026-06-12",
+          "visible": [
+            "maximalist",
+            "polished",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-13",
+          "visible": [
+            "maximalist",
+            "polished",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-14",
+          "visible": [
+            "polished",
+            "sensual",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-15",
+          "visible": [
+            "polished",
+            "sensual",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-16",
+          "visible": [
+            "sensual",
+            "polished",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-17",
+          "visible": [
+            "sensual",
+            "polished",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-18",
+          "visible": [
+            "sensual",
+            "polished",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-19",
+          "visible": [
+            "polished",
+            "maximalist",
+            "sensual"
+          ]
+        },
+        {
+          "date": "2026-06-20",
+          "visible": [
+            "polished",
+            "maximalist",
+            "sensual"
+          ]
+        },
+        {
+          "date": "2026-06-21",
+          "visible": [
+            "polished",
+            "maximalist",
+            "sensual"
+          ]
+        },
+        {
+          "date": "2026-06-22",
+          "visible": [
+            "polished",
+            "maximalist",
+            "sensual"
+          ]
+        },
+        {
+          "date": "2026-06-23",
+          "visible": [
+            "maximalist",
+            "polished",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-24",
+          "visible": [
+            "sensual",
+            "polished",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-25",
+          "visible": [
+            "maximalist",
+            "polished",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-26",
+          "visible": [
+            "maximalist",
+            "polished",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-27",
+          "visible": [
+            "sensual",
+            "polished",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-28",
+          "visible": [
+            "sensual",
+            "polished",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-29",
+          "visible": [
+            "sensual",
+            "polished",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-30",
+          "visible": [
+            "maximalist",
+            "polished",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-07-01",
+          "visible": [
+            "sensual",
+            "polished",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-07-02",
+          "visible": [
+            "polished",
+            "maximalist",
+            "sensual"
+          ]
+        },
+        {
+          "date": "2026-07-03",
+          "visible": [
+            "sensual",
+            "polished",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-07-04",
+          "visible": [
+            "polished",
+            "sensual",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-07-05",
+          "visible": [
+            "polished",
+            "sensual",
+            "maximalist"
+          ]
+        }
+      ],
+      "air": [
+        {
+          "date": "2026-06-06",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-07",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-08",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-09",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-10",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-11",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-12",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-13",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-14",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-15",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-16",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-17",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-18",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-19",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-20",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-21",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-22",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-23",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-24",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-25",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-26",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-27",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-28",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-29",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-30",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-07-01",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-07-02",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-07-03",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-07-04",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-07-05",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "edgy"
+          ]
+        }
+      ],
+      "water": [
+        {
+          "date": "2026-06-06",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-07",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-08",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-09",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-10",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-11",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-12",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-13",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-14",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-15",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-16",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-17",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-18",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-19",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-20",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-21",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-22",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-23",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-24",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-25",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-26",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-27",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-28",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-29",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-30",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-07-01",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-07-02",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-07-03",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-07-04",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-07-05",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        }
+      ],
+      "leo": [
+        {
+          "date": "2026-06-06",
+          "visible": [
+            "maximalist",
+            "drama",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-07",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-08",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-09",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-10",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-11",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-12",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-13",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-14",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-15",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-16",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-17",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-18",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-19",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-20",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-21",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-22",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-23",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-24",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "sensual"
+          ]
+        },
+        {
+          "date": "2026-06-25",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "sensual"
+          ]
+        },
+        {
+          "date": "2026-06-26",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "sensual"
+          ]
+        },
+        {
+          "date": "2026-06-27",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-28",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-29",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-30",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-07-01",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-07-02",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-07-03",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-07-04",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-07-05",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "eclectic"
+          ]
+        }
+      ]
+    },
+    "stage1_experimental": {
+      "fire": [
+        {
+          "date": "2026-06-06",
+          "visible": [
+            "edgy",
+            "sensual",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-07",
+          "visible": [
+            "sensual",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-08",
+          "visible": [
+            "sensual",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-09",
+          "visible": [
+            "sensual",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-10",
+          "visible": [
+            "sensual",
+            "edgy",
+            "effortless"
+          ]
+        },
+        {
+          "date": "2026-06-11",
+          "visible": [
+            "sensual",
+            "edgy",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-12",
+          "visible": [
+            "sensual",
+            "edgy",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-13",
+          "visible": [
+            "sensual",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-14",
+          "visible": [
+            "sensual",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-15",
+          "visible": [
+            "sensual",
+            "minimal",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-16",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-17",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-18",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-19",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-20",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-21",
+          "visible": [
+            "edgy",
+            "sensual",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-22",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-23",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-24",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-25",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-26",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-27",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-28",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-29",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-30",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-07-01",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-07-02",
+          "visible": [
+            "edgy",
+            "sensual",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-07-03",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-07-04",
+          "visible": [
+            "sensual",
+            "minimal",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-07-05",
+          "visible": [
+            "sensual",
+            "edgy",
+            "minimal"
+          ]
+        }
+      ],
+      "earth": [
+        {
+          "date": "2026-06-06",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-07",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-08",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-09",
+          "visible": [
+            "edgy",
+            "drama",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-10",
+          "visible": [
+            "maximalist",
+            "drama",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-11",
+          "visible": [
+            "drama",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-12",
+          "visible": [
+            "edgy",
+            "drama",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-13",
+          "visible": [
+            "drama",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-14",
+          "visible": [
+            "drama",
+            "edgy",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-15",
+          "visible": [
+            "drama",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-16",
+          "visible": [
+            "drama",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-17",
+          "visible": [
+            "edgy",
+            "eclectic",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-18",
+          "visible": [
+            "edgy",
+            "maximalist",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-19",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-20",
+          "visible": [
+            "edgy",
+            "maximalist",
+            "drama"
+          ]
+        },
+        {
+          "date": "2026-06-21",
+          "visible": [
+            "maximalist",
+            "drama",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-22",
+          "visible": [
+            "maximalist",
+            "drama",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-23",
+          "visible": [
+            "maximalist",
+            "drama",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-24",
+          "visible": [
+            "maximalist",
+            "drama",
+            "edgy"
+          ]
+        },
+        {
+          "date": "2026-06-25",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-26",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-27",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-28",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "polished"
+          ]
+        },
+        {
+          "date": "2026-06-29",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "sensual"
+          ]
+        },
+        {
+          "date": "2026-06-30",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-07-01",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-07-02",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-07-03",
+          "visible": [
+            "maximalist",
+            "eclectic",
+            "sensual"
+          ]
+        },
+        {
+          "date": "2026-07-04",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "polished"
+          ]
+        },
+        {
+          "date": "2026-07-05",
+          "visible": [
+            "maximalist",
+            "magnetic",
+            "drama"
+          ]
+        }
+      ],
+      "air": [
+        {
+          "date": "2026-06-06",
+          "visible": [
+            "polished",
+            "minimal",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-07",
+          "visible": [
+            "edgy",
+            "grounded",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-08",
+          "visible": [
+            "edgy",
+            "minimal",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-09",
+          "visible": [
+            "edgy",
+            "magnetic",
+            "sensual"
+          ]
+        },
+        {
+          "date": "2026-06-10",
+          "visible": [
+            "edgy",
+            "minimal",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-11",
+          "visible": [
+            "edgy",
+            "minimal",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-12",
+          "visible": [
+            "edgy",
+            "grounded",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-13",
+          "visible": [
+            "edgy",
+            "minimal",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-14",
+          "visible": [
+            "edgy",
+            "magnetic",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-15",
+          "visible": [
+            "edgy",
+            "minimal",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-16",
+          "visible": [
+            "edgy",
+            "romantic",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-17",
+          "visible": [
+            "edgy",
+            "minimal",
+            "romantic"
+          ]
+        },
+        {
+          "date": "2026-06-18",
+          "visible": [
+            "edgy",
+            "minimal",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-19",
+          "visible": [
+            "edgy",
+            "minimal",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-20",
+          "visible": [
+            "edgy",
+            "minimal",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-21",
+          "visible": [
+            "edgy",
+            "minimal",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-22",
+          "visible": [
+            "edgy",
+            "sensual",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-23",
+          "visible": [
+            "edgy",
+            "sensual",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-24",
+          "visible": [
+            "edgy",
+            "minimal",
+            "sensual"
+          ]
+        },
+        {
+          "date": "2026-06-25",
+          "visible": [
+            "edgy",
+            "sensual",
+            "romantic"
+          ]
+        },
+        {
+          "date": "2026-06-26",
+          "visible": [
+            "edgy",
+            "grounded",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-27",
+          "visible": [
+            "edgy",
+            "sensual",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-28",
+          "visible": [
+            "edgy",
+            "sensual",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-29",
+          "visible": [
+            "edgy",
+            "sensual",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-30",
+          "visible": [
+            "edgy",
+            "romantic",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-07-01",
+          "visible": [
+            "edgy",
+            "grounded",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-07-02",
+          "visible": [
+            "edgy",
+            "grounded",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-07-03",
+          "visible": [
+            "edgy",
+            "maximalist",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-07-04",
+          "visible": [
+            "edgy",
+            "magnetic",
+            "romantic"
+          ]
+        },
+        {
+          "date": "2026-07-05",
+          "visible": [
+            "edgy",
+            "magnetic",
+            "maximalist"
+          ]
+        }
+      ],
+      "water": [
+        {
+          "date": "2026-06-06",
+          "visible": [
+            "edgy",
+            "sensual",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-07",
+          "visible": [
+            "edgy",
+            "magnetic",
+            "sensual"
+          ]
+        },
+        {
+          "date": "2026-06-08",
+          "visible": [
+            "edgy",
+            "effortless",
+            "eclectic"
+          ]
+        },
+        {
+          "date": "2026-06-09",
+          "visible": [
+            "sensual",
+            "edgy",
+            "effortless"
+          ]
+        },
+        {
+          "date": "2026-06-10",
+          "visible": [
+            "sensual",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-11",
+          "visible": [
+            "sensual",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-12",
+          "visible": [
+            "sensual",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-13",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "utility"
+          ]
+        },
+        {
+          "date": "2026-06-14",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-15",
+          "visible": [
+            "edgy",
+            "maximalist",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-16",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-17",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-18",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-19",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "effortless"
+          ]
+        },
+        {
+          "date": "2026-06-20",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "utility"
+          ]
+        },
+        {
+          "date": "2026-06-21",
+          "visible": [
+            "maximalist",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-22",
+          "visible": [
+            "sensual",
+            "edgy",
+            "effortless"
+          ]
+        },
+        {
+          "date": "2026-06-23",
+          "visible": [
+            "sensual",
+            "edgy",
+            "effortless"
+          ]
+        },
+        {
+          "date": "2026-06-24",
+          "visible": [
+            "sensual",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-25",
+          "visible": [
+            "sensual",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-26",
+          "visible": [
+            "sensual",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-27",
+          "visible": [
+            "sensual",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-28",
+          "visible": [
+            "sensual",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-29",
+          "visible": [
+            "sensual",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-06-30",
+          "visible": [
+            "sensual",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-07-01",
+          "visible": [
+            "sensual",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-07-02",
+          "visible": [
+            "sensual",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-07-03",
+          "visible": [
+            "sensual",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-07-04",
+          "visible": [
+            "sensual",
+            "edgy",
+            "maximalist"
+          ]
+        },
+        {
+          "date": "2026-07-05",
+          "visible": [
+            "sensual",
+            "edgy",
+            "maximalist"
+          ]
+        }
+      ],
+      "leo": [
+        {
+          "date": "2026-06-06",
+          "visible": [
+            "edgy",
+            "grounded",
+            "minimal"
+          ]
+        },
+        {
+          "date": "2026-06-07",
+          "visible": [
+            "edgy",
+            "sensual",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-08",
+          "visible": [
+            "edgy",
+            "sensual",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-09",
+          "visible": [
+            "sensual",
+            "edgy",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-10",
+          "visible": [
+            "sensual",
+            "edgy",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-11",
+          "visible": [
+            "sensual",
+            "edgy",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-12",
+          "visible": [
+            "sensual",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-13",
+          "visible": [
+            "edgy",
+            "sensual",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-14",
+          "visible": [
+            "sensual",
+            "edgy",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-15",
+          "visible": [
+            "sensual",
+            "edgy",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-16",
+          "visible": [
+            "sensual",
+            "edgy",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-17",
+          "visible": [
+            "sensual",
+            "edgy",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-18",
+          "visible": [
+            "sensual",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-19",
+          "visible": [
+            "edgy",
+            "sensual",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-20",
+          "visible": [
+            "sensual",
+            "edgy",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-21",
+          "visible": [
+            "sensual",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-22",
+          "visible": [
+            "sensual",
+            "edgy",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-23",
+          "visible": [
+            "sensual",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-24",
+          "visible": [
+            "sensual",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-25",
+          "visible": [
+            "sensual",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-06-26",
+          "visible": [
+            "sensual",
+            "edgy",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-27",
+          "visible": [
+            "sensual",
+            "edgy",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-28",
+          "visible": [
+            "sensual",
+            "edgy",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-29",
+          "visible": [
+            "sensual",
+            "edgy",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-06-30",
+          "visible": [
+            "sensual",
+            "edgy",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-07-01",
+          "visible": [
+            "sensual",
+            "edgy",
+            "grounded"
+          ]
+        },
+        {
+          "date": "2026-07-02",
+          "visible": [
+            "sensual",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-07-03",
+          "visible": [
+            "sensual",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-07-04",
+          "visible": [
+            "sensual",
+            "edgy",
+            "magnetic"
+          ]
+        },
+        {
+          "date": "2026-07-05",
+          "visible": [
+            "sensual",
+            "edgy",
+            "magnetic"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -313,6 +313,90 @@ final class MariaAshLocked_Tests: XCTestCase {
         }
     }
 
+    func testAccentToAccentHueSeparation() throws {
+        let minAccentHueAngle: Double = 10.0
+
+        for (label, input) in [("Ash", try ashInput), ("Maria", try mariaInput)] {
+            let result = ColourEngine.evaluateStrict(input: input)
+            let accentHues: [Double] = result.accentSlots.compactMap { slot in
+                guard let lab = ColourMath.hexToLab(slot.hex) else { return nil }
+                let h = atan2(lab.b, lab.a) * 180.0 / .pi
+                return h < 0 ? h + 360.0 : h
+            }
+            for i in 0..<accentHues.count {
+                for j in (i+1)..<accentHues.count {
+                    let raw = abs(accentHues[i] - accentHues[j]).truncatingRemainder(dividingBy: 360)
+                    let dist = min(raw, 360 - raw)
+                    XCTAssertGreaterThanOrEqual(dist, minAccentHueAngle,
+                        "\(label) accent[\(i)] vs [\(j)]: hue separation only \(String(format: "%.1f", dist))° (need ≥\(minAccentHueAngle)°)")
+                }
+            }
+        }
+    }
+
+    func testAccentHueSeparationFromCorePalette() throws {
+        let chromaFloor: Double = 10.0
+
+        for (label, input) in [("Ash", try ashInput), ("Maria", try mariaInput)] {
+            let result = ColourEngine.evaluateStrict(input: input)
+            var personalHexes = (result.palette.neutrals + result.palette.coreColours).map {
+                PaletteLibrary.hex(for: $0)
+            }
+            if let support = result.palette.supportColours {
+                personalHexes.append(contentsOf: support.map { PaletteLibrary.hex(for: $0) })
+            }
+            personalHexes.append(PaletteLibrary.hex(for: result.palette.lightAnchor))
+            personalHexes.append(PaletteLibrary.hex(for: result.palette.deepAnchor))
+            let coreHues: [Double] = personalHexes.compactMap { hex in
+                guard let lab = ColourMath.hexToLab(hex) else { return nil }
+                let C = sqrt(lab.a * lab.a + lab.b * lab.b)
+                guard C >= chromaFloor else { return nil }
+                let h = atan2(lab.b, lab.a) * 180.0 / .pi
+                return h < 0 ? h + 360.0 : h
+            }
+            var totalMinDist: Double = 0
+            for (i, slot) in result.accentSlots.enumerated() {
+                guard let lab = ColourMath.hexToLab(slot.hex) else { continue }
+                let rawH = atan2(lab.b, lab.a) * 180.0 / .pi
+                let accentHue = rawH < 0 ? rawH + 360.0 : rawH
+                var minDist: Double = 180.0
+                for coreHue in coreHues {
+                    let raw = abs(accentHue - coreHue).truncatingRemainder(dividingBy: 360)
+                    minDist = min(minDist, min(raw, 360 - raw))
+                }
+                totalMinDist += minDist
+                XCTAssertGreaterThanOrEqual(minDist, 5.0,
+                    "\(label) accent[\(i)] '\(slot.displayName)' hue \(String(format: "%.0f", accentHue))° is only \(String(format: "%.1f", minDist))° from nearest core hue (absolute minimum 5°)")
+                if i == 0 {
+                    XCTAssertGreaterThanOrEqual(minDist, 18.0,
+                        "\(label) accent[\(i)] '\(slot.displayName)' primary accent hue \(String(format: "%.0f", accentHue))° is only \(String(format: "%.1f", minDist))° from nearest core hue (need ≥18° for strict path)")
+                }
+            }
+            let avgMinDist = totalMinDist / Double(result.accentSlots.count)
+            XCTAssertGreaterThanOrEqual(avgMinDist, 12.0,
+                "\(label) average accent-to-core hue separation is only \(String(format: "%.1f", avgMinDist))° — expected ≥12° across accents")
+        }
+    }
+
+    func testMariaAccentsUseDifferentSigns() throws {
+        let result = ColourEngine.evaluateStrict(input: try mariaInput)
+        let signs = result.accentSlots.map(\.sourceSign)
+        XCTAssertEqual(signs.count, 2, "Maria should have exactly 2 accent slots")
+        XCTAssertNotEqual(signs[0], signs[1],
+            "Maria accent slots should source from different signs, got \(signs[0]) twice")
+    }
+
+    func testMariaAccentSourcesAreChartDerived() throws {
+        let result = ColourEngine.evaluateStrict(input: try mariaInput)
+        let chartSigns: Set<V4ZodiacSign> = [
+            .scorpio, .gemini, .cancer, .leo, .aquarius
+        ]
+        for slot in result.accentSlots {
+            XCTAssertTrue(chartSigns.contains(slot.sourceSign),
+                "Maria accent '\(slot.displayName)' sourced from \(slot.sourceSign) which is not in her chart")
+        }
+    }
+
     func testAshAndMariaGetDifferentAccentHexes() throws {
         let ashResult = ColourEngine.evaluateStrict(input: try ashInput)
         let mariaResult = ColourEngine.evaluateStrict(input: try mariaInput)

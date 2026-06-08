@@ -31,7 +31,7 @@
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-05-23T14:53:20Z",
+  "generatedAt" : "2026-06-06T14:07:13Z",
   "hardware" : {
     "metalsText" : "Heavy, rigid hardware will completely suffocate the lightness of your wardrobe. You always look much more interesting when you actively scramble your finishes, letting white gold tones rings sit right next to a rose gold tones bag clasp. Because your clothes rely on fluid layers and soft movement, keep the actual metal textures equally relaxed. Liquid, slightly melted shapes in mixed metals work far better on you than aggressive, high-shine spikes. Treat your zips and jacket buttons as conversational details instead of purely functional bolts. The final effect should be a gentle, expensive jangle as you walk, never the imposing clank of a bank vault.",
     "recommendedMetals" : [
@@ -66,8 +66,8 @@
   "palette" : {
     "accentColours" : [
       {
-        "hexValue" : "#00706F",
-        "name" : "Mercury Teal",
+        "hexValue" : "#00656E",
+        "name" : "Warm Petrol",
         "provenance" : {
           "kind" : "chartDerivedAccent",
           "role" : "Signature",
@@ -78,8 +78,8 @@
         "role" : "accent"
       },
       {
-        "hexValue" : "#005E64",
-        "name" : "Midnight Teal",
+        "hexValue" : "#2D6D68",
+        "name" : "Warm Aquamarine",
         "provenance" : {
           "kind" : "chartDerivedAccent",
           "role" : "Contrast",
@@ -172,7 +172,7 @@
       "role" : "signature",
       "semanticLabel" : "luminary signature"
     },
-    "narrativeText" : "Dressing for you is a constant dialogue, meaning your wardrobe needs shades that are naturally light on their feet. Your daily foundations rely heavily on honey yellow and peach, which translate beautifully across crisp cotton shirting and sheer silk-blend layers. A wash of aqua mint brings a softer, almost watercolour quality to the mix, ensuring the overall effect remains approachable rather than stark. Introduce Mercury Teal as an unexpected flash of detail; think an enamel pendant or a slightly unusual flat shoe, to keep the eye moving. The result is a highly conversational mix of tones that shifts seamlessly depending on your mood and whoever you happen to be talking to.",
+    "narrativeText" : "Dressing for you is a constant dialogue, meaning your wardrobe needs shades that are naturally light on their feet. Your daily foundations rely heavily on honey yellow and peach, which translate beautifully across crisp cotton shirting and sheer silk-blend layers. A wash of aqua mint brings a softer, almost watercolour quality to the mix, ensuring the overall effect remains approachable rather than stark. Introduce Warm Petrol as an unexpected flash of detail; think an enamel pendant or a slightly unusual flat shoe, to keep the eye moving. The result is a highly conversational mix of tones that shifts seamlessly depending on your mood and whoever you happen to be talking to.",
     "neutrals" : [
       {
         "hexValue" : "#FAF5EF",
@@ -344,6 +344,6 @@
   "userInfo" : {
     "birthDate" : "1993-03-21T00:00:00Z",
     "birthLocation" : "Synthetic Fixture",
-    "generationDate" : "2026-05-23T14:53:20Z"
+    "generationDate" : "2026-06-06T14:07:13Z"
   }
 }

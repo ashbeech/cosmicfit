@@ -520,7 +520,7 @@ struct DailyFitDistribution_Tests {
         report += CalibrationReportHelper.summaryStats(label: "A↔R", values: data.arValues) + "\n\n"
 
         report += CalibrationReportHelper.renderNumericHistogram(
-            title: "Silhouette — Structured↔Draped (0.0–1.0)",
+            title: "Silhouette — Structured↔Relaxed (0.0–1.0)",
             values: data.sdValues,
             bucketCount: 10, rangeMin: 0.0, rangeMax: 1.0
         )
@@ -708,7 +708,7 @@ struct DailyFitDistribution_Tests {
         report += CalibrationReportHelper.summaryStats(label: "A↔R", values: data.arValues) + "\n\n"
 
         report += CalibrationReportHelper.renderNumericHistogram(
-            title: "Structured↔Draped (0.0–1.0)", values: data.sdValues,
+            title: "Structured↔Relaxed (0.0–1.0)", values: data.sdValues,
             bucketCount: 10, rangeMin: 0.0, rangeMax: 1.0
         )
         report += CalibrationReportHelper.summaryStats(label: "S↔D", values: data.sdValues) + "\n\n"

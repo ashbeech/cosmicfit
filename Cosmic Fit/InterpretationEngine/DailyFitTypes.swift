@@ -165,7 +165,7 @@ struct SilhouetteProfile: Codable, Equatable {
     let masculineFeminine: Double
     /// 0.0 = Angular, 1.0 = Rounded
     let angularRounded: Double
-    /// 0.0 = Structured, 1.0 = Draped
+    /// 0.0 = Structured, 1.0 = Relaxed
     let structuredDraped: Double
     /// Style Guide keyword baseline (Stage 1 inspector reference only).
     var chartAnchorMF: Double?
