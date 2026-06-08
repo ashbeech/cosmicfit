@@ -2,6 +2,9 @@
 //  AccentResolver.swift
 //  Cosmic Fit
 //
+//  V4.10 — Collapse to a single accent when two resolved slots share the
+//  same hue family (< 30° Lab hue separation, both chromatic).
+//
 //  V4.9 — Chart-derived accent colour resolution with core-hue skip rule.
 //  Accents cannot occupy a core hue zone unless every underrepresented
 //  placement has been exhausted. If a placement's entire candidate pool
@@ -26,6 +29,7 @@ enum AccentResolver {
 
     private static let hueSetChromaFloor: Double = 10.0
     private static let coreHueMinimumAngle: Double = 20.0
+    private static let collapseHueThreshold: Double = 30.0
     private static let accentHueThresholdLadder: [Double] = [40, 30, 20, 10, 0]
     private static let pairwiseLabThreshold: Double = 64.0 // ΔE ≥ 8 squared
 
@@ -152,7 +156,65 @@ enum AccentResolver {
             usedSigns.insert(slot.sourceSign)
         }
 
-        return slots
+        return collapseSimilarAccents(slots, personalPaletteHexes: personalPaletteHexes)
+    }
+
+    // MARK: - Collapse Similar Accents
+
+    /// When two accents occupy the same hue family they read as one wardrobe move.
+    /// Keep the slot with the stronger chart driver; break ties toward Signature.
+    private static func collapseSimilarAccents(
+        _ slots: [AccentSlot],
+        personalPaletteHexes: [String]
+    ) -> [AccentSlot] {
+        guard slots.count == 2 else { return slots }
+        let first = slots[0]
+        let second = slots[1]
+
+        guard shouldCollapse(first, second) else { return slots }
+        return [preferredAccentSlot(first, second, personalPaletteHexes: personalPaletteHexes)]
+    }
+
+    private static func shouldCollapse(_ a: AccentSlot, _ b: AccentSlot) -> Bool {
+        guard let hueA = chromaticHue(forHex: a.hex),
+              let hueB = chromaticHue(forHex: b.hex) else {
+            return false
+        }
+        return shortestAngularDistance(hueA, hueB) < collapseHueThreshold
+    }
+
+    private static func preferredAccentSlot(
+        _ a: AccentSlot,
+        _ b: AccentSlot,
+        personalPaletteHexes: [String]
+    ) -> AccentSlot {
+        let weightA = DriverWeights.weight(for: a.sourcePlanet)
+        let weightB = DriverWeights.weight(for: b.sourcePlanet)
+        if weightA != weightB {
+            return weightA > weightB ? a : b
+        }
+        if a.role == .signature && b.role != .signature { return a }
+        if b.role == .signature && a.role != .signature { return b }
+        return minPaletteDistanceSlot(a, b, personalPaletteHexes: personalPaletteHexes)
+    }
+
+    private static func minPaletteDistanceSlot(
+        _ a: AccentSlot,
+        _ b: AccentSlot,
+        personalPaletteHexes: [String]
+    ) -> AccentSlot {
+        func minDistance(_ hex: String) -> Double {
+            personalPaletteHexes.map { ColourMath.labDistanceSquared(hex, $0) }.min() ?? 0
+        }
+        return minDistance(a.hex) >= minDistance(b.hex) ? a : b
+    }
+
+    private static func chromaticHue(forHex hex: String) -> Double? {
+        guard let lab = ColourMath.hexToLab(hex) else { return nil }
+        let chroma = sqrt(lab.a * lab.a + lab.b * lab.b)
+        guard chroma >= hueSetChromaFloor else { return nil }
+        let h = atan2(lab.b, lab.a) * 180.0 / .pi
+        return h < 0 ? h + 360.0 : h
     }
 
     // MARK: - Element Percentages (retained for external use)

@@ -12,6 +12,15 @@
 
 **Origin conversation:** [Narrative Layer Plan](52de5e4e-f7ba-4a3b-aba2-fca4d858b305)
 
+**Independent audit amendment:** This one-file handoff is now split into three phase-specific execution plans. Use these for implementation:
+- [`daily_fit_narrative_layer_phase_1_foundation_plan.md`](daily_fit_narrative_layer_phase_1_foundation_plan.md) — Phase 0/1 measurement, cohort, and adaptive salience.
+- [`daily_fit_narrative_layer_phase_2_coherence_plan.md`](daily_fit_narrative_layer_phase_2_coherence_plan.md) — Phase 2 narrative decision layer and hard coherence contract.
+- [`daily_fit_narrative_layer_phase_3_validation_plan.md`](daily_fit_narrative_layer_phase_3_validation_plan.md) — Phase 3/4 six-slider normalization, final validation, cleanup audit, and promotion gate.
+
+Implementation must proceed one split plan at a time. Do not start the next plan until the previous plan's tests, cohort reports, AI analysis, and Ash review are complete.
+
+The most important audit correction is that aggregate coherence scoring is not sufficient on its own. User-visible contradiction checks are hard zero-tolerance gates: no opposition pairs within essences, and no cross-surface narrative contradictions after routing through `DailyNarrativePlan`.
+
 ---
 
 ## 1. Executive summary

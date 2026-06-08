@@ -7,8 +7,7 @@ final class MariaAshLocked_Tests: XCTestCase {
 
     // MARK: - Maria
 
-    /// Maria's chart placements (to be frozen from NatalChartCalculator output).
-    /// Placeholder values — will be replaced with frozen fixture placements.
+    /// Maria's chart placements — frozen from Athens birth (1989-04-28 04:30).
     private var mariaInput: BirthChartColourInput {
         get throws {
             try loadPlacement(id: "maria")
@@ -53,8 +52,10 @@ final class MariaAshLocked_Tests: XCTestCase {
 
     func testMariaAccentsAreChartDerived() throws {
         let result = ColourEngine.evaluateStrict(input: try mariaInput)
-        XCTAssertEqual(result.accentSlots.count, 2,
-            "Maria must have exactly 2 chart-derived accent slots")
+        XCTAssertGreaterThanOrEqual(result.accentSlots.count, 1,
+            "Maria must have at least 1 chart-derived accent slot")
+        XCTAssertLessThanOrEqual(result.accentSlots.count, 2,
+            "Maria must have at most 2 chart-derived accent slots")
         for slot in result.accentSlots {
             XCTAssertTrue(slot.hex.hasPrefix("#") && slot.hex.count == 7,
                 "Accent hex '\(slot.hex)' must be valid 7-char format")
@@ -162,8 +163,8 @@ final class MariaAshLocked_Tests: XCTestCase {
         let result = ColourEngine.evaluateStrict(input: try mariaInput)
         XCTAssertEqual(result.palette.lightAnchor, "warm cream",
             "Maria lightAnchor should be 'warm cream' for Deep Autumn")
-        XCTAssertEqual(result.palette.deepAnchor, "black",
-            "Maria deepAnchor should be 'black' — winter-compressed DA override")
+        XCTAssertEqual(result.palette.deepAnchor, "ink brown",
+            "Maria deepAnchor should be 'ink brown' — Athens chart is not winter-compressed")
     }
 
     func testAshHasDeepAutumnAnchors() throws {
@@ -174,15 +175,13 @@ final class MariaAshLocked_Tests: XCTestCase {
             "Ash deepAnchor should be 'black' — winter-compressed DA override")
     }
 
-    /// Both Ash and Maria are winter-compressed Deep Autumn, so they share
-    /// both anchors: "warm cream" (light) and "black" (deep override).
-    func testAshAndMariaShareAnchors() throws {
+    /// Same-family users share the light anchor; deep anchor may differ when
+    /// only one chart triggers winter-compression.
+    func testAshAndMariaShareLightAnchor() throws {
         let ashResult = ColourEngine.evaluateStrict(input: try ashInput)
         let mariaResult = ColourEngine.evaluateStrict(input: try mariaInput)
         XCTAssertEqual(ashResult.palette.lightAnchor, mariaResult.palette.lightAnchor,
             "Same-family users must share the lightAnchor (foundation invariance)")
-        XCTAssertEqual(ashResult.palette.deepAnchor, mariaResult.palette.deepAnchor,
-            "Both winter-compressed DA users get 'black' as deepAnchor")
     }
 
     // MARK: - V4.5 Winter-Compression Anchor Override
@@ -194,12 +193,12 @@ final class MariaAshLocked_Tests: XCTestCase {
             "Deep Autumn + winterCompressionApplied → deepAnchor must be 'black'")
     }
 
-    func testMariaIsAlsoWinterCompressedDA() throws {
+    func testMariaIsNotWinterCompressedDA() throws {
         let result = ColourEngine.evaluateStrict(input: try mariaInput)
-        XCTAssertTrue(result.trace.overrideFlags.winterCompressionApplied,
-            "Maria is also winter-compressed DA")
-        XCTAssertEqual(result.palette.deepAnchor, "black",
-            "Winter-compressed DA gets 'black' as deepAnchor")
+        XCTAssertFalse(result.trace.overrideFlags.winterCompressionApplied,
+            "Athens Maria is Deep Autumn without winter compression")
+        XCTAssertEqual(result.palette.deepAnchor, "ink brown",
+            "Non-compressed DA keeps template deepAnchor")
     }
 
     // MARK: - V4.4 Chart Signatures
@@ -233,7 +232,7 @@ final class MariaAshLocked_Tests: XCTestCase {
         }
     }
 
-    /// Ash (Scorpio Sun) and Maria (Taurus Sun) must get distinct luminary
+    /// Ash and Maria (Taurus Sun) must get distinct luminary
     /// signatures — this is the *point* of chart signatures: user-level
     /// individuation inside a shared family template.
     func testAshAndMariaHaveDistinctLuminarySignatures() throws {
@@ -285,6 +284,7 @@ final class MariaAshLocked_Tests: XCTestCase {
         for (label, input) in [("Ash", try ashInput), ("Maria", try mariaInput)] {
             let result = ColourEngine.evaluateStrict(input: input)
             let hexes = result.accentSlots.map(\.hex)
+            guard hexes.count >= 2 else { continue }
             for i in 0..<hexes.count {
                 for j in (i+1)..<hexes.count {
                     let dist = ColourMath.labDistanceSquared(hexes[i], hexes[j])
@@ -318,6 +318,7 @@ final class MariaAshLocked_Tests: XCTestCase {
 
         for (label, input) in [("Ash", try ashInput), ("Maria", try mariaInput)] {
             let result = ColourEngine.evaluateStrict(input: input)
+            guard result.accentSlots.count >= 2 else { continue }
             let accentHues: [Double] = result.accentSlots.compactMap { slot in
                 guard let lab = ColourMath.hexToLab(slot.hex) else { return nil }
                 let h = atan2(lab.b, lab.a) * 180.0 / .pi
@@ -339,6 +340,7 @@ final class MariaAshLocked_Tests: XCTestCase {
 
         for (label, input) in [("Ash", try ashInput), ("Maria", try mariaInput)] {
             let result = ColourEngine.evaluateStrict(input: input)
+            guard result.accentSlots.count >= 2 else { continue }
             var personalHexes = (result.palette.neutrals + result.palette.coreColours).map {
                 PaletteLibrary.hex(for: $0)
             }
@@ -367,29 +369,43 @@ final class MariaAshLocked_Tests: XCTestCase {
                 totalMinDist += minDist
                 XCTAssertGreaterThanOrEqual(minDist, 5.0,
                     "\(label) accent[\(i)] '\(slot.displayName)' hue \(String(format: "%.0f", accentHue))° is only \(String(format: "%.1f", minDist))° from nearest core hue (absolute minimum 5°)")
-                if i == 0 {
+                if i == 0 && result.accentSlots.count >= 2 {
                     XCTAssertGreaterThanOrEqual(minDist, 18.0,
                         "\(label) accent[\(i)] '\(slot.displayName)' primary accent hue \(String(format: "%.0f", accentHue))° is only \(String(format: "%.1f", minDist))° from nearest core hue (need ≥18° for strict path)")
                 }
             }
-            let avgMinDist = totalMinDist / Double(result.accentSlots.count)
-            XCTAssertGreaterThanOrEqual(avgMinDist, 12.0,
-                "\(label) average accent-to-core hue separation is only \(String(format: "%.1f", avgMinDist))° — expected ≥12° across accents")
+            if result.accentSlots.count >= 2 {
+                let avgMinDist = totalMinDist / Double(result.accentSlots.count)
+                XCTAssertGreaterThanOrEqual(avgMinDist, 12.0,
+                    "\(label) average accent-to-core hue separation is only \(String(format: "%.1f", avgMinDist))° — expected ≥12° across accents")
+            }
         }
     }
 
     func testMariaAccentsUseDifferentSigns() throws {
         let result = ColourEngine.evaluateStrict(input: try mariaInput)
         let signs = result.accentSlots.map(\.sourceSign)
-        XCTAssertEqual(signs.count, 2, "Maria should have exactly 2 accent slots")
+        guard signs.count >= 2 else { return }
         XCTAssertNotEqual(signs[0], signs[1],
             "Maria accent slots should source from different signs, got \(signs[0]) twice")
+    }
+
+    func testMariaCollapsesSimilarTealAccentsToDominantSlot() throws {
+        let result = ColourEngine.evaluateStrict(input: try mariaInput)
+        XCTAssertEqual(result.accentSlots.count, 1,
+            "Maria's near-duplicate teal accents should collapse to one dominant slot")
+        let slot = try XCTUnwrap(result.accentSlots.first)
+        XCTAssertEqual(slot.sourcePlanet, .ascendant,
+            "Dominant accent should come from the stronger Ascendant driver")
+        XCTAssertEqual(slot.sourceSign, .pisces)
+        XCTAssertEqual(slot.displayName, "Warm Aquamarine")
+        XCTAssertEqual(slot.hex, "#2D6D68")
     }
 
     func testMariaAccentSourcesAreChartDerived() throws {
         let result = ColourEngine.evaluateStrict(input: try mariaInput)
         let chartSigns: Set<V4ZodiacSign> = [
-            .scorpio, .gemini, .cancer, .leo, .aquarius
+            .taurus, .capricorn, .gemini, .pisces, .scorpio
         ]
         for slot in result.accentSlots {
             XCTAssertTrue(chartSigns.contains(slot.sourceSign),

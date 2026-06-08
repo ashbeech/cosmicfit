@@ -56,6 +56,8 @@ Four real-ephemeris presets are defined in `Resources/presets.json`:
 | `earth` | Earth | Taurus Sun — London morning |
 | `air` | Air | Aquarius Sun — London early morning |
 | `water` | Water | Scorpio Sun — London night |
+| `maria` | Earth | Maria — Taurus Sun / Pisces Rising (Athens) |
+| `ash` | Fire | Ash — Sagittarius Sun / Pisces Rising (London noon) |
 
 ### Adding a Preset
 

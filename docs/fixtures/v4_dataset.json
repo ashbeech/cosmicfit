@@ -34,8 +34,7 @@
     "birthData" : "1995-06-22 17:07",
     "expected" : {
       "accentColours" : [
-        "#00706F",
-        "#366064"
+        "#00706F"
       ],
       "cluster" : "Light Airy Warm",
       "contrast" : "Medium",
@@ -65,8 +64,7 @@
     "birthData" : "1992-05-28 15:18",
     "expected" : {
       "accentColours" : [
-        "#00706F",
-        "#005D69"
+        "#00706F"
       ],
       "cluster" : "Light Airy Warm",
       "contrast" : "Medium",
@@ -127,8 +125,7 @@
     "birthData" : "2001-12-03 18:00",
     "expected" : {
       "accentColours" : [
-        "#386B6C",
-        "#005D69"
+        "#386B6C"
       ],
       "cluster" : "Light Airy Warm",
       "contrast" : "Medium",
@@ -189,8 +186,7 @@
     "birthData" : "2001-04-03 11:00",
     "expected" : {
       "accentColours" : [
-        "#005E64",
-        "#2E766B"
+        "#005E64"
       ],
       "cluster" : "Medium Warm Grounded",
       "contrast" : "Medium",
@@ -251,7 +247,6 @@
     "birthData" : "1998-06-02 19:29",
     "expected" : {
       "accentColours" : [
-        "#7E1B2F",
         "#E96675"
       ],
       "cluster" : "Medium Warm Grounded",
@@ -375,7 +370,6 @@
     "birthData" : "1995-05-05 11:29",
     "expected" : {
       "accentColours" : [
-        "#7E1B2F",
         "#E96675"
       ],
       "cluster" : "Medium Warm Grounded",
@@ -685,7 +679,6 @@
     "birthData" : "1998-11-21 17:29",
     "expected" : {
       "accentColours" : [
-        "#762249",
         "#8A4484"
       ],
       "cluster" : "Medium Neutral Electric",
@@ -747,8 +740,7 @@
     "birthData" : "1990-07-18 05:00",
     "expected" : {
       "accentColours" : [
-        "#9665A3",
-        "#702E62"
+        "#9665A3"
       ],
       "cluster" : "Light Airy Cool",
       "contrast" : "Low",
@@ -778,8 +770,7 @@
     "birthData" : "1997-06-14 18:41",
     "expected" : {
       "accentColours" : [
-        "#9F3D8A",
-        "#562865"
+        "#9F3D8A"
       ],
       "cluster" : "Light Airy Cool",
       "contrast" : "Low",
@@ -809,8 +800,7 @@
     "birthData" : "1998-10-04 07:07",
     "expected" : {
       "accentColours" : [
-        "#9F3D8A",
-        "#702E62"
+        "#9F3D8A"
       ],
       "cluster" : "Light Airy Cool",
       "contrast" : "Low",
@@ -840,8 +830,7 @@
     "birthData" : "2001-03-03 16:18",
     "expected" : {
       "accentColours" : [
-        "#9F3D8A",
-        "#9665A3"
+        "#9F3D8A"
       ],
       "cluster" : "Light Airy Cool",
       "contrast" : "Low",
@@ -871,7 +860,6 @@
     "birthData" : "1991-11-24 21:23",
     "expected" : {
       "accentColours" : [
-        "#702E62",
         "#653F96"
       ],
       "cluster" : "Light Airy Cool",
@@ -902,8 +890,7 @@
     "birthData" : "1992-09-10 23:47",
     "expected" : {
       "accentColours" : [
-        "#9665A3",
-        "#702E62"
+        "#9665A3"
       ],
       "cluster" : "Light Airy Cool",
       "contrast" : "Low",
@@ -995,7 +982,6 @@
     "birthData" : "1996-01-03 15:53",
     "expected" : {
       "accentColours" : [
-        "#085267",
         "#A6C6D0"
       ],
       "cluster" : "Medium Cool Soft",
@@ -1026,8 +1012,7 @@
     "birthData" : "1995-06-17 20:12",
     "expected" : {
       "accentColours" : [
-        "#085267",
-        "#00AFBF"
+        "#085267"
       ],
       "cluster" : "Medium Cool Soft",
       "contrast" : "Low",
@@ -1057,7 +1042,6 @@
     "birthData" : "1998-07-22 21:53",
     "expected" : {
       "accentColours" : [
-        "#00A9AE",
         "#00A0BF"
       ],
       "cluster" : "Medium Cool Soft",
@@ -1088,8 +1072,7 @@
     "birthData" : "1992-10-16 20:47",
     "expected" : {
       "accentColours" : [
-        "#00AFBF",
-        "#A6C6D0"
+        "#00AFBF"
       ],
       "cluster" : "Medium Cool Soft",
       "contrast" : "Low",
@@ -1336,7 +1319,6 @@
     "birthData" : "1989-03-03 04:53",
     "expected" : {
       "accentColours" : [
-        "#085267",
         "#0095AC"
       ],
       "cluster" : "Medium Cool Muted",
@@ -1584,8 +1566,7 @@
     "birthData" : "1991-01-20 14:07",
     "expected" : {
       "accentColours" : [
-        "#005D69",
-        "#056463"
+        "#005D69"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -1708,8 +1689,7 @@
     "birthData" : "1992-03-15 01:12",
     "expected" : {
       "accentColours" : [
-        "#00656E",
-        "#2D6D68"
+        "#00656E"
       ],
       "cluster" : "Medium Warm Muted",
       "contrast" : "Low",
@@ -1863,8 +1843,7 @@
     "birthData" : "2002-04-11 01:53",
     "expected" : {
       "accentColours" : [
-        "#00656E",
-        "#3C746F"
+        "#00656E"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2049,7 +2028,6 @@
     "birthData" : "1999-03-02 15:47",
     "expected" : {
       "accentColours" : [
-        "#7E1B2F",
         "#D14649"
       ],
       "cluster" : "Medium Warm Grounded",
@@ -2111,8 +2089,7 @@
     "birthData" : "2002-05-18 22:23",
     "expected" : {
       "accentColours" : [
-        "#2E766B",
-        "#366064"
+        "#2E766B"
       ],
       "cluster" : "Medium Warm Grounded",
       "contrast" : "Medium",
@@ -2204,8 +2181,7 @@
     "birthData" : "1988-04-09 21:53",
     "expected" : {
       "accentColours" : [
-        "#00656E",
-        "#1C6E6B"
+        "#00656E"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2235,8 +2211,7 @@
     "birthData" : "1999-07-21 21:47",
     "expected" : {
       "accentColours" : [
-        "#005D69",
-        "#3C746F"
+        "#005D69"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2266,8 +2241,7 @@
     "birthData" : "2000-01-08 09:47",
     "expected" : {
       "accentColours" : [
-        "#005D69",
-        "#056463"
+        "#005D69"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2297,8 +2271,7 @@
     "birthData" : "1990-05-24 00:29",
     "expected" : {
       "accentColours" : [
-        "#00656E",
-        "#2D6D68"
+        "#00656E"
       ],
       "cluster" : "Deep Warm Structured",
       "contrast" : "Medium",
@@ -2328,7 +2301,6 @@
     "birthData" : "2002-08-05 15:00",
     "expected" : {
       "accentColours" : [
-        "#00656E",
         "#3C746F"
       ],
       "cluster" : "Deep Warm Structured",
@@ -2390,7 +2362,6 @@
     "birthData" : "1991-03-06 23:07",
     "expected" : {
       "accentColours" : [
-        "#00656E",
         "#2D6D68"
       ],
       "cluster" : "Deep Warm Structured",
@@ -2483,7 +2454,6 @@
     "birthData" : "1985-04-22 03:47",
     "expected" : {
       "accentColours" : [
-        "#005D69",
         "#056463"
       ],
       "cluster" : "Deep Warm Structured",
@@ -2638,7 +2608,6 @@
     "birthData" : "1991-05-27 16:00",
     "expected" : {
       "accentColours" : [
-        "#00A9AE",
         "#00BAB2"
       ],
       "cluster" : "Deep Cool Controlled",
@@ -2700,8 +2669,7 @@
     "birthData" : "1989-02-25 19:29",
     "expected" : {
       "accentColours" : [
-        "#00A0BF",
-        "#79BBC7"
+        "#00A0BF"
       ],
       "cluster" : "Deep Cool Controlled",
       "contrast" : "Medium",
@@ -2855,8 +2823,7 @@
     "birthData" : "1992-10-16 06:18",
     "expected" : {
       "accentColours" : [
-        "#BA4983",
-        "#702E62"
+        "#BA4983"
       ],
       "cluster" : "Deep Cool High-Contrast",
       "contrast" : "High",
@@ -2886,7 +2853,6 @@
     "birthData" : "1989-02-27 15:29",
     "expected" : {
       "accentColours" : [
-        "#085267",
         "#008ABE"
       ],
       "cluster" : "Deep Cool High-Contrast",
@@ -3010,7 +2976,6 @@
     "birthData" : "1987-11-17 19:29",
     "expected" : {
       "accentColours" : [
-        "#9F3D8A",
         "#702E62"
       ],
       "cluster" : "Deep Cool High-Contrast",
@@ -3072,7 +3037,6 @@
     "birthData" : "1989-09-21 15:34",
     "expected" : {
       "accentColours" : [
-        "#085267",
         "#0095AC"
       ],
       "cluster" : "Deep Cool High-Contrast",

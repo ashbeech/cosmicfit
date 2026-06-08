@@ -128,7 +128,7 @@ final class V4PlacementGenerator_Tests: XCTestCase {
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
 
         let profiles: [(name: String, birthData: String, location: String)] = [
-            ("maria", "1991-06-13 05:30", "Buenos Aires, Argentina"),
+            ("maria", "1989-04-28 04:30", "Athens, Greece"),
             ("ash", "1996-10-09 16:10", "London, UK"),
         ]
 
