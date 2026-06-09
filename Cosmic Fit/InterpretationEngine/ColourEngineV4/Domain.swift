@@ -133,6 +133,7 @@ struct BirthChartColourInput: Codable, Equatable {
     let saturn: PlacementInput
     let jupiter: PlacementInput
     let pluto: PlacementInput?
+    let midheaven: PlacementInput?
 
     func sign(for driver: DriverKey) -> V4ZodiacSign? {
         switch driver {
@@ -348,6 +349,10 @@ struct ColourEngineResult: Codable, Equatable {
     let rulerSignature: String
     /// V4.5 — chart-derived accent slots (4 functional roles).
     let accentSlots: [AccentSlot]
+    /// V4.7 — MC/Moon depth overlay trace.
+    let depthOverlay: DepthOverlayResolver.OverlayResult
+    /// V4.8 — Black eligibility trace.
+    let blackEligibility: BlackEligibilityResolver.BlackResult
 
     init(
         variables: DerivedVariables,
@@ -358,7 +363,9 @@ struct ColourEngineResult: Codable, Equatable {
         trace: FamilyDecisionTrace,
         luminarySignature: String,
         rulerSignature: String,
-        accentSlots: [AccentSlot] = []
+        accentSlots: [AccentSlot] = [],
+        depthOverlay: DepthOverlayResolver.OverlayResult = .none,
+        blackEligibility: BlackEligibilityResolver.BlackResult = .ineligible
     ) {
         self.variables = variables
         self.family = family
@@ -369,11 +376,14 @@ struct ColourEngineResult: Codable, Equatable {
         self.luminarySignature = luminarySignature
         self.rulerSignature = rulerSignature
         self.accentSlots = accentSlots
+        self.depthOverlay = depthOverlay
+        self.blackEligibility = blackEligibility
     }
 
     enum CodingKeys: String, CodingKey {
         case variables, family, cluster, palette, secondaryPull, trace
-        case luminarySignature, rulerSignature, accentSlots
+        case luminarySignature, rulerSignature, accentSlots, depthOverlay
+        case blackEligibility
     }
 
     init(from decoder: Decoder) throws {
@@ -387,5 +397,7 @@ struct ColourEngineResult: Codable, Equatable {
         self.luminarySignature = try c.decodeIfPresent(String.self, forKey: .luminarySignature) ?? "#808080"
         self.rulerSignature = try c.decodeIfPresent(String.self, forKey: .rulerSignature) ?? "#808080"
         self.accentSlots = try c.decodeIfPresent([AccentSlot].self, forKey: .accentSlots) ?? []
+        self.depthOverlay = try c.decodeIfPresent(DepthOverlayResolver.OverlayResult.self, forKey: .depthOverlay) ?? .none
+        self.blackEligibility = try c.decodeIfPresent(BlackEligibilityResolver.BlackResult.self, forKey: .blackEligibility) ?? .ineligible
     }
 }

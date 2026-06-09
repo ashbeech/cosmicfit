@@ -14,6 +14,39 @@ struct BlueprintDiagnosticReport: Codable, Equatable {
     let boundaryFlags: [ChartInputAdapter.BoundaryFlag]
     let familyDecisionTrace: FamilyDecisionTrace
     let accentSlots: [AccentSlot]
+    let depthOverlay: DepthOverlayResolver.OverlayResult
+    let blackEligibility: BlackEligibilityResolver.BlackResult
+
+    init(
+        chartInput: BirthChartColourInput,
+        boundaryFlags: [ChartInputAdapter.BoundaryFlag],
+        familyDecisionTrace: FamilyDecisionTrace,
+        accentSlots: [AccentSlot],
+        depthOverlay: DepthOverlayResolver.OverlayResult,
+        blackEligibility: BlackEligibilityResolver.BlackResult = .ineligible
+    ) {
+        self.chartInput = chartInput
+        self.boundaryFlags = boundaryFlags
+        self.familyDecisionTrace = familyDecisionTrace
+        self.accentSlots = accentSlots
+        self.depthOverlay = depthOverlay
+        self.blackEligibility = blackEligibility
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case chartInput, boundaryFlags, familyDecisionTrace, accentSlots
+        case depthOverlay, blackEligibility
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.chartInput = try c.decode(BirthChartColourInput.self, forKey: .chartInput)
+        self.boundaryFlags = try c.decode([ChartInputAdapter.BoundaryFlag].self, forKey: .boundaryFlags)
+        self.familyDecisionTrace = try c.decode(FamilyDecisionTrace.self, forKey: .familyDecisionTrace)
+        self.accentSlots = try c.decode([AccentSlot].self, forKey: .accentSlots)
+        self.depthOverlay = try c.decode(DepthOverlayResolver.OverlayResult.self, forKey: .depthOverlay)
+        self.blackEligibility = try c.decodeIfPresent(BlackEligibilityResolver.BlackResult.self, forKey: .blackEligibility) ?? .ineligible
+    }
 }
 
 struct BlueprintComposeResult: Equatable {
@@ -31,7 +64,9 @@ enum BlueprintDiagnostics {
             chartInput: adaptedInput.colourInput,
             boundaryFlags: adaptedInput.boundaryFlags,
             familyDecisionTrace: colourResult.trace,
-            accentSlots: colourResult.accentSlots
+            accentSlots: colourResult.accentSlots,
+            depthOverlay: colourResult.depthOverlay,
+            blackEligibility: colourResult.blackEligibility
         )
     }
 }

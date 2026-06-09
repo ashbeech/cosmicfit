@@ -1,5 +1,5 @@
 {
-  "generatedAt" : "2026-06-06T14:07:12Z",
+  "generatedAt" : "2026-06-09T16:45:22Z",
   "markdownReferencePath" : "\/Users\/ash\/dev\/mobile_apps\/cosmicfit\/docs\/archive\/fixtures\/v4_markdown_reference.json",
   "placementsPath" : "\/Users\/ash\/dev\/mobile_apps\/cosmicfit\/docs\/archive\/fixtures\/v4_placements.json",
   "rows" : [
@@ -9,7 +9,7 @@
       "id" : "U001",
       "lightAnchor" : "warm white",
       "liveAccentColours" : [
-        "#005E64",
+        "#056463",
         "#865373"
       ],
       "liveCoreColours" : [
@@ -99,8 +99,8 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#005E64",
-          "name" : "Midnight Teal",
+          "hex" : "#056463",
+          "name" : "Deep Ocean",
           "source" : "accent[0]"
         },
         {
@@ -181,8 +181,7 @@
       "id" : "U002",
       "lightAnchor" : "warm white",
       "liveAccentColours" : [
-        "#00656E",
-        "#3C746F"
+        "#00706F"
       ],
       "liveCoreColours" : [
         "honey yellow",
@@ -271,14 +270,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#00656E",
-          "name" : "Warm Petrol",
+          "hex" : "#00706F",
+          "name" : "Mercury Teal",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#3C746F",
-          "name" : "Warm Sea Pearl",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#C9C0BB",
@@ -353,8 +347,7 @@
       "id" : "U003",
       "lightAnchor" : "warm white",
       "liveAccentColours" : [
-        "#00656E",
-        "#1C6E6B"
+        "#00706F"
       ],
       "liveCoreColours" : [
         "honey yellow",
@@ -443,14 +436,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#00656E",
-          "name" : "Warm Petrol",
+          "hex" : "#00706F",
+          "name" : "Mercury Teal",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#1C6E6B",
-          "name" : "Burnished Teal",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#C9C0BB",
@@ -525,7 +513,7 @@
       "id" : "U004",
       "lightAnchor" : "warm white",
       "liveAccentColours" : [
-        "#005E64",
+        "#056463",
         "#82312E"
       ],
       "liveCoreColours" : [
@@ -615,8 +603,8 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#005E64",
-          "name" : "Midnight Teal",
+          "hex" : "#056463",
+          "name" : "Deep Ocean",
           "source" : "accent[0]"
         },
         {
@@ -693,12 +681,11 @@
     },
     {
       "birthData" : "2001-12-03 18:00",
-      "deepAnchor" : "warm charcoal",
+      "deepAnchor" : "ink navy",
       "id" : "U005",
       "lightAnchor" : "warm white",
       "liveAccentColours" : [
-        "#366064",
-        "#1C6E6B"
+        "#386B6C"
       ],
       "liveCoreColours" : [
         "honey yellow",
@@ -731,8 +718,8 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#4A4244",
-          "name" : "warm charcoal",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         "lightestSwatch" : {
@@ -742,7 +729,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 3,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 4
       },
       "presentedSwatches" : [
@@ -787,14 +774,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#366064",
-          "name" : "Deep Moonstone",
+          "hex" : "#386B6C",
+          "name" : "Moonlit Teal",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#1C6E6B",
-          "name" : "Burnished Teal",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#C9C0BB",
@@ -822,8 +804,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#4A4244",
-          "name" : "warm charcoal",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -870,7 +852,7 @@
       "lightAnchor" : "warm white",
       "liveAccentColours" : [
         "#865373",
-        "#00656E"
+        "#00706F"
       ],
       "liveCoreColours" : [
         "honey yellow",
@@ -964,8 +946,8 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#00656E",
-          "name" : "Warm Petrol",
+          "hex" : "#00706F",
+          "name" : "Mercury Teal",
           "source" : "accent[1]"
         },
         {
@@ -1041,8 +1023,7 @@
       "id" : "U007",
       "lightAnchor" : "warm ivory",
       "liveAccentColours" : [
-        "#005E64",
-        "#2E766B"
+        "#005E64"
       ],
       "liveCoreColours" : [
         "marigold",
@@ -1136,11 +1117,6 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#2E766B",
-          "name" : "Verdigris",
-          "source" : "accent[1]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -1209,12 +1185,12 @@
     },
     {
       "birthData" : "1991-07-07 07:23",
-      "deepAnchor" : "graphite",
+      "deepAnchor" : "bitter chocolate",
       "id" : "U008",
       "lightAnchor" : "warm ivory",
       "liveAccentColours" : [
-        "#366064",
-        "#00676A"
+        "#005D69",
+        "#7E1B2F"
       ],
       "liveCoreColours" : [
         "marigold",
@@ -1247,8 +1223,8 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#4B4F54",
-          "name" : "graphite",
+          "hex" : "#3A2A1E",
+          "name" : "bitter chocolate",
           "source" : "support[3]"
         },
         "lightestSwatch" : {
@@ -1303,13 +1279,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#366064",
-          "name" : "Deep Moonstone",
+          "hex" : "#005D69",
+          "name" : "Warm Prussian",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#00676A",
-          "name" : "Deep Electric Teal",
+          "hex" : "#7E1B2F",
+          "name" : "Oxblood",
           "source" : "accent[1]"
         },
         {
@@ -1328,8 +1304,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#4B4F54",
-          "name" : "graphite",
+          "hex" : "#3A2A1E",
+          "name" : "bitter chocolate",
           "source" : "support[3]"
         },
         {
@@ -1338,8 +1314,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#4B4F54",
-          "name" : "graphite",
+          "hex" : "#3A2A1E",
+          "name" : "bitter chocolate",
           "source" : "deepAnchor"
         },
         {
@@ -1385,8 +1361,7 @@
       "id" : "U009",
       "lightAnchor" : "warm ivory",
       "liveAccentColours" : [
-        "#00656E",
-        "#2D6D68"
+        "#E96675"
       ],
       "liveCoreColours" : [
         "marigold",
@@ -1475,14 +1450,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#00656E",
-          "name" : "Warm Petrol",
+          "hex" : "#E96675",
+          "name" : "Warm Coral",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#2D6D68",
-          "name" : "Warm Aquamarine",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#8A8D8F",
@@ -1557,8 +1527,8 @@
       "id" : "U010",
       "lightAnchor" : "warm ivory",
       "liveAccentColours" : [
-        "#00656E",
-        "#3C746F"
+        "#7E1B2F",
+        "#00656E"
       ],
       "liveCoreColours" : [
         "marigold",
@@ -1591,9 +1561,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#4B4F54",
-          "name" : "graphite",
-          "source" : "support[3]"
+          "hex" : "#7E1B2F",
+          "name" : "Oxblood",
+          "source" : "accent[0]"
         },
         "lightestSwatch" : {
           "hex" : "#FFFFF0",
@@ -1647,13 +1617,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#00656E",
-          "name" : "Warm Petrol",
+          "hex" : "#7E1B2F",
+          "name" : "Oxblood",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#3C746F",
-          "name" : "Warm Sea Pearl",
+          "hex" : "#00656E",
+          "name" : "Warm Petrol",
           "source" : "accent[1]"
         },
         {
@@ -1729,7 +1699,7 @@
       "id" : "U011",
       "lightAnchor" : "warm ivory",
       "liveAccentColours" : [
-        "#744D6D",
+        "#865373",
         "#82312E"
       ],
       "liveCoreColours" : [
@@ -1819,8 +1789,8 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#744D6D",
-          "name" : "Dusky Plum",
+          "hex" : "#865373",
+          "name" : "Warm Mauve",
           "source" : "accent[0]"
         },
         {
@@ -2069,12 +2039,11 @@
     },
     {
       "birthData" : "1995-05-05 11:29",
-      "deepAnchor" : "graphite",
+      "deepAnchor" : "ink navy",
       "id" : "U013",
       "lightAnchor" : "warm ivory",
       "liveAccentColours" : [
-        "#366064",
-        "#2E766B"
+        "#E96675"
       ],
       "liveCoreColours" : [
         "marigold",
@@ -2107,9 +2076,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#4B4F54",
-          "name" : "graphite",
-          "source" : "support[3]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#FFFFF0",
@@ -2118,7 +2087,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 2,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 2
       },
       "presentedSwatches" : [
@@ -2163,14 +2132,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#366064",
-          "name" : "Deep Moonstone",
+          "hex" : "#E96675",
+          "name" : "Warm Coral",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#2E766B",
-          "name" : "Verdigris",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#8A8D8F",
@@ -2188,8 +2152,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#4B4F54",
-          "name" : "graphite",
+          "hex" : "#6B7B8D",
+          "name" : "mist navy",
           "source" : "support[3]"
         },
         {
@@ -2198,8 +2162,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#4B4F54",
-          "name" : "graphite",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -2241,12 +2205,12 @@
     },
     {
       "birthData" : "2001-09-03 04:18",
-      "deepAnchor" : "graphite",
+      "deepAnchor" : "ink navy",
       "id" : "U014",
       "lightAnchor" : "warm ivory",
       "liveAccentColours" : [
-        "#005E64",
-        "#865373"
+        "#865373",
+        "#005E64"
       ],
       "liveCoreColours" : [
         "marigold",
@@ -2279,9 +2243,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#4B4F54",
-          "name" : "graphite",
-          "source" : "support[3]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#FFFFF0",
@@ -2290,7 +2254,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 2,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 2
       },
       "presentedSwatches" : [
@@ -2335,13 +2299,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#005E64",
-          "name" : "Midnight Teal",
+          "hex" : "#865373",
+          "name" : "Warm Mauve",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#865373",
-          "name" : "Warm Mauve",
+          "hex" : "#005E64",
+          "name" : "Midnight Teal",
           "source" : "accent[1]"
         },
         {
@@ -2360,8 +2324,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#4B4F54",
-          "name" : "graphite",
+          "hex" : "#4F5D73",
+          "name" : "soft navy",
           "source" : "support[3]"
         },
         {
@@ -2370,8 +2334,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#4B4F54",
-          "name" : "graphite",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -2417,8 +2381,8 @@
       "id" : "U015",
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
-        "#00818A",
-        "#A36B89"
+        "#A36B89",
+        "#751A2F"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -2507,13 +2471,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#00818A",
-          "name" : "Aqua Blue",
+          "hex" : "#A36B89",
+          "name" : "Venus Rose",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#A36B89",
-          "name" : "Venus Rose",
+          "hex" : "#751A2F",
+          "name" : "Deep Wine",
           "source" : "accent[1]"
         },
         {
@@ -2532,8 +2496,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#5B6770",
-          "name" : "slate",
+          "hex" : "#3A2A1E",
+          "name" : "bitter chocolate",
           "source" : "support[3]"
         },
         {
@@ -2589,8 +2553,8 @@
       "id" : "U016",
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
-        "#387C7E",
-        "#007788"
+        "#D35D70",
+        "#19475A"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -2634,7 +2598,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 2,
-        "nearBlackSwatchCount" : 1,
+        "nearBlackSwatchCount" : 2,
         "veryLightSwatchCount" : 3
       },
       "presentedSwatches" : [
@@ -2679,13 +2643,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#387C7E",
-          "name" : "Soft Aqua",
+          "hex" : "#D35D70",
+          "name" : "Terra Rose",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#007788",
-          "name" : "Cerulean",
+          "hex" : "#19475A",
+          "name" : "Gunmetal",
           "source" : "accent[1]"
         },
         {
@@ -2704,8 +2668,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#5B6770",
-          "name" : "slate",
+          "hex" : "#3C2415",
+          "name" : "espresso",
           "source" : "support[3]"
         },
         {
@@ -2761,8 +2725,8 @@
       "id" : "U017",
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
-        "#2F9097",
-        "#21776B"
+        "#751A2F",
+        "#8A4484"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -2851,13 +2815,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#2F9097",
-          "name" : "Warm Aqua",
+          "hex" : "#751A2F",
+          "name" : "Deep Wine",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#21776B",
-          "name" : "Lagoon",
+          "hex" : "#8A4484",
+          "name" : "Deep Mauve",
           "source" : "accent[1]"
         },
         {
@@ -2934,7 +2898,7 @@
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
         "#007788",
-        "#762249"
+        "#751A2F"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -3028,8 +2992,8 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#762249",
-          "name" : "Dark Cherry",
+          "hex" : "#751A2F",
+          "name" : "Deep Wine",
           "source" : "accent[1]"
         },
         {
@@ -3106,7 +3070,7 @@
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
         "#4D7E8C",
-        "#A6768A"
+        "#A36B89"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -3200,8 +3164,8 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#A6768A",
-          "name" : "Soft Pink",
+          "hex" : "#A36B89",
+          "name" : "Venus Rose",
           "source" : "accent[1]"
         },
         {
@@ -3278,7 +3242,7 @@
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
         "#906584",
-        "#387C7E"
+        "#2F9097"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -3372,8 +3336,8 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#387C7E",
-          "name" : "Soft Aqua",
+          "hex" : "#2F9097",
+          "name" : "Warm Aqua",
           "source" : "accent[1]"
         },
         {
@@ -3392,8 +3356,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#5B6770",
-          "name" : "slate",
+          "hex" : "#4F5D73",
+          "name" : "soft navy",
           "source" : "support[3]"
         },
         {
@@ -3450,7 +3414,7 @@
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
         "#A36B89",
-        "#387C7E"
+        "#007788"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -3544,8 +3508,8 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#387C7E",
-          "name" : "Soft Aqua",
+          "hex" : "#007788",
+          "name" : "Cerulean",
           "source" : "accent[1]"
         },
         {
@@ -3793,8 +3757,7 @@
       "id" : "U023",
       "lightAnchor" : "clear ivory",
       "liveAccentColours" : [
-        "#762249",
-        "#387C7E"
+        "#8A4484"
       ],
       "liveCoreColours" : [
         "poppy",
@@ -3883,14 +3846,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#762249",
-          "name" : "Dark Cherry",
+          "hex" : "#8A4484",
+          "name" : "Deep Mauve",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#387C7E",
-          "name" : "Soft Aqua",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#9C9A9A",
@@ -4137,8 +4095,7 @@
       "id" : "U025",
       "lightAnchor" : "soft white",
       "liveAccentColours" : [
-        "#9665A3",
-        "#5485C8"
+        "#9665A3"
       ],
       "liveCoreColours" : [
         "powder blue",
@@ -4232,11 +4189,6 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#5485C8",
-          "name" : "Regal Blue",
-          "source" : "accent[1]"
-        },
-        {
           "hex" : "#F5E6C8",
           "name" : "buttercream",
           "source" : "support[0]"
@@ -4309,7 +4261,6 @@
       "id" : "U026",
       "lightAnchor" : "soft white",
       "liveAccentColours" : [
-        "#678C70",
         "#9F3D8A"
       ],
       "liveCoreColours" : [
@@ -4345,7 +4296,7 @@
         "darkestSwatch" : {
           "hex" : "#9F3D8A",
           "name" : "Cool Berry",
-          "source" : "accent[1]"
+          "source" : "accent[0]"
         },
         "lightestSwatch" : {
           "hex" : "#F5F0EB",
@@ -4399,14 +4350,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#678C70",
-          "name" : "Sage Mist",
-          "source" : "accent[0]"
-        },
-        {
           "hex" : "#9F3D8A",
           "name" : "Cool Berry",
-          "source" : "accent[1]"
+          "source" : "accent[0]"
         },
         {
           "hex" : "#F5E6C8",
@@ -4477,12 +4423,11 @@
     },
     {
       "birthData" : "1998-10-04 07:07",
-      "deepAnchor" : "mist navy",
+      "deepAnchor" : "ink navy",
       "id" : "U027",
       "lightAnchor" : "soft white",
       "liveAccentColours" : [
-        "#BA4983",
-        "#5485C8"
+        "#9F3D8A"
       ],
       "liveCoreColours" : [
         "powder blue",
@@ -4515,9 +4460,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#BA4983",
-          "name" : "Rose Madder",
-          "source" : "accent[0]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#F5F0EB",
@@ -4526,7 +4471,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 3,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 4
       },
       "presentedSwatches" : [
@@ -4571,14 +4516,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#BA4983",
-          "name" : "Rose Madder",
+          "hex" : "#9F3D8A",
+          "name" : "Cool Berry",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#5485C8",
-          "name" : "Regal Blue",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#F5E6C8",
@@ -4596,8 +4536,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#A89F91",
-          "name" : "warm stone",
+          "hex" : "#4F5D73",
+          "name" : "soft navy",
           "source" : "support[3]"
         },
         {
@@ -4606,8 +4546,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#6B7B8D",
-          "name" : "mist navy",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -4653,8 +4593,7 @@
       "id" : "U028",
       "lightAnchor" : "soft white",
       "liveAccentColours" : [
-        "#9F3D8A",
-        "#653F96"
+        "#9F3D8A"
       ],
       "liveCoreColours" : [
         "powder blue",
@@ -4687,9 +4626,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#653F96",
-          "name" : "Royal Violet",
-          "source" : "accent[1]"
+          "hex" : "#9F3D8A",
+          "name" : "Cool Berry",
+          "source" : "accent[0]"
         },
         "lightestSwatch" : {
           "hex" : "#F5F0EB",
@@ -4746,11 +4685,6 @@
           "hex" : "#9F3D8A",
           "name" : "Cool Berry",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#653F96",
-          "name" : "Royal Violet",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#F5E6C8",
@@ -4821,12 +4755,11 @@
     },
     {
       "birthData" : "1991-11-24 21:23",
-      "deepAnchor" : "mist navy",
+      "deepAnchor" : "ink navy",
       "id" : "U029",
       "lightAnchor" : "soft white",
       "liveAccentColours" : [
-        "#9665A3",
-        "#678C70"
+        "#653F96"
       ],
       "liveCoreColours" : [
         "powder blue",
@@ -4859,9 +4792,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#9665A3",
-          "name" : "Iced Plum",
-          "source" : "accent[0]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#F5F0EB",
@@ -4870,7 +4803,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 3,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 4
       },
       "presentedSwatches" : [
@@ -4915,14 +4848,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#9665A3",
-          "name" : "Iced Plum",
+          "hex" : "#653F96",
+          "name" : "Royal Violet",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#678C70",
-          "name" : "Sage Mist",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#F5E6C8",
@@ -4940,8 +4868,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#A89F91",
-          "name" : "warm stone",
+          "hex" : "#6B7B8D",
+          "name" : "mist navy",
           "source" : "support[3]"
         },
         {
@@ -4950,8 +4878,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#6B7B8D",
-          "name" : "mist navy",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -4993,12 +4921,11 @@
     },
     {
       "birthData" : "1992-09-10 23:47",
-      "deepAnchor" : "mist navy",
+      "deepAnchor" : "ink navy",
       "id" : "U030",
       "lightAnchor" : "soft white",
       "liveAccentColours" : [
-        "#9665A3",
-        "#678C70"
+        "#9665A3"
       ],
       "liveCoreColours" : [
         "powder blue",
@@ -5031,9 +4958,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#9665A3",
-          "name" : "Iced Plum",
-          "source" : "accent[0]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#F5F0EB",
@@ -5042,7 +4969,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 3,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 4
       },
       "presentedSwatches" : [
@@ -5092,11 +5019,6 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#678C70",
-          "name" : "Sage Mist",
-          "source" : "accent[1]"
-        },
-        {
           "hex" : "#F5E6C8",
           "name" : "buttercream",
           "source" : "support[0]"
@@ -5112,8 +5034,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#A89F91",
-          "name" : "warm stone",
+          "hex" : "#4F5D73",
+          "name" : "soft navy",
           "source" : "support[3]"
         },
         {
@@ -5122,8 +5044,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#6B7B8D",
-          "name" : "mist navy",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -5165,7 +5087,7 @@
     },
     {
       "birthData" : "1986-01-24 08:34",
-      "deepAnchor" : "soft navy",
+      "deepAnchor" : "ink navy",
       "id" : "U031",
       "lightAnchor" : "cool ivory",
       "liveAccentColours" : [
@@ -5203,9 +5125,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#085267",
-          "name" : "Steel Blue",
-          "source" : "accent[0]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#F3F3EE",
@@ -5214,7 +5136,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 1,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 1
       },
       "presentedSwatches" : [
@@ -5284,8 +5206,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#7B5B3A",
-          "name" : "cocoa",
+          "hex" : "#6B7B8D",
+          "name" : "mist navy",
           "source" : "support[3]"
         },
         {
@@ -5294,8 +5216,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#4F5D73",
-          "name" : "soft navy",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -5513,7 +5435,6 @@
       "id" : "U033",
       "lightAnchor" : "cool ivory",
       "liveAccentColours" : [
-        "#085267",
         "#A6C6D0"
       ],
       "liveCoreColours" : [
@@ -5547,9 +5468,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#085267",
-          "name" : "Steel Blue",
-          "source" : "accent[0]"
+          "hex" : "#4F5D73",
+          "name" : "soft navy",
+          "source" : "neutral[2]"
         },
         "lightestSwatch" : {
           "hex" : "#F3F3EE",
@@ -5603,14 +5524,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#085267",
-          "name" : "Steel Blue",
-          "source" : "accent[0]"
-        },
-        {
           "hex" : "#A6C6D0",
           "name" : "Lunar Silver",
-          "source" : "accent[1]"
+          "source" : "accent[0]"
         },
         {
           "hex" : "#AF9B88",
@@ -5685,8 +5601,7 @@
       "id" : "U034",
       "lightAnchor" : "cool ivory",
       "liveAccentColours" : [
-        "#085267",
-        "#3D7E65"
+        "#085267"
       ],
       "liveCoreColours" : [
         "dusty blue",
@@ -5780,11 +5695,6 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#3D7E65",
-          "name" : "Cool Fern",
-          "source" : "accent[1]"
-        },
-        {
           "hex" : "#AF9B88",
           "name" : "warm taupe",
           "source" : "support[0]"
@@ -5853,12 +5763,11 @@
     },
     {
       "birthData" : "1998-07-22 21:53",
-      "deepAnchor" : "soft navy",
+      "deepAnchor" : "ink navy",
       "id" : "U035",
       "lightAnchor" : "cool ivory",
       "liveAccentColours" : [
-        "#00A9AE",
-        "#007362"
+        "#00A0BF"
       ],
       "liveCoreColours" : [
         "dusty blue",
@@ -5891,9 +5800,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#4F5D73",
-          "name" : "soft navy",
-          "source" : "neutral[2]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#F3F3EE",
@@ -5902,7 +5811,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 1,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 1
       },
       "presentedSwatches" : [
@@ -5947,14 +5856,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#00A9AE",
-          "name" : "Cool Topaz",
+          "hex" : "#00A0BF",
+          "name" : "Iced Cyan",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#007362",
-          "name" : "Teal Moss",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#AF9B88",
@@ -5972,8 +5876,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#7B5B3A",
-          "name" : "cocoa",
+          "hex" : "#6B7B8D",
+          "name" : "mist navy",
           "source" : "support[3]"
         },
         {
@@ -5982,8 +5886,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#4F5D73",
-          "name" : "soft navy",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -6025,12 +5929,11 @@
     },
     {
       "birthData" : "1992-10-16 20:47",
-      "deepAnchor" : "soft navy",
+      "deepAnchor" : "ink navy",
       "id" : "U036",
       "lightAnchor" : "cool ivory",
       "liveAccentColours" : [
-        "#653F96",
-        "#702E62"
+        "#00AFBF"
       ],
       "liveCoreColours" : [
         "dusty blue",
@@ -6063,9 +5966,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#702E62",
-          "name" : "Deep Plum",
-          "source" : "accent[1]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#F3F3EE",
@@ -6074,7 +5977,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 1,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 1
       },
       "presentedSwatches" : [
@@ -6119,14 +6022,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#653F96",
-          "name" : "Royal Violet",
+          "hex" : "#00AFBF",
+          "name" : "Iced Aqua",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#702E62",
-          "name" : "Deep Plum",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#AF9B88",
@@ -6154,8 +6052,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#4F5D73",
-          "name" : "soft navy",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -6197,12 +6095,12 @@
     },
     {
       "birthData" : "1989-10-27 15:47",
-      "deepAnchor" : "soft navy",
+      "deepAnchor" : "ink navy",
       "id" : "U037",
       "lightAnchor" : "cool ivory",
       "liveAccentColours" : [
-        "#653F96",
-        "#1C475B"
+        "#69B8BD",
+        "#653F96"
       ],
       "liveCoreColours" : [
         "dusty blue",
@@ -6235,9 +6133,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#1C475B",
-          "name" : "Cool Graphite",
-          "source" : "accent[1]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#F3F3EE",
@@ -6246,7 +6144,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 1,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 1
       },
       "presentedSwatches" : [
@@ -6291,13 +6189,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#653F96",
-          "name" : "Royal Violet",
+          "hex" : "#69B8BD",
+          "name" : "Cool Aquamarine",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#1C475B",
-          "name" : "Cool Graphite",
+          "hex" : "#653F96",
+          "name" : "Royal Violet",
           "source" : "accent[1]"
         },
         {
@@ -6326,8 +6224,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#4F5D73",
-          "name" : "soft navy",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -6369,12 +6267,12 @@
     },
     {
       "birthData" : "1994-05-14 10:12",
-      "deepAnchor" : "soft navy",
+      "deepAnchor" : "ink navy",
       "id" : "U038",
       "lightAnchor" : "cool ivory",
       "liveAccentColours" : [
-        "#007362",
-        "#BA4983"
+        "#BA4983",
+        "#00A8AD"
       ],
       "liveCoreColours" : [
         "dusty blue",
@@ -6407,9 +6305,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#4F5D73",
-          "name" : "soft navy",
-          "source" : "neutral[2]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#F3F3EE",
@@ -6418,7 +6316,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 1,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 1
       },
       "presentedSwatches" : [
@@ -6463,13 +6361,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#007362",
-          "name" : "Teal Moss",
+          "hex" : "#BA4983",
+          "name" : "Rose Madder",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#BA4983",
-          "name" : "Rose Madder",
+          "hex" : "#00A8AD",
+          "name" : "Mercurial Teal",
           "source" : "accent[1]"
         },
         {
@@ -6488,8 +6386,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#7B5B3A",
-          "name" : "cocoa",
+          "hex" : "#6B7B8D",
+          "name" : "mist navy",
           "source" : "support[3]"
         },
         {
@@ -6498,8 +6396,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#4F5D73",
-          "name" : "soft navy",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -6541,12 +6439,12 @@
     },
     {
       "birthData" : "1996-02-02 20:00",
-      "deepAnchor" : "muted charcoal",
+      "deepAnchor" : "ink navy",
       "id" : "U039",
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
         "#678C70",
-        "#085267"
+        "#702E62"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -6579,9 +6477,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#3B4B5E",
-          "name" : "smoked navy",
-          "source" : "neutral[2]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#E8E6E2",
@@ -6590,7 +6488,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 2,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 1
       },
       "presentedSwatches" : [
@@ -6640,8 +6538,8 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#085267",
-          "name" : "Steel Blue",
+          "hex" : "#702E62",
+          "name" : "Deep Plum",
           "source" : "accent[1]"
         },
         {
@@ -6660,8 +6558,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#C19A6B",
-          "name" : "camel",
+          "hex" : "#6B7B8D",
+          "name" : "mist navy",
           "source" : "support[3]"
         },
         {
@@ -6670,8 +6568,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#636B6F",
-          "name" : "muted charcoal",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -6713,12 +6611,12 @@
     },
     {
       "birthData" : "1987-04-05 12:07",
-      "deepAnchor" : "muted charcoal",
+      "deepAnchor" : "ink navy",
       "id" : "U040",
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
         "#BA4983",
-        "#653F96"
+        "#00A8AD"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -6751,9 +6649,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#3B4B5E",
-          "name" : "smoked navy",
-          "source" : "neutral[2]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#E8E6E2",
@@ -6762,7 +6660,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 2,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 1
       },
       "presentedSwatches" : [
@@ -6812,8 +6710,8 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#653F96",
-          "name" : "Royal Violet",
+          "hex" : "#00A8AD",
+          "name" : "Mercurial Teal",
           "source" : "accent[1]"
         },
         {
@@ -6832,8 +6730,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#C19A6B",
-          "name" : "camel",
+          "hex" : "#6B7B8D",
+          "name" : "mist navy",
           "source" : "support[3]"
         },
         {
@@ -6842,8 +6740,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#636B6F",
-          "name" : "muted charcoal",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -6889,8 +6787,8 @@
       "id" : "U041",
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
-        "#1D6640",
-        "#653F96"
+        "#678C70",
+        "#8EB6CE"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -6979,13 +6877,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#1D6640",
-          "name" : "Forest Evergreen",
+          "hex" : "#678C70",
+          "name" : "Sage Mist",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#653F96",
-          "name" : "Royal Violet",
+          "hex" : "#8EB6CE",
+          "name" : "Misty Blue",
           "source" : "accent[1]"
         },
         {
@@ -7057,7 +6955,7 @@
     },
     {
       "birthData" : "1993-01-08 22:12",
-      "deepAnchor" : "muted charcoal",
+      "deepAnchor" : "ink navy",
       "id" : "U042",
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
@@ -7095,9 +6993,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#3B4B5E",
-          "name" : "smoked navy",
-          "source" : "neutral[2]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#E8E6E2",
@@ -7106,7 +7004,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 2,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 1
       },
       "presentedSwatches" : [
@@ -7176,8 +7074,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#C19A6B",
-          "name" : "camel",
+          "hex" : "#6B7B8D",
+          "name" : "mist navy",
           "source" : "support[3]"
         },
         {
@@ -7186,8 +7084,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#636B6F",
-          "name" : "muted charcoal",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -7234,7 +7132,7 @@
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
         "#00A9AE",
-        "#678C70"
+        "#BA4983"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -7328,8 +7226,8 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#678C70",
-          "name" : "Sage Mist",
+          "hex" : "#BA4983",
+          "name" : "Rose Madder",
           "source" : "accent[1]"
         },
         {
@@ -7401,12 +7299,11 @@
     },
     {
       "birthData" : "1989-03-03 04:53",
-      "deepAnchor" : "muted charcoal",
+      "deepAnchor" : "soft black",
       "id" : "U044",
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
-        "#085267",
-        "#1D6640"
+        "#0095AC"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -7439,9 +7336,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#3B4B5E",
-          "name" : "smoked navy",
-          "source" : "neutral[2]"
+          "hex" : "#1A1A1E",
+          "name" : "soft black",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#E8E6E2",
@@ -7450,7 +7347,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 2,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 2,
         "veryLightSwatchCount" : 1
       },
       "presentedSwatches" : [
@@ -7495,14 +7392,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#085267",
-          "name" : "Steel Blue",
+          "hex" : "#0095AC",
+          "name" : "Electric Teal",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#1D6640",
-          "name" : "Forest Evergreen",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#D2C6B2",
@@ -7520,8 +7412,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#C19A6B",
-          "name" : "camel",
+          "hex" : "#3C2415",
+          "name" : "espresso",
           "source" : "support[3]"
         },
         {
@@ -7530,8 +7422,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#636B6F",
-          "name" : "muted charcoal",
+          "hex" : "#1A1A1E",
+          "name" : "soft black",
           "source" : "deepAnchor"
         },
         {
@@ -7573,12 +7465,11 @@
     },
     {
       "birthData" : "1985-11-30 21:12",
-      "deepAnchor" : "muted charcoal",
+      "deepAnchor" : "ink navy",
       "id" : "U045",
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
-        "#653F96",
-        "#8EB6CE"
+        "#702E62"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -7611,9 +7502,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#3B4B5E",
-          "name" : "smoked navy",
-          "source" : "neutral[2]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#E8E6E2",
@@ -7622,7 +7513,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 2,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 1
       },
       "presentedSwatches" : [
@@ -7667,14 +7558,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#653F96",
-          "name" : "Royal Violet",
+          "hex" : "#702E62",
+          "name" : "Deep Plum",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#8EB6CE",
-          "name" : "Misty Blue",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#D2C6B2",
@@ -7692,8 +7578,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#C19A6B",
-          "name" : "camel",
+          "hex" : "#6B7B8D",
+          "name" : "mist navy",
           "source" : "support[3]"
         },
         {
@@ -7702,8 +7588,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#636B6F",
-          "name" : "muted charcoal",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -7745,12 +7631,12 @@
     },
     {
       "birthData" : "1999-11-17 20:47",
-      "deepAnchor" : "muted charcoal",
+      "deepAnchor" : "ink navy",
       "id" : "U046",
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
         "#085267",
-        "#1D6640"
+        "#BA4983"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -7783,9 +7669,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#3B4B5E",
-          "name" : "smoked navy",
-          "source" : "neutral[2]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#E8E6E2",
@@ -7794,7 +7680,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 2,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 1
       },
       "presentedSwatches" : [
@@ -7844,8 +7730,8 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#1D6640",
-          "name" : "Forest Evergreen",
+          "hex" : "#BA4983",
+          "name" : "Rose Madder",
           "source" : "accent[1]"
         },
         {
@@ -7864,8 +7750,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#C19A6B",
-          "name" : "camel",
+          "hex" : "#4F5D73",
+          "name" : "soft navy",
           "source" : "support[3]"
         },
         {
@@ -7874,8 +7760,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#636B6F",
-          "name" : "muted charcoal",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -7917,12 +7803,12 @@
     },
     {
       "birthData" : "1991-05-09 16:07",
-      "deepAnchor" : "muted charcoal",
+      "deepAnchor" : "ink navy",
       "id" : "U047",
       "lightAnchor" : "smoke white",
       "liveAccentColours" : [
         "#BA4983",
-        "#1D6640"
+        "#00A9AE"
       ],
       "liveCoreColours" : [
         "eucalyptus",
@@ -7955,9 +7841,9 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#3B4B5E",
-          "name" : "smoked navy",
-          "source" : "neutral[2]"
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
+          "source" : "deepAnchor"
         },
         "lightestSwatch" : {
           "hex" : "#E8E6E2",
@@ -7966,7 +7852,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 2,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 1,
         "veryLightSwatchCount" : 1
       },
       "presentedSwatches" : [
@@ -8016,8 +7902,8 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#1D6640",
-          "name" : "Forest Evergreen",
+          "hex" : "#00A9AE",
+          "name" : "Cool Topaz",
           "source" : "accent[1]"
         },
         {
@@ -8036,8 +7922,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#C19A6B",
-          "name" : "camel",
+          "hex" : "#4F5D73",
+          "name" : "soft navy",
           "source" : "support[3]"
         },
         {
@@ -8046,8 +7932,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#636B6F",
-          "name" : "muted charcoal",
+          "hex" : "#1B2A4A",
+          "name" : "ink navy",
           "source" : "deepAnchor"
         },
         {
@@ -8265,7 +8151,7 @@
       "id" : "U049",
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
-        "#744D6D",
+        "#865373",
         "#005D69"
       ],
       "liveCoreColours" : [
@@ -8355,8 +8241,8 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#744D6D",
-          "name" : "Dusky Plum",
+          "hex" : "#865373",
+          "name" : "Warm Mauve",
           "source" : "accent[0]"
         },
         {
@@ -8781,8 +8667,7 @@
       "id" : "U052",
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
-        "#005D69",
-        "#056463"
+        "#005D69"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -8876,11 +8761,6 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#056463",
-          "name" : "Deep Ocean",
-          "source" : "accent[1]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -8949,12 +8829,11 @@
     },
     {
       "birthData" : "1991-05-25 12:29",
-      "deepAnchor" : "bitter chocolate",
+      "deepAnchor" : "black brown",
       "id" : "U053",
       "lightAnchor" : "bone",
       "liveAccentColours" : [
-        "#366064",
-        "#2E766B"
+        "#366064"
       ],
       "liveCoreColours" : [
         "terracotta",
@@ -8987,8 +8866,8 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#3A2A1E",
-          "name" : "bitter chocolate",
+          "hex" : "#1C1210",
+          "name" : "black brown",
           "source" : "deepAnchor"
         },
         "lightestSwatch" : {
@@ -8998,7 +8877,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 2,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 2,
         "veryLightSwatchCount" : 1
       },
       "presentedSwatches" : [
@@ -9048,11 +8927,6 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#2E766B",
-          "name" : "Verdigris",
-          "source" : "accent[1]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -9068,8 +8942,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#5B6770",
-          "name" : "slate",
+          "hex" : "#4A1C20",
+          "name" : "oxblood",
           "source" : "support[3]"
         },
         {
@@ -9078,8 +8952,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#3A2A1E",
-          "name" : "bitter chocolate",
+          "hex" : "#1C1210",
+          "name" : "black brown",
           "source" : "deepAnchor"
         },
         {
@@ -9125,8 +8999,8 @@
       "id" : "U054",
       "lightAnchor" : "bone",
       "liveAccentColours" : [
-        "#366064",
-        "#2D6D68"
+        "#865373",
+        "#7E1B2F"
       ],
       "liveCoreColours" : [
         "terracotta",
@@ -9215,13 +9089,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#366064",
-          "name" : "Deep Moonstone",
+          "hex" : "#865373",
+          "name" : "Warm Mauve",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#2D6D68",
-          "name" : "Warm Aquamarine",
+          "hex" : "#7E1B2F",
+          "name" : "Oxblood",
           "source" : "accent[1]"
         },
         {
@@ -9240,8 +9114,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#5B6770",
-          "name" : "slate",
+          "hex" : "#4F5D73",
+          "name" : "soft navy",
           "source" : "support[3]"
         },
         {
@@ -9412,8 +9286,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#5B6770",
-          "name" : "slate",
+          "hex" : "#4F5D73",
+          "name" : "soft navy",
           "source" : "support[3]"
         },
         {
@@ -9469,8 +9343,7 @@
       "id" : "U056",
       "lightAnchor" : "bone",
       "liveAccentColours" : [
-        "#00656E",
-        "#2D6D68"
+        "#00656E"
       ],
       "liveCoreColours" : [
         "terracotta",
@@ -9562,11 +9435,6 @@
           "hex" : "#00656E",
           "name" : "Warm Petrol",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#2D6D68",
-          "name" : "Warm Aquamarine",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#8A8D8F",
@@ -9809,12 +9677,12 @@
     },
     {
       "birthData" : "1992-10-31 04:47",
-      "deepAnchor" : "bitter chocolate",
+      "deepAnchor" : "black brown",
       "id" : "U058",
       "lightAnchor" : "bone",
       "liveAccentColours" : [
-        "#82312E",
-        "#366064"
+        "#744D6D",
+        "#82312E"
       ],
       "liveCoreColours" : [
         "terracotta",
@@ -9847,8 +9715,8 @@
       },
       "presentedRange" : {
         "darkestSwatch" : {
-          "hex" : "#3A2A1E",
-          "name" : "bitter chocolate",
+          "hex" : "#1C1210",
+          "name" : "black brown",
           "source" : "deepAnchor"
         },
         "lightestSwatch" : {
@@ -9858,7 +9726,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 2,
-        "nearBlackSwatchCount" : 0,
+        "nearBlackSwatchCount" : 2,
         "veryLightSwatchCount" : 1
       },
       "presentedSwatches" : [
@@ -9903,13 +9771,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#82312E",
-          "name" : "Dark Sienna",
+          "hex" : "#744D6D",
+          "name" : "Dusky Plum",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#366064",
-          "name" : "Deep Moonstone",
+          "hex" : "#82312E",
+          "name" : "Dark Sienna",
           "source" : "accent[1]"
         },
         {
@@ -9928,8 +9796,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#5B6770",
-          "name" : "slate",
+          "hex" : "#3C2415",
+          "name" : "espresso",
           "source" : "support[3]"
         },
         {
@@ -9938,8 +9806,8 @@
           "source" : "lightAnchor"
         },
         {
-          "hex" : "#3A2A1E",
-          "name" : "bitter chocolate",
+          "hex" : "#1C1210",
+          "name" : "black brown",
           "source" : "deepAnchor"
         },
         {
@@ -9985,8 +9853,8 @@
       "id" : "U059",
       "lightAnchor" : "bone",
       "liveAccentColours" : [
-        "#366064",
-        "#744D6D"
+        "#865373",
+        "#366064"
       ],
       "liveCoreColours" : [
         "terracotta",
@@ -10075,13 +9943,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#366064",
-          "name" : "Deep Moonstone",
+          "hex" : "#865373",
+          "name" : "Warm Mauve",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#744D6D",
-          "name" : "Dusky Plum",
+          "hex" : "#366064",
+          "name" : "Deep Moonstone",
           "source" : "accent[1]"
         },
         {
@@ -10329,8 +10197,7 @@
       "id" : "U061",
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
-        "#00656E",
-        "#386B6C"
+        "#00656E"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -10424,11 +10291,6 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#386B6C",
-          "name" : "Moonlit Teal",
-          "source" : "accent[1]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -10501,8 +10363,8 @@
       "id" : "U062",
       "lightAnchor" : "bone",
       "liveAccentColours" : [
-        "#3C746F",
-        "#005D69"
+        "#7E1B2F",
+        "#3C746F"
       ],
       "liveCoreColours" : [
         "rust",
@@ -10591,13 +10453,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#3C746F",
-          "name" : "Warm Sea Pearl",
+          "hex" : "#7E1B2F",
+          "name" : "Oxblood",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#005D69",
-          "name" : "Warm Prussian",
+          "hex" : "#3C746F",
+          "name" : "Warm Sea Pearl",
           "source" : "accent[1]"
         },
         {
@@ -10674,7 +10536,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#00656E",
-        "#744D6D"
+        "#865373"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -10768,8 +10630,8 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#744D6D",
-          "name" : "Dusky Plum",
+          "hex" : "#865373",
+          "name" : "Warm Mauve",
           "source" : "accent[1]"
         },
         {
@@ -10845,8 +10707,8 @@
       "id" : "U064",
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
-        "#731632",
-        "#366064"
+        "#00656E",
+        "#731632"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -10935,13 +10797,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#731632",
-          "name" : "Burnt Wine",
+          "hex" : "#00656E",
+          "name" : "Warm Petrol",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#366064",
-          "name" : "Deep Moonstone",
+          "hex" : "#731632",
+          "name" : "Burnt Wine",
           "source" : "accent[1]"
         },
         {
@@ -11017,8 +10879,8 @@
       "id" : "U065",
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
-        "#731632",
-        "#865373"
+        "#865373",
+        "#82312E"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -11107,13 +10969,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#731632",
-          "name" : "Burnt Wine",
+          "hex" : "#865373",
+          "name" : "Warm Mauve",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#865373",
-          "name" : "Warm Mauve",
+          "hex" : "#82312E",
+          "name" : "Dark Sienna",
           "source" : "accent[1]"
         },
         {
@@ -11189,8 +11051,8 @@
       "id" : "U066",
       "lightAnchor" : "bone",
       "liveAccentColours" : [
-        "#744D6D",
-        "#7E1B2F"
+        "#865373",
+        "#82312E"
       ],
       "liveCoreColours" : [
         "rust",
@@ -11279,13 +11141,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#744D6D",
-          "name" : "Dusky Plum",
+          "hex" : "#865373",
+          "name" : "Warm Mauve",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#7E1B2F",
-          "name" : "Oxblood",
+          "hex" : "#82312E",
+          "name" : "Dark Sienna",
           "source" : "accent[1]"
         },
         {
@@ -11361,8 +11223,7 @@
       "id" : "U067",
       "lightAnchor" : "bone",
       "liveAccentColours" : [
-        "#2D6D68",
-        "#7E1B2F"
+        "#D14649"
       ],
       "liveCoreColours" : [
         "rust",
@@ -11451,14 +11312,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#2D6D68",
-          "name" : "Warm Aquamarine",
+          "hex" : "#D14649",
+          "name" : "Crimson Ember",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#7E1B2F",
-          "name" : "Oxblood",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#8A8D8F",
@@ -11533,7 +11389,7 @@
       "id" : "U068",
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
-        "#744D6D",
+        "#865373",
         "#82312E"
       ],
       "liveCoreColours" : [
@@ -11623,8 +11479,8 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#744D6D",
-          "name" : "Dusky Plum",
+          "hex" : "#865373",
+          "name" : "Warm Mauve",
           "source" : "accent[0]"
         },
         {
@@ -11705,8 +11561,7 @@
       "id" : "U069",
       "lightAnchor" : "bone",
       "liveAccentColours" : [
-        "#2E766B",
-        "#366064"
+        "#2E766B"
       ],
       "liveCoreColours" : [
         "rust",
@@ -11800,11 +11655,6 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#366064",
-          "name" : "Deep Moonstone",
-          "source" : "accent[1]"
-        },
-        {
           "hex" : "#8A8D8F",
           "name" : "cool stone",
           "source" : "support[0]"
@@ -11878,7 +11728,7 @@
       "lightAnchor" : "bone",
       "liveAccentColours" : [
         "#865373",
-        "#005D69"
+        "#7E1B2F"
       ],
       "liveCoreColours" : [
         "rust",
@@ -11913,7 +11763,7 @@
         "darkestSwatch" : {
           "hex" : "#3C2415",
           "name" : "espresso",
-          "source" : "deepAnchor"
+          "source" : "support[3]"
         },
         "lightestSwatch" : {
           "hex" : "#EFE6D3",
@@ -11922,7 +11772,7 @@
         },
         "literalBlackSwatchCount" : 0,
         "namedOffWhiteSwatchCount" : 1,
-        "nearBlackSwatchCount" : 2,
+        "nearBlackSwatchCount" : 3,
         "veryLightSwatchCount" : 1
       },
       "presentedSwatches" : [
@@ -11972,8 +11822,8 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#005D69",
-          "name" : "Warm Prussian",
+          "hex" : "#7E1B2F",
+          "name" : "Oxblood",
           "source" : "accent[1]"
         },
         {
@@ -11992,8 +11842,8 @@
           "source" : "support[2]"
         },
         {
-          "hex" : "#4B4F54",
-          "name" : "graphite",
+          "hex" : "#3C2415",
+          "name" : "espresso",
           "source" : "support[3]"
         },
         {
@@ -12049,8 +11899,8 @@
       "id" : "U071",
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
-        "#731632",
-        "#005D69"
+        "#005D69",
+        "#731632"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -12139,13 +11989,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#731632",
-          "name" : "Burnt Wine",
+          "hex" : "#005D69",
+          "name" : "Warm Prussian",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#005D69",
-          "name" : "Warm Prussian",
+          "hex" : "#731632",
+          "name" : "Burnt Wine",
           "source" : "accent[1]"
         },
         {
@@ -12221,8 +12071,7 @@
       "id" : "U072",
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
-        "#00656E",
-        "#1C6E6B"
+        "#00656E"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -12316,11 +12165,6 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#1C6E6B",
-          "name" : "Burnished Teal",
-          "source" : "accent[1]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -12393,8 +12237,7 @@
       "id" : "U073",
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
-        "#005D69",
-        "#386B6C"
+        "#005D69"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -12488,11 +12331,6 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#386B6C",
-          "name" : "Moonlit Teal",
-          "source" : "accent[1]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -12565,8 +12403,7 @@
       "id" : "U074",
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
-        "#005D69",
-        "#056463"
+        "#005D69"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -12660,11 +12497,6 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#056463",
-          "name" : "Deep Ocean",
-          "source" : "accent[1]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -12737,8 +12569,7 @@
       "id" : "U075",
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
-        "#00656E",
-        "#2D6D68"
+        "#00656E"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -12832,11 +12663,6 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#2D6D68",
-          "name" : "Warm Aquamarine",
-          "source" : "accent[1]"
-        },
-        {
           "hex" : "#1B2A4A",
           "name" : "ink navy",
           "source" : "support[0]"
@@ -12909,8 +12735,7 @@
       "id" : "U076",
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
-        "#366064",
-        "#2E766B"
+        "#3C746F"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -12999,14 +12824,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#366064",
-          "name" : "Deep Moonstone",
+          "hex" : "#3C746F",
+          "name" : "Warm Sea Pearl",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#2E766B",
-          "name" : "Verdigris",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#1B2A4A",
@@ -13082,7 +12902,7 @@
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
         "#744D6D",
-        "#7E1B2F"
+        "#005D69"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -13176,8 +12996,8 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#7E1B2F",
-          "name" : "cool ruby",
+          "hex" : "#005D69",
+          "name" : "Warm Prussian",
           "source" : "accent[1]"
         },
         {
@@ -13253,8 +13073,7 @@
       "id" : "U078",
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
-        "#005E64",
-        "#731632"
+        "#2D6D68"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -13343,14 +13162,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#005E64",
-          "name" : "Midnight Teal",
+          "hex" : "#2D6D68",
+          "name" : "Warm Aquamarine",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#731632",
-          "name" : "Burnt Wine",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#1B2A4A",
@@ -13597,8 +13411,8 @@
       "id" : "U080",
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
-        "#744D6D",
-        "#82312E"
+        "#865373",
+        "#005D69"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -13687,13 +13501,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#744D6D",
-          "name" : "Dusky Plum",
+          "hex" : "#865373",
+          "name" : "Warm Mauve",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#82312E",
-          "name" : "Dark Sienna",
+          "hex" : "#005D69",
+          "name" : "Warm Prussian",
           "source" : "accent[1]"
         },
         {
@@ -13769,8 +13583,7 @@
       "id" : "U081",
       "lightAnchor" : "warm cream",
       "liveAccentColours" : [
-        "#005E64",
-        "#731632"
+        "#056463"
       ],
       "liveCoreColours" : [
         "oxblood",
@@ -13859,14 +13672,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#005E64",
-          "name" : "Midnight Teal",
+          "hex" : "#056463",
+          "name" : "Deep Ocean",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#731632",
-          "name" : "Burnt Wine",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#1B2A4A",
@@ -14286,7 +14094,7 @@
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
         "#00A9AE",
-        "#085267"
+        "#562865"
       ],
       "liveCoreColours" : [
         "black cherry",
@@ -14380,8 +14188,8 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#085267",
-          "name" : "Steel Blue",
+          "hex" : "#562865",
+          "name" : "Aubergine",
           "source" : "accent[1]"
         },
         {
@@ -14457,8 +14265,8 @@
       "id" : "U085",
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
-        "#085267",
-        "#9665A3"
+        "#9F3D8A",
+        "#00A0BF"
       ],
       "liveCoreColours" : [
         "black cherry",
@@ -14547,13 +14355,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#085267",
-          "name" : "Steel Blue",
+          "hex" : "#9F3D8A",
+          "name" : "Cool Berry",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#9665A3",
-          "name" : "Iced Plum",
+          "hex" : "#00A0BF",
+          "name" : "Iced Cyan",
           "source" : "accent[1]"
         },
         {
@@ -14629,8 +14437,7 @@
       "id" : "U086",
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
-        "#007362",
-        "#00A9AE"
+        "#00BAB2"
       ],
       "liveCoreColours" : [
         "black cherry",
@@ -14719,14 +14526,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#007362",
-          "name" : "Teal Moss",
+          "hex" : "#00BAB2",
+          "name" : "Cool Citrine",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#00A9AE",
-          "name" : "Cool Topaz",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#4A4244",
@@ -14801,8 +14603,8 @@
       "id" : "U087",
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
-        "#085267",
-        "#702E62"
+        "#702E62",
+        "#00A0BF"
       ],
       "liveCoreColours" : [
         "black cherry",
@@ -14891,13 +14693,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#085267",
-          "name" : "Steel Blue",
+          "hex" : "#702E62",
+          "name" : "Deep Plum",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#702E62",
-          "name" : "Deep Plum",
+          "hex" : "#00A0BF",
+          "name" : "Iced Cyan",
           "source" : "accent[1]"
         },
         {
@@ -14973,8 +14775,7 @@
       "id" : "U088",
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
-        "#00A9AE",
-        "#008265"
+        "#00A0BF"
       ],
       "liveCoreColours" : [
         "black cherry",
@@ -15063,14 +14864,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#00A9AE",
-          "name" : "Cool Topaz",
+          "hex" : "#00A0BF",
+          "name" : "Iced Cyan",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#008265",
-          "name" : "Minted Green",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#4A4244",
@@ -15145,8 +14941,8 @@
       "id" : "U089",
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
-        "#085267",
-        "#9665A3"
+        "#702E62",
+        "#085267"
       ],
       "liveCoreColours" : [
         "black cherry",
@@ -15235,13 +15031,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#085267",
-          "name" : "Steel Blue",
+          "hex" : "#702E62",
+          "name" : "Deep Plum",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#9665A3",
-          "name" : "Iced Plum",
+          "hex" : "#085267",
+          "name" : "Steel Blue",
           "source" : "accent[1]"
         },
         {
@@ -15317,8 +15113,8 @@
       "id" : "U090",
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
-        "#007362",
-        "#678C70"
+        "#702E62",
+        "#00A0BF"
       ],
       "liveCoreColours" : [
         "black cherry",
@@ -15407,13 +15203,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#007362",
-          "name" : "Teal Moss",
+          "hex" : "#702E62",
+          "name" : "Deep Plum",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#678C70",
-          "name" : "Sage Mist",
+          "hex" : "#00A0BF",
+          "name" : "Iced Cyan",
           "source" : "accent[1]"
         },
         {
@@ -15489,8 +15285,8 @@
       "id" : "U091",
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
-        "#9665A3",
-        "#273E51"
+        "#273E51",
+        "#BA4983"
       ],
       "liveCoreColours" : [
         "cobalt",
@@ -15579,13 +15375,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#9665A3",
-          "name" : "Iced Plum",
+          "hex" : "#273E51",
+          "name" : "Saturn Slate",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#273E51",
-          "name" : "Saturn Slate",
+          "hex" : "#BA4983",
+          "name" : "Rose Madder",
           "source" : "accent[1]"
         },
         {
@@ -15661,8 +15457,8 @@
       "id" : "U092",
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
-        "#1C475B",
-        "#9665A3"
+        "#69B8BD",
+        "#702E62"
       ],
       "liveCoreColours" : [
         "cobalt",
@@ -15751,13 +15547,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#1C475B",
-          "name" : "Cool Graphite",
+          "hex" : "#69B8BD",
+          "name" : "Cool Aquamarine",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#9665A3",
-          "name" : "Iced Plum",
+          "hex" : "#702E62",
+          "name" : "Deep Plum",
           "source" : "accent[1]"
         },
         {
@@ -15833,8 +15629,7 @@
       "id" : "U093",
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
-        "#BA4983",
-        "#702E62"
+        "#BA4983"
       ],
       "liveCoreColours" : [
         "cobalt",
@@ -15928,11 +15723,6 @@
           "source" : "accent[0]"
         },
         {
-          "hex" : "#702E62",
-          "name" : "Deep Plum",
-          "source" : "accent[1]"
-        },
-        {
           "hex" : "#AF9B88",
           "name" : "warm taupe",
           "source" : "support[0]"
@@ -16005,8 +15795,7 @@
       "id" : "U094",
       "lightAnchor" : "optic white",
       "liveAccentColours" : [
-        "#9665A3",
-        "#1D6640"
+        "#008ABE"
       ],
       "liveCoreColours" : [
         "cobalt",
@@ -16095,14 +15884,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#9665A3",
-          "name" : "Iced Plum",
+          "hex" : "#008ABE",
+          "name" : "Arctic Blue",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#1D6640",
-          "name" : "Forest Evergreen",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#AF9B88",
@@ -16693,8 +16477,7 @@
       "id" : "U098",
       "lightAnchor" : "bright white",
       "liveAccentColours" : [
-        "#9665A3",
-        "#BA4983"
+        "#702E62"
       ],
       "liveCoreColours" : [
         "midnight",
@@ -16783,14 +16566,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#9665A3",
-          "name" : "Iced Plum",
+          "hex" : "#702E62",
+          "name" : "Deep Plum",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#BA4983",
-          "name" : "Rose Madder",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#A89F91",
@@ -16865,8 +16643,8 @@
       "id" : "U099",
       "lightAnchor" : "bright white",
       "liveAccentColours" : [
-        "#1D6640",
-        "#9665A3"
+        "#9F3D8A",
+        "#008ABE"
       ],
       "liveCoreColours" : [
         "midnight",
@@ -16955,13 +16733,13 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#1D6640",
-          "name" : "Forest Evergreen",
+          "hex" : "#9F3D8A",
+          "name" : "Cool Berry",
           "source" : "accent[0]"
         },
         {
-          "hex" : "#9665A3",
-          "name" : "Iced Plum",
+          "hex" : "#008ABE",
+          "name" : "Arctic Blue",
           "source" : "accent[1]"
         },
         {
@@ -17037,8 +16815,7 @@
       "id" : "U100",
       "lightAnchor" : "bright white",
       "liveAccentColours" : [
-        "#678C70",
-        "#085267"
+        "#0095AC"
       ],
       "liveCoreColours" : [
         "midnight",
@@ -17127,14 +16904,9 @@
           "source" : "core[3]"
         },
         {
-          "hex" : "#678C70",
-          "name" : "Sage Mist",
+          "hex" : "#0095AC",
+          "name" : "Electric Teal",
           "source" : "accent[0]"
-        },
-        {
-          "hex" : "#085267",
-          "name" : "Steel Blue",
-          "source" : "accent[1]"
         },
         {
           "hex" : "#A89F91",
@@ -17272,7 +17044,7 @@
         "rowCount" : 6,
         "rowsWithLiteralBlack" : 0,
         "rowsWithNamedOffWhite" : 6,
-        "rowsWithNearBlackSwatch" : 0,
+        "rowsWithNearBlackSwatch" : 1,
         "rowsWithVariation" : 0,
         "rowsWithVeryLightSwatch" : 6,
         "secondaryPullMatches" : 5
@@ -17285,7 +17057,7 @@
         "rowCount" : 6,
         "rowsWithLiteralBlack" : 0,
         "rowsWithNamedOffWhite" : 6,
-        "rowsWithNearBlackSwatch" : 0,
+        "rowsWithNearBlackSwatch" : 3,
         "rowsWithVariation" : 0,
         "rowsWithVeryLightSwatch" : 6,
         "secondaryPullMatches" : 1
@@ -17298,7 +17070,7 @@
         "rowCount" : 9,
         "rowsWithLiteralBlack" : 0,
         "rowsWithNamedOffWhite" : 9,
-        "rowsWithNearBlackSwatch" : 0,
+        "rowsWithNearBlackSwatch" : 2,
         "rowsWithVariation" : 0,
         "rowsWithVeryLightSwatch" : 9,
         "secondaryPullMatches" : 2
@@ -17311,7 +17083,7 @@
         "rowCount" : 10,
         "rowsWithLiteralBlack" : 0,
         "rowsWithNamedOffWhite" : 10,
-        "rowsWithNearBlackSwatch" : 0,
+        "rowsWithNearBlackSwatch" : 7,
         "rowsWithVariation" : 0,
         "rowsWithVeryLightSwatch" : 10,
         "secondaryPullMatches" : 3
@@ -17337,7 +17109,7 @@
         "rowCount" : 8,
         "rowsWithLiteralBlack" : 0,
         "rowsWithNamedOffWhite" : 8,
-        "rowsWithNearBlackSwatch" : 0,
+        "rowsWithNearBlackSwatch" : 2,
         "rowsWithVariation" : 0,
         "rowsWithVeryLightSwatch" : 8,
         "secondaryPullMatches" : 8
@@ -17350,7 +17122,7 @@
         "rowCount" : 8,
         "rowsWithLiteralBlack" : 0,
         "rowsWithNamedOffWhite" : 8,
-        "rowsWithNearBlackSwatch" : 0,
+        "rowsWithNearBlackSwatch" : 5,
         "rowsWithVariation" : 0,
         "rowsWithVeryLightSwatch" : 8,
         "secondaryPullMatches" : 3
@@ -17376,7 +17148,7 @@
     "rowsWithAnyVariation" : 0,
     "rowsWithLiteralBlackPresentedSwatch" : 36,
     "rowsWithNamedOffWhitePresentedSwatch" : 100,
-    "rowsWithNearBlackPresentedSwatch" : 53,
+    "rowsWithNearBlackPresentedSwatch" : 73,
     "rowsWithVeryLightPresentedSwatch" : 100,
     "saturationMatches" : 100,
     "secondaryPullMatches" : 48,

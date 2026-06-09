@@ -14,7 +14,8 @@ final class ColourEngineV4_UnitTests: XCTestCase {
         mars: V4ZodiacSign = .virgo,
         saturn: V4ZodiacSign = .libra,
         jupiter: V4ZodiacSign = .sagittarius,
-        pluto: V4ZodiacSign? = nil
+        pluto: V4ZodiacSign? = nil,
+        midheaven: V4ZodiacSign? = nil
     ) -> BirthChartColourInput {
         BirthChartColourInput(
             ascendant: PlacementInput(sign: asc),
@@ -25,7 +26,8 @@ final class ColourEngineV4_UnitTests: XCTestCase {
             mars: PlacementInput(sign: mars),
             saturn: PlacementInput(sign: saturn),
             jupiter: PlacementInput(sign: jupiter),
-            pluto: pluto.map { PlacementInput(sign: $0) }
+            pluto: pluto.map { PlacementInput(sign: $0) },
+            midheaven: midheaven.map { PlacementInput(sign: $0) }
         )
     }
 

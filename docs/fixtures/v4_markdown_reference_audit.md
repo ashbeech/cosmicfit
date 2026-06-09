@@ -1,6 +1,6 @@
 # V4 Markdown Reference Audit
 
-- Generated: 2026-06-06T14:07:12Z
+- Generated: 2026-06-09T16:45:22Z
 - Markdown reference: `/Users/ash/dev/mobile_apps/cosmicfit/docs/archive/fixtures/v4_markdown_reference.json`
 - Frozen placements: `/Users/ash/dev/mobile_apps/cosmicfit/docs/archive/fixtures/v4_placements.json`
 
@@ -14,7 +14,7 @@
 - Exact triad matches vs markdown: neutrals 100, core 100, accent 0
 - Rows with any variation: 0/100
 - Presented palettes with very-light swatch: 100/100
-- Presented palettes with near-black swatch: 53/100
+- Presented palettes with near-black swatch: 73/100
 - Presented palettes with literal black swatch: 36/100
 - Presented palettes with named off-white swatch: 100/100
 - Average variation strength: 0.0
@@ -28,13 +28,13 @@
 | Bright Winter | 6 | 4 | 6 | 0 | 0 | 6 | 6 | 6 | 6 | 0.0 |
 | Deep Autumn | 20 | 11 | 20 | 0 | 0 | 18 | 20 | 20 | 20 | 0.0 |
 | Deep Winter | 8 | 4 | 8 | 0 | 0 | 8 | 8 | 8 | 8 | 0.0 |
-| Light Spring | 6 | 5 | 6 | 0 | 0 | 0 | 6 | 6 | 0 | 0.0 |
-| Light Summer | 6 | 1 | 6 | 0 | 0 | 0 | 6 | 6 | 0 | 0.0 |
-| Soft Autumn | 9 | 2 | 9 | 0 | 0 | 0 | 9 | 9 | 0 | 0.0 |
-| Soft Summer | 10 | 3 | 10 | 0 | 0 | 0 | 10 | 10 | 0 | 0.0 |
+| Light Spring | 6 | 5 | 6 | 0 | 0 | 0 | 6 | 6 | 1 | 0.0 |
+| Light Summer | 6 | 1 | 6 | 0 | 0 | 0 | 6 | 6 | 3 | 0.0 |
+| Soft Autumn | 9 | 2 | 9 | 0 | 0 | 0 | 9 | 9 | 2 | 0.0 |
+| Soft Summer | 10 | 3 | 10 | 0 | 0 | 0 | 10 | 10 | 7 | 0.0 |
 | True Autumn | 5 | 2 | 5 | 0 | 0 | 0 | 5 | 5 | 5 | 0.0 |
-| True Spring | 8 | 8 | 8 | 0 | 0 | 0 | 8 | 8 | 0 | 0.0 |
-| True Summer | 8 | 3 | 8 | 0 | 0 | 0 | 8 | 8 | 0 | 0.0 |
+| True Spring | 8 | 8 | 8 | 0 | 0 | 0 | 8 | 8 | 2 | 0.0 |
+| True Summer | 8 | 3 | 8 | 0 | 0 | 0 | 8 | 8 | 5 | 0.0 |
 | True Winter | 4 | 3 | 4 | 0 | 0 | 4 | 4 | 4 | 4 | 0.0 |
 
 ## Highest-Variation Rows

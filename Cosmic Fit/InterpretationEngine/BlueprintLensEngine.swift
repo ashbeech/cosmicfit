@@ -1351,9 +1351,9 @@ enum BlueprintLensEngine {
     /// Axis modifier scale for stage1Experimental essence (stage1Experimental mode only).
     private static let stage1AxisEssenceMultiplier = 1.6
     /// Transit boost per matching dominant transit for stage1Experimental essence.
-    private static let stage1TransitEssenceBoost = 0.35
+    private static let stage1TransitEssenceBoost = 0.20
     /// Amplifies sky−chart vibe delta before essence category scoring (Stage 1).
-    private static let stage1EssenceVibeDeltaAmplification = 1.8
+    private static let stage1EssenceVibeDeltaAmplification = 2.5
 
     /// Stage 1 experimental: today's outside-energy essence, with chart anchor for contrast.
     static func deriveStyleEssenceProfileStage1Experimental(
@@ -1377,14 +1377,30 @@ enum BlueprintLensEngine {
                 "visibility": (snapshot.axes.visibility - chart.visibility) / 9.0,
             ]
         }
+        // Use adaptive salience drivers when available; fall back to legacy dominantTransits.
+        let essenceDriverTransits: [DailyTransitSummary]
+        if let drivers = snapshot.skySalience?.topDrivers {
+            essenceDriverTransits = drivers.map {
+                DailyTransitSummary(
+                    transitPlanet: $0.planet,
+                    natalPlanet: $0.natalTarget,
+                    aspect: $0.aspect,
+                    strength: $0.salience
+                )
+            }
+        } else {
+            essenceDriverTransits = Array(snapshot.dominantTransits.prefix(3))
+        }
+
         let todayScores = scoreEssenceCategories(
             normVibe: deltaNorm,
             axesNorm: nil,
             axisDeltaNorm: axisDeltaNorm,
-            dominantTransits: snapshot.dominantTransits,
+            dominantTransits: essenceDriverTransits,
             stage1Mode: true
         )
         var profile = finalizeEssenceScores(todayScores)
+        profile = applyDailyEssenceJitter(profile, dailySeed: snapshot.dailySeed)
 
         let chartScores = scoreEssenceCategories(
             normVibe: chartNorm,
@@ -1402,10 +1418,31 @@ enum BlueprintLensEngine {
         return profile
     }
 
+    /// Seeded perturbation applied to already-normalized scores so close
+    /// categories trade the #1 position across a 60-day window without
+    /// triggering peak-normalization amplification.
+    private static func applyDailyEssenceJitter(
+        _ profile: StyleEssenceProfile, dailySeed: Int
+    ) -> StyleEssenceProfile {
+        let jittered = profile.allScores.enumerated().map { index, score -> StyleEssenceScore in
+            var rng = SeededRandomGenerator(seed: dailySeed &+ index &* 7919)
+            let jitter = Double.random(in: -0.07...0.07, using: &rng)
+            return StyleEssenceScore(
+                category: score.category,
+                score: max(0.0, score.score + jitter)
+            )
+        }
+        let sorted = jittered.sorted { $0.score > $1.score }
+        return StyleEssenceProfile(
+            allScores: jittered,
+            visibleCategories: Array(sorted.prefix(3))
+        )
+    }
+
     private static let stage1TransitEssenceCategories: [String: StyleEssenceCategory] = [
         "Mars": .drama, "Venus": .romantic, "Sun": .magnetic,
-        "Moon": .sensual, "Mercury": .playful, "Jupiter": .maximalist,
-        "Saturn": .minimal, "Uranus": .edgy, "Neptune": .sensual, "Pluto": .edgy,
+        "Moon": .playful, "Mercury": .eclectic, "Jupiter": .maximalist,
+        "Saturn": .minimal, "Uranus": .effortless, "Neptune": .sensual, "Pluto": .edgy,
     ]
 
     // MARK: - Silhouette Profile Derivation

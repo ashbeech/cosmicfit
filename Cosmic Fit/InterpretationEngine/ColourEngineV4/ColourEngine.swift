@@ -108,6 +108,26 @@ enum ColourEngine {
             flags.deepAnchorOverriddenToBlack = true
         }
 
+        // 11c. V4.7 — MC/Moon depth overlay. Evaluates whether
+        // Midheaven and Moon signs indicate depth the family template
+        // underrepresents. May substitute one support slot and/or
+        // the deep anchor. Neutrals and core are never touched.
+        let depthOverlayResult = DepthOverlayResolver.resolve(
+            family: family, input: input, palette: palette
+        )
+        palette = depthOverlayResult.palette
+        let depthOverlay = depthOverlayResult.overlay
+
+        // 11d. V4.8 — Black eligibility. Evaluates whether chart
+        // placements justify upgrading the deep anchor to a black or
+        // near-black swatch. Scorpio/Capricorn prominence, Pluto,
+        // and high-contrast families are the primary signals.
+        let blackResult = BlackEligibilityResolver.resolve(
+            family: family, input: input, palette: palette,
+            winterCompressionApplied: flags.winterCompressionApplied
+        )
+        palette = blackResult.palette
+
         // 12. Assemble trace
         let trace = FamilyDecisionTrace(
             rawScoresBeforeModifiers: rawScoresBase,
@@ -155,7 +175,38 @@ enum ColourEngine {
         )
 
         // Replace template accent band with chart-derived hex values
-        let accentHexes = accentSlots.map(\.hex)
+        var accentHexes = accentSlots.map(\.hex)
+
+        // 14b. V4.7 — Accent depth injection. If MC is a strong depth
+        // sign and the accent band has no dark note, inject one moody
+        // accent from the MC sign's expression table.
+        let accentInjectionResult = DepthOverlayResolver.injectAccentDepth(
+            input: input,
+            family: family,
+            accentHexes: accentHexes,
+            existingPaletteHexes: personalPaletteHexes,
+            previousOverlay: depthOverlay
+        )
+        accentHexes = accentInjectionResult.accentHexes
+        let depthOverlayFinal = accentInjectionResult.overlay
+
+        // 14c. Sync accentSlots when accent injection replaced a slot,
+        // so BlueprintComposer (which reads accentSlots[].hex) displays
+        // the injected dark accent instead of the pre-injection value.
+        var finalAccentSlots = accentSlots
+        if let injection = depthOverlayFinal.accentDepthInjection,
+           injection.slotIndex < finalAccentSlots.count {
+            let original = finalAccentSlots[injection.slotIndex]
+            finalAccentSlots[injection.slotIndex] = AccentSlot(
+                hex: injection.replacementHex,
+                displayName: injection.replacementName,
+                role: original.role,
+                sourcePlanet: original.sourcePlanet,
+                sourceSign: original.sourceSign,
+                saturationOverrideApplied: original.saturationOverrideApplied
+            )
+        }
+
         palette = PaletteTriadV4(
             neutrals: palette.neutrals,
             coreColours: palette.coreColours,
@@ -179,7 +230,9 @@ enum ColourEngine {
             trace: trace,
             luminarySignature: luminarySignature,
             rulerSignature: rulerSignature,
-            accentSlots: accentSlots
+            accentSlots: finalAccentSlots,
+            depthOverlay: depthOverlayFinal,
+            blackEligibility: blackResult.result
         )
     }
 }

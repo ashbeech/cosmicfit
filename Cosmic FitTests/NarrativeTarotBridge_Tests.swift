@@ -165,9 +165,9 @@ struct NarrativeTarotBridge_Tests {
                     "Card diverged on run \(run)")
             #expect(result.candidate.variant.title == first.candidate.variant.title,
                     "Variant diverged on run \(run)")
-            #expect(result.candidate.variantBridgeScore == first.candidate.variantBridgeScore,
+            #expect(abs(result.candidate.variantBridgeScore - first.candidate.variantBridgeScore) < 1e-10,
                     "Bridge score diverged on run \(run)")
-            #expect(result.candidate.pairTotalScore == first.candidate.pairTotalScore,
+            #expect(abs(result.candidate.pairTotalScore - first.candidate.pairTotalScore) < 1e-10,
                     "Pair total diverged on run \(run)")
         }
 

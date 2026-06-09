@@ -31,7 +31,7 @@
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-06-06T14:07:13Z",
+  "generatedAt" : "2026-06-09T16:45:26Z",
   "hardware" : {
     "metalsText" : "Flimsy zips and hollow buttons are an immediate dealbreaker. Hardware is where a garment truly proves its worth, and you naturally gravitate towards metals with literal, physical weight. Rose gold tones provides traditional warmth and deep sensory satisfaction, particularly when the finish is lightly brushed rather than blindingly polished. When you want a sharper, more assertive edge on heavy leather belts or structured bags, soft copper tones cuts through beautifully. Every clasp, rivet, and buckle should yield a deeply satisfying mechanical thunk when you snap it shut.",
     "recommendedMetals" : [
@@ -325,7 +325,7 @@
     "tipText" : "Flimsy prints feel entirely too fussy when your wardrobe thrives on structured wool and deep charcoal. To make balanced geometric work, treat it like a striking graphic rather than a delicate afterthought. Look for exaggerated scales woven directly into heavy jacquard or crisp pressed cotton, giving the motif genuine physical weight. Keep the surrounding garments entirely solid and strictly tailored. This delivers a sharp flash of energy without sacrificing the expensive finish of your silhouette."
   },
   "styleCore" : {
-    "narrativeText" : "You walk into a room and instantly ground it. There is a distinct physical weight to your style, driven by substantial construction and immaculate tailoring, yet you carry it with a dynamic, restless energy. Your wardrobe functions as a collection of serious investments that look best in motion. You gravitate toward clean, architectural shapes that offer sensory security without ever feeling rigid or restrictive. It is a deeply authoritative way of dressing, built for someone who naturally takes the lead but refuses to sacrifice an ounce of physical ease to get there. You arrive looking fully established, carrying the kind of permanent polish that makes everyone else feel like they need to stand a little straighter.\n\nYour natural sense of beauty shows up most powerfully in your public-facing identity — public beauty, polished image, aesthetic reputation, career-enhancing style. Your style instincts lean toward clarity, structure, and visible polish."
+    "narrativeText" : "You walk into a room and instantly ground it. There is a distinct physical weight to your style, driven by substantial construction and immaculate tailoring, yet you carry it with a dynamic, restless energy. Your wardrobe functions as a collection of serious investments that look best in motion. You gravitate toward clean, architectural shapes that offer sensory security without ever feeling rigid or restrictive. It is a deeply authoritative way of dressing, built for someone who naturally takes the lead but refuses to sacrifice an ounce of physical ease to get there. You arrive looking fully established, carrying the kind of permanent polish that makes everyone else feel like they need to stand a little straighter.\n\nYour natural sense of beauty shows up most powerfully in your public-facing identity, public beauty, polished image, aesthetic reputation, career-enhancing style. Your style instincts lean toward clarity, structure, and visible polish."
   },
   "textures" : {
     "avoidTextures" : [
@@ -350,6 +350,6 @@
   "userInfo" : {
     "birthDate" : "1991-07-15T12:00:00Z",
     "birthLocation" : "Synthetic Fixture",
-    "generationDate" : "2026-06-06T14:07:13Z"
+    "generationDate" : "2026-06-09T16:45:26Z"
   }
 }

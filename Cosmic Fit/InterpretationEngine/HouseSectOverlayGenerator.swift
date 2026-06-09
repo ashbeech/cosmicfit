@@ -95,7 +95,7 @@ struct HouseSectOverlayGenerator {
         let domain = ChartAnalyser.houseDomainLabel(for: house) ?? "identity"
         let modifier = placement.modifier
 
-        return "Your natural sense of beauty shows up most powerfully in your \(domainPhrase(domain)) — \(modifier)."
+        return "Your natural sense of beauty shows up most powerfully in your \(domainPhrase(domain)), \(modifier)."
     }
 
     // MARK: - Moon Overlay (-> textures_sweet_spot or occasions_daily)
@@ -178,7 +178,7 @@ struct HouseSectOverlayGenerator {
             return "your wardrobe works hardest when polished pieces double as daily workhorses"
         }
         if pair.contains("identity") && pair.contains("creativity") {
-            return "dressing is a core creative practice — lean into that"
+            return "dressing is a core creative practice; lean into that"
         }
         if pair.contains("partnership") && pair.contains("creativity") {
             return "your style thrives when it balances personal expression with social harmony"
@@ -196,7 +196,7 @@ struct HouseSectOverlayGenerator {
             return "your style communicates most when it signals belonging and individuality at once"
         }
         if pair.contains("public") && pair.contains("identity") {
-            return "your personal brand and public image are deeply linked — dress accordingly"
+            return "your personal brand and public image are deeply linked; dress accordingly"
         }
         if pair.contains("philosophy") {
             return "your wardrobe benefits from globally inspired, intentional choices"

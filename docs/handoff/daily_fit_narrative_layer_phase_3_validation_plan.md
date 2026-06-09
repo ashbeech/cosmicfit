@@ -1,9 +1,48 @@
 # Daily Fit Narrative Layer — Plan 3: Unified Slider Normalization, Cohort Validation & Promotion Gate
 
 **Status:** Audited implementation plan, split from `daily_fit_narrative_layer_handoff.md`.
-**Scope:** Original Phase 3 and Phase 4.
-**Prerequisite:** Plan 2 must be complete, reported, and approved by Ash.
-**Must read first:** `daily_fit_narrative_layer_handoff.md`, `daily_fit_narrative_layer_phase_1_foundation_plan.md`, and `daily_fit_narrative_layer_phase_2_coherence_plan.md`.
+**Scope:** Original Phase 3 and Phase 4 only.
+**Audience:** **Plan 3 of 3** — the final AI developer in the relay. This is the last implementation phase before Ash's promotion decision.
+**Prerequisite:** Plans 1 and 2 complete, committed, and **Ash-approved**. Do not start if either completion doc is missing or shows exit gate failures.
+**Must read first:** `daily_fit_narrative_layer_handoff.md` — Sequential AI developer workflow + §11 testing strategy. Then Plan 1 §7 and Plan 2 §10 (inherited artifacts). You do not need to re-read full Plan 1/2 implementation sections unless verifying a specific dependency.
+
+---
+
+## 0. Your place in the relay
+
+| | |
+|---|---|
+| **You are** | Developer 3 of 3 — six-slider normalization, final cohort validation, cleanup audit |
+| **You inherit** | Full plan-driven stage1 path from Plan 2, cohort + harnesses from Plan 1, all prior fixtures and canvases |
+| **You deliver to Ash** | Six-slider display positions, cohesion harness report, exit canvas, promotion recommendation (if hard gates pass), cleanup audit, completion doc |
+| **You must not** | Redesign `DailyNarrativePlan` or the coherence contract, rebuild salience, promote to production without Ash's separate decision, or delete compatibility code without cleanup audit justification |
+
+**Your workflow (in order):**
+
+1. §0.1 prerequisite verification.
+2. §3 slider normalization implementation.
+3. §4 cohesion harness + validation metrics.
+4. §4.4 exit canvas + §4.5 report review.
+5. §5 cleanup audit (classify only — removal only where tests prove safe).
+6. §7 completion document.
+7. **Stop.** Production promotion is Ash's decision, not yours.
+
+**Completion document (write last):** `docs/handoff/completions/narrative_layer_plan3_completion.md`
+
+Include every §6 exit criterion, four-dimension metric table, promotion recommendation status, and cleanup audit summary.
+
+### 0.1 Prerequisite verification (run before any edits)
+
+- [ ] `docs/handoff/completions/narrative_layer_plan1_completion.md` — passed, Ash-approved
+- [ ] `docs/handoff/completions/narrative_layer_plan2_completion.md` — passed, Ash-approved
+- [ ] `DailyNarrativePlan` routes all stage1 surfaces (Plan 2 §5)
+- [ ] `docs/fixtures/narrative_coherence_report.json` — hard gates at 0 violations
+- [ ] Plan 2 exit canvas exists and matches fixture data
+- [ ] Phase 0 baseline snapshots still committed (needed for before/after)
+- [ ] `ProductionFingerprintGuard_Tests` green
+- [ ] Essence variation targets from Plan 1 still met
+
+If any check fails, **stop and report to Ash.** Do not re-implement Plan 1 or Plan 2 scope unless Ash explicitly asks.
 
 ---
 
@@ -21,7 +60,8 @@ This is a validation and promotion-gate plan. It must not quietly change the nar
 2. No slider may remain stuck in one tertile across the full report window.
 3. Coherence validation must include both intra-element and cross-element contradiction checks.
 4. Production promotion is not automatic, even if metrics pass.
-5. Ash reviews the final report before any production decision.
+5. Ash reviews the final report and exit canvas before any production decision.
+6. Each phase boundary must ship a mandatory Cursor canvas report (tables, pass/fail badges, diagrams) fed from committed JSON fixtures — not chat-only summaries.
 
 ---
 
@@ -137,18 +177,49 @@ Quantitative improvement targets:
 - Accent essence matches top salience driver: at least 70%.
 - Blueprint saturation and contrast baseline respected: at least 95%.
 
-### 4.4 Report Review Process
+### 4.4 Mandatory Plan 3 Exit Canvas (Full Validation)
+
+After the cohesion harness run, create the final validation canvas. This is the primary deliverable Ash uses to decide promotion.
+
+**File:** `/Users/ash/.cursor/projects/Users-ash-dev-mobile-apps-cosmicfit/canvases/narrative-layer-phase3-exit.canvas.tsx`
+
+**Data sources (embed inline — no `fetch`):**
+
+- `docs/fixtures/narrative_cohesion_report.json`
+- `docs/fixtures/slider_range_report.json` (post–Plan 3, all six sliders)
+- Phase 0 baseline copies: `docs/fixtures/slider_range_report.phase0_baseline.json`, `docs/fixtures/essence_stage1_diagnostics.phase0_baseline.json`
+- Plan 2 final `docs/fixtures/narrative_coherence_report.json` (coherence mid-point reference)
+
+**Required sections — four validation dimensions:**
+
+| Dimension | Canvas content |
+|-----------|----------------|
+| **Variation** | Before/after table: essence flip rate, distinct #1, category coverage, palette diversity; slider range coverage for all 6 sliders; stuck-slider count |
+| **Coherence** | Hard gates (0 opposition, 0 cross-surface); mean coherence score; texture/pattern/tarot match rates |
+| **Sky accuracy** | Accent–salience match %, salience-driver validity %, determinism badge |
+| **User applicability** | Palette-from-blueprint %, metal/saturation/contrast baseline respect % |
+
+**Also required:**
+
+- Executive pass/fail row for every hard target in §4.3 and every quantitative target (weak passes flagged separately).
+- Before/after charts spanning Phase 0 baseline → Plan 3 final for essence staleness and slider travel.
+- System architecture diagram: `SkySalienceProfile` → `DailyNarrativePlan` → six sliders + surfaces.
+- Promotion recommendation panel: promote / do not promote / promote with documented exceptions — only if hard targets pass.
+
+Follow the Cursor canvas skill. Omit sections with no data; do not render placeholders.
+
+### 4.5 Report Review Process
 
 Generate:
 
 - `docs/fixtures/narrative_cohesion_report.json`
-- a human-readable `.txt` or `.md` summary
-- a final visual report if useful
-- a promotion recommendation document only if all hard targets pass
+- `docs/fixtures/narrative_cohesion_report.txt` (or `.md` summary)
+- `docs/fixtures/narrative_layer_promotion_recommendation.md` only if all hard targets pass
+- Plan 3 exit canvas (mandatory — not optional)
 
-AI must analyze the report and explicitly call out failures, weak passes, suspicious metrics, or signs of overfitting.
+AI must analyze the report and canvas data and explicitly call out failures, weak passes, suspicious metrics, or signs of overfitting.
 
-Ash must review and approve any promotion recommendation. Passing tests alone is not approval.
+Ash must review the cohesion fixtures, the exit canvas, and any promotion recommendation. Passing tests alone is not approval.
 
 ---
 
@@ -188,6 +259,27 @@ Plan 3 is complete only when:
 - No contradiction defects appear in the final cohort report.
 - Production fingerprint is unchanged.
 - Cleanup audit is complete.
-- Ash has reviewed the final report and made a separate production promotion decision.
+- Plan 3 exit canvas exists with four-dimension tables, before/after charts, hard-gate badges, and promotion panel.
+- AI has linked the exit canvas and summarized pass/fail against every §4.3 target.
+- Ash has reviewed the final fixtures, exit canvas, and made a separate production promotion decision.
 
 Do not promote to production automatically.
+
+---
+
+## 7. Final handoff to Ash (end of relay)
+
+When §6 is satisfied, commit `docs/handoff/completions/narrative_layer_plan3_completion.md`. This closes the three-developer relay. There is no Plan 4 implementation handoff.
+
+| Artifact | Path |
+|----------|------|
+| Plan 1 + Plan 2 completion docs | `docs/handoff/completions/narrative_layer_plan1_completion.md`, `narrative_layer_plan2_completion.md` |
+| Plan 3 completion doc | `docs/handoff/completions/narrative_layer_plan3_completion.md` |
+| Cohesion harness | `tools/narrative_cohesion_harness.py` |
+| Final cohesion report | `docs/fixtures/narrative_cohesion_report.json` |
+| Updated slider report | `docs/fixtures/slider_range_report.json` (all six sliders with displayPosition) |
+| Exit canvas | `canvases/narrative-layer-phase3-exit.canvas.tsx` |
+| Promotion recommendation | `docs/fixtures/narrative_layer_promotion_recommendation.md` (if hard gates pass) |
+| Cleanup audit | recorded in Plan 3 completion doc |
+
+Ash uses the exit canvas and promotion recommendation to decide production promotion. Your session ends when the completion doc is committed — not when production is promoted.

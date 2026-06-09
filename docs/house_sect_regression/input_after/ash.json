@@ -31,7 +31,7 @@
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-06-06T14:07:13Z",
+  "generatedAt" : "2026-06-09T16:45:26Z",
   "hardware" : {
     "metalsText" : "Your most effective hardware relies on a strict clash of high-tech precision and familiar, heavy warmth. Slick, industrial white gold tones gives you a sharp foundation, looking right at home on the oversized zips of technical outerwear or the chunky fastenings of a utility bag. A completely clinical finish leaves you cold, so you break up those stark details with titanium tones. Seek out titanium tones pieces with a battered, nostalgic patina, like a weighty heirloom pendant strung onto a modern synthetic cord, or thick, warm-toned belt buckles. This visual friction keeps your clothes from looking like a uniform, grounding bold shapes in something deeply personal.",
     "recommendedMetals" : [
@@ -79,18 +79,6 @@
           "saturationOverride" : false,
           "sourcePlanet" : "Venus",
           "sourceSign" : "Aquarius"
-        },
-        "role" : "accent"
-      },
-      {
-        "hexValue" : "#5C8383",
-        "name" : "Opal Teal",
-        "provenance" : {
-          "kind" : "chartDerivedAccent",
-          "role" : "Contrast",
-          "saturationOverride" : false,
-          "sourcePlanet" : "Moon",
-          "sourceSign" : "Cancer"
         },
         "role" : "accent"
       }
@@ -283,8 +271,8 @@
         "role" : "support"
       },
       {
-        "hexValue" : "#5B6770",
-        "name" : "slate",
+        "hexValue" : "#6B7B8D",
+        "name" : "mist navy",
         "provenance" : {
           "band" : "support",
           "family" : "Bright Spring",
@@ -324,7 +312,7 @@
     "tipText" : "Your eye for a print naturally gravitates towards something slightly off-kilter but entirely wearable. Take vintage florals and blow up the scale until it reads as a bold, graphic strike rather than a polite repeat. This satisfies your drive for visual volume while retaining a certain familiar ease. Put this loud motif on a comforting, everyday textile like a heavy loopback jersey or a spongy technical knit. The high-tension design brings the heat you crave, while the tactile weight keeps the outfit beautifully anchored."
   },
   "styleCore" : {
-    "narrativeText" : "Your presence thrives on a highly visible tension between the fiercely modern and the deeply familiar. You project an energy that is undeniably forward-looking, yet grounded in pieces that feel emotionally safe to wear. While you draw the eye with unexpected proportions and an unapologetic attitude, your silhouette always retains a distinct element of shelter. You take up space in a room with complete confidence, but there is a clear warmth to your subversion. It is the look of someone pushing the boundaries of taste while keeping themselves entirely protected.\n\nYour natural sense of beauty shows up most powerfully in your daily rituals — daily beauty rituals, functional elegance, beautiful workwear, aesthetic routines. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort."
+    "narrativeText" : "Your presence thrives on a highly visible tension between the fiercely modern and the deeply familiar. You project an energy that is undeniably forward-looking, yet grounded in pieces that feel emotionally safe to wear. While you draw the eye with unexpected proportions and an unapologetic attitude, your silhouette always retains a distinct element of shelter. You take up space in a room with complete confidence, but there is a clear warmth to your subversion. It is the look of someone pushing the boundaries of taste while keeping themselves entirely protected.\n\nYour natural sense of beauty shows up most powerfully in your daily rituals, daily beauty rituals, functional elegance, beautiful workwear, aesthetic routines. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort."
   },
   "textures" : {
     "avoidTextures" : [
@@ -349,6 +337,6 @@
   "userInfo" : {
     "birthDate" : "1984-12-11T00:00:00Z",
     "birthLocation" : "London, UK",
-    "generationDate" : "2026-06-06T14:07:13Z"
+    "generationDate" : "2026-06-09T16:45:26Z"
   }
 }

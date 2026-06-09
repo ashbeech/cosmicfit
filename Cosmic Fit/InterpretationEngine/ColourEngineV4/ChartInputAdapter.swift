@@ -62,6 +62,12 @@ enum ChartInputAdapter {
             ))
         }
 
+        let midheavenDeg = natalChart.midheaven.truncatingRemainder(dividingBy: 30.0)
+        let midheavenSignIndex = Int(natalChart.midheaven / 30.0) % 12
+        let midheavenSignNames = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+                                  "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
+        let midheavenSign = V4ZodiacSign(rawValue: midheavenSignNames[midheavenSignIndex]) ?? .aries
+
         let colourInput = BirthChartColourInput(
             ascendant: PlacementInput(sign: ascendantSign, degree: ascendantDeg),
             venus: placement(for: "Venus", driverKey: .venus, longitude: longitude(for: "Venus")),
@@ -71,7 +77,8 @@ enum ChartInputAdapter {
             mars: placement(for: "Mars", driverKey: .mars, longitude: longitude(for: "Mars")),
             saturn: placement(for: "Saturn", driverKey: .saturn, longitude: longitude(for: "Saturn")),
             jupiter: placement(for: "Jupiter", driverKey: .jupiter, longitude: longitude(for: "Jupiter")),
-            pluto: placement(for: "Pluto", driverKey: .pluto, longitude: longitude(for: "Pluto"))
+            pluto: placement(for: "Pluto", driverKey: .pluto, longitude: longitude(for: "Pluto")),
+            midheaven: PlacementInput(sign: midheavenSign, degree: midheavenDeg)
         )
 
         return AdaptedInput(

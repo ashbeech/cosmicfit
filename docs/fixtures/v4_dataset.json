@@ -1196,7 +1196,7 @@
     "expected" : {
       "accentColours" : [
         "#BA4983",
-        "#8EB6CE"
+        "#00A8AD"
       ],
       "cluster" : "Medium Cool Muted",
       "contrast" : "Low",
@@ -1349,7 +1349,6 @@
     "birthData" : "1985-11-30 21:12",
     "expected" : {
       "accentColours" : [
-        "#8EB6CE",
         "#702E62"
       ],
       "cluster" : "Medium Cool Muted",
@@ -1596,7 +1595,6 @@
     "birthData" : "1991-05-25 12:29",
     "expected" : {
       "accentColours" : [
-        "#731632",
         "#366064"
       ],
       "cluster" : "Medium Warm Muted",

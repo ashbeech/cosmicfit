@@ -2,7 +2,7 @@
 
 **Status:** Plan ready — no code changes shipped yet.
 **Date:** 2026-06-08
-**Audience:** Engineer or AI agent implementing the full phased build.
+**Audience:** Product owner (Ash) and **sequential AI developers** — one developer per phase plan, not one developer for the whole build.
 **Prerequisite reading:**
 - [`daily_fit_narrative_unification_v1_cleanup_v1_1_handoff.md`](daily_fit_narrative_unification_v1_cleanup_v1_1_handoff.md) — current `NarrativeIntentEngine` architecture
 - [`daily_fit_sky_forward_v2_refactor_handoff.md`](daily_fit_sky_forward_v2_refactor_handoff.md) — sky-forward principle and history
@@ -17,7 +17,44 @@
 - [`daily_fit_narrative_layer_phase_2_coherence_plan.md`](daily_fit_narrative_layer_phase_2_coherence_plan.md) — Phase 2 narrative decision layer and hard coherence contract.
 - [`daily_fit_narrative_layer_phase_3_validation_plan.md`](daily_fit_narrative_layer_phase_3_validation_plan.md) — Phase 3/4 six-slider normalization, final validation, cleanup audit, and promotion gate.
 
-Implementation must proceed one split plan at a time. Do not start the next plan until the previous plan's tests, cohort reports, AI analysis, and Ash review are complete.
+## Sequential AI developer workflow (read this first)
+
+Ash assigns **one phase plan to one AI developer at a time**. Each developer implements **only their plan**, then stops. Ash reviews and approves before the next developer receives the next plan.
+
+```
+Plan 1 developer → implement + test + report + completion doc → Ash approves
+        ↓
+Plan 2 developer → verify Plan 1 artifacts → implement + test + report + completion doc → Ash approves
+        ↓
+Plan 3 developer → verify Plan 1–2 artifacts → implement + test + report + completion doc → Ash promotion decision
+```
+
+**Each developer's mandatory sequence:**
+
+1. Read this overview (§1–2 only) plus **their** phase plan in full.
+2. Run the phase plan's **prerequisite verification** checklist — do not code until it passes.
+3. Implement **only** the scope in that plan.
+4. Run unit tests and cohort harnesses specified in that plan.
+5. Commit fixtures, canvases, and code.
+6. Write the phase **completion document** (path in each plan's §0).
+7. Summarize results for Ash with canvas links.
+8. **Stop.** Do not open or implement the next phase plan unless Ash explicitly assigns it.
+
+**Relay contract:** The next developer inherits **committed repo artifacts**, not chat history. If a prerequisite file, canvas, or completion doc is missing, the developer must stop and report the gap to Ash — not improvise or skip ahead.
+
+| Plan | Handoff doc | Completion doc (written at end) |
+|------|-------------|----------------------------------|
+| 1 | `daily_fit_narrative_layer_phase_1_foundation_plan.md` | `docs/handoff/completions/narrative_layer_plan1_completion.md` |
+| 2 | `daily_fit_narrative_layer_phase_2_coherence_plan.md` | `docs/handoff/completions/narrative_layer_plan2_completion.md` |
+| 3 | `daily_fit_narrative_layer_phase_3_validation_plan.md` | `docs/handoff/completions/narrative_layer_plan3_completion.md` |
+
+| Plan | Mandatory canvases (in `~/.cursor/projects/Users-ash-dev-mobile-apps-cosmicfit/canvases/`) |
+|------|----------------------------------------------------------------------------------------------|
+| Plan 1 | `narrative-layer-phase1-baseline.canvas.tsx` (Phase 0 snapshot), `narrative-layer-phase1-exit.canvas.tsx` (before/after salience) |
+| Plan 2 | `narrative-layer-phase2-shadow.canvas.tsx` (pre-routing gate), `narrative-layer-phase2-exit.canvas.tsx` (full routing + coherence) |
+| Plan 3 | `narrative-layer-phase3-exit.canvas.tsx` (four-dimension validation + promotion panel) |
+
+Do not start the next plan until the previous plan's tests, cohort reports, canvases, completion doc, AI analysis, and **Ash's explicit approval** are complete.
 
 The most important audit correction is that aggregate coherence scoring is not sufficient on its own. User-visible contradiction checks are hard zero-tolerance gates: no opposition pairs within essences, and no cross-surface narrative contradictions after routing through `DailyNarrativePlan`.
 

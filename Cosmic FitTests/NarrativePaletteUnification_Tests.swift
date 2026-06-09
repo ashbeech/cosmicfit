@@ -23,12 +23,12 @@ struct NarrativePaletteUnification_Tests {
         #expect(trace.paletteSelectionPath == "narrativeSlots")
     }
 
-    @Test("Briar 2026-05-23 reinforce: ≤2 statement slots")
+    @Test("Briar 2026-05-23 after adaptive salience: ≤2 statement slots")
     func briarMay23PaletteSlots() {
         let date = SkyForwardV2Support.date(year: 2026, month: 5, day: 23)
         let (_, trace, narrativeTrace, _, _) = generateBriarTrace(for: date)
 
-        #expect(narrativeTrace?.chosenRelationship == .reinforce)
+        #expect(narrativeTrace?.chosenRelationship == .stretch)
         #expect(trace.paletteStatementSlotCount <= 2)
         #expect(trace.narrativeBiasApplied == true)
     }

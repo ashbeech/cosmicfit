@@ -2,8 +2,49 @@
 
 **Status:** Audited implementation plan, split from `daily_fit_narrative_layer_handoff.md`.
 **Scope:** Original Phase 2 only.
-**Prerequisite:** Plan 1 must be complete, reported, and approved by Ash.
-**Must read first:** `daily_fit_narrative_layer_handoff.md` and `daily_fit_narrative_layer_phase_1_foundation_plan.md`.
+**Audience:** **Plan 2 of 3** — the second AI developer in a sequential relay. You are not expected to implement Plan 3.
+**Prerequisite:** Plan 1 complete, committed, and **Ash-approved**. Do not start if `docs/handoff/completions/narrative_layer_plan1_completion.md` is missing or shows exit gate failures.
+**Must read first:** `daily_fit_narrative_layer_handoff.md` — Sequential AI developer workflow + §1–2. Then `daily_fit_narrative_layer_phase_1_foundation_plan.md` §7 (your inherited artifacts). Skim Plan 1 exit criteria (§6) to understand what you must preserve.
+
+---
+
+## 0. Your place in the relay
+
+| | |
+|---|---|
+| **You are** | Developer 2 of 3 — `DailyNarrativePlan`, coherence contract, surface routing |
+| **You inherit** | Plan 1 cohort, harnesses, `SkySalienceProfile`, baseline snapshots, Plan 1 completion doc |
+| **You deliver to Developer 3** | Plan-driven stage1 path for all surfaces, coherence harness + report, shadow + exit canvases, completion doc |
+| **You must not** | Rebuild the salience model, extend six-slider `displayPosition` normalization, run final promotion validation, or delete production-compatible types without documented reason |
+
+**Your workflow (in order):**
+
+1. §0.1 prerequisite verification — all Plan 1 artifacts present; stop if not.
+2. §3 coherence contract — implement before routing.
+3. §4 implementation — shadow mode first; Ash approves shadow canvas before §5 routing.
+4. §5 surface routing — one group at a time with harness re-runs.
+5. Tests (§7) + report (§8) + canvases (§4.6, §8.1).
+6. §10 completion document.
+7. **Stop.** Ash assigns Plan 3 to a new developer.
+
+**Completion document (write last):** `docs/handoff/completions/narrative_layer_plan2_completion.md`
+
+Same structure as Plan 1 completion doc (see Plan 1 §0), adapted for Plan 2 §9 exit criteria. Include shadow-mode approval date and per-surface routing status table.
+
+### 0.1 Prerequisite verification (run before any edits)
+
+Confirm every item exists and Plan 1 exit metrics still pass:
+
+- [ ] `docs/handoff/completions/narrative_layer_plan1_completion.md` — all §6 gates passed, Ash approval recorded
+- [ ] `inspector/Resources/synthetic_cohort.json` and `tools/synthetic_cohort.py`
+- [ ] `tools/slider_range_harness.py` runs successfully
+- [ ] `SkySalienceProfile` / `computeSkySalience` on stage1 path
+- [ ] Phase 0 baseline snapshots committed
+- [ ] Plan 1 exit canvases render real data
+- [ ] `ProductionFingerprintGuard_Tests` green
+- [ ] Essence flip rate ≥40%, distinct #1 ≥6, opposition violations = 0 (re-run harness if unsure)
+
+If any check fails, **stop and report to Ash.** Do not re-implement Plan 1 scope unless Ash explicitly asks.
 
 ---
 
@@ -138,7 +179,38 @@ Before using the plan output:
 - Do not route surfaces yet.
 - Run the cohort harness for at least 60 days.
 
-Ash must review shadow-mode report data before routing begins.
+Ash must review shadow-mode report data and the shadow-mode canvas (§4.5) before routing begins.
+
+### 4.5 Build Coherence Cohort Harness
+
+Create `tools/narrative_coherence_harness.py` (or extend an existing harness if one already covers plan diagnostics).
+
+Requirements:
+
+- Run at least 200 cohort users across at least 60 consecutive days.
+- Capture `DailyNarrativePlan`, rejected candidates, coherence validation results, and final routed payloads.
+- Output `docs/fixtures/narrative_coherence_report.json` and `.txt`.
+- Re-run after each surface routing step in §5; commit dated snapshots when metrics shift materially (e.g. `narrative_coherence_report.after_essence.json`).
+
+### 4.6 Mandatory Shadow-Mode Canvas
+
+After shadow-mode harness run, before any surface routing:
+
+**File:** `/Users/ash/.cursor/projects/Users-ash-dev-mobile-apps-cosmicfit/canvases/narrative-layer-phase2-shadow.canvas.tsx`
+
+**Data source:** `docs/fixtures/narrative_coherence_report.json` (shadow-mode section)
+
+**Required sections:**
+
+| Section | Content |
+|---------|---------|
+| Plan generation summary | Plans generated, candidates rejected by reason (table + bar chart) |
+| Hard gate badges | Essence opposition violations, cross-surface violations — must show 0 before routing |
+| Coherence score | Mean score with note that score alone is insufficient |
+| Variation retained | Essence flip rate and distinct #1 vs Plan 1 targets |
+| Shadow vs legacy divergence | % of days plan would change essence, palette, or tarot vs old path |
+
+Ash approves routing only after this canvas shows zero hard-gate violations in shadow mode.
 
 ---
 
@@ -197,7 +269,7 @@ End state for Plan 2:
 
 - Old narrative components may still compile.
 - Stage1 plan-driven path must not call old post-hoc conflict correction.
-- Any retained old code must have a named reason: production compatibility, diagnostic comparison, or planned removal after Plan 4.
+- Any retained old code must have a named reason: production compatibility, diagnostic comparison, or planned removal after Plan 3 cleanup.
 
 Add a test or static assertion that the stage1 plan-driven path does not call the old essence conflict resolver.
 
@@ -239,6 +311,35 @@ For the cohort across at least 60 days, report:
 
 The report must clearly identify any remaining old code dependency.
 
+Commit final output as `docs/fixtures/narrative_coherence_report.json` and `.txt`.
+
+### 8.1 Mandatory Plan 2 Exit Canvas
+
+At Plan 2 completion, after all surfaces are routed:
+
+**File:** `/Users/ash/.cursor/projects/Users-ash-dev-mobile-apps-cosmicfit/canvases/narrative-layer-phase2-exit.canvas.tsx`
+
+**Data sources (embed inline — no `fetch`):**
+
+- Final `docs/fixtures/narrative_coherence_report.json`
+- Plan 1 exit metrics (from `docs/fixtures/essence_stage1_diagnostics.json` or phase0/phase1 baseline copies) for variation comparison
+
+**Required sections:**
+
+| Section | Content |
+|---------|---------|
+| Executive pass/fail row | Badges for every Plan 2 exit criterion in §9 |
+| Hard gate panel | Opposition violations (0), cross-surface violations (0) — prominent pass/fail |
+| Surface routing checklist | Table: essence, palette, tarot, vibrancy/contrast, silhouette, metal, textures, pattern — each row shows plan-driven vs legacy guardrail |
+| Rejected candidates | Breakdown by rejection reason |
+| Match rates | Tarot variant, palette directive, slider target — table with targets |
+| Coherence score | Mean with dimension breakdown if available |
+| Variation retained | Side-by-side with Plan 1: flip rate, distinct #1, category coverage |
+| Legacy dependency callout | Surfaces or code paths still calling old guardrails (must be none in stage1 plan path) |
+| Narrative flow diagram | `skySalience` → `DailyNarrativePlan` → routed surfaces (labeled boxes) |
+
+AI must link the canvas in the phase completion summary. Ash reviews this canvas before approving Plan 3.
+
 ---
 
 ## 9. Exit Gate For Plan 2
@@ -253,7 +354,30 @@ Plan 2 is complete only when:
 - Old stage1 post-hoc guardrails are no longer called in the plan-driven path.
 - Retained old code is documented with a concrete reason.
 - Production fingerprint is unchanged.
-- AI has summarized the cohort report.
-- Ash has reviewed the report and explicitly approved moving to Plan 3.
+- `narrative_coherence_report` fixture committed.
+- Shadow-mode canvas reviewed and zero hard-gate violations confirmed before routing.
+- Plan 2 exit canvas exists with routing checklist, hard-gate panel, and pass/fail badges.
+- AI has summarized the cohort report and linked both Plan 2 canvases.
+- Ash has reviewed the fixtures and both canvases and explicitly approved moving to Plan 3.
 
 Do not proceed to Plan 3 without this approval.
+
+---
+
+## 10. Handoff to Plan 3 developer
+
+When §9 is satisfied, commit `docs/handoff/completions/narrative_layer_plan2_completion.md`. Developer 3 will verify these exist before coding:
+
+| Artifact | Path |
+|----------|------|
+| Plan 1 completion doc | `docs/handoff/completions/narrative_layer_plan1_completion.md` |
+| Plan 2 completion doc | `docs/handoff/completions/narrative_layer_plan2_completion.md` |
+| Narrative plan types | `DailyNarrativePlan`, `DailyNarrativeSelector`, `DailyNarrativeCoherence` |
+| Coherence harness | `tools/narrative_coherence_harness.py` |
+| Coherence report | `docs/fixtures/narrative_coherence_report.json` |
+| Shadow canvas | `canvases/narrative-layer-phase2-shadow.canvas.tsx` |
+| Exit canvas | `canvases/narrative-layer-phase2-exit.canvas.tsx` |
+| All surfaces routed | stage1 plan-driven path for essence → pattern (§5) |
+| Variation preserved | essence metrics still meet Plan 1 targets |
+
+Your session ends when the completion doc is committed and Ash has approved. A different AI developer receives `daily_fit_narrative_layer_phase_3_validation_plan.md`.
