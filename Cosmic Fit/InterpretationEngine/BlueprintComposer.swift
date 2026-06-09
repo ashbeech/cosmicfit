@@ -195,7 +195,9 @@ struct BlueprintComposer {
 
         let diagnostics = BlueprintDiagnostics.report(
             from: colourResult,
-            adaptedInput: adapted
+            adaptedInput: adapted,
+            midheavenSign: analysis.midheavenSign,
+            midheavenOverlayApplied: true
         )
 
         return BlueprintComposeResult(blueprint: blueprint, diagnostics: diagnostics)
@@ -546,6 +548,7 @@ struct BlueprintComposer {
         let venusH = analysis.planetHouses["Venus"].map { "H\($0)" } ?? "—"
         let moonH = analysis.planetHouses["Moon"].map { "H\($0)" } ?? "—"
         print("\(p) Venus house: \(venusH)   Moon house: \(moonH)")
+        print("\(p) Midheaven sign: \(analysis.midheavenSign)")
         print("\(p) style_core append: \(overlays.styleCoreAppend != nil ? "YES (\(overlays.styleCoreAppend!.prefix(60))…)" : "none")")
         print("\(p) textures_sweet_spot append: \(overlays.texturesSweetSpotAppend != nil ? "YES (\(overlays.texturesSweetSpotAppend!.prefix(60))…)" : "none")")
         print("\(p) occasions_work append: \(overlays.occasionsWorkAppend != nil ? "YES (\(overlays.occasionsWorkAppend!.prefix(60))…)" : "none")")
