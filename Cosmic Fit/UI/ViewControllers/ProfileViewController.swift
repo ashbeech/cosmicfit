@@ -49,6 +49,10 @@ class ProfileViewController: UIViewController {
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     private let mainStack = UIStackView()
     private let topFormDivider = UIView()
+    private let preferencesSectionDivider = UIView()
+    private let preferencesSectionTitleLabel = UILabel()
+    private let showMasculineFeminineLabel = UILabel()
+    private let showMasculineFeminineSwitch = UISwitch()
     private let dangerSectionDivider = UIView()
     
     // Callback for dismissal request
@@ -85,6 +89,7 @@ class ProfileViewController: UIViewController {
         setupConstraints()
         setupKeyboardDismissal()
         loadCurrentUserData()
+        showMasculineFeminineSwitch.isOn = UserProfileStorage.shared.showMasculineFeminineSliderInDailyFit()
 
         NotificationCenter.default.addObserver(
             self,
@@ -242,6 +247,10 @@ class ProfileViewController: UIViewController {
         unknownTimeCheckbox.isSelected.toggle()
         birthTimeIsUnknown = unknownTimeCheckbox.isSelected
         updateBirthTimeFieldState()
+    }
+
+    @objc private func showMasculineFeminineSwitchChanged() {
+        UserProfileStorage.shared.setShowMasculineFeminineSliderInDailyFit(showMasculineFeminineSwitch.isOn)
     }
     
     private func updateBirthTimeFieldState() {
@@ -422,6 +431,52 @@ class ProfileViewController: UIViewController {
         mainStack.addArrangedSubview(verticalFieldStack(label: locationLabel, field: locationAutocompleteView))
         
         mainStack.setCustomSpacing(28, after: mainStack.arrangedSubviews.last!)
+        
+        preferencesSectionDivider.translatesAutoresizingMaskIntoConstraints = false
+        preferencesSectionDivider.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
+        preferencesSectionDivider.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        mainStack.addArrangedSubview(preferencesSectionDivider)
+        mainStack.setCustomSpacing(20, after: preferencesSectionDivider)
+        
+        preferencesSectionTitleLabel.text = "Your Preferences"
+        preferencesSectionTitleLabel.font = CosmicFitTheme.Typography.dmSansFont(
+            size: CosmicFitTheme.Typography.FontSizes.callout,
+            weight: .semibold
+        )
+        preferencesSectionTitleLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
+        preferencesSectionTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        mainStack.addArrangedSubview(preferencesSectionTitleLabel)
+        mainStack.setCustomSpacing(16, after: preferencesSectionTitleLabel)
+        
+        showMasculineFeminineLabel.text = "Show masculine/feminine style spectrum in Daily Fit"
+        showMasculineFeminineLabel.font = CosmicFitTheme.Typography.dmSansFont(
+            size: CosmicFitTheme.Typography.FontSizes.callout,
+            weight: .regular
+        )
+        showMasculineFeminineLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
+        showMasculineFeminineLabel.numberOfLines = 0
+        showMasculineFeminineLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        showMasculineFeminineSwitch.onTintColor = CosmicFitTheme.Colours.cosmicBlue
+        showMasculineFeminineSwitch.translatesAutoresizingMaskIntoConstraints = false
+        showMasculineFeminineSwitch.addTarget(
+            self,
+            action: #selector(showMasculineFeminineSwitchChanged),
+            for: .valueChanged
+        )
+        
+        let masculineFemininePreferenceRow = UIStackView(arrangedSubviews: [
+            showMasculineFeminineLabel,
+            showMasculineFeminineSwitch
+        ])
+        masculineFemininePreferenceRow.axis = .horizontal
+        masculineFemininePreferenceRow.spacing = 12
+        masculineFemininePreferenceRow.alignment = .center
+        showMasculineFeminineSwitch.setContentHuggingPriority(.required, for: .horizontal)
+        showMasculineFeminineSwitch.setContentCompressionResistancePriority(.required, for: .horizontal)
+        mainStack.addArrangedSubview(masculineFemininePreferenceRow)
+        
+        mainStack.setCustomSpacing(28, after: masculineFemininePreferenceRow)
         
         mainStack.addArrangedSubview(updateButton)
         mainStack.setCustomSpacing(34, after: updateButton)
