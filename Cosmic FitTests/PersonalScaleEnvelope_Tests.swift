@@ -168,10 +168,9 @@ struct PersonalScaleEnvelopeTests {
 
     // MARK: P1 — Contrast medium + Stage 1 coeffs
 
-    @Test("P1: Contrast medium baseline + Stage 1 — floor/ceiling match §6.2 ±0.001")
+    @Test("P1: Contrast medium baseline + Stage 1 — floor/ceiling match practical half-span")
     func contrastMediumStage1() {
         let cal = EnvelopeFixtures.stage1Calibration
-        let coeff = cal.stage2Sensitivity.contrastCoeff // 0.55
         let presentation = PersonalScaleEnvelopeCalculator.makePresentation(
             blueprint: EnvelopeFixtures.mediumBlueprint,
             calibration: cal,
@@ -180,8 +179,9 @@ struct PersonalScaleEnvelopeTests {
         )
         let env = presentation.contrast
         #expect(env.baseline == 0.50)
-        let expectedFloor = max(0.0, 0.50 + (-Stage1ScaleSensitivity.contrastMaxBlendNorm * coeff))
-        let expectedCeiling = min(1.0, 0.50 + (Stage1ScaleSensitivity.contrastMaxBlendNorm * coeff))
+        let halfSpan = Stage1ScaleSensitivity.contrastPracticalHalfSpan
+        let expectedFloor = max(0.0, 0.50 - halfSpan)
+        let expectedCeiling = min(1.0, 0.50 + halfSpan)
         #expect(abs(env.floor - expectedFloor) < 0.001,
                 "Floor: \(env.floor) vs expected \(expectedFloor)")
         #expect(abs(env.ceiling - expectedCeiling) < 0.001,
@@ -210,8 +210,7 @@ struct PersonalScaleEnvelopeTests {
                 "Soft floor \(softEnv.floor) should be < rich floor \(richEnv.floor)")
         #expect(softEnv.baseline != richEnv.baseline)
 
-        // Stage 1: wide modulation (±0.92) clamps both floors to 0;
-        // difference shows in baseline and baselinePosition
+        // Stage 1: calibrated practical bounds (Plan 3); floors differ because baselines differ
         let s1Cal = EnvelopeFixtures.stage1Calibration
         let softS1 = PersonalScaleEnvelopeCalculator.makePresentation(
             blueprint: softBP, calibration: s1Cal, mode: .stage1Experimental,
@@ -347,35 +346,40 @@ struct PersonalScaleEnvelopeTests {
 
     // MARK: P10 — Envelope uses full analytical ceiling (soften caps are runtime-only)
 
-    @Test("P10: Envelope ceiling is analytical max — soften caps apply only at runtime via ScaleDirective")
-    func envelopeCeilingIsAnalyticalMax() {
+    @Test("P10: Contrast uses calibrated practical bounds (Plan 4); Vibrancy uses calibrated practical bounds (Plan 3)")
+    func envelopeCeilingBehavior() {
         let cal = EnvelopeFixtures.stage1Calibration
-        let coeff = cal.stage2Sensitivity.contrastCoeff
 
-        // Briar (high contrast, baseline 0.75): ceiling = 0.75 + 0.50*coeff = 1.025 → clamped to 1.0
+        // Briar (high contrast, baseline 0.75): ceiling = 0.75 + halfSpan
         let briarEnv = PersonalScaleEnvelopeCalculator.makePresentation(
             blueprint: EnvelopeFixtures.briarBlueprint, calibration: cal,
             mode: .stage1Experimental, vibrancy: 0.5, contrast: 0.5, metalTone: 0.5
         )
-        let expectedBriarCeiling = min(1.0, 0.75 + Stage1ScaleSensitivity.contrastMaxBlendNorm * coeff)
+        let contrastHalfSpan = Stage1ScaleSensitivity.contrastPracticalHalfSpan
+        let expectedBriarCeiling = min(1.0, 0.75 + contrastHalfSpan)
         #expect(abs(briarEnv.contrast.ceiling - expectedBriarCeiling) < 0.001,
-                "Briar contrast ceiling \(briarEnv.contrast.ceiling) should be analytical max \(expectedBriarCeiling)")
+                "Briar contrast ceiling \(briarEnv.contrast.ceiling) should be baseline+halfSpan \(expectedBriarCeiling)")
         #expect(briarEnv.contrast.ceiling > 0.70,
                 "Contrast ceiling must exceed softenContrastCap (0.70) — cap is runtime-only")
 
-        // Vibrancy (rich, baseline 0.75): analytical max clamps to 1.0
-        #expect(briarEnv.vibrancy.ceiling == 1.0,
-                "Vibrancy ceiling \(briarEnv.vibrancy.ceiling) should be 1.0 (analytical max clamped)")
-        // Vibrancy floor for rich baseline: 0.75 + minMod ≈ 0.75 - 0.92 → clamped to 0.0
-        #expect(briarEnv.vibrancy.floor == 0.0)
+        // Vibrancy (rich, baseline 0.75): Plan 3 calibrated practical envelope
+        let halfSpan = Stage1ScaleSensitivity.vibrancyPracticalHalfSpan
+        let expectedVibrancyCeiling = min(1.0, 0.75 + halfSpan)
+        let expectedVibrancyFloor = max(0.0, 0.75 - halfSpan)
+        #expect(abs(briarEnv.vibrancy.ceiling - expectedVibrancyCeiling) < 0.001,
+                "Vibrancy ceiling \(briarEnv.vibrancy.ceiling) should be baseline+halfSpan \(expectedVibrancyCeiling)")
+        #expect(abs(briarEnv.vibrancy.floor - expectedVibrancyFloor) < 0.001,
+                "Vibrancy floor \(briarEnv.vibrancy.floor) should be baseline-halfSpan \(expectedVibrancyFloor)")
 
-        // Medium blueprint vibrancy: floor=0, ceiling=1.0 (no soften cap)
+        // Medium blueprint vibrancy: calibrated around 0.50
         let medEnv = PersonalScaleEnvelopeCalculator.makePresentation(
             blueprint: EnvelopeFixtures.mediumBlueprint, calibration: cal,
             mode: .stage1Experimental, vibrancy: 0.5, contrast: 0.5, metalTone: 0.5
         )
-        #expect(medEnv.vibrancy.ceiling == 1.0,
-                "Muted vibrancy ceiling \(medEnv.vibrancy.ceiling) should be 1.0 (full analytical range)")
+        #expect(abs(medEnv.vibrancy.ceiling - (0.50 + halfSpan)) < 0.001,
+                "Muted vibrancy ceiling \(medEnv.vibrancy.ceiling) should be 0.50+halfSpan")
+        #expect(abs(medEnv.vibrancy.floor - (0.50 - halfSpan)) < 0.001,
+                "Muted vibrancy floor \(medEnv.vibrancy.floor) should be 0.50-halfSpan")
     }
 
     // MARK: - Additional edge cases
@@ -453,6 +457,188 @@ struct PersonalScaleEnvelopeTests {
                     #expect(env.metalTone.displayPosition >= 0.0 && env.metalTone.displayPosition <= 1.0)
                 }
             }
+        }
+    }
+}
+
+// MARK: - Plan 3 Silhouette Envelope Tests
+
+@Suite
+struct SilhouetteEnvelopeTests {
+
+    @Test("S1: Silhouette envelope floor/ceiling centered on chart anchor with practical half-span")
+    func silhouetteEnvelopeUsesCommittedConstants() {
+        let sil = SilhouetteProfile(
+            masculineFeminine: 0.6, angularRounded: 0.4, structuredDraped: 0.5,
+            chartAnchorMF: 0.55, chartAnchorAR: 0.45, chartAnchorSD: 0.50
+        )
+        let env = PersonalScaleEnvelopeCalculator.makePresentation(
+            blueprint: EnvelopeFixtures.briarBlueprint,
+            calibration: EnvelopeFixtures.stage1Calibration,
+            mode: .stage1Experimental,
+            vibrancy: 0.5, contrast: 0.5, metalTone: 0.5,
+            silhouette: sil
+        )
+        let mf = env.masculineFeminine!
+        let ar = env.angularRounded!
+        let sd = env.structuredDraped!
+
+        let mfHalf = Stage1ScaleSensitivity.silhouetteMFARPracticalHalfSpan
+        let sdHalf = Stage1ScaleSensitivity.silhouetteSDPracticalHalfSpan
+
+        #expect(abs(mf.floor - max(0.0, 0.55 - mfHalf)) < 0.001)
+        #expect(abs(mf.ceiling - min(1.0, 0.55 + mfHalf)) < 0.001)
+        #expect(abs(ar.floor - max(0.0, 0.45 - mfHalf)) < 0.001)
+        #expect(abs(ar.ceiling - min(1.0, 0.45 + mfHalf)) < 0.001)
+        #expect(abs(sd.floor - max(0.0, 0.50 - sdHalf)) < 0.001)
+        #expect(abs(sd.ceiling - min(1.0, 0.50 + sdHalf)) < 0.001)
+    }
+
+    @Test("S2: Silhouette envelope baseline matches chart anchor")
+    func silhouetteBaselineIsChartAnchor() {
+        let sil = SilhouetteProfile(
+            masculineFeminine: 0.6, angularRounded: 0.4, structuredDraped: 0.7,
+            chartAnchorMF: 0.35, chartAnchorAR: 0.60, chartAnchorSD: 0.45
+        )
+        let env = PersonalScaleEnvelopeCalculator.makePresentation(
+            blueprint: EnvelopeFixtures.mediumBlueprint,
+            calibration: EnvelopeFixtures.stage1Calibration,
+            mode: .stage1Experimental,
+            vibrancy: 0.5, contrast: 0.5, metalTone: 0.5,
+            silhouette: sil
+        )
+        #expect(env.masculineFeminine!.baseline == 0.35)
+        #expect(env.angularRounded!.baseline == 0.60)
+        #expect(env.structuredDraped!.baseline == 0.45)
+    }
+
+    @Test("S3: Silhouette displayPosition at floor ≈ 0.0")
+    func silhouetteDisplayPositionAtFloor() {
+        let sil = SilhouetteProfile(
+            masculineFeminine: Stage1ScaleSensitivity.silhouetteFloor,
+            angularRounded: 0.5, structuredDraped: 0.5,
+            chartAnchorMF: 0.5, chartAnchorAR: 0.5, chartAnchorSD: 0.5
+        )
+        let env = PersonalScaleEnvelopeCalculator.makePresentation(
+            blueprint: EnvelopeFixtures.mediumBlueprint,
+            calibration: EnvelopeFixtures.stage1Calibration,
+            mode: .stage1Experimental,
+            vibrancy: 0.5, contrast: 0.5, metalTone: 0.5,
+            silhouette: sil
+        )
+        #expect(abs(env.masculineFeminine!.displayPosition - 0.0) < 0.001)
+    }
+
+    @Test("S4: Silhouette displayPosition at ceiling ≈ 1.0")
+    func silhouetteDisplayPositionAtCeiling() {
+        let sil = SilhouetteProfile(
+            masculineFeminine: Stage1ScaleSensitivity.silhouetteCeiling,
+            angularRounded: 0.5, structuredDraped: 0.5,
+            chartAnchorMF: 0.5, chartAnchorAR: 0.5, chartAnchorSD: 0.5
+        )
+        let env = PersonalScaleEnvelopeCalculator.makePresentation(
+            blueprint: EnvelopeFixtures.mediumBlueprint,
+            calibration: EnvelopeFixtures.stage1Calibration,
+            mode: .stage1Experimental,
+            vibrancy: 0.5, contrast: 0.5, metalTone: 0.5,
+            silhouette: sil
+        )
+        #expect(abs(env.masculineFeminine!.displayPosition - 1.0) < 0.001)
+    }
+
+    @Test("S5: Silhouette degenerate (value outside bounds) clamps to 0 or 1")
+    func silhouetteClampsBeyondBounds() {
+        let sil = SilhouetteProfile(
+            masculineFeminine: 0.01, angularRounded: 0.99, structuredDraped: 0.5,
+            chartAnchorMF: 0.5, chartAnchorAR: 0.5, chartAnchorSD: 0.5
+        )
+        let env = PersonalScaleEnvelopeCalculator.makePresentation(
+            blueprint: EnvelopeFixtures.mediumBlueprint,
+            calibration: EnvelopeFixtures.stage1Calibration,
+            mode: .stage1Experimental,
+            vibrancy: 0.5, contrast: 0.5, metalTone: 0.5,
+            silhouette: sil
+        )
+        #expect(env.masculineFeminine!.displayPosition == 0.0)
+        #expect(env.angularRounded!.displayPosition == 1.0)
+    }
+
+    @Test("S6: No silhouette input → nil envelopes (legacy compat)")
+    func noSilhouetteInputProducesNilEnvelopes() {
+        let env = PersonalScaleEnvelopeCalculator.makePresentation(
+            blueprint: EnvelopeFixtures.mediumBlueprint,
+            calibration: EnvelopeFixtures.stage1Calibration,
+            mode: .stage1Experimental,
+            vibrancy: 0.5, contrast: 0.5, metalTone: 0.5
+        )
+        #expect(env.masculineFeminine == nil)
+        #expect(env.angularRounded == nil)
+        #expect(env.structuredDraped == nil)
+    }
+
+    @Test("S7: Stage1 payloads include six scale envelopes")
+    func stage1PayloadIncludesSixEnvelopes() {
+        let bp = EnvelopeFixtures.briarBlueprint
+        let snapshot = DailyEnergySnapshot.fixture()
+        let cal = DailyFitEngineRegistry.calibration(for: DailyFitEngineRegistry.stage1ExperimentalId)
+        let engineId = DailyFitEngineRegistry.stage1ExperimentalId
+        let payload = DailyFitPipeline.generate(
+            blueprint: bp, snapshot: snapshot, calibration: cal, dailyFitEngineId: engineId
+        )
+        let sp = payload.scalePresentation!
+        #expect(sp.masculineFeminine != nil)
+        #expect(sp.angularRounded != nil)
+        #expect(sp.structuredDraped != nil)
+        #expect(sp.masculineFeminine!.kind == .masculineFeminine)
+        #expect(sp.angularRounded!.kind == .angularRounded)
+        #expect(sp.structuredDraped!.kind == .structuredDraped)
+    }
+
+    @Test("S8: Legacy payloads without silhouette envelopes decode safely")
+    func legacyPayloadDecodesSafely() throws {
+        let presentation = PersonalScalePresentation(
+            vibrancy: PersonalScaleEnvelope(
+                kind: .vibrancy, floor: 0.0, ceiling: 0.72,
+                baseline: 0.25, value: 0.4,
+                displayPosition: 0.556, baselinePosition: 0.347
+            ),
+            contrast: PersonalScaleEnvelope(
+                kind: .contrast, floor: 0.3, ceiling: 0.7,
+                baseline: 0.5, value: 0.55,
+                displayPosition: 0.625, baselinePosition: 0.5
+            ),
+            metalTone: PersonalScaleEnvelope(
+                kind: .metalTone, floor: 0.2, ceiling: 0.9,
+                baseline: 0.5, value: 0.6,
+                displayPosition: 0.571, baselinePosition: 0.429
+            ),
+            masculineFeminine: nil,
+            angularRounded: nil,
+            structuredDraped: nil
+        )
+        let encoder = JSONEncoder()
+        let data = try encoder.encode(presentation)
+        let decoder = JSONDecoder()
+        let decoded = try decoder.decode(PersonalScalePresentation.self, from: data)
+        #expect(decoded.masculineFeminine == nil)
+        #expect(decoded.angularRounded == nil)
+        #expect(decoded.structuredDraped == nil)
+        #expect(decoded.vibrancy == presentation.vibrancy)
+    }
+
+    @Test("S9: Vibrancy calibrated envelope span ≈ 0.44 for all baselines")
+    func vibrancyCalibratedEnvelopeSpan() {
+        let cal = EnvelopeFixtures.stage1Calibration
+        let halfSpan = Stage1ScaleSensitivity.vibrancyPracticalHalfSpan
+
+        for bp in [EnvelopeFixtures.briarBlueprint, EnvelopeFixtures.mediumBlueprint, EnvelopeFixtures.softBlueprint()] {
+            let env = PersonalScaleEnvelopeCalculator.makePresentation(
+                blueprint: bp, calibration: cal, mode: .stage1Experimental,
+                vibrancy: 0.5, contrast: 0.5, metalTone: 0.5
+            )
+            let span = env.vibrancy.ceiling - env.vibrancy.floor
+            #expect(abs(span - halfSpan * 2) < 0.01 || span < halfSpan * 2,
+                    "Vibrancy span \(span) should be ≈ \(halfSpan * 2) or less (clamped to [0,1])")
         }
     }
 }

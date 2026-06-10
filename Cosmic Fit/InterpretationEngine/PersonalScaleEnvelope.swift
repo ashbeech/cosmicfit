@@ -16,6 +16,9 @@ enum PersonalScaleKind: String, Codable, Equatable {
     case vibrancy
     case contrast
     case metalTone
+    case masculineFeminine
+    case angularRounded
+    case structuredDraped
 }
 
 struct PersonalScaleEnvelope: Codable, Equatable {
@@ -32,6 +35,9 @@ struct PersonalScalePresentation: Codable, Equatable {
     let vibrancy: PersonalScaleEnvelope
     let contrast: PersonalScaleEnvelope
     let metalTone: PersonalScaleEnvelope
+    let masculineFeminine: PersonalScaleEnvelope?
+    let angularRounded: PersonalScaleEnvelope?
+    let structuredDraped: PersonalScaleEnvelope?
 }
 
 // MARK: - Calculator
@@ -47,12 +53,27 @@ enum PersonalScaleEnvelopeCalculator {
         mode: DailyFitEngineMode,
         vibrancy: Double,
         contrast: Double,
-        metalTone: Double
+        metalTone: Double,
+        silhouette: SilhouetteProfile? = nil
     ) -> PersonalScalePresentation {
-        PersonalScalePresentation(
+        let silhouetteEnvelopes: (PersonalScaleEnvelope, PersonalScaleEnvelope, PersonalScaleEnvelope)?
+        if let sil = silhouette {
+            silhouetteEnvelopes = (
+                silhouetteEnvelope(kind: .masculineFeminine, value: sil.masculineFeminine, baseline: sil.chartAnchorMF ?? 0.5),
+                silhouetteEnvelope(kind: .angularRounded, value: sil.angularRounded, baseline: sil.chartAnchorAR ?? 0.5),
+                silhouetteEnvelope(kind: .structuredDraped, value: sil.structuredDraped, baseline: sil.chartAnchorSD ?? 0.5)
+            )
+        } else {
+            silhouetteEnvelopes = nil
+        }
+
+        return PersonalScalePresentation(
             vibrancy: vibrancyEnvelope(blueprint: blueprint, calibration: calibration, mode: mode, value: vibrancy),
             contrast: contrastEnvelope(blueprint: blueprint, calibration: calibration, mode: mode, value: contrast),
-            metalTone: metalToneEnvelope(blueprint: blueprint, calibration: calibration, mode: mode, value: metalTone)
+            metalTone: metalToneEnvelope(blueprint: blueprint, calibration: calibration, mode: mode, value: metalTone),
+            masculineFeminine: silhouetteEnvelopes?.0,
+            angularRounded: silhouetteEnvelopes?.1,
+            structuredDraped: silhouetteEnvelopes?.2
         )
     }
 
@@ -83,20 +104,20 @@ enum PersonalScaleEnvelopeCalculator {
         }
 
         let coeff = calibration.stage2Sensitivity.contrastCoeff
-        let minModulation: Double
-        let maxModulation: Double
+        let floor: Double
+        let ceiling: Double
 
         switch mode {
         case .standard:
-            minModulation = -0.4 * coeff
-            maxModulation = 0.5 * coeff
+            let minModulation = -0.4 * coeff
+            let maxModulation = 0.5 * coeff
+            floor = clamp01(baseline + minModulation)
+            ceiling = clamp01(baseline + maxModulation)
         case .stage1Experimental:
-            minModulation = -Stage1ScaleSensitivity.contrastMaxBlendNorm * coeff
-            maxModulation = Stage1ScaleSensitivity.contrastMaxBlendNorm * coeff
+            let halfSpan = Stage1ScaleSensitivity.contrastPracticalHalfSpan
+            floor = clamp01(baseline - halfSpan)
+            ceiling = clamp01(baseline + halfSpan)
         }
-
-        let floor = clamp01(baseline + minModulation)
-        let ceiling = clamp01(baseline + maxModulation)
 
         let dp = computeDisplayPosition(value: value, floor: floor, ceiling: ceiling)
         let bp = computeDisplayPosition(value: baseline, floor: floor, ceiling: ceiling)
@@ -124,25 +145,21 @@ enum PersonalScaleEnvelopeCalculator {
         case nil:    baseline = 0.50
         }
 
-        let minModulation: Double
-        let maxModulation: Double
+        let floor: Double
+        let ceiling: Double
 
         switch mode {
         case .standard:
             let coeff = calibration.stage2Sensitivity.vibrancyCoeff
-            minModulation = -1.0 * coeff
-            maxModulation = (20.0 / 21.0) * coeff
+            let minModulation = -1.0 * coeff
+            let maxModulation = (20.0 / 21.0) * coeff
+            floor = clamp01(baseline + minModulation)
+            ceiling = clamp01(baseline + maxModulation)
         case .stage1Experimental:
-            let maxVibeModulation = (20.0 / 21.0) * Stage1ScaleSensitivity.vibeScale
-            let minVibeModulation = -1.0 * Stage1ScaleSensitivity.vibeScale
-            let maxTempoMod = (Stage1ScaleSensitivity.tempoNormMax - 0.5) * Stage1ScaleSensitivity.tempoScale
-            let minTempoMod = (Stage1ScaleSensitivity.tempoNormMin - 0.5) * Stage1ScaleSensitivity.tempoScale
-            maxModulation = maxVibeModulation + maxTempoMod
-            minModulation = minVibeModulation + minTempoMod
+            let halfSpan = Stage1ScaleSensitivity.vibrancyPracticalHalfSpan
+            floor = clamp01(baseline - halfSpan)
+            ceiling = clamp01(baseline + halfSpan)
         }
-
-        let floor = clamp01(baseline + minModulation)
-        let ceiling = clamp01(baseline + maxModulation)
 
         let dp = computeDisplayPosition(value: value, floor: floor, ceiling: ceiling)
         let bp = computeDisplayPosition(value: baseline, floor: floor, ceiling: ceiling)
@@ -203,6 +220,34 @@ enum PersonalScaleEnvelopeCalculator {
 
         return PersonalScaleEnvelope(
             kind: .metalTone, floor: floor, ceiling: ceiling,
+            baseline: baseline, value: value,
+            displayPosition: dp, baselinePosition: bp
+        )
+    }
+
+    // MARK: - Silhouette Envelopes (Plan 3 §3.2, Plan 4 per-user calibration)
+
+    private static func silhouetteEnvelope(
+        kind: PersonalScaleKind,
+        value: Double,
+        baseline: Double
+    ) -> PersonalScaleEnvelope {
+        let halfSpan: Double
+        switch kind {
+        case .structuredDraped:
+            halfSpan = Stage1ScaleSensitivity.silhouetteSDPracticalHalfSpan
+        default:
+            halfSpan = Stage1ScaleSensitivity.silhouetteMFARPracticalHalfSpan
+        }
+
+        let floor = clamp01(baseline - halfSpan)
+        let ceiling = clamp01(baseline + halfSpan)
+
+        let dp = computeDisplayPosition(value: value, floor: floor, ceiling: ceiling)
+        let bp = computeDisplayPosition(value: baseline, floor: floor, ceiling: ceiling)
+
+        return PersonalScaleEnvelope(
+            kind: kind, floor: floor, ceiling: ceiling,
             baseline: baseline, value: value,
             displayPosition: dp, baselinePosition: bp
         )

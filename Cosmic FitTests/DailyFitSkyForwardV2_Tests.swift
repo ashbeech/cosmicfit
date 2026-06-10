@@ -219,6 +219,12 @@ enum SkyForwardV2Support {
         let vibe = Energy.allCases.map { "\($0.rawValue)=\(payload.vibeBreakdown.value(for: $0))" }.joined(separator: ";")
         return "\(vibe)|\(axes)|\(essence)|\(palette)|\(payload.vibrancy)|\(payload.contrast)|\(payload.metalTone)|\(payload.silhouetteProfile.masculineFeminine)"
     }
+
+    static func isoString(for date: Date) -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withFullDate]
+        return formatter.string(from: date)
+    }
 }
 
 // MARK: - §13.3B Transit cap (hard gate)

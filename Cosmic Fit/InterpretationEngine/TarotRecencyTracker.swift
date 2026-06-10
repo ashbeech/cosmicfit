@@ -19,7 +19,8 @@ class TarotRecencyTracker {
     /// Base penalty multiplier for yesterday's card (increased for stronger variety enforcement)
     private static let YESTERDAY_PENALTY_BASE = EngineConfig.tarotRecencyStrongPenalty
     
-    private static let COOLDOWN_DAYS = 3  // Hard-block period
+    static let cooldownDayCount = 3
+    private static let COOLDOWN_DAYS = cooldownDayCount
     
     /// Minimum penalty floor (cards can't be reduced below this multiplier)
     private static let PENALTY_FLOOR = 0.55

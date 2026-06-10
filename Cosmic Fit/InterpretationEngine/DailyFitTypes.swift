@@ -540,6 +540,57 @@ struct NarrativeBridgeTrace: Codable, Equatable {
     let bridgePass: Bool
 }
 
+// MARK: - Daily Narrative Plan (Plan 2)
+
+/// Intensity level derived from sky salience concentration.
+enum IntensityLevel: String, Codable, CaseIterable, Equatable {
+    case low, moderate, high, peak
+}
+
+/// Tempo emphasis derived from Moon's position in salience profile.
+enum TempoEmphasis: String, Codable, CaseIterable, Equatable {
+    case slow, steady, dynamic
+}
+
+/// Plan-owned texture selection constraint.
+struct TextureDirective: Codable, Equatable {
+    let preferredAffinities: [String]
+    let intensityBias: Double
+}
+
+/// Plan-owned pattern selection constraint.
+struct PatternDirective: Codable, Equatable {
+    let gateEnabled: Bool
+    let preferredEnergy: String?
+}
+
+/// Single forward-looking narrative decision for the day.
+/// Decided BEFORE any surface is selected; every visible surface reads from this plan.
+struct DailyNarrativePlan: Codable, Equatable {
+    let relationship: NarrativeRelationship
+    let accentEssence: StyleEssenceCategory
+    let supportingEssences: [StyleEssenceCategory]
+    let anchorEssences: [StyleEssenceCategory]
+
+    let intensityLevel: IntensityLevel
+    let tempoEmphasis: TempoEmphasis
+
+    let targetVibrancy: Double
+    let targetContrast: Double
+    let targetMetalTone: Double
+    let targetSilhouette: SilhouetteProfile
+
+    let paletteDirective: PaletteDirective
+    let tarotDirective: TarotDirective
+    let scaleDirective: ScaleDirective?
+    let textureDirective: TextureDirective
+    let patternDirective: PatternDirective
+
+    let salienceDrivers: [String]
+    let skyJustification: String
+    let coherenceTrace: CoherenceValidationResult?
+}
+
 /// Record of a single essence category suppressed to avoid contradictory narrative.
 struct EssenceConflictSuppression: Codable, Equatable {
     let suppressedCategory: String

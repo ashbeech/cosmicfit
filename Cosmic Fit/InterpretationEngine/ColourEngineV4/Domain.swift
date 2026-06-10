@@ -320,6 +320,7 @@ enum AccentRole: String, Codable, CaseIterable {
     case contrast = "Contrast"
     case depth = "Depth"
     case lift = "Lift"
+    case visibility = "Visibility"
 }
 
 struct AccentSlot: Codable, Equatable {
@@ -353,6 +354,8 @@ struct ColourEngineResult: Codable, Equatable {
     let depthOverlay: DepthOverlayResolver.OverlayResult
     /// V4.8 — Black eligibility trace.
     let blackEligibility: BlackEligibilityResolver.BlackResult
+    /// V4.9 — MC visibility accent trace.
+    let visibilityAccent: VisibilityAccentResolver.VisibilityResult
 
     init(
         variables: DerivedVariables,
@@ -365,7 +368,8 @@ struct ColourEngineResult: Codable, Equatable {
         rulerSignature: String,
         accentSlots: [AccentSlot] = [],
         depthOverlay: DepthOverlayResolver.OverlayResult = .none,
-        blackEligibility: BlackEligibilityResolver.BlackResult = .ineligible
+        blackEligibility: BlackEligibilityResolver.BlackResult = .ineligible,
+        visibilityAccent: VisibilityAccentResolver.VisibilityResult = .none
     ) {
         self.variables = variables
         self.family = family
@@ -378,12 +382,13 @@ struct ColourEngineResult: Codable, Equatable {
         self.accentSlots = accentSlots
         self.depthOverlay = depthOverlay
         self.blackEligibility = blackEligibility
+        self.visibilityAccent = visibilityAccent
     }
 
     enum CodingKeys: String, CodingKey {
         case variables, family, cluster, palette, secondaryPull, trace
         case luminarySignature, rulerSignature, accentSlots, depthOverlay
-        case blackEligibility
+        case blackEligibility, visibilityAccent
     }
 
     init(from decoder: Decoder) throws {
@@ -399,5 +404,6 @@ struct ColourEngineResult: Codable, Equatable {
         self.accentSlots = try c.decodeIfPresent([AccentSlot].self, forKey: .accentSlots) ?? []
         self.depthOverlay = try c.decodeIfPresent(DepthOverlayResolver.OverlayResult.self, forKey: .depthOverlay) ?? .none
         self.blackEligibility = try c.decodeIfPresent(BlackEligibilityResolver.BlackResult.self, forKey: .blackEligibility) ?? .ineligible
+        self.visibilityAccent = try c.decodeIfPresent(VisibilityAccentResolver.VisibilityResult.self, forKey: .visibilityAccent) ?? .none
     }
 }

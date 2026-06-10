@@ -2,7 +2,11 @@
 //  NarrativeIntentEngine.swift
 //  Cosmic Fit
 //
-//  Chart anchor vs sky weather classification and selection directives (no user-facing copy).
+//  DEPRECATED (Plan 2): Superseded by DailyNarrativeSelector + DailyNarrativeCoherence.
+//  Retained for production compatibility and diagnostic comparison.
+//  Planned removal after Plan 3 cleanup validation.
+//
+//  Original purpose: Chart anchor vs sky weather classification and selection directives.
 //
 
 import Foundation

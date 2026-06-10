@@ -1,0 +1,368 @@
+{
+  "aggregate": {
+    "angularRounded": {
+      "envelopeUtilization": 0.0,
+      "meanBaselineDeltaRange": 0.0,
+      "meanClampRate": 0.5,
+      "meanDisplayPositionRange": 0.0,
+      "meanEnvelopeSpan": 0.4,
+      "meanRawRange": 0.0,
+      "meanUiDistinctPositions": 1.0,
+      "meanUiMarkerRange": 0.0,
+      "nUsers": 216,
+      "p10DpRange": 0,
+      "p50DpRange": 0,
+      "p50RawRange": 0.0,
+      "p90DpRange": 0,
+      "pctStuckOneTertile_dp": 100.0,
+      "pctStuckOneTertile_ui": 100.0,
+      "pctUsersClampAny": 100.0,
+      "pctUsersClampHigh": 100.0
+    },
+    "contrast": {
+      "envelopeUtilization": 0.263,
+      "meanBaselineDeltaRange": 0.0736,
+      "meanClampRate": 0.5,
+      "meanDisplayPositionRange": 0.263,
+      "meanEnvelopeSpan": 0.28,
+      "meanRawRange": 0.0736,
+      "meanUiDistinctPositions": 7.5,
+      "meanUiMarkerRange": 0.263,
+      "nUsers": 216,
+      "p10DpRange": 0.1205,
+      "p50DpRange": 0.2834,
+      "p50RawRange": 0.0793,
+      "p90DpRange": 0.3744,
+      "pctStuckOneTertile_dp": 69.4,
+      "pctStuckOneTertile_ui": 69.4,
+      "pctUsersClampAny": 100.0,
+      "pctUsersClampHigh": 100.0
+    },
+    "masculineFeminine": {
+      "envelopeUtilization": 0.5843,
+      "meanBaselineDeltaRange": 0.2337,
+      "meanClampRate": 0.5,
+      "meanDisplayPositionRange": 0.5843,
+      "meanEnvelopeSpan": 0.4,
+      "meanRawRange": 0.2337,
+      "meanUiDistinctPositions": 17.0,
+      "meanUiMarkerRange": 0.5843,
+      "nUsers": 216,
+      "p10DpRange": 0.3865,
+      "p50DpRange": 0.5874,
+      "p50RawRange": 0.235,
+      "p90DpRange": 0.7556,
+      "pctStuckOneTertile_dp": 2.8,
+      "pctStuckOneTertile_ui": 2.8,
+      "pctUsersClampAny": 100.0,
+      "pctUsersClampHigh": 100.0
+    },
+    "metalTone": {
+      "envelopeUtilization": 0.4826,
+      "meanBaselineDeltaRange": 0.3366,
+      "meanClampRate": 0.0833,
+      "meanDisplayPositionRange": 0.4883,
+      "meanEnvelopeSpan": 0.6975,
+      "meanRawRange": 0.3366,
+      "meanUiDistinctPositions": 2.2,
+      "meanUiMarkerRange": 0.6157,
+      "nUsers": 216,
+      "p10DpRange": 0.356,
+      "p50DpRange": 0.4682,
+      "p50RawRange": 0.3579,
+      "p90DpRange": 0.6817,
+      "pctStuckOneTertile_dp": 0.0,
+      "pctStuckOneTertile_ui": 0.0,
+      "pctUsersClampAny": 16.7,
+      "pctUsersClampHigh": 16.7
+    },
+    "structuredDraped": {
+      "envelopeUtilization": 0.0,
+      "meanBaselineDeltaRange": 0.0,
+      "meanClampRate": 0.5,
+      "meanDisplayPositionRange": 0.0,
+      "meanEnvelopeSpan": 0.5,
+      "meanRawRange": 0.0,
+      "meanUiDistinctPositions": 1.0,
+      "meanUiMarkerRange": 0.0,
+      "nUsers": 216,
+      "p10DpRange": 0,
+      "p50DpRange": 0,
+      "p50RawRange": 0.0,
+      "p90DpRange": 0,
+      "pctStuckOneTertile_dp": 100.0,
+      "pctStuckOneTertile_ui": 100.0,
+      "pctUsersClampAny": 100.0,
+      "pctUsersClampHigh": 100.0
+    },
+    "vibrancy": {
+      "envelopeUtilization": 0.7059,
+      "meanBaselineDeltaRange": 0.3106,
+      "meanClampRate": 0.4792,
+      "meanDisplayPositionRange": 0.7059,
+      "meanEnvelopeSpan": 0.44,
+      "meanRawRange": 0.3106,
+      "meanUiDistinctPositions": 20.7,
+      "meanUiMarkerRange": 0.7059,
+      "nUsers": 216,
+      "p10DpRange": 0.6125,
+      "p50DpRange": 0.7138,
+      "p50RawRange": 0.3141,
+      "p90DpRange": 0.7946,
+      "pctStuckOneTertile_dp": 0.0,
+      "pctStuckOneTertile_ui": 0.0,
+      "pctUsersClampAny": 95.8,
+      "pctUsersClampHigh": 95.8
+    }
+  },
+  "cohort": "synthetic_cohort",
+  "engine": "stage1_experimental",
+  "generated": "2026-06-10",
+  "nUsers": 216,
+  "variantEnvelopes": [
+    {
+      "angularRounded": {
+        "baseline": 0.5,
+        "ceiling": 0.7,
+        "floor": 0.3,
+        "span": 0.4
+      },
+      "config": "soft/low/cool",
+      "contrast": {
+        "baseline": 0.25,
+        "ceiling": 0.39,
+        "floor": 0.11,
+        "span": 0.28
+      },
+      "masculineFeminine": {
+        "baseline": 0.5,
+        "ceiling": 0.7,
+        "floor": 0.3,
+        "span": 0.4
+      },
+      "metalTone": {
+        "baseline": 0.12,
+        "ceiling": 0.525,
+        "floor": 0.0,
+        "span": 0.525
+      },
+      "structuredDraped": {
+        "baseline": 0.5,
+        "ceiling": 0.75,
+        "floor": 0.25,
+        "span": 0.5
+      },
+      "variant": 0,
+      "vibrancy": {
+        "baseline": 0.25,
+        "ceiling": 0.47,
+        "floor": 0.03,
+        "span": 0.44
+      }
+    },
+    {
+      "angularRounded": {
+        "baseline": 0.5,
+        "ceiling": 0.7,
+        "floor": 0.3,
+        "span": 0.4
+      },
+      "config": "muted/medium/neutral",
+      "contrast": {
+        "baseline": 0.5,
+        "ceiling": 0.64,
+        "floor": 0.36,
+        "span": 0.28
+      },
+      "masculineFeminine": {
+        "baseline": 0.5,
+        "ceiling": 0.7,
+        "floor": 0.3,
+        "span": 0.4
+      },
+      "metalTone": {
+        "baseline": 0.5,
+        "ceiling": 0.905,
+        "floor": 0.095,
+        "span": 0.81
+      },
+      "structuredDraped": {
+        "baseline": 0.5,
+        "ceiling": 0.75,
+        "floor": 0.25,
+        "span": 0.5
+      },
+      "variant": 1,
+      "vibrancy": {
+        "baseline": 0.5,
+        "ceiling": 0.72,
+        "floor": 0.28,
+        "span": 0.44
+      }
+    },
+    {
+      "angularRounded": {
+        "baseline": 0.5,
+        "ceiling": 0.7,
+        "floor": 0.3,
+        "span": 0.4
+      },
+      "config": "rich/high/warm",
+      "contrast": {
+        "baseline": 0.75,
+        "ceiling": 0.89,
+        "floor": 0.61,
+        "span": 0.28
+      },
+      "masculineFeminine": {
+        "baseline": 0.5,
+        "ceiling": 0.7,
+        "floor": 0.3,
+        "span": 0.4
+      },
+      "metalTone": {
+        "baseline": 0.88,
+        "ceiling": 1.0,
+        "floor": 0.475,
+        "span": 0.525
+      },
+      "structuredDraped": {
+        "baseline": 0.5,
+        "ceiling": 0.75,
+        "floor": 0.25,
+        "span": 0.5
+      },
+      "variant": 2,
+      "vibrancy": {
+        "baseline": 0.75,
+        "ceiling": 0.97,
+        "floor": 0.53,
+        "span": 0.44
+      }
+    },
+    {
+      "angularRounded": {
+        "baseline": 0.5,
+        "ceiling": 0.7,
+        "floor": 0.3,
+        "span": 0.4
+      },
+      "config": "soft/medium/warm",
+      "contrast": {
+        "baseline": 0.5,
+        "ceiling": 0.64,
+        "floor": 0.36,
+        "span": 0.28
+      },
+      "masculineFeminine": {
+        "baseline": 0.5,
+        "ceiling": 0.7,
+        "floor": 0.3,
+        "span": 0.4
+      },
+      "metalTone": {
+        "baseline": 0.48,
+        "ceiling": 0.885,
+        "floor": 0.075,
+        "span": 0.81
+      },
+      "structuredDraped": {
+        "baseline": 0.5,
+        "ceiling": 0.75,
+        "floor": 0.25,
+        "span": 0.5
+      },
+      "variant": 3,
+      "vibrancy": {
+        "baseline": 0.25,
+        "ceiling": 0.47,
+        "floor": 0.03,
+        "span": 0.44
+      }
+    },
+    {
+      "angularRounded": {
+        "baseline": 0.5,
+        "ceiling": 0.7,
+        "floor": 0.3,
+        "span": 0.4
+      },
+      "config": "muted/high/cool",
+      "contrast": {
+        "baseline": 0.75,
+        "ceiling": 0.89,
+        "floor": 0.61,
+        "span": 0.28
+      },
+      "masculineFeminine": {
+        "baseline": 0.5,
+        "ceiling": 0.7,
+        "floor": 0.3,
+        "span": 0.4
+      },
+      "metalTone": {
+        "baseline": 0.52,
+        "ceiling": 0.925,
+        "floor": 0.115,
+        "span": 0.81
+      },
+      "structuredDraped": {
+        "baseline": 0.5,
+        "ceiling": 0.75,
+        "floor": 0.25,
+        "span": 0.5
+      },
+      "variant": 4,
+      "vibrancy": {
+        "baseline": 0.5,
+        "ceiling": 0.72,
+        "floor": 0.28,
+        "span": 0.44
+      }
+    },
+    {
+      "angularRounded": {
+        "baseline": 0.5,
+        "ceiling": 0.7,
+        "floor": 0.3,
+        "span": 0.4
+      },
+      "config": "rich/low/neutral",
+      "contrast": {
+        "baseline": 0.25,
+        "ceiling": 0.39,
+        "floor": 0.11,
+        "span": 0.28
+      },
+      "masculineFeminine": {
+        "baseline": 0.5,
+        "ceiling": 0.7,
+        "floor": 0.3,
+        "span": 0.4
+      },
+      "metalTone": {
+        "baseline": 0.3,
+        "ceiling": 0.705,
+        "floor": 0.0,
+        "span": 0.705
+      },
+      "structuredDraped": {
+        "baseline": 0.5,
+        "ceiling": 0.75,
+        "floor": 0.25,
+        "span": 0.5
+      },
+      "variant": 5,
+      "vibrancy": {
+        "baseline": 0.75,
+        "ceiling": 0.97,
+        "floor": 0.53,
+        "span": 0.44
+      }
+    }
+  ],
+  "window": {
+    "days": 60,
+    "start": "2026-05-01"
+  }
+}

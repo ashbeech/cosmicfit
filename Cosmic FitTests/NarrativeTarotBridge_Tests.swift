@@ -9,7 +9,7 @@ import Testing
 import Foundation
 @testable import Cosmic_Fit
 
-@Suite("NarrativeTarotBridge")
+@Suite("NarrativeTarotBridge", .serialized)
 struct NarrativeTarotBridge_Tests {
 
     @Test("Stage-1 uses bridge selector → narrativeBridgeTrace non-nil")
@@ -279,6 +279,58 @@ struct NarrativeTarotBridge_Tests {
         let output = lines.joined(separator: "\n")
         CalibrationReportHelper.writeReport(prefix: "briar_14day_bridge_trace", content: output)
         print(output)
+    }
+
+    @Test("3-day cooldown hard-blocks repeat cards across consecutive days")
+    func cooldownHardBlock() {
+        TarotCalibrationTestSupport.installIsolatedTrackers()
+        defer { TarotCalibrationTestSupport.resetTrackersForProfile() }
+
+        let start = SkyForwardV2Support.date(year: 2026, month: 5, day: 23)
+        var selectedCards: [String] = []
+
+        for offset in 0..<7 {
+            let date = start.addingTimeInterval(Double(offset) * 86400)
+            let (payload, _, _, _, _, _) = generateBriarTrace(for: date)
+            selectedCards.append(payload.tarotCard.name)
+        }
+
+        // Verify no card appears on consecutive days (cooldown >= 1 day apart)
+        for i in 1..<selectedCards.count {
+            #expect(selectedCards[i] != selectedCards[i - 1],
+                    "Day \(i) repeated '\(selectedCards[i])' from day \(i - 1) — cooldown should prevent this")
+        }
+
+        // Verify no card appears within a 3-day window
+        for i in 0..<selectedCards.count {
+            for j in (i + 1)..<min(i + 4, selectedCards.count) {
+                #expect(selectedCards[j] != selectedCards[i],
+                        "Day \(j) repeated '\(selectedCards[i])' from day \(i) — within 3-day cooldown")
+            }
+        }
+    }
+
+    @Test("Stage-1 trace generation stores the payload tarot card once")
+    func stage1TraceStoresPayloadCard() {
+        TarotCalibrationTestSupport.installIsolatedTrackers()
+        defer { TarotCalibrationTestSupport.resetTrackersForProfile() }
+
+        let start = SkyForwardV2Support.date(year: 2026, month: 5, day: 23)
+
+        for offset in 0..<7 {
+            let date = start.addingTimeInterval(Double(offset) * 86400)
+            let (payload, trace, _, _, _, _) = generateBriarTrace(for: date)
+            let todaySelection = TarotRecencyTracker.shared.getRecentSelections(
+                profileHash: SkyForwardV2Support.briarHash,
+                referenceDate: date,
+                dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
+            ).first { $0.daysAgo == 0 }
+
+            #expect(todaySelection?.cardName == payload.tarotCard.name,
+                    "Trace generation should not overwrite day \(offset)'s payload card")
+            #expect(trace.narrativeBridgeTrace?.selectedCardName == payload.tarotCard.name,
+                    "Bridge trace should describe the payload card")
+        }
     }
 
     // MARK: - Helpers

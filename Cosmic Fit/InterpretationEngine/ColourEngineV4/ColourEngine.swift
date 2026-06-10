@@ -207,6 +207,23 @@ enum ColourEngine {
             )
         }
 
+        // 14d. V4.9 — MC visibility accent. When the MC is a fire/air sign
+        // and the existing accent band lacks coverage in the MC ruler's
+        // colour direction, appends one vivid accent for public-facing
+        // memorability. Complements DepthOverlayResolver (which handles
+        // depth-sign MCs) by covering brightness-sign MCs.
+        let visibilityResult = VisibilityAccentResolver.resolve(
+            family: family,
+            input: input,
+            accentHexes: accentHexes,
+            accentSlots: finalAccentSlots,
+            existingPaletteHexes: personalPaletteHexes
+        )
+        if let visSlot = visibilityResult.slot {
+            accentHexes.append(visSlot.hex)
+            finalAccentSlots.append(visSlot)
+        }
+
         palette = PaletteTriadV4(
             neutrals: palette.neutrals,
             coreColours: palette.coreColours,
@@ -232,7 +249,8 @@ enum ColourEngine {
             rulerSignature: rulerSignature,
             accentSlots: finalAccentSlots,
             depthOverlay: depthOverlayFinal,
-            blackEligibility: blackResult.result
+            blackEligibility: blackResult.result,
+            visibilityAccent: visibilityResult
         )
     }
 }

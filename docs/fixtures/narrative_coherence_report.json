@@ -1,0 +1,7311 @@
+{
+  "aggregate" : {
+    "meanCoherenceScore" : 1,
+    "meanDistinctAccents" : 2.2000000000000002,
+    "meanFlipRate" : 0.28139999999999998,
+    "totalCrossSurfaceViolations" : 0,
+    "totalOppositionViolations" : 0
+  },
+  "days" : 60,
+  "engine" : "stage1_experimental",
+  "generated" : "2026-06-10",
+  "presets" : [
+    {
+      "accentDistribution" : {
+        "drama" : 13,
+        "playful" : 11,
+        "romantic" : 36
+      },
+      "coherenceScore" : 1,
+      "crossSurfaceViolations" : 0,
+      "dailyRows" : [
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9017",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-01",
+          "intensity" : "peak",
+          "metalTone" : "0.7437",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "minimal",
+            "romantic"
+          ],
+          "vibrancy" : "0.8903"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9705",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-02",
+          "intensity" : "peak",
+          "metalTone" : "0.7491",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.9117"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9749",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-03",
+          "intensity" : "peak",
+          "metalTone" : "0.7545",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8744"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8619",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-04",
+          "intensity" : "peak",
+          "metalTone" : "0.7598",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "drama",
+            "minimal"
+          ],
+          "vibrancy" : "0.9362"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "1.0000",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-05",
+          "intensity" : "peak",
+          "metalTone" : "0.7652",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "romantic"
+          ],
+          "vibrancy" : "0.8446"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9987",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-06",
+          "intensity" : "peak",
+          "metalTone" : "0.7705",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "romantic"
+          ],
+          "vibrancy" : "0.8358"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9557",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-07",
+          "intensity" : "peak",
+          "metalTone" : "0.7759",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8271"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9892",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-08",
+          "intensity" : "peak",
+          "metalTone" : "0.7813",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "romantic"
+          ],
+          "vibrancy" : "0.8881"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9617",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-09",
+          "intensity" : "peak",
+          "metalTone" : "0.7866",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8000"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8913",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-10",
+          "intensity" : "peak",
+          "metalTone" : "0.7920",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8975"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9961",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-11",
+          "intensity" : "peak",
+          "metalTone" : "0.7973",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "romantic"
+          ],
+          "vibrancy" : "0.8250"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9675",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-12",
+          "intensity" : "peak",
+          "metalTone" : "0.8027",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.6853"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9462",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-13",
+          "intensity" : "peak",
+          "metalTone" : "0.8080",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7097"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8483",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-14",
+          "intensity" : "peak",
+          "metalTone" : "0.8134",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "classic",
+            "minimal"
+          ],
+          "vibrancy" : "0.7238"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "1.0000",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-15",
+          "intensity" : "peak",
+          "metalTone" : "0.8188",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.6851"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9327",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-16",
+          "intensity" : "peak",
+          "metalTone" : "0.8241",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7322"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9567",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-17",
+          "intensity" : "peak",
+          "metalTone" : "0.8295",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7501"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9743",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-18",
+          "intensity" : "peak",
+          "metalTone" : "0.8348",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.6545"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9013",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-19",
+          "intensity" : "peak",
+          "metalTone" : "0.8402",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.7137"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9002",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-20",
+          "intensity" : "peak",
+          "metalTone" : "0.8456",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7609"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9636",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-21",
+          "intensity" : "peak",
+          "metalTone" : "0.8509",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7001"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9447",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-22",
+          "intensity" : "peak",
+          "metalTone" : "0.8563",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.7868"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9237",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-23",
+          "intensity" : "peak",
+          "metalTone" : "0.8616",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7356"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9530",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-24",
+          "intensity" : "peak",
+          "metalTone" : "0.8670",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7302"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9306",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-25",
+          "intensity" : "peak",
+          "metalTone" : "0.8723",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "minimal",
+            "romantic"
+          ],
+          "vibrancy" : "0.7460"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8850",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-26",
+          "intensity" : "peak",
+          "metalTone" : "0.7277",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "minimal",
+            "romantic"
+          ],
+          "vibrancy" : "0.9059"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9455",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-27",
+          "intensity" : "peak",
+          "metalTone" : "0.7331",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7982"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9055",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-28",
+          "intensity" : "peak",
+          "metalTone" : "0.7384",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "minimal",
+            "romantic"
+          ],
+          "vibrancy" : "0.9356"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9008",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-29",
+          "intensity" : "peak",
+          "metalTone" : "0.7438",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8972"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8980",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-30",
+          "intensity" : "peak",
+          "metalTone" : "0.7491",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8438"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9454",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-31",
+          "intensity" : "peak",
+          "metalTone" : "0.7545",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "minimal",
+            "romantic"
+          ],
+          "vibrancy" : "0.8888"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9730",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-01",
+          "intensity" : "peak",
+          "metalTone" : "0.7599",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "romantic"
+          ],
+          "vibrancy" : "0.9345"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9326",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-02",
+          "intensity" : "peak",
+          "metalTone" : "0.7652",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8458"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8301",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-03",
+          "intensity" : "peak",
+          "metalTone" : "0.7706",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8666"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9518",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-04",
+          "intensity" : "peak",
+          "metalTone" : "0.7759",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8398"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9756",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-05",
+          "intensity" : "peak",
+          "metalTone" : "0.7813",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "minimal"
+          ],
+          "vibrancy" : "0.8408"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9147",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-06",
+          "intensity" : "peak",
+          "metalTone" : "0.7866",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8896"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8647",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-07",
+          "intensity" : "peak",
+          "metalTone" : "0.7920",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "sensual"
+          ],
+          "vibrancy" : "0.8601"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9906",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-08",
+          "intensity" : "peak",
+          "metalTone" : "0.7974",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "romantic"
+          ],
+          "vibrancy" : "0.8471"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9009",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-09",
+          "intensity" : "peak",
+          "metalTone" : "0.8027",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "classic",
+            "polished"
+          ],
+          "vibrancy" : "0.7274"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9299",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-10",
+          "intensity" : "peak",
+          "metalTone" : "0.8081",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7200"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9789",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-11",
+          "intensity" : "peak",
+          "metalTone" : "0.8134",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "polished",
+            "minimal"
+          ],
+          "vibrancy" : "0.6530"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "1.0000",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-12",
+          "intensity" : "peak",
+          "metalTone" : "0.8188",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7076"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8422",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-13",
+          "intensity" : "peak",
+          "metalTone" : "0.8242",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7426"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9597",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-14",
+          "intensity" : "peak",
+          "metalTone" : "0.8295",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.6977"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9108",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-15",
+          "intensity" : "peak",
+          "metalTone" : "0.8349",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7123"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9172",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-16",
+          "intensity" : "peak",
+          "metalTone" : "0.8402",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7515"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9849",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-17",
+          "intensity" : "peak",
+          "metalTone" : "0.8456",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7645"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9399",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-18",
+          "intensity" : "peak",
+          "metalTone" : "0.8509",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.8012"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9316",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-19",
+          "intensity" : "peak",
+          "metalTone" : "0.8563",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7851"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9112",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-20",
+          "intensity" : "peak",
+          "metalTone" : "0.8617",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7279"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8805",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-21",
+          "intensity" : "peak",
+          "metalTone" : "0.8670",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "minimal",
+            "romantic"
+          ],
+          "vibrancy" : "0.8287"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8793",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-22",
+          "intensity" : "peak",
+          "metalTone" : "0.8724",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.7802"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9660",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-23",
+          "intensity" : "peak",
+          "metalTone" : "0.7277",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8060"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9086",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-24",
+          "intensity" : "peak",
+          "metalTone" : "0.7331",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "minimal",
+            "romantic"
+          ],
+          "vibrancy" : "0.8287"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9451",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-25",
+          "intensity" : "peak",
+          "metalTone" : "0.7385",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8836"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9478",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-26",
+          "intensity" : "peak",
+          "metalTone" : "0.7438",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8569"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8828",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-27",
+          "intensity" : "peak",
+          "metalTone" : "0.7492",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "romantic",
+            "minimal"
+          ],
+          "vibrancy" : "0.9071"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9128",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-28",
+          "intensity" : "peak",
+          "metalTone" : "0.7545",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8841"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9219",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-29",
+          "intensity" : "peak",
+          "metalTone" : "0.7599",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8149"
+        }
+      ],
+      "distinctAccents" : 3,
+      "essenceOppositionViolations" : 0,
+      "flipRate" : 0.61019999999999996,
+      "plansGenerated" : 60,
+      "preset" : "fire",
+      "relationshipDistribution" : {
+        "contrast" : 54,
+        "stretch" : 6
+      }
+    },
+    {
+      "accentDistribution" : {
+        "drama" : 60
+      },
+      "coherenceScore" : 1,
+      "crossSurfaceViolations" : 0,
+      "dailyRows" : [
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8936",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-01",
+          "intensity" : "peak",
+          "metalTone" : "0.7437",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.9028"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9345",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-02",
+          "intensity" : "peak",
+          "metalTone" : "0.7491",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "eclectic"
+          ],
+          "vibrancy" : "0.8968"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9147",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-03",
+          "intensity" : "peak",
+          "metalTone" : "0.7545",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.8587"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8821",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-04",
+          "intensity" : "peak",
+          "metalTone" : "0.7598",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.9260"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9333",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-05",
+          "intensity" : "peak",
+          "metalTone" : "0.7652",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "sensual"
+          ],
+          "vibrancy" : "0.8309"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9399",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-06",
+          "intensity" : "peak",
+          "metalTone" : "0.7705",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "magnetic"
+          ],
+          "vibrancy" : "0.7911"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8883",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-07",
+          "intensity" : "peak",
+          "metalTone" : "0.7759",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "magnetic"
+          ],
+          "vibrancy" : "0.8666"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8461",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-08",
+          "intensity" : "peak",
+          "metalTone" : "0.7813",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "eclectic"
+          ],
+          "vibrancy" : "0.8940"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9357",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-09",
+          "intensity" : "peak",
+          "metalTone" : "0.7866",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.7844"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8455",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-10",
+          "intensity" : "peak",
+          "metalTone" : "0.7920",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "magnetic"
+          ],
+          "vibrancy" : "0.8797"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9428",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-11",
+          "intensity" : "peak",
+          "metalTone" : "0.7973",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "sensual"
+          ],
+          "vibrancy" : "0.8767"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9271",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-12",
+          "intensity" : "peak",
+          "metalTone" : "0.8027",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "sensual"
+          ],
+          "vibrancy" : "0.7353"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9313",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-13",
+          "intensity" : "peak",
+          "metalTone" : "0.8080",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.7169"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8914",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-14",
+          "intensity" : "peak",
+          "metalTone" : "0.8134",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "sensual"
+          ],
+          "vibrancy" : "0.7008"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9462",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-15",
+          "intensity" : "peak",
+          "metalTone" : "0.8188",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.7085"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9009",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-16",
+          "intensity" : "peak",
+          "metalTone" : "0.8241",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.7190"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9431",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-17",
+          "intensity" : "peak",
+          "metalTone" : "0.8295",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "sensual",
+            "romantic"
+          ],
+          "vibrancy" : "0.7693"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8981",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-18",
+          "intensity" : "peak",
+          "metalTone" : "0.8348",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.7287"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9436",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-19",
+          "intensity" : "peak",
+          "metalTone" : "0.8402",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "edgy"
+          ],
+          "vibrancy" : "0.7349"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8646",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-20",
+          "intensity" : "peak",
+          "metalTone" : "0.8456",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.8270"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9627",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-21",
+          "intensity" : "peak",
+          "metalTone" : "0.8509",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.7528"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8939",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-22",
+          "intensity" : "peak",
+          "metalTone" : "0.8563",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.7755"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9408",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-23",
+          "intensity" : "peak",
+          "metalTone" : "0.8616",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "edgy"
+          ],
+          "vibrancy" : "0.7710"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9375",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-24",
+          "intensity" : "peak",
+          "metalTone" : "0.8670",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.6826"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9179",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-25",
+          "intensity" : "peak",
+          "metalTone" : "0.8723",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "maximalist"
+          ],
+          "vibrancy" : "0.7708"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9155",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-26",
+          "intensity" : "peak",
+          "metalTone" : "0.7277",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.9019"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9229",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-27",
+          "intensity" : "peak",
+          "metalTone" : "0.7331",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.7903"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9030",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-28",
+          "intensity" : "peak",
+          "metalTone" : "0.7384",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.9329"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9366",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-29",
+          "intensity" : "peak",
+          "metalTone" : "0.7438",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "eclectic"
+          ],
+          "vibrancy" : "0.8680"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9282",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-30",
+          "intensity" : "peak",
+          "metalTone" : "0.7491",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.7974"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9397",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-31",
+          "intensity" : "peak",
+          "metalTone" : "0.7545",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "eclectic"
+          ],
+          "vibrancy" : "0.8579"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9505",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-01",
+          "intensity" : "peak",
+          "metalTone" : "0.7599",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.9210"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9709",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-02",
+          "intensity" : "peak",
+          "metalTone" : "0.7652",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "magnetic"
+          ],
+          "vibrancy" : "0.7980"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8821",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-03",
+          "intensity" : "peak",
+          "metalTone" : "0.7706",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "sensual"
+          ],
+          "vibrancy" : "0.8947"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9804",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-04",
+          "intensity" : "peak",
+          "metalTone" : "0.7759",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "magnetic"
+          ],
+          "vibrancy" : "0.8063"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9051",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-05",
+          "intensity" : "peak",
+          "metalTone" : "0.7813",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "eclectic"
+          ],
+          "vibrancy" : "0.8448"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9663",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-06",
+          "intensity" : "peak",
+          "metalTone" : "0.7866",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "magnetic"
+          ],
+          "vibrancy" : "0.8780"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8984",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-07",
+          "intensity" : "peak",
+          "metalTone" : "0.7920",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "magnetic"
+          ],
+          "vibrancy" : "0.8718"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9191",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-08",
+          "intensity" : "peak",
+          "metalTone" : "0.7974",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "edgy"
+          ],
+          "vibrancy" : "0.8485"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8824",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-09",
+          "intensity" : "peak",
+          "metalTone" : "0.8027",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.7410"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9117",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-10",
+          "intensity" : "peak",
+          "metalTone" : "0.8081",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.7277"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9134",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-11",
+          "intensity" : "peak",
+          "metalTone" : "0.8134",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.6624"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9431",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-12",
+          "intensity" : "peak",
+          "metalTone" : "0.8188",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.7113"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8239",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-13",
+          "intensity" : "peak",
+          "metalTone" : "0.8242",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.7249"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9272",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-14",
+          "intensity" : "peak",
+          "metalTone" : "0.8295",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.6979"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9406",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-15",
+          "intensity" : "peak",
+          "metalTone" : "0.8349",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.7259"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9460",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-16",
+          "intensity" : "peak",
+          "metalTone" : "0.8402",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.7556"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9531",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-17",
+          "intensity" : "peak",
+          "metalTone" : "0.8456",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.7072"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9632",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-18",
+          "intensity" : "peak",
+          "metalTone" : "0.8509",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.7612"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8791",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-19",
+          "intensity" : "peak",
+          "metalTone" : "0.8563",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.8065"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9671",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-20",
+          "intensity" : "peak",
+          "metalTone" : "0.8617",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.6811"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8805",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-21",
+          "intensity" : "peak",
+          "metalTone" : "0.8670",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.8361"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9680",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-22",
+          "intensity" : "peak",
+          "metalTone" : "0.8724",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.7745"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9248",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-23",
+          "intensity" : "peak",
+          "metalTone" : "0.7277",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.7984"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8880",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-24",
+          "intensity" : "peak",
+          "metalTone" : "0.7331",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "maximalist"
+          ],
+          "vibrancy" : "0.8329"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9225",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-25",
+          "intensity" : "peak",
+          "metalTone" : "0.7385",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.9279"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9014",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-26",
+          "intensity" : "peak",
+          "metalTone" : "0.7438",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "eclectic"
+          ],
+          "vibrancy" : "0.8578"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8717",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-27",
+          "intensity" : "peak",
+          "metalTone" : "0.7492",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "eclectic"
+          ],
+          "vibrancy" : "0.9104"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9102",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-28",
+          "intensity" : "peak",
+          "metalTone" : "0.7545",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "classic",
+            "edgy"
+          ],
+          "vibrancy" : "0.8941"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8906",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-29",
+          "intensity" : "peak",
+          "metalTone" : "0.7599",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "edgy"
+          ],
+          "vibrancy" : "0.8273"
+        }
+      ],
+      "distinctAccents" : 1,
+      "essenceOppositionViolations" : 0,
+      "flipRate" : 0,
+      "plansGenerated" : 60,
+      "preset" : "earth",
+      "relationshipDistribution" : {
+        "contrast" : 22,
+        "stretch" : 38
+      }
+    },
+    {
+      "accentDistribution" : {
+        "drama" : 10,
+        "romantic" : 50
+      },
+      "coherenceScore" : 1,
+      "crossSurfaceViolations" : 0,
+      "dailyRows" : [
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9207",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-01",
+          "intensity" : "peak",
+          "metalTone" : "0.7437",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.8814"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9202",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-02",
+          "intensity" : "peak",
+          "metalTone" : "0.7491",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.8895"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9527",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-03",
+          "intensity" : "peak",
+          "metalTone" : "0.7545",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.8003"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9367",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-04",
+          "intensity" : "peak",
+          "metalTone" : "0.7598",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "drama"
+          ],
+          "vibrancy" : "0.9068"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9553",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-05",
+          "intensity" : "peak",
+          "metalTone" : "0.7652",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.8666"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "1.0000",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-06",
+          "intensity" : "peak",
+          "metalTone" : "0.7705",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "edgy",
+            "romantic"
+          ],
+          "vibrancy" : "0.8195"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9598",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-07",
+          "intensity" : "peak",
+          "metalTone" : "0.7759",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.8370"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8540",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-08",
+          "intensity" : "peak",
+          "metalTone" : "0.7813",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.9001"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9629",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-09",
+          "intensity" : "peak",
+          "metalTone" : "0.7866",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.7928"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8487",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-10",
+          "intensity" : "peak",
+          "metalTone" : "0.7920",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "drama",
+            "sensual"
+          ],
+          "vibrancy" : "0.9004"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9717",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-11",
+          "intensity" : "peak",
+          "metalTone" : "0.7973",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "edgy",
+            "romantic"
+          ],
+          "vibrancy" : "0.8445"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9972",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-12",
+          "intensity" : "peak",
+          "metalTone" : "0.8027",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "classic"
+          ],
+          "vibrancy" : "0.6907"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9448",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-13",
+          "intensity" : "peak",
+          "metalTone" : "0.8080",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "classic"
+          ],
+          "vibrancy" : "0.7068"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8429",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-14",
+          "intensity" : "peak",
+          "metalTone" : "0.8134",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "classic",
+            "polished"
+          ],
+          "vibrancy" : "0.7313"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9549",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-15",
+          "intensity" : "peak",
+          "metalTone" : "0.8188",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "classic"
+          ],
+          "vibrancy" : "0.6877"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9720",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-16",
+          "intensity" : "peak",
+          "metalTone" : "0.8241",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "classic"
+          ],
+          "vibrancy" : "0.7280"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9795",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-17",
+          "intensity" : "peak",
+          "metalTone" : "0.8295",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "classic"
+          ],
+          "vibrancy" : "0.7688"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9310",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-18",
+          "intensity" : "peak",
+          "metalTone" : "0.8348",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.7077"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9412",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-19",
+          "intensity" : "peak",
+          "metalTone" : "0.8402",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.7081"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9102",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-20",
+          "intensity" : "peak",
+          "metalTone" : "0.8456",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.7653"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8842",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-21",
+          "intensity" : "peak",
+          "metalTone" : "0.8509",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.7612"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9310",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-22",
+          "intensity" : "peak",
+          "metalTone" : "0.8563",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.8201"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9775",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-23",
+          "intensity" : "peak",
+          "metalTone" : "0.8616",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.8158"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9527",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-24",
+          "intensity" : "peak",
+          "metalTone" : "0.8670",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.7387"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9218",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-25",
+          "intensity" : "peak",
+          "metalTone" : "0.8723",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.7250"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8917",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-26",
+          "intensity" : "peak",
+          "metalTone" : "0.7277",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.8933"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9279",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-27",
+          "intensity" : "peak",
+          "metalTone" : "0.7331",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.8618"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9209",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-28",
+          "intensity" : "peak",
+          "metalTone" : "0.7384",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.9000"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8814",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-29",
+          "intensity" : "peak",
+          "metalTone" : "0.7438",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.8500"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9344",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-30",
+          "intensity" : "peak",
+          "metalTone" : "0.7491",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.8119"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8892",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-31",
+          "intensity" : "peak",
+          "metalTone" : "0.7545",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.8264"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8694",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-01",
+          "intensity" : "peak",
+          "metalTone" : "0.7599",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.9078"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8980",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-02",
+          "intensity" : "peak",
+          "metalTone" : "0.7652",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "minimal"
+          ],
+          "vibrancy" : "0.7817"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8432",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-03",
+          "intensity" : "peak",
+          "metalTone" : "0.7706",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "drama",
+            "sensual"
+          ],
+          "vibrancy" : "0.8710"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8983",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-04",
+          "intensity" : "peak",
+          "metalTone" : "0.7759",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.8246"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "1.0000",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-05",
+          "intensity" : "peak",
+          "metalTone" : "0.7813",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "edgy",
+            "romantic"
+          ],
+          "vibrancy" : "0.8531"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9889",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-06",
+          "intensity" : "peak",
+          "metalTone" : "0.7866",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "edgy",
+            "romantic"
+          ],
+          "vibrancy" : "0.8836"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9163",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-07",
+          "intensity" : "peak",
+          "metalTone" : "0.7920",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "polished"
+          ],
+          "vibrancy" : "0.8699"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9924",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-08",
+          "intensity" : "peak",
+          "metalTone" : "0.7974",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "edgy",
+            "romantic"
+          ],
+          "vibrancy" : "0.8022"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8198",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-09",
+          "intensity" : "peak",
+          "metalTone" : "0.8027",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "classic",
+            "polished"
+          ],
+          "vibrancy" : "0.7391"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9257",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-10",
+          "intensity" : "peak",
+          "metalTone" : "0.8081",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "classic"
+          ],
+          "vibrancy" : "0.7293"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9352",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-11",
+          "intensity" : "peak",
+          "metalTone" : "0.8134",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.6749"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9909",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-12",
+          "intensity" : "peak",
+          "metalTone" : "0.8188",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "classic"
+          ],
+          "vibrancy" : "0.7459"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8794",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-13",
+          "intensity" : "peak",
+          "metalTone" : "0.8242",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "classic",
+            "polished"
+          ],
+          "vibrancy" : "0.7657"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "1.0000",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-14",
+          "intensity" : "peak",
+          "metalTone" : "0.8295",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "classic"
+          ],
+          "vibrancy" : "0.6776"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9579",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-15",
+          "intensity" : "peak",
+          "metalTone" : "0.8349",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.7576"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9029",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-16",
+          "intensity" : "peak",
+          "metalTone" : "0.8402",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.8115"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9191",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-17",
+          "intensity" : "peak",
+          "metalTone" : "0.8456",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.7988"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9914",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-18",
+          "intensity" : "peak",
+          "metalTone" : "0.8509",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.7663"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8123",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-19",
+          "intensity" : "peak",
+          "metalTone" : "0.8563",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "utility"
+          ],
+          "vibrancy" : "0.8323"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8911",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-20",
+          "intensity" : "peak",
+          "metalTone" : "0.8617",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "grounded"
+          ],
+          "vibrancy" : "0.7346"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9454",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-21",
+          "intensity" : "peak",
+          "metalTone" : "0.8670",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.8402"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9044",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-22",
+          "intensity" : "peak",
+          "metalTone" : "0.8724",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "grounded"
+          ],
+          "vibrancy" : "0.8228"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9285",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-23",
+          "intensity" : "peak",
+          "metalTone" : "0.7277",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.8110"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8674",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-24",
+          "intensity" : "peak",
+          "metalTone" : "0.7331",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.8608"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8628",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-25",
+          "intensity" : "peak",
+          "metalTone" : "0.7385",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.9151"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9717",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-26",
+          "intensity" : "peak",
+          "metalTone" : "0.7438",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.8176"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9650",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-27",
+          "intensity" : "peak",
+          "metalTone" : "0.7492",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "edgy",
+            "minimal"
+          ],
+          "vibrancy" : "0.8827"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9439",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-28",
+          "intensity" : "peak",
+          "metalTone" : "0.7545",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.8974"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9053",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-29",
+          "intensity" : "peak",
+          "metalTone" : "0.7599",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "minimal",
+            "polished"
+          ],
+          "vibrancy" : "0.8433"
+        }
+      ],
+      "distinctAccents" : 2,
+      "essenceOppositionViolations" : 0,
+      "flipRate" : 0.2034,
+      "plansGenerated" : 60,
+      "preset" : "air",
+      "relationshipDistribution" : {
+        "contrast" : 34,
+        "stretch" : 26
+      }
+    },
+    {
+      "accentDistribution" : {
+        "drama" : 41,
+        "playful" : 19
+      },
+      "coherenceScore" : 1,
+      "crossSurfaceViolations" : 0,
+      "dailyRows" : [
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8357",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-01",
+          "intensity" : "peak",
+          "metalTone" : "0.7437",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "eclectic",
+            "edgy"
+          ],
+          "vibrancy" : "0.8298"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8010",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-02",
+          "intensity" : "peak",
+          "metalTone" : "0.7491",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "edgy",
+            "eclectic"
+          ],
+          "vibrancy" : "0.8204"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8232",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-03",
+          "intensity" : "peak",
+          "metalTone" : "0.7545",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "edgy"
+          ],
+          "vibrancy" : "0.7796"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8212",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-04",
+          "intensity" : "peak",
+          "metalTone" : "0.7598",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "eclectic"
+          ],
+          "vibrancy" : "0.8412"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8942",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-05",
+          "intensity" : "peak",
+          "metalTone" : "0.7652",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "magnetic"
+          ],
+          "vibrancy" : "0.8324"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8690",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-06",
+          "intensity" : "peak",
+          "metalTone" : "0.7705",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.8324"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9312",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-07",
+          "intensity" : "peak",
+          "metalTone" : "0.7759",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.8261"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8778",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-08",
+          "intensity" : "peak",
+          "metalTone" : "0.7813",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "eclectic"
+          ],
+          "vibrancy" : "0.9027"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9081",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-09",
+          "intensity" : "peak",
+          "metalTone" : "0.7866",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.8169"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.7765",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-10",
+          "intensity" : "peak",
+          "metalTone" : "0.7920",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "eclectic",
+            "sensual"
+          ],
+          "vibrancy" : "0.8979"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9240",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-11",
+          "intensity" : "peak",
+          "metalTone" : "0.7973",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "sensual"
+          ],
+          "vibrancy" : "0.8726"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9578",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-12",
+          "intensity" : "peak",
+          "metalTone" : "0.8027",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "polished",
+            "romantic"
+          ],
+          "vibrancy" : "0.6987"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9025",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-13",
+          "intensity" : "peak",
+          "metalTone" : "0.8080",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "polished"
+          ],
+          "vibrancy" : "0.7303"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8114",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-14",
+          "intensity" : "peak",
+          "metalTone" : "0.8134",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.7426"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9309",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-15",
+          "intensity" : "peak",
+          "metalTone" : "0.8188",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "polished"
+          ],
+          "vibrancy" : "0.7341"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8471",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-16",
+          "intensity" : "peak",
+          "metalTone" : "0.8241",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "polished"
+          ],
+          "vibrancy" : "0.7283"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9217",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-17",
+          "intensity" : "peak",
+          "metalTone" : "0.8295",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "polished"
+          ],
+          "vibrancy" : "0.7291"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9274",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-18",
+          "intensity" : "peak",
+          "metalTone" : "0.8348",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "polished",
+            "romantic"
+          ],
+          "vibrancy" : "0.6961"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8153",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-19",
+          "intensity" : "peak",
+          "metalTone" : "0.8402",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "edgy",
+            "utility"
+          ],
+          "vibrancy" : "0.7387"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.7980",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-20",
+          "intensity" : "peak",
+          "metalTone" : "0.8456",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "edgy",
+            "eclectic"
+          ],
+          "vibrancy" : "0.7624"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8210",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-21",
+          "intensity" : "peak",
+          "metalTone" : "0.8509",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "edgy",
+            "eclectic"
+          ],
+          "vibrancy" : "0.7443"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8086",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-22",
+          "intensity" : "peak",
+          "metalTone" : "0.8563",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "edgy",
+            "eclectic"
+          ],
+          "vibrancy" : "0.7606"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8131",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-23",
+          "intensity" : "peak",
+          "metalTone" : "0.8616",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "edgy",
+            "eclectic"
+          ],
+          "vibrancy" : "0.7358"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8291",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-24",
+          "intensity" : "peak",
+          "metalTone" : "0.8670",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "edgy",
+            "eclectic"
+          ],
+          "vibrancy" : "0.7311"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8108",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-25",
+          "intensity" : "peak",
+          "metalTone" : "0.8723",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "effortless",
+            "minimal"
+          ],
+          "vibrancy" : "0.7616"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8036",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-26",
+          "intensity" : "peak",
+          "metalTone" : "0.7277",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "eclectic",
+            "edgy"
+          ],
+          "vibrancy" : "0.8278"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8203",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-27",
+          "intensity" : "peak",
+          "metalTone" : "0.7331",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "eclectic"
+          ],
+          "vibrancy" : "0.8073"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.7983",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-28",
+          "intensity" : "peak",
+          "metalTone" : "0.7384",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "eclectic",
+            "edgy"
+          ],
+          "vibrancy" : "0.8380"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8261",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-29",
+          "intensity" : "peak",
+          "metalTone" : "0.7438",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "eclectic",
+            "drama"
+          ],
+          "vibrancy" : "0.8268"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8250",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-30",
+          "intensity" : "peak",
+          "metalTone" : "0.7491",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "eclectic"
+          ],
+          "vibrancy" : "0.7930"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8533",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-31",
+          "intensity" : "peak",
+          "metalTone" : "0.7545",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "playful"
+          ],
+          "vibrancy" : "0.8141"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8313",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-01",
+          "intensity" : "peak",
+          "metalTone" : "0.7599",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "eclectic",
+            "edgy"
+          ],
+          "vibrancy" : "0.8439"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9119",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-02",
+          "intensity" : "peak",
+          "metalTone" : "0.7652",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.8467"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.7905",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-03",
+          "intensity" : "peak",
+          "metalTone" : "0.7706",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.8626"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8971",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-04",
+          "intensity" : "peak",
+          "metalTone" : "0.7759",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "sensual"
+          ],
+          "vibrancy" : "0.8681"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8733",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-05",
+          "intensity" : "peak",
+          "metalTone" : "0.7813",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.7832"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8927",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-06",
+          "intensity" : "peak",
+          "metalTone" : "0.7866",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "eclectic"
+          ],
+          "vibrancy" : "0.8901"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8574",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-07",
+          "intensity" : "peak",
+          "metalTone" : "0.7920",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "sensual"
+          ],
+          "vibrancy" : "0.8148"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8979",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-08",
+          "intensity" : "peak",
+          "metalTone" : "0.7974",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "eclectic"
+          ],
+          "vibrancy" : "0.8258"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.7996",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-09",
+          "intensity" : "peak",
+          "metalTone" : "0.8027",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.7429"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8636",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-10",
+          "intensity" : "peak",
+          "metalTone" : "0.8081",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "polished",
+            "maximalist"
+          ],
+          "vibrancy" : "0.7404"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8416",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-11",
+          "intensity" : "peak",
+          "metalTone" : "0.8134",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "polished"
+          ],
+          "vibrancy" : "0.7180"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8410",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-12",
+          "intensity" : "peak",
+          "metalTone" : "0.8188",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "polished"
+          ],
+          "vibrancy" : "0.7206"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8765",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-13",
+          "intensity" : "peak",
+          "metalTone" : "0.8242",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.7434"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8518",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-14",
+          "intensity" : "peak",
+          "metalTone" : "0.8295",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "polished"
+          ],
+          "vibrancy" : "0.6918"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8446",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-15",
+          "intensity" : "peak",
+          "metalTone" : "0.8349",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "romantic",
+            "polished"
+          ],
+          "vibrancy" : "0.7373"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8262",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-16",
+          "intensity" : "peak",
+          "metalTone" : "0.8402",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "eclectic",
+            "edgy"
+          ],
+          "vibrancy" : "0.7664"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8517",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-17",
+          "intensity" : "peak",
+          "metalTone" : "0.8456",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "edgy",
+            "maximalist"
+          ],
+          "vibrancy" : "0.7346"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8481",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-18",
+          "intensity" : "peak",
+          "metalTone" : "0.8509",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "edgy",
+            "eclectic"
+          ],
+          "vibrancy" : "0.7606"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.7949",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-19",
+          "intensity" : "peak",
+          "metalTone" : "0.8563",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "eclectic",
+            "edgy"
+          ],
+          "vibrancy" : "0.7744"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8251",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-20",
+          "intensity" : "peak",
+          "metalTone" : "0.8617",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "edgy",
+            "eclectic"
+          ],
+          "vibrancy" : "0.7207"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8401",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-21",
+          "intensity" : "peak",
+          "metalTone" : "0.8670",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "edgy",
+            "eclectic"
+          ],
+          "vibrancy" : "0.7907"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8069",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-22",
+          "intensity" : "peak",
+          "metalTone" : "0.8724",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "edgy",
+            "eclectic"
+          ],
+          "vibrancy" : "0.7869"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8358",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-23",
+          "intensity" : "peak",
+          "metalTone" : "0.7277",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "playful",
+            "edgy"
+          ],
+          "vibrancy" : "0.7699"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8345",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-24",
+          "intensity" : "peak",
+          "metalTone" : "0.7331",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "reinforce",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "drama",
+            "romantic"
+          ],
+          "vibrancy" : "0.8810"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8218",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-25",
+          "intensity" : "peak",
+          "metalTone" : "0.7385",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "eclectic",
+            "edgy"
+          ],
+          "vibrancy" : "0.8399"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8545",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-26",
+          "intensity" : "peak",
+          "metalTone" : "0.7438",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "playful"
+          ],
+          "vibrancy" : "0.7836"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8034",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-27",
+          "intensity" : "peak",
+          "metalTone" : "0.7492",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "eclectic",
+            "maximalist"
+          ],
+          "vibrancy" : "0.8192"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8360",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-28",
+          "intensity" : "peak",
+          "metalTone" : "0.7545",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "eclectic",
+            "edgy"
+          ],
+          "vibrancy" : "0.8049"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8615",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-29",
+          "intensity" : "peak",
+          "metalTone" : "0.7599",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "eclectic"
+          ],
+          "vibrancy" : "0.8066"
+        }
+      ],
+      "distinctAccents" : 2,
+      "essenceOppositionViolations" : 0,
+      "flipRate" : 0.25419999999999998,
+      "plansGenerated" : 60,
+      "preset" : "water",
+      "relationshipDistribution" : {
+        "reinforce" : 22,
+        "stretch" : 38
+      }
+    },
+    {
+      "accentDistribution" : {
+        "drama" : 6,
+        "playful" : 11,
+        "romantic" : 43
+      },
+      "coherenceScore" : 1,
+      "crossSurfaceViolations" : 0,
+      "dailyRows" : [
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9468",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-01",
+          "intensity" : "peak",
+          "metalTone" : "0.7437",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.9105"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9645",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-02",
+          "intensity" : "peak",
+          "metalTone" : "0.7491",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.9242"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9190",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-03",
+          "intensity" : "peak",
+          "metalTone" : "0.7545",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.8026"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8046",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-04",
+          "intensity" : "peak",
+          "metalTone" : "0.7598",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "playful",
+            "minimal"
+          ],
+          "vibrancy" : "0.8397"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9820",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-05",
+          "intensity" : "peak",
+          "metalTone" : "0.7652",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.8702"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9784",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-06",
+          "intensity" : "peak",
+          "metalTone" : "0.7705",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.7890"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9697",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-07",
+          "intensity" : "peak",
+          "metalTone" : "0.7759",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.8541"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9671",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-08",
+          "intensity" : "peak",
+          "metalTone" : "0.7813",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.8691"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9500",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-09",
+          "intensity" : "peak",
+          "metalTone" : "0.7866",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.8097"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8618",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-10",
+          "intensity" : "peak",
+          "metalTone" : "0.7920",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "sensual"
+          ],
+          "vibrancy" : "0.8892"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "1.0000",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-11",
+          "intensity" : "peak",
+          "metalTone" : "0.7973",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.8407"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8617",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-12",
+          "intensity" : "peak",
+          "metalTone" : "0.8027",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "polished",
+            "grounded"
+          ],
+          "vibrancy" : "0.7483"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8546",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-13",
+          "intensity" : "peak",
+          "metalTone" : "0.8080",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "polished",
+            "minimal"
+          ],
+          "vibrancy" : "0.7419"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8100",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-14",
+          "intensity" : "peak",
+          "metalTone" : "0.8134",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "classic",
+            "polished"
+          ],
+          "vibrancy" : "0.7379"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8710",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-15",
+          "intensity" : "peak",
+          "metalTone" : "0.8188",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "polished",
+            "grounded"
+          ],
+          "vibrancy" : "0.7300"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9680",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-16",
+          "intensity" : "peak",
+          "metalTone" : "0.8241",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.7510"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9802",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-17",
+          "intensity" : "peak",
+          "metalTone" : "0.8295",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.7590"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9565",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-18",
+          "intensity" : "peak",
+          "metalTone" : "0.8348",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.7067"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9828",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-19",
+          "intensity" : "peak",
+          "metalTone" : "0.8402",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.7347"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9354",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-20",
+          "intensity" : "peak",
+          "metalTone" : "0.8456",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.7551"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9657",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-21",
+          "intensity" : "peak",
+          "metalTone" : "0.8509",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.7274"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9412",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-22",
+          "intensity" : "peak",
+          "metalTone" : "0.8563",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.7829"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9656",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-23",
+          "intensity" : "peak",
+          "metalTone" : "0.8616",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.7349"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9849",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-24",
+          "intensity" : "peak",
+          "metalTone" : "0.8670",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.6746"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9186",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-25",
+          "intensity" : "peak",
+          "metalTone" : "0.8723",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.7963"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8850",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-26",
+          "intensity" : "peak",
+          "metalTone" : "0.7277",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.9171"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9073",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-27",
+          "intensity" : "peak",
+          "metalTone" : "0.7331",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.8223"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9159",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-28",
+          "intensity" : "peak",
+          "metalTone" : "0.7384",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.9131"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9218",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-29",
+          "intensity" : "peak",
+          "metalTone" : "0.7438",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.8886"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9491",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-30",
+          "intensity" : "peak",
+          "metalTone" : "0.7491",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.8211"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9888",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-05-31",
+          "intensity" : "peak",
+          "metalTone" : "0.7545",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.8757"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9495",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-01",
+          "intensity" : "peak",
+          "metalTone" : "0.7599",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.9378"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9323",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-02",
+          "intensity" : "peak",
+          "metalTone" : "0.7652",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.7989"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8727",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-03",
+          "intensity" : "peak",
+          "metalTone" : "0.7706",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "drama"
+          ],
+          "vibrancy" : "0.8957"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9744",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-04",
+          "intensity" : "peak",
+          "metalTone" : "0.7759",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.8211"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9458",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-05",
+          "intensity" : "peak",
+          "metalTone" : "0.7813",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.8194"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9187",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-06",
+          "intensity" : "peak",
+          "metalTone" : "0.7866",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.8890"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9732",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-07",
+          "intensity" : "peak",
+          "metalTone" : "0.7920",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.8750"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "1.0000",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-08",
+          "intensity" : "peak",
+          "metalTone" : "0.7974",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.8520"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8124",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-09",
+          "intensity" : "peak",
+          "metalTone" : "0.8027",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "polished",
+            "classic"
+          ],
+          "vibrancy" : "0.7395"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9318",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-10",
+          "intensity" : "peak",
+          "metalTone" : "0.8081",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.7268"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8577",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-11",
+          "intensity" : "peak",
+          "metalTone" : "0.8134",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "stretch",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "polished",
+            "grounded"
+          ],
+          "vibrancy" : "0.6945"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9888",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-12",
+          "intensity" : "peak",
+          "metalTone" : "0.8188",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.7096"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9131",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-13",
+          "intensity" : "peak",
+          "metalTone" : "0.8242",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.7127"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9411",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-14",
+          "intensity" : "peak",
+          "metalTone" : "0.8295",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.6758"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9652",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-15",
+          "intensity" : "peak",
+          "metalTone" : "0.8349",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.7141"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9287",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-16",
+          "intensity" : "peak",
+          "metalTone" : "0.8402",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.7241"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9254",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-17",
+          "intensity" : "peak",
+          "metalTone" : "0.8456",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.7228"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9336",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-18",
+          "intensity" : "peak",
+          "metalTone" : "0.8509",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "maximalist",
+            "polished"
+          ],
+          "vibrancy" : "0.7918"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9259",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-19",
+          "intensity" : "peak",
+          "metalTone" : "0.8563",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.7973"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9948",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-20",
+          "intensity" : "peak",
+          "metalTone" : "0.8617",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.6826"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9227",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-21",
+          "intensity" : "peak",
+          "metalTone" : "0.8670",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.8589"
+        },
+        {
+          "accent" : "drama",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8749",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-22",
+          "intensity" : "peak",
+          "metalTone" : "0.8724",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "drama",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.8068"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9392",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-23",
+          "intensity" : "peak",
+          "metalTone" : "0.7277",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.8215"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9412",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-24",
+          "intensity" : "peak",
+          "metalTone" : "0.7331",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.8606"
+        },
+        {
+          "accent" : "playful",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9042",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-25",
+          "intensity" : "peak",
+          "metalTone" : "0.7385",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "playful",
+            "maximalist",
+            "romantic"
+          ],
+          "vibrancy" : "0.9061"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9650",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-26",
+          "intensity" : "peak",
+          "metalTone" : "0.7438",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.8725"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.8108",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-27",
+          "intensity" : "peak",
+          "metalTone" : "0.7492",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "playful"
+          ],
+          "vibrancy" : "0.9197"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9540",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-28",
+          "intensity" : "peak",
+          "metalTone" : "0.7545",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.8995"
+        },
+        {
+          "accent" : "romantic",
+          "candidatesGenerated" : 1,
+          "candidatesRejected" : 0,
+          "coherenceScore" : "1.0000",
+          "contrast" : "0.9894",
+          "crossSurfaceViolations" : [
+
+          ],
+          "date" : "2026-06-29",
+          "intensity" : "peak",
+          "metalTone" : "0.7599",
+          "oppositionViolations" : [
+
+          ],
+          "relationship" : "contrast",
+          "tempo" : "dynamic",
+          "top3" : [
+            "romantic",
+            "maximalist",
+            "grounded"
+          ],
+          "vibrancy" : "0.8331"
+        }
+      ],
+      "distinctAccents" : 3,
+      "essenceOppositionViolations" : 0,
+      "flipRate" : 0.33900000000000002,
+      "plansGenerated" : 60,
+      "preset" : "leo",
+      "relationshipDistribution" : {
+        "contrast" : 53,
+        "stretch" : 7
+      }
+    }
+  ],
+  "startDate" : "2026-05-01"
+}

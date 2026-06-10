@@ -524,7 +524,10 @@ struct DailyFitTypesTests {
                 kind: .metalTone, floor: 0.189, ceiling: 0.999,
                 baseline: 0.594, value: 0.6,
                 displayPosition: 0.507, baselinePosition: 0.5
-            )
+            ),
+            masculineFeminine: nil,
+            angularRounded: nil,
+            structuredDraped: nil
         )
         let payload = DailyFitPayload.fixture()
         let payloadWithPresentation = DailyFitPayload(

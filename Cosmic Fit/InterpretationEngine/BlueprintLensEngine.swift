@@ -33,6 +33,31 @@ enum Stage1ScaleSensitivity {
     static let lunarDegreeScale: Double = 0.15
     /// Maximum absolute contribution from lunar degree mod: |((0 or 1) - 0.5) * lunarDegreeScale|
     static var lunarDegreeMaxAbs: Double { lunarDegreeScale * 0.5 }
+
+    // Vibrancy — calibrated practical envelope half-span (Plan 3).
+    // Derived from Phase 0 cohort P95: observed max deviation from baseline ≈ 0.12;
+    // ±0.22 provides safety margin while narrowing the theoretical ±0.92 to useful display travel.
+    static let vibrancyPracticalHalfSpan: Double = 0.22
+
+    // Contrast — calibrated practical envelope half-span (Plan 4 audit).
+    // Observed raw range P95 ≈ 0.19; max baseline-relative deviation ≈ 0.12.
+    // ±0.14 covers relationship modifiers (+0.08 max) with margin while
+    // narrowing the theoretical ±0.275 (0.50×0.55) to useful display travel.
+    static let contrastPracticalHalfSpan: Double = 0.14
+
+    // Silhouette — analytical tanh-formula bounds for axis ∈ [0, 11].
+    // value = 0.5 + tanh((axis - 5.5) / 4.5) * 0.45
+    // At axis=0: 0.5 + tanh(-1.222)*0.45 ≈ 0.122
+    // At axis=11: 0.5 + tanh(1.222)*0.45 ≈ 0.878
+    static let silhouetteFloor: Double = 0.12
+    static let silhouetteCeiling: Double = 0.88
+
+    // Silhouette — per-user calibrated envelope half-spans (Plan 4 audit).
+    // Centered on chartAnchor instead of global [0.12, 0.88].
+    // Strategy axis varies more (observed raw range P50 ≈ 0.46) → wider span.
+    // MF/AR axes vary less (observed raw range P50 ≈ 0.34–0.36) → narrower span.
+    static let silhouetteSDPracticalHalfSpan: Double = 0.25
+    static let silhouetteMFARPracticalHalfSpan: Double = 0.20
 }
 
 /// Stage 2 engine. Stateless — all methods are static.
@@ -82,7 +107,8 @@ enum BlueprintLensEngine {
         snapshot: DailyEnergySnapshot,
         calibration: DailyFitCalibration = .default,
         dailyFitEngineId explicitEngineId: String? = nil,
-        narrativeIntent: NarrativeIntent? = nil
+        narrativeIntent: NarrativeIntent? = nil,
+        recordSelection: Bool = true
     ) -> TarotSelectionResult {
         let engineId = explicitEngineId ?? dailyFitEngineId(for: calibration)
         let allCards = loadAndNormaliseCards()
@@ -92,23 +118,37 @@ enum BlueprintLensEngine {
             dailyFitEngineId: engineId
         )
 
+        // Hard-block: remove cards within the 3-day cooldown window from the
+        // candidate pool so no amount of score advantage can override recency.
+        // The soft penalty (days 4-10) still applies via TarotCardScoring.
+        let cooldownCards = TarotRecencyTracker.shared.getCooldownCards(
+            profileHash: snapshot.profileHash,
+            referenceDate: snapshot.generatedAt,
+            dailyFitEngineId: engineId
+        )
+        let eligibleCards = cooldownCards.isEmpty
+            ? allCards
+            : allCards.filter { !cooldownCards.contains($0.card.name) }
+
         // Stage-1 narrative bridge path: joint (card, variant) selection
         if let intent = narrativeIntent, calibration.narrativeSelection != nil {
             let bridgeResult = NarrativeTarotBridgeSelector.select(
                 snapshot: snapshot,
-                allCards: allCards,
+                allCards: eligibleCards,
                 recentSelections: recentSelections,
                 intent: intent,
                 calibration: calibration,
                 dailySeed: snapshot.dailySeed
             )
 
-            TarotRecencyTracker.shared.storeCardSelection(
-                bridgeResult.candidate.card.name,
-                profileHash: snapshot.profileHash,
-                date: snapshot.generatedAt,
-                dailyFitEngineId: engineId
-            )
+            if recordSelection {
+                TarotRecencyTracker.shared.storeCardSelection(
+                    bridgeResult.candidate.card.name,
+                    profileHash: snapshot.profileHash,
+                    date: snapshot.generatedAt,
+                    dailyFitEngineId: engineId
+                )
+            }
 
             return TarotSelectionResult(
                 card: bridgeResult.candidate.card,
@@ -120,14 +160,14 @@ enum BlueprintLensEngine {
             )
         }
 
-        // Production / nil-intent path: existing card-first selection (unchanged)
+        // Production / nil-intent path: card-first selection with cooldown exclusion
         let weights = calibration.selectionWeights
         let vibeVector = buildVibeVector(from: snapshot.vibeProfile)
         let axesVector = buildAxesVector(from: snapshot.axes)
 
         var scoredCards: [(card: TarotCard, normAxes: [String: Double], score: Double)] = []
 
-        for (card, normAxes) in allCards {
+        for (card, normAxes) in eligibleCards {
             let breakdown = TarotCardScoring.scoreCard(
                 card: card, normAxes: normAxes,
                 vibeVector: vibeVector, axesVector: axesVector,
@@ -170,12 +210,14 @@ enum BlueprintLensEngine {
             selected = topCandidate.card
         }
 
-        TarotRecencyTracker.shared.storeCardSelection(
-            selected.name,
-            profileHash: snapshot.profileHash,
-            date: snapshot.generatedAt,
-            dailyFitEngineId: engineId
-        )
+        if recordSelection {
+            TarotRecencyTracker.shared.storeCardSelection(
+                selected.name,
+                profileHash: snapshot.profileHash,
+                date: snapshot.generatedAt,
+                dailyFitEngineId: engineId
+            )
+        }
 
         let variantResult = selectVariant(
             for: selected, profileHash: snapshot.profileHash,
@@ -476,17 +518,20 @@ enum BlueprintLensEngine {
         dailyFitEngineId engineId: String? = nil,
         precomputedEssence: StyleEssenceProfile? = nil,
         precomputedSilhouette: SilhouetteProfile? = nil,
-        narrativeIntent: NarrativeIntent? = nil
+        narrativeIntent: NarrativeIntent? = nil,
+        preselectedTarotResult: TarotSelectionResult? = nil,
+        recordTarotSelection: Bool = true
     ) -> (payload: DailyFitPayload, trace: PayloadTrace) {
         let effectiveMode = DailyFitEngineRegistry.resolvedMode(explicit: mode, engineId: engineId)
         let resolvedEngineId = DailyFitEngineRegistry.engineId(for: calibration, mode: effectiveMode)
 
         // Unified tarot+variant selection (single source of truth for both paths)
-        let tarotResult = selectTarotAndStyleEditWithBridgeTrace(
+        let tarotResult = preselectedTarotResult ?? selectTarotAndStyleEditWithBridgeTrace(
             snapshot: snapshot,
             calibration: calibration,
             dailyFitEngineId: resolvedEngineId,
-            narrativeIntent: narrativeIntent
+            narrativeIntent: narrativeIntent,
+            recordSelection: recordTarotSelection
         )
         let selected = tarotResult.card
         let variant = tarotResult.variant
@@ -1197,6 +1242,253 @@ enum BlueprintLensEngine {
         return max(0.0, min(1.0, baseline + fireNudge - waterNudge + lunarNudge + lunarMetalMod))
     }
 
+    // MARK: - Plan 2 Public Accessors
+
+    /// Public accessor for DailyNarrativeSelector — metal tone derivation.
+    static func deriveMetalTonePublic(
+        from blueprint: CosmicBlueprint,
+        snapshot: DailyEnergySnapshot,
+        calibration: DailyFitCalibration,
+        mode: DailyFitEngineMode
+    ) -> Double {
+        deriveMetalTone(from: blueprint, snapshot: snapshot, calibration: calibration, mode: mode)
+    }
+
+    // MARK: - Plan-Driven Payload Generation (Plan 2 §5.5)
+
+    /// Generates a DailyFitPayload where every surface reads from the DailyNarrativePlan.
+    /// Replaces independent surface scoring with plan-driven allocation.
+    static func generatePayloadFromPlan(
+        plan: DailyNarrativePlan,
+        blueprint: CosmicBlueprint,
+        snapshot: DailyEnergySnapshot,
+        calibration: DailyFitCalibration,
+        mode: DailyFitEngineMode,
+        dailyFitEngineId engineId: String?
+    ) -> DailyFitPayload {
+        generatePayloadFromPlanWithTarotResult(
+            plan: plan,
+            blueprint: blueprint,
+            snapshot: snapshot,
+            calibration: calibration,
+            mode: mode,
+            dailyFitEngineId: engineId
+        ).payload
+    }
+
+    static func generatePayloadFromPlanWithTarotResult(
+        plan: DailyNarrativePlan,
+        blueprint: CosmicBlueprint,
+        snapshot: DailyEnergySnapshot,
+        calibration: DailyFitCalibration,
+        mode: DailyFitEngineMode,
+        dailyFitEngineId engineId: String?
+    ) -> (payload: DailyFitPayload, tarotResult: TarotSelectionResult) {
+        let effectiveMode = DailyFitEngineRegistry.resolvedMode(explicit: mode, engineId: engineId)
+        let resolvedEngineId = DailyFitEngineRegistry.engineId(for: calibration, mode: effectiveMode)
+
+        // Essence: plan-assigned visible categories with original scoring magnitudes
+        let rawEssence = resolveEssenceProfile(from: snapshot, mode: effectiveMode)
+        let essence = planDrivenEssence(plan: plan, rawEssence: rawEssence)
+
+        // Tarot: use plan's tarot directive
+        let intent = planToIntent(plan: plan)
+        let tarotResult = selectTarotAndStyleEditWithBridgeTrace(
+            snapshot: snapshot,
+            calibration: calibration,
+            dailyFitEngineId: resolvedEngineId,
+            narrativeIntent: intent
+        )
+
+        // Palette: plan's palette directive drives slot allocation
+        let palette = selectDailyPalette(
+            from: blueprint.palette,
+            snapshot: snapshot,
+            calibration: calibration,
+            narrativeIntent: intent
+        )
+
+        // Sliders: directly from plan targets
+        let vibrancy = plan.targetVibrancy
+        let contrast = plan.targetContrast
+        let metalTone = plan.targetMetalTone
+        let silhouette = plan.targetSilhouette
+
+        // Textures: plan-biased selection
+        let textures = selectDailyTexturesFromPlan(
+            plan: plan,
+            from: blueprint.textures,
+            snapshot: snapshot
+        )
+
+        // Pattern: plan-gated selection
+        let pattern = selectDailyPatternFromPlan(
+            plan: plan,
+            from: blueprint.pattern,
+            snapshot: snapshot
+        )
+
+        let presentation = PersonalScaleEnvelopeCalculator.makePresentation(
+            blueprint: blueprint,
+            calibration: calibration,
+            mode: effectiveMode,
+            vibrancy: vibrancy,
+            contrast: contrast,
+            metalTone: metalTone,
+            silhouette: silhouette
+        )
+
+        let payload = DailyFitPayload(
+            tarotCard: tarotResult.card,
+            styleEditVariant: tarotResult.variant,
+            dailyPalette: palette,
+            vibrancy: vibrancy,
+            contrast: contrast,
+            metalTone: metalTone,
+            essenceProfile: essence,
+            silhouetteProfile: silhouette,
+            vibeBreakdown: snapshot.vibeProfile,
+            axes: snapshot.axes,
+            dominantTransits: snapshot.dominantTransits,
+            lunarContext: snapshot.lunarContext,
+            dailyTextures: textures,
+            dailyPattern: pattern,
+            generatedAt: snapshot.generatedAt,
+            dailyFitEngineId: resolvedEngineId,
+            scalePresentation: presentation
+        )
+        return (payload, tarotResult)
+    }
+
+    /// Build a plan-assigned essence profile: visible top-3 comes from the plan,
+    /// magnitudes from original scoring. Preserves allScores for ghost/trace.
+    private static func planDrivenEssence(
+        plan: DailyNarrativePlan,
+        rawEssence: StyleEssenceProfile
+    ) -> StyleEssenceProfile {
+        let planVisible = [plan.accentEssence] + plan.supportingEssences
+        let scoreMap = Dictionary(uniqueKeysWithValues: rawEssence.allScores.map { ($0.category, $0.score) })
+        let visibleScores = planVisible.map { cat in
+            StyleEssenceScore(category: cat, score: scoreMap[cat] ?? 0.0)
+        }
+        return StyleEssenceProfile(
+            allScores: rawEssence.allScores,
+            visibleCategories: visibleScores,
+            chartAnchorScores: rawEssence.chartAnchorScores
+        )
+    }
+
+    /// Convert a DailyNarrativePlan to a NarrativeIntent for backward-compatible
+    /// tarot and palette selection functions.
+    private static func planToIntent(plan: DailyNarrativePlan) -> NarrativeIntent {
+        NarrativeIntent(
+            relationship: plan.relationship,
+            anchorTop3: plan.anchorEssences,
+            weatherTop3: [plan.accentEssence] + plan.supportingEssences,
+            tarot: plan.tarotDirective,
+            palette: plan.paletteDirective,
+            scales: plan.scaleDirective ?? ScaleDirective(
+                vibrancyCap: nil, contrastCap: nil,
+                pullTowardBaseline: false, baselineBlend: 0.0
+            ),
+            essencePresentation: EssencePresentationDirective(showAnchorGhost: true),
+            themeLexiconKey: nil,
+            coherenceGap: nil
+        )
+    }
+
+    /// Texture selection biased by plan directives.
+    private static func selectDailyTexturesFromPlan(
+        plan: DailyNarrativePlan,
+        from textures: TexturesSection,
+        snapshot: DailyEnergySnapshot
+    ) -> [String] {
+        let axesNorm: [String: Double] = [
+            "action":     snapshot.axes.action / 10.0,
+            "tempo":      snapshot.axes.tempo / 10.0,
+            "strategy":   snapshot.axes.strategy / 10.0,
+            "visibility": snapshot.axes.visibility / 10.0,
+        ]
+        let skyVibe = snapshot.skyVibeProfile ?? snapshot.vibeProfile
+
+        var scored: [(String, Double)] = textures.recommendedTextures.map { texture in
+            let lower = texture.lowercased()
+            var score = 0.5
+
+            for (keyword, affinities) in textureAxisAffinity {
+                if lower.contains(keyword) {
+                    let weightSum = affinities.values.reduce(0.0, +)
+                    guard weightSum > 0 else { break }
+                    score = affinities.reduce(0.0) {
+                        $0 + $1.value * (axesNorm[$1.key] ?? 0.5)
+                    } / weightSum
+                    break
+                }
+            }
+            score += textureVibeBonus(lower: lower, vibe: skyVibe)
+
+            // Plan bias: boost textures matching plan's preferred affinities
+            for affinity in plan.textureDirective.preferredAffinities {
+                if lower.contains(affinity) {
+                    score += 0.15 + plan.textureDirective.intensityBias
+                    break
+                }
+            }
+
+            return (texture, score)
+        }
+
+        if let topScore = scored.max(by: { $0.1 < $1.1 })?.1, topScore > 0 {
+            let threshold = topScore * 0.85
+            let tiedGroup = scored.filter { $0.1 >= threshold }
+            if tiedGroup.count > 1 {
+                var rng = SeededRandomGenerator(seed: snapshot.dailySeed &+ 7)
+                let shuffled = tiedGroup.shuffled(using: &rng)
+                let rest = scored.filter { $0.1 < threshold }
+                scored = shuffled + rest.sorted { $0.1 > $1.1 }
+            } else {
+                scored.sort { $0.1 > $1.1 }
+            }
+        } else {
+            scored.sort { $0.1 > $1.1 }
+        }
+
+        guard scored.count >= 2 else { return scored.map(\.0) }
+        let takeThree = scored.count >= 3 && scored[2].1 >= scored[1].1 * 0.8
+        return Array(scored.prefix(takeThree ? 3 : 2)).map(\.0)
+    }
+
+    /// Pattern selection gated and directed by plan.
+    private static func selectDailyPatternFromPlan(
+        plan: DailyNarrativePlan,
+        from patterns: PatternSection,
+        snapshot: DailyEnergySnapshot
+    ) -> String? {
+        guard plan.patternDirective.gateEnabled else { return nil }
+        guard snapshot.axes.visibility >= 6.0 else { return nil }
+        guard !patterns.recommendedPatterns.isEmpty else { return nil }
+
+        let energyKey = plan.patternDirective.preferredEnergy ?? "drama"
+        let energy = Energy(rawValue: energyKey) ?? .drama
+        let keywords = patternEnergyKeywords[energy] ?? []
+
+        var scored: [(String, Double)] = patterns.recommendedPatterns.map { pattern in
+            let lower = pattern.lowercased()
+            let score = keywords.reduce(0.0) { $0 + (lower.contains($1) ? 1.0 : 0.0) }
+            return (pattern, score)
+        }
+        scored.sort { $0.1 > $1.1 }
+
+        if let topScore = scored.first?.1, topScore > 0 {
+            let topPatterns = scored.filter { $0.1 >= topScore * 0.8 }
+            var rng = SeededRandomGenerator(seed: snapshot.dailySeed)
+            let idx = Int.random(in: 0..<topPatterns.count, using: &rng)
+            return topPatterns[idx].0
+        }
+
+        return scored.first?.0
+    }
+
     // MARK: - Style Essence Profile (14-Category Radar)
 
     /// Single dispatch point for mode-dependent essence derivation.
@@ -1810,6 +2102,14 @@ enum BlueprintLensEngine {
             referenceDate: snapshot.generatedAt,
             dailyFitEngineId: engineId
         )
+        let diagnosticCooldownCards = TarotRecencyTracker.shared.getCooldownCards(
+            profileHash: snapshot.profileHash,
+            referenceDate: snapshot.generatedAt,
+            dailyFitEngineId: engineId
+        )
+        if !diagnosticCooldownCards.isEmpty {
+            print("\(p) Hard-blocked (\(TarotRecencyTracker.cooldownDayCount)-day cooldown): \(diagnosticCooldownCards.sorted().joined(separator: ", "))")
+        }
         let vibeVector = buildVibeVector(from: snapshot.vibeProfile)
         let axesVector = buildAxesVector(from: snapshot.axes)
         let weights = calibration.selectionWeights
