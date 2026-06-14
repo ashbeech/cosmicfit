@@ -81,6 +81,7 @@ class UserProfileStorage {
     private let hasSeenWelcomeKey = "CosmicFitHasSeenWelcome"
     private let migrationDoneKey = "CosmicFitProfileMigratedToFile"
     private let onboardingPendingAuthKey = "CosmicFitOnboardingPendingAuth"
+    private let showMasculineFeminineSliderKey = "CosmicFitShowMasculineFeminineSlider"
     
     private var profileFileURL: URL {
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -201,7 +202,22 @@ class UserProfileStorage {
     func clearOnboardingPendingAuth() {
         userDefaults.removeObject(forKey: onboardingPendingAuthKey)
     }
-    
+
+    // MARK: - Daily Fit Display Preferences
+
+    /// When `true` (default), the masculine/feminine silhouette slider is shown on Daily Fit.
+    func showMasculineFeminineSliderInDailyFit() -> Bool {
+        if userDefaults.object(forKey: showMasculineFeminineSliderKey) == nil {
+            return true
+        }
+        return userDefaults.bool(forKey: showMasculineFeminineSliderKey)
+    }
+
+    func setShowMasculineFeminineSliderInDailyFit(_ show: Bool) {
+        userDefaults.set(show, forKey: showMasculineFeminineSliderKey)
+        NotificationCenter.default.post(name: .dailyFitDisplayPreferencesChanged, object: nil)
+    }
+
     // MARK: - Private Methods
     
     private func cleanupUserDailyVibes(userId: String) {
@@ -235,4 +251,7 @@ extension Notification.Name {
 
     /// DEBUG: Posted when dev force refresh starts/finishes; `userInfo["isRefreshing"]` is `Bool`.
     static let devForceRefreshStateChanged = Notification.Name("devForceRefreshStateChanged")
+
+    /// Posted when Daily Fit display preferences change (e.g. silhouette slider visibility).
+    static let dailyFitDisplayPreferencesChanged = Notification.Name("dailyFitDisplayPreferencesChanged")
 }

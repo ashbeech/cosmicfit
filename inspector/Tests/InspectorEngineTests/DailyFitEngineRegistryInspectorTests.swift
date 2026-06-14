@@ -60,7 +60,9 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
-                dailyFitEngineId: DailyFitEngineRegistry.legacyBaselineId
+                dailyFitEngineId: DailyFitEngineRegistry.legacyBaselineId,
+                deviceLatitude: nil,
+                deviceLongitude: nil
             )
         )
 
@@ -89,7 +91,9 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
-                dailyFitEngineId: DailyFitEngineRegistry.productionId
+                dailyFitEngineId: DailyFitEngineRegistry.productionId,
+                deviceLatitude: nil,
+                deviceLongitude: nil
             )
         )
 
@@ -120,7 +124,9 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
-                dailyFitEngineId: nil
+                dailyFitEngineId: nil,
+                deviceLatitude: nil,
+                deviceLongitude: nil
             )
         )
 
@@ -149,7 +155,9 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
-                dailyFitEngineId: DailyFitEngineRegistry.productionId
+                dailyFitEngineId: DailyFitEngineRegistry.productionId,
+                deviceLatitude: nil,
+                deviceLongitude: nil
             )
         )
 
@@ -186,7 +194,9 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
-                dailyFitEngineId: DailyFitEngineRegistry.productionId
+                dailyFitEngineId: DailyFitEngineRegistry.productionId,
+                deviceLatitude: nil,
+                deviceLongitude: nil
             )
         )
         let prodResponse = try await engine.resolve(request: prodRequest)
@@ -200,7 +210,9 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
-                dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
+                dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId,
+                deviceLatitude: nil,
+                deviceLongitude: nil
             )
         )
         let stage1Response = try await engine.resolve(request: stage1Request)
@@ -231,7 +243,9 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
-                dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
+                dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId,
+                deviceLatitude: nil,
+                deviceLongitude: nil
             )
         )
 
@@ -275,7 +289,9 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
-                dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
+                dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId,
+                deviceLatitude: nil,
+                deviceLongitude: nil
             )
         )
 

@@ -139,9 +139,12 @@ class DailyFitViewController: UIViewController {
     private var metalToneIndicatorConstraint: NSLayoutConstraint?
 
     private var silhouetteSliderData: [(indicator: UILabel, track: UIView, constraint: NSLayoutConstraint?)] = []
+    private let silhouetteSlidersStack = UIStackView()
+    private var masculineFeminineSliderView: UIView?
 
     /// Six scale markers: vibrancy, contrast, metal tone, and three silhouette sliders.
     private static let dailyFitSliderCount = 6
+    private static let masculineFeminineSliderIndex = 3
     private static let sliderEntranceAnimationDuration: TimeInterval = 0.38
     private static let sliderEntranceAnimationStagger: TimeInterval = 0.03
     private var sliderTargetValues = [Double](repeating: 0, count: dailyFitSliderCount)
@@ -319,6 +322,13 @@ class DailyFitViewController: UIViewController {
             object: nil
         )
 
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleDailyFitDisplayPreferencesChanged),
+            name: .dailyFitDisplayPreferencesChanged,
+            object: nil
+        )
+
         if dailyFitPayload != nil {
             updateContentFromPayload()
         }
@@ -326,6 +336,13 @@ class DailyFitViewController: UIViewController {
 
     @objc private func handleEntitlementChange() {
         updateDayNavigationUI()
+    }
+
+    @objc private func handleDailyFitDisplayPreferencesChanged() {
+        applyMasculineFeminineSliderVisibility()
+        markSliderEntranceAnimationCompleteIfNeeded()
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
     }
 
     override func viewDidLayoutSubviews() {
@@ -448,6 +465,7 @@ class DailyFitViewController: UIViewController {
         }
         
         checkCardRevealState()
+        applyMasculineFeminineSliderVisibility()
         
         if !isCardRevealed, currentCardState == .unrevealed {
             contentView.bringSubviewToFront(tarotCardContainerView)
@@ -1525,6 +1543,18 @@ class DailyFitViewController: UIViewController {
         silhouetteContainer.alpha = 0.0
         contentView.addSubview(silhouetteContainer)
 
+        silhouetteSlidersStack.axis = .vertical
+        silhouetteSlidersStack.spacing = 24
+        silhouetteSlidersStack.translatesAutoresizingMaskIntoConstraints = false
+        silhouetteContainer.addSubview(silhouetteSlidersStack)
+
+        NSLayoutConstraint.activate([
+            silhouetteSlidersStack.topAnchor.constraint(equalTo: silhouetteContainer.topAnchor),
+            silhouetteSlidersStack.leadingAnchor.constraint(equalTo: silhouetteContainer.leadingAnchor),
+            silhouetteSlidersStack.trailingAnchor.constraint(equalTo: silhouetteContainer.trailingAnchor),
+            silhouetteSlidersStack.bottomAnchor.constraint(equalTo: silhouetteContainer.bottomAnchor),
+        ])
+
         let sliderLabels = [
             ("Masculine", "Feminine"),
             ("Angular", "Rounded"),
@@ -1532,29 +1562,47 @@ class DailyFitViewController: UIViewController {
         ]
 
         silhouetteSliderData = []
-        var lastSlider: UIView?
 
-        for (leftLabel, rightLabel) in sliderLabels {
+        for (index, (leftLabel, rightLabel)) in sliderLabels.enumerated() {
             let (slider, indicator, track) = createSilhouetteSlider(leftLabel: leftLabel, rightLabel: rightLabel)
             slider.translatesAutoresizingMaskIntoConstraints = false
-            silhouetteContainer.addSubview(slider)
+            silhouetteSlidersStack.addArrangedSubview(slider)
             silhouetteSliderData.append((indicator: indicator, track: track, constraint: nil))
 
-            NSLayoutConstraint.activate([
-                slider.leadingAnchor.constraint(equalTo: silhouetteContainer.leadingAnchor),
-                slider.trailingAnchor.constraint(equalTo: silhouetteContainer.trailingAnchor),
-            ])
-
-            if let last = lastSlider {
-                slider.topAnchor.constraint(equalTo: last.bottomAnchor, constant: 24).isActive = true
-            } else {
-                slider.topAnchor.constraint(equalTo: silhouetteContainer.topAnchor).isActive = true
+            if index == 0 {
+                masculineFeminineSliderView = slider
             }
-            lastSlider = slider
         }
 
-        if let lastSlider = lastSlider {
-            silhouetteContainer.bottomAnchor.constraint(equalTo: lastSlider.bottomAnchor).isActive = true
+        applyMasculineFeminineSliderVisibility()
+    }
+
+    private func isMasculineFeminineSliderVisibleInDailyFit() -> Bool {
+        UserProfileStorage.shared.showMasculineFeminineSliderInDailyFit()
+    }
+
+    private func isSliderIndexActive(_ index: Int) -> Bool {
+        if index == Self.masculineFeminineSliderIndex {
+            return isMasculineFeminineSliderVisibleInDailyFit()
+        }
+        return true
+    }
+
+    private func applyMasculineFeminineSliderVisibility() {
+        guard let sliderView = masculineFeminineSliderView else { return }
+        let show = isMasculineFeminineSliderVisibleInDailyFit()
+        sliderView.isHidden = !show
+
+        if !show {
+            sliderEntranceAnimationsPlayed[Self.masculineFeminineSliderIndex] = true
+            sliderEntranceAnimationsInFlight.remove(Self.masculineFeminineSliderIndex)
+        }
+    }
+
+    private func syncHiddenSliderEntranceStateIfNeeded() {
+        if !isMasculineFeminineSliderVisibleInDailyFit() {
+            sliderEntranceAnimationsPlayed[Self.masculineFeminineSliderIndex] = true
+            sliderEntranceAnimationsInFlight.remove(Self.masculineFeminineSliderIndex)
         }
     }
 
@@ -2445,19 +2493,16 @@ class DailyFitViewController: UIViewController {
             sliderTargetValues[0] = sp.vibrancy.displayPosition
             sliderTargetValues[1] = sp.contrast.displayPosition
             sliderTargetValues[2] = Self.snapMetalToThreePositions(sp.metalTone.displayPosition)
+            sliderTargetValues[3] = sp.masculineFeminine?.displayPosition ?? payload.silhouetteProfile.masculineFeminine
+            sliderTargetValues[4] = sp.angularRounded?.displayPosition ?? payload.silhouetteProfile.angularRounded
+            sliderTargetValues[5] = sp.structuredDraped?.displayPosition ?? payload.silhouetteProfile.structuredDraped
         } else {
             sliderTargetValues[0] = payload.vibrancy
             sliderTargetValues[1] = payload.contrast
             sliderTargetValues[2] = Self.snapMetalToThreePositions(payload.metalTone)
-        }
-
-        let silhouetteValues = [
-            payload.silhouetteProfile.masculineFeminine,
-            payload.silhouetteProfile.angularRounded,
-            payload.silhouetteProfile.structuredDraped
-        ]
-        for (offset, value) in silhouetteValues.enumerated() where offset < 3 {
-            sliderTargetValues[3 + offset] = value
+            sliderTargetValues[3] = payload.silhouetteProfile.masculineFeminine
+            sliderTargetValues[4] = payload.silhouetteProfile.angularRounded
+            sliderTargetValues[5] = payload.silhouetteProfile.structuredDraped
         }
 
         applyAllSliderMarkerPositionsFromState()
@@ -2474,6 +2519,7 @@ class DailyFitViewController: UIViewController {
 
         let alreadyAnimatedToday = hasPersistedSliderEntranceForCurrentDay
         sliderEntranceAnimationsPlayed = [Bool](repeating: alreadyAnimatedToday, count: Self.dailyFitSliderCount)
+        syncHiddenSliderEntranceStateIfNeeded()
 
         applyAllSliderMarkerPositionsFromState()
     }
@@ -2489,6 +2535,7 @@ class DailyFitViewController: UIViewController {
         sliderEntranceAnimationGeneration += 1
         sliderEntranceAnimationsInFlight.removeAll()
         sliderEntranceAnimationsPlayed = [Bool](repeating: false, count: Self.dailyFitSliderCount)
+        syncHiddenSliderEntranceStateIfNeeded()
         applyAllSliderMarkerPositionsFromState()
         // Commit the left-edge reset to the presentation layer now, so a marker
         // carried over at the previous day's position can't leak into the
@@ -2506,12 +2553,16 @@ class DailyFitViewController: UIViewController {
     }
 
     private func markSliderEntranceAnimationCompleteIfNeeded() {
-        guard sliderEntranceAnimationsPlayed.allSatisfy({ $0 }) else { return }
+        let allComplete = (0..<Self.dailyFitSliderCount).allSatisfy { index in
+            !isSliderIndexActive(index) || sliderEntranceAnimationsPlayed[index]
+        }
+        guard allComplete else { return }
         persistSliderEntranceForCurrentDay()
     }
 
     private func applyAllSliderMarkerPositionsFromState() {
         for index in 0..<Self.dailyFitSliderCount {
+            guard isSliderIndexActive(index) else { continue }
             guard !sliderEntranceAnimationsInFlight.contains(index) else { continue }
             let value = sliderEntranceAnimationsPlayed[index] ? sliderTargetValues[index] : 0
             applySliderMarkerPosition(index: index, value: value)
@@ -2584,7 +2635,8 @@ class DailyFitViewController: UIViewController {
 
         var pendingIndices: [Int] = []
         for index in 0..<Self.dailyFitSliderCount {
-            guard !sliderEntranceAnimationsPlayed[index],
+            guard isSliderIndexActive(index),
+                  !sliderEntranceAnimationsPlayed[index],
                   !sliderEntranceAnimationsInFlight.contains(index),
                   let track = sliderTrackView(for: index),
                   isSliderTrackVisibleInScrollView(track) else { continue }

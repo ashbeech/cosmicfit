@@ -10,6 +10,29 @@ import Foundation
 
 // MARK: - Stage 1 Nested Types
 
+// MARK: - Sky Salience (Adaptive Transit Weighting)
+
+/// Speed-weighted, freshness-aware salience profile for the day's transits.
+/// Replaces fixed planet weights with adaptive scoring that surfaces fast-moving,
+/// currently-active signals over slow background outer-planet noise.
+/// Diagnostic fuel for Plan 2 — kept separate from production dominant-transit logic.
+struct SkySalienceProfile: Codable, Equatable {
+    struct SalienceEntry: Codable, Equatable {
+        let planet: String
+        let aspect: String
+        let natalTarget: String
+        let rawStrength: Double
+        let speedFactor: Double
+        let freshnessBonus: Double
+        let salience: Double
+        let essenceCategory: StyleEssenceCategory?
+    }
+
+    let entries: [SalienceEntry]
+    let topDrivers: [SalienceEntry]
+    let dominantNarrative: String?
+}
+
 /// Lightweight summary of an active transit for Stage 2 and UI consumption.
 struct DailyTransitSummary: Codable, Equatable {
     /// Transiting planet name, e.g. "Mars"
@@ -61,6 +84,8 @@ struct DailyEnergySnapshot: Codable {
     let chartAxes: DerivedAxes?
     /// Raw (pre-normalisation) vibe scores for tie-breaking when integer points are equal.
     let vibeRawScores: [Energy: Double]?
+    /// Adaptive salience profile for stage1_experimental diagnostics. nil in production.
+    let skySalience: SkySalienceProfile?
 
     init(
         vibeProfile: VibeBreakdown,
@@ -73,7 +98,8 @@ struct DailyEnergySnapshot: Codable {
         chartVibeProfile: VibeBreakdown? = nil,
         skyVibeProfile: VibeBreakdown? = nil,
         chartAxes: DerivedAxes? = nil,
-        vibeRawScores: [Energy: Double]? = nil
+        vibeRawScores: [Energy: Double]? = nil,
+        skySalience: SkySalienceProfile? = nil
     ) {
         self.vibeProfile = vibeProfile
         self.axes = axes
@@ -86,6 +112,7 @@ struct DailyEnergySnapshot: Codable {
         self.skyVibeProfile = skyVibeProfile
         self.chartAxes = chartAxes
         self.vibeRawScores = vibeRawScores
+        self.skySalience = skySalience
     }
 }
 
@@ -511,6 +538,57 @@ struct NarrativeBridgeTrace: Codable, Equatable {
     let pairsEvaluated: Int
     let contrastWeatherWins: Bool?
     let bridgePass: Bool
+}
+
+// MARK: - Daily Narrative Plan (Plan 2)
+
+/// Intensity level derived from sky salience concentration.
+enum IntensityLevel: String, Codable, CaseIterable, Equatable {
+    case low, moderate, high, peak
+}
+
+/// Tempo emphasis derived from Moon's position in salience profile.
+enum TempoEmphasis: String, Codable, CaseIterable, Equatable {
+    case slow, steady, dynamic
+}
+
+/// Plan-owned texture selection constraint.
+struct TextureDirective: Codable, Equatable {
+    let preferredAffinities: [String]
+    let intensityBias: Double
+}
+
+/// Plan-owned pattern selection constraint.
+struct PatternDirective: Codable, Equatable {
+    let gateEnabled: Bool
+    let preferredEnergy: String?
+}
+
+/// Single forward-looking narrative decision for the day.
+/// Decided BEFORE any surface is selected; every visible surface reads from this plan.
+struct DailyNarrativePlan: Codable, Equatable {
+    let relationship: NarrativeRelationship
+    let accentEssence: StyleEssenceCategory
+    let supportingEssences: [StyleEssenceCategory]
+    let anchorEssences: [StyleEssenceCategory]
+
+    let intensityLevel: IntensityLevel
+    let tempoEmphasis: TempoEmphasis
+
+    let targetVibrancy: Double
+    let targetContrast: Double
+    let targetMetalTone: Double
+    let targetSilhouette: SilhouetteProfile
+
+    let paletteDirective: PaletteDirective
+    let tarotDirective: TarotDirective
+    let scaleDirective: ScaleDirective?
+    let textureDirective: TextureDirective
+    let patternDirective: PatternDirective
+
+    let salienceDrivers: [String]
+    let skyJustification: String
+    let coherenceTrace: CoherenceValidationResult?
 }
 
 /// Record of a single essence category suppressed to avoid contradictory narrative.

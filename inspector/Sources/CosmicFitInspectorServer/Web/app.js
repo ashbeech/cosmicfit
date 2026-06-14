@@ -2551,9 +2551,21 @@ function buildFamilyDecisionTraceSteps(ctx, options = {}) {
 function buildBlueprintDiagnosticsAccordion(diag) {
   if (!diag?.familyDecisionTrace) return "";
   const ctx = { data: { blueprintDiagnostics: diag } };
-  return accordion("Style Guide · Colour Engine Decision Tree", () =>
+  let html = accordion("Style Guide · Colour Engine Decision Tree", () =>
     renderDerivationTimeline(buildFamilyDecisionTraceSteps(ctx)),
   );
+
+  if (diag.midheavenSign) {
+    html += accordion("Style Guide · Midheaven Narrative Overlay", () => {
+      const applied = diag.midheavenOverlayApplied ? "Yes" : "No";
+      return `<table class="data-table"><tbody>
+        <tr><td>Midheaven sign</td><td>${esc(diag.midheavenSign)}</td></tr>
+        <tr><td>MC narrative overlay applied</td><td>${applied}</td></tr>
+      </tbody></table>`;
+    });
+  }
+
+  return html;
 }
 
 function renderBlueprintColourDrill(name, ctx) {

@@ -1,5 +1,5 @@
-MARIA: family=Deep Autumn | d=68 w=16 s=146 c=117 st=70 fa=4 ew=2
-  flags: earthDepth=false winterComp=false coolLean=false scorpio=true capVirgo=false faChroma=true waterSoft=false surfPres=false
+MARIA: family=Deep Autumn | d=103 w=44 s=25 c=6 st=68 fa=1 ew=5
+  flags: earthDepth=false winterComp=false coolLean=false scorpio=false capVirgo=true faChroma=false waterSoft=false surfPres=false
   variables: depth=Deep temp=Warm sat=Rich contrast=Medium surface=Structured
   secondaryPull: True Autumn
 

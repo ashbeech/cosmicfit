@@ -2,7 +2,12 @@
 //  NarrativeSelectionDirectives.swift
 //  Cosmic Fit
 //
-//  Narrative intent types, role-preference maps, and palette slot allocation (§15.2–§15.3).
+//  DEPRECATED (Plan 2): resolveEssenceConflicts superseded by DailyNarrativeCoherence.validate.
+//  applyNarrativePaletteScoring and selectViaNarrativeSlots still used by generatePayloadFromPlan
+//  via plan-to-intent bridge. Palette slot allocation reads from DailyNarrativePlan.paletteDirective.
+//  Retained for production compatibility and plan-to-intent bridge. Planned removal after Plan 3.
+//
+//  Original purpose: Narrative intent types, role-preference maps, and palette slot allocation.
 //
 
 import Foundation
@@ -22,11 +27,11 @@ struct NarrativeIntent: Equatable {
     let coherenceGap: String?
 }
 
-struct TarotDirective: Equatable {
+struct TarotDirective: Equatable, Codable {
     let targetEnergyVector: [Energy: Double]
 }
 
-struct PaletteDirective: Equatable {
+struct PaletteDirective: Equatable, Codable {
     let maxStatementSlots: Int
     let accentCategory: StyleEssenceCategory
     let foundationCategory: StyleEssenceCategory
@@ -34,7 +39,7 @@ struct PaletteDirective: Equatable {
     let preferFoundationOverStatement: Bool
 }
 
-struct ScaleDirective: Equatable {
+struct ScaleDirective: Equatable, Codable {
     let vibrancyCap: Double?
     let contrastCap: Double?
     let pullTowardBaseline: Bool

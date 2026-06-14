@@ -288,6 +288,10 @@ enum PaletteLibrary {
         "clear black": "#0D1014",
         "bitter chocolate": "#3A2A1E",
         "ink brown": "#2B1E15",
+
+        // V4.8 — Black eligibility swatches
+        "soft black": "#1A1A1E",
+        "black brown": "#1C1210",
     ]
 
     static func hex(for colourName: String) -> String {

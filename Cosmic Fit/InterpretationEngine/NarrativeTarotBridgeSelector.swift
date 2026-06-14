@@ -2,8 +2,12 @@
 //  NarrativeTarotBridgeSelector.swift
 //  Cosmic Fit
 //
-//  Joint (card, variant) selection for Stage-1 narrative bridge.
-//  Astro funnel builds eligibility; narrative intent picks best existing copy.
+//  DEPRECATED (Plan 2): Stage-1 tarot selection now reads from DailyNarrativePlan.tarotDirective
+//  via BlueprintLensEngine.generatePayloadFromPlan. This selector is still called indirectly
+//  through the plan-to-intent bridge for backward compatibility.
+//  Retained for production compatibility. Planned removal after Plan 3 cleanup.
+//
+//  Original purpose: Joint (card, variant) selection for Stage-1 narrative bridge.
 //
 
 import Foundation

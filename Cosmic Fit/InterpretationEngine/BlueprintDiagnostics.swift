@@ -14,6 +14,52 @@ struct BlueprintDiagnosticReport: Codable, Equatable {
     let boundaryFlags: [ChartInputAdapter.BoundaryFlag]
     let familyDecisionTrace: FamilyDecisionTrace
     let accentSlots: [AccentSlot]
+    let depthOverlay: DepthOverlayResolver.OverlayResult
+    let blackEligibility: BlackEligibilityResolver.BlackResult
+    let visibilityAccent: VisibilityAccentResolver.VisibilityResult
+    let midheavenSign: String
+    let midheavenOverlayApplied: Bool
+
+    init(
+        chartInput: BirthChartColourInput,
+        boundaryFlags: [ChartInputAdapter.BoundaryFlag],
+        familyDecisionTrace: FamilyDecisionTrace,
+        accentSlots: [AccentSlot],
+        depthOverlay: DepthOverlayResolver.OverlayResult,
+        blackEligibility: BlackEligibilityResolver.BlackResult = .ineligible,
+        visibilityAccent: VisibilityAccentResolver.VisibilityResult = .none,
+        midheavenSign: String = "",
+        midheavenOverlayApplied: Bool = false
+    ) {
+        self.chartInput = chartInput
+        self.boundaryFlags = boundaryFlags
+        self.familyDecisionTrace = familyDecisionTrace
+        self.accentSlots = accentSlots
+        self.depthOverlay = depthOverlay
+        self.blackEligibility = blackEligibility
+        self.visibilityAccent = visibilityAccent
+        self.midheavenSign = midheavenSign
+        self.midheavenOverlayApplied = midheavenOverlayApplied
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case chartInput, boundaryFlags, familyDecisionTrace, accentSlots
+        case depthOverlay, blackEligibility, visibilityAccent
+        case midheavenSign, midheavenOverlayApplied
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.chartInput = try c.decode(BirthChartColourInput.self, forKey: .chartInput)
+        self.boundaryFlags = try c.decode([ChartInputAdapter.BoundaryFlag].self, forKey: .boundaryFlags)
+        self.familyDecisionTrace = try c.decode(FamilyDecisionTrace.self, forKey: .familyDecisionTrace)
+        self.accentSlots = try c.decode([AccentSlot].self, forKey: .accentSlots)
+        self.depthOverlay = try c.decode(DepthOverlayResolver.OverlayResult.self, forKey: .depthOverlay)
+        self.blackEligibility = try c.decodeIfPresent(BlackEligibilityResolver.BlackResult.self, forKey: .blackEligibility) ?? .ineligible
+        self.visibilityAccent = try c.decodeIfPresent(VisibilityAccentResolver.VisibilityResult.self, forKey: .visibilityAccent) ?? .none
+        self.midheavenSign = try c.decodeIfPresent(String.self, forKey: .midheavenSign) ?? ""
+        self.midheavenOverlayApplied = try c.decodeIfPresent(Bool.self, forKey: .midheavenOverlayApplied) ?? false
+    }
 }
 
 struct BlueprintComposeResult: Equatable {
@@ -25,13 +71,20 @@ enum BlueprintDiagnostics {
 
     static func report(
         from colourResult: ColourEngineResult,
-        adaptedInput: ChartInputAdapter.AdaptedInput
+        adaptedInput: ChartInputAdapter.AdaptedInput,
+        midheavenSign: String = "",
+        midheavenOverlayApplied: Bool = false
     ) -> BlueprintDiagnosticReport {
         BlueprintDiagnosticReport(
             chartInput: adaptedInput.colourInput,
             boundaryFlags: adaptedInput.boundaryFlags,
             familyDecisionTrace: colourResult.trace,
-            accentSlots: colourResult.accentSlots
+            accentSlots: colourResult.accentSlots,
+            depthOverlay: colourResult.depthOverlay,
+            blackEligibility: colourResult.blackEligibility,
+            visibilityAccent: colourResult.visibilityAccent,
+            midheavenSign: midheavenSign,
+            midheavenOverlayApplied: midheavenOverlayApplied
         )
     }
 }

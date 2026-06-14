@@ -1,0 +1,169 @@
+Slider Range Audit — Full Diagnostic
+Engine: stage1_experimental | 216 users × 60 days | 2026-05-01
+══════════════════════════════════════════════════════════════════════════════════════════
+
+┌─ VIBRANCY ──────────────────────────────────────────────────────────────
+│ Raw value range (mean):          0.3106
+│ Raw value range (p50):           0.3141
+│ Baseline-relative delta (mean):  0.3106
+│ Envelope span (mean):            0.4400
+│ Envelope utilization:            0.7059
+│ Display position range (mean):   0.7059
+│ Display position range (p10/p50/p90): 0.613/0.714/0.795
+│ Clamp rate (mean):               0.4792
+│ Users with any clamping:         96%
+│ Users with >10% clamping:        96%
+│ UI marker range (mean):          0.7059
+│ UI distinct positions (mean):    20.7
+│ Stuck one tertile (dp):          0%
+│ Stuck one tertile (UI):          0%
+└────────────────────────────────────────────────────────────────────────────────────────
+
+┌─ CONTRAST ──────────────────────────────────────────────────────────────
+│ Raw value range (mean):          0.0736
+│ Raw value range (p50):           0.0793
+│ Baseline-relative delta (mean):  0.0736
+│ Envelope span (mean):            0.2800
+│ Envelope utilization:            0.2630
+│ Display position range (mean):   0.2630
+│ Display position range (p10/p50/p90): 0.120/0.283/0.374
+│ Clamp rate (mean):               0.5000
+│ Users with any clamping:         100%
+│ Users with >10% clamping:        100%
+│ UI marker range (mean):          0.2630
+│ UI distinct positions (mean):    7.5
+│ Stuck one tertile (dp):          69%
+│ Stuck one tertile (UI):          69%
+└────────────────────────────────────────────────────────────────────────────────────────
+
+┌─ METALTONE ─────────────────────────────────────────────────────────────
+│ Raw value range (mean):          0.3366
+│ Raw value range (p50):           0.3579
+│ Baseline-relative delta (mean):  0.3366
+│ Envelope span (mean):            0.6975
+│ Envelope utilization:            0.4826
+│ Display position range (mean):   0.4883
+│ Display position range (p10/p50/p90): 0.356/0.468/0.682
+│ Clamp rate (mean):               0.0833
+│ Users with any clamping:         17%
+│ Users with >10% clamping:        17%
+│ UI marker range (mean):          0.6157
+│ UI distinct positions (mean):    2.2
+│ Stuck one tertile (dp):          0%
+│ Stuck one tertile (UI):          0%
+└────────────────────────────────────────────────────────────────────────────────────────
+
+┌─ MASCULINEFEMININE ─────────────────────────────────────────────────────
+│ Raw value range (mean):          0.2337
+│ Raw value range (p50):           0.2350
+│ Baseline-relative delta (mean):  0.2337
+│ Envelope span (mean):            0.4000
+│ Envelope utilization:            0.5843
+│ Display position range (mean):   0.5843
+│ Display position range (p10/p50/p90): 0.387/0.587/0.756
+│ Clamp rate (mean):               0.5000
+│ Users with any clamping:         100%
+│ Users with >10% clamping:        100%
+│ UI marker range (mean):          0.5843
+│ UI distinct positions (mean):    17.0
+│ Stuck one tertile (dp):          3%
+│ Stuck one tertile (UI):          3%
+└────────────────────────────────────────────────────────────────────────────────────────
+
+┌─ ANGULARROUNDED ────────────────────────────────────────────────────────
+│ Raw value range (mean):          0.0000
+│ Raw value range (p50):           0.0000
+│ Baseline-relative delta (mean):  0.0000
+│ Envelope span (mean):            0.4000
+│ Envelope utilization:            0.0000
+│ Display position range (mean):   0.0000
+│ Display position range (p10/p50/p90): 0.000/0.000/0.000
+│ Clamp rate (mean):               0.5000
+│ Users with any clamping:         100%
+│ Users with >10% clamping:        100%
+│ UI marker range (mean):          0.0000
+│ UI distinct positions (mean):    1.0
+│ Stuck one tertile (dp):          100%
+│ Stuck one tertile (UI):          100%
+└────────────────────────────────────────────────────────────────────────────────────────
+
+┌─ STRUCTUREDDRAPED ──────────────────────────────────────────────────────
+│ Raw value range (mean):          0.0000
+│ Raw value range (p50):           0.0000
+│ Baseline-relative delta (mean):  0.0000
+│ Envelope span (mean):            0.5000
+│ Envelope utilization:            0.0000
+│ Display position range (mean):   0.0000
+│ Display position range (p10/p50/p90): 0.000/0.000/0.000
+│ Clamp rate (mean):               0.5000
+│ Users with any clamping:         100%
+│ Users with >10% clamping:        100%
+│ UI marker range (mean):          0.0000
+│ UI distinct positions (mean):    1.0
+│ Stuck one tertile (dp):          100%
+│ Stuck one tertile (UI):          100%
+└────────────────────────────────────────────────────────────────────────────────────────
+
+══════════════════════════════════════════════════════════════════════════════════════════
+DIAGNOSIS SUMMARY
+
+Bottleneck key: [E]=Envelope [S]=Signal [U]=UI [C]=Coherence cap
+
+  vibrancy             [OK] [E] envelope too narrow (clamping)
+  contrast             [POOR] [E] envelope too wide for actual signal + [S] weak daily signal variation + [E] envelope too narrow (clamping)
+  metalTone            [WEAK] [E] envelope too wide for actual signal + [E] envelope too narrow (clamping)
+  masculineFeminine    [OK] [E] envelope too narrow (clamping)
+  angularRounded       [POOR] [E] envelope too wide for actual signal + [S] weak daily signal variation + [E] envelope too narrow (clamping)
+  structuredDraped     [POOR] [E] envelope too wide for actual signal + [S] weak daily signal variation + [E] envelope too narrow (clamping)
+
+══════════════════════════════════════════════════════════════════════════════════════════
+VARIANT ENVELOPE REFERENCE
+
+  Variant 0: soft/low/cool
+    vibrancy             baseline=0.250  floor=0.030  ceiling=0.470  span=0.440
+    contrast             baseline=0.250  floor=0.110  ceiling=0.390  span=0.280
+    metalTone            baseline=0.120  floor=0.000  ceiling=0.525  span=0.525
+    masculineFeminine    baseline=0.500  floor=0.300  ceiling=0.700  span=0.400
+    angularRounded       baseline=0.500  floor=0.300  ceiling=0.700  span=0.400
+    structuredDraped     baseline=0.500  floor=0.250  ceiling=0.750  span=0.500
+
+  Variant 1: muted/medium/neutral
+    vibrancy             baseline=0.500  floor=0.280  ceiling=0.720  span=0.440
+    contrast             baseline=0.500  floor=0.360  ceiling=0.640  span=0.280
+    metalTone            baseline=0.500  floor=0.095  ceiling=0.905  span=0.810
+    masculineFeminine    baseline=0.500  floor=0.300  ceiling=0.700  span=0.400
+    angularRounded       baseline=0.500  floor=0.300  ceiling=0.700  span=0.400
+    structuredDraped     baseline=0.500  floor=0.250  ceiling=0.750  span=0.500
+
+  Variant 2: rich/high/warm
+    vibrancy             baseline=0.750  floor=0.530  ceiling=0.970  span=0.440
+    contrast             baseline=0.750  floor=0.610  ceiling=0.890  span=0.280
+    metalTone            baseline=0.880  floor=0.475  ceiling=1.000  span=0.525
+    masculineFeminine    baseline=0.500  floor=0.300  ceiling=0.700  span=0.400
+    angularRounded       baseline=0.500  floor=0.300  ceiling=0.700  span=0.400
+    structuredDraped     baseline=0.500  floor=0.250  ceiling=0.750  span=0.500
+
+  Variant 3: soft/medium/warm
+    vibrancy             baseline=0.250  floor=0.030  ceiling=0.470  span=0.440
+    contrast             baseline=0.500  floor=0.360  ceiling=0.640  span=0.280
+    metalTone            baseline=0.480  floor=0.075  ceiling=0.885  span=0.810
+    masculineFeminine    baseline=0.500  floor=0.300  ceiling=0.700  span=0.400
+    angularRounded       baseline=0.500  floor=0.300  ceiling=0.700  span=0.400
+    structuredDraped     baseline=0.500  floor=0.250  ceiling=0.750  span=0.500
+
+  Variant 4: muted/high/cool
+    vibrancy             baseline=0.500  floor=0.280  ceiling=0.720  span=0.440
+    contrast             baseline=0.750  floor=0.610  ceiling=0.890  span=0.280
+    metalTone            baseline=0.520  floor=0.115  ceiling=0.925  span=0.810
+    masculineFeminine    baseline=0.500  floor=0.300  ceiling=0.700  span=0.400
+    angularRounded       baseline=0.500  floor=0.300  ceiling=0.700  span=0.400
+    structuredDraped     baseline=0.500  floor=0.250  ceiling=0.750  span=0.500
+
+  Variant 5: rich/low/neutral
+    vibrancy             baseline=0.750  floor=0.530  ceiling=0.970  span=0.440
+    contrast             baseline=0.250  floor=0.110  ceiling=0.390  span=0.280
+    metalTone            baseline=0.300  floor=0.000  ceiling=0.705  span=0.705
+    masculineFeminine    baseline=0.500  floor=0.300  ceiling=0.700  span=0.400
+    angularRounded       baseline=0.500  floor=0.300  ceiling=0.700  span=0.400
+    structuredDraped     baseline=0.500  floor=0.250  ceiling=0.750  span=0.500
+

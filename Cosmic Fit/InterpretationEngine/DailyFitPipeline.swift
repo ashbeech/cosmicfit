@@ -9,7 +9,7 @@ import Foundation
 
 enum DailyFitPipeline {
 
-    /// Generate a complete payload. Narrative intent biases Stage-1 selection only; no user-facing copy.
+    /// Generate a complete payload. Stage1 routes through DailyNarrativePlan (Plan 2).
     static func generate(
         blueprint: CosmicBlueprint,
         snapshot: DailyEnergySnapshot,
@@ -17,43 +17,48 @@ enum DailyFitPipeline {
         dailyFitEngineId engineId: String? = nil
     ) -> DailyFitPayload {
         let mode = DailyFitEngineRegistry.resolvedMode(engineId: engineId)
-        let rawEssence = BlueprintLensEngine.resolveEssenceProfile(from: snapshot, mode: mode)
-        let silhouette = BlueprintLensEngine.deriveSilhouetteProfile(
-            from: blueprint, snapshot: snapshot, calibration: calibration, mode: mode
-        )
-        let tuning = calibration.narrativeSelection ?? .stage1Default
-        let narrativeResolution = mode == .stage1Experimental
-            ? NarrativeIntentEngine.resolve(
-                essence: rawEssence,
-                snapshot: snapshot,
-                mode: mode,
-                silhouetteProfile: silhouette,
-                tuning: tuning
+
+        if mode == .stage1Experimental {
+            let rawEssence = BlueprintLensEngine.resolveEssenceProfile(from: snapshot, mode: mode)
+            let rawSilhouette = BlueprintLensEngine.deriveSilhouetteProfile(
+                from: blueprint, snapshot: snapshot, calibration: calibration, mode: mode
             )
-            : nil
-
-        let essence: StyleEssenceProfile
-        if let intent = narrativeResolution?.intent {
-            essence = NarrativeSelectionDirectives.resolveEssenceConflicts(
-                profile: rawEssence, intent: intent
-            ).resolved
+            let (plan, _) = DailyNarrativeSelector.select(
+                snapshot: snapshot,
+                blueprint: blueprint,
+                calibration: calibration,
+                precomputedEssence: rawEssence,
+                precomputedSilhouette: rawSilhouette
+            )
+            return BlueprintLensEngine.generatePayloadFromPlan(
+                plan: plan,
+                blueprint: blueprint,
+                snapshot: snapshot,
+                calibration: calibration,
+                mode: mode,
+                dailyFitEngineId: engineId
+            )
         } else {
-            essence = rawEssence
+            // Production path — completely unchanged
+            let rawEssence = BlueprintLensEngine.resolveEssenceProfile(from: snapshot, mode: mode)
+            let silhouette = BlueprintLensEngine.deriveSilhouetteProfile(
+                from: blueprint, snapshot: snapshot, calibration: calibration, mode: mode
+            )
+            return BlueprintLensEngine.generatePayload(
+                blueprint: blueprint,
+                snapshot: snapshot,
+                calibration: calibration,
+                mode: mode,
+                dailyFitEngineId: engineId,
+                precomputedEssence: rawEssence,
+                precomputedSilhouette: silhouette,
+                narrativeIntent: nil
+            )
         }
-
-        return BlueprintLensEngine.generatePayload(
-            blueprint: blueprint,
-            snapshot: snapshot,
-            calibration: calibration,
-            mode: mode,
-            dailyFitEngineId: engineId,
-            precomputedEssence: essence,
-            precomputedSilhouette: silhouette,
-            narrativeIntent: narrativeResolution?.intent
-        )
     }
 
     /// Generate payload + Stage 2 trace, with narrative trace for diagnostics.
+    /// Stage1 routes through DailyNarrativePlan; legacy traces still generated for comparison.
     static func generateWithTrace(
         blueprint: CosmicBlueprint,
         snapshot: DailyEnergySnapshot,
@@ -73,61 +78,107 @@ enum DailyFitPipeline {
             from: blueprint, snapshot: snapshot, calibration: calibration, mode: mode
         )
         let tuning = calibration.narrativeSelection ?? .stage1Default
-        let narrativeResolution = mode == .stage1Experimental
-            ? NarrativeIntentEngine.resolve(
-                essence: rawEssence,
-                snapshot: snapshot,
-                mode: mode,
-                silhouetteProfile: silhouette,
-                tuning: tuning
-            )
-            : nil
 
-        let essence: StyleEssenceProfile
-        let essenceConflictTrace: EssenceConflictTrace?
-        if let intent = narrativeResolution?.intent {
-            let result = NarrativeSelectionDirectives.resolveEssenceConflicts(
-                profile: rawEssence, intent: intent
+        if mode == .stage1Experimental {
+            let (plan, _) = DailyNarrativeSelector.select(
+                snapshot: snapshot,
+                blueprint: blueprint,
+                calibration: calibration,
+                precomputedEssence: rawEssence,
+                precomputedSilhouette: silhouette
             )
-            essence = result.resolved
-            essenceConflictTrace = result.trace
-        } else {
-            essence = rawEssence
-            essenceConflictTrace = nil
+
+            // Use plan-driven intent for trace compatibility
+            let planIntent = NarrativeIntent(
+                relationship: plan.relationship,
+                anchorTop3: plan.anchorEssences,
+                weatherTop3: [plan.accentEssence] + plan.supportingEssences,
+                tarot: plan.tarotDirective,
+                palette: plan.paletteDirective,
+                scales: plan.scaleDirective ?? ScaleDirective(
+                    vibrancyCap: nil, contrastCap: nil,
+                    pullTowardBaseline: false, baselineBlend: 0.0
+                ),
+                essencePresentation: EssencePresentationDirective(showAnchorGhost: true),
+                themeLexiconKey: nil,
+                coherenceGap: nil
+            )
+
+            // Generate payload through the same plan-driven path as generate().
+            // Reuse its tarot result for trace generation so Inspector diagnostics
+            // do not perform a second stateful tarot selection for the same day.
+            let planPayload = BlueprintLensEngine.generatePayloadFromPlanWithTarotResult(
+                plan: plan,
+                blueprint: blueprint,
+                snapshot: snapshot,
+                calibration: calibration,
+                mode: mode,
+                dailyFitEngineId: engineId
+            )
+            let payload = planPayload.payload
+
+            // Generate legacy trace for diagnostics (slider values may differ but trace structure is preserved)
+            let (_, s2Trace) = BlueprintLensEngine.generatePayloadWithTrace(
+                blueprint: blueprint,
+                snapshot: snapshot,
+                calibration: calibration,
+                mode: mode,
+                dailyFitEngineId: engineId,
+                precomputedEssence: rawEssence,
+                precomputedSilhouette: silhouette,
+                narrativeIntent: planIntent,
+                preselectedTarotResult: planPayload.tarotResult,
+                recordTarotSelection: false
+            )
+
+            // Build legacy-compatible trace from the plan
+            let narrativeTrace = NarrativeTrace(
+                anchorTop3: plan.anchorEssences.map(\.rawValue),
+                weatherTop3: ([plan.accentEssence] + plan.supportingEssences).map(\.rawValue),
+                overlapCount: Set(plan.anchorEssences).intersection(Set([plan.accentEssence] + plan.supportingEssences)).count,
+                silhouetteDeltaMF: silhouette.chartAnchorMF.map { silhouette.masculineFeminine - $0 },
+                silhouetteDeltaAR: silhouette.chartAnchorAR.map { silhouette.angularRounded - $0 },
+                silhouetteDeltaSD: silhouette.chartAnchorSD.map { silhouette.structuredDraped - $0 },
+                chosenRelationship: plan.relationship,
+                templateKey: "\(plan.relationship.rawValue).\(plan.accentEssence.rawValue)"
+            )
+
+            let intentTrace = NarrativeIntentTrace(
+                relationship: plan.relationship.rawValue,
+                anchorTop3: plan.anchorEssences.map(\.rawValue),
+                weatherTop3: ([plan.accentEssence] + plan.supportingEssences).map(\.rawValue),
+                accentCategory: plan.accentEssence.rawValue,
+                foundationCategory: plan.paletteDirective.foundationCategory.rawValue,
+                overlapCount: Set(plan.anchorEssences).intersection(Set([plan.accentEssence] + plan.supportingEssences)).count,
+                themeLexiconKey: nil,
+                coherenceGap: nil
+            )
+
+            let coherence = NarrativeSelectionDirectives.computeCoherenceTrace(
+                payload: payload,
+                intent: planIntent,
+                tuning: tuning,
+                tarotVariantWasScored: s2Trace.tarotVariantWasScored,
+                tarotCategoryBoostApplied: s2Trace.tarotCategoryBoostApplied,
+                statementSlotCount: s2Trace.paletteStatementSlotCount,
+                bridgeTrace: s2Trace.narrativeBridgeTrace
+            )
+
+            return (payload, s2Trace, narrativeTrace, intentTrace, coherence, nil)
         }
 
+        // Production path — completely unchanged
         let (payload, s2Trace) = BlueprintLensEngine.generatePayloadWithTrace(
             blueprint: blueprint,
             snapshot: snapshot,
             calibration: calibration,
             mode: mode,
             dailyFitEngineId: engineId,
-            precomputedEssence: essence,
+            precomputedEssence: rawEssence,
             precomputedSilhouette: silhouette,
-            narrativeIntent: narrativeResolution?.intent
+            narrativeIntent: nil
         )
 
-        guard let resolution = narrativeResolution else {
-            return (payload, s2Trace, nil, nil, nil, nil)
-        }
-
-        let coherence = NarrativeSelectionDirectives.computeCoherenceTrace(
-            payload: payload,
-            intent: resolution.intent,
-            tuning: tuning,
-            tarotVariantWasScored: s2Trace.tarotVariantWasScored,
-            tarotCategoryBoostApplied: s2Trace.tarotCategoryBoostApplied,
-            statementSlotCount: s2Trace.paletteStatementSlotCount,
-            bridgeTrace: s2Trace.narrativeBridgeTrace
-        )
-
-        return (
-            payload,
-            s2Trace,
-            resolution.trace,
-            NarrativeSelectionDirectives.narrativeIntentTrace(from: resolution.intent, trace: resolution.trace),
-            coherence,
-            essenceConflictTrace
-        )
+        return (payload, s2Trace, nil, nil, nil, nil)
     }
 }

@@ -84,6 +84,7 @@ struct ChartAnalysis: Equatable {
     let ascendantSign: String
     let venusSign: String
     let marsSign: String
+    let midheavenSign: String
     let planetSigns: [String: String]
     let planetDignities: [String: DignityStatus]
     let planetHouses: [String: Int]
@@ -108,6 +109,7 @@ struct ChartAnalyser {
         let modalityBalance = computeModalityBalance(signLookup: signLookup, chart: chart)
 
         let ascSign = signName(for: chart.ascendant)
+        let mcSign = signName(for: chart.midheaven)
         let chartRuler = resolveChartRuler(ascendantSign: ascSign)
 
         let dignities = computeDignities(signLookup: signLookup)
@@ -133,6 +135,7 @@ struct ChartAnalyser {
             ascendantSign: ascSign,
             venusSign: signLookup["Venus"] ?? "Unknown",
             marsSign: signLookup["Mars"] ?? "Unknown",
+            midheavenSign: mcSign,
             planetSigns: signLookup,
             planetDignities: dignities,
             planetHouses: houseLookup,

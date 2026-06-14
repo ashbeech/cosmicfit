@@ -1,0 +1,68 @@
+Narrative Coherence Report — Plan 2
+Engine: stage1_experimental
+Window: 2026-05-01 + 60 days
+======================================================================
+
+Preset: fire
+  Plans generated:          60
+  Opposition violations:    0
+  Cross-surface violations: 0
+  Coherence score:          1.0
+  Flip rate:                0.6102
+  Distinct accents:         3
+  Accents: ["romantic": 36, "playful": 11, "drama": 13]
+  Relationships: ["stretch": 6, "contrast": 54]
+
+Preset: earth
+  Plans generated:          60
+  Opposition violations:    0
+  Cross-surface violations: 0
+  Coherence score:          1.0
+  Flip rate:                0.0
+  Distinct accents:         1
+  Accents: ["drama": 60]
+  Relationships: ["contrast": 22, "stretch": 38]
+
+Preset: air
+  Plans generated:          60
+  Opposition violations:    0
+  Cross-surface violations: 0
+  Coherence score:          1.0
+  Flip rate:                0.2034
+  Distinct accents:         2
+  Accents: ["drama": 10, "romantic": 50]
+  Relationships: ["stretch": 26, "contrast": 34]
+
+Preset: water
+  Plans generated:          60
+  Opposition violations:    0
+  Cross-surface violations: 0
+  Coherence score:          1.0
+  Flip rate:                0.2542
+  Distinct accents:         2
+  Accents: ["drama": 41, "playful": 19]
+  Relationships: ["stretch": 38, "reinforce": 22]
+
+Preset: leo
+  Plans generated:          60
+  Opposition violations:    0
+  Cross-surface violations: 0
+  Coherence score:          1.0
+  Flip rate:                0.339
+  Distinct accents:         3
+  Accents: ["romantic": 43, "drama": 6, "playful": 11]
+  Relationships: ["stretch": 7, "contrast": 53]
+
+======================================================================
+AGGREGATE
+  Total opposition violations:    0
+  Total cross-surface violations: 0
+  Mean coherence score:           1.0
+  Mean flip rate:                 0.2814
+  Mean distinct accents:          2.2
+
+EXIT GATE:
+  Opposition == 0:    PASS
+  Cross-surface == 0: PASS
+  Coherence ≥ 0.85:   PASS
+  Flip rate ≥ 40%:    FAIL

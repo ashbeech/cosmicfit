@@ -111,6 +111,10 @@ enum DailyEnergyEngine {
             )
         }
 
+        let skySalienceSimple: SkySalienceProfile? = effectiveMode == .stage1Experimental
+            ? computeSkySalience(from: transits, date: date)
+            : nil
+
         return DailyEnergySnapshot(
             vibeProfile: vibeProfile,
             axes: axes,
@@ -122,7 +126,8 @@ enum DailyEnergyEngine {
             chartVibeProfile: chartVibe,
             skyVibeProfile: skyVibe,
             chartAxes: chartAxes,
-            vibeRawScores: skyRawScores
+            vibeRawScores: skyRawScores,
+            skySalience: skySalienceSimple
         )
     }
 
@@ -787,6 +792,10 @@ enum DailyEnergyEngine {
             vibeProfile = normaliseToTwentyOne(postMultiplier)
         }
 
+        let skySalience: SkySalienceProfile? = effectiveMode == .stage1Experimental
+            ? computeSkySalience(from: transits, date: date)
+            : nil
+
         let snapshot = DailyEnergySnapshot(
             vibeProfile: vibeProfile, axes: axes,
             dominantTransits: extractDominantTransits(from: transits),
@@ -795,7 +804,8 @@ enum DailyEnergyEngine {
             chartVibeProfile: chartVibe,
             skyVibeProfile: skyVibe,
             chartAxes: chartAxes,
-            vibeRawScores: skyRawScores
+            vibeRawScores: skyRawScores,
+            skySalience: skySalience
         )
         var rawDict = Dictionary(uniqueKeysWithValues: rawScores.map { ($0.key.rawValue, $0.value) })
         if effectiveMode == .stage1Experimental, let skyRawScores {
@@ -1215,6 +1225,102 @@ enum DailyEnergyEngine {
                 strength: strength / maxStr
             )
         }
+    }
+
+    // MARK: - Adaptive Sky Salience (Stage 1 Experimental)
+
+    private static let salienceSpeedFactors: [String: Double] = [
+        "Moon": 1.0, "Mercury": 0.9, "Venus": 0.85, "Sun": 0.8, "Mars": 0.7,
+        "Jupiter": 0.4, "Saturn": 0.3, "Uranus": 0.2, "Neptune": 0.15, "Pluto": 0.1,
+    ]
+
+    private static let salienceEssenceCategories: [String: StyleEssenceCategory] = [
+        "Mars": .drama, "Venus": .romantic, "Sun": .magnetic,
+        "Moon": .playful, "Mercury": .eclectic, "Jupiter": .maximalist,
+        "Saturn": .minimal, "Uranus": .effortless, "Neptune": .sensual, "Pluto": .edgy,
+    ]
+
+    static func computeSkySalience(
+        from transits: [NatalChartCalculator.TransitAspect],
+        date: Date
+    ) -> SkySalienceProfile {
+        guard !transits.isEmpty else {
+            return SkySalienceProfile(entries: [], topDrivers: [], dominantNarrative: nil)
+        }
+
+        var rawEntries: [(transit: NatalChartCalculator.TransitAspect, raw: Double, speed: Double, freshness: Double)] = []
+
+        for transit in transits {
+            let key = transit.aspectType.lowercased()
+            let maxOrb = standardMaxOrbs[key] ?? 10.0
+            let orbTightness = max(0.0, 1.0 - abs(transit.orb) / maxOrb)
+            let aspectWeight = transitAspectWeights[key] ?? 0.5
+            let speedFactor = salienceSpeedFactors[transit.transitPlanet] ?? 0.5
+
+            let freshnessBonus: Double
+            if abs(transit.orb) < 0.5 {
+                freshnessBonus = 0.3
+            } else if transit.applying {
+                freshnessBonus = 0.1
+            } else if abs(transit.orb) > 3.0 {
+                freshnessBonus = -0.2
+            } else {
+                freshnessBonus = -0.1
+            }
+
+            let rawSalience = orbTightness * aspectWeight * speedFactor + freshnessBonus
+            rawEntries.append((transit, rawSalience, speedFactor, freshnessBonus))
+        }
+
+        let maxRaw = rawEntries.map(\.raw).max() ?? 1.0
+        let normFactor = maxRaw > 0 ? maxRaw : 1.0
+
+        var entries: [SkySalienceProfile.SalienceEntry] = rawEntries.map { item in
+            SkySalienceProfile.SalienceEntry(
+                planet: item.transit.transitPlanet,
+                aspect: item.transit.aspectType,
+                natalTarget: item.transit.natalPlanet,
+                rawStrength: item.raw,
+                speedFactor: item.speed,
+                freshnessBonus: item.freshness,
+                salience: max(0, item.raw / normFactor),
+                essenceCategory: salienceEssenceCategories[item.transit.transitPlanet]
+            )
+        }
+
+        // Sort by salience descending, tie-break alphabetically on planet for determinism
+        entries.sort { a, b in
+            if a.salience != b.salience { return a.salience > b.salience }
+            return a.planet < b.planet
+        }
+
+        // Dedup: keep only the highest-salience entry per essence category for top drivers
+        var seenCategories = Set<StyleEssenceCategory>()
+        var topDrivers: [SkySalienceProfile.SalienceEntry] = []
+        for entry in entries {
+            guard let cat = entry.essenceCategory, !seenCategories.contains(cat) else {
+                if entry.essenceCategory == nil && topDrivers.count < 3 {
+                    topDrivers.append(entry)
+                }
+                continue
+            }
+            seenCategories.insert(cat)
+            topDrivers.append(entry)
+            if topDrivers.count >= 3 { break }
+        }
+
+        let narrative: String?
+        if let top = topDrivers.first {
+            narrative = "\(top.planet) \(top.aspect) \(top.natalTarget)"
+        } else {
+            narrative = nil
+        }
+
+        return SkySalienceProfile(
+            entries: entries,
+            topDrivers: topDrivers,
+            dominantNarrative: narrative
+        )
     }
 
     // MARK: - Phase 2: Lunar Context

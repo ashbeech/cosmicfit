@@ -188,7 +188,8 @@ struct ChartSignatureResolverTests {
             mars: PlacementInput(sign: mars),
             saturn: PlacementInput(sign: saturn),
             jupiter: PlacementInput(sign: jupiter),
-            pluto: nil
+            pluto: nil,
+            midheaven: nil
         )
     }
 }

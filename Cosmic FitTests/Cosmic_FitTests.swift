@@ -610,6 +610,7 @@ struct WP3EngineTests {
             ascendantSign: "Libra",
             venusSign: venusSign,
             marsSign: "Aries",
+            midheavenSign: "Capricorn",
             planetSigns: [
                 "Sun": "Sagittarius", "Moon": moonSign,
                 "Venus": venusSign, "Mars": "Aries",
@@ -740,7 +741,10 @@ struct HouseSectIntegrationTests {
         let overlays = HouseSectOverlayGenerator.generate(analysis: analysis, dataset: dataset)
 
         let jargonTerms = ["house", "chart", "Venus", "Moon", "Sun", "Mars",
-                           "sect", "angular", "cadent", "succedent", "luminary"]
+                           "sect", "angular", "cadent", "succedent", "luminary",
+                           "Midheaven", "MC",
+                           "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+                           "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
 
         let allOverlayTexts = [
             overlays.styleCoreAppend,
@@ -813,6 +817,235 @@ struct HouseSectIntegrationTests {
         #expect(overlays.occasionsDailyAppend != nil)
     }
 
+    // MARK: - 8g. Midheaven Overlay Tests
+
+    @Test("MC overlay Style Core always present for Scorpio MC")
+    func mcOverlayStyleCoreAlwaysPresent() {
+        guard let dataset = loadTestDataset() else {
+            Issue.record("Failed to load dataset"); return
+        }
+
+        let analysis = makeAnalysis(
+            venusHouse: 7, moonHouse: 4, sect: .night,
+            planetSigns: ["Venus": "Pisces", "Moon": "Taurus"],
+            planetHouses: ["Venus": 7, "Moon": 4]
+        )
+        let scorpioAnalysis = ChartAnalysis(
+            elementBalance: analysis.elementBalance,
+            modalityBalance: analysis.modalityBalance,
+            chartRuler: analysis.chartRuler,
+            sunSign: analysis.sunSign, moonSign: analysis.moonSign,
+            ascendantSign: analysis.ascendantSign,
+            venusSign: analysis.venusSign, marsSign: analysis.marsSign,
+            midheavenSign: "Scorpio",
+            planetSigns: analysis.planetSigns,
+            planetDignities: analysis.planetDignities,
+            planetHouses: analysis.planetHouses,
+            significantAspects: analysis.significantAspects,
+            dominantPlanets: analysis.dominantPlanets,
+            chartSect: analysis.chartSect,
+            planetSectStatus: analysis.planetSectStatus,
+            houseEmphasis: analysis.houseEmphasis
+        )
+
+        let overlays = HouseSectOverlayGenerator.generate(analysis: scorpioAnalysis, dataset: dataset)
+        #expect(overlays.styleCoreAppend != nil)
+        #expect(overlays.styleCoreAppend!.contains("magnetic"))
+    }
+
+    @Test("MC overlay produces Style Core text for all 12 signs")
+    func mcOverlayAllSigns() {
+        guard let dataset = loadTestDataset() else {
+            Issue.record("Failed to load dataset"); return
+        }
+
+        let signs = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+                     "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
+
+        for sign in signs {
+            let analysis = makeAnalysis(
+                venusHouse: 7, moonHouse: 4, sect: .day,
+                planetSigns: ["Venus": "Pisces", "Moon": "Taurus"],
+                planetHouses: ["Venus": 7, "Moon": 4]
+            )
+            let mcAnalysis = ChartAnalysis(
+                elementBalance: analysis.elementBalance,
+                modalityBalance: analysis.modalityBalance,
+                chartRuler: analysis.chartRuler,
+                sunSign: analysis.sunSign, moonSign: analysis.moonSign,
+                ascendantSign: analysis.ascendantSign,
+                venusSign: analysis.venusSign, marsSign: analysis.marsSign,
+                midheavenSign: sign,
+                planetSigns: analysis.planetSigns,
+                planetDignities: analysis.planetDignities,
+                planetHouses: analysis.planetHouses,
+                significantAspects: analysis.significantAspects,
+                dominantPlanets: analysis.dominantPlanets,
+                chartSect: analysis.chartSect,
+                planetSectStatus: analysis.planetSectStatus,
+                houseEmphasis: analysis.houseEmphasis
+            )
+
+            let overlays = HouseSectOverlayGenerator.generate(analysis: mcAnalysis, dataset: dataset)
+            #expect(overlays.styleCoreAppend != nil,
+                    "MC sign \(sign) should produce style core text")
+            #expect(overlays.styleCoreAppend!.contains("public style"),
+                    "MC sign \(sign) style core text should contain 'public style'")
+        }
+    }
+
+    @Test("MC work overlay present when H10 is not dominant")
+    func mcOverlayWorkPresentWhenH10NotDominant() {
+        guard let dataset = loadTestDataset() else {
+            Issue.record("Failed to load dataset"); return
+        }
+
+        let analysis = makeAnalysis(
+            venusHouse: 5, moonHouse: 7, sect: .day,
+            planetSigns: ["Venus": "Leo", "Moon": "Libra"],
+            planetHouses: ["Venus": 5, "Moon": 7]
+        )
+        let mcAnalysis = ChartAnalysis(
+            elementBalance: analysis.elementBalance,
+            modalityBalance: analysis.modalityBalance,
+            chartRuler: analysis.chartRuler,
+            sunSign: analysis.sunSign, moonSign: analysis.moonSign,
+            ascendantSign: analysis.ascendantSign,
+            venusSign: analysis.venusSign, marsSign: analysis.marsSign,
+            midheavenSign: "Scorpio",
+            planetSigns: analysis.planetSigns,
+            planetDignities: analysis.planetDignities,
+            planetHouses: analysis.planetHouses,
+            significantAspects: analysis.significantAspects,
+            dominantPlanets: analysis.dominantPlanets,
+            chartSect: analysis.chartSect,
+            planetSectStatus: analysis.planetSectStatus,
+            houseEmphasis: analysis.houseEmphasis
+        )
+
+        let overlays = HouseSectOverlayGenerator.generate(analysis: mcAnalysis, dataset: dataset)
+        #expect(overlays.occasionsWorkAppend != nil)
+        #expect(overlays.occasionsWorkAppend!.contains("work"))
+    }
+
+    @Test("MC work overlay suppressed when H10 is dominant")
+    func mcOverlayWorkSuppressedWhenH10Dominant() {
+        guard let dataset = loadTestDataset() else {
+            Issue.record("Failed to load dataset"); return
+        }
+
+        let scores = Dictionary(uniqueKeysWithValues: (1...12).map { house -> (Int, Double) in
+            if house == 10 { return (house, 9.0) }
+            if house == 5 { return (house, 8.5) }
+            return (house, 1.0)
+        })
+
+        let analysis = ChartAnalysis(
+            elementBalance: ElementBalance(fire: 3, earth: 2, air: 2, water: 1),
+            modalityBalance: ModalityBalance(cardinal: 3, fixed: 3, mutable: 2),
+            chartRuler: "Venus",
+            sunSign: "Aries", moonSign: "Taurus",
+            ascendantSign: "Aries", venusSign: "Libra", marsSign: "Capricorn",
+            midheavenSign: "Scorpio",
+            planetSigns: ["Sun": "Aries", "Moon": "Taurus", "Venus": "Libra",
+                          "Mars": "Capricorn", "Mercury": "Gemini"],
+            planetDignities: [:],
+            planetHouses: ["Venus": 10, "Moon": 4],
+            significantAspects: [],
+            dominantPlanets: ["Venus", "Moon", "Sun"],
+            chartSect: .day,
+            planetSectStatus: ChartAnalyser.computePlanetSectStatus(chartSect: .day),
+            houseEmphasis: HouseEmphasis(
+                houseScores: scores,
+                dominantHouses: [10, 5, 1],
+                venusHouseDomain: "public",
+                moonHouseDomain: "foundations"
+            )
+        )
+
+        let overlays = HouseSectOverlayGenerator.generate(analysis: analysis, dataset: dataset)
+
+        let workText = overlays.occasionsWorkAppend ?? ""
+        #expect(!workText.contains("At work, lean into"),
+                "MC work text should be suppressed when H10 is dominant, got: \(workText)")
+    }
+
+    @Test("MC overlay is deterministic across 20 runs")
+    func mcOverlayDeterministic() {
+        guard let dataset = loadTestDataset() else {
+            Issue.record("Failed to load dataset"); return
+        }
+
+        let analysis = makeAnalysis(
+            venusHouse: 7, moonHouse: 4, sect: .night,
+            planetSigns: ["Venus": "Pisces", "Moon": "Taurus"],
+            planetHouses: ["Venus": 7, "Moon": 4]
+        )
+        let mcAnalysis = ChartAnalysis(
+            elementBalance: analysis.elementBalance,
+            modalityBalance: analysis.modalityBalance,
+            chartRuler: analysis.chartRuler,
+            sunSign: analysis.sunSign, moonSign: analysis.moonSign,
+            ascendantSign: analysis.ascendantSign,
+            venusSign: analysis.venusSign, marsSign: analysis.marsSign,
+            midheavenSign: "Scorpio",
+            planetSigns: analysis.planetSigns,
+            planetDignities: analysis.planetDignities,
+            planetHouses: analysis.planetHouses,
+            significantAspects: analysis.significantAspects,
+            dominantPlanets: analysis.dominantPlanets,
+            chartSect: analysis.chartSect,
+            planetSectStatus: analysis.planetSectStatus,
+            houseEmphasis: analysis.houseEmphasis
+        )
+
+        let first = HouseSectOverlayGenerator.generate(analysis: mcAnalysis, dataset: dataset)
+        for _ in 0..<20 {
+            let run = HouseSectOverlayGenerator.generate(analysis: mcAnalysis, dataset: dataset)
+            #expect(run.styleCoreAppend == first.styleCoreAppend)
+            #expect(run.occasionsWorkAppend == first.occasionsWorkAppend)
+        }
+    }
+
+    @Test("ChartAnalyser exposes midheavenSign from natal chart")
+    func chartAnalyserMidheavenSign() {
+        let ascendant = 180.0
+        let midheaven = CoordinateTransformations.normalizeAngle(ascendant + 90.0)
+        let planetOrder = ["Sun", "Moon", "Mercury", "Venus", "Mars",
+                           "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]
+        let lons: [String: Double] = [
+            "Sun": 150.0, "Moon": 30.0, "Mercury": 160.0,
+            "Venus": 200.0, "Mars": 0.0, "Jupiter": 90.0,
+            "Saturn": 270.0, "Uranus": 300.0, "Neptune": 330.0, "Pluto": 240.0
+        ]
+        let planets = planetOrder.map { name -> NatalChartCalculator.PlanetPosition in
+            let lon = lons[name] ?? 0.0
+            let zodiac = CoordinateTransformations.decimalDegreesToZodiac(lon)
+            return NatalChartCalculator.PlanetPosition(
+                name: name, symbol: String(name.prefix(1)),
+                longitude: lon, latitude: 0.0,
+                zodiacSign: zodiac.sign, zodiacPosition: zodiac.position,
+                isRetrograde: false
+            )
+        }
+        let houseCusps = (0..<12).map {
+            CoordinateTransformations.normalizeAngle(ascendant + Double($0) * 30.0)
+        }
+        let chart = NatalChartCalculator.NatalChart(
+            planets: planets, ascendant: ascendant,
+            midheaven: midheaven,
+            descendant: CoordinateTransformations.normalizeAngle(ascendant + 180.0),
+            imumCoeli: CoordinateTransformations.normalizeAngle(ascendant + 270.0),
+            houseCusps: houseCusps, wholeSignHouseCusps: houseCusps,
+            northNode: 0.0, southNode: 180.0, vertex: 90.0,
+            partOfFortune: 120.0, lilith: 240.0, chiron: 300.0, lunarPhase: 180.0
+        )
+
+        let analysis = ChartAnalyser.analyse(chart: chart)
+        // midheaven = 270° → Capricorn (270/30 = 9, sign index 10 = Capricorn)
+        #expect(analysis.midheavenSign == "Capricorn")
+    }
+
     // MARK: - 8f. Pattern Invariants and Determinism
 
     @Test("Pattern ordering is deterministic across 20 runs")
@@ -879,6 +1112,7 @@ struct HouseSectIntegrationTests {
             ascendantSign: "Libra",
             venusSign: planetSigns["Venus"] ?? "Scorpio",
             marsSign: planetSigns["Mars"] ?? "Aries",
+            midheavenSign: "Cancer",
             planetSigns: planetSigns,
             planetDignities: [:],
             planetHouses: planetHouses,
@@ -1029,8 +1263,9 @@ struct HardeningEdgeCaseTests {
                 pairCount += 1
                 let analysis = makeOverlayCoverageAnalysis(primaryHouse: house1, secondaryHouse: house2)
                 let overlays = HouseSectOverlayGenerator.generate(analysis: analysis, dataset: dataset)
-                let text = overlays.occasionsWorkAppend ?? overlays.occasionsDailyAppend ?? ""
-                if text.contains("Your style energy concentrates in"), !text.contains("reflects both") {
+                let allText = [overlays.occasionsWorkAppend, overlays.occasionsDailyAppend]
+                    .compactMap { $0 }.joined(separator: " ")
+                if allText.contains("Your style energy concentrates in"), !allText.contains("reflects both") {
                     nonFallbackCount += 1
                 }
             }
@@ -1175,6 +1410,7 @@ struct HardeningEdgeCaseTests {
             ascendantSign: "Aries",
             venusSign: "Libra",
             marsSign: "Capricorn",
+            midheavenSign: "Capricorn",
             planetSigns: [
                 "Sun": "Aries", "Moon": "Taurus", "Mercury": "Gemini",
                 "Venus": "Libra", "Mars": "Capricorn", "Jupiter": "Cancer",
@@ -1672,6 +1908,7 @@ struct HardwareAllocationAuditTests {
             ascendantSign: user.ascendantSign,
             venusSign: user.venusSign,
             marsSign: user.marsSign,
+            midheavenSign: "Capricorn",
             planetSigns: signs,
             planetDignities: [:],
             planetHouses: houses,
@@ -1883,6 +2120,7 @@ struct HardwareAllocationAuditTests {
             chartRuler: "Venus",
             sunSign: "Taurus", moonSign: "Capricorn",
             ascendantSign: "Pisces", venusSign: "Taurus", marsSign: "Gemini",
+            midheavenSign: "Sagittarius",
             planetSigns: signs, planetDignities: ["Venus": .domicile],
             planetHouses: houses, significantAspects: [],
             dominantPlanets: ["Venus", "Moon", "Saturn"],

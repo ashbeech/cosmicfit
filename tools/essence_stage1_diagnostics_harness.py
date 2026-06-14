@@ -47,9 +47,9 @@ ALL_CATEGORIES = [
 # From BlueprintLensEngine.stage1TransitEssenceCategories — which category each
 # transiting planet boosts in stage1 essence scoring.
 TRANSIT_TO_CATEGORY = {
-    "Mars": "drama", "Venus": "romantic", "Sun": "magnetic", "Moon": "sensual",
-    "Mercury": "playful", "Jupiter": "maximalist", "Saturn": "minimal",
-    "Uranus": "edgy", "Neptune": "sensual", "Pluto": "edgy",
+    "Mars": "drama", "Venus": "romantic", "Sun": "magnetic", "Moon": "playful",
+    "Mercury": "eclectic", "Jupiter": "maximalist", "Saturn": "minimal",
+    "Uranus": "effortless", "Neptune": "sensual", "Pluto": "edgy",
 }
 # Rough daily motion (deg/day) — illustrates which transits are "fast" vs "slow".
 PLANET_SPEED = {
