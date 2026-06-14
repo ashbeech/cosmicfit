@@ -45,19 +45,17 @@ enum Stage1ScaleSensitivity {
     // narrowing the theoretical ±0.275 (0.50×0.55) to useful display travel.
     static let contrastPracticalHalfSpan: Double = 0.14
 
-    // Silhouette — analytical tanh-formula bounds for axis ∈ [0, 11].
-    // value = 0.5 + tanh((axis - 5.5) / 4.5) * 0.45
-    // At axis=0: 0.5 + tanh(-1.222)*0.45 ≈ 0.122
-    // At axis=11: 0.5 + tanh(1.222)*0.45 ≈ 0.878
+    // Silhouette — extreme test bounds (retained for backward-compatible tests).
+    // With anchor-blend formula, raw values stay within [baseline±0.20] so these
+    // represent out-of-band extremes that will always clamp to display 0.0/1.0.
     static let silhouetteFloor: Double = 0.12
     static let silhouetteCeiling: Double = 0.88
 
     // Silhouette — per-user calibrated envelope half-spans (Plan 4 audit).
     // Centered on chartAnchor instead of global [0.12, 0.88].
-    // Strategy axis varies more (observed raw range P50 ≈ 0.46) → wider span.
-    // MF/AR axes vary less (observed raw range P50 ≈ 0.34–0.36) → narrower span.
-    static let silhouetteSDPracticalHalfSpan: Double = 0.25
-    static let silhouetteMFARPracticalHalfSpan: Double = 0.20
+    // With ±0.20 sky modulation, half-spans give useful display travel without rail-pinning.
+    static let silhouetteSDPracticalHalfSpan: Double = 0.30
+    static let silhouetteMFARPracticalHalfSpan: Double = 0.28
 }
 
 /// Stage 2 engine. Stateless — all methods are static.
@@ -132,13 +130,19 @@ enum BlueprintLensEngine {
 
         // Stage-1 narrative bridge path: joint (card, variant) selection
         if let intent = narrativeIntent, calibration.narrativeSelection != nil {
+            let lastVariantByCard = TarotVariantRotationTracker.shared.lastShownVariantMapForEligibleCards(
+                eligibleCardNames: eligibleCards.map(\.card.name),
+                profileHash: snapshot.profileHash,
+                dailyFitEngineId: engineId
+            )
             let bridgeResult = NarrativeTarotBridgeSelector.select(
                 snapshot: snapshot,
                 allCards: eligibleCards,
                 recentSelections: recentSelections,
                 intent: intent,
                 calibration: calibration,
-                dailySeed: snapshot.dailySeed
+                dailySeed: snapshot.dailySeed,
+                lastVariantByCard: lastVariantByCard
             )
 
             if recordSelection {
@@ -146,6 +150,12 @@ enum BlueprintLensEngine {
                     bridgeResult.candidate.card.name,
                     profileHash: snapshot.profileHash,
                     date: snapshot.generatedAt,
+                    dailyFitEngineId: engineId
+                )
+                TarotVariantRotationTracker.shared.recordVariantShown(
+                    bridgeResult.candidate.variantIndex,
+                    forCard: bridgeResult.candidate.card.name,
+                    profileHash: snapshot.profileHash,
                     dailyFitEngineId: engineId
                 )
             }
@@ -816,10 +826,14 @@ enum BlueprintLensEngine {
         from palette: PaletteSection,
         snapshot: DailyEnergySnapshot,
         calibration: DailyFitCalibration = .default,
-        narrativeIntent: NarrativeIntent? = nil
+        narrativeIntent: NarrativeIntent? = nil,
+        dailyFitEngineId: String? = nil,
+        referenceDate: Date? = nil
     ) -> DailyPaletteSelection {
         selectDailyPaletteWithTrace(
-            from: palette, snapshot: snapshot, calibration: calibration, narrativeIntent: narrativeIntent
+            from: palette, snapshot: snapshot, calibration: calibration,
+            narrativeIntent: narrativeIntent,
+            dailyFitEngineId: dailyFitEngineId, referenceDate: referenceDate
         ).selection
     }
 
@@ -833,7 +847,9 @@ enum BlueprintLensEngine {
         from palette: PaletteSection,
         snapshot: DailyEnergySnapshot,
         calibration: DailyFitCalibration = .default,
-        narrativeIntent: NarrativeIntent? = nil
+        narrativeIntent: NarrativeIntent? = nil,
+        dailyFitEngineId: String? = nil,
+        referenceDate: Date? = nil
     ) -> PaletteSelectionResult {
         let candidates = buildPaletteCandidates(from: palette)
         let allHexes = buildAllPaletteHexes(from: palette)
@@ -872,19 +888,63 @@ enum BlueprintLensEngine {
             )
             if let intent = narrativeIntent, let tuning = calibration.narrativeSelection {
                 var rng = SeededRandomGenerator(seed: snapshot.dailySeed)
+
+                let coverageDebtFn: ((String) -> Double)?
+                if let engineId = dailyFitEngineId {
+                    let refDate = referenceDate ?? snapshot.generatedAt
+                    let profileHash = snapshot.profileHash
+                    coverageDebtFn = { hex in
+                        ColourRecencyTracker.shared.coverageDebt(
+                            hex: hex,
+                            profileHash: profileHash,
+                            referenceDate: refDate,
+                            dailyFitEngineId: engineId
+                        )
+                    }
+                } else {
+                    coverageDebtFn = nil
+                }
+
                 let narrativeScored = NarrativeSelectionDirectives.applyNarrativePaletteScoring(
                     baseScored: baseScored,
                     intent: intent,
                     tuning: tuning,
                     roleEnergyAlignment: roleEnergyAlignment,
-                    seededJitter: { _ in Double.random(in: 0..<1.0, using: &rng) }
+                    seededJitter: { _ in Double.random(in: 0..<1.0, using: &rng) },
+                    coverageDebtForHex: coverageDebtFn
                 )
                 let slotResult = NarrativeSelectionDirectives.selectViaNarrativeSlots(
                     scored: narrativeScored,
                     intent: intent,
-                    normalizeHex: normalizedPaletteHex
+                    normalizeHex: normalizedPaletteHex,
+                    tuning: tuning,
+                    coverageDebtForHex: coverageDebtFn
                 )
-                selected = slotResult.selected
+
+                let heroDebtFn: ((String) -> Double)?
+                if let engineId = dailyFitEngineId {
+                    let refDate = referenceDate ?? snapshot.generatedAt
+                    let profileHash = snapshot.profileHash
+                    heroDebtFn = { hex in
+                        ColourRecencyTracker.shared.heroDebt(
+                            hex: hex,
+                            profileHash: profileHash,
+                            referenceDate: refDate,
+                            dailyFitEngineId: engineId
+                        )
+                    }
+                } else {
+                    heroDebtFn = nil
+                }
+
+                let heroRotated = NarrativeSelectionDirectives.applyHeroRotation(
+                    selected: slotResult.selected,
+                    intent: intent,
+                    tuning: tuning,
+                    heroDebtForHex: heroDebtFn
+                )
+
+                selected = heroRotated
                 statementSlotCount = slotResult.statementSlotCount
                 selectionPath = "narrativeSlots"
             } else {
@@ -905,8 +965,13 @@ enum BlueprintLensEngine {
     }
 
     /// Build the deduped candidate pool from the Style Guide palette.
+    /// Anchors are inserted before neutrals so that hex collisions (common for
+    /// light anchor vs first neutral) preserve the anchor-role entry, ensuring
+    /// deep/light anchors remain reachable via `.anchor` role scoring.
     private static func buildPaletteCandidates(from palette: PaletteSection) -> [BlueprintColour] {
         var candidates: [BlueprintColour] = []
+        if let light = palette.lightAnchor { candidates.append(light) }
+        if let deep = palette.deepAnchor { candidates.append(deep) }
         candidates.append(contentsOf: palette.coreColours)
         candidates.append(contentsOf: palette.accentColours)
         if let neutrals = palette.neutrals { candidates.append(contentsOf: neutrals) }
@@ -1070,6 +1135,12 @@ enum BlueprintLensEngine {
         hexes.append(contentsOf: palette.accentColours.map(\.hexValue))
         if let support = palette.supportColours {
             hexes.append(contentsOf: support.map(\.hexValue))
+        }
+        if let light = palette.lightAnchor {
+            hexes.append(light.hexValue)
+        }
+        if let deep = palette.deepAnchor {
+            hexes.append(deep.hexValue)
         }
         if let lum = palette.luminarySignature {
             hexes.append(lum.hexValue)
@@ -1305,7 +1376,9 @@ enum BlueprintLensEngine {
             from: blueprint.palette,
             snapshot: snapshot,
             calibration: calibration,
-            narrativeIntent: intent
+            narrativeIntent: intent,
+            dailyFitEngineId: resolvedEngineId,
+            referenceDate: snapshot.generatedAt
         )
 
         // Sliders: directly from plan targets
@@ -1357,6 +1430,16 @@ enum BlueprintLensEngine {
             dailyFitEngineId: resolvedEngineId,
             scalePresentation: presentation
         )
+
+        // Store colour recency for cross-day coverage tracking
+        ColourRecencyTracker.shared.storeDailyColours(
+            shownHexes: palette.colours.map(\.hexValue),
+            heroHex: palette.colours.first?.hexValue ?? "",
+            profileHash: snapshot.profileHash,
+            date: snapshot.generatedAt,
+            dailyFitEngineId: resolvedEngineId
+        )
+
         return (payload, tarotResult)
     }
 
@@ -1783,12 +1866,10 @@ enum BlueprintLensEngine {
         )
 
         if mode == .stage1Experimental {
-            let skyVis = snapshot.axes.visibility
-            let skyAct = snapshot.axes.action
-            let skyStr = snapshot.axes.strategy
-            let mf = 0.5 + tanh((skyVis - 5.5) / 4.5) * 0.45
-            let ar = 0.5 + tanh((skyAct - 5.5) / 4.5) * 0.45
-            let sd = 0.5 + tanh((skyStr - 5.5) / 4.5) * 0.45
+            let skyMod = { (axis: Double) in tanh((axis - 5.5) / 4.5) * 0.20 }
+            let mf = max(0.0, min(1.0, mfBase + skyMod(snapshot.axes.visibility)))
+            let ar = max(0.0, min(1.0, arBase + skyMod(snapshot.axes.action)))
+            let sd = max(0.0, min(1.0, sdBase + skyMod(snapshot.axes.strategy)))
             return SilhouetteProfile(
                 masculineFeminine: mf,
                 angularRounded: ar,

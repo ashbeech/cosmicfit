@@ -1,0 +1,350 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "A single piece of serious hardware does the job of ten lesser items. Rather than layering a dozen delicate trinkets, rely on the weight of one familiar object you rarely take off. This could be a chunky mechanical watch on a thick strap, a substantial ring, or a wide leather belt with a heavy clasp. You want an item that lands a bold first impression while providing a comforting, tactile reassurance throughout the day. Committing to one substantial accessory grounds your silhouette and leaves the rest of your look entirely uncomplicated.",
+   "The weight of a good accessory grounds your entire look in physical reality. Look for thick leather straps, satisfyingly heavy hardware, and clasps that snap shut with absolute authority. A beautifully constructed bag with rigid sides or a substantial watch gives a distinct boundary to the softer, more familiar fabrics you naturally wear. These pieces become the solid edges that keep your spontaneous styling choices from losing their shape.",
+   "The physical weight of what you wear matters just as much as how it looks in the mirror. You crave items with an undeniable tactile presence. The substantial drag of a structured bag on your shoulder or the rich, lived-in scent of thick leather provides an immediate grounding effect. There is a deep, familiar comfort in the friction of a stiff strap and the definitive sound of a heavy clasp snapping shut. These sensory details turn an outfit from a purely visual concept into a solid physical reality."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Anything that requires constant fussing or adjusting. If you have to think about it once you have left the house, it has failed.",
+   "Overly delicate pieces that cannot keep up with your energy. Fragile fabrics and fiddly closures are a mismatch.",
+   "Complicated layering systems that slow down your morning. You should be dressed and out the door in minutes, not negotiating with your wardrobe.",
+   "Anything emotionally cold or sterile that strips warmth from a room. Clinical minimalism is not your language.",
+   "Harsh fabric against your skin, especially near your neck and wrists. Those contact points carry emotional weight.",
+   "Exposing too much when you feel fragile. Your wardrobe should protect you, not put you on display."
+  ],
+  "consider": [
+   "dress for how it makes you feel, not how it looks to others",
+   "seek beauty in softness and simplicity",
+   "dress to feel emotionally approachable",
+   "keep comfort in pieces that move with you"
+  ],
+  "leanInto": [
+   "Dressing for the first three seconds. If the outfit does not make an instant impression, it is not doing its job.",
+   "Choosing bold colour over safe neutral every single time. A sharp coral blazer outperforms a beige one in any room.",
+   "Letting one hero piece carry the entire outfit. A striking jacket or a perfect pair of trainers is all you need.",
+   "Prioritising silhouettes that let you move. If a garment restricts your stride or your shoulders, leave it on the rack.",
+   "Keeping clothes with emotional history in active rotation. A coat from a family member or a scarf from a trip holds real power.",
+   "Wrapping yourself in soft protective layers as a daily practice. A worn-in cardigan or a heritage shawl is emotional armour."
+  ]
+ },
+ "engineVersion": "2.0.0",
+ "generatedAt": "2026-06-10T20:30:38Z",
+ "hardware": {
+  "metalsText": "Your hardware needs to feel like it has survived something, balancing an impulsive edge with deep sentimental value. Heavy, solid warm bronze tones is your default, bringing a satisfying physical weight to your favourite chunky belt buckles, rivets, and oversized zips. When you want a warmer tone, a slightly tarnished yellow gold tones feels incredibly familiar and right, pulling raw denim and crisp cotton together flawlessly. Flimsy chains and delicate little clasps simply get lost on you. You want substantial, tactile details that clink onto a wooden bedside table at the end of the night with real conviction.",
+  "recommendedMetals": [
+   "warm bronze",
+   "yellow gold",
+   "antique brass",
+   "bright copper",
+   "polished brass",
+   "rose gold",
+   "sterling silver",
+   "white gold",
+   "antique silver"
+  ],
+  "recommendedStones": [
+   "emerald",
+   "jade",
+   "bloodstone",
+   "lapis lazuli",
+   "tiger eye",
+   "carnelian",
+   "garnet",
+   "red jasper",
+   "moonstone",
+   "pearl",
+   "selenite"
+  ],
+  "stonesText": "Forget polite little sparkles that disappear into the background; you suit stones with serious physical weight and an undeniable pulse. A large, cabochon-cut emerald set in thick gold brings a sudden flash of heat while feeling solid and protective on the body. Opaque or deeply saturated gems satisfy your urge for something tactile and real. A chunky pendant featuring raw jade looks brilliant resting over crisp poplin, acting as a private talisman that still demands attention. For high impact, a heavy vintage setting with bloodstone delivers fiery colour without ever looking pristine or mass-produced. The ideal piece acts less like mere decoration and more like a heavy, comforting weapon.",
+  "tipText": "The best hardware hits a very specific sweet spot: striking enough to command immediate attention, yet familiar enough to feel deeply personal. You need pieces with serious physical presence that actually survive your daily routine. A chunky warm bronze tones ID bracelet or a heavy emerald signet ring provides a satisfying, grounding weight. Skip the fragile chains that tangle the second you move. Let one solid, beautifully worn item handle the entire statement."
+ },
+ "occasions": {
+  "dailyText": "Your off-duty wardrobe runs on a very specific tension between the urge to hibernate and the need to look entirely ready for the world. Rely on substantial, enduring materials that feel reassuring and protective, cut into decisive, uncomplicated silhouettes. You want garments with enough inherent architecture to hold their own, allowing you to get dressed in three seconds flat while still delivering a striking first impression. It is about building a daily uniform that acts like a private retreat but reads as a bold statement.\n\nYour comfort instinct gravitates toward emotional dressing that communicates, approachable comfort, soft signals. Your style energy concentrates in retreat and identity, so your wardrobe is at its best when it reflects both retreat and identity.",
+  "intimateText": "Dressing for close quarters is about managing the friction between your desire to make an immediate impact and your preference for pieces that feel familiar. Focus on silhouettes that offer substantial weight and coverage, but intentionally break away to reveal an unexpected flash of bare skin. Slipping a heavy, enveloping outer layer over a sharply minimal foundation provides physical reassurance while keeping your overall presence decisive. You end up with a mood that feels fiercely private, yet undeniably commanding to anyone sitting across the table.",
+  "workText": "Your professional wardrobe functions as a highly effective boundary that never sacrifices authority. Lean into tailoring with a bit of physical weight, choosing substantial materials and considered proportions that hold their shape while you move through the office. The logic here is combining pieces that feel fundamentally secure on the body with a silhouette that reads as entirely decisive to anyone sitting across the desk. When your daily rotation feels physically grounded, you have the absolute freedom to be impulsive and unapologetic in your actual work.\n\nAt work, lean into empathetic fluidity; soft structure and creatively composed pieces communicate intuitive intelligence."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#9F3D8A",
+    "name": "Cool Berry",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Venus",
+     "sourceSign": "Aries"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#A6C6D0",
+    "name": "Lunar Silver",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Moon",
+     "sourceSign": "Cancer"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Deep Cool Controlled",
+  "coreColours": [
+   {
+    "hexValue": "#4D0F28",
+    "name": "black cherry",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#1B3A4B",
+    "name": "petrol",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#014421",
+    "name": "dark emerald",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#0D1B2A",
+    "name": "blue-black",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#0A0A0A",
+   "name": "black",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "Deep Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "Deep Winter",
+  "lightAnchor": {
+   "hexValue": "#FEFEFA",
+   "name": "optic white",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "Deep Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#157059",
+   "name": "forest green",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "Deep Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "Your wardrobe relies on an earthy, tactile base to handle sudden bursts of visual heat. Establish your daily uniform in black cherry, petrol, and dark emerald. These reliable shades take on a rich density when cast in raw denim or structured cotton, giving you a deeply wearable backdrop that never looks overworked. Once that solid ground is set, introduce Cool Berry or Lunar Silver to inject immediate, unapologetic energy. Keep those brighter hits contained to a sharp collar, a lightweight poplin shirt, or a single piece of enamel hardware. The contrast gives you a spontaneous edge without losing your grip on reality.",
+  "neutrals": [
+   {
+    "hexValue": "#0A0A0A",
+    "name": "black",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#1B2A4A",
+    "name": "ink navy",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#4B4F54",
+    "name": "graphite",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#3B3F42",
+    "name": "cool charcoal",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": false,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": true,
+   "fireAirChromaApplied": false,
+   "scorpioDensityApplied": true,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#895CC0",
+   "name": "royal blue",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "Deep Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Deep Autumn",
+  "supportColours": [
+   {
+    "hexValue": "#4A4244",
+    "name": "warm charcoal",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#3C2415",
+    "name": "espresso",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#5C4033",
+    "name": "bark brown",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#7B5B3A",
+    "name": "cocoa",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "Medium",
+   "depth": "Deep",
+   "saturation": "Rich",
+   "surface": "Structured",
+   "temperature": "Cool"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "tiny florals",
+   "paisley",
+   "fussy prints",
+   "aggressive graphics"
+  ],
+  "narrativeText": "Prints need to hit hard and fast, but they still have to feel grounded enough to live in day to day. You thrive in motifs that deliver an immediate visual punch while retaining a sense of familiar comfort. Bold stripes and colour blocking give you that striking, decisive read without overwhelming a crisp poplin shirt or a heavy cotton knit. If you want something sharper, contrast-piped racing stripe brings that direct, fiery energy while keeping the fabric honest. Steer clear of tiny florals and paisley. That kind of visual noise feels fussy, chaotic, and wears you out before you have even stepped out the front door. You want your clothes to make a bold entrance, but they should never stutter.",
+  "recommendedPatterns": [
+   "bold stripes",
+   "colour blocking",
+   "contrast-piped racing stripe",
+   "pop-art colour block",
+   "vintage florals",
+   "nautical stripes"
+  ],
+  "tipText": "Your best approach to pattern involves balancing immediate visual impact with deep, familiar comfort. A bold bold stripes cut from crisp poplin gives you that spontaneous hit of colour without feeling overworked or fussy. Look for motifs rooted in classic clothing traditions rather than passing digital trends. When working with colour blocking, choose woven textiles rather than flat prints so the fabric retains a grounding, tactile quality. Wearing a bright coral or fire red pattern over perfectly worn-in raw denim delivers a direct, confident finish that still feels entirely like home."
+ },
+ "styleCore": {
+  "narrativeText": "Your style presence relies on a brilliant contradiction. You hit the eye with an immediate, unapologetic force, but up close, your clothes reveal a deeply protective and familiar weight. You walk into a room looking entirely ready for action, yet dressed for total sensory comfort. Build a wardrobe that balances sudden visual impact with enduring, substantial construction. You project the attitude of someone who makes rapid, instinctive style choices, but only trusts garments built for a lifetime of wear. It is a look of unhesitating decisions anchored by heavy, reassuring quality.\n\nYour natural sense of beauty shows up most powerfully in your inner world, private beauty, dreamy personal aesthetics, beauty for the self alone. Your style instincts lean toward clarity, structure, and visible polish. Your public style reads as fluid and intuitive; soft elegance and imaginative beauty feel effortlessly composed."
+ },
+ "textures": {
+  "avoidTextures": [
+   "heavy brocade",
+   "stiff formal fabrics",
+   "overly delicate lace"
+  ],
+  "badText": "Anything scratchy, suffocating, or visibly artificial is a non-starter. You operate with a high sensory baseline and move with purpose, so materials like heavy brocade will irritate you before you even leave the house. They sit awkwardly against the skin, catching the light poorly rather than offering a crisp, deliberate finish. You are equally averse to stiff formal fabrics, which lacks the substantial physical weight needed to ground your silhouette. If a garment feels like it will generate static shock or requires constant tugging just to sit right, leave it on the hanger.",
+  "goodText": "You want clothes that act as a physical anchor without getting in the way of a sudden exit. Reach for lightweight cotton because it provides immediate, uncomplicated comfort against the skin while keeping a crisp edge. Contrast this with the reassuring, heavy-duty weight of crisp poplin for pieces that actually look better the harder you wear them. You also thrive in tech fabrics when you need a protective barrier that still moves seamlessly with your body. The ideal piece feels like a familiar refuge the second you put it on, but is entirely engineered to leave the house at a moment's notice.",
+  "recommendedTextures": [
+   "lightweight cotton",
+   "crisp poplin",
+   "tech fabrics",
+   "raw denim"
+  ],
+  "sweetSpotKeywords": [
+   "movement",
+   "freedom"
+  ],
+  "sweetSpotText": "You are drawn to garments that deliver an immediate visual punch while secretly acting as a physical anchor. The true sweet spot is a strict combination of movement and freedom. You need pieces that look sharp and ready for motion, yet behave like a protective shell the second you slip them on. Think about the uncompromising snap of lightweight cotton backed by a dense, reassuring weave that requires zero breaking in. If an item lacks that instant tactile payoff, it will simply gather dust at the back of your wardrobe."
+ },
+ "userInfo": {
+  "birthDate": "1985-04-25T20:00:00Z",
+  "birthLocation": "Synth 024 \u2014 Taurus Sun, 20:00 UTC, London (1985)",
+  "generationDate": "2026-06-10T20:30:38Z"
+ }
+}

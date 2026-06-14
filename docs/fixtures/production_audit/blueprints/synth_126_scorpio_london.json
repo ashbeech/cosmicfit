@@ -1,0 +1,341 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "A single, flawlessly constructed accessory speaks much louder than a clutter of minor additions. Fiddling with a pile of tiny components wastes time and distracts from the clean movement of your clothes. Instead, rely on one substantial anchor, like a sharply structured bag or a heavyweight watch on a thick leather strap. The crisp snap of a solid clasp gives your outfit an immediate focal point without adding any fuss to your morning. Let one serious item do the hard work so you can simply walk out the door looking perfectly finished.",
+   "The soft drape of your clothes requires a counterweight to stop the whole look floating away. A stiff leather bag with a satisfyingly heavy clasp introduces just enough discipline to a fluid silhouette. Because you despise fuss, the construction of these pieces must be immaculate and deeply practical. Think of a wide belt that defines your shape in seconds, or a watch with a clean, readable face rather than delicate, tangled chains. Let the sharp edge of a strap do the heavy lifting, framing your effortless elegance with serious intent.",
+   "How a piece sounds and feels when you put it on dictates your entire mood. You want the decisive, heavy snap of a brilliant clasp, not a tiny mechanism that requires endless fiddling. A daily bag should offer up that faint, rich scent of treated leather every time you open it, while yielding softly in your hands. You have no time for rings that scratch or straps that squeak while you are moving. The sensory feedback of your hardware must be smooth, secure, and entirely deliberate. Your finishing touches should feel like a seamless extension of your own momentum."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Deliberately jarring combinations that create visual conflict. Tension in your outfit creates tension in your body.",
+   "Aggressive power dressing that overwhelms your natural grace. Sharp shoulders and hard lines fight your energy rather than channel it.",
+   "Anything that feels confrontational or intentionally abrasive. Your style should draw people in, not push them away.",
+   "Blunt, aggressive dressing that shuts down dialogue. Your power comes from persuasion, not intimidation.",
+   "Harsh industrial textures that contradict your natural grace. Rough fabrics fight your energy instead of channelling it.",
+   "Anything naive, cutesy, or performatively innocent. These registers contradict your natural intensity and will feel like a costume."
+  ],
+  "consider": [
+   "dress for harmony in shared contexts",
+   "balance personal style with social awareness",
+   "one truly innovative piece that starts conversations about fashion's future",
+   "Sustainable luxury as the ultimate expression of abundance. Generosity starts with the planet"
+  ],
+  "leanInto": [
+   "Balancing proportions between top and bottom. If the top is voluminous, the bottom should be slim. Harmony is your operating principle.",
+   "Building soft colour stories that feel cohesive from head to toe. Every piece should look like it belongs in the same painting.",
+   "Choosing elegant simplicity over dramatic statement. A beautifully draped dress does more for you than a hundred loud accessories.",
+   "Investing in pieces that transition from day to evening with a single swap. A silk blouse that works under a blazer and over bare shoulders is ideal.",
+   "Using charm as a form of strength in your wardrobe. A beautifully cut blazer disarms a room more effectively than a power suit.",
+   "Bringing elegance to confrontation. When the day demands toughness, a silk blouse with a sharp trouser says you can do both."
+  ]
+ },
+ "engineVersion": "2.0.0",
+ "generatedAt": "2026-06-10T20:39:12Z",
+ "hardware": {
+  "metalsText": "Your hardware should look like a natural extension of the garment, never an afterthought. Since you despise fiddly fastenings and heavy embellishments, look for smooth, flat-profile closures that snap shut in a second. High-shine rose gold tones offers a crisp finish that anchors your lighter fabrics, while gunmetal tones looks incredibly chic on fine zippers or sleek cuffs. You want details that fasten swiftly and lie flat, letting the drape of your silk or soft crepe take the lead. A subtle, functional clasp in polished copper tones grants you that effortless mobility without ruining the clean line of your silhouette.",
+  "recommendedMetals": [
+   "rose gold",
+   "gunmetal",
+   "polished copper",
+   "blackened silver",
+   "soft gold",
+   "soft copper",
+   "blackened steel",
+   "blackened titanium",
+   "dark steel",
+   "titanium",
+   "polished brass"
+  ],
+  "recommendedStones": [
+   "obsidian",
+   "black tourmaline",
+   "garnet",
+   "kunzite",
+   "pink tourmaline",
+   "black diamond",
+   "onyx",
+   "carnelian",
+   "rose quartz",
+   "red agate",
+   "ruby",
+   "red jasper"
+  ],
+  "stonesText": "Approach stones with an eye for brilliant clarity and total ease. You want light-catching gems that flash across a room while you talk, but they must never weigh you down or demand careful handling. Obsidian gives you that essential hit of pristine elegance in a single glance. A solitary black tourmaline suspended on a fine chain offers striking symmetry, while garnet brings a cool, intellectual gleam when bezel-set. Keep the settings smooth and the cuts clean, ensuring you can pull a jumper over your head without snagging a prong.",
+  "tipText": "Fiddly clasps and layered chains are an immediate dealbreaker for someone who moves quickly. You need hardware that looks inherently considered but takes two seconds to put on. A perfectly weighted cuff in rose gold tones or sleek, architectural hoops will anchor an outfit without getting in the way. The finish must be immaculate and highly polished to satisfy your eye for proportion, but the construction has to endure real life. If a piece of jewellery interrupts your momentum, it simply does not belong on your body."
+ },
+ "occasions": {
+  "dailyText": "Your off-duty wardrobe has to bridge the gap between looking flawlessly presented and acting completely frictionless. You need silhouettes that fall beautifully the second you pull them on, yet still let you break into a sudden sprint if you spot a friend across the street. Prioritise garments with precise proportions that refuse to actually bind or pinch your frame. You simply do not have the patience to adjust hems or fix rogue straps while you are busy running errands. The ultimate daytime formula is achieving total visual harmony with the mechanical ease of sportswear.\n\nYour comfort instinct gravitates toward emotional comfort visible in how you present, your feelings wear you. Your style energy concentrates in intensity and partnership, so your wardrobe is at its best when it reflects both intensity and partnership.",
+  "intimateText": "Intimate settings demand clothes that look entirely intentional but require zero maintenance. You want garments that move with your body, allowing you to hold court at a dinner table or slide into a low booth without rearranging a single seam. Seek out fluid tailoring and cutaway shapes that skim rather than cling, keeping the overall impression impeccably balanced while retaining a strong physical boldness. Skip the complicated straps, heavy layers, or restrictive necklines that slowly kill an evening. The final effect must be magnetic, leaving you entirely free to focus on the conversation.",
+  "workText": "Professional dressing for you relies on projecting high-level polish while secretly maintaining total physical freedom. You need tailoring that looks sharply considered but refuses to restrict your stride. Skip anything with fussy closures or rigid shoulders that demand adjusting throughout the morning. Your most powerful office pieces use clever proportions and relaxed cuts to do the work for you. Go for wide trousers with generous room and unstructured blazers that sit lightly on the frame, giving you the space to breathe and command the room simultaneously. The result is a highly considered uniform that moves exactly as fast as your brain does.\n\nAt work, lean into structured authority; timeless tailoring and investment-grade workwear build lasting credibility."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#9F3D8A",
+    "name": "Cool Berry",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Ascendant",
+     "sourceSign": "Aries"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Deep Cool High-Contrast",
+  "coreColours": [
+   {
+    "hexValue": "#191970",
+    "name": "midnight",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#4169E1",
+    "name": "royal blue",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#CC0066",
+    "name": "magenta red",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#5FADA5",
+    "name": "icy teal",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#0A0A0A",
+   "name": "black",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "Bright Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "Bright Winter",
+  "lightAnchor": {
+   "hexValue": "#FFFFFF",
+   "name": "bright white",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "Bright Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#4B306F",
+   "name": "warm navy",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "Bright Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "Your ideal wardrobe operates on a foundation of soft, highly communicative tones that look entirely put-together even when thrown on in a rush. Build your daily rotation around midnight and royal blue, letting these shades do the heavy lifting in fluid silks or a lightweight crepe. Mixing in magenta red keeps the overall mood versatile, giving you a beautiful canvas that does not need hours of careful matching. When you inevitably crave a sharper visual edge, a sudden flash of Cool Berry in your hardware or a pointed shoe cuts right through the sweetness. The trick is letting the softer shades remain the main event while keeping a bright, impatient streak present in the styling.",
+  "neutrals": [
+   {
+    "hexValue": "#0A0A0A",
+    "name": "black",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#FFFFFF",
+    "name": "bright white",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#1B2A4A",
+    "name": "ink navy",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#71797E",
+    "name": "steel grey",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": false,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": false,
+   "fireAirChromaApplied": true,
+   "scorpioDensityApplied": true,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#7F6996",
+   "name": "dusty plum",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "Bright Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Bright Spring",
+  "supportColours": [
+   {
+    "hexValue": "#A89F91",
+    "name": "warm stone",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#786D4E",
+    "name": "deep khaki",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#7B5B3A",
+    "name": "cocoa",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#C4A35A",
+    "name": "camel sand",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "High",
+   "depth": "Deep",
+   "saturation": "Rich",
+   "surface": "Structured",
+   "temperature": "Cool"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "chaotic abstract",
+   "aggressive asymmetry",
+   "clashing prints",
+   "dainty florals"
+  ],
+  "narrativeText": "Your eye for proportion means a fussy print is an instant write-off. You need patterns to feel deliberate and clean, since a messy garment feels deeply exhausting to wear. Think about how a motif reads when you are moving fast. A fluid art deco motifs on soft crepe or a perfectly spaced mirror-image damask delivers immediate visual harmony without slowing you down in the morning. Stay away from chaotic abstract, as it looks heavy-handed and demands entirely too much patience to style properly. Leave the complicated outfits to someone else and let a sharp elegant stripes do the hard work for you.",
+  "recommendedPatterns": [
+   "art deco motifs",
+   "mirror-image damask",
+   "elegant stripes",
+   "balanced geometric",
+   "elegant stripe",
+   "dark-on-dark jacquard"
+  ],
+  "tipText": "Your tolerance for fussy styling is famously low, which means your prints need to perform immediately. When you incorporate a art deco motifs, let it take the lead on a clean, uncomplicated silhouette. A perfectly proportioned motif on fluid silk or soft crepe delivers instant visual impact without forcing you to stand in front of a mirror tweaking layers. Keep the surrounding garments entirely understated to maintain that crucial sense of elegance. The pattern does the heavy lifting, leaving you completely unencumbered and ready to move."
+ },
+ "styleCore": {
+  "narrativeText": "You project an immediate sense of flawless proportion, but beneath that polished surface is a distinctly restless momentum. Your wardrobe has to bridge the gap between a highly refined social presentation and total physical freedom. Because you navigate a room with a quick, conversational ease, your silhouette needs to adapt and pivot just as fast as you do. Fuss and over-styling are your natural enemies. If an outfit demands constant adjustment or limits your stride, it simply does not belong on your body.\n\nYour natural sense of beauty shows up most powerfully in your shared spaces, dressing for partnership, harmonious social presentation, beauty that attracts. Your style instincts lean toward clarity, structure, and visible polish. Your public style reads as structured and authoritative; timeless polish and investment-grade quality define your image."
+ },
+ "textures": {
+  "avoidTextures": [
+   "rough burlap",
+   "stiff heavy canvas",
+   "harsh industrial fabrics"
+  ],
+  "badText": "Your wardrobe relies on effortless movement, meaning anything stiff, scratchy, or visually heavy immediately breaks the illusion of ease. Materials like rough burlap add unnecessary bulk and physically drag you down when you just want to get out the door. You also have absolutely no patience for stiff heavy canvas fighting against your skin or restricting your stride. If a piece requires constant tugging or feels abrasive the second you put it on, it actively blocks your momentum. Your clothing has to keep up with your fast pace while maintaining total grace, so leave the demanding, high-maintenance finishes on the rail.",
+  "goodText": "Looking immaculate should never come at the expense of your mobility. You have absolutely no patience for garments that tug, trap heat, or require awkward readjusting mid-stride, so your fabrics must breathe and move exactly as fast as you do. Rely on fluid silk and soft crepe for an effortless, liquid drape. These materials give you a flawless, expensive finish while secretly feeling entirely unrestrictive against the skin. When you need a sharper cut, fine wool provides a crisp tailored edge without locking your shoulders into place. Layering organza over the top introduces a sheer, weightless element that catches the breeze and keeps your silhouette active. Your clothes must communicate pure, unbothered grace, even if you dressed in a genuine rush.",
+  "recommendedTextures": [
+   "fluid silk",
+   "soft crepe",
+   "fine wool",
+   "organza"
+  ],
+  "sweetSpotKeywords": [
+   "balance",
+   "drape"
+  ],
+  "sweetSpotText": "The pieces that actually make it out of your house share a very specific DNA. You are always hunting for that exact intersection of balance and drape. You have zero tolerance for fussy, restrictive construction, yet you categorically refuse to look unkempt. A shirt in fluid silk has to drape perfectly over the shoulder while still letting you move fast enough to catch a train. The same logic applies to trousers cut from soft crepe, delivering an instant hit of visual polish without making you feel physically trapped. If a garment requires smoothing down every time you stand up, it simply has no place in your rotation."
+ },
+ "userInfo": {
+  "birthDate": "1985-10-28T04:00:00Z",
+  "birthLocation": "Synth 126 \u2014 Scorpio Sun, 04:00 UTC, London (1985)",
+  "generationDate": "2026-06-10T20:39:12Z"
+ }
+}

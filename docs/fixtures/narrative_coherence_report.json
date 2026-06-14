@@ -1,8 +1,8 @@
 {
   "aggregate" : {
     "meanCoherenceScore" : 1,
-    "meanDistinctAccents" : 2.2000000000000002,
-    "meanFlipRate" : 0.28139999999999998,
+    "meanDistinctAccents" : 5.5999999999999996,
+    "meanFlipRate" : 0.93559999999999999,
     "totalCrossSurfaceViolations" : 0,
     "totalOppositionViolations" : 0
   },
@@ -12,15 +12,16 @@
   "presets" : [
     {
       "accentDistribution" : {
-        "drama" : 13,
-        "playful" : 11,
-        "romantic" : 36
+        "drama" : 18,
+        "minimal" : 3,
+        "playful" : 15,
+        "romantic" : 24
       },
       "coherenceScore" : 1,
       "crossSurfaceViolations" : 0,
       "dailyRows" : [
         {
-          "accent" : "playful",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -37,9 +38,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
+            "romantic",
             "playful",
-            "minimal",
-            "romantic"
+            "minimal"
           ],
           "vibrancy" : "0.8903"
         },
@@ -68,7 +69,7 @@
           "vibrancy" : "0.9117"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -85,14 +86,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "playful",
             "minimal"
           ],
           "vibrancy" : "0.8744"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -109,14 +110,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "romantic",
-            "drama",
-            "minimal"
+            "drama"
           ],
           "vibrancy" : "0.9362"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -133,9 +134,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "playful",
-            "romantic"
+            "minimal"
           ],
           "vibrancy" : "0.8446"
         },
@@ -192,7 +193,7 @@
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
-          "contrast" : "0.9892",
+          "contrast" : "0.8957",
           "crossSurfaceViolations" : [
 
           ],
@@ -202,17 +203,17 @@
           "oppositionViolations" : [
 
           ],
-          "relationship" : "contrast",
+          "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
             "drama",
-            "playful",
-            "romantic"
+            "romantic",
+            "minimal"
           ],
           "vibrancy" : "0.8881"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -229,8 +230,8 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
             "playful",
+            "romantic",
             "minimal"
           ],
           "vibrancy" : "0.8000"
@@ -308,7 +309,7 @@
           "vibrancy" : "0.6853"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -325,14 +326,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "playful",
-            "minimal"
+            "romantic"
           ],
           "vibrancy" : "0.7097"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -349,9 +350,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "romantic",
-            "classic",
-            "minimal"
+            "classic"
           ],
           "vibrancy" : "0.7238"
         },
@@ -380,7 +381,7 @@
           "vibrancy" : "0.6851"
         },
         {
-          "accent" : "romantic",
+          "accent" : "minimal",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -397,14 +398,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "minimal",
             "playful",
-            "minimal"
+            "romantic"
           ],
           "vibrancy" : "0.7322"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -421,9 +422,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "playful",
-            "minimal"
+            "romantic"
           ],
           "vibrancy" : "0.7501"
         },
@@ -500,7 +501,7 @@
           "vibrancy" : "0.7609"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -517,7 +518,7 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "playful",
             "minimal"
           ],
@@ -548,7 +549,7 @@
           "vibrancy" : "0.7868"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -565,14 +566,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "playful",
             "minimal"
           ],
           "vibrancy" : "0.7356"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -589,7 +590,7 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "playful",
             "minimal"
           ],
@@ -620,7 +621,7 @@
           "vibrancy" : "0.7460"
         },
         {
-          "accent" : "playful",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -637,14 +638,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
+            "romantic",
             "playful",
-            "minimal",
-            "romantic"
+            "minimal"
           ],
           "vibrancy" : "0.9059"
         },
         {
-          "accent" : "romantic",
+          "accent" : "minimal",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -661,14 +662,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "minimal",
             "playful",
-            "minimal"
+            "romantic"
           ],
           "vibrancy" : "0.7982"
         },
         {
-          "accent" : "playful",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -685,14 +686,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
+            "drama",
             "playful",
-            "minimal",
-            "romantic"
+            "minimal"
           ],
           "vibrancy" : "0.9356"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -709,9 +710,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
             "playful",
-            "minimal"
+            "minimal",
+            "romantic"
           ],
           "vibrancy" : "0.8972"
         },
@@ -740,7 +741,7 @@
           "vibrancy" : "0.8438"
         },
         {
-          "accent" : "playful",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -757,14 +758,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
+            "drama",
             "playful",
-            "minimal",
-            "romantic"
+            "minimal"
           ],
           "vibrancy" : "0.8888"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -781,9 +782,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "playful",
-            "romantic"
+            "minimal"
           ],
           "vibrancy" : "0.9345"
         },
@@ -812,7 +813,7 @@
           "vibrancy" : "0.8458"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -829,14 +830,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "playful",
-            "minimal"
+            "romantic"
           ],
           "vibrancy" : "0.8666"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -853,14 +854,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
             "playful",
+            "romantic",
             "minimal"
           ],
           "vibrancy" : "0.8398"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -877,14 +878,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
             "romantic",
+            "drama",
             "minimal"
           ],
           "vibrancy" : "0.8408"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -901,14 +902,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "playful",
-            "minimal"
+            "romantic"
           ],
           "vibrancy" : "0.8896"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -925,14 +926,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
             "romantic",
+            "drama",
             "sensual"
           ],
           "vibrancy" : "0.8601"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -949,14 +950,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
             "playful",
-            "romantic"
+            "romantic",
+            "minimal"
           ],
           "vibrancy" : "0.8471"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -973,9 +974,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "drama",
             "romantic",
-            "classic",
-            "polished"
+            "classic"
           ],
           "vibrancy" : "0.7274"
         },
@@ -1004,7 +1005,7 @@
           "vibrancy" : "0.7200"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1021,14 +1022,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "drama",
             "romantic",
-            "polished",
-            "minimal"
+            "polished"
           ],
           "vibrancy" : "0.6530"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1045,8 +1046,8 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
             "playful",
+            "romantic",
             "minimal"
           ],
           "vibrancy" : "0.7076"
@@ -1076,7 +1077,7 @@
           "vibrancy" : "0.7426"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1093,14 +1094,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "playful",
-            "minimal"
+            "romantic"
           ],
           "vibrancy" : "0.6977"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1117,14 +1118,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
             "playful",
+            "romantic",
             "minimal"
           ],
           "vibrancy" : "0.7123"
         },
         {
-          "accent" : "drama",
+          "accent" : "minimal",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1141,9 +1142,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "minimal",
             "playful",
-            "minimal"
+            "romantic"
           ],
           "vibrancy" : "0.7515"
         },
@@ -1268,7 +1269,7 @@
           "vibrancy" : "0.8287"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1285,7 +1286,7 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "playful",
             "minimal"
           ],
@@ -1340,7 +1341,7 @@
           "vibrancy" : "0.8287"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1357,14 +1358,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "playful",
             "minimal"
           ],
           "vibrancy" : "0.8836"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1381,7 +1382,7 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "playful",
             "minimal"
           ],
@@ -1412,7 +1413,7 @@
           "vibrancy" : "0.9071"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1429,7 +1430,7 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "playful",
             "minimal"
           ],
@@ -1460,19 +1461,24 @@
           "vibrancy" : "0.8149"
         }
       ],
-      "distinctAccents" : 3,
+      "distinctAccents" : 4,
       "essenceOppositionViolations" : 0,
-      "flipRate" : 0.61019999999999996,
+      "flipRate" : 0.94920000000000004,
       "plansGenerated" : 60,
       "preset" : "fire",
       "relationshipDistribution" : {
-        "contrast" : 54,
-        "stretch" : 6
+        "contrast" : 53,
+        "stretch" : 7
       }
     },
     {
       "accentDistribution" : {
-        "drama" : 60
+        "drama" : 28,
+        "eclectic" : 2,
+        "edgy" : 1,
+        "maximalist" : 1,
+        "playful" : 16,
+        "romantic" : 12
       },
       "coherenceScore" : 1,
       "crossSurfaceViolations" : 0,
@@ -1502,7 +1508,7 @@
           "vibrancy" : "0.9028"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1519,14 +1525,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "drama",
-            "maximalist",
-            "eclectic"
+            "maximalist"
           ],
           "vibrancy" : "0.8968"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1543,9 +1549,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "classic",
-            "edgy"
+            "drama"
           ],
           "vibrancy" : "0.8587"
         },
@@ -1574,7 +1580,7 @@
           "vibrancy" : "0.9260"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1591,9 +1597,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "drama",
-            "maximalist",
-            "sensual"
+            "maximalist"
           ],
           "vibrancy" : "0.8309"
         },
@@ -1622,7 +1628,7 @@
           "vibrancy" : "0.7911"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1639,9 +1645,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "romantic",
             "drama",
-            "maximalist",
-            "magnetic"
+            "maximalist"
           ],
           "vibrancy" : "0.8666"
         },
@@ -1650,7 +1656,7 @@
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
-          "contrast" : "0.8461",
+          "contrast" : "0.9056",
           "crossSurfaceViolations" : [
 
           ],
@@ -1670,7 +1676,7 @@
           "vibrancy" : "0.8940"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1687,9 +1693,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "drama",
-            "maximalist",
-            "romantic"
+            "maximalist"
           ],
           "vibrancy" : "0.7844"
         },
@@ -1718,7 +1724,7 @@
           "vibrancy" : "0.8797"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1735,9 +1741,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "romantic",
             "drama",
-            "maximalist",
-            "sensual"
+            "maximalist"
           ],
           "vibrancy" : "0.8767"
         },
@@ -1766,7 +1772,7 @@
           "vibrancy" : "0.7353"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1783,14 +1789,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "drama",
-            "romantic",
-            "maximalist"
+            "romantic"
           ],
           "vibrancy" : "0.7169"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1807,9 +1813,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "romantic",
             "drama",
-            "maximalist",
-            "sensual"
+            "maximalist"
           ],
           "vibrancy" : "0.7008"
         },
@@ -1862,7 +1868,7 @@
           "vibrancy" : "0.7190"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1879,9 +1885,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "romantic",
             "drama",
-            "sensual",
-            "romantic"
+            "sensual"
           ],
           "vibrancy" : "0.7693"
         },
@@ -1934,7 +1940,7 @@
           "vibrancy" : "0.7349"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1951,14 +1957,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "classic",
             "edgy"
           ],
           "vibrancy" : "0.8270"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -1975,7 +1981,7 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "classic",
             "edgy"
           ],
@@ -2006,7 +2012,7 @@
           "vibrancy" : "0.7755"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2023,9 +2029,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "maximalist",
-            "edgy"
+            "drama"
           ],
           "vibrancy" : "0.7710"
         },
@@ -2054,7 +2060,7 @@
           "vibrancy" : "0.6826"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2071,14 +2077,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "romantic",
             "drama",
-            "playful",
-            "maximalist"
+            "playful"
           ],
           "vibrancy" : "0.7708"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2095,9 +2101,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "classic",
-            "edgy"
+            "drama"
           ],
           "vibrancy" : "0.9019"
         },
@@ -2126,7 +2132,7 @@
           "vibrancy" : "0.7903"
         },
         {
-          "accent" : "drama",
+          "accent" : "eclectic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2143,8 +2149,8 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
+            "eclectic",
             "drama",
-            "classic",
             "maximalist"
           ],
           "vibrancy" : "0.9329"
@@ -2174,7 +2180,7 @@
           "vibrancy" : "0.8680"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2191,14 +2197,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "classic",
-            "edgy"
+            "drama"
           ],
           "vibrancy" : "0.7974"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2215,9 +2221,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "romantic",
             "drama",
-            "maximalist",
-            "eclectic"
+            "maximalist"
           ],
           "vibrancy" : "0.8579"
         },
@@ -2246,7 +2252,7 @@
           "vibrancy" : "0.9210"
         },
         {
-          "accent" : "drama",
+          "accent" : "maximalist",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2263,14 +2269,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
             "maximalist",
+            "drama",
             "magnetic"
           ],
           "vibrancy" : "0.7980"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2287,9 +2293,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "drama",
-            "maximalist",
-            "sensual"
+            "maximalist"
           ],
           "vibrancy" : "0.8947"
         },
@@ -2366,7 +2372,7 @@
           "vibrancy" : "0.8780"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2383,14 +2389,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "drama",
-            "maximalist",
-            "magnetic"
+            "maximalist"
           ],
           "vibrancy" : "0.8718"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2407,9 +2413,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "romantic",
             "drama",
-            "maximalist",
-            "edgy"
+            "maximalist"
           ],
           "vibrancy" : "0.8485"
         },
@@ -2438,7 +2444,7 @@
           "vibrancy" : "0.7410"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2455,9 +2461,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "drama",
-            "romantic",
-            "maximalist"
+            "romantic"
           ],
           "vibrancy" : "0.7277"
         },
@@ -2486,7 +2492,7 @@
           "vibrancy" : "0.6624"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2503,14 +2509,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "romantic",
             "drama",
-            "maximalist",
-            "romantic"
+            "maximalist"
           ],
           "vibrancy" : "0.7113"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2527,9 +2533,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "drama",
-            "romantic",
-            "maximalist"
+            "romantic"
           ],
           "vibrancy" : "0.7249"
         },
@@ -2558,7 +2564,7 @@
           "vibrancy" : "0.6979"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2575,14 +2581,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
             "romantic",
+            "drama",
             "maximalist"
           ],
           "vibrancy" : "0.7259"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2599,9 +2605,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "classic",
-            "edgy"
+            "drama"
           ],
           "vibrancy" : "0.7556"
         },
@@ -2630,7 +2636,7 @@
           "vibrancy" : "0.7072"
         },
         {
-          "accent" : "drama",
+          "accent" : "edgy",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2647,14 +2653,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "edgy",
             "classic",
-            "edgy"
+            "drama"
           ],
           "vibrancy" : "0.7612"
         },
         {
-          "accent" : "drama",
+          "accent" : "eclectic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2671,9 +2677,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
-            "classic",
-            "edgy"
+            "eclectic",
+            "edgy",
+            "drama"
           ],
           "vibrancy" : "0.8065"
         },
@@ -2726,7 +2732,7 @@
           "vibrancy" : "0.8361"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2743,9 +2749,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "classic",
-            "edgy"
+            "drama"
           ],
           "vibrancy" : "0.7745"
         },
@@ -2798,7 +2804,7 @@
           "vibrancy" : "0.8329"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2815,14 +2821,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "classic",
-            "maximalist"
+            "drama"
           ],
           "vibrancy" : "0.9279"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2839,9 +2845,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "romantic",
             "drama",
-            "maximalist",
-            "eclectic"
+            "maximalist"
           ],
           "vibrancy" : "0.8578"
         },
@@ -2870,7 +2876,7 @@
           "vibrancy" : "0.9104"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2887,9 +2893,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "classic",
-            "edgy"
+            "drama"
           ],
           "vibrancy" : "0.8941"
         },
@@ -2918,9 +2924,9 @@
           "vibrancy" : "0.8273"
         }
       ],
-      "distinctAccents" : 1,
+      "distinctAccents" : 6,
       "essenceOppositionViolations" : 0,
-      "flipRate" : 0,
+      "flipRate" : 0.89829999999999999,
       "plansGenerated" : 60,
       "preset" : "earth",
       "relationshipDistribution" : {
@@ -2930,8 +2936,11 @@
     },
     {
       "accentDistribution" : {
-        "drama" : 10,
-        "romantic" : 50
+        "drama" : 17,
+        "grounded" : 1,
+        "minimal" : 1,
+        "playful" : 12,
+        "romantic" : 29
       },
       "coherenceScore" : 1,
       "crossSurfaceViolations" : 0,
@@ -2961,7 +2970,7 @@
           "vibrancy" : "0.8814"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -2978,14 +2987,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "drama",
             "romantic",
-            "minimal",
-            "polished"
+            "minimal"
           ],
           "vibrancy" : "0.8895"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3002,9 +3011,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "playful",
             "edgy",
-            "minimal"
+            "romantic"
           ],
           "vibrancy" : "0.8003"
         },
@@ -3081,7 +3090,7 @@
           "vibrancy" : "0.8195"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3098,9 +3107,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "playful",
             "edgy",
-            "minimal"
+            "romantic"
           ],
           "vibrancy" : "0.8370"
         },
@@ -3109,7 +3118,7 @@
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
-          "contrast" : "0.8540",
+          "contrast" : "0.9006",
           "crossSurfaceViolations" : [
 
           ],
@@ -3153,7 +3162,7 @@
           "vibrancy" : "0.7928"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3170,14 +3179,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
             "drama",
+            "romantic",
             "sensual"
           ],
           "vibrancy" : "0.9004"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3194,7 +3203,7 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "edgy",
             "romantic"
           ],
@@ -3225,7 +3234,7 @@
           "vibrancy" : "0.6907"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3242,9 +3251,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "edgy",
-            "classic"
+            "romantic"
           ],
           "vibrancy" : "0.7068"
         },
@@ -3369,7 +3378,7 @@
           "vibrancy" : "0.7077"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3386,14 +3395,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "playful",
             "edgy",
             "minimal"
           ],
           "vibrancy" : "0.7081"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3410,7 +3419,7 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "edgy",
             "minimal"
           ],
@@ -3441,7 +3450,7 @@
           "vibrancy" : "0.7612"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3458,7 +3467,7 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "edgy",
             "minimal"
           ],
@@ -3489,7 +3498,7 @@
           "vibrancy" : "0.8158"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3506,7 +3515,7 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "playful",
             "edgy",
             "minimal"
           ],
@@ -3537,7 +3546,7 @@
           "vibrancy" : "0.7250"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3554,9 +3563,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "drama",
             "romantic",
-            "minimal",
-            "polished"
+            "minimal"
           ],
           "vibrancy" : "0.8933"
         },
@@ -3585,11 +3594,11 @@
           "vibrancy" : "0.8618"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
-          "contrast" : "0.9209",
+          "contrast" : "0.9297",
           "crossSurfaceViolations" : [
 
           ],
@@ -3599,19 +3608,19 @@
           "oppositionViolations" : [
 
           ],
-          "relationship" : "contrast",
+          "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "romantic",
-            "edgy",
             "minimal"
           ],
           "vibrancy" : "0.9000"
         },
         {
-          "accent" : "romantic",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "accent" : "drama",
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "0.8814",
           "crossSurfaceViolations" : [
@@ -3626,9 +3635,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "drama",
             "romantic",
-            "minimal",
-            "polished"
+            "minimal"
           ],
           "vibrancy" : "0.8500"
         },
@@ -3657,9 +3666,9 @@
           "vibrancy" : "0.8119"
         },
         {
-          "accent" : "romantic",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "accent" : "playful",
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "0.8892",
           "crossSurfaceViolations" : [
@@ -3674,16 +3683,16 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "romantic",
-            "minimal",
-            "polished"
+            "minimal"
           ],
           "vibrancy" : "0.8264"
         },
         {
           "accent" : "romantic",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "0.8694",
           "crossSurfaceViolations" : [
@@ -3729,7 +3738,7 @@
           "vibrancy" : "0.7817"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3746,9 +3755,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "romantic",
-            "drama",
-            "sensual"
+            "drama"
           ],
           "vibrancy" : "0.8710"
         },
@@ -3801,7 +3810,7 @@
           "vibrancy" : "0.8531"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3818,14 +3827,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "edgy",
-            "romantic"
+            "drama"
           ],
           "vibrancy" : "0.8836"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3842,9 +3851,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "romantic",
-            "polished"
+            "drama"
           ],
           "vibrancy" : "0.8699"
         },
@@ -3897,7 +3906,7 @@
           "vibrancy" : "0.7391"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3914,14 +3923,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "edgy",
-            "classic"
+            "romantic"
           ],
           "vibrancy" : "0.7293"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3938,9 +3947,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "playful",
             "edgy",
-            "minimal"
+            "romantic"
           ],
           "vibrancy" : "0.6749"
         },
@@ -3969,7 +3978,7 @@
           "vibrancy" : "0.7459"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -3986,9 +3995,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "drama",
             "romantic",
-            "classic",
-            "polished"
+            "classic"
           ],
           "vibrancy" : "0.7657"
         },
@@ -4017,7 +4026,7 @@
           "vibrancy" : "0.6776"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4034,14 +4043,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "playful",
             "edgy",
-            "minimal"
+            "romantic"
           ],
           "vibrancy" : "0.7576"
         },
         {
-          "accent" : "romantic",
+          "accent" : "minimal",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4058,9 +4067,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "minimal",
             "edgy",
-            "minimal"
+            "grounded"
           ],
           "vibrancy" : "0.8115"
         },
@@ -4113,7 +4122,7 @@
           "vibrancy" : "0.7663"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4130,14 +4139,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "romantic",
-            "minimal",
-            "utility"
+            "minimal"
           ],
           "vibrancy" : "0.8323"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4154,9 +4163,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "minimal",
-            "grounded"
+            "romantic"
           ],
           "vibrancy" : "0.7346"
         },
@@ -4185,7 +4194,7 @@
           "vibrancy" : "0.8402"
         },
         {
-          "accent" : "romantic",
+          "accent" : "grounded",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4202,14 +4211,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "grounded",
             "minimal",
-            "grounded"
+            "romantic"
           ],
           "vibrancy" : "0.8228"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4226,9 +4235,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "drama",
             "romantic",
-            "minimal",
-            "polished"
+            "minimal"
           ],
           "vibrancy" : "0.8110"
         },
@@ -4305,11 +4314,11 @@
           "vibrancy" : "0.8176"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
-          "contrast" : "0.9650",
+          "contrast" : "0.8908",
           "crossSurfaceViolations" : [
 
           ],
@@ -4319,12 +4328,12 @@
           "oppositionViolations" : [
 
           ],
-          "relationship" : "contrast",
+          "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "drama",
             "romantic",
-            "edgy",
-            "minimal"
+            "polished"
           ],
           "vibrancy" : "0.8827"
         },
@@ -4377,20 +4386,25 @@
           "vibrancy" : "0.8433"
         }
       ],
-      "distinctAccents" : 2,
+      "distinctAccents" : 5,
       "essenceOppositionViolations" : 0,
-      "flipRate" : 0.2034,
+      "flipRate" : 0.83050000000000002,
       "plansGenerated" : 60,
       "preset" : "air",
       "relationshipDistribution" : {
-        "contrast" : 34,
-        "stretch" : 26
+        "contrast" : 32,
+        "stretch" : 28
       }
     },
     {
       "accentDistribution" : {
-        "drama" : 41,
-        "playful" : 19
+        "drama" : 21,
+        "eclectic" : 3,
+        "edgy" : 2,
+        "maximalist" : 1,
+        "playful" : 18,
+        "polished" : 1,
+        "romantic" : 14
       },
       "coherenceScore" : 1,
       "crossSurfaceViolations" : 0,
@@ -4420,7 +4434,7 @@
           "vibrancy" : "0.8298"
         },
         {
-          "accent" : "playful",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4437,14 +4451,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "drama",
             "edgy",
             "eclectic"
           ],
           "vibrancy" : "0.8204"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4461,7 +4475,7 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "playful",
             "edgy"
           ],
@@ -4472,7 +4486,7 @@
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
-          "contrast" : "0.8212",
+          "contrast" : "0.8624",
           "crossSurfaceViolations" : [
 
           ],
@@ -4482,17 +4496,17 @@
           "oppositionViolations" : [
 
           ],
-          "relationship" : "stretch",
+          "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
             "drama",
             "maximalist",
             "eclectic"
           ],
-          "vibrancy" : "0.8412"
+          "vibrancy" : "0.9325"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4509,14 +4523,14 @@
           "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "drama",
-            "romantic",
-            "magnetic"
+            "romantic"
           ],
           "vibrancy" : "0.8324"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4533,8 +4547,8 @@
           "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
             "romantic",
+            "drama",
             "maximalist"
           ],
           "vibrancy" : "0.8324"
@@ -4564,11 +4578,11 @@
           "vibrancy" : "0.8261"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
-          "contrast" : "0.8778",
+          "contrast" : "0.8071",
           "crossSurfaceViolations" : [
 
           ],
@@ -4581,9 +4595,9 @@
           "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "maximalist",
-            "eclectic"
+            "drama"
           ],
           "vibrancy" : "0.9027"
         },
@@ -4612,7 +4626,7 @@
           "vibrancy" : "0.8169"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4629,9 +4643,9 @@
           "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
+            "romantic",
             "drama",
-            "eclectic",
-            "sensual"
+            "eclectic"
           ],
           "vibrancy" : "0.8979"
         },
@@ -4660,7 +4674,7 @@
           "vibrancy" : "0.8726"
         },
         {
-          "accent" : "drama",
+          "accent" : "polished",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4677,14 +4691,14 @@
           "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
             "polished",
+            "drama",
             "romantic"
           ],
           "vibrancy" : "0.6987"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4701,14 +4715,14 @@
           "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "romantic",
             "polished"
           ],
           "vibrancy" : "0.7303"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4725,9 +4739,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
             "romantic",
-            "maximalist"
+            "maximalist",
+            "sensual"
           ],
           "vibrancy" : "0.7426"
         },
@@ -4756,7 +4770,7 @@
           "vibrancy" : "0.7341"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4773,14 +4787,14 @@
           "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "romantic",
             "polished"
           ],
           "vibrancy" : "0.7283"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4797,9 +4811,9 @@
           "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
             "romantic",
-            "polished"
+            "polished",
+            "drama"
           ],
           "vibrancy" : "0.7291"
         },
@@ -4852,7 +4866,7 @@
           "vibrancy" : "0.7387"
         },
         {
-          "accent" : "drama",
+          "accent" : "edgy",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4869,14 +4883,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
             "edgy",
-            "eclectic"
+            "eclectic",
+            "utility"
           ],
           "vibrancy" : "0.7624"
         },
         {
-          "accent" : "playful",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4893,7 +4907,7 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "drama",
             "edgy",
             "eclectic"
           ],
@@ -4924,7 +4938,7 @@
           "vibrancy" : "0.7606"
         },
         {
-          "accent" : "playful",
+          "accent" : "eclectic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4941,14 +4955,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "eclectic",
             "edgy",
-            "eclectic"
+            "playful"
           ],
           "vibrancy" : "0.7358"
         },
         {
-          "accent" : "playful",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -4965,7 +4979,7 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "romantic",
             "edgy",
             "eclectic"
           ],
@@ -4996,7 +5010,7 @@
           "vibrancy" : "0.7616"
         },
         {
-          "accent" : "playful",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5013,14 +5027,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "drama",
             "eclectic",
-            "edgy"
+            "playful"
           ],
           "vibrancy" : "0.8278"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5037,18 +5051,18 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "playful",
             "eclectic"
           ],
           "vibrancy" : "0.8073"
         },
         {
-          "accent" : "playful",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
-          "contrast" : "0.7983",
+          "contrast" : "0.7647",
           "crossSurfaceViolations" : [
 
           ],
@@ -5061,9 +5075,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "drama",
             "eclectic",
-            "edgy"
+            "playful"
           ],
           "vibrancy" : "0.8380"
         },
@@ -5092,7 +5106,7 @@
           "vibrancy" : "0.8268"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5109,7 +5123,7 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "playful",
             "eclectic"
           ],
@@ -5120,7 +5134,7 @@
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
-          "contrast" : "0.8533",
+          "contrast" : "0.9267",
           "crossSurfaceViolations" : [
 
           ],
@@ -5130,17 +5144,17 @@
           "oppositionViolations" : [
 
           ],
-          "relationship" : "stretch",
+          "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
             "drama",
             "maximalist",
             "playful"
           ],
-          "vibrancy" : "0.8141"
+          "vibrancy" : "0.8782"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5157,14 +5171,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "eclectic",
             "edgy"
           ],
           "vibrancy" : "0.8439"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5181,9 +5195,9 @@
           "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
+            "romantic",
             "drama",
-            "maximalist",
-            "romantic"
+            "maximalist"
           ],
           "vibrancy" : "0.8467"
         },
@@ -5212,7 +5226,7 @@
           "vibrancy" : "0.8626"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5229,9 +5243,9 @@
           "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "drama",
-            "maximalist",
-            "sensual"
+            "maximalist"
           ],
           "vibrancy" : "0.8681"
         },
@@ -5260,7 +5274,7 @@
           "vibrancy" : "0.7832"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5277,18 +5291,18 @@
           "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
+            "romantic",
             "drama",
-            "maximalist",
-            "eclectic"
+            "maximalist"
           ],
           "vibrancy" : "0.8901"
         },
         {
-          "accent" : "drama",
+          "accent" : "maximalist",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
-          "contrast" : "0.8574",
+          "contrast" : "0.8704",
           "crossSurfaceViolations" : [
 
           ],
@@ -5298,14 +5312,14 @@
           "oppositionViolations" : [
 
           ],
-          "relationship" : "stretch",
+          "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
             "maximalist",
+            "drama",
             "sensual"
           ],
-          "vibrancy" : "0.8148"
+          "vibrancy" : "0.8797"
         },
         {
           "accent" : "drama",
@@ -5332,7 +5346,7 @@
           "vibrancy" : "0.8258"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5349,14 +5363,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "romantic",
             "maximalist"
           ],
           "vibrancy" : "0.7429"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5373,7 +5387,7 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "polished",
             "maximalist"
           ],
@@ -5404,7 +5418,7 @@
           "vibrancy" : "0.7180"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5421,14 +5435,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "romantic",
             "polished"
           ],
           "vibrancy" : "0.7206"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5445,9 +5459,9 @@
           "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
             "romantic",
-            "maximalist"
+            "maximalist",
+            "drama"
           ],
           "vibrancy" : "0.7434"
         },
@@ -5476,7 +5490,7 @@
           "vibrancy" : "0.6918"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5493,14 +5507,14 @@
           "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "romantic",
             "polished"
           ],
           "vibrancy" : "0.7373"
         },
         {
-          "accent" : "playful",
+          "accent" : "eclectic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5517,14 +5531,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
             "eclectic",
-            "edgy"
+            "edgy",
+            "playful"
           ],
           "vibrancy" : "0.7664"
         },
         {
-          "accent" : "drama",
+          "accent" : "edgy",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5541,14 +5555,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
             "edgy",
-            "maximalist"
+            "maximalist",
+            "eclectic"
           ],
           "vibrancy" : "0.7346"
         },
         {
-          "accent" : "playful",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5565,7 +5579,7 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "drama",
             "edgy",
             "eclectic"
           ],
@@ -5596,7 +5610,7 @@
           "vibrancy" : "0.7744"
         },
         {
-          "accent" : "playful",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5613,9 +5627,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "romantic",
             "edgy",
-            "eclectic"
+            "playful"
           ],
           "vibrancy" : "0.7207"
         },
@@ -5624,7 +5638,7 @@
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
-          "contrast" : "0.8401",
+          "contrast" : "0.9002",
           "crossSurfaceViolations" : [
 
           ],
@@ -5634,17 +5648,17 @@
           "oppositionViolations" : [
 
           ],
-          "relationship" : "stretch",
+          "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
             "drama",
             "edgy",
             "eclectic"
           ],
-          "vibrancy" : "0.7907"
+          "vibrancy" : "0.8313"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5661,7 +5675,7 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "edgy",
             "eclectic"
           ],
@@ -5692,7 +5706,7 @@
           "vibrancy" : "0.7699"
         },
         {
-          "accent" : "playful",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5709,9 +5723,9 @@
           "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
+            "romantic",
             "playful",
-            "drama",
-            "romantic"
+            "drama"
           ],
           "vibrancy" : "0.8810"
         },
@@ -5764,11 +5778,11 @@
           "vibrancy" : "0.7836"
         },
         {
-          "accent" : "playful",
+          "accent" : "eclectic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
-          "contrast" : "0.8034",
+          "contrast" : "0.8268",
           "crossSurfaceViolations" : [
 
           ],
@@ -5778,14 +5792,14 @@
           "oppositionViolations" : [
 
           ],
-          "relationship" : "stretch",
+          "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
             "eclectic",
-            "maximalist"
+            "maximalist",
+            "drama"
           ],
-          "vibrancy" : "0.8192"
+          "vibrancy" : "0.8884"
         },
         {
           "accent" : "playful",
@@ -5816,7 +5830,7 @@
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
-          "contrast" : "0.8615",
+          "contrast" : "0.9431",
           "crossSurfaceViolations" : [
 
           ],
@@ -5826,31 +5840,34 @@
           "oppositionViolations" : [
 
           ],
-          "relationship" : "stretch",
+          "relationship" : "reinforce",
           "tempo" : "dynamic",
           "top3" : [
             "drama",
             "maximalist",
             "eclectic"
           ],
-          "vibrancy" : "0.8066"
+          "vibrancy" : "0.8632"
         }
       ],
-      "distinctAccents" : 2,
+      "distinctAccents" : 7,
       "essenceOppositionViolations" : 0,
-      "flipRate" : 0.25419999999999998,
+      "flipRate" : 1,
       "plansGenerated" : 60,
       "preset" : "water",
       "relationshipDistribution" : {
-        "reinforce" : 22,
-        "stretch" : 38
+        "reinforce" : 28,
+        "stretch" : 32
       }
     },
     {
       "accentDistribution" : {
-        "drama" : 6,
-        "playful" : 11,
-        "romantic" : 43
+        "drama" : 17,
+        "grounded" : 3,
+        "minimal" : 2,
+        "playful" : 15,
+        "polished" : 2,
+        "romantic" : 21
       },
       "coherenceScore" : 1,
       "crossSurfaceViolations" : 0,
@@ -5880,7 +5897,7 @@
           "vibrancy" : "0.9105"
         },
         {
-          "accent" : "playful",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5897,14 +5914,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "romantic",
             "maximalist",
-            "romantic"
+            "grounded"
           ],
           "vibrancy" : "0.9242"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5921,14 +5938,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "maximalist",
-            "grounded"
+            "romantic"
           ],
           "vibrancy" : "0.8026"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5945,8 +5962,8 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
             "playful",
+            "romantic",
             "minimal"
           ],
           "vibrancy" : "0.8397"
@@ -5976,7 +5993,7 @@
           "vibrancy" : "0.8702"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -5993,9 +6010,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "maximalist",
-            "polished"
+            "romantic"
           ],
           "vibrancy" : "0.7890"
         },
@@ -6024,11 +6041,11 @@
           "vibrancy" : "0.8541"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
-          "contrast" : "0.9671",
+          "contrast" : "0.9083",
           "crossSurfaceViolations" : [
 
           ],
@@ -6041,16 +6058,16 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "playful",
             "maximalist",
-            "polished"
+            "romantic"
           ],
           "vibrancy" : "0.8691"
         },
         {
-          "accent" : "romantic",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "accent" : "drama",
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "0.9500",
           "crossSurfaceViolations" : [
@@ -6065,9 +6082,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "maximalist",
-            "polished"
+            "romantic"
           ],
           "vibrancy" : "0.8097"
         },
@@ -6096,9 +6113,9 @@
           "vibrancy" : "0.8892"
         },
         {
-          "accent" : "romantic",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "accent" : "drama",
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "1.0000",
           "crossSurfaceViolations" : [
@@ -6113,9 +6130,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "maximalist",
-            "polished"
+            "romantic"
           ],
           "vibrancy" : "0.8407"
         },
@@ -6144,7 +6161,7 @@
           "vibrancy" : "0.7483"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6161,9 +6178,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "romantic",
-            "polished",
-            "minimal"
+            "polished"
           ],
           "vibrancy" : "0.7419"
         },
@@ -6192,7 +6209,7 @@
           "vibrancy" : "0.7379"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6209,16 +6226,16 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "drama",
             "romantic",
-            "polished",
-            "grounded"
+            "polished"
           ],
           "vibrancy" : "0.7300"
         },
         {
-          "accent" : "romantic",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "accent" : "polished",
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "0.9680",
           "crossSurfaceViolations" : [
@@ -6233,9 +6250,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "polished",
             "maximalist",
-            "polished"
+            "romantic"
           ],
           "vibrancy" : "0.7510"
         },
@@ -6264,7 +6281,7 @@
           "vibrancy" : "0.7590"
         },
         {
-          "accent" : "romantic",
+          "accent" : "minimal",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6281,8 +6298,8 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
+            "minimal",
             "romantic",
-            "maximalist",
             "polished"
           ],
           "vibrancy" : "0.7067"
@@ -6312,7 +6329,7 @@
           "vibrancy" : "0.7347"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6329,14 +6346,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "maximalist",
             "grounded"
           ],
           "vibrancy" : "0.7551"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6353,7 +6370,7 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "maximalist",
             "grounded"
           ],
@@ -6384,7 +6401,7 @@
           "vibrancy" : "0.7829"
         },
         {
-          "accent" : "romantic",
+          "accent" : "grounded",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6401,14 +6418,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "grounded",
             "maximalist",
-            "grounded"
+            "romantic"
           ],
           "vibrancy" : "0.7349"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6425,14 +6442,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "maximalist",
             "grounded"
           ],
           "vibrancy" : "0.6746"
         },
         {
-          "accent" : "playful",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6449,14 +6466,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "romantic",
             "maximalist",
-            "polished"
+            "grounded"
           ],
           "vibrancy" : "0.7963"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6473,16 +6490,16 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "playful",
             "maximalist",
-            "grounded"
+            "romantic"
           ],
           "vibrancy" : "0.9171"
         },
         {
           "accent" : "romantic",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "0.9073",
           "crossSurfaceViolations" : [
@@ -6504,11 +6521,11 @@
           "vibrancy" : "0.8223"
         },
         {
-          "accent" : "playful",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
-          "contrast" : "0.9159",
+          "contrast" : "0.8508",
           "crossSurfaceViolations" : [
 
           ],
@@ -6521,16 +6538,16 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "drama",
             "maximalist",
             "romantic"
           ],
           "vibrancy" : "0.9131"
         },
         {
-          "accent" : "romantic",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "accent" : "playful",
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "0.9218",
           "crossSurfaceViolations" : [
@@ -6545,16 +6562,16 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "playful",
             "maximalist",
-            "grounded"
+            "romantic"
           ],
           "vibrancy" : "0.8886"
         },
         {
           "accent" : "romantic",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "0.9491",
           "crossSurfaceViolations" : [
@@ -6576,9 +6593,9 @@
           "vibrancy" : "0.8211"
         },
         {
-          "accent" : "playful",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "accent" : "drama",
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "0.9888",
           "crossSurfaceViolations" : [
@@ -6593,16 +6610,16 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "drama",
             "maximalist",
             "romantic"
           ],
           "vibrancy" : "0.8757"
         },
         {
-          "accent" : "romantic",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "accent" : "playful",
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "0.9495",
           "crossSurfaceViolations" : [
@@ -6617,9 +6634,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "playful",
             "maximalist",
-            "grounded"
+            "romantic"
           ],
           "vibrancy" : "0.9378"
         },
@@ -6648,7 +6665,7 @@
           "vibrancy" : "0.7989"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6665,14 +6682,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "maximalist",
-            "drama"
+            "romantic"
           ],
           "vibrancy" : "0.8957"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6689,9 +6706,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "playful",
             "maximalist",
-            "grounded"
+            "romantic"
           ],
           "vibrancy" : "0.8211"
         },
@@ -6720,7 +6737,7 @@
           "vibrancy" : "0.8194"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6737,9 +6754,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "maximalist",
-            "grounded"
+            "romantic"
           ],
           "vibrancy" : "0.8890"
         },
@@ -6768,7 +6785,7 @@
           "vibrancy" : "0.8750"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6785,14 +6802,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "maximalist",
-            "polished"
+            "romantic"
           ],
           "vibrancy" : "0.8520"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6809,9 +6826,9 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
+            "playful",
             "romantic",
-            "polished",
-            "classic"
+            "polished"
           ],
           "vibrancy" : "0.7395"
         },
@@ -6840,7 +6857,7 @@
           "vibrancy" : "0.7268"
         },
         {
-          "accent" : "romantic",
+          "accent" : "polished",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6857,14 +6874,14 @@
           "relationship" : "stretch",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
             "polished",
+            "romantic",
             "grounded"
           ],
           "vibrancy" : "0.6945"
         },
         {
-          "accent" : "romantic",
+          "accent" : "minimal",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6881,8 +6898,8 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
+            "minimal",
             "romantic",
-            "maximalist",
             "polished"
           ],
           "vibrancy" : "0.7096"
@@ -6912,7 +6929,7 @@
           "vibrancy" : "0.7127"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6929,14 +6946,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "maximalist",
-            "polished"
+            "romantic"
           ],
           "vibrancy" : "0.6758"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6953,14 +6970,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "playful",
             "maximalist",
-            "polished"
+            "romantic"
           ],
           "vibrancy" : "0.7141"
         },
         {
-          "accent" : "drama",
+          "accent" : "grounded",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -6977,14 +6994,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "grounded",
             "maximalist",
-            "grounded"
+            "romantic"
           ],
           "vibrancy" : "0.7241"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -7001,14 +7018,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "maximalist",
             "grounded"
           ],
           "vibrancy" : "0.7228"
         },
         {
-          "accent" : "playful",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -7025,14 +7042,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "drama",
             "maximalist",
-            "polished"
+            "grounded"
           ],
           "vibrancy" : "0.7918"
         },
         {
-          "accent" : "drama",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -7049,14 +7066,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "maximalist",
-            "grounded"
+            "romantic"
           ],
           "vibrancy" : "0.7973"
         },
         {
-          "accent" : "drama",
+          "accent" : "romantic",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -7073,16 +7090,16 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "romantic",
             "maximalist",
             "grounded"
           ],
           "vibrancy" : "0.6826"
         },
         {
-          "accent" : "playful",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "accent" : "drama",
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "0.9227",
           "crossSurfaceViolations" : [
@@ -7097,16 +7114,16 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "drama",
             "maximalist",
-            "romantic"
+            "grounded"
           ],
           "vibrancy" : "0.8589"
         },
         {
-          "accent" : "drama",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "accent" : "playful",
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "0.8749",
           "crossSurfaceViolations" : [
@@ -7121,16 +7138,16 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "drama",
+            "playful",
             "maximalist",
-            "grounded"
+            "romantic"
           ],
           "vibrancy" : "0.8068"
         },
         {
           "accent" : "romantic",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "0.9392",
           "crossSurfaceViolations" : [
@@ -7152,9 +7169,9 @@
           "vibrancy" : "0.8215"
         },
         {
-          "accent" : "playful",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "accent" : "grounded",
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "0.9412",
           "crossSurfaceViolations" : [
@@ -7169,16 +7186,16 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "grounded",
             "maximalist",
             "romantic"
           ],
           "vibrancy" : "0.8606"
         },
         {
-          "accent" : "playful",
-          "candidatesGenerated" : 1,
-          "candidatesRejected" : 0,
+          "accent" : "drama",
+          "candidatesGenerated" : 2,
+          "candidatesRejected" : 1,
           "coherenceScore" : "1.0000",
           "contrast" : "0.9042",
           "crossSurfaceViolations" : [
@@ -7193,9 +7210,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "playful",
+            "drama",
             "maximalist",
-            "romantic"
+            "grounded"
           ],
           "vibrancy" : "0.9061"
         },
@@ -7224,7 +7241,7 @@
           "vibrancy" : "0.8725"
         },
         {
-          "accent" : "romantic",
+          "accent" : "playful",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -7241,14 +7258,14 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "playful",
             "maximalist",
-            "playful"
+            "romantic"
           ],
           "vibrancy" : "0.9197"
         },
         {
-          "accent" : "romantic",
+          "accent" : "drama",
           "candidatesGenerated" : 1,
           "candidatesRejected" : 0,
           "coherenceScore" : "1.0000",
@@ -7265,9 +7282,9 @@
           "relationship" : "contrast",
           "tempo" : "dynamic",
           "top3" : [
-            "romantic",
+            "drama",
             "maximalist",
-            "grounded"
+            "romantic"
           ],
           "vibrancy" : "0.8995"
         },
@@ -7296,9 +7313,9 @@
           "vibrancy" : "0.8331"
         }
       ],
-      "distinctAccents" : 3,
+      "distinctAccents" : 6,
       "essenceOppositionViolations" : 0,
-      "flipRate" : 0.33900000000000002,
+      "flipRate" : 1,
       "plansGenerated" : 60,
       "preset" : "leo",
       "relationshipDistribution" : {

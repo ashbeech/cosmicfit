@@ -1,0 +1,350 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "Scattering a dozen tiny trinkets across your outfit simply dilutes the quiet power of your clothes. A single, substantial anchor piece grounds the look and gives the silhouette clear purpose. Choose items that offer a reassuring heft, like the solid weight of a substantial watch, the thick edge of a premium leather belt, or a heavy bag strap resting neatly on your shoulder. Instead of fussing with layers of delicate bands or flimsy rings, commit to one serious piece with a satisfying clasp. That solitary item provides a deep sense of tactile security, doing the hard work so the rest of your wardrobe can just breathe.",
+   "Accessories provide the physical scaffolding for your entire look. The soft drape of a familiar coat needs the counterweight of serious hardware. A rigid bag or a stiff leather belt introduces necessary tension, framing your softer layers with strict boundaries. There is deep comfort in the tactile weight of these pieces. The definitive snap of a heavy clasp or the steady pressure of a substantial watch strap serves as an anchor. These finishing details do the heavy lifting, pulling your most relaxed silhouettes back into sharp focus.",
+   "The physical sensation of a well-made piece provides an immediate sense of grounding. Notice the satisfying resistance of a heavy buckle pulling through thick hide, or the definitive snap of an engineered bag clasp. You need items that feel substantial on the body, like a watch with enough heft to reassure you it is there, or a solid ring that rests comfortably on the hand. Even the faint, familiar scent of polished leather brings a quiet, private comfort to your morning routine. Style at this level is entirely tactile."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Anything emotionally cold or sterile that strips warmth from a room. Clinical minimalism is not your language.",
+   "Harsh fabric against your skin, especially near your neck and wrists. Those contact points carry emotional weight.",
+   "Exposing too much when you feel fragile. Your wardrobe should protect you, not put you on display.",
+   "Fast fashion impulse buys that dilute the quality of your collection. One cheap piece can drag down an entire outfit.",
+   "Trend-chasing at the expense of quality or longevity. If it will look dated in two seasons, it was never worth buying.",
+   "Anything you will not wear confidently in five years. Apply that test in the changing room and most impulse purchases disappear."
+  ],
+  "consider": [
+   "dress for emotional harmony in shared spaces",
+   "balance comfort with social grace",
+   "let your aesthetic be the first thing people notice",
+   "invest in pieces that feel unmistakably you"
+  ],
+  "leanInto": [
+   "Keeping clothes with emotional history in active rotation. A coat from a family member or a scarf from a trip holds real power.",
+   "Wrapping yourself in soft protective layers as a daily practice. A worn-in cardigan or a heritage shawl is emotional armour.",
+   "Treating comfort as a non-negotiable, not a luxury. If a garment makes you tense, it is actively working against you.",
+   "Choosing pieces that feel like home. If an outfit does not settle your nervous system, it is not earning its place.",
+   "Building a wardrobe that appreciates like an investment portfolio. Every piece should gain authority with age, not lose it.",
+   "Anchoring everything on dark, structured foundations. A perfectly tailored charcoal suit is worth more than a wardrobe full of trend pieces."
+  ]
+ },
+ "engineVersion": "2.0.0",
+ "generatedAt": "2026-06-10T20:42:24Z",
+ "hardware": {
+  "metalsText": "You look best in hardware that feels like it has survived a few generations. Let platinum tones form the backbone of your collection, especially in brushed or subtly tarnished finishes that suggest history rather than the showroom floor. When an outfit demands something softer, polished silver tones brings an heirloom quality to a heavy crepe dress or the clasp of a structured leather bag. You want buckles, zips, and fastenings that lock with a satisfyingly heavy click. These details should look like they are keeping something valuable securely intact.",
+  "recommendedMetals": [
+   "platinum",
+   "polished silver",
+   "white gold",
+   "antique silver",
+   "blackened steel",
+   "gunmetal",
+   "aged brass",
+   "hammered bronze",
+   "hammered titanium",
+   "brass"
+  ],
+  "recommendedStones": [
+   "garnet",
+   "onyx",
+   "sapphire",
+   "turquoise",
+   "lapis lazuli",
+   "moonstone",
+   "pearl",
+   "selenite",
+   "black onyx",
+   "obsidian"
+  ],
+  "stonesText": "Skip the brilliant-cut solitaires in favour of stones that feel heavy and historical. A substantial cabochon of garnet set in thick, unpolished gold offers the exact kind of quiet weight you want from your jewellery. You suit pieces that look like they carry a past, making onyx an excellent choice for rings or pendants worn flush beneath a collarbone. For a denser texture, sapphire brings an opaque finish that grounds lighter wools and pressed cottons. It is less about the flash of a facet and entirely about the comforting, permanent drag of the stone itself.",
+  "tipText": "Hardware needs to feel like it has been in your family for generations, even if you bought it yesterday. Look for substantial, comforting weight, like a heavy platinum tones watch or a thick signet ring set with garnet that provides a grounding heft on the hand. Keep the finishes brushed or gently worn rather than high-shine, ensuring they sit quietly alongside your tailored wools and pressed cottons. One quietly expensive item worn daily makes a much stronger statement than a jewellery box full of passing trends."
+ },
+ "occasions": {
+  "dailyText": "Your version of dressing down is never a full surrender to slouch. You want garments that feel familiar and protective, yet retain enough tailoring to look entirely intentional. Seek out materials with serious physical weight that hold a clean shape while offering a reassuring, cocooning sensation on the body. The goal is an off-duty uniform that provides a quiet retreat from the public eye, without sacrificing a single ounce of your usual polish.\n\nYour comfort instinct gravitates toward emotional harmony in partnership dressing, soft social presentation. Your style energy concentrates in identity and retreat, so your wardrobe is at its best when it reflects both identity and retreat.",
+  "intimateText": "Intimate evenings require a deliberate softening of your everyday tailoring. Your instinct always leans towards immaculate construction, but smaller rooms and closer company call for garments that actually invite proximity. Trade rigid silhouettes for pieces with a gentle, forgiving drape that still hold a clean shape over a long dinner. Focus on reassuring weight and an exceptional finish, choosing clothes that wrap around the body rather than standing stiffly away from it. The result is a look that feels highly intentional, yet completely anchored in your own private comfort.",
+  "workText": "Your professional wardrobe is an exercise in self-preservation and absolute competence. The most successful pieces in your rotation carry a literal weight to them, grounding your posture the second you walk into a meeting. Prioritise exact tailoring paired with slightly generous proportions, giving you the physical space to retreat into the shape of the garment. The rest of the office sees someone completely in charge, while you get to operate from a place of quiet, private ease.\n\nAt work, lean into diplomatic elegance; balanced proportions and harmonious palettes support collaborative authority."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#3C746F",
+    "name": "Warm Sea Pearl",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Moon",
+     "sourceSign": "Cancer"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#82312E",
+    "name": "Dark Sienna",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Mars",
+     "sourceSign": "Scorpio"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Medium Warm Grounded",
+  "coreColours": [
+   {
+    "hexValue": "#B7410E",
+    "name": "rust",
+    "provenance": {
+     "band": "core",
+     "family": "True Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#5B7744",
+    "name": "moss",
+    "provenance": {
+     "band": "core",
+     "family": "True Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#CC7722",
+    "name": "ochre",
+    "provenance": {
+     "band": "core",
+     "family": "True Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#014D4E",
+    "name": "deep teal",
+    "provenance": {
+     "band": "core",
+     "family": "True Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#0A0A0A",
+   "name": "black",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "True Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "True Autumn",
+  "lightAnchor": {
+   "hexValue": "#EFE6D3",
+   "name": "bone",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "True Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#825159",
+   "name": "berry mauve",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "True Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "Colour is a matter of discretion for you, creating a wardrobe that looks effortlessly expensive and deeply familiar. Your foundation rests heavily on rust and moss, tones that hold their shape perfectly in a dense wool overcoat or a sharply pressed cotton trouser. Layer in ochre when you want a softer baseline, giving the eye a place to rest. When you decide to shift the mood, a flash of Warm Sea Pearl in your lining or leather accessories provides just enough contrast without interrupting the flow. The entire palette wraps you in a quiet, protective sophistication that never has to shout to be noticed.",
+  "neutrals": [
+   {
+    "hexValue": "#C19A6B",
+    "name": "camel",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#7B5B3A",
+    "name": "cocoa",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#706238",
+    "name": "warm olive",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#786D4E",
+    "name": "deep khaki",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": true,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": true,
+   "fireAirChromaApplied": false,
+   "scorpioDensityApplied": true,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#AD2B51",
+   "name": "cool ruby",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "True Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Deep Autumn",
+  "supportColours": [
+   {
+    "hexValue": "#8A8D8F",
+    "name": "cool stone",
+    "provenance": {
+     "band": "support",
+     "family": "True Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#71797E",
+    "name": "steel grey",
+    "provenance": {
+     "band": "support",
+     "family": "True Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#1B2A4A",
+    "name": "ink navy",
+    "provenance": {
+     "band": "support",
+     "family": "True Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#6B7B8D",
+    "name": "mist navy",
+    "provenance": {
+     "band": "support",
+     "family": "True Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "Medium",
+   "depth": "Medium",
+   "saturation": "Rich",
+   "surface": "Balanced",
+   "temperature": "Warm"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "novelty prints",
+   "cartoonish patterns",
+   "trend-driven logos",
+   "aggressive graphics"
+  ],
+  "narrativeText": "A chaotic print feels completely alien on you, disrupting the quiet control you naturally project. Instead of looking for something novel, lean into the reassurance of heritage designs like vintage florals or a sharply drawn nautical stripes. When soft gingham is woven into structured wool or heavy crepe, it provides a sense of familiar comfort while still looking incredibly put-together. Frantic visuals, particularly novelty prints or cartoonish patterns, immediately fight your underlying need for order and end up wearing you. Your wardrobe operates best as a well-tailored sanctuary, where the visual rhythm is entirely on your terms.",
+  "recommendedPatterns": [
+   "vintage florals",
+   "nautical stripes",
+   "soft gingham",
+   "dark-on-dark jacquard weave",
+   "dark embossed crest detail",
+   "classic pinstripe"
+  ],
+  "tipText": "Prints are often a point of friction when your wardrobe is built on serious investments and clean lines. Rather than treating vintage florals as a loud interruption, use it as a subtle texture woven straight into the fabric. A tonal version layered into a structured wool blazer or a heavy crepe skirt gives the eye something to land on without compromising your clean silhouette. Keeping the scale tight and the colours strictly within your charcoal or dark camel families ensures the look stays grounded. It stops a classic outfit from looking flat, giving it a quiet sense of history instead."
+ },
+ "styleCore": {
+  "narrativeText": "Your style operates as a beautifully constructed privacy screen. You naturally gravitate towards garments that hold their own shape rather than clinging to yours, establishing a comfortable boundary between you and the rest of the room. Your wardrobe functions as an exercise in long-term investment, built entirely on pieces with serious physical weight and exacting proportions. While the outside world sees absolute, unshakeable authority, these structured layers actually serve to make you feel safely enclosed and perfectly at home. It is the look of someone completely in charge, who also prefers keeping the public strictly at arm's length.\n\nYour natural sense of beauty shows up most powerfully in your personal identity, beauty as first impression, your aesthetic IS your identity. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as harmonious and elegant; social grace and balanced aesthetics are immediately legible."
+ },
+ "textures": {
+  "avoidTextures": [
+   "cold metallics",
+   "hard plastics",
+   "synthetic mesh"
+  ],
+  "badText": "Flimsy, insubstantial materials are a total mismatch for your exacting eye. When garments lack weight and permanence, like cold metallics, they feel cheap rather than grounding. Add hard plastics into the mix, and the whole look becomes noisy, fighting against your preference for a clean drape and quiet comfort. Anything overly synthetic or scratchy strips away that reassuring layer of protection you rely on to navigate the day. If a piece feels like a temporary distraction rather than a lasting investment, leave it on the rail.",
+  "goodText": "True comfort comes from clothes that create a physical boundary between you and the rest of the room. You want substantial weight against your skin, which is why washed cotton and heritage knits feel instinctively right. They hold their architecture beautifully without restricting your movement or feeling hopelessly stiff. Layering in soft flannel adds that necessary tactile warmth, giving you the familiar, lived-in ease you always look for in a garment. When your wardrobe is built on materials with actual physical gravity, you carry a sense of quiet, unbothered authority before you even open your mouth.",
+  "recommendedTextures": [
+   "washed cotton",
+   "heritage knits",
+   "soft flannel",
+   "vintage silk"
+  ],
+  "sweetSpotKeywords": [
+   "memory",
+   "warmth"
+  ],
+  "sweetSpotText": "The ideal wardrobe acts as both armour and sanctuary. It demands a flawless balance of memory and warmth. You want a coat in washed cotton that holds a sharp, disciplined shoulder but wraps around you like an old habit. A tailored piece in heritage knits must fall with heavy, unshakeable precision while offering the hidden softness of a familiar blanket inside. If an item looks expensive but feels cold to wear, leave it on the hanger."
+ },
+ "userInfo": {
+  "birthDate": "1985-12-27T12:00:00Z",
+  "birthLocation": "Synth 166 \u2014 Capricorn Sun, 12:00 UTC, New York (1985)",
+  "generationDate": "2026-06-10T20:42:24Z"
+ }
+}

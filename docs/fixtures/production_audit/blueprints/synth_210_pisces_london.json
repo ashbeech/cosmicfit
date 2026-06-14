@@ -1,0 +1,351 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "A jumble of fine chains and stacked rings scatters your visual impact. Your best styling relies on a single, undeniable anchor piece rather than a collection of minor distractions. It comes down to choosing one heavy, tactile object, a substantial watch on a wide strap, a bag with severe hardware, or a thick leather belt that immediately alters your proportions. There is a distinct psychological comfort in wearing just one serious piece of design. It draws the eye entirely, letting the fluid fabrics of your clothing drape without interference. A weighty clasp or a solitary, industrial ring acts as a grounding mechanism, giving you a quiet, unshakeable sense of control.",
+   "Fluid clothing needs an anchor, and your accessories are where you assert total control. When the garments themselves drape and yield, the finishing touches introduce necessary tension. Think of a thick, unforgiving leather belt pulling a soft silhouette into focus, or an oversized watch heavily weighing down the wrist. Pay attention to the tactile snap of a severe clasp on a rigid bag rather than bothering with flimsy, decorative details. These structured pieces act as a secure boundary, letting the rest of your outfit move intuitively while keeping you entirely grounded.",
+   "The sensory footprint of what you wear acts as a quiet psychological boundary. The dull, satisfying snap of a heavy clasp or the dense drag of a wide belt sitting on your hips gives you an immediate sense of control. The rich scent of thick leather and the smooth, cold resistance of a rubberised watch strap pressing into your wrist ground your energy before you step out the door. These pieces are never just decorative afterthoughts. They are the physical switches that lock your chosen mood in place."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Anything that makes you feel emotionally exposed or readable. If the outfit reveals more than you intend, it is a liability.",
+   "Transparent or flimsy fabrics that strip away your sense of privacy. Your body needs density and opacity to feel safe.",
+   "Cheerful colours on days when you feel guarded. Forcing brightness when you need shadow creates an exhausting performance.",
+   "Following trends simply because everyone else does. If it is on every feed, it has already lost its edge for you.",
+   "Conventional matching rules that assume everyone wants to blend in. Your coordination should look intentional, not obedient.",
+   "Safe, predictable combinations that could be assembled by an algorithm. You are not a lookbook. Surprise is part of the point."
+  ],
+  "consider": [
+   "let playfulness guide your comfort choices",
+   "choose pieces that spark emotional joy",
+   "invest in fewer transformative pieces",
+   "let allure build through restraint"
+  ],
+  "leanInto": [
+   "Controlling what others see of you through deliberate wardrobe choices. Concealment is your form of emotional power dressing.",
+   "Using dark layers as emotional protection on vulnerable days. A black coat over a black knit creates a shield that actually works.",
+   "Prioritising quality over visibility. The best piece in your wardrobe should be the one nobody knows about until they get close.",
+   "Dressing to feel emotionally contained and secure. If the outfit holds you together, it is doing its most important job.",
+   "Wearing what nobody else in the room is wearing. If your outfit could belong to anyone, it does not belong to you.",
+   "Making sustainable and ethical choices part of your style identity. Recycled fabrics and deadstock finds are rebellion, not compromise."
+  ]
+ },
+ "engineVersion": "2.0.0",
+ "generatedAt": "2026-06-10T20:46:18Z",
+ "hardware": {
+  "metalsText": "Hardware acts as the structural skeleton of your wardrobe, blending tactical utility with stark modernism. Titanium tones provides the perfect baseline for your daily rotation because it reads as cold, clinical, and entirely unsentimental. When building out outerwear and structured bags, surgical steel tones adds a necessary, anchoring weight. Focus on matte finishes, heavy-duty taped zippers, and flat snap closures rather than anything overly decorative or fussy. A flash of high-shine anodised aluminium tones functions exceptionally well as a sparse accent, cutting cleanly across dark technical fabric or smooth nylon. The metal details you wear should always look less like traditional jewellery and more like precisely milled components on a very expensive machine.",
+  "recommendedMetals": [
+   "titanium",
+   "surgical steel",
+   "anodised aluminium",
+   "gunmetal",
+   "blackened silver",
+   "iridescent finishes",
+   "silver",
+   "sterling silver",
+   "white gold"
+  ],
+  "recommendedStones": [
+   "labradorite",
+   "meteorite",
+   "ammolite",
+   "fluorite",
+   "black tourmaline",
+   "obsidian",
+   "smoky quartz",
+   "amethyst",
+   "aquamarine",
+   "opal",
+   "moonstone",
+   "pearl"
+  ],
+  "stonesText": "Your jewellery operates less like a polite decoration and more like a private energy source. Skip the standard brilliant cuts and look for gems that trap and reflect light in unexpected ways. A piece featuring labradorite gives that necessary edge of cold, electric clarity, commanding attention without giving your actual mood away. A darker option like meteorite brings a magnetic intensity to an oversized ring or a structured cuff. Set these stones in brushed silver or heavy steel rather than delicate gold prongs to keep the overall silhouette grounded. It is about wearing something that looks undeniably chic to the room, but functions like a secret talisman to you.",
+  "tipText": "Your jewellery needs to feel less like decoration and more like beautifully engineered equipment. Look for fluid, molten shapes in titanium tones that wrap around the wrist or collarbone with a cold, satisfying weight. There is real power in an industrial closure or a heavy carabiner clip worn as a focal point. If you wear a labradorite, choose an unexpected setting, tension-set or entirely encased in metal rather than politely pronged and exposed. Every piece of hardware you put on should carry a distinct sense of private security."
+ },
+ "occasions": {
+  "dailyText": "Casual dressing for you is never an invitation to be entirely readable. Your daily rotation relies on pieces that feel like a private sanctuary, yet still read as sharp and deliberate to an outsider. Seek out enveloping outerwear or asymmetric layers that let you move fluidly through a room while keeping your physical boundaries firmly intact. Even when running errands, the cut of a trouser or the drop of a shoulder has to hold an unusual, architectural shape. You are dressing for anonymity, but it must be an exceptionally well-designed disguise.\n\nYour comfort instinct gravitates toward playful emotional expression, comfort in creativity, joy-driven dressing. Your style energy concentrates in intensity and creativity, so your wardrobe is at its best when it reflects both intensity and creativity.",
+  "intimateText": "When the room gets smaller and the evening slows down, your wardrobe needs to hold its own without shouting. You look best when there is a slight contradiction at play, like a severely high neckline paired with an unexpected drape, or a tailored waist that gives way to fluid movement. It is about creating an aura of privacy that forces people to pay closer attention, rather than putting everything on display. Rely on garments cut with strict precision but worn with total ease. This approach grants you complete control over how much you share, ensuring you command the space without ever looking like you tried.",
+  "workText": "Your professional wardrobe acts as an intellectual smokescreen. Standard corporate uniforms feel far too obvious for you, so your approach relies on stealthy, unexpected proportions. Think of an immaculate blazer worn over a heavily draped, fluid foundation. This clash of rigid architecture and protective, graceful movement gives you a distinct psychological edge in any meeting. You dress for the office like someone who holds all the inside information. A silhouette that wraps and conceals allows you to dictate exactly how much of yourself the room gets to see, establishing authority without ever having to raise your voice.\n\nAt work, lean into meticulous polish; impeccable tailoring and refined detail communicate competence instantly."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#678C70",
+    "name": "Sage Mist",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Jupiter",
+     "sourceSign": "Virgo"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#A6C6D0",
+    "name": "Lunar Silver",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Ascendant",
+     "sourceSign": "Cancer"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Medium Cool Muted",
+  "coreColours": [
+   {
+    "hexValue": "#6E9E8E",
+    "name": "eucalyptus",
+    "provenance": {
+     "band": "core",
+     "family": "Soft Summer",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#C29290",
+    "name": "muted rose",
+    "provenance": {
+     "band": "core",
+     "family": "Soft Summer",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#7A8B6A",
+    "name": "moss sage",
+    "provenance": {
+     "band": "core",
+     "family": "Soft Summer",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#8E82A7",
+    "name": "smoky periwinkle",
+    "provenance": {
+     "band": "core",
+     "family": "Soft Summer",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#1A1A1E",
+   "name": "soft black",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "Soft Summer",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "Soft Summer",
+  "lightAnchor": {
+   "hexValue": "#E8E6E2",
+   "name": "smoke white",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "Soft Summer",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#70B8AE",
+   "name": "mist teal",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "Soft Summer",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "Your ideal colour palette operates on a strict logic of concealment and sudden, sharp revelation. You rely on a foundation of eucalyptus and muted rose to build an opaque, unbothered base. These deep shades perform exceptionally well when rendered in dense technical fabrics or structured knits that hold their shape as you move. A highly deliberate flash of Sage Mist or moss sage then cuts through the darkness, especially when introduced via industrial hardware or a high-gloss finish. The visual impact comes from keeping the outside world guessing exactly where you will pull focus next.",
+  "neutrals": [
+   {
+    "hexValue": "#928E85",
+    "name": "stone grey",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Soft Summer",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#ADA39A",
+    "name": "mushroom",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Soft Summer",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#3B4B5E",
+    "name": "smoked navy",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Soft Summer",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#636B6F",
+    "name": "muted charcoal",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Soft Summer",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": false,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": false,
+   "fireAirChromaApplied": false,
+   "scorpioDensityApplied": true,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": true,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#6C5486",
+   "name": "dusty plum",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "Soft Summer",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "True Summer",
+  "supportColours": [
+   {
+    "hexValue": "#D2C6B2",
+    "name": "oatmeal",
+    "provenance": {
+     "band": "support",
+     "family": "Soft Summer",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#AF9B88",
+    "name": "warm taupe",
+    "provenance": {
+     "band": "support",
+     "family": "Soft Summer",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#B3A580",
+    "name": "olive beige",
+    "provenance": {
+     "band": "support",
+     "family": "Soft Summer",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#4A1C20",
+    "name": "oxblood",
+    "provenance": {
+     "band": "support",
+     "family": "Soft Summer",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "Low",
+   "depth": "Medium",
+   "saturation": "Muted",
+   "surface": "Soft",
+   "temperature": "Cool"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "traditional florals",
+   "heritage plaid",
+   "conventional paisley",
+   "cheerful prints"
+  ],
+  "narrativeText": "Wearing prints is rarely a default setting for a wardrobe built on strict shapes and deep colour. When you do fold them in, the design needs to feel deliberate and totally devoid of sweetness. Dark-on-dark jacquard weave and subtle jacquard satisfy that craving for visual order, acting as a graphic layer rather than a decorative one. If you want something with more movement, monochrome depth introduces a fluid, shadowy quality that suits your instinct to keep things fiercely private. Fussy, overtly organic motifs are an immediate error, meaning traditional florals completely shatters your cool exterior and makes the outfit look frantic. Let the precision of your garments speak far louder than the print.",
+  "recommendedPatterns": [
+   "dark-on-dark jacquard weave",
+   "subtle jacquard",
+   "monochrome depth",
+   "digital prints",
+   "circuit-inspired",
+   "abstract geometric"
+  ],
+  "tipText": "Most prints demand too much warmth, but you need yours to act like a privacy screen rather than a billboard. Seek out dark-on-dark jacquard weave on a fluid mesh overlay or a heavy neoprene, where the motif physically distorts as you move. Keeping the colourways icy and stark; think an electric blue cutting through a pitch-black ground, turns the design into a calculated glitch rather than a decorative flourish. It functions as a deliberate visual disruption, allowing you to hold the room's focus while keeping everyone at a fascinated, untouchable distance."
+ },
+ "styleCore": {
+  "narrativeText": "Your style presence relies on the tension between intellectual distance and a deep, unspoken intensity. You carry an air of deliberate mystery, wrapping a highly private core in silhouettes that feel entirely progressive. When you enter a space, there is an immediate sense that your clothing acts as a calculated boundary rather than an invitation. You treat your wardrobe as both a shield and a provocation, combining fluid drape with rigorous construction. It is an aesthetic built on absolute control. You project the magnetic power of someone who knows exactly what they are concealing.\n\nYour natural sense of beauty shows up most powerfully in your transformative moments, strategic allure, investment beauty, transformative aesthetics, hidden luxury. Your style instincts lean toward clarity, structure, and visible polish. Your public style reads as refined and precise; quiet excellence and immaculate detail speak louder than flash."
+ },
+ "textures": {
+  "avoidTextures": [
+   "sheer exposing fabrics",
+   "flimsy chiffon",
+   "see-through materials"
+  ],
+  "badText": "There is a distinct line where a material goes from visually interesting to deeply irritating, and you cross it the moment a garment demands too much accommodation. Anything inherently fussy or nostalgic, like sheer exposing fabrics, immediately fights your instinct for forward momentum. You have zero interest in clothes that make you look like a fragile heirloom. Steer clear of flimsy chiffon as well, especially when it sits heavily against the skin and disrupts your physical ease. If an item requires constant adjustment or careful handling, it shatters your baseline confidence. A truly brilliant outfit lets you move through a room like a shark, not stand in the corner picking at your sleeves.",
+  "goodText": "Your wardrobe relies on materials that feel like a sleek barrier between you and the rest of the world. You want surfaces with a bit of an engineered edge, making dense knit and structured leather brilliant choices for your daily foundations. They offer a proper sense of containment, wrapping around the body with enough density to keep you feeling completely in control. When you want fluidity without feeling exposed, look for the quiet glide of heavy silk. It is less about looking traditionally soft and entirely about wearing clothes that act like intelligent armour.",
+  "recommendedTextures": [
+   "dense knit",
+   "structured leather",
+   "heavy silk",
+   "bonded fabrics"
+  ],
+  "sweetSpotKeywords": [
+   "protection",
+   "density"
+  ],
+  "sweetSpotText": "Your ideal fabric strikes an uncompromising balance of protection and density. You instinctively reach for dense knit that act as a sleek physical barrier against the outside world, masking your interior mood behind an impenetrable finish. A heavy, enveloping coat cut from structured leather does exactly this, wrapping you in absolute privacy while maintaining a clinical, progressive edge. If a piece leaves you structurally exposed or mentally distracted, leave it right there on the rail."
+ },
+ "userInfo": {
+  "birthDate": "1992-02-24T12:00:00Z",
+  "birthLocation": "Synth 210 \u2014 Pisces Sun, 12:00 UTC, London (1992)",
+  "generationDate": "2026-06-10T20:46:18Z"
+ }
+}

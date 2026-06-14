@@ -1,0 +1,351 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "A stack of delicate trinkets feels entirely wrong for the way you navigate a room. You need a single, substantial focal point that grounds your look without restricting your movement. Think about the physical weight of a serious watch on the wrist or the satisfying click of a heavy clasp on a structured leather bag. This approach gives your outfit an immediate centre of gravity, allowing the rest of your styling to stay completely clean and unimpeded. It is about possessing the quiet confidence to let one immaculate detail speak for the entire look.",
+   "The way you finish a look is entirely about setting boundaries. A rigid leather bag or a wide, unyielding belt serves as a physical checkpoint, pulling your clothing into sharp focus. You rely on the satisfying snap of a heavy clasp and the tension of a thick strap to ground your silhouette. Carrying accessories with serious structural weight gives you an immediate sense of privacy and control, even when you are working a packed room. Your extras do not just decorate an outfit; they lock it in place.",
+   "The physical weight of your accessories dictates exactly how you hold yourself. You rely on the cold, grounding drop of a substantial watch or a dense ring to steady your gestures. There is a specific satisfaction in the friction of a thick leather belt that takes genuine effort to pull through a buckle, or a bag that smells unmistakably of premium hide. Every clasp needs to make a sharp, definitive snap when it locks into place. It is about the quiet thrill of knowing you are completely fastened in."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Convention for convention's sake that serves no creative purpose. Following rules without questioning them is the real failure.",
+   "Traditional stuffy fabrics that anchor you to the past. Your creative axis points forward, and your wardrobe should too.",
+   "conventional",
+   "traditional",
+   "safe",
+   "Transparent or overly revealing pieces that give everything away. Your power comes from what people cannot see."
+  ],
+  "consider": [
+   "Comfort-armour pieces that you keep for difficult days. A particular coat or a favourite knit that makes you feel held together.",
+   "The relationship between physical warmth and emotional security. Layering up when you feel exposed is not overdressing; it is self-care.",
+   "prioritize polished finishes over distressed pieces",
+   "treat fit precision as a non-negotiable"
+  ],
+  "leanInto": [
+   "Understanding that rebellion needs structure to be effective. A carefully deconstructed jacket communicates more than a randomly torn one.",
+   "Innovating within constraints rather than discarding all rules. Limits sharpen your creativity and make your unconventional choices land harder.",
+   "Using discipline as a foundation for originality. The most memorable disruptors are precise about how they break the rules.",
+   "Investing in the darkest foundations you can find. If a black does not feel bottomless, keep looking.",
+   "Placing one strategically chosen point of exposure. A slit, a neckline, a single bare wrist, never more than one.",
+   "Letting the cut speak louder than the colour. A sharp shoulder line in ink does more than any bright accent."
+  ]
+ },
+ "engineVersion": "2.0.0",
+ "generatedAt": "2026-06-10T20:39:12Z",
+ "hardware": {
+  "metalsText": "The metal on your clothes needs to look like it serves a distinct, uncompromising purpose. High-shine blackened silver tones looks brilliant when it mimics industrial componentry, like oversized zips on a dense knit or severe, geometric buckles on a structured bag. Brushed gunmetal tones delivers a shadowy, matte alternative that adds serious weight to an outfit without reflecting the room. Because you move rapidly through different social spaces, the detailing must remain clean and architectural so it never reads as fussy or overworked. You want clasps and rivets that fasten with a satisfying, decisive snap, locking the silhouette strictly on your terms.",
+  "recommendedMetals": [
+   "blackened silver",
+   "gunmetal",
+   "surgical steel",
+   "titanium",
+   "oxidised steel",
+   "copper",
+   "rose gold",
+   "blackened titanium",
+   "dark steel"
+  ],
+  "recommendedStones": [
+   "obsidian",
+   "smoky quartz",
+   "labradorite",
+   "black onyx",
+   "black tourmaline",
+   "garnet",
+   "meteorite",
+   "black diamond",
+   "fluorite",
+   "opal",
+   "pink tourmaline",
+   "rose quartz"
+  ],
+  "stonesText": "Brilliant, internally flawless gems feel far too polite for your wardrobe. You want stones that absorb light rather than throwing it blindly across the room. A dense, opaque cut of obsidian gives you a quiet, tactile weight that grounds a fluid silk shirt beautifully. For something with a bit more visual movement, the shifting colour of smoky quartz plays perfectly into your highly observant, social nature. Skip fussy prong settings and look for smooth, dark cabochons encased in heavy, cold metal. A solitary labradorite worn close to the collarbone makes an excellent everyday signature, serving more as a satisfying physical presence than a decorative extra.",
+  "tipText": "Your approach to jewellery works best when it feels less like decoration and more like strategic weight. A heavy blackened silver tones chain or a dense, cold cuff looks incredibly sharp sitting half-hidden under the sleeve of a structured leather jacket. You need pieces that sit with undeniable physical presence on the collarbone or wrist, but never immediately give away the whole game. A single dark obsidian ring acts as the perfect final punctuation mark in an outfit of midnight and ink, catching the light only when you move your hands in conversation."
+ },
+ "occasions": {
+  "dailyText": "Even your downtime requires a baseline of strict control. Rather than unravelling completely into basic loungewear, seek out garments with a defined shape that sit cleanly on the frame. You move fast and engage with the world constantly, so your clothes must allow for swift motion without exposing more than you choose to share. Prioritise substantial, weighty fabrics that drape securely and hold their line after hours of wear. True comfort is just the quiet satisfaction of knowing exactly how much is on display while you run your errands.\n\nYour comfort instinct gravitates toward publicly composed emotional presentation, professional comfort, polished calm.",
+  "intimateText": "Dressing for evening is an exercise in strategic exposure. Focus on garments built with immaculate tailoring and precise proportions, creating a physical tension that naturally draws people closer. You want pieces that move easily through a crowded room but maintain an undeniable gravity when someone finally pulls up a chair next to you. Favour asymmetric cuts or sharp necklines that frame the face, ensuring the focus stays firmly on your wit. The end result should feel like you hold all the cards, perfectly turned out for a quiet conversation in a dimly lit room.",
+  "workText": "Getting dressed for the office is essentially an exercise in strategic concealment. You need a wardrobe that projects immediate, undeniable competence while giving away almost nothing of your actual mood. Rely on sharp, unyielding outer layers worn over fluid foundations. Focus on the geometry of the garment, impeccable shoulders, precise collars, and long hemlines that move through a corridor with real purpose. You thrive in pieces that let you navigate the room with ease, keeping your physical presence strictly anchored while your intellect does the heavy lifting. A flawlessly constructed uniform ensures people focus exclusively on your ideas, simply because the outfit itself is completely immune to critique.\n\nYour style energy concentrates in public and philosophy, so your wardrobe benefits from globally inspired, intentional choices."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#418273",
+    "name": "Teal Sage",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Jupiter",
+     "sourceSign": "Virgo"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#008ABE",
+    "name": "Arctic Blue",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Ascendant",
+     "sourceSign": "Aquarius"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Deep Cool High-Contrast",
+  "coreColours": [
+   {
+    "hexValue": "#0047AB",
+    "name": "cobalt",
+    "provenance": {
+     "band": "core",
+     "family": "True Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#DC143C",
+    "name": "crimson",
+    "provenance": {
+     "band": "core",
+     "family": "True Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#8A2BE2",
+    "name": "blue-red",
+    "provenance": {
+     "band": "core",
+     "family": "True Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#2E8B57",
+    "name": "clear pine",
+    "provenance": {
+     "band": "core",
+     "family": "True Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#0A0A0A",
+   "name": "black",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "True Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "True Winter",
+  "lightAnchor": {
+   "hexValue": "#FEFEFA",
+   "name": "optic white",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "True Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#7F6996",
+   "name": "dusty plum",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "True Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "Your wardrobe thrives in the shadows, built on colours that absorb light rather than reflect it. A base of cobalt and crimson gives you that necessary anonymity in a crowded room, letting your sharp conversational timing do the actual talking. Layering blue-red into the mix stops the look from feeling flat, especially when rendered in heavy silk or a dense knit that catches the eye only when you shift your weight. When you feel like breaking the monochrome, introduce Teal Sage through a sharp collar or a structured bag. The overall effect is incredibly magnetic, drawing people in precisely because you give so little away.",
+  "neutrals": [
+   {
+    "hexValue": "#0A0A0A",
+    "name": "black",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#FEFEFA",
+    "name": "optic white",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#4B4F54",
+    "name": "graphite",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#D6D6D6",
+    "name": "icy grey",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": false,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": false,
+   "fireAirChromaApplied": false,
+   "scorpioDensityApplied": true,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#00829A",
+   "name": "muted teal",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "True Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Bright Winter",
+  "supportColours": [
+   {
+    "hexValue": "#AF9B88",
+    "name": "warm taupe",
+    "provenance": {
+     "band": "support",
+     "family": "True Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#786D4E",
+    "name": "deep khaki",
+    "provenance": {
+     "band": "support",
+     "family": "True Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#3C2415",
+    "name": "espresso",
+    "provenance": {
+     "band": "support",
+     "family": "True Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#C19A6B",
+    "name": "camel",
+    "provenance": {
+     "band": "support",
+     "family": "True Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "High",
+   "depth": "Deep",
+   "saturation": "Rich",
+   "surface": "Structured",
+   "temperature": "Cool"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "cheerful florals",
+   "bright gingham",
+   "whimsical prints",
+   "cheerful prints"
+  ],
+  "narrativeText": "You are deeply selective about print, mostly because you prefer your clothes to frame your presence rather than shout over it. A subtle circuit-inspired woven into dark, heavy silk or a sharp brutalist grid windowpane on a tailored shirt offers just enough visual interest without compromising your need for control. If you want to push it further, a deeply saturated tone-on-tone shadow jacquard works beautifully on a dense knit, keeping the mood grounded and intentional. Steer completely clear of cheerful florals and bright gingham, which just look fussy and dilute your natural magnetism. The rule is simple: if the print enters the room before you do, leave it on the rail.",
+  "recommendedPatterns": [
+   "circuit-inspired",
+   "brutalist grid windowpane",
+   "tone-on-tone shadow jacquard",
+   "dark-on-dark jacquard",
+   "pinstripe",
+   "monochromatic tone-on-tone"
+  ],
+  "tipText": "Loud prints scatter your visual power, so treat pattern strictly as a covert operation. If you introduce a circuit-inspired, look for it woven directly into the garment rather than stamped onto the surface. Tone-on-tone jacquard on heavy silk or a dense, structured knit works perfectly because the motif only reveals itself when the light catches the thread. Restrict the palette to shifting shades of midnight or ink to maintain total control over your silhouette. It gives the room something interesting to decode without ever giving your game away."
+ },
+ "styleCore": {
+  "narrativeText": "You project an energy that is highly sociable but entirely impenetrable. There is a compelling tension in your style, balancing a sharp conversational ease with an aesthetic that remains fiercely guarded. Your wardrobe functions as a tool for calculated exposure, relying on exacting cuts and enveloping silhouettes to establish a firm boundary between you and the rest of the room. You command attention through immaculate construction and deliberate proportions rather than obvious details. It is a look of absolute private power, ensuring you hold focus simply by deciding exactly what stays hidden.\n\nYour natural sense of beauty shows up most powerfully in your public-facing identity, public beauty, polished image, aesthetic reputation, career-enhancing style. Your style instincts lean toward clarity, structure, and visible polish. Your public style reads as magnetic and controlled; depth, intensity, and polished restraint draw people in."
+ },
+ "textures": {
+  "avoidTextures": [
+   "traditional stuffy fabrics",
+   "fluffy angora",
+   "frilly chiffon"
+  ],
+  "badText": "Your wardrobe needs to feel deliberate, so anything that implies chaos or accidental exposure immediately works against you. Materials like traditional stuffy fabrics and fluffy angora are inherently unpredictable and dilute your natural magnetism. If a garment requires constant readjusting, clings uncomfortably, or looks completely crumpled the second you sit down, it undermines your composure. You navigate social spaces with a very particular, knowing rhythm, making frilly chiffon a terrible choice if it catches the light in a cheap or fussy way. Leave the fragile, overly sweet finishes to someone else, because your look relies on clothing that knows how to keep a secret.",
+  "goodText": "The materials you wear need to act as a strict physical boundary while still letting you navigate a room with ease. Reach for tech fabric when you want a feeling of absolute enclosure and architectural structure. For something slightly more fluid but equally opaque, recycled innovation drapes beautifully without clinging or giving too much away. Because your mind and social schedule are always moving fast, structural mesh grounds that rapid-fire energy while holding a ruthlessly sharp silhouette. These surfaces keep your perimeter firmly intact, leaving you in total control of what the world actually gets to see.",
+  "recommendedTextures": [
+   "tech fabric",
+   "recycled innovation",
+   "structural mesh",
+   "structured leather"
+  ],
+  "sweetSpotKeywords": [
+   "innovation",
+   "structure"
+  ],
+  "sweetSpotText": "The sweet spot for your wardrobe sits right at the intersection of innovation and structure. You need pieces that move effortlessly through a crowded room, yet carry a distinct physical weight. Slipping into tech fabric grounds you instantly, offering a dense, tactile reality check while you hold everyone's attention. Similarly, the heavy drape of recycled innovation against your skin provides a private sense of total control without ever stiffening your posture. If a fabric feels apologetic or gives the game away too quickly, leave it on the hanger."
+ },
+ "userInfo": {
+  "birthDate": "1992-09-28T20:00:00Z",
+  "birthLocation": "Synth 124 \u2014 Libra Sun, 20:00 UTC, New York (1992)",
+  "generationDate": "2026-06-10T20:39:12Z"
+ }
+}

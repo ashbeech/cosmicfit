@@ -28,6 +28,8 @@ public struct InspectOptions: Codable {
     public let profileId: String?
     /// Clears tarot recency + variant rotation for the resolved profile hash before computing.
     public let resetTarotHistory: Bool?
+    /// Clears visible-essence recency for the resolved profile hash before computing.
+    public let resetEssenceRecencyHistory: Bool?
     /// Daily Fit engine preset slug (e.g. `production`, `legacy_baseline`).
     public let dailyFitEngineId: String?
     /// Device location latitude for transit angle calculations (mirrors app GPS).

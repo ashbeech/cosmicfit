@@ -22,13 +22,7 @@ final class MenuBarView: UIView {
     private let logoImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
-        iv.image = UIImage(named: "CosmicFitLogo")
-        iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
-        
-        // Invert colours using Core Animation
-        let filter = CIFilter(name: "CIColorInvert")
-        iv.layer.filters = [filter as Any]
-        
+        iv.image = UIImage(named: "CosmicFitLogoSmallIcon")
         return iv
     }()
     

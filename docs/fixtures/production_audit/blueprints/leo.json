@@ -1,0 +1,337 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "A handful of delicate, fussy accessories just gets in the way when you move with genuine energy. Instead of piling on a messy stack of fragile rings or a tangle of fine chains, ground your look with one substantial, deeply personal anchor piece. Picture a weighty vintage watch, a slouchy, oversized bag that essentially acts as a wearable comfort object, or a wide leather belt with a heavily patinated clasp. Because your core wardrobe relies on soft, yielding textiles, you need this hit of physical contrast to prevent the silhouette from reading as pure sleepwear. It provides a bold, defining edge to an otherwise gentle outfit. You grab it on your way out the door, and the entire look immediately snaps into focus.",
+   "When your clothes lean entirely into comfort, your accessories must take on the job of giving the silhouette its spine. A wide, supple leather belt worn over a loose knit provides immediate shape to the softness. Think of bags with satisfying, heavy clasps that snap shut with a confident click, rather than slouchy totes that lose their form the minute you put them down. Wide straps and substantial, rounded rings add a sense of deliberate weight to an outfit that otherwise feels completely fluid. It is this exact tension, firm hardware gripping soft fabric, that stops a comfortable look from reading as pyjamas.",
+   "The sensory feedback of what you put on matters just as much as the silhouette. There is a satisfying, immediate snap to a heavy belt buckle and a comforting, familiar scent to well-loved leather. Your finishing touches need to feel intimately lived-in, yet carry enough physical heft to remind you they are actually there. Real emotional reassurance lives in these small details, whether it is the solid drop of a chunky watch on your wrist or the soft, yielding grain of a vintage bag strap. This constant tactile weight gives your daily uniform a warm, confident pulse."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Deliberately fading into the background to make others comfortable. Dimming your presence is a disservice to everyone, including you.",
+   "Dull invisible clothing that treats style as a neutral act. For you, getting dressed is a form of self-expression, not a chore.",
+   "Underestimating the power of your entrance. If the outfit does not hold up in the first three seconds, it needs more warmth or drama.",
+   "invisible",
+   "dimmed",
+   "unnoticed"
+  ],
+  "consider": [
+   "save your softest pieces for private moments",
+   "let solitary comfort be a form of self-care",
+   "A structured travel wardrobe that works in five climates with five pieces. The discipline of packing light sharpens your style eye.",
+   "How your footwear communicates your readiness for anything. A boot that walks five miles and still looks sharp is worth three dress shoes."
+  ],
+  "leanInto": [
+   "Being the most memorable person in the room, every room, without exception. If they do not remember what you wore, the outfit underperformed.",
+   "Reaching for warm metals as a default. Gold hardware, brass buttons, and amber stones are your baseline, not your special occasion.",
+   "Treating drama as a compliment to yourself and to others. A velvet jacket or a bold proportion tells the room you showed up on purpose.",
+   "Dressing for your audience as much as for yourself. Your generosity shows in how much visual pleasure you give a room.",
+   "Keeping clothes with emotional history in active rotation. A coat from a family member or a scarf from a trip holds real power.",
+   "Wrapping yourself in soft protective layers as a daily practice. A worn-in cardigan or a heritage shawl is emotional armour."
+  ]
+ },
+ "engineVersion": "2.0.0",
+ "generatedAt": "2026-06-10T20:28:26Z",
+ "hardware": {
+  "metalsText": "Metals should feel like they possess a history, carrying enough visual weight to ground your natural warmth. Look for polished brass tones with an oxidised or brushed finish rather than a blinding high shine. It acts as a quiet anchor on oversized knits or washed cottons. When you need a brighter flash, yellow gold tones brings a confident heat without reading as brand new or overly polished. Think chunky vintage lockets, rounded belt buckles, and heavy zips that pull with a satisfying drag. If you wear white gold tones, ensure the tone is slightly muted, sitting on the skin with a reassuring, heavy permanence.",
+  "recommendedMetals": [
+   "polished brass",
+   "yellow gold",
+   "white gold",
+   "antique silver",
+   "polished steel",
+   "sterling silver",
+   "gold",
+   "bright copper"
+  ],
+  "recommendedStones": [
+   "sunstone",
+   "amber",
+   "citrine",
+   "tiger eye",
+   "moonstone",
+   "pearl",
+   "selenite",
+   "bloodstone",
+   "red jasper",
+   "ruby",
+   "opal"
+  ],
+  "stonesText": "Forget perfectly clear, icy gems that look like they belong in a glass case. Your jewellery needs a pulse and a sense of history. Choose stones that feel warm to the touch and carry immediate heirloom appeal. Sunstone delivers that soft, protective glow, sitting naturally alongside vintage denim and washed cottons. When you want a more expressive flash of colour, reach for amber set in chunky yellow gold or soft silver. You want pieces that look as though they have absorbed the heat of your skin. Because jewellery sits so intimately close to the body, yours should function less like seasonal decoration and more like a permanent, deeply personal fixture.",
+  "tipText": "The best hardware feels like a cherished heirloom worn with an unapologetic, warm attitude. You want pieces that carry a clear sense of history, but they still need enough visual weight to keep up with your dynamic pace. A heavy polished brass tones chain or a chunky signet ring set with sunstone works brilliantly when it looks inherited from a glamorous relative. These items act as emotional anchors rather than mere decoration. The result is personal jewellery that feels intensely familiar while staying entirely visible."
+ },
+ "occasions": {
+  "dailyText": "Getting dressed for a standard Tuesday requires garments that feel instantly safe but never slow you down. Your everyday uniform relies on forgiving, familiar silhouettes that drape easily and let you move with serious momentum. Focus on pieces with a genuinely lived-in finish, leaning on items that look like they have a bit of history to them. Because you naturally take up space with so much warmth and energy, your casual layers should be generous and enveloping rather than tight or rigid. The ultimate off-duty mood is looking entirely unbothered, comfortably swathed in reliable shapes that quietly protect your peace.\n\nYour style energy concentrates in retreat and identity, so your wardrobe is at its best when it reflects both retreat and identity.",
+  "intimateText": "Getting ready for an intimate evening is an exercise in balancing intense personal warmth with a fiercely protective edge. Seek out shapes that drape generously across the collarbone or sweep fluidly around the body, marrying a quiet, nostalgic romance with undeniable dramatic flair. You look incredible in garments that move intuitively with you, projecting total, unapologetic confidence without losing an ounce of softness. The overall impression should feel deeply familiar and entirely touchable, yet firmly anchored by a bold energy that easily holds attention. Your best evening looks always control the temperature, wrapping you in silhouettes that feel as comforting as a well-kept secret.",
+  "workText": "Your approach to professional dressing is a masterclass in commanding warmth. Instead of rigid corporate uniforms, build your work rotation around enveloping silhouettes that wrap the body and establish a sense of secure familiarity. Fluid tailoring and generous proportions allow you to move with bold, expressive energy while keeping your personal space intensely your own. Seek out soft structure in your jackets and trousers, prioritising garments that feel gently lived-in rather than stiffly brand new. The result is an office presence that feels reassuringly human but undeniably in charge.\n\nAt work, lean into direct confidence; structured pieces and clean lines reinforce your natural authority."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#E96675",
+    "name": "Warm Coral",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Mars",
+     "sourceSign": "Aries"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Medium Warm Grounded",
+  "coreColours": [
+   {
+    "hexValue": "#EAA221",
+    "name": "marigold",
+    "provenance": {
+     "band": "core",
+     "family": "True Spring",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#FF7F50",
+    "name": "coral",
+    "provenance": {
+     "band": "core",
+     "family": "True Spring",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#4AE082",
+    "name": "fresh green",
+    "provenance": {
+     "band": "core",
+     "family": "True Spring",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#08E8DE",
+    "name": "clear turquoise",
+    "provenance": {
+     "band": "core",
+     "family": "True Spring",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#1B2A4A",
+   "name": "ink navy",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "True Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "True Spring",
+  "lightAnchor": {
+   "hexValue": "#FFFFF0",
+   "name": "warm ivory",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "True Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#DFA74B",
+   "name": "antique gold",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "True Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "Your palette thrives on a tension between tender nostalgia and unapologetic warmth. Build your foundation on marigold and coral, treating these colours as luminous, tactile neutrals rather than flat, passive pastels. A heavy, washed cotton overshirt or a brushed knit in fresh green gives these gentle shades a sense of physical weight and daily purpose. When you want a flash of action, a sharp hit of Warm Coral prevents the outfit from reading as too delicate. You want the visual softness of a treasured vintage find, styled with the bold stride of someone who actually gets things done.",
+  "neutrals": [
+   {
+    "hexValue": "#FFFFF0",
+    "name": "warm ivory",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Spring",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#C4A35A",
+    "name": "camel sand",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Spring",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#C3B091",
+    "name": "light khaki",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Spring",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#A89F91",
+    "name": "warm stone",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Spring",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": false,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": false,
+   "fireAirChromaApplied": true,
+   "scorpioDensityApplied": false,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": true,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#DFA74B",
+   "name": "muted amber",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "True Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Bright Spring",
+  "supportColours": [
+   {
+    "hexValue": "#8A8D8F",
+    "name": "cool stone",
+    "provenance": {
+     "band": "support",
+     "family": "True Spring",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#6B7B8D",
+    "name": "mist navy",
+    "provenance": {
+     "band": "support",
+     "family": "True Spring",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#4F5D73",
+    "name": "soft navy",
+    "provenance": {
+     "band": "support",
+     "family": "True Spring",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#6B7B8D",
+    "name": "mist navy",
+    "provenance": {
+     "band": "support",
+     "family": "True Spring",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "Medium",
+   "depth": "Medium",
+   "saturation": "Rich",
+   "surface": "Balanced",
+   "temperature": "Warm"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "aggressive graphics",
+   "skull prints",
+   "harsh geometric",
+   "invisible minimal"
+  ],
+  "narrativeText": "Your best prints look like they already have a history. A faded animal print or a soft bold florals gives you that lived-in familiarity you crave, especially when cut into a sweeping, dynamic silhouette that catches the air. You can push the scale and keep the mood nostalgic with medallion. Anything rigidly modern like aggressive graphics or skull prints reads as clinical and completely puts out your fire. You need clothes that feel like a comforting memory but move with immediate, expressive heat.",
+  "recommendedPatterns": [
+   "animal print",
+   "bold florals",
+   "medallion",
+   "vintage florals",
+   "nautical stripes",
+   "soft gingham"
+  ],
+  "tipText": "The most effective prints for your wardrobe feel lived-in rather than sharply modern. When you reach for a animal print, look for it on softened textiles like brushed flannel or a washed cotton that gently blurs the edges of the design. Play up the scale of the motif to keep the outfit confident and expressive, but stick to warm, familiar tones like pearl white and faded blush instead of harsh graphic contrasts. It creates a striking visual statement that still wears as comfortably as a cherished vintage piece."
+ },
+ "styleCore": {
+  "narrativeText": "Your presence is defined by a vivid, unapologetic warmth that feels instantly familiar. While your wardrobe relies on a foundation of protective comfort and historical references, the way you wear it is intensely dynamic. You take silhouettes that feel safe, nostalgic, and lived-in, and push them into the spotlight through sheer force of personality. The clothes act as an emotional buffer, but rather than hiding you away, their enveloping shapes give you the foundation to take up space and move with absolute purpose. You walk into a room and project the rare kind of energy that manages to be completely commanding while making everyone else feel entirely at ease.\n\nYour natural sense of beauty shows up most powerfully in your inner world, private beauty, dreamy personal aesthetics, beauty for the self alone. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as bold and decisive; you make strong first impressions without trying too hard."
+ },
+ "textures": {
+  "avoidTextures": [
+   "dull matte fabrics",
+   "cheap-looking materials",
+   "cheap materials"
+  ],
+  "badText": "Anything too sterile or aggressive completely derails your natural warmth. You move with far too much heat to be trapped in dull matte fabrics. It sits cold against the skin and creates a clinical barrier that stifles your expressiveness. Similarly, skip the punishing rigidity of cheap-looking materials entirely. If a material refuses to yield to your stride or requires weeks of breaking in before it stops leaving red marks, it fails your most basic requirement. Your wardrobe has to act as a soft ally, never a cage.",
+  "goodText": "The contrast between your loud, expressive energy and your need for deep comfort is easily resolved through touch. Look for materials that feel immediately familiar against your skin, like rich velvet and structured satin. The lived-in weight of gold-thread details serves as a tactile reassurance when your own intensity runs high. Clothes that act like a second skin allow you to be as bold and action-oriented as you naturally are, without ever feeling physically or emotionally exposed. When the garment is inherently forgiving, you have the freedom to take up absolute space.",
+  "recommendedTextures": [
+   "rich velvet",
+   "structured satin",
+   "gold-thread details",
+   "heavy silk"
+  ],
+  "sweetSpotKeywords": [
+   "lustre",
+   "drama"
+  ],
+  "sweetSpotText": "The peak of your wardrobe sits precisely where lustre meets drama. You need fabrics that protect your mood but still let you operate with heat and momentum. Notice the way rich velvet sits on the collarbone, it offers immediate tactile reassurance without ever restricting your stride. A piece cut from structured satin does exactly the same job, acting as a plush, lived-in barrier between you and a chaotic schedule. If an item demands physical sacrifice just to hold its shape, leave it on the rail.\n\nYour comfort instinct gravitates toward private emotional retreat, the softest, most comforting pieces saved for solitude."
+ },
+ "userInfo": {
+  "birthDate": "1988-08-10T04:00:00Z",
+  "birthLocation": "Leo Sun \u2014 London dawn (Fire / visibility stress)",
+  "generationDate": "2026-06-10T20:28:26Z"
+ }
+}

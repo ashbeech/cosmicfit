@@ -5,45 +5,50 @@ Users: 216, Days: 60, Window: 2026-05-01 → 2026-06-29
 
 HARD GATES
   Opposition violations:        0 — PASS
-  Cross-surface violations:     0 — PASS
+  Cross-surface violations:     8 — FAIL
   Production fingerprint:       PASS (verified in separate test)
 
 VARIATION METRICS
-  Mean flip rate:               42.5% (target ≥ 40%)
-  Mean distinct #1 / 60d:       4.0 (target ≥ 6)
-  Mean category coverage / 14:  10.7 (target ≥ 10)
-  Users with flip < 40%:        98 / 216
-  Users with distinct < 6:      216 / 216
+  Mean flip rate:               54.3% (target ≥ 40%)
+  Mean distinct #1 / 60d:       4.6 (target ≥ 6)
+  Mean category coverage / 14:  13.3 (target ≥ 10)
+  Users with flip < 40%:        5 / 216
+  Users with distinct < 6:      201 / 216
 
 COHERENCE
   Mean coherence score:         1.0000 (target ≥ 0.85)
 
 SKY ACCURACY
-  Accent-salience match rate:   74.6% (target ≥ 70%)
+  Accent-salience match rate:   86.7% (target ≥ 70%)
+  Miss breakdown (1719 misses):
+    Sky top in supporting:      303
+    Sky top cooldown-blocked:    0
+    Sky top coherence-rejected:  0
+    Other (outscored/unmapped):  1416
 
 SLIDER DISPLAY POSITION COVERAGE
-  vibrancy             meanRange=0.706  stuck=0%  rangeLt0.5=0%
-  contrast             meanRange=0.263  stuck=69%  rangeLt0.5=100%
+  vibrancy             meanRange=0.713  stuck=0%  rangeLt0.5=0%
+  contrast             meanRange=0.263  stuck=70%  rangeLt0.5=100%
   metalTone            meanRange=0.488  stuck=0%  rangeLt0.5=67%
-  masculineFeminine    meanRange=0.584  stuck=3%  rangeLt0.5=28%
-  angularRounded       meanRange=0.000  stuck=100%  rangeLt0.5=100%
-  structuredDraped     meanRange=0.000  stuck=100%  rangeLt0.5=100%
+  masculineFeminine    meanRange=0.284  stuck=85%  rangeLt0.5=100%
+  angularRounded       meanRange=0.499  stuck=0%  rangeLt0.5=37%
+  structuredDraped     meanRange=0.477  stuck=0%  rangeLt0.5=100%
 
 ======================================================================
 §4.3 TARGET EVALUATION
 
 Hard zero-tolerance:
   [1] Opposition violations == 0:      PASS
-  [2] Cross-surface violations == 0:   PASS
+  [2] Cross-surface violations == 0:   FAIL
   [3] Salience drivers valid:          100% (plan construction guarantees)
   [4] Palette from approved pool:      100% (blueprint-constrained selection)
   [5] Production fingerprint:          PASS (separate test)
 
 Quantitative:
-  [6] Flip rate ≥ 40%:                 PASS (42.5%)
-  [7] Distinct #1 ≥ 6:                 WEAK/FAIL (4.0)
-  [8] Category coverage ≥ 10/14:       PASS (10.7)
+  [6] Flip rate ≥ 40%:                 PASS (54.3%)
+  [7] Distinct #1 ≥ 6:                 WEAK/FAIL (4.6)
+  [8] Category coverage ≥ 10/14:       PASS (13.3)
   [9] Slider range ≥ 0.5 per user:     see per-slider detail
   [10] No slider stuck 60d:            see per-slider detail
   [11] Coherence ≥ 0.85:               PASS (1.0000)
-  [12] Accent-salience match ≥ 70%:    PASS (74.6%)
+  [12] Accent-salience match ≥ 70%:    PASS (86.7%)

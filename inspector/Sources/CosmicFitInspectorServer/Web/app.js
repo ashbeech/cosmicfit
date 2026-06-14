@@ -939,6 +939,7 @@ async function doSubmit(dateOnly = false) {
   }
   if (birthChanged) {
     body.options.resetTarotHistory = true;
+    body.options.resetEssenceRecencyHistory = true;
   }
   const birthYear = parseInt(body.birth.birthDate.slice(0, 4), 10);
   const targetYear = parseInt(body.targetDate.slice(0, 4), 10);
@@ -986,6 +987,7 @@ async function doSubmit(dateOnly = false) {
 function buildRequest({
   composeBlueprint = true,
   resetTarotHistory = false,
+  resetEssenceRecencyHistory = false,
 } = {}) {
   applyDefaultDeviceLocationIfBlank();
 
@@ -1034,6 +1036,7 @@ function buildRequest({
       composeBlueprint,
       includeProgressed: true,
       resetTarotHistory,
+      resetEssenceRecencyHistory,
       profileId: profileIdValue,
       dailyFitEngineId: currentDailyFitEngineId(),
       deviceLatitude: Number.isFinite(deviceLatitude) ? deviceLatitude : null,
@@ -3873,6 +3876,15 @@ function markdownTrace(diag, dayLabel = null) {
       md += `- Contrast weather wins: ${bt.contrastWeatherWins ? "yes" : "no"}\n`;
     }
     md += `- Bridge pass: ${bt.bridgePass ? "pass" : "fail"}\n`;
+    if (bt.variantFormBridgeSimilarity != null) {
+      md += `- Form similarity: ${bt.variantFormBridgeSimilarity.toFixed(3)}\n`;
+    }
+    if (bt.formBridgePass != null) {
+      md += `- Form bridge pass: ${bt.formBridgePass ? "pass" : "fail"}\n`;
+    }
+    if (bt.structureGateApplied != null) {
+      md += `- Structure gate applied: ${bt.structureGateApplied ? "yes" : "no"}\n`;
+    }
     md += `- Funnel cards: ${bt.funnelCardCount}, pairs evaluated: ${bt.pairsEvaluated}\n`;
     md += "\n";
   }

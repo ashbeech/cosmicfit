@@ -26,14 +26,20 @@ enum TarotCalibrationTestSupport {
         let isolated = UserDefaults(suiteName: suiteName)!
         TarotRecencyTracker.shared = TarotRecencyTracker(userDefaults: isolated)
         TarotVariantRotationTracker.shared = TarotVariantRotationTracker(defaults: isolated)
+        AccentRecencyTracker.shared = AccentRecencyTracker(defaults: isolated)
+        VisibleEssenceRecencyTracker.shared = VisibleEssenceRecencyTracker(defaults: isolated)
+        ColourRecencyTracker.shared = ColourRecencyTracker(defaults: isolated)
         return suiteName
     }
 
-    /// Reset both trackers and BlueprintLensEngine card cache.
+    /// Reset all trackers and BlueprintLensEngine card cache.
     /// Call at the start of each profile's multi-day sweep.
     static func resetTrackersForProfile() {
         TarotRecencyTracker.shared.resetAllForTesting()
         TarotVariantRotationTracker.shared.resetAll()
+        AccentRecencyTracker.shared.resetAll()
+        VisibleEssenceRecencyTracker.shared.resetAll()
+        ColourRecencyTracker.shared.resetAll()
         BlueprintLensEngine._resetCardCache()
     }
 

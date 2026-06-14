@@ -538,6 +538,59 @@ struct NarrativeBridgeTrace: Codable, Equatable {
     let pairsEvaluated: Int
     let contrastWeatherWins: Bool?
     let bridgePass: Bool
+    let variantRecencySwapped: Bool
+    let variantFormBridgeSimilarity: Double?
+    let formBridgePass: Bool?
+    let structureGateApplied: Bool?
+
+    init(
+        selectedCardName: String, selectedVariantTitle: String, selectedVariantIndex: Int,
+        variantBridgeSimilarity: Double, bestPairTotalScore: Double, runnerUpPairTotalScore: Double,
+        bridgeMargin: Double, bestVariantSimilarityInPool: Double,
+        funnelCardCount: Int, pairsEvaluated: Int,
+        contrastWeatherWins: Bool?, bridgePass: Bool,
+        variantRecencySwapped: Bool = false,
+        variantFormBridgeSimilarity: Double? = nil,
+        formBridgePass: Bool? = nil,
+        structureGateApplied: Bool? = nil
+    ) {
+        self.selectedCardName = selectedCardName
+        self.selectedVariantTitle = selectedVariantTitle
+        self.selectedVariantIndex = selectedVariantIndex
+        self.variantBridgeSimilarity = variantBridgeSimilarity
+        self.bestPairTotalScore = bestPairTotalScore
+        self.runnerUpPairTotalScore = runnerUpPairTotalScore
+        self.bridgeMargin = bridgeMargin
+        self.bestVariantSimilarityInPool = bestVariantSimilarityInPool
+        self.funnelCardCount = funnelCardCount
+        self.pairsEvaluated = pairsEvaluated
+        self.contrastWeatherWins = contrastWeatherWins
+        self.bridgePass = bridgePass
+        self.variantRecencySwapped = variantRecencySwapped
+        self.variantFormBridgeSimilarity = variantFormBridgeSimilarity
+        self.formBridgePass = formBridgePass
+        self.structureGateApplied = structureGateApplied
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        selectedCardName = try c.decode(String.self, forKey: .selectedCardName)
+        selectedVariantTitle = try c.decode(String.self, forKey: .selectedVariantTitle)
+        selectedVariantIndex = try c.decode(Int.self, forKey: .selectedVariantIndex)
+        variantBridgeSimilarity = try c.decode(Double.self, forKey: .variantBridgeSimilarity)
+        bestPairTotalScore = try c.decode(Double.self, forKey: .bestPairTotalScore)
+        runnerUpPairTotalScore = try c.decode(Double.self, forKey: .runnerUpPairTotalScore)
+        bridgeMargin = try c.decode(Double.self, forKey: .bridgeMargin)
+        bestVariantSimilarityInPool = try c.decode(Double.self, forKey: .bestVariantSimilarityInPool)
+        funnelCardCount = try c.decode(Int.self, forKey: .funnelCardCount)
+        pairsEvaluated = try c.decode(Int.self, forKey: .pairsEvaluated)
+        contrastWeatherWins = try c.decodeIfPresent(Bool.self, forKey: .contrastWeatherWins)
+        bridgePass = try c.decode(Bool.self, forKey: .bridgePass)
+        variantRecencySwapped = try c.decodeIfPresent(Bool.self, forKey: .variantRecencySwapped) ?? false
+        variantFormBridgeSimilarity = try c.decodeIfPresent(Double.self, forKey: .variantFormBridgeSimilarity)
+        formBridgePass = try c.decodeIfPresent(Bool.self, forKey: .formBridgePass)
+        structureGateApplied = try c.decodeIfPresent(Bool.self, forKey: .structureGateApplied)
+    }
 }
 
 // MARK: - Daily Narrative Plan (Plan 2)
@@ -755,6 +808,22 @@ struct DailyFitCalibration: Equatable {
         let minBridgeMargin: Double
         let pairScoreTieEpsilon: Double
 
+        // Tarot form bridge tunables
+        let variantFormBridgeWeight: Double
+        let structureSkyWeight: Double
+        let structureSilhouetteWeight: Double
+        let minFormBridgeSimilarity: Double
+        let structureVariantStrategyFloor: Int
+        let structureSliderThreshold: Double
+
+        // Visible essence recency gate
+        let visibleEssenceCooldownDays: Int
+
+        // Colour coverage/recency tunables (stage1 full-range selection)
+        let colourCoverageWeight: Double
+        let colourCoverageFloorEnabled: Bool
+        let colourHeroRotationEnabled: Bool
+
         static let stage1Default = NarrativeSelectionTuning(
             categoryBoostWeight: 0.15,
             rolePreferenceBonus: 0.12,
@@ -768,7 +837,17 @@ struct DailyFitCalibration: Equatable {
             bridgeCandidatePoolSize: 15,
             minVariantBridgeSimilarity: 0.50,
             minBridgeMargin: 0.01,
-            pairScoreTieEpsilon: 0.01
+            pairScoreTieEpsilon: 0.01,
+            variantFormBridgeWeight: 0.20,
+            structureSkyWeight: 0.35,
+            structureSilhouetteWeight: 0.65,
+            minFormBridgeSimilarity: 0.45,
+            structureVariantStrategyFloor: 50,
+            structureSliderThreshold: 0.15,
+            visibleEssenceCooldownDays: 2,
+            colourCoverageWeight: 0.10,
+            colourCoverageFloorEnabled: true,
+            colourHeroRotationEnabled: true
         )
     }
 

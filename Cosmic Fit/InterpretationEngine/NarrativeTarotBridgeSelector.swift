@@ -20,6 +20,7 @@ enum NarrativeTarotBridgeSelector {
         let variantIndex: Int
         let baseCardScore: Double
         let variantBridgeScore: Double
+        let variantFormBridgeScore: Double
         let pairTotalScore: Double
     }
 
@@ -38,7 +39,8 @@ enum NarrativeTarotBridgeSelector {
         recentSelections: [(cardName: String, daysAgo: Int)],
         intent: NarrativeIntent,
         calibration: DailyFitCalibration,
-        dailySeed: Int
+        dailySeed: Int,
+        lastVariantByCard: [String: Int] = [:]
     ) -> SelectionResult {
         let tuning = calibration.narrativeSelection ?? .stage1Default
         let weights = calibration.selectionWeights
@@ -69,6 +71,8 @@ enum NarrativeTarotBridgeSelector {
         let pool = Array(scoredCards.prefix(poolSize))
 
         // Stage B + C: for each card in funnel, score all variants jointly
+        let targetAxes = intent.tarot.targetAxesVector
+        let structureGateActive = intent.tarot.structuredDraped < tuning.structureSliderThreshold
         var pairs: [Candidate] = []
         for entry in pool {
             guard let edits = entry.card.styleEdits, !edits.isEmpty else { continue }
@@ -80,13 +84,27 @@ enum NarrativeTarotBridgeSelector {
                     bridgeScore *= 1.2
                 }
 
-                let total = entry.baseScore + tuning.variantBridgeWeight * bridgeScore
+                let axesDict = NarrativeSelectionDirectives.axesDictionary(from: edit.axesEmphasis)
+                let formScore = NarrativeSelectionDirectives.cosineSimilarityAxes(axesDict, targetAxes)
+
+                var total = entry.baseScore
+                    + tuning.variantBridgeWeight * bridgeScore
+                    + tuning.variantFormBridgeWeight * formScore
+
+                if structureGateActive {
+                    let variantStrategy = edit.axesEmphasis["strategy"] ?? 50
+                    if variantStrategy < tuning.structureVariantStrategyFloor {
+                        total -= 10.0
+                    }
+                }
+
                 pairs.append(Candidate(
                     card: entry.card,
                     variant: edit,
                     variantIndex: i,
                     baseCardScore: entry.baseScore,
                     variantBridgeScore: bridgeScore,
+                    variantFormBridgeScore: formScore,
                     pairTotalScore: total
                 ))
             }
@@ -110,7 +128,8 @@ enum NarrativeTarotBridgeSelector {
             )
             let fallbackCandidate = Candidate(
                 card: fallbackCard, variant: fallbackVariant, variantIndex: 0,
-                baseCardScore: pool.first?.baseScore ?? 0, variantBridgeScore: 0, pairTotalScore: 0
+                baseCardScore: pool.first?.baseScore ?? 0, variantBridgeScore: 0,
+                variantFormBridgeScore: 0, pairTotalScore: 0
             )
             let trace = NarrativeBridgeTrace(
                 selectedCardName: fallbackCard.name,
@@ -141,6 +160,13 @@ enum NarrativeTarotBridgeSelector {
             selected = pairs[pick]
         }
 
+        // Variant-recency swap: if the winning card is a returning card and
+        // would repeat the same variant, swap to the best alternate variant
+        // of the same card. Card choice stays untouched.
+        let recencySwapped = applyVariantRecencySwap(
+            &selected, pairs: pairs, lastVariantByCard: lastVariantByCard
+        )
+
         let runnerUp = pairs.count > 1 ? pairs[1].pairTotalScore : selected.pairTotalScore
         let maxSim = pairs.map(\.variantBridgeScore).max() ?? 0
         let margin = selected.pairTotalScore - runnerUp
@@ -151,6 +177,8 @@ enum NarrativeTarotBridgeSelector {
 
         let bridgePass = selected.variantBridgeScore >= tuning.minVariantBridgeSimilarity
             && margin >= tuning.minBridgeMargin
+
+        let formBridgePass = selected.variantFormBridgeScore >= tuning.minFormBridgeSimilarity
 
         let trace = NarrativeBridgeTrace(
             selectedCardName: selected.card.name,
@@ -164,7 +192,11 @@ enum NarrativeTarotBridgeSelector {
             funnelCardCount: poolSize,
             pairsEvaluated: pairs.count,
             contrastWeatherWins: contrastWeatherWins,
-            bridgePass: bridgePass
+            bridgePass: bridgePass,
+            variantRecencySwapped: recencySwapped,
+            variantFormBridgeSimilarity: selected.variantFormBridgeScore,
+            formBridgePass: formBridgePass,
+            structureGateApplied: structureGateActive
         )
 
         return SelectionResult(
@@ -201,6 +233,26 @@ enum NarrativeTarotBridgeSelector {
 
     // MARK: - Private Helpers
 
+    /// If the selected card was recently shown and would repeat the same variant index,
+    /// swap to the best-scoring alternate variant of the same card.
+    /// Returns true if a swap occurred.
+    private static func applyVariantRecencySwap(
+        _ selected: inout Candidate,
+        pairs: [Candidate],
+        lastVariantByCard: [String: Int]
+    ) -> Bool {
+        guard let lastIndex = lastVariantByCard[selected.card.name],
+              lastIndex == selected.variantIndex else {
+            return false
+        }
+        let alternates = pairs
+            .filter { $0.card.name == selected.card.name && $0.variantIndex != lastIndex }
+            .sorted { $0.variantBridgeScore > $1.variantBridgeScore }
+        guard let best = alternates.first else { return false }
+        selected = best
+        return true
+    }
+
     /// Soften rule: among top-3 variant bridge scores per card, prefer minimum drama emphasis.
     /// Iterates grouped cards in sorted key order for deterministic results.
     private static func applySoftenMinDramaRule(_ pairs: [Candidate]) -> [Candidate] {
@@ -235,6 +287,7 @@ enum NarrativeTarotBridgeSelector {
                         result.append(Candidate(
                             card: pair.card, variant: pair.variant, variantIndex: pair.variantIndex,
                             baseCardScore: pair.baseCardScore, variantBridgeScore: pair.variantBridgeScore,
+                            variantFormBridgeScore: pair.variantFormBridgeScore,
                             pairTotalScore: bestScore
                         ))
                     } else {

@@ -1,0 +1,354 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "A single, substantial piece of hardware carries far more weight than a messy stack of trinkets. When your clothes drift and wrap in soft, sheer layers, you rely on the blunt contrast of a rigid leather strap or an unapologetically heavy watch to bring the overall silhouette to order. One focal point of serious construction, a thick belt, a flawless bag, or a prominent clasp, lets your fluid jersey and gauze move freely without ever reading as careless. This strict tension between light cloth and hard finishes tells people you know exactly what you are doing.",
+   "When your wardrobe leans into sheer fluidity, your accessories have to do the heavy lifting. A rigid top-handle bag or an entirely uncompromising belt provides the strict boundaries your softer layers need. You find a deep sense of calm in the sharp click of a heavy clasp or the unyielding stiffness of a thick leather strap resting over your shoulder. Framing delicate gauze and flowing silk with something decidedly firm gives the look an immediate, intelligent focus. It stops a dreamy silhouette from drifting away entirely, pulling the whole outfit securely back into the room.",
+   "How your pieces sound and feel matters just as much as how they look on a hanger. There is a deep psychological comfort in the crisp snap of a beautifully engineered bag clasp or the reassuring weight of a heavy watch. You rely on that tactile discipline to ground your softer, more fluid clothing. Contrast the stiff, rich scent of premium leather with the whisper of a lightweight strap shifting as you move and talk. Your finishing touches act as a sensory boundary, giving your dreamiest silhouettes a necessary hit of real-world structure."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Convention for convention's sake that serves no creative purpose. Following rules without questioning them is the real failure.",
+   "Traditional stuffy fabrics that anchor you to the past. Your creative axis points forward, and your wardrobe should too.",
+   "Harsh structured power suits that feel like a costume on you. Your authority comes from presence, not from sharp shoulders.",
+   "Aggressive angular silhouettes that cut against your natural fluidity. Hard geometric shapes drain your energy rather than channel it.",
+   "Anything that feels militaristic, regimented, or punishing. Your body responds best to softness, not discipline.",
+   "Blending into the background on purpose. You were not built for camouflage and your clothes should not pretend otherwise."
+  ],
+  "consider": [
+   "prioritize quality over quantity in every purchase",
+   "build a wardrobe of pieces that hold value",
+   "a signature colour that becomes your verbal shorthand",
+   "Pre-decided outfit formulas that give you zero-decision mornings and maximum momentum"
+  ],
+  "leanInto": [
+   "Understanding that rebellion needs structure to be effective. A carefully deconstructed jacket communicates more than a randomly torn one.",
+   "Innovating within constraints rather than discarding all rules. Limits sharpen your creativity and make your unconventional choices land harder.",
+   "Using discipline as a foundation for originality. The most memorable disruptors are precise about how they break the rules.",
+   "Embracing the flowing and the romantic without apology. If a dress moves like water when you walk, it was made for you.",
+   "Layering sheer over opaque for depth and mystery. A chiffon blouse over a silk camisole creates dimension that hard fabrics cannot.",
+   "Letting garments move with your body rather than against it. If a piece fights your natural rhythm, it does not belong."
+  ]
+ },
+ "engineVersion": "2.0.0",
+ "generatedAt": "2026-06-10T20:29:25Z",
+ "hardware": {
+  "metalsText": "The most convincing hardware for your wardrobe feels like it could melt, yet holds its shape perfectly. Smooth, liquid-finish titanium tones works as your baseline, acting as a cool, collected frame for your soft-flowing silks and lightweight gauzes. When you want a more understated finish, look for surgical steel tones with a brushed or matte surface to impose a quiet sense of order on your outfit. The details on your bags and coats should look structural but never heavy, favouring fine wirework or sleek, unbroken clasps. Your jewellery and fastenings act as the neat architecture keeping the romance in check.",
+  "recommendedMetals": [
+   "titanium",
+   "surgical steel",
+   "platinum",
+   "polished silver",
+   "opal-set silver",
+   "white gold",
+   "anodised aluminium",
+   "iridescent finishes",
+   "rose gold",
+   "polished brass"
+  ],
+  "recommendedStones": [
+   "labradorite",
+   "meteorite",
+   "garnet",
+   "fluorite",
+   "jet",
+   "onyx",
+   "amethyst",
+   "aquamarine",
+   "moonstone",
+   "opal",
+   "carnelian",
+   "diamond",
+   "red jasper",
+   "sapphire"
+  ],
+  "stonesText": "Your approach to jewellery requires a certain tension: the stones need to look ethereal, but the cuts must be completely serious. Skip the loud, opaque gems and look for pieces that capture a watery, almost elusive light, like labradorite or meteorite. You want them set in clean, disciplined metalwork so the visual softness of the gem avoids looking overly sweet. A sharply faceted garnet works perfectly when worn over a fluid silk blouse, providing a necessary hit of cold, collected order to the drape. The final effect always feels less like decoration and more like an icy punctuation mark.",
+  "tipText": "Hardware for you is an exercise in tension between ethereal softness and strict rigour. A substantial piece of titanium tones cast into a fluid, melting shape hits exactly the right note. Skip the aggressively sharp edges and fragile, easily tangled chains. Look for weight that feels deliberate, like a smooth, heavy cuff or a clean bezel setting enclosing a labradorite. The trick is wearing accessories that look liquid from a distance but feel uncompromisingly solid when handled. It gives a deeply romantic wardrobe the necessary backbone without breaking the spell."
+ },
+ "occasions": {
+  "dailyText": "Your ideal off-duty style sits right at the intersection of effortless fluidity and strict order. Seek out silhouettes that drift and breathe as you go about your day, but rely on sharp, clean construction to maintain a disciplined framework. You cannot stand looking unkempt, yet you thrive on a sense of lightness in how you move through a room. Build your looks around smart layers that drape with actual intent rather than just hanging loose on the frame. The final impression should be someone floating through the afternoon with a highly demanding itinerary.\n\nYour style energy concentrates in retreat and identity, so your wardrobe is at its best when it reflects both retreat and identity.",
+  "intimateText": "Evening dressing for you relies on a clever trick of the light, appearing completely effortless while retaining a strict internal logic. Favour silhouettes that flow freely away from the body but depend on precise tailoring at the waist or shoulder to keep the look grounded. The goal is an inviting mood ready for hours of lively dialogue, never stiff or severely formal. Pieces with an inherent liquid quality capture movement beautifully, especially when anchored by rigid, architectural shapes in your footwear. You leave an impression that is romantic and slightly out of reach, yet sharply put together.",
+  "workText": "Your best workwear thrives on the tension of strict tailoring worn against something fluid. A razor-sharp lapel layered over a gentle, draped neckline gives you authority without erasing your approachability. You need silhouettes that let you move effortlessly through pitches and office politics without feeling physically restricted. Ground the look in disciplined foundation pieces, like a trouser with an immaculate crease, so the softer elements never read as careless. This interplay of hard and soft proportions signals exactly who is running the meeting, even when you are speaking quietly.\n\nAt work, lean into expansive confidence; globally inspired pieces and bold scope signal vision and ambition."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#9F3D8A",
+    "name": "Cool Berry",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Sun",
+     "sourceSign": "Aries"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#273E51",
+    "name": "Saturn Slate",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Moon",
+     "sourceSign": "Capricorn"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Deep Cool High-Contrast",
+  "coreColours": [
+   {
+    "hexValue": "#191970",
+    "name": "midnight",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#4169E1",
+    "name": "royal blue",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#CC0066",
+    "name": "magenta red",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#5FADA5",
+    "name": "icy teal",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#0A0A0A",
+   "name": "black",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "Bright Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "Bright Winter",
+  "lightAnchor": {
+   "hexValue": "#FFFFFF",
+   "name": "bright white",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "Bright Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#895CC0",
+   "name": "cobalt",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "Bright Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "There is a distinct logic to how you wear colour, balancing delicate romance with serious intent. Build your foundation on midnight, royal blue, and magenta red. These watercolour shades bring a necessary lightness to the sharp tailoring and crisp poplin you instinctively prefer. Instead of shouting across a crowded room, this airy combination invites easy conversation. When you need a harder edge, introduce a flash of Cool Berry through a smooth calfskin shoe or cool metal hardware. It is a quiet palette, but it guarantees you are taken seriously.",
+  "neutrals": [
+   {
+    "hexValue": "#0A0A0A",
+    "name": "black",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#FFFFFF",
+    "name": "bright white",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#1B2A4A",
+    "name": "ink navy",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#71797E",
+    "name": "steel grey",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": true,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": false,
+   "fireAirChromaApplied": true,
+   "scorpioDensityApplied": false,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#00829A",
+   "name": "muted teal",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "Bright Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Bright Spring",
+  "supportColours": [
+   {
+    "hexValue": "#A89F91",
+    "name": "warm stone",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#786D4E",
+    "name": "deep khaki",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#7B5B3A",
+    "name": "cocoa",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#C4A35A",
+    "name": "camel sand",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "High",
+   "depth": "Deep",
+   "saturation": "Rich",
+   "surface": "Structured",
+   "temperature": "Cool"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "sharp geometric",
+   "harsh stripes",
+   "aggressive graphic prints",
+   "novelty prints"
+  ],
+  "narrativeText": "Your relationship with print is a constant negotiation between wanting to float and needing to remain completely in control. Loud, chaotic motifs quickly disrupt your mental order, so leave sharp geometric out of the rotation entirely. Instead, look for designs that offer a dreamy mood but possess a quiet, underlying logic. Circuit-inspired and brutalist grid windowpane hit this exact mark, bringing soft colour and visual interest to a flowing chiffon dress without overwhelming the eye. For daytime socialising, watercolour prints provides just enough texture to feel deliberate while keeping the overall finish airy and light. You wear prints best when they act as a gentle suggestion rather than a demanding shout.",
+  "recommendedPatterns": [
+   "circuit-inspired",
+   "brutalist grid windowpane",
+   "watercolour prints",
+   "oceanic motifs",
+   "soft tie-dye",
+   "impressionist florals"
+  ],
+  "tipText": "Graphic, high-contrast prints will instantly make you feel visually frantic. Seek out motifs that are soft and atmospheric instead, letting a watercolour circuit-inspired bleed gently across pale aqua silk or fine gauze. The real trick to wearing them is containment. Rather than letting a floaty seafoam design swallow your entire silhouette, wear it cleanly tailored or tucked into heavy, disciplined wool trousers. The print provides the necessary fantasy, but the sharp construction does the actual work."
+ },
+ "styleCore": {
+  "narrativeText": "Your style operates on a brilliant contradiction between total fluidity and absolute control. You walk into a space with a light, communicative energy, but your presence is anchored by a quiet, unshakeable composure. The trick is to dress in a way that allows for graceful movement and social ease, while keeping the underlying architecture of your outfit strictly tailored and resolved. Let your outer layers drift and move organically, but rely on sharp, definitive construction underneath to maintain a vital sense of physical order. It is an aesthetic of rigorous romanticism, projecting a relaxed intelligence that always knows exactly what it is doing.\n\nYour natural sense of beauty shows up most powerfully in your personal investments, investment in beautiful things as self-worth expression, quality over quantity. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as bold and expansive; globally informed choices and adventurous scope signal confidence."
+ },
+ "textures": {
+  "avoidTextures": [
+   "traditional stuffy fabrics",
+   "stiff structured suiting",
+   "hard leather"
+  ],
+  "badText": "You need your clothes to breathe with you, which means anything overtly rigid or artificial is an immediate problem. Materials like traditional stuffy fabrics suffocate your natural ease, while the aggressive friction of stiff structured suiting interrupts your quiet discipline. If a fabric feels industrial or fights your body heat, it ruins the entire look. You rely on garments that drape beautifully without forcing you into an awkward silhouette. Skip hard leather entirely. You are far too socially agile to spend your day trapped inside a piece that wears like a cheap suit of armour.",
+  "goodText": "Getting dressed is a balancing act between strict composure and total fluidity. You thrive in garments that drift gracefully around the body but never lose their shape. Reach for tech fabric and recycled innovation to give you that necessary movement, catching the air as you walk without looking completely unbuttoned. Even when you are leaning into romance, you expect a certain emotional order from your clothes. Layering structural mesh with flowing chiffon gives you that dreamlike softness while keeping you securely held together. It is about wearing something that looks entirely effortless, but behaves with absolute discipline.",
+  "recommendedTextures": [
+   "tech fabric",
+   "recycled innovation",
+   "structural mesh",
+   "flowing chiffon"
+  ],
+  "sweetSpotKeywords": [
+   "innovation",
+   "structure"
+  ],
+  "sweetSpotText": "The exact intersection of innovation and structure is where your wardrobe actually clicks into gear. You want the romantic drape of tech fabric to satisfy your eye, but your frame demands the grounding presence of sharp, orderly construction. This specific balance keeps you moving easily through a crowded room without ever feeling restricted or visually chaotic. Try anchoring the breathless finish of recycled innovation against clean, decisive lines. If a piece cannot offer both strict boundaries and a soft, poetic touch, leave it on the hanger.\n\nYour comfort instinct gravitates toward private emotional retreat, the softest, most comforting pieces saved for solitude."
+ },
+ "userInfo": {
+  "birthDate": "1992-03-26T04:00:00Z",
+  "birthLocation": "Synth 009 \u2014 Aries Sun, 04:00 UTC, London (1992)",
+  "generationDate": "2026-06-10T20:29:25Z"
+ }
+}

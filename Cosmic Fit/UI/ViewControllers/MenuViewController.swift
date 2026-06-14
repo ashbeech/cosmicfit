@@ -52,12 +52,7 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
     private let cfLogoImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
-        iv.image = UIImage(named: "CosmicFitLogo")
-        iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
-        
-        let filter = CIFilter(name: "CIColorInvert")
-        iv.layer.filters = [filter as Any]
-        
+        iv.image = UIImage(named: "CosmicFitLogoSmallIcon")
         return iv
     }()
     

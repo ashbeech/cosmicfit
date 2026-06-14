@@ -1,0 +1,338 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "A handful of fragile trinkets will only ever feel fussy. Choose a single, substantial item that carries real physical weight and historical permanence. Think of a wide leather belt worn soft from years of use, or a heavy vintage watch with a satisfyingly secure clasp. These are objects designed to be lived in and touched repeatedly. This one serious addition gives your silhouette focus and provides a quiet sense of physical security, letting the rest of your clothes remain completely unbothered.",
+   "The right accessories act as sensory weights, bringing physical reassurance to the softer fabrics in your wardrobe. A thick leather belt that slowly moulds to your waist offers genuine tactile permanence. Your daily bag needs a wide, secure strap and heavy hardware that snaps shut with a decisive click. Even the simple friction of a substantial watch or a smooth, weighty ring gives you a continuous grounding touchpoint. Rather than mere decoration, these pieces become the true load-bearers of your comfort.",
+   "A truly great accessory makes itself known through touch and sound before you even check a mirror. The satisfying weight of a heavy buckle resting on your hip and the sharp, decisive click of a secure bag clasp offer a subtle daily grounding. Even the distinct scent of rich, supple leather becomes part of your routine. You wear these pieces for the physical reassurance they bring to your day, rather than just their visual appeal."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Anything scratchy, stiff, or uncomfortable against your skin. If you have to endure a garment, it is already failing.",
+   "Trend pieces that sacrifice comfort for novelty. Your body rejects discomfort faster than your mind accepts a bargain.",
+   "Rushing through purchases without touching the fabric. Your hands know more about quality than any label.",
+   "Flimsy disposable pieces that fall apart after a few wears. Insubstantial clothing offends your sense of permanence.",
+   "Trend-driven purchases that replace substance with novelty. You would rather wear the same jacket for a decade than chase this season's silhouette.",
+   "Cold, austere minimalism that strips away all warmth. If an outfit makes a room feel colder, it is wrong for you."
+  ],
+  "consider": [
+   "invest in fabrics that feel like emotional anchors",
+   "choose textures that ground you",
+   "honour comfort as a core style value",
+   "seek pieces with sentimental or heirloom quality"
+  ],
+  "leanInto": [
+   "Treating softness as a power move, not a concession. The person in cashmere has already won the room.",
+   "Investing in loungewear that makes you feel wealthy. A heavy cotton robe or a silk pyjama set is emotional infrastructure.",
+   "Prioritising natural materials against your skin at all times. Your body registers the difference before your mind does.",
+   "Buying the most expensive basics you can afford. A perfect white T-shirt in organic cotton resets your whole nervous system.",
+   "Treating durability as a form of personal strength. A heavy denim jacket or a dense knit says you are built to last.",
+   "Choosing heavy, reliable fabrics that can take a beating. If the garment cannot survive your day, it is too fragile for your life."
+  ]
+ },
+ "engineVersion": "2.0.0",
+ "generatedAt": "2026-06-10T20:34:50Z",
+ "hardware": {
+  "metalsText": "Your hardware needs a quiet, lived-in weight rather than high-shine aggression. Matte sterling silver tones gives you a necessary vintage sensibility, while white gold tones provides a softer glow that sits easily next to your washed cottons and heavy knits. Look for satisfyingly heavy belt buckles, smooth domed buttons, and zips that pull with substantial resistance. The best finishes will always warm up to your body temperature and feel reassuring in your hand.",
+  "recommendedMetals": [
+   "sterling silver",
+   "white gold",
+   "antique silver",
+   "warm bronze",
+   "silver",
+   "yellow gold",
+   "antique brass",
+   "polished brass",
+   "rose gold"
+  ],
+  "recommendedStones": [
+   "moonstone",
+   "pearl",
+   "opal",
+   "selenite",
+   "emerald",
+   "malachite",
+   "rose quartz",
+   "bloodstone",
+   "tiger eye",
+   "carnelian",
+   "red jasper"
+  ],
+  "stonesText": "Jewellery for you is as much about how a heavy stone warms up on your bare skin as how it catches the eye. Skip the sharp, aggressive facets and look for smooth cabochon cuts that practically beg to be held. Something opaque and creamy like moonstone brings a soft, protective weight to your daily rotation. When you want a bit more visual depth, pearl set in heavily brushed metal feels less like a loud display of wealth and more like a quiet personal comfort. The best pieces are the ones that look like they have spent generations being thoroughly loved.",
+  "tipText": "Forget sterile angles and anything that feels remotely flimsy. Your jewellery needs a satisfying physical weight and a quiet sense of history. Choose smooth, rounded edges in sterling silver tones that sit close to the body rather than catching on your knits. A vintage-inspired setting featuring moonstone works flawlessly here, provided the finish feels slightly worn-in rather than fiercely polished. You want pieces that feel instantly familiar the second you fasten them."
+ },
+ "occasions": {
+  "dailyText": "Your off-duty wardrobe needs to function as a highly refined comfort zone. You dress for sensory reassurance, meaning every item must feel substantial in the hand and gentle on the body. Flimsy construction or rigid fits will only leave you feeling exposed and irritable before you even leave the house. Invest in weighty everyday pieces that soften with wear and learn your proportions over time. Silhouettes must cocoon rather than cling, giving you an immediate sense of ease. The goal is a daily rotation that looks quietly expensive while acting as a familiar, wearable shelter.\n\nYour comfort instinct gravitates toward security through tactile quality, fabrics as emotional anchors.",
+  "intimateText": "Intimate evenings call for a wardrobe that feels like a private sanctuary rather than a strict performance. Focus on garments with an exceptional hand-feel, relying on supple finishes and dense, enveloping weaves that reward anyone lucky enough to sit nearby. A great evening look for you carries just enough weight to feel secure, paired with a soft drape that moves fluidly as you settle into a low-lit room. Skip rigid construction in favour of cuts that simply skim the body. You always look the most compelling when projecting a quiet, undisturbed ease.",
+  "workText": "Dressing for the office should feel like putting on a quiet, protective layer rather than adopting a rigid corporate disguise. Seek out garments that offer substantial weight and fluid movement, relying on gentle, enveloping silhouettes to establish your presence. A softly constructed shoulder or a generously proportioned trouser gives you the physical ease to navigate a demanding day with complete focus. Your version of professional authority comes from looking phenomenally comfortable in premium tailoring, projecting the steady competence of someone who is never rattled.\n\nYour style energy concentrates in foundations and resources, so your wardrobe is at its best when it reflects both foundations and resources. At work, lean into structured authority; timeless tailoring and investment-grade workwear build lasting credibility."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#664330",
+    "name": "Dark Bronze",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Ascendant",
+     "sourceSign": "Aries"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Medium Warm Muted",
+  "coreColours": [
+   {
+    "hexValue": "#CC6644",
+    "name": "terracotta",
+    "provenance": {
+     "band": "core",
+     "family": "Soft Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#8B8B4B",
+    "name": "olive sage",
+    "provenance": {
+     "band": "core",
+     "family": "Soft Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#5E8E8E",
+    "name": "muted teal",
+    "provenance": {
+     "band": "core",
+     "family": "Soft Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#B7654E",
+    "name": "soft rust",
+    "provenance": {
+     "band": "core",
+     "family": "Soft Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#1C1210",
+   "name": "black brown",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "Soft Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "Soft Autumn",
+  "lightAnchor": {
+   "hexValue": "#EFE6D3",
+   "name": "bone",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "Soft Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#C1B89F",
+   "name": "light khaki",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "Soft Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "Your colour story is essentially an exercise in visual softness, built around shades that look exactly like they feel. Base your everyday rotation on terracotta, olive sage, and muted teal. Layered together in washed cotton or heavy ribbed knits, these gentle tones create a continuous, soothing finish rather than a stark graphic block. Introduce Dark Bronze and a complementary choice through a vintage tortoiseshell clip or a worn-in leather bag to anchor the look. The resulting mood is understated and inherently private, treating colour as an intimate detail rather than a loud public broadcast.",
+  "neutrals": [
+   {
+    "hexValue": "#C19A6B",
+    "name": "camel",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Soft Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#AF9B88",
+    "name": "warm taupe",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Soft Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#D2C6B2",
+    "name": "oatmeal",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Soft Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#B3A580",
+    "name": "olive beige",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Soft Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": false,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": false,
+   "fireAirChromaApplied": false,
+   "scorpioDensityApplied": false,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": true,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#6F632D",
+   "name": "warm olive",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "Soft Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "True Autumn",
+  "supportColours": [
+   {
+    "hexValue": "#8A8D8F",
+    "name": "cool stone",
+    "provenance": {
+     "band": "support",
+     "family": "Soft Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#4F5D73",
+    "name": "soft navy",
+    "provenance": {
+     "band": "support",
+     "family": "Soft Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#636B6F",
+    "name": "muted charcoal",
+    "provenance": {
+     "band": "support",
+     "family": "Soft Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#3C2415",
+    "name": "espresso",
+    "provenance": {
+     "band": "support",
+     "family": "Soft Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "Low",
+   "depth": "Medium",
+   "saturation": "Muted",
+   "surface": "Balanced",
+   "temperature": "Warm"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "aggressive graphics",
+   "skull prints",
+   "harsh geometric",
+   "harsh graphics"
+  ],
+  "narrativeText": "Loud, aggressive graphics instantly disrupt the quiet sensory ease of your wardrobe. Rather than fighting for attention, your clothing needs to feel visually soothing and deeply familiar. Turn towards heritage-led motifs like earth-tone blocks and slub-weave cotton solid, which provide a steady, grounding rhythm to an outfit. When you want more visual detail, soft plaid works perfectly, provided it sits on a soft brushed flannel or washed-down silk. Leave the frantic, high-contrast energy of aggressive graphics and skull prints to people who actively want to look busy. A successful print should feel like a cherished piece of history you can actually wear.",
+  "recommendedPatterns": [
+   "earth-tone blocks",
+   "slub-weave cotton solid",
+   "soft plaid",
+   "natural grain jacquard",
+   "tone-on-tone cable knit",
+   "soft florals"
+  ],
+  "tipText": "Loud, sharp prints ruin the quiet ease of your wardrobe. Treat pattern as a woven detail rather than a flat graphic, looking for designs that feel softly faded or distinctly nostalgic. A earth-tone blocks woven directly into a heavy brushed flannel or washed cotton feels entirely natural to your eye. When introducing a slub-weave cotton solid, ensure the colours sit closely together in the same muted family, blurring the edges to keep the visual volume down. This method preserves your deeply sensory approach to getting dressed. Your clothes should feel like a comforting secret kept close to the body, quietly drawing people in."
+ },
+ "styleCore": {
+  "narrativeText": "Your presence feels like a deep, grounding exhale in a room full of people trying too hard. You project a quiet, enveloping comfort that relies entirely on how a garment actually feels on the body. Your wardrobe is built on generous, sweeping silhouettes and materials with enough physical weight to feel genuinely protective. Instead of rigid tailoring, you create shape through dense, pliable layers that drape beautifully without restricting your movement. People read your look as completely settled and enduring, the mark of someone who prioritises their own sensory ease over the exhausting cycle of trends.\n\nYour natural sense of beauty shows up most powerfully in your private world, comfort as beauty, nostalgic pieces, heirloom aesthetics, beauty at home first. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as structured and authoritative; timeless polish and investment-grade quality define your image."
+ },
+ "textures": {
+  "avoidTextures": [
+   "scratchy wool",
+   "stiff synthetics",
+   "rough textures"
+  ],
+  "badText": "Physical comfort dictates your entire approach to getting dressed, making anything scratchy or artificial an immediate dealbreaker. Abrasive finishes like scratchy wool interrupt your need for absolute physical ease and inevitably end up hanging unworn in the back of the wardrobe. You demand a certain tactile indulgence, so bypass the stiff, cold touch of stiff synthetics entirely. Flimsy, disposable textiles will constantly irritate your skin, fighting against your natural preference for lasting, substantial quality. If a garment makes you overly aware of its friction the second you put it on, send it straight to the charity shop.",
+  "goodText": "For you, getting dressed is fundamentally an exercise in sensory management. Your skin demands materials that offer a protective buffer against the outside world without compromising on undeniable quality. Heavy cotton provides a crucial layer of comforting weight, grounding your silhouette the moment you put it on. Keep dense denim and thick knit in constant rotation for their reliable softness, choosing pieces that wrap around the body rather than restricting it. The most successful items in your wardrobe behave like trusted companions, wearing in beautifully over time while maintaining their quiet, structural integrity.",
+  "recommendedTextures": [
+   "heavy cotton",
+   "dense denim",
+   "thick knit",
+   "cashmere"
+  ],
+  "sweetSpotKeywords": [
+   "endurance",
+   "weight"
+  ],
+  "sweetSpotText": "Your absolute textile sweet spot lives right at the intersection of endurance and weight. You look for pieces that offer an immediate sense of physical reassurance the second you pull them on. A heavy rotation of heavy cotton or dense denim provides a crucial sensory anchor, creating a quiet, protective layer between you and the outside world. If a material scratches, clings awkwardly, or demands constant adjusting, it will simply sit ignored on a hanger. You are investing in tactile sanctuary, choosing items that look exceptionally refined to observers but remain a private indulgence for your own skin."
+ },
+ "userInfo": {
+  "birthDate": "1992-06-26T12:00:00Z",
+  "birthLocation": "Synth 066 \u2014 Cancer Sun, 12:00 UTC, London (1992)",
+  "generationDate": "2026-06-10T20:34:50Z"
+ }
+}

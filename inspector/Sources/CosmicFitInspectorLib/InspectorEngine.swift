@@ -82,6 +82,13 @@ public actor InspectorEngine {
             )
         }
 
+        if request.options?.resetEssenceRecencyHistory == true {
+            VisibleEssenceRecencyTracker.shared.clearProfile(
+                profileHash: profileHash,
+                dailyFitEngineId: engineDescriptor.id
+            )
+        }
+
         let natalChart = NatalChartCalculator.calculateNatalChart(
             birthDate: birthDate, latitude: birth.latitude,
             longitude: birth.longitude, timeZone: tz

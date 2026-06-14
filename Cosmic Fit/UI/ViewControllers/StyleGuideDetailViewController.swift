@@ -98,17 +98,11 @@ final class StyleGuideDetailViewController: UIViewController {
     
     private let headerLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
-        
-        let attributedText = NSAttributedString(
-            string: "YOUR COSMIC STYLE GUIDE",
-            attributes: [
-                .font: CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold),
-                .foregroundColor: CosmicFitTheme.Colours.cosmicBlue,
-                .kern: 1.75
-            ]
+        CosmicFitTheme.stylePageEyebrowLabel(
+            label,
+            text: "YOUR COSMIC STYLE GUIDE",
+            color: CosmicFitTheme.Colours.cosmicBlue
         )
-        label.attributedText = attributedText
         return label
     }()
     

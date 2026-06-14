@@ -26,6 +26,7 @@ enum DailyNarrativeSelector {
         let relationship: String
         let intensityLevel: String
         let tempoEmphasis: String
+        let visibleEssenceCooldownBlocked: [String]
     }
 
     // MARK: - Public API
@@ -35,8 +36,11 @@ enum DailyNarrativeSelector {
         blueprint: CosmicBlueprint,
         calibration: DailyFitCalibration,
         precomputedEssence: StyleEssenceProfile,
-        precomputedSilhouette: SilhouetteProfile
+        precomputedSilhouette: SilhouetteProfile,
+        dailyFitEngineId: String? = nil
     ) -> (plan: DailyNarrativePlan, trace: SelectionTrace) {
+        let resolvedEngineId = dailyFitEngineId
+            ?? DailyFitEngineRegistry.engineId(for: calibration, mode: .stage1Experimental)
         let salience = snapshot.skySalience
         let tuning = calibration.narrativeSelection ?? .stage1Default
 
@@ -61,14 +65,37 @@ enum DailyNarrativeSelector {
         // 3. Derive tempo from Moon's position
         let tempoEmphasis = deriveTempo(salience: salience, snapshot: snapshot)
 
-        // 4. Build candidate accent essences ranked by salience + scoring
+        // 4. Visible essence cooldown — hard block categories from recent top-3
+        let cooldown = VisibleEssenceRecencyTracker.shared.getCooldownCategories(
+            profileHash: snapshot.profileHash,
+            referenceDate: snapshot.generatedAt,
+            dailyFitEngineId: resolvedEngineId,
+            cooldownDayCount: tuning.visibleEssenceCooldownDays
+        )
+        let recentVisible = VisibleEssenceRecencyTracker.shared.getRecentVisibleEssences(
+            profileHash: snapshot.profileHash,
+            referenceDate: snapshot.generatedAt,
+            dailyFitEngineId: resolvedEngineId,
+            windowDays: tuning.visibleEssenceCooldownDays
+        )
+        var cooldownBlockedOut: [String] = []
+
+        // 5. Identify sky top driver category (exempt from accent cooldown)
+        let skyTopCategory: StyleEssenceCategory? = salience?.topDrivers.first?.essenceCategory
+
+        // 6. Build candidate accent essences ranked by salience + scoring + recency
         let rankedAccents = rankAccentCandidates(
             salience: salience,
             essenceScores: precomputedEssence.allScores,
-            dailySeed: snapshot.dailySeed
+            dailySeed: snapshot.dailySeed,
+            profileHash: snapshot.profileHash,
+            referenceDate: snapshot.generatedAt,
+            cooldown: cooldown,
+            skyTopCategory: skyTopCategory,
+            cooldownBlockedOut: &cooldownBlockedOut
         )
 
-        // 5. For each accent candidate, try to build a valid plan
+        // 7. For each accent candidate, try to build a valid plan
         var rejectedCandidates: [RejectedCandidate] = []
         var candidateCount = 0
 
@@ -78,7 +105,11 @@ enum DailyNarrativeSelector {
                 essenceScores: precomputedEssence.allScores,
                 relationship: relationship,
                 anchorTop3: Array(anchorTop3),
-                dailySeed: snapshot.dailySeed
+                dailySeed: snapshot.dailySeed,
+                cooldown: cooldown,
+                recentVisible: recentVisible,
+                cooldownDayCount: tuning.visibleEssenceCooldownDays,
+                cooldownBlockedOut: &cooldownBlockedOut
             )
 
             candidateCount += 1
@@ -123,6 +154,18 @@ enum DailyNarrativeSelector {
                     coherenceTrace: validation
                 )
 
+                AccentRecencyTracker.shared.storeAccent(
+                    accentCandidate,
+                    profileHash: snapshot.profileHash,
+                    date: snapshot.generatedAt
+                )
+                VisibleEssenceRecencyTracker.shared.storeVisibleTop3(
+                    [accentCandidate] + supporting,
+                    profileHash: snapshot.profileHash,
+                    date: snapshot.generatedAt,
+                    dailyFitEngineId: resolvedEngineId
+                )
+
                 let trace = SelectionTrace(
                     candidatesGenerated: candidateCount,
                     candidatesRejected: rejectedCandidates.count,
@@ -131,7 +174,8 @@ enum DailyNarrativeSelector {
                     selectedSupporting: supporting.map(\.rawValue),
                     relationship: relationship.rawValue,
                     intensityLevel: intensityLevel.rawValue,
-                    tempoEmphasis: tempoEmphasis.rawValue
+                    tempoEmphasis: tempoEmphasis.rawValue,
+                    visibleEssenceCooldownBlocked: cooldownBlockedOut
                 )
 
                 return (planWithTrace, trace)
@@ -145,15 +189,52 @@ enum DailyNarrativeSelector {
             }
         }
 
-        // Fallback: all candidates rejected — use first accent with forced-safe supporting
+        // Fallback: all candidates rejected — try each accent with forced-safe supporting,
+        // pick the first that passes coherence; fall through to first if none pass.
         let fallbackAccent = rankedAccents.first ?? .magnetic
+        var chosenFallbackAccent = fallbackAccent
+        for candidate in rankedAccents {
+            let safeSupporting = forceSafeSupporting(
+                accent: candidate,
+                essenceScores: precomputedEssence.allScores
+            )
+            let testPlan = buildPlan(
+                relationship: relationship,
+                accent: candidate,
+                supporting: safeSupporting,
+                anchorEssences: Array(anchorTop3),
+                intensityLevel: intensityLevel,
+                tempoEmphasis: tempoEmphasis,
+                snapshot: snapshot,
+                blueprint: blueprint,
+                calibration: calibration,
+                salience: salience,
+                precomputedSilhouette: precomputedSilhouette,
+                tuning: tuning,
+                weatherTop3: Array(weatherTop3)
+            )
+            let testValidation = DailyNarrativeCoherence.validate(plan: testPlan)
+            if testValidation.passed {
+                chosenFallbackAccent = candidate
+                break
+            }
+        }
+        AccentRecencyTracker.shared.storeAccent(
+            chosenFallbackAccent, profileHash: snapshot.profileHash, date: snapshot.generatedAt
+        )
         let fallbackSupporting = forceSafeSupporting(
-            accent: fallbackAccent,
+            accent: chosenFallbackAccent,
             essenceScores: precomputedEssence.allScores
+        )
+        VisibleEssenceRecencyTracker.shared.storeVisibleTop3(
+            [chosenFallbackAccent] + fallbackSupporting,
+            profileHash: snapshot.profileHash,
+            date: snapshot.generatedAt,
+            dailyFitEngineId: resolvedEngineId
         )
         let fallbackPlan = buildPlan(
             relationship: relationship,
-            accent: fallbackAccent,
+            accent: chosenFallbackAccent,
             supporting: fallbackSupporting,
             anchorEssences: Array(anchorTop3),
             intensityLevel: intensityLevel,
@@ -191,11 +272,12 @@ enum DailyNarrativeSelector {
             candidatesGenerated: candidateCount + 1,
             candidatesRejected: rejectedCandidates.count,
             rejectedCandidates: rejectedCandidates,
-            selectedAccent: fallbackAccent.rawValue,
+            selectedAccent: chosenFallbackAccent.rawValue,
             selectedSupporting: fallbackSupporting.map(\.rawValue),
             relationship: relationship.rawValue,
             intensityLevel: intensityLevel.rawValue,
-            tempoEmphasis: tempoEmphasis.rawValue
+            tempoEmphasis: tempoEmphasis.rawValue,
+            visibleEssenceCooldownBlocked: cooldownBlockedOut
         )
         return (plan, trace)
     }
@@ -214,6 +296,14 @@ enum DailyNarrativeSelector {
 
         if anchorTop3.first == weatherTop3.first || overlapCount >= 2 {
             return .reinforce
+        }
+
+        if overlapCount >= 1 {
+            let anchorVec = BlueprintLensEngine.essenceCategoryWeights(for: anchorTop3[0])
+            let weatherVec = BlueprintLensEngine.essenceCategoryWeights(for: weatherTop3[0])
+            if NarrativeSelectionDirectives.cosineSimilarity(anchorVec, weatherVec) > 0.7 {
+                return .reinforce
+            }
         }
 
         if hasLeadingOpposition(anchorTop3: anchorTop3, weatherTop3: weatherTop3) {
@@ -298,10 +388,21 @@ enum DailyNarrativeSelector {
 
     // MARK: - Accent Ranking
 
+    /// Minimum recency multiplier for the sky's top salience driver.
+    /// Full penalty (as low as 0.30) would let diversity machinery override
+    /// the dominant transit signal; 0.80 keeps the top driver competitive
+    /// while still allowing mild demotion.
+    private static let skyTopRecencyFloor = 0.80
+
     private static func rankAccentCandidates(
         salience: SkySalienceProfile?,
         essenceScores: [StyleEssenceScore],
-        dailySeed: Int
+        dailySeed: Int,
+        profileHash: String,
+        referenceDate: Date,
+        cooldown: Set<StyleEssenceCategory>,
+        skyTopCategory: StyleEssenceCategory?,
+        cooldownBlockedOut: inout [String]
     ) -> [StyleEssenceCategory] {
         var candidates: [(StyleEssenceCategory, Double)] = []
         let scoreMap = Dictionary(uniqueKeysWithValues: essenceScores.map { ($0.category, $0.score) })
@@ -330,6 +431,43 @@ enum DailyNarrativeSelector {
                 .map { ($0.category, $0.score) }
         }
 
+        // Hard block: remove categories in visible-essence cooldown,
+        // but exempt the sky's top salience driver — the accent slot
+        // should reflect "what the sky is shouting today."
+        let unfilteredCount = candidates.count
+        candidates = candidates.filter { (cat, _) in
+            if cat == skyTopCategory { return true }
+            if cooldown.contains(cat) {
+                cooldownBlockedOut.append("accent:\(cat.rawValue)")
+                return false
+            }
+            return true
+        }
+
+        // Fallback: if cooldown removed all candidates, use unfiltered top-5
+        if candidates.isEmpty {
+            candidates = essenceScores
+                .sorted { $0.score > $1.score }
+                .prefix(5)
+                .map { ($0.category, $0.score) }
+            if unfilteredCount > 0 {
+                cooldownBlockedOut.append("accent:fallback_pool_exhausted")
+            }
+        }
+
+        // Accent recency penalty — demote recently-used #1 categories,
+        // but floor the penalty for the sky top driver so transit signal
+        // isn't drowned by diversity rotation.
+        candidates = candidates.map { (cat, score) in
+            var penalty = AccentRecencyTracker.shared.recencyPenalty(
+                for: cat, profileHash: profileHash, referenceDate: referenceDate
+            )
+            if cat == skyTopCategory {
+                penalty = max(penalty, skyTopRecencyFloor)
+            }
+            return (cat, score * penalty)
+        }
+
         // Seeded tie-break for candidates within epsilon
         var rng = SeededRandomGenerator(seed: dailySeed &+ 31)
         candidates = candidates.map { ($0.0, $0.1 + Double.random(in: 0...0.001, using: &rng)) }
@@ -345,7 +483,11 @@ enum DailyNarrativeSelector {
         essenceScores: [StyleEssenceScore],
         relationship: NarrativeRelationship,
         anchorTop3: [StyleEssenceCategory],
-        dailySeed: Int
+        dailySeed: Int,
+        cooldown: Set<StyleEssenceCategory>,
+        recentVisible: [(category: StyleEssenceCategory, daysAgo: Int)],
+        cooldownDayCount: Int,
+        cooldownBlockedOut: inout [String]
     ) -> [StyleEssenceCategory] {
         let opposedToAccent = Set(essenceOppositions.flatMap { pair -> [StyleEssenceCategory] in
             if pair.0 == accent { return [pair.1] }
@@ -360,23 +502,55 @@ enum DailyNarrativeSelector {
 
         var selected: [StyleEssenceCategory] = []
 
+        // Contrast anchor injection — EXEMPT from cooldown
         if relationship == .contrast, let anchorCat = anchorTop3.first,
            !opposedToAccent.contains(anchorCat), anchorCat != accent {
             selected.append(anchorCat)
         }
 
-        for cat in ranked {
-            if selected.count >= 2 { break }
-            if selected.contains(cat) { continue }
-            // Check mutual opposition between this candidate and already-selected
-            let conflictsWithSelected = selected.contains { existing in
-                essenceOppositions.contains { ($0.0 == cat && $0.1 == existing) || ($0.1 == cat && $0.0 == existing) }
-            }
-            if conflictsWithSelected { continue }
-            selected.append(cat)
+        // Attempt with full cooldown gate
+        let result = fillSupporting(
+            ranked: ranked,
+            selected: &selected,
+            accent: accent,
+            cooldownFilter: cooldown,
+            cooldownBlockedOut: &cooldownBlockedOut
+        )
+
+        if result { return Array(selected.prefix(2)) }
+
+        // Progressive relaxation: re-admit oldest blocked day first
+        if cooldownDayCount > 1 {
+            let oldestBlocked = Set(
+                recentVisible.filter { $0.daysAgo == cooldownDayCount }.map(\.category)
+            )
+            let relaxedCooldown = cooldown.subtracting(oldestBlocked)
+            let relaxedResult = fillSupporting(
+                ranked: ranked,
+                selected: &selected,
+                accent: accent,
+                cooldownFilter: relaxedCooldown,
+                cooldownBlockedOut: &cooldownBlockedOut
+            )
+            if relaxedResult { return Array(selected.prefix(2)) }
         }
 
-        // Fallback if we couldn't find 2 non-opposing categories
+        // Further relaxation: re-admit all except daysAgo == 1
+        let yesterdayOnly = Set(
+            recentVisible.filter { $0.daysAgo == 1 }.map(\.category)
+        )
+        if yesterdayOnly != cooldown {
+            let _ = fillSupporting(
+                ranked: ranked,
+                selected: &selected,
+                accent: accent,
+                cooldownFilter: yesterdayOnly,
+                cooldownBlockedOut: &cooldownBlockedOut
+            )
+            if selected.count >= 2 { return Array(selected.prefix(2)) }
+        }
+
+        // Final fallback: no gate at all
         if selected.count < 2 {
             for cat in StyleEssenceCategory.allCases where cat != accent && !selected.contains(cat) {
                 if selected.count >= 2 { break }
@@ -385,6 +559,30 @@ enum DailyNarrativeSelector {
         }
 
         return Array(selected.prefix(2))
+    }
+
+    /// Fill supporting slots from ranked candidates, filtering by cooldown. Returns true when 2 slots filled.
+    private static func fillSupporting(
+        ranked: [StyleEssenceCategory],
+        selected: inout [StyleEssenceCategory],
+        accent: StyleEssenceCategory,
+        cooldownFilter: Set<StyleEssenceCategory>,
+        cooldownBlockedOut: inout [String]
+    ) -> Bool {
+        for cat in ranked {
+            if selected.count >= 2 { break }
+            if selected.contains(cat) { continue }
+            if cooldownFilter.contains(cat) {
+                cooldownBlockedOut.append("supporting:\(cat.rawValue)")
+                continue
+            }
+            let conflictsWithSelected = selected.contains { existing in
+                essenceOppositions.contains { ($0.0 == cat && $0.1 == existing) || ($0.1 == cat && $0.0 == existing) }
+            }
+            if conflictsWithSelected { continue }
+            selected.append(cat)
+        }
+        return selected.count >= 2
     }
 
     private static func forceSafeSupporting(
@@ -495,9 +693,22 @@ enum DailyNarrativeSelector {
                 factor: 0.7
             )
         case .stretch, .contrast:
-            tarotVector = NarrativeSelectionDirectives.targetEnergyVector(weatherTop3: weatherForVector)
+            let weatherVec = NarrativeSelectionDirectives.targetEnergyVector(weatherTop3: weatherForVector)
+            let anchorVec = NarrativeSelectionDirectives.blendCategoryWeightRowsPublic(
+                categories: anchorEssences,
+                weights: [0.5, 0.35, 0.15]
+            )
+            tarotVector = NarrativeSelectionDirectives.zipEnergyPublic(weatherVec, anchorVec, anchorWeight: 0.25)
         }
-        let tarotDirective = TarotDirective(targetEnergyVector: tarotVector)
+        let tarotDirective = TarotDirective(
+            targetEnergyVector: tarotVector,
+            targetAxesVector: NarrativeSelectionDirectives.targetAxesVector(
+                snapshot: snapshot,
+                silhouette: precomputedSilhouette,
+                tuning: tuning
+            ),
+            structuredDraped: precomputedSilhouette.structuredDraped
+        )
 
         // Apply scale directive to vibrancy/contrast targets
         var finalVibrancy = targetVibrancy

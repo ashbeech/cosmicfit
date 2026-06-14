@@ -1,0 +1,357 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "Stacking a dozen thin rings or frail belts just dilutes the sheer force of your presence. You need one substantial anchor piece that looks like it has crossed continents to live in your wardrobe. Focus on thick leather straps, a generously sized bag with heavy clasps, or a deeply personal watch with a worn face. These items carry the weight of memory while taking whatever physical beating your day throws at them. Let a single, tactile object finish the outfit, leaving the rest of your silhouette unbothered and ready to move.",
+   "Your accessories do the heavy lifting when the rest of your outfit is in motion. Choose hardware that feels like it has survived a few sudden changes of plan. A substantial leather belt or a slouchy bag suspended by a wide, heavy strap gives your softer, more nostalgic clothes a necessary frame. Slipping on thick, irregular rings or a mechanical watch with a deeply creased band brings tactile weight right down to your hands. These are the solid, dependable details that keep your whole look from unravelling.",
+   "Your accessories need to register on a physical level before they even register visually. The smell of heavy, worked leather on a wide bag strap provides an immediate sense of familiar comfort. You want the reassuring heft of a substantial buckle sitting at your waist and the subtle friction of raw, hand-woven textiles under your fingertips. The sound of thick rings knocking together as you speak with your hands communicates a bold, lived-in warmth. A good piece acts as a tactile companion rather than a simple ornament."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Vulnerability through transparency or exposure. Sheer fabrics and revealing cuts strip away the control you need to function.",
+   "Light, cheerful colours that contradict your operative intensity. Pastels and brights flatten your depth into something ordinary.",
+   "exposed",
+   "vulnerable",
+   "naive",
+   "Anything emotionally cold or sterile that strips warmth from a room. Clinical minimalism is not your language."
+  ],
+  "consider": [
+   "seek comfort in pieces that travel well",
+   "let global softness expand your wardrobe",
+   "prioritize quality over quantity in every purchase",
+   "build a wardrobe of pieces that hold value"
+  ],
+  "leanInto": [
+   "Treating darkness as your power uniform. A full black palette is not absence of colour; it is presence of control.",
+   "Exercising strategic wardrobe control at all times. Every piece in your outfit should be there by deliberate choice, not by accident.",
+   "Building outfits with covert intensity. The interest should be felt up close, in the weight of the leather, the texture of the knit, the quality of the finish.",
+   "Keeping clothes with emotional history in active rotation. A coat from a family member or a scarf from a trip holds real power.",
+   "Wrapping yourself in soft protective layers as a daily practice. A worn-in cardigan or a heritage shawl is emotional armour.",
+   "Treating comfort as a non-negotiable, not a luxury. If a garment makes you tense, it is actively working against you."
+  ]
+ },
+ "engineVersion": "2.0.0",
+ "generatedAt": "2026-06-10T20:42:24Z",
+ "hardware": {
+  "metalsText": "High-shine, factory-fresh hardware feels far too sterile for your wardrobe. You want metals that look handled and warmed by daily wear, making gunmetal tones an excellent foundation when the finish is hammered or visibly oxidised. Introduce aged brass tones through heavy, protective shapes, like an oversized vintage belt buckle or a thick, smooth cuff that sits close to the skin. Skip the flimsy chains and delicate clasps in favour of hardware with genuine physical weight. The most successful pieces read like personal talismans you picked up on the road and simply never took off.",
+  "recommendedMetals": [
+   "gunmetal",
+   "aged brass",
+   "blackened silver",
+   "blackened steel",
+   "hammered gold",
+   "hammered titanium",
+   "oxidised copper",
+   "blackened titanium",
+   "dark steel",
+   "antique silver",
+   "white gold",
+   "brass",
+   "hammered bronze",
+   "platinum",
+   "polished silver"
+  ],
+  "recommendedStones": [
+   "turquoise",
+   "garnet",
+   "obsidian",
+   "lapis lazuli",
+   "amber",
+   "black onyx",
+   "black diamond",
+   "moonstone",
+   "pearl",
+   "selenite",
+   "onyx",
+   "sapphire"
+  ],
+  "stonesText": "Your jewellery needs to look like it has crossed borders and collected a few stories. A heavy, imperfect turquoise makes total sense for you, especially when sunk into thick, hammered metal that clearly shows the maker's hand. You wear gems that offer protective weight and inner heat, skipping right past the sterile chill of perfectly clear stones. Garnet brings exactly this kind of nostalgic, deeply personal warmth to your daily rotation. These pieces function as private talismans that rest smoothly on the collarbone, grounding your most expressive outfits with a feeling of home.",
+  "tipText": "The best jewellery feels collected over a lifetime rather than bought in a single afternoon. A heavy, travel-worn cuff in gunmetal tones or a chunky pendant set with turquoise gives your outfits a necessary tactile weight. These substantial, slightly battered pieces sit brilliantly well with relaxed linen and waxed cotton. The hardware has to carry some history or personal meaning, working almost like a familiar amulet rather than simple decoration. Leave the pristine, delicate chains in the shop; you want metal with warmth, scale, and a few visible scratches."
+ },
+ "occasions": {
+  "dailyText": "Your daily wardrobe has to balance the urge to roam with the need to feel securely at home. Garments should physically shelter the body but leave plenty of room in the joints for sudden changes of plan. Generous outerwear finished with substantial hardware provides the right kind of protection, especially when paired with trousers cut with enough volume to allow a fast, unbroken stride. Pieces carrying a sense of history or visible wear always succeed here, offering the comforting weight of an inheritance from a highly adventurous relative. The end result is a look ready for a spontaneous detour while remaining entirely cocooned in your own private world.\n\nYour comfort instinct gravitates toward emotionally expansive dressing, travel comfort, soft global influences.",
+  "intimateText": "Dressing for close quarters is about finding the exact point where a worldly spirit meets total physical ease. You want silhouettes that envelop the figure, worn with unexpected proportions that suggest a life lived well outside your local postcode. Think sweeping, unstructured lengths that flow with your quick pacing, styled with deeply personal items that carry a hint of nostalgia. There is an inviting, restless warmth to your natural state, so avoid anything heavily constructed or tailored too close to the bone. The final look should read like a well-travelled life brought indoors for the night.",
+  "workText": "Rigid corporate dress codes feel incredibly stifling when your instinct is to move quickly and take up space. Approach your working wardrobe as a deliberate balance between eager momentum and soft defence. Build your outfits around sweeping proportions and unstructured tailoring that allow you to gesture wildly in a meeting without popping a seam. Generous layers provide an essential feeling of being safely wrapped up while keeping your overall shape dynamic and forward-moving. You want to walk into the office looking like someone who genuinely owns their schedule, wearing pieces that feel thoughtfully collected rather than fresh out of a boardroom catalogue.\n\nYour style energy concentrates in resources and identity, so your wardrobe is at its best when it reflects both resources and identity. At work, lean into commanding warmth; statement pieces with generous polish project leadership naturally."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#005D69",
+    "name": "Warm Prussian",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Jupiter",
+     "sourceSign": "Aquarius"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#82312E",
+    "name": "Dark Sienna",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Ascendant",
+     "sourceSign": "Scorpio"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Deep Warm Structured",
+  "coreColours": [
+   {
+    "hexValue": "#4A1C20",
+    "name": "oxblood",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#0B4F4A",
+    "name": "forest teal",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#254D32",
+    "name": "forest green",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#9E4E3A",
+    "name": "dark terracotta",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#0A0A0A",
+   "name": "black",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "Deep Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "Deep Autumn",
+  "lightAnchor": {
+   "hexValue": "#F2E8D4",
+   "name": "warm cream",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "Deep Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#532730",
+   "name": "black cherry",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "Deep Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "Your approach to colour balances an appetite for the vivid with an instinct for things that feel lived-in. Anchor your daily rotation in rich, grounded tones like oxblood, forest teal, and forest green. These shades always look best when they show a bit of mileage; think sun-bleached dyes, heavy washed silks, or a thick cotton canvas that softens with wear. Bring in Warm Prussian or Dark Sienna when you want to turn up the volume, applying them through a textured knit or an unexpected flash of enamel hardware. The result is a vibrant, deeply personal palette that feels less like a strict uniform and more like a collection of brilliant souvenirs.",
+  "neutrals": [
+   {
+    "hexValue": "#3C2415",
+    "name": "espresso",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#4A4244",
+    "name": "warm charcoal",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#3C4B27",
+    "name": "deep olive",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#5C4033",
+    "name": "bark brown",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": true,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": true,
+   "earthDepthOverrideApplied": false,
+   "fireAirChromaApplied": false,
+   "scorpioDensityApplied": true,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": true
+  },
+  "rulerSignature": {
+   "hexValue": "#751A2F",
+   "name": "cool ruby",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "Deep Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Deep Winter",
+  "supportColours": [
+   {
+    "hexValue": "#1B2A4A",
+    "name": "ink navy",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#3B3F42",
+    "name": "cool charcoal",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#5B6770",
+    "name": "slate",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#2F3A2B",
+    "name": "midnight olive",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "Medium",
+   "depth": "Deep",
+   "saturation": "Rich",
+   "surface": "Structured",
+   "temperature": "Warm"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "corporate pinstripe",
+   "dainty florals",
+   "safe predictable prints",
+   "aggressive graphics"
+  ],
+  "narrativeText": "You wear prints best when they look a bit travelled and deeply familiar. Crisp, highly engineered designs like corporate pinstripe or stiff dainty florals feel far too claustrophobic for your expressive energy. They literally box you in. Instead, you look brilliant in dark-on-dark jacquard weave and dark embossed crest detail, which carry that warm, lived-in texture you instinctively seek out. Layering a vintage-feeling vintage florals over waxed cotton or relaxed linen gives you an expansive, culturally curious look that remains completely comfortable. The right motif simply feels like a brilliant flea market find you have worn to death.",
+  "recommendedPatterns": [
+   "dark-on-dark jacquard weave",
+   "dark embossed crest detail",
+   "vintage florals",
+   "nautical stripes",
+   "soft gingham",
+   "ethnic-inspired prints"
+  ],
+  "tipText": "The most successful prints look like they have lived a full life before they ever reached your wardrobe. A bold dark-on-dark jacquard weave reads beautifully when it sits on a tactile, washed fabric like relaxed linen or softly aged cotton, rather than a crisp poplin. Seek out warm, sun-baked colours like burnt sienna or ochre to soften the visual volume and lend the piece an immediate sense of familiarity. It stops the print from wearing you, keeping the mood grounded in the effortless charm of a well-loved favourite."
+ },
+ "styleCore": {
+  "narrativeText": "You walk into a room with the undeniable energy of someone who has actually lived in their clothes. Your presence is a brilliant contradiction of restless motion and fiercely guarded comfort. Instead of stiff tailoring, your wardrobe functions as a wearable archive of your experiences, built on an underlying foundation of familiar, protective layers. Let your outfits take up physical space through sweeping proportions and unapologetic volume, while keeping the inner garments close to the body for a sense of grounding. You look your absolute best when your style communicates constant, bold movement, wrapped up in an unmistakable feeling of home.\n\nYour natural sense of beauty shows up most powerfully in your personal investments, investment in beautiful things as self-worth expression, quality over quantity. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as radiant and confident; generous presence and visible polish are your natural mode."
+ },
+ "textures": {
+  "avoidTextures": [
+   "transparent fabrics",
+   "flimsy materials",
+   "cold metallics"
+  ],
+  "badText": "Anything overly precious or severely engineered actively fights your dynamic nature. Materials like transparent fabrics read as completely sterile to you, offering none of the nostalgic warmth you inherently crave. A stiff, unyielding flimsy materials acts like a cage, shutting down your momentum and making you look entirely boxed in. You have absolutely no time for cold metallics either, as it looks artificial and lacks any real worldly charm. If a piece requires constant babysitting or stops you from throwing it into a weekender bag at a moment's notice, it has no place in your rotation.",
+  "goodText": "The best pieces in your wardrobe look like they have already lived a full life. You want materials that tell a story but still feel intensely familiar against the skin. Reach for heavy leather that handles the weather without feeling rigid, alongside dense knit that softens and moulds entirely to your frame over time. Because you are constantly moving but secretly crave a soft shell, matte stretch gives you breathable, easy movement while retaining a crucial sense of physical comfort. A hit of bonded fabric satisfies your urge for something visually bold and expressive. Ultimately, your clothes have to survive being stuffed into a weekend holdall and still feel completely like home the second you put them on.",
+  "recommendedTextures": [
+   "heavy leather",
+   "dense knit",
+   "bonded fabric",
+   "matte stretch"
+  ],
+  "sweetSpotKeywords": [
+   "intensity",
+   "stealth"
+  ],
+  "sweetSpotText": "Your absolute ideal sits right between intensity and stealth. You want pieces that look like they have crossed continents but wrap you in total physical security the minute you slip them on. A dense knit jacket must possess the grit to withstand a sudden downpour or a sprint across town, yet the interior lining needs to be outrageously gentle against bare arms. If a textile demands precious handling or strict dry-cleaning, leave it on the rail. Everything you wear must break in and mould to your exact shape, carrying a sense of lived history while effortlessly keeping pace with your momentum."
+ },
+ "userInfo": {
+  "birthDate": "1985-12-27T04:00:00Z",
+  "birthLocation": "Synth 164 \u2014 Capricorn Sun, 04:00 UTC, Sydney (1985)",
+  "generationDate": "2026-06-10T20:42:24Z"
+ }
+}
