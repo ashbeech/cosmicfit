@@ -537,6 +537,8 @@ struct DailyFitCalibration_Tests {
         allBPHexes.formUnion(bp.palette.coreColours.map(\.hexValue))
         allBPHexes.formUnion(bp.palette.accentColours.map(\.hexValue))
         if let s = bp.palette.supportColours { allBPHexes.formUnion(s.map(\.hexValue)) }
+        if let la = bp.palette.lightAnchor { allBPHexes.insert(la.hexValue) }
+        if let da = bp.palette.deepAnchor { allBPHexes.insert(da.hexValue) }
         if let l = bp.palette.luminarySignature { allBPHexes.insert(l.hexValue) }
         if let r = bp.palette.rulerSignature { allBPHexes.insert(r.hexValue) }
 

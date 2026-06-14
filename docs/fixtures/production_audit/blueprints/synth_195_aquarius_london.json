@@ -1,0 +1,362 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "Piling on a dozen delicate trinkets creates visual noise, interrupting the calm balance you prefer. Your approach to dressing relies on the undeniable gravity of a single, serious anchor piece instead. It is about trusting the weight and finish of something substantial, whether that is a heavy watch with a thick strap, a structured leather bag that sits perfectly flat on a table, or a solid clasp that commands attention on its own. Letting one exceptional item do all the talking means the rest of your outfit is free to simply breathe.",
+   "Hardware and leather goods do the heavy lifting of keeping your outfits grounded. A rigidly constructed bag or a thick, edge-painted leather belt provides a satisfying boundary to your silhouette. The tactile resistance of a heavy clasp and the cool weight of a substantial watch bring an immediate sense of order to how you carry yourself. These pieces act as the quiet enforcers of your taste, ensuring nothing ever looks accidental or undone.",
+   "A cheap clasp makes a tinny rattle, while a serious piece of hardware shuts with a satisfying, heavy thud. The physical sensation of your accessories matters deeply to your daily equilibrium. You rely on the substantial weight of a proper watch settling onto your wrist, and the smooth, expensive resistance of a thick belt sliding through its keeper. There is genuine comfort in the faint scent of premium leather and the cold, unyielding finish of solid rings. These tactile details create a quiet environment of order that keeps you feeling entirely pulled together."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Frivolous or immature pieces that undermine your natural gravitas. If it looks playful, it is fighting your energy.",
+   "Casual dressing that suggests a lack of discipline. Even your weekend clothes should carry structural backbone.",
+   "Fast fashion impulse buys that dilute the quality of your collection. One cheap piece can drag down an entire outfit.",
+   "Trend-chasing at the expense of quality or longevity. If it will look dated in two seasons, it was never worth buying.",
+   "Anything you will not wear confidently in five years. Apply that test in the changing room and most impulse purchases disappear.",
+   "Ugly-on-purpose fashion that creates internal discord. Trend-driven deliberate clashing unsettles your equilibrium."
+  ],
+  "consider": [
+   "treat dressing as creative self-expression",
+   "let joy drive your wardrobe choices",
+   "invest in fabrics that feel like emotional anchors",
+   "choose textures that ground you"
+  ],
+  "leanInto": [
+   "Wielding discipline as the ultimate power tool. A perfectly maintained wardrobe of dark staples says more than any flashy collection.",
+   "Making enduring quality the foundation of your style statement. Pieces that look better with age mirror your own trajectory.",
+   "Dressing with the authority of someone who has already arrived. Your wardrobe should project seniority even before you have earned it.",
+   "Building a wardrobe that appreciates like an investment portfolio. Every piece should gain authority with age, not lose it.",
+   "Anchoring everything on dark, structured foundations. A perfectly tailored charcoal suit is worth more than a wardrobe full of trend pieces.",
+   "Treating tailoring as non-negotiable. If the shoulders are not precise and the hem is not exact, the garment is not finished."
+  ]
+ },
+ "engineVersion": "2.0.0",
+ "generatedAt": "2026-06-10T20:45:13Z",
+ "hardware": {
+  "metalsText": "Hardware is never just decorative on your wardrobe. It carries serious weight and structural integrity, anchoring the whole look. Flimsy chains or fussy filigree will instantly ruin the immaculate drape of a heavy crepe trouser. Stick to platinum tones for a cool, uncompromising finish on belt buckles and bag closures. When you wear polished silver tones, ensure it features a brushed or satin texture rather than a high-shine gloss. You instinctively reach for details that feel cold and solid to the touch, like a bespoke watch clasp or a heavy industrial zipper. White gold tones works flawlessly here, provided the design is completely stripped back. Your metals must look like they serve a distinct physical purpose, holding everything together with quiet precision.",
+  "recommendedMetals": [
+   "platinum",
+   "polished silver",
+   "white gold",
+   "steel",
+   "silver",
+   "brushed silver",
+   "surgical steel",
+   "titanium",
+   "polished copper",
+   "rose gold"
+  ],
+  "recommendedStones": [
+   "garnet",
+   "onyx",
+   "sapphire",
+   "hematite",
+   "blue lace agate",
+   "kunzite",
+   "rose quartz",
+   "peridot",
+   "labradorite",
+   "meteorite"
+  ],
+  "stonesText": "There is a distinct gravity to how you dress, meaning flimsy, trend-driven jewellery always looks entirely out of place. You suit stones that feel substantial, permanent, and undeniably expensive. A heavy garnet set in brushed metal delivers the quiet, structured edge you naturally prefer. To maintain a sense of visual harmony, temper those dark, grounding pieces with a smooth onyx so the overall effect never turns too severe. A sharply cut sapphire offers a cool, architectural clarity that works flawlessly with a pressed cotton shirt or a heavy wool blazer. You are not buying decorative extras; you are acquiring modern heirlooms meant to be worn daily.",
+  "tipText": "Flimsy jewellery and thin chains will just annoy you. When you dress in thick crepe or structured wool, your accessories need enough physical weight to hold their own. A solid cuff in platinum tones or a heavy, perfectly cast buckle on a good leather belt brings a satisfying sense of permanence to the look. If you wear stones, a piece of garnet set cleanly into the metal feels secure rather than fragile. You want items that look like expensive heirlooms but feel completely effortless to live in every day."
+ },
+ "occasions": {
+  "dailyText": "Your version of dressing down is less about giving up and more about finding a softer kind of precision. The pieces you reach for on a Sunday morning must still offer a clean, definitive shape to feel right. Focus on immaculate construction, seeking out substantial fabric weights that stand away from the body rather than collapsing into it. Real comfort comes from knowing a look is entirely resolved. Build a weekend rotation around flawless, understated garments that fit perfectly straight off the hanger. When the foundation is this rigorous, even a quick dash out of the door feels entirely intentional.\n\nYour comfort instinct gravitates toward security through tactile quality, fabrics as emotional anchors.",
+  "intimateText": "Intimacy for you does not mean unravelling into shapelessness. Even behind closed doors, you want to feel entirely put-together, just at a slightly softer volume. Focus on garments crafted from substantial, weighty materials that hold their shape while letting you move effortlessly. A cleanly cut top paired with a tailored trouser offering a slightly relaxed leg strikes the perfect balance between composure and ease. The end result is a beautifully constructed look that proves you respect your downtime just as much as your public life.",
+  "workText": "Getting dressed for the office is an exercise in looking impeccably capable. Rely on rigorous tailoring and garments cut with enough precision to give you a definitive edge in any meeting. The trick is building a rotation of pieces that feel deeply reassuring to wear, leaning on clever construction and heavy drape to maintain a strict exterior. When every seam and proportion aligns perfectly, you walk into the room looking exactly like the person running the entire operation.\n\nYour style energy concentrates in creativity and routine, so your wardrobe is at its best when it reflects both creativity and routine. At work, lean into adaptability; polished separates and communication-friendly styling keep you agile."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#744D6D",
+    "name": "Dusky Plum",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Moon",
+     "sourceSign": "Libra"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#005D69",
+    "name": "Warm Prussian",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Sun",
+     "sourceSign": "Aquarius"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#663C2A",
+    "name": "Umber",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Visibility",
+     "saturationOverride": false,
+     "sourcePlanet": "Mercury",
+     "sourceSign": "Capricorn"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Medium Warm Grounded",
+  "coreColours": [
+   {
+    "hexValue": "#B7410E",
+    "name": "rust",
+    "provenance": {
+     "band": "core",
+     "family": "True Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#5B7744",
+    "name": "moss",
+    "provenance": {
+     "band": "core",
+     "family": "True Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#CC7722",
+    "name": "ochre",
+    "provenance": {
+     "band": "core",
+     "family": "True Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#014D4E",
+    "name": "deep teal",
+    "provenance": {
+     "band": "core",
+     "family": "True Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#3C2415",
+   "name": "espresso",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "True Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "True Autumn",
+  "lightAnchor": {
+   "hexValue": "#EFE6D3",
+   "name": "bone",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "True Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#938438",
+   "name": "olive gold",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "True Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "A dependable wardrobe starts with shades that feel inherently expensive and totally unbothered by passing fads. Build your daily foundation on rust, moss, and ochre, relying on the richness of heavy crepe or pressed cotton to give these understated tones real depth. Because you naturally crave visual harmony, a disciplined tonal approach works beautifully, allowing the silhouette to stand out without jarring the eye. When you want a slight shift in temperature, bring in a subtle flash of Dusky Plum or Warm Prussian through a silk lining or pristine leather hardware. A highly controlled colour palette guarantees the sheer quality of your clothes is always the first thing people notice.",
+  "neutrals": [
+   {
+    "hexValue": "#C19A6B",
+    "name": "camel",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#7B5B3A",
+    "name": "cocoa",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#706238",
+    "name": "warm olive",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#786D4E",
+    "name": "deep khaki",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": true,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": true,
+   "fireAirChromaApplied": false,
+   "scorpioDensityApplied": false,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#825159",
+   "name": "berry mauve",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "True Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Deep Autumn",
+  "supportColours": [
+   {
+    "hexValue": "#8A8D8F",
+    "name": "cool stone",
+    "provenance": {
+     "band": "support",
+     "family": "True Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#71797E",
+    "name": "steel grey",
+    "provenance": {
+     "band": "support",
+     "family": "True Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#1B2A4A",
+    "name": "ink navy",
+    "provenance": {
+     "band": "support",
+     "family": "True Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#4B4F54",
+    "name": "graphite",
+    "provenance": {
+     "band": "support",
+     "family": "True Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "Medium",
+   "depth": "Medium",
+   "saturation": "Rich",
+   "surface": "Balanced",
+   "temperature": "Warm"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "novelty prints",
+   "cartoonish patterns",
+   "trend-driven logos",
+   "jarring asymmetry"
+  ],
+  "narrativeText": "You view prints with a healthy dose of suspicion, mostly because busy motifs ruin the clean lines of a well-cut garment. If you introduce a pattern, it needs to feel disciplined and structurally sound, like herringbone or glen check woven directly into heavy crepe or structured wool. Frantic designs disrupt your sense of visual peace, so leave novelty prints entirely out of your wardrobe. Keep the colour contrast low; think tonal variations in deep charcoal or cool navy, so the material speaks louder than the print. You want to look like someone who buys clothes for their impeccable construction, rather than someone trying to make a noisy statement.",
+  "recommendedPatterns": [
+   "herringbone",
+   "glen check",
+   "classic stripe",
+   "classic pinstripe",
+   "houndstooth",
+   "fine check"
+  ],
+  "tipText": "Loud prints will only ever disrupt your sense of visual peace. When introducing a herringbone, approach the motif as a continuation of texture rather than a surface decoration. Seek out designs woven directly into structured wool or heavy crepe instead of flat prints stamped over the top. Keeping the colours rooted in deep charcoal or cool navy ensures the detail registers only to someone standing close enough to have a real conversation. It offers a quiet point of interest without compromising the clean precision of your clothes."
+ },
+ "styleCore": {
+  "narrativeText": "You walk into a room and the immediate impression is one of expensive, undisturbed calm. Your aesthetic hinges on flawless proportion and serious construction, creating an atmosphere of unbothered authority. You find actual comfort in visual harmony, relying on perfectly balanced silhouettes to give you a quiet sense of internal peace. You dress for the physical reality of a garment, choosing pieces that hold their shape and command respect simply by existing. It is a look of absolute, unapologetic competence disguised as everyday grace.\n\nYour natural sense of beauty shows up most powerfully in your creative self-expression, creative joy in dressing, bold romantic expression, date-night dressing as art. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as versatile and expressive; you communicate range and adaptability through what you wear."
+ },
+ "textures": {
+  "avoidTextures": [
+   "cheap disposable fabric",
+   "flimsy synthetic",
+   "cheap stretch fabrics"
+  ],
+  "badText": "Flimsy or chaotic materials instantly derail your carefully considered wardrobe. Anything resembling cheap disposable fabric reads as an immediate downgrade, fighting against the sharp construction and visual harmony you naturally lean towards. You expect garments to hold their shape from morning until night, which makes flimsy synthetic a firm pass. If a finish crumbles the second you sit down, clings awkwardly, or carries a cheap synthetic shine, it undermines your inherent authority. Leave the high-maintenance, flyaway garments to people who do not mind looking dishevelled by midday.",
+  "goodText": "True comfort for you comes from clothes that feel like a quiet, expensive anchor. A sharp shoulder or a perfectly cut trouser requires heavy structured wool to hold that strict architectural line all day. Introduce quality leather and dense twill for surfaces that offer a sense of absolute visual peace while remaining deeply substantial against the skin. Flimsy garments just leave you feeling unmoored, so stick to disciplined weaves that do the hard work of looking immaculate for you.",
+  "recommendedTextures": [
+   "heavy structured wool",
+   "quality leather",
+   "dense twill",
+   "structured wool"
+  ],
+  "sweetSpotKeywords": [
+   "discipline",
+   "endurance"
+  ],
+  "sweetSpotText": "Your hands know a serious piece of clothing before your eyes do. You live right at the intersection of discipline and endurance. You need actual weight and substance to feel properly anchored, instinctively reaching for the reassuring drape of heavy structured wool or the immaculate finish of quality leather. These materials hold a definitive, strict silhouette without demanding too much from you physically, creating a vital sense of quiet order. If a textile requires constant fussing or feels chaotic to wear, it ruins your mood before you even step out the door."
+ },
+ "userInfo": {
+  "birthDate": "1992-01-25T20:00:00Z",
+  "birthLocation": "Synth 195 \u2014 Aquarius Sun, 20:00 UTC, London (1992)",
+  "generationDate": "2026-06-10T20:45:13Z"
+ }
+}

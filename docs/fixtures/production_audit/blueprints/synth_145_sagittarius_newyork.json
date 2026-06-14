@@ -1,0 +1,352 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "A single, undeniable accessory does far more work than a clutter of minor trinkets. You naturally run on a high, restless energy, so piling on fragile rings or fiddly clasps just gets in the way of how you move. Instead, ground your outfit with one serious, tactile focal point. A sharply structured leather bag or a substantial watch with a thick strap serves as your anchor, holding the entire look together while your clothes remain fluid. That solitary piece gives the eye somewhere to rest and brings immediate power to the silhouette.",
+   "Your everyday hardware handles the tension between your demand for privacy and your restless physical energy. While your clothes give you room to move, your finishing details provide the necessary spine. A thick, structured leather belt instantly cuts through softer silhouettes to define your shape, just as a heavy watch dial brings an immediate sense of weight to the wrist. Seek out rigid bags fitted with definitive, snapping clasps that lock securely, giving your hands a satisfying mechanical detail to constantly interact with. These pieces serve as the sharp punctuation marks in your wardrobe, establishing your boundaries before you even speak.",
+   "How a piece sounds and feels when you handle it dictates whether it stays in your rotation. Flimsy hardware or a bag that feels hollow instantly ruins the effect. You need items that close with a heavy, deliberate snap, paired with dense leathers that take real force to break in. That restless physical energy means you naturally seek out tactile details, spinning a substantial ring or running a thumb along the edge of a thick strap. The scent of rich hides and the solid weight of a watch resting on your wrist give your daily momentum a tangible edge."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Rigid dress codes that strip away your natural range. If a rule says you cannot wear it, that rule was not written for you.",
+   "Movement-restricting pieces that limit your stride or your spontaneity. If you cannot run for a train in it, it does not belong in your life.",
+   "Corporate uniformity that flattens your expansive personality. Your style should feel like a passport, not a prison.",
+   "confined",
+   "restricted",
+   "routine-bound"
+  ],
+  "consider": [
+   "one truly innovative piece that starts conversations about fashion's future",
+   "Sustainable luxury as the ultimate expression of abundance. Generosity starts with the planet",
+   "one collected piece per trip that joins the rotation",
+   "Globally-sourced accessories as conversation pieces that carry stories from the places you have visited"
+  ],
+  "leanInto": [
+   "Dressing with travel inspiration woven into every outfit. A waxed jacket or a hand-woven scarf carries the energy of the road even at home.",
+   "Mixing cultural references with respect and confidence. An ikat shirt with tailored chinos bridges worlds in a single outfit.",
+   "Choosing movement-ready layers that adapt to the day. A removable jacket, a rolled sleeve, and sturdy boots handle anything the world throws at you.",
+   "Buying pieces that tell stories. A belt from a souk or a hat from a market gives your outfit more identity than any designer label.",
+   "authority in dressing is identity",
+   "align your outward style with inner beauty"
+  ]
+ },
+ "engineVersion": "2.0.0",
+ "generatedAt": "2026-06-10T20:40:45Z",
+ "hardware": {
+  "metalsText": "The hardware you wear is never passive; it acts as the anchor that pulls an outfit into sharp focus. Solid aged brass tones provides that necessary, heavy contrast against a dense knit or a stark midnight slip dress. When the mood shifts and you want visual heat, bring in hammered bronze tones through brutalist rings or industrial-gauge chains. Your restless eye craves pieces that feel kinetic rather than static, favouring thick clasps, heavy zips, and buckles that actually work rather than just sitting pretty on the fabric. Every detail should look like it takes real intent to undo.",
+  "recommendedMetals": [
+   "aged brass",
+   "hammered bronze",
+   "hammered gold",
+   "hammered titanium",
+   "brass",
+   "sterling silver",
+   "blackened silver",
+   "gunmetal",
+   "oxidised steel",
+   "polished brass",
+   "yellow gold",
+   "mixed metals"
+  ],
+  "recommendedStones": [
+   "turquoise",
+   "lapis lazuli",
+   "amber",
+   "citrine",
+   "sunstone",
+   "agate",
+   "alexandrite",
+   "black onyx",
+   "garnet",
+   "obsidian",
+   "smoky quartz"
+  ],
+  "stonesText": "Polite, perfectly transparent gems lack the physical tension your wardrobe demands. Seek out stones with an internal pulse, pieces that absorb light rather than throwing it out in a predictable sparkle. The sudden flash of heat buried deep inside turquoise captures your restless, expressive energy perfectly. Sinking a rough, unpolished cut of lapis lazuli into heavy metal adds immediate gravity to a dark, fluid silhouette. A dense cabochon of amber resting flush on the collarbone acts as a sharp, grounding focal point. Your jewellery must look less like a delicate purchase and more like it was forged in a furnace.",
+  "tipText": "The right hardware must satisfy your restless energy while holding serious visual weight. Look for heavy, articulated chains, industrial-scale clasps, or a substantial aged brass tones ring you can spin on your finger while holding court. Delicate, fussy layers will only annoy you the second they snag on a structured leather collar. Instead, choose a single undeniable focal point set with turquoise that flashes as you talk with your hands. Keep your pieces bold, cold to the touch, and easy to strip off the minute your mood shifts."
+ },
+ "occasions": {
+  "dailyText": "Your casual wardrobe thrives on a quiet, restless tension. The silhouette needs to feel entirely mobile and ready for a sudden change of plans, yet still carry enough weight to leave a serious impression. Layer concealing, dramatic shapes over pieces that sit close to the skin, giving you room to shift the mood as the day progresses. Every garment must withstand a fast, high-energy pace while keeping a strict physical boundary up against the crowd. It is the style of someone deeply engaged with the street but refusing to give the whole game away.\n\nYour comfort instinct gravitates toward emotional belonging through group-appropriate comfort, community softness. Your style energy concentrates in creativity and foundations, so your wardrobe is at its best when it reflects both creativity and foundations.",
+  "intimateText": "When the lighting drops, your instinct for controlled exposure takes over. The smartest evening shapes for you are deceptively simple from a distance but radically interesting up close. Let plunging lines, precise draping, or an unexpected cut-out hold the eye while the rest of your silhouette stays strictly disciplined. You need pieces that adapt instantly to your shifting social gears, allowing you to hold court at a crowded table or manoeuvre easily out the door. Skip anything that traps you in stiff, traditional evening codes, sticking instead to dynamic cuts that move as fast as you do.",
+  "workText": "Your professional wardrobe has to project intense authority while leaving room for your restless momentum. Build your outfits around sharp, uncompromising silhouettes that do the heavy lifting before you even speak. You thrive in garments that look severe on the hanger but remain entirely fluid on the body, allowing you to dart across the office without feeling restricted. Smart layering gives you the ability to strip back or build up shape as the day shifts gear and your focus moves elsewhere. Find tailoring that commands the room instantly, yet stays flexible enough to let you pivot the second the agenda changes.\n\nAt work, lean into quality and permanence; investment pieces and rich textures signal reliability and taste."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#762249",
+    "name": "Dark Cherry",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Venus",
+     "sourceSign": "Scorpio"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#2F9097",
+    "name": "Warm Aqua",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Moon",
+     "sourceSign": "Gemini"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Medium Neutral Electric",
+  "coreColours": [
+   {
+    "hexValue": "#E35335",
+    "name": "poppy",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Spring",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#009B8D",
+    "name": "bright teal",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Spring",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#FFE302",
+    "name": "vivid yellow",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Spring",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#0080FF",
+    "name": "electric blue",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Spring",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#0D1014",
+   "name": "clear black",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "Bright Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "Bright Spring",
+  "lightAnchor": {
+   "hexValue": "#FFFDF0",
+   "name": "clear ivory",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "Bright Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#724BA4",
+   "name": "cobalt",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "Bright Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "Your approach to colour thrives on dark, saturated intensity cut with sudden flashes of heat. Building a foundation of poppy and bright teal provides a magnetic baseline, especially when rendered in light-absorbing heavy silk or a dense ribbed knit. A stark base of vivid yellow acts as the ideal backdrop for your rapid shifts in mood and fast-paced styling habits. Since you switch gears constantly, introduce Dark Cherry and Warm Aqua through an unexpected bright sheer underlayer, a vivid shoe, or high-shine hardware. You wear shadow as a deliberate statement, letting those sharp, bold accents strike exactly when you are ready to be noticed.",
+  "neutrals": [
+   {
+    "hexValue": "#FFFDF0",
+    "name": "clear ivory",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Spring",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#384C70",
+    "name": "warm navy",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Spring",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#4B4F54",
+    "name": "graphite",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Spring",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#C19A6B",
+    "name": "clear camel",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Spring",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": false,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": false,
+   "fireAirChromaApplied": true,
+   "scorpioDensityApplied": true,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#724BA4",
+   "name": "midnight",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "Bright Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Bright Winter",
+  "supportColours": [
+   {
+    "hexValue": "#9C9A9A",
+    "name": "dove grey",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Spring",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#636B6F",
+    "name": "muted charcoal",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Spring",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#3B4B5E",
+    "name": "smoked navy",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Spring",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#3A2A1E",
+    "name": "bitter chocolate",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Spring",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "High",
+   "depth": "Medium",
+   "saturation": "Rich",
+   "surface": "Structured",
+   "temperature": "Neutral"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "cheerful florals",
+   "bright gingham",
+   "whimsical prints",
+   "single heavy pattern"
+  ],
+  "narrativeText": "Fussy, overly sweet prints do nothing for your wardrobe, diluting your natural intensity and making your restless energy look scattered. When you introduce a motif, it needs to feel deliberate and powerful, like a heavy silk shirt cut in ethnic prints or a structured jacket featuring ikat. Skip cheerful florals entirely, as it instantly softens your edge and drags down your bold physical presence. You can easily carry off high visual volume, provided the underlying colour palette stays tethered to your signature ink and shadow tones. Let the print command the room while your silhouette remains ruthlessly controlled.",
+  "recommendedPatterns": [
+   "ethnic prints",
+   "ikat",
+   "oversized geometric",
+   "animal print",
+   "bold florals"
+  ],
+  "tipText": "Loud, chaotic prints easily swallow up your natural physical presence. Treat ethnic prints strictly as a textural element rather than a flat graphic. A tonal, shadowy variation woven directly into a heavy silk or a dense jacquard knit offers just enough visual movement to keep you interested. It reads as a solid block of midnight or ink from across the room, only revealing its complexity up close."
+ },
+ "styleCore": {
+  "narrativeText": "Your style presence strikes a rare balance between absolute control and restless, forward motion. You walk into a room with a bold, unapologetic energy, yet you never give your entire look away at first glance. There is a fast, intelligent edge to how you build an outfit, relying on sharp, exacting proportions that adapt effortlessly to your shifting moods. You command space not by shouting, but through a mastery of concealed details and strategic reveals. It is an aesthetic that demands immediate attention while keeping your true intentions completely out of reach.\n\nYour natural sense of beauty shows up most powerfully in your private world, comfort as beauty, nostalgic pieces, heirloom aesthetics, beauty at home first. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as quietly luxurious; tactile quality and understated expense signal before you speak."
+ },
+ "textures": {
+  "avoidTextures": [
+   "stiff formal suiting",
+   "restrictive fabrics",
+   "dull cheap-looking fabrics"
+  ],
+  "badText": "Your wardrobe needs to sustain a high level of intensity, which means anything apologetic or overly fragile is completely pointless. Avoid stiff formal suiting entirely, as it feels far too polite and actively dampens your natural spark. The same goes for restrictive fabrics, which lacks the necessary density to ground your rapidly shifting moods, leaving your look watered down rather than deliberate. You thrive when a silhouette can handle a bit of rough treatment without losing its shape. If a piece feels like it would fall apart under a slightly heavy gaze, leave it on the rail.",
+  "goodText": "You approach getting dressed with a distinct intensity, but your restless daily rhythm demands clothes that can actually keep pace. A foundation of waxed cotton provides the weight and structural armour you naturally gravitate towards, while distressed leather offers a heavy, fluid motion that prevents an outfit from feeling too static. A layer of sturdy linen gives you a dense, tactile surface, acting as a protective barrier that still allows you total physical freedom. For absolute reliability, global textiles brings a tough edge that only improves the harder you wear it. These materials strike the perfect balance between bold movement and absolute control.",
+  "recommendedTextures": [
+   "waxed cotton",
+   "distressed leather",
+   "sturdy linen",
+   "global textiles"
+  ],
+  "sweetSpotKeywords": [
+   "adventure",
+   "freedom"
+  ],
+  "sweetSpotText": "Garments only earn their keep in your rotation when they combine adventure with freedom. You gravitate toward clothing that projects a sharp, almost intimidating boundary to the outside world, while giving your restless energy total physical freedom. An item cut from waxed cotton must hold a fierce, uncompromising silhouette, but it also has to move fast enough to match your rapid pace. If a fabric restricts your stride or dictates exactly how you sit, it gets abandoned instantly."
+ },
+ "userInfo": {
+  "birthDate": "1985-11-27T04:00:00Z",
+  "birthLocation": "Synth 145 \u2014 Sagittarius Sun, 04:00 UTC, New York (1985)",
+  "generationDate": "2026-06-10T20:40:45Z"
+ }
+}

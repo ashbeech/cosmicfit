@@ -176,11 +176,12 @@ private static func selectDailyPalette(
    - `accentColours` (always present)
    - `neutrals` (if present)
    - `supportColours` (if present)
+   - `lightAnchor` (if present)
+   - `deepAnchor` (if present)
    - `luminarySignature` (if present)
    - `rulerSignature` (if present)
-   - Do NOT include `lightAnchor` or `deepAnchor` (these are edge anchors for UI framing, not daily recommendations).
    
-   Use the colour's typed `ColourRole` enum for role-based scoring (not raw strings).
+   All Style Guide bands are eligible. Anchors score via `.anchor → [.utility, .classic]` and sit in the grounding pool, surfacing on classic / minimal / grounded days. Use the colour's typed `ColourRole` enum for role-based scoring (not raw strings).
 
 2. **Score each colour** for today's energy:
    - **Role-energy alignment:** different roles resonate with different energies:

@@ -358,6 +358,8 @@ private enum Fixtures {
         if let s = bp.palette.supportColours {
             hexes.formUnion(s.map(\.hexValue))
         }
+        if let la = bp.palette.lightAnchor { hexes.insert(la.hexValue) }
+        if let da = bp.palette.deepAnchor { hexes.insert(da.hexValue) }
         if let l = bp.palette.luminarySignature { hexes.insert(l.hexValue) }
         if let r = bp.palette.rulerSignature { hexes.insert(r.hexValue) }
         return hexes
@@ -506,8 +508,9 @@ func testAllPaletteHexesComplete() {
     let accentHexes = bp.palette.accentColours.map(\.hexValue)
     let neutralHexes = bp.palette.neutrals?.map(\.hexValue) ?? []
     let supportHexes = bp.palette.supportColours?.map(\.hexValue) ?? []
+    let anchorHexes = [bp.palette.lightAnchor?.hexValue, bp.palette.deepAnchor?.hexValue].compactMap { $0 }
 
-    for hex in coreHexes + accentHexes + neutralHexes + supportHexes {
+    for hex in coreHexes + accentHexes + neutralHexes + supportHexes + anchorHexes {
         #expect(outputSet.contains(hex),
                 "Missing hex \(hex) from allPaletteHexes")
     }

@@ -137,10 +137,12 @@ Collected in order, then deduped by hex (first occurrence wins):
 2. `palette.accentColours`
 3. `palette.neutrals` (if present)
 4. `palette.supportColours` (if present)
-5. `palette.luminarySignature` (if present)
-6. `palette.rulerSignature` (if present)
+5. `palette.lightAnchor` (if present)
+6. `palette.deepAnchor` (if present)
+7. `palette.luminarySignature` (if present)
+8. `palette.rulerSignature` (if present)
 
-**Excluded:** `lightAnchor`, `deepAnchor` (UI framing only).
+All Style Guide bands are eligible. Anchors score via `.anchor → [.utility, .classic]` alignment and sit in the grounding pool, so they surface on classic / minimal / grounded days. Where an anchor duplicates a neutral hex, dedupe keeps the neutral (first occurrence wins).
 
 **Deduping:** Luminary and ruler signatures often resolve to the **same hex** after LCH clamping into the family envelope. After dedupe, only one signature candidate remains.
 

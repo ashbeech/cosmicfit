@@ -89,7 +89,9 @@ enum NarrativeIntentEngine {
             weatherTop3: Array(weatherTop3),
             themeLexiconKey: themeLexiconKey,
             coherenceGap: coherenceGap,
-            tuning: tuning
+            tuning: tuning,
+            snapshot: snapshot,
+            silhouetteProfile: silhouetteProfile
         )
 
         let trace = NarrativeTrace(
@@ -121,6 +123,14 @@ enum NarrativeIntentEngine {
     ) -> NarrativeRelationship {
         if anchorTop3[0] == weatherTop3[0] || overlapCount >= 2 {
             return .reinforce
+        }
+
+        if overlapCount >= 1 {
+            let anchorVec = BlueprintLensEngine.essenceCategoryWeights(for: anchorTop3[0])
+            let weatherVec = BlueprintLensEngine.essenceCategoryWeights(for: weatherTop3[0])
+            if NarrativeSelectionDirectives.cosineSimilarity(anchorVec, weatherVec) > 0.7 {
+                return .reinforce
+            }
         }
 
         if hasLeadingOpposition(anchorTop3: anchorTop3, weatherTop3: weatherTop3) {
@@ -208,7 +218,9 @@ enum NarrativeIntentEngine {
         weatherTop3: [StyleEssenceCategory],
         themeLexiconKey: String?,
         coherenceGap: String?,
-        tuning: DailyFitCalibration.NarrativeSelectionTuning
+        tuning: DailyFitCalibration.NarrativeSelectionTuning,
+        snapshot: DailyEnergySnapshot,
+        silhouetteProfile: SilhouetteProfile?
     ) -> NarrativeIntent {
         let weatherAccent = weatherTop3[0]
         let foundation = restrainedFoundationCategory(from: anchorTop3)
@@ -226,7 +238,12 @@ enum NarrativeIntentEngine {
                 factor: 0.7
             )
         case .stretch, .contrast:
-            tarotVector = NarrativeSelectionDirectives.targetEnergyVector(weatherTop3: weatherTop3)
+            let weatherVec = NarrativeSelectionDirectives.targetEnergyVector(weatherTop3: weatherTop3)
+            let anchorVec = NarrativeSelectionDirectives.blendCategoryWeightRowsPublic(
+                categories: anchorTop3,
+                weights: [0.5, 0.35, 0.15]
+            )
+            tarotVector = NarrativeSelectionDirectives.zipEnergyPublic(weatherVec, anchorVec, anchorWeight: 0.25)
         }
 
         let maxStatementSlots: Int
@@ -275,7 +292,18 @@ enum NarrativeIntentEngine {
             relationship: relationship,
             anchorTop3: anchorTop3,
             weatherTop3: weatherTop3,
-            tarot: TarotDirective(targetEnergyVector: tarotVector),
+            tarot: TarotDirective(
+                targetEnergyVector: tarotVector,
+                targetAxesVector: {
+                    if let sil = silhouetteProfile {
+                        return NarrativeSelectionDirectives.targetAxesVector(
+                            snapshot: snapshot, silhouette: sil, tuning: tuning
+                        )
+                    }
+                    return NarrativeSelectionDirectives.targetAxesVectorSkyOnly(snapshot: snapshot)
+                }(),
+                structuredDraped: silhouetteProfile?.structuredDraped ?? 0.5
+            ),
             palette: PaletteDirective(
                 maxStatementSlots: maxStatementSlots,
                 accentCategory: weatherAccent,

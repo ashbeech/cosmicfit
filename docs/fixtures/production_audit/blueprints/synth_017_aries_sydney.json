@@ -1,0 +1,354 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "A single, substantial piece of hardware carries far more weight than a messy stack of trinkets. When your clothes drift and wrap in soft, sheer layers, you rely on the blunt contrast of a rigid leather strap or an unapologetically heavy watch to bring the overall silhouette to order. One focal point of serious construction, a thick belt, a flawless bag, or a prominent clasp, lets your fluid jersey and gauze move freely without ever reading as careless. This strict tension between light cloth and hard finishes tells people you know exactly what you are doing.",
+   "When your wardrobe leans into sheer fluidity, your accessories have to do the heavy lifting. A rigid top-handle bag or an entirely uncompromising belt provides the strict boundaries your softer layers need. You find a deep sense of calm in the sharp click of a heavy clasp or the unyielding stiffness of a thick leather strap resting over your shoulder. Framing delicate gauze and flowing silk with something decidedly firm gives the look an immediate, intelligent focus. It stops a dreamy silhouette from drifting away entirely, pulling the whole outfit securely back into the room.",
+   "How your pieces sound and feel matters just as much as how they look on a hanger. There is a deep psychological comfort in the crisp snap of a beautifully engineered bag clasp or the reassuring weight of a heavy watch. You rely on that tactile discipline to ground your softer, more fluid clothing. Contrast the stiff, rich scent of premium leather with the whisper of a lightweight strap shifting as you move and talk. Your finishing touches act as a sensory boundary, giving your dreamiest silhouettes a necessary hit of real-world structure."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Harsh structured power suits that feel like a costume on you. Your authority comes from presence, not from sharp shoulders.",
+   "Aggressive angular silhouettes that cut against your natural fluidity. Hard geometric shapes drain your energy rather than channel it.",
+   "Anything that feels militaristic, regimented, or punishing. Your body responds best to softness, not discipline.",
+   "rigid",
+   "aggressive",
+   "confrontational"
+  ],
+  "consider": [
+   "build daily uniforms that feel beautiful",
+   "choose pieces that perform across your routine",
+   "midnight-blue suiting as a daily act of visionary authority",
+   "structured silk that brings dreamlike quality to power dressing"
+  ],
+  "leanInto": [
+   "Embracing the flowing and the romantic without apology. If a dress moves like water when you walk, it was made for you.",
+   "Layering sheer over opaque for depth and mystery. A chiffon blouse over a silk camisole creates dimension that hard fabrics cannot.",
+   "Letting garments move with your body rather than against it. If a piece fights your natural rhythm, it does not belong.",
+   "Building colour stories that feel like watercolour paintings. Soft gradients of lilac into seafoam or blush into pearl create your atmosphere.",
+   "Leading with colour in every outfit. A vivid red jacket or a bright trainer says more about you than any safe neutral ever could.",
+   "Letting one bold statement piece do the talking. If the outfit has a hero, you do not need supporting cast."
+  ]
+ },
+ "engineVersion": "2.0.0",
+ "generatedAt": "2026-06-10T20:30:13Z",
+ "hardware": {
+  "metalsText": "The most convincing hardware for your wardrobe feels like it could melt, yet holds its shape perfectly. Smooth, liquid-finish platinum tones works as your baseline, acting as a cool, collected frame for your soft-flowing silks and lightweight gauzes. When you want a more understated finish, look for rose gold tones with a brushed or matte surface to impose a quiet sense of order on your outfit. The details on your bags and coats should look structural but never heavy, favouring fine wirework or sleek, unbroken clasps. Your jewellery and fastenings act as the neat architecture keeping the romance in check.",
+  "recommendedMetals": [
+   "platinum",
+   "rose gold",
+   "polished brass",
+   "polished silver",
+   "copper",
+   "iridescent finishes",
+   "opal-set silver",
+   "white gold",
+   "surgical steel",
+   "titanium"
+  ],
+  "recommendedStones": [
+   "garnet",
+   "opal",
+   "jet",
+   "onyx",
+   "amethyst",
+   "aquamarine",
+   "moonstone",
+   "carnelian",
+   "diamond",
+   "red jasper",
+   "sapphire",
+   "labradorite",
+   "meteorite",
+   "rose quartz"
+  ],
+  "stonesText": "Your approach to jewellery requires a certain tension: the stones need to look ethereal, but the cuts must be completely serious. Skip the loud, opaque gems and look for pieces that capture a watery, almost elusive light, like garnet or opal. You want them set in clean, disciplined metalwork so the visual softness of the gem avoids looking overly sweet. A sharply faceted jet works perfectly when worn over a fluid silk blouse, providing a necessary hit of cold, collected order to the drape. The final effect always feels less like decoration and more like an icy punctuation mark.",
+  "tipText": "Hardware for you is an exercise in tension between ethereal softness and strict rigour. A substantial piece of platinum tones cast into a fluid, melting shape hits exactly the right note. Skip the aggressively sharp edges and fragile, easily tangled chains. Look for weight that feels deliberate, like a smooth, heavy cuff or a clean bezel setting enclosing a garnet. The trick is wearing accessories that look liquid from a distance but feel uncompromisingly solid when handled. It gives a deeply romantic wardrobe the necessary backbone without breaking the spell."
+ },
+ "occasions": {
+  "dailyText": "Your ideal off-duty style sits right at the intersection of effortless fluidity and strict order. Seek out silhouettes that drift and breathe as you go about your day, but rely on sharp, clean construction to maintain a disciplined framework. You cannot stand looking unkempt, yet you thrive on a sense of lightness in how you move through a room. Build your looks around smart layers that drape with actual intent rather than just hanging loose on the frame. The final impression should be someone floating through the afternoon with a highly demanding itinerary.",
+  "intimateText": "Evening dressing for you relies on a clever trick of the light, appearing completely effortless while retaining a strict internal logic. Favour silhouettes that flow freely away from the body but depend on precise tailoring at the waist or shoulder to keep the look grounded. The goal is an inviting mood ready for hours of lively dialogue, never stiff or severely formal. Pieces with an inherent liquid quality capture movement beautifully, especially when anchored by rigid, architectural shapes in your footwear. You leave an impression that is romantic and slightly out of reach, yet sharply put together.",
+  "workText": "Your best workwear thrives on the tension of strict tailoring worn against something fluid. A razor-sharp lapel layered over a gentle, draped neckline gives you authority without erasing your approachability. You need silhouettes that let you move effortlessly through pitches and office politics without feeling physically restricted. Ground the look in disciplined foundation pieces, like a trouser with an immaculate crease, so the softer elements never read as careless. This interplay of hard and soft proportions signals exactly who is running the meeting, even when you are speaking quietly.\n\nYour style energy concentrates in foundations and routine, so your wardrobe is at its best when it reflects both foundations and routine. At work, lean into approachable authority; soft structure and nurturing polish build trust without sacrificing presence."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#A36B89",
+    "name": "Venus Rose",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Ascendant",
+     "sourceSign": "Libra"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#007788",
+    "name": "Cerulean",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Mars",
+     "sourceSign": "Aquarius"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Medium Neutral Electric",
+  "coreColours": [
+   {
+    "hexValue": "#E35335",
+    "name": "poppy",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Spring",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#009B8D",
+    "name": "bright teal",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Spring",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#FFE302",
+    "name": "vivid yellow",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Spring",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#0080FF",
+    "name": "electric blue",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Spring",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#0D1014",
+   "name": "clear black",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "Bright Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "Bright Spring",
+  "lightAnchor": {
+   "hexValue": "#FFFDF0",
+   "name": "clear ivory",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "Bright Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#C84346",
+   "name": "cool ruby",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "Bright Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "There is a distinct logic to how you wear colour, balancing delicate romance with serious intent. Build your foundation on poppy, bright teal, and vivid yellow. These watercolour shades bring a necessary lightness to the sharp tailoring and crisp poplin you instinctively prefer. Instead of shouting across a crowded room, this airy combination invites easy conversation. When you need a harder edge, introduce a flash of Venus Rose through a smooth calfskin shoe or cool metal hardware. It is a quiet palette, but it guarantees you are taken seriously.",
+  "neutrals": [
+   {
+    "hexValue": "#FFFDF0",
+    "name": "clear ivory",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Spring",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#384C70",
+    "name": "warm navy",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Spring",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#4B4F54",
+    "name": "graphite",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Spring",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#C19A6B",
+    "name": "clear camel",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Spring",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": true,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": false,
+   "fireAirChromaApplied": true,
+   "scorpioDensityApplied": false,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#70B8AE",
+   "name": "mist teal",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "Bright Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Bright Winter",
+  "supportColours": [
+   {
+    "hexValue": "#9C9A9A",
+    "name": "dove grey",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Spring",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#636B6F",
+    "name": "muted charcoal",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Spring",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#3B4B5E",
+    "name": "smoked navy",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Spring",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#3C2415",
+    "name": "espresso",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Spring",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "High",
+   "depth": "Medium",
+   "saturation": "Rich",
+   "surface": "Structured",
+   "temperature": "Neutral"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "sharp geometric",
+   "harsh stripes",
+   "aggressive graphic prints",
+   "novelty prints"
+  ],
+  "narrativeText": "Your relationship with print is a constant negotiation between wanting to float and needing to remain completely in control. Loud, chaotic motifs quickly disrupt your mental order, so leave sharp geometric out of the rotation entirely. Instead, look for designs that offer a dreamy mood but possess a quiet, underlying logic. Watercolour prints and oceanic motifs hit this exact mark, bringing soft colour and visual interest to a flowing chiffon dress without overwhelming the eye. For daytime socialising, soft tie-dye provides just enough texture to feel deliberate while keeping the overall finish airy and light. You wear prints best when they act as a gentle suggestion rather than a demanding shout.",
+  "recommendedPatterns": [
+   "watercolour prints",
+   "oceanic motifs",
+   "soft tie-dye",
+   "impressionist florals",
+   "bold stripes",
+   "chevron"
+  ],
+  "tipText": "Graphic, high-contrast prints will instantly make you feel visually frantic. Seek out motifs that are soft and atmospheric instead, letting a watercolour watercolour prints bleed gently across pale aqua silk or fine gauze. The real trick to wearing them is containment. Rather than letting a floaty seafoam design swallow your entire silhouette, wear it cleanly tailored or tucked into heavy, disciplined wool trousers. The print provides the necessary fantasy, but the sharp construction does the actual work."
+ },
+ "styleCore": {
+  "narrativeText": "Your style operates on a brilliant contradiction between total fluidity and absolute control. You walk into a space with a light, communicative energy, but your presence is anchored by a quiet, unshakeable composure. The trick is to dress in a way that allows for graceful movement and social ease, while keeping the underlying architecture of your outfit strictly tailored and resolved. Let your outer layers drift and move organically, but rely on sharp, definitive construction underneath to maintain a vital sense of physical order. It is an aesthetic of rigorous romanticism, projecting a relaxed intelligence that always knows exactly what it is doing.\n\nYour natural sense of beauty shows up most powerfully in your daily rituals, daily beauty rituals, functional elegance, beautiful workwear, aesthetic routines. Your style instincts lean toward clarity, structure, and visible polish. Your public style reads as warm and approachable; polished comfort signals care and emotional intelligence."
+ },
+ "textures": {
+  "avoidTextures": [
+   "stiff structured suiting",
+   "hard leather",
+   "rigid tailoring"
+  ],
+  "badText": "You need your clothes to breathe with you, which means anything overtly rigid or artificial is an immediate problem. Materials like stiff structured suiting suffocate your natural ease, while the aggressive friction of hard leather interrupts your quiet discipline. If a fabric feels industrial or fights your body heat, it ruins the entire look. You rely on garments that drape beautifully without forcing you into an awkward silhouette. Skip rigid tailoring entirely. You are far too socially agile to spend your day trapped inside a piece that wears like a cheap suit of armour.",
+  "goodText": "Getting dressed is a balancing act between strict composure and total fluidity. You thrive in garments that drift gracefully around the body but never lose their shape. Reach for flowing chiffon and soft jersey to give you that necessary movement, catching the air as you walk without looking completely unbuttoned. Even when you are leaning into romance, you expect a certain emotional order from your clothes. Layering watercolour silk with gauze gives you that dreamlike softness while keeping you securely held together. It is about wearing something that looks entirely effortless, but behaves with absolute discipline.",
+  "recommendedTextures": [
+   "flowing chiffon",
+   "soft jersey",
+   "watercolour silk",
+   "gauze"
+  ],
+  "sweetSpotKeywords": [
+   "flow",
+   "softness"
+  ],
+  "sweetSpotText": "The exact intersection of flow and softness is where your wardrobe actually clicks into gear. You want the romantic drape of flowing chiffon to satisfy your eye, but your frame demands the grounding presence of sharp, orderly construction. This specific balance keeps you moving easily through a crowded room without ever feeling restricted or visually chaotic. Try anchoring the breathless finish of soft jersey against clean, decisive lines. If a piece cannot offer both strict boundaries and a soft, poetic touch, leave it on the hanger.\n\nYour comfort instinct gravitates toward deepest comfort zone, nostalgic fabrics, heirloom softness, home-as-wardrobe."
+ },
+ "userInfo": {
+  "birthDate": "1992-03-26T20:00:00Z",
+  "birthLocation": "Synth 017 \u2014 Aries Sun, 20:00 UTC, Sydney (1992)",
+  "generationDate": "2026-06-10T20:30:13Z"
+ }
+}

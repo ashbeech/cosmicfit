@@ -1,0 +1,352 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "When your garments behave like liquid, scattering handfuls of fragile trinkets over the top just creates visual noise. A single, substantial object does a far better job of anchoring the silhouette. An unlined leather bag that slumps heavily at the hip or a wide suede belt provides a vital centre of gravity for all that draped jersey and weightless chiffon. This solitary focal point gives the eye a place to rest without interrupting the intuitive sweep of your clothes. You only ever need one reassuring piece of hardware to keep a dreamlike outfit from floating away completely.",
+   "Your wardrobe leans instinctively towards the fluid and the unstructured, meaning your accessories must step in to keep your silhouette from washing away entirely. Rather than sharp corners or rigid frames, rely on pieces that offer a comforting sense of physical gravity. A slouchy but substantial leather bag with a heavy strap, or a wide belt that gently gathers fabric without biting into the waist, gives your softer garments a necessary anchor. Rings cast with melted, organic edges or a weighty watch provide a grounding touch at the extremities. These solid additions lend your dreamiest shapes just enough reality to hold their own in a crowded room.",
+   "Your accessories have to feel like a natural extension of your body, never a physical interruption. A wide bag strap should melt into your shoulder rather than dig, cut from pliant leather that easily folds in your hands. The sensory feedback of getting dressed matters immensely to your daily mood. You want the gentle, frictionless slide of a smooth clasp or the quiet rustle of a soft fabric tie, rather than the loud clank of heavy, restrictive hardware. The best pieces sit quietly on the skin, offering a subtle, tactile finish instead of demanding constant attention."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Rigid harsh structures that pin you into a single shape. Stiff jackets and hard waistbands fight your natural flow.",
+   "Aggressive colour palettes that contradict your gentle persistence. Your strength is quiet, and your wardrobe should be too.",
+   "Harsh structured power suits that feel like a costume on you. Your authority comes from presence, not from sharp shoulders.",
+   "Aggressive angular silhouettes that cut against your natural fluidity. Hard geometric shapes drain your energy rather than channel it.",
+   "Anything that feels militaristic, regimented, or punishing. Your body responds best to softness, not discipline.",
+   "Rigid dress codes that ignore your emotional state. Forcing yourself into structure on a fluid day creates real suffering."
+  ],
+  "consider": [
+   "dress for how it makes you feel, not how it looks to others",
+   "seek beauty in softness and simplicity",
+   "one perfectly fitted dark suit as the foundation of everything",
+   "a pressing and maintenance ritual as professional practice"
+  ],
+  "leanInto": [
+   "Letting intuition guide your dressing each morning. If the fabric does not feel right when you reach for it, trust that instinct and reach for something else.",
+   "Choosing gentle force over brute strength in your wardrobe. A soft flowing layer communicates more power than a hard structured one ever could for you.",
+   "Dressing in a way that reflects your inner fluidity. Fabrics that move and drape mirror the adaptable persistence that defines your energy.",
+   "Embracing the flowing and the romantic without apology. If a dress moves like water when you walk, it was made for you.",
+   "Layering sheer over opaque for depth and mystery. A chiffon blouse over a silk camisole creates dimension that hard fabrics cannot.",
+   "Letting garments move with your body rather than against it. If a piece fights your natural rhythm, it does not belong."
+  ]
+ },
+ "engineVersion": "2.0.0",
+ "generatedAt": "2026-06-10T20:44:07Z",
+ "hardware": {
+  "metalsText": "Hard edges and heavy buckles disrupt the fluidity of your wardrobe. You want fastenings and jewellery that look molten rather than stamped out of a machine. Reach for silver tones with a brushed or hammered finish so it gleams softly against your skin, or use iridescent finishes when you need a delicate, almost invisible closure for diaphanous layers. Heavy chains will drag down soft jersey and silk, so seek out fine clasps that disappear into the drape of a garment. A touch of white gold tones works beautifully as a final accent, acting like water droplets resting on the fabric rather than functional armour.",
+  "recommendedMetals": [
+   "silver",
+   "iridescent finishes",
+   "white gold",
+   "iridescent",
+   "opal-set silver",
+   "polished brass",
+   "rose gold",
+   "platinum",
+   "surgical steel",
+   "titanium"
+  ],
+  "recommendedStones": [
+   "amethyst",
+   "aquamarine",
+   "moonstone",
+   "opal",
+   "rainbow moonstone",
+   "garnet",
+   "carnelian",
+   "red jasper",
+   "fluorite",
+   "labradorite",
+   "onyx",
+   "sapphire"
+  ],
+  "stonesText": "Crisp, heavily faceted gems feel entirely too sharp for the way you move through the world. Your jewellery collection asks for pieces with a natural, cloudy translucence, like a smooth cabochon amethyst. A suspended drop of aquamarine catches the light with a soft, milky iridescence rather than a blinding flash. Look for fine, practically invisible bezel settings that let the gems rest directly on the collarbone or wrist, warming quickly to your body temperature. The effect reads less like a formal purchase and more like an instinctive, watery extension of yourself.",
+  "tipText": "Rigid, industrially stamped jewellery immediately disrupts the visual flow of your clothes. You need pieces in silver tones that look cast by hand, favouring organic curves, melted edges, and liquid forms over harsh, architectural geometry. A softly irregular pendant set with amethyst or a fine chain that pools naturally on your collarbone maintains that intuitive rhythm. Hardware is just another fluid element in your outfit, designed to glide over the skin rather than interrupt the silhouette."
+ },
+ "occasions": {
+  "dailyText": "Getting dressed on an average morning is an instinctive exercise for you. You need pieces that respond to your current state rather than forcing you into a strict shape. Seek out yielding construction, dropped shoulders, and hems that drift gently as you move through your day. Rigid waistbands and heavy, inflexible materials will only disrupt your peace. The final look should read as entirely effortless, wrapping the frame in a continuous, uninterrupted line.",
+  "intimateText": "Intimate dinners and low-lit evenings are when you drop the armour and lean into pure romance. Choose weightless pieces that shift as you breathe, focusing on soft volumes over rigid construction. Layering gently translucent garments creates a subtle blur across your silhouette, making your presence feel dreamlike and incredibly inviting at close range. It is less about projecting a sharp image and more about setting a hypnotic mood. The final look should feel entirely effortless, wrapping your body in absolute softness.",
+  "workText": "Rigid office wear completely contradicts your natural rhythm. Your interpretation of professional dressing relies on pieces that yield to the body rather than boxing it in. Swap sharp, stiff collars for soft, sweeping necklines, and build your weekday rotation from lightweight, unstructured layers that catch the air as you cross the room. Prioritise soft tailoring cut with constant movement in mind, constructing a silhouette that implies ease rather than corporate aggression. You command respect by appearing highly adaptable, intuitive, and flawlessly assembled.\n\nYour style energy concentrates in retreat and public, so your wardrobe is at its best when it reflects both retreat and public."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#BA4983",
+    "name": "Rose Madder",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Ascendant",
+     "sourceSign": "Aries"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#085267",
+    "name": "Steel Blue",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Mercury",
+     "sourceSign": "Capricorn"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Medium Cool Soft",
+  "coreColours": [
+   {
+    "hexValue": "#6E8FAD",
+    "name": "dusty blue",
+    "provenance": {
+     "band": "core",
+     "family": "True Summer",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#C08081",
+    "name": "rose mauve",
+    "provenance": {
+     "band": "core",
+     "family": "True Summer",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#7DA98E",
+    "name": "sage aqua",
+    "provenance": {
+     "band": "core",
+     "family": "True Summer",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#9B87A4",
+    "name": "soft violet",
+    "provenance": {
+     "band": "core",
+     "family": "True Summer",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#1B2A4A",
+   "name": "ink navy",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "True Summer",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "True Summer",
+  "lightAnchor": {
+   "hexValue": "#F3F3EE",
+   "name": "cool ivory",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "True Summer",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#4A8D99",
+   "name": "muted teal",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "True Summer",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "Your ideal wardrobe reads less like a strict colour chart and more like a gentle wash of pigment. Build your foundation on dusty blue, rose mauve, and sage aqua, layering these tones together rather than relying on sharp, high-contrast combinations. These shades truly come alive on sheer gauzes and soft, light-catching silks, where the dye shifts and changes with your movement. Fold in Rose Madder when you need a touch of depth for outerwear or a heavier base layer. The result is a beautifully blurred palette that leaves a quiet, lingering visual impression rather than a loud graphic punch.",
+  "neutrals": [
+   {
+    "hexValue": "#9C9A9A",
+    "name": "dove grey",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Summer",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#9E8E82",
+    "name": "mushroom taupe",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Summer",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#4F5D73",
+    "name": "soft navy",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Summer",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#8A8D8F",
+    "name": "cool stone",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Summer",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": false,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": false,
+   "fireAirChromaApplied": false,
+   "scorpioDensityApplied": true,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": true,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#78B7AE",
+   "name": "mist teal",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "True Summer",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Soft Summer",
+  "supportColours": [
+   {
+    "hexValue": "#AF9B88",
+    "name": "warm taupe",
+    "provenance": {
+     "band": "support",
+     "family": "True Summer",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#A89F91",
+    "name": "warm stone",
+    "provenance": {
+     "band": "support",
+     "family": "True Summer",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#C19A6B",
+    "name": "camel",
+    "provenance": {
+     "band": "support",
+     "family": "True Summer",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#3C2415",
+    "name": "espresso",
+    "provenance": {
+     "band": "support",
+     "family": "True Summer",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "Low",
+   "depth": "Medium",
+   "saturation": "Soft",
+   "surface": "Soft",
+   "temperature": "Cool"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "sharp geometric",
+   "harsh stripes",
+   "aggressive graphic prints",
+   "harsh geometric"
+  ],
+  "narrativeText": "Graphic prints always look a bit jarring on you, as though they are trapping your natural softness inside a cage. Your eye instinctively prefers boundaries that blur and bleed on the fabric. Let the visuals stay fluid by reaching for watercolour wash and soft abstract, allowing the dye to wash over soft silk or sheer chiffon. Steer entirely clear of sharp geometric or harsh stripes, which just look stiff and overly calculated when paired with your energy. The most convincing print for you is one that feels like a mood rather than a geometry lesson.",
+  "recommendedPatterns": [
+   "watercolour wash",
+   "soft abstract",
+   "watercolour prints",
+   "oceanic motifs",
+   "soft tie-dye",
+   "impressionist florals"
+  ],
+  "tipText": "Harsh graphic prints completely disrupt your natural visual rhythm. When wearing watercolour wash, the most successful versions are those where the ink appears to bleed softly into the base fabric. Treat patterns as diffused watercolour washes over silk rather than stiff, stamped motifs. This approach ensures the design melts into your silhouette instead of fighting the fluidity of your clothes. A gentle fade of seafoam or lilac dissolving across a draped cut lets the garment breathe. The end result reads like a passing mood rather than a rigid boundary."
+ },
+ "styleCore": {
+  "narrativeText": "Your presence is entirely built on motion and intuition. You do not get dressed using rigid outfit math or strict, high-tension tailoring. Instead, your style relies on pieces that move with the body, creating a continuous, unbroken line that feels both romantic and incredibly comfortable. When you walk into a room, you project an atmosphere of soft, unbothered grace rather than shouting for attention. People notice the way your clothes drape, yield, and respond to the space around you. You look your best when you allow your silhouette to blur slightly at the edges, abandoning harsh boundaries for something far more seamless. Your wardrobe operates as a deeply personal extension of your mood, offering a sense of fluid protection against a sharp world.\n\nYour natural sense of beauty shows up most powerfully in your inner world, private beauty, dreamy personal aesthetics, beauty for the self alone. Your style instincts lean toward clarity, structure, and visible polish. Your public style reads as structured and authoritative; timeless polish and investment-grade quality define your image."
+ },
+ "textures": {
+  "avoidTextures": [
+   "stiff rigid fabrics",
+   "stiff structured suiting",
+   "hard leather"
+  ],
+  "badText": "Anything sharp or aggressively constructed feels entirely wrong on your frame. Thick stiff rigid fabrics and heavy stiff structured suiting simply trap your natural movement, leaving you looking boxed in and visibly uncomfortable. If a piece feels like a shell or requires actual physical effort to bend and sit in, it actively fights your need for physical ease. Stay away from hard leather entirely, because an abrasive finish completely kills the gentle mood you project. Your clothes are meant to float, never confine.",
+  "goodText": "Stiff, architectural clothing is fundamentally wrong for your energy. Your wardrobe needs to yield to your body, relying on drape rather than rigid tailoring to create a silhouette. Look for soft stretch and flowing jersey that pool around the ankles or catch the air when you move. There is an inherent romance to waterproof tech, especially when worn as a sheer layer over a bias-cut slip. If a garment holds its own shape on the hanger, it will only make you feel trapped.",
+  "recommendedTextures": [
+   "soft stretch",
+   "flowing jersey",
+   "waterproof tech",
+   "flowing chiffon"
+  ],
+  "sweetSpotKeywords": [
+   "flow",
+   "intuition"
+  ],
+  "sweetSpotText": "Your ideal textile balance relies on a seamless blend of flow and intuition. You need fabrics that yield to your daily movements, making soft stretch or a perfectly washed flowing jersey an absolute necessity for your rotation. Anything rigid, starchy, or heavily tailored immediately disrupts your natural rhythm. Garments must carry a certain liquid weight to hang correctly on the body without causing restriction. If a piece demands to wear you instead of melting quietly onto your frame, leave it on the hanger.\n\nYour comfort instinct gravitates toward private emotional retreat, the softest, most comforting pieces saved for solitude."
+ },
+ "userInfo": {
+  "birthDate": "1985-01-25T12:00:00Z",
+  "birthLocation": "Synth 185 \u2014 Aquarius Sun, 12:00 UTC, Sydney (1985)",
+  "generationDate": "2026-06-10T20:44:07Z"
+ }
+}

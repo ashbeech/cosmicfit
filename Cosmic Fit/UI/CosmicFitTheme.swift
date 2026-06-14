@@ -71,6 +71,25 @@ struct CosmicFitTheme {
             + (Typography.FontSizes.pageTitle - Typography.FontSizes.title1) / 2
             + 6
     }
+
+    /// Eyebrow label above section glyphs ("ABOUT YOU", "DAILY FIT", etc.).
+    struct PageEyebrowTypography {
+        static let fontSize: CGFloat = 15
+        /// Letter-spacing as a fraction of font size (4% → 0.04).
+        static let letterSpacingFraction: CGFloat = 0.04
+        static var letterSpacing: CGFloat { fontSize * letterSpacingFraction }
+
+        static func attributedString(_ text: String, color: UIColor) -> NSAttributedString {
+            NSAttributedString(
+                string: text,
+                attributes: [
+                    .font: Typography.dmSansFont(size: fontSize, weight: .bold),
+                    .foregroundColor: color,
+                    .kern: letterSpacing
+                ]
+            )
+        }
+    }
     
     // MARK: - Typography
     struct Typography {
@@ -296,6 +315,12 @@ struct CosmicFitTheme {
     static func styleTitleLabel(_ label: UILabel, fontSize: CGFloat = Typography.FontSizes.title2, weight: UIFont.Weight = .semibold) {
         label.font = Typography.DMSerifTextFont(size: fontSize, weight: weight)
         label.textColor = Colours.cosmicBlue
+    }
+
+    /// Eyebrow caps label above a section glyph (15pt DM Sans bold, 4% tracking).
+    static func stylePageEyebrowLabel(_ label: UILabel, text: String, color: UIColor) {
+        label.textAlignment = .center
+        label.attributedText = PageEyebrowTypography.attributedString(text, color: color)
     }
     
     /// text over tarot card

@@ -112,6 +112,7 @@ The inspector runs four automated checks on every response:
 2. **vibrancy_contrast_metal_in_range** — all in [0, 1]
 3. **palette_three_unique** — exactly 3 distinct daily colours
 4. **tarot_recency** — uses the same `TarotRecencyTracker` as the app (isolated in `UserDefaults` suite `com.cosmicfit.inspector`). Recency and variant-rotation keys are namespaced by `dailyFitEngineId`, so switching the engine dropdown does not share tarot history between presets. Use `options.resetTarotHistory: true` to clear recency for the active engine only.
+5. **essence_recency** — the `VisibleEssenceRecencyTracker` hard-blocks categories that appeared in the visible top-3 within the cooldown window. Engine-namespaced like tarot. Use `options.resetEssenceRecencyHistory: true` to clear essence recency for the active engine only.
 
 ### Extending Verdicts
 

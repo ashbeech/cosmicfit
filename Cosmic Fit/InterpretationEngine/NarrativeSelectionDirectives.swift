@@ -29,6 +29,11 @@ struct NarrativeIntent: Equatable {
 
 struct TarotDirective: Equatable, Codable {
     let targetEnergyVector: [Energy: Double]
+    /// Normalized 0–1 targets for action/tempo/strategy/visibility.
+    /// `strategy` incorporates plan.targetSilhouette.structuredDraped.
+    let targetAxesVector: [String: Double]
+    /// Carried from plan so the bridge can fire the hard structure gate.
+    let structuredDraped: Double
 }
 
 struct PaletteDirective: Equatable, Codable {
@@ -168,6 +173,64 @@ enum NarrativeSelectionDirectives {
         targetEnergyVector(weatherTop3: weatherTop3, weights: weights)
     }
 
+    // MARK: - Form / Axes Helpers (Tarot Form Bridge)
+
+    /// Build a normalized 0–1 target axes vector from sky axes + silhouette structure blend.
+    static func targetAxesVector(
+        snapshot: DailyEnergySnapshot,
+        silhouette: SilhouetteProfile,
+        tuning: DailyFitCalibration.NarrativeSelectionTuning
+    ) -> [String: Double] {
+        let skyStrategy = snapshot.axes.strategy / 10.0
+        let silhouetteStructure = 1.0 - silhouette.structuredDraped
+        let targetStrategy = min(max(
+            tuning.structureSkyWeight * skyStrategy
+            + tuning.structureSilhouetteWeight * silhouetteStructure,
+            0.0), 1.0)
+
+        return [
+            "action": snapshot.axes.action / 10.0,
+            "tempo": snapshot.axes.tempo / 10.0,
+            "strategy": targetStrategy,
+            "visibility": snapshot.axes.visibility / 10.0
+        ]
+    }
+
+    /// Sky-only fallback when no silhouette is available (e.g. NarrativeIntentEngine legacy path).
+    static func targetAxesVectorSkyOnly(snapshot: DailyEnergySnapshot) -> [String: Double] {
+        [
+            "action": snapshot.axes.action / 10.0,
+            "tempo": snapshot.axes.tempo / 10.0,
+            "strategy": snapshot.axes.strategy / 10.0,
+            "visibility": snapshot.axes.visibility / 10.0
+        ]
+    }
+
+    /// Normalize Int 0–100 variant axesEmphasis to Double 0–1.
+    static func axesDictionary(from emphasis: [String: Int]) -> [String: Double] {
+        var result: [String: Double] = [:]
+        for (key, value) in emphasis {
+            result[key] = Double(value) / 100.0
+        }
+        return result
+    }
+
+    /// Cosine similarity for string-keyed axes vectors (action/tempo/strategy/visibility).
+    static func cosineSimilarityAxes(_ a: [String: Double], _ b: [String: Double]) -> Double {
+        let allKeys = Set(a.keys).union(b.keys)
+        var dot = 0.0, magA = 0.0, magB = 0.0
+        for key in allKeys {
+            let va = a[key] ?? 0.0
+            let vb = b[key] ?? 0.0
+            dot += va * vb
+            magA += va * va
+            magB += vb * vb
+        }
+        let denom = sqrt(magA) * sqrt(magB)
+        guard denom > 0 else { return 0.0 }
+        return dot / denom
+    }
+
     // MARK: - Palette Scoring (§15.3)
 
     static func tierMultiplier(role: ColourRole, preferences: [ColourRole]) -> Double {
@@ -212,9 +275,11 @@ enum NarrativeSelectionDirectives {
         intent: NarrativeIntent,
         tuning: DailyFitCalibration.NarrativeSelectionTuning,
         roleEnergyAlignment: [ColourRole: [Energy]],
-        seededJitter: (BlueprintColour) -> Double
+        seededJitter: (BlueprintColour) -> Double,
+        coverageDebtForHex: ((String) -> Double)? = nil
     ) -> [(colour: BlueprintColour, score: Double)] {
         let directive = intent.palette
+        let coverageWeight = tuning.colourCoverageWeight
         var scored = baseScored.map { item -> (colour: BlueprintColour, score: Double) in
             let role = item.colour.role
             let energyTerm = energyAlignmentTerm(
@@ -229,10 +294,12 @@ enum NarrativeSelectionDirectives {
                 tuning: tuning
             )
             let jitter = seededJitter(item.colour)
+            let debtTerm: Double = coverageDebtForHex?(item.colour.hexValue) ?? 0.0
             let score = item.score
                 + tuning.categoryEnergyWeight * energyTerm
                 + roleTerm
                 + tuning.narrativePaletteJitter * jitter
+                + coverageWeight * debtTerm
             return (item.colour, score)
         }
         if directive.preferFoundationOverStatement {
@@ -250,7 +317,9 @@ enum NarrativeSelectionDirectives {
     static func selectViaNarrativeSlots(
         scored: [(colour: BlueprintColour, score: Double)],
         intent: NarrativeIntent,
-        normalizeHex: (String) -> String
+        normalizeHex: (String) -> String,
+        tuning: DailyFitCalibration.NarrativeSelectionTuning? = nil,
+        coverageDebtForHex: ((String) -> Double)? = nil
     ) -> (selected: [(colour: BlueprintColour, score: Double)], statementSlotCount: Int) {
         let statementPool = scored.filter { accentRoles.contains($0.colour.role) }
         let foundationPool = scored.filter { foundationRoles.contains($0.colour.role) }
@@ -288,8 +357,91 @@ enum NarrativeSelectionDirectives {
             }
         }
 
+        // Coverage floor: on grounded-eligible days, if a max-debt foundation/anchor
+        // candidate exists outside the current selection, swap it into the lowest-scoring
+        // foundation slot.
+        if let tuning, tuning.colourCoverageFloorEnabled,
+           let debtFn = coverageDebtForHex,
+           isGroundedEligible(intent: intent) {
+            let selectedHexes = Set(selected.map { normalizeHex($0.colour.hexValue) })
+            let unselectedFoundation = foundationPool.filter {
+                !selectedHexes.contains(normalizeHex($0.colour.hexValue))
+            }
+            if let maxDebtCandidate = unselectedFoundation
+                .map({ ($0, debtFn($0.colour.hexValue)) })
+                .filter({ $0.1 >= 0.85 })
+                .max(by: { $0.1 < $1.1 })?.0 {
+                // Find lowest-scoring foundation slot in selected to swap out
+                if let swapIdx = selected.enumerated()
+                    .filter({ foundationRoles.contains($0.element.colour.role) })
+                    .min(by: { $0.element.score < $1.element.score })?.offset {
+                    let swapHex = normalizeHex(selected[swapIdx].colour.hexValue)
+                    let candidateHex = normalizeHex(maxDebtCandidate.colour.hexValue)
+                    if swapHex != candidateHex {
+                        selected[swapIdx] = maxDebtCandidate
+                        usedHexes.remove(swapHex)
+                        usedHexes.insert(candidateHex)
+                    }
+                }
+            }
+        }
+
         let statementCount = selected.filter { accentRoles.contains($0.colour.role) }.count
         return (selected, statementCount)
+    }
+
+    /// A day is grounded-eligible when statement slots are limited (soften/contrast/stretch
+    /// or preferFoundationOverStatement). Coverage floor only activates on these days.
+    private static func isGroundedEligible(intent: NarrativeIntent) -> Bool {
+        if intent.palette.preferFoundationOverStatement { return true }
+        if intent.palette.maxStatementSlots <= 1 { return true }
+        return false
+    }
+
+    // MARK: - Hero Rotation (§15.4)
+
+    /// Reorder selected colours so the hero (index 0) rotates over time while
+    /// respecting narrative coherence: statement-leaning days (reinforce / maxStatementSlots >= 2)
+    /// always keep a statement-role hero; grounded days allow any pick to be hero.
+    /// Among eligible candidates, the one with greatest heroDebt wins, tie-broken by score.
+    static func applyHeroRotation(
+        selected: [(colour: BlueprintColour, score: Double)],
+        intent: NarrativeIntent,
+        tuning: DailyFitCalibration.NarrativeSelectionTuning,
+        heroDebtForHex: ((String) -> Double)? = nil
+    ) -> [(colour: BlueprintColour, score: Double)] {
+        guard tuning.colourHeroRotationEnabled,
+              let debtFn = heroDebtForHex,
+              selected.count >= 2 else {
+            return selected
+        }
+
+        let statementLeaning = intent.palette.maxStatementSlots >= 2
+            && !intent.palette.preferFoundationOverStatement
+
+        let eligibleIndices: [Int]
+        if statementLeaning {
+            let indices = selected.indices.filter { accentRoles.contains(selected[$0].colour.role) }
+            eligibleIndices = indices.isEmpty ? [0] : indices
+        } else {
+            eligibleIndices = Array(selected.indices)
+        }
+
+        guard eligibleIndices.count > 1 else { return selected }
+
+        let bestIdx = eligibleIndices.max(by: { a, b in
+            let debtA = debtFn(selected[a].colour.hexValue)
+            let debtB = debtFn(selected[b].colour.hexValue)
+            if abs(debtA - debtB) > 0.01 { return debtA < debtB }
+            return selected[a].score < selected[b].score
+        }) ?? eligibleIndices[0]
+
+        if bestIdx == 0 { return selected }
+
+        var reordered = selected
+        let hero = reordered.remove(at: bestIdx)
+        reordered.insert(hero, at: 0)
+        return reordered
     }
 
     // MARK: - Coherence Heuristic (§15.5)
@@ -418,6 +570,23 @@ enum NarrativeSelectionDirectives {
         )
         let trace = EssenceConflictTrace(suppressions: suppressions)
         return (resolved, trace)
+    }
+
+    // MARK: - Public Accessors (for NarrativeIntentEngine anchor-blend)
+
+    static func blendCategoryWeightRowsPublic(
+        categories: [StyleEssenceCategory],
+        weights: [Double]
+    ) -> [Energy: Double] {
+        blendCategoryWeightRows(categories: categories, weights: weights)
+    }
+
+    static func zipEnergyPublic(
+        _ a: [Energy: Double],
+        _ b: [Energy: Double],
+        anchorWeight: Double
+    ) -> [Energy: Double] {
+        zipEnergy(a, b, anchorWeight: anchorWeight)
     }
 
     // MARK: - Private Helpers

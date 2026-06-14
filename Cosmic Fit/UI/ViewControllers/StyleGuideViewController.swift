@@ -32,16 +32,7 @@ final class StyleGuideViewController: UIViewController {
 
     private let aboutYouLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
-        let attributedText = NSAttributedString(
-            string: "ABOUT YOU",
-            attributes: [
-                .font: CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.sectionHeader, weight: .bold),
-                .foregroundColor: CosmicFitTheme.Colours.cosmicBlue,
-                .kern: 1.75
-            ]
-        )
-        label.attributedText = attributedText
+        CosmicFitTheme.stylePageEyebrowLabel(label, text: "ABOUT YOU", color: CosmicFitTheme.Colours.cosmicBlue)
         return label
     }()
 

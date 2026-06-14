@@ -202,7 +202,13 @@ enum DailyNarrativeCoherence {
             let variantVector = NarrativeSelectionDirectives.energyDictionary(
                 from: payload.styleEditVariant.energyEmphasis
             )
-            return NarrativeSelectionDirectives.cosineSimilarity(planVector, variantVector) > 0.5 ? 1.0 : 0.0
+            let energyOk = NarrativeSelectionDirectives.cosineSimilarity(planVector, variantVector) > 0.5
+
+            let axesTarget = plan.tarotDirective.targetAxesVector
+            let variantAxes = NarrativeSelectionDirectives.axesDictionary(from: payload.styleEditVariant.axesEmphasis)
+            let formOk = NarrativeSelectionDirectives.cosineSimilarityAxes(axesTarget, variantAxes) > 0.5
+
+            return (energyOk && formOk) ? 1.0 : 0.0
         }()
 
         let sliderMatch: Double = abs(payload.vibrancy - plan.targetVibrancy) < 0.05 ? 1.0 : 0.0
@@ -229,6 +235,25 @@ enum DailyNarrativeCoherence {
     }
 
     // MARK: - Helpers
+
+    /// Post-selection structure gate: flags when tarot variant strategy contradicts
+    /// the plan's strongly-structured silhouette. Phase 1: trace-only validator.
+    static func validateTarotForm(
+        plan: DailyNarrativePlan,
+        variantAxesEmphasis: [String: Int],
+        tuning: DailyFitCalibration.NarrativeSelectionTuning = .stage1Default
+    ) -> [String] {
+        var violations: [String] = []
+        if plan.targetSilhouette.structuredDraped < tuning.structureSliderThreshold {
+            let strat = variantAxesEmphasis["strategy"] ?? 50
+            if strat < tuning.structureVariantStrategyFloor {
+                violations.append(
+                    "tarot variant strategy \(strat) contradicts structure slider \(f2(plan.targetSilhouette.structuredDraped))"
+                )
+            }
+        }
+        return violations
+    }
 
     private static func f2(_ v: Double) -> String {
         String(format: "%.2f", v)

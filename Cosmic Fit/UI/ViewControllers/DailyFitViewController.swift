@@ -1985,10 +1985,7 @@ class DailyFitViewController: UIViewController {
     // MARK: - Header Components Setup
     private func setupHeaderComponents() {
         // Daily Fit title — bold sans caps (design); calendar sits on same row, trailing.
-        dailyFitLabel.text = "DAILY FIT"
-        dailyFitLabel.font = CosmicFitTheme.Typography.dmSansFont(size: 15, weight: .bold)
-        dailyFitLabel.textColor = .black
-        dailyFitLabel.textAlignment = .center
+        CosmicFitTheme.stylePageEyebrowLabel(dailyFitLabel, text: "DAILY FIT", color: .black)
         dailyFitLabel.translatesAutoresizingMaskIntoConstraints = false
         dailyFitLabel.alpha = 0.0
         contentView.addSubview(dailyFitLabel)
@@ -2457,22 +2454,16 @@ class DailyFitViewController: UIViewController {
         constraint = newConstraint
     }
 
-    /// Pick the most accent / vibrant colour from the daily palette and apply it
-    /// to the right end of the vibrancy gradient track.
+    /// Apply the selected daily colour (hero / slot 0) to the right end of the
+    /// vibrancy gradient track, matching the single swatch shown above.
     private func updateVibrancyTrackAccentColor(from palette: DailyPaletteSelection) {
+        let fallback = UIColor(red: 0, green: 165/255, blue: 195/255, alpha: 1)
         let accentColor: UIColor = {
-            if let accent = palette.colours.first(where: { $0.role == "accent" }) {
-                return UIColor(hex: accent.hexValue) ?? UIColor(red: 0, green: 165/255, blue: 195/255, alpha: 1)
+            if let hero = palette.colours.first,
+               let color = UIColor(hex: hero.hexValue) {
+                return color
             }
-            return palette.colours
-                .compactMap { pick -> (UIColor, CGFloat)? in
-                    guard let color = UIColor(hex: pick.hexValue) else { return nil }
-                    var h: CGFloat = 0, s: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
-                    color.getHue(&h, saturation: &s, brightness: &b, alpha: &a)
-                    return (color, s * b)
-                }
-                .max(by: { $0.1 < $1.1 })?.0
-                ?? UIColor(red: 0, green: 165/255, blue: 195/255, alpha: 1)
+            return fallback
         }()
         (vibrancyTrack as? GradientTrackView)?.updateColors([UIColor.gray, accentColor])
     }

@@ -28,7 +28,8 @@ enum DailyFitPipeline {
                 blueprint: blueprint,
                 calibration: calibration,
                 precomputedEssence: rawEssence,
-                precomputedSilhouette: rawSilhouette
+                precomputedSilhouette: rawSilhouette,
+                dailyFitEngineId: engineId
             )
             return BlueprintLensEngine.generatePayloadFromPlan(
                 plan: plan,
@@ -85,7 +86,8 @@ enum DailyFitPipeline {
                 blueprint: blueprint,
                 calibration: calibration,
                 precomputedEssence: rawEssence,
-                precomputedSilhouette: silhouette
+                precomputedSilhouette: silhouette,
+                dailyFitEngineId: engineId
             )
 
             // Use plan-driven intent for trace compatibility

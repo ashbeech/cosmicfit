@@ -2,10 +2,9 @@
 //  DailyColourPaletteView.swift
 //  Cosmic Fit
 //
-//  Three daily colour swatches in a horizontal row (Style Guide swatch style).
-//  Tapping a swatch expands a panel above the row (same interaction language as
-//  `ColourPaletteView` in the Style Guide palette) showing the colour name, with
-//  room to add more detail later.
+//  Single daily colour swatch spanning the content width. Height matches
+//  the former three-up square swatches (width ÷ 3). The colour name is
+//  always centred on the swatch.
 //
 
 import UIKit
@@ -15,49 +14,36 @@ final class DailyColourPaletteView: UIView {
     // MARK: - Constants
 
     private let swatchCornerRadius: CGFloat = 4
-    private let swatchSpacing: CGFloat = 6
-    private let expansionToSwatchGap: CGFloat = 6
-    private let expansionRowCount: CGFloat = 2
-    private let animDuration: TimeInterval = 0.4
+    /// Matches the square swatch height when three equal squares fit in one row.
+    private let swatchHeightToWidthRatio: CGFloat = 1.0 / 3.0
 
     // MARK: - Data
 
-    private var picks: [DailyColourPick] = []
-
-    private var focusedIndex: Int?
+    private var pick: DailyColourPick?
 
     // MARK: - Subviews
 
-    private let expansionContainer: UIView = {
+    private let swatchView: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
+        v.layer.cornerRadius = 4
         v.clipsToBounds = true
-        v.backgroundColor = .clear
+        v.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         return v
     }()
 
-    private let expansionPanel: UIView = {
-        let v = UIView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.clipsToBounds = true
-        v.isUserInteractionEnabled = true
-        return v
-    }()
-
-    private let expansionLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.font = CosmicFitTheme.Typography.DMSerifTextItalicFont(
             size: CosmicFitTheme.Typography.FontSizes.sectionHeader
         )
         lbl.textAlignment = .center
-        lbl.numberOfLines = 0
+        lbl.numberOfLines = 2
+        lbl.adjustsFontSizeToFitWidth = true
+        lbl.minimumScaleFactor = 0.75
         return lbl
     }()
-
-    private var swatchViews: [UIView] = []
-    private var expansionCollapsedConstraint: NSLayoutConstraint!
-    private var expansionExpandedConstraint: NSLayoutConstraint!
 
     // MARK: - Initialization
 
@@ -73,81 +59,31 @@ final class DailyColourPaletteView: UIView {
     // MARK: - Public Configuration
 
     func configure(dailyPicks: [DailyColourPick], allPaletteHexes _: [String]) {
-        picks = Array(dailyPicks.prefix(3))
-        focusedIndex = nil
-        applyPickColors()
-        setExpansionVisible(animated: false)
+        pick = dailyPicks.first
+        applyPick()
     }
 
     // MARK: - Private Setup
 
     private func setupUI() {
-        addSubview(expansionContainer)
-        expansionContainer.addSubview(expansionPanel)
-        expansionPanel.addSubview(expansionLabel)
-        expansionPanel.layer.cornerRadius = swatchCornerRadius
-
-        let dismissTap = UITapGestureRecognizer(target: self, action: #selector(onExpansionPanelTap))
-        expansionPanel.addGestureRecognizer(dismissTap)
+        swatchView.layer.cornerRadius = swatchCornerRadius
+        addSubview(swatchView)
+        swatchView.addSubview(nameLabel)
 
         NSLayoutConstraint.activate([
-            expansionPanel.topAnchor.constraint(equalTo: expansionContainer.topAnchor),
-            expansionPanel.leadingAnchor.constraint(equalTo: expansionContainer.leadingAnchor),
-            expansionPanel.trailingAnchor.constraint(equalTo: expansionContainer.trailingAnchor),
-            expansionPanel.bottomAnchor.constraint(equalTo: expansionContainer.bottomAnchor),
+            swatchView.topAnchor.constraint(equalTo: topAnchor),
+            swatchView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            swatchView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            swatchView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            swatchView.heightAnchor.constraint(
+                equalTo: swatchView.widthAnchor,
+                multiplier: swatchHeightToWidthRatio
+            ),
 
-            expansionLabel.centerXAnchor.constraint(equalTo: expansionPanel.centerXAnchor),
-            expansionLabel.centerYAnchor.constraint(equalTo: expansionPanel.centerYAnchor),
-            expansionLabel.leadingAnchor.constraint(greaterThanOrEqualTo: expansionPanel.leadingAnchor, constant: 16),
-            expansionLabel.trailingAnchor.constraint(lessThanOrEqualTo: expansionPanel.trailingAnchor, constant: -16),
-        ])
-
-        for _ in 0..<3 {
-            let swatch = UIView()
-            swatch.translatesAutoresizingMaskIntoConstraints = false
-            swatch.layer.cornerRadius = swatchCornerRadius
-            swatch.clipsToBounds = true
-            swatch.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
-            swatch.isUserInteractionEnabled = true
-            let tap = UITapGestureRecognizer(target: self, action: #selector(onSwatchTap(_:)))
-            swatch.addGestureRecognizer(tap)
-            addSubview(swatch)
-            swatchViews.append(swatch)
-        }
-
-        let s0 = swatchViews[0]
-        let s1 = swatchViews[1]
-        let s2 = swatchViews[2]
-
-        expansionCollapsedConstraint = expansionContainer.heightAnchor.constraint(equalToConstant: 0)
-        expansionExpandedConstraint = expansionContainer.heightAnchor.constraint(
-            equalTo: s0.heightAnchor,
-            multiplier: expansionRowCount,
-            constant: CGFloat(max(Int(expansionRowCount) - 1, 0)) * swatchSpacing
-        )
-        expansionCollapsedConstraint.isActive = true
-
-        NSLayoutConstraint.activate([
-            expansionContainer.topAnchor.constraint(equalTo: topAnchor),
-            expansionContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
-            expansionContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
-
-            s0.topAnchor.constraint(equalTo: expansionContainer.bottomAnchor, constant: expansionToSwatchGap),
-            s0.leadingAnchor.constraint(equalTo: leadingAnchor),
-            s0.heightAnchor.constraint(equalTo: s0.widthAnchor),
-
-            s1.topAnchor.constraint(equalTo: expansionContainer.bottomAnchor, constant: expansionToSwatchGap),
-            s1.leadingAnchor.constraint(equalTo: s0.trailingAnchor, constant: swatchSpacing),
-            s1.widthAnchor.constraint(equalTo: s0.widthAnchor),
-            s1.heightAnchor.constraint(equalTo: s0.heightAnchor),
-
-            s2.topAnchor.constraint(equalTo: expansionContainer.bottomAnchor, constant: expansionToSwatchGap),
-            s2.leadingAnchor.constraint(equalTo: s1.trailingAnchor, constant: swatchSpacing),
-            s2.widthAnchor.constraint(equalTo: s0.widthAnchor),
-            s2.heightAnchor.constraint(equalTo: s0.heightAnchor),
-            s2.trailingAnchor.constraint(equalTo: trailingAnchor),
-
-            bottomAnchor.constraint(equalTo: s0.bottomAnchor),
+            nameLabel.centerXAnchor.constraint(equalTo: swatchView.centerXAnchor),
+            nameLabel.centerYAnchor.constraint(equalTo: swatchView.centerYAnchor),
+            nameLabel.leadingAnchor.constraint(greaterThanOrEqualTo: swatchView.leadingAnchor, constant: 16),
+            nameLabel.trailingAnchor.constraint(lessThanOrEqualTo: swatchView.trailingAnchor, constant: -16),
         ])
 
         isAccessibilityElement = false
@@ -156,88 +92,21 @@ final class DailyColourPaletteView: UIView {
         accessibilityLabel = "Daily style palette"
     }
 
-    private func applyPickColors() {
-        for (index, swatch) in swatchViews.enumerated() {
-            if index < picks.count, let c = UIColor(hex: picks[index].hexValue) {
-                swatch.backgroundColor = c
-                swatch.isUserInteractionEnabled = true
-                swatch.accessibilityLabel = picks[index].name
-                swatch.isAccessibilityElement = true
-            } else {
-                swatch.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
-                swatch.isUserInteractionEnabled = false
-                swatch.accessibilityLabel = nil
-                swatch.isAccessibilityElement = false
-            }
-        }
-    }
-
-    @objc private func onSwatchTap(_ g: UITapGestureRecognizer) {
-        guard let v = g.view, let idx = swatchViews.firstIndex(of: v) else { return }
-        guard idx < picks.count else { return }
-
-        if focusedIndex == idx {
-            focusedIndex = nil
-        } else {
-            focusedIndex = idx
-        }
-        setExpansionVisible(animated: true)
-    }
-
-    @objc private func onExpansionPanelTap() {
-        focusedIndex = nil
-        setExpansionVisible(animated: true)
-    }
-
-    private func setExpansionVisible(animated: Bool) {
-        let expanded = focusedIndex.map { $0 < picks.count } ?? false
-
-        guard bounds.width > 0 else {
-            expansionCollapsedConstraint.isActive = true
-            expansionExpandedConstraint.isActive = false
-            expansionPanel.alpha = 0
-            expansionPanel.accessibilityElementsHidden = true
+    private func applyPick() {
+        guard let pick, let colour = UIColor(hex: pick.hexValue) else {
+            swatchView.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
+            nameLabel.text = nil
+            nameLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
+            swatchView.isAccessibilityElement = false
+            swatchView.accessibilityLabel = nil
             return
         }
 
-        let wasExpanded = expansionExpandedConstraint.isActive
-
-        if expanded, let fi = focusedIndex, fi < picks.count {
-            let pick = picks[fi]
-            expansionPanel.backgroundColor = UIColor(hex: pick.hexValue) ?? .gray
-            expansionLabel.text = pick.name.localizedCapitalized
-            expansionLabel.textColor = Self.contrastingTextColor(forHex: pick.hexValue)
-            expansionCollapsedConstraint.isActive = false
-            expansionExpandedConstraint.isActive = true
-            expansionPanel.accessibilityElementsHidden = false
-        } else {
-            expansionExpandedConstraint.isActive = false
-            expansionCollapsedConstraint.isActive = true
-            expansionPanel.accessibilityElementsHidden = true
-        }
-
-        let openingAnimated = animated && expanded && !wasExpanded
-        if openingAnimated {
-            expansionPanel.alpha = 0
-        }
-
-        let updates = {
-            self.expansionPanel.alpha = expanded ? 1 : 0
-            self.superview?.layoutIfNeeded()
-        }
-
-        if animated {
-            UIView.animate(
-                withDuration: animDuration,
-                delay: 0,
-                usingSpringWithDamping: 0.85,
-                initialSpringVelocity: 0,
-                options: [.curveEaseInOut, .beginFromCurrentState],
-                animations: updates
-            )
-        } else {
-            updates()
-        }
+        swatchView.backgroundColor = colour
+        nameLabel.text = pick.name.localizedCapitalized
+        nameLabel.textColor = Self.contrastingTextColor(forHex: pick.hexValue)
+        swatchView.isAccessibilityElement = true
+        swatchView.accessibilityLabel = pick.name
     }
 
     private static func contrastingTextColor(forHex hex: String) -> UIColor {
