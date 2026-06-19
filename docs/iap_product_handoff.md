@@ -56,12 +56,16 @@ This section is **normative** for the implementation. It prevents accidental cou
 
 **Purchasing does not require** Cosmic Fit sign-in. **Entitlement must not** be stored in or read from Supabase, UserDefaults keyed by user id, or any server flag in v1. The subscription is **not** “attached” to an email address in your backend for unlocking the app.
 
-### Source of truth (v1)
+### Source of truth (v1+comp)
 
-- **`EntitlementManager.checkEntitlement()`** resolves `hasFullAccess` **only** from StoreKit 2: verified transactions in `Transaction.currentEntitlements` for the known product IDs, per the existing spec (active / grace via Apple’s rules; expired or revoked → no access).
+- **`EntitlementManager.checkEntitlement()`** resolves `hasFullAccess` from **two** independent paths:
+  1. **StoreKit 2**: verified transactions in `Transaction.currentEntitlements` for the known product IDs (active / grace via Apple’s rules; expired or revoked → no access).
+  2. **Comp access**: a valid `CompAccessGrant` in Keychain, originally validated by the `redeem-code` edge function and cached locally. Expired grants are pruned on each check.
+- `hasFullAccess = storeKitActive || compAccessValid` (OR, not merged authority).
 - **`StoreKitManager.restorePurchases()`** calls `AppStore.sync()`, then **`await EntitlementManager.shared.checkEntitlement()`** — same code path whether invoked from the paywall or from Profile.
+- **`PromoCodeService.restoreCompAccessIfNeeded()`** checks the server for an existing comp grant (by `client_install_id` or `user_id`) and caches it locally if found. Called on boot and on sign-in.
 
-**Forbidden:** setting `hasFullAccess` from `CosmicFitAuthService.shared.isAuthenticated`, profile payloads, or any API response. **Forbidden:** persisting “isSubscribed” to Supabase or local storage as the authority for gating (caching StoreKit output for UX is unnecessary in v1; if you ever add caching, it must still be refreshed from StoreKit on launch and after transactions).
+**Forbidden:** setting `hasFullAccess` from `CosmicFitAuthService.shared.isAuthenticated`, profile payloads, or any API response not related to comp code validation. **Forbidden:** persisting “isSubscribed” to Supabase or local storage as the authority for gating (caching StoreKit output for UX is unnecessary in v1; if you ever add caching, it must still be refreshed from StoreKit on launch and after transactions).
 
 ### New install, reinstall, same Apple ID (explicit behaviour)
 

@@ -970,22 +970,23 @@ func testCoreAnchoredRankingDifferentSnapshotsDiffer() {
             "Expected different palettes for drama vs classic under coreAnchoredRanking")
 }
 
-// MARK: - T4.31: production preset still uses dramaSlots
+// MARK: - T4.31: stage2_legacy preset still uses dramaSlots
 
-@Test("T4.31 — production calibration defaults to dramaSlots strategy")
-func testProductionDefaultIsDramaSlots() {
-    let prodCal = DailyFitCalibration.default
-    #expect(prodCal.stage2Sensitivity.paletteSelectionStrategy == .dramaSlots)
+@Test("T4.31 — stage2_legacy calibration uses dramaSlots strategy")
+func testStage2LegacyIsDramaSlots() {
+    let stage2Cal = DailyFitEngineRegistry.calibration(for: DailyFitEngineRegistry.stage2LegacyId)
+    #expect(stage2Cal.stage2Sensitivity.paletteSelectionStrategy == .dramaSlots)
 
     let prodDescriptor = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)
-    #expect(prodDescriptor?.calibration.stage2Sensitivity.paletteSelectionStrategy == .dramaSlots)
+    #expect(prodDescriptor?.calibration.stage2Sensitivity.paletteSelectionStrategy == .pureSkyScoring)
 }
 
-// MARK: - T4.32: stage1_experimental preset uses pureSkyScoring
+// MARK: - T4.32: Sky Forward production preset uses pureSkyScoring
 
-@Test("T4.32 — stage1_experimental calibration uses pureSkyScoring strategy")
-func testStage1ExperimentalIsPureSkyScoring() {
-    let descriptor = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.stage1ExperimentalId)
+@Test("T4.32 — Sky Forward production calibration uses pureSkyScoring strategy")
+func testSkyForwardProductionIsPureSkyScoring() {
+    let descriptor = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)
+    #expect(descriptor?.displayName == "Sky Forward")
     #expect(descriptor?.calibration.stage2Sensitivity.paletteSelectionStrategy == .pureSkyScoring)
     #expect(descriptor?.calibration.axisTuning.sigmoidSpread == 0.8)
 }

@@ -115,8 +115,6 @@ final class StyleGuideDetailViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.title1, weight: .bold)
-        label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -348,7 +346,7 @@ final class StyleGuideDetailViewController: UIViewController {
     // MARK: - Content Population
     private func populateContent(_ content: StyleGuideDetailContent) {
         iconImageView.image = UIImage(named: content.iconImageName)
-        titleLabel.text = content.title
+        titleLabel.attributedText = CosmicFitTheme.StyleGuideSubPageTitleTypography.attributedString(content.title)
         
         let firstSectionHasSubheading = content.textSections.first?.subheading != nil
         topDivider.isHidden = firstSectionHasSubheading

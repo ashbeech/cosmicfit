@@ -66,6 +66,17 @@ struct TarotCard: Codable, Identifiable, Equatable {
         case pentacles = "Pentacles"
     }
     
+    // MARK: - Static Fallback
+
+    static let fallbackFool = TarotCard(
+        name: "The Fool", imagePath: "Cards/00-TheFool",
+        arcana: .major, suit: nil, number: nil,
+        keywords: [], themes: [],
+        energyAffinity: [:], axesAffinity: nil,
+        description: "", reversedKeywords: [],
+        symbolism: [], styleEdits: nil
+    )
+
     // MARK: - Computed Properties
 
     /// Stable identifier for Identifiable conformance

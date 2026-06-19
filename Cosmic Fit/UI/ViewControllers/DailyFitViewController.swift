@@ -96,6 +96,20 @@ class DailyFitViewController: UIViewController {
     private let wardrobeReflectionLabel = UILabel()
     private let tomorrowTeaseLabel = UILabel()
     private let tomorrowButton = UIButton(type: .system)
+    private let restrictedAreaGradientView = RestrictedAreaGradientOverlayView()
+    private let restrictedUnlockButton = UIButton(type: .system)
+    private var restrictedObscurationRitualTopConstraint: NSLayoutConstraint?
+    private var restrictedObscurationStyleBreakdownTopConstraint: NSLayoutConstraint?
+    /// Per-element blurred snapshots covering restricted Daily Fit content (no panel overlay).
+    private var restrictedBlurOverlays: [ObjectIdentifier: UIImageView] = [:]
+    private var restrictedBlurBoundsSignatures: [ObjectIdentifier: String] = [:]
+    private var restrictedPreObscureVisibility: [ObjectIdentifier: (isHidden: Bool, alpha: CGFloat)] = [:]
+    private var restrictedBlurRefreshWorkItem: DispatchWorkItem?
+    private static let restrictedBlurRadius: CGFloat = 14
+    private static let restrictedBlurSnapshotPadding: CGFloat = 12
+    private static let restrictedBlurBleed: CGFloat = 10
+    /// Cap snapshot pixel width so CI blur stays within device memory/time budgets.
+    private static let restrictedBlurMaxSnapshotWidth: CGFloat = 420
 
     /// Captured so `updateLayoutDependentConstants` can keep the
     /// "Tap to reveal…" caption pinned the right distance above the
@@ -336,6 +350,7 @@ class DailyFitViewController: UIViewController {
 
     @objc private func handleEntitlementChange() {
         updateDayNavigationUI()
+        updateRestrictedDailyFitObscuration(animated: true)
     }
 
     @objc private func handleDailyFitDisplayPreferencesChanged() {
@@ -361,6 +376,7 @@ class DailyFitViewController: UIViewController {
         updateDayNavigationBackButtonScrollPosition()
         guard dailyFitPayload != nil else { return }
         refreshDiamondScalePositions()
+        scheduleRestrictedBlurRefreshIfBoundsChanged()
     }
 
     /// Sizes `backgroundBlurImageView`'s bottom over-extension to the
@@ -538,6 +554,7 @@ class DailyFitViewController: UIViewController {
     // MARK: - Memory Management
     deinit {
         NotificationCenter.default.removeObserver(self)
+        restrictedBlurRefreshWorkItem?.cancel()
         ciContext = nil
         cardBackImageView.layer.filters = nil
         if let gesture = cardTapGesture {
@@ -858,6 +875,7 @@ class DailyFitViewController: UIViewController {
             self.tarotCardGlowView.alpha = 1.0
 
             self.scrollView.isScrollEnabled = false
+            self.updateRestrictedDailyFitObscuration(animated: false)
         }
         
         if animated {
@@ -922,6 +940,7 @@ class DailyFitViewController: UIViewController {
             allContentViews.compactMap { $0 }.forEach { $0.alpha = 1.0 }
             
             self.scrollView.isScrollEnabled = true
+            self.updateRestrictedDailyFitObscuration(animated: false)
         }
         
         if animated {
@@ -1670,6 +1689,424 @@ class DailyFitViewController: UIViewController {
         tomorrowButton.alpha = 0.0
         tomorrowButton.addTarget(self, action: #selector(dayNavigationButtonTapped), for: .touchUpInside)
         contentView.addSubview(tomorrowButton)
+
+        setupRestrictedUnlockChrome()
+    }
+
+    private func setupRestrictedUnlockChrome() {
+        restrictedAreaGradientView.translatesAutoresizingMaskIntoConstraints = false
+        restrictedAreaGradientView.isHidden = true
+        restrictedAreaGradientView.alpha = 0
+        contentView.addSubview(restrictedAreaGradientView)
+
+        restrictedUnlockButton.translatesAutoresizingMaskIntoConstraints = false
+        restrictedUnlockButton.isHidden = true
+        restrictedUnlockButton.alpha = 0
+        restrictedUnlockButton.accessibilityLabel = "Unlock Your Daily Fit"
+        restrictedUnlockButton.titleLabel?.numberOfLines = 1
+        restrictedUnlockButton.titleLabel?.lineBreakMode = .byClipping
+        restrictedUnlockButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        restrictedUnlockButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        configureRestrictedUnlockButton()
+        restrictedUnlockButton.addTarget(self, action: #selector(restrictedUnlockTapped), for: .touchUpInside)
+        contentView.addSubview(restrictedUnlockButton)
+    }
+
+    private func configureRestrictedUnlockButton() {
+        restrictedUnlockButton.configuration = nil
+        CosmicFitTheme.styleButton(restrictedUnlockButton, style: .secondary)
+        restrictedUnlockButton.setTitle("Unlock Your Daily Fit", for: .normal)
+        restrictedUnlockButton.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(
+            size: CosmicFitTheme.Typography.FontSizes.footnote,
+            weight: .medium
+        )
+    }
+
+    @objc private func restrictedUnlockTapped() {
+        presentPurchaseScreen()
+    }
+
+    private var restrictedDailyFitObscuredViews: [UIView] {
+        [
+            dailyRitualHeaderDivider,
+            dailyRitualLabel,
+            postDailyRitualDivider,
+            styleBreakdownDivider,
+            colourHeaderDivider,
+            colourPaletteContainer,
+            vibrancyScaleContainer,
+            contrastScaleContainer,
+            toneSliderContainer,
+            vibeHeaderDivider,
+            essenceTriangleView,
+            silhouetteHeaderDivider,
+            silhouetteContainer,
+            wardrobeReflectionHeaderDivider,
+            wardrobeReflectionLabel
+        ].compactMap { $0 }
+    }
+
+    private var isRestrictedDailyFitObscured: Bool {
+        isCardRevealed && !EntitlementManager.shared.hasFullAccess
+    }
+
+    private var activeRestrictedDailyFitObscuredViews: [UIView] {
+        restrictedDailyFitObscuredViews.filter {
+            !$0.isHidden && $0.bounds.width > 1 && $0.bounds.height > 1
+        }
+    }
+
+    private func attachBlurOverlay(_ overlay: UIImageView, to view: UIView) {
+        let bleed = Self.restrictedBlurBleed
+        contentView.addSubview(overlay)
+        NSLayoutConstraint.activate([
+            overlay.topAnchor.constraint(equalTo: view.topAnchor, constant: -bleed),
+            overlay.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -bleed),
+            overlay.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: bleed),
+            overlay.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: bleed)
+        ])
+    }
+
+    private func blurOverlay(for view: UIView) -> UIImageView {
+        let key = ObjectIdentifier(view)
+        if let existing = restrictedBlurOverlays[key] {
+            if existing.superview !== contentView {
+                existing.removeFromSuperview()
+                attachBlurOverlay(existing, to: view)
+            }
+            return existing
+        }
+
+        let overlay = UIImageView()
+        overlay.translatesAutoresizingMaskIntoConstraints = false
+        overlay.contentMode = .scaleToFill
+        overlay.isUserInteractionEnabled = false
+        overlay.isAccessibilityElement = false
+        overlay.clipsToBounds = false
+        overlay.isHidden = true
+        overlay.alpha = 0
+
+        attachBlurOverlay(overlay, to: view)
+        restrictedBlurOverlays[key] = overlay
+        return overlay
+    }
+
+    private func hideRestrictedContent(for views: [UIView]) {
+        for view in views {
+            let key = ObjectIdentifier(view)
+            if restrictedPreObscureVisibility[key] == nil {
+                restrictedPreObscureVisibility[key] = (view.isHidden, view.alpha)
+            }
+            view.alpha = 0
+            view.isUserInteractionEnabled = false
+        }
+    }
+
+    private func restoreRestrictedContentVisibility() {
+        for view in restrictedDailyFitObscuredViews {
+            let key = ObjectIdentifier(view)
+            guard let prior = restrictedPreObscureVisibility[key] else { continue }
+            view.isHidden = prior.isHidden
+            view.alpha = prior.alpha
+            view.isUserInteractionEnabled = true
+        }
+        restrictedPreObscureVisibility.removeAll()
+    }
+
+    private func withTemporaryRestrictedContentVisibility<T>(
+        for view: UIView,
+        perform work: () -> T
+    ) -> T {
+        let key = ObjectIdentifier(view)
+        let prior = restrictedPreObscureVisibility[key]
+        if let prior {
+            view.alpha = prior.alpha
+        }
+        defer {
+            if prior != nil {
+                view.alpha = 0
+            }
+        }
+        return work()
+    }
+
+    private func boundsSignature(for view: UIView) -> String {
+        let frame = view.bounds
+        return "\(Int(frame.width.rounded()))x\(Int(frame.height.rounded()))"
+    }
+
+    private func snapshotScale(for view: UIView) -> CGFloat {
+        let width = view.bounds.width
+        guard width > Self.restrictedBlurMaxSnapshotWidth else { return 1 }
+        return Self.restrictedBlurMaxSnapshotWidth / width
+    }
+
+    /// Uses `layer.render` instead of `drawHierarchy` to avoid layout feedback loops on device.
+    private func captureSnapshot(of view: UIView) -> (image: UIImage, scale: CGFloat)? {
+        let bounds = view.bounds
+        guard bounds.width > 1, bounds.height > 1 else { return nil }
+
+        let padding = Self.restrictedBlurSnapshotPadding
+        let renderScale = snapshotScale(for: view)
+        let screenScale = view.window?.screen.scale ?? UIScreen.main.scale
+        let outputScale = screenScale * renderScale
+
+        let canvasSize = CGSize(
+            width: (bounds.width + padding * 2) * renderScale,
+            height: (bounds.height + padding * 2) * renderScale
+        )
+
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = outputScale
+        format.opaque = false
+
+        let overlay = restrictedBlurOverlays[ObjectIdentifier(view)]
+        overlay?.isHidden = true
+
+        let snapshot = withTemporaryRestrictedContentVisibility(for: view) {
+            UIGraphicsImageRenderer(size: canvasSize, format: format).image { ctx in
+                ctx.cgContext.scaleBy(x: renderScale, y: renderScale)
+                ctx.cgContext.translateBy(x: padding, y: padding)
+                view.layer.render(in: ctx.cgContext)
+            }
+        }
+
+        overlay?.isHidden = false
+        return (snapshot, outputScale)
+    }
+
+    private func blurSnapshot(_ snapshot: UIImage, outputScale: CGFloat) -> UIImage? {
+        guard let ciImage = CIImage(image: snapshot) else { return nil }
+        guard let blurFilter = CIFilter(name: "CIGaussianBlur") else { return nil }
+        blurFilter.setValue(ciImage, forKey: kCIInputImageKey)
+        blurFilter.setValue(Self.restrictedBlurRadius, forKey: kCIInputRadiusKey)
+
+        guard let blurred = blurFilter.outputImage?.cropped(to: ciImage.extent) else { return nil }
+
+        var output = blurred
+        if let mono = CIFilter(name: "CIPhotoEffectMono") {
+            mono.setValue(output, forKey: kCIInputImageKey)
+            output = mono.outputImage?.cropped(to: ciImage.extent) ?? output
+        }
+
+        if ciContext == nil {
+            ciContext = CIContext(options: [CIContextOption.useSoftwareRenderer: false])
+        }
+        guard let context = ciContext,
+              let cgImage = context.createCGImage(output, from: ciImage.extent) else { return nil }
+
+        return UIImage(cgImage: cgImage, scale: outputScale, orientation: .up)
+    }
+
+    private func cancelRestrictedBlurRefresh() {
+        restrictedBlurRefreshWorkItem?.cancel()
+        restrictedBlurRefreshWorkItem = nil
+    }
+
+    private func scheduleRestrictedBlurRefresh(force: Bool = false) {
+        guard isRestrictedDailyFitObscured else { return }
+
+        let views = activeRestrictedDailyFitObscuredViews
+        guard !views.isEmpty else { return }
+
+        if !force {
+            let signaturesMatch = views.allSatisfy { view in
+                restrictedBlurBoundsSignatures[ObjectIdentifier(view)] == boundsSignature(for: view)
+                    && restrictedBlurOverlays[ObjectIdentifier(view)]?.image != nil
+            }
+            if signaturesMatch { return }
+        }
+
+        cancelRestrictedBlurRefresh()
+
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.performRestrictedBlurRefresh(for: views)
+        }
+        restrictedBlurRefreshWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)
+    }
+
+    private func scheduleRestrictedBlurRefreshIfBoundsChanged() {
+        guard isRestrictedDailyFitObscured else { return }
+        let views = activeRestrictedDailyFitObscuredViews
+        let needsRefresh = views.contains { view in
+            restrictedBlurBoundsSignatures[ObjectIdentifier(view)] != boundsSignature(for: view)
+        }
+        if needsRefresh {
+            scheduleRestrictedBlurRefresh(force: true)
+        }
+    }
+
+    private func performRestrictedBlurRefresh(for views: [UIView]) {
+        guard isRestrictedDailyFitObscured else { return }
+
+        struct PendingBlur {
+            let view: UIView
+            let snapshot: UIImage
+            let scale: CGFloat
+            let signature: String
+        }
+
+        var pending: [PendingBlur] = []
+        pending.reserveCapacity(views.count)
+
+        for view in views {
+            guard let capture = captureSnapshot(of: view) else { continue }
+            pending.append(
+                PendingBlur(
+                    view: view,
+                    snapshot: capture.image,
+                    scale: capture.scale,
+                    signature: boundsSignature(for: view)
+                )
+            )
+        }
+
+        guard !pending.isEmpty else { return }
+
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            struct BlurredItem {
+                let view: UIView
+                let image: UIImage
+                let signature: String
+            }
+
+            var blurred: [BlurredItem] = []
+            blurred.reserveCapacity(pending.count)
+
+            for item in pending {
+                autoreleasepool {
+                    guard let image = self?.blurSnapshot(item.snapshot, outputScale: item.scale) else { return }
+                    blurred.append(BlurredItem(view: item.view, image: image, signature: item.signature))
+                }
+            }
+
+            DispatchQueue.main.async { [weak self] in
+                guard let self, self.isRestrictedDailyFitObscured else { return }
+                for item in blurred {
+                    guard item.view.window != nil else { continue }
+                    let overlay = self.blurOverlay(for: item.view)
+                    overlay.image = item.image
+                    overlay.isHidden = false
+                    overlay.alpha = 1
+                    self.restrictedBlurBoundsSignatures[ObjectIdentifier(item.view)] = item.signature
+                    self.contentView.bringSubviewToFront(overlay)
+                }
+                self.hideRestrictedContent(for: blurred.map(\.view))
+                self.bringRestrictedUnlockStackToFront()
+            }
+        }
+    }
+
+    private func clearRestrictedElementBlurs() {
+        cancelRestrictedBlurRefresh()
+        restrictedBlurBoundsSignatures.removeAll()
+        restoreRestrictedContentVisibility()
+        restrictedBlurOverlays.values.forEach { overlay in
+            overlay.image = nil
+            overlay.isHidden = true
+            overlay.alpha = 0
+        }
+        setRestrictedUnlockChromeVisible(false, animated: false)
+    }
+
+    private func bringRestrictedChromeAboveTomorrowSection() {
+        if let finalStarDivider {
+            contentView.bringSubviewToFront(finalStarDivider)
+        }
+        contentView.bringSubviewToFront(tomorrowTeaseLabel)
+        contentView.bringSubviewToFront(tomorrowButton)
+    }
+
+    private func bringRestrictedUnlockStackToFront() {
+        activeRestrictedDailyFitObscuredViews.forEach { view in
+            if let overlay = restrictedBlurOverlays[ObjectIdentifier(view)] {
+                contentView.bringSubviewToFront(overlay)
+            }
+        }
+        contentView.bringSubviewToFront(restrictedAreaGradientView)
+        contentView.bringSubviewToFront(restrictedUnlockButton)
+        bringRestrictedChromeAboveTomorrowSection()
+    }
+
+    private func setRestrictedUnlockChromeVisible(_ visible: Bool, animated: Bool) {
+        if visible {
+            restrictedAreaGradientView.isHidden = false
+            restrictedUnlockButton.isHidden = false
+        }
+
+        let apply = {
+            self.restrictedAreaGradientView.alpha = visible ? 1.0 : 0.0
+            self.restrictedUnlockButton.alpha = visible ? 1.0 : 0.0
+        }
+
+        let completion = {
+            if !visible {
+                self.restrictedAreaGradientView.isHidden = true
+                self.restrictedUnlockButton.isHidden = true
+            }
+        }
+
+        if animated {
+            UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut], animations: apply) { _ in
+                completion()
+            }
+        } else {
+            apply()
+            completion()
+        }
+    }
+
+    private func setRestrictedElementBlursVisible(_ visible: Bool, animated: Bool) {
+        let activeViews = activeRestrictedDailyFitObscuredViews
+        let activeKeys = Set(activeViews.map(ObjectIdentifier.init))
+
+        if !visible {
+            clearRestrictedElementBlurs()
+            return
+        }
+
+        restrictedBlurOverlays.forEach { key, overlay in
+            guard !activeKeys.contains(key) else { return }
+            overlay.isHidden = true
+            overlay.alpha = 0
+            overlay.image = nil
+            restrictedBlurBoundsSignatures.removeValue(forKey: key)
+        }
+
+        activeViews.forEach { view in
+            _ = blurOverlay(for: view)
+        }
+
+        scheduleRestrictedBlurRefresh(force: true)
+
+        let viewsWithCachedBlur = activeViews.filter {
+            restrictedBlurOverlays[ObjectIdentifier($0)]?.image != nil
+        }
+        hideRestrictedContent(for: viewsWithCachedBlur)
+
+        let apply = {
+            activeViews.forEach { view in
+                let overlay = self.blurOverlay(for: view)
+                overlay.isHidden = false
+                self.contentView.bringSubviewToFront(overlay)
+            }
+        }
+
+        if animated {
+            UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut], animations: apply)
+        } else {
+            apply()
+        }
+
+        setRestrictedUnlockChromeVisible(true, animated: animated)
+        bringRestrictedUnlockStackToFront()
+    }
+
+    private func updateRestrictedDailyFitObscuration(animated: Bool) {
+        let shouldShow = isRestrictedDailyFitObscured
+        restrictedDailyFitObscuredViews.forEach { $0.accessibilityElementsHidden = shouldShow }
+        setRestrictedElementBlursVisible(shouldShow, animated: animated)
     }
 
     // MARK: - Day Navigation
@@ -1678,10 +2115,6 @@ class DailyFitViewController: UIViewController {
         if isViewingTomorrow {
             switchToToday()
         } else {
-            guard EntitlementManager.shared.hasFullAccess else {
-                presentPurchaseScreen()
-                return
-            }
             switchToTomorrow()
         }
     }
@@ -1853,27 +2286,12 @@ class DailyFitViewController: UIViewController {
             dayNavigationBackButton.alpha = 1
             dayNavigationBackButton.isUserInteractionEnabled = true
         } else {
-            if EntitlementManager.shared.hasFullAccess {
-                CosmicNavigationArrow.apply(
-                    to: tomorrowButton,
-                    title: "SEE TOMORROW\u{2019}S FIT",
-                    arrow: .right,
-                    pointSize: 6
-                )
-            } else {
-                var config = tomorrowButton.configuration ?? UIButton.Configuration.plain()
-                var titleAttributes = AttributeContainer()
-                titleAttributes.font = CosmicFitTheme.Typography.dmSansFont(
-                    size: CosmicFitTheme.Typography.FontSizes.footnote,
-                    weight: .medium
-                )
-                config.attributedTitle = AttributedString("UNLOCK FULL ACCESS", attributes: titleAttributes)
-                config.image = nil
-                config.titleLineBreakMode = .byClipping
-                config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 14, bottom: 8, trailing: 14)
-                config.baseForegroundColor = CosmicFitTheme.Colours.cosmicBlue
-                tomorrowButton.configuration = config
-            }
+            CosmicNavigationArrow.apply(
+                to: tomorrowButton,
+                title: "SEE TOMORROW\u{2019}S FIT",
+                arrow: .right,
+                pointSize: 6
+            )
             tomorrowTeaseLabel.text = "Tomorrow\u{2019}s energy is already shifting..."
             dayNavigationBackButton.isHidden = true
             dayNavigationBackButton.alpha = 0
@@ -1886,6 +2304,7 @@ class DailyFitViewController: UIViewController {
         } else {
             dayNavigationBackButton.transform = .identity
         }
+        updateRestrictedDailyFitObscuration(animated: false)
     }
 
     private func setupDayNavigationBackButton() {
@@ -1998,13 +2417,8 @@ class DailyFitViewController: UIViewController {
         tarotNumeralImageView.alpha = 0.0
         contentView.addSubview(tarotNumeralImageView)
 
-        // Tarot card title — large serif caps
-        tarotTitleLabel.text = "THE CHARIOT"
-        tarotTitleLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(
-            size: CosmicFitTheme.Typography.FontSizes.title1,
-            weight: .semibold
-        )
-        tarotTitleLabel.textColor = .black
+        // Tarot card title — large serif caps with wide tracking
+        applyTarotTitleLabel("THE CHARIOT")
         tarotTitleLabel.textAlignment = .center
         tarotTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         tarotTitleLabel.alpha = 0.0
@@ -2023,13 +2437,11 @@ class DailyFitViewController: UIViewController {
         df.dateFormat = "EEEE, MMMM d"
         df.locale = Locale(identifier: "en_GB")
         let raw = df.string(from: date).uppercased()
-        let font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.callout, weight: .regular)
-        let attrs: [NSAttributedString.Key: Any] = [
-            .font: font,
-            .foregroundColor: UIColor.black,
-            .kern: 2.25
-        ]
-        dateLabel.attributedText = NSAttributedString(string: raw, attributes: attrs)
+        dateLabel.attributedText = CosmicFitTheme.DailyFitDateTypography.attributedString(raw)
+    }
+
+    private func applyTarotTitleLabel(_ text: String) {
+        tarotTitleLabel.attributedText = CosmicFitTheme.DailyFitCardTitleTypography.attributedString(text)
     }
     
     // MARK: - Divider Helper Methods
@@ -2680,7 +3092,7 @@ class DailyFitViewController: UIViewController {
 
         loadTarotCardImage(for: payload.tarotCard)
         loadTarotNumeral(for: payload.tarotCard)
-        tarotTitleLabel.text = payload.tarotCard.displayName.uppercased()
+        applyTarotTitleLabel(payload.tarotCard.displayName.uppercased())
 
         applyDailyFitDateLabel(for: payload.generatedAt)
 
@@ -2714,6 +3126,7 @@ class DailyFitViewController: UIViewController {
         updateVibrancyTrackAccentColor(from: payload.dailyPalette)
         refreshDiamondScalePositions()
         updateTarotCardOuterGlow()
+        updateRestrictedDailyFitObscuration(animated: false)
     }
 
     private func createStarDivider() -> UIView {
@@ -3031,6 +3444,37 @@ class DailyFitViewController: UIViewController {
             ])
         }
 
+        restrictedObscurationRitualTopConstraint = restrictedAreaGradientView.topAnchor.constraint(
+            equalTo: dailyRitualHeaderDivider?.topAnchor ?? styleEditLabel.bottomAnchor
+        )
+        restrictedObscurationStyleBreakdownTopConstraint = restrictedAreaGradientView.topAnchor.constraint(
+            equalTo: styleBreakdownDivider?.topAnchor ?? styleEditLabel.bottomAnchor
+        )
+        constraints.append(contentsOf: [
+            restrictedAreaGradientView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            restrictedAreaGradientView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+
+            restrictedUnlockButton.centerXAnchor.constraint(equalTo: restrictedAreaGradientView.centerXAnchor),
+            restrictedUnlockButton.centerYAnchor.constraint(equalTo: restrictedAreaGradientView.centerYAnchor),
+            restrictedUnlockButton.leadingAnchor.constraint(
+                greaterThanOrEqualTo: contentView.leadingAnchor,
+                constant: horizontalMargin
+            ),
+            restrictedUnlockButton.trailingAnchor.constraint(
+                lessThanOrEqualTo: contentView.trailingAnchor,
+                constant: -horizontalMargin
+            ),
+            restrictedUnlockButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 38)
+        ])
+        if let finalStarDivider {
+            constraints.append(
+                restrictedAreaGradientView.bottomAnchor.constraint(
+                    equalTo: finalStarDivider.topAnchor,
+                    constant: -8
+                )
+            )
+        }
+
         NSLayoutConstraint.activate(constraints)
 
         let hasRitual = dailyFitPayload?.styleEditVariant.dailyRitual != nil
@@ -3045,6 +3489,8 @@ class DailyFitViewController: UIViewController {
         postDailyRitualDividerConstraints.forEach { $0.isActive = hasRitual }
         styleBreakdownAfterDailyRitualConstraint?.isActive = hasRitual
         styleBreakdownAfterStyleParagraphConstraint?.isActive = !hasRitual
+        restrictedObscurationRitualTopConstraint?.isActive = hasRitual
+        restrictedObscurationStyleBreakdownTopConstraint?.isActive = !hasRitual
     }
 
     private func loadTarotNumeral(for tarotCard: TarotCard) {
@@ -3435,6 +3881,7 @@ class DailyFitViewController: UIViewController {
                 view.alpha = 1.0
             }
         }
+        updateRestrictedDailyFitObscuration(animated: true)
         
         scrollView.isScrollEnabled = true
         setupContentSectionBackgrounds(animated: true)
@@ -3565,6 +4012,12 @@ class DailyFitViewController: UIViewController {
             }
             self.calendarButton.alpha = 1.0
             self.contentView.bringSubviewToFront(self.calendarButton)
+            if let finalStarDivider = self.finalStarDivider {
+                self.contentView.bringSubviewToFront(finalStarDivider)
+            }
+            self.contentView.bringSubviewToFront(self.tomorrowTeaseLabel)
+            self.contentView.bringSubviewToFront(self.tomorrowButton)
+            self.updateRestrictedDailyFitObscuration(animated: false)
         }
         
         if animated {
@@ -3751,6 +4204,34 @@ private class MetallicGradientTrackView: GradientTrackView {
     override func layoutSubviews() {
         super.layoutSubviews()
         gleamLayer.frame = bounds
+    }
+}
+
+private final class RestrictedAreaGradientOverlayView: UIView {
+    private let gradientLayer = CAGradientLayer()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        isUserInteractionEnabled = false
+        backgroundColor = .clear
+        gradientLayer.colors = [
+            UIColor.white.withAlphaComponent(0).cgColor,
+            UIColor.white.withAlphaComponent(0.42).cgColor,
+            UIColor.white.withAlphaComponent(0.68).cgColor,
+            UIColor.white.withAlphaComponent(0.42).cgColor,
+            UIColor.white.withAlphaComponent(0).cgColor
+        ]
+        gradientLayer.locations = [0, 0.26, 0.5, 0.74, 1]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
+        layer.addSublayer(gradientLayer)
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) not supported") }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        gradientLayer.frame = bounds
     }
 }
 

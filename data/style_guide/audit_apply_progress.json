@@ -1,0 +1,9 @@
+{
+  "phase": "rewrite",
+  "completed": 111,
+  "total": 111,
+  "applied": 111,
+  "skipped": 0,
+  "failed": 0,
+  "timestamp": "2026-06-17T11:24:49.095339+00:00"
+}

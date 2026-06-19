@@ -22,13 +22,20 @@ struct DailyFitEngineRegistry_Tests {
     @Test("Unknown id falls back to production calibration")
     func unknownIdFallsBackToProduction() {
         let calibration = DailyFitEngineRegistry.calibration(for: "not_a_real_engine")
-        #expect(calibration == DailyFitCalibration.default)
+        let production = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)!
+        #expect(calibration == production.calibration)
     }
 
-    @Test("Production preset uses .default by identity")
-    func productionUsesDefaultIdentity() {
+    @Test("Production preset uses Sky Forward stage1 calibration")
+    func productionUsesSkyForwardCalibration() {
         let production = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)
-        #expect(production?.calibration == DailyFitCalibration.default)
+        let stage1Calibration = DailyFitEngineRegistry.calibration(
+            for: DailyFitEngineRegistry.stage1ExperimentalId
+        )
+        #expect(production?.displayName == "Sky Forward")
+        #expect(production?.marketingVersion == DailyFitEngineRegistry.productionMarketingVersion)
+        #expect(production?.calibration == stage1Calibration)
+        #expect(production?.mode == .stage1Experimental)
     }
 
     @Test("Fingerprints are stable and differ between production and legacy_baseline")
@@ -41,11 +48,18 @@ struct DailyFitEngineRegistry_Tests {
         #expect(production.fingerprint != legacy.fingerprint)
     }
 
-    @Test("stage1_experimental fingerprint differs from production")
-    func stage1FingerprintDiffersFromProduction() {
+    @Test("stage2_legacy fingerprint differs from Sky Forward production")
+    func stage2LegacyFingerprintDiffersFromProduction() {
+        let production = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)!
+        let stage2Legacy = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.stage2LegacyId)!
+        #expect(stage2Legacy.fingerprint != production.fingerprint)
+    }
+
+    @Test("stage1_experimental alias matches Sky Forward production fingerprint")
+    func stage1AliasMatchesProductionFingerprint() {
         let production = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)!
         let stage1 = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.stage1ExperimentalId)!
-        #expect(stage1.fingerprint != production.fingerprint)
+        #expect(stage1.fingerprint == production.fingerprint)
     }
 
     @Test("stage1_experimental uses sky-forward calibration, stage1Experimental mode, and S2 seed policy")
@@ -62,46 +76,47 @@ struct DailyFitEngineRegistry_Tests {
             == .stage1Experimental)
     }
 
-    @Test("stage1_experimental produces different output than production on fixed fixture")
-    func stage1ExperimentalDiffersFromProduction() {
+    @Test("Sky Forward production differs from stage2 legacy on fixed fixture")
+    func skyForwardDiffersFromStage2Legacy() {
         TarotCalibrationTestSupport.installIsolatedTrackers()
         defer { TarotCalibrationTestSupport.resetTrackersForProfile() }
 
         let profile = DailyFitEngineRegistryTestSupport.ashProfile
         let date = DailyFitEngineRegistryTestSupport.fixedBaseDate
-        let stage1Calibration = DailyFitEngineRegistry.calibration(
-            for: DailyFitEngineRegistry.stage1ExperimentalId
+        let skyForwardCalibration = DailyFitEngineRegistry.calibration(
+            for: DailyFitEngineRegistry.productionId
         )
 
         TarotCalibrationTestSupport.resetTrackersForProfile()
-        let productionPayload = DailyFitEngineRegistryTestSupport.generatePayload(
+        let stage2Payload = DailyFitEngineRegistryTestSupport.generatePayload(
             profile: profile,
             date: date,
             calibration: DailyFitCalibration.default,
-            engineId: DailyFitEngineRegistry.productionId
+            engineId: DailyFitEngineRegistry.stage2LegacyId
         )
 
         TarotCalibrationTestSupport.resetTrackersForProfile()
-        let stage1Payload = DailyFitEngineRegistryTestSupport.generatePayload(
+        let skyForwardPayload = DailyFitEngineRegistryTestSupport.generatePayload(
             profile: profile,
             date: date,
-            calibration: stage1Calibration,
-            engineId: DailyFitEngineRegistry.stage1ExperimentalId
+            calibration: skyForwardCalibration,
+            mode: .stage1Experimental,
+            engineId: DailyFitEngineRegistry.productionId
         )
 
-        #expect(stage1Payload.dailyFitEngineId == DailyFitEngineRegistry.stage1ExperimentalId)
-        let productionVibe = productionPayload.vibeBreakdown
-        let stage1Vibe = stage1Payload.vibeBreakdown
+        #expect(skyForwardPayload.dailyFitEngineId == DailyFitEngineRegistry.productionId)
+        let stage2Vibe = stage2Payload.vibeBreakdown
+        let skyForwardVibe = skyForwardPayload.vibeBreakdown
         let vibeDiffers = Energy.allCases.contains {
-            productionVibe.value(for: $0) != stage1Vibe.value(for: $0)
+            stage2Vibe.value(for: $0) != skyForwardVibe.value(for: $0)
         }
-        let essenceDiffers = productionPayload.essenceProfile.visibleCategories.map(\.category)
-            != stage1Payload.essenceProfile.visibleCategories.map(\.category)
-        let tarotDiffers = productionPayload.tarotCard.name != stage1Payload.tarotCard.name
-        let paletteDiffers = productionPayload.dailyPalette.colours.map(\.name)
-            != stage1Payload.dailyPalette.colours.map(\.name)
-        let scalesDiffer = productionPayload.vibrancy != stage1Payload.vibrancy
-            || productionPayload.contrast != stage1Payload.contrast
+        let essenceDiffers = stage2Payload.essenceProfile.visibleCategories.map(\.category)
+            != skyForwardPayload.essenceProfile.visibleCategories.map(\.category)
+        let tarotDiffers = stage2Payload.tarotCard.name != skyForwardPayload.tarotCard.name
+        let paletteDiffers = stage2Payload.dailyPalette.colours.map(\.name)
+            != skyForwardPayload.dailyPalette.colours.map(\.name)
+        let scalesDiffer = stage2Payload.vibrancy != skyForwardPayload.vibrancy
+            || stage2Payload.contrast != skyForwardPayload.contrast
         #expect(vibeDiffers || essenceDiffers || tarotDiffers || paletteDiffers || scalesDiffer)
     }
 
@@ -274,8 +289,34 @@ struct DailyFitEngineRegistry_Tests {
         #expect(report.stage1AxisAttribution?.byAxis.count == 4)
     }
 
-    @Test("production daily path applies non-neutral sign multipliers in trace")
-    func productionDailySignMultipliersInTrace() {
+    @Test("Sky Forward production daily path skips sign multipliers on sky read")
+    func skyForwardDailySignMultipliersInTrace() {
+        let profile = DailyFitEngineRegistryTestSupport.ashProfile
+        let date = DailyFitEngineRegistryTestSupport.fixedBaseDate
+        let natal = DailyFitEngineRegistryTestSupport.chart(signs: profile.natalSigns)
+        let progressed = DailyFitEngineRegistryTestSupport.chart(signs: profile.progressedSigns)
+        let skyForwardCalibration = DailyFitEngineRegistry.calibration(
+            for: DailyFitEngineRegistry.productionId
+        )
+
+        let (_, report) = DailyFitDiagnostics.generateReport(
+            natalChart: natal,
+            progressedChart: progressed,
+            transits: [],
+            moonPhaseDegrees: 45.0,
+            profileHash: profile.hash,
+            blueprint: DailyFitEngineRegistryTestSupport.minimalBlueprint,
+            date: date,
+            calibration: skyForwardCalibration,
+            dailyFitEngineId: DailyFitEngineRegistry.productionId
+        )
+
+        #expect(report.stage1Attribution?.signMultipliersAppliedToDailyVibe == false)
+        #expect(report.postMultiplierScores == report.rawEnergyScores)
+    }
+
+    @Test("stage2 legacy daily path applies non-neutral sign multipliers in trace")
+    func stage2LegacyDailySignMultipliersInTrace() {
         let profile = DailyFitEngineRegistryTestSupport.ashProfile
         let date = DailyFitEngineRegistryTestSupport.fixedBaseDate
         let natal = DailyFitEngineRegistryTestSupport.chart(signs: profile.natalSigns)
@@ -290,7 +331,7 @@ struct DailyFitEngineRegistry_Tests {
             blueprint: DailyFitEngineRegistryTestSupport.minimalBlueprint,
             date: date,
             calibration: .default,
-            dailyFitEngineId: DailyFitEngineRegistry.productionId
+            dailyFitEngineId: DailyFitEngineRegistry.stage2LegacyId
         )
 
         #expect(report.stage1Attribution?.signMultipliersAppliedToDailyVibe == true)

@@ -16,10 +16,10 @@
    "Convention for convention's sake that serves no creative purpose. Following rules without questioning them is the real failure."
   ],
   "consider": [
-   "Exploring 3D-knit suiting that outperforms traditional tailoring in fit, comfort, and environmental impact",
-   "Making structural innovation visible in every seam, so the engineering speaks as loudly as the fabric",
    "midnight-blue suiting as a daily act of visionary authority",
-   "structured silk that brings dreamlike quality to power dressing"
+   "structured silk that brings dreamlike quality to power dressing",
+   "Exploring 3D-knit suiting that outperforms traditional tailoring in fit, comfort, and environmental impact",
+   "Making structural innovation visible in every seam, so the engineering speaks as loudly as the fabric"
   ],
   "leanInto": [
    "Wielding discipline as the ultimate power tool. A perfectly maintained wardrobe of dark staples says more than any flashy collection.",
@@ -31,7 +31,7 @@
   ]
  },
  "engineVersion": "2.0.0",
- "generatedAt": "2026-06-10T20:44:29Z",
+ "generatedAt": "2026-06-14T15:05:41Z",
  "hardware": {
   "metalsText": "Your metal details demand substantial physical weight and a sense of having lived a little. A baseline of platinum tones gives everyday pieces a warm, worldly foundation. You can easily work polished silver tones into the mix on heavy belt buckles or the structural clasps of a good leather bag. Finish matters just as much as the metal itself, so look for brushed or hand-cast textures rather than blindingly shiny surfaces. The trick is balancing that raw, hammered feel with clean symmetry so the overall look never tips into pure costume. You want zips and fastenings that feel reassuringly solid under your thumb.",
   "recommendedMetals": [
@@ -350,6 +350,6 @@
  "userInfo": {
   "birthDate": "1992-01-25T04:00:00Z",
   "birthLocation": "Synth 190 \u2014 Aquarius Sun, 04:00 UTC, New York (1992)",
-  "generationDate": "2026-06-10T20:44:29Z"
+  "generationDate": "2026-06-14T15:05:41Z"
  }
 }

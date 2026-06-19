@@ -90,6 +90,97 @@ struct CosmicFitTheme {
             )
         }
     }
+
+    /// Style Guide hub title — two-line serif caps ("YOUR COSMIC STYLE GUIDE").
+    struct PageMainTitleTypography {
+        static let styleGuideLetterSpacingFraction: CGFloat = 0.024
+        static let multiLineHeightMultiple: CGFloat = 0.78
+
+        static func attributedString(
+            _ text: String,
+            fontSize: CGFloat = Typography.FontSizes.pageTitle,
+            color: UIColor = Colours.cosmicBlue,
+            weight: UIFont.Weight = .regular
+        ) -> NSAttributedString {
+            let font = Typography.DMSerifTextFont(size: fontSize, weight: weight)
+            let kern = fontSize * styleGuideLetterSpacingFraction
+
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.lineHeightMultiple = multiLineHeightMultiple
+            paragraphStyle.alignment = .center
+
+            return NSAttributedString(
+                string: text,
+                attributes: [
+                    .font: font,
+                    .foregroundColor: color,
+                    .kern: kern,
+                    .paragraphStyle: paragraphStyle
+                ]
+            )
+        }
+    }
+
+    /// Style Guide sub-page titles — serif section headers ("The Textures", "The Blueprint", etc.).
+    struct StyleGuideSubPageTitleTypography {
+        static let letterSpacingFraction: CGFloat = 0.052
+
+        static func attributedString(
+            _ text: String,
+            fontSize: CGFloat = Typography.FontSizes.title1,
+            color: UIColor = Colours.cosmicBlue,
+            weight: UIFont.Weight = .bold
+        ) -> NSAttributedString {
+            let font = Typography.DMSerifTextFont(size: fontSize, weight: weight)
+            return NSAttributedString(
+                string: text,
+                attributes: [
+                    .font: font,
+                    .foregroundColor: color,
+                    .kern: fontSize * letterSpacingFraction
+                ]
+            )
+        }
+    }
+
+    /// Daily Fit tarot card title — single-line serif caps ("THE CHARIOT"); default line height.
+    struct DailyFitCardTitleTypography {
+        static let letterSpacingFraction: CGFloat = 0.078
+
+        static func attributedString(
+            _ text: String,
+            fontSize: CGFloat = Typography.FontSizes.title1,
+            color: UIColor = .black,
+            weight: UIFont.Weight = .semibold
+        ) -> NSAttributedString {
+            let font = Typography.DMSerifTextFont(size: fontSize, weight: weight)
+            return NSAttributedString(
+                string: text,
+                attributes: [
+                    .font: font,
+                    .foregroundColor: color,
+                    .kern: fontSize * letterSpacingFraction
+                ]
+            )
+        }
+    }
+
+    /// Daily Fit date line — sans caps ("FRIDAY, MAY 2").
+    struct DailyFitDateTypography {
+        static let fontSize = Typography.FontSizes.callout
+        static let letterSpacingFraction: CGFloat = 0.14
+
+        static func attributedString(_ text: String, color: UIColor = .black) -> NSAttributedString {
+            NSAttributedString(
+                string: text,
+                attributes: [
+                    .font: Typography.dmSansFont(size: fontSize, weight: .regular),
+                    .foregroundColor: color,
+                    .kern: fontSize * letterSpacingFraction
+                ]
+            )
+        }
+    }
     
     // MARK: - Typography
     struct Typography {

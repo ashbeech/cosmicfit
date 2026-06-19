@@ -102,7 +102,11 @@ def resolve_model_name(cli_value: str | None) -> str:
     if env_value:
         return env_value
 
-    return "gemini-2.0-flash"
+    try:
+        from gemini_client import DEFAULT_MODEL
+        return DEFAULT_MODEL
+    except ImportError:
+        return "gemini-3.1-pro-preview"
 
 
 def _configure_model(api_key: str, model_name: str):

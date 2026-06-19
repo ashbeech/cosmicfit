@@ -119,7 +119,7 @@ enum NarrativeTarotBridgeSelector {
 
         guard let best = pairs.first else {
             // Fallback: no pairs (all cards had empty styleEdits)
-            let fallbackCard = pool.first?.card ?? allCards[0].card
+            let fallbackCard = pool.first?.card ?? allCards.first?.card ?? TarotCard.fallbackFool
             let fallbackVariant = StyleEditVariant(
                 variant: "I", title: fallbackCard.name,
                 description: "Style guidance inspired by \(fallbackCard.name).",

@@ -46,7 +46,7 @@ class OnboardingFormViewController: UIViewController {
     private let timeDivider = UIView()
     private let datePicker = UIDatePicker()
     private let timePicker = UIDatePicker()
-    private let unknownTimeCheckbox = UIButton(type: .system)
+    private let unknownTimeCheckbox = UIButton(type: .custom)
     private let unknownTimeLabel = UILabel()
     private var hasSelectedDate = false
     private var hasSelectedTime = false
@@ -277,13 +277,18 @@ class OnboardingFormViewController: UIViewController {
 
         // Unknown time controls
         unknownTimeCheckbox.translatesAutoresizingMaskIntoConstraints = false
-        let uncheckedImage = makeCheckboxImage(filled: false)
-        let checkedImage = makeCheckboxImage(filled: true)
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .regular)
+        let uncheckedImage = UIImage(systemName: "square", withConfiguration: symbolConfig)
+        let checkedImage = UIImage(systemName: "checkmark.square", withConfiguration: symbolConfig)
         unknownTimeCheckbox.setImage(uncheckedImage, for: .normal)
         unknownTimeCheckbox.setImage(uncheckedImage, for: .highlighted)
         unknownTimeCheckbox.setImage(checkedImage, for: .selected)
         unknownTimeCheckbox.setImage(checkedImage, for: [.selected, .highlighted])
         unknownTimeCheckbox.tintColor = CosmicFitTheme.Colours.cosmicBlue
+        unknownTimeCheckbox.adjustsImageWhenHighlighted = false
+        if #available(iOS 15.0, *) {
+            unknownTimeCheckbox.configuration = nil
+        }
         unknownTimeCheckbox.addTarget(self, action: #selector(unknownTimeToggled), for: .touchUpInside)
 
         unknownTimeLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -388,29 +393,6 @@ class OnboardingFormViewController: UIViewController {
         done.tintColor = CosmicFitTheme.Colours.cosmicBlue
         toolbar.setItems([flex, done], animated: false)
         return toolbar
-    }
-
-    private func makeCheckboxImage(filled: Bool) -> UIImage? {
-        let size = CGSize(width: 22, height: 22)
-        let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { context in
-            let cgContext = context.cgContext
-            let rect = CGRect(origin: .zero, size: size).insetBy(dx: 1, dy: 1)
-            let path = UIBezierPath(roundedRect: rect, cornerRadius: 2)
-            cgContext.setStrokeColor(CosmicFitTheme.Colours.cosmicBlue.cgColor)
-            cgContext.setLineWidth(1.5)
-            path.stroke()
-
-            if filled {
-                cgContext.setStrokeColor(CosmicFitTheme.Colours.cosmicBlue.cgColor)
-                cgContext.setLineWidth(2.0)
-                cgContext.setLineCap(.round)
-                cgContext.move(to: CGPoint(x: rect.minX + 4, y: rect.midY))
-                cgContext.addLine(to: CGPoint(x: rect.midX - 1, y: rect.maxY - 4))
-                cgContext.addLine(to: CGPoint(x: rect.maxX - 3, y: rect.minY + 4))
-                cgContext.strokePath()
-            }
-        }.withRenderingMode(.alwaysOriginal)
     }
 
     private func setupConstraints() {

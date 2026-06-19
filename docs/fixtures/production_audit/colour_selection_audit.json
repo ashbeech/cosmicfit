@@ -1,0 +1,116 @@
+{
+  "generatedAt": "2026-06-14T15:16Z",
+  "users": 223,
+  "days": 10035,
+  "meanSlotCoverage": 99.3,
+  "meanHeroCoverage": 92.6,
+  "bandCoverage": [
+    {
+      "band": "Accent",
+      "slot": 100.0,
+      "hero": 100.0,
+      "total": 422
+    },
+    {
+      "band": "Core",
+      "slot": 100.0,
+      "hero": 94.8,
+      "total": 892
+    },
+    {
+      "band": "Support",
+      "slot": 100.0,
+      "hero": 93.8,
+      "total": 882
+    },
+    {
+      "band": "Ruler Signature",
+      "slot": 100.0,
+      "hero": 100.0,
+      "total": 160
+    },
+    {
+      "band": "Luminary Signature",
+      "slot": 100.0,
+      "hero": 100.0,
+      "total": 223
+    },
+    {
+      "band": "Neutrals",
+      "slot": 98.2,
+      "hero": 85.4,
+      "total": 892
+    },
+    {
+      "band": "Light Anchor",
+      "slot": 95.6,
+      "hero": 81.8,
+      "total": 137
+    },
+    {
+      "band": "Deep Anchor",
+      "slot": 97.4,
+      "hero": 84.9,
+      "total": 152
+    }
+  ],
+  "roleSlots": [
+    {
+      "role": "Core",
+      "slots": 7342,
+      "hero": 2179
+    },
+    {
+      "role": "Accent",
+      "slots": 8049,
+      "hero": 2292
+    },
+    {
+      "role": "Support",
+      "slots": 5523,
+      "hero": 1871
+    },
+    {
+      "role": "Signature",
+      "slots": 4779,
+      "hero": 1822
+    },
+    {
+      "role": "Neutral",
+      "slots": 2901,
+      "hero": 1234
+    },
+    {
+      "role": "Anchor",
+      "slots": 1511,
+      "hero": 637
+    }
+  ],
+  "black": {
+    "users": 149,
+    "seenAnySlot": 144,
+    "seenHero": 130
+  },
+  "findings": [
+    [
+      "P2",
+      "Deep anchors now surface but remain hero-rare",
+      "Deep anchors appear in 97.4% of candidate pools (any slot) but only 84.9% as first-slot hero."
+    ],
+    [
+      "P2",
+      "Hero rotation now spans foundation bands",
+      "First-slot heroes include accent, anchor, core, neutral, signature, support \u2014 broader than the prior accent/signature-only pattern."
+    ],
+    [
+      "P2",
+      "Black exposure improved but hero slot still sparse",
+      "149 users had black candidates; 144 saw one in any slot (97%), 130 as hero (87%)."
+    ],
+    [
+      "P2",
+      "Tests verify uniqueness and reachability",
+      "ColourReachability_Tests (7/7 pass) assert band coverage, hero rotation, and anchor-as-hero within 60 days on a full-range fixture."
+    ]
+  ]
+}

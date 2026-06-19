@@ -128,17 +128,18 @@ class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate
         dismissSelf()
     }
     
-    func dismissSelf() {
+    func dismissSelf(completion: (() -> Void)? = nil) {
         var currentParent: UIViewController? = parent
         while currentParent != nil {
             if let tabBarController = currentParent as? CosmicFitTabBarController {
-                tabBarController.dismissDetailViewController(animated: true)
+                tabBarController.dismissDetailViewController(animated: true, completion: completion)
                 return
             }
             currentParent = currentParent?.parent
         }
         
         print("⚠️ Could not find CosmicFitTabBarController to dismiss")
+        completion?()
     }
     
     // MARK: - Gesture Handling

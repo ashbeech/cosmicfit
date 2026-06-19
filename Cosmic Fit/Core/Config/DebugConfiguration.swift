@@ -13,11 +13,14 @@ struct DebugConfiguration {
     // MARK: - Entitlement Override
     
     /// When true, `EntitlementManager` bypasses StoreKit and reports full access.
-    /// Set to `true` during feature development so locked sections are accessible.
     /// Defaults to `false` so the app launches in production-like mode for testing.
+    /// Toggle at runtime via UserDefaults `debug.forceFullAccess`.
     /// Only compiles under #if DEBUG — zero footprint in release builds.
     #if DEBUG
-    static var overrideEntitlementUnlocked: Bool = true
+    static var overrideEntitlementUnlocked: Bool {
+        get { UserDefaults.standard.bool(forKey: "debug.forceFullAccess") }
+        set { UserDefaults.standard.set(newValue, forKey: "debug.forceFullAccess") }
+    }
     #endif
     
     // MARK: - Debug Control

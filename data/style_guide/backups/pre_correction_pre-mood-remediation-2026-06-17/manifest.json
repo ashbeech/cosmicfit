@@ -1,0 +1,33 @@
+{
+  "created_at": "2026-06-17T10:39:39.931106+00:00",
+  "purpose": "Pre-audit-correction snapshot (content_audit_apply.py)",
+  "repo_root": "/Users/ash/dev/mobile_apps/cosmicfit",
+  "files": [
+    {
+      "repo_path": "data/style_guide/astrological_style_dataset.json",
+      "backup_path": "data/style_guide/backups/pre_correction_pre-mood-remediation-2026-06-17/data/style_guide/astrological_style_dataset.json",
+      "bytes": 513184
+    },
+    {
+      "repo_path": "data/style_guide/blueprint_narrative_cache.json",
+      "backup_path": "data/style_guide/backups/pre_correction_pre-mood-remediation-2026-06-17/data/style_guide/blueprint_narrative_cache.json",
+      "bytes": 5646063
+    },
+    {
+      "repo_path": "data/style_guide/extracted_runtime_strings.json",
+      "backup_path": "data/style_guide/backups/pre_correction_pre-mood-remediation-2026-06-17/data/style_guide/extracted_runtime_strings.json",
+      "bytes": 26430
+    },
+    {
+      "repo_path": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "backup_path": "data/style_guide/backups/pre_correction_pre-mood-remediation-2026-06-17/Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "bytes": 13928
+    },
+    {
+      "repo_path": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "backup_path": "data/style_guide/backups/pre_correction_pre-mood-remediation-2026-06-17/Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "bytes": 41727
+    }
+  ],
+  "restore_command": "python3 tools/backup_style_guide_sources.py restore --backup-dir data/style_guide/backups/pre_correction_pre-mood-remediation-2026-06-17"
+}

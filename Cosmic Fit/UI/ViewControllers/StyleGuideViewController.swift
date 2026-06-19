@@ -45,21 +45,11 @@ final class StyleGuideViewController: UIViewController {
 
     private let mainHeadingLabel: UILabel = {
         let label = UILabel()
-        label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .center
         label.numberOfLines = 2
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 0.75
-        paragraphStyle.alignment = .center
-        let attributedText = NSAttributedString(
-            string: "YOUR COSMIC\nSTYLE GUIDE",
-            attributes: [
-                .font: CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.pageTitle),
-                .foregroundColor: CosmicFitTheme.Colours.cosmicBlue,
-                .paragraphStyle: paragraphStyle
-            ]
+        label.attributedText = CosmicFitTheme.PageMainTitleTypography.attributedString(
+            "YOUR COSMIC\nSTYLE GUIDE"
         )
-        label.attributedText = attributedText
         return label
     }()
 
@@ -76,12 +66,12 @@ final class StyleGuideViewController: UIViewController {
         backgroundImageName: "style_core_glyph"
     )
     private let texturesButton = StyleGuideGridButton(
-        number: "2.",
+        number: "3.",
         title: "The Textures",
         backgroundImageName: "textures_glyph"
     )
     private let paletteButton = StyleGuideGridButton(
-        number: "3.",
+        number: "2.",
         title: "The Palette",
         backgroundImageName: "palette_glyph"
     )
@@ -303,8 +293,8 @@ final class StyleGuideViewController: UIViewController {
         starImageView.translatesAutoresizingMaskIntoConstraints = false
 
         let gridButtons = [
-            (styleCoreButton, texturesButton),
-            (paletteButton, occasionsButton),
+            (styleCoreButton, paletteButton),
+            (texturesButton, occasionsButton),
             (hardwareButton, codeButton),
             (accessoryButton, patternButton)
         ]
@@ -527,9 +517,9 @@ final class StyleGuideViewController: UIViewController {
 
         case .textures:
             let good = bp?.textures.goodText.nonEmpty
-                ?? "Go for fabrics with actual weight and integrity. Heavy gauge silks that feel cool and substantial provide the right anchor. Organic wools offer a proper architectural frame. Leather that is buttery and gains character with age belongs in your collection. They ground you, make you feel secure, and still look polished."
+                ?? "You demand fabrics with actual weight, gravity, and structural integrity. A heavy gauge silk that feels cool and substantial against the skin provides the perfect anchor for your wardrobe. An organic wool offers a proper architectural frame, holding its shape without clinging to the body. A buttery leather jacket that gains character with age absolutely belongs in your daily rotation. These substantial textiles ground your look, make you feel entirely secure, and ensure you always look ruthlessly polished."
             let bad = bp?.textures.badText.nonEmpty
-                ?? "Flimsy or disposable fabrics just do not suit you. If a material is scratchy or overly synthetic, it is a hard pass. Static-prone polyesters or stiff cottons that fight your natural movement are a distraction. If you have to spend your whole day messing with a garment to make it sit right, it is draining your energy."
+                ?? "Flimsy, disposable fabrics simply have no place in your wardrobe. If a material is scratchy, overly synthetic, or lacks structural integrity, you must give it a hard pass. A static-prone polyester or a stiff cotton that fights your natural movement acts as a constant, irritating distraction. Clothing should never feel like a battle against your own body. If you have to spend your entire day adjusting a garment just to make it sit right, it is draining the life out of your look."
             let sweet = bp?.textures.sweetSpotText.nonEmpty
                 ?? "Your absolute peak is a blend of the sturdy and the soft. Choose items that look high quality at a glance but feel like a secret luxury when touched. If it does not feel like a treat for your skin, it does not belong in your wardrobe."
 
@@ -565,7 +555,7 @@ final class StyleGuideViewController: UIViewController {
 
             let narrativeText = bp?.palette.narrativeText.nonEmpty
             let para1 = narrativeText
-                ?? "Your core colours are found in the natural world. Look for deep sage greens, sophisticated caramels, slate greys, and creamy neutrals. These tones provide a stable base for your personality to shine through. Accents work best when they feel weathered, muted, or mineral-toned."
+                ?? "The colours that flatter you most are pulled straight from the natural world. You look incredible in a deep sage green, a sophisticated caramel, a slate grey, or a creamy neutral. These grounding tones provide a brilliantly stable base for your wardrobe, allowing the texture of the fabric to take centre stage. Your accent colours work best when they feel distinctly weathered, beautifully muted, or richly mineral-toned. Build your rotation around these earthy shades to guarantee a consistently expensive finish."
 
             var textSections = [
                 StyleGuideDetailContent.TextSection(subheading: nil, bodyText: para1)
@@ -590,7 +580,7 @@ final class StyleGuideViewController: UIViewController {
             let intimate = bp?.occasions.intimateText.nonEmpty
                 ?? "Soften the edges when the sun goes down. Keep that solid base but introduce pieces with drape and mystery. Aim for quiet magnetism and close-range impact. Heavy silk or soft knits that move with you invite people to get a bit closer."
             let daily = bp?.occasions.dailyText.nonEmpty
-                ?? "Even casual looks need to look intentional. Ditch the mess for high-quality basics that allow you to move freely. You can do relaxed, but it should never look sloppy. Think of your daily look as the visionary on a day off: elevated and completely unbothered."
+                ?? "Even your most casual weekend looks require a distinct sense of intention. Ditch the messy loungewear for high-quality, beautifully cut basics that allow you to move freely without losing your shape. You do relaxed dressing brilliantly, but the execution must never look sloppy or unfinished. Think of your daily uniform as the wardrobe of a fashion insider on a day off. You always step out looking completely unbothered, incredibly comfortable, and ruthlessly put together."
 
             return StyleGuideDetailContent(
                 sectionType: .occasions,
@@ -606,11 +596,11 @@ final class StyleGuideViewController: UIViewController {
 
         case .hardware:
             let metals = bp?.hardware.metalsText.nonEmpty
-                ?? "Your energy requires hardware with actual presence. Look for brushed gold, matte silver, or hammered bronze. Choose pieces that feel like they have some history. Heavy chains and matte surfaces that soak up the light are your best options."
+                ?? "Your wardrobe demands hardware with a genuine, undeniable physical presence. You look spectacular in a brushed gold, a matte silver, or a heavily hammered bronze. Choose heavy zippers, thick buckles, and chunky rings that feel as though they carry some real history. A heavy chain or a matte surface that absorbs the light rather than reflecting it cheaply will always be your best option. Invest in substantial metals to give your clothing an instantly expensive, perfectly weighted finish."
             let stones = bp?.hardware.stonesText.nonEmpty
                 ?? "Skip the perfectly clear gems. You suit stones that look like they were pulled directly from the earth. Raw emeralds, smoky quartz, and malachite work best. These natural inclusions make the pieces feel alive and connected to you."
             let tip = bp?.hardware.tipText.nonEmpty
-                ?? "One substantial anchor piece is always more powerful than a bunch of delicate items. Pick a signature like a heavy ring or a bold pendant and let it be the focal point."
+                ?? "Your hardware dictates the entire attitude of your outfit. Stacking a dozen flimsy chains simply looks chaotic. You need one substantial, uncompromising anchor piece to centre the look. Slide on a heavy brushed steel signet ring or clasp a thick, sculptural silver collar around your neck. Let that single, heavy metal focal point speak for itself. Your accessories should command attention, not whisper for it."
 
             return StyleGuideDetailContent(
                 sectionType: .hardware,
@@ -643,13 +633,13 @@ final class StyleGuideViewController: UIViewController {
                 "Buying something just because it is a bargain. A deal is only a deal if the item is perfect.",
                 "Chasing trends that clash with your natural composure. If it feels like a costume, it will look like one.",
                 "Keeping your best pieces hidden. Your style works best when it is seen and shared.",
-                "Flimsy or disposable fabrics that lack actual integrity."
+                "Reject flimsy, disposable synthetic fabrics that completely lack structural integrity or a decent tactile finish."
             ]
             codeContainer.addArrangedSubview(DosAndDontsSectionView(title: "Avoid", bulletPoints: avoidItems))
 
             let considerItems = bp?.code.consider.nilIfEmpty ?? [
-                "How your style acts as a conversation starter in your daily environment.",
-                "The way your physical home space influences your creative output.",
+                "Introduce heavy statement hardware and exaggerated silhouettes to act as immediate conversation starters in your daily routine.",
+                "Dress your physical living space in the exact same rich, tactile fabrics you wear to fuel your creative output.",
                 "Making sure your outfit is actually comfortable. If you are constantly tugging at your clothes, you lose your edge."
             ]
             codeContainer.addArrangedSubview(DosAndDontsSectionView(title: "Consider", bulletPoints: considerItems))
@@ -664,7 +654,7 @@ final class StyleGuideViewController: UIViewController {
 
         case .accessory:
             let fallback = [
-                "One significant piece carries more weight than five minor ones. Whether it is a heavy watch or a perfectly made bag, let that item be the anchor. This creates a focal point that allows the rest of your look to stay quiet.",
+                "The right accessory completely rewrites the geometry of your outfit. Throwing on five minor, forgettable additions dilutes your visual impact. Instead, you must ground your silhouette with one incredibly significant, meticulously constructed piece. Fasten a heavy, oversized chronograph to your wrist or grip the structural leather handle of a perfectly made architectural bag. This creates a decisive focal point that allows the rest of your garments to drape quietly. Make your one addition impossible to ignore.",
                 "Accessories are where you introduce your most rigid lines. While your clothes might flow, your accessories should provide the structure. A stiff bag or a firm leather strap acts as the frame for your more fluid choices.",
                 "Think about the sound and scent of your accessories. The weight of a heavy buckle or the specific smell of high-quality leather adds to the vibe. Style is a total sensory environment."
             ]
@@ -682,7 +672,7 @@ final class StyleGuideViewController: UIViewController {
 
         case .pattern:
             let narrative = bp?.pattern.narrativeText.nonEmpty
-                ?? "You do not really do busy prints. Anything too frantic fights your energy and looks forced. Your patterns need to feel like they have a pulse: organic, slightly blurred, or naturally occurring."
+                ?? "Frantic prints kill a good outfit. Busy, high-contrast motifs fight your presence and look manufactured. Shift your focus toward textiles with a living pulse. Seek out watercolour bleeds, moiré silks, or marble effects over rigid geometrics. A successful pattern must look grown rather than drafted. Leave the dizzying polka dots on the rail and choose prints that breathe with the cloth."
             let tipText = bp?.pattern.tipText.nonEmpty
                 ?? "Use pattern as a texture. A tonal jacquard weave or a subtle embossed print is your secret weapon. It adds depth without screaming for attention."
 

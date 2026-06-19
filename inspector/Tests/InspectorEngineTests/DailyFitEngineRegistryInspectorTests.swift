@@ -8,12 +8,14 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
         XCTAssertTrue(ids.contains(DailyFitEngineRegistry.productionId))
         XCTAssertTrue(ids.contains(DailyFitEngineRegistry.legacyBaselineId))
         XCTAssertTrue(ids.contains(DailyFitEngineRegistry.stage1ExperimentalId))
-        XCTAssertEqual(DailyFitEngineRegistry.allDescriptors.count, 3)
+        XCTAssertTrue(ids.contains(DailyFitEngineRegistry.stage2LegacyId))
+        XCTAssertEqual(DailyFitEngineRegistry.allDescriptors.count, 4)
     }
 
     func testUnknownEngineIdFallsBackToProductionCalibration() {
         let calibration = DailyFitEngineRegistry.calibration(for: "not_a_real_engine")
-        XCTAssertEqual(calibration, DailyFitCalibration.default)
+        let production = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)!
+        XCTAssertEqual(calibration, production.calibration)
     }
 
     func testStage1ExperimentalDescriptorUsesExperimentalMode() {
@@ -31,10 +33,10 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
         )
     }
 
-    func testStage1ExperimentalFingerprintDiffersFromProduction() {
+    func testStage2LegacyFingerprintDiffersFromSkyForwardProduction() {
         let production = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)!
-        let stage1 = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.stage1ExperimentalId)!
-        XCTAssertNotEqual(stage1.fingerprint, production.fingerprint)
+        let stage2Legacy = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.stage2LegacyId)!
+        XCTAssertNotEqual(stage2Legacy.fingerprint, production.fingerprint)
     }
 
     func testProductionAndLegacyFingerprintsDiffer() {
@@ -176,7 +178,7 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
         }
     }
 
-    func testStage1AttributionDiffersAcrossEngines() async throws {
+    func testSkyForwardAttributionDiffersFromStage2Legacy() async throws {
         let engine = InspectorEngine()
         try await engine.bootstrap()
 
@@ -201,7 +203,7 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
         )
         let prodResponse = try await engine.resolve(request: prodRequest)
 
-        let stage1Request = InspectorRequest(
+        let stage2Request = InspectorRequest(
             preset: preset.id,
             birth: preset.birthInput,
             targetDate: "2026-05-10",
@@ -210,20 +212,20 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
-                dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId,
+                dailyFitEngineId: DailyFitEngineRegistry.stage2LegacyId,
                 deviceLatitude: nil,
                 deviceLongitude: nil
             )
         )
-        let stage1Response = try await engine.resolve(request: stage1Request)
+        let stage2Response = try await engine.resolve(request: stage2Request)
 
         let prodAttr = prodResponse.dailyFit.diagnostics.stage1Attribution
-        let stage1Attr = stage1Response.dailyFit.diagnostics.stage1Attribution
+        let stage2Attr = stage2Response.dailyFit.diagnostics.stage1Attribution
         XCTAssertNotNil(prodAttr)
-        XCTAssertNotNil(stage1Attr)
-        XCTAssertEqual(prodAttr?.engineMode, "standard")
-        XCTAssertEqual(stage1Attr?.engineMode, "stage1Experimental")
-        XCTAssertNotEqual(prodAttr, stage1Attr, "Different calibrations should produce different attribution")
+        XCTAssertNotNil(stage2Attr)
+        XCTAssertEqual(prodAttr?.engineMode, "stage1Experimental")
+        XCTAssertEqual(stage2Attr?.engineMode, "standard")
+        XCTAssertNotEqual(prodAttr, stage2Attr, "Sky Forward and Stage 2 legacy should produce different attribution")
     }
 
     func testStage1AttributionSkipsDailySignMultipliers() async throws {

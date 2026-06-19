@@ -49,19 +49,36 @@ struct DailyFitEngineConfig_Tests {
         #expect(DailyFitEngineRegistry.productionId == "production")
         #else
         #expect(DailyFitEngineConfig.effectiveEngineId == DailyFitEngineRegistry.productionId)
-        #expect(DailyFitEngineConfig.effectiveCalibration == DailyFitCalibration.default)
+        let productionCal = DailyFitEngineRegistry.calibration(for: DailyFitEngineRegistry.productionId)
+        #expect(DailyFitEngineConfig.effectiveCalibration == productionCal)
         #endif
     }
 
-    @Test("Default effective calibration matches production preset")
+    @Test("Production build mode ignores DEBUG runtime engine override")
+    func productionBuildModeIgnoresRuntimeOverride() {
+        #if DEBUG
+        guard DailyFitEngineConfig.isProductionBuildMode else { return }
+        let key = DailyFitEngineConfig.runtimeOverrideUserDefaultsKey
+        defer { UserDefaults.standard.removeObject(forKey: key) }
+
+        UserDefaults.standard.set(DailyFitEngineRegistry.legacyBaselineId, forKey: key)
+        DailyFitEngineConfig.applyProductionBuildModeSanityChecks()
+        #expect(DailyFitEngineConfig.effectiveEngineId == DailyFitEngineRegistry.productionId)
+        #expect(DailyFitEngineConfig.allowsDevEngineTools == false)
+        #endif
+    }
+
+    @Test("Default effective calibration matches Sky Forward production preset")
     func defaultEffectiveCalibrationIsProduction() {
         #if DEBUG
         UserDefaults.standard.removeObject(forKey: DailyFitEngineConfig.runtimeOverrideUserDefaultsKey)
         if DailyFitEngineConfig.buildTimeEngineId == DailyFitEngineRegistry.productionId {
-            #expect(DailyFitEngineConfig.effectiveCalibration == DailyFitCalibration.default)
+            let productionCal = DailyFitEngineRegistry.calibration(for: DailyFitEngineRegistry.productionId)
+            #expect(DailyFitEngineConfig.effectiveCalibration == productionCal)
         }
         #else
-        #expect(DailyFitEngineConfig.effectiveCalibration == DailyFitCalibration.default)
+        let productionCal = DailyFitEngineRegistry.calibration(for: DailyFitEngineRegistry.productionId)
+        #expect(DailyFitEngineConfig.effectiveCalibration == productionCal)
         #endif
     }
 

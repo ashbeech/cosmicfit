@@ -1,8 +1,14 @@
 # Python dependencies for tools/ (local development only)
 # From repo root: pip install -r tools/requirements.txt
 
-# tools/backfill_narratives.py
+# tools/backfill_narratives.py, tools/content_audit_apply.py (google.genai SDK)
+google-genai>=1.0.0
+
+# Legacy — still imported by backfill_narratives.py until migrated
 google-generativeai>=0.8.0
 
-# tools/review_tool.py
+# tools/review_tool.py, tools/content_audit_tool.py
 flask>=3.0.0
+
+# tools/content_audit.py (wraps LanguageTool; requires Java 8+ at runtime)
+language-tool-python>=2.8

@@ -31,6 +31,8 @@ struct DailyFitEngineDescriptor: Equatable {
     let fingerprint: String
     let mode: DailyFitEngineMode
     let dailySeedPolicy: DailyFitDailySeedPolicy
+    /// Shipped marketing version (production only); nil for experimental presets.
+    let marketingVersion: String?
 }
 
 enum DailyFitEngineRegistry {
@@ -38,11 +40,29 @@ enum DailyFitEngineRegistry {
     static let productionId = "production"
     static let legacyBaselineId = "legacy_baseline"
     static let stage1ExperimentalId = "stage1_experimental"
+    static let stage2LegacyId = "stage2_legacy"
+
+    static let productionMarketingVersion = "1.0.0"
+
+    static var productionDisplayName: String {
+        descriptor(for: productionId)?.displayName ?? "Sky Forward"
+    }
+
+    /// Read-only Profile / about copy for Release builds.
+    static var productionEngineDisplayLine: String {
+        "Cosmic Fit Engine: \(productionDisplayName) v\(productionMarketingVersion)"
+    }
+
+    /// Compact version stamp shown on Profile in production builds.
+    static var productionVersionDisplayText: String {
+        "\(productionDisplayName) v\(productionMarketingVersion)"
+    }
 
     static let allDescriptors: [DailyFitEngineDescriptor] = [
         productionDescriptor,
         legacyBaselineDescriptor,
         stage1ExperimentalDescriptor,
+        stage2LegacyDescriptor,
     ]
 
     static func descriptor(for id: String) -> DailyFitEngineDescriptor? {
@@ -54,7 +74,7 @@ enum DailyFitEngineRegistry {
             return descriptor.calibration
         }
         logUnknownEngineWarning(id)
-        return DailyFitCalibration.default
+        return descriptor(for: productionId)?.calibration ?? DailyFitCalibration.default
     }
 
     static func mode(for id: String) -> DailyFitEngineMode {
@@ -120,15 +140,19 @@ enum DailyFitEngineRegistry {
         )
     }()
 
+    /// Pre–Sky Forward Stage 2 calibration preserved for DEBUG regression comparison.
+    private static let stage2LegacyCalibration: DailyFitCalibration = .default
+
     private static let productionDescriptor = DailyFitEngineDescriptor(
         id: productionId,
-        displayName: "Production (Stage 2)",
-        summary: "Current shipped Daily Fit calibration (.default)",
+        displayName: "Sky Forward",
+        summary: "Shipped Daily Fit engine — sky-forward daily read from chart anchor (v1.0.0)",
         isExperimental: false,
-        calibration: .default,
-        fingerprint: fingerprint(for: .default),
-        mode: .standard,
-        dailySeedPolicy: .sharedProfileDate
+        calibration: stage1ExperimentalCalibration,
+        fingerprint: fingerprint(for: stage1ExperimentalCalibration),
+        mode: .stage1Experimental,
+        dailySeedPolicy: .includesEngineId,
+        marketingVersion: productionMarketingVersion
     )
 
     private static let legacyBaselineDescriptor = DailyFitEngineDescriptor(
@@ -139,7 +163,8 @@ enum DailyFitEngineRegistry {
         calibration: legacyBaselineCalibration,
         fingerprint: fingerprint(for: legacyBaselineCalibration),
         mode: .standard,
-        dailySeedPolicy: .sharedProfileDate
+        dailySeedPolicy: .sharedProfileDate,
+        marketingVersion: nil
     )
 
     /// Stage 1 sky-forward sandbox: chart anchor + amplified outside-energy delta (§5.4).
@@ -168,16 +193,30 @@ enum DailyFitEngineRegistry {
         )
     }()
 
-    /// Stage 1 redesign candidate: sky-forward daily signal from chart anchor (§5.4). S2 seed policy.
+    /// DEBUG alias — same calibration as shipped Sky Forward production; kept for frozen-payload compatibility.
     private static let stage1ExperimentalDescriptor = DailyFitEngineDescriptor(
         id: stage1ExperimentalId,
-        displayName: "Stage 1 Experimental (Sky Forward)",
-        summary: "Sky-forward daily read — chart anchor vs today's outside energy (DEBUG/inspector)",
+        displayName: "Stage 1 Experimental (Sky Forward alias)",
+        summary: "DEBUG alias of shipped Sky Forward production — same calibration and fingerprint",
         isExperimental: true,
         calibration: stage1ExperimentalCalibration,
         fingerprint: fingerprint(for: stage1ExperimentalCalibration),
         mode: .stage1Experimental,
-        dailySeedPolicy: .includesEngineId
+        dailySeedPolicy: .includesEngineId,
+        marketingVersion: nil
+    )
+
+    /// Pre–Sky Forward Stage 2 production calibration (dramaSlots) for DEBUG regression.
+    private static let stage2LegacyDescriptor = DailyFitEngineDescriptor(
+        id: stage2LegacyId,
+        displayName: "Stage 2 Legacy (pre-Sky Forward)",
+        summary: "Previous production calibration (.default / dramaSlots) for regression comparison",
+        isExperimental: true,
+        calibration: stage2LegacyCalibration,
+        fingerprint: fingerprint(for: stage2LegacyCalibration),
+        mode: .standard,
+        dailySeedPolicy: .sharedProfileDate,
+        marketingVersion: nil
     )
 
     // MARK: - Fingerprint serialization (§5.3)

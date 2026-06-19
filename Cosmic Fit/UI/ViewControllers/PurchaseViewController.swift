@@ -122,6 +122,14 @@ final class PurchaseViewController: UIViewController {
         return btn
     }()
 
+    private let haveACodeButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("Have a code?", for: .normal)
+        btn.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(size: 13, weight: .medium)
+        btn.setTitleColor(CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.7), for: .normal)
+        return btn
+    }()
+
     private let legalStack: UIStackView = {
         let termsBtn = UIButton(type: .system)
         termsBtn.setTitle("Terms of Use", for: .normal)
@@ -195,6 +203,7 @@ final class PurchaseViewController: UIViewController {
             productCardsStack,
             ctaButton,
             restoreButton,
+            haveACodeButton,
             legalStack,
             disclosureLabel
         ])
@@ -206,7 +215,8 @@ final class PurchaseViewController: UIViewController {
         mainStack.setCustomSpacing(28, after: benefitsStack)
         mainStack.setCustomSpacing(16, after: productCardsStack)
         mainStack.setCustomSpacing(16, after: ctaButton)
-        mainStack.setCustomSpacing(12, after: restoreButton)
+        mainStack.setCustomSpacing(4, after: restoreButton)
+        mainStack.setCustomSpacing(12, after: haveACodeButton)
         mainStack.setCustomSpacing(8, after: legalStack)
         mainStack.translatesAutoresizingMaskIntoConstraints = false
         mainStack.alignment = .fill
@@ -241,6 +251,7 @@ final class PurchaseViewController: UIViewController {
         monthlyCard.onSelected = { [weak self] in self?.selectProduct(isAnnual: false) }
         ctaButton.addTarget(self, action: #selector(subscribeTapped), for: .touchUpInside)
         restoreButton.addTarget(self, action: #selector(restoreTapped), for: .touchUpInside)
+        haveACodeButton.addTarget(self, action: #selector(haveACodeTapped), for: .touchUpInside)
         retryButton.addTarget(self, action: #selector(retryTapped), for: .touchUpInside)
 
         for case let btn as UIButton in legalStack.arrangedSubviews {
@@ -361,6 +372,29 @@ final class PurchaseViewController: UIViewController {
             }
             restoreButton.isEnabled = true
             restoreButton.setTitle("Already subscribed? Restore", for: .normal)
+        }
+    }
+
+    @objc private func haveACodeTapped() {
+        guard let genericDetail = parent as? GenericDetailViewController else { return }
+
+        // Walk the parent chain to find the tab bar controller before dismiss
+        var tabBar: CosmicFitTabBarController?
+        var current: UIViewController? = genericDetail.parent
+        while current != nil {
+            if let tbc = current as? CosmicFitTabBarController {
+                tabBar = tbc
+                break
+            }
+            current = current?.parent
+        }
+
+        genericDetail.dismissSelf { [weak tabBar] in
+            guard let tabBar else { return }
+            let profileVC = ProfileViewController()
+            profileVC.focusPromoCodeField = true
+            let detailVC = GenericDetailViewController(contentViewController: profileVC)
+            tabBar.presentDetailViewController(detailVC, animated: true)
         }
     }
 

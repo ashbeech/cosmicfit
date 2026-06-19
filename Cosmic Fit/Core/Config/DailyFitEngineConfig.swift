@@ -20,6 +20,33 @@ enum DailyFitEngineConfig {
         validatedEngineId(rawBuildTimeEngineIdFromPlist() ?? DailyFitEngineRegistry.productionId)
     }()
 
+    /// `true` when this install is built for production / App Store behaviour (Sky Forward, no dev engine tools).
+    /// DEBUG builds with `DAILY_FIT_ENGINE_ID = production` in xcconfig match Release here.
+    static var isProductionBuildMode: Bool {
+        #if DEBUG
+        return buildTimeEngineId == DailyFitEngineRegistry.productionId
+        #else
+        return true
+        #endif
+    }
+
+    /// Profile engine picker + force refresh — only when DEBUG and xcconfig selects a non-production preset.
+    static var allowsDevEngineTools: Bool {
+        #if DEBUG
+        return !isProductionBuildMode
+        #else
+        return false
+        #endif
+    }
+
+    /// Clears stale DEBUG engine override when running a production-configured build.
+    static func applyProductionBuildModeSanityChecks() {
+        #if DEBUG
+        guard isProductionBuildMode else { return }
+        runtimeOverrideEngineId = nil
+        #endif
+    }
+
     #if DEBUG
     /// DEBUG-only Profile override (picker in P5). Read/write for tests and future UI.
     static var runtimeOverrideEngineId: String? {
@@ -43,6 +70,9 @@ enum DailyFitEngineConfig {
     /// Process-wide effective engine id (build + DEBUG override). Release always returns `production`.
     static var effectiveEngineId: String {
         #if DEBUG
+        guard allowsDevEngineTools else {
+            return DailyFitEngineRegistry.productionId
+        }
         let candidate = runtimeOverrideEngineId ?? buildTimeEngineId
         return validatedEngineId(candidate)
         #else

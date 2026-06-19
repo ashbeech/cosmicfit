@@ -36,11 +36,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Migrate profile from UserDefaults to Documents-dir JSON
         UserProfileStorage.shared.migrateFromUserDefaultsIfNeeded()
+
+        DailyFitEngineConfig.applyProductionBuildModeSanityChecks()
         
         // Subscription bootstrap
         StoreKitManager.shared.listenForTransactions()
         Task { await StoreKitManager.shared.loadProducts() }
-        Task { await EntitlementManager.shared.checkEntitlement() }
+        Task {
+            await EntitlementManager.shared.checkEntitlement()
+            await PromoCodeService.shared.restoreCompAccessIfNeeded()
+        }
                 
         window = UIWindow(frame: UIScreen.main.bounds)
         
@@ -98,18 +103,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+    private static let launchAttemptKey = "CosmicFitLaunchAttemptTimestamp"
+    private static let consecutiveFailuresKey = "CosmicFitConsecutiveLaunchFailures"
+
     private func setupExistingUserFlow(launchScreenVC: AnimatedLaunchScreenViewController) {
         guard let userProfile = UserProfileStorage.shared.loadUserProfile() else {
             print("❌ Profile exists but corrupted - fallback to onboarding")
             setupOnboardingFormFlow(launchScreenVC: launchScreenVC)
             return
         }
-        
+
+        // Crash-loop detection: if 3+ consecutive rapid failures, reset corrupted data
+        let now = Date().timeIntervalSince1970
+        let lastAttempt = UserDefaults.standard.double(forKey: Self.launchAttemptKey)
+        var failures = UserDefaults.standard.integer(forKey: Self.consecutiveFailuresKey)
+
+        if now - lastAttempt < 8.0 {
+            failures += 1
+        } else {
+            failures = 0
+        }
+        UserDefaults.standard.set(now, forKey: Self.launchAttemptKey)
+        UserDefaults.standard.set(failures, forKey: Self.consecutiveFailuresKey)
+
+        if failures >= 3 {
+            print("⚠️ Crash loop detected (\(failures) rapid failures) — clearing derived data")
+            BlueprintStorage.shared.delete()
+            DailyFitFrozenPayloadStorage.shared.removeAll()
+            UserDefaults.standard.set(0, forKey: Self.consecutiveFailuresKey)
+        }
+
         let tabBarController = CosmicFitTabBarController()
-        
+
         // CRITICAL: Set background to match launch screen
         tabBarController.view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
-        
+
         // Configure with stored user data
         let chartData = NatalChartManager.shared.calculateNatalChart(
             date: userProfile.birthDate,
@@ -117,25 +145,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             longitude: userProfile.longitude,
             timeZone: TimeZone(identifier: userProfile.timeZoneIdentifier) ?? TimeZone.current
         )
-        
+
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .short
         let birthInfo = "\(dateFormatter.string(from: userProfile.birthDate)) at \(userProfile.birthLocation) (Lat: \(String(format: "%.4f", userProfile.latitude)), Long: \(String(format: "%.4f", userProfile.longitude)))"
-        
+
         tabBarController.configure(with: chartData,
                                  birthInfo: birthInfo,
                                  birthDate: userProfile.birthDate,
                                  latitude: userProfile.latitude,
                                  longitude: userProfile.longitude,
                                  timeZone: TimeZone(identifier: userProfile.timeZoneIdentifier) ?? TimeZone.current)
-        
+
         tabBarController.selectedIndex = 0
-        
+
         _ = tabBarController.view
-        
+
+        // Mark successful launch (reset failure counter)
+        UserDefaults.standard.set(0, forKey: Self.consecutiveFailuresKey)
+
         launchScreenVC.setMainViewController(tabBarController)
-        
+
         print("✅ Returning user detected — landing on Daily Fit tab")
     }
     

@@ -27,7 +27,7 @@ class ProfileViewController: UIViewController {
     private let birthTimeField = UITextField()
     private let birthDatePicker = UIDatePicker()
     private let birthTimePicker = UIDatePicker()
-    private let unknownTimeCheckbox = UIButton(type: .system)
+    private let unknownTimeCheckbox = UIButton(type: .custom)
     private let unknownTimeLabel = UILabel()
     private var birthTimeIsUnknown: Bool = false
     
@@ -36,6 +36,31 @@ class ProfileViewController: UIViewController {
     private let signInButton = UIButton(type: .system)
     private let restorePurchasesButton = UIButton(type: .system)
     private let manageSubscriptionButton = UIButton(type: .system)
+
+    // Promo code UI
+    private let subscriptionStatusLabel = UILabel()
+    private let promoCodeFieldContainer = UIView()
+    private let promoCodeFieldRow = UIStackView()
+    private let promoCodeField = UITextField()
+    private let redeemButton = UIButton(type: .system)
+    private let appliedPromoContainer = UIView()
+    private let appliedPromoRow = UIStackView()
+    private let appliedPromoCodeLabel = UILabel()
+    private let removePromoButton = UIButton(type: .system)
+    private let promoErrorLabel = UILabel()
+    private var isRedeeming = false
+    private var isRemovingPromo = false
+    private var promoRedeemFeedbackTask: Task<Void, Never>?
+    var focusPromoCodeField = false
+
+    private enum PromoRedeemButtonAppearance {
+        case coupon
+        case success
+        case failure
+    }
+
+    private let engineVersionLabel = UILabel()
+
     #if DEBUG
     private let engineLabel = UILabel()
     private let engineField = UITextField()
@@ -89,7 +114,7 @@ class ProfileViewController: UIViewController {
         setupConstraints()
         setupKeyboardDismissal()
         loadCurrentUserData()
-        showMasculineFeminineSwitch.isOn = UserProfileStorage.shared.showMasculineFeminineSliderInDailyFit()
+        showMasculineFeminineSwitch.isOn = !UserProfileStorage.shared.showMasculineFeminineSliderInDailyFit()
 
         NotificationCenter.default.addObserver(
             self,
@@ -98,17 +123,29 @@ class ProfileViewController: UIViewController {
             object: nil
         )
 
-        #if DEBUG
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(handleDevForceRefreshStateChanged(_:)),
-            name: .devForceRefreshStateChanged,
+            selector: #selector(updateEntitlementUI),
+            name: EntitlementManager.entitlementDidChange,
             object: nil
         )
+
+        updateEntitlementUI()
+
+        #if DEBUG
+        if DailyFitEngineConfig.allowsDevEngineTools {
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(handleDevForceRefreshStateChanged(_:)),
+                name: .devForceRefreshStateChanged,
+                object: nil
+            )
+        }
         #endif
     }
 
     deinit {
+        promoRedeemFeedbackTask?.cancel()
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -119,7 +156,9 @@ class ProfileViewController: UIViewController {
         navigationController?.navigationBar.isHidden = false
 
         #if DEBUG
-        syncDailyFitEnginePickerSelection()
+        if DailyFitEngineConfig.allowsDevEngineTools {
+            syncDailyFitEnginePickerSelection()
+        }
         #endif
     }
     
@@ -129,13 +168,13 @@ class ProfileViewController: UIViewController {
         // Ensure the view is always fully interactive when visible
         view.isUserInteractionEnabled = true
         scrollView.isUserInteractionEnabled = true
-        
-        // Ensure the close button in the parent GenericDetailViewController is accessible
-        // This helps prevent any potential blocking of the close button
-        /*
-        if let parentVC = parent {
-            parentVC.view.isUserInteractionEnabled = true
-        }*/
+
+        if focusPromoCodeField {
+            focusPromoCodeField = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.promoCodeField.becomeFirstResponder()
+            }
+        }
     }
     
     // MARK: - UI Setup
@@ -205,42 +244,24 @@ class ProfileViewController: UIViewController {
     
     private func configureUnknownTimeControls() {
         unknownTimeCheckbox.translatesAutoresizingMaskIntoConstraints = false
-        let uncheckedImage = makeCheckboxImage(filled: false)
-        let checkedImage = makeCheckboxImage(filled: true)
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .regular)
+        let uncheckedImage = UIImage(systemName: "square", withConfiguration: symbolConfig)
+        let checkedImage = UIImage(systemName: "checkmark.square", withConfiguration: symbolConfig)
         unknownTimeCheckbox.setImage(uncheckedImage, for: .normal)
         unknownTimeCheckbox.setImage(uncheckedImage, for: .highlighted)
         unknownTimeCheckbox.setImage(checkedImage, for: .selected)
         unknownTimeCheckbox.setImage(checkedImage, for: [.selected, .highlighted])
         unknownTimeCheckbox.tintColor = CosmicFitTheme.Colours.cosmicBlue
+        unknownTimeCheckbox.adjustsImageWhenHighlighted = false
+        if #available(iOS 15.0, *) {
+            unknownTimeCheckbox.configuration = nil
+        }
         unknownTimeCheckbox.addTarget(self, action: #selector(unknownTimeToggled), for: .touchUpInside)
         
         unknownTimeLabel.translatesAutoresizingMaskIntoConstraints = false
         unknownTimeLabel.text = "I don't know my time"
         unknownTimeLabel.font = CosmicFitTheme.Typography.dmSansFont(size: CosmicFitTheme.Typography.FontSizes.callout, weight: .regular)
         unknownTimeLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
-    }
-    
-    private func makeCheckboxImage(filled: Bool) -> UIImage? {
-        let size = CGSize(width: 22, height: 22)
-        let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { context in
-            let cgContext = context.cgContext
-            let rect = CGRect(origin: .zero, size: size).insetBy(dx: 1, dy: 1)
-            let path = UIBezierPath(roundedRect: rect, cornerRadius: 2)
-            cgContext.setStrokeColor(CosmicFitTheme.Colours.cosmicBlue.cgColor)
-            cgContext.setLineWidth(1.5)
-            path.stroke()
-            
-            if filled {
-                cgContext.setStrokeColor(CosmicFitTheme.Colours.cosmicBlue.cgColor)
-                cgContext.setLineWidth(2.0)
-                cgContext.setLineCap(.round)
-                cgContext.move(to: CGPoint(x: rect.minX + 4, y: rect.midY))
-                cgContext.addLine(to: CGPoint(x: rect.midX - 1, y: rect.maxY - 4))
-                cgContext.addLine(to: CGPoint(x: rect.maxX - 3, y: rect.minY + 4))
-                cgContext.strokePath()
-            }
-        }.withRenderingMode(.alwaysOriginal)
     }
     
     @objc private func unknownTimeToggled() {
@@ -250,7 +271,7 @@ class ProfileViewController: UIViewController {
     }
 
     @objc private func showMasculineFeminineSwitchChanged() {
-        UserProfileStorage.shared.setShowMasculineFeminineSliderInDailyFit(showMasculineFeminineSwitch.isOn)
+        UserProfileStorage.shared.setShowMasculineFeminineSliderInDailyFit(!showMasculineFeminineSwitch.isOn)
     }
     
     private func updateBirthTimeFieldState() {
@@ -352,16 +373,20 @@ class ProfileViewController: UIViewController {
         CosmicFitTheme.styleButton(updateButton, style: .primary)
         updateButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
+        configureEngineVersionLabel()
+
         #if DEBUG
-        configureDailyFitEnginePickerControls()
-        forceRefreshButton.setTitle("⟳ Force refresh all data", for: .normal)
-        forceRefreshButton.addTarget(self, action: #selector(forceRefreshTapped), for: .touchUpInside)
-        forceRefreshButton.translatesAutoresizingMaskIntoConstraints = false
-        CosmicFitTheme.styleButton(forceRefreshButton, style: .secondary)
-        forceRefreshButton.layer.borderColor = UIColor.systemOrange.cgColor
-        forceRefreshButton.layer.borderWidth = 1.5
-        forceRefreshButton.setTitleColor(.systemOrange, for: .normal)
-        forceRefreshButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        if DailyFitEngineConfig.allowsDevEngineTools {
+            configureDailyFitEnginePickerControls()
+            forceRefreshButton.setTitle("⟳ Force refresh all data", for: .normal)
+            forceRefreshButton.addTarget(self, action: #selector(forceRefreshTapped), for: .touchUpInside)
+            forceRefreshButton.translatesAutoresizingMaskIntoConstraints = false
+            CosmicFitTheme.styleButton(forceRefreshButton, style: .secondary)
+            forceRefreshButton.layer.borderColor = UIColor.systemOrange.cgColor
+            forceRefreshButton.layer.borderWidth = 1.5
+            forceRefreshButton.setTitleColor(.systemOrange, for: .normal)
+            forceRefreshButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        }
         #endif
         
         signInButton.setTitle("Sign in to sync your data", for: .normal)
@@ -382,6 +407,28 @@ class ProfileViewController: UIViewController {
         manageSubscriptionButton.translatesAutoresizingMaskIntoConstraints = false
         CosmicFitTheme.styleButton(manageSubscriptionButton, style: .secondary)
         manageSubscriptionButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
+        // Subscription status
+        subscriptionStatusLabel.font = CosmicFitTheme.Typography.dmSansFont(
+            size: CosmicFitTheme.Typography.FontSizes.footnote, weight: .medium
+        )
+        subscriptionStatusLabel.textColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.72)
+        subscriptionStatusLabel.textAlignment = .center
+        subscriptionStatusLabel.numberOfLines = 0
+        subscriptionStatusLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        // Promo code — inline field + coupon redeem button
+        configurePromoCodeInlineRow()
+        configureAppliedPromoRow()
+
+        promoErrorLabel.font = CosmicFitTheme.Typography.dmSansFont(
+            size: CosmicFitTheme.Typography.FontSizes.footnote, weight: .medium
+        )
+        promoErrorLabel.textColor = .systemRed
+        promoErrorLabel.textAlignment = .center
+        promoErrorLabel.numberOfLines = 0
+        promoErrorLabel.isHidden = true
+        promoErrorLabel.translatesAutoresizingMaskIntoConstraints = false
 
         signOutButton.setTitle("Sign out", for: .normal)
         signOutButton.addTarget(self, action: #selector(signOutButtonTapped), for: .touchUpInside)
@@ -429,9 +476,14 @@ class ProfileViewController: UIViewController {
         mainStack.setCustomSpacing(8, after: mainStack.arrangedSubviews[mainStack.arrangedSubviews.count - 2])
         
         mainStack.addArrangedSubview(verticalFieldStack(label: locationLabel, field: locationAutocompleteView))
-        
-        mainStack.setCustomSpacing(28, after: mainStack.arrangedSubviews.last!)
-        
+
+        if DailyFitEngineConfig.isProductionBuildMode {
+            mainStack.addArrangedSubview(engineVersionLabel)
+            mainStack.setCustomSpacing(12, after: engineVersionLabel)
+        } else {
+            mainStack.setCustomSpacing(28, after: mainStack.arrangedSubviews.last!)
+        }
+
         preferencesSectionDivider.translatesAutoresizingMaskIntoConstraints = false
         preferencesSectionDivider.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
         preferencesSectionDivider.heightAnchor.constraint(equalToConstant: 1).isActive = true
@@ -448,7 +500,7 @@ class ProfileViewController: UIViewController {
         mainStack.addArrangedSubview(preferencesSectionTitleLabel)
         mainStack.setCustomSpacing(16, after: preferencesSectionTitleLabel)
         
-        showMasculineFeminineLabel.text = "Show masculine/feminine style spectrum in Daily Fit"
+        showMasculineFeminineLabel.text = "Hide masculine/feminine"
         showMasculineFeminineLabel.font = CosmicFitTheme.Typography.dmSansFont(
             size: CosmicFitTheme.Typography.FontSizes.callout,
             weight: .regular
@@ -485,11 +537,22 @@ class ProfileViewController: UIViewController {
         mainStack.addArrangedSubview(signInButton)
         mainStack.addArrangedSubview(restorePurchasesButton)
         mainStack.addArrangedSubview(manageSubscriptionButton)
+
+        mainStack.addArrangedSubview(subscriptionStatusLabel)
+        mainStack.setCustomSpacing(20, after: subscriptionStatusLabel)
+        mainStack.addArrangedSubview(promoCodeFieldContainer)
+        mainStack.addArrangedSubview(appliedPromoContainer)
+        mainStack.setCustomSpacing(8, after: appliedPromoContainer)
+        mainStack.addArrangedSubview(promoErrorLabel)
+        mainStack.setCustomSpacing(20, after: promoErrorLabel)
+
         #if DEBUG
-        mainStack.addArrangedSubview(verticalFieldStack(label: engineLabel, field: engineField))
-        mainStack.addArrangedSubview(engineFootnoteLabel)
-        mainStack.setCustomSpacing(8, after: engineFootnoteLabel)
-        mainStack.addArrangedSubview(forceRefreshButton)
+        if DailyFitEngineConfig.allowsDevEngineTools {
+            mainStack.addArrangedSubview(verticalFieldStack(label: engineLabel, field: engineField))
+            mainStack.addArrangedSubview(engineFootnoteLabel)
+            mainStack.setCustomSpacing(8, after: engineFootnoteLabel)
+            mainStack.addArrangedSubview(forceRefreshButton)
+        }
         #endif
         mainStack.addArrangedSubview(signOutButton)
         mainStack.addArrangedSubview(deleteProfileButton)
@@ -625,6 +688,17 @@ class ProfileViewController: UIViewController {
         updateProfile()
     }
     
+    private func configureEngineVersionLabel() {
+        engineVersionLabel.translatesAutoresizingMaskIntoConstraints = false
+        engineVersionLabel.numberOfLines = 1
+        engineVersionLabel.font = CosmicFitTheme.Typography.dmSansFont(
+            size: CosmicFitTheme.Typography.FontSizes.footnote,
+            weight: .regular
+        )
+        engineVersionLabel.textColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.45)
+        engineVersionLabel.text = DailyFitEngineRegistry.productionVersionDisplayText
+    }
+
     #if DEBUG
     private func configureDailyFitEnginePickerControls() {
         styleFieldCaption(engineLabel, text: "Daily Fit engine (debug)")
@@ -657,7 +731,7 @@ class ProfileViewController: UIViewController {
         )
         engineFootnoteLabel.textColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.72)
         engineFootnoteLabel.text = """
-        Applies to this install (not per profile). Release builds always use production.
+        Applies to this install (not per profile). Release builds always use Sky Forward production.
         """
 
         syncDailyFitEnginePickerSelection()
@@ -737,8 +811,10 @@ class ProfileViewController: UIViewController {
         Task {
             do {
                 try await StoreKitManager.shared.restorePurchases()
-                if EntitlementManager.shared.hasFullAccess {
+                if EntitlementManager.shared.hasStoreKitSubscription {
                     showAlert(title: "Restored", message: "Your subscription has been restored.")
+                } else if EntitlementManager.shared.hasCompAccess {
+                    showAlert(title: "No Subscription Found", message: "No App Store subscription found. Your comp access is active.")
                 } else {
                     showAlert(title: "No Subscription Found", message: "No active subscription found for this Apple ID.")
                 }
@@ -753,6 +829,250 @@ class ProfileViewController: UIViewController {
     @objc private func manageSubscriptionTapped() {
         if let url = URL(string: "https://apps.apple.com/account/subscriptions") {
             UIApplication.shared.open(url)
+        }
+    }
+
+    @objc private func updateEntitlementUI() {
+        let em = EntitlementManager.shared
+
+        if em.hasStoreKitSubscription {
+            subscriptionStatusLabel.text = "Subscribed"
+            subscriptionStatusLabel.isHidden = false
+            manageSubscriptionButton.isHidden = false
+        } else if em.hasCompAccess, let code = em.appliedCompCode {
+            subscriptionStatusLabel.text = "Comp access (\(code))"
+            subscriptionStatusLabel.isHidden = false
+            manageSubscriptionButton.isHidden = true
+        } else if !DailyFitEngineConfig.isProductionBuildMode {
+            if em.hasFullAccess {
+                subscriptionStatusLabel.text = "Access: Debug unlock"
+            } else {
+                subscriptionStatusLabel.text = "Access: Free"
+            }
+            subscriptionStatusLabel.isHidden = false
+            manageSubscriptionButton.isHidden = true
+        } else {
+            subscriptionStatusLabel.isHidden = true
+            manageSubscriptionButton.isHidden = true
+        }
+
+        if em.hasStoreKitSubscription {
+            promoCodeFieldContainer.isHidden = true
+            appliedPromoContainer.isHidden = true
+        } else if em.hasCompAccess, let code = em.appliedCompCode {
+            appliedPromoCodeLabel.text = code
+            appliedPromoContainer.isHidden = false
+            promoCodeFieldContainer.isHidden = true
+        } else {
+            appliedPromoContainer.isHidden = true
+            promoCodeFieldContainer.isHidden = false
+        }
+    }
+
+    private func configureAppliedPromoRow() {
+        appliedPromoContainer.translatesAutoresizingMaskIntoConstraints = false
+        appliedPromoContainer.backgroundColor = CosmicFitTheme.Colours.transparentBackground
+        appliedPromoContainer.layer.borderColor = CosmicFitTheme.Colours.borderColor.cgColor
+        appliedPromoContainer.layer.borderWidth = 1.0
+        appliedPromoContainer.layer.cornerRadius = 8
+        appliedPromoContainer.clipsToBounds = true
+        appliedPromoContainer.isHidden = true
+        appliedPromoContainer.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
+        appliedPromoRow.translatesAutoresizingMaskIntoConstraints = false
+        appliedPromoRow.axis = .horizontal
+        appliedPromoRow.alignment = .center
+        appliedPromoRow.spacing = 8
+        appliedPromoRow.isLayoutMarginsRelativeArrangement = true
+        appliedPromoRow.layoutMargins = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 4)
+
+        appliedPromoCodeLabel.font = CosmicFitTheme.Typography.dmSansFont(
+            size: CosmicFitTheme.Typography.FontSizes.body,
+            weight: .medium
+        )
+        appliedPromoCodeLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
+        appliedPromoCodeLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        removePromoButton.translatesAutoresizingMaskIntoConstraints = false
+        let removeConfig = UIImage.SymbolConfiguration(pointSize: 13, weight: .semibold)
+        removePromoButton.setImage(
+            UIImage(systemName: "xmark", withConfiguration: removeConfig),
+            for: .normal
+        )
+        removePromoButton.tintColor = CosmicFitTheme.Colours.cosmicBlue
+        removePromoButton.accessibilityLabel = "Remove promo code"
+        removePromoButton.addTarget(self, action: #selector(removePromoTapped), for: .touchUpInside)
+
+        appliedPromoContainer.addSubview(appliedPromoRow)
+        appliedPromoRow.addArrangedSubview(appliedPromoCodeLabel)
+        appliedPromoRow.addArrangedSubview(removePromoButton)
+
+        NSLayoutConstraint.activate([
+            appliedPromoRow.topAnchor.constraint(equalTo: appliedPromoContainer.topAnchor),
+            appliedPromoRow.leadingAnchor.constraint(equalTo: appliedPromoContainer.leadingAnchor),
+            appliedPromoRow.trailingAnchor.constraint(equalTo: appliedPromoContainer.trailingAnchor),
+            appliedPromoRow.bottomAnchor.constraint(equalTo: appliedPromoContainer.bottomAnchor),
+
+            removePromoButton.widthAnchor.constraint(equalToConstant: 36),
+            removePromoButton.heightAnchor.constraint(equalToConstant: 36),
+        ])
+    }
+
+    @objc private func removePromoTapped() {
+        guard !isRemovingPromo else { return }
+
+        isRemovingPromo = true
+        promoErrorLabel.isHidden = true
+        removePromoButton.isEnabled = false
+        appliedPromoContainer.alpha = 0.45
+
+        Task {
+            do {
+                try await PromoCodeService.shared.revokeCompAccess()
+                await MainActor.run {
+                    updateEntitlementUI()
+                }
+            } catch {
+                await MainActor.run {
+                    promoErrorLabel.text = error.localizedDescription
+                    promoErrorLabel.isHidden = false
+                }
+            }
+            await MainActor.run {
+                isRemovingPromo = false
+                removePromoButton.isEnabled = true
+                appliedPromoContainer.alpha = 1.0
+            }
+        }
+    }
+
+    private func configurePromoCodeInlineRow() {
+        promoCodeFieldContainer.translatesAutoresizingMaskIntoConstraints = false
+        promoCodeFieldContainer.backgroundColor = CosmicFitTheme.Colours.transparentBackground
+        promoCodeFieldContainer.layer.borderColor = CosmicFitTheme.Colours.borderColor.cgColor
+        promoCodeFieldContainer.layer.borderWidth = 1.0
+        promoCodeFieldContainer.layer.cornerRadius = 8
+        promoCodeFieldContainer.clipsToBounds = true
+        promoCodeFieldContainer.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
+        promoCodeFieldRow.translatesAutoresizingMaskIntoConstraints = false
+        promoCodeFieldRow.axis = .horizontal
+        promoCodeFieldRow.alignment = .fill
+        promoCodeFieldRow.spacing = 0
+
+        promoCodeField.placeholder = "Enter promo code"
+        promoCodeField.autocapitalizationType = .allCharacters
+        promoCodeField.autocorrectionType = .no
+        promoCodeField.spellCheckingType = .no
+        promoCodeField.textContentType = .none
+        promoCodeField.returnKeyType = .go
+        promoCodeField.delegate = self
+        promoCodeField.translatesAutoresizingMaskIntoConstraints = false
+        CosmicFitTheme.styleTextField(promoCodeField)
+        promoCodeField.layer.borderWidth = 0
+        promoCodeField.backgroundColor = .clear
+        promoCodeField.rightView = nil
+        promoCodeField.rightViewMode = .never
+
+        redeemButton.translatesAutoresizingMaskIntoConstraints = false
+        redeemButton.addTarget(self, action: #selector(redeemButtonTapped), for: .touchUpInside)
+        redeemButton.accessibilityLabel = "Redeem promo code"
+        CosmicFitTheme.styleButton(redeemButton, style: .onboardingAction)
+        redeemButton.setTitle(nil, for: .normal)
+        applyPromoRedeemButtonAppearance(.coupon)
+
+        promoCodeFieldContainer.addSubview(promoCodeFieldRow)
+        promoCodeFieldRow.addArrangedSubview(promoCodeField)
+        promoCodeFieldRow.addArrangedSubview(redeemButton)
+
+        NSLayoutConstraint.activate([
+            promoCodeFieldRow.topAnchor.constraint(equalTo: promoCodeFieldContainer.topAnchor),
+            promoCodeFieldRow.leadingAnchor.constraint(equalTo: promoCodeFieldContainer.leadingAnchor),
+            promoCodeFieldRow.trailingAnchor.constraint(equalTo: promoCodeFieldContainer.trailingAnchor),
+            promoCodeFieldRow.bottomAnchor.constraint(equalTo: promoCodeFieldContainer.bottomAnchor),
+
+            redeemButton.widthAnchor.constraint(equalToConstant: 50),
+        ])
+    }
+
+    private func applyPromoRedeemButtonAppearance(_ appearance: PromoRedeemButtonAppearance) {
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
+        let symbolName: String
+        let background: UIColor
+
+        switch appearance {
+        case .coupon:
+            symbolName = "ticket.fill"
+            background = CosmicFitTheme.Colours.cosmicBlue
+        case .success:
+            symbolName = "checkmark"
+            background = .systemGreen
+        case .failure:
+            symbolName = "xmark"
+            background = .systemRed
+        }
+
+        redeemButton.backgroundColor = background
+        redeemButton.setImage(
+            UIImage(systemName: symbolName, withConfiguration: symbolConfig),
+            for: .normal
+        )
+        redeemButton.tintColor = .white
+    }
+
+    private func setPromoCodeInputEnabled(_ enabled: Bool) {
+        promoCodeField.isEnabled = enabled
+        promoCodeField.alpha = enabled ? 1.0 : 0.45
+        redeemButton.isEnabled = enabled
+        redeemButton.alpha = enabled ? 1.0 : 0.85
+    }
+
+    private func flashPromoRedeemButton(_ appearance: PromoRedeemButtonAppearance) async {
+        await MainActor.run {
+            applyPromoRedeemButtonAppearance(appearance)
+        }
+        try? await Task.sleep(for: .seconds(1))
+        await MainActor.run {
+            applyPromoRedeemButtonAppearance(.coupon)
+        }
+    }
+
+    @objc private func redeemButtonTapped() {
+        let code = promoCodeField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !code.isEmpty else { return }
+        guard !isRedeeming else { return }
+
+        promoRedeemFeedbackTask?.cancel()
+        isRedeeming = true
+        promoErrorLabel.isHidden = true
+        setPromoCodeInputEnabled(false)
+        promoCodeField.resignFirstResponder()
+
+        promoRedeemFeedbackTask = Task {
+            do {
+                _ = try await PromoCodeService.shared.redeem(code: code)
+                guard !Task.isCancelled else { return }
+                await MainActor.run {
+                    isRedeeming = false
+                    setPromoCodeInputEnabled(true)
+                }
+                await flashPromoRedeemButton(.success)
+                guard !Task.isCancelled else { return }
+                await MainActor.run {
+                    promoCodeField.text = ""
+                    showAlert(title: "Full Access Unlocked", message: "Your code has been applied successfully.")
+                    updateEntitlementUI()
+                }
+            } catch {
+                guard !Task.isCancelled else { return }
+                await MainActor.run {
+                    isRedeeming = false
+                    setPromoCodeInputEnabled(true)
+                    promoErrorLabel.text = error.localizedDescription
+                    promoErrorLabel.isHidden = false
+                }
+                await flashPromoRedeemButton(.failure)
+            }
         }
     }
 
@@ -1037,6 +1357,10 @@ extension ProfileViewController: UITextFieldDelegate {
             return true
         }
         #endif
+        if textField === promoCodeField {
+            redeemButtonTapped()
+            return true
+        }
         if textField === nameTextField {
             textField.resignFirstResponder()
         } else if textField === birthDateField || textField === birthTimeField {

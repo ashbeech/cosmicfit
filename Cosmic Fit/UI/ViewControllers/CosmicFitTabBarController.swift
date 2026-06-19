@@ -430,18 +430,20 @@ final class CosmicFitTabBarController: UITabBarController {
         print("🔍 Dismiss observer added successfully")
 
         #if DEBUG
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleDevForceRefresh),
-            name: .devForceRefreshRequested,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleDailyFitEngineOverrideChanged),
-            name: .dailyFitEngineOverrideChanged,
-            object: nil
-        )
+        if DailyFitEngineConfig.allowsDevEngineTools {
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(handleDevForceRefresh),
+                name: .devForceRefreshRequested,
+                object: nil
+            )
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(handleDailyFitEngineOverrideChanged),
+                name: .dailyFitEngineOverrideChanged,
+                object: nil
+            )
+        }
         #endif
     }
 
@@ -540,6 +542,11 @@ final class CosmicFitTabBarController: UITabBarController {
         guard let updatedProfile = notification.object as? UserProfile else { return }
         
         print("🔄 Profile updated - refreshing app data")
+
+        defer {
+            setupViewControllers()
+            print("✅ App data refreshed with updated profile")
+        }
         
         let priorProfile = self.userProfile
         userProfile = updatedProfile
@@ -555,6 +562,11 @@ final class CosmicFitTabBarController: UITabBarController {
         self.birthInfo = "\(dateFormatter.string(from: updatedProfile.birthDate)) at \(updatedProfile.birthLocation) (Lat: \(String(format: "%.4f", updatedProfile.latitude)), Long: \(String(format: "%.4f", updatedProfile.longitude)))"
         
         calculateCharts()
+
+        guard natalChart != nil else {
+            print("⚠️ Chart calculation failed after profile update — skipping content generation")
+            return
+        }
 
         let birthInputsChanged: Bool = {
             guard let prior = priorProfile else { return true }
@@ -593,10 +605,6 @@ final class CosmicFitTabBarController: UITabBarController {
                 generateAndCacheDailyVibe(chartId: chartId)
             }
         }
-
-        setupViewControllers()
-        
-        print("✅ App data refreshed with updated profile")
     }
     
     @objc private func handleProfileDeleted() {
@@ -640,7 +648,12 @@ final class CosmicFitTabBarController: UITabBarController {
             setupViewControllers()
         }
 
-        Task { await EntitlementManager.shared.checkEntitlement() }
+        Task {
+            await EntitlementManager.shared.checkEntitlement()
+            if isAuthenticated {
+                await PromoCodeService.shared.restoreCompAccessIfNeeded()
+            }
+        }
     }
     
     /// Attempts to pull Style Guide data (`CosmicBlueprint`) from Supabase and save it locally.

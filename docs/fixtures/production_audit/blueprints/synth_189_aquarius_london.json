@@ -31,23 +31,21 @@
   ]
  },
  "engineVersion": "2.0.0",
- "generatedAt": "2026-06-10T20:44:29Z",
+ "generatedAt": "2026-06-14T15:05:40Z",
  "hardware": {
-  "metalsText": "Your jewellery and hardware should feel like they were picked up on a very good trip, not bought in a panic at a department store. Platinum tones serves as your daily anchor, especially when it has a slightly hammered or hand-forged finish that catches the light without blinding anyone. It plays beautifully against heavy linen and distressed leather. When you need something sharper to frame a silhouette, pull in polished silver tones with a smooth, matte finish. You do not do fussy or fragile clasps; your metalwork has to keep up with how much you move and talk. The goal is to wear pieces that prompt people to ask exactly where you found them.",
+  "metalsText": "Your jewellery and hardware should feel like they were picked up on a very good trip, not bought in a panic at a department store. Platinum tones serves as your daily anchor, especially when it has a slightly hammered or hand-forged finish that catches the light without blinding anyone. It plays beautifully against heavy linen and distressed leather. When you need something sharper to frame a silhouette, pull in silver tones with a smooth, matte finish. You do not do fussy or fragile clasps; your metalwork has to keep up with how much you move and talk. The goal is to wear pieces that prompt people to ask exactly where you found them.",
   "recommendedMetals": [
    "platinum",
+   "silver",
    "polished silver",
    "steel",
-   "silver",
    "aged brass",
    "hammered gold",
    "oxidised copper",
    "polished copper",
    "rose gold",
    "surgical steel",
-   "titanium",
-   "mixed metals",
-   "sterling silver"
+   "titanium"
   ],
   "recommendedStones": [
    "garnet",
@@ -61,9 +59,7 @@
    "blue lace agate",
    "kunzite",
    "labradorite",
-   "meteorite",
-   "aquamarine",
-   "citrine"
+   "meteorite"
   ],
   "stonesText": "Forget overly faceted, mass-produced gems. You suit stones that look like they have actually crossed a border or two in a beautifully worn travel bag. Garnet brings exactly the right kind of worldly texture, sitting perfectly against a relaxed linen cuff or a distressed leather jacket. Though you gravitate toward pieces with a nomadic backstory, the final setting still needs visual calm to feel right on your skin. Incorporating hematite introduces a cool, conversational element without dragging the silhouette into something heavy or cluttered. The goal is hardware that sparks a question over drinks, proving true refinement never has to mean predictable.",
   "tipText": "The most compelling jewellery looks like it has a passport, but piling it on ruins the effect. Choose one focal point, like a substantial platinum tones cuff or a heavy pendant set with garnet, that feels found rather than manufactured. This kind of worldly hardware looks incredible sitting at the collar of a crisp linen shirt or resting over a distressed leather jacket. Let one significant piece handle the conversation while the rest of your outfit keeps things cool and uncluttered."
@@ -352,6 +348,6 @@
  "userInfo": {
   "birthDate": "1992-01-25T04:00:00Z",
   "birthLocation": "Synth 189 \u2014 Aquarius Sun, 04:00 UTC, London (1992)",
-  "generationDate": "2026-06-10T20:44:29Z"
+  "generationDate": "2026-06-14T15:05:40Z"
  }
 }

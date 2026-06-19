@@ -992,11 +992,18 @@ struct DeterministicResolver {
             }
         }
 
-        // Generate anti-tokens from opposites of top 3 lean-into combos
+        // Generate anti-tokens from opposites of top 3 lean-into combos.
+        // Only inject mood tokens that are full sentences (≥5 words with
+        // terminal punctuation). Bare fragments like "safe" must not reach
+        // the UI; the dataset should contain expanded sentences after the
+        // content-quality remediation pass.
         let topLeanIntoCombos = contributingCombos.prefix(3)
         for combo in topLeanIntoCombos {
             guard let entry = dataset.planetSign[combo.key] else { continue }
             for oppMood in entry.opposites.mood {
+                let wordCount = oppMood.split(separator: " ").count
+                let hasTerminal = oppMood.hasSuffix(".") || oppMood.hasSuffix("!") || oppMood.hasSuffix("?")
+                guard wordCount >= 5 && hasTerminal else { continue }
                 avoidItems.append((oppMood, combo.aggregateWeight * 0.5))
             }
         }
