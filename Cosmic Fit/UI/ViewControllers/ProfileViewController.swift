@@ -509,7 +509,7 @@ class ProfileViewController: UIViewController {
         showMasculineFeminineLabel.numberOfLines = 0
         showMasculineFeminineLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        showMasculineFeminineSwitch.onTintColor = CosmicFitTheme.Colours.cosmicBlue
+        CosmicFitTheme.styleSwitch(showMasculineFeminineSwitch)
         showMasculineFeminineSwitch.translatesAutoresizingMaskIntoConstraints = false
         showMasculineFeminineSwitch.addTarget(
             self,

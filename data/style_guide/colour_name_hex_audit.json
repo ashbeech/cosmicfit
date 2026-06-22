@@ -9,25 +9,25 @@
     "sign_accent_expressions": 106,
     "chart_signature_archetypes": 12,
     "informational_flags": 214,
-    "actionable_rows": 33,
-    "label_implied_css_mismatches": 12,
+    "actionable_rows": 23,
+    "label_implied_css_mismatches": 2,
     "css_semantic_mismatches": 13,
     "library_near_duplicates": 9
   },
   "priority_fixes": {
     "label_implied_css_mismatch": [
       {
-        "name": "magenta red",
+        "name": "hot pink",
         "hex": "#CC0066",
         "source": "palette_library",
         "context": "template token",
         "css_label_match": false,
         "flags": [
-          "label_implied_css_mismatch:magenta \u0394E=71.0",
+          "label_implied_css_mismatch:hotpink \u0394E=26.5",
           "css_nearest_far:\u0394E=18.1"
         ],
         "actionable_flags": [
-          "label_implied_css_mismatch:magenta \u0394E=71.0"
+          "label_implied_css_mismatch:hotpink \u0394E=26.5"
         ],
         "nearest_css": {
           "name": "mediumvioletred",
@@ -40,203 +40,29 @@
           "delta_e": 8.92
         },
         "nearest_library": {
-          "name": "fuchsia red",
+          "name": "deep magenta",
           "hex": "#C81585",
           "delta_e": 17.8
         },
         "implied_css": {
-          "name": "magenta",
-          "hex": "#FF00FF",
-          "delta_e": 71.02
+          "name": "hotpink",
+          "hex": "#FF69B4",
+          "delta_e": 26.47
         }
       },
       {
-        "name": "lime",
-        "hex": "#A4C639",
-        "source": "palette_library",
-        "context": "template token",
-        "css_label_match": false,
-        "flags": [
-          "label_implied_css_mismatch:lime \u0394E=60.5",
-          "pantone_nearest_far:\u0394E=18.5"
-        ],
-        "actionable_flags": [
-          "label_implied_css_mismatch:lime \u0394E=60.5"
-        ],
-        "nearest_css": {
-          "name": "yellowgreen",
-          "hex": "#9ACD32",
-          "delta_e": 8.38
-        },
-        "nearest_pantone": {
-          "name": "Pantone 15-0343 Greenery",
-          "hex": "#88B04B",
-          "delta_e": 18.46
-        },
-        "nearest_library": {
-          "name": "acid lime",
-          "hex": "#B0BF1A",
-          "delta_e": 10.78
-        },
-        "implied_css": {
-          "name": "lime",
-          "hex": "#00FF00",
-          "delta_e": 60.52
-        }
-      },
-      {
-        "name": "fuchsia red",
-        "hex": "#C81585",
-        "source": "palette_library",
-        "context": "template token",
-        "css_label_match": false,
-        "flags": [
-          "label_implied_css_mismatch:fuchsia \u0394E=55.5",
-          "pantone_nearest_far:\u0394E=18.0"
-        ],
-        "actionable_flags": [
-          "label_implied_css_mismatch:fuchsia \u0394E=55.5"
-        ],
-        "nearest_css": {
-          "name": "mediumvioletred",
-          "hex": "#C71585",
-          "delta_e": 0.43
-        },
-        "nearest_pantone": {
-          "name": "Pantone 673 C",
-          "hex": "#C94C8A",
-          "delta_e": 18.0
-        },
-        "nearest_library": {
-          "name": "magenta red",
-          "hex": "#CC0066",
-          "delta_e": 17.8
-        },
-        "implied_css": {
-          "name": "fuchsia",
-          "hex": "#FF00FF",
-          "delta_e": 55.49
-        }
-      },
-      {
-        "name": "forest green",
-        "hex": "#254D32",
-        "source": "palette_library",
-        "context": "template token",
-        "css_label_match": false,
-        "flags": [
-          "label_implied_css_mismatch:forestgreen \u0394E=48.6",
-          "css_nearest_far:\u0394E=18.3",
-          "pantone_nearest_far:\u0394E=21.0"
-        ],
-        "actionable_flags": [
-          "label_implied_css_mismatch:forestgreen \u0394E=48.6"
-        ],
-        "nearest_css": {
-          "name": "darkslategray",
-          "hex": "#2F4F4F",
-          "delta_e": 18.28
-        },
-        "nearest_pantone": {
-          "name": "Pantone 7474 C",
-          "hex": "#005F61",
-          "delta_e": 20.98
-        },
-        "nearest_library": {
-          "name": "dark emerald",
-          "hex": "#014421",
-          "delta_e": 9.82
-        },
-        "implied_css": {
-          "name": "forestgreen",
-          "hex": "#228B22",
-          "delta_e": 48.65
-        }
-      },
-      {
-        "name": "Regal Blue",
-        "hex": "#5485C8",
-        "source": "sign_accent_expression",
-        "context": "leo/cool",
-        "css_label_match": false,
-        "flags": [
-          "label_implied_css_mismatch:royalblue \u0394E=34.9",
-          "css_nearest_far:\u0394E=11.0",
-          "pantone_nearest_far:\u0394E=11.1",
-          "library_nearest_far:dusty blue \u0394E=21.9"
-        ],
-        "actionable_flags": [
-          "label_implied_css_mismatch:royalblue \u0394E=34.9"
-        ],
-        "nearest_css": {
-          "name": "steelblue",
-          "hex": "#4682B4",
-          "delta_e": 11.02
-        },
-        "nearest_pantone": {
-          "name": "Pantone 660 C",
-          "hex": "#5B87B7",
-          "delta_e": 11.13
-        },
-        "nearest_library": {
-          "name": "dusty blue",
-          "hex": "#6E8FAD",
-          "delta_e": 21.86
-        },
-        "implied_css": {
-          "name": "royalblue",
-          "hex": "#4169E1",
-          "delta_e": 34.87
-        }
-      },
-      {
-        "name": "Steel Blue",
-        "hex": "#085267",
-        "source": "sign_accent_expression",
-        "context": "capricorn/cool",
-        "css_label_match": false,
-        "flags": [
-          "label_implied_css_mismatch:steelblue \u0394E=26.3",
-          "css_nearest_far:\u0394E=14.3",
-          "library_nearest_far:petrol \u0394E=12.2"
-        ],
-        "actionable_flags": [
-          "label_implied_css_mismatch:steelblue \u0394E=26.3"
-        ],
-        "nearest_css": {
-          "name": "darkslategray",
-          "hex": "#2F4F4F",
-          "delta_e": 14.34
-        },
-        "nearest_pantone": {
-          "name": "Pantone 7475 C",
-          "hex": "#004F59",
-          "delta_e": 7.74
-        },
-        "nearest_library": {
-          "name": "petrol",
-          "hex": "#1B3A4B",
-          "delta_e": 12.17
-        },
-        "implied_css": {
-          "name": "steelblue",
-          "hex": "#4682B4",
-          "delta_e": 26.33
-        }
-      },
-      {
-        "name": "Cerulean",
+        "name": "Dark Cyan",
         "hex": "#007788",
         "source": "sign_accent_expression",
         "context": "aquarius/neutral",
         "css_label_match": false,
         "flags": [
-          "label_implied_css_mismatch:steelblue \u0394E=24.0",
+          "label_implied_css_mismatch:darkcyan \u0394E=13.9",
           "css_nearest_far:\u0394E=11.7",
           "library_nearest_far:muted teal \u0394E=16.7"
         ],
         "actionable_flags": [
-          "label_implied_css_mismatch:steelblue \u0394E=24.0"
+          "label_implied_css_mismatch:darkcyan \u0394E=13.9"
         ],
         "nearest_css": {
           "name": "teal",
@@ -254,183 +80,9 @@
           "delta_e": 16.7
         },
         "implied_css": {
-          "name": "steelblue",
-          "hex": "#4682B4",
-          "delta_e": 23.99
-        }
-      },
-      {
-        "name": "Arctic Blue",
-        "hex": "#008ABE",
-        "source": "sign_accent_expression",
-        "context": "aquarius/cool",
-        "css_label_match": false,
-        "flags": [
-          "label_implied_css_mismatch:deepskyblue \u0394E=20.6",
-          "pantone_nearest_far:\u0394E=10.4",
-          "library_nearest_far:dusty blue \u0394E=18.8"
-        ],
-        "actionable_flags": [
-          "label_implied_css_mismatch:deepskyblue \u0394E=20.6"
-        ],
-        "nearest_css": {
-          "name": "steelblue",
-          "hex": "#4682B4",
-          "delta_e": 9.0
-        },
-        "nearest_pantone": {
-          "name": "Pantone 7684 C",
-          "hex": "#00A3E0",
-          "delta_e": 10.39
-        },
-        "nearest_library": {
-          "name": "dusty blue",
-          "hex": "#6E8FAD",
-          "delta_e": 18.75
-        },
-        "implied_css": {
-          "name": "deepskyblue",
-          "hex": "#00BFFF",
-          "delta_e": 20.56
-        }
-      },
-      {
-        "name": "true red",
-        "hex": "#CC0000",
-        "source": "palette_library",
-        "context": "template token",
-        "css_label_match": false,
-        "flags": [
-          "label_implied_css_mismatch:red \u0394E=19.4",
-          "css_nearest_far:\u0394E=19.4"
-        ],
-        "actionable_flags": [
-          "label_implied_css_mismatch:red \u0394E=19.4"
-        ],
-        "nearest_css": {
-          "name": "orangered",
-          "hex": "#FF4500",
-          "delta_e": 19.35
-        },
-        "nearest_pantone": {
-          "name": "Pantone 485 C",
-          "hex": "#DA291C",
-          "delta_e": 7.84
-        },
-        "nearest_library": {
-          "name": "poppy",
-          "hex": "#E35335",
-          "delta_e": 20.84
-        },
-        "implied_css": {
-          "name": "red",
-          "hex": "#FF0000",
-          "delta_e": 19.41
-        }
-      },
-      {
-        "name": "electric blue",
-        "hex": "#0080FF",
-        "source": "palette_library",
-        "context": "template token",
-        "css_label_match": false,
-        "flags": [
-          "label_implied_css_mismatch:dodgerblue \u0394E=12.5",
-          "css_nearest_far:\u0394E=11.6",
-          "pantone_nearest_far:\u0394E=20.4"
-        ],
-        "actionable_flags": [
-          "label_implied_css_mismatch:dodgerblue \u0394E=12.5"
-        ],
-        "nearest_css": {
-          "name": "royalblue",
-          "hex": "#4169E1",
-          "delta_e": 11.64
-        },
-        "nearest_pantone": {
-          "name": "Pantone 7686 C",
-          "hex": "#0072CE",
-          "delta_e": 20.38
-        },
-        "nearest_library": {
-          "name": "royal blue",
-          "hex": "#4169E1",
-          "delta_e": 11.64
-        },
-        "implied_css": {
-          "name": "dodgerblue",
-          "hex": "#1E90FF",
-          "delta_e": 12.5
-        }
-      },
-      {
-        "name": "peach",
-        "hex": "#FFCBA4",
-        "source": "palette_library",
-        "context": "template token",
-        "css_label_match": true,
-        "flags": [
-          "label_implied_css_mismatch:peachpuff \u0394E=8.5",
-          "css_semantic_mismatch:\u0394E=8.5",
-          "pantone_nearest_far:\u0394E=11.8"
-        ],
-        "actionable_flags": [
-          "label_implied_css_mismatch:peachpuff \u0394E=8.5"
-        ],
-        "nearest_css": {
-          "name": "peachpuff",
-          "hex": "#FFDAB9",
-          "delta_e": 8.52
-        },
-        "nearest_pantone": {
-          "name": "Pantone 15-1520 Peach",
-          "hex": "#FFB59A",
-          "delta_e": 11.84
-        },
-        "nearest_library": {
-          "name": "apricot",
-          "hex": "#FBCEB1",
-          "delta_e": 6.28
-        },
-        "implied_css": {
-          "name": "peachpuff",
-          "hex": "#FFDAB9",
-          "delta_e": 8.52
-        }
-      },
-      {
-        "name": "clear turquoise",
-        "hex": "#08E8DE",
-        "source": "palette_library",
-        "context": "template token",
-        "css_label_match": true,
-        "flags": [
-          "label_implied_css_mismatch:turquoise \u0394E=5.8",
-          "css_semantic_mismatch:\u0394E=5.8",
-          "pantone_nearest_far:\u0394E=17.5"
-        ],
-        "actionable_flags": [
-          "label_implied_css_mismatch:turquoise \u0394E=5.8"
-        ],
-        "nearest_css": {
-          "name": "turquoise",
-          "hex": "#40E0D0",
-          "delta_e": 5.84
-        },
-        "nearest_pantone": {
-          "name": "Pantone 7478 C",
-          "hex": "#7EDDD3",
-          "delta_e": 17.53
-        },
-        "nearest_library": {
-          "name": "clear cyan",
-          "hex": "#00FFFF",
-          "delta_e": 9.66
-        },
-        "implied_css": {
-          "name": "turquoise",
-          "hex": "#40E0D0",
-          "delta_e": 5.84
+          "name": "darkcyan",
+          "hex": "#008B8B",
+          "delta_e": 13.93
         }
       }
     ],
@@ -589,7 +241,7 @@
         "implied_css": null
       },
       {
-        "name": "Antique Brass",
+        "name": "Rich Sienna",
         "hex": "#C47A3E",
         "source": "sign_accent_expression",
         "context": "leo/warm",
@@ -798,7 +450,7 @@
           "delta_e": 23.81
         },
         "nearest_library": {
-          "name": "aged brass",
+          "name": "warm umber",
           "hex": "#8E7530",
           "delta_e": 10.28
         },
@@ -1115,71 +767,6 @@
   },
   "actionable_rows": [
     {
-      "name": "Antique Brass",
-      "hex": "#C47A3E",
-      "source": "sign_accent_expression",
-      "context": "leo/warm",
-      "css_label_match": false,
-      "flags": [
-        "pantone_nearest_far:\u0394E=28.0",
-        "library_near_match:copper \u0394E=4.0"
-      ],
-      "actionable_flags": [
-        "library_near_match:copper \u0394E=4.0"
-      ],
-      "nearest_css": {
-        "name": "peru",
-        "hex": "#CD853F",
-        "delta_e": 5.79
-      },
-      "nearest_pantone": {
-        "name": "Pantone 18-1441 Brick Red",
-        "hex": "#C14A3D",
-        "delta_e": 28.01
-      },
-      "nearest_library": {
-        "name": "copper",
-        "hex": "#B87333",
-        "delta_e": 4.03
-      },
-      "implied_css": null
-    },
-    {
-      "name": "Arctic Blue",
-      "hex": "#008ABE",
-      "source": "sign_accent_expression",
-      "context": "aquarius/cool",
-      "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:deepskyblue \u0394E=20.6",
-        "pantone_nearest_far:\u0394E=10.4",
-        "library_nearest_far:dusty blue \u0394E=18.8"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:deepskyblue \u0394E=20.6"
-      ],
-      "nearest_css": {
-        "name": "steelblue",
-        "hex": "#4682B4",
-        "delta_e": 9.0
-      },
-      "nearest_pantone": {
-        "name": "Pantone 7684 C",
-        "hex": "#00A3E0",
-        "delta_e": 10.39
-      },
-      "nearest_library": {
-        "name": "dusty blue",
-        "hex": "#6E8FAD",
-        "delta_e": 18.75
-      },
-      "implied_css": {
-        "name": "deepskyblue",
-        "hex": "#00BFFF",
-        "delta_e": 20.56
-      }
-    },
-    {
       "name": "black brown",
       "hex": "#1C1210",
       "source": "palette_library",
@@ -1332,41 +919,6 @@
       "implied_css": null
     },
     {
-      "name": "Cerulean",
-      "hex": "#007788",
-      "source": "sign_accent_expression",
-      "context": "aquarius/neutral",
-      "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:steelblue \u0394E=24.0",
-        "css_nearest_far:\u0394E=11.7",
-        "library_nearest_far:muted teal \u0394E=16.7"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:steelblue \u0394E=24.0"
-      ],
-      "nearest_css": {
-        "name": "teal",
-        "hex": "#008080",
-        "delta_e": 11.72
-      },
-      "nearest_pantone": {
-        "name": "Pantone 7473 C",
-        "hex": "#007681",
-        "delta_e": 3.84
-      },
-      "nearest_library": {
-        "name": "muted teal",
-        "hex": "#5E8E8E",
-        "delta_e": 16.7
-      },
-      "implied_css": {
-        "name": "steelblue",
-        "hex": "#4682B4",
-        "delta_e": 23.99
-      }
-    },
-    {
       "name": "clear black",
       "hex": "#0D1014",
       "source": "palette_library",
@@ -1397,38 +949,38 @@
       "implied_css": null
     },
     {
-      "name": "clear turquoise",
-      "hex": "#08E8DE",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": true,
+      "name": "Dark Cyan",
+      "hex": "#007788",
+      "source": "sign_accent_expression",
+      "context": "aquarius/neutral",
+      "css_label_match": false,
       "flags": [
-        "label_implied_css_mismatch:turquoise \u0394E=5.8",
-        "css_semantic_mismatch:\u0394E=5.8",
-        "pantone_nearest_far:\u0394E=17.5"
+        "label_implied_css_mismatch:darkcyan \u0394E=13.9",
+        "css_nearest_far:\u0394E=11.7",
+        "library_nearest_far:muted teal \u0394E=16.7"
       ],
       "actionable_flags": [
-        "label_implied_css_mismatch:turquoise \u0394E=5.8"
+        "label_implied_css_mismatch:darkcyan \u0394E=13.9"
       ],
       "nearest_css": {
-        "name": "turquoise",
-        "hex": "#40E0D0",
-        "delta_e": 5.84
+        "name": "teal",
+        "hex": "#008080",
+        "delta_e": 11.72
       },
       "nearest_pantone": {
-        "name": "Pantone 7478 C",
-        "hex": "#7EDDD3",
-        "delta_e": 17.53
+        "name": "Pantone 7473 C",
+        "hex": "#007681",
+        "delta_e": 3.84
       },
       "nearest_library": {
-        "name": "clear cyan",
-        "hex": "#00FFFF",
-        "delta_e": 9.66
+        "name": "muted teal",
+        "hex": "#5E8E8E",
+        "delta_e": 16.7
       },
       "implied_css": {
-        "name": "turquoise",
-        "hex": "#40E0D0",
-        "delta_e": 5.84
+        "name": "darkcyan",
+        "hex": "#008B8B",
+        "delta_e": 13.93
       }
     },
     {
@@ -1526,41 +1078,6 @@
       "implied_css": null
     },
     {
-      "name": "electric blue",
-      "hex": "#0080FF",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:dodgerblue \u0394E=12.5",
-        "css_nearest_far:\u0394E=11.6",
-        "pantone_nearest_far:\u0394E=20.4"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:dodgerblue \u0394E=12.5"
-      ],
-      "nearest_css": {
-        "name": "royalblue",
-        "hex": "#4169E1",
-        "delta_e": 11.64
-      },
-      "nearest_pantone": {
-        "name": "Pantone 7686 C",
-        "hex": "#0072CE",
-        "delta_e": 20.38
-      },
-      "nearest_library": {
-        "name": "royal blue",
-        "hex": "#4169E1",
-        "delta_e": 11.64
-      },
-      "implied_css": {
-        "name": "dodgerblue",
-        "hex": "#1E90FF",
-        "delta_e": 12.5
-      }
-    },
-    {
       "name": "Fertile Moss",
       "hex": "#4E6B39",
       "source": "sign_accent_expression",
@@ -1591,72 +1108,37 @@
       "implied_css": null
     },
     {
-      "name": "forest green",
-      "hex": "#254D32",
+      "name": "hot pink",
+      "hex": "#CC0066",
       "source": "palette_library",
       "context": "template token",
       "css_label_match": false,
       "flags": [
-        "label_implied_css_mismatch:forestgreen \u0394E=48.6",
-        "css_nearest_far:\u0394E=18.3",
-        "pantone_nearest_far:\u0394E=21.0"
+        "label_implied_css_mismatch:hotpink \u0394E=26.5",
+        "css_nearest_far:\u0394E=18.1"
       ],
       "actionable_flags": [
-        "label_implied_css_mismatch:forestgreen \u0394E=48.6"
-      ],
-      "nearest_css": {
-        "name": "darkslategray",
-        "hex": "#2F4F4F",
-        "delta_e": 18.28
-      },
-      "nearest_pantone": {
-        "name": "Pantone 7474 C",
-        "hex": "#005F61",
-        "delta_e": 20.98
-      },
-      "nearest_library": {
-        "name": "dark emerald",
-        "hex": "#014421",
-        "delta_e": 9.82
-      },
-      "implied_css": {
-        "name": "forestgreen",
-        "hex": "#228B22",
-        "delta_e": 48.65
-      }
-    },
-    {
-      "name": "fuchsia red",
-      "hex": "#C81585",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:fuchsia \u0394E=55.5",
-        "pantone_nearest_far:\u0394E=18.0"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:fuchsia \u0394E=55.5"
+        "label_implied_css_mismatch:hotpink \u0394E=26.5"
       ],
       "nearest_css": {
         "name": "mediumvioletred",
         "hex": "#C71585",
-        "delta_e": 0.43
+        "delta_e": 18.1
       },
       "nearest_pantone": {
-        "name": "Pantone 673 C",
-        "hex": "#C94C8A",
-        "delta_e": 18.0
+        "name": "Pantone 19-1655 Rhodamine Red",
+        "hex": "#CE0058",
+        "delta_e": 8.92
       },
       "nearest_library": {
-        "name": "magenta red",
-        "hex": "#CC0066",
+        "name": "deep magenta",
+        "hex": "#C81585",
         "delta_e": 17.8
       },
       "implied_css": {
-        "name": "fuchsia",
-        "hex": "#FF00FF",
-        "delta_e": 55.49
+        "name": "hotpink",
+        "hex": "#FF69B4",
+        "delta_e": 26.47
       }
     },
     {
@@ -1690,74 +1172,6 @@
         "delta_e": 19.09
       },
       "implied_css": null
-    },
-    {
-      "name": "lime",
-      "hex": "#A4C639",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:lime \u0394E=60.5",
-        "pantone_nearest_far:\u0394E=18.5"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:lime \u0394E=60.5"
-      ],
-      "nearest_css": {
-        "name": "yellowgreen",
-        "hex": "#9ACD32",
-        "delta_e": 8.38
-      },
-      "nearest_pantone": {
-        "name": "Pantone 15-0343 Greenery",
-        "hex": "#88B04B",
-        "delta_e": 18.46
-      },
-      "nearest_library": {
-        "name": "acid lime",
-        "hex": "#B0BF1A",
-        "delta_e": 10.78
-      },
-      "implied_css": {
-        "name": "lime",
-        "hex": "#00FF00",
-        "delta_e": 60.52
-      }
-    },
-    {
-      "name": "magenta red",
-      "hex": "#CC0066",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:magenta \u0394E=71.0",
-        "css_nearest_far:\u0394E=18.1"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:magenta \u0394E=71.0"
-      ],
-      "nearest_css": {
-        "name": "mediumvioletred",
-        "hex": "#C71585",
-        "delta_e": 18.1
-      },
-      "nearest_pantone": {
-        "name": "Pantone 19-1655 Rhodamine Red",
-        "hex": "#CE0058",
-        "delta_e": 8.92
-      },
-      "nearest_library": {
-        "name": "fuchsia red",
-        "hex": "#C81585",
-        "delta_e": 17.8
-      },
-      "implied_css": {
-        "name": "magenta",
-        "hex": "#FF00FF",
-        "delta_e": 71.02
-      }
     },
     {
       "name": "Mercury Teal",
@@ -1843,7 +1257,7 @@
         "delta_e": 23.81
       },
       "nearest_library": {
-        "name": "aged brass",
+        "name": "warm umber",
         "hex": "#8E7530",
         "delta_e": 10.28
       },
@@ -1880,75 +1294,34 @@
       "implied_css": null
     },
     {
-      "name": "peach",
-      "hex": "#FFCBA4",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": true,
-      "flags": [
-        "label_implied_css_mismatch:peachpuff \u0394E=8.5",
-        "css_semantic_mismatch:\u0394E=8.5",
-        "pantone_nearest_far:\u0394E=11.8"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:peachpuff \u0394E=8.5"
-      ],
-      "nearest_css": {
-        "name": "peachpuff",
-        "hex": "#FFDAB9",
-        "delta_e": 8.52
-      },
-      "nearest_pantone": {
-        "name": "Pantone 15-1520 Peach",
-        "hex": "#FFB59A",
-        "delta_e": 11.84
-      },
-      "nearest_library": {
-        "name": "apricot",
-        "hex": "#FBCEB1",
-        "delta_e": 6.28
-      },
-      "implied_css": {
-        "name": "peachpuff",
-        "hex": "#FFDAB9",
-        "delta_e": 8.52
-      }
-    },
-    {
-      "name": "Regal Blue",
-      "hex": "#5485C8",
+      "name": "Rich Sienna",
+      "hex": "#C47A3E",
       "source": "sign_accent_expression",
-      "context": "leo/cool",
+      "context": "leo/warm",
       "css_label_match": false,
       "flags": [
-        "label_implied_css_mismatch:royalblue \u0394E=34.9",
-        "css_nearest_far:\u0394E=11.0",
-        "pantone_nearest_far:\u0394E=11.1",
-        "library_nearest_far:dusty blue \u0394E=21.9"
+        "pantone_nearest_far:\u0394E=28.0",
+        "library_near_match:copper \u0394E=4.0"
       ],
       "actionable_flags": [
-        "label_implied_css_mismatch:royalblue \u0394E=34.9"
+        "library_near_match:copper \u0394E=4.0"
       ],
       "nearest_css": {
-        "name": "steelblue",
-        "hex": "#4682B4",
-        "delta_e": 11.02
+        "name": "peru",
+        "hex": "#CD853F",
+        "delta_e": 5.79
       },
       "nearest_pantone": {
-        "name": "Pantone 660 C",
-        "hex": "#5B87B7",
-        "delta_e": 11.13
+        "name": "Pantone 18-1441 Brick Red",
+        "hex": "#C14A3D",
+        "delta_e": 28.01
       },
       "nearest_library": {
-        "name": "dusty blue",
-        "hex": "#6E8FAD",
-        "delta_e": 21.86
+        "name": "copper",
+        "hex": "#B87333",
+        "delta_e": 4.03
       },
-      "implied_css": {
-        "name": "royalblue",
-        "hex": "#4169E1",
-        "delta_e": 34.87
-      }
+      "implied_css": null
     },
     {
       "name": "Saturn Slate",
@@ -2008,41 +1381,6 @@
         "delta_e": 5.0
       },
       "implied_css": null
-    },
-    {
-      "name": "Steel Blue",
-      "hex": "#085267",
-      "source": "sign_accent_expression",
-      "context": "capricorn/cool",
-      "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:steelblue \u0394E=26.3",
-        "css_nearest_far:\u0394E=14.3",
-        "library_nearest_far:petrol \u0394E=12.2"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:steelblue \u0394E=26.3"
-      ],
-      "nearest_css": {
-        "name": "darkslategray",
-        "hex": "#2F4F4F",
-        "delta_e": 14.34
-      },
-      "nearest_pantone": {
-        "name": "Pantone 7475 C",
-        "hex": "#004F59",
-        "delta_e": 7.74
-      },
-      "nearest_library": {
-        "name": "petrol",
-        "hex": "#1B3A4B",
-        "delta_e": 12.17
-      },
-      "implied_css": {
-        "name": "steelblue",
-        "hex": "#4682B4",
-        "delta_e": 26.33
-      }
     },
     {
       "name": "Teal Moss",
@@ -2107,40 +1445,6 @@
         "delta_e": 12.5
       },
       "implied_css": null
-    },
-    {
-      "name": "true red",
-      "hex": "#CC0000",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:red \u0394E=19.4",
-        "css_nearest_far:\u0394E=19.4"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:red \u0394E=19.4"
-      ],
-      "nearest_css": {
-        "name": "orangered",
-        "hex": "#FF4500",
-        "delta_e": 19.35
-      },
-      "nearest_pantone": {
-        "name": "Pantone 485 C",
-        "hex": "#DA291C",
-        "delta_e": 7.84
-      },
-      "nearest_library": {
-        "name": "poppy",
-        "hex": "#E35335",
-        "delta_e": 20.84
-      },
-      "implied_css": {
-        "name": "red",
-        "hex": "#FF0000",
-        "delta_e": 19.41
-      }
     },
     {
       "name": "Warm Slate",
@@ -2305,7 +1609,7 @@
         "delta_e": 10.74
       },
       "nearest_library": {
-        "name": "antique gold",
+        "name": "deep honey",
         "hex": "#C9A84C",
         "delta_e": 3.77
       },
@@ -2319,7 +1623,7 @@
       "css_label_match": false,
       "flags": [
         "css_nearest_far:\u0394E=13.9",
-        "library_nearest_far:antique gold \u0394E=10.6"
+        "library_nearest_far:deep honey \u0394E=10.6"
       ],
       "actionable_flags": [],
       "nearest_css": {
@@ -2333,7 +1637,7 @@
         "delta_e": 9.86
       },
       "nearest_library": {
-        "name": "antique gold",
+        "name": "deep honey",
         "hex": "#C9A84C",
         "delta_e": 10.58
       },
@@ -2522,37 +1826,9 @@
         "delta_e": 20.89
       },
       "nearest_library": {
-        "name": "lime",
+        "name": "apple green",
         "hex": "#A4C639",
         "delta_e": 10.78
-      },
-      "implied_css": null
-    },
-    {
-      "name": "aged brass",
-      "hex": "#8E7530",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": false,
-      "flags": [
-        "css_nearest_far:\u0394E=21.7",
-        "pantone_nearest_far:\u0394E=17.1"
-      ],
-      "actionable_flags": [],
-      "nearest_css": {
-        "name": "olive",
-        "hex": "#808000",
-        "delta_e": 21.66
-      },
-      "nearest_pantone": {
-        "name": "Pantone 871 C Gold",
-        "hex": "#84754E",
-        "delta_e": 17.07
-      },
-      "nearest_library": {
-        "name": "olive gold",
-        "hex": "#A28C3A",
-        "delta_e": 10.28
       },
       "implied_css": null
     },
@@ -2585,30 +1861,29 @@
       "implied_css": null
     },
     {
-      "name": "antique gold",
-      "hex": "#C9A84C",
+      "name": "apple green",
+      "hex": "#A4C639",
       "source": "palette_library",
       "context": "template token",
       "css_label_match": false,
       "flags": [
-        "css_nearest_far:\u0394E=15.8",
-        "pantone_nearest_far:\u0394E=12.5"
+        "pantone_nearest_far:\u0394E=18.5"
       ],
       "actionable_flags": [],
       "nearest_css": {
-        "name": "darkkhaki",
-        "hex": "#BDB76B",
-        "delta_e": 15.85
+        "name": "yellowgreen",
+        "hex": "#9ACD32",
+        "delta_e": 8.38
       },
       "nearest_pantone": {
-        "name": "Pantone 14-0848 Mimosa",
-        "hex": "#F0C05A",
-        "delta_e": 12.51
+        "name": "Pantone 15-0343 Greenery",
+        "hex": "#88B04B",
+        "delta_e": 18.46
       },
       "nearest_library": {
-        "name": "camel sand",
-        "hex": "#C4A35A",
-        "delta_e": 9.1
+        "name": "acid lime",
+        "hex": "#B0BF1A",
+        "delta_e": 10.78
       },
       "implied_css": null
     },
@@ -2633,7 +1908,7 @@
         "delta_e": 13.87
       },
       "nearest_library": {
-        "name": "peach",
+        "name": "light peach",
         "hex": "#FFCBA4",
         "delta_e": 6.28
       },
@@ -2924,6 +2199,61 @@
       "implied_css": null
     },
     {
+      "name": "bright aqua",
+      "hex": "#08E8DE",
+      "source": "palette_library",
+      "context": "template token",
+      "css_label_match": false,
+      "flags": [
+        "pantone_nearest_far:\u0394E=17.5"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "turquoise",
+        "hex": "#40E0D0",
+        "delta_e": 5.84
+      },
+      "nearest_pantone": {
+        "name": "Pantone 7478 C",
+        "hex": "#7EDDD3",
+        "delta_e": 17.53
+      },
+      "nearest_library": {
+        "name": "clear cyan",
+        "hex": "#00FFFF",
+        "delta_e": 9.66
+      },
+      "implied_css": null
+    },
+    {
+      "name": "bright blue",
+      "hex": "#0080FF",
+      "source": "palette_library",
+      "context": "template token",
+      "css_label_match": false,
+      "flags": [
+        "css_nearest_far:\u0394E=11.6",
+        "pantone_nearest_far:\u0394E=20.4"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "royalblue",
+        "hex": "#4169E1",
+        "delta_e": 11.64
+      },
+      "nearest_pantone": {
+        "name": "Pantone 7686 C",
+        "hex": "#0072CE",
+        "delta_e": 20.38
+      },
+      "nearest_library": {
+        "name": "royal blue",
+        "hex": "#4169E1",
+        "delta_e": 11.64
+      },
+      "implied_css": null
+    },
+    {
       "name": "bright gold",
       "hex": "#FFD700",
       "source": "palette_library",
@@ -3055,31 +2385,6 @@
       "implied_css": null
     },
     {
-      "name": "brushed pewter",
-      "hex": "#7C7D7D",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": false,
-      "flags": [],
-      "actionable_flags": [],
-      "nearest_css": {
-        "name": "gray",
-        "hex": "#808080",
-        "delta_e": 1.32
-      },
-      "nearest_pantone": {
-        "name": "Pantone 7545 C",
-        "hex": "#6D7275",
-        "delta_e": 5.18
-      },
-      "nearest_library": {
-        "name": "steel grey",
-        "hex": "#71797E",
-        "delta_e": 4.42
-      },
-      "implied_css": null
-    },
-    {
       "name": "buttercream",
       "hex": "#F5E6C8",
       "source": "palette_library",
@@ -3163,31 +2468,6 @@
       "implied_css": null
     },
     {
-      "name": "chrome silver",
-      "hex": "#DBE0E3",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": false,
-      "flags": [],
-      "actionable_flags": [],
-      "nearest_css": {
-        "name": "gainsboro",
-        "hex": "#DCDCDC",
-        "delta_e": 2.6
-      },
-      "nearest_pantone": {
-        "name": "Pantone 7541 C",
-        "hex": "#E5E1E6",
-        "delta_e": 3.54
-      },
-      "nearest_library": {
-        "name": "icy grey",
-        "hex": "#D6D6D6",
-        "delta_e": 4.01
-      },
-      "implied_css": null
-    },
-    {
       "name": "clear aqua",
       "hex": "#00CED1",
       "source": "palette_library",
@@ -3208,7 +2488,7 @@
         "delta_e": 15.09
       },
       "nearest_library": {
-        "name": "clear turquoise",
+        "name": "bright aqua",
         "hex": "#08E8DE",
         "delta_e": 12.22
       },
@@ -3293,7 +2573,7 @@
         "delta_e": 22.16
       },
       "nearest_library": {
-        "name": "clear turquoise",
+        "name": "bright aqua",
         "hex": "#08E8DE",
         "delta_e": 9.66
       },
@@ -3354,41 +2634,6 @@
         "delta_e": 15.01
       },
       "implied_css": null
-    },
-    {
-      "name": "clear turquoise",
-      "hex": "#08E8DE",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": true,
-      "flags": [
-        "label_implied_css_mismatch:turquoise \u0394E=5.8",
-        "css_semantic_mismatch:\u0394E=5.8",
-        "pantone_nearest_far:\u0394E=17.5"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:turquoise \u0394E=5.8"
-      ],
-      "nearest_css": {
-        "name": "turquoise",
-        "hex": "#40E0D0",
-        "delta_e": 5.84
-      },
-      "nearest_pantone": {
-        "name": "Pantone 7478 C",
-        "hex": "#7EDDD3",
-        "delta_e": 17.53
-      },
-      "nearest_library": {
-        "name": "clear cyan",
-        "hex": "#00FFFF",
-        "delta_e": 9.66
-      },
-      "implied_css": {
-        "name": "turquoise",
-        "hex": "#40E0D0",
-        "delta_e": 5.84
-      }
     },
     {
       "name": "cobalt",
@@ -3683,8 +2928,36 @@
         "delta_e": 27.22
       },
       "nearest_library": {
-        "name": "forest green",
+        "name": "dark pine",
         "hex": "#254D32",
+        "delta_e": 9.82
+      },
+      "implied_css": null
+    },
+    {
+      "name": "dark pine",
+      "hex": "#254D32",
+      "source": "palette_library",
+      "context": "template token",
+      "css_label_match": false,
+      "flags": [
+        "css_nearest_far:\u0394E=18.3",
+        "pantone_nearest_far:\u0394E=21.0"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "darkslategray",
+        "hex": "#2F4F4F",
+        "delta_e": 18.28
+      },
+      "nearest_pantone": {
+        "name": "Pantone 7474 C",
+        "hex": "#005F61",
+        "delta_e": 20.98
+      },
+      "nearest_library": {
+        "name": "dark emerald",
+        "hex": "#014421",
         "delta_e": 9.82
       },
       "implied_css": null
@@ -3745,6 +3018,34 @@
       "implied_css": null
     },
     {
+      "name": "deep honey",
+      "hex": "#C9A84C",
+      "source": "palette_library",
+      "context": "template token",
+      "css_label_match": false,
+      "flags": [
+        "css_nearest_far:\u0394E=15.8",
+        "pantone_nearest_far:\u0394E=12.5"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "darkkhaki",
+        "hex": "#BDB76B",
+        "delta_e": 15.85
+      },
+      "nearest_pantone": {
+        "name": "Pantone 14-0848 Mimosa",
+        "hex": "#F0C05A",
+        "delta_e": 12.51
+      },
+      "nearest_library": {
+        "name": "camel sand",
+        "hex": "#C4A35A",
+        "delta_e": 9.1
+      },
+      "implied_css": null
+    },
+    {
       "name": "deep khaki",
       "hex": "#786D4E",
       "source": "palette_library",
@@ -3772,6 +3073,33 @@
       "implied_css": null
     },
     {
+      "name": "deep magenta",
+      "hex": "#C81585",
+      "source": "palette_library",
+      "context": "template token",
+      "css_label_match": false,
+      "flags": [
+        "pantone_nearest_far:\u0394E=18.0"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "mediumvioletred",
+        "hex": "#C71585",
+        "delta_e": 0.43
+      },
+      "nearest_pantone": {
+        "name": "Pantone 673 C",
+        "hex": "#C94C8A",
+        "delta_e": 18.0
+      },
+      "nearest_library": {
+        "name": "hot pink",
+        "hex": "#CC0066",
+        "delta_e": 17.8
+      },
+      "implied_css": null
+    },
+    {
       "name": "deep olive",
       "hex": "#3C4B27",
       "source": "palette_library",
@@ -3793,9 +3121,36 @@
         "delta_e": 13.82
       },
       "nearest_library": {
-        "name": "forest green",
+        "name": "dark pine",
         "hex": "#254D32",
         "delta_e": 11.16
+      },
+      "implied_css": null
+    },
+    {
+      "name": "deep red",
+      "hex": "#CC0000",
+      "source": "palette_library",
+      "context": "template token",
+      "css_label_match": false,
+      "flags": [
+        "css_nearest_far:\u0394E=19.4"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "orangered",
+        "hex": "#FF4500",
+        "delta_e": 19.35
+      },
+      "nearest_pantone": {
+        "name": "Pantone 485 C",
+        "hex": "#DA291C",
+        "delta_e": 7.84
+      },
+      "nearest_library": {
+        "name": "poppy",
+        "hex": "#E35335",
+        "delta_e": 20.84
       },
       "implied_css": null
     },
@@ -3903,41 +3258,6 @@
         "delta_e": 11.83
       },
       "implied_css": null
-    },
-    {
-      "name": "electric blue",
-      "hex": "#0080FF",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:dodgerblue \u0394E=12.5",
-        "css_nearest_far:\u0394E=11.6",
-        "pantone_nearest_far:\u0394E=20.4"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:dodgerblue \u0394E=12.5"
-      ],
-      "nearest_css": {
-        "name": "royalblue",
-        "hex": "#4169E1",
-        "delta_e": 11.64
-      },
-      "nearest_pantone": {
-        "name": "Pantone 7686 C",
-        "hex": "#0072CE",
-        "delta_e": 20.38
-      },
-      "nearest_library": {
-        "name": "royal blue",
-        "hex": "#4169E1",
-        "delta_e": 11.64
-      },
-      "implied_css": {
-        "name": "dodgerblue",
-        "hex": "#1E90FF",
-        "delta_e": 12.5
-      }
     },
     {
       "name": "electric fuchsia",
@@ -4052,41 +3372,6 @@
       "implied_css": null
     },
     {
-      "name": "forest green",
-      "hex": "#254D32",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:forestgreen \u0394E=48.6",
-        "css_nearest_far:\u0394E=18.3",
-        "pantone_nearest_far:\u0394E=21.0"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:forestgreen \u0394E=48.6"
-      ],
-      "nearest_css": {
-        "name": "darkslategray",
-        "hex": "#2F4F4F",
-        "delta_e": 18.28
-      },
-      "nearest_pantone": {
-        "name": "Pantone 7474 C",
-        "hex": "#005F61",
-        "delta_e": 20.98
-      },
-      "nearest_library": {
-        "name": "dark emerald",
-        "hex": "#014421",
-        "delta_e": 9.82
-      },
-      "implied_css": {
-        "name": "forestgreen",
-        "hex": "#228B22",
-        "delta_e": 48.65
-      }
-    },
-    {
       "name": "forest teal",
       "hex": "#0B4F4A",
       "source": "palette_library",
@@ -4168,38 +3453,29 @@
       "implied_css": null
     },
     {
-      "name": "fuchsia red",
-      "hex": "#C81585",
+      "name": "frost grey",
+      "hex": "#DBE0E3",
       "source": "palette_library",
       "context": "template token",
       "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:fuchsia \u0394E=55.5",
-        "pantone_nearest_far:\u0394E=18.0"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:fuchsia \u0394E=55.5"
-      ],
+      "flags": [],
+      "actionable_flags": [],
       "nearest_css": {
-        "name": "mediumvioletred",
-        "hex": "#C71585",
-        "delta_e": 0.43
+        "name": "gainsboro",
+        "hex": "#DCDCDC",
+        "delta_e": 2.6
       },
       "nearest_pantone": {
-        "name": "Pantone 673 C",
-        "hex": "#C94C8A",
-        "delta_e": 18.0
+        "name": "Pantone 7541 C",
+        "hex": "#E5E1E6",
+        "delta_e": 3.54
       },
       "nearest_library": {
-        "name": "magenta red",
-        "hex": "#CC0066",
-        "delta_e": 17.8
+        "name": "icy grey",
+        "hex": "#D6D6D6",
+        "delta_e": 4.01
       },
-      "implied_css": {
-        "name": "fuchsia",
-        "hex": "#FF00FF",
-        "delta_e": 55.49
-      }
+      "implied_css": null
     },
     {
       "name": "goldenrod",
@@ -4337,6 +3613,40 @@
       "implied_css": null
     },
     {
+      "name": "hot pink",
+      "hex": "#CC0066",
+      "source": "palette_library",
+      "context": "template token",
+      "css_label_match": false,
+      "flags": [
+        "label_implied_css_mismatch:hotpink \u0394E=26.5",
+        "css_nearest_far:\u0394E=18.1"
+      ],
+      "actionable_flags": [
+        "label_implied_css_mismatch:hotpink \u0394E=26.5"
+      ],
+      "nearest_css": {
+        "name": "mediumvioletred",
+        "hex": "#C71585",
+        "delta_e": 18.1
+      },
+      "nearest_pantone": {
+        "name": "Pantone 19-1655 Rhodamine Red",
+        "hex": "#CE0058",
+        "delta_e": 8.92
+      },
+      "nearest_library": {
+        "name": "deep magenta",
+        "hex": "#C81585",
+        "delta_e": 17.8
+      },
+      "implied_css": {
+        "name": "hotpink",
+        "hex": "#FF69B4",
+        "delta_e": 26.47
+      }
+    },
+    {
       "name": "icy aqua",
       "hex": "#B0F0F0",
       "source": "palette_library",
@@ -4409,7 +3719,7 @@
         "delta_e": 4.33
       },
       "nearest_library": {
-        "name": "chrome silver",
+        "name": "frost grey",
         "hex": "#DBE0E3",
         "delta_e": 4.01
       },
@@ -4566,7 +3876,7 @@
         "delta_e": 7.89
       },
       "nearest_library": {
-        "name": "chrome silver",
+        "name": "frost grey",
         "hex": "#DBE0E3",
         "delta_e": 9.49
       },
@@ -4625,72 +3935,31 @@
       "implied_css": null
     },
     {
-      "name": "lime",
-      "hex": "#A4C639",
+      "name": "light peach",
+      "hex": "#FFCBA4",
       "source": "palette_library",
       "context": "template token",
       "css_label_match": false,
       "flags": [
-        "label_implied_css_mismatch:lime \u0394E=60.5",
-        "pantone_nearest_far:\u0394E=18.5"
+        "pantone_nearest_far:\u0394E=11.8"
       ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:lime \u0394E=60.5"
-      ],
+      "actionable_flags": [],
       "nearest_css": {
-        "name": "yellowgreen",
-        "hex": "#9ACD32",
-        "delta_e": 8.38
+        "name": "peachpuff",
+        "hex": "#FFDAB9",
+        "delta_e": 8.52
       },
       "nearest_pantone": {
-        "name": "Pantone 15-0343 Greenery",
-        "hex": "#88B04B",
-        "delta_e": 18.46
+        "name": "Pantone 15-1520 Peach",
+        "hex": "#FFB59A",
+        "delta_e": 11.84
       },
       "nearest_library": {
-        "name": "acid lime",
-        "hex": "#B0BF1A",
-        "delta_e": 10.78
+        "name": "apricot",
+        "hex": "#FBCEB1",
+        "delta_e": 6.28
       },
-      "implied_css": {
-        "name": "lime",
-        "hex": "#00FF00",
-        "delta_e": 60.52
-      }
-    },
-    {
-      "name": "magenta red",
-      "hex": "#CC0066",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:magenta \u0394E=71.0",
-        "css_nearest_far:\u0394E=18.1"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:magenta \u0394E=71.0"
-      ],
-      "nearest_css": {
-        "name": "mediumvioletred",
-        "hex": "#C71585",
-        "delta_e": 18.1
-      },
-      "nearest_pantone": {
-        "name": "Pantone 19-1655 Rhodamine Red",
-        "hex": "#CE0058",
-        "delta_e": 8.92
-      },
-      "nearest_library": {
-        "name": "fuchsia red",
-        "hex": "#C81585",
-        "delta_e": 17.8
-      },
-      "implied_css": {
-        "name": "magenta",
-        "hex": "#FF00FF",
-        "delta_e": 71.02
-      }
+      "implied_css": null
     },
     {
       "name": "marigold",
@@ -5170,7 +4439,7 @@
         "delta_e": 23.81
       },
       "nearest_library": {
-        "name": "aged brass",
+        "name": "warm umber",
         "hex": "#8E7530",
         "delta_e": 10.28
       },
@@ -5281,41 +4550,6 @@
         "delta_e": 5.93
       },
       "implied_css": null
-    },
-    {
-      "name": "peach",
-      "hex": "#FFCBA4",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": true,
-      "flags": [
-        "label_implied_css_mismatch:peachpuff \u0394E=8.5",
-        "css_semantic_mismatch:\u0394E=8.5",
-        "pantone_nearest_far:\u0394E=11.8"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:peachpuff \u0394E=8.5"
-      ],
-      "nearest_css": {
-        "name": "peachpuff",
-        "hex": "#FFDAB9",
-        "delta_e": 8.52
-      },
-      "nearest_pantone": {
-        "name": "Pantone 15-1520 Peach",
-        "hex": "#FFB59A",
-        "delta_e": 11.84
-      },
-      "nearest_library": {
-        "name": "apricot",
-        "hex": "#FBCEB1",
-        "delta_e": 6.28
-      },
-      "implied_css": {
-        "name": "peachpuff",
-        "hex": "#FFDAB9",
-        "delta_e": 8.52
-      }
     },
     {
       "name": "pearl grey",
@@ -5451,6 +4685,33 @@
       }
     },
     {
+      "name": "rich honey",
+      "hex": "#D4AF37",
+      "source": "palette_library",
+      "context": "template token",
+      "css_label_match": false,
+      "flags": [
+        "pantone_nearest_far:\u0394E=10.8"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "goldenrod",
+        "hex": "#DAA520",
+        "delta_e": 9.45
+      },
+      "nearest_pantone": {
+        "name": "Pantone 14-0848 Mimosa",
+        "hex": "#F0C05A",
+        "delta_e": 10.78
+      },
+      "nearest_library": {
+        "name": "goldenrod",
+        "hex": "#DAA520",
+        "delta_e": 9.45
+      },
+      "implied_css": null
+    },
+    {
       "name": "rose mauve",
       "hex": "#C08081",
       "source": "palette_library",
@@ -5523,7 +4784,7 @@
         "delta_e": 18.99
       },
       "nearest_library": {
-        "name": "electric blue",
+        "name": "bright blue",
         "hex": "#0080FF",
         "delta_e": 11.64
       },
@@ -5725,6 +4986,31 @@
       "implied_css": null
     },
     {
+      "name": "smoke grey",
+      "hex": "#7C7D7D",
+      "source": "palette_library",
+      "context": "template token",
+      "css_label_match": false,
+      "flags": [],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "gray",
+        "hex": "#808080",
+        "delta_e": 1.32
+      },
+      "nearest_pantone": {
+        "name": "Pantone 7545 C",
+        "hex": "#6D7275",
+        "delta_e": 5.18
+      },
+      "nearest_library": {
+        "name": "steel grey",
+        "hex": "#71797E",
+        "delta_e": 4.42
+      },
+      "implied_css": null
+    },
+    {
       "name": "smoke white",
       "hex": "#E8E6E2",
       "source": "palette_library",
@@ -5830,61 +5116,6 @@
         "name": "clear black",
         "hex": "#0D1014",
         "delta_e": 5.0
-      },
-      "implied_css": null
-    },
-    {
-      "name": "soft copper",
-      "hex": "#BD7E55",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": false,
-      "flags": [
-        "css_nearest_far:\u0394E=14.7",
-        "pantone_nearest_far:\u0394E=23.2"
-      ],
-      "actionable_flags": [],
-      "nearest_css": {
-        "name": "darksalmon",
-        "hex": "#E9967A",
-        "delta_e": 14.73
-      },
-      "nearest_pantone": {
-        "name": "Pantone 15-1520 Peach",
-        "hex": "#FFB59A",
-        "delta_e": 23.16
-      },
-      "nearest_library": {
-        "name": "soft rust",
-        "hex": "#B7654E",
-        "delta_e": 13.41
-      },
-      "implied_css": null
-    },
-    {
-      "name": "soft gold",
-      "hex": "#D4AF37",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": false,
-      "flags": [
-        "pantone_nearest_far:\u0394E=10.8"
-      ],
-      "actionable_flags": [],
-      "nearest_css": {
-        "name": "goldenrod",
-        "hex": "#DAA520",
-        "delta_e": 9.45
-      },
-      "nearest_pantone": {
-        "name": "Pantone 14-0848 Mimosa",
-        "hex": "#F0C05A",
-        "delta_e": 10.78
-      },
-      "nearest_library": {
-        "name": "goldenrod",
-        "hex": "#DAA520",
-        "delta_e": 9.45
       },
       "implied_css": null
     },
@@ -6069,7 +5300,7 @@
         "delta_e": 3.05
       },
       "nearest_library": {
-        "name": "brushed pewter",
+        "name": "smoke grey",
         "hex": "#7C7D7D",
         "delta_e": 4.42
       },
@@ -6155,40 +5386,6 @@
         "name": "tomato",
         "hex": "#FF6347",
         "delta_e": 0.0
-      }
-    },
-    {
-      "name": "true red",
-      "hex": "#CC0000",
-      "source": "palette_library",
-      "context": "template token",
-      "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:red \u0394E=19.4",
-        "css_nearest_far:\u0394E=19.4"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:red \u0394E=19.4"
-      ],
-      "nearest_css": {
-        "name": "orangered",
-        "hex": "#FF4500",
-        "delta_e": 19.35
-      },
-      "nearest_pantone": {
-        "name": "Pantone 485 C",
-        "hex": "#DA291C",
-        "delta_e": 7.84
-      },
-      "nearest_library": {
-        "name": "poppy",
-        "hex": "#E35335",
-        "delta_e": 20.84
-      },
-      "implied_css": {
-        "name": "red",
-        "hex": "#FF0000",
-        "delta_e": 19.41
       }
     },
     {
@@ -6382,6 +5579,34 @@
       "implied_css": null
     },
     {
+      "name": "warm sienna",
+      "hex": "#BD7E55",
+      "source": "palette_library",
+      "context": "template token",
+      "css_label_match": false,
+      "flags": [
+        "css_nearest_far:\u0394E=14.7",
+        "pantone_nearest_far:\u0394E=23.2"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "darksalmon",
+        "hex": "#E9967A",
+        "delta_e": 14.73
+      },
+      "nearest_pantone": {
+        "name": "Pantone 15-1520 Peach",
+        "hex": "#FFB59A",
+        "delta_e": 23.16
+      },
+      "nearest_library": {
+        "name": "soft rust",
+        "hex": "#B7654E",
+        "delta_e": 13.41
+      },
+      "implied_css": null
+    },
+    {
       "name": "warm stone",
       "hex": "#A89F91",
       "source": "palette_library",
@@ -6430,6 +5655,34 @@
         "name": "cool taupe",
         "hex": "#B0A093",
         "delta_e": 4.17
+      },
+      "implied_css": null
+    },
+    {
+      "name": "warm umber",
+      "hex": "#8E7530",
+      "source": "palette_library",
+      "context": "template token",
+      "css_label_match": false,
+      "flags": [
+        "css_nearest_far:\u0394E=21.7",
+        "pantone_nearest_far:\u0394E=17.1"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "olive",
+        "hex": "#808000",
+        "delta_e": 21.66
+      },
+      "nearest_pantone": {
+        "name": "Pantone 871 C Gold",
+        "hex": "#84754E",
+        "delta_e": 17.07
+      },
+      "nearest_library": {
+        "name": "olive gold",
+        "hex": "#A28C3A",
+        "delta_e": 10.28
       },
       "implied_css": null
     },
@@ -6487,36 +5740,6 @@
       "implied_css": null
     },
     {
-      "name": "Antique Brass",
-      "hex": "#C47A3E",
-      "source": "sign_accent_expression",
-      "context": "leo/warm",
-      "css_label_match": false,
-      "flags": [
-        "pantone_nearest_far:\u0394E=28.0",
-        "library_near_match:copper \u0394E=4.0"
-      ],
-      "actionable_flags": [
-        "library_near_match:copper \u0394E=4.0"
-      ],
-      "nearest_css": {
-        "name": "peru",
-        "hex": "#CD853F",
-        "delta_e": 5.79
-      },
-      "nearest_pantone": {
-        "name": "Pantone 18-1441 Brick Red",
-        "hex": "#C14A3D",
-        "delta_e": 28.01
-      },
-      "nearest_library": {
-        "name": "copper",
-        "hex": "#B87333",
-        "delta_e": 4.03
-      },
-      "implied_css": null
-    },
-    {
       "name": "Aqua Blue",
       "hex": "#00818A",
       "source": "sign_accent_expression",
@@ -6542,41 +5765,6 @@
         "delta_e": 14.56
       },
       "implied_css": null
-    },
-    {
-      "name": "Arctic Blue",
-      "hex": "#008ABE",
-      "source": "sign_accent_expression",
-      "context": "aquarius/cool",
-      "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:deepskyblue \u0394E=20.6",
-        "pantone_nearest_far:\u0394E=10.4",
-        "library_nearest_far:dusty blue \u0394E=18.8"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:deepskyblue \u0394E=20.6"
-      ],
-      "nearest_css": {
-        "name": "steelblue",
-        "hex": "#4682B4",
-        "delta_e": 9.0
-      },
-      "nearest_pantone": {
-        "name": "Pantone 7684 C",
-        "hex": "#00A3E0",
-        "delta_e": 10.39
-      },
-      "nearest_library": {
-        "name": "dusty blue",
-        "hex": "#6E8FAD",
-        "delta_e": 18.75
-      },
-      "implied_css": {
-        "name": "deepskyblue",
-        "hex": "#00BFFF",
-        "delta_e": 20.56
-      }
     },
     {
       "name": "Aubergine",
@@ -6608,30 +5796,30 @@
       "implied_css": null
     },
     {
-      "name": "Burnished Gold",
-      "hex": "#D59B49",
+      "name": "Bright Cyan",
+      "hex": "#008ABE",
       "source": "sign_accent_expression",
-      "context": "leo/neutral",
+      "context": "aquarius/cool",
       "css_label_match": false,
       "flags": [
-        "css_nearest_far:\u0394E=10.4",
-        "pantone_nearest_far:\u0394E=15.4"
+        "pantone_nearest_far:\u0394E=10.4",
+        "library_nearest_far:dusty blue \u0394E=18.8"
       ],
       "actionable_flags": [],
       "nearest_css": {
-        "name": "peru",
-        "hex": "#CD853F",
-        "delta_e": 10.44
+        "name": "steelblue",
+        "hex": "#4682B4",
+        "delta_e": 9.0
       },
       "nearest_pantone": {
-        "name": "Pantone 14-0848 Mimosa",
-        "hex": "#F0C05A",
-        "delta_e": 15.42
+        "name": "Pantone 7684 C",
+        "hex": "#00A3E0",
+        "delta_e": 10.39
       },
       "nearest_library": {
-        "name": "muted amber",
-        "hex": "#CA8B39",
-        "delta_e": 6.27
+        "name": "dusty blue",
+        "hex": "#6E8FAD",
+        "delta_e": 18.75
       },
       "implied_css": null
     },
@@ -6690,31 +5878,6 @@
         "name": "forest teal",
         "hex": "#0B4F4A",
         "delta_e": 12.8
-      },
-      "implied_css": null
-    },
-    {
-      "name": "Burnt Copper",
-      "hex": "#AE4D37",
-      "source": "sign_accent_expression",
-      "context": "sagittarius/warm",
-      "css_label_match": false,
-      "flags": [],
-      "actionable_flags": [],
-      "nearest_css": {
-        "name": "sienna",
-        "hex": "#A0522D",
-        "delta_e": 9.57
-      },
-      "nearest_pantone": {
-        "name": "Pantone 18-1441 Brick Red",
-        "hex": "#C14A3D",
-        "delta_e": 9.2
-      },
-      "nearest_library": {
-        "name": "dark terracotta",
-        "hex": "#9E4E3A",
-        "delta_e": 8.64
       },
       "implied_css": null
     },
@@ -6807,41 +5970,6 @@
       "implied_css": null
     },
     {
-      "name": "Cerulean",
-      "hex": "#007788",
-      "source": "sign_accent_expression",
-      "context": "aquarius/neutral",
-      "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:steelblue \u0394E=24.0",
-        "css_nearest_far:\u0394E=11.7",
-        "library_nearest_far:muted teal \u0394E=16.7"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:steelblue \u0394E=24.0"
-      ],
-      "nearest_css": {
-        "name": "teal",
-        "hex": "#008080",
-        "delta_e": 11.72
-      },
-      "nearest_pantone": {
-        "name": "Pantone 7473 C",
-        "hex": "#007681",
-        "delta_e": 3.84
-      },
-      "nearest_library": {
-        "name": "muted teal",
-        "hex": "#5E8E8E",
-        "delta_e": 16.7
-      },
-      "implied_css": {
-        "name": "steelblue",
-        "hex": "#4682B4",
-        "delta_e": 23.99
-      }
-    },
-    {
       "name": "Cool Aquamarine",
       "hex": "#69B8BD",
       "source": "sign_accent_expression",
@@ -6875,7 +6003,7 @@
       "flags": [
         "css_nearest_far:\u0394E=20.4",
         "pantone_nearest_far:\u0394E=18.1",
-        "library_nearest_far:fuchsia red \u0394E=23.1"
+        "library_nearest_far:deep magenta \u0394E=23.1"
       ],
       "actionable_flags": [],
       "nearest_css": {
@@ -6889,7 +6017,7 @@
         "delta_e": 18.05
       },
       "nearest_library": {
-        "name": "fuchsia red",
+        "name": "deep magenta",
         "hex": "#C81585",
         "delta_e": 23.06
       },
@@ -7063,34 +6191,6 @@
       "implied_css": null
     },
     {
-      "name": "Dark Bronze",
-      "hex": "#664330",
-      "source": "sign_accent_expression",
-      "context": "capricorn/warm",
-      "css_label_match": false,
-      "flags": [
-        "css_nearest_far:\u0394E=25.1",
-        "pantone_nearest_far:\u0394E=10.1"
-      ],
-      "actionable_flags": [],
-      "nearest_css": {
-        "name": "dimgray",
-        "hex": "#696969",
-        "delta_e": 25.09
-      },
-      "nearest_pantone": {
-        "name": "Pantone 4625 C",
-        "hex": "#5C3317",
-        "delta_e": 10.13
-      },
-      "nearest_library": {
-        "name": "bark brown",
-        "hex": "#5C4033",
-        "delta_e": 5.8
-      },
-      "implied_css": null
-    },
-    {
       "name": "Dark Cherry",
       "hex": "#762249",
       "source": "sign_accent_expression",
@@ -7118,6 +6218,41 @@
         "delta_e": 15.83
       },
       "implied_css": null
+    },
+    {
+      "name": "Dark Cyan",
+      "hex": "#007788",
+      "source": "sign_accent_expression",
+      "context": "aquarius/neutral",
+      "css_label_match": false,
+      "flags": [
+        "label_implied_css_mismatch:darkcyan \u0394E=13.9",
+        "css_nearest_far:\u0394E=11.7",
+        "library_nearest_far:muted teal \u0394E=16.7"
+      ],
+      "actionable_flags": [
+        "label_implied_css_mismatch:darkcyan \u0394E=13.9"
+      ],
+      "nearest_css": {
+        "name": "teal",
+        "hex": "#008080",
+        "delta_e": 11.72
+      },
+      "nearest_pantone": {
+        "name": "Pantone 7473 C",
+        "hex": "#007681",
+        "delta_e": 3.84
+      },
+      "nearest_library": {
+        "name": "muted teal",
+        "hex": "#5E8E8E",
+        "delta_e": 16.7
+      },
+      "implied_css": {
+        "name": "darkcyan",
+        "hex": "#008B8B",
+        "delta_e": 13.93
+      }
     },
     {
       "name": "Dark Sienna",
@@ -7294,6 +6429,34 @@
       "implied_css": null
     },
     {
+      "name": "Deep Petrol",
+      "hex": "#085267",
+      "source": "sign_accent_expression",
+      "context": "capricorn/cool",
+      "css_label_match": false,
+      "flags": [
+        "css_nearest_far:\u0394E=14.3",
+        "library_nearest_far:petrol \u0394E=12.2"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "darkslategray",
+        "hex": "#2F4F4F",
+        "delta_e": 14.34
+      },
+      "nearest_pantone": {
+        "name": "Pantone 7475 C",
+        "hex": "#004F59",
+        "delta_e": 7.74
+      },
+      "nearest_library": {
+        "name": "petrol",
+        "hex": "#1B3A4B",
+        "delta_e": 12.17
+      },
+      "implied_css": null
+    },
+    {
       "name": "Deep Plum",
       "hex": "#702E62",
       "source": "sign_accent_expression",
@@ -7319,6 +6482,34 @@
         "name": "black cherry",
         "hex": "#4D0F28",
         "delta_e": 23.11
+      },
+      "implied_css": null
+    },
+    {
+      "name": "Deep Umber",
+      "hex": "#664330",
+      "source": "sign_accent_expression",
+      "context": "capricorn/warm",
+      "css_label_match": false,
+      "flags": [
+        "css_nearest_far:\u0394E=25.1",
+        "pantone_nearest_far:\u0394E=10.1"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "dimgray",
+        "hex": "#696969",
+        "delta_e": 25.09
+      },
+      "nearest_pantone": {
+        "name": "Pantone 4625 C",
+        "hex": "#5C3317",
+        "delta_e": 10.13
+      },
+      "nearest_library": {
+        "name": "bark brown",
+        "hex": "#5C4033",
+        "delta_e": 5.8
       },
       "implied_css": null
     },
@@ -7582,6 +6773,33 @@
       "implied_css": null
     },
     {
+      "name": "Frost Blue",
+      "hex": "#91B5CF",
+      "source": "sign_accent_expression",
+      "context": "leo/cool",
+      "css_label_match": false,
+      "flags": [
+        "library_nearest_far:soft slate \u0394E=10.5"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "lightsteelblue",
+        "hex": "#B0C4DE",
+        "delta_e": 8.29
+      },
+      "nearest_pantone": {
+        "name": "Pantone 659 C",
+        "hex": "#89ABD3",
+        "delta_e": 8.65
+      },
+      "nearest_library": {
+        "name": "soft slate",
+        "hex": "#8B9DAF",
+        "delta_e": 10.46
+      },
+      "implied_css": null
+    },
+    {
       "name": "Garnet",
       "hex": "#7B2943",
       "source": "sign_accent_expression",
@@ -7658,36 +6876,9 @@
         "delta_e": 17.63
       },
       "nearest_library": {
-        "name": "aged brass",
+        "name": "warm umber",
         "hex": "#8E7530",
         "delta_e": 5.22
-      },
-      "implied_css": null
-    },
-    {
-      "name": "Gunmetal",
-      "hex": "#19475A",
-      "source": "sign_accent_expression",
-      "context": "capricorn/neutral",
-      "css_label_match": false,
-      "flags": [
-        "css_nearest_far:\u0394E=12.9"
-      ],
-      "actionable_flags": [],
-      "nearest_css": {
-        "name": "darkslategray",
-        "hex": "#2F4F4F",
-        "delta_e": 12.91
-      },
-      "nearest_pantone": {
-        "name": "Pantone 7476 C",
-        "hex": "#003E51",
-        "delta_e": 4.42
-      },
-      "nearest_library": {
-        "name": "petrol",
-        "hex": "#1B3A4B",
-        "delta_e": 6.3
       },
       "implied_css": null
     },
@@ -7713,7 +6904,7 @@
         "delta_e": 12.54
       },
       "nearest_library": {
-        "name": "antique gold",
+        "name": "deep honey",
         "hex": "#C9A84C",
         "delta_e": 5.94
       },
@@ -7921,6 +7112,33 @@
       "implied_css": null
     },
     {
+      "name": "Ink Teal",
+      "hex": "#19475A",
+      "source": "sign_accent_expression",
+      "context": "capricorn/neutral",
+      "css_label_match": false,
+      "flags": [
+        "css_nearest_far:\u0394E=12.9"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "darkslategray",
+        "hex": "#2F4F4F",
+        "delta_e": 12.91
+      },
+      "nearest_pantone": {
+        "name": "Pantone 7476 C",
+        "hex": "#003E51",
+        "delta_e": 4.42
+      },
+      "nearest_library": {
+        "name": "petrol",
+        "hex": "#1B3A4B",
+        "delta_e": 6.3
+      },
+      "implied_css": null
+    },
+    {
       "name": "Jade Green",
       "hex": "#437F4C",
       "source": "sign_accent_expression",
@@ -8004,7 +7222,7 @@
       "implied_css": null
     },
     {
-      "name": "Lunar Silver",
+      "name": "Lunar Mist",
       "hex": "#A6C6D0",
       "source": "sign_accent_expression",
       "context": "cancer/cool",
@@ -8375,7 +7593,7 @@
       "flags": [
         "css_nearest_far:\u0394E=14.5",
         "pantone_nearest_far:\u0394E=15.8",
-        "library_nearest_far:aged brass \u0394E=10.1"
+        "library_nearest_far:warm umber \u0394E=10.1"
       ],
       "actionable_flags": [],
       "nearest_css": {
@@ -8389,7 +7607,7 @@
         "delta_e": 15.84
       },
       "nearest_library": {
-        "name": "aged brass",
+        "name": "warm umber",
         "hex": "#8E7530",
         "delta_e": 10.05
       },
@@ -8482,94 +7700,6 @@
       "implied_css": null
     },
     {
-      "name": "Pewter",
-      "hex": "#25515B",
-      "source": "sign_accent_expression",
-      "context": "capricorn/neutral",
-      "css_label_match": false,
-      "flags": [],
-      "actionable_flags": [],
-      "nearest_css": {
-        "name": "darkslategray",
-        "hex": "#2F4F4F",
-        "delta_e": 6.78
-      },
-      "nearest_pantone": {
-        "name": "Pantone 7475 C",
-        "hex": "#004F59",
-        "delta_e": 5.45
-      },
-      "nearest_library": {
-        "name": "deep teal",
-        "hex": "#014D4E",
-        "delta_e": 9.22
-      },
-      "implied_css": null
-    },
-    {
-      "name": "Platinum Frost",
-      "hex": "#91B5CF",
-      "source": "sign_accent_expression",
-      "context": "leo/cool",
-      "css_label_match": false,
-      "flags": [
-        "library_nearest_far:soft slate \u0394E=10.5"
-      ],
-      "actionable_flags": [],
-      "nearest_css": {
-        "name": "lightsteelblue",
-        "hex": "#B0C4DE",
-        "delta_e": 8.29
-      },
-      "nearest_pantone": {
-        "name": "Pantone 659 C",
-        "hex": "#89ABD3",
-        "delta_e": 8.65
-      },
-      "nearest_library": {
-        "name": "soft slate",
-        "hex": "#8B9DAF",
-        "delta_e": 10.46
-      },
-      "implied_css": null
-    },
-    {
-      "name": "Regal Blue",
-      "hex": "#5485C8",
-      "source": "sign_accent_expression",
-      "context": "leo/cool",
-      "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:royalblue \u0394E=34.9",
-        "css_nearest_far:\u0394E=11.0",
-        "pantone_nearest_far:\u0394E=11.1",
-        "library_nearest_far:dusty blue \u0394E=21.9"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:royalblue \u0394E=34.9"
-      ],
-      "nearest_css": {
-        "name": "steelblue",
-        "hex": "#4682B4",
-        "delta_e": 11.02
-      },
-      "nearest_pantone": {
-        "name": "Pantone 660 C",
-        "hex": "#5B87B7",
-        "delta_e": 11.13
-      },
-      "nearest_library": {
-        "name": "dusty blue",
-        "hex": "#6E8FAD",
-        "delta_e": 21.86
-      },
-      "implied_css": {
-        "name": "royalblue",
-        "hex": "#4169E1",
-        "delta_e": 34.87
-      }
-    },
-    {
       "name": "Rich Amber",
       "hex": "#AD661D",
       "source": "sign_accent_expression",
@@ -8594,6 +7724,36 @@
         "name": "copper",
         "hex": "#B87333",
         "delta_e": 6.72
+      },
+      "implied_css": null
+    },
+    {
+      "name": "Rich Sienna",
+      "hex": "#C47A3E",
+      "source": "sign_accent_expression",
+      "context": "leo/warm",
+      "css_label_match": false,
+      "flags": [
+        "pantone_nearest_far:\u0394E=28.0",
+        "library_near_match:copper \u0394E=4.0"
+      ],
+      "actionable_flags": [
+        "library_near_match:copper \u0394E=4.0"
+      ],
+      "nearest_css": {
+        "name": "peru",
+        "hex": "#CD853F",
+        "delta_e": 5.79
+      },
+      "nearest_pantone": {
+        "name": "Pantone 18-1441 Brick Red",
+        "hex": "#C14A3D",
+        "delta_e": 28.01
+      },
+      "nearest_library": {
+        "name": "copper",
+        "hex": "#B87333",
+        "delta_e": 4.03
       },
       "implied_css": null
     },
@@ -8632,7 +7792,7 @@
       "css_label_match": false,
       "flags": [
         "css_nearest_far:\u0394E=16.8",
-        "library_nearest_far:fuchsia red \u0394E=20.8"
+        "library_nearest_far:deep magenta \u0394E=20.8"
       ],
       "actionable_flags": [],
       "nearest_css": {
@@ -8646,7 +7806,7 @@
         "delta_e": 5.22
       },
       "nearest_library": {
-        "name": "fuchsia red",
+        "name": "deep magenta",
         "hex": "#C81585",
         "delta_e": 20.8
       },
@@ -8707,7 +7867,7 @@
       "implied_css": null
     },
     {
-      "name": "Saffron Gold",
+      "name": "Saffron Amber",
       "hex": "#C79538",
       "source": "sign_accent_expression",
       "context": "sagittarius/warm",
@@ -8820,6 +7980,34 @@
       "implied_css": null
     },
     {
+      "name": "Slate Teal",
+      "hex": "#4D7E8C",
+      "source": "sign_accent_expression",
+      "context": "cancer/neutral",
+      "css_label_match": false,
+      "flags": [
+        "css_nearest_far:\u0394E=11.1",
+        "library_nearest_far:muted teal \u0394E=10.2"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "slategray",
+        "hex": "#708090",
+        "delta_e": 11.09
+      },
+      "nearest_pantone": {
+        "name": "Pantone 5483 C",
+        "hex": "#4F868E",
+        "delta_e": 5.05
+      },
+      "nearest_library": {
+        "name": "muted teal",
+        "hex": "#5E8E8E",
+        "delta_e": 10.17
+      },
+      "implied_css": null
+    },
+    {
       "name": "Soft Aqua",
       "hex": "#387C7E",
       "source": "sign_accent_expression",
@@ -8841,6 +8029,35 @@
         "name": "muted teal",
         "hex": "#5E8E8E",
         "delta_e": 9.4
+      },
+      "implied_css": null
+    },
+    {
+      "name": "Soft Cornflower",
+      "hex": "#5485C8",
+      "source": "sign_accent_expression",
+      "context": "leo/cool",
+      "css_label_match": false,
+      "flags": [
+        "css_nearest_far:\u0394E=11.0",
+        "pantone_nearest_far:\u0394E=11.1",
+        "library_nearest_far:dusty blue \u0394E=21.9"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "steelblue",
+        "hex": "#4682B4",
+        "delta_e": 11.02
+      },
+      "nearest_pantone": {
+        "name": "Pantone 660 C",
+        "hex": "#5B87B7",
+        "delta_e": 11.13
+      },
+      "nearest_library": {
+        "name": "dusty blue",
+        "hex": "#6E8FAD",
+        "delta_e": 21.86
       },
       "implied_css": null
     },
@@ -8873,42 +8090,14 @@
       "implied_css": null
     },
     {
-      "name": "Soft Silver",
-      "hex": "#4D7E8C",
-      "source": "sign_accent_expression",
-      "context": "cancer/neutral",
-      "css_label_match": false,
-      "flags": [
-        "css_nearest_far:\u0394E=11.1",
-        "library_nearest_far:muted teal \u0394E=10.2"
-      ],
-      "actionable_flags": [],
-      "nearest_css": {
-        "name": "slategray",
-        "hex": "#708090",
-        "delta_e": 11.09
-      },
-      "nearest_pantone": {
-        "name": "Pantone 5483 C",
-        "hex": "#4F868E",
-        "delta_e": 5.05
-      },
-      "nearest_library": {
-        "name": "muted teal",
-        "hex": "#5E8E8E",
-        "delta_e": 10.17
-      },
-      "implied_css": null
-    },
-    {
-      "name": "Solar Gold",
+      "name": "Solar Amber",
       "hex": "#DFA74B",
       "source": "sign_accent_expression",
       "context": "leo/warm",
       "css_label_match": false,
       "flags": [
         "css_nearest_far:\u0394E=13.9",
-        "library_nearest_far:antique gold \u0394E=10.6"
+        "library_nearest_far:deep honey \u0394E=10.6"
       ],
       "actionable_flags": [],
       "nearest_css": {
@@ -8922,46 +8111,64 @@
         "delta_e": 9.86
       },
       "nearest_library": {
-        "name": "antique gold",
+        "name": "deep honey",
         "hex": "#C9A84C",
         "delta_e": 10.58
       },
       "implied_css": null
     },
     {
-      "name": "Steel Blue",
-      "hex": "#085267",
+      "name": "Stone Teal",
+      "hex": "#25515B",
       "source": "sign_accent_expression",
-      "context": "capricorn/cool",
+      "context": "capricorn/neutral",
       "css_label_match": false,
-      "flags": [
-        "label_implied_css_mismatch:steelblue \u0394E=26.3",
-        "css_nearest_far:\u0394E=14.3",
-        "library_nearest_far:petrol \u0394E=12.2"
-      ],
-      "actionable_flags": [
-        "label_implied_css_mismatch:steelblue \u0394E=26.3"
-      ],
+      "flags": [],
+      "actionable_flags": [],
       "nearest_css": {
         "name": "darkslategray",
         "hex": "#2F4F4F",
-        "delta_e": 14.34
+        "delta_e": 6.78
       },
       "nearest_pantone": {
         "name": "Pantone 7475 C",
         "hex": "#004F59",
-        "delta_e": 7.74
+        "delta_e": 5.45
       },
       "nearest_library": {
-        "name": "petrol",
-        "hex": "#1B3A4B",
-        "delta_e": 12.17
+        "name": "deep teal",
+        "hex": "#014D4E",
+        "delta_e": 9.22
       },
-      "implied_css": {
-        "name": "steelblue",
-        "hex": "#4682B4",
-        "delta_e": 26.33
-      }
+      "implied_css": null
+    },
+    {
+      "name": "Tawny Amber",
+      "hex": "#D59B49",
+      "source": "sign_accent_expression",
+      "context": "leo/neutral",
+      "css_label_match": false,
+      "flags": [
+        "css_nearest_far:\u0394E=10.4",
+        "pantone_nearest_far:\u0394E=15.4"
+      ],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "peru",
+        "hex": "#CD853F",
+        "delta_e": 10.44
+      },
+      "nearest_pantone": {
+        "name": "Pantone 14-0848 Mimosa",
+        "hex": "#F0C05A",
+        "delta_e": 15.42
+      },
+      "nearest_library": {
+        "name": "muted amber",
+        "hex": "#CA8B39",
+        "delta_e": 6.27
+      },
+      "implied_css": null
     },
     {
       "name": "Teal Moss",
@@ -9251,6 +8458,31 @@
       "implied_css": null
     },
     {
+      "name": "Warm Ember",
+      "hex": "#AE4D37",
+      "source": "sign_accent_expression",
+      "context": "sagittarius/warm",
+      "css_label_match": false,
+      "flags": [],
+      "actionable_flags": [],
+      "nearest_css": {
+        "name": "sienna",
+        "hex": "#A0522D",
+        "delta_e": 9.57
+      },
+      "nearest_pantone": {
+        "name": "Pantone 18-1441 Brick Red",
+        "hex": "#C14A3D",
+        "delta_e": 9.2
+      },
+      "nearest_library": {
+        "name": "dark terracotta",
+        "hex": "#9E4E3A",
+        "delta_e": 8.64
+      },
+      "implied_css": null
+    },
+    {
       "name": "Warm Fern",
       "hex": "#95824F",
       "source": "sign_accent_expression",
@@ -9384,7 +8616,7 @@
         "delta_e": 11.52
       },
       "nearest_library": {
-        "name": "aged brass",
+        "name": "warm umber",
         "hex": "#8E7530",
         "delta_e": 6.05
       },

@@ -54,6 +54,8 @@
 		<string>DMSans-Medium.ttf</string>
 		<string>DMSans-MediumItalic.ttf</string>
 	</array>
+	<key>UIDesignRequiresCompatibility</key>
+	<true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
 </dict>

@@ -74,7 +74,7 @@
   "accentColours": [
    {
     "hexValue": "#91B5CF",
-    "name": "Platinum Frost",
+    "name": "Frost Blue",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Signature",
@@ -111,7 +111,7 @@
    },
    {
     "hexValue": "#CC0066",
-    "name": "magenta red",
+    "name": "hot pink",
     "provenance": {
      "band": "core",
      "family": "Bright Winter",
@@ -167,7 +167,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your rotation of colour runs hot and intentionally takes up space in a room. Anchor your wardrobe in the unapologetic heat of midnight, royal blue, and magenta red. Because these shades are naturally loud, they rely on the physical weight of heavy silks and thick, structured velvet to ground them in reality. Break up all that rich warmth with a sharp hit of Platinum Frost or a complementary choice, delivered through a highly modern, deliberately offbeat accessory. The end result is visually expensive, but slashed with enough eccentric tension to keep it interesting.",
+  "narrativeText": "Your rotation of colour runs hot and intentionally takes up space in a room. Anchor your wardrobe in the unapologetic heat of midnight, royal blue, and hot pink. Because these shades are naturally loud, they rely on the physical weight of heavy silks and thick, structured velvet to ground them in reality. Break up all that rich warmth with a sharp hit of Platinum Frost or a complementary choice, delivered through a highly modern, deliberately offbeat accessory. The end result is visually expensive, but slashed with enough eccentric tension to keep it interesting.",
   "neutrals": [
    {
     "hexValue": "#0A0A0A",

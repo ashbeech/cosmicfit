@@ -813,7 +813,7 @@ class SemanticTokenGenerator {
             "Scorpio": [("black", "colour"), ("burgundy", "colour"), ("deep colours", "colour_quality"), ("power silhouettes", "colour_quality")],
             "Sagittarius": [("purple", "colour"), ("royal blue", "colour"), ("international influences", "colour_quality"), ("travel ready", "colour_quality")],
             "Capricorn": [("charcoal", "colour"), ("brown", "colour"), ("black", "colour"), ("classic business", "colour_quality")],
-            "Aquarius": [("electric blue", "colour"), ("unexpected combinations", "colour_quality"), ("technical fabrics", "colour_quality")],
+            "Aquarius": [("bright blue", "colour"), ("unexpected combinations", "colour_quality"), ("technical fabrics", "colour_quality")],
             "Pisces": [("sea colours", "colour_quality"), ("flowing fabrics", "colour_quality"), ("ethereal elements", "colour_quality")]
         ]
     }

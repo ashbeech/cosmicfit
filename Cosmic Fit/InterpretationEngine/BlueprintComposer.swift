@@ -12,7 +12,7 @@ import Foundation
 
 struct BlueprintComposer {
 
-    static let engineVersion = "2.0.0"
+    static let engineVersion = "2.1.0"
 
     // MARK: - Full Pipeline
 

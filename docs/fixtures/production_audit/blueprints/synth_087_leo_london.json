@@ -68,7 +68,7 @@
   "accentColours": [
    {
     "hexValue": "#008ABE",
-    "name": "Arctic Blue",
+    "name": "Bright Cyan",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Contrast",
@@ -105,7 +105,7 @@
    },
    {
     "hexValue": "#CC0066",
-    "name": "magenta red",
+    "name": "hot pink",
     "provenance": {
      "band": "core",
      "family": "Bright Winter",
@@ -161,7 +161,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "A wardrobe built for a natural centre of attention requires unapologetic, radiating warmth. Your foundation thrives on deep, sun-baked shades like midnight, royal blue, and magenta red. These tones do their best work poured into heavy silk or dense velvet, instantly warming the skin and catching the light when you walk. Introduce a quiet flash of Arctic Blue as an inner layer, providing a soft, nostalgic anchor beneath the bolder exterior. You wear rich pigment to hold the room, but the actual heat it generates is strictly for your own comfort.",
+  "narrativeText": "A wardrobe built for a natural centre of attention requires unapologetic, radiating warmth. Your foundation thrives on deep, sun-baked shades like midnight, royal blue, and hot pink. These tones do their best work poured into heavy silk or dense velvet, instantly warming the skin and catching the light when you walk. Introduce a quiet flash of Bright Cyan as an inner layer, providing a soft, nostalgic anchor beneath the bolder exterior. You wear rich pigment to hold the room, but the actual heat it generates is strictly for your own comfort.",
   "neutrals": [
    {
     "hexValue": "#0A0A0A",

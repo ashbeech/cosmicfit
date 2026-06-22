@@ -79,7 +79,7 @@
    },
    {
     "hexValue": "#91B5CF",
-    "name": "Platinum Frost",
+    "name": "Frost Blue",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Contrast",
@@ -116,7 +116,7 @@
    },
    {
     "hexValue": "#CC0066",
-    "name": "magenta red",
+    "name": "hot pink",
     "provenance": {
      "band": "core",
      "family": "Bright Winter",
@@ -172,7 +172,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "There is nothing shy about the way you process colour. Your foundation relies on the unapologetic heat of midnight and royal blue, shades that telegraph confidence across a room before you even speak. To keep this intensity from feeling suffocating, balance that warmth with the clean, crisp agility of magenta red. When you want to pull focus without trying too hard, a sudden flash of Cool Berry on a sharp collar or a sleek sneaker does the job perfectly. You treat pigment as a brilliant icebreaker, wearing high-volume tones like they are the most natural thing in the world.",
+  "narrativeText": "There is nothing shy about the way you process colour. Your foundation relies on the unapologetic heat of midnight and royal blue, shades that telegraph confidence across a room before you even speak. To keep this intensity from feeling suffocating, balance that warmth with the clean, crisp agility of hot pink. When you want to pull focus without trying too hard, a sudden flash of Cool Berry on a sharp collar or a sleek sneaker does the job perfectly. You treat pigment as a brilliant icebreaker, wearing high-volume tones like they are the most natural thing in the world.",
   "neutrals": [
    {
     "hexValue": "#0A0A0A",
@@ -232,7 +232,7 @@
   },
   "rulerSignature": {
    "hexValue": "#157059",
-   "name": "forest green",
+   "name": "dark pine",
    "provenance": {
     "band": "rulerSignature",
     "family": "Bright Winter",

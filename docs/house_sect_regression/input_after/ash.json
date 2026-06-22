@@ -1,7 +1,7 @@
 {
   "accessory" : {
     "paragraphs" : [
-      "Piling on tiny, fiddly extras simply reads as fussy. A single, substantial anchor with genuine physical weight pulls a look together far more effectively. Look for thick, pliable leather belts, an oversized bag secured with heavy-duty clasps, or a serious mechanical watch. This approach provides a reassuring sense of physical armour while keeping you unencumbered and ready to move. One definitive, well-constructed object does the heavy lifting, leaving the rest of your silhouette clean and unbothered.",
+      "Piling on tiny, fiddly extras simply reads as a nervous styling tick. A single, substantial anchor carrying genuine physical weight pulls a look together with far more authority. You need thick, pliable leather belts, a structured bag secured with heavy-duty metal clasps, or a serious mechanical watch. This approach provides a reassuring sense of physical armour while keeping you unencumbered and ready to move. One definitive, brilliantly constructed object does the heavy lifting, leaving the rest of your silhouette clean and completely unbothered.",
       "Accessories act as the load-bearing walls of your wardrobe. When your clothes lean into soft familiarity, a wide, rigid belt or a bag with an aggressively engineered clasp stops the look from feeling sentimental. It is entirely about tension. A heavy, blunt-edged ring or a thick leather strap pulls a fluid silhouette back into sharp focus. You want pieces that sit firmly on the body, offering a quiet sense of physical reassurance while you are on the move. Think of a bag that tucks tightly beneath the arm rather than swinging loose from the shoulder. They provide a strict, functional framework that lets the rest of your outfit breathe.",
       "The sensory footprint of your accessories dictates how they actually feel to live in. Notice the satisfying mechanical snap of a heavy bag closure, or the dense, comforting drag of a wide woven strap sitting across your collarbone. The familiar, lived-in scent of leather set next to sleek, engineered hardware creates a friction that works entirely in your favour. Your pieces need to carry enough physical weight to match your daily momentum. It is strictly about how these items sound and move with you, announcing your arrival while wrapping you in a quiet, tactile familiarity."
     ]
@@ -9,16 +9,16 @@
   "code" : {
     "avoid" : [
       "Anything emotionally cold or sterile that strips warmth from a room. Clinical minimalism is not your language.",
-      "Harsh fabric against your skin, especially near your neck and wrists. Those contact points carry emotional weight.",
+      "Ban harsh, scratchy fabrics from sitting directly against your skin. Your delicate contact points, particularly near your neck and wrists, demand absolute softness.",
       "Exposing too much when you feel fragile. Your wardrobe should protect you, not put you on display.",
       "Rigid dress codes that strip away your natural range. If a rule says you cannot wear it, that rule was not written for you.",
       "Movement-restricting pieces that limit your stride or your spontaneity. If you cannot run for a train in it, it does not belong in your life.",
       "Corporate uniformity that flattens your expansive personality. Your style should feel like a passport, not a prison."
     ],
     "consider" : [
-      "dress for emotional belonging in groups",
-      "let comfort signal community",
-      "Treating your wardrobe as life armour, maintained and deployed with strategic intent. Every piece serves a protective purpose.",
+      "Wear relaxed, oversized silhouettes that allow you to move freely and connect with your local community.",
+      "Choose tactile knitwear and slouchy denim that visually invite warmth and easy conversation with your peers.",
+      "Treat your wardrobe as literal life armour, deploying sharply tailored pieces with strategic intent to serve a strictly protective purpose.",
       "How the density of fabric affects your sense of control. Heavier, more opaque garments reinforce the containment you need."
     ],
     "leanInto" : [
@@ -27,20 +27,20 @@
       "Treating comfort as a non-negotiable, not a luxury. If a garment makes you tense, it is actively working against you.",
       "Choosing pieces that feel like home. If an outfit does not settle your nervous system, it is not earning its place.",
       "Dressing with travel inspiration woven into every outfit. A waxed jacket or a hand-woven scarf carries the energy of the road even at home.",
-      "Mixing cultural references with respect and confidence. An ikat shirt with tailored chinos bridges worlds in a single outfit."
+      "Mix global textile references with absolute confidence by pairing an authentic heavy ikat shirt with sharp tailored chinos to bridge entirely different aesthetics."
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-06-10T23:58:21Z",
+  "generatedAt" : "2026-06-19T17:06:42Z",
   "hardware" : {
     "metalsText" : "Your most effective hardware relies on a strict clash of high-tech precision and familiar, heavy warmth. Slick, industrial white gold tones gives you a sharp foundation, looking right at home on the oversized zips of technical outerwear or the chunky fastenings of a utility bag. A completely clinical finish leaves you cold, so you break up those stark details with titanium tones. Seek out titanium tones pieces with a battered, nostalgic patina, like a weighty heirloom pendant strung onto a modern synthetic cord, or thick, warm-toned belt buckles. This visual friction keeps your clothes from looking like a uniform, grounding bold shapes in something deeply personal.",
     "recommendedMetals" : [
       "white gold",
       "titanium",
       "antique silver",
-      "aged brass",
       "hammered gold",
       "hammered titanium",
+      "warm umber",
       "brushed silver",
       "anodised aluminium",
       "surgical steel",
@@ -66,13 +66,13 @@
   "occasions" : {
     "dailyText" : "Your daily rotation requires a very specific friction to function properly. A part of you wants to retreat into an incredibly familiar, lived-in shell, while the rest of your personality needs to command the street. Master this tension by pairing deeply comforting foundation pieces with unapologetic, unconventional shapes. Look for garments that envelop the body, relying on generous proportions and sweeping lengths that give you ample room to hide. Then, deliberately puncture that safety with an unexpected cut or a stark silhouette that breaks the rules of typical casualwear. You do relaxed beautifully, provided the final result still reads as a completely original thought.\n\nYour comfort instinct gravitates toward emotional belonging through group-appropriate comfort, community softness.",
     "intimateText" : "When the lighting drops, your best looks hinge on balancing protective volume with striking geometry. The standard delicate slip will leave you feeling exposed; instead, look for garments that cocoon the body while offering an entirely unpredictable silhouette. Generous, sweeping proportions work beautifully when anchored by an asymmetrical cut or an unusual drape that naturally holds the eye. The piece must offer serious physical comfort, allowing you to gesture wildly and take up space without adjusting a single seam. You end up with an outfit that feels completely secure to inhabit, yet visually thrilling for whoever is sitting across the table.",
-    "workText" : "Your professional wardrobe thrives on a brilliant contradiction: looking intellectually rigorous while feeling like a safe place to hide. You look best in tailoring that plays with unexpected proportions, favouring fluid, asymmetrical shapes that generously wrap the body rather than constricting it. An exaggerated blazer with unusual structural details or trousers cut wide enough to accommodate a commanding stride give you serious presence without sacrificing ease. The trick is to appear entirely in charge of the room, while remaining comfortably insulated from the noise of the working day.\n\nYour style energy concentrates in foundations and routine, so your wardrobe is at its best when it reflects both foundations and routine. At work, lean into adaptability; polished separates and communication-friendly styling keep you agile."
+    "workText" : "Your professional wardrobe thrives on a brilliant contradiction: looking intellectually rigorous while feeling like a safe place to hide. You look best in tailoring that plays with unexpected proportions, favouring fluid, asymmetrical shapes that generously wrap the body rather than constricting it. An exaggerated blazer with unusual structural details or trousers cut wide enough to accommodate a commanding stride give you serious presence without sacrificing ease. The trick is to appear entirely in charge of the room, while remaining comfortably insulated from the noise of the working day.\n\nYour style energy concentrates in foundations and routine, so your wardrobe is at its best when it reflects both foundations and routine. You maintain your professional agility by styling sharply cut separates with lightweight silk shirts for a flawlessly dynamic aesthetic."
   },
   "palette" : {
     "accentColours" : [
       {
         "hexValue" : "#007788",
-        "name" : "Cerulean",
+        "name" : "Dark Cyan",
         "provenance" : {
           "kind" : "chartDerivedAccent",
           "role" : "Signature",
@@ -120,7 +120,7 @@
       },
       {
         "hexValue" : "#0080FF",
-        "name" : "electric blue",
+        "name" : "bright blue",
         "provenance" : {
           "band" : "core",
           "family" : "Bright Spring",
@@ -165,7 +165,7 @@
       "role" : "signature",
       "semanticLabel" : "luminary signature"
     },
-    "narrativeText" : "Your colour story thrives on a clash of temperature. Build a foundation on the stark, synthetic edge of poppy and the industrial calm of bright teal, then soften the impact with the washed-out safety of vivid yellow. This mix gives you the brilliant tension of a vintage silhouette cut from a space-age fabric. Introduce Cerulean as a sudden, unapologetic hit of heat to break up the cool tones. A high-visibility shade always carries more attitude when it sits next to something reassuringly soft.",
+    "narrativeText" : "Your colour story thrives on a clash of temperature. Build a foundation on the stark, synthetic edge of poppy and the industrial calm of bright teal, then soften the impact with the washed-out safety of vivid yellow. This mix gives you the brilliant tension of a vintage silhouette cut from a space-age fabric. Introduce Dark Cyan as a sudden, unapologetic hit of heat to break up the cool tones. A high-visibility shade always carries more attitude when it sits next to something reassuringly soft.",
     "neutrals" : [
       {
         "hexValue" : "#FFFDF0",
@@ -337,6 +337,6 @@
   "userInfo" : {
     "birthDate" : "1984-12-11T00:00:00Z",
     "birthLocation" : "London, UK",
-    "generationDate" : "2026-06-10T23:58:21Z"
+    "generationDate" : "2026-06-19T17:06:42Z"
   }
 }

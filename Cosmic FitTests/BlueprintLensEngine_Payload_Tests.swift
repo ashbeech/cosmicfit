@@ -67,7 +67,7 @@ private enum Fixtures {
     ]
     static let coolCore = [
         colour("Navy", "#000080", .core),
-        colour("Steel Blue", "#4682B4", .core),
+        colour("Deep Petrol", "#085267", .core),
         colour("Lavender", "#B0A0D0", .core),
         colour("Sage", "#87AE73", .core),
     ]

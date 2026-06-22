@@ -8,22 +8,22 @@
   },
   "code" : {
     "avoid" : [
-      "Anything below your standard in fabric, construction, or fit. A single cheap piece drags down the authority of everything around it.",
+      "Discard anything falling below your exacting standards for fabric and fit, since a single poorly constructed garment immediately compromises your authority.",
       "Compromising on quality for convenience or speed. Your wardrobe demands the same rigour and patience that defines the rest of your life.",
       "Cheap fast fashion that falls apart after three washes. You feel the difference in quality even if nobody else sees it.",
       "Anything that does not feel good against your skin. If a seam scratches or a waistband digs, the outfit is already ruined.",
-      "Harsh synthetic fabrics that trap heat and static. Your body knows the difference even before you check the label.",
-      "frivolous"
+      "Avoid harsh synthetic fabrics that trap heat and static, because your skin registers a cheap finish before you even check the care label.",
+      "Eliminate frivolous embellishments and trendy micro-details that distract from your naturally authoritative silhouette."
     ],
     "consider" : [
-      "treat dressing as creative self-expression",
-      "let joy drive your wardrobe choices",
-      "a leather bag that patinas beautifully over years",
-      "Heritage denim worn to personal perfection over years, where every fade tells your specific story"
+      "Treat your daily dressing routine as a brilliant opportunity for dramatic creative self-expression.",
+      "Let pure, unadulterated joy dictate your next major wardrobe purchase and ignore passing trends.",
+      "Invest in a heavy leather bag that develops a rich, beautiful patina over years of daily wear.",
+      "Wear heritage raw denim to personal perfection over years, letting every single fade tell your specific story."
     ],
     "leanInto" : [
       "Embodying the standard that others aspire to. Your wardrobe should look like the definitive version of whatever dress code applies.",
-      "Treating timeless pieces as life investments rather than seasonal purchases. A perfect overcoat or a flawless trouser appreciates over decades.",
+      "Treat timeless tailored pieces as serious life investments rather than seasonal purchases, knowing a perfect wool overcoat appreciates in value over decades.",
       "Building an impeccable collection where nothing is accidental, nothing is filler, and every piece earns its place through quality.",
       "Investing in fewer, better pieces that you will reach for every week. If it does not earn its place in a small wardrobe, it does not belong.",
       "Touching before you buy. Run the fabric between your fingers. If the texture does not feel like a reward, walk away.",
@@ -31,7 +31,7 @@
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-06-10T23:58:21Z",
+  "generatedAt" : "2026-06-19T17:06:42Z",
   "hardware" : {
     "metalsText" : "Hardware on you should feel like an investment rather than a decorative afterthought. You need serious, satisfying weight, the kind of brushed platinum tones that pulls together a heavy winter coat or secures a beautifully constructed leather bag. Flimsy, high-shine chains and noisy zips look nervous next to your natural composure. Lean on solid polished silver tones details with a matte or gently aged finish, ensuring every buckle actually serves a structural purpose. When the metal feels substantial enough to outlast the garment itself, it belongs in your rotation.",
     "recommendedMetals" : [
@@ -55,9 +55,9 @@
     "tipText" : "Substantial weight is the only metric that matters when choosing your jewellery. A flimsy chain or a hollow band will instantly cheapen a perfectly good outfit. Seek out solid, cast pieces in platinum tones that carry a real physical presence on the body, or a heavy ring set with garnet for a quiet finish. A smooth cuff or an impeccably engineered watch strap provides that sense of disciplined luxury your eye naturally seeks. Two substantial items will always beat a tangle of delicate layers."
   },
   "occasions" : {
-    "dailyText" : "Downtime does not mean letting your standards slip. Your off-duty rotation relies on architectural integrity and undeniable physical weight just as much as your formal wardrobe. Swap out flimsy basics for heavy, densely woven separates that hold their shape from morning until evening. You feel at your best when there is a distinct sense of order to what you wear, so ensure your seams sit exactly where they should and your casual silhouettes remain crisp. Real luxury is the quiet satisfaction of knowing every daily piece is flawlessly engineered.\n\nYour comfort instinct gravitates toward emotional comfort visible in how you present, your feelings wear you. Your style energy concentrates in identity and creativity, so dressing is a core creative practice; lean into that.",
+    "dailyText" : "Downtime does not mean letting your standards slip. Your off-duty rotation relies on architectural integrity and undeniable physical weight just as much as your formal wardrobe. Swap out flimsy basics for heavy, densely woven separates that hold their shape from morning until evening. You feel at your best when there is a distinct sense of order to what you wear, so ensure your seams sit exactly where they should and your casual silhouettes remain crisp. Real luxury is the quiet satisfaction of knowing every daily piece is flawlessly engineered.\n\nYour comfort instinct gravitates toward emotional comfort visible in how you present, your feelings wear you. Your style energy concentrates in identity and creativity, so You express your personal creativity best through daring silhouettes and unexpected fabric combinations..",
     "intimateText" : "Dressing for the evening is less about reinvention and more about turning up the sensory dial. Your best looks rely on garments that possess a satisfying physical weight, bypassing anything flimsy or overly sheer. A meticulously tailored waist paired with a hem that drops heavily to the floor strikes exactly the right balance of discipline and indulgence. Let the cut frame your shape with absolute intent, trusting impeccable construction over loud embellishment. You want the final impression to feel incredibly grounded, inviting a closer look without giving everything away at once.",
-    "workText" : "Your professional wardrobe thrives on quiet authority and serious construction. You look your best in pieces that carry a noticeable physical weight, relying on flawless tailoring rather than loud trends to command a room. Seek out garments with serious structural integrity, the kind that hold their exact shape from the first morning meeting straight through to the taxi home. Flimsy materials and fussy finishes simply distract from your natural air of extreme competence. Keep the silhouette clean, substantial, and deliberately put together. When your outfit is built this well, you walk into the office looking exactly like the person who signs the cheques.\n\nAt work, lean into powerful restraint; deep tones, controlled intensity, and impeccable finish command respect quietly."
+    "workText" : "Your professional wardrobe thrives on quiet authority and serious construction. You look your best in pieces that carry a noticeable physical weight, relying on flawless tailoring rather than loud trends to command a room. Seek out garments with serious structural integrity, the kind that hold their exact shape from the first morning meeting straight through to the taxi home. Flimsy materials and fussy finishes simply distract from your natural air of extreme competence. Keep the silhouette clean, substantial, and deliberately put together. When your outfit is built this well, you walk into the office looking exactly like the person who signs the cheques.\n\nAt work, you command quiet respect through a powerful restraint, relying on deep colour tones and an impeccable finish."
   },
   "palette" : {
     "accentColours" : [
@@ -158,7 +158,7 @@
     },
     "luminarySignature" : {
       "hexValue" : "#157059",
-      "name" : "forest green",
+      "name" : "dark pine",
       "provenance" : {
         "band" : "luminarySignature",
         "family" : "Deep Winter",
@@ -315,7 +315,7 @@
     "tipText" : "Prints can feel like a loss of control when your wardrobe relies on the sensory perfection of solid, expensive fabrics. Treat pinstripe as a textural shift rather than a graphic statement. Look for designs built directly into the material itself, like a tonal weave on a heavy silk jacquard or a subtle check woven into brushed wool. Flat, high-contrast dyes instantly break your calm, grounded aesthetic. Sticking to patterns that read almost like solids from a distance satisfies your need for visual order, ensuring the sheer quality of the garment remains the most obvious detail you are wearing."
   },
   "styleCore" : {
-    "narrativeText" : "Your style presence projects the quiet, expensive authority that only comes from knowing exactly what a garment is worth. You look your best in clothing that carries real physical weight and flawless construction. Rather than chasing seasonal shifts, you rely on the discipline of a perfect fit and the gravity of an immaculate drape to communicate your taste. There is a deep psychological comfort for you in wearing pieces that feel enduring, structurally sound, and completely finished. You never have to fight for space in a room when your wardrobe makes it entirely obvious that you set the baseline.\n\nYour natural sense of beauty shows up most powerfully in your creative self-expression, creative joy in dressing, bold romantic expression, date-night dressing as art. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as magnetic and controlled; depth, intensity, and polished restraint draw people in."
+    "narrativeText" : "Your style presence projects the quiet, expensive authority that only comes from knowing exactly what a garment is worth. You look your best in clothing that carries real physical weight and flawless construction. Rather than chasing seasonal shifts, you rely on the discipline of a perfect fit and the gravity of an immaculate drape to communicate your taste. There is a deep psychological comfort for you in wearing pieces that feel enduring, structurally sound, and completely finished. You never have to fight for space in a room when your wardrobe makes it entirely obvious that you set the baseline.\n\nYour natural sense of beauty shows up most powerfully in your creative self-expression, creative joy in dressing, bold romantic expression, date-night dressing as art. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your commanding public presence demands heavy leather outerwear and fiercely structured silhouettes that project absolute control."
   },
   "textures" : {
     "avoidTextures" : [
@@ -340,6 +340,6 @@
   "userInfo" : {
     "birthDate" : "1989-04-28T00:00:00Z",
     "birthLocation" : "Unknown",
-    "generationDate" : "2026-06-10T23:58:21Z"
+    "generationDate" : "2026-06-19T17:06:42Z"
   }
 }

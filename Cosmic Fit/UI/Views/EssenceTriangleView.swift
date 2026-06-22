@@ -219,10 +219,17 @@ final class EssenceTriangleView: UIView {
 
     // MARK: - Drawing
 
+    private func layoutShapeLayer(_ shapeLayer: CAShapeLayer, path: CGPath?) {
+        shapeLayer.path = path
+        guard bounds.width > 0, bounds.height > 0 else { return }
+        shapeLayer.bounds = CGRect(origin: .zero, size: bounds.size)
+        shapeLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
+    }
+
     private func drawChart() {
         guard let visible = profile?.visibleCategories, visible.count == 3 else {
-            triangleLayer.path = nil
-            anchorTriangleLayer.path = nil
+            layoutShapeLayer(triangleLayer, path: nil)
+            layoutShapeLayer(anchorTriangleLayer, path: nil)
             vertexStarViews.forEach { $0.isHidden = true }
             return
         }
@@ -265,8 +272,7 @@ final class EssenceTriangleView: UIView {
             triPath.addLine(to: weatherPoints[i])
         }
         triPath.close()
-        triangleLayer.path = triPath.cgPath
-        triangleLayer.frame = bounds
+        layoutShapeLayer(triangleLayer, path: triPath.cgPath)
 
         if anchorPoints.count == 3 {
             let anchorPath = UIBezierPath()
@@ -274,10 +280,9 @@ final class EssenceTriangleView: UIView {
             anchorPath.addLine(to: anchorPoints[1])
             anchorPath.addLine(to: anchorPoints[2])
             anchorPath.close()
-            anchorTriangleLayer.path = anchorPath.cgPath
-            anchorTriangleLayer.frame = bounds
+            layoutShapeLayer(anchorTriangleLayer, path: anchorPath.cgPath)
         } else {
-            anchorTriangleLayer.path = nil
+            layoutShapeLayer(anchorTriangleLayer, path: nil)
         }
 
         positionLabels(

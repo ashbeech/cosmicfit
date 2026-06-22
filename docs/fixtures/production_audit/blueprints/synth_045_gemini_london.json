@@ -95,7 +95,7 @@
    },
    {
     "hexValue": "#FFCBA4",
-    "name": "peach",
+    "name": "light peach",
     "provenance": {
      "band": "core",
      "family": "Light Spring",
@@ -117,7 +117,7 @@
    },
    {
     "hexValue": "#A4C639",
-    "name": "lime",
+    "name": "apple green",
     "provenance": {
      "band": "core",
      "family": "Light Spring",
@@ -152,7 +152,7 @@
   },
   "luminarySignature": {
    "hexValue": "#D3AB53",
-   "name": "antique gold",
+   "name": "deep honey",
    "provenance": {
     "band": "luminarySignature",
     "family": "Light Spring",
@@ -162,7 +162,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Dressing for you is a constant dialogue, meaning your wardrobe needs shades that are naturally light on their feet. Your daily foundations rely heavily on honey yellow and peach, which translate beautifully across crisp cotton shirting and sheer silk-blend layers. A wash of aqua mint brings a softer, almost watercolour quality to the mix, ensuring the overall effect remains approachable rather than stark. Introduce Mercury Teal as an unexpected flash of detail; think an enamel pendant or a slightly unusual flat shoe, to keep the eye moving. The result is a highly conversational mix of tones that shifts seamlessly depending on your mood and whoever you happen to be talking to.",
+  "narrativeText": "Dressing for you is a constant dialogue, meaning your wardrobe needs shades that are naturally light on their feet. Your daily foundations rely heavily on honey yellow and light peach, which translate beautifully across crisp cotton shirting and sheer silk-blend layers. A wash of aqua mint brings a softer, almost watercolour quality to the mix, ensuring the overall effect remains approachable rather than stark. Introduce Mercury Teal as an unexpected flash of detail; think an enamel pendant or a slightly unusual flat shoe, to keep the eye moving. The result is a highly conversational mix of tones that shifts seamlessly depending on your mood and whoever you happen to be talking to.",
   "neutrals": [
    {
     "hexValue": "#FAF5EF",

@@ -121,7 +121,7 @@
    },
    {
     "hexValue": "#254D32",
-    "name": "forest green",
+    "name": "dark pine",
     "provenance": {
      "band": "core",
      "family": "Deep Autumn",
@@ -167,7 +167,7 @@
   },
   "luminarySignature": {
    "hexValue": "#807227",
-   "name": "aged brass",
+   "name": "warm umber",
    "provenance": {
     "band": "luminarySignature",
     "family": "Deep Autumn",
@@ -177,7 +177,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your ideal wardrobe reads less like a strict colour chart and more like a gentle wash of pigment. Build your foundation on oxblood, forest teal, and forest green, layering these tones together rather than relying on sharp, high-contrast combinations. These shades truly come alive on sheer gauzes and soft, light-catching silks, where the dye shifts and changes with your movement. Fold in Warm Prussian when you need a touch of depth for outerwear or a heavier base layer. The result is a beautifully blurred palette that leaves a quiet, lingering visual impression rather than a loud graphic punch.",
+  "narrativeText": "Your ideal wardrobe reads less like a strict colour chart and more like a gentle wash of pigment. Build your foundation on oxblood, forest teal, and dark pine, layering these tones together rather than relying on sharp, high-contrast combinations. These shades truly come alive on sheer gauzes and soft, light-catching silks, where the dye shifts and changes with your movement. Fold in Warm Prussian when you need a touch of depth for outerwear or a heavier base layer. The result is a beautifully blurred palette that leaves a quiet, lingering visual impression rather than a loud graphic punch.",
   "neutrals": [
    {
     "hexValue": "#3C2415",

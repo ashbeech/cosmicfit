@@ -141,13 +141,13 @@ enum SignAccentExpressions {
                 SignExpression(L: 45, C: 20, h: 188, name: "Warm Sea Pearl"),
             ],
             .cool: [
-                SignExpression(L: 78, C: 12, h: 225, name: "Lunar Silver"),
+                SignExpression(L: 78, C: 12, h: 225, name: "Lunar Mist"),
                 SignExpression(L: 72, C: 18, h: 245, name: "Misty Blue"),
                 SignExpression(L: 75, C: 15, h: 260, name: "Iced Pearl"),
             ],
             .neutral: [
                 SignExpression(L: 55, C: 16, h: 210, name: "Moonstone"),
-                SignExpression(L: 50, C: 18, h: 225, name: "Soft Silver"),
+                SignExpression(L: 50, C: 18, h: 225, name: "Slate Teal"),
                 SignExpression(L: 52, C: 14, h: 198, name: "Opal Teal"),
             ],
         ],
@@ -155,17 +155,17 @@ enum SignAccentExpressions {
         // ── Leo (Sun · Fire) ────────────────────────────────────
         .leo: [
             .warm: [
-                SignExpression(L: 72, C: 55, h:  78, name: "Solar Gold"),
-                SignExpression(L: 58, C: 50, h:  62, name: "Antique Brass"),
+                SignExpression(L: 72, C: 55, h:  78, name: "Solar Amber"),
+                SignExpression(L: 58, C: 50, h:  62, name: "Rich Sienna"),
                 SignExpression(L: 55, C: 58, h:  52, name: "Amber Flame"),
             ],
             .cool: [
                 SignExpression(L: 62, C: 42, h: 200, name: "Cool Topaz"),
-                SignExpression(L: 55, C: 40, h: 275, name: "Regal Blue"),
-                SignExpression(L: 72, C: 18, h: 250, name: "Platinum Frost"),
+                SignExpression(L: 55, C: 40, h: 275, name: "Soft Cornflower"),
+                SignExpression(L: 72, C: 18, h: 250, name: "Frost Blue"),
             ],
             .neutral: [
-                SignExpression(L: 68, C: 52, h:  75, name: "Burnished Gold"),
+                SignExpression(L: 68, C: 52, h:  75, name: "Tawny Amber"),
                 SignExpression(L: 62, C: 48, h:  68, name: "Rich Topaz"),
                 SignExpression(L: 70, C: 50, h:  82, name: "Honey"),
             ],
@@ -232,8 +232,8 @@ enum SignAccentExpressions {
         .sagittarius: [
             .warm: [
                 SignExpression(L: 55, C: 60, h:  55, name: "Ember"),
-                SignExpression(L: 65, C: 55, h:  80, name: "Saffron Gold"),
-                SignExpression(L: 45, C: 50, h:  40, name: "Burnt Copper"),
+                SignExpression(L: 65, C: 55, h:  80, name: "Saffron Amber"),
+                SignExpression(L: 45, C: 50, h:  40, name: "Warm Ember"),
             ],
             .cool: [
                 SignExpression(L: 35, C: 55, h: 310, name: "Royal Violet"),
@@ -248,19 +248,19 @@ enum SignAccentExpressions {
         // ── Capricorn (Saturn · Earth) ──────────────────────────
         .capricorn: [
             .warm: [
-                SignExpression(L: 32, C: 22, h:  55, name: "Dark Bronze"),
+                SignExpression(L: 32, C: 22, h:  55, name: "Deep Umber"),
                 SignExpression(L: 28, C: 18, h:  40, name: "Warm Slate"),
                 SignExpression(L: 30, C: 25, h:  50, name: "Umber"),
             ],
             .cool: [
                 SignExpression(L: 25, C: 15, h: 260, name: "Saturn Slate"),
                 SignExpression(L: 28, C: 18, h: 245, name: "Cool Graphite"),
-                SignExpression(L: 32, C: 22, h: 235, name: "Steel Blue"),
+                SignExpression(L: 32, C: 22, h: 235, name: "Deep Petrol"),
             ],
             .neutral: [
                 SignExpression(L: 25, C: 14, h: 255, name: "Dark Slate"),
-                SignExpression(L: 32, C: 16, h: 220, name: "Pewter"),
-                SignExpression(L: 28, C: 18, h: 240, name: "Gunmetal"),
+                SignExpression(L: 32, C: 16, h: 220, name: "Stone Teal"),
+                SignExpression(L: 28, C: 18, h: 240, name: "Ink Teal"),
             ],
         ],
 
@@ -274,11 +274,11 @@ enum SignAccentExpressions {
             .cool: [
                 SignExpression(L: 55, C: 42, h: 215, name: "Electric Teal"),
                 SignExpression(L: 60, C: 38, h: 225, name: "Iced Cyan"),
-                SignExpression(L: 52, C: 45, h: 240, name: "Arctic Blue"),
+                SignExpression(L: 52, C: 45, h: 240, name: "Bright Cyan"),
             ],
             .neutral: [
                 SignExpression(L: 48, C: 35, h: 205, name: "Aqua Blue"),
-                SignExpression(L: 45, C: 32, h: 215, name: "Cerulean"),
+                SignExpression(L: 45, C: 32, h: 215, name: "Dark Cyan"),
                 SignExpression(L: 50, C: 28, h: 195, name: "Muted Teal"),
             ],
         ],

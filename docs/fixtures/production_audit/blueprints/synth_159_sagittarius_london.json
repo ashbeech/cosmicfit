@@ -119,7 +119,7 @@
    },
    {
     "hexValue": "#254D32",
-    "name": "forest green",
+    "name": "dark pine",
     "provenance": {
      "band": "core",
      "family": "Deep Autumn",
@@ -175,7 +175,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "You treat colour with absolute seriousness, relying on strict shades that match your internal drive. Your foundational rotation thrives on heavy, saturated solids like oxblood, forest teal, and forest green. These tones provide an exacting, disciplined background that leaves ample room for your natural warmth and presence to take over. When a flash of Warm Prussian or Warm Mauve makes an appearance, it is always sharp and intentional, a bright silk scarf layered under a heavy wool collar, or a pristine piece of statement leather. The visual impact comes from pairing a highly regulated palette with your distinct, undeniable heat.",
+  "narrativeText": "You treat colour with absolute seriousness, relying on strict shades that match your internal drive. Your foundational rotation thrives on heavy, saturated solids like oxblood, forest teal, and dark pine. These tones provide an exacting, disciplined background that leaves ample room for your natural warmth and presence to take over. When a flash of Warm Prussian or Warm Mauve makes an appearance, it is always sharp and intentional, a bright silk scarf layered under a heavy wool collar, or a pristine piece of statement leather. The visual impact comes from pairing a highly regulated palette with your distinct, undeniable heat.",
   "neutrals": [
    {
     "hexValue": "#3C2415",
@@ -235,7 +235,7 @@
   },
   "rulerSignature": {
    "hexValue": "#9E1A46",
-   "name": "magenta red",
+   "name": "hot pink",
    "provenance": {
     "band": "rulerSignature",
     "family": "Deep Autumn",

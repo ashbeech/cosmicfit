@@ -757,6 +757,13 @@ final class CosmicFitTabBarController: UITabBarController {
         print("  • User ID: \(userProfile?.id ?? "None")")
         print("  • Style Guide persisted: \(BlueprintStorage.shared.load() != nil)")
         
+        // Discard stale blueprints when engine version advances (e.g. narrative template fixes)
+        if let existing = BlueprintStorage.shared.load(),
+           existing.engineVersion != BlueprintComposer.engineVersion {
+            print("🔄 Engine version mismatch (\(existing.engineVersion) → \(BlueprintComposer.engineVersion)) — recomposing Style Guide")
+            BlueprintStorage.shared.delete()
+        }
+
         // Style Guide generation (one-per-life: only compose when no local CosmicBlueprint exists)
         if BlueprintStorage.shared.load() == nil {
             generateAndPersistBlueprint()

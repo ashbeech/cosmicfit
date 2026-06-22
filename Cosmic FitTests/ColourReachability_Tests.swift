@@ -38,7 +38,7 @@ private func fullRangeBlueprint() -> CosmicBlueprint {
             colour("Forest Green", "#228B22", .core, band: "core"),
         ],
         accentColours: [
-            colour("Cerulean", "#007BA7", .accent, band: "accent"),
+            colour("Dark Cyan", "#007BA7", .accent, band: "accent"),
             colour("Electric Violet", "#8B00FF", .accent, band: "accent"),
         ],
         supportColours: [

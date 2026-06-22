@@ -609,9 +609,9 @@ struct PaletteLibrarySignatureLabelTests {
     func signaturePairAvoidsTemplateTokens() {
         let oxHex = PaletteLibrary.hex(for: "oxblood")
         let claimed = Set([
-            "oxblood", "forest teal", "forest green", "dark terracotta",
+            "oxblood", "forest teal", "dark pine", "dark terracotta",
             "espresso", "warm charcoal", "deep olive", "bark brown",
-            "antique gold", "aged brass", "copper", "deep amber",
+            "deep honey", "warm umber", "copper", "deep amber",
             "warm cream", "ink brown",
         ])
         let pair = PaletteLibrary.signaturePairLabels(
@@ -633,7 +633,7 @@ struct AccentLabelDeduplicationTests {
     func accentVsTemplateCollision() {
         let deepAutumnNonAccent: Set<String> = [
             "espresso", "warm charcoal", "deep olive", "bark brown",
-            "oxblood", "forest teal", "forest green", "dark terracotta",
+            "oxblood", "forest teal", "dark pine", "dark terracotta",
             "warm cream", "ink brown",
         ]
         let slots = [
@@ -643,7 +643,7 @@ struct AccentLabelDeduplicationTests {
                 saturationOverrideApplied: false
             ),
             AccentSlot(
-                hex: "#D4A23C", displayName: "Saffron Gold",
+                hex: "#D4A23C", displayName: "Saffron Amber",
                 role: .contrast, sourcePlanet: .sun, sourceSign: .leo,
                 saturationOverrideApplied: false
             ),
@@ -655,7 +655,7 @@ struct AccentLabelDeduplicationTests {
         )
         #expect(labels[0].lowercased() != "oxblood",
                 "Accent label should be renamed when it collides with a core template name")
-        #expect(labels[1] == "Saffron Gold",
+        #expect(labels[1] == "Saffron Amber",
                 "Non-colliding accent label should be preserved")
     }
 
@@ -700,7 +700,7 @@ struct AccentLabelDeduplicationTests {
     func hexesUnchanged() {
         let deepAutumnNonAccent: Set<String> = [
             "espresso", "warm charcoal", "deep olive", "bark brown",
-            "oxblood", "forest teal", "forest green", "dark terracotta",
+            "oxblood", "forest teal", "dark pine", "dark terracotta",
             "warm cream", "ink brown",
         ]
         let originalHex = "#4B1018"

@@ -82,7 +82,7 @@
    },
    {
     "hexValue": "#008ABE",
-    "name": "Arctic Blue",
+    "name": "Bright Cyan",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Contrast",
@@ -119,7 +119,7 @@
    },
    {
     "hexValue": "#CC0066",
-    "name": "magenta red",
+    "name": "hot pink",
     "provenance": {
      "band": "core",
      "family": "Bright Winter",
@@ -175,7 +175,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your colour palette operates on a principle of magnetic restraint, pulling people in without shouting for attention. Build your foundation around midnight, royal blue, and magenta red, treating these deep, light-absorbing shades as a smooth base for heavy silks and dense knits. When you want to shift the social energy, a concentrated hit of Sage Mist or Arctic Blue in a clean lining or a structured bag provides a clever conversational spark. The final look is flawlessly balanced yet beautifully guarded, giving away exactly as much as you intend.",
+  "narrativeText": "Your colour palette operates on a principle of magnetic restraint, pulling people in without shouting for attention. Build your foundation around midnight, royal blue, and hot pink, treating these deep, light-absorbing shades as a smooth base for heavy silks and dense knits. When you want to shift the social energy, a concentrated hit of Sage Mist or Bright Cyan in a clean lining or a structured bag provides a clever conversational spark. The final look is flawlessly balanced yet beautifully guarded, giving away exactly as much as you intend.",
   "neutrals": [
    {
     "hexValue": "#0A0A0A",

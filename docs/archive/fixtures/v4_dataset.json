@@ -10,9 +10,9 @@
       "contrast" : "Medium",
       "coreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "depth" : "Light",
       "family" : "Light Spring",
@@ -41,9 +41,9 @@
       "contrast" : "Medium",
       "coreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "depth" : "Light",
       "family" : "Light Spring",
@@ -72,9 +72,9 @@
       "contrast" : "Medium",
       "coreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "depth" : "Light",
       "family" : "Light Spring",
@@ -103,9 +103,9 @@
       "contrast" : "Medium",
       "coreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "depth" : "Light",
       "family" : "Light Spring",
@@ -134,9 +134,9 @@
       "contrast" : "Medium",
       "coreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "depth" : "Light",
       "family" : "Light Spring",
@@ -165,9 +165,9 @@
       "contrast" : "Medium",
       "coreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "depth" : "Light",
       "family" : "Light Spring",
@@ -198,7 +198,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -229,7 +229,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -260,7 +260,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -291,7 +291,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -322,7 +322,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -353,7 +353,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -384,7 +384,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -415,7 +415,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "depth" : "Medium",
       "family" : "True Spring",
@@ -446,7 +446,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -477,7 +477,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -508,7 +508,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -539,7 +539,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -570,7 +570,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -601,7 +601,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -632,7 +632,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -663,7 +663,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -694,7 +694,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -725,7 +725,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "depth" : "Medium",
       "family" : "Bright Spring",
@@ -1499,7 +1499,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -1592,7 +1592,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -1840,7 +1840,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -1871,7 +1871,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -1933,7 +1933,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -1964,7 +1964,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -1995,7 +1995,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -2088,7 +2088,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -2181,7 +2181,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -2212,7 +2212,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -2243,7 +2243,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -2274,7 +2274,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -2305,7 +2305,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -2336,7 +2336,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -2367,7 +2367,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -2398,7 +2398,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -2429,7 +2429,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -2460,7 +2460,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -2491,7 +2491,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -2522,7 +2522,7 @@
       "coreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "depth" : "Deep",
@@ -2925,7 +2925,7 @@
       "coreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "depth" : "Deep",
@@ -2956,7 +2956,7 @@
       "coreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "depth" : "Deep",
@@ -2987,7 +2987,7 @@
       "coreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "depth" : "Deep",
@@ -3018,7 +3018,7 @@
       "coreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "depth" : "Deep",
@@ -3049,7 +3049,7 @@
       "coreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "depth" : "Deep",
@@ -3080,7 +3080,7 @@
       "coreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "depth" : "Deep",

@@ -70,7 +70,7 @@
   "accentColours": [
    {
     "hexValue": "#007788",
-    "name": "Cerulean",
+    "name": "Dark Cyan",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Signature",
@@ -130,7 +130,7 @@
    },
    {
     "hexValue": "#0080FF",
-    "name": "electric blue",
+    "name": "bright blue",
     "provenance": {
      "band": "core",
      "family": "Bright Spring",
@@ -175,7 +175,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your approach to colour is brilliantly straightforward, relying on maximum visual impact with zero morning fuss. Let poppy and bright teal carry the bulk of your wardrobe, worn as loud, solid blocks across crisp cotton poplin shirting or a stiff raw denim jacket. A sudden flash of Cerulean serves as a sharp punctuation mark, particularly effective in a lightweight tech fabric that breathes as you rush through your day. When this high-energy palette needs a physical anchor, introduce the substantial weight of vivid yellow in a dense, high-quality knit to keep your senses grounded. You end up with a look that commands immediate attention in any room, all while keeping you entirely physically secure.",
+  "narrativeText": "Your approach to colour is brilliantly straightforward, relying on maximum visual impact with zero morning fuss. Let poppy and bright teal carry the bulk of your wardrobe, worn as loud, solid blocks across crisp cotton poplin shirting or a stiff raw denim jacket. A sudden flash of Dark Cyan serves as a sharp punctuation mark, particularly effective in a lightweight tech fabric that breathes as you rush through your day. When this high-energy palette needs a physical anchor, introduce the substantial weight of vivid yellow in a dense, high-quality knit to keep your senses grounded. You end up with a look that commands immediate attention in any room, all while keeping you entirely physically secure.",
   "neutrals": [
    {
     "hexValue": "#FFFDF0",

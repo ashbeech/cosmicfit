@@ -148,7 +148,20 @@ python3 tools/colour_name_hex_audit.py --delta-e 8 --css-warn-delta-e 3
 | `data/style_guide/colour_name_hex_audit.json` | Full 262-pair inventory + flags |
 | `data/style_guide/colour_name_hex_audit.md` | Tier 1/2/3 human summary |
 
-### 5.3 Audit counts (2026-06-19 run)
+### 5.3 Metal-fabric vocabulary audit (Phase 4)
+
+```bash
+python3 tools/colour_metal_fabric_audit.py
+python3 tools/colour_metal_fabric_audit.py --validate-proposals data/style_guide/colour_metal_fabric_proposals.json
+```
+
+| Path | Contents |
+|------|----------|
+| `data/style_guide/colour_metal_fabric_audit.json` | 25 flagged metal-themed palette names with reachability maps |
+| `data/style_guide/colour_metal_fabric_audit.md` | Flagged list with context and nearest-neighbour data |
+| `data/style_guide/colour_metal_fabric_proposals.json` | AI inference proposals (17 renames, 8 keeps) |
+
+### 5.4 Audit counts (2026-06-19 run, post-Phase 1)
 
 | Metric | Count |
 |--------|------:|
@@ -156,11 +169,11 @@ python3 tools/colour_name_hex_audit.py --delta-e 8 --css-warn-delta-e 3
 | PaletteLibrary tokens | 144 |
 | SignAccentExpressions | 106 |
 | Chart signature archetypes | 12 |
-| **Tier 1** — label implies standard colour, ΔE > 5 | **12** |
+| **Tier 1** — label implies standard colour, ΔE > 5 | **2** (down from 12; remaining are intentional Phase 1 renames) |
 | **Tier 2** — near-duplicate of library token (ΔE ≤ 5) | **9** |
 | **Tier 3** — weaker CSS token overlap | **13** |
 
-**Tier 1** = Phase 1 rename (partner priority).  
+**Tier 1** original 12 items resolved by Phase 1 renames. 2 auto-matched residuals (`hot pink` ↔ CSS `hotpink`, `Dark Cyan` ↔ CSS `darkcyan`) are accepted deviations.  
 **Tier 2** = Phase 2 consolidation (optional).  
 **Tier 3** = Phase 3 if partner flags more in testing.
 
@@ -336,13 +349,15 @@ Prevent accidental Pantone labelling in app code.
 
 ## 12. Suggested PR sequence
 
-| PR | Scope | Risk |
-|----|-------|------|
-| **PR1** | Tier 1 `PaletteLibrary` renames (7 tokens) + VariationSlots + fixture regen | Medium — breaks name-based tests |
-| **PR2** | Tier 1 `SignAccentExpressions` renames (5 tokens) | Low — display names only |
-| **PR3** | Tier 2 duplicate alignment (optional) | Low |
-| **PR4** | Tier 3 + narrative fixture sweep | Medium — large JSON diffs |
-| **PR5** | Audit script refresh + CI guard | Low |
+| PR | Phase | Scope | Risk |
+|----|-------|-------|------|
+| **PR1** | 1 | PaletteLibrary Tier 1 renames (8 tokens) + VariationSlots + downstream | Medium |
+| **PR2** | 1 | SignAccentExpressions Tier 1 renames (4 tokens) + test debt fix | Low |
+| **PR3** | 2–3 | Optional Tier 2/3 + blueprint fixture sweep | Medium |
+| **PR4** | 1–3 | Audit refresh + optional Pantone CI guard | Low |
+| **PR5 prep** | 4 | Metal-fabric audit tool + AI proposals + validators | Low |
+| **PR5** | 4 | Apply Phase 4 metal-fabric renames (17) + context-aware fixture sweep | Medium |
+| **PR6** | All | Final test suite + both audits + apply report | Low |
 
 ---
 
@@ -381,18 +396,84 @@ Prevent accidental Pantone labelling in app code.
 
 ## 16. Checklist for implementing developer
 
-- [ ] Product sign-off on §6 proposed names (or edit table)
-- [ ] Implement Phase 1 PaletteLibrary key renames + hex unchanged
-- [ ] Implement Phase 1 SignAccentExpressions `name` field renames only
-- [ ] Update `VariationSlots.swift` references
-- [ ] Grep and update tests, fixtures, narrative JSON
-- [ ] Regenerate `v4_dataset.json` if calibration gate requires it
-- [ ] Fix `BlueprintLensEngine_Payload_Tests` Steel Blue hex mismatch
-- [ ] Re-run `python3 tools/colour_name_hex_audit.py` — Tier 1 count should drop
+- [x] Product sign-off on §6 proposed names
+- [x] Implement Phase 1 PaletteLibrary key renames (8 tokens) + hex unchanged
+- [x] Implement Phase 1 SignAccentExpressions `name` field renames (4 tokens)
+- [x] Update `VariationSlots.swift` references
+- [x] Update tests, fixtures, narrative JSON for Phase 1
+- [x] Fix `BlueprintLensEngine_Payload_Tests` Steel Blue hex mismatch (#4682B4 → #085267)
+- [x] Re-run `colour_name_hex_audit.py` — Tier 1: 12 → 2 (auto-catch only)
+- [x] Build `tools/colour_metal_fabric_audit.py` — 25 flagged (14 palette, 11 accents)
+- [x] AI inference pass → `colour_metal_fabric_proposals.json` (17 renames, 8 keeps)
+- [x] Run `--validate-proposals` — 0 issues (0 BLOCK, 0 WARN)
+- [x] Risk audit: hardware-copy bleed check (warmMetals in Cosmic_FitTests preserved)
+- [x] Phase 4 sign-off on §17 rename table
+- [x] Apply Phase 4 renames in PaletteLibrary + SignArchetypes + VariationSlots
+- [x] Update InterpretationTextLibrary narrative `dailyColours` references
+- [x] Context-aware fixture sweep (palette fields only, hardware fields preserved)
 - [ ] Decide blueprint migration strategy for cached users
-- [ ] Manual QA: Bright Winter profile shows renamed `hot pink` (not `magenta red`) at `#CC0066`
-- [ ] Manual QA: Capricorn-cool accent shows renamed `deep petrol` (not `Steel Blue`) at `#085267`
+- [ ] Manual QA: Bright Winter profile shows `hot pink` (not `magenta red`) at `#CC0066`
+- [ ] Manual QA: Capricorn-cool accent shows `Deep Petrol` (not `Steel Blue`) at `#085267`
+- [ ] Manual QA: Deep Autumn accent shows `warm umber` (not `aged brass`) beside Cool metal tone
 - [ ] Partner re-test with §13 tester copy
+
+---
+
+## 17. Phase 4 — Metal-fabric disambiguation
+
+### 17.1 Problem
+
+Daily Fit shows **Style Palette swatches** (fabric colours) beside a **Metal Tone** slider (Cool / Mixed / Warm for jewellery/hardware). Names like `aged brass`, `Antique Brass`, `Burnt Copper` share vocabulary with `recommendedMetals` but are **not engine-linked** — they are naming friction.
+
+### 17.2 Decision test
+
+> **"Would I look for this name in the clothing rail, or only at a hardware counter?"**
+
+- **Hardware counter** → rename to fabric-first plain English (hex unchanged)
+- **Clothing rail** → KEEP (document rationale)
+
+### 17.3 Tooling
+
+| Tool | Command |
+|------|---------|
+| Flag audit | `python3 tools/colour_metal_fabric_audit.py` |
+| Validate proposals | `python3 tools/colour_metal_fabric_audit.py --validate-proposals data/style_guide/colour_metal_fabric_proposals.json` |
+
+### 17.4 Phase 4 rename table (approved)
+
+| # | Current | Hex | Source | Verdict | Proposed | Rationale |
+|---|---------|-----|--------|---------|----------|-----------|
+| 1 | `aged brass` | `#8E7530` | palette_library | rename | **warm umber** | Hardware-counter; swatch is dark olive-brown |
+| 2 | `antique gold` | `#C9A84C` | palette_library | rename | **deep honey** | Hardware-counter; swatch is warm golden-brown |
+| 3 | `brushed pewter` | `#7C7D7D` | palette_library | rename | **smoke grey** | "Brushed" is a metal-finish descriptor |
+| 4 | `chrome silver` | `#DBE0E3` | palette_library | rename | **frost grey** | "Chrome" is unambiguously hardware |
+| 5 | `soft copper` | `#BD7E55` | palette_library | rename | **warm sienna** | "Soft copper" reads as metal patina |
+| 6 | `soft gold` | `#D4AF37` | palette_library | rename | **rich honey** | "Soft gold" reads as jewellery beside Metal Tone slider |
+| 7 | `Antique Brass` | `#C47A3E` | sign_accent | rename | **Rich Sienna** | Hardware-counter; warm orange-brown |
+| 8 | `Burnished Gold` | `#D59B49` | sign_accent | rename | **Tawny Amber** | "Burnished" is metal-finish + "gold" is metal |
+| 9 | `Burnt Copper` | `#AE4D37` | sign_accent | rename | **Warm Ember** | Hardware-counter; warm rust-red |
+| 10 | `Dark Bronze` | `#664330` | sign_accent | rename | **Deep Umber** | Hardware-counter; deep brown |
+| 11 | `Gunmetal` | `#19475A` | sign_accent | rename | **Ink Teal** | LCH produces dark teal, not grey; misnamed |
+| 12 | `Lunar Silver` | `#A6C6D0` | sign_accent | rename | **Lunar Mist** | "Silver" creates metal association; swatch is cool blue-grey |
+| 13 | `Pewter` | `#25515B` | sign_accent | rename | **Stone Teal** | LCH produces dark teal, not grey; misnamed |
+| 14 | `Platinum Frost` | `#91B5CF` | sign_accent | rename | **Frost Blue** | "Platinum" is unambiguously precious metal |
+| 15 | `Saffron Gold` | `#C79538` | sign_accent | rename | **Saffron Amber** | Keeps saffron warmth, removes gold |
+| 16 | `Soft Silver` | `#4D7E8C` | sign_accent | rename | **Slate Teal** | LCH produces teal, not silver; misnamed |
+| 17 | `Solar Gold` | `#DFA74B` | sign_accent | rename | **Solar Amber** | Keeps solar (Leo), removes gold |
+
+**Kept (clothing-rail vocabulary):** `bright gold`, `bronze`, `copper`, `gunmetal` (library), `olive gold`, `pewter` (library), `silver`, `steel grey`
+
+### 17.5 Allowed residuals after Phase 4
+
+Old metal-themed names may legitimately remain in:
+- `recommendedMetals` / hardware copy (`DeterministicResolver.swift`)
+- Hardware keyword sets (`warmMetals`, `coolMetals` in tests and engine)
+- Handoff docs, audit reports, backups
+- Narrative text where the term means jewellery metal, not fabric
+
+### 17.6 Collision report
+
+Zero duplicate names in PaletteLibrary + SignAccentExpressions + chart signature display labels after Phase 4.
 
 ---
 

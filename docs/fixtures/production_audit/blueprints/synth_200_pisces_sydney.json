@@ -109,7 +109,7 @@
    },
    {
     "hexValue": "#FFCBA4",
-    "name": "peach",
+    "name": "light peach",
     "provenance": {
      "band": "core",
      "family": "Light Spring",
@@ -131,7 +131,7 @@
    },
    {
     "hexValue": "#A4C639",
-    "name": "lime",
+    "name": "apple green",
     "provenance": {
      "band": "core",
      "family": "Light Spring",
@@ -176,7 +176,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your colour story thrives on visual immediacy rather than slow-burn subtlety. Build your foundation around high-impact shades like honey yellow and peach, treating them as daily base layers rather than occasional statement pieces. Because you lean into clean tech fabrics and raw denim over complicated draping, these saturated tones do the heavy lifting for your outfit. Bring in Deep Ocean and Oxblood through hardware, trainers, or a sharp poplin collar to keep the energy high without adding unnecessary visual clutter. The result is a palette that registers instantly the moment you walk into a room.",
+  "narrativeText": "Your colour story thrives on visual immediacy rather than slow-burn subtlety. Build your foundation around high-impact shades like honey yellow and light peach, treating them as daily base layers rather than occasional statement pieces. Because you lean into clean tech fabrics and raw denim over complicated draping, these saturated tones do the heavy lifting for your outfit. Bring in Deep Ocean and Oxblood through hardware, trainers, or a sharp poplin collar to keep the energy high without adding unnecessary visual clutter. The result is a palette that registers instantly the moment you walk into a room.",
   "neutrals": [
    {
     "hexValue": "#FAF5EF",

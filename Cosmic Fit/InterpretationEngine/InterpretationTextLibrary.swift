@@ -382,7 +382,7 @@ struct InterpretationTextLibrary {
                         ("structured", "structure"), ("enduring", "texture"), ("charcoal", "colour"), ("classic", "colour_quality")
                     ],
                     "Aquarius": [
-                        ("innovative", "structure"), ("distinctive", "mood"), ("electric blue", "colour"), ("unique", "colour_quality")
+                        ("innovative", "structure"), ("distinctive", "mood"), ("bright blue", "colour"), ("unique", "colour_quality")
                     ],
                     "Pisces": [
                         ("fluid", "structure"), ("dreamy", "mood"), ("seafoam", "colour"), ("flowing", "colour_quality")
@@ -508,7 +508,7 @@ struct InterpretationTextLibrary {
                         ("disciplined", "structure"), ("enduring", "texture"), ("dark brown", "colour"), ("structured", "colour_quality")
                     ],
                     "Aquarius": [
-                        ("innovative", "structure"), ("progressive", "mood"), ("electric blue", "colour"), ("unique", "colour_quality")
+                        ("innovative", "structure"), ("progressive", "mood"), ("bright blue", "colour"), ("unique", "colour_quality")
                     ],
                     "Pisces": [
                         ("fluid", "texture"), ("adaptive", "structure"), ("sea blue", "colour"), ("flowing", "colour_quality")
@@ -550,7 +550,7 @@ struct InterpretationTextLibrary {
                         ("structured", "communication"), ("disciplined", "approach"), ("charcoal", "colour"), ("defined", "colour_quality")
                     ],
                     "Aquarius": [
-                        ("innovative", "communication"), ("objective", "approach"), ("electric blue", "colour"), ("unique", "colour_quality")
+                        ("innovative", "communication"), ("objective", "approach"), ("bright blue", "colour"), ("unique", "colour_quality")
                     ],
                     "Pisces": [
                         ("intuitive", "communication"), ("imaginative", "approach"), ("sea green", "colour"), ("blended", "colour_quality")
@@ -581,7 +581,7 @@ struct InterpretationTextLibrary {
                 ]
                 
                 static let uranus = [
-                    ("electric blue", "colour"), ("neon turquoise", "colour"),
+                    ("bright blue", "colour"), ("neon turquoise", "colour"),
                     ("unexpected", "colour_quality"), ("innovative", "colour_quality")
                 ]
             }
@@ -1239,7 +1239,7 @@ struct InterpretationTextLibrary {
                 "dark": ["coal", "espresso", "midnight blue", "deep forest", "smoky plum", "charcoal"],
                 "light": ["ivory", "bone", "pearl", "light gray", "soft white", "pale gold"],
                 "muted": ["faded indigo", "dove gray", "dusty rose", "sage", "muted mauve", "ash grey"],
-                "vibrant": ["electric blue", "emerald", "crimson", "royal purple", "bright mustard"],
+                "vibrant": ["bright blue", "emerald", "crimson", "royal purple", "bright mustard"],
                 "default": ["navy", "charcoal", "ivory", "taupe", "black", "gray"]
             ]
             
@@ -1248,7 +1248,7 @@ struct InterpretationTextLibrary {
                 "pale chamomile", "misty lavender", "storm grey", "warm terracotta",
                 "dusty sage", "deep bordeaux", "weathered denim", "soft ochre",
                 "antique ivory", "vintage cognac", "muted juniper", "hazy charcoal",
-                "blushed clay", "stained walnut", "aged brass", "smoky quartz",
+                "blushed clay", "stained walnut", "warm umber", "smoky quartz",
                 "faded damson", "burnished copper", "sea glass", "deep olive",
                 "washed saffron", "shadow mauve", "midnight navy", "sunlit amber",
                 "cool teal", "sandstone", "dusty plum", "smoked pearl"
@@ -1549,7 +1549,7 @@ struct InterpretationTextLibrary {
                 "pale chamomile", "misty lavender", "storm grey", "warm terracotta",
                 "dusty sage", "deep bordeaux", "weathered denim", "soft ochre",
                 "antique ivory", "vintage cognac", "muted juniper", "hazy charcoal",
-                "blushed clay", "stained walnut", "aged brass", "smoky quartz",
+                "blushed clay", "stained walnut", "warm umber", "smoky quartz",
                 "faded damson", "burnished copper", "sea glass", "deep olive",
                 "washed saffron", "shadow mauve", "midnight navy", "sunlit amber",
                 "cool teal", "sandstone", "dusty plum", "smoked pearl"

@@ -110,7 +110,7 @@
    },
    {
     "hexValue": "#254D32",
-    "name": "forest green",
+    "name": "dark pine",
     "provenance": {
      "band": "core",
      "family": "Deep Autumn",
@@ -166,7 +166,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "A truly effective palette for you is one that feels instantly warm but completely unapologetic. Instead of saving oxblood and forest teal for special occasions, treat their blazing directness as your everyday baseline. These high-voltage tones need a grounding element so they never become exhausting, which is where the softer, lived-in familiarity of forest green steps in to anchor the look. When the mood strikes for a sudden flash of adrenaline, Warm Sea Pearl works brilliantly on a crisp poplin collar or a piece of sharp resin hardware. The overall colour story reads as fast and expressive, yet perfectly secure to actually live inside.",
+  "narrativeText": "A truly effective palette for you is one that feels instantly warm but completely unapologetic. Instead of saving oxblood and forest teal for special occasions, treat their blazing directness as your everyday baseline. These high-voltage tones need a grounding element so they never become exhausting, which is where the softer, lived-in familiarity of dark pine steps in to anchor the look. When the mood strikes for a sudden flash of adrenaline, Warm Sea Pearl works brilliantly on a crisp poplin collar or a piece of sharp resin hardware. The overall colour story reads as fast and expressive, yet perfectly secure to actually live inside.",
   "neutrals": [
    {
     "hexValue": "#3C2415",
@@ -226,7 +226,7 @@
   },
   "rulerSignature": {
    "hexValue": "#6F632D",
-   "name": "aged brass",
+   "name": "warm umber",
    "provenance": {
     "band": "rulerSignature",
     "family": "Deep Autumn",

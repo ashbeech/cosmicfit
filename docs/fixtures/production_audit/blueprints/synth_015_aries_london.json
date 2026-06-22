@@ -84,7 +84,7 @@
    },
    {
     "hexValue": "#19475A",
-    "name": "Gunmetal",
+    "name": "Ink Teal",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Contrast",
@@ -132,7 +132,7 @@
    },
    {
     "hexValue": "#0080FF",
-    "name": "electric blue",
+    "name": "bright blue",
     "provenance": {
      "band": "core",
      "family": "Bright Spring",

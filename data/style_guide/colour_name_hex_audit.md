@@ -18,8 +18,8 @@ Re-run: `python3 tools/colour_name_hex_audit.py`
 | sign accent expressions | 106 |
 | chart signature archetypes | 12 |
 | informational flags | 214 |
-| actionable rows | 33 |
-| label implied css mismatches | 12 |
+| actionable rows | 23 |
+| label implied css mismatches | 2 |
 | css semantic mismatches | 13 |
 | library near duplicates | 9 |
 
@@ -29,18 +29,8 @@ These names explicitly reference CSS vocabulary. If the hex does not match, user
 
 | Name | Hex | Source | Implied CSS | CSS hex | ΔE | Nearest library |
 |------|-----|--------|-------------|---------|----:|-----------------|
-| magenta red | `#CC0066` | palette_library | magenta | `#FF00FF` | 71.0 | fuchsia red `#C81585` (17.8) |
-| lime | `#A4C639` | palette_library | lime | `#00FF00` | 60.5 | acid lime `#B0BF1A` (10.8) |
-| fuchsia red | `#C81585` | palette_library | fuchsia | `#FF00FF` | 55.5 | magenta red `#CC0066` (17.8) |
-| forest green | `#254D32` | palette_library | forestgreen | `#228B22` | 48.6 | dark emerald `#014421` (9.8) |
-| Regal Blue | `#5485C8` | sign_accent_expression | royalblue | `#4169E1` | 34.9 | dusty blue `#6E8FAD` (21.9) |
-| Steel Blue | `#085267` | sign_accent_expression | steelblue | `#4682B4` | 26.3 | petrol `#1B3A4B` (12.2) |
-| Cerulean | `#007788` | sign_accent_expression | steelblue | `#4682B4` | 24.0 | muted teal `#5E8E8E` (16.7) |
-| Arctic Blue | `#008ABE` | sign_accent_expression | deepskyblue | `#00BFFF` | 20.6 | dusty blue `#6E8FAD` (18.8) |
-| true red | `#CC0000` | palette_library | red | `#FF0000` | 19.4 | poppy `#E35335` (20.8) |
-| electric blue | `#0080FF` | palette_library | dodgerblue | `#1E90FF` | 12.5 | royal blue `#4169E1` (11.6) |
-| peach | `#FFCBA4` | palette_library | peachpuff | `#FFDAB9` | 8.5 | apricot `#FBCEB1` (6.3) |
-| clear turquoise | `#08E8DE` | palette_library | turquoise | `#40E0D0` | 5.8 | clear cyan `#00FFFF` (9.7) |
+| hot pink | `#CC0066` | palette_library | hotpink | `#FF69B4` | 26.5 | deep magenta `#C81585` (17.8) |
+| Dark Cyan | `#007788` | sign_accent_expression | darkcyan | `#008B8B` | 13.9 | muted teal `#5E8E8E` (16.7) |
 
 ## Tier 2 — Near-duplicate of an existing library token
 
@@ -53,7 +43,7 @@ Chart-derived accents that are perceptually identical to a template token but us
 | Saturn Slate | `#273E51` | sign_accent_expression | petrol | `#1B3A4B` | 3.5 |
 | Warm Slate | `#5B3A31` | sign_accent_expression | bark brown | `#5C4033` | 3.8 |
 | Moonstone | `#5E8B91` | sign_accent_expression | muted teal | `#5E8E8E` | 3.9 |
-| Antique Brass | `#C47A3E` | sign_accent_expression | copper | `#B87333` | 4.0 |
+| Rich Sienna | `#C47A3E` | sign_accent_expression | copper | `#B87333` | 4.0 |
 | Burnt Sienna | `#CB674C` | sign_accent_expression | terracotta | `#CC6644` | 4.3 |
 | Opal Teal | `#5C8383` | sign_accent_expression | muted teal | `#5E8E8E` | 4.7 |
 | Fertile Moss | `#4E6B39` | sign_accent_expression | moss | `#5B7744` | 4.9 |
@@ -95,9 +85,8 @@ Label shares tokens with the globally nearest CSS name, but no explicit phrase m
 | taurus signature archetype | `#4E6B39` | chart_signature_archetype | taurus | — | 6.2 | 21.8 | — |
 | virgo signature archetype | `#807E57` | chart_signature_archetype | virgo | — | 18.7 | 6.5 | — |
 | acid lime | `#B0BF1A` | palette_library | template token | — | 15.5 | 20.9 | — |
-| aged brass | `#8E7530` | palette_library | template token | — | 21.7 | 17.1 | — |
 | amber | `#FFBF00` | palette_library | template token | — | 14.2 | 10.7 | — |
-| antique gold | `#C9A84C` | palette_library | template token | — | 15.8 | 12.5 | — |
+| apple green | `#A4C639` | palette_library | template token | — | 8.4 | 18.5 | — |
 | apricot | `#FBCEB1` | palette_library | template token | — | 5.1 | 13.9 | — |
 | aqua mint | `#7FFFD4` | palette_library | template token | — | 0.0 | 22.5 | — |
 | bark brown | `#5C4033` | palette_library | template token | — | 21.9 | 10.9 | — |
@@ -109,23 +98,22 @@ Label shares tokens with the globally nearest CSS name, but no explicit phrase m
 | blue-black | `#0D1B2A` | palette_library | template token | — | 15.2 | 11.1 | css_semantic_mismatch:ΔE=15.2 |
 | blue-red | `#8A2BE2` | palette_library | template token | — | 0.0 | 47.1 | — |
 | bone | `#EFE6D3` | palette_library | template token | — | 3.2 | 9.6 | — |
+| bright aqua | `#08E8DE` | palette_library | template token | — | 5.8 | 17.5 | — |
+| bright blue | `#0080FF` | palette_library | template token | — | 11.6 | 20.4 | — |
 | bright gold | `#FFD700` | palette_library | template token | — | 0.0 | 3.5 | — |
 | bright jade | `#00A86B` | palette_library | template token | — | 6.2 | 15.0 | — |
 | bright teal | `#009B8D` | palette_library | template token | — | 9.2 | 14.6 | — |
 | bright white | `#FFFFFF` | palette_library | template token | — | 0.0 | 4.2 | — |
 | bronze | `#CD7F32` | palette_library | template token | — | 5.3 | 27.0 | — |
-| brushed pewter | `#7C7D7D` | palette_library | template token | — | 1.3 | 5.2 | — |
 | buttercream | `#F5E6C8` | palette_library | template token | — | 2.9 | 12.8 | — |
 | camel | `#C19A6B` | palette_library | template token | — | 10.9 | 13.9 | — |
 | camel sand | `#C4A35A` | palette_library | template token | — | 13.2 | 15.2 | — |
-| chrome silver | `#DBE0E3` | palette_library | template token | — | 2.6 | 3.5 | — |
 | clear aqua | `#00CED1` | palette_library | template token | — | 0.0 | 15.1 | — |
 | clear black | `#0D1014` | palette_library | template token | — | 5.3 | 13.5 | css_semantic_mismatch:ΔE=5.3 |
 | clear camel | `#C19A6B` | palette_library | template token | — | 10.9 | 13.9 | — |
 | clear cyan | `#00FFFF` | palette_library | template token | 0.0 | 0.0 | 22.2 | — |
 | clear ivory | `#FFFDF0` | palette_library | template token | — | 1.3 | 9.8 | — |
 | clear pine | `#2E8B57` | palette_library | template token | — | 0.0 | 21.1 | — |
-| clear turquoise | `#08E8DE` | palette_library | template token | 5.8 | 5.8 | 17.5 | label_implied_css_mismatch:turquoise ΔE=5.8 |
 | cobalt | `#0047AB` | palette_library | template token | — | 16.9 | 5.7 | — |
 | cocoa | `#7B5B3A` | palette_library | template token | — | 23.7 | 12.4 | — |
 | cool charcoal | `#3B3F42` | palette_library | template token | — | 11.9 | 2.7 | — |
@@ -137,29 +125,32 @@ Label shares tokens with the globally nearest CSS name, but no explicit phrase m
 | coral | `#FF7F50` | palette_library | template token | 0.0 | 0.0 | 14.5 | — |
 | crimson | `#DC143C` | palette_library | template token | 0.0 | 0.0 | 7.1 | — |
 | dark emerald | `#014421` | palette_library | template token | — | 25.1 | 27.2 | — |
+| dark pine | `#254D32` | palette_library | template token | — | 18.3 | 21.0 | — |
 | dark terracotta | `#9E4E3A` | palette_library | template token | — | 8.9 | 14.6 | — |
 | deep amber | `#A36D2A` | palette_library | template token | — | 13.2 | 25.9 | — |
+| deep honey | `#C9A84C` | palette_library | template token | — | 15.8 | 12.5 | — |
 | deep khaki | `#786D4E` | palette_library | template token | — | 19.0 | 5.9 | — |
+| deep magenta | `#C81585` | palette_library | template token | — | 0.4 | 18.0 | — |
 | deep olive | `#3C4B27` | palette_library | template token | — | 17.6 | 13.8 | — |
+| deep red | `#CC0000` | palette_library | template token | — | 19.4 | 7.8 | — |
 | deep teal | `#014D4E` | palette_library | template token | — | 8.8 | 6.2 | — |
 | dove grey | `#9C9A9A` | palette_library | template token | — | 5.5 | 2.9 | — |
 | dusty blue | `#6E8FAD` | palette_library | template token | — | 8.8 | 11.1 | — |
 | dusty plum | `#7E6585` | palette_library | template token | — | 19.8 | 21.0 | — |
-| electric blue | `#0080FF` | palette_library | template token | 12.5 | 11.6 | 20.4 | label_implied_css_mismatch:dodgerblue ΔE=12.5 |
 | electric fuchsia | `#FF00FF` | palette_library | template token | 0.0 | 0.0 | 68.2 | — |
 | espresso | `#3C2415` | palette_library | template token | — | 24.3 | 14.6 | — |
 | eucalyptus | `#6E9E8E` | palette_library | template token | — | 10.6 | 12.9 | — |
 | faded mauve | `#B09DA7` | palette_library | template token | — | 9.5 | 9.1 | — |
-| forest green | `#254D32` | palette_library | template token | 48.6 | 18.3 | 21.0 | label_implied_css_mismatch:forestgreen ΔE=48.6 |
 | forest teal | `#0B4F4A` | palette_library | template token | — | 9.5 | 8.3 | — |
 | fresh green | `#4AE082` | palette_library | template token | — | 13.4 | 25.0 | — |
 | fresh leaf | `#71BC78` | palette_library | template token | — | 12.1 | 20.9 | — |
-| fuchsia red | `#C81585` | palette_library | template token | 55.5 | 0.4 | 18.0 | label_implied_css_mismatch:fuchsia ΔE=55.5 |
+| frost grey | `#DBE0E3` | palette_library | template token | — | 2.6 | 3.5 | — |
 | goldenrod | `#DAA520` | palette_library | template token | 0.0 | 0.0 | 15.4 | — |
 | graphite | `#4B4F54` | palette_library | template token | — | 11.5 | 4.7 | — |
 | gunmetal | `#53565A` | palette_library | template token | — | 8.4 | 7.7 | — |
 | hard white | `#FAFAFA` | palette_library | template token | — | 1.7 | 3.5 | — |
 | honey yellow | `#E8A317` | palette_library | template token | — | 7.9 | 20.0 | — |
+| hot pink | `#CC0066` | palette_library | template token | 26.5 | 18.1 | 8.9 | label_implied_css_mismatch:hotpink ΔE=26.5 |
 | icy aqua | `#B0F0F0` | palette_library | template token | — | 0.7 | 13.8 | — |
 | icy blue | `#A5F2F3` | palette_library | template token | — | 4.0 | 11.9 | — |
 | icy grey | `#D6D6D6` | palette_library | template token | — | 1.1 | 4.3 | — |
@@ -171,8 +162,7 @@ Label shares tokens with the globally nearest CSS name, but no explicit phrase m
 | lavender mist | `#E6E6FA` | palette_library | template token | — | 0.0 | 7.9 | — |
 | light camel | `#C9A96E` | palette_library | template token | — | 8.4 | 9.0 | — |
 | light khaki | `#C3B091` | palette_library | template token | — | 7.1 | 11.3 | — |
-| lime | `#A4C639` | palette_library | template token | 60.5 | 8.4 | 18.5 | label_implied_css_mismatch:lime ΔE=60.5 |
-| magenta red | `#CC0066` | palette_library | template token | 71.0 | 18.1 | 8.9 | label_implied_css_mismatch:magenta ΔE=71.0 |
+| light peach | `#FFCBA4` | palette_library | template token | — | 8.5 | 11.8 | — |
 | marigold | `#EAA221` | palette_library | template token | — | 8.7 | 19.1 | — |
 | midnight | `#191970` | palette_library | template token | — | 0.0 | 16.0 | — |
 | midnight olive | `#2F3A2B` | palette_library | template token | — | 14.7 | 11.8 | — |
@@ -195,12 +185,12 @@ Label shares tokens with the globally nearest CSS name, but no explicit phrase m
 | optic white | `#FEFEFA` | palette_library | template token | — | 2.1 | 5.7 | — |
 | oxblood | `#4A1C20` | palette_library | template token | — | 29.5 | 13.6 | — |
 | pale sand | `#E8D5B7` | palette_library | template token | — | 6.7 | 8.6 | — |
-| peach | `#FFCBA4` | palette_library | template token | 8.5 | 8.5 | 11.8 | label_implied_css_mismatch:peachpuff ΔE=8.5 |
 | pearl grey | `#C9C0BB` | palette_library | template token | — | 4.3 | 4.8 | — |
 | petrol | `#1B3A4B` | palette_library | template token | — | 14.5 | 3.9 | — |
 | pewter | `#8B8E90` | palette_library | template token | — | 5.5 | 2.8 | — |
 | poppy | `#E35335` | palette_library | template token | — | 8.1 | 4.6 | — |
 | powder blue | `#B0E0E6` | palette_library | template token | 0.0 | 0.0 | 11.6 | — |
+| rich honey | `#D4AF37` | palette_library | template token | — | 9.4 | 10.8 | — |
 | rose mauve | `#C08081` | palette_library | template token | — | 9.2 | 16.2 | — |
 | rose quartz | `#F7CACA` | palette_library | template token | — | 8.8 | 0.5 | — |
 | royal blue | `#4169E1` | palette_library | template token | 0.0 | 0.0 | 19.0 | — |
@@ -211,12 +201,11 @@ Label shares tokens with the globally nearest CSS name, but no explicit phrase m
 | shell pink | `#FFB4B4` | palette_library | template token | — | 6.0 | 0.5 | — |
 | silver | `#C0C0C0` | palette_library | template token | 0.0 | 0.0 | 3.3 | — |
 | slate | `#5B6770` | palette_library | template token | — | 7.2 | 6.5 | — |
+| smoke grey | `#7C7D7D` | palette_library | template token | — | 1.3 | 5.2 | — |
 | smoke white | `#E8E6E2` | palette_library | template token | — | 4.2 | 2.6 | — |
 | smoked navy | `#3B4B5E` | palette_library | template token | — | 14.3 | 5.3 | — |
 | smoky periwinkle | `#8E82A7` | palette_library | template token | — | 16.0 | 16.7 | — |
 | soft black | `#1A1A1E` | palette_library | template token | — | 9.9 | 9.2 | css_semantic_mismatch:ΔE=9.9 |
-| soft copper | `#BD7E55` | palette_library | template token | — | 14.7 | 23.2 | — |
-| soft gold | `#D4AF37` | palette_library | template token | — | 9.4 | 10.8 | — |
 | soft lilac | `#C8A2C8` | palette_library | template token | — | 12.6 | 8.7 | — |
 | soft navy | `#4F5D73` | palette_library | template token | — | 14.4 | 6.7 | — |
 | soft rust | `#B7654E` | palette_library | template token | — | 11.5 | 17.3 | — |
@@ -227,7 +216,6 @@ Label shares tokens with the globally nearest CSS name, but no explicit phrase m
 | stone grey | `#928E85` | palette_library | template token | — | 7.7 | 3.8 | — |
 | terracotta | `#CC6644` | palette_library | template token | — | 14.0 | 12.6 | — |
 | tomato red | `#FF6347` | palette_library | template token | 0.0 | 0.0 | 9.5 | — |
-| true red | `#CC0000` | palette_library | template token | 19.4 | 19.4 | 7.8 | label_implied_css_mismatch:red ΔE=19.4 |
 | vivid yellow | `#FFE302` | palette_library | template token | — | 7.0 | 10.6 | — |
 | warm auburn | `#A0522D` | palette_library | template token | — | 0.0 | 18.3 | — |
 | warm charcoal | `#4A4244` | palette_library | template token | — | 16.1 | 5.2 | — |
@@ -235,22 +223,20 @@ Label shares tokens with the globally nearest CSS name, but no explicit phrase m
 | warm ivory | `#FFFFF0` | palette_library | template token | — | 0.0 | 10.6 | — |
 | warm navy | `#384C70` | palette_library | template token | — | 23.3 | 10.2 | — |
 | warm olive | `#706238` | palette_library | template token | — | 18.8 | 8.1 | — |
+| warm sienna | `#BD7E55` | palette_library | template token | — | 14.7 | 23.2 | — |
 | warm stone | `#A89F91` | palette_library | template token | — | 9.2 | 5.9 | — |
 | warm taupe | `#AF9B88` | palette_library | template token | — | 14.0 | 9.2 | — |
+| warm umber | `#8E7530` | palette_library | template token | — | 21.7 | 17.1 | — |
 | warm white | `#FAF5EF` | palette_library | template token | — | 1.9 | 6.7 | — |
 | Amber Flame | `#CB6835` | sign_accent_expression | leo/warm | — | 11.5 | 17.0 | — |
-| Antique Brass | `#C47A3E` | sign_accent_expression | leo/warm | — | 5.8 | 28.0 | library_near_match:copper ΔE=4.0 |
 | Aqua Blue | `#00818A` | sign_accent_expression | aquarius/neutral | — | 5.7 | 4.7 | — |
-| Arctic Blue | `#008ABE` | sign_accent_expression | aquarius/cool | 20.6 | 9.0 | 10.4 | label_implied_css_mismatch:deepskyblue ΔE=20.6 |
 | Aubergine | `#562865` | sign_accent_expression | scorpio/cool | — | 17.1 | 15.5 | — |
-| Burnished Gold | `#D59B49` | sign_accent_expression | leo/neutral | — | 10.4 | 15.4 | — |
+| Bright Cyan | `#008ABE` | sign_accent_expression | aquarius/cool | — | 9.0 | 10.4 | — |
 | Burnished Rose | `#8A5D73` | sign_accent_expression | libra/warm | — | 22.4 | 18.9 | — |
 | Burnished Teal | `#1C6E6B` | sign_accent_expression | aquarius/warm | — | 8.4 | 6.7 | css_semantic_mismatch:ΔE=8.4 |
-| Burnt Copper | `#AE4D37` | sign_accent_expression | sagittarius/warm | — | 9.6 | 9.2 | — |
 | Burnt Sienna | `#CB674C` | sign_accent_expression | aries/warm | — | 13.5 | 12.0 | library_near_match:terracotta ΔE=4.3 |
 | Burnt Wine | `#731632` | sign_accent_expression | scorpio/warm | — | 27.4 | 8.1 | — |
 | Cardinal Red | `#CA414A` | sign_accent_expression | aries/neutral | — | 11.7 | 10.3 | — |
-| Cerulean | `#007788` | sign_accent_expression | aquarius/neutral | 24.0 | 11.7 | 3.8 | label_implied_css_mismatch:steelblue ΔE=24.0 |
 | Cool Aquamarine | `#69B8BD` | sign_accent_expression | pisces/cool | — | 9.9 | 7.6 | — |
 | Cool Berry | `#9F3D8A` | sign_accent_expression | aries/cool | — | 20.4 | 18.1 | — |
 | Cool Citrine | `#00BAB2` | sign_accent_expression | gemini/cool | — | 3.8 | 11.7 | — |
@@ -259,15 +245,17 @@ Label shares tokens with the globally nearest CSS name, but no explicit phrase m
 | Cool Mauve | `#A08CC9` | sign_accent_expression | libra/cool | — | 18.2 | 17.8 | — |
 | Cool Topaz | `#00A9AE` | sign_accent_expression | leo/cool | — | 8.1 | 6.0 | — |
 | Crimson Ember | `#D14649` | sign_accent_expression | aries/warm | — | 12.6 | 8.9 | — |
-| Dark Bronze | `#664330` | sign_accent_expression | capricorn/warm | — | 25.1 | 10.1 | — |
 | Dark Cherry | `#762249` | sign_accent_expression | scorpio/neutral | — | 33.2 | 11.0 | — |
+| Dark Cyan | `#007788` | sign_accent_expression | aquarius/neutral | 13.9 | 11.7 | 3.8 | label_implied_css_mismatch:darkcyan ΔE=13.9 |
 | Dark Sienna | `#82312E` | sign_accent_expression | scorpio/warm | — | 19.1 | 9.1 | — |
 | Dark Slate | `#263E4F` | sign_accent_expression | capricorn/neutral | — | 13.8 | 3.5 | css_semantic_mismatch:ΔE=13.8, library_duplicate:petrol ΔE=2.8 |
 | Deep Electric Teal | `#00676A` | sign_accent_expression | aquarius/warm | — | 10.5 | 3.4 | css_semantic_mismatch:ΔE=10.5 |
 | Deep Mauve | `#8A4484` | sign_accent_expression | sagittarius/neutral | — | 24.9 | 18.9 | — |
 | Deep Moonstone | `#366064` | sign_accent_expression | cancer/warm | — | 7.6 | 9.4 | — |
 | Deep Ocean | `#056463` | sign_accent_expression | pisces/warm | — | 11.5 | 2.8 | — |
+| Deep Petrol | `#085267` | sign_accent_expression | capricorn/cool | — | 14.3 | 7.7 | — |
 | Deep Plum | `#702E62` | sign_accent_expression | scorpio/cool | — | 27.0 | 21.3 | — |
+| Deep Umber | `#664330` | sign_accent_expression | capricorn/warm | — | 25.1 | 10.1 | — |
 | Deep Wine | `#751A2F` | sign_accent_expression | scorpio/neutral | — | 24.7 | 7.9 | — |
 | Dusky Plum | `#744D6D` | sign_accent_expression | libra/warm | — | 25.8 | 21.0 | — |
 | Dusty Fern | `#7B8967` | sign_accent_expression | virgo/neutral | — | 20.2 | 14.4 | library_duplicate:moss sage ΔE=1.5 |
@@ -277,10 +265,10 @@ Label shares tokens with the globally nearest CSS name, but no explicit phrase m
 | Ember | `#CA692D` | sign_accent_expression | sagittarius/warm | — | 8.1 | 19.2 | — |
 | Fertile Moss | `#4E6B39` | sign_accent_expression | taurus/neutral | — | 6.2 | 21.8 | library_near_match:moss ΔE=4.9 |
 | Forest Evergreen | `#1D6640` | sign_accent_expression | taurus/cool | — | 16.2 | 25.1 | — |
+| Frost Blue | `#91B5CF` | sign_accent_expression | leo/cool | — | 8.3 | 8.7 | — |
 | Garnet | `#7B2943` | sign_accent_expression | scorpio/neutral | — | 30.8 | 7.8 | — |
 | Golden Khaki | `#89744D` | sign_accent_expression | virgo/warm | — | 23.5 | 2.8 | — |
 | Golden Lichen | `#9E803D` | sign_accent_expression | taurus/warm | — | 20.6 | 17.6 | — |
-| Gunmetal | `#19475A` | sign_accent_expression | capricorn/neutral | — | 12.9 | 4.4 | — |
 | Honey | `#D1A44F` | sign_accent_expression | leo/neutral | — | 16.4 | 12.5 | — |
 | Iced Aqua | `#00AFBF` | sign_accent_expression | gemini/cool | — | 13.9 | 7.8 | — |
 | Iced Crimson | `#CB627F` | sign_accent_expression | aries/cool | — | 6.5 | 11.5 | — |
@@ -289,10 +277,11 @@ Label shares tokens with the globally nearest CSS name, but no explicit phrase m
 | Iced Pearl | `#A4BBD3` | sign_accent_expression | cancer/cool | — | 3.8 | 8.6 | — |
 | Iced Plum | `#9665A3` | sign_accent_expression | sagittarius/cool | — | 23.7 | 16.9 | css_semantic_mismatch:ΔE=23.7 |
 | Icy Seafoam | `#79BBC7` | sign_accent_expression | pisces/cool | — | 11.6 | 11.5 | — |
+| Ink Teal | `#19475A` | sign_accent_expression | capricorn/neutral | — | 12.9 | 4.4 | — |
 | Jade Green | `#437F4C` | sign_accent_expression | taurus/neutral | — | 9.3 | 27.3 | — |
 | Lagoon | `#21776B` | sign_accent_expression | pisces/neutral | — | 8.4 | 12.8 | — |
 | Lilac | `#A3AEE2` | sign_accent_expression | libra/cool | — | 16.5 | 7.9 | — |
-| Lunar Silver | `#A6C6D0` | sign_accent_expression | cancer/cool | — | 7.0 | 4.6 | — |
+| Lunar Mist | `#A6C6D0` | sign_accent_expression | cancer/cool | — | 7.0 | 4.6 | — |
 | Mercurial Teal | `#00A8AD` | sign_accent_expression | gemini/cool | — | 8.3 | 5.7 | — |
 | Mercury Air | `#008584` | sign_accent_expression | gemini/neutral | — | 2.1 | 10.1 | — |
 | Mercury Teal | `#00706F` | sign_accent_expression | gemini/warm | — | 6.5 | 7.4 | css_semantic_mismatch:ΔE=6.5 |
@@ -309,23 +298,23 @@ Label shares tokens with the globally nearest CSS name, but no explicit phrase m
 | Opal Teal | `#5C8383` | sign_accent_expression | cancer/neutral | — | 11.5 | 6.2 | library_near_match:muted teal ΔE=4.7 |
 | Oxblood | `#7E1B2F` | sign_accent_expression | scorpio/warm | — | 20.5 | 6.1 | — |
 | Pale Ocean | `#51A9C0` | sign_accent_expression | pisces/cool | — | 12.9 | 9.2 | — |
-| Pewter | `#25515B` | sign_accent_expression | capricorn/neutral | — | 6.8 | 5.5 | — |
-| Platinum Frost | `#91B5CF` | sign_accent_expression | leo/cool | — | 8.3 | 8.7 | — |
-| Regal Blue | `#5485C8` | sign_accent_expression | leo/cool | 34.9 | 11.0 | 11.1 | label_implied_css_mismatch:royalblue ΔE=34.9 |
 | Rich Amber | `#AD661D` | sign_accent_expression | sagittarius/neutral | — | 12.0 | 29.5 | — |
+| Rich Sienna | `#C47A3E` | sign_accent_expression | leo/warm | — | 5.8 | 28.0 | library_near_match:copper ΔE=4.0 |
 | Rich Topaz | `#C88846` | sign_accent_expression | leo/neutral | — | 4.8 | 24.9 | — |
 | Rose Madder | `#BA4983` | sign_accent_expression | aries/cool | — | 16.8 | 5.2 | — |
 | Royal Violet | `#653F96` | sign_accent_expression | sagittarius/cool | — | 9.5 | 7.4 | — |
 | Russet | `#C35E4F` | sign_accent_expression | aries/neutral | — | 8.0 | 10.2 | — |
-| Saffron Gold | `#C79538` | sign_accent_expression | sagittarius/warm | — | 10.2 | 15.8 | — |
+| Saffron Amber | `#C79538` | sign_accent_expression | sagittarius/warm | — | 10.2 | 15.8 | — |
 | Sage Earth | `#807E57` | sign_accent_expression | virgo/neutral | — | 18.7 | 6.5 | — |
 | Sage Mist | `#678C70` | sign_accent_expression | virgo/cool | — | 19.3 | 21.2 | — |
 | Saturn Slate | `#273E51` | sign_accent_expression | capricorn/cool | — | 15.0 | 4.0 | library_near_match:petrol ΔE=3.5 |
+| Slate Teal | `#4D7E8C` | sign_accent_expression | cancer/neutral | — | 11.1 | 5.0 | — |
 | Soft Aqua | `#387C7E` | sign_accent_expression | pisces/neutral | — | 8.2 | 7.0 | — |
+| Soft Cornflower | `#5485C8` | sign_accent_expression | leo/cool | — | 11.0 | 11.1 | — |
 | Soft Pink | `#A6768A` | sign_accent_expression | libra/neutral | — | 14.1 | 21.2 | — |
-| Soft Silver | `#4D7E8C` | sign_accent_expression | cancer/neutral | — | 11.1 | 5.0 | — |
-| Solar Gold | `#DFA74B` | sign_accent_expression | leo/warm | — | 13.9 | 9.9 | — |
-| Steel Blue | `#085267` | sign_accent_expression | capricorn/cool | 26.3 | 14.3 | 7.7 | label_implied_css_mismatch:steelblue ΔE=26.3 |
+| Solar Amber | `#DFA74B` | sign_accent_expression | leo/warm | — | 13.9 | 9.9 | — |
+| Stone Teal | `#25515B` | sign_accent_expression | capricorn/neutral | — | 6.8 | 5.5 | — |
+| Tawny Amber | `#D59B49` | sign_accent_expression | leo/neutral | — | 10.4 | 15.4 | — |
 | Teal Moss | `#007362` | sign_accent_expression | taurus/cool | — | 11.8 | 15.1 | css_semantic_mismatch:ΔE=11.8 |
 | Teal Sage | `#418273` | sign_accent_expression | virgo/cool | — | 11.1 | 14.9 | css_semantic_mismatch:ΔE=11.1 |
 | Terra Rose | `#D35D70` | sign_accent_expression | aries/neutral | — | 10.2 | 8.6 | — |
@@ -336,6 +325,7 @@ Label shares tokens with the globally nearest CSS name, but no explicit phrase m
 | Warm Aqua | `#2F9097` | sign_accent_expression | gemini/neutral | — | 6.7 | 6.9 | — |
 | Warm Aquamarine | `#2D6D67` | sign_accent_expression | pisces/warm | — | 10.9 | 7.9 | — |
 | Warm Coral | `#E96675` | sign_accent_expression | aries/warm | — | 10.9 | 10.2 | — |
+| Warm Ember | `#AE4D37` | sign_accent_expression | sagittarius/warm | — | 9.6 | 9.2 | — |
 | Warm Fern | `#95824F` | sign_accent_expression | virgo/warm | — | 21.4 | 8.4 | — |
 | Warm Mauve | `#865373` | sign_accent_expression | libra/warm | — | 27.9 | 22.4 | — |
 | Warm Petrol | `#00656E` | sign_accent_expression | gemini/warm | — | 12.8 | 5.1 | — |

@@ -5,21 +5,21 @@ enum PaletteLibrary {
     static let library: [PaletteFamily: PaletteTriadV4] = [
         .lightSpring: PaletteTriadV4(
             neutrals: ["warm white", "buttercream", "pale sand", "light camel"],
-            coreColours: ["honey yellow", "peach", "aqua mint", "lime"],
-            accentColours: ["apricot", "soft gold", "clear aqua", "fresh leaf"],
+            coreColours: ["honey yellow", "light peach", "aqua mint", "apple green"],
+            accentColours: ["apricot", "rich honey", "clear aqua", "fresh leaf"],
             lightAnchor: "warm white",
             deepAnchor: "warm charcoal"
         ),
         .trueSpring: PaletteTriadV4(
             neutrals: ["warm ivory", "camel sand", "light khaki", "warm stone"],
-            coreColours: ["marigold", "coral", "fresh green", "clear turquoise"],
+            coreColours: ["marigold", "coral", "fresh green", "bright aqua"],
             accentColours: ["tomato red", "goldenrod", "bright jade", "clear aqua"],
             lightAnchor: "warm ivory",
             deepAnchor: "graphite"
         ),
         .brightSpring: PaletteTriadV4(
             neutrals: ["clear ivory", "warm navy", "graphite", "clear camel"],
-            coreColours: ["poppy", "bright teal", "vivid yellow", "electric blue"],
+            coreColours: ["poppy", "bright teal", "vivid yellow", "bright blue"],
             accentColours: ["lacquer coral", "acid lime", "bright gold", "clear aqua"],
             lightAnchor: "clear ivory",
             deepAnchor: "clear black"
@@ -41,14 +41,14 @@ enum PaletteLibrary {
         .softSummer: PaletteTriadV4(
             neutrals: ["stone grey", "mushroom", "smoked navy", "muted charcoal"],
             coreColours: ["eucalyptus", "muted rose", "moss sage", "smoky periwinkle"],
-            accentColours: ["brushed pewter", "dusty plum", "sea glass", "faded mauve"],
+            accentColours: ["smoke grey", "dusty plum", "sea glass", "faded mauve"],
             lightAnchor: "smoke white",
             deepAnchor: "muted charcoal"
         ),
         .softAutumn: PaletteTriadV4(
             neutrals: ["camel", "warm taupe", "oatmeal", "olive beige"],
             coreColours: ["terracotta", "olive sage", "muted teal", "soft rust"],
-            accentColours: ["antique gold", "soft copper", "moss green", "muted amber"],
+            accentColours: ["deep honey", "warm sienna", "moss green", "muted amber"],
             lightAnchor: "bone",
             deepAnchor: "bitter chocolate"
         ),
@@ -61,8 +61,8 @@ enum PaletteLibrary {
         ),
         .deepAutumn: PaletteTriadV4(
             neutrals: ["espresso", "warm charcoal", "deep olive", "bark brown"],
-            coreColours: ["oxblood", "forest teal", "forest green", "dark terracotta"],
-            accentColours: ["antique gold", "aged brass", "copper", "deep amber"],
+            coreColours: ["oxblood", "forest teal", "dark pine", "dark terracotta"],
+            accentColours: ["deep honey", "warm umber", "copper", "deep amber"],
             lightAnchor: "warm cream",
             deepAnchor: "ink brown"
         ),
@@ -76,14 +76,14 @@ enum PaletteLibrary {
         .trueWinter: PaletteTriadV4(
             neutrals: ["black", "optic white", "graphite", "icy grey"],
             coreColours: ["cobalt", "crimson", "blue-red", "clear pine"],
-            accentColours: ["silver", "icy blue", "fuchsia red", "hard white"],
+            accentColours: ["silver", "icy blue", "deep magenta", "hard white"],
             lightAnchor: "optic white",
             deepAnchor: "black"
         ),
         .brightWinter: PaletteTriadV4(
             neutrals: ["black", "bright white", "ink navy", "steel grey"],
-            coreColours: ["midnight", "royal blue", "magenta red", "icy teal"],
-            accentColours: ["chrome silver", "electric fuchsia", "clear cyan", "true red"],
+            coreColours: ["midnight", "royal blue", "hot pink", "icy teal"],
+            accentColours: ["frost grey", "electric fuchsia", "clear cyan", "deep red"],
             lightAnchor: "bright white",
             deepAnchor: "black"
         ),
@@ -123,11 +123,11 @@ enum PaletteLibrary {
         "pale sand": "#E8D5B7",
         "light camel": "#C9A96E",
         "honey yellow": "#E8A317",
-        "peach": "#FFCBA4",
+        "light peach": "#FFCBA4",
         "aqua mint": "#7FFFD4",
-        "lime": "#A4C639",
+        "apple green": "#A4C639",
         "apricot": "#FBCEB1",
-        "soft gold": "#D4AF37",
+        "rich honey": "#D4AF37",
         "clear aqua": "#00CED1",
         "fresh leaf": "#71BC78",
 
@@ -139,7 +139,7 @@ enum PaletteLibrary {
         "marigold": "#EAA221",
         "coral": "#FF7F50",
         "fresh green": "#4AE082",
-        "clear turquoise": "#08E8DE",
+        "bright aqua": "#08E8DE",
         "tomato red": "#FF6347",
         "goldenrod": "#DAA520",
         "bright jade": "#00A86B",
@@ -152,7 +152,7 @@ enum PaletteLibrary {
         "poppy": "#E35335",
         "bright teal": "#009B8D",
         "vivid yellow": "#FFE302",
-        "electric blue": "#0080FF",
+        "bright blue": "#0080FF",
         "lacquer coral": "#E2583E",
         "acid lime": "#B0BF1A",
         "bright gold": "#FFD700",
@@ -194,7 +194,7 @@ enum PaletteLibrary {
         "muted rose": "#C29290",
         "moss sage": "#7A8B6A",
         "smoky periwinkle": "#8E82A7",
-        "brushed pewter": "#7C7D7D",
+        "smoke grey": "#7C7D7D",
         "dusty plum": "#7E6585",
         "sea glass": "#89C4B0",
         "faded mauve": "#B09DA7",
@@ -208,8 +208,8 @@ enum PaletteLibrary {
         "olive sage": "#8B8B4B",
         "muted teal": "#5E8E8E",
         "soft rust": "#B7654E",
-        "antique gold": "#C9A84C",
-        "soft copper": "#BD7E55",
+        "deep honey": "#C9A84C",
+        "warm sienna": "#BD7E55",
         "moss green": "#6B7F3E",
         "muted amber": "#CA8B39",
 
@@ -233,9 +233,9 @@ enum PaletteLibrary {
         "bark brown": "#5C4033",
         "oxblood": "#4A1C20",
         "forest teal": "#0B4F4A",
-        "forest green": "#254D32",
+        "dark pine": "#254D32",
         "dark terracotta": "#9E4E3A",
-        "aged brass": "#8E7530",
+        "warm umber": "#8E7530",
         "copper": "#B87333",
         "deep amber": "#A36D2A",
 
@@ -259,7 +259,7 @@ enum PaletteLibrary {
         "blue-red": "#8A2BE2",
         "clear pine": "#2E8B57",
         "icy blue": "#A5F2F3",
-        "fuchsia red": "#C81585",
+        "deep magenta": "#C81585",
         "hard white": "#FAFAFA",
 
         // Bright Winter
@@ -267,11 +267,11 @@ enum PaletteLibrary {
         "steel grey": "#71797E",
         "midnight": "#191970",
         "royal blue": "#4169E1",
-        "magenta red": "#CC0066",
-        "chrome silver": "#DBE0E3",
+        "hot pink": "#CC0066",
+        "frost grey": "#DBE0E3",
         "electric fuchsia": "#FF00FF",
         "clear cyan": "#00FFFF",
-        "true red": "#CC0000",
+        "deep red": "#CC0000",
 
         // Support-only colours (V4.2)
         "slate": "#5B6770",

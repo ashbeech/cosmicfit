@@ -289,7 +289,7 @@
         ],
         "accent": [
           {
-            "name": "peach",
+            "name": "light peach",
             "hex": "#FFDAB9"
           },
           {
@@ -819,7 +819,7 @@
       "metals": [
         "rose gold",
         "polished copper",
-        "soft gold"
+        "rich honey"
       ],
       "stones": [
         "rose quartz",
@@ -1073,7 +1073,7 @@
         ]
       },
       "metals": [
-        "aged brass",
+        "warm umber",
         "hammered gold",
         "oxidised copper"
       ],
@@ -1298,7 +1298,7 @@
       "colours": {
         "primary": [
           {
-            "name": "electric blue",
+            "name": "bright blue",
             "hex": "#7DF9FF"
           },
           {
@@ -1790,7 +1790,7 @@
             "hex": "#98FF98"
           },
           {
-            "name": "peach",
+            "name": "light peach",
             "hex": "#FFDAB9"
           }
         ],
@@ -2450,7 +2450,7 @@
         ]
       },
       "metals": [
-        "aged brass",
+        "warm umber",
         "hammered gold"
       ],
       "stones": [
@@ -2646,7 +2646,7 @@
       "colours": {
         "primary": [
           {
-            "name": "electric blue",
+            "name": "bright blue",
             "hex": "#7DF9FF"
           },
           {
@@ -3722,7 +3722,7 @@
         ]
       },
       "metals": [
-        "aged brass",
+        "warm umber",
         "hammered gold"
       ],
       "stones": [
@@ -3915,7 +3915,7 @@
       "colours": {
         "primary": [
           {
-            "name": "electric blue",
+            "name": "bright blue",
             "hex": "#7DF9FF"
           },
           {
@@ -4703,7 +4703,7 @@
             "hex": "#FF007F"
           },
           {
-            "name": "soft gold",
+            "name": "rich honey",
             "hex": "#DAA520"
           }
         ],
@@ -4719,7 +4719,7 @@
       },
       "metals": [
         "rose gold",
-        "soft copper"
+        "warm sienna"
       ],
       "stones": [
         "pink tourmaline",
@@ -6058,7 +6058,7 @@
         ]
       },
       "metals": [
-        "aged brass",
+        "warm umber",
         "hammered gold"
       ],
       "stones": [
@@ -6229,7 +6229,7 @@
       "colours": {
         "primary": [
           {
-            "name": "electric blue",
+            "name": "bright blue",
             "hex": "#7DF9FF"
           },
           {
@@ -6524,7 +6524,7 @@
         ]
       },
       "metals": [
-        "antique gold",
+        "deep honey",
         "bronze"
       ],
       "stones": [
@@ -7146,7 +7146,7 @@
       },
       "metals": [
         "hammered bronze",
-        "aged brass"
+        "warm umber"
       ],
       "stones": [
         "turquoise",
@@ -7319,7 +7319,7 @@
         ],
         "accent": [
           {
-            "name": "electric blue",
+            "name": "bright blue",
             "hex": "#7DF9FF"
           }
         ],
@@ -8501,7 +8501,7 @@
         ],
         "accent": [
           {
-            "name": "electric blue",
+            "name": "bright blue",
             "hex": "#7DF9FF"
           }
         ],
@@ -9675,7 +9675,7 @@
       "colours": {
         "primary": [
           {
-            "name": "electric blue",
+            "name": "bright blue",
             "hex": "#7DF9FF"
           }
         ],
@@ -10075,7 +10075,7 @@
         ],
         "accent": [
           {
-            "name": "electric blue",
+            "name": "bright blue",
             "hex": "#7DF9FF"
           }
         ],
@@ -14853,7 +14853,7 @@
         "leo"
       ]
     },
-    "soft gold": {
+    "rich honey": {
       "hex": "#DAA520",
       "associations": [
         "mars_libra",
@@ -15282,7 +15282,7 @@
       "depth": "deep",
       "chroma": "bright"
     },
-    "electric blue": {
+    "bright blue": {
       "hex": "#7DF9FF",
       "associations": [
         "aquarius",
@@ -15546,7 +15546,7 @@
         "earth"
       ]
     },
-    "forest green": {
+    "dark pine": {
       "hex": "#228B22",
       "associations": [
         "taurus",
@@ -15755,7 +15755,7 @@
         "earth"
       ]
     },
-    "peach": {
+    "light peach": {
       "hex": "#FFDAB9",
       "associations": [
         "gemini",

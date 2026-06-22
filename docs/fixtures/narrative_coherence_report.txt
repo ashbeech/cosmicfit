@@ -8,49 +8,49 @@ Preset: fire
   Opposition violations:    0
   Cross-surface violations: 0
   Coherence score:          1.0
-  Flip rate:                0.9492
-  Distinct accents:         4
-  Accents: ["drama": 18, "minimal": 3, "romantic": 24, "playful": 15]
-  Relationships: ["contrast": 53, "stretch": 7]
+  Flip rate:                0.661
+  Distinct accents:         3
+  Accents: ["drama": 40, "romantic": 7, "playful": 13]
+  Relationships: ["contrast": 55, "stretch": 5]
 
 Preset: earth
   Plans generated:          60
   Opposition violations:    0
   Cross-surface violations: 0
   Coherence score:          1.0
-  Flip rate:                0.8983
-  Distinct accents:         6
-  Accents: ["playful": 16, "maximalist": 1, "drama": 28, "romantic": 12, "eclectic": 2, "edgy": 1]
-  Relationships: ["contrast": 22, "stretch": 38]
+  Flip rate:                0.678
+  Distinct accents:         2
+  Accents: ["playful": 20, "drama": 40]
+  Relationships: ["contrast": 20, "stretch": 40]
 
 Preset: air
   Plans generated:          60
   Opposition violations:    0
   Cross-surface violations: 0
   Coherence score:          1.0
-  Flip rate:                0.8305
-  Distinct accents:         5
-  Accents: ["minimal": 1, "drama": 17, "playful": 12, "grounded": 1, "romantic": 29]
-  Relationships: ["contrast": 32, "stretch": 28]
+  Flip rate:                0.661
+  Distinct accents:         3
+  Accents: ["playful": 13, "romantic": 8, "drama": 39]
+  Relationships: ["contrast": 28, "stretch": 32]
 
 Preset: water
   Plans generated:          60
   Opposition violations:    0
   Cross-surface violations: 0
   Coherence score:          1.0
-  Flip rate:                1.0
-  Distinct accents:         7
-  Accents: ["polished": 1, "eclectic": 3, "drama": 21, "romantic": 14, "maximalist": 1, "playful": 18, "edgy": 2]
-  Relationships: ["stretch": 32, "reinforce": 28]
+  Flip rate:                0.678
+  Distinct accents:         3
+  Accents: ["playful": 19, "drama": 39, "romantic": 2]
+  Relationships: ["reinforce": 28, "stretch": 32]
 
 Preset: leo
   Plans generated:          60
   Opposition violations:    0
   Cross-surface violations: 0
   Coherence score:          1.0
-  Flip rate:                1.0
-  Distinct accents:         6
-  Accents: ["minimal": 2, "playful": 15, "grounded": 3, "drama": 17, "romantic": 21, "polished": 2]
+  Flip rate:                0.7288
+  Distinct accents:         3
+  Accents: ["playful": 16, "romantic": 8, "drama": 36]
   Relationships: ["contrast": 53, "stretch": 7]
 
 ======================================================================
@@ -58,8 +58,8 @@ AGGREGATE
   Total opposition violations:    0
   Total cross-surface violations: 0
   Mean coherence score:           1.0
-  Mean flip rate:                 0.9356
-  Mean distinct accents:          5.6
+  Mean flip rate:                 0.6814
+  Mean distinct accents:          2.8
 
 EXIT GATE:
   Opposition == 0:    PASS

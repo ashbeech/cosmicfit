@@ -74,7 +74,7 @@
   "accentColours": [
    {
     "hexValue": "#007788",
-    "name": "Cerulean",
+    "name": "Dark Cyan",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Signature",
@@ -134,7 +134,7 @@
    },
    {
     "hexValue": "#0080FF",
-    "name": "electric blue",
+    "name": "bright blue",
     "provenance": {
      "band": "core",
      "family": "Bright Spring",
@@ -179,7 +179,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your colour palette operates on visual weight and stealth, built for a person who dictates exactly what others get to see. Ground your wardrobe in a profoundly dark, saturated base of poppy, bright teal, and vivid yellow. Because your mind works quickly and you easily tire of looking the same every day, a strictly dark uniform will eventually feel suffocating. Cut through that rich density by splicing in Cerulean or a sharp, unexpected hit of Deep Wine. Keep these brighter interruptions tactical, slipping them onto the printed silk lining of a structured jacket or the enamel hardware of a bag. The overall effect is incredibly commanding, giving you an intimidating baseline with just enough flash to satisfy your need for variety.",
+  "narrativeText": "Your colour palette operates on visual weight and stealth, built for a person who dictates exactly what others get to see. Ground your wardrobe in a profoundly dark, saturated base of poppy, bright teal, and vivid yellow. Because your mind works quickly and you easily tire of looking the same every day, a strictly dark uniform will eventually feel suffocating. Cut through that rich density by splicing in Dark Cyan or a sharp, unexpected hit of Deep Wine. Keep these brighter interruptions tactical, slipping them onto the printed silk lining of a structured jacket or the enamel hardware of a bag. The overall effect is incredibly commanding, giving you an intimidating baseline with just enough flash to satisfy your need for variety.",
   "neutrals": [
    {
     "hexValue": "#FFFDF0",

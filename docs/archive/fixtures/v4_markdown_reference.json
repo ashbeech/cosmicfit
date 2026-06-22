@@ -2,7 +2,7 @@
   {
     "accentColours": [
       "apricot",
-      "soft gold",
+      "rich honey",
       "clear aqua",
       "fresh leaf"
     ],
@@ -11,9 +11,9 @@
     "contrast": "Medium",
     "coreColours": [
       "honey yellow",
-      "peach",
+      "light peach",
       "aqua mint",
-      "lime"
+      "apple green"
     ],
     "depth": "Light",
     "family": "Light Spring",
@@ -33,7 +33,7 @@
   {
     "accentColours": [
       "apricot",
-      "soft gold",
+      "rich honey",
       "clear aqua",
       "fresh leaf"
     ],
@@ -42,9 +42,9 @@
     "contrast": "Medium",
     "coreColours": [
       "honey yellow",
-      "peach",
+      "light peach",
       "aqua mint",
-      "lime"
+      "apple green"
     ],
     "depth": "Light",
     "family": "Light Spring",
@@ -64,7 +64,7 @@
   {
     "accentColours": [
       "apricot",
-      "soft gold",
+      "rich honey",
       "clear aqua",
       "fresh leaf"
     ],
@@ -73,9 +73,9 @@
     "contrast": "Medium",
     "coreColours": [
       "honey yellow",
-      "peach",
+      "light peach",
       "aqua mint",
-      "lime"
+      "apple green"
     ],
     "depth": "Light",
     "family": "Light Spring",
@@ -95,7 +95,7 @@
   {
     "accentColours": [
       "apricot",
-      "soft gold",
+      "rich honey",
       "clear aqua",
       "fresh leaf"
     ],
@@ -104,9 +104,9 @@
     "contrast": "Medium",
     "coreColours": [
       "honey yellow",
-      "peach",
+      "light peach",
       "aqua mint",
-      "lime"
+      "apple green"
     ],
     "depth": "Light",
     "family": "Light Spring",
@@ -126,7 +126,7 @@
   {
     "accentColours": [
       "apricot",
-      "soft gold",
+      "rich honey",
       "clear aqua",
       "fresh leaf"
     ],
@@ -135,9 +135,9 @@
     "contrast": "Medium",
     "coreColours": [
       "honey yellow",
-      "peach",
+      "light peach",
       "aqua mint",
-      "lime"
+      "apple green"
     ],
     "depth": "Light",
     "family": "Light Spring",
@@ -157,7 +157,7 @@
   {
     "accentColours": [
       "apricot",
-      "soft gold",
+      "rich honey",
       "clear aqua",
       "fresh leaf"
     ],
@@ -166,9 +166,9 @@
     "contrast": "Medium",
     "coreColours": [
       "honey yellow",
-      "peach",
+      "light peach",
       "aqua mint",
-      "lime"
+      "apple green"
     ],
     "depth": "Light",
     "family": "Light Spring",
@@ -199,7 +199,7 @@
       "marigold",
       "coral",
       "fresh green",
-      "clear turquoise"
+      "bright aqua"
     ],
     "depth": "Medium",
     "family": "True Spring",
@@ -230,7 +230,7 @@
       "marigold",
       "coral",
       "fresh green",
-      "clear turquoise"
+      "bright aqua"
     ],
     "depth": "Medium",
     "family": "True Spring",
@@ -261,7 +261,7 @@
       "marigold",
       "coral",
       "fresh green",
-      "clear turquoise"
+      "bright aqua"
     ],
     "depth": "Medium",
     "family": "True Spring",
@@ -292,7 +292,7 @@
       "marigold",
       "coral",
       "fresh green",
-      "clear turquoise"
+      "bright aqua"
     ],
     "depth": "Medium",
     "family": "True Spring",
@@ -323,7 +323,7 @@
       "marigold",
       "coral",
       "fresh green",
-      "clear turquoise"
+      "bright aqua"
     ],
     "depth": "Medium",
     "family": "True Spring",
@@ -354,7 +354,7 @@
       "marigold",
       "coral",
       "fresh green",
-      "clear turquoise"
+      "bright aqua"
     ],
     "depth": "Medium",
     "family": "True Spring",
@@ -385,7 +385,7 @@
       "marigold",
       "coral",
       "fresh green",
-      "clear turquoise"
+      "bright aqua"
     ],
     "depth": "Medium",
     "family": "True Spring",
@@ -416,7 +416,7 @@
       "marigold",
       "coral",
       "fresh green",
-      "clear turquoise"
+      "bright aqua"
     ],
     "depth": "Medium",
     "family": "True Spring",
@@ -447,7 +447,7 @@
       "poppy",
       "bright teal",
       "vivid yellow",
-      "electric blue"
+      "bright blue"
     ],
     "depth": "Medium",
     "family": "Bright Spring",
@@ -478,7 +478,7 @@
       "poppy",
       "bright teal",
       "vivid yellow",
-      "electric blue"
+      "bright blue"
     ],
     "depth": "Medium",
     "family": "Bright Spring",
@@ -509,7 +509,7 @@
       "poppy",
       "bright teal",
       "vivid yellow",
-      "electric blue"
+      "bright blue"
     ],
     "depth": "Medium",
     "family": "Bright Spring",
@@ -540,7 +540,7 @@
       "poppy",
       "bright teal",
       "vivid yellow",
-      "electric blue"
+      "bright blue"
     ],
     "depth": "Medium",
     "family": "Bright Spring",
@@ -571,7 +571,7 @@
       "poppy",
       "bright teal",
       "vivid yellow",
-      "electric blue"
+      "bright blue"
     ],
     "depth": "Medium",
     "family": "Bright Spring",
@@ -602,7 +602,7 @@
       "poppy",
       "bright teal",
       "vivid yellow",
-      "electric blue"
+      "bright blue"
     ],
     "depth": "Medium",
     "family": "Bright Spring",
@@ -633,7 +633,7 @@
       "poppy",
       "bright teal",
       "vivid yellow",
-      "electric blue"
+      "bright blue"
     ],
     "depth": "Medium",
     "family": "Bright Spring",
@@ -664,7 +664,7 @@
       "poppy",
       "bright teal",
       "vivid yellow",
-      "electric blue"
+      "bright blue"
     ],
     "depth": "Medium",
     "family": "Bright Spring",
@@ -695,7 +695,7 @@
       "poppy",
       "bright teal",
       "vivid yellow",
-      "electric blue"
+      "bright blue"
     ],
     "depth": "Medium",
     "family": "Bright Spring",
@@ -726,7 +726,7 @@
       "poppy",
       "bright teal",
       "vivid yellow",
-      "electric blue"
+      "bright blue"
     ],
     "depth": "Medium",
     "family": "Bright Spring",
@@ -1179,7 +1179,7 @@
   },
   {
     "accentColours": [
-      "brushed pewter",
+      "smoke grey",
       "dusty plum",
       "sea glass",
       "faded mauve"
@@ -1210,7 +1210,7 @@
   },
   {
     "accentColours": [
-      "brushed pewter",
+      "smoke grey",
       "dusty plum",
       "sea glass",
       "faded mauve"
@@ -1241,7 +1241,7 @@
   },
   {
     "accentColours": [
-      "brushed pewter",
+      "smoke grey",
       "dusty plum",
       "sea glass",
       "faded mauve"
@@ -1272,7 +1272,7 @@
   },
   {
     "accentColours": [
-      "brushed pewter",
+      "smoke grey",
       "dusty plum",
       "sea glass",
       "faded mauve"
@@ -1303,7 +1303,7 @@
   },
   {
     "accentColours": [
-      "brushed pewter",
+      "smoke grey",
       "dusty plum",
       "sea glass",
       "faded mauve"
@@ -1334,7 +1334,7 @@
   },
   {
     "accentColours": [
-      "brushed pewter",
+      "smoke grey",
       "dusty plum",
       "sea glass",
       "faded mauve"
@@ -1365,7 +1365,7 @@
   },
   {
     "accentColours": [
-      "brushed pewter",
+      "smoke grey",
       "dusty plum",
       "sea glass",
       "faded mauve"
@@ -1396,7 +1396,7 @@
   },
   {
     "accentColours": [
-      "brushed pewter",
+      "smoke grey",
       "dusty plum",
       "sea glass",
       "faded mauve"
@@ -1427,7 +1427,7 @@
   },
   {
     "accentColours": [
-      "brushed pewter",
+      "smoke grey",
       "dusty plum",
       "sea glass",
       "faded mauve"
@@ -1458,7 +1458,7 @@
   },
   {
     "accentColours": [
-      "brushed pewter",
+      "smoke grey",
       "dusty plum",
       "sea glass",
       "faded mauve"
@@ -1489,8 +1489,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -1500,7 +1500,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -1520,8 +1520,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "soft copper",
+      "deep honey",
+      "warm sienna",
       "moss green",
       "muted amber"
     ],
@@ -1551,8 +1551,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "soft copper",
+      "deep honey",
+      "warm sienna",
       "moss green",
       "muted amber"
     ],
@@ -1582,8 +1582,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -1593,7 +1593,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -1613,8 +1613,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "soft copper",
+      "deep honey",
+      "warm sienna",
       "moss green",
       "muted amber"
     ],
@@ -1644,8 +1644,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "soft copper",
+      "deep honey",
+      "warm sienna",
       "moss green",
       "muted amber"
     ],
@@ -1675,8 +1675,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "soft copper",
+      "deep honey",
+      "warm sienna",
       "moss green",
       "muted amber"
     ],
@@ -1706,8 +1706,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "soft copper",
+      "deep honey",
+      "warm sienna",
       "moss green",
       "muted amber"
     ],
@@ -1737,8 +1737,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "soft copper",
+      "deep honey",
+      "warm sienna",
       "moss green",
       "muted amber"
     ],
@@ -1768,8 +1768,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "soft copper",
+      "deep honey",
+      "warm sienna",
       "moss green",
       "muted amber"
     ],
@@ -1799,8 +1799,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "soft copper",
+      "deep honey",
+      "warm sienna",
       "moss green",
       "muted amber"
     ],
@@ -1830,8 +1830,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -1841,7 +1841,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -1861,8 +1861,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -1872,7 +1872,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -1923,8 +1923,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -1934,7 +1934,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -1954,8 +1954,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -1965,7 +1965,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -1985,8 +1985,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -1996,7 +1996,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -2078,8 +2078,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -2089,7 +2089,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -2171,8 +2171,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -2182,7 +2182,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -2202,8 +2202,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -2213,7 +2213,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -2233,8 +2233,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -2244,7 +2244,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -2264,8 +2264,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -2275,7 +2275,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -2295,8 +2295,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -2306,7 +2306,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -2326,8 +2326,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -2337,7 +2337,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -2357,8 +2357,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -2368,7 +2368,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -2388,8 +2388,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -2399,7 +2399,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -2419,8 +2419,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -2430,7 +2430,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -2450,8 +2450,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -2461,7 +2461,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -2481,8 +2481,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -2492,7 +2492,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -2512,8 +2512,8 @@
   },
   {
     "accentColours": [
-      "antique gold",
-      "aged brass",
+      "deep honey",
+      "warm umber",
       "copper",
       "deep amber"
     ],
@@ -2523,7 +2523,7 @@
     "coreColours": [
       "oxblood",
       "forest teal",
-      "forest green",
+      "dark pine",
       "dark terracotta"
     ],
     "depth": "Deep",
@@ -2793,7 +2793,7 @@
     "accentColours": [
       "silver",
       "icy blue",
-      "fuchsia red",
+      "deep magenta",
       "hard white"
     ],
     "birthData": "1998-02-17 14:07",
@@ -2824,7 +2824,7 @@
     "accentColours": [
       "silver",
       "icy blue",
-      "fuchsia red",
+      "deep magenta",
       "hard white"
     ],
     "birthData": "1992-12-30 09:00",
@@ -2855,7 +2855,7 @@
     "accentColours": [
       "silver",
       "icy blue",
-      "fuchsia red",
+      "deep magenta",
       "hard white"
     ],
     "birthData": "1992-10-16 06:18",
@@ -2886,7 +2886,7 @@
     "accentColours": [
       "silver",
       "icy blue",
-      "fuchsia red",
+      "deep magenta",
       "hard white"
     ],
     "birthData": "1989-02-27 15:29",
@@ -2915,10 +2915,10 @@
   },
   {
     "accentColours": [
-      "chrome silver",
+      "frost grey",
       "electric fuchsia",
       "clear cyan",
-      "true red"
+      "deep red"
     ],
     "birthData": "1998-02-06 06:41",
     "cluster": "Deep Cool High-Contrast",
@@ -2926,7 +2926,7 @@
     "coreColours": [
       "midnight",
       "royal blue",
-      "magenta red",
+      "hot pink",
       "icy teal"
     ],
     "depth": "Deep",
@@ -2946,10 +2946,10 @@
   },
   {
     "accentColours": [
-      "chrome silver",
+      "frost grey",
       "electric fuchsia",
       "clear cyan",
-      "true red"
+      "deep red"
     ],
     "birthData": "1990-03-26 19:12",
     "cluster": "Deep Cool High-Contrast",
@@ -2957,7 +2957,7 @@
     "coreColours": [
       "midnight",
       "royal blue",
-      "magenta red",
+      "hot pink",
       "icy teal"
     ],
     "depth": "Deep",
@@ -2977,10 +2977,10 @@
   },
   {
     "accentColours": [
-      "chrome silver",
+      "frost grey",
       "electric fuchsia",
       "clear cyan",
-      "true red"
+      "deep red"
     ],
     "birthData": "1993-08-22 10:00",
     "cluster": "Deep Cool High-Contrast",
@@ -2988,7 +2988,7 @@
     "coreColours": [
       "midnight",
       "royal blue",
-      "magenta red",
+      "hot pink",
       "icy teal"
     ],
     "depth": "Deep",
@@ -3008,10 +3008,10 @@
   },
   {
     "accentColours": [
-      "chrome silver",
+      "frost grey",
       "electric fuchsia",
       "clear cyan",
-      "true red"
+      "deep red"
     ],
     "birthData": "1987-11-17 19:29",
     "cluster": "Deep Cool High-Contrast",
@@ -3019,7 +3019,7 @@
     "coreColours": [
       "midnight",
       "royal blue",
-      "magenta red",
+      "hot pink",
       "icy teal"
     ],
     "depth": "Deep",
@@ -3039,10 +3039,10 @@
   },
   {
     "accentColours": [
-      "chrome silver",
+      "frost grey",
       "electric fuchsia",
       "clear cyan",
-      "true red"
+      "deep red"
     ],
     "birthData": "1987-05-19 23:47",
     "cluster": "Deep Cool High-Contrast",
@@ -3050,7 +3050,7 @@
     "coreColours": [
       "midnight",
       "royal blue",
-      "magenta red",
+      "hot pink",
       "icy teal"
     ],
     "depth": "Deep",
@@ -3070,10 +3070,10 @@
   },
   {
     "accentColours": [
-      "chrome silver",
+      "frost grey",
       "electric fuchsia",
       "clear cyan",
-      "true red"
+      "deep red"
     ],
     "birthData": "1989-09-21 15:34",
     "cluster": "Deep Cool High-Contrast",
@@ -3081,7 +3081,7 @@
     "coreColours": [
       "midnight",
       "royal blue",
-      "magenta red",
+      "hot pink",
       "icy teal"
     ],
     "depth": "Deep",

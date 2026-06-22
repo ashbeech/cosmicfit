@@ -107,7 +107,7 @@
    },
    {
     "hexValue": "#FFCBA4",
-    "name": "peach",
+    "name": "light peach",
     "provenance": {
      "band": "core",
      "family": "Light Spring",
@@ -129,7 +129,7 @@
    },
    {
     "hexValue": "#A4C639",
-    "name": "lime",
+    "name": "apple green",
     "provenance": {
      "band": "core",
      "family": "Light Spring",
@@ -164,7 +164,7 @@
   },
   "luminarySignature": {
    "hexValue": "#DFA74B",
-   "name": "antique gold",
+   "name": "deep honey",
    "provenance": {
     "band": "luminarySignature",
     "family": "Light Spring",
@@ -174,7 +174,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "You use colour to start a conversation before you even open your mouth. Your wardrobe is anchored by a high-definition foundation of honey yellow, peach, and aqua mint. These shades look their best on crisp cottons and lightweight linens that allow you to move and gesture freely. When you want to turn up the volume, mix in Mercury Teal or Oxblood through a printed silk scarf or an unexpected piece of footwear. The overall effect is warm and spontaneous, giving you a palette that feels as fast-paced and sociable as you are.",
+  "narrativeText": "You use colour to start a conversation before you even open your mouth. Your wardrobe is anchored by a high-definition foundation of honey yellow, light peach, and aqua mint. These shades look their best on crisp cottons and lightweight linens that allow you to move and gesture freely. When you want to turn up the volume, mix in Mercury Teal or Oxblood through a printed silk scarf or an unexpected piece of footwear. The overall effect is warm and spontaneous, giving you a palette that feels as fast-paced and sociable as you are.",
   "neutrals": [
    {
     "hexValue": "#FAF5EF",

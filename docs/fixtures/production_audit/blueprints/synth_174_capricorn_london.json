@@ -78,7 +78,7 @@
    },
    {
     "hexValue": "#085267",
-    "name": "Steel Blue",
+    "name": "Deep Petrol",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Contrast",
@@ -115,7 +115,7 @@
    },
    {
     "hexValue": "#CC0066",
-    "name": "magenta red",
+    "name": "hot pink",
     "provenance": {
      "band": "core",
      "family": "Bright Winter",
@@ -171,7 +171,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your wardrobe relies on cool, slightly synthetic tones that feel deliberately removed from the natural world. Anchor your daily rotation in uncompromising shades of midnight, royal blue, and magenta red. These cold neutrals take on a brilliant, almost clinical quality when applied to the right fabrics, they need to bounce off a flat nylon or a sleek metallic knit rather than sinking into a traditional organic weave. When you want a hit of colour, use Deep Plum as a jarring shock of pigment rather than a soft gradient. The overall effect is sharp, cerebral, and refuses to rely on nostalgia.",
+  "narrativeText": "Your wardrobe relies on cool, slightly synthetic tones that feel deliberately removed from the natural world. Anchor your daily rotation in uncompromising shades of midnight, royal blue, and hot pink. These cold neutrals take on a brilliant, almost clinical quality when applied to the right fabrics, they need to bounce off a flat nylon or a sleek metallic knit rather than sinking into a traditional organic weave. When you want a hit of colour, use Deep Plum as a jarring shock of pigment rather than a soft gradient. The overall effect is sharp, cerebral, and refuses to rely on nostalgia.",
   "neutrals": [
    {
     "hexValue": "#0A0A0A",

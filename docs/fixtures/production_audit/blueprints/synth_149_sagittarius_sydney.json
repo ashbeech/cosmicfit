@@ -77,7 +77,7 @@
   "accentColours": [
    {
     "hexValue": "#4D7E8C",
-    "name": "Soft Silver",
+    "name": "Slate Teal",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Signature",
@@ -137,7 +137,7 @@
    },
    {
     "hexValue": "#0080FF",
-    "name": "electric blue",
+    "name": "bright blue",
     "provenance": {
      "band": "core",
      "family": "Bright Spring",
@@ -242,7 +242,7 @@
   },
   "rulerSignature": {
    "hexValue": "#D3AB53",
-   "name": "antique gold",
+   "name": "deep honey",
    "provenance": {
     "band": "rulerSignature",
     "family": "Bright Spring",

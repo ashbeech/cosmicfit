@@ -1,8 +1,8 @@
 {
-  "total": 5305,
-  "completed": 5305,
+  "total": 9216,
+  "completed": 9216,
   "current_item": "complete",
   "percent": 100.0,
-  "issues_found": 0,
-  "timestamp": "2026-06-17T15:41:48.547001+00:00"
+  "issues_found": 1739,
+  "timestamp": "2026-06-22T15:03:46.190775+00:00"
 }

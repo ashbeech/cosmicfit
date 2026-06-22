@@ -314,7 +314,7 @@ final class VisibilityAccentResolver_Tests: XCTestCase {
 
     func testVibrancyFilterExcludesLowChroma() {
         // Aquarius MC → Saturn → Capricorn
-        // Capricorn/cool candidates: Saturn Slate (C:15), Cool Graphite (C:18), Steel Blue (C:22)
+        // Capricorn/cool candidates: Saturn Slate (C:15), Cool Graphite (C:18), Deep Petrol (C:22)
         // All below vibrancyChromaMin of 30, so fallback to chroma-descending sort
         let input = makeInput(
             asc: .cancer, venus: .virgo, sun: .virgo,

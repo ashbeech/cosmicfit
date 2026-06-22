@@ -82,7 +82,7 @@
    },
    {
     "hexValue": "#25515B",
-    "name": "Pewter",
+    "name": "Stone Teal",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Contrast",
@@ -130,7 +130,7 @@
    },
    {
     "hexValue": "#0080FF",
-    "name": "electric blue",
+    "name": "bright blue",
     "provenance": {
      "band": "core",
      "family": "Bright Spring",

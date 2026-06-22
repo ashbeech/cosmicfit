@@ -225,11 +225,11 @@ ALLOWED_PLACEHOLDERS = {
 
 SECTION_ALLOWED_PLACEHOLDERS: dict[str, set[str]] = {
     "palette_narrative": {f"core_colour_{i}" for i in range(1, 5)} | {f"accent_colour_{i}" for i in range(1, 3)},
-    "pattern_narrative": {f"recommended_pattern_{i}" for i in range(1, 5)} | {f"avoid_pattern_{i}" for i in range(1, 3)},
-    "pattern_tip": {f"recommended_pattern_{i}" for i in range(1, 5)} | {f"avoid_pattern_{i}" for i in range(1, 3)},
-    "hardware_metals": {f"metal_{i}" for i in range(1, 4)},
-    "hardware_stones": {f"stone_{i}" for i in range(1, 4)},
-    "hardware_tip": {f"metal_{i}" for i in range(1, 4)} | {f"stone_{i}" for i in range(1, 4)},
+    "pattern_narrative": {f"recommended_pattern_{i}" for i in range(1, 5)} | {f"avoid_pattern_{i}" for i in range(1, 3)} | {f"core_colour_{i}" for i in range(1, 5)} | {f"accent_colour_{i}" for i in range(1, 3)},
+    "pattern_tip": {f"recommended_pattern_{i}" for i in range(1, 5)} | {f"avoid_pattern_{i}" for i in range(1, 3)} | {f"core_colour_{i}" for i in range(1, 5)} | {f"accent_colour_{i}" for i in range(1, 3)},
+    "hardware_metals": {f"metal_{i}" for i in range(1, 4)} | {f"core_colour_{i}" for i in range(1, 5)} | {f"accent_colour_{i}" for i in range(1, 3)},
+    "hardware_stones": {f"stone_{i}" for i in range(1, 4)} | {f"core_colour_{i}" for i in range(1, 5)} | {f"accent_colour_{i}" for i in range(1, 3)},
+    "hardware_tip": {f"metal_{i}" for i in range(1, 4)} | {f"stone_{i}" for i in range(1, 4)} | {f"core_colour_{i}" for i in range(1, 5)} | {f"accent_colour_{i}" for i in range(1, 3)},
     "textures_good": {f"texture_good_{i}" for i in range(1, 5)},
     "textures_bad": {f"texture_bad_{i}" for i in range(1, 4)},
     "textures_sweet_spot": {f"sweet_spot_keyword_{i}" for i in range(1, 3)} | {f"texture_good_{i}" for i in range(1, 5)},
@@ -369,26 +369,32 @@ SECTION_PROMPTS = {
     "hardware_metals": (
         "Write a paragraph about the metals and hardware finishes that suit this person. "
         "Use these placeholders for metals: {metal_1}, {metal_2}, {metal_3}. "
+        "For garment/palette colours use {core_colour_1}, {core_colour_2}, {accent_colour_1}, etc. only; do not invent literal colour names. "
         "Do NOT invent specific metal names outside these placeholders. Use at least two."
     ),
     "hardware_stones": (
         "Write a paragraph about the stones and gems that suit this person. "
         "Use these placeholders for stones: {stone_1}, {stone_2}, {stone_3}. "
+        "For garment/palette colours use {core_colour_1}, {core_colour_2}, {accent_colour_1}, etc. only; do not invent literal colour names. "
         "Do NOT invent specific stone or gem names outside these placeholders. Use at least two."
     ),
     "hardware_tip": (
         "Write a short practical tip about how this person should approach accessories and hardware. "
-        "You may reference {metal_1} or {stone_1} if it strengthens the tip. Do NOT invent specific metal or stone names outside placeholders."
+        "You may reference {metal_1} or {stone_1} if it strengthens the tip. "
+        "For garment/palette colours use {core_colour_1}, {core_colour_2}, {accent_colour_1}, etc. only; do not invent literal colour names. "
+        "Do NOT invent specific metal or stone names outside placeholders."
     ),
     "pattern_narrative": (
         "Write a paragraph about this person's relationship with patterns — what works, what does not, and why. "
         "Use these placeholders for patterns: {recommended_pattern_1}, {recommended_pattern_2}, {recommended_pattern_3}, {recommended_pattern_4}, "
         "{avoid_pattern_1}, {avoid_pattern_2}. "
+        "For garment/palette colours use {core_colour_1}, {core_colour_2}, {accent_colour_1}, etc. only; do not invent literal colour names. "
         "Do NOT invent specific pattern names outside these placeholders. Use at least two recommended and one avoid."
     ),
     "pattern_tip": (
         "Write a short practical tip about how this person should use patterns. "
         "You may reference {recommended_pattern_1} or {recommended_pattern_2} if it strengthens the tip. "
+        "For garment/palette colours use {core_colour_1}, {core_colour_2}, {accent_colour_1}, etc. only; do not invent literal colour names. "
         "Do NOT invent specific pattern names outside placeholders."
     ),
 }

@@ -57,7 +57,7 @@
    "bloodstone",
    "tiger eye"
   ],
-  "stonesText": "Heavy, sentimental jewellery feels entirely wrong for your natural pace. The stones you wear need immediate, unbothered impact, looking like they were grabbed off the bedside table right before walking out the door. A sharp, brilliant carnelian set in a chunky, minimal bezel delivers that necessary flash without demanding to be babied. For daily wear, red jasper brings a vivid heat that suits a fast-moving life. Skip the intricate pav\u00e9 clusters entirely and stick to solitary, high-wattage gems that make a fast, striking impression while you are talking with your hands.",
+  "stonesText": "Heavy, sentimental jewellery feels entirely wrong for your natural pace. The stones you wear need immediate, unbothered impact, looking like they were grabbed off the bedside table right before walking out the door. A sharp, brilliant carnelian set in a chunky, minimal bezel delivers that necessary flash without demanding to be babied. For daily wear, red jasper brings a vivid heat that suits a fast-moving life. Skip the intricate pavé clusters entirely and stick to solitary, high-wattage gems that make a fast, striking impression while you are talking with your hands.",
   "tipText": "Jewellery for you is about fast, striking impact rather than standing in front of a mirror untangling delicate chains. You need hardware that keeps up with your momentum. A solid rose gold tones cuff or a thick collar slips on in seconds and immediately finishes an outfit. Skip anything too precious or fussy that requires constant rearranging throughout the day. A clean flash of carnelian set into a hard-edged ring gives you that necessary bolt of visual interest without slowing you down."
  },
  "occasions": {
@@ -107,7 +107,7 @@
    },
    {
     "hexValue": "#FFCBA4",
-    "name": "peach",
+    "name": "light peach",
     "provenance": {
      "band": "core",
      "family": "Light Spring",
@@ -129,7 +129,7 @@
    },
    {
     "hexValue": "#A4C639",
-    "name": "lime",
+    "name": "apple green",
     "provenance": {
      "band": "core",
      "family": "Light Spring",
@@ -174,7 +174,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "You treat colour as an instigator, reaching for tones that speak before you do. Your daily rotation revolves around honey yellow and peach, shades that hit hard and leave an unapologetic first impression. Because you tire of looking identical two days in a row, aqua mint provides a necessary, crisp baseline to ground those louder flashes. Drop Warm Mauve or Mercury Teal into the mix through a bright poplin collar or a vivid technical trainer when your aesthetic restlessness kicks in mid-week. The goal is a palette loud enough to match your pace, without trapping you in a single visual story.",
+  "narrativeText": "You treat colour as an instigator, reaching for tones that speak before you do. Your daily rotation revolves around honey yellow and light peach, shades that hit hard and leave an unapologetic first impression. Because you tire of looking identical two days in a row, aqua mint provides a necessary, crisp baseline to ground those louder flashes. Drop Warm Mauve or Mercury Teal into the mix through a bright poplin collar or a vivid technical trainer when your aesthetic restlessness kicks in mid-week. The goal is a palette loud enough to match your pace, without trapping you in a single visual story.",
   "neutrals": [
    {
     "hexValue": "#FAF5EF",

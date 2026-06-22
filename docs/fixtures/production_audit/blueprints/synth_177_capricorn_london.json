@@ -67,7 +67,7 @@
   "accentColours": [
    {
     "hexValue": "#007788",
-    "name": "Cerulean",
+    "name": "Dark Cyan",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Signature",
@@ -115,7 +115,7 @@
    },
    {
     "hexValue": "#0080FF",
-    "name": "electric blue",
+    "name": "bright blue",
     "provenance": {
      "band": "core",
      "family": "Bright Spring",
@@ -160,7 +160,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your wardrobe relies on cool, slightly synthetic tones that feel deliberately removed from the natural world. Anchor your daily rotation in uncompromising shades of poppy, bright teal, and vivid yellow. These cold neutrals take on a brilliant, almost clinical quality when applied to the right fabrics, they need to bounce off a flat nylon or a sleek metallic knit rather than sinking into a traditional organic weave. When you want a hit of colour, use Cerulean as a jarring shock of pigment rather than a soft gradient. The overall effect is sharp, cerebral, and refuses to rely on nostalgia.",
+  "narrativeText": "Your wardrobe relies on cool, slightly synthetic tones that feel deliberately removed from the natural world. Anchor your daily rotation in uncompromising shades of poppy, bright teal, and vivid yellow. These cold neutrals take on a brilliant, almost clinical quality when applied to the right fabrics, they need to bounce off a flat nylon or a sleek metallic knit rather than sinking into a traditional organic weave. When you want a hit of colour, use Dark Cyan as a jarring shock of pigment rather than a soft gradient. The overall effect is sharp, cerebral, and refuses to rely on nostalgia.",
   "neutrals": [
    {
     "hexValue": "#FFFDF0",

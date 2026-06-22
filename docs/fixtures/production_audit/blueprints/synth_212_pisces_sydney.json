@@ -103,7 +103,7 @@
    },
    {
     "hexValue": "#254D32",
-    "name": "forest green",
+    "name": "dark pine",
     "provenance": {
      "band": "core",
      "family": "Deep Autumn",
@@ -159,7 +159,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "There is a sharp, almost clinical intelligence to how you wear colour. You bypass soft pastels and gentle gradients in favour of oxblood and forest teal, establishing a clean, slightly severe foundation. Introducing forest green adds a sudden drop of visual weight, giving those lighter, oxygenated tones an intimidating, secretive edge. When you want to interrupt the rhythm, deploy Warm Prussian through unexpected hardware, a metallic knit detail, or an opaque tight. The resulting mix reads less like a standard wardrobe and more like a highly engineered uniform.",
+  "narrativeText": "There is a sharp, almost clinical intelligence to how you wear colour. You bypass soft pastels and gentle gradients in favour of oxblood and forest teal, establishing a clean, slightly severe foundation. Introducing dark pine adds a sudden drop of visual weight, giving those lighter, oxygenated tones an intimidating, secretive edge. When you want to interrupt the rhythm, deploy Warm Prussian through unexpected hardware, a metallic knit detail, or an opaque tight. The resulting mix reads less like a standard wardrobe and more like a highly engineered uniform.",
   "neutrals": [
    {
     "hexValue": "#3C2415",
@@ -219,7 +219,7 @@
   },
   "rulerSignature": {
    "hexValue": "#807227",
-   "name": "aged brass",
+   "name": "warm umber",
    "provenance": {
     "band": "rulerSignature",
     "family": "Deep Autumn",

@@ -14,9 +14,9 @@
       ],
       "liveCoreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "liveFamily" : "Light Spring",
       "liveNeutrals" : [
@@ -85,7 +85,7 @@
         },
         {
           "hex" : "#FFCBA4",
-          "name" : "peach",
+          "name" : "light peach",
           "source" : "core[1]"
         },
         {
@@ -95,7 +95,7 @@
         },
         {
           "hex" : "#A4C639",
-          "name" : "lime",
+          "name" : "apple green",
           "source" : "core[3]"
         },
         {
@@ -145,21 +145,21 @@
         },
         {
           "hex" : "#D3AB53",
-          "name" : "antique gold",
+          "name" : "deep honey",
           "source" : "rulerSignature"
         }
       ],
       "referenceAccentColours" : [
         "apricot",
-        "soft gold",
+        "rich honey",
         "clear aqua",
         "fresh leaf"
       ],
       "referenceCoreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "referenceFamily" : "Light Spring",
       "referenceNeutrals" : [
@@ -186,9 +186,9 @@
       ],
       "liveCoreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "liveFamily" : "Light Spring",
       "liveNeutrals" : [
@@ -257,7 +257,7 @@
         },
         {
           "hex" : "#FFCBA4",
-          "name" : "peach",
+          "name" : "light peach",
           "source" : "core[1]"
         },
         {
@@ -267,7 +267,7 @@
         },
         {
           "hex" : "#A4C639",
-          "name" : "lime",
+          "name" : "apple green",
           "source" : "core[3]"
         },
         {
@@ -317,21 +317,21 @@
         },
         {
           "hex" : "#D3AB53",
-          "name" : "antique gold",
+          "name" : "deep honey",
           "source" : "rulerSignature"
         }
       ],
       "referenceAccentColours" : [
         "apricot",
-        "soft gold",
+        "rich honey",
         "clear aqua",
         "fresh leaf"
       ],
       "referenceCoreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "referenceFamily" : "Light Spring",
       "referenceNeutrals" : [
@@ -358,9 +358,9 @@
       ],
       "liveCoreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "liveFamily" : "Light Spring",
       "liveNeutrals" : [
@@ -429,7 +429,7 @@
         },
         {
           "hex" : "#FFCBA4",
-          "name" : "peach",
+          "name" : "light peach",
           "source" : "core[1]"
         },
         {
@@ -439,7 +439,7 @@
         },
         {
           "hex" : "#A4C639",
-          "name" : "lime",
+          "name" : "apple green",
           "source" : "core[3]"
         },
         {
@@ -484,7 +484,7 @@
         },
         {
           "hex" : "#D3AB53",
-          "name" : "antique gold",
+          "name" : "deep honey",
           "source" : "luminarySignature"
         },
         {
@@ -495,15 +495,15 @@
       ],
       "referenceAccentColours" : [
         "apricot",
-        "soft gold",
+        "rich honey",
         "clear aqua",
         "fresh leaf"
       ],
       "referenceCoreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "referenceFamily" : "Light Spring",
       "referenceNeutrals" : [
@@ -530,9 +530,9 @@
       ],
       "liveCoreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "liveFamily" : "Light Spring",
       "liveNeutrals" : [
@@ -601,7 +601,7 @@
         },
         {
           "hex" : "#FFCBA4",
-          "name" : "peach",
+          "name" : "light peach",
           "source" : "core[1]"
         },
         {
@@ -611,7 +611,7 @@
         },
         {
           "hex" : "#A4C639",
-          "name" : "lime",
+          "name" : "apple green",
           "source" : "core[3]"
         },
         {
@@ -667,15 +667,15 @@
       ],
       "referenceAccentColours" : [
         "apricot",
-        "soft gold",
+        "rich honey",
         "clear aqua",
         "fresh leaf"
       ],
       "referenceCoreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "referenceFamily" : "Light Spring",
       "referenceNeutrals" : [
@@ -702,9 +702,9 @@
       ],
       "liveCoreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "liveFamily" : "Light Spring",
       "liveNeutrals" : [
@@ -773,7 +773,7 @@
         },
         {
           "hex" : "#FFCBA4",
-          "name" : "peach",
+          "name" : "light peach",
           "source" : "core[1]"
         },
         {
@@ -783,7 +783,7 @@
         },
         {
           "hex" : "#A4C639",
-          "name" : "lime",
+          "name" : "apple green",
           "source" : "core[3]"
         },
         {
@@ -839,15 +839,15 @@
       ],
       "referenceAccentColours" : [
         "apricot",
-        "soft gold",
+        "rich honey",
         "clear aqua",
         "fresh leaf"
       ],
       "referenceCoreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "referenceFamily" : "Light Spring",
       "referenceNeutrals" : [
@@ -874,9 +874,9 @@
       ],
       "liveCoreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "liveFamily" : "Light Spring",
       "liveNeutrals" : [
@@ -945,7 +945,7 @@
         },
         {
           "hex" : "#FFCBA4",
-          "name" : "peach",
+          "name" : "light peach",
           "source" : "core[1]"
         },
         {
@@ -955,7 +955,7 @@
         },
         {
           "hex" : "#A4C639",
-          "name" : "lime",
+          "name" : "apple green",
           "source" : "core[3]"
         },
         {
@@ -1011,15 +1011,15 @@
       ],
       "referenceAccentColours" : [
         "apricot",
-        "soft gold",
+        "rich honey",
         "clear aqua",
         "fresh leaf"
       ],
       "referenceCoreColours" : [
         "honey yellow",
-        "peach",
+        "light peach",
         "aqua mint",
-        "lime"
+        "apple green"
       ],
       "referenceFamily" : "Light Spring",
       "referenceNeutrals" : [
@@ -1048,7 +1048,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "liveFamily" : "True Spring",
       "liveNeutrals" : [
@@ -1127,7 +1127,7 @@
         },
         {
           "hex" : "#08E8DE",
-          "name" : "clear turquoise",
+          "name" : "bright aqua",
           "source" : "core[3]"
         },
         {
@@ -1177,7 +1177,7 @@
         },
         {
           "hex" : "#D3AB53",
-          "name" : "antique gold",
+          "name" : "deep honey",
           "source" : "rulerSignature"
         }
       ],
@@ -1191,7 +1191,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "referenceFamily" : "True Spring",
       "referenceNeutrals" : [
@@ -1220,7 +1220,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "liveFamily" : "True Spring",
       "liveNeutrals" : [
@@ -1299,7 +1299,7 @@
         },
         {
           "hex" : "#08E8DE",
-          "name" : "clear turquoise",
+          "name" : "bright aqua",
           "source" : "core[3]"
         },
         {
@@ -1363,7 +1363,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "referenceFamily" : "True Spring",
       "referenceNeutrals" : [
@@ -1392,7 +1392,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "liveFamily" : "True Spring",
       "liveNeutrals" : [
@@ -1471,7 +1471,7 @@
         },
         {
           "hex" : "#08E8DE",
-          "name" : "clear turquoise",
+          "name" : "bright aqua",
           "source" : "core[3]"
         },
         {
@@ -1516,12 +1516,12 @@
         },
         {
           "hex" : "#D3AB53",
-          "name" : "antique gold",
+          "name" : "deep honey",
           "source" : "luminarySignature"
         },
         {
           "hex" : "#D3AB53",
-          "name" : "antique gold",
+          "name" : "deep honey",
           "source" : "rulerSignature"
         }
       ],
@@ -1535,7 +1535,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "referenceFamily" : "True Spring",
       "referenceNeutrals" : [
@@ -1564,7 +1564,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "liveFamily" : "True Spring",
       "liveNeutrals" : [
@@ -1643,7 +1643,7 @@
         },
         {
           "hex" : "#08E8DE",
-          "name" : "clear turquoise",
+          "name" : "bright aqua",
           "source" : "core[3]"
         },
         {
@@ -1688,12 +1688,12 @@
         },
         {
           "hex" : "#DFA74B",
-          "name" : "antique gold",
+          "name" : "deep honey",
           "source" : "luminarySignature"
         },
         {
           "hex" : "#DFA74B",
-          "name" : "antique gold",
+          "name" : "deep honey",
           "source" : "rulerSignature"
         }
       ],
@@ -1707,7 +1707,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "referenceFamily" : "True Spring",
       "referenceNeutrals" : [
@@ -1736,7 +1736,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "liveFamily" : "True Spring",
       "liveNeutrals" : [
@@ -1815,7 +1815,7 @@
         },
         {
           "hex" : "#08E8DE",
-          "name" : "clear turquoise",
+          "name" : "bright aqua",
           "source" : "core[3]"
         },
         {
@@ -1879,7 +1879,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "referenceFamily" : "True Spring",
       "referenceNeutrals" : [
@@ -1908,7 +1908,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "liveFamily" : "True Spring",
       "liveNeutrals" : [
@@ -1987,7 +1987,7 @@
         },
         {
           "hex" : "#08E8DE",
-          "name" : "clear turquoise",
+          "name" : "bright aqua",
           "source" : "core[3]"
         },
         {
@@ -2051,7 +2051,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "referenceFamily" : "True Spring",
       "referenceNeutrals" : [
@@ -2080,7 +2080,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "liveFamily" : "True Spring",
       "liveNeutrals" : [
@@ -2159,7 +2159,7 @@
         },
         {
           "hex" : "#08E8DE",
-          "name" : "clear turquoise",
+          "name" : "bright aqua",
           "source" : "core[3]"
         },
         {
@@ -2223,7 +2223,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "referenceFamily" : "True Spring",
       "referenceNeutrals" : [
@@ -2252,7 +2252,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "liveFamily" : "True Spring",
       "liveNeutrals" : [
@@ -2331,7 +2331,7 @@
         },
         {
           "hex" : "#08E8DE",
-          "name" : "clear turquoise",
+          "name" : "bright aqua",
           "source" : "core[3]"
         },
         {
@@ -2395,7 +2395,7 @@
         "marigold",
         "coral",
         "fresh green",
-        "clear turquoise"
+        "bright aqua"
       ],
       "referenceFamily" : "True Spring",
       "referenceNeutrals" : [
@@ -2424,7 +2424,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "liveFamily" : "Bright Spring",
       "liveNeutrals" : [
@@ -2503,7 +2503,7 @@
         },
         {
           "hex" : "#0080FF",
-          "name" : "electric blue",
+          "name" : "bright blue",
           "source" : "core[3]"
         },
         {
@@ -2567,7 +2567,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "referenceFamily" : "Bright Spring",
       "referenceNeutrals" : [
@@ -2596,7 +2596,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "liveFamily" : "Bright Spring",
       "liveNeutrals" : [
@@ -2675,7 +2675,7 @@
         },
         {
           "hex" : "#0080FF",
-          "name" : "electric blue",
+          "name" : "bright blue",
           "source" : "core[3]"
         },
         {
@@ -2725,7 +2725,7 @@
         },
         {
           "hex" : "#D3AB53",
-          "name" : "antique gold",
+          "name" : "deep honey",
           "source" : "rulerSignature"
         }
       ],
@@ -2739,7 +2739,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "referenceFamily" : "Bright Spring",
       "referenceNeutrals" : [
@@ -2768,7 +2768,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "liveFamily" : "Bright Spring",
       "liveNeutrals" : [
@@ -2847,7 +2847,7 @@
         },
         {
           "hex" : "#0080FF",
-          "name" : "electric blue",
+          "name" : "bright blue",
           "source" : "core[3]"
         },
         {
@@ -2911,7 +2911,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "referenceFamily" : "Bright Spring",
       "referenceNeutrals" : [
@@ -2940,7 +2940,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "liveFamily" : "Bright Spring",
       "liveNeutrals" : [
@@ -3019,7 +3019,7 @@
         },
         {
           "hex" : "#0080FF",
-          "name" : "electric blue",
+          "name" : "bright blue",
           "source" : "core[3]"
         },
         {
@@ -3083,7 +3083,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "referenceFamily" : "Bright Spring",
       "referenceNeutrals" : [
@@ -3112,7 +3112,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "liveFamily" : "Bright Spring",
       "liveNeutrals" : [
@@ -3191,7 +3191,7 @@
         },
         {
           "hex" : "#0080FF",
-          "name" : "electric blue",
+          "name" : "bright blue",
           "source" : "core[3]"
         },
         {
@@ -3236,7 +3236,7 @@
         },
         {
           "hex" : "#DFA74B",
-          "name" : "antique gold",
+          "name" : "deep honey",
           "source" : "luminarySignature"
         },
         {
@@ -3255,7 +3255,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "referenceFamily" : "Bright Spring",
       "referenceNeutrals" : [
@@ -3284,7 +3284,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "liveFamily" : "Bright Spring",
       "liveNeutrals" : [
@@ -3363,7 +3363,7 @@
         },
         {
           "hex" : "#0080FF",
-          "name" : "electric blue",
+          "name" : "bright blue",
           "source" : "core[3]"
         },
         {
@@ -3427,7 +3427,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "referenceFamily" : "Bright Spring",
       "referenceNeutrals" : [
@@ -3456,7 +3456,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "liveFamily" : "Bright Spring",
       "liveNeutrals" : [
@@ -3535,7 +3535,7 @@
         },
         {
           "hex" : "#0080FF",
-          "name" : "electric blue",
+          "name" : "bright blue",
           "source" : "core[3]"
         },
         {
@@ -3599,7 +3599,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "referenceFamily" : "Bright Spring",
       "referenceNeutrals" : [
@@ -3628,7 +3628,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "liveFamily" : "Bright Spring",
       "liveNeutrals" : [
@@ -3707,7 +3707,7 @@
         },
         {
           "hex" : "#0080FF",
-          "name" : "electric blue",
+          "name" : "bright blue",
           "source" : "core[3]"
         },
         {
@@ -3771,7 +3771,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "referenceFamily" : "Bright Spring",
       "referenceNeutrals" : [
@@ -3800,7 +3800,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "liveFamily" : "Bright Spring",
       "liveNeutrals" : [
@@ -3879,7 +3879,7 @@
         },
         {
           "hex" : "#0080FF",
-          "name" : "electric blue",
+          "name" : "bright blue",
           "source" : "core[3]"
         },
         {
@@ -3943,7 +3943,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "referenceFamily" : "Bright Spring",
       "referenceNeutrals" : [
@@ -3972,7 +3972,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "liveFamily" : "Bright Spring",
       "liveNeutrals" : [
@@ -4051,7 +4051,7 @@
         },
         {
           "hex" : "#0080FF",
-          "name" : "electric blue",
+          "name" : "bright blue",
           "source" : "core[3]"
         },
         {
@@ -4115,7 +4115,7 @@
         "poppy",
         "bright teal",
         "vivid yellow",
-        "electric blue"
+        "bright blue"
       ],
       "referenceFamily" : "Bright Spring",
       "referenceNeutrals" : [
@@ -6686,7 +6686,7 @@
         }
       ],
       "referenceAccentColours" : [
-        "brushed pewter",
+        "smoke grey",
         "dusty plum",
         "sea glass",
         "faded mauve"
@@ -6858,7 +6858,7 @@
         }
       ],
       "referenceAccentColours" : [
-        "brushed pewter",
+        "smoke grey",
         "dusty plum",
         "sea glass",
         "faded mauve"
@@ -7030,7 +7030,7 @@
         }
       ],
       "referenceAccentColours" : [
-        "brushed pewter",
+        "smoke grey",
         "dusty plum",
         "sea glass",
         "faded mauve"
@@ -7202,7 +7202,7 @@
         }
       ],
       "referenceAccentColours" : [
-        "brushed pewter",
+        "smoke grey",
         "dusty plum",
         "sea glass",
         "faded mauve"
@@ -7374,7 +7374,7 @@
         }
       ],
       "referenceAccentColours" : [
-        "brushed pewter",
+        "smoke grey",
         "dusty plum",
         "sea glass",
         "faded mauve"
@@ -7546,7 +7546,7 @@
         }
       ],
       "referenceAccentColours" : [
-        "brushed pewter",
+        "smoke grey",
         "dusty plum",
         "sea glass",
         "faded mauve"
@@ -7718,7 +7718,7 @@
         }
       ],
       "referenceAccentColours" : [
-        "brushed pewter",
+        "smoke grey",
         "dusty plum",
         "sea glass",
         "faded mauve"
@@ -7890,7 +7890,7 @@
         }
       ],
       "referenceAccentColours" : [
-        "brushed pewter",
+        "smoke grey",
         "dusty plum",
         "sea glass",
         "faded mauve"
@@ -8052,7 +8052,7 @@
         },
         {
           "hex" : "#157059",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "luminarySignature"
         },
         {
@@ -8062,7 +8062,7 @@
         }
       ],
       "referenceAccentColours" : [
-        "brushed pewter",
+        "smoke grey",
         "dusty plum",
         "sea glass",
         "faded mauve"
@@ -8234,7 +8234,7 @@
         }
       ],
       "referenceAccentColours" : [
-        "brushed pewter",
+        "smoke grey",
         "dusty plum",
         "sea glass",
         "faded mauve"
@@ -8271,7 +8271,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -8346,7 +8346,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -8396,7 +8396,7 @@
         },
         {
           "hex" : "#807227",
-          "name" : "aged brass",
+          "name" : "warm umber",
           "source" : "luminarySignature"
         },
         {
@@ -8406,15 +8406,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -8578,8 +8578,8 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "soft copper",
+        "deep honey",
+        "warm sienna",
         "moss green",
         "muted amber"
       ],
@@ -8750,8 +8750,8 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "soft copper",
+        "deep honey",
+        "warm sienna",
         "moss green",
         "muted amber"
       ],
@@ -8787,7 +8787,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -8862,7 +8862,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -8922,15 +8922,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -9094,8 +9094,8 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "soft copper",
+        "deep honey",
+        "warm sienna",
         "moss green",
         "muted amber"
       ],
@@ -9266,8 +9266,8 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "soft copper",
+        "deep honey",
+        "warm sienna",
         "moss green",
         "muted amber"
       ],
@@ -9438,8 +9438,8 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "soft copper",
+        "deep honey",
+        "warm sienna",
         "moss green",
         "muted amber"
       ],
@@ -9610,8 +9610,8 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "soft copper",
+        "deep honey",
+        "warm sienna",
         "moss green",
         "muted amber"
       ],
@@ -9782,8 +9782,8 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "soft copper",
+        "deep honey",
+        "warm sienna",
         "moss green",
         "muted amber"
       ],
@@ -9954,8 +9954,8 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "soft copper",
+        "deep honey",
+        "warm sienna",
         "moss green",
         "muted amber"
       ],
@@ -10126,8 +10126,8 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "soft copper",
+        "deep honey",
+        "warm sienna",
         "moss green",
         "muted amber"
       ],
@@ -10163,7 +10163,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -10238,7 +10238,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -10298,15 +10298,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -10335,7 +10335,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -10410,7 +10410,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -10465,20 +10465,20 @@
         },
         {
           "hex" : "#8E6D14",
-          "name" : "aged brass",
+          "name" : "warm umber",
           "source" : "rulerSignature"
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -10679,7 +10679,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -10754,7 +10754,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -10814,15 +10814,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -10851,7 +10851,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -10926,7 +10926,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -10976,7 +10976,7 @@
         },
         {
           "hex" : "#8E6D14",
-          "name" : "aged brass",
+          "name" : "warm umber",
           "source" : "luminarySignature"
         },
         {
@@ -10986,15 +10986,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -11023,7 +11023,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -11098,7 +11098,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -11158,15 +11158,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -11539,7 +11539,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -11614,7 +11614,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -11674,15 +11674,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -11841,7 +11841,7 @@
         },
         {
           "hex" : "#D3AB53",
-          "name" : "antique gold",
+          "name" : "deep honey",
           "source" : "rulerSignature"
         }
       ],
@@ -12055,7 +12055,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -12130,7 +12130,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -12180,7 +12180,7 @@
         },
         {
           "hex" : "#807227",
-          "name" : "aged brass",
+          "name" : "warm umber",
           "source" : "luminarySignature"
         },
         {
@@ -12190,15 +12190,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -12227,7 +12227,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -12302,7 +12302,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -12362,15 +12362,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -12399,7 +12399,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -12474,7 +12474,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -12534,15 +12534,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -12571,7 +12571,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -12646,7 +12646,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -12706,15 +12706,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -12743,7 +12743,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -12818,7 +12818,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -12868,7 +12868,7 @@
         },
         {
           "hex" : "#8E6D14",
-          "name" : "aged brass",
+          "name" : "warm umber",
           "source" : "luminarySignature"
         },
         {
@@ -12878,15 +12878,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -12915,7 +12915,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -12990,7 +12990,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -13050,15 +13050,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -13087,7 +13087,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -13162,7 +13162,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -13222,15 +13222,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -13259,7 +13259,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -13334,7 +13334,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -13394,15 +13394,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -13431,7 +13431,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -13506,7 +13506,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -13566,15 +13566,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -13603,7 +13603,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -13678,7 +13678,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -13733,20 +13733,20 @@
         },
         {
           "hex" : "#8E6D14",
-          "name" : "aged brass",
+          "name" : "warm umber",
           "source" : "rulerSignature"
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -13775,7 +13775,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -13850,7 +13850,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -13905,20 +13905,20 @@
         },
         {
           "hex" : "#807227",
-          "name" : "aged brass",
+          "name" : "warm umber",
           "source" : "rulerSignature"
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -13947,7 +13947,7 @@
       "liveCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "liveFamily" : "Deep Autumn",
@@ -14022,7 +14022,7 @@
         },
         {
           "hex" : "#254D32",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "core[2]"
         },
         {
@@ -14082,15 +14082,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "antique gold",
-        "aged brass",
+        "deep honey",
+        "warm umber",
         "copper",
         "deep amber"
       ],
       "referenceCoreColours" : [
         "oxblood",
         "forest teal",
-        "forest green",
+        "dark pine",
         "dark terracotta"
       ],
       "referenceFamily" : "Deep Autumn",
@@ -15632,7 +15632,7 @@
       "referenceAccentColours" : [
         "silver",
         "icy blue",
-        "fuchsia red",
+        "deep magenta",
         "hard white"
       ],
       "referenceCoreColours" : [
@@ -15804,7 +15804,7 @@
       "referenceAccentColours" : [
         "silver",
         "icy blue",
-        "fuchsia red",
+        "deep magenta",
         "hard white"
       ],
       "referenceCoreColours" : [
@@ -15976,7 +15976,7 @@
       "referenceAccentColours" : [
         "silver",
         "icy blue",
-        "fuchsia red",
+        "deep magenta",
         "hard white"
       ],
       "referenceCoreColours" : [
@@ -16141,14 +16141,14 @@
         },
         {
           "hex" : "#157059",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "rulerSignature"
         }
       ],
       "referenceAccentColours" : [
         "silver",
         "icy blue",
-        "fuchsia red",
+        "deep magenta",
         "hard white"
       ],
       "referenceCoreColours" : [
@@ -16183,7 +16183,7 @@
       "liveCoreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "liveFamily" : "Bright Winter",
@@ -16258,7 +16258,7 @@
         },
         {
           "hex" : "#CC0066",
-          "name" : "magenta red",
+          "name" : "hot pink",
           "source" : "core[2]"
         },
         {
@@ -16318,15 +16318,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "chrome silver",
+        "frost grey",
         "electric fuchsia",
         "clear cyan",
-        "true red"
+        "deep red"
       ],
       "referenceCoreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "referenceFamily" : "Bright Winter",
@@ -16355,7 +16355,7 @@
       "liveCoreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "liveFamily" : "Bright Winter",
@@ -16430,7 +16430,7 @@
         },
         {
           "hex" : "#CC0066",
-          "name" : "magenta red",
+          "name" : "hot pink",
           "source" : "core[2]"
         },
         {
@@ -16490,15 +16490,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "chrome silver",
+        "frost grey",
         "electric fuchsia",
         "clear cyan",
-        "true red"
+        "deep red"
       ],
       "referenceCoreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "referenceFamily" : "Bright Winter",
@@ -16527,7 +16527,7 @@
       "liveCoreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "liveFamily" : "Bright Winter",
@@ -16602,7 +16602,7 @@
         },
         {
           "hex" : "#CC0066",
-          "name" : "magenta red",
+          "name" : "hot pink",
           "source" : "core[2]"
         },
         {
@@ -16662,15 +16662,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "chrome silver",
+        "frost grey",
         "electric fuchsia",
         "clear cyan",
-        "true red"
+        "deep red"
       ],
       "referenceCoreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "referenceFamily" : "Bright Winter",
@@ -16699,7 +16699,7 @@
       "liveCoreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "liveFamily" : "Bright Winter",
@@ -16774,7 +16774,7 @@
         },
         {
           "hex" : "#CC0066",
-          "name" : "magenta red",
+          "name" : "hot pink",
           "source" : "core[2]"
         },
         {
@@ -16834,15 +16834,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "chrome silver",
+        "frost grey",
         "electric fuchsia",
         "clear cyan",
-        "true red"
+        "deep red"
       ],
       "referenceCoreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "referenceFamily" : "Bright Winter",
@@ -16871,7 +16871,7 @@
       "liveCoreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "liveFamily" : "Bright Winter",
@@ -16946,7 +16946,7 @@
         },
         {
           "hex" : "#CC0066",
-          "name" : "magenta red",
+          "name" : "hot pink",
           "source" : "core[2]"
         },
         {
@@ -16996,7 +16996,7 @@
         },
         {
           "hex" : "#157059",
-          "name" : "forest green",
+          "name" : "dark pine",
           "source" : "luminarySignature"
         },
         {
@@ -17006,15 +17006,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "chrome silver",
+        "frost grey",
         "electric fuchsia",
         "clear cyan",
-        "true red"
+        "deep red"
       ],
       "referenceCoreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "referenceFamily" : "Bright Winter",
@@ -17043,7 +17043,7 @@
       "liveCoreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "liveFamily" : "Bright Winter",
@@ -17118,7 +17118,7 @@
         },
         {
           "hex" : "#CC0066",
-          "name" : "magenta red",
+          "name" : "hot pink",
           "source" : "core[2]"
         },
         {
@@ -17178,15 +17178,15 @@
         }
       ],
       "referenceAccentColours" : [
-        "chrome silver",
+        "frost grey",
         "electric fuchsia",
         "clear cyan",
-        "true red"
+        "deep red"
       ],
       "referenceCoreColours" : [
         "midnight",
         "royal blue",
-        "magenta red",
+        "hot pink",
         "icy teal"
       ],
       "referenceFamily" : "Bright Winter",

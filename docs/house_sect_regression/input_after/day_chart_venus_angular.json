@@ -8,16 +8,16 @@
   },
   "code" : {
     "avoid" : [
-      "Blunt, aggressive dressing that shuts down dialogue. Your power comes from persuasion, not intimidation.",
-      "Harsh industrial textures that contradict your natural grace. Rough fabrics fight your energy instead of channelling it.",
+      "Avoid blunt, aggressive dressing that completely shuts down dialogue, remembering that your true power comes from quiet persuasion rather than loud intimidation.",
+      "Skip harsh industrial textures that contradict your natural grace, as rough fabrics actively fight your personal style instead of channelling it effectively.",
       "Anything scratchy, stiff, or uncomfortable against your skin. If you have to endure a garment, it is already failing.",
-      "Trend pieces that sacrifice comfort for novelty. Your body rejects discomfort faster than your mind accepts a bargain.",
-      "Rushing through purchases without touching the fabric. Your hands know more about quality than any label.",
+      "Refuse trend pieces that sacrifice physical comfort for sheer novelty. Your body violently rejects restrictive construction much faster than your mind accepts a bargain.",
+      "Refuse to rush through any purchases without actually touching the fabric first. Your hands instinctively know infinitely more about genuine construction quality than any woven designer label.",
       "Fast fashion impulse buys that dilute the quality of your collection. One cheap piece can drag down an entire outfit."
     ],
     "consider" : [
-      "invest in fabrics that feel like emotional anchors",
-      "choose textures that ground you",
+      "Build your foundation on heavy natural fibres that act as physical anchors throughout your day.",
+      "Ground your daily look with substantial, heavyweight cottons and dense wools that offer serious weight.",
       "Military-inspired details as a through-line in your wardrobe. Epaulettes, structured shoulders, and clean brass hardware suit your energy.",
       "How a consistent dark palette communicates reliability. When people know what to expect visually, they trust your judgement."
     ],
@@ -31,20 +31,20 @@
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-06-10T23:58:21Z",
+  "generatedAt" : "2026-06-19T17:06:42Z",
   "hardware" : {
-    "metalsText" : "Flimsy zips and hollow buttons are an immediate dealbreaker. Hardware is where a garment truly proves its worth, and you naturally gravitate towards metals with literal, physical weight. Rose gold tones provides traditional warmth and deep sensory satisfaction, particularly when the finish is lightly brushed rather than blindingly polished. When you want a sharper, more assertive edge on heavy leather belts or structured bags, soft copper tones cuts through beautifully. Every clasp, rivet, and buckle should yield a deeply satisfying mechanical thunk when you snap it shut.",
+    "metalsText" : "Flimsy zips and hollow buttons are an immediate dealbreaker. Hardware is where a garment truly proves its worth, and you naturally gravitate towards metals with literal, physical weight. Rose gold tones provides traditional warmth and deep sensory satisfaction, particularly when the finish is lightly brushed rather than blindingly polished. When you want a sharper, more assertive edge on heavy leather belts or structured bags, warm bronze tones cuts through beautifully. Every clasp, rivet, and buckle should yield a deeply satisfying mechanical thunk when you snap it shut.",
     "recommendedMetals" : [
       "rose gold",
-      "soft copper",
       "warm bronze",
       "yellow gold",
       "polished brass",
-      "aged brass",
       "hammered gold",
+      "warm sienna",
       "platinum",
       "polished silver",
-      "white gold"
+      "white gold",
+      "warm umber"
     ],
     "recommendedStones" : [
       "kunzite",
@@ -122,7 +122,7 @@
       },
       {
         "hexValue" : "#254D32",
-        "name" : "forest green",
+        "name" : "dark pine",
         "provenance" : {
           "band" : "core",
           "family" : "Deep Autumn",
@@ -178,7 +178,7 @@
       "role" : "signature",
       "semanticLabel" : "luminary signature"
     },
-    "narrativeText" : "There is a distinctly expensive weight to your ideal palette, rooted firmly in oxblood and forest teal. These are serious shades that take beautifully to heavy crepe and thick, structured wool, projecting a quiet but absolute competence. You soften this severity by bringing in forest green, keeping the overall mood rich, tactile, and completely grounded. When you want a flash of heat or a more active edge, cut through the classics with Dusky Plum. It is a colour story designed for someone who respects heritage but moves through the world with a highly visible spark.",
+    "narrativeText" : "There is a distinctly expensive weight to your ideal palette, rooted firmly in oxblood and forest teal. These are serious shades that take beautifully to heavy crepe and thick, structured wool, projecting a quiet but absolute competence. You soften this severity by bringing in dark pine, keeping the overall mood rich, tactile, and completely grounded. When you want a flash of heat or a more active edge, cut through the classics with Dusky Plum. It is a colour story designed for someone who respects heritage but moves through the world with a highly visible spark.",
     "neutrals" : [
       {
         "hexValue" : "#3C2415",
@@ -325,7 +325,7 @@
     "tipText" : "Flimsy prints feel entirely too fussy when your wardrobe thrives on structured wool and deep charcoal. To make balanced geometric work, treat it like a striking graphic rather than a delicate afterthought. Look for exaggerated scales woven directly into heavy jacquard or crisp pressed cotton, giving the motif genuine physical weight. Keep the surrounding garments entirely solid and strictly tailored. This delivers a sharp flash of energy without sacrificing the expensive finish of your silhouette."
   },
   "styleCore" : {
-    "narrativeText" : "You walk into a room and instantly ground it. There is a distinct physical weight to your style, driven by substantial construction and immaculate tailoring, yet you carry it with a dynamic, restless energy. Your wardrobe functions as a collection of serious investments that look best in motion. You gravitate toward clean, architectural shapes that offer sensory security without ever feeling rigid or restrictive. It is a deeply authoritative way of dressing, built for someone who naturally takes the lead but refuses to sacrifice an ounce of physical ease to get there. You arrive looking fully established, carrying the kind of permanent polish that makes everyone else feel like they need to stand a little straighter.\n\nYour natural sense of beauty shows up most powerfully in your public-facing identity, public beauty, polished image, aesthetic reputation, career-enhancing style. Your style instincts lean toward clarity, structure, and visible polish. Your public style reads as warm and approachable; polished comfort signals care and emotional intelligence."
+    "narrativeText" : "Grounding a room happens the moment you cross the threshold. A distinct physical weight defines your aesthetic, driven by substantial construction and immaculate tailoring. Despite this heaviness, a dynamic, restless energy keeps the look alive. Clean, architectural shapes offer sensory security without ever turning rigid or restrictive against the body. You arrive carrying a permanent polish, possessing an authority that forces everyone else to stand a little straighter.\n\nYour natural sense of beauty shows up most powerfully in your public-facing identity, public beauty, polished image, aesthetic reputation, career-enhancing style. Your style instincts lean toward clarity, structure, and visible polish. Your public aesthetic relies on heavy silk crepe and soft draping to communicate a welcoming yet deeply polished presence."
   },
   "textures" : {
     "avoidTextures" : [
@@ -350,6 +350,6 @@
   "userInfo" : {
     "birthDate" : "1991-07-15T12:00:00Z",
     "birthLocation" : "Synthetic Fixture",
-    "generationDate" : "2026-06-10T23:58:21Z"
+    "generationDate" : "2026-06-19T17:06:42Z"
   }
 }

@@ -70,7 +70,7 @@
   "accentColours": [
    {
     "hexValue": "#007788",
-    "name": "Cerulean",
+    "name": "Dark Cyan",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Signature",
@@ -130,7 +130,7 @@
    },
    {
     "hexValue": "#0080FF",
-    "name": "electric blue",
+    "name": "bright blue",
     "provenance": {
      "band": "core",
      "family": "Bright Spring",
@@ -175,7 +175,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your rotation of colour runs hot and intentionally takes up space in a room. Anchor your wardrobe in the unapologetic heat of poppy, bright teal, and vivid yellow. Because these shades are naturally loud, they rely on the physical weight of heavy silks and thick, structured velvet to ground them in reality. Break up all that rich warmth with a sharp hit of Cerulean or Dark Cherry, delivered through a highly modern, deliberately offbeat accessory. The end result is visually expensive, but slashed with enough eccentric tension to keep it interesting.",
+  "narrativeText": "Your rotation of colour runs hot and intentionally takes up space in a room. Anchor your wardrobe in the unapologetic heat of poppy, bright teal, and vivid yellow. Because these shades are naturally loud, they rely on the physical weight of heavy silks and thick, structured velvet to ground them in reality. Break up all that rich warmth with a sharp hit of Dark Cyan or Dark Cherry, delivered through a highly modern, deliberately offbeat accessory. The end result is visually expensive, but slashed with enough eccentric tension to keep it interesting.",
   "neutrals": [
    {
     "hexValue": "#FFFDF0",

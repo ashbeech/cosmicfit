@@ -129,7 +129,7 @@
    },
    {
     "hexValue": "#0080FF",
-    "name": "electric blue",
+    "name": "bright blue",
     "provenance": {
      "band": "core",
      "family": "Bright Spring",
@@ -164,7 +164,7 @@
   },
   "luminarySignature": {
    "hexValue": "#D3AB53",
-   "name": "antique gold",
+   "name": "deep honey",
    "provenance": {
     "band": "luminarySignature",
     "family": "Bright Spring",

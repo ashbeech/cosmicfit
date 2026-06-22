@@ -682,6 +682,52 @@ def check_keyword_stuffing(item) -> list[dict]:
     return []
 
 
+_PALETTE_COLOUR_LITERALS = [
+    "burnt siennas", "burnt sienna", "warm ochre", "cobalt blue", "deep cobalt",
+    "electric blue", "fire red", "bright coral", "deep coral", "silver grey",
+    "jet black", "ochres", "siennas", "ochre", "sienna", "cobalt", "coral",
+]
+_PALETTE_LITERAL_PATTERNS = [
+    (re.compile(r"\b" + re.escape(lit) + r"\b", re.IGNORECASE), lit)
+    for lit in sorted(_PALETTE_COLOUR_LITERALS, key=len, reverse=True)
+]
+_PALETTE_ALLOWLIST = [
+    "matte silver", "cold steel", "brushed steel", "brushed silver",
+    "industrial silver", "matte silver-grey", "silver-grey",
+    "unpolished silver", "polished silver", "thick matte silver",
+    "heavy steel", "cold silver",
+]
+_GROUP_B_PALETTE_SECTIONS = frozenset([
+    "pattern_tip", "pattern_narrative",
+    "hardware_metals", "hardware_stones", "hardware_tip",
+])
+
+
+def check_hardcoded_palette_colour_in_group_b(item) -> list[dict]:
+    section = getattr(item, "section_key", "") or ""
+    if section not in _GROUP_B_PALETTE_SECTIONS:
+        return []
+    text = _PLACEHOLDER_RE.sub(" ", item.text)
+    issues = []
+    for pat, literal in _PALETTE_LITERAL_PATTERNS:
+        for m in pat.finditer(text):
+            window_start = max(0, m.start() - 30)
+            window_end = min(len(text), m.end() + 30)
+            window = text[window_start:window_end].lower()
+            if any(phrase in window for phrase in _PALETTE_ALLOWLIST):
+                continue
+            issues.append(_issue(
+                item, "hardcoded_palette_colour_in_group_b", "high",
+                f"Hardcoded palette colour \"{literal}\" in {section}; should use a {{core_colour_*}} or {{accent_colour_*}} placeholder.",
+                flagged_fragment=text[max(0, m.start() - 20):m.end() + 20].strip(),
+                suggested_fix=f"Replace \"{literal}\" with the appropriate {{core_colour_*}} or {{accent_colour_*}} placeholder.",
+                rewrite_brief=f"Replace literal colour name with a palette placeholder.",
+                action_type="rewrite",
+                span=(m.start(), m.end()),
+            ))
+    return issues
+
+
 # ─── Check registry ───────────────────────────────────────────────────
 
 ALL_CHECKS = [
@@ -702,6 +748,7 @@ ALL_CHECKS = [
     check_ai_slop_patterns,
     check_intra_paragraph_repetition,
     check_missing_second_person,
+    check_hardcoded_palette_colour_in_group_b,
     # MEDIUM
     check_em_dash,
     check_capitalisation,

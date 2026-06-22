@@ -76,7 +76,7 @@
   "accentColours": [
    {
     "hexValue": "#91B5CF",
-    "name": "Platinum Frost",
+    "name": "Frost Blue",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Signature",
@@ -125,7 +125,7 @@
    },
    {
     "hexValue": "#CC0066",
-    "name": "magenta red",
+    "name": "hot pink",
     "provenance": {
      "band": "core",
      "family": "Bright Winter",
@@ -181,7 +181,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your ideal wardrobe operates on a foundation of soft, highly communicative tones that look entirely put-together even when thrown on in a rush. Build your daily rotation around midnight and royal blue, letting these shades do the heavy lifting in fluid silks or a lightweight crepe. Mixing in magenta red keeps the overall mood versatile, giving you a beautiful canvas that does not need hours of careful matching. When you inevitably crave a sharper visual edge, a sudden flash of Platinum Frost in your hardware or a pointed shoe cuts right through the sweetness. The trick is letting the softer shades remain the main event while keeping a bright, impatient streak present in the styling.",
+  "narrativeText": "Your ideal wardrobe operates on a foundation of soft, highly communicative tones that look entirely put-together even when thrown on in a rush. Build your daily rotation around midnight and royal blue, letting these shades do the heavy lifting in fluid silks or a lightweight crepe. Mixing in hot pink keeps the overall mood versatile, giving you a beautiful canvas that does not need hours of careful matching. When you inevitably crave a sharper visual edge, a sudden flash of Platinum Frost in your hardware or a pointed shoe cuts right through the sweetness. The trick is letting the softer shades remain the main event while keeping a bright, impatient streak present in the styling.",
   "neutrals": [
    {
     "hexValue": "#0A0A0A",

@@ -122,7 +122,7 @@
    },
    {
     "hexValue": "#254D32",
-    "name": "forest green",
+    "name": "dark pine",
     "provenance": {
      "band": "core",
      "family": "Deep Autumn",
@@ -178,7 +178,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your wardrobe thrives on rich, saturated dyes that look as though they have lived a little before reaching you. Base your daily rotation on oxblood and forest teal, treating them as your grounded, worldly neutrals instead of reaching for standard navy or black. Because you naturally gravitate towards softer, enveloping shapes, an injection of forest green brings sudden, necessary heat to the overall look. Introduce Warm Prussian through the woven pattern of a rough-spun scarf or the lining of a waxed cotton jacket just to break up the visual weight. The end result is a mix of tones that look beautifully intentional but thrown together at the last minute for a flight.",
+  "narrativeText": "Your wardrobe thrives on rich, saturated dyes that look as though they have lived a little before reaching you. Base your daily rotation on oxblood and forest teal, treating them as your grounded, worldly neutrals instead of reaching for standard navy or black. Because you naturally gravitate towards softer, enveloping shapes, an injection of dark pine brings sudden, necessary heat to the overall look. Introduce Warm Prussian through the woven pattern of a rough-spun scarf or the lining of a waxed cotton jacket just to break up the visual weight. The end result is a mix of tones that look beautifully intentional but thrown together at the last minute for a flight.",
   "neutrals": [
    {
     "hexValue": "#3C2415",
@@ -238,7 +238,7 @@
   },
   "rulerSignature": {
    "hexValue": "#807227",
-   "name": "aged brass",
+   "name": "warm umber",
    "provenance": {
     "band": "rulerSignature",
     "family": "Deep Autumn",

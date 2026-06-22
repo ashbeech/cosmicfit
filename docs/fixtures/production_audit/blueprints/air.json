@@ -84,7 +84,7 @@
    },
    {
     "hexValue": "#008ABE",
-    "name": "Arctic Blue",
+    "name": "Bright Cyan",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Contrast",
@@ -121,7 +121,7 @@
    },
    {
     "hexValue": "#CC0066",
-    "name": "magenta red",
+    "name": "hot pink",
     "provenance": {
      "band": "core",
      "family": "Bright Winter",
@@ -177,7 +177,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "The logic behind your colour choices is simple: harmonious canvases engineered for sudden impact. A beautifully resolved base of midnight and royal blue gives your eye the aesthetic peace it craves, keeping the overall look polished and socially agile. Then the impulse hits. A sharp shot of Cool Berry or a saturated flash of Arctic Blue breaks the calm, usually delivered through a technical knit, a sculptural shoe, or a crisp collar. This tension between a perfectly balanced foundation and a hot, fast streak of pigment makes your wardrobe deeply engaging. People register the elegance first, and the audacity a second later.",
+  "narrativeText": "The logic behind your colour choices is simple: harmonious canvases engineered for sudden impact. A beautifully resolved base of midnight and royal blue gives your eye the aesthetic peace it craves, keeping the overall look polished and socially agile. Then the impulse hits. A sharp shot of Cool Berry or a saturated flash of Bright Cyan breaks the calm, usually delivered through a technical knit, a sculptural shoe, or a crisp collar. This tension between a perfectly balanced foundation and a hot, fast streak of pigment makes your wardrobe deeply engaging. People register the elegance first, and the audacity a second later.",
   "neutrals": [
    {
     "hexValue": "#0A0A0A",

@@ -1,0 +1,473 @@
+{
+  "summary": {
+    "total_palette_library_tokens": 144,
+    "total_sign_accent_expressions": 106,
+    "flagged_total": 8,
+    "flagged_palette_library": 8,
+    "flagged_sign_accent_expressions": 0,
+    "unique_metal_keywords": [
+      "bronze",
+      "copper",
+      "gold",
+      "gunmetal",
+      "pewter",
+      "silver",
+      "steel"
+    ]
+  },
+  "flagged_rows": [
+    {
+      "name": "bright gold",
+      "hex": "#FFD700",
+      "source": "palette_library",
+      "context": "",
+      "reachability": {
+        "palette_family_bands": [
+          {
+            "family": "brightSpring",
+            "band": "accentColours"
+          }
+        ],
+        "sign_accent_expressions": [],
+        "chart_signature_hits": [],
+        "daily_fit_eligible": true
+      },
+      "nearest_5": [
+        {
+          "name": "vivid yellow",
+          "hex": "#FFE302",
+          "delta_e": 7.01
+        },
+        {
+          "name": "amber",
+          "hex": "#FFBF00",
+          "delta_e": 14.25
+        },
+        {
+          "name": "goldenrod",
+          "hex": "#DAA520",
+          "delta_e": 26.58
+        },
+        {
+          "name": "honey yellow",
+          "hex": "#E8A317",
+          "delta_e": 27.38
+        },
+        {
+          "name": "rich honey",
+          "hex": "#D4AF37",
+          "delta_e": 28.21
+        }
+      ],
+      "metal_keywords_matched": [
+        "gold"
+      ],
+      "source_locations": [
+        {
+          "file": "Cosmic Fit/InterpretationEngine/ColourEngineV4/PaletteLibrary.swift",
+          "line": 158
+        }
+      ]
+    },
+    {
+      "name": "bronze",
+      "hex": "#CD7F32",
+      "source": "palette_library",
+      "context": "",
+      "reachability": {
+        "palette_family_bands": [
+          {
+            "family": "trueAutumn",
+            "band": "accentColours"
+          }
+        ],
+        "sign_accent_expressions": [],
+        "chart_signature_hits": [],
+        "daily_fit_eligible": true
+      },
+      "nearest_5": [
+        {
+          "name": "ochre",
+          "hex": "#CC7722",
+          "delta_e": 5.95
+        },
+        {
+          "name": "muted amber",
+          "hex": "#CA8B39",
+          "delta_e": 7.93
+        },
+        {
+          "name": "copper",
+          "hex": "#B87333",
+          "delta_e": 9.15
+        },
+        {
+          "name": "deep amber",
+          "hex": "#A36D2A",
+          "delta_e": 15.21
+        },
+        {
+          "name": "warm sienna",
+          "hex": "#BD7E55",
+          "delta_e": 20.67
+        }
+      ],
+      "metal_keywords_matched": [
+        "bronze"
+      ],
+      "source_locations": [
+        {
+          "file": "Cosmic Fit/InterpretationEngine/ColourEngineV4/PaletteLibrary.swift",
+          "line": 224
+        }
+      ]
+    },
+    {
+      "name": "copper",
+      "hex": "#B87333",
+      "source": "palette_library",
+      "context": "",
+      "reachability": {
+        "palette_family_bands": [
+          {
+            "family": "deepAutumn",
+            "band": "accentColours"
+          }
+        ],
+        "sign_accent_expressions": [],
+        "chart_signature_hits": [],
+        "daily_fit_eligible": true
+      },
+      "nearest_5": [
+        {
+          "name": "deep amber",
+          "hex": "#A36D2A",
+          "delta_e": 7.65
+        },
+        {
+          "name": "bronze",
+          "hex": "#CD7F32",
+          "delta_e": 9.15
+        },
+        {
+          "name": "muted amber",
+          "hex": "#CA8B39",
+          "delta_e": 11.41
+        },
+        {
+          "name": "ochre",
+          "hex": "#CC7722",
+          "delta_e": 13.21
+        },
+        {
+          "name": "warm sienna",
+          "hex": "#BD7E55",
+          "delta_e": 13.85
+        }
+      ],
+      "metal_keywords_matched": [
+        "copper"
+      ],
+      "source_locations": [
+        {
+          "file": "Cosmic Fit/InterpretationEngine/ColourEngineV4/PaletteLibrary.swift",
+          "line": 239
+        }
+      ]
+    },
+    {
+      "name": "gunmetal",
+      "hex": "#53565A",
+      "source": "palette_library",
+      "context": "",
+      "reachability": {
+        "palette_family_bands": [
+          {
+            "family": "deepWinter",
+            "band": "accentColours"
+          }
+        ],
+        "sign_accent_expressions": [],
+        "chart_signature_hits": [],
+        "daily_fit_eligible": true
+      },
+      "nearest_5": [
+        {
+          "name": "graphite",
+          "hex": "#4B4F54",
+          "delta_e": 3.12
+        },
+        {
+          "name": "slate",
+          "hex": "#5B6770",
+          "delta_e": 7.84
+        },
+        {
+          "name": "muted charcoal",
+          "hex": "#636B6F",
+          "delta_e": 8.48
+        },
+        {
+          "name": "warm charcoal",
+          "hex": "#4A4244",
+          "delta_e": 9.08
+        },
+        {
+          "name": "cool charcoal",
+          "hex": "#3B3F42",
+          "delta_e": 10.07
+        }
+      ],
+      "metal_keywords_matched": [
+        "gunmetal"
+      ],
+      "source_locations": [
+        {
+          "file": "Cosmic Fit/InterpretationEngine/ColourEngineV4/PaletteLibrary.swift",
+          "line": 250
+        }
+      ]
+    },
+    {
+      "name": "olive gold",
+      "hex": "#A28C3A",
+      "source": "palette_library",
+      "context": "",
+      "reachability": {
+        "palette_family_bands": [
+          {
+            "family": "trueAutumn",
+            "band": "accentColours"
+          }
+        ],
+        "sign_accent_expressions": [],
+        "chart_signature_hits": [
+          {
+            "sign": "aquarius",
+            "family": "trueSpring",
+            "signature_hex": "#938438"
+          },
+          {
+            "sign": "aquarius",
+            "family": "trueAutumn",
+            "signature_hex": "#938438"
+          }
+        ],
+        "daily_fit_eligible": true
+      },
+      "nearest_5": [
+        {
+          "name": "warm umber",
+          "hex": "#8E7530",
+          "delta_e": 10.28
+        },
+        {
+          "name": "camel sand",
+          "hex": "#C4A35A",
+          "delta_e": 11.42
+        },
+        {
+          "name": "deep honey",
+          "hex": "#C9A84C",
+          "delta_e": 12.93
+        },
+        {
+          "name": "olive sage",
+          "hex": "#8B8B4B",
+          "delta_e": 14.3
+        },
+        {
+          "name": "light camel",
+          "hex": "#C9A96E",
+          "delta_e": 17.17
+        }
+      ],
+      "metal_keywords_matched": [
+        "gold"
+      ],
+      "source_locations": [
+        {
+          "file": "Cosmic Fit/InterpretationEngine/ColourEngineV4/PaletteLibrary.swift",
+          "line": 226
+        }
+      ]
+    },
+    {
+      "name": "pewter",
+      "hex": "#8B8E90",
+      "source": "palette_library",
+      "context": "",
+      "reachability": {
+        "palette_family_bands": [
+          {
+            "family": "trueSummer",
+            "band": "accentColours"
+          }
+        ],
+        "sign_accent_expressions": [],
+        "chart_signature_hits": [],
+        "daily_fit_eligible": true
+      },
+      "nearest_5": [
+        {
+          "name": "cool stone",
+          "hex": "#8A8D8F",
+          "delta_e": 0.39
+        },
+        {
+          "name": "dove grey",
+          "hex": "#9C9A9A",
+          "delta_e": 5.41
+        },
+        {
+          "name": "smoke grey",
+          "hex": "#7C7D7D",
+          "delta_e": 6.65
+        },
+        {
+          "name": "stone grey",
+          "hex": "#928E85",
+          "delta_e": 6.79
+        },
+        {
+          "name": "steel grey",
+          "hex": "#71797E",
+          "delta_e": 8.9
+        }
+      ],
+      "metal_keywords_matched": [
+        "pewter"
+      ],
+      "source_locations": [
+        {
+          "file": "Cosmic Fit/InterpretationEngine/ColourEngineV4/PaletteLibrary.swift",
+          "line": 183
+        }
+      ]
+    },
+    {
+      "name": "silver",
+      "hex": "#C0C0C0",
+      "source": "palette_library",
+      "context": "",
+      "reachability": {
+        "palette_family_bands": [
+          {
+            "family": "lightSummer",
+            "band": "accentColours"
+          },
+          {
+            "family": "deepWinter",
+            "band": "accentColours"
+          },
+          {
+            "family": "trueWinter",
+            "band": "accentColours"
+          }
+        ],
+        "sign_accent_expressions": [],
+        "chart_signature_hits": [
+          {
+            "sign": "cancer",
+            "family": "trueSummer",
+            "signature_hex": "#9EBEC8"
+          }
+        ],
+        "daily_fit_eligible": true
+      },
+      "nearest_5": [
+        {
+          "name": "pearl grey",
+          "hex": "#C9C0BB",
+          "delta_e": 4.33
+        },
+        {
+          "name": "icy grey",
+          "hex": "#D6D6D6",
+          "delta_e": 7.92
+        },
+        {
+          "name": "frost grey",
+          "hex": "#DBE0E3",
+          "delta_e": 11.42
+        },
+        {
+          "name": "oatmeal",
+          "hex": "#D2C6B2",
+          "delta_e": 11.86
+        },
+        {
+          "name": "mushroom",
+          "hex": "#ADA39A",
+          "delta_e": 11.92
+        }
+      ],
+      "metal_keywords_matched": [
+        "silver"
+      ],
+      "source_locations": [
+        {
+          "file": "Cosmic Fit/InterpretationEngine/ColourEngineV4/PaletteLibrary.swift",
+          "line": 169
+        }
+      ]
+    },
+    {
+      "name": "steel grey",
+      "hex": "#71797E",
+      "source": "palette_library",
+      "context": "",
+      "reachability": {
+        "palette_family_bands": [
+          {
+            "family": "brightWinter",
+            "band": "neutrals"
+          },
+          {
+            "family": "trueAutumn",
+            "band": "supportColours"
+          }
+        ],
+        "sign_accent_expressions": [],
+        "chart_signature_hits": [],
+        "daily_fit_eligible": true
+      },
+      "nearest_5": [
+        {
+          "name": "smoke grey",
+          "hex": "#7C7D7D",
+          "delta_e": 4.42
+        },
+        {
+          "name": "muted charcoal",
+          "hex": "#636B6F",
+          "delta_e": 5.67
+        },
+        {
+          "name": "slate",
+          "hex": "#5B6770",
+          "delta_e": 7.96
+        },
+        {
+          "name": "mist navy",
+          "hex": "#6B7B8D",
+          "delta_e": 7.98
+        },
+        {
+          "name": "cool stone",
+          "hex": "#8A8D8F",
+          "delta_e": 8.53
+        }
+      ],
+      "metal_keywords_matched": [
+        "steel"
+      ],
+      "source_locations": [
+        {
+          "file": "Cosmic Fit/InterpretationEngine/ColourEngineV4/PaletteLibrary.swift",
+          "line": 267
+        }
+      ]
+    }
+  ]
+}

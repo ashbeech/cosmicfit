@@ -75,7 +75,7 @@
   "accentColours": [
    {
     "hexValue": "#007788",
-    "name": "Cerulean",
+    "name": "Dark Cyan",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Signature",
@@ -123,7 +123,7 @@
    },
    {
     "hexValue": "#0080FF",
-    "name": "electric blue",
+    "name": "bright blue",
     "provenance": {
      "band": "core",
      "family": "Bright Spring",
@@ -168,7 +168,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your palette operates on a brilliant contradiction of nostalgic warmth and cool detachment. The foundation relies on poppy and bright teal, establishing a protective base that feels incredibly familiar but slightly insulated. These shades do their best work in unexpectedly technical finishes like heavy neoprene or fluid metallic knits, giving a gentle silhouette a quiet, intellectual edge. When you introduce Cerulean and a complementary choice, use them as sudden visual jolts rather than sprawling themes. It is a mix that feels completely safe to retreat into, yet consistently interesting to look at.",
+  "narrativeText": "Your palette operates on a brilliant contradiction of nostalgic warmth and cool detachment. The foundation relies on poppy and bright teal, establishing a protective base that feels incredibly familiar but slightly insulated. These shades do their best work in unexpectedly technical finishes like heavy neoprene or fluid metallic knits, giving a gentle silhouette a quiet, intellectual edge. When you introduce Dark Cyan and a complementary choice, use them as sudden visual jolts rather than sprawling themes. It is a mix that feels completely safe to retreat into, yet consistently interesting to look at.",
   "neutrals": [
    {
     "hexValue": "#FFFDF0",

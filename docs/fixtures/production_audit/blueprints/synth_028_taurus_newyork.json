@@ -119,7 +119,7 @@
    },
    {
     "hexValue": "#CC0066",
-    "name": "magenta red",
+    "name": "hot pink",
     "provenance": {
      "band": "core",
      "family": "Bright Winter",
@@ -165,7 +165,7 @@
   },
   "luminarySignature": {
    "hexValue": "#157059",
-   "name": "forest green",
+   "name": "dark pine",
    "provenance": {
     "band": "luminarySignature",
     "family": "Bright Winter",

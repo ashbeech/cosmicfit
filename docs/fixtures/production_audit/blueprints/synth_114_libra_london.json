@@ -64,7 +64,7 @@
  },
  "occasions": {
   "dailyText": "Your everyday wardrobe needs to move exactly as fast as you do, but it still has to look entirely deliberate. The trick is building a foundation of garments that offer total physical freedom while being cut with enough geometric precision to pass for proper daywear. Look for pieces that require zero adjusting once they are zipped or buttoned, relying on intelligent construction rather than fussy, complicated layering. You want to be able to leave the house at a moment's notice, thoroughly prepared to run into an ex or an old colleague. Fast dressing works best when the silhouette holds its own shape, letting you get on with the day.\n\nYour comfort instinct gravitates toward playful emotional expression, comfort in creativity, joy-driven dressing.",
-  "intimateText": "Intimate settings are not an excuse to dissolve into romantic clich\u00e9s. Your best evening pieces slip on in seconds but appear rigorously fitted, striking an exact balance where sharp tailoring meets total freedom of movement. Let a clean silhouette and flawless construction do the heavy lifting, skipping loud embellishments entirely. Fiddling with complicated straps or restrictive hemlines kills the mood instantly when you just want to focus on the conversation. Choose shapes that allow you to gesture confidently, lean in close, and navigate a room without a second thought. The final impression is undeniably inviting, but always firmly in control.",
+  "intimateText": "Intimate settings are not an excuse to dissolve into romantic clichés. Your best evening pieces slip on in seconds but appear rigorously fitted, striking an exact balance where sharp tailoring meets total freedom of movement. Let a clean silhouette and flawless construction do the heavy lifting, skipping loud embellishments entirely. Fiddling with complicated straps or restrictive hemlines kills the mood instantly when you just want to focus on the conversation. Choose shapes that allow you to gesture confidently, lean in close, and navigate a room without a second thought. The final impression is undeniably inviting, but always firmly in control.",
   "workText": "Your professional wardrobe functions best as a highly intelligent uniform. Dressing for the office requires a fine balance between sharp intellect and total physical freedom. You need garments that telegraph immediate competence but never restrict your stride when darting between meetings. Focus on exact tailoring that leaves room to breathe, choosing trousers with a deliberate drape and lightweight shirting that holds a defined shape. The goal is an understated presentation that demands zero adjustment once you walk out the door. When your outfit is this brilliantly engineered, authority becomes a natural byproduct.\n\nYour style energy concentrates in public and community, so your wardrobe is at its best when it reflects both public and community."
  },
  "palette": {
@@ -119,7 +119,7 @@
    },
    {
     "hexValue": "#0080FF",
-    "name": "electric blue",
+    "name": "bright blue",
     "provenance": {
      "band": "core",
      "family": "Bright Spring",

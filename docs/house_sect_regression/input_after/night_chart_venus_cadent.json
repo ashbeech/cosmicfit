@@ -8,16 +8,16 @@
   },
   "code" : {
     "avoid" : [
-      "Blunt, aggressive dressing that shuts down dialogue. Your power comes from persuasion, not intimidation.",
-      "Harsh industrial textures that contradict your natural grace. Rough fabrics fight your energy instead of channelling it.",
+      "Avoid blunt, aggressive dressing that completely shuts down dialogue, remembering that your true power comes from quiet persuasion rather than loud intimidation.",
+      "Skip harsh industrial textures that contradict your natural grace, as rough fabrics actively fight your personal style instead of channelling it effectively.",
       "Rigid matching sets that remove all surprise. If the outfit looks like it came off a mannequin as one unit, it is too predictable.",
       "Head-to-toe uniform dressing that shuts down your versatility. You need room to remix.",
       "One-note outfits that say only one thing. Your style should carry at least two ideas at once.",
       "Fussy or indecisive presentations that dilute your natural impact. If the outfit looks like you could not choose, neither can anyone else."
     ],
     "consider" : [
-      "A dedicated pressing routine as a style ritual that ensures every garment meets your standard daily",
-      "Strategic fit alterations on every key piece so nothing in rotation is merely approximate",
+      "Commit to a strict steaming routine to guarantee the crisp finish of every garment meets your exacting standards.",
+      "Strategic fit alterations on every key piece so nothing in rotation is merely approximate.",
       "Military-inspired details as a through-line in your wardrobe. Epaulettes, structured shoulders, and clean brass hardware suit your energy.",
       "How a consistent dark palette communicates reliability. When people know what to expect visually, they trust your judgement."
     ],
@@ -27,11 +27,11 @@
       "Dressing strategically for the reaction you want. Your clothes are diplomatic tools, and every outfit is a negotiation.",
       "Mixing high and low fearlessly. A vintage market find paired with a designer knit shows range, not confusion.",
       "Embracing pattern clashing with clear intention. Stripes with florals works when the colour story holds together.",
-      "Treating accessories as conversation starters. A ring with a story or a bag that prompts a question earns its place."
+      "Treat your accessories as immediate conversation starters; a sculptural ring with a backstory or a clutch that prompts a question always earns its keep."
     ]
   },
   "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-06-10T23:58:22Z",
+  "generatedAt" : "2026-06-19T17:06:42Z",
   "hardware" : {
     "metalsText" : "Heavy, rigid hardware will completely suffocate the lightness of your wardrobe. You always look much more interesting when you actively scramble your finishes, letting white gold tones rings sit right next to a rose gold tones bag clasp. Because your clothes rely on fluid layers and soft movement, keep the actual metal textures equally relaxed. Liquid, slightly melted shapes in mixed metals work far better on you than aggressive, high-shine spikes. Treat your zips and jacket buttons as conversational details instead of purely functional bolts. The final effect should be a gentle, expensive jangle as you walk, never the imposing clank of a bank vault.",
     "recommendedMetals" : [
@@ -40,7 +40,7 @@
       "mixed metals",
       "sterling silver",
       "silver",
-      "soft copper",
+      "warm sienna",
       "polished brass",
       "iridescent finishes"
     ],
@@ -61,7 +61,7 @@
   "occasions" : {
     "dailyText" : "Dressing for a standard weekday is an exercise in leaving room to change your mind. Your off-duty wardrobe relies on weightless layers and pieces that overlap, allowing the look to evolve as your mood shifts. Look for fluid silhouettes that drape gently rather than holding a rigid shape, giving you total physical ease without sacrificing visual interest. A stiff collar or an unforgiving waistline will only annoy you before noon. Focus instead on garments with clever construction, movement, and a bit of playful volume. Give yourself an outfit that feels like a private comfort blanket but looks entirely ready to talk to anyone.\n\nYour style energy concentrates in expression and retreat, so your wardrobe is at its best when it reflects both expression and retreat.",
     "intimateText" : "Close-quarters dressing requires a balance between complete physical ease and a flash of wit. Choose garments that float away from the body, relying on weightless layers that respond to how you shift in a chair or lean over a table. Contrast that fluid drape with one highly specific, slightly eccentric finishing touch that prompts a question from whoever sits next to you. The overall impression is a look entirely surrendered to the mood of the room, while keeping the conversation in motion.",
-    "workText" : "Workwear for you is an exercise in social agility. Keep your professional silhouette light and adaptable by layering sharp tailoring over pieces with genuine drape and physical ease. You need an outfit that looks totally intentional while sitting in a meeting, but still moves with you when you talk with your hands or pivot into a sudden pitch. Ground the look in classic shapes, then let the styling do the talking through unexpected proportions. You are aiming for a wardrobe that functions seamlessly without ever feeling rigid.\n\nAt work, lean into approachable authority; soft structure and nurturing polish build trust without sacrificing presence."
+    "workText" : "Workwear for you is an exercise in social agility. Keep your professional silhouette light and adaptable by layering sharp tailoring over pieces with genuine drape and physical ease. You need an outfit that looks totally intentional while sitting in a meeting, but still moves with you when you talk with your hands or pivot into a sudden pitch. Ground the look in classic shapes, then let the styling do the talking through unexpected proportions. You are aiming for a wardrobe that functions seamlessly without ever feeling rigid.\n\nYou command your workplace by softening the rigorous structure of traditional suiting with fluid silks and tactile brushed cotton."
   },
   "palette" : {
     "accentColours" : [
@@ -93,7 +93,7 @@
       },
       {
         "hexValue" : "#FFCBA4",
-        "name" : "peach",
+        "name" : "light peach",
         "provenance" : {
           "band" : "core",
           "family" : "Light Spring",
@@ -115,7 +115,7 @@
       },
       {
         "hexValue" : "#A4C639",
-        "name" : "lime",
+        "name" : "apple green",
         "provenance" : {
           "band" : "core",
           "family" : "Light Spring",
@@ -150,7 +150,7 @@
     },
     "luminarySignature" : {
       "hexValue" : "#D3AB53",
-      "name" : "antique gold",
+      "name" : "deep honey",
       "provenance" : {
         "band" : "luminarySignature",
         "family" : "Light Spring",
@@ -160,7 +160,7 @@
       "role" : "signature",
       "semanticLabel" : "luminary signature"
     },
-    "narrativeText" : "Dressing for you is a constant dialogue, meaning your wardrobe needs shades that are naturally light on their feet. Your daily foundations rely heavily on honey yellow and peach, which translate beautifully across crisp cotton shirting and sheer silk-blend layers. A wash of aqua mint brings a softer, almost watercolour quality to the mix, ensuring the overall effect remains approachable rather than stark. Introduce Mercury Teal as an unexpected flash of detail; think an enamel pendant or a slightly unusual flat shoe, to keep the eye moving. The result is a highly conversational mix of tones that shifts seamlessly depending on your mood and whoever you happen to be talking to.",
+    "narrativeText" : "Dressing for you is a constant dialogue, meaning your wardrobe needs shades that are naturally light on their feet. Your daily foundations rely heavily on honey yellow and light peach, which translate beautifully across crisp cotton shirting and sheer silk-blend layers. A wash of aqua mint brings a softer, almost watercolour quality to the mix, ensuring the overall effect remains approachable rather than stark. Introduce Mercury Teal as an unexpected flash of detail; think an enamel pendant or a slightly unusual flat shoe, to keep the eye moving. The result is a highly conversational mix of tones that shifts seamlessly depending on your mood and whoever you happen to be talking to.",
     "neutrals" : [
       {
         "hexValue" : "#FAF5EF",
@@ -307,7 +307,7 @@
     "tipText" : "Treat your prints like a conversation starter rather than a loud declaration. Slip a balanced geometric into your outfit through a washed silk shirt layered under a crisp cotton jacket, letting just the collar and cuffs show. You need visual variety to stay interested, but stiff, heavy motifs will instantly ruin your comfort. Grounding a playful design in a lightweight, fluid fabric softens the entire look. It reads as clever and observant, giving your outfit a sense of humour without sacrificing an ounce of physical ease."
   },
   "styleCore" : {
-    "narrativeText" : "Your presence is inherently conversational. You walk into a room and instantly broadcast a clever, adaptable energy that feels completely approachable. There is a quick-witted quality to how you build an outfit, effortlessly mixing unexpected proportions while keeping the overall silhouette loose and fluid. While your aesthetic thrives on social motion and visual intrigue, the actual foundation relies on absolute physical ease. You do not dress to build a wall between yourself and the rest of the room. Your style acts as an intelligent, shifting dialogue with whoever happens to be standing in front of you.\n\nYour natural sense of beauty shows up most powerfully in your everyday expression, style as social currency, approachable beauty that invites conversation. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as warm and approachable; polished comfort signals care and emotional intelligence."
+    "narrativeText" : "Your presence is inherently conversational. You walk into a room and instantly broadcast a clever, adaptable energy that feels completely approachable. There is a quick-witted quality to how you build an outfit, effortlessly mixing unexpected proportions while keeping the overall silhouette loose and fluid. While your aesthetic thrives on social motion and visual intrigue, the actual foundation relies on absolute physical ease. You do not dress to build a wall between yourself and the rest of the room. Your style acts as an intelligent, shifting dialogue with whoever happens to be standing in front of you.\n\nYour natural sense of beauty shows up most powerfully in your everyday expression, style as social currency, approachable beauty that invites conversation. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public aesthetic relies on heavy silk crepe and soft draping to communicate a welcoming yet deeply polished presence."
   },
   "textures" : {
     "avoidTextures" : [
@@ -332,6 +332,6 @@
   "userInfo" : {
     "birthDate" : "1993-03-21T00:00:00Z",
     "birthLocation" : "Synthetic Fixture",
-    "generationDate" : "2026-06-10T23:58:22Z"
+    "generationDate" : "2026-06-19T17:06:42Z"
   }
 }

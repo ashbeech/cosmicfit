@@ -68,7 +68,7 @@
   "accentColours": [
    {
     "hexValue": "#4D7E8C",
-    "name": "Soft Silver",
+    "name": "Slate Teal",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Signature",
@@ -116,7 +116,7 @@
    },
    {
     "hexValue": "#0080FF",
-    "name": "electric blue",
+    "name": "bright blue",
     "provenance": {
      "band": "core",
      "family": "Bright Spring",
@@ -151,7 +151,7 @@
   },
   "luminarySignature": {
    "hexValue": "#DFA74B",
-   "name": "antique gold",
+   "name": "deep honey",
    "provenance": {
     "band": "luminarySignature",
     "family": "Bright Spring",

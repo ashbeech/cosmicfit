@@ -37,7 +37,7 @@ struct CosmicFitTheme {
         static let tabBarInactive = UIColor.white
         
         /// Tab bar active/selected colour - Cosmic Orange
-        static let tabBarActive = cosmicLilac
+        static let tabBarActive = cosmicOrange
         
         /// Border colour for form elements
         static let borderColor = cosmicBlue
@@ -308,6 +308,26 @@ struct CosmicFitTheme {
         }
     }
     
+    private static func applyTabBarItemAppearance(_ itemAppearance: UITabBarItemAppearance) {
+        let titleFont = Typography.DMSerifTextFont(size: Typography.FontSizes.body, weight: .regular)
+        let titleOffset = UIOffset(horizontal: 0, vertical: -10)
+
+        itemAppearance.selected.titleTextAttributes = [
+            .foregroundColor: Colours.tabBarActive,
+            .font: titleFont
+        ]
+        itemAppearance.selected.iconColor = .clear
+
+        itemAppearance.normal.titleTextAttributes = [
+            .foregroundColor: Colours.tabBarInactive,
+            .font: titleFont
+        ]
+        itemAppearance.normal.iconColor = .clear
+
+        itemAppearance.normal.titlePositionAdjustment = titleOffset
+        itemAppearance.selected.titlePositionAdjustment = titleOffset
+    }
+
     /// Apply theme to tab bar with black background and white text
     static func styleTabBar(_ tabBar: UITabBar) {
         tabBar.backgroundColor = Colours.tabBarBackground
@@ -320,24 +340,13 @@ struct CosmicFitTheme {
             let tabBarAppearance = UITabBarAppearance()
             tabBarAppearance.configureWithOpaqueBackground()
             tabBarAppearance.backgroundColor = Colours.tabBarBackground
-            
-            // Selected tab item - Orange text with DM Serif Text font
-            tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [
-                .foregroundColor: Colours.tabBarActive,
-                .font: Typography.DMSerifTextFont(size: Typography.FontSizes.body, weight: .regular)
-            ]
-            tabBarAppearance.stackedLayoutAppearance.selected.iconColor = .clear // Hide icon
-            
-            // Normal tab item - White text with DM Serif Text font
-            tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [
-                .foregroundColor: Colours.tabBarInactive,
-                .font: Typography.DMSerifTextFont(size: Typography.FontSizes.body, weight: .regular)
-            ]
-            tabBarAppearance.stackedLayoutAppearance.normal.iconColor = .clear // Hide icon
-            
-            // Increase title position to center text vertically (since no icon)
-            tabBarAppearance.stackedLayoutAppearance.normal.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: -10)
-            tabBarAppearance.stackedLayoutAppearance.selected.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: -10)
+            tabBarAppearance.shadowColor = .clear
+            tabBarAppearance.selectionIndicatorTintColor = .clear
+            tabBarAppearance.selectionIndicatorImage = UIImage()
+
+            applyTabBarItemAppearance(tabBarAppearance.stackedLayoutAppearance)
+            applyTabBarItemAppearance(tabBarAppearance.inlineLayoutAppearance)
+            applyTabBarItemAppearance(tabBarAppearance.compactInlineLayoutAppearance)
             
             tabBar.standardAppearance = tabBarAppearance
             if #available(iOS 15.0, *) {
@@ -554,6 +563,19 @@ struct CosmicFitTheme {
         scrollView.showsVerticalScrollIndicator = true
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.contentInsetAdjustmentBehavior = .never
+        scrollView.delaysContentTouches = false
+    }
+
+    /// Styles a toggle for legibility on light content backgrounds.
+    /// The app Info.plist sets `UIUserInterfaceStyle` to Dark, but most screens
+    /// use light grey backgrounds — force light-mode switch chrome there.
+    static func styleSwitch(_ switchControl: UISwitch) {
+        switchControl.overrideUserInterfaceStyle = .light
+        switchControl.onTintColor = Colours.cosmicBlue
+        switchControl.thumbTintColor = .white
+        switchControl.backgroundColor = Colours.cosmicBlue.withAlphaComponent(0.22)
+        switchControl.layer.cornerRadius = 16
+        switchControl.clipsToBounds = true
     }
 }
 
