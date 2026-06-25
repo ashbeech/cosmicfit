@@ -1,0 +1,359 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "A jumble of delicate chains or a loud stack of rings will just feel like noise to you. Instead, let one serious, flawlessly made anchor piece do the work of five minor accessories. Find the luxury in tactile details, whether that is the satisfying weight of a bag closure or the precise stitching on a leather watch strap. That solitary item grounds the quiet precision of your clothes. It proves that when the finish is exactly right, a single choice is all you need.",
+   "Your finishing pieces act as structural punctuation rather than an afterthought. A firm leather bag with flawless stitching or a stiff belt brings immediate discipline to a silhouette. You find genuine comfort in the mechanics of dressing, drawn to a meticulously engineered clasp or the reassuring weight of a proper watch. These additions provide your framework, imposing crisp boundaries on softer fabrics like brushed cotton or fine-gauge knits. When the hardware is this exacting, the rest of the outfit falls instantly in line.",
+   "The way your daily rotation sounds and feels in motion sets the tone for your entire day. That clean, distinct scent of high-grade leather on a structured bag establishes a baseline of quality before it is even opened. You find immense comfort in the physical precision of putting a look together, the firm, definitive snap of a heavy belt clasp, or the reassuring weight of a solid watch face settling perfectly on your wrist. These tangible touchpoints ground your energy. True style relies entirely on items that satisfy your hands long before you ever check the mirror."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Convention for convention's sake that serves no creative purpose. Following rules without questioning them is the real failure.",
+   "Traditional stuffy fabrics that anchor you to the past. Your creative axis points forward, and your wardrobe should too.",
+   "Conventional styling rules and expected silhouettes that force you into a boring sartorial box.",
+   "Step away from fiercely traditional tailoring that suppresses your distinctly architectural, futuristic edge.",
+   "Safe, middle-of-the-road outfits that completely fail to push your personal style boundaries forward.",
+   "Visible wrinkles, stains, and fabric pilling from your rotation entirely. These tiny surface imperfections create a disproportionate amount of distracting visual noise."
+  ],
+  "consider": [
+   "Claiming a signature bold print for your rotation that instantly acts as your definitive sartorial calling card.",
+   "Wearing heavy gold accessories as a daily declaration of your creative authority and generous warmth.",
+   "Finding a tailor who understands your body and can adjust every key piece to your exact proportions.",
+   "Buyying one perfectly fitting poplin shirt to act as a strict template for every future purchase."
+  ],
+  "leanInto": [
+   "Understanding that rebellion needs structure to be effective. A carefully deconstructed jacket communicates more than a randomly torn one.",
+   "Innovating within constraints rather than discarding all rules. Limits sharpen your creativity and make your unconventional choices land harder.",
+   "Using discipline as a foundation for originality. The most memorable disruptors are precise about how they break the rules.",
+   "Treating ironing and pressing your garments as a genuine form of self-care, allowing the quiet ritual of preparing clothes to calm your mind before the day begins.",
+   "Keeping a minimalist wardrobe with maximum polish. Fewer pieces, all of them perfect, is your emotional sweet spot.",
+   "Making sure everything has a place. A tidy wardrobe translates directly into a tidy state of mind for you."
+  ]
+ },
+ "engineVersion": "2.1.0",
+ "generatedAt": "2026-06-25T10:51:29Z",
+ "hardware": {
+  "metalsText": "Loud hardware completely disrupts a clean line for you. You prefer details that serve a clear function rather than just existing as decoration. Metalwork should feel seamlessly integrated, quietly doing its job without distracting the eye. A brushed brushed silver tones zip on a fine knit feels exactly right, offering a matte finish without flash. For everyday pieces and trench buckles, white gold tones provides a cool, flat tone that blends beautifully into soft sage and warm taupe. If you want a hint of warmth, a very simple platinum tones pendant sits perfectly on bare skin. The best metallic elements you own feel less like styling extras and more like precise engineering.",
+  "recommendedMetals": [
+   "brushed silver",
+   "white gold",
+   "platinum",
+   "matte platinum",
+   "matte white gold",
+   "polished silver",
+   "surgical steel",
+   "titanium"
+  ],
+  "recommendedStones": [
+   "peridot",
+   "amazonite",
+   "sapphire",
+   "clear quartz",
+   "moss agate",
+   "garnet",
+   "onyx",
+   "labradorite",
+   "meteorite"
+  ],
+  "stonesText": "Your instinct for jewellery naturally leans toward quiet substance rather than distracting sparkle. You bypass faceted, highly reflective gems in favour of the smooth, grounded finish found in peridot and amazonite. You prefer a cabochon cut set flush into a neat metal bezel, ensuring the piece never snags on your knitwear. A subtle slice of sapphire works perfectly when the setting is exceptionally precise. The ideal piece functions less as a decorative afterthought and more as a tactile object to ground you as you move through your day.",
+  "tipText": "Your accessories should feel less like decoration and more like precision engineering. A functional, weighty piece in brushed silver tones; think a complex watch dial or a heavy architectural clasp, gives proper weight to a fine-gauge knit. Since your eye naturally seeks out order, skip the tangled layers and look for integrated fastenings or a single, flush-set peridot. The ultimate luxury is wearing items designed so flawlessly you never have to adjust them."
+ },
+ "occasions": {
+  "dailyText": "Your version of throwing something on still involves a steamer and a critical eye. Even on a quiet Sunday, your everyday rotation has to provide a strict sense of order to keep you grounded. Rather than sinking into shapeless loungewear, seek out simple separates defined by immaculate seaming, exact proportions, and hemlines that hit precisely where they should. The overall silhouette must remain neat, stripping away excess volume or trailing edges that quickly read as unkempt. True comfort for you comes entirely from knowing every piece fits flawlessly and sits exactly in its proper place.\n\nYour comfort instinct gravitates toward emotionally expansive dressing, travel comfort, soft global influences.",
+  "intimateText": "Evening dressing is an exercise in serious restraint for you. The impact comes entirely from the fit and the undeniable quality of the cut rather than loud embellishment. Seek out silhouettes that sit close to the body with absolute geometric perfection. The draw lies in subtle details only visible from across a small table: an expertly finished edge, a razor-sharp neckline, or the satisfying weight of the material as you shift in your seat. Keep the overall shape streamlined and beautifully controlled. Your version of allure comes from looking entirely unbothered, wrapped in immaculate construction that demands closer attention.",
+  "workText": "Your approach to workwear is essentially an exercise in establishing immediate visual order. Seek out garments that hold a deliberate shape and feel inherently expensive purely through their considered proportions. You thrive in pieces that sit exactly right on the body, relying on sharp hemlines and clean seams to map out a decisive silhouette. Skip the fussy extras and concentrate entirely on structural integrity and an immaculate fit over loud focal points. You appear most authoritative when there is zero visual distraction, projecting the quiet power of someone who misses absolutely nothing.\n\nYour style energy concentrates in philosophy and resources, so You build an intelligent wardrobe by investing in globally inspired silhouettes and deeply intentional craftsmanship.. At work, you command collaborative authority by dressing in balanced proportions and maintaining a harmonious colour palette for diplomatic elegance."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#731632",
+    "name": "Burnt Wine",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Pluto",
+     "sourceSign": "Scorpio"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#2E766B",
+    "name": "Verdigris",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Mars",
+     "sourceSign": "Gemini"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#95824F",
+    "name": "Warm Fern",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Visibility",
+     "saturationOverride": false,
+     "sourcePlanet": "Venus",
+     "sourceSign": "Virgo"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Medium Warm Grounded",
+  "coreColours": [
+   {
+    "hexValue": "#B7410E",
+    "name": "rust",
+    "provenance": {
+     "band": "core",
+     "family": "True Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#5B7744",
+    "name": "moss",
+    "provenance": {
+     "band": "core",
+     "family": "True Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#CC7722",
+    "name": "ochre",
+    "provenance": {
+     "band": "core",
+     "family": "True Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#014D4E",
+    "name": "deep teal",
+    "provenance": {
+     "band": "core",
+     "family": "True Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#1C1210",
+   "name": "black brown",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "True Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "True Autumn",
+  "lightAnchor": {
+   "hexValue": "#EFE6D3",
+   "name": "bone",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "True Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#867C56",
+   "name": "moss sage",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "True Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "Your wardrobe is an exercise in visual calm, built on shades that look inherently expensive because they require pristine maintenance. Anchor your daily rotation in rust, moss, and ochre, treating these tones as a quiet backdrop for flawless tailoring and crisp poplin shirting. Introduce Burnt Wine strictly when you want to draw the eye to a specific detail, like a sharp collar or a perfectly finished seam. Keeping the contrast low and the saturation dialled back ensures the focus remains exactly where you want it: on the immaculate fit and the tactile weight of the fabric.",
+  "neutrals": [
+   {
+    "hexValue": "#C19A6B",
+    "name": "camel",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#7B5B3A",
+    "name": "cocoa",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#706238",
+    "name": "warm olive",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#786D4E",
+    "name": "deep khaki",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": true,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": true,
+   "fireAirChromaApplied": false,
+   "scorpioDensityApplied": false,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#938438",
+   "name": "olive gold",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "True Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Deep Autumn",
+  "supportColours": [
+   {
+    "hexValue": "#8A8D8F",
+    "name": "cool stone",
+    "provenance": {
+     "band": "support",
+     "family": "True Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#71797E",
+    "name": "steel grey",
+    "provenance": {
+     "band": "support",
+     "family": "True Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#1B2A4A",
+    "name": "ink navy",
+    "provenance": {
+     "band": "support",
+     "family": "True Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#4B4F54",
+    "name": "graphite",
+    "provenance": {
+     "band": "support",
+     "family": "True Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "Medium",
+   "depth": "Medium",
+   "saturation": "Rich",
+   "surface": "Balanced",
+   "temperature": "Warm"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "loud graphics",
+   "chaotic prints",
+   "oversized logos",
+   "novelty prints"
+  ],
+  "narrativeText": "Visual clutter physically irritates you, which means your approach to prints is remarkably strict. If a print makes the cut, it must be orderly and intentional, like the quiet repetition of circuit-inspired or the refined geometry of brutalist grid windowpane. You look brilliant in micro-check woven directly into a crisp poplin or a fine-gauge knit, where the design feels like a structural detail rather than mere surface decoration. Steer clear of loud graphics and chaotic prints, as their erratic scale pulls focus from the impeccable fit of your garments. Let the quality of the textile speak first, keeping the graphics entirely in check.",
+  "recommendedPatterns": [
+   "circuit-inspired",
+   "brutalist grid windowpane",
+   "micro-check",
+   "fine stripe",
+   "tone-on-tone herringbone",
+   "pinstripe"
+  ],
+  "tipText": "Loud prints disrupt the quiet precision of your wardrobe. A good pattern should behave beautifully, blending into your look rather than shouting over it. Rely on a subtle circuit-inspired to provide visual depth without breaking your clean silhouette. Woven motifs work exceptionally well for this. A fine brutalist grid windowpane woven into crisp poplin or pressed linen reads as a solid colour from a few steps away, only revealing its exactness up close. The best prints function as an intimate texture that rewards a closer look."
+ },
+ "styleCore": {
+  "narrativeText": "An unwavering commitment to exactness defines your presence. This look of total composure stems from knowing a perfectly executed seam speaks louder than any passing trend. Finding genuine comfort in order translates into a beautifully grounded aesthetic, requiring garments that sit immaculately on the body with flawless internal construction. Projecting a quiet, tactile intelligence through your clothes results in a strict, intentional silhouette. Observers register the impeccable fit of your wardrobe long before they clock the designer brand. Ultimately, your understated elegance proves that the most compelling style comes from obsessing over the details.\n\nYour natural sense of beauty shows up most powerfully in your broader vision, beauty from around the world, global aesthetic influences, cultural elegance. Your style instincts lean toward clarity, structure, and visible polish. Your public style reads as harmonious and elegant; social grace and balanced aesthetics are immediately legible."
+ },
+ "textures": {
+  "avoidTextures": [
+   "traditional stuffy fabrics",
+   "wrinkled linen",
+   "unfinished edges"
+  ],
+  "badText": "There is a specific kind of low-level stress that comes from wearing materials that refuse to behave. Something like traditional stuffy fabrics always reads as unresolved and messy, while the synthetic drape of wrinkled linen fights against your need for structural calm. Your eye catches the cut corners in manufacturing long before anyone else notices them. Anything prone to static, pilling, or clinging simply disrupts your day. If a piece demands constant adjusting just to hang correctly, it has no place on your body.",
+  "goodText": "Flimsy materials that lose their shape by lunchtime are entirely useless to you. A perfectly constructed collar or a seam sitting exactly where it belongs provides a genuine sense of calm. Your wardrobe demands tech fabric and recycled innovation, fabrics that feel crisp, intentional, and firmly under control. You need textiles that look just as sharp at midnight as they did the second you buttoned them up. Incorporate structural mesh and pressed cotton into your rotation to guarantee a flawless, smooth finish against the skin, actively avoiding anything remotely clingy. True security comes from wearing clothes that behave exactly as the designer intended.",
+  "recommendedTextures": [
+   "tech fabric",
+   "recycled innovation",
+   "structural mesh",
+   "pressed cotton"
+  ],
+  "sweetSpotKeywords": [
+   "innovation",
+   "structure"
+  ],
+  "sweetSpotText": "Your ideal wardrobe thrives right at the intersection of innovation and structure. True luxury for you is an entirely tactile experience, calling for garments that provide an immediate sense of physical calm the moment they touch your skin. Reaching for a tech fabric or a meticulously constructed recycled innovation offers that necessary grounding weight without sacrificing visual neatness. You want fabrics that are exceptionally quiet to look at but undeniably rich when handled. If the interior seams are messy or the material feels unconvincing, it simply will not survive a day in your life."
+ },
+ "userInfo": {
+  "birthDate": "1992-08-28T20:00:00Z",
+  "birthLocation": "Synth 106 \u2014 Virgo Sun, 20:00 UTC, New York (1992)",
+  "generationDate": "2026-06-25T10:51:29Z"
+ }
+}

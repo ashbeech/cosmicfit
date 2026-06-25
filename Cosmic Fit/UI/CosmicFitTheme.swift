@@ -28,6 +28,12 @@ struct CosmicFitTheme {
         /// Primary accent colour (#7E69E6)
         static let cosmicLilac = UIColor(red: 126/255, green: 105/255, blue: 230/255, alpha: 1.0)
 
+        /// Lighter lilac used for filled-button confirmation flashes.
+        static let lightCosmicLilac = UIColor(red: 196/255, green: 182/255, blue: 248/255, alpha: 1.0)
+
+        /// Lighter cosmic blue used for filled onboarding-action confirmation flashes.
+        static let lightCosmicBlue = UIColor(red: 88/255, green: 92/255, blue: 112/255, alpha: 1.0)
+
         /// Tab bar background colour - Black
         static let tabBarBackground = cosmicBlue
         
@@ -121,7 +127,7 @@ struct CosmicFitTheme {
 
     /// Style Guide sub-page titles — serif section headers ("The Textures", "The Blueprint", etc.).
     struct StyleGuideSubPageTitleTypography {
-        static let letterSpacingFraction: CGFloat = 0.039
+        static let letterSpacingFraction: CGFloat = 0.028
 
         static func attributedString(
             _ text: String,
@@ -143,7 +149,7 @@ struct CosmicFitTheme {
 
     /// Daily Fit tarot card title — single-line serif caps ("THE CHARIOT"); default line height.
     struct DailyFitCardTitleTypography {
-        static let letterSpacingFraction: CGFloat = 0.078
+        static let letterSpacingFraction: CGFloat = 0.077
 
         static func attributedString(
             _ text: String,
@@ -513,6 +519,64 @@ struct CosmicFitTheme {
         button.layer.masksToBounds = true
     }
 
+    /// Brief confirmation flash for filled `.primary` / `.onboardingAction` buttons:
+    /// white → lighter accent → original accent (optional checkmark while flashing).
+    static func flashFilledButtonConfirmed(
+        _ button: UIButton,
+        style: ButtonStyle,
+        confirmationSymbol: String? = "checkmark",
+        completion: (() -> Void)? = nil
+    ) {
+        guard let palette = filledButtonPalette(for: style) else {
+            completion?()
+            return
+        }
+
+        let originalTitle = button.title(for: .normal)
+        let originalImage = button.image(for: .normal)
+        let originalTint = button.tintColor
+
+        if let confirmationSymbol {
+            let symbolConfig = UIImage.SymbolConfiguration(pointSize: style == .primary ? 24 : 16, weight: .semibold)
+            button.setImage(UIImage(systemName: confirmationSymbol, withConfiguration: symbolConfig), for: .normal)
+            button.setTitle("", for: .normal)
+            button.tintColor = .white
+        }
+
+        button.backgroundColor = .white
+
+        UIView.animate(withDuration: 0.12, delay: 0, options: [.curveEaseOut]) {
+            button.backgroundColor = .white
+        } completion: { _ in
+            UIView.animate(withDuration: 0.16, delay: 0, options: [.curveEaseOut]) {
+                button.backgroundColor = palette.light
+            } completion: { _ in
+                UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseOut]) {
+                    button.backgroundColor = palette.base
+                } completion: { _ in
+                    if confirmationSymbol != nil {
+                        button.setTitle(originalTitle, for: .normal)
+                        button.setImage(originalImage, for: .normal)
+                        button.tintColor = originalTint
+                        button.backgroundColor = palette.base
+                    }
+                    completion?()
+                }
+            }
+        }
+    }
+
+    private static func filledButtonPalette(for style: ButtonStyle) -> (base: UIColor, light: UIColor)? {
+        switch style {
+        case .primary:
+            return (Colours.cosmicLilac, Colours.lightCosmicLilac)
+        case .onboardingAction:
+            return (Colours.cosmicBlue, Colours.lightCosmicBlue)
+        case .secondary, .text:
+            return nil
+        }
+    }
+
     /// Light spinner for `.onboardingAction` buttons (cosmicBlue background).
     static func styleActivityIndicatorOnOnboardingAction(_ indicator: UIActivityIndicatorView) {
         indicator.style = .medium
@@ -531,7 +595,7 @@ struct CosmicFitTheme {
     
     /// Apply theme to divider/separator views
     static func styleDivider(_ divider: UIView) {
-        divider.backgroundColor = Colours.dividerColor
+        divider.backgroundColor = Colours.cosmicBlue
     }
     
     /// Create themed attributed string for mixed title/content text

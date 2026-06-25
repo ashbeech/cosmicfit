@@ -51,11 +51,11 @@ class ProfileViewController: UIViewController {
     private var isRedeeming = false
     private var isRemovingPromo = false
     private var promoRedeemFeedbackTask: Task<Void, Never>?
+    private var keyboardDismissTapGesture: UITapGestureRecognizer?
     var focusPromoCodeField = false
 
     private enum PromoRedeemButtonAppearance {
         case coupon
-        case success
         case failure
     }
 
@@ -71,6 +71,7 @@ class ProfileViewController: UIViewController {
     #endif
     private let signOutButton = UIButton(type: .system)
     private let deleteProfileButton = UIButton(type: .system)
+    private let deleteAccountButton = UIButton(type: .system)
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     private let mainStack = UIStackView()
     private let topFormDivider = UIView()
@@ -131,6 +132,7 @@ class ProfileViewController: UIViewController {
         )
 
         updateEntitlementUI()
+        updateAuthUI()
 
         #if DEBUG
         if DailyFitEngineConfig.allowsDevEngineTools {
@@ -154,6 +156,16 @@ class ProfileViewController: UIViewController {
         
         // Ensure navigation bar is visible
         navigationController?.navigationBar.isHidden = false
+
+        if let grant = CompAccessStorage.load(),
+           grant.isValid,
+           grant.isFirst50Code,
+           grant.redemptionPosition == nil {
+            Task {
+                await PromoCodeService.shared.restoreCompAccessIfNeeded()
+                await MainActor.run { updateEntitlementUI() }
+            }
+        }
 
         #if DEBUG
         if DailyFitEngineConfig.allowsDevEngineTools {
@@ -444,9 +456,19 @@ class ProfileViewController: UIViewController {
         deleteProfileButton.setTitleColor(.white, for: .normal)
         deleteProfileButton.layer.borderWidth = 0
         deleteProfileButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+
+        deleteAccountButton.setTitle("Delete account", for: .normal)
+        deleteAccountButton.addTarget(self, action: #selector(deleteAccountButtonTapped), for: .touchUpInside)
+        deleteAccountButton.translatesAutoresizingMaskIntoConstraints = false
+        CosmicFitTheme.styleButton(deleteAccountButton, style: .secondary)
+        deleteAccountButton.backgroundColor = .systemRed
+        deleteAccountButton.setTitleColor(.white, for: .normal)
+        deleteAccountButton.layer.borderWidth = 0
+        deleteAccountButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        deleteAccountButton.isHidden = true
         
         dangerSectionDivider.translatesAutoresizingMaskIntoConstraints = false
-        dangerSectionDivider.backgroundColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.28)
+        CosmicFitTheme.styleDivider(dangerSectionDivider)
         dangerSectionDivider.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
@@ -534,16 +556,15 @@ class ProfileViewController: UIViewController {
         mainStack.addArrangedSubview(dangerSectionDivider)
         mainStack.setCustomSpacing(22, after: dangerSectionDivider)
         mainStack.addArrangedSubview(signInButton)
-        mainStack.addArrangedSubview(restorePurchasesButton)
-        mainStack.addArrangedSubview(manageSubscriptionButton)
-
-        mainStack.addArrangedSubview(subscriptionStatusLabel)
-        mainStack.setCustomSpacing(20, after: subscriptionStatusLabel)
         mainStack.addArrangedSubview(promoCodeFieldContainer)
         mainStack.addArrangedSubview(appliedPromoContainer)
         mainStack.setCustomSpacing(8, after: appliedPromoContainer)
+        mainStack.addArrangedSubview(subscriptionStatusLabel)
+        mainStack.setCustomSpacing(8, after: subscriptionStatusLabel)
         mainStack.addArrangedSubview(promoErrorLabel)
         mainStack.setCustomSpacing(20, after: promoErrorLabel)
+        mainStack.addArrangedSubview(restorePurchasesButton)
+        mainStack.addArrangedSubview(manageSubscriptionButton)
 
         #if DEBUG
         if DailyFitEngineConfig.allowsDevEngineTools {
@@ -554,6 +575,7 @@ class ProfileViewController: UIViewController {
         }
         #endif
         mainStack.addArrangedSubview(signOutButton)
+        mainStack.addArrangedSubview(deleteAccountButton)
         mainStack.addArrangedSubview(deleteProfileButton)
     }
     
@@ -584,7 +606,9 @@ class ProfileViewController: UIViewController {
         // Add tap gesture to dismiss keyboard when tapping outside
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
+        tapGesture.delegate = self
         view.addGestureRecognizer(tapGesture)
+        keyboardDismissTapGesture = tapGesture
         
         // Register for keyboard notifications
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -833,13 +857,14 @@ class ProfileViewController: UIViewController {
 
     @objc private func updateEntitlementUI() {
         let em = EntitlementManager.shared
+        let compGrant = CompAccessStorage.load()
 
         if em.hasStoreKitSubscription {
             subscriptionStatusLabel.text = "Subscribed"
             subscriptionStatusLabel.isHidden = false
             manageSubscriptionButton.isHidden = false
-        } else if em.hasCompAccess, let code = em.appliedCompCode {
-            subscriptionStatusLabel.text = "Comp access (\(code))"
+        } else if em.hasCompAccess, let grant = compGrant, grant.isValid {
+            subscriptionStatusLabel.text = compAccessStatusMessage(for: grant)
             subscriptionStatusLabel.isHidden = false
             manageSubscriptionButton.isHidden = true
         } else if !DailyFitEngineConfig.isProductionBuildMode {
@@ -858,6 +883,7 @@ class ProfileViewController: UIViewController {
         if em.hasStoreKitSubscription {
             promoCodeFieldContainer.isHidden = true
             appliedPromoContainer.isHidden = true
+            promoErrorLabel.isHidden = true
         } else if em.hasCompAccess, let code = em.appliedCompCode {
             appliedPromoCodeLabel.text = code
             appliedPromoContainer.isHidden = false
@@ -866,6 +892,13 @@ class ProfileViewController: UIViewController {
             appliedPromoContainer.isHidden = true
             promoCodeFieldContainer.isHidden = false
         }
+    }
+
+    private func compAccessStatusMessage(for grant: CompAccessGrant) -> String {
+        if grant.isFirst50Code, let position = grant.redemptionPosition {
+            return "You're \(position) of the first 50"
+        }
+        return "Comp access (\(grant.code))"
     }
 
     private func configureAppliedPromoRow() {
@@ -974,7 +1007,9 @@ class ProfileViewController: UIViewController {
         promoCodeField.rightViewMode = .never
 
         redeemButton.translatesAutoresizingMaskIntoConstraints = false
-        redeemButton.addTarget(self, action: #selector(redeemButtonTapped), for: .touchUpInside)
+        // .touchDown ensures redeem fires when the keyboard is up; the first tap can
+        // otherwise only resign first responder without delivering .touchUpInside.
+        redeemButton.addTarget(self, action: #selector(redeemButtonTapped), for: [.touchUpInside, .touchDown])
         redeemButton.accessibilityLabel = "Redeem promo code"
         CosmicFitTheme.styleButton(redeemButton, style: .onboardingAction)
         redeemButton.setTitle(nil, for: .normal)
@@ -1003,9 +1038,6 @@ class ProfileViewController: UIViewController {
         case .coupon:
             symbolName = "ticket.fill"
             background = CosmicFitTheme.Colours.cosmicBlue
-        case .success:
-            symbolName = "checkmark"
-            background = .systemGreen
         case .failure:
             symbolName = "xmark"
             background = .systemRed
@@ -1026,9 +1058,17 @@ class ProfileViewController: UIViewController {
         redeemButton.alpha = enabled ? 1.0 : 0.85
     }
 
-    private func flashPromoRedeemButton(_ appearance: PromoRedeemButtonAppearance) async {
+    private func flashPromoRedeemButtonSuccess() async {
+        await withCheckedContinuation { continuation in
+            CosmicFitTheme.flashFilledButtonConfirmed(redeemButton, style: .onboardingAction) {
+                continuation.resume()
+            }
+        }
+    }
+
+    private func flashPromoRedeemButtonFailure() async {
         await MainActor.run {
-            applyPromoRedeemButtonAppearance(appearance)
+            applyPromoRedeemButtonAppearance(.failure)
         }
         try? await Task.sleep(for: .seconds(1))
         await MainActor.run {
@@ -1055,7 +1095,7 @@ class ProfileViewController: UIViewController {
                     isRedeeming = false
                     setPromoCodeInputEnabled(true)
                 }
-                await flashPromoRedeemButton(.success)
+                await flashPromoRedeemButtonSuccess()
                 guard !Task.isCancelled else { return }
                 await MainActor.run {
                     promoCodeField.text = ""
@@ -1070,7 +1110,7 @@ class ProfileViewController: UIViewController {
                     promoErrorLabel.text = error.localizedDescription
                     promoErrorLabel.isHidden = false
                 }
-                await flashPromoRedeemButton(.failure)
+                await flashPromoRedeemButtonFailure()
             }
         }
     }
@@ -1097,6 +1137,23 @@ class ProfileViewController: UIViewController {
         let isAuth = CosmicFitAuthService.shared.isAuthenticated
         signInButton.isHidden = isAuth
         signOutButton.isHidden = !isAuth
+        deleteAccountButton.isHidden = !isAuth
+        deleteProfileButton.isHidden = isAuth
+    }
+    
+    @objc private func deleteAccountButtonTapped() {
+        let alert = UIAlertController(
+            title: "Delete Account",
+            message: "This permanently deletes your cloud account and synced Style Guide data. Your on-device data will also be removed. This does not cancel an App Store subscription. Are you sure?",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Delete Account", style: .destructive) { [weak self] _ in
+            self?.deleteAccount()
+        })
+
+        present(alert, animated: true)
     }
     
     @objc private func deleteButtonTapped() {
@@ -1107,8 +1164,8 @@ class ProfileViewController: UIViewController {
         )
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { _ in
-            self.deleteProfile()
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            self?.deleteProfile()
         })
         
         present(alert, animated: true)
@@ -1201,16 +1258,42 @@ class ProfileViewController: UIViewController {
     
     private func deleteProfile() {
         UserProfileStorage.shared.deleteUserProfile()
-        
-        // Post notification
         NotificationCenter.default.post(name: .userProfileDeleted, object: nil)
-        
-        // Navigate back to onboarding - skip welcome since they've seen it
+        navigateToOnboarding()
+    }
+
+    private func deleteAccount() {
+        activityIndicator.startAnimating()
+        deleteAccountButton.isEnabled = false
+        deleteProfileButton.isEnabled = false
+
+        Task {
+            do {
+                try await CosmicFitAuthService.shared.deleteAccount()
+                await MainActor.run {
+                    self.activityIndicator.stopAnimating()
+                    NotificationCenter.default.post(name: .userProfileDeleted, object: nil)
+                    self.navigateToOnboarding()
+                }
+            } catch {
+                await MainActor.run {
+                    activityIndicator.stopAnimating()
+                    deleteAccountButton.isEnabled = true
+                    deleteProfileButton.isEnabled = true
+                    showAlert(
+                        title: "Could Not Delete Account",
+                        message: "We couldn't delete your account right now. Please try again or email help@cosmicfit.app."
+                    )
+                }
+            }
+        }
+    }
+
+    private func navigateToOnboarding() {
         let onboardingFormVC = OnboardingFormViewController()
         let navController = UINavigationController(rootViewController: onboardingFormVC)
         navController.navigationBar.isHidden = true
-        
-        // Replace the entire app's navigation stack using AppDelegate
+
         DispatchQueue.main.async {
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate,
                let window = appDelegate.window {
@@ -1241,67 +1324,9 @@ class ProfileViewController: UIViewController {
     
     // MARK: - Success State Animation
     private func showSuccessStateAndDismiss() {
-        // Disable the button to prevent multiple taps during animation
         updateButton.isEnabled = false
-        
-        // Store the original button configuration to restore later
-        //let originalTitle = updateButton.title(for: .normal)
-        //let originalbackgroundColor = updateButton.backgroundColor
-        
-        // Show success animation
-        UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations: {
-            self.updateButton.backgroundColor = .systemGreen
-            self.updateButton.setTitle("", for: .normal)
-        }) { _ in
-            self.addCheckmarkToButton()
-            
-            // DISMISS WITHOUT SAVING (temporary test)
-            print("DISMISSING WITHOUT SAVING (TEST)!!!")
-            self.requestDismissal()
-        }
-    }
-    
-    private func addCheckmarkToButton() {
-        // Create checkmark image configuration
-        let config = UIImage.SymbolConfiguration(pointSize: 24, weight: .bold)
-        let checkmarkImage = UIImage(systemName: "checkmark", withConfiguration: config)
-        
-        // Set the checkmark as the button image
-        updateButton.setImage(checkmarkImage, for: .normal)
-        updateButton.tintColor = .white
-        
-        // Center the image in the button
-        updateButton.imageView?.contentMode = .scaleAspectFit
-        
-        // Ensure image is centered (remove any existing insets)
-        updateButton.contentHorizontalAlignment = .center
-        updateButton.contentVerticalAlignment = .center
-        
-        // Animate the checkmark appearance
-        updateButton.imageView?.alpha = 0
-        UIView.animate(withDuration: 0.3) {
-            self.updateButton.imageView?.alpha = 1
-        }
-    }
-    
-    private func resetButtonToOriginalState(title: String, backgroundColor: UIColor) {
-        // Animate back to original state (NO SCALE ANIMATION)
-        UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut], animations: {
-            // Restore original background colour
-            self.updateButton.backgroundColor = backgroundColor
-            
-            // Remove the checkmark image
-            self.updateButton.setImage(nil, for: .normal)
-            
-            // Restore the original title
-            self.updateButton.setTitle(title, for: .normal)
-            
-            // NO SCALE TRANSFORM - REMOVED
-        }) { _ in
-            // Re-enable the button so it can be used again
-            self.updateButton.isEnabled = true
-            
-            print("✅ Update button reset to original state and re-enabled")
+        CosmicFitTheme.flashFilledButtonConfirmed(updateButton, style: .primary) { [weak self] in
+            self?.requestDismissal()
         }
     }
 }
@@ -1332,6 +1357,22 @@ extension ProfileViewController: LocationAutocompleteDelegate {
             longitude = 0
             locationName = ""
         }
+    }
+}
+
+// MARK: - UIGestureRecognizerDelegate
+extension ProfileViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard gestureRecognizer === keyboardDismissTapGesture else { return true }
+
+        var candidate: UIView? = touch.view
+        while let view = candidate {
+            if view is UIControl {
+                return false
+            }
+            candidate = view.superview
+        }
+        return true
     }
 }
 

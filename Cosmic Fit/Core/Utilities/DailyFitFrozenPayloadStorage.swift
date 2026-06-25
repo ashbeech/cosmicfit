@@ -161,6 +161,15 @@ final class DailyFitFrozenPayloadStorage {
             try? FileManager.default.removeItem(at: url)
         }
         lastPurgedEngineId = nil
+        clearRevealAndSliderFlags()
+    }
+
+    /// Clears persisted Daily Fit reveal and slider-animation flags from UserDefaults.
+    func clearRevealAndSliderFlags() {
+        let keys = UserDefaults.standard.dictionaryRepresentation().keys
+        for key in keys where key.hasPrefix("CardRevealed_") || key.hasPrefix("SliderEntrancePlayed_") {
+            UserDefaults.standard.removeObject(forKey: key)
+        }
     }
 
     /// Forces the next `load` to re-run purge logic (e.g. after engine override change).

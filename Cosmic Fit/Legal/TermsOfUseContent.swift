@@ -8,7 +8,7 @@
 import Foundation
 
 enum TermsOfUseContent {
-    static let lastUpdated = "June 24, 2026"
+    static let lastUpdated = "June 25, 2026"
     static let termsOfUseURL = "https://cosmicfit.app/terms"
     static let privacyPolicyURL = "https://cosmicfit.app/privacy"
     static let supportEmail = "help@cosmicfit.app"
@@ -30,7 +30,7 @@ enum TermsOfUseContent {
     }
 
     static let importantNotice = """
-    IMPORTANT NOTICE: PLEASE READ THESE TERMS OF USE CAREFULLY—THEY AFFECT YOUR LEGAL RIGHTS AND OBLIGATIONS, AND INCLUDE WAIVERS OF RIGHTS AND LIMITATIONS OF LIABILITY. THEY ALSO REQUIRE DISPUTES BETWEEN YOU AND US TO BE RESOLVED THROUGH BINDING INDIVIDUAL ARBITRATION AND TO WAIVE ANY RIGHT TO A JURY TRIAL, CLASS OR COLLECTIVE ACTIONS OR PROCEEDINGS, AND ANY OTHER COURT PROCEEDING OF ANY KIND, SUBJECT TO LIMITED EXCEPTIONS. UNLESS YOU OPT OUT IN ACCORDANCE WITH THE OPT-OUT PROCEDURES DESCRIBED BELOW, YOU WILL BE BOUND BY THESE TERMS. THE FULL TERMS OF THE ARBITRATION AGREEMENT ARE BELOW.
+    IMPORTANT NOTICE: PLEASE READ THESE TERMS OF USE CAREFULLY—THEY AFFECT YOUR LEGAL RIGHTS AND OBLIGATIONS, AND INCLUDE WAIVERS OF RIGHTS AND LIMITATIONS OF LIABILITY. THEY ALSO REQUIRE DISPUTES BETWEEN YOU AND US TO BE RESOLVED THROUGH BINDING INDIVIDUAL ARBITRATION AND TO WAIVE ANY RIGHT TO BRING OR PARTICIPATE IN COLLECTIVE OR GROUP PROCEEDINGS, SUBJECT TO LIMITED EXCEPTIONS. UNLESS YOU OPT OUT IN ACCORDANCE WITH THE OPT-OUT PROCEDURES DESCRIBED BELOW, YOU WILL BE BOUND BY THESE TERMS. THE FULL TERMS OF THE ARBITRATION AGREEMENT ARE BELOW.
     """
 
     static let sections: [LegalDocumentSection] = [
@@ -38,6 +38,7 @@ enum TermsOfUseContent {
             title: "i. Introduction",
             paragraphs: [
                 "Welcome to Cosmic Fit.",
+                "Cosmic Fit is operated by THIS IS BULLISH LTD.",
                 "These Terms of Use (\"Terms\") govern your access to and use of the Cosmic Fit mobile application, related websites, and any other services we make available (collectively, the \"Services\"). Cosmic Fit translates astrological birth-chart data into personalised style guidance, including your Style Guide and Daily Fit.",
                 "By downloading, accessing, or using the Services, you agree to these Terms. If you do not agree, do not use the Services.",
                 "For information on how we collect, use, and protect personal data, please see our Privacy Policy.",
@@ -47,9 +48,9 @@ enum TermsOfUseContent {
         LegalDocumentSection(
             title: "ii. Definitions",
             bullets: [
-                "\"App Store\" means the third-party store from which you obtained the mobile app, such as the Apple App Store or Google Play Store.",
+                "\"App Store\" means the Apple App Store, from which you obtained the mobile app.",
                 "\"App Store Sourced Application\" means a mobile app accessed through or downloaded from the Apple App Store.",
-                "\"Company,\" \"we,\" \"our,\" and \"us\" means the operator of Cosmic Fit (cosmicfit.app).",
+                "\"Company,\" \"we,\" \"our,\" and \"us\" means THIS IS BULLISH LTD., which operates Cosmic Fit (cosmicfit.app).",
                 "\"Company Parties\" means Company and its predecessors, successors, assigns, parents, subsidiaries, and affiliates.",
                 "\"Content\" means text, graphics, images, audio, video, software, data, interpretations, recommendations, and other materials made available through the Services.",
                 "\"Dispute\" means any dispute, claim, or controversy between you and Company Parties relating to the Services or these Terms, including the Arbitration Agreement.",
@@ -105,6 +106,7 @@ enum TermsOfUseContent {
                     title: "B. Accounts and Sign-In",
                     paragraphs: [
                         "You may use much of the Services without creating an account. Optional sign-in via email and one-time passcode lets you sync your profile and Style Guide across devices.",
+                        "You may delete your account in the app, which removes your cloud account and associated synced data, or request deletion by emailing \(supportEmail).",
                         "You are responsible for maintaining the security of your account credentials and for all activity under your account. If you believe your account has been compromised, contact us at \(supportEmail).",
                         "Signing in or out does not by itself grant or revoke a paid Subscription. Subscription status is determined by the app store account used for purchase, promotional access, or other entitlement rules described below."
                     ]
@@ -119,13 +121,13 @@ enum TermsOfUseContent {
                 LegalDocumentSubsection(
                     title: "D. Subscriptions and Purchases",
                     paragraphs: [
-                        "Cosmic Fit offers auto-renewing Subscriptions, currently including monthly and annual plans, processed through the Apple App Store or Google Play Store (as applicable). Prices are shown in the app before purchase and may vary by region.",
-                        "Your Subscription automatically renews unless you cancel at least 24 hours before the end of the current billing period through your app store account settings. Cancellation takes effect at the end of the current period.",
-                        "YOU MAY CANCEL YOUR SUBSCRIPTION AT ANY TIME, BUT WE DO NOT PROVIDE REFUNDS FOR FEES ALREADY PAID except where required by applicable law or the applicable app store policy.",
-                        "If you purchased through an app store, billing, renewal, cancellation, and refund requests must be handled through that store. Apple and Google are not responsible for the Services themselves.",
+                        "Cosmic Fit offers auto-renewing Subscriptions, currently including monthly and annual plans, processed through the Apple App Store. Prices are shown in the app before purchase and may vary by region.",
+                        "Your Subscription automatically renews unless you cancel at least 24 hours before the end of the current billing period through your Apple account settings. Cancellation takes effect at the end of the current period.",
+                        "YOU MAY CANCEL YOUR SUBSCRIPTION AT ANY TIME, BUT WE DO NOT PROVIDE REFUNDS FOR FEES ALREADY PAID except where required by applicable law or the Apple App Store policy.",
+                        "Billing, renewal, cancellation, and refund requests must be handled through the Apple App Store. Apple is not responsible for the Services themselves.",
                         "We may change Subscription prices from time to time. Any price increase will apply no earlier than the next renewal period after notice as required by applicable law and store rules.",
-                        "From time to time we may offer promotional or complimentary access codes. Such access is subject to the terms of the offer, may expire, and does not replace app-store billing rules for separately purchased Subscriptions.",
-                        "Deleting your Cosmic Fit profile or account does not cancel an app store Subscription. Billing continues until you cancel with Apple or Google. Reinstalling the app and using the same app store account may restore premium access while a Subscription remains active."
+                        "From time to time we may offer promotional or complimentary access codes. Such access is subject to the terms of the offer, may expire, and does not replace App Store billing rules for separately purchased Subscriptions. Promotional access codes have no cash value, may not be sold or transferred unless we say otherwise, may be limited to one user, device, or install, and may be suspended or revoked for misuse, fraud, error, restoration, or violation of the offer terms.",
+                        "Deleting your Cosmic Fit profile or account does not cancel an App Store Subscription. Billing continues until you cancel with Apple. Reinstalling the app and using the same Apple account may restore premium access while a Subscription remains active."
                     ]
                 ),
                 LegalDocumentSubsection(
@@ -189,13 +191,13 @@ enum TermsOfUseContent {
                     title: "B. Your Information",
                     paragraphs: [
                         "You retain ownership of Your Information. You grant Licensed Parties a worldwide, non-exclusive, royalty-free license to use, store, process, reproduce, and display Your Information as necessary to operate, improve, and secure the Services, and as described in our Privacy Policy.",
-                        "You may update or delete profile information in the app. Deleting your profile removes locally stored data and, if you are signed in, associated cloud data as described in our Privacy Policy."
+                        "You may update or delete profile information in the app. Deleting your local profile removes on-device data as described in our Privacy Policy but does not automatically delete cloud account data or cancel app store subscriptions."
                     ]
                 ),
                 LegalDocumentSubsection(
                     title: "C. Copyright Complaints",
                     paragraphs: [
-                        "If you believe Content on the Services infringes your copyright, please email \(noticeEmail) with: (1) identification of the copyrighted work; (2) identification of the material you claim is infringing; (3) your contact information; (4) a statement of good-faith belief; and (5) a statement, under penalty of perjury, that your notice is accurate and you are authorized to act on behalf of the copyright owner."
+                        "If you believe Content on the Services infringes your copyright, please email \(noticeEmail) with: (1) identification of the copyrighted work; (2) identification of the material you claim is infringing; (3) your contact information; (4) a statement of good-faith belief; and (5) a statement that the information in your notice is accurate and that you are authorised to act on behalf of the copyright owner."
                     ]
                 )
             ]
@@ -213,6 +215,7 @@ enum TermsOfUseContent {
                     title: "B. Assumptions of Risk",
                     paragraphs: [
                         "Entertainment and informational purposes only. Astrological interpretations, style recommendations, tarot references, colour suggestions, and other Content are provided for entertainment and general informational purposes only. They are not professional advice of any kind—including medical, psychological, financial, legal, or fashion-industry advice—and should not be relied on for important personal, professional, or financial decisions.",
+                        "The Services are not designed for emergencies, medical or mental-health crises, diagnosis, treatment, therapy, or professional decision-making. If you are in danger or need urgent help, contact local emergency services or a qualified professional.",
                         "You use the Services at your own risk. Licensed Parties are not liable for decisions you make based on Content in the Services.",
                         "Third parties. Some Services rely on third-party platforms, app stores, payment processors, or infrastructure. We are not responsible for third-party acts or omissions."
                     ]
@@ -238,26 +241,27 @@ enum TermsOfUseContent {
                     ]
                 ),
                 LegalDocumentSubsection(
-                    title: "F. Resolving Disputes; Agreement to Arbitrate; Class Action and Jury Waiver",
+                    title: "F. Resolving Disputes; Agreement to Arbitrate; Collective Proceedings Waiver",
                     paragraphs: [
-                        "PLEASE READ THIS SECTION CAREFULLY. IT REQUIRES MOST DISPUTES TO BE RESOLVED BY INDIVIDUAL BINDING ARBITRATION RATHER THAN IN COURT, AND INCLUDES A JURY TRIAL AND CLASS ACTION WAIVER.",
-                        "1. Mandatory Individual Arbitration. Except as stated below, any Dispute will be resolved exclusively by binding individual arbitration under the Federal Arbitration Act. The arbitrator will have authority to resolve disputes about the interpretation, applicability, and enforceability of this Arbitration Agreement.",
-                        "Either party may bring an individual claim in small claims court if it qualifies and remains individual. Either party may seek injunctive relief in court for intellectual property misuse.",
+                        "PLEASE READ THIS SECTION CAREFULLY. IT REQUIRES MOST DISPUTES TO BE RESOLVED BY INDIVIDUAL BINDING ARBITRATION RATHER THAN IN COURT, AND INCLUDES A COLLECTIVE PROCEEDINGS WAIVER.",
+                        "1. Mandatory Individual Arbitration. Except as stated below, any Dispute will be resolved exclusively by binding individual arbitration under the Arbitration Act 1996. The arbitrator will have authority to resolve disputes about the interpretation, applicability, and enforceability of this Arbitration Agreement.",
+                        "Either party may bring an individual claim in the small claims track of the County Court of England and Wales if it qualifies and remains individual. Either party may seek injunctive relief in court for intellectual property misuse.",
                         "To the extent permitted by law, any claim must be filed within one year after it arose or it is permanently barred.",
-                        "2. Class Action / Jury Trial Waiver. You and Company Parties waive any right to a jury trial and to participate in a class, collective, consolidated, private attorney general, or representative proceeding.",
-                        "If a court or arbitrator determines that the class waiver cannot be enforced for a particular claim, that claim must be litigated in court on an individual basis and individual arbitration of other claims may proceed.",
+                        "2. Collective Proceedings Waiver. You and Company Parties agree that Disputes will be resolved only on an individual basis and waive any right to bring or participate in a class, collective, group, representative, or similar proceeding where permitted by law.",
+                        "If a court or arbitrator determines that the collective proceedings waiver cannot be enforced for a particular claim, that claim must be litigated in court on an individual basis and individual arbitration of other claims may proceed.",
                         "3. Opt-Out. You may opt out of this Arbitration Agreement by emailing \(noticeEmail) within 30 days of first accepting these Terms (or first purchase or first use after updated Terms are posted). Your email must include your full name, mailing address, email address, phone number, and a clear statement that you wish to opt out of arbitration. If you validly opt out, Disputes will be resolved in court as described below.",
                         "4. Informal Resolution First. Before starting arbitration, you and we agree to send a written notice of the Dispute to \(noticeEmail) describing the claim and your contact information. We will try to resolve the Dispute informally for at least 30 days.",
-                        "5. Rules and Governing Law. Unless you opt out, arbitration will be administered by the American Arbitration Association (AAA) under its Consumer Arbitration Rules. The Federal Arbitration Act governs this section. If arbitration does not apply, the exclusive jurisdiction and venue for Disputes will be the state or federal courts located in California, United States, and the laws of the State of California will govern, without regard to conflict-of-law rules.",
+                        "5. Rules and Governing Law. Unless you opt out, arbitration will be administered by the Centre for Effective Dispute Resolution (CEDR) under its applicable rules, or by another recognised arbitration body we nominate with notice to you. The Arbitration Act 1996 governs this section. If arbitration does not apply, the exclusive jurisdiction and venue for Disputes will be the courts of England and Wales, and the laws of England and Wales will govern, without regard to conflict-of-law rules.",
                         "6. Survival. This Arbitration Agreement survives termination of these Terms."
                     ]
                 )
             ]
         ),
         LegalDocumentSection(
-            title: "vii. Notice for California Users",
+            title: "vii. Notice for UK Consumers",
             paragraphs: [
-                "Under California Civil Code Section 1789.3, California users may contact the Complaint Assistance Unit of the Division of Consumer Services of the California Department of Consumer Affairs in writing at 400 R Street, Suite 1080, Sacramento, California 95814, or by telephone at (916) 445-1254 or (800) 952-5210."
+                "If you are a consumer in the United Kingdom, nothing in these Terms affects your statutory rights under the Consumer Rights Act 2015 and other applicable UK consumer law.",
+                "For help with consumer disputes, you may contact Citizens Advice (citizensadvice.org.uk) or the Competition and Markets Authority (gov.uk/cma)."
             ]
         ),
         LegalDocumentSection(
@@ -269,7 +273,7 @@ enum TermsOfUseContent {
                 "Assignment. You may not assign these Terms without our consent. We may assign these Terms without restriction.",
                 "Survival. Provisions that by their nature should survive termination—including intellectual property, disclaimers, limitation of liability, indemnification, and dispute resolution—will survive.",
                 "Export. You agree to comply with applicable export and sanctions laws.",
-                "Contact. Questions about these Terms may be sent to \(supportEmail)."
+                "Contact. Questions about these Terms may be sent to THIS IS BULLISH LTD. at \(supportEmail)."
             ]
         )
     ]

@@ -184,6 +184,16 @@ final class LocationManager: NSObject, CLLocationManagerDelegate {
         UserDefaults.standard.set(location.horizontalAccuracy, forKey: "CachedLocationAccuracy")
     }
     
+    /// Clears in-memory and UserDefaults cached device location (e.g. local profile deletion).
+    func clearCachedLocation() {
+        currentLocation = nil
+        lastLocationUpdate = nil
+        UserDefaults.standard.removeObject(forKey: "CachedLocationLatitude")
+        UserDefaults.standard.removeObject(forKey: "CachedLocationLongitude")
+        UserDefaults.standard.removeObject(forKey: "CachedLocationTimestamp")
+        UserDefaults.standard.removeObject(forKey: "CachedLocationAccuracy")
+    }
+
     private func loadCachedLocation() {
         let latitude = UserDefaults.standard.double(forKey: "CachedLocationLatitude")
         let longitude = UserDefaults.standard.double(forKey: "CachedLocationLongitude")

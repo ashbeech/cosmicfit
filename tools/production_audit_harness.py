@@ -30,7 +30,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 INSPECTOR_URL = "http://127.0.0.1:7777/api/inspect"
-ENGINE = "stage1_experimental"
+ENGINE = "production"
 
 _print_lock = threading.Lock()
 

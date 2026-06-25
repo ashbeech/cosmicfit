@@ -225,6 +225,27 @@ final class CosmicFitAuthService {
         defaults.removeObject(forKey: lastUserIdKey)
     }
 
+    // MARK: - Account deletion
+
+    func deleteAccount() async throws {
+        struct DeleteAccountResponse: Decodable {
+            let success: Bool
+        }
+
+        let data = try await invokeEdgeFunction("delete-account", body: Data("{}".utf8))
+        let response = try JSONDecoder().decode(DeleteAccountResponse.self, from: data)
+        guard response.success else {
+            throw CosmicFitAuthError.serverError("Account deletion failed")
+        }
+
+        try? await supabase.auth.signOut()
+        clearState(clearLocal: true)
+        clearAccountEmail()
+        clearLastUserId()
+        UserProfileStorage.shared.clearLocalUserGeneratedContent()
+        print("✅ Account deleted")
+    }
+
     // MARK: - Sign out
 
     func signOut() async throws {
@@ -303,11 +324,7 @@ final class CosmicFitAuthService {
 
     private func purgeLocalUserData() {
         print("⚠️ Different user detected — purging local data")
-        UserProfileStorage.shared.deleteUserProfile()
-        BlueprintStorage.shared.delete()
-        Task { @MainActor in
-            BlueprintStorage.bumpRemoteBlueprintPullEpoch()
-        }
+        UserProfileStorage.shared.clearLocalUserGeneratedContent()
     }
 
     private func parseEmailExistsError(_ error: Error) -> CosmicFitAuthError? {

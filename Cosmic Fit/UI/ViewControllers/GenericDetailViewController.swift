@@ -219,11 +219,9 @@ class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate
     }
     
     func dismissSelf(completion: (() -> Void)? = nil) {
-        if presentingViewController != nil {
-            dismiss(animated: true, completion: completion)
-            return
-        }
-
+        // Always prefer tab-bar detail dismissal when embedded there. Calling
+        // dismiss() on a child of the presented tab bar walks up the hierarchy
+        // and dismisses the whole app shell back to AnimatedLaunchScreenViewController.
         var currentParent: UIViewController? = parent
         while currentParent != nil {
             if let tabBarController = currentParent as? CosmicFitTabBarController {
@@ -232,7 +230,12 @@ class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate
             }
             currentParent = currentParent?.parent
         }
-        
+
+        if presentingViewController != nil {
+            dismiss(animated: true, completion: completion)
+            return
+        }
+
         print("⚠️ Could not find CosmicFitTabBarController to dismiss")
         completion?()
     }

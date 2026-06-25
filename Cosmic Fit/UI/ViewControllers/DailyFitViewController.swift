@@ -1479,7 +1479,6 @@ class DailyFitViewController: UIViewController {
         topDivider?.alpha = 0.0
         if let divider = topDivider {
             contentView.addSubview(divider)
-            divider.backgroundColor = .black
         }
 
         styleEditLabel.text = ""

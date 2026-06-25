@@ -99,9 +99,9 @@ final class MotionSheenView: UIView {
 
     /// Base opacity of the rainbow tint when intensity = 1. Low enough
     /// that the underlying card art remains the dominant visual.
-    private static let irisBaseOpacity: Float = 0.28 * (2.0 / 3.0)
+    private static let irisBaseOpacity: Float = 0.30 * (2.2 / 3.0)
     /// Base opacity of the specular highlight when intensity = 1.
-    private static let highlightBaseOpacity: Float = 0.1 * (2.0 / 3.0)
+    private static let highlightBaseOpacity: Float = 0.20 * (2.2 / 3.0)
 
     /// Total radians of phase rotation as the device tilts edge-to-edge.
     /// One rainbow loop = 2π; we move through ~1.6 loops between
@@ -414,13 +414,13 @@ public final class MotionParallaxBinding {
     /// `tanh` easing means the rotation grows linearly near zero and
     /// asymptotes smoothly into this clamp at the extremes — the user
     /// never sees a hard cap, just the parallax slowing as it nears
-    /// the saturation point. Default ~3.7°: gentle and understated.
-    public var maxAngleRadians: Double = 0.065
+    /// the saturation point. Default ~4.1°: gentle and understated.
+    public var maxAngleRadians: Double = 0.0715
 
     /// How aggressively `tanh` saturates. Larger values reach near-clamp
     /// rotation with smaller device tilts. Tuned so the bulk of the
     /// motion happens within natural hand-held tilt ranges.
-    public var inputGain: Double = 1.6
+    public var inputGain: Double = 1.76
 
     /// Camera-plane distance for the perspective transform. Smaller =
     /// more pronounced 3D foreshortening. Set high enough that the

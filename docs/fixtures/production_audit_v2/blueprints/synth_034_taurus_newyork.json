@@ -1,0 +1,347 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "Piling on multiple tiny rings and delicate chains just looks fussy when your style relies on clear intentions. Instead of messing with fiddly layers, ground your outfit with a single, uncompromising item that feels satisfyingly substantial to the touch. A thick leather bag strap, an oversized watch, or a wide belt with an unexpected clasp proves you understand serious construction. Committing to one solitary anchor pulls the entire silhouette together and lets your clothes speak without interruption.",
+   "Accessories are the hard boundaries that keep your wardrobe in check. Thick leather belts and firm straps give your clothing a sense of sudden gravity. A substantial watch or a bag with a heavy, satisfying clasp provides a sharp interruption to softer fabrics. Instead of blending into the background, these pieces introduce a necessary physical tension. They stop an outfit from floating away as a mere idea, turning it into clothes you actually live in.",
+   "The tactile reality of a piece matters long before you check the mirror. The stiff resistance of a raw leather belt or the satisfying mechanical snap of a heavy bag closure dictates your daily rhythm. You want noticeable weight on your wrist from a substantial watch, paired with the quiet friction of woven tech straps. Mixing smooth, cold hardware with the distinct scent of thick hides creates a tension that makes total sense for your wardrobe. An item is only worth putting on if you can feel its physical gravity when you walk down the street."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Blending into the background for the sake of social ease, because stylistic conformity drains your energy far more than commanding attention ever could.",
+   "Conventional matching rules that assume everyone wants the same thing. Your coordination logic is your own.",
+   "Nostalgia-driven dressing that keeps you in the past. Your emotional axis points forward, and your wardrobe should too.",
+   "Mixed-message outfits that confuse your own story before anyone else has a chance to read it.",
+   "Hedging with too many safe neutrals when a single strong colour would say it all.",
+   "Fussing over options when the first instinct was right."
+  ],
+  "consider": [
+   "Finding a tailor who understands your body and can adjust every key piece to your exact proportions.",
+   "Buyying one perfectly fitting poplin shirt to act as a strict template for every future purchase.",
+   "Establishing a ruthlessly dependable daily uniform built entirely upon expertly cut, low-maintenance fabrics that hold their shape flawlessly.",
+   "Relying on intelligent, high-performance textiles that offer breathability and stretch during your busy daily schedule."
+  ],
+  "leanInto": [
+   "Being the person nobody can easily categorise. Your emotional comfort comes from knowing your style surprises people.",
+   "Finding comfort in standing apart from the crowd. If everyone in the room is dressed the same, your difference is your armour.",
+   "Treating sartorial innovation as a vital daily practice by experimenting with an exaggerated silhouette or a highly technical fabric to instantly shift your mood.",
+   "Choosing intellectually stimulating pieces that reflect your ideas through unusual asymmetric construction and brilliantly clever hardware details.",
+   "Letting one strong piece speak instead of many whispering.",
+   "Making decisive colour choices over safe hedge-betting. Pick the bold shade and commit fully."
+  ]
+ },
+ "engineVersion": "2.1.0",
+ "generatedAt": "2026-06-25T09:19:55Z",
+ "hardware": {
+  "metalsText": "Flimsy fastenings and delicate chains look completely lost on you. You need metals with real physical weight, the kind that make a satisfying sound when they snap shut. Rose gold tones is your baseline, providing a clean, uncompromising finish to crisp poplin and raw denim. When you want an unexpected shift, introduce surgical steel tones through heavy-duty zips or oversized utilitarian buckles. Your metalwork should always look like it has a distinct mechanical job to do, even when it is just holding a jacket closed.",
+  "recommendedMetals": [
+   "rose gold",
+   "surgical steel",
+   "titanium",
+   "bright copper",
+   "polished brass",
+   "warm bronze",
+   "yellow gold",
+   "sterling silver"
+  ],
+  "recommendedStones": [
+   "labradorite",
+   "meteorite",
+   "carnelian",
+   "fluorite",
+   "garnet",
+   "red jasper",
+   "emerald",
+   "jade",
+   "lapis lazuli"
+  ],
+  "stonesText": "Standard, perfectly clear gems look far too polite for your daily rotation. Your jewellery box needs stones with raw nerve and undeniable physical weight. Labradorite delivers a direct punch of fiery colour, especially when set in heavy, unpolished metal. Meteorite provides a cooler, slightly unconventional texture that satisfies your urge to disrupt a look rather than simply finish it. Keep the cuts chunky and tactile, favouring smooth cabochons or rough-hewn edges over delicate facets. A flash of carnelian anchors the collection, giving your rings and cuffs a grounded permanence.",
+  "tipText": "The right hardware must feel substantial and entirely self-sufficient. Your wardrobe thrives on immediate visual punch, so skip the fussy, delicate chains that tangle in your collar. A heavy-gauge choker in rose gold tones or a strictly geometric ring featuring a flush-set labradorite provides an instant, uncompromising focal point. Tactile, brushed finishes keep the look rooted in physical reality rather than pure flash. This is jewellery acting as equipment: weighty, solid, and completely unapologetic."
+ },
+ "occasions": {
+  "dailyText": "Your version of downtime is never about unravelling. Even on a completely blank Sunday, your outfit needs a sense of momentum and structural integrity. Build your casual rotation around items that sit slightly away from the body, offering a clean drop rather than anything formless or clingy. The styling logic here is pure self-sufficiency. You need an ensemble that feels entirely distinct to you, yet remains tough enough to handle a sudden shift in plans. Keep the overall finish grounded, decisive, and fully ready to move.\n\nYour comfort instinct gravitates toward emotional wellbeing through daily comfort, functional softness, care routines.",
+  "intimateText": "The standard uniform for a night out relies heavily on obvious romance, but you are infinitely more compelling when you play against type. Pieces with genuine physical weight and architectural lines will hold their shape beautifully across a low-lit table, giving you an anchor of undeniable quality. Build a silhouette that registers immediately, bypassing anything overly sweet or complicated. An asymmetric drop or a sharp, unexpected cut provides all the visual tension you need to hold the room's attention. There is a massive flex in looking like you threw on something brilliant and left the house without a second glance in the mirror.",
+  "workText": "Standard corporate uniforms offer zero value to your working life. Bypass the expected for garments boasting serious structural integrity and an unorthodox cut. Shifts in volume or a sharp blazer with an irregular neckline construct the authority you require. Demand dense, heavyweight fabrics that satisfy a strict eye for quality while isolating your silhouette from the pack. Walk into the boardroom projecting competence, grounded energy, and an untouchable edge. Your clothes act as an architectural boundary between yourself and the noise.\n\nYour style energy concentrates in intensity and routine, so your wardrobe is at its best when it reflects both intensity and routine. You maintain your professional agility by styling sharply cut separates with lightweight silk shirts for a flawlessly dynamic aesthetic."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#005D69",
+    "name": "Warm Prussian",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Moon",
+     "sourceSign": "Aquarius"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#E96675",
+    "name": "Warm Coral",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Visibility",
+     "saturationOverride": false,
+     "sourcePlanet": "Mercury",
+     "sourceSign": "Aries"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Deep Warm Structured",
+  "coreColours": [
+   {
+    "hexValue": "#4A1C20",
+    "name": "oxblood",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#0B4F4A",
+    "name": "forest teal",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#254D32",
+    "name": "dark pine",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#9E4E3A",
+    "name": "dark terracotta",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#0A0A0A",
+   "name": "black",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "Deep Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "Deep Autumn",
+  "lightAnchor": {
+   "hexValue": "#F2E8D4",
+   "name": "warm cream",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "Deep Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#6F632D",
+   "name": "warm olive",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "Deep Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "There is a brilliant, deliberate friction in how you wear colour, a clash between total pragmatism and sudden heat. A dense, tactile base of oxblood and forest teal does the heavy lifting, rooting your wardrobe in an undeniably physical reality. Then comes the punchline. You drop in a hit of Warm Prussian or Warm Coral as a fast, unapologetic shock to the system. Whether it lands via a rigid tech-canvas tote or a slick leather boot, this high-contrast strategy guarantees you hold the room without ever looking overstyled.",
+  "neutrals": [
+   {
+    "hexValue": "#3C2415",
+    "name": "espresso",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#4A4244",
+    "name": "warm charcoal",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#3C4B27",
+    "name": "deep olive",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#5C4033",
+    "name": "bark brown",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": true,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": true,
+   "earthDepthOverrideApplied": true,
+   "fireAirChromaApplied": false,
+   "scorpioDensityApplied": false,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": true
+  },
+  "rulerSignature": {
+   "hexValue": "#C84346",
+   "name": "cool ruby",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "Deep Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "True Autumn",
+  "supportColours": [
+   {
+    "hexValue": "#1B2A4A",
+    "name": "ink navy",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#3B3F42",
+    "name": "cool charcoal",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#5B6770",
+    "name": "slate",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#2F3A2B",
+    "name": "midnight olive",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "Medium",
+   "depth": "Deep",
+   "saturation": "Rich",
+   "surface": "Structured",
+   "temperature": "Warm"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "tiny florals",
+   "paisley",
+   "fussy prints",
+   "traditional florals"
+  ],
+  "narrativeText": "Most prints feel completely superfluous when you rely on heavy cottons and raw denim to set the tone. When you do introduce a pattern, it needs to be immediate and unapologetic. A stark digital abstract or a slightly off-kilter laser-cut geometric panel provides that brilliant, cerebral jolt of visual noise. Fussy, romantic repeats like tiny florals sit entirely awkwardly on your frame, diluting your natural straightforwardness into something saccharine. Treat your prints like a graphic shock to the system, keeping the silhouettes clean and the colours uncompromising.",
+  "recommendedPatterns": [
+   "digital abstract",
+   "laser-cut geometric panel",
+   "circuit motifs",
+   "circuit-inspired",
+   "brutalist grid windowpane",
+   "graphic type"
+  ],
+  "tipText": "Your approach to print needs to feel deliberate, never like a fussy afterthought. Drop a digital abstract onto a crisp cotton poplin and let it act as a sharp, immediate shock to the eye. The trick is grounding that visual noise with heavy, tactile solids. Pair a loud Warm Prussian or Warm Prussian print with rigid raw denim or a substantial tech fabric. This stops the outfit from looking chaotic and keeps the overall feeling entirely self-possessed."
+ },
+ "styleCore": {
+  "narrativeText": "Your presence is defined by a sharp, immediate impact that is anchored in serious substance. People notice the fast, unapologetic confidence of your look first, but what holds their attention is the obvious physical quality of the garments. You dress with the quick instincts of someone who knows exactly what they want, yet you demand that everything you wear feels fundamentally solid. There is a cool, slightly detached independence to how you put things together, stepping deliberately away from expected fashion formulas. You walk into a room projecting a spontaneous energy that is entirely backed up by exceptional construction. Your style is at its best when it feels clever, quick, and undeniably grounded.\n\nYour natural sense of beauty shows up most powerfully in your transformative moments, strategic allure, investment beauty, transformative aesthetics, hidden luxury. Your style instincts lean toward clarity, structure, and visible polish. Your public style reads as versatile and expressive; you communicate range and adaptability through what you wear."
+ },
+ "textures": {
+  "avoidTextures": [
+   "traditional formal fabrics",
+   "predictable cotton",
+   "fussy multi-layered chiffon"
+  ],
+  "badText": "Fussy, high-maintenance materials completely contradict your straightforward approach to getting dressed. Swathing yourself in traditional formal fabrics reads as a massive distraction, clinging to your frame and fighting your naturally grounded stride. You thrive on an unbothered, cerebral kind of cool, meaning predictable cotton demands far too much babying to ever really work in your wardrobe. If a piece requires constant pulling, smoothing, or visual apology for its fragility, leave it on the hanger.",
+  "goodText": "Your wardrobe demands materials with immediate physical presence and a total lack of fuss. You naturally gravitate towards the crisp reliability of tech fabrics or the structured snap of innovative blends against your skin, which provide both sensory weight and instant visual impact. Recycled materials brings an intelligent tension to a silhouette, while metallic knit appeals to your fiercely practical streak and holds sharp colour brilliantly. These textiles do the heavy lifting, allowing your clothes to hold their shape and command the room without needing constant adjustment.",
+  "recommendedTextures": [
+   "tech fabrics",
+   "innovative blends",
+   "recycled materials",
+   "metallic knit"
+  ],
+  "sweetSpotKeywords": [
+   "individuality",
+   "innovation"
+  ],
+  "sweetSpotText": "Your absolute sweet spot lies in the tension between individuality and innovation. The clothes that actually make it out of your house are the ones requiring zero precious handling while still possessing serious physical substance. If a piece asks for careful steaming or tip-toeing around, it simply will not survive your routine. Think about the crisp snap of tech fabrics or the rigid, architectural weight of innovative blends cut into a surprisingly unconventional silhouette. You gravitate towards items that project a cool, cerebral detachment but quietly deliver exceptional tactile quality up close. It is entirely about finding garments that let you move on impulse without ever compromising the finish."
+ },
+ "userInfo": {
+  "birthDate": "1992-04-25T20:00:00Z",
+  "birthLocation": "Synth 034 \u2014 Taurus Sun, 20:00 UTC, New York (1992)",
+  "generationDate": "2026-06-25T09:19:55Z"
+ }
+}

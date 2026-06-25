@@ -8,7 +8,7 @@
 import Foundation
 
 enum PrivacyPolicyContent {
-    static let effectiveDate = "June 24, 2026"
+    static let effectiveDate = "June 25, 2026"
     static let privacyPolicyURL = "https://cosmicfit.app/privacy"
     static let termsOfUseURL = "https://cosmicfit.app/terms"
     static let supportEmail = "help@cosmicfit.app"
@@ -30,14 +30,14 @@ enum PrivacyPolicyContent {
         LegalDocumentSection(
             title: "1. Introduction",
             paragraphs: [
-                "This Privacy Policy describes how Cosmic Fit (cosmicfit.app) (\"Cosmic Fit,\" \"we,\" \"our,\" or \"us\") handles information about you when you use the Cosmic Fit mobile application and related websites or services that link to this Privacy Policy (collectively, the \"Service\").",
+                "This Privacy Policy describes how THIS IS BULLISH LTD. (\"Cosmic Fit,\" \"we,\" \"our,\" or \"us\"), which operates Cosmic Fit (cosmicfit.app), handles information about you when you use the Cosmic Fit mobile application and related websites or services that link to this Privacy Policy (collectively, the \"Service\").",
                 "In this Privacy Policy, \"information\" or \"personal information\" means information relating to an identified or identifiable individual, except where applicable law defines those terms differently.",
                 "Your use of the Service is also governed by our Terms of Use. Please read both documents together.",
                 "This Privacy Policy does not apply to:",
                 "For contact details, see the Contact Us section below."
             ],
             bullets: [
-                "The practices of third parties we do not control, such as Apple, Google, or other platform providers that process payments or host app distribution;",
+                "The practices of third parties we do not control, such as Apple or other platform providers that process payments or host app distribution;",
                 "Information collected in the context of a job application or employment with us; or",
                 "Information that has been anonymized or, to the extent permitted by law, deidentified."
             ]
@@ -58,7 +58,8 @@ enum PrivacyPolicyContent {
                     bullets: [
                         "Contact identifiers, such as your first name and email address when you sign in or contact us;",
                         "Birth chart and profile information, including birth date, birth time (or an indication that your birth time is unknown), birth location, latitude, longitude, and time zone, which we use to calculate your natal chart and generate your Style Guide and Daily Fit;",
-                        "Style Guide and Daily Fit data, including generated recommendations, palettes, narratives, and related outputs stored on your device and, if you are signed in, synced to our cloud database;",
+                        "Style Guide data, including generated recommendations, palettes, narratives, and related outputs, stored on your device and, if you are signed in, synced to our cloud database;",
+                        "Daily Fit data, including generated recommendations and related outputs, stored locally on your device. Daily Fit is not currently synced to our cloud database;",
                         "Account and authentication information, such as one-time passcodes used to verify your email address;",
                         "Promotional code redemption information, including the code entered and a device install identifier used to validate eligibility;",
                         "Support communications, such as the content of emails or messages you send to help@cosmicfit.app."
@@ -72,16 +73,16 @@ enum PrivacyPolicyContent {
                     bullets: [
                         "Device and app information, such as operating system version, app version, language settings, and diagnostic logs we generate for troubleshooting;",
                         "On-device identifiers stored locally, such as a device install identifier kept in your device keychain to support promotional code validation and entitlement checks;",
-                        "Usage and preference data stored on your device, such as UI state, feature flags, and locally cached Style Guide or Daily Fit data;",
-                        "Approximate device location, if you grant location permission, which we may use to improve astrological transit calculations for Daily Fit. We do not use precise location for advertising."
+                        "Locally cached data stored outside the keychain, including profile JSON files, Style Guide blueprint data, Daily Fit frozen payloads, current-location coordinates and timestamps cached in UserDefaults, UI preferences, welcome and reveal flags, and other app state needed for offline use;",
+                        "Current device location, if you grant location permission, including approximate latitude and longitude, which we may cache on your device and use for Daily Fit weather features and related astrological calculations. We do not use device location for advertising."
                     ]
                 ),
                 LegalDocumentSubsection(
                     title: "Information from App Stores and Service Providers",
                     paragraphs: [
-                        "If you purchase a subscription or restore purchases, Apple or Google processes payment and provides us with subscription status information. We do not receive or store your full payment card number.",
+                        "If you purchase a subscription or restore purchases, Apple processes payment and provides us with subscription status information. We do not receive or store your full payment card number.",
                         "Our backend may receive App Store Server Notification data related to your subscription, such as product identifier, transaction identifiers, notification type, and timestamps, for entitlement validation and audit purposes.",
-                        "If you sign in, our authentication and cloud hosting provider (Supabase) processes your email address, authentication tokens, and synced profile and Style Guide data on our behalf."
+                        "If you sign in, our authentication and cloud hosting provider (Supabase) processes your email address, authentication tokens, synced profile data, and synced Style Guide data on our behalf."
                     ]
                 ),
                 LegalDocumentSubsection(
@@ -98,7 +99,7 @@ enum PrivacyPolicyContent {
                 "We collect and use information for the following purposes:"
             ],
             bullets: [
-                "Providing the Service, including calculating your birth chart, generating your Style Guide and Daily Fit, operating accounts, syncing data across devices when you are signed in, validating subscriptions or promotional access, and providing support;",
+                "Providing the Service, including calculating your birth chart, generating your Style Guide and Daily Fit, operating accounts, syncing profile and Style Guide data across devices when you are signed in, validating subscriptions or promotional access, and providing support;",
                 "Personalizing your experience within the Service, such as tailoring daily recommendations to your chart and the current date;",
                 "Communications, including sending one-time passcodes for sign-in, responding to support requests, and sending transactional messages related to the Service;",
                 "Security and enforcement, including preventing fraud, abuse, and unauthorized access, validating promotional codes, and enforcing our Terms of Use;",
@@ -112,8 +113,8 @@ enum PrivacyPolicyContent {
                 "We disclose information for the purposes described in this Privacy Policy. The categories of recipients include:"
             ],
             bullets: [
-                "Service providers that process information on our behalf, such as Supabase (authentication, database hosting, and edge functions), email delivery providers used to send sign-in codes, and infrastructure providers that host our backend;",
-                "App store platforms, such as Apple and Google, which process subscriptions and related transactions according to their own policies;",
+                "Service providers that process information on our behalf, such as Supabase (authentication, database hosting, and edge functions), Resend (transactional email delivery for sign-in codes), Open-Meteo (weather data when we send approximate location coordinates for location-based Daily Fit features), and infrastructure providers that host our backend;",
+                "App store platforms, such as Apple, which process subscriptions and related transactions according to their own policies;",
                 "Professional advisers and authorities where required by law, to protect rights and safety, or to respond to legal process;",
                 "Successors in connection with a merger, acquisition, financing, reorganization, or sale of assets, subject to this Privacy Policy;",
                 "Others with your direction or consent."
@@ -123,32 +124,45 @@ enum PrivacyPolicyContent {
             title: "5. Third Parties and Platform Providers",
             paragraphs: [
                 "Parts of the Service rely on third-party platforms and providers. Except where a third party acts as our service provider, that third party controls its own processing of your information under its own policies.",
-                "Apple App Store and Google Play Store. Subscriptions are billed through the applicable app store. Payment details are handled by the store, not by Cosmic Fit. Your use of the store is subject to the store's terms and privacy policies.",
+                "Apple App Store. Subscriptions are billed through the Apple App Store. Payment details are handled by Apple, not by Cosmic Fit. Your use of the App Store is subject to Apple's terms and privacy policies.",
+                "Apple MapKit. When you search for a birth location, we use Apple's MapKit framework to suggest places and obtain geographic coordinates. Apple processes your search queries according to its own privacy practices.",
                 "Supabase. We use Supabase to host authentication, database storage, and server-side functions for signed-in users. Supabase processes information according to our instructions and its own privacy and security practices.",
+                "Resend. We use Resend to send transactional emails, such as one-time passcodes for sign-in. Resend processes email addresses and message delivery data according to our instructions and its own privacy practices.",
+                "Open-Meteo. When location-based weather features are used, we send your approximate current latitude and longitude to Open-Meteo (open-meteo.com) so it can return local weather data for Daily Fit. Open-Meteo processes this information according to its own privacy practices; we use it only to obtain weather conditions for the Service.",
                 "We do not operate an e-commerce storefront inside the app and do not use Shopify or similar commerce platforms for in-app purchases."
             ]
         ),
         LegalDocumentSection(
-            title: "6. Your Privacy Choices",
+            title: "6. Cookies and Analytics",
+            paragraphs: [
+                "The Cosmic Fit mobile application does not currently use cookies or third-party analytics tools.",
+                "Website pages that host this Privacy Policy, our Terms of Use, and related informational content may use essential technical cookies or similar technologies as required by our hosting providers.",
+                "If we add cookies or analytics in the future, we will update this Privacy Policy and provide notice when practicable."
+            ]
+        ),
+        LegalDocumentSection(
+            title: "7. Your Privacy Choices",
             subsections: [
                 LegalDocumentSubsection(
                     title: "Account, Profile, and Sync",
                     paragraphs: [
-                        "You may use the Service without signing in. If you sign in, you may update profile information in the app. You may delete your local profile in the app, which removes on-device profile and Style Guide data from your device.",
-                        "Deleting your local profile does not automatically delete your cloud account or cancel an app store subscription. To request deletion of cloud account data associated with your sign-in, contact us at help@cosmicfit.app.",
-                        "Signing out removes local session credentials but does not by itself delete cloud-stored account data."
+                        "You may use the Service without signing in. If you sign in, you may update profile information in the app. You may delete your local profile in the app, which removes on-device profile, Style Guide, Daily Fit cache, locally cached current-location data, and related local preferences from your device.",
+                        "Deleting your local profile does not remove your device install identifier or promotional access grants stored in your device keychain. It also does not automatically delete your cloud account, authentication records, subscription records, promotional access records, or App Store billing.",
+                        "If you are signed in, you may delete your cloud account and associated synced data in the app. You may also request account deletion by emailing help@cosmicfit.app.",
+                        "Signing out removes local session credentials but does not by itself delete cloud-stored account data.",
+                        "Uninstalling the app removes locally stored data from your device but does not delete cloud account data or cancel App Store subscriptions."
                     ]
                 ),
                 LegalDocumentSubsection(
                     title: "Subscriptions and Purchases",
                     paragraphs: [
-                        "You manage subscriptions, cancellations, and refunds through your Apple or Google account settings. Deleting a Cosmic Fit profile or account does not cancel billing with the app store."
+                        "You manage subscriptions, cancellations, and refunds through your Apple account settings. Deleting a Cosmic Fit profile or account does not cancel billing with the App Store."
                     ]
                 ),
                 LegalDocumentSubsection(
                     title: "Location Permission",
                     paragraphs: [
-                        "You can control whether the app may access device location through your device settings. If you deny location access, Daily Fit may use less precise location data or omit location-dependent calculations where applicable."
+                        "You can control whether the app may access device location through your device settings. If you deny location access, Daily Fit may omit location-based weather features and related calculations where applicable."
                     ]
                 ),
                 LegalDocumentSubsection(
@@ -161,75 +175,68 @@ enum PrivacyPolicyContent {
             ]
         ),
         LegalDocumentSection(
-            title: "7. Children",
+            title: "8. Children",
             paragraphs: [
-                "The Service is not directed to children under 13, and we do not knowingly collect personal information from children under 13 in violation of the U.S. Children's Online Privacy Protection Act (COPPA).",
+                "The Service is not directed to children under 13, and we do not knowingly collect personal information from children under 13 in violation of applicable UK data protection law, including the UK GDPR and the Data Protection Act 2018.",
                 "If you are under 18 (or the age of majority where you live), you may use the Service only with the involvement and consent of a parent or legal guardian, consistent with our Terms of Use.",
                 "If you believe we have collected personal information from a child in violation of applicable law, please contact us at help@cosmicfit.app and we will take appropriate steps to delete it."
             ]
         ),
         LegalDocumentSection(
-            title: "8. Security",
+            title: "9. Security",
             paragraphs: [
-                "We implement reasonable administrative, technical, and organizational safeguards designed to protect information about you. For example, authentication tokens and promotional access grants may be stored in your device keychain, and cloud data is protected through access controls and encryption in transit.",
+                "We implement reasonable administrative, technical, and organizational safeguards designed to protect information about you. For example, authentication tokens and promotional access grants may be stored in your device keychain, and cloud data is protected through access controls, row-level security where applicable, and encryption in transit.",
                 "No method of transmission or storage is completely secure, and we cannot guarantee absolute security."
             ]
         ),
         LegalDocumentSection(
-            title: "9. Retention",
+            title: "10. Retention",
             paragraphs: [
                 "We retain information for as long as reasonably necessary to provide the Service, maintain your account or synced data if you are signed in, comply with legal obligations, resolve disputes, enforce our agreements, and prevent fraud or abuse.",
-                "Locally stored profile and Style Guide data remains on your device until you delete it or uninstall the app. Server-side authentication codes and rate-limit records are retained for limited periods according to our backend configuration.",
-                "Subscription event records may be retained for audit and entitlement validation purposes."
+                "Locally stored profile, Style Guide, Daily Fit cache, current-location cache, and preference data remains on your device until you delete it through the app (where available), clear app data, or uninstall the app.",
+                "One-time passcode and rate-limit records are retained for short security windows and then deleted or expired according to our backend configuration.",
+                "Synced profile and Style Guide data for signed-in users is retained until you delete your account or request deletion.",
+                "Subscription event records, subscription status ledgers, and promotional access and redemption records may be retained for audit, entitlement validation, fraud prevention, tax, and legal compliance purposes even after termination of access.",
+                "We may retain limited server logs and diagnostic records for security, troubleshooting, and legal compliance for as long as reasonably necessary."
             ]
         ),
         LegalDocumentSection(
-            title: "10. International Transfer",
+            title: "11. International Transfer",
             paragraphs: [
-                "We are based in the United States. If you access the Service from outside the U.S., your information may be transferred to, stored in, and processed in the U.S. or other countries where we or our service providers operate.",
+                "We are based in the United Kingdom. If you access the Service from outside the UK, your information may be transferred to, stored in, and processed in the UK or other countries where we or our service providers operate.",
                 "Where required by applicable law, we use appropriate safeguards for international transfers."
             ]
         ),
         LegalDocumentSection(
-            title: "11. Changes to this Privacy Policy",
+            title: "12. Changes to this Privacy Policy",
             paragraphs: [
                 "We may update this Privacy Policy from time to time. If we make material changes, we will provide notice when practicable, such as in the app or on our website. The Effective Date at the top indicates when this Privacy Policy was last revised.",
                 "Your continued use of the Service after changes become effective means you acknowledge the updated Privacy Policy."
             ]
         ),
         LegalDocumentSection(
-            title: "12. Contact Us",
+            title: "13. Contact Us",
             paragraphs: [
-                "If you have questions about this Privacy Policy or our data practices, contact us at help@cosmicfit.app.",
+                "If you have questions about this Privacy Policy or our data practices, contact THIS IS BULLISH LTD. at help@cosmicfit.app.",
                 "To exercise privacy rights available in your region, contact us using the same email address and describe the right you wish to exercise."
             ]
         ),
         LegalDocumentSection(
-            title: "13. U.S. State-Specific Disclosures",
-            subsections: [
-                LegalDocumentSubsection(
-                    title: "California",
-                    paragraphs: [
-                        "This section applies to California residents.",
-                        "Notice at Collection. The categories of personal information we collect, the sources of collection, the business purposes, and the categories of recipients are described in the Collection, Purposes, and Disclosure sections above.",
-                        "Sales and Sharing. We do not sell or share personal information for cross-context behavioral advertising as those terms are defined under California law.",
-                        "Sensitive Personal Information. We use sensitive personal information, such as birth date and birth location, only as necessary to provide the Service and as permitted by California law.",
-                        "Your Rights. Subject to exceptions under applicable law, California residents may have the right to know, access, correct, and delete personal information we collect about them. To submit a request, email help@cosmicfit.app. We may need to verify your identity before responding."
-                    ]
-                ),
-                LegalDocumentSubsection(
-                    title: "Other U.S. States",
-                    paragraphs: [
-                        "Residents of U.S. states with comprehensive privacy laws may have similar rights to access, correct, delete, or obtain a copy of personal information, and to opt out of certain processing such as targeted advertising or sales. We do not sell personal information or use it for targeted advertising.",
-                        "To exercise applicable rights, contact help@cosmicfit.app."
-                    ]
-                )
+            title: "14. United Kingdom",
+            paragraphs: [
+                "If you are in the United Kingdom, THIS IS BULLISH LTD. is the controller of your personal data for the purposes of the UK GDPR and the Data Protection Act 2018.",
+                "The categories of personal data we collect, our purposes, and recipients are described in the Collection, Purposes, and Disclosure sections above.",
+                "We do not sell your personal data and do not share it for targeted advertising.",
+                "We use personal data such as birth date and birth location only as necessary to provide the Service and as permitted by UK data protection law.",
+                "Subject to applicable law and exceptions, you may have the right to access, rectify, erase, restrict processing of, object to processing of, and request portability of your personal data.",
+                "To exercise these rights, email help@cosmicfit.app. We may need to verify your identity before responding.",
+                "You also have the right to lodge a complaint with the Information Commissioner's Office (ico.org.uk)."
             ]
         ),
         LegalDocumentSection(
-            title: "14. EEA, Switzerland, and the UK",
+            title: "15. EEA and Switzerland",
             paragraphs: [
-                "If you are located in the European Economic Area, Switzerland, or the United Kingdom, our practices regarding the collection, use, disclosure, and retention of your personal data are described in this Privacy Policy.",
+                "If you are located in the European Economic Area or Switzerland, our practices regarding the collection, use, disclosure, and retention of your personal data are described in this Privacy Policy.",
                 "Lawful Basis. We process personal data where: (a) necessary to perform our contract with you to provide the Service; (b) necessary for our legitimate interests, such as securing and improving the Service, balanced against your rights; (c) necessary to comply with legal obligations; or (d) based on your consent where required, such as optional device permissions.",
                 "Your Rights. You may have the right to access, rectify, erase, restrict, or object to processing of your personal data, and to data portability where applicable. You may also withdraw consent where processing is based on consent.",
                 "To exercise these rights, contact help@cosmicfit.app. You also have the right to lodge a complaint with your local data protection authority."

@@ -18,7 +18,7 @@ xcodebuild test \
   -workspace "Cosmic Fit.xcworkspace" \
   -scheme "Cosmic Fit" \
   -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
-  -only-testing:"Cosmic FitTests/NarrativeCohesionReportXCTests/testGenerateCohesionReportFixture" \
+  -only-testing:"Cosmic FitTests/NarrativeCohesionReport_Tests/generateCohesionReport" \
   -resultBundlePath "$RESULT" \
   -parallel-testing-enabled NO \
   -test-timeouts-enabled YES \

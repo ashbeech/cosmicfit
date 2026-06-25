@@ -31,6 +31,9 @@ ESSENCE_TO_ENERGY = {
     "utility": "utility", "playful": "playful", "edgy": "edge",
 }
 
+IMPERCEPTIBLE_DELTA = 0.02
+MEANINGFUL_DELTA = 0.05
+
 STOPWORDS = set("the a an and or of to in on for with your you it is are be at as that this".split())
 
 
@@ -61,6 +64,46 @@ def windowed_unique(seq, window):
     if len(seq) < window:
         return None
     return stats.mean(len(set(seq[i:i + window])) for i in range(0, len(seq) - window + 1, window))
+
+
+def max_unchanged_streak(values: list[float], eps: float = 1e-9) -> int:
+    if len(values) < 2:
+        return len(values)
+    best = cur = 1
+    for i in range(1, len(values)):
+        if abs(values[i] - values[i - 1]) <= eps:
+            cur += 1
+            best = max(best, cur)
+        else:
+            cur = 1
+    return best
+
+
+def slider_variation_for_user(records: list[dict]) -> dict[str, dict]:
+    """Compute day-over-day slider variation metrics per slider."""
+    out: dict[str, dict] = {}
+    for s in SLIDERS:
+        vals = [r["displayPositions"].get(s) for r in records]
+        vals = [float(v) for v in vals if v is not None]
+        if len(vals) < 2:
+            out[s] = {"skipped": True, "nDays": len(vals)}
+            continue
+        deltas = [abs(vals[i] - vals[i - 1]) for i in range(1, len(vals))]
+        unchanged = sum(1 for d in deltas if d < 1e-9)
+        imperceptible = sum(1 for d in deltas if d < IMPERCEPTIBLE_DELTA)
+        meaningful = sum(1 for d in deltas if d >= MEANINGFUL_DELTA)
+        n_pairs = len(deltas)
+        out[s] = {
+            "nDays": len(vals),
+            "meanDayDelta": round(stats.fmean(deltas), 6),
+            "medianDayDelta": round(stats.median(deltas), 6),
+            "pctUnchangedDayPairs": round(unchanged / n_pairs * 100, 1),
+            "pctImperceptibleDayPairs": round(imperceptible / n_pairs * 100, 1),
+            "pctMeaningfulDayPairs": round(meaningful / n_pairs * 100, 1),
+            "maxUnchangedStreak": max_unchanged_streak(vals),
+            "distinctPositions": len(set(round(v, 6) for v in vals)),
+        }
+    return out
 
 
 def analyze_user(records: list[dict]) -> dict:
@@ -229,6 +272,7 @@ def analyze_user(records: list[dict]) -> dict:
             "top1Counts": dict(Counter(t for t in top1 if t)),
         },
         "sliders": {"ranges": slider_ranges, "stuck": stuck, "axisRanges": axis_ranges},
+        "sliderVariation": slider_variation_for_user(records),
         "palette": {
             "uniqueColours": unique_colours,
             "meanNextDayRetention": safe_mean(retention),
@@ -318,10 +362,18 @@ def main() -> None:
     base = ROOT / args.indir
 
     per_user = {}
+    all_slider_deltas: dict[str, list[float]] = {s: [] for s in SLIDERS}
     for f in sorted((base / "raw").glob("*.jsonl")):
         records = [json.loads(line) for line in f.read_text().splitlines() if line.strip()]
-        if records:
-            per_user[f.stem] = analyze_user(records)
+        if not records:
+            continue
+        per_user[f.stem] = analyze_user(records)
+        sorted_recs = sorted(records, key=lambda r: r["date"])
+        for s in SLIDERS:
+            vals = [float(r["displayPositions"][s]) for r in sorted_recs
+                    if r["displayPositions"].get(s) is not None]
+            for i in range(1, len(vals)):
+                all_slider_deltas[s].append(abs(vals[i] - vals[i - 1]))
 
     users = list(per_user.values())
     n_users = len(users)
@@ -350,6 +402,48 @@ def main() -> None:
     card_totals = Counter()
     for u in users:
         card_totals.update(u["tarot"]["cardCounts"])
+
+    # --- Slider day-variation aggregate ---
+    sv_agg: dict[str, dict] = {}
+    sv_histograms: dict[str, dict] = {}
+    hist_edges = [0, 0.001, 0.02, 0.05, 0.10, 0.20, 0.50, 1.01]
+    hist_labels = ["0 (unchanged)", "<0.02", "0.02-0.05", "0.05-0.10",
+                   "0.10-0.20", "0.20-0.50", ">0.50"]
+    for s in SLIDERS:
+        rows = [u["sliderVariation"][s] for u in users
+                if not u["sliderVariation"].get(s, {}).get("skipped")]
+        if not rows:
+            continue
+        n_sv = len(rows)
+        sv_agg[s] = {
+            "nUsers": n_sv,
+            "meanDayDelta": round(stats.fmean(r["meanDayDelta"] for r in rows), 4),
+            "medianDayDelta": round(stats.median(r["medianDayDelta"] for r in rows), 4),
+            "meanDistinctPositions": round(stats.fmean(r["distinctPositions"] for r in rows), 1),
+            "meanMaxUnchangedStreak": round(stats.fmean(r["maxUnchangedStreak"] for r in rows), 1),
+            "meanPctUnchangedDayPairs": round(stats.fmean(r["pctUnchangedDayPairs"] for r in rows), 1),
+            "meanPctMeaningfulDayPairs": round(stats.fmean(r["pctMeaningfulDayPairs"] for r in rows), 1),
+            "pctUsersMostlyUnchanged": round(
+                sum(1 for r in rows if r["pctUnchangedDayPairs"] >= 50) / n_sv * 100, 1),
+            "pctUsersRarelyMeaningful": round(
+                sum(1 for r in rows if r["pctMeaningfulDayPairs"] < 10) / n_sv * 100, 1),
+            "pctUsersLowRange": round(
+                sum(1 for u in users if u["sliders"]["ranges"].get(s, 0) < 0.33) / n_sv * 100, 1),
+        }
+        deltas = all_slider_deltas[s]
+        counts = [0] * len(hist_labels)
+        for d in deltas:
+            for i in range(len(hist_edges) - 1):
+                if hist_edges[i] <= d < hist_edges[i + 1]:
+                    counts[i] += 1
+                    break
+        n_deltas = len(deltas) or 1
+        sv_histograms[s] = {
+            "labels": hist_labels,
+            "counts": counts,
+            "pct": [round(c / n_deltas * 100, 1) for c in counts],
+            "nDayPairs": len(deltas),
+        }
 
     summary = {
         "cohortSize": n_users,
@@ -414,6 +508,10 @@ def main() -> None:
             "totalChecks": sum(u["verdicts"]["totalChecks"] for u in users),
             "failTotals": dict(verdict_fail_totals),
         },
+        "sliderVariation": {
+            "aggregate": sv_agg,
+            "deltaHistograms": sv_histograms,
+        },
         "perUser": per_user,
     }
 
@@ -449,6 +547,23 @@ def main() -> None:
         f"VERDICTS  fails: {summary['verdicts']['failTotals'] or 'none'} "
         f"of {summary['verdicts']['totalChecks']} checks",
     ]
+    if sv_agg:
+        lines += [
+            "",
+            "SLIDER VARIATION (day-over-day)",
+            f"  {'slider':<20}{'meanΔ':>8}{'medΔ':>8}{'%unch':>8}{'%≥0.05':>8}"
+            f"{'maxStrk':>8}{'distPos':>8}{'%stuck':>8}",
+        ]
+        for s in SLIDERS:
+            a = sv_agg.get(s)
+            if not a:
+                continue
+            lines.append(
+                f"  {s:<20}{a['meanDayDelta']:>8.4f}{a['medianDayDelta']:>8.4f}"
+                f"{a['meanPctUnchangedDayPairs']:>8.1f}{a['meanPctMeaningfulDayPairs']:>8.1f}"
+                f"{a['meanMaxUnchangedStreak']:>8.1f}{a['meanDistinctPositions']:>8.1f}"
+                f"{a['pctUsersLowRange']:>8.1f}"
+            )
     if "blueprints" in summary:
         b = summary["blueprints"]
         lines += [

@@ -117,8 +117,8 @@ def run_harness(presets: list[dict], start: date, days: int) -> dict:
                 print(f"  [SKIP] {ds}: {e}")
                 continue
 
-            payload = resp.get("payload", {})
-            diag = resp.get("diagnostics", {})
+            payload = (resp.get("dailyFit") or {}).get("payload", {})
+            diag = (resp.get("dailyFit") or {}).get("diagnostics", {})
             narrative_trace = diag.get("narrativeTrace", {})
             intent_trace = diag.get("narrativeIntentTrace", {})
             coherence_trace = diag.get("narrativeCoherenceTrace", {})

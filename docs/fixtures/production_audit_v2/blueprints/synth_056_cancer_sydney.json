@@ -1,0 +1,345 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "A single, exceptionally made accessory does more for your state of mind than a noisy stack of minor additions. You need an item with literal and visual weight to anchor your fluid layers. Focus on a substantial leather bag with a satisfyingly heavy clasp, or a serious watch that sits cold and heavy on the wrist. Stripping the details back to just one focal point creates immediate visual calm. It gives the eye a place to rest and proves you understand the confidence of restraint.",
+   "The garments do the yielding, so your accessories must take on the job of holding everything in place. A substantial leather belt or a rigidly constructed bag gives your softer, draped fabrics a necessary boundary. You need items with a deeply satisfying weight to them, whether that is a solid watch sitting cleanly on the wrist or a thick strap finished with a heavy, flawless clasp. These structural pieces act as the quiet architecture of your wardrobe. They prove that dressing for supreme physical ease never means looking like you are falling apart.",
+   "The true impact of your accessories has very little to do with a mirror. It lives in the rich scent of an unlined leather bag and the satisfying, heavy drop of a solid belt buckle falling into place. The quiet, decisive click of a well-made clasp provides a surprising hit of emotional calm. Cool hardware warms rapidly to your skin, while thick, supple straps mould fluidly to your shape over time. This constant tactile feedback becomes a private luxury, turning the items you carry into a reliable source of peace."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Cheap fast fashion that falls apart after three washes. You feel the difference in quality even if nobody else sees it.",
+   "Anything that does not feel good against your skin. If a seam scratches or a waistband digs, the outfit is already ruined.",
+   "Harsh synthetic fabrics that trap heat and static, because your skin registers a cheap finish before you even check the care label.",
+   "Impulsive fast-fashion buys that lack the tactile quality and lasting construction your wardrobe demands.",
+   "Disposable trends that divert your budget from beautiful, enduring pieces crafted from premium fabrics.",
+   "Trend-chasing instead of building an edited rotation of luxurious, perfectly cut staples."
+  ],
+  "consider": [
+   "Ensure your strong aesthetic direction is the very first thing people notice when you enter.",
+   "Spending your clothing budget exclusively on beautifully constructed pieces that feel unmistakably yours.",
+   "Investing in one radically innovative piece of construction that immediately starts brilliant conversations about the future of fashion.",
+   "Embracing sustainable luxury as the ultimate expression of abundance, because true generosity always starts with the planet."
+  ],
+  "leanInto": [
+   "Investing in fewer, better pieces that you will reach for every week. If it does not earn its place in a small wardrobe, it does not belong.",
+   "Touching before you buy. Run the fabric between your fingers. If the texture does not feel like a reward, walk away.",
+   "Choosing natural fibres over synthetics as a rule. Cashmere, silk, and cotton age gracefully. Polyester does not.",
+   "Building your wardrobe foundation on warm neutrals, knowing that rich cream, camel, and sage carry far more visual weight than any passing trend colour.",
+   "Treating your wardrobe like a collection, not a stockpile. Every addition should feel like it was curated, not grabbed.",
+   "Honouring beauty as a genuine emotional need, not vanity. When your outfit is beautiful, your whole nervous system relaxes."
+  ]
+ },
+ "engineVersion": "2.1.0",
+ "generatedAt": "2026-06-25T09:44:05Z",
+ "hardware": {
+  "metalsText": "Your hardware needs to feel substantial in the hand, yet completely smooth to the touch. Look for sterling silver tones in fluid, rounded shapes; think heavy, melted-looking buckles or subtle closures sitting quietly on a buttery leather bag. Antique silver tones provides a softer gleam that works brilliantly next to rich cashmere and deep sage tones. Avoid aggressive zips, sharp corners, or finishes that read as overly industrial. The final effect should always look poured into place rather than stamped out on an assembly line.",
+  "recommendedMetals": [
+   "sterling silver",
+   "antique silver",
+   "white gold",
+   "rose gold",
+   "warm bronze",
+   "yellow gold",
+   "silver",
+   "polished copper"
+  ],
+  "recommendedStones": [
+   "moonstone",
+   "pearl",
+   "emerald",
+   "jade",
+   "rose quartz",
+   "labrimar",
+   "selenite",
+   "blue lace agate",
+   "kunzite"
+  ],
+  "stonesText": "The stones you wear need to invite a lingering gaze rather than throwing blinding light across a room. Focus on smooth, cabochon cuts that feel deliberately cold and heavy on the collarbone. A generous slice of moonstone set in thick, brushed gold satisfies your drive for tactile luxury, while pearl offers a soft, watery depth that gently anchors a structured outfit. Avoid aggressively faceted gems that look sharp or brittle to the touch. Your jewellery functions best when it feels like a very expensive worry stone you just happen to wear on a heavy chain.",
+  "tipText": "Cheap or flimsy hardware instantly shatters the visual harmony of an outfit. Look for substantial pieces that rest cool and heavy on the collarbone or wrist, skipping fragile, easily tangled chains entirely. A solid cuff or a gently rounded ring in sterling silver tones gives a satisfying weight without interrupting fluid silhouettes. If you incorporate moonstone, ensure the setting is exceptionally smooth to the touch, with zero sharp prongs to snag your heavy silk layers or brushed wool knits. Jewellery must act as a sensory anchor, never an irritant."
+ },
+ "occasions": {
+  "dailyText": "For you, dressing down is entirely about finding a deep physical ease through exceptional construction. Rather than throwing on whatever garment is nearest, you naturally gravitate towards pieces that offer a gentle weight and fluid, continuous lines. Your approach to casual dressing relies on flawless proportions and soft tailoring, ensuring that every hem and shoulder sits in perfect harmony. The result feels wonderfully relaxed against the body, yet looks as though your entire weekend wardrobe was expertly custom-made.\n\nYour comfort instinct gravitates toward emotional wellbeing through daily comfort, functional softness, care routines. Your style energy concentrates in expression and identity, so your wardrobe is at its best when it reflects both expression and identity.",
+  "intimateText": "Evening dressing for you is entirely about how a garment moves when someone leans in close. Pieces that drape fluidly over your frame offer a sense of comforting weight and substance without relying on rigid structure. The lines need to flow, creating a silhouette that feels highly considered yet completely undone. Focus on masterful construction that quietly follows your form, letting the inherent quality of the material do the work instead of loud embellishments. The final impression is simply someone perfectly at ease in their own skin, wearing something impossible not to touch.",
+  "workText": "Your professional wardrobe needs to project absolute serenity in rooms where other people are losing their minds. The trick is finding fluid silhouettes cut with rigorous precision. Everything you bring to the office must feel remarkably substantial to the touch while maintaining an effortless, liquid grace when you move. Heavy materials tailored into soft shapes offer a sense of quiet armour without making you look defensive. Pieces that sit seamlessly on the body create an uninterrupted line from shoulder to hem, projecting an aesthetic that is inherently diplomatic but too expensive-looking to argue with. Let everyone else sweat in rigid suiting while you run the room looking completely unbothered.\n\nAt work, you signal your original leadership by embracing a distinctive innovation, combining an unconventional polish with forward-thinking sartorial choices."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#865373",
+    "name": "Warm Mauve",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Moon",
+     "sourceSign": "Libra"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#005D69",
+    "name": "Warm Prussian",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Jupiter",
+     "sourceSign": "Aquarius"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Deep Warm Structured",
+  "coreColours": [
+   {
+    "hexValue": "#4A1C20",
+    "name": "oxblood",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#0B4F4A",
+    "name": "forest teal",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#254D32",
+    "name": "dark pine",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#9E4E3A",
+    "name": "dark terracotta",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#2B1E15",
+   "name": "ink brown",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "Deep Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "Deep Autumn",
+  "lightAnchor": {
+   "hexValue": "#F2E8D4",
+   "name": "warm cream",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "Deep Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#7C724D",
+   "name": "deep khaki",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "Deep Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "A truly successful palette for you acts as a sensory retreat from the visual noise of the outside world. Build your daily rotation on rich, grounding tones like oxblood and forest teal. Blending these with dark pine creates a sweeping, tonal softness that practically begs to be touched. When you bring in Warm Mauve, apply it as a fluid wash of pigment rather than a sharp, graphic contrast. The end goal is uninterrupted visual harmony, wrapping you in shades that quietly soothe your nervous system.",
+  "neutrals": [
+   {
+    "hexValue": "#3C2415",
+    "name": "espresso",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#4A4244",
+    "name": "warm charcoal",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#3C4B27",
+    "name": "deep olive",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#5C4033",
+    "name": "bark brown",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": false,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": true,
+   "fireAirChromaApplied": false,
+   "scorpioDensityApplied": true,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#6F632D",
+   "name": "warm olive",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "Deep Autumn",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "True Autumn",
+  "supportColours": [
+   {
+    "hexValue": "#1B2A4A",
+    "name": "ink navy",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Autumn",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#3B3F42",
+    "name": "cool charcoal",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Autumn",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#5B6770",
+    "name": "slate",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Autumn",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#2F3A2B",
+    "name": "midnight olive",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Autumn",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "Medium",
+   "depth": "Deep",
+   "saturation": "Rich",
+   "surface": "Structured",
+   "temperature": "Warm"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "aggressive graphics",
+   "neon prints",
+   "overly busy patterns",
+   "jarring asymmetry"
+  ],
+  "narrativeText": "High-contrast, chaotic prints immediately disrupt your sense of visual peace. When you introduce a motif, it needs to feel fluid and harmonious, making subtle herringbone and bark-effect weave obvious choices for your wardrobe. The way a design sits on heavy silk or brushed wool matters just as much as the shape itself; the lines must melt into the fabric rather than sitting stiffly on the surface. Anything jarring like aggressive graphics or neon prints simply breaks the calm, expensive spell you cast. Keep the scale considered, relying on tonal knits to provide movement without ever shouting for attention.",
+  "recommendedPatterns": [
+   "subtle herringbone",
+   "bark-effect weave",
+   "tonal knits",
+   "classic plaid"
+  ],
+  "tipText": "Patterns serve you best when they behave more like textures than loud graphic statements. A tonal subtle herringbone woven directly into a heavy silk or brushed cashmere does the job perfectly. Keeping the colours closely related, like buttery cream melting into soft taupe, ensures the design flows over the body rather than fighting for attention. The motif should reveal its true complexity only when someone is standing close enough to touch your sleeve."
+ },
+ "styleCore": {
+  "narrativeText": "Your presence is defined by an undeniable, expensive ease. You project the calm authority of someone who expects their wardrobe to feel as good as it looks, bringing a sense of fluid grace to very substantial, high-quality garments. There is a beautiful tension in your look between protective weight and effortless movement. You never appear as though you are trying hard or chasing fleeting shifts in taste, because your clothes do the work through flawless drape and serious physical comfort. It is an aesthetic that proves absolute ease and total polish are exactly the same thing.\n\nYour natural sense of beauty shows up most powerfully in your personal identity, beauty as first impression, your aesthetic IS your identity. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your distinctive public image relies on avant-garde silhouettes and unexpected hardware to establish a fiercely independent aesthetic."
+ },
+ "textures": {
+  "avoidTextures": [
+   "synthetic jersey",
+   "cheap polyester",
+   "plasticky fabrics"
+  ],
+  "badText": "Your physical comfort dictates your entire mood, meaning harsh or poorly made materials are an immediate dealbreaker. Anything mimicking synthetic jersey instantly disrupts your flow and leaves you feeling agitated. The same applies to cheap polyester, because if a material feels highly synthetic or restricts your natural movement, it reads as an unforced error on your frame. You are highly sensitive to how a piece sits on the skin, so stiff or unyielding finishes will just make you feel boxed in and tense. Leave the high-friction synthetics on the rail and stick to fabrics that genuinely respect your body.",
+  "goodText": "If a piece feels remotely abrasive on the hanger, it is simply not coming home with you. You process your wardrobe entirely by touch, expecting clothes to soothe your nervous system while looking undeniably expensive. Because getting dressed acts as a gentle buffer against the outside world, you need materials that move fluidly but carry a proper, luxurious weight. Wrap yourself in cashmere for immediate sensory relief, and lean on heavy silk when you want a silhouette to drape with quiet authority. Layering in buttery leather provides a beautiful, tactile finish that sits securely against the skin. For you, true style is never just visual; it is about knowing your clothes are actively taking care of you.",
+  "recommendedTextures": [
+   "cashmere",
+   "heavy silk",
+   "buttery leather",
+   "brushed wool"
+  ],
+  "sweetSpotKeywords": [
+   "weight",
+   "softness"
+  ],
+  "sweetSpotText": "The exact point of perfection relies entirely on the balance of weight and softness. A textile must deliver an immediate hit of physical peace the second it touches your skin, or it goes straight back on the rail. You naturally gravitate towards materials with genuine weight and intuition, like a dense cashmere knit or a cut of heavy silk that moves like liquid. This is an uncompromising sensory standard. A rigid cuff or a sharp seam will genuinely ruin your day, so every single thing you wear must behave like a quiet, private indulgence."
+ },
+ "userInfo": {
+  "birthDate": "1985-06-26T04:00:00Z",
+  "birthLocation": "Synth 056 \u2014 Cancer Sun, 04:00 UTC, Sydney (1985)",
+  "generationDate": "2026-06-25T09:44:05Z"
+ }
+}

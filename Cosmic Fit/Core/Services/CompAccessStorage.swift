@@ -6,8 +6,15 @@ struct CompAccessGrant: Codable, Equatable {
     let code: String
     let grantedAt: Date
     let expiresAt: Date?
+    /// 1-based slot among limited codes such as FIRST50 (from server `redemptionPosition`).
+    let redemptionPosition: Int?
 
     var isValid: Bool { expiresAt == nil || expiresAt! > Date() }
+
+    var isFirst50Code: Bool {
+        let normalized = code.uppercased()
+        return normalized == "FIRST50" || normalized == "BETATESTER"
+    }
 }
 
 /// Keychain-backed storage for the local comp access grant.

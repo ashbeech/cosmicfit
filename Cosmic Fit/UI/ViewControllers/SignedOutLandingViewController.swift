@@ -277,7 +277,6 @@ final class SignedOutLandingViewController: UIViewController {
             try? await CosmicFitAuthService.shared.signOut()
             await MainActor.run {
                 UserProfileStorage.shared.deleteUserProfile()
-                BlueprintStorage.shared.delete()
                 UserProfileStorage.shared.clearOnboardingPendingAuth()
                 CosmicFitAuthService.shared.clearAccountEmail()
                 CosmicFitAuthService.shared.clearLastUserId()

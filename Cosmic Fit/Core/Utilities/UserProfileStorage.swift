@@ -165,16 +165,30 @@ class UserProfileStorage {
     }
     
     func deleteUserProfile() {
+        clearLocalUserGeneratedContent()
+        print("🗑️ User profile deleted")
+    }
+
+    /// Removes on-device profile, Style Guide, Daily Fit cache, location cache, and related preferences.
+    /// Does not remove Keychain install identifiers or promotional access grants.
+    func clearLocalUserGeneratedContent() {
         let existingProfile = loadUserProfile()
-        
+
         try? FileManager.default.removeItem(at: profileFileURL)
         userDefaults.removeObject(forKey: userProfileKey)
-        
+
         if let profile = existingProfile {
             cleanupUserDailyVibes(userId: profile.id)
         }
-        
-        print("🗑️ User profile deleted")
+
+        BlueprintStorage.shared.delete()
+        DailyFitFrozenPayloadStorage.shared.removeAll()
+        LocationManager.shared.clearCachedLocation()
+        userDefaults.removeObject(forKey: showMasculineFeminineSliderKey)
+
+        Task { @MainActor in
+            BlueprintStorage.bumpRemoteBlueprintPullEpoch()
+        }
     }
     
     func hasSeenWelcome() -> Bool {

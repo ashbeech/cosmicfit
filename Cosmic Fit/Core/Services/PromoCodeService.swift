@@ -65,9 +65,15 @@ final class PromoCodeService {
     }
 
     /// Attempt to restore comp access from the server (e.g. after reinstall).
+    /// Also refreshes FIRST50 slot position when missing from the local cache.
     /// Silent — does not throw on "no access found", only on hard errors.
     func restoreCompAccessIfNeeded() async {
-        guard CompAccessStorage.load()?.isValid != true else { return }
+        let existing = CompAccessStorage.load()
+        let needsFirst50PositionRefresh = existing?.isValid == true
+            && existing?.isFirst50Code == true
+            && existing?.redemptionPosition == nil
+
+        guard existing?.isValid != true || needsFirst50PositionRefresh else { return }
         guard SupabaseConfig.isConfigured else { return }
 
         let body: [String: Any] = [
@@ -157,6 +163,12 @@ final class PromoCodeService {
         if let expiresStr = obj["expiresAt"] as? String {
             expiresAt = formatter.date(from: expiresStr)
         }
-        return CompAccessGrant(code: code, grantedAt: grantedAt, expiresAt: expiresAt)
+        let redemptionPosition = obj["redemptionPosition"] as? Int
+        return CompAccessGrant(
+            code: code,
+            grantedAt: grantedAt,
+            expiresAt: expiresAt,
+            redemptionPosition: redemptionPosition
+        )
     }
 }

@@ -1,0 +1,351 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "A handful of delicate extras only distracts from your natural presence. You need one substantial anchor rather than a clutter of minor additions. Think of a heavy, oversized watch or a structured bag with serious hardware, items that provide a comforting, tactile weight in your hand or on your wrist. This solitary piece becomes your focal point, offering both a commanding edge and a familiar, reassuring heft. When the construction is this undeniable, the satisfying click of a thick leather belt speaks much louder than a pile of trinkets.",
+   "The items you put on last are usually the ones pulling the entire look into focus. Thick leather waist belts and weighty, satisfying clasps act as the architectural borders of your wardrobe. They offer a deep sense of physical security while projecting absolute confidence to the room. A structured bag with rigid handles gives you something deliberate to hold, while substantial hardware on a thick strap prevents your softer garments from floating away. These are the solid finishing touches that keep your warmth from losing its centre.",
+   "A serious accessory registers physically before it even catches the eye. You want the sheer gravity of a weighty watch on your wrist and the thick, waxy drag of a premium leather strap. This sensory feedback acts as a constant, comforting presence throughout the day. It comes down to the satisfying snap of a heavy bag clasp, the audible clatter of stacked rings when you talk with your hands, and the rich scent of well-handled hides. You wear them for their physical reassurance just as much as the look."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Deliberately dressing down when the occasion does not require it. You dim the room when you dim yourself.",
+   "Safe, flat neutrals that make you blend into the walls, as head-to-toe beige is strictly for people who hate being seen.",
+   "Apologetic fashion choices that hedge your presence. Half-measures in style always read as uncertainty.",
+   "Anything emotionally cold or sterile that strips warmth from a room. Clinical minimalism is not your language.",
+   "Ban harsh, scratchy fabrics from sitting directly against your skin. Your delicate contact points, particularly near your neck and wrists, demand absolute softness.",
+   "Exposing too much when you feel fragile. Your wardrobe should protect you, not put you on display."
+  ],
+  "consider": [
+   "Disrupting the traditional proportions of your wardrobe by experimenting fearlessly with a progressive, exaggerated silhouette and heavy-duty structural fabrics.",
+   "Projecting your personal values through conscious fabric choices and independent designers.",
+   "Grounding your look in high-gauge cashmere knitwear and sharply creased trousers that deliver both supreme comfort and undeniable authority.",
+   "Selecting softly constructed suiting and fluid silk blouses that bring tactical softness to the boardroom."
+  ],
+  "leanInto": [
+   "Dressing like the lead in your own film. Every outfit should feel like a costume for the most exciting version of you.",
+   "Letting one statement piece stop the room. A rich velvet blazer or a gold-thread knit is worth more than ten forgettable basics.",
+   "Reaching for warm metals and rich textures in every outfit. Gold hardware, silk linings, and heavy drape are your baseline, not your luxury.",
+   "Wearing confidence as your most visible accessory. If the outfit does not make you stand taller, it is not earning its place.",
+   "Treating drama as a compliment, not a criticism. A structured shoulder or a bold proportion is how you communicate warmth at scale.",
+   "Keeping clothes with emotional history in active rotation. A coat from a family member or a scarf from a trip holds real power."
+  ]
+ },
+ "engineVersion": "2.1.0",
+ "generatedAt": "2026-06-25T10:24:39Z",
+ "hardware": {
+  "metalsText": "Hardware is never just a functional detail on a garment; it needs to carry a distinct sense of heat and history. Polished brass tones is your obvious default, especially when it has that slightly heavy, melted-down quality that catches the light without looking brassy or cheap. When a bag or jacket requires a fastening with a bit more age to it, yellow gold tones brings a beautiful, nostalgic weight to the silhouette. For finer details like zips or shoe buckles, gilded finishes provides a polished but substantial finish. Flimsy fastenings simply look apologetic on you, so hold out for solid hardware that feels like a modern heirloom.",
+  "recommendedMetals": [
+   "polished brass",
+   "yellow gold",
+   "gilded finishes",
+   "gold",
+   "copper",
+   "rose gold",
+   "antique silver",
+   "white gold",
+   "surgical steel",
+   "titanium"
+  ],
+  "recommendedStones": [
+   "sunstone",
+   "amber",
+   "tiger eye",
+   "citrine",
+   "moonstone",
+   "pearl",
+   "selenite",
+   "opal",
+   "rose quartz",
+   "labradorite",
+   "meteorite"
+  ],
+  "stonesText": "The pieces you wear on bare skin should feel like heavy, glamorous heirlooms. Look for gems that hold a deep, internal heat rather than a cold, icy sparkle, making sunstone and amber your obvious signatures. Cabochon cuts or thick, burnished gold settings give these stones a tactile, lived-in quality that feels deeply personal and fiercely protective. A single, substantial tiger eye resting on the collarbone commands the room long before you speak.",
+  "tipText": "Your jewellery needs to feel like a treasured inheritance, even if you bought it for yourself yesterday. It is all about physical weight combined with undeniable visual presence. Seek out polished brass tones cast in chunky, rounded shapes that actually warm to your skin temperature as you wear them. A heavy curb chain or a substantial ring set with sunstone delivers that necessary mix of high-drama glamour and nostalgic comfort. Flimsy wire rings and paper-thin pendants simply vanish on you. The right pieces function as bold focal points that also feel incredibly reassuring to wear every day."
+ },
+ "occasions": {
+  "dailyText": "Your off-duty rotation is never about slipping into the background. Even your most relaxed pieces need a sense of occasion and a bit of theatrical sweep. Seek out generous, enveloping silhouettes that provide physical ease while still holding a striking shape. The overall fit should feel protective and deeply familiar, but the final execution must remain strictly polished. A dropped shoulder or a wide, pooling trouser leg lets you take up space effortlessly without feeling restricted. You are off the clock, but your wardrobe never stops commanding the room.\n\nYour comfort instinct gravitates toward publicly composed emotional presentation, professional comfort, polished calm.",
+  "intimateText": "Private spaces call for a mood that feels less like a performance and more like an invitation. Gravitate towards substantial, enveloping pieces that carry a noticeable physical weight while leaving your outline distinct. The best items for these hours possess an undeniable richness and a subtle sheen that catches low light, wrapping you in something deeply familiar yet completely striking. Evening dressing for you is simply about maintaining your natural heat without needing to project it to the back of the room.",
+  "workText": "Your workwear needs to bridge the gap between unignorable presence and private sanctuary. A commanding, expansive silhouette establishes your authority the moment you walk into the room, but the piece itself must feel deeply reassuring on the body. Look for substantial, weighty materials that drape with a sense of theatre while offering a soft, insulated layer from the outside world. Bring a sense of heat to professional spaces through generous proportions and unapologetic scale rather than stiff, restrictive tailoring. You project the most power when your outfit functions as a luxurious, personal stronghold.\n\nYour style energy concentrates in community and public, so your wardrobe is at its best when it reflects both community and public."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#865373",
+    "name": "Warm Mauve",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Ascendant",
+     "sourceSign": "Libra"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#005D69",
+    "name": "Warm Prussian",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Saturn",
+     "sourceSign": "Aquarius"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Medium Warm Grounded",
+  "coreColours": [
+   {
+    "hexValue": "#EAA221",
+    "name": "marigold",
+    "provenance": {
+     "band": "core",
+     "family": "True Spring",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#FF7F50",
+    "name": "coral",
+    "provenance": {
+     "band": "core",
+     "family": "True Spring",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#4AE082",
+    "name": "fresh green",
+    "provenance": {
+     "band": "core",
+     "family": "True Spring",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#08E8DE",
+    "name": "bright aqua",
+    "provenance": {
+     "band": "core",
+     "family": "True Spring",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#1B2A4A",
+   "name": "ink navy",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "True Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "True Spring",
+  "lightAnchor": {
+   "hexValue": "#FFFFF0",
+   "name": "warm ivory",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "True Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#DFA74B",
+   "name": "deep honey",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "True Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "A wardrobe built for a natural centre of attention requires unapologetic, radiating warmth. Your foundation thrives on deep, sun-baked shades like marigold, coral, and fresh green. These tones do their best work poured into heavy silk or dense velvet, instantly warming the skin and catching the light when you walk. Introduce a quiet flash of Warm Mauve as an inner layer, providing a soft, nostalgic anchor beneath the bolder exterior. You wear rich pigment to hold the room, but the actual heat it generates is strictly for your own comfort.",
+  "neutrals": [
+   {
+    "hexValue": "#FFFFF0",
+    "name": "warm ivory",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Spring",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#C4A35A",
+    "name": "camel sand",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Spring",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#C3B091",
+    "name": "light khaki",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Spring",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#A89F91",
+    "name": "warm stone",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Spring",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": false,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": false,
+   "fireAirChromaApplied": true,
+   "scorpioDensityApplied": false,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#DFA74B",
+   "name": "muted amber",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "True Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Bright Spring",
+  "supportColours": [
+   {
+    "hexValue": "#8A8D8F",
+    "name": "cool stone",
+    "provenance": {
+     "band": "support",
+     "family": "True Spring",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#6B7B8D",
+    "name": "mist navy",
+    "provenance": {
+     "band": "support",
+     "family": "True Spring",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#4F5D73",
+    "name": "soft navy",
+    "provenance": {
+     "band": "support",
+     "family": "True Spring",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#6B7B8D",
+    "name": "mist navy",
+    "provenance": {
+     "band": "support",
+     "family": "True Spring",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "Medium",
+   "depth": "Medium",
+   "saturation": "Rich",
+   "surface": "Balanced",
+   "temperature": "Warm"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "barely-visible micro-weave",
+   "tiny ditsy prints",
+   "wallflower designs",
+   "aggressive graphics"
+  ],
+  "narrativeText": "When you wear a print, it needs to look expensive and feel deeply familiar, never like a frantic afterthought. Rich, historically grounded motifs like animal print and bold medallion give your wardrobe that heavy, cinematic warmth you naturally project. These designs look best scaled up on structured satin or woven directly into a thick gold-thread brocade, giving the eye something substantial to trace. Stay completely clear of barely-visible micro-weave and tiny ditsy prints. Anything busy, cold, or overly digital strips away your innate glamour and makes the outfit look nervous. A successful print always acts like a treasured heirloom, designed to be admired the second you walk into the room.",
+  "recommendedPatterns": [
+   "animal print",
+   "bold medallion",
+   "rich damask",
+   "statement florals",
+   "vintage florals",
+   "nautical stripes"
+  ],
+  "tipText": "People mistake statement prints for pure extroversion, but for you, the right motif acts as a personal crest. When wearing a animal print, ensure the print sits on a fabric with genuine physical weight, such as structured satin or heavy silk twill. Flimsy materials ruin the execution. Instead, a dense, tactile cloth gives those rich ambers and burnished golds a comforting, nostalgic gravity. You want the outfit to register not as a seasonal trend, but as a beautifully inherited archive piece."
+ },
+ "styleCore": {
+  "narrativeText": "Walking through a door, your immediate, unapologetic warmth sets the temperature of the room. Dramatic volume and substantial, heavy garments form the foundation of your wardrobe, announcing your arrival while keeping your physical core completely secure. Sweeping, cinematic silhouettes put you in your element, offering absolute physical ease alongside total visual dominance. While others are drawn to your bold energy, the inherent weight of your clothing establishes a firm, beautiful boundary. Holding the centre of the room is your default setting, provided it happens on your own exceptionally comfortable terms.\n\nYour natural sense of beauty shows up most powerfully in your community presence, beauty within community, group-aware style, progressive aesthetics, social elegance. Your style instincts lean toward clarity, structure, and visible polish. Your public aesthetic relies on heavy silk crepe and soft draping to communicate a welcoming yet deeply polished presence."
+ },
+ "textures": {
+  "avoidTextures": [
+   "thin cheap jersey",
+   "lifeless polyester",
+   "anything that looks budget"
+  ],
+  "badText": "Anything flat, brittle, or apologetic in its finish actively fights against your natural presence. Garments cut from thin cheap jersey lack the rich, protective drape you need to feel genuinely secure in a look. When you wear lifeless polyester, that stiff, lifeless surface immediately dulls your glow and feels oddly clinical. You are built for clothes that wrap around you with intent and move beautifully with your body. If a piece feels like a flimsy afterthought the second it touches your skin, it is only going to drag your mood down with it.",
+  "goodText": "You expect your clothes to command a room, but they also have to act as a very glamorous security blanket. Substantial, protective weights are non-negotiable, meaning heavy silk and structured satin belong in heavy rotation. These materials drape around you with genuine heft and warmth. Adding elements of rich velvet or gold-thread brocade provides an essential hit of unapologetic luxury that keeps you entirely insulated from a cold, uninviting space. It is about dressing for maximum outward impact while secretly staying completely cocooned.",
+  "recommendedTextures": [
+   "heavy silk",
+   "structured satin",
+   "rich velvet",
+   "gold-thread brocade"
+  ],
+  "sweetSpotKeywords": [
+   "lustre",
+   "drama"
+  ],
+  "sweetSpotText": "Your true sweet spot relies on a collision of lustre and drama. You naturally gravitate toward the unapologetic gleam of structured satin, provided it comes with a built-in sense of protective warmth. Every item you wear has to project undeniable authority to the room while offering a private, almost nostalgic comfort on the inside. If a jacket looks spectacular under restaurant lighting but sits like stiff cardboard against your neck, it goes straight back on the hanger."
+ },
+ "userInfo": {
+  "birthDate": "1992-07-28T12:00:00Z",
+  "birthLocation": "Synth 086 \u2014 Leo Sun, 12:00 UTC, Sydney (1992)",
+  "generationDate": "2026-06-25T10:24:39Z"
+ }
+}

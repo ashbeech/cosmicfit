@@ -81,13 +81,19 @@ SECURITY DEFINER
 SET search_path = public, pg_catalog
 AS $$
 DECLARE
-  v_promo        RECORD;
-  v_existing     RECORD;
+  v_lookup_code   TEXT;
+  v_promo         RECORD;
+  v_existing      RECORD;
   v_grant_expires TIMESTAMPTZ;
 BEGIN
+  v_lookup_code := UPPER(TRIM(p_code));
+  IF v_lookup_code = 'BETATESTER' THEN
+    v_lookup_code := 'FIRST50';
+  END IF;
+
   SELECT * INTO v_promo
   FROM promo_codes
-  WHERE code = UPPER(TRIM(p_code));
+  WHERE code = v_lookup_code;
 
   IF NOT FOUND THEN
     RETURN json_build_object('ok', false, 'error', 'INVALID_CODE');
@@ -254,9 +260,9 @@ REVOKE ALL ON FUNCTION get_comp_access(TEXT, UUID) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION get_comp_access(TEXT, UUID) TO service_role;
 
 -- ────────────────────────────────────────────────────────────
--- 6. Seed BETATESTER code
+-- 6. Seed FIRST50 code
 -- ────────────────────────────────────────────────────────────
 
 INSERT INTO promo_codes (code, kind, grant_days, max_redemptions, is_dev_only, note)
-VALUES ('BETATESTER', 'comp', NULL, 100, false, 'Beta testers — permanent full access')
+VALUES ('FIRST50', 'comp', NULL, 50, false, 'First 50 — permanent full access')
 ON CONFLICT (code) DO NOTHING;

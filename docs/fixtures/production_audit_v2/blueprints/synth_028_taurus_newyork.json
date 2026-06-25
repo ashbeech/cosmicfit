@@ -1,0 +1,350 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "A cluttered wrist or a tangled neckline completely dilutes the sharp, immediate impression you naturally project. Rather than fussing with a pile of minor trinkets, let one substantial item take full control of the look. Seek out a heavy watch, a bag slung on a radically wide strap, or a thick leather belt secured by an uncompromising buckle. This solitary focal point feeds your appetite for bold design while keeping you physically unencumbered. One excellent, deliberate piece gives the eye an obvious place to land, leaving you free to navigate a room without a chorus of jingling hardware.",
+   "The tension in your outfit comes down to how you fasten it together. A rigid belt or a firm leather strap cuts straight through lighter clothing, pulling the whole silhouette into sudden, sharp focus. Look for heavy, industrial clasps and dense webbing that simply refuse to lose their shape. These structural details do the hard work of turning a fast, spontaneous combination of clothes into a deliberate uniform. That single, severe line across the body is exactly what gives your style its bite.",
+   "The tactile feedback of your accessories dictates how you physically move through a space. You register the sharp, satisfying snap of a firm bag closure or the cool glide of a technical watch strap instantly. Heavy, clattering pieces just drag on your natural momentum. You tune into the clean scent of freshly cut leather and the crisp friction of a woven belt instead. Every finishing piece acts as a specific tool of personal agency, sliding perfectly into position without requiring constant adjustment."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Mixed-message outfits that confuse your own story before anyone else has a chance to read it.",
+   "Hedging with too many safe neutrals when a single strong colour would say it all.",
+   "Fussing over options when the first instinct was right.",
+   "Disposable fashion that treats garments as temporary. If a piece is designed to last one season, it was designed for someone else.",
+   "Trend-chasing at the expense of quality or tactile pleasure. Your body knows the difference between real and fake before you do.",
+   "Rushing through purchases without engaging your senses. Slow shopping that involves touching, trying, and sitting in a garment is your superpower."
+  ],
+  "consider": [
+   "Finding a tailor who understands your body and can adjust every key piece to your exact proportions.",
+   "Buyying one perfectly fitting poplin shirt to act as a strict template for every future purchase.",
+   "Disrupting the traditional proportions of your wardrobe by experimenting fearlessly with a progressive, exaggerated silhouette and heavy-duty structural fabrics.",
+   "Projecting your personal values through conscious fabric choices and independent designers."
+  ],
+  "leanInto": [
+   "Letting one strong piece speak instead of many whispering.",
+   "Making decisive colour choices over safe hedge-betting. Pick the bold shade and commit fully.",
+   "Choosing clarity over complexity in every combination. If the message is not instant, simplify.",
+   "Choosing exceptional construction over sheer quantity every single time, knowing firmly that one perfect cashmere knit entirely defeats five mediocre high-street alternatives.",
+   "Making natural fibres your non-negotiable standard. Cotton, wool, silk, and linen are your baseline, not your luxury tier.",
+   "Anchoring your wardrobe on earth tones that feel grounded and enduring. Sage, caramel, and stone carry your energy perfectly."
+  ]
+ },
+ "engineVersion": "2.1.0",
+ "generatedAt": "2026-06-25T09:14:11Z",
+ "hardware": {
+  "metalsText": "Your hardware needs to look like a swift, deliberate decision rather than a polite afterthought. Let rose gold tones act as your daily baseline, particularly through chunky zips, heavy carabiners, or oversized snap buttons that sit boldly against crisp poplin and raw denim. When an outfit requires a different frequency, warm bronze tones provides a cooler, slightly clinical edge that suits your deeply independent eye. Look for closures and buckles that genuinely function and feel satisfying to fasten. The best metal details in your wardrobe look completely engineered but take half a second to throw on.",
+  "recommendedMetals": [
+   "rose gold",
+   "warm bronze",
+   "yellow gold",
+   "bright copper",
+   "polished brass",
+   "sterling silver",
+   "surgical steel",
+   "titanium",
+   "mixed metals"
+  ],
+  "recommendedStones": [
+   "carnelian",
+   "emerald",
+   "jade",
+   "lapis lazuli",
+   "garnet",
+   "red jasper",
+   "fluorite",
+   "labradorite",
+   "meteorite",
+   "aquamarine",
+   "citrine"
+  ],
+  "stonesText": "Your jewellery box does not need to look like a dusty antique stall. You suit stones that carry an immediate, unapologetic hit of visual heat, sitting starkly against cool, clinical metals. Skip the fussy, overly delicate clusters and find carnelian cut into sharp, geometric shapes that feel slightly engineered. When you want something less expected, emerald gives you a strange, electric flash of colour that catches the eye without feeling deeply traditional. It is purely about impact over inheritance. You wear stones like jade best when they are solitary and bold, resting against a crisp collar like a sudden bright idea.",
+  "tipText": "Accessories should never look fussy or tacked on as an afterthought. Look for hardware that mirrors the sharp efficiency of your clothes, like an oversized rose gold tones zipper slicing through crisp poplin or a single, brutally simple ring. You need pieces that read as clever rather than purely decorative, so skip the delicate, tangled chain stacks entirely. A brilliantly engineered closure or an unexpectedly set carnelian does the talking before you even open your mouth."
+ },
+ "occasions": {
+  "dailyText": "Daily dressing for you is about speed and instant legibility, but there is always a slight sense of detachment. Reach for garments that require zero fuss to put on yet immediately disrupt the usual casual uniform. Prioritise sharp, architectural shapes that sit away from the frame rather than restricting it, giving you the physical room to pivot without hesitation. A sudden shift in volume or a dramatically exaggerated proportion does the heavy lifting. Your off-duty wardrobe needs to look fast, intelligent, and entirely uninterested in blending into the background.\n\nYour comfort instinct gravitates toward emotionally expansive dressing, travel comfort, soft global influences. Your style energy concentrates in community and philosophy, so You build an intelligent wardrobe by investing in globally inspired silhouettes and deeply intentional craftsmanship..",
+  "intimateText": "Evening settings routinely demand a predictable sort of romance, but your version of intimacy is far more direct. Skip the expected sensual tropes and rely on architectural shapes that sit slightly away from the frame, granting you literal and psychological room to breathe. Sharp, confident lines ensure you make an immediate visual impact the moment you walk into a dimly lit room. A severe, asymmetric cut or an entirely backless garment feels inherently correct, offering up skin on your own highly specific terms. You want an outfit that sparks a brilliant conversation, then looks completely unbothered about leaving early.",
+  "workText": "Your professional presence relies on rapid intelligence and a firm refusal to blend into the office furniture. Traditional corporate uniforms feel far too stagnant for the way you operate. Instead, construct a daily wardrobe from tailoring that feels fast and unrestrictive, focusing on razor-sharp proportions and slightly abbreviated shapes. A deliberate touch of oddness, like an asymmetrical lapel or a sleeve with sudden, geometric volume, signals complete independence to everyone watching. You walk into the room looking like the brightest mind at the table, entirely unbothered by the standard dress code.\n\nAt work, you command collaborative authority by dressing in balanced proportions and maintaining a harmonious colour palette for diplomatic elegance."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#9F3D8A",
+    "name": "Cool Berry",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Venus",
+     "sourceSign": "Aries"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#00AFBF",
+    "name": "Iced Aqua",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Ascendant",
+     "sourceSign": "Gemini"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Deep Cool High-Contrast",
+  "coreColours": [
+   {
+    "hexValue": "#191970",
+    "name": "midnight",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#4169E1",
+    "name": "royal blue",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#CC0066",
+    "name": "hot pink",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#5FADA5",
+    "name": "icy teal",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#0A0A0A",
+   "name": "black",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "Bright Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "Bright Winter",
+  "lightAnchor": {
+   "hexValue": "#FFFFFF",
+   "name": "bright white",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "Bright Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#157059",
+   "name": "dark pine",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "Bright Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "Your wardrobe relies on a fast, highly deliberate approach to colour. A baseline of midnight and royal blue acts as a clean, slightly clinical canvas, giving your mind space to operate while keeping the silhouette in sharp focus. From there, you introduce Cool Berry with total conviction. It is never about blending or creating a soft gradient; you wear pigment to make a sudden, unmistakable point. Think of a crisp midnight poplin shirt interrupted by a jarring Cool Berry detail, or Iced Aqua deployed when you want a cooler, more detached flash. The resulting mood is bright, incredibly confident, and completely bypasses traditional matching rules.",
+  "neutrals": [
+   {
+    "hexValue": "#0A0A0A",
+    "name": "black",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#FFFFFF",
+    "name": "bright white",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#1B2A4A",
+    "name": "ink navy",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#71797E",
+    "name": "steel grey",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": false,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": false,
+   "fireAirChromaApplied": true,
+   "scorpioDensityApplied": false,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#895CC0",
+   "name": "cobalt",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "Bright Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Bright Spring",
+  "supportColours": [
+   {
+    "hexValue": "#A89F91",
+    "name": "warm stone",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#786D4E",
+    "name": "deep khaki",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#7B5B3A",
+    "name": "cocoa",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#C4A35A",
+    "name": "camel sand",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "High",
+   "depth": "Deep",
+   "saturation": "Rich",
+   "surface": "Structured",
+   "temperature": "Cool"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "tiny florals",
+   "paisley",
+   "fussy prints",
+   "traditional florals"
+  ],
+  "narrativeText": "Your approach to print is entirely unsentimental. When you wear a pattern, it needs to register loud and clear on crisp poplin or a slick tech shell, delivering an immediate graphic impact. A sharp graphic type or a stark bold slogan prints gives you that necessary visibility without looking overly laboured. Skip tiny florals and paisley completely. Polite, heavily detailed prints just look apologetic on you, smothering your naturally spontaneous energy.",
+  "recommendedPatterns": [
+   "graphic type",
+   "bold slogan prints",
+   "digital abstract",
+   "laser-cut geometric panel",
+   "circuit motifs",
+   "mixed-scale print clash"
+  ],
+  "tipText": "Treat pattern as a sharp disruption rather than a pretty decoration. You have little time for fussy, small-scale prints that blur from a distance. When you introduce a graphic type, make sure it registers instantly and clearly. Throw it on via a crisp poplin shirt or a lightweight tech jacket, letting that single graphic hit do the heavy lifting for your outfit. Pair it with rigid, raw denim to give the look a solid base. The aim is an outfit that feels completely deliberate, communicating your edge before you even speak."
+ },
+ "styleCore": {
+  "narrativeText": "There is a sharp, fast energy to how you present yourself that immediately alters the mood of a room. Your best silhouettes feel impulsive yet highly intelligent, cleanly avoiding anything fussy or nostalgic. You excel in pieces that look fiercely modern and entirely unbothered by the current consensus. This approach to getting dressed relies on striking a balance between bold, immediate visual impact and a cool distance that stops the outfit from ever looking eager. People read your presence as someone who is deeply plugged into the culture, yet fiercely protective of your right to look completely different from everyone else.\n\nYour natural sense of beauty shows up most powerfully in your community presence, beauty within community, group-aware style, progressive aesthetics, social elegance. Your style instincts lean toward clarity, structure, and visible polish. Your public style reads as harmonious and elegant; social grace and balanced aesthetics are immediately legible."
+ },
+ "textures": {
+  "avoidTextures": [
+   "fussy multi-layered chiffon",
+   "delicate fabrics requiring constant adjustment",
+   "cheap polyester"
+  ],
+  "badText": "Clothes that restrict your stride or feel bogged down in nostalgia are a dead weight in your rotation. Dense, suffocating layers of fussy multi-layered chiffon drag on your frame and stifle your natural spontaneity. Anything overly fussy or fragile, like delicate fabrics requiring constant adjustment, reads as a costume rather than clothing. You dress for forward motion and intellectual agility, so you cannot be held captive by garments that snag, cling, or demand constant adjustment. If a material requires you to overthink how you sit down, it simply does not belong in your wardrobe.",
+  "goodText": "Heavy, suffocating clothes simply do not work for someone who needs to be out the door the minute a plan changes. Your wardrobe has to keep pace with a fast, restless energy, which means you need materials with a bit of snap and absolutely zero fuss. A crisp crisp poplin shirt or a structured cotton twill that holds a sharp, clean fold will give you an immediate visual punch without weighing you down. You always look best in garments that sit slightly away from the body rather than clinging to it. This is exactly where the cool glide of performance jersey and the pragmatic friction of tech fabrics come into play. They create a silhouette that is distinct and entirely your own, letting you hold the room's attention without ever feeling physically trapped.",
+  "recommendedTextures": [
+   "crisp poplin shirt",
+   "structured cotton twill",
+   "performance jersey",
+   "tech fabrics"
+  ],
+  "sweetSpotKeywords": [
+   "clarity",
+   "decisiveness"
+  ],
+  "sweetSpotText": "The true sweet spot exists right at the intersection of clarity and decisiveness. You need materials that deliver a sharp visual strike without clinging to your silhouette. A piece cut from structured cotton twill or crisp poplin shirt should hold a strict shape but still let the air circulate freely around your skin. Because you operate on a mix of bold intent and cool detachment, the fabric has to support sudden changes in direction. If an item demands to be smoothed down or managed throughout the day, it is a liability rather than a look."
+ },
+ "userInfo": {
+  "birthDate": "1992-04-25T04:00:00Z",
+  "birthLocation": "Synth 028 \u2014 Taurus Sun, 04:00 UTC, New York (1992)",
+  "generationDate": "2026-06-25T09:14:11Z"
+ }
+}
