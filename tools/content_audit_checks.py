@@ -281,6 +281,44 @@ def check_not_a_sentence(item) -> list[dict]:
     return []
 
 
+def check_section_header_flow(item) -> list[dict]:
+    """Code bullets must grammatically continue their section title (Lean Into / Avoid / Consider)."""
+    from code_header_flow_rules import (
+        REWRITE_BRIEFS,
+        header_flow_violation,
+        section_kind_from_item,
+    )
+
+    fk = getattr(item, "field_kind", "") or ""
+    ui = getattr(item, "ui_section", "") or ""
+    section = section_kind_from_item(fk, ui)
+    if section is None:
+        return []
+
+    applies = (
+        item.rule.expected_format == "actionable_bullet"
+        or fk in CODE_INJECTION_FIELD_KINDS
+        or fk in ("code_leaninto", "code_avoid", "code_consider")
+        or "Lean Into" in ui
+        or "Avoid" in ui
+        or "Consider" in ui
+    )
+    if not applies:
+        return []
+
+    reason = header_flow_violation(item.text.strip(), section)
+    if reason is None:
+        return []
+
+    return [_issue(
+        item, "section_header_flow", "high",
+        f"Bullet does not flow from section title '{section.replace('_', ' ').title()}': {reason}.",
+        flagged_fragment=item.text.strip()[:80],
+        rewrite_brief=REWRITE_BRIEFS[section],
+        action_type="rewrite",
+    )]
+
+
 def check_vague_direction(item) -> list[dict]:
     if item.rule.expected_format != "actionable_bullet":
         return []
@@ -739,6 +777,7 @@ ALL_CHECKS = [
     check_nonsense_fragment,
     # HIGH
     check_sparse_code_bullet,
+    check_section_header_flow,
     check_wrong_format_for_field,
     check_not_a_sentence,
     check_vague_direction,

@@ -36,6 +36,8 @@ ALL_SLIDERS = SCALE_SLIDERS + SILHOUETTE_SLIDERS
 MEANINGFUL_DELTA = 0.05
 IMPERCEPTIBLE_DELTA = 0.02
 
+LEGACY_METAL_SNAP = False
+
 
 def snap_metal(value: float) -> float:
     if value < 1.0 / 3.0:
@@ -46,7 +48,7 @@ def snap_metal(value: float) -> float:
 
 
 def ui_value(slider: str, raw: float) -> float:
-    if slider == "metalTone":
+    if slider == "metalTone" and LEGACY_METAL_SNAP:
         return snap_metal(raw)
     return raw
 
@@ -96,6 +98,14 @@ def extract_sliders(resp: dict) -> dict[str, float | None]:
         for slider in SCALE_SLIDERS:
             env = sp.get(slider)
             values[slider] = float(env["displayPosition"]) if env else None
+        if sp.get("contrast") and "contrast" in payload:
+            values["_contrastDeviation"] = abs(
+                float(payload["contrast"]) - float(sp["contrast"]["baseline"])
+            )
+        if sp.get("metalTone") and "metalTone" in payload:
+            values["_metalDeviation"] = abs(
+                float(payload["metalTone"]) - float(sp["metalTone"]["baseline"])
+            )
     else:
         for slider in SCALE_SLIDERS:
             values[slider] = None
@@ -110,6 +120,14 @@ def extract_sliders(resp: dict) -> dict[str, float | None]:
             values[slider] = float(val) if val is not None else None
 
     return values
+
+
+def p95(values: list[float]) -> float:
+    if not values:
+        return 0.0
+    sorted_vals = sorted(values)
+    idx = int(len(sorted_vals) * 0.95)
+    return sorted_vals[min(idx, len(sorted_vals) - 1)]
 
 
 def max_unchanged_streak(values: list[float], eps: float = 1e-9) -> int:
@@ -187,6 +205,9 @@ def aggregate(users: list[dict]) -> dict:
             "p90MaxUnchangedStreakUI": round(sorted(r["maxUnchangedStreakUI"] for r in rows)[int(n * 0.9)], 1),
             "meanPctUnchangedDayPairsUI": round(statistics.fmean(r["pctUnchangedDayPairsUI"] for r in rows), 1),
             "meanPctMeaningfulDayPairsUI": round(statistics.fmean(r["pctMeaningfulDayPairsUI"] for r in rows), 1),
+            "pctUsersLowRawRange": round(
+                sum(1 for r in rows if r["rawRange"] < 0.33) / n * 100, 1
+            ),
         }
     return agg
 
@@ -252,7 +273,7 @@ def global_delta_histogram(all_deltas: list[dict], slider: str) -> dict:
     }
 
 
-def run(start: date, n_days: int, subset: int | None, parallel: int) -> int:
+def run(start: date, n_days: int, subset: int | None, parallel: int, output: str | None = None) -> int:
     users = load_cohort(subset)
     dates = [(start + timedelta(days=i)).isoformat() for i in range(n_days)]
 
@@ -261,6 +282,8 @@ def run(start: date, n_days: int, subset: int | None, parallel: int) -> int:
 
     user_analyses: list[dict] = []
     all_deltas: list[dict] = []
+    contrast_deviations: list[float] = []
+    metal_deviations: list[float] = []
 
     if parallel > 1:
         with ThreadPoolExecutor(max_workers=parallel) as pool:
@@ -269,6 +292,13 @@ def run(start: date, n_days: int, subset: int | None, parallel: int) -> int:
                 uid, series, deltas = future.result()
                 user_analyses.append(analyze_user_series(uid, series))
                 all_deltas.extend(deltas)
+                for day in series:
+                    dev = day.get("_contrastDeviation")
+                    if dev is not None:
+                        contrast_deviations.append(float(dev))
+                    mdev = day.get("_metalDeviation")
+                    if mdev is not None:
+                        metal_deviations.append(float(mdev))
                 if (i + 1) % 20 == 0:
                     print(f"  {i+1}/{len(users)} users complete", file=sys.stderr)
     else:
@@ -276,8 +306,21 @@ def run(start: date, n_days: int, subset: int | None, parallel: int) -> int:
             uid, series, deltas = run_user(user, dates)
             user_analyses.append(analyze_user_series(uid, series))
             all_deltas.extend(deltas)
+            for day in series:
+                dev = day.get("_contrastDeviation")
+                if dev is not None:
+                    contrast_deviations.append(float(dev))
+                mdev = day.get("_metalDeviation")
+                if mdev is not None:
+                    metal_deviations.append(float(mdev))
             if (i + 1) % 10 == 0:
                 print(f"  {i+1}/{len(users)} users complete", file=sys.stderr)
+
+    contrast_p95 = p95(contrast_deviations)
+    contrast_half_span = round(min(0.22, max(0.14, round(contrast_p95 + 0.04, 2))), 2)
+
+    metal_p95 = p95(metal_deviations)
+    metal_half_span = round(min(0.44, max(0.28, round(metal_p95 + 0.02, 2))), 2)
 
     agg = aggregate(user_analyses)
     histograms = {s: global_delta_histogram(all_deltas, s) for s in ALL_SLIDERS}
@@ -294,6 +337,18 @@ def run(start: date, n_days: int, subset: int | None, parallel: int) -> int:
         },
         "aggregate": agg,
         "deltaHistograms": histograms,
+        "contrastEnvelopeCalibration": {
+            "p95Deviation": round(contrast_p95, 4),
+            "recommendedHalfSpan": contrast_half_span,
+            "nSamples": len(contrast_deviations),
+            "formula": "clamp(round(P95 + 0.04, 2), min=0.14, max=0.22)",
+        },
+        "metalEnvelopeCalibration": {
+            "p95Deviation": round(metal_p95, 4),
+            "recommendedHalfSpan": metal_half_span,
+            "nSamples": len(metal_deviations),
+            "formula": "clamp(round(P95 + 0.02, 2), min=0.28, max=0.44)",
+        },
         "worstUsers": {
             slider: sorted(
                 [
@@ -313,7 +368,8 @@ def run(start: date, n_days: int, subset: int | None, parallel: int) -> int:
     }
 
     FIXTURES.mkdir(parents=True, exist_ok=True)
-    out_json = FIXTURES / "slider_day_variation_report.json"
+    out_json = Path(output) if output else FIXTURES / "slider_day_variation_report.json"
+    out_json.parent.mkdir(parents=True, exist_ok=True)
     out_json.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
 
     lines = [
@@ -342,7 +398,9 @@ def run(start: date, n_days: int, subset: int | None, parallel: int) -> int:
 
     lines += ["", "=== SCALE vs SILHOUETTE VERDICT ==="]
     for slider in SCALE_SLIDERS:
-        a = agg[slider]
+        a = agg.get(slider)
+        if not a:
+            continue
         sil = agg.get("structuredDraped", {})
         lines.append(
             f"  {slider}: {a['pctUsersRarelyMeaningful']:.0f}% users see meaningful shift <10% of days; "
@@ -358,14 +416,20 @@ def run(start: date, n_days: int, subset: int | None, parallel: int) -> int:
 
 
 def main() -> int:
+    global LEGACY_METAL_SNAP
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--start", default="2026-04-23")
     ap.add_argument("--days", type=int, default=60)
     ap.add_argument("--subset", type=int, default=None)
     ap.add_argument("--parallel", type=int, default=6)
+    ap.add_argument("--legacy-metal-snap", action="store_true",
+                    help="Apply 3-position snap to metal tone (pre-fix behaviour)")
+    ap.add_argument("--output", default=None,
+                    help="Output JSON path (default: docs/fixtures/slider_day_variation_report.json)")
     args = ap.parse_args()
+    LEGACY_METAL_SNAP = args.legacy_metal_snap
     start = datetime.strptime(args.start, "%Y-%m-%d").date()
-    return run(start, args.days, args.subset, args.parallel)
+    return run(start, args.days, args.subset, args.parallel, args.output)
 
 
 if __name__ == "__main__":

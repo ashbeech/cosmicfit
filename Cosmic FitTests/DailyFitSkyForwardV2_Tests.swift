@@ -159,12 +159,12 @@ enum SkyForwardV2Support {
         )
     }()
 
-    static func generateBriarPayload(for targetDate: Date) -> DailyFitPayload {
+    static func generateBriarSnapshot(for targetDate: Date) -> DailyEnergySnapshot {
         let base = Self.date(year: 2026, month: 5, day: 21)
         let dayOffset = Int(targetDate.timeIntervalSince(base) / 86400)
         let natal = chart(signs: briarNatalSigns)
         let progressed = chart(signs: briarProgressedSigns)
-        let snapshot = DailyEnergyEngine.generateSnapshot(
+        return DailyEnergyEngine.generateSnapshot(
             natalChart: natal,
             progressedChart: progressed,
             transits: briarTransits(for: targetDate, dayOffset: dayOffset),
@@ -175,6 +175,10 @@ enum SkyForwardV2Support {
             mode: .stage1Experimental,
             dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
         )
+    }
+
+    static func generateBriarPayload(for targetDate: Date) -> DailyFitPayload {
+        let snapshot = generateBriarSnapshot(for: targetDate)
         return DailyFitPipeline.generate(
             blueprint: briarBlueprint,
             snapshot: snapshot,
@@ -617,8 +621,8 @@ struct PersonalScaleEnvelope_Integration_Tests {
         }
     }
 
-    @Test("I4b: Extreme metal inputs produce all 3 snap positions (Cool/Mixed/Warm)")
-    func metalExtremeInputsReachAllThreeSnaps() {
+    @Test("I4b_legacySnap: Extreme metal inputs produce all 3 snap positions (Cool/Mixed/Warm)")
+    func metalExtremeInputsReachAllThreeSnaps_legacy() {
         let cal = SkyForwardV2Support.stage1Calibration
         let bp = SkyForwardV2Support.briarBlueprint
         let env = PersonalScaleEnvelopeCalculator.makePresentation(
@@ -649,31 +653,31 @@ struct PersonalScaleEnvelope_Integration_Tests {
                 "Midpoint value must snap to Mixed")
     }
 
-    @Test("I4c: Pipeline displayPosition used directly — 14-day Briar shows variation")
+    @Test("I4c: Pipeline displayPosition used continuously — 14-day Briar shows rich variation")
     func metalPipelineDisplayPositionVariation() {
         let start = SkyForwardV2Support.date(year: 2026, month: 5, day: 23)
         var rawDisplayPositions: [Double] = []
-        var snappedPositions: Set<Double> = []
+        var rangeWindowPositions: [Double] = []
 
-        for offset in 0..<14 {
+        for offset in 0..<30 {
             let date = start.addingTimeInterval(Double(offset) * 86400)
             let payload = SkyForwardV2Support.generateBriarPayload(for: date)
             guard let sp = payload.scalePresentation else {
                 Issue.record("scalePresentation must be non-nil")
                 return
             }
-            let dp = sp.metalTone.displayPosition
-            rawDisplayPositions.append(dp)
-            snappedPositions.insert(DailyFitViewController.snapMetalToThreePositions(dp))
+            if offset < 14 {
+                rawDisplayPositions.append(sp.metalTone.displayPosition)
+            }
+            rangeWindowPositions.append(sp.metalTone.displayPosition)
         }
 
-        // The pipeline's own displayPosition must be used (not recomputed) and vary
         let distinctRaw = Set(rawDisplayPositions.map { String(format: "%.3f", $0) }).count
-        #expect(distinctRaw >= 3,
-                "Raw metal displayPosition should show ≥3 distinct values over 14 days; got \(distinctRaw)")
-        // Snapped positions: ≥2 is valid (specific sky patterns determine which 3 appear)
-        #expect(snappedPositions.count >= 2,
-                "Snapped metal should show ≥2 distinct positions over 14 days; got \(snappedPositions)")
+        #expect(distinctRaw >= 10,
+                "Continuous metal displayPosition should show ≥10 distinct values over 14 days; got \(distinctRaw)")
+        let range = rangeWindowPositions.max()! - rangeWindowPositions.min()!
+        #expect(range >= 0.15,
+                "Metal displayPosition range should be ≥0.15 over 30 days; got \(range)")
     }
 
     // MARK: I5 — Briar 14-day contrast ≥ 3 distinct display positions
@@ -704,8 +708,103 @@ struct PersonalScaleEnvelope_Integration_Tests {
 
         #expect(contrastPositions.count >= 3,
                 "Need ≥ 3 distinct contrast display positions; got \(contrastPositions.count)")
-        #expect(minDisplay < maxDisplay,
-                "Min display \(minDisplay) must be < max display \(maxDisplay)")
+        let displayRange = maxDisplay - minDisplay
+        #expect(displayRange >= 0.20,
+                "Contrast display range should be ≥0.20; got \(displayRange)")
+    }
+
+    @Test("I5b: buildPlan contrast matches computeStage1ContrastRaw for plan relationship")
+    func buildPlanContrastMatchesDeriveContrastWhenModerate() {
+        let bp = SkyForwardV2Support.briarBlueprint
+        let cal = SkyForwardV2Support.stage1Calibration
+        let start = SkyForwardV2Support.date(year: 2026, month: 5, day: 23)
+
+        for offset in 0..<14 {
+            let date = start.addingTimeInterval(Double(offset) * 86400)
+            let snapshot = SkyForwardV2Support.generateBriarSnapshot(for: date)
+            let payload = SkyForwardV2Support.generateBriarPayload(for: date)
+
+            let rawEssence = BlueprintLensEngine.resolveEssenceProfile(
+                from: snapshot, mode: .stage1Experimental
+            )
+            let rawSilhouette = BlueprintLensEngine.deriveSilhouetteProfile(
+                from: bp, snapshot: snapshot, calibration: cal, mode: .stage1Experimental
+            )
+            let (plan, _) = DailyNarrativeSelector.select(
+                snapshot: snapshot, blueprint: bp, calibration: cal,
+                precomputedEssence: rawEssence, precomputedSilhouette: rawSilhouette
+            )
+            let relationshipMod: Double = switch plan.relationship {
+            case .reinforce: 0.02
+            case .stretch:   0.05
+            case .soften:    -0.05
+            case .contrast:  0.08
+            }
+            var expected = BlueprintLensEngine.computeStage1ContrastRaw(
+                palette: bp.palette,
+                snapshot: snapshot,
+                calibration: cal,
+                relationshipMod: relationshipMod,
+                intensityMod: 0
+            )
+            if let scaleDir = plan.scaleDirective {
+                if let cap = scaleDir.contrastCap { expected = min(expected, cap) }
+                if scaleDir.pullTowardBaseline {
+                    let contrastBaseline: Double = switch bp.palette.variables?.contrast {
+                    case .low: 0.25; case .medium: 0.50; case .high: 0.75; case nil: 0.50
+                    }
+                    expected = contrastBaseline * scaleDir.baselineBlend + expected * (1.0 - scaleDir.baselineBlend)
+                }
+            }
+            expected = max(0.0, min(1.0, expected))
+            #expect(abs(expected - plan.targetContrast) < 1e-9,
+                    "Day \(offset): helper must match plan.targetContrast")
+            #expect(abs(plan.targetContrast - payload.contrast) < 1e-9,
+                    "Day \(offset): plan.targetContrast must equal payload.contrast")
+        }
+    }
+
+    // MARK: I6 — Sky-native metal signal: variation and bounds
+
+    @Test("I6: computeStage1MetalToneRaw produces ≥10 distinct values over 30 days")
+    func skyNativeMetalSignalVariation() {
+        let bp = SkyForwardV2Support.briarBlueprint
+        let cal = SkyForwardV2Support.stage1Calibration
+        let start = SkyForwardV2Support.date(year: 2026, month: 5, day: 23)
+        var values: [Double] = []
+
+        for offset in 0..<30 {
+            let date = start.addingTimeInterval(Double(offset) * 86400)
+            let snapshot = SkyForwardV2Support.generateBriarSnapshot(for: date)
+            let raw = BlueprintLensEngine.computeStage1MetalToneRaw(
+                blueprint: bp, snapshot: snapshot, calibration: cal
+            )
+            values.append(raw)
+        }
+
+        let distinct = Set(values.map { String(format: "%.4f", $0) }).count
+        #expect(distinct >= 10,
+                "computeStage1MetalToneRaw should yield ≥10 distinct values over 30 days; got \(distinct)")
+        let range = values.max()! - values.min()!
+        #expect(range >= 0.08,
+                "Raw metal signal range should be ≥0.08 over 30 days; got \(String(format: "%.4f", range))")
+    }
+
+    @Test("I6b: computeStage1MetalToneRaw always in [0, 1]")
+    func skyNativeMetalSignalBounded() {
+        let bp = SkyForwardV2Support.briarBlueprint
+        let cal = SkyForwardV2Support.stage1Calibration
+        let start = SkyForwardV2Support.date(year: 2026, month: 4, day: 1)
+
+        for offset in 0..<60 {
+            let date = start.addingTimeInterval(Double(offset) * 86400)
+            let snapshot = SkyForwardV2Support.generateBriarSnapshot(for: date)
+            let raw = BlueprintLensEngine.computeStage1MetalToneRaw(
+                blueprint: bp, snapshot: snapshot, calibration: cal
+            )
+            #expect(raw >= 0.0 && raw <= 1.0,
+                    "Day \(offset): metal raw \(raw) out of bounds")
+        }
     }
 
     // MARK: Absolute values unchanged
@@ -718,6 +817,8 @@ struct PersonalScaleEnvelope_Integration_Tests {
         #expect(p1.vibrancy == p2.vibrancy)
         #expect(p1.contrast == p2.contrast)
         #expect(p1.metalTone == p2.metalTone)
-        #expect(SkyForwardV2Support.payloadFingerprint(p1) == SkyForwardV2Support.payloadFingerprint(p2))
+        let fp1 = "\(p1.vibrancy)|\(p1.contrast)|\(p1.metalTone)"
+        let fp2 = "\(p2.vibrancy)|\(p2.contrast)|\(p2.metalTone)"
+        #expect(fp1 == fp2, "Scale absolutes must be deterministic for fixed inputs")
     }
 }

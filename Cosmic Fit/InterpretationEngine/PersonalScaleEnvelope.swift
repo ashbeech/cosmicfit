@@ -210,10 +210,20 @@ enum PersonalScaleEnvelopeCalculator {
         let lunarMetalMaxAbs = mode == .stage1Experimental
             ? Stage1ScaleSensitivity.lunarDegreeMaxAbs
             : 0.0
-        let maxNudge = nudgeCap + Stage1ScaleSensitivity.lunarNamedPhaseNudge + lunarMetalMaxAbs
 
-        let floor = clamp01(baseline - maxNudge)
-        let ceiling = clamp01(baseline + maxNudge)
+        let floor: Double
+        let ceiling: Double
+
+        switch mode {
+        case .stage1Experimental:
+            let halfSpan = Stage1ScaleSensitivity.metalPracticalHalfSpan
+            floor = clamp01(baseline - halfSpan)
+            ceiling = clamp01(baseline + halfSpan)
+        case .standard:
+            let maxNudge = nudgeCap + Stage1ScaleSensitivity.lunarNamedPhaseNudge + lunarMetalMaxAbs
+            floor = clamp01(baseline - maxNudge)
+            ceiling = clamp01(baseline + maxNudge)
+        }
 
         let dp = computeDisplayPosition(value: value, floor: floor, ceiling: ceiling)
         let bp = computeDisplayPosition(value: baseline, floor: floor, ceiling: ceiling)

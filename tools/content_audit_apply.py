@@ -437,9 +437,9 @@ ASTROLOGY-CONTEXT GROUNDING:
 
 MOOD ANTI-TOKEN EXPANSION (for opposites.mood items):
 - These are single words or short phrases representing style anti-qualities (e.g. "safe", "conventional", "chaotic").
-- Expand each into a complete, actionable Avoid sentence that explains what the user should steer away from and why, grounded in the astrological context of the planet-sign combo.
-- The expanded sentence must be 8-20 words, start with a verb or directive, and end with a full stop.
-- Example: "safe" for mars_aquarius → "Ditch anything predictable or risk-free that plays it safe with your silhouette."
+- Expand each into a complete Avoid bullet (8-20 words, terminal full stop) grounded in the astrological context.
+- The bullet completes the section title "Avoid ___" — open with a NOUN PHRASE or gerund, NEVER with Avoid/Resist/Skip/Stop/Reject/Refuse/Ditch.
+- Example: "safe" for mars_aquarius → "Predictable, risk-free silhouettes that play it safe and drain your natural boldness."
 
 PLACEHOLDER PRESERVATION:
 - If the source text contains {placeholder} tokens (e.g. {texture_good_1}, {core_colour_1}), preserve them EXACTLY in your rewrite. Do not remove, rename, or invent new placeholders.
@@ -454,12 +454,22 @@ Return valid JSON with exactly this schema:
 One entry per input item. Preserve the json_edit_path exactly as given."""
 
 FORMAT_RULES = {
-    "actionable_bullet": "Write a complete, actionable sentence of at least 8 words. Start with a verb or confident directive. No fragments.",
+    "actionable_bullet": (
+        "Write a complete sentence of at least 8 words. Match the Code section title grammar: "
+        "Lean Into → gerund opening (-ing); Avoid → noun phrase or gerund (never Avoid/Resist/Skip); "
+        "Consider → gerund OR noun phrase (One/A/The/Whether), never imperatives like Wear/Build."
+    ),
     "keyword": "Write a single descriptive keyword or short compound (2-3 words max). Lowercase, no punctuation.",
     "phrase": "Write a concise descriptive phrase (3-8 words). No terminal punctuation.",
     "paragraph": "Write 3-6 sentences, 50-150 words total. Open with an observation or judgement. Close memorably. Plain text only.",
     "template": "Write 3-6 sentences, 50-150 words. CRITICAL: preserve ALL {placeholder} tokens exactly as they appear in the original. Plain text only.",
     "full_sentence": "Write one complete sentence of at least 8 words. British English, second person where appropriate.",
+}
+
+SECTION_FORMAT_RULES = {
+    "lean into": "Lean Into bullet: open with a gerund (-ing). Never repeat 'Lean into' or use imperatives (Build, Choose, Use).",
+    "avoid": "Avoid bullet: open with a noun phrase or gerund completing 'Avoid ___'. Never use Avoid, Resist, Skip, Stop, Reject, Refuse, or Ditch.",
+    "consider": "Consider bullet: open with a gerund OR noun phrase (One/A/The/Whether/How). Never use imperatives like Wear, Build, or Use.",
 }
 
 
@@ -482,6 +492,12 @@ def _extract_astro_context(json_edit_path: str) -> str:
 def build_batch_prompt(batch: list[dict], expected_format: str) -> str:
     """Build the user prompt for a rewrite batch."""
     format_rule = FORMAT_RULES.get(expected_format, FORMAT_RULES["paragraph"])
+    # Section-specific override for Code bullets
+    ui_sections = {a.get("ui_section", "").lower() for a in batch}
+    for key, rule in SECTION_FORMAT_RULES.items():
+        if any(key in s for s in ui_sections):
+            format_rule = rule
+            break
     lines = [
         f"FORMAT REQUIREMENT: {format_rule}",
         "",

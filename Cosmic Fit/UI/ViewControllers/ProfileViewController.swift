@@ -245,16 +245,15 @@ class ProfileViewController: UIViewController {
     private func configureUnknownTimeControls() {
         unknownTimeCheckbox.translatesAutoresizingMaskIntoConstraints = false
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .regular)
-        let uncheckedImage = UIImage(systemName: "square", withConfiguration: symbolConfig)
-        let checkedImage = UIImage(systemName: "checkmark.square", withConfiguration: symbolConfig)
-        unknownTimeCheckbox.setImage(uncheckedImage, for: .normal)
-        unknownTimeCheckbox.setImage(uncheckedImage, for: .highlighted)
-        unknownTimeCheckbox.setImage(checkedImage, for: .selected)
-        unknownTimeCheckbox.setImage(checkedImage, for: [.selected, .highlighted])
-        unknownTimeCheckbox.tintColor = CosmicFitTheme.Colours.cosmicBlue
-        unknownTimeCheckbox.adjustsImageWhenHighlighted = false
-        if #available(iOS 15.0, *) {
-            unknownTimeCheckbox.configuration = nil
+        var checkboxConfig = UIButton.Configuration.plain()
+        checkboxConfig.baseForegroundColor = CosmicFitTheme.Colours.cosmicBlue
+        checkboxConfig.preferredSymbolConfigurationForImage = symbolConfig
+        checkboxConfig.image = UIImage(systemName: "square")
+        unknownTimeCheckbox.configuration = checkboxConfig
+        unknownTimeCheckbox.configurationUpdateHandler = { button in
+            button.configuration?.image = UIImage(
+                systemName: button.isSelected ? "checkmark.square" : "square"
+            )
         }
         unknownTimeCheckbox.addTarget(self, action: #selector(unknownTimeToggled), for: .touchUpInside)
         
@@ -382,9 +381,9 @@ class ProfileViewController: UIViewController {
             forceRefreshButton.addTarget(self, action: #selector(forceRefreshTapped), for: .touchUpInside)
             forceRefreshButton.translatesAutoresizingMaskIntoConstraints = false
             CosmicFitTheme.styleButton(forceRefreshButton, style: .secondary)
-            forceRefreshButton.layer.borderColor = UIColor.systemOrange.cgColor
+            forceRefreshButton.layer.borderColor = CosmicFitTheme.Colours.cosmicLilac.cgColor
             forceRefreshButton.layer.borderWidth = 1.5
-            forceRefreshButton.setTitleColor(.systemOrange, for: .normal)
+            forceRefreshButton.setTitleColor(CosmicFitTheme.Colours.cosmicLilac, for: .normal)
             forceRefreshButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         }
         #endif

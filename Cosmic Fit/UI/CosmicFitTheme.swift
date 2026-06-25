@@ -25,9 +25,7 @@ struct CosmicFitTheme {
         /// Cosmic Blue - Primary text colour (#000210)
         static let cosmicBlue = UIColor(red: 0/255, green: 2/255, blue: 16/255, alpha: 1.0)
         
-        /// Highlight/accent colours (#FF8502/7E69E6)
-        static let cosmicOrange = UIColor(red: 255/255, green: 133/255, blue: 2/255, alpha: 1.0)
-        
+        /// Primary accent colour (#7E69E6)
         static let cosmicLilac = UIColor(red: 126/255, green: 105/255, blue: 230/255, alpha: 1.0)
 
         /// Tab bar background colour - Black
@@ -36,8 +34,8 @@ struct CosmicFitTheme {
         /// Tab bar text/icon colour - White
         static let tabBarInactive = UIColor.white
         
-        /// Tab bar active/selected colour - Cosmic Orange
-        static let tabBarActive = cosmicOrange
+        /// Tab bar active/selected colour
+        static let tabBarActive = cosmicLilac
         
         /// Border colour for form elements
         static let borderColor = cosmicBlue
@@ -123,7 +121,7 @@ struct CosmicFitTheme {
 
     /// Style Guide sub-page titles — serif section headers ("The Textures", "The Blueprint", etc.).
     struct StyleGuideSubPageTitleTypography {
-        static let letterSpacingFraction: CGFloat = 0.052
+        static let letterSpacingFraction: CGFloat = 0.039
 
         static func attributedString(
             _ text: String,
@@ -293,7 +291,7 @@ struct CosmicFitTheme {
             .foregroundColor: Colours.cosmicBlue,
             .font: Typography.DMSerifTextFont(size: Typography.FontSizes.headline, weight: .semibold)
         ]
-        navigationBar.tintColor = Colours.cosmicOrange
+        navigationBar.tintColor = Colours.cosmicLilac
         
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
@@ -489,7 +487,7 @@ struct CosmicFitTheme {
     static func styleButton(_ button: UIButton, style: ButtonStyle = .primary) {
         switch style {
         case .primary:
-            button.backgroundColor = Colours.cosmicOrange
+            button.backgroundColor = Colours.cosmicLilac
             button.setTitleColor(.white, for: .normal)
             button.titleLabel?.font = Typography.dmSansFont(size: Typography.FontSizes.headline, weight: .semibold)
             button.layer.cornerRadius = 8
@@ -507,7 +505,7 @@ struct CosmicFitTheme {
             button.layer.cornerRadius = 8
         case .text:
             button.backgroundColor = UIColor.clear
-            button.setTitleColor(Colours.cosmicOrange, for: .normal)
+            button.setTitleColor(Colours.cosmicLilac, for: .normal)
             button.titleLabel?.font = Typography.dmSansFont(size: Typography.FontSizes.body, weight: .medium)
             button.layer.cornerRadius = 8
         }
@@ -581,7 +579,7 @@ struct CosmicFitTheme {
 
 // MARK: - Button Styles
 enum ButtonStyle {
-    case primary           // Cosmic Orange background
+    case primary           // Cosmic Lilac background
     case onboardingAction  // cosmicBlue + white text on light backgrounds (onboarding Next, auth actions)
     case secondary         // Cosmic Grey background with border
     case text              // Text only, no background

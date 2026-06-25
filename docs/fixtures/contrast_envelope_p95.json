@@ -1,0 +1,7 @@
+{
+  "nSamples": 12960,
+  "p95Deviation": 0.2712,
+  "recommendedHalfSpan": 0.22,
+  "formula": "clamp(round(P95 + 0.04, 2), min=0.14, max=0.22)",
+  "source": "slider_day_variation_report.post_fix.json (2026-06-24 tuned run)"
+}

@@ -8,15 +8,15 @@
   },
   "code" : {
     "avoid" : [
-      "Avoid blunt, aggressive dressing that completely shuts down dialogue, remembering that your true power comes from quiet persuasion rather than loud intimidation.",
-      "Skip harsh industrial textures that contradict your natural grace, as rough fabrics actively fight your personal style instead of channelling it effectively.",
+      "Blunt, aggressive dressing that completely shuts down dialogue, remembering that your true power comes from quiet persuasion rather than loud intimidation.",
+      "Harsh industrial textures that contradict your natural grace, as rough fabrics actively fight your personal style instead of channelling it effectively.",
       "Rigid matching sets that remove all surprise. If the outfit looks like it came off a mannequin as one unit, it is too predictable.",
       "Head-to-toe uniform dressing that shuts down your versatility. You need room to remix.",
       "One-note outfits that say only one thing. Your style should carry at least two ideas at once.",
       "Fussy or indecisive presentations that dilute your natural impact. If the outfit looks like you could not choose, neither can anyone else."
     ],
     "consider" : [
-      "Commit to a strict steaming routine to guarantee the crisp finish of every garment meets your exacting standards.",
+      "Committing to a strict steaming routine to guarantee the crisp finish of every garment meets your exacting standards.",
       "Strategic fit alterations on every key piece so nothing in rotation is merely approximate.",
       "Military-inspired details as a through-line in your wardrobe. Epaulettes, structured shoulders, and clean brass hardware suit your energy.",
       "How a consistent dark palette communicates reliability. When people know what to expect visually, they trust your judgement."
@@ -27,11 +27,11 @@
       "Dressing strategically for the reaction you want. Your clothes are diplomatic tools, and every outfit is a negotiation.",
       "Mixing high and low fearlessly. A vintage market find paired with a designer knit shows range, not confusion.",
       "Embracing pattern clashing with clear intention. Stripes with florals works when the colour story holds together.",
-      "Treat your accessories as immediate conversation starters; a sculptural ring with a backstory or a clutch that prompts a question always earns its keep."
+      "Treating your accessories as immediate conversation starters; a sculptural ring with a backstory or a clutch that prompts a question always earns its keep."
     ]
   },
-  "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-06-19T17:06:42Z",
+  "engineVersion" : "2.1.0",
+  "generatedAt" : "2026-06-24T15:28:25Z",
   "hardware" : {
     "metalsText" : "Heavy, rigid hardware will completely suffocate the lightness of your wardrobe. You always look much more interesting when you actively scramble your finishes, letting white gold tones rings sit right next to a rose gold tones bag clasp. Because your clothes rely on fluid layers and soft movement, keep the actual metal textures equally relaxed. Liquid, slightly melted shapes in mixed metals work far better on you than aggressive, high-shine spikes. Treat your zips and jacket buttons as conversational details instead of purely functional bolts. The final effect should be a gentle, expensive jangle as you walk, never the imposing clank of a bank vault.",
     "recommendedMetals" : [
@@ -332,6 +332,6 @@
   "userInfo" : {
     "birthDate" : "1993-03-21T00:00:00Z",
     "birthLocation" : "Synthetic Fixture",
-    "generationDate" : "2026-06-19T17:06:42Z"
+    "generationDate" : "2026-06-24T15:28:25Z"
   }
 }

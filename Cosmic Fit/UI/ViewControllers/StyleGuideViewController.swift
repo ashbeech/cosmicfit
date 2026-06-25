@@ -633,13 +633,13 @@ final class StyleGuideViewController: UIViewController {
                 "Buying something just because it is a bargain. A deal is only a deal if the item is perfect.",
                 "Chasing trends that clash with your natural composure. If it feels like a costume, it will look like one.",
                 "Keeping your best pieces hidden. Your style works best when it is seen and shared.",
-                "Reject flimsy, disposable synthetic fabrics that completely lack structural integrity or a decent tactile finish."
+                "Flimsy, disposable synthetic fabrics that completely lack structural integrity or a decent tactile finish."
             ]
             codeContainer.addArrangedSubview(DosAndDontsSectionView(title: "Avoid", bulletPoints: avoidItems))
 
             let considerItems = bp?.code.consider.nilIfEmpty ?? [
-                "Introduce heavy statement hardware and exaggerated silhouettes to act as immediate conversation starters in your daily routine.",
-                "Dress your physical living space in the exact same rich, tactile fabrics you wear to fuel your creative output.",
+                "Introducing heavy statement hardware and exaggerated silhouettes to act as immediate conversation starters in your daily routine.",
+                "Dressing your physical living space in the exact same rich, tactile fabrics you wear to fuel your creative output.",
                 "Making sure your outfit is actually comfortable. If you are constantly tugging at your clothes, you lose your edge."
             ]
             codeContainer.addArrangedSubview(DosAndDontsSectionView(title: "Consider", bulletPoints: considerItems))

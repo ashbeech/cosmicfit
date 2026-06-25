@@ -11,7 +11,7 @@ import CoreImage
 class DailyFitViewController: UIViewController {
     
     // MARK: - Properties
-    private let scrollView = UIScrollView()
+    private let scrollView = GatedPaywallScrollView()
     private let contentView = UIView()
     private let topMaskView = UIView()
     
@@ -96,20 +96,51 @@ class DailyFitViewController: UIViewController {
     private let wardrobeReflectionLabel = UILabel()
     private let tomorrowTeaseLabel = UILabel()
     private let tomorrowButton = UIButton(type: .system)
-    private let restrictedAreaGradientView = RestrictedAreaGradientOverlayView()
     private let restrictedUnlockButton = UIButton(type: .system)
-    private var restrictedObscurationRitualTopConstraint: NSLayoutConstraint?
-    private var restrictedObscurationStyleBreakdownTopConstraint: NSLayoutConstraint?
-    /// Per-element blurred snapshots covering restricted Daily Fit content (no panel overlay).
-    private var restrictedBlurOverlays: [ObjectIdentifier: UIImageView] = [:]
-    private var restrictedBlurBoundsSignatures: [ObjectIdentifier: String] = [:]
-    private var restrictedPreObscureVisibility: [ObjectIdentifier: (isHidden: Bool, alpha: CGFloat)] = [:]
-    private var restrictedBlurRefreshWorkItem: DispatchWorkItem?
-    private static let restrictedBlurRadius: CGFloat = 14
-    private static let restrictedBlurSnapshotPadding: CGFloat = 12
-    private static let restrictedBlurBleed: CGFloat = 10
-    /// Cap snapshot pixel width so CI blur stays within device memory/time budgets.
-    private static let restrictedBlurMaxSnapshotWidth: CGFloat = 420
+
+    // MARK: - Torn-paper paywall (restricted Daily Fit)
+
+    /// Jagged paper edge that caps the content card just below the free
+    /// paragraph; below it the card falls away into the glyph field.
+    private let tornPaperEdgeView = TornPaperEdgeView()
+    /// Opaque launch-style fill + animated glyph field, masked below the tear.
+    private let gatedPaywallBackgroundContainer = UIView()
+    private let gatedPaywallBackdrop = UIView()
+    private let gatedGlyphBackground = ScrollingRunesBackgroundView(edgeFadeStyle: .launch)
+    private let gatedPaywallMaskLayer = CALayer()
+    /// Screen-anchored CTA layer that fades in with scroll progress.
+    private let gatedCTAContainer = PassthroughContainerView()
+    private let gatedCTAMaskLayer = CALayer()
+    private let gatedCTAStack = UIStackView()
+    private let gatedUnlockBlock = UIStackView()
+    private let gatedUnlockHeadingLabel = UILabel()
+    private let gatedUnlockBulletsStack = UIStackView()
+    private let gatedTomorrowBlock = UIStackView()
+    private let gatedTomorrowTeaseLabel = UILabel()
+    private let gatedTomorrowButton = UIButton(type: .system)
+    /// Unlock headline, bullets, buttons — revealed one-by-one with scroll.
+    private var gatedCTARevealItems: [UIView] = []
+
+    /// Tear-line anchors (mirror the daily-ritual / style-breakdown boundary).
+    private var tornEdgeTopRitualConstraint: NSLayoutConstraint?
+    private var tornEdgeTopStyleBreakdownConstraint: NSLayoutConstraint?
+    /// Card-panel bottom while gated (capped at the tear instead of full length).
+    private var gatedCardBottomConstraint: NSLayoutConstraint?
+    /// `contentView` bottom while gated (tear + scroll spacer sets the clamp).
+    private var gatedContentBottomConstraint: NSLayoutConstraint?
+    /// `contentView` bottom in the normal (full) layout — toggled off while gated.
+    private var contentBottomToTomorrowConstraint: NSLayoutConstraint?
+    /// Card-panel bottom in the normal (full) layout — toggled off while gated.
+    private var contentBackgroundBottomFullConstraint: NSLayoutConstraint?
+    /// CTA layer top, kept at ~1/3 from the top of the screen.
+    private var gatedCTATopConstraint: NSLayoutConstraint?
+    /// Whether the gated torn-paper layout is currently applied.
+    private var isGatedLayoutActive = false
+    /// Fraction of screen height the torn edge settles at when fully scrolled.
+    private static let tornEdgeRestFraction: CGFloat = 1.0 / 3.0
+    private static let tornEdgeViewHeight: CGFloat = TornPaperEdgeView.preferredHeight
+    /// CTA lines scale up from this factor as scroll progress reveals them.
+    private static let gatedCTARevealStartScale: CGFloat = 0.88
 
     /// Captured so `updateLayoutDependentConstants` can keep the
     /// "Tap to reveal…" caption pinned the right distance above the
@@ -376,7 +407,7 @@ class DailyFitViewController: UIViewController {
         updateDayNavigationBackButtonScrollPosition()
         guard dailyFitPayload != nil else { return }
         refreshDiamondScalePositions()
-        scheduleRestrictedBlurRefreshIfBoundsChanged()
+        updateGatedPaywallMetrics()
     }
 
     /// Sizes `backgroundBlurImageView`'s bottom over-extension to the
@@ -554,7 +585,6 @@ class DailyFitViewController: UIViewController {
     // MARK: - Memory Management
     deinit {
         NotificationCenter.default.removeObserver(self)
-        restrictedBlurRefreshWorkItem?.cancel()
         ciContext = nil
         cardBackImageView.layer.filters = nil
         if let gesture = cardTapGesture {
@@ -1690,26 +1720,176 @@ class DailyFitViewController: UIViewController {
         tomorrowButton.addTarget(self, action: #selector(dayNavigationButtonTapped), for: .touchUpInside)
         contentView.addSubview(tomorrowButton)
 
-        setupRestrictedUnlockChrome()
+        setupTornPaperPaywall()
     }
 
-    private func setupRestrictedUnlockChrome() {
-        restrictedAreaGradientView.translatesAutoresizingMaskIntoConstraints = false
-        restrictedAreaGradientView.isHidden = true
-        restrictedAreaGradientView.alpha = 0
-        contentView.addSubview(restrictedAreaGradientView)
+    /// Builds the torn-paper edge that caps the card, the animated glyph field
+    /// revealed beneath it, and the scroll-anchored unlock CTA.
+    private func setupTornPaperPaywall() {
+        tornPaperEdgeView.translatesAutoresizingMaskIntoConstraints = false
+        tornPaperEdgeView.fillColor = CosmicFitTheme.Colours.cosmicGrey
+        tornPaperEdgeView.isHidden = true
+        contentView.addSubview(tornPaperEdgeView)
 
+        setupGatedGlyphField()
+        setupGatedCTA()
+    }
+
+    private func setupGatedGlyphField() {
+        gatedPaywallBackgroundContainer.translatesAutoresizingMaskIntoConstraints = false
+        gatedPaywallBackgroundContainer.isHidden = true
+        gatedPaywallBackgroundContainer.isUserInteractionEnabled = false
+        gatedPaywallMaskLayer.backgroundColor = UIColor.black.cgColor
+        gatedPaywallMaskLayer.anchorPoint = .zero
+        gatedPaywallBackgroundContainer.layer.mask = gatedPaywallMaskLayer
+
+        gatedPaywallBackdrop.translatesAutoresizingMaskIntoConstraints = false
+        gatedPaywallBackdrop.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
+        gatedPaywallBackdrop.isUserInteractionEnabled = false
+
+        gatedGlyphBackground.translatesAutoresizingMaskIntoConstraints = false
+        gatedGlyphBackground.isUserInteractionEnabled = false
+
+        gatedPaywallBackgroundContainer.addSubview(gatedPaywallBackdrop)
+        gatedPaywallBackgroundContainer.addSubview(gatedGlyphBackground)
+        view.insertSubview(gatedPaywallBackgroundContainer, belowSubview: scrollView)
+
+        NSLayoutConstraint.activate([
+            gatedPaywallBackgroundContainer.topAnchor.constraint(equalTo: view.topAnchor),
+            gatedPaywallBackgroundContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            gatedPaywallBackgroundContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            gatedPaywallBackgroundContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            gatedPaywallBackdrop.topAnchor.constraint(equalTo: gatedPaywallBackgroundContainer.topAnchor),
+            gatedPaywallBackdrop.leadingAnchor.constraint(equalTo: gatedPaywallBackgroundContainer.leadingAnchor),
+            gatedPaywallBackdrop.trailingAnchor.constraint(equalTo: gatedPaywallBackgroundContainer.trailingAnchor),
+            gatedPaywallBackdrop.bottomAnchor.constraint(equalTo: gatedPaywallBackgroundContainer.bottomAnchor),
+
+            gatedGlyphBackground.topAnchor.constraint(equalTo: gatedPaywallBackgroundContainer.topAnchor),
+            gatedGlyphBackground.leadingAnchor.constraint(equalTo: gatedPaywallBackgroundContainer.leadingAnchor),
+            gatedGlyphBackground.trailingAnchor.constraint(equalTo: gatedPaywallBackgroundContainer.trailingAnchor),
+            gatedGlyphBackground.bottomAnchor.constraint(equalTo: gatedPaywallBackgroundContainer.bottomAnchor)
+        ])
+    }
+
+    private func setupGatedCTA() {
+        configureRestrictedUnlockButton()
         restrictedUnlockButton.translatesAutoresizingMaskIntoConstraints = false
-        restrictedUnlockButton.isHidden = true
-        restrictedUnlockButton.alpha = 0
         restrictedUnlockButton.accessibilityLabel = "Unlock Your Daily Fit"
         restrictedUnlockButton.titleLabel?.numberOfLines = 1
         restrictedUnlockButton.titleLabel?.lineBreakMode = .byClipping
         restrictedUnlockButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         restrictedUnlockButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        configureRestrictedUnlockButton()
         restrictedUnlockButton.addTarget(self, action: #selector(restrictedUnlockTapped), for: .touchUpInside)
-        contentView.addSubview(restrictedUnlockButton)
+
+        gatedUnlockHeadingLabel.text = "Unlock your full Daily Fit"
+        gatedUnlockHeadingLabel.font = preferredBoldItalicSerifFont(size: CosmicFitTheme.Typography.FontSizes.title3)
+        gatedUnlockHeadingLabel.textColor = .white
+        gatedUnlockHeadingLabel.textAlignment = .center
+        gatedUnlockHeadingLabel.numberOfLines = 0
+
+        gatedUnlockBulletsStack.axis = .vertical
+        gatedUnlockBulletsStack.alignment = .leading
+        gatedUnlockBulletsStack.spacing = 7
+        for text in [
+            "Your full colour palette & style scales",
+            "Daily styling ritual & wardrobe notes",
+            "Every silhouette and essence detail"
+        ] {
+            gatedUnlockBulletsStack.addArrangedSubview(makeGatedBulletLabel(text))
+        }
+
+        gatedUnlockBlock.axis = .vertical
+        gatedUnlockBlock.alignment = .center
+        gatedUnlockBlock.spacing = 16
+        gatedUnlockBlock.isUserInteractionEnabled = false
+        gatedUnlockBulletsStack.isUserInteractionEnabled = false
+        gatedUnlockBlock.addArrangedSubview(gatedUnlockHeadingLabel)
+        gatedUnlockBlock.addArrangedSubview(gatedUnlockBulletsStack)
+        gatedUnlockBlock.addArrangedSubview(restrictedUnlockButton)
+
+        gatedTomorrowTeaseLabel.font = preferredBoldItalicSerifFont(size: CosmicFitTheme.Typography.FontSizes.body)
+        gatedTomorrowTeaseLabel.textColor = .white
+        gatedTomorrowTeaseLabel.textAlignment = .center
+        gatedTomorrowTeaseLabel.numberOfLines = 0
+        gatedTomorrowTeaseLabel.text = "Tomorrow\u{2019}s energy is already shifting..."
+
+        CosmicFitTheme.styleButton(gatedTomorrowButton, style: .secondary)
+        gatedTomorrowButton.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(
+            size: CosmicFitTheme.Typography.FontSizes.footnote, weight: .medium
+        )
+        gatedTomorrowButton.titleLabel?.numberOfLines = 1
+        gatedTomorrowButton.titleLabel?.lineBreakMode = .byClipping
+        gatedTomorrowButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        gatedTomorrowButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        gatedTomorrowButton.addTarget(self, action: #selector(dayNavigationButtonTapped), for: .touchUpInside)
+
+        gatedTomorrowBlock.axis = .vertical
+        gatedTomorrowBlock.alignment = .center
+        gatedTomorrowBlock.spacing = 18
+        gatedTomorrowBlock.isUserInteractionEnabled = false
+        gatedTomorrowBlock.addArrangedSubview(gatedTomorrowTeaseLabel)
+        gatedTomorrowBlock.addArrangedSubview(gatedTomorrowButton)
+
+        gatedCTAStack.axis = .vertical
+        gatedCTAStack.alignment = .center
+        gatedCTAStack.spacing = 34
+        gatedCTAStack.isUserInteractionEnabled = false
+        gatedCTAStack.translatesAutoresizingMaskIntoConstraints = false
+        gatedCTAStack.addArrangedSubview(gatedUnlockBlock)
+        gatedCTAStack.addArrangedSubview(gatedTomorrowBlock)
+
+        gatedCTAContainer.translatesAutoresizingMaskIntoConstraints = false
+        gatedCTAContainer.isHidden = true
+        gatedCTAMaskLayer.backgroundColor = UIColor.black.cgColor
+        gatedCTAMaskLayer.anchorPoint = .zero
+        gatedCTAContainer.layer.mask = gatedCTAMaskLayer
+        gatedCTAContainer.addSubview(gatedCTAStack)
+        // Glyphs → CTA → scroll card/torn edge (see `applyGatedLayout`).
+        view.insertSubview(gatedCTAContainer, aboveSubview: gatedPaywallBackgroundContainer)
+
+        gatedCTARevealItems = [
+            gatedUnlockHeadingLabel,
+            gatedUnlockBulletsStack.arrangedSubviews[0],
+            gatedUnlockBulletsStack.arrangedSubviews[1],
+            gatedUnlockBulletsStack.arrangedSubviews[2],
+            restrictedUnlockButton,
+            gatedTomorrowTeaseLabel,
+            gatedTomorrowButton
+        ]
+        resetGatedCTAReveal()
+
+        scrollView.ctaTouchTarget = gatedCTAContainer
+        scrollView.isGatedPaywallActive = { [weak self] in
+            self?.isGatedLayoutActive == true
+        }
+
+        let horizontalMargin: CGFloat = 32
+        gatedCTATopConstraint = gatedCTAContainer.topAnchor.constraint(equalTo: view.topAnchor)
+        NSLayoutConstraint.activate([
+            gatedCTATopConstraint!,
+            gatedCTAContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            gatedCTAContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            gatedCTAContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+
+            gatedCTAStack.centerYAnchor.constraint(equalTo: gatedCTAContainer.centerYAnchor),
+            gatedCTAStack.leadingAnchor.constraint(equalTo: gatedCTAContainer.leadingAnchor, constant: horizontalMargin),
+            gatedCTAStack.trailingAnchor.constraint(equalTo: gatedCTAContainer.trailingAnchor, constant: -horizontalMargin),
+
+            restrictedUnlockButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 38),
+            gatedTomorrowButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 38)
+        ])
+    }
+
+    private func makeGatedBulletLabel(_ text: String) -> UILabel {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.textColor = UIColor.white.withAlphaComponent(0.88)
+        label.font = CosmicFitTheme.Typography.dmSansFont(
+            size: CosmicFitTheme.Typography.FontSizes.callout, weight: .regular
+        )
+        label.text = "\u{2022}  \(text)"
+        return label
     }
 
     private func configureRestrictedUnlockButton() {
@@ -1750,363 +1930,171 @@ class DailyFitViewController: UIViewController {
         isCardRevealed && !EntitlementManager.shared.hasFullAccess
     }
 
-    private var activeRestrictedDailyFitObscuredViews: [UIView] {
-        restrictedDailyFitObscuredViews.filter {
-            !$0.isHidden && $0.bounds.width > 1 && $0.bounds.height > 1
-        }
-    }
-
-    private func attachBlurOverlay(_ overlay: UIImageView, to view: UIView) {
-        let bleed = Self.restrictedBlurBleed
-        contentView.addSubview(overlay)
-        NSLayoutConstraint.activate([
-            overlay.topAnchor.constraint(equalTo: view.topAnchor, constant: -bleed),
-            overlay.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -bleed),
-            overlay.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: bleed),
-            overlay.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: bleed)
-        ])
-    }
-
-    private func blurOverlay(for view: UIView) -> UIImageView {
-        let key = ObjectIdentifier(view)
-        if let existing = restrictedBlurOverlays[key] {
-            if existing.superview !== contentView {
-                existing.removeFromSuperview()
-                attachBlurOverlay(existing, to: view)
-            }
-            return existing
-        }
-
-        let overlay = UIImageView()
-        overlay.translatesAutoresizingMaskIntoConstraints = false
-        overlay.contentMode = .scaleToFill
-        overlay.isUserInteractionEnabled = false
-        overlay.isAccessibilityElement = false
-        overlay.clipsToBounds = false
-        overlay.isHidden = true
-        overlay.alpha = 0
-
-        attachBlurOverlay(overlay, to: view)
-        restrictedBlurOverlays[key] = overlay
-        return overlay
-    }
-
-    private func hideRestrictedContent(for views: [UIView]) {
-        for view in views {
-            let key = ObjectIdentifier(view)
-            if restrictedPreObscureVisibility[key] == nil {
-                restrictedPreObscureVisibility[key] = (view.isHidden, view.alpha)
-            }
-            view.alpha = 0
-            view.isUserInteractionEnabled = false
-        }
-    }
-
-    private func restoreRestrictedContentVisibility() {
-        for view in restrictedDailyFitObscuredViews {
-            let key = ObjectIdentifier(view)
-            guard let prior = restrictedPreObscureVisibility[key] else { continue }
-            view.isHidden = prior.isHidden
-            view.alpha = prior.alpha
-            view.isUserInteractionEnabled = true
-        }
-        restrictedPreObscureVisibility.removeAll()
-    }
-
-    private func withTemporaryRestrictedContentVisibility<T>(
-        for view: UIView,
-        perform work: () -> T
-    ) -> T {
-        let key = ObjectIdentifier(view)
-        let prior = restrictedPreObscureVisibility[key]
-        if let prior {
-            view.alpha = prior.alpha
-        }
-        defer {
-            if prior != nil {
-                view.alpha = 0
-            }
-        }
-        return work()
-    }
-
-    private func boundsSignature(for view: UIView) -> String {
-        let frame = view.bounds
-        return "\(Int(frame.width.rounded()))x\(Int(frame.height.rounded()))"
-    }
-
-    private func snapshotScale(for view: UIView) -> CGFloat {
-        let width = view.bounds.width
-        guard width > Self.restrictedBlurMaxSnapshotWidth else { return 1 }
-        return Self.restrictedBlurMaxSnapshotWidth / width
-    }
-
-    /// Uses `layer.render` instead of `drawHierarchy` to avoid layout feedback loops on device.
-    private func captureSnapshot(of view: UIView) -> (image: UIImage, scale: CGFloat)? {
-        let bounds = view.bounds
-        guard bounds.width > 1, bounds.height > 1 else { return nil }
-
-        let padding = Self.restrictedBlurSnapshotPadding
-        let renderScale = snapshotScale(for: view)
-        let screenScale = view.window?.screen.scale ?? UIScreen.main.scale
-        let outputScale = screenScale * renderScale
-
-        let canvasSize = CGSize(
-            width: (bounds.width + padding * 2) * renderScale,
-            height: (bounds.height + padding * 2) * renderScale
-        )
-
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = outputScale
-        format.opaque = false
-
-        let overlay = restrictedBlurOverlays[ObjectIdentifier(view)]
-        overlay?.isHidden = true
-
-        let snapshot = withTemporaryRestrictedContentVisibility(for: view) {
-            UIGraphicsImageRenderer(size: canvasSize, format: format).image { ctx in
-                ctx.cgContext.scaleBy(x: renderScale, y: renderScale)
-                ctx.cgContext.translateBy(x: padding, y: padding)
-                view.layer.render(in: ctx.cgContext)
-            }
-        }
-
-        overlay?.isHidden = false
-        return (snapshot, outputScale)
-    }
-
-    private func blurSnapshot(_ snapshot: UIImage, outputScale: CGFloat) -> UIImage? {
-        guard let ciImage = CIImage(image: snapshot) else { return nil }
-        guard let blurFilter = CIFilter(name: "CIGaussianBlur") else { return nil }
-        blurFilter.setValue(ciImage, forKey: kCIInputImageKey)
-        blurFilter.setValue(Self.restrictedBlurRadius, forKey: kCIInputRadiusKey)
-
-        guard let blurred = blurFilter.outputImage?.cropped(to: ciImage.extent) else { return nil }
-
-        var output = blurred
-        if let mono = CIFilter(name: "CIPhotoEffectMono") {
-            mono.setValue(output, forKey: kCIInputImageKey)
-            output = mono.outputImage?.cropped(to: ciImage.extent) ?? output
-        }
-
-        if ciContext == nil {
-            ciContext = CIContext(options: [CIContextOption.useSoftwareRenderer: false])
-        }
-        guard let context = ciContext,
-              let cgImage = context.createCGImage(output, from: ciImage.extent) else { return nil }
-
-        return UIImage(cgImage: cgImage, scale: outputScale, orientation: .up)
-    }
-
-    private func cancelRestrictedBlurRefresh() {
-        restrictedBlurRefreshWorkItem?.cancel()
-        restrictedBlurRefreshWorkItem = nil
-    }
-
-    private func scheduleRestrictedBlurRefresh(force: Bool = false) {
-        guard isRestrictedDailyFitObscured else { return }
-
-        let views = activeRestrictedDailyFitObscuredViews
-        guard !views.isEmpty else { return }
-
-        if !force {
-            let signaturesMatch = views.allSatisfy { view in
-                restrictedBlurBoundsSignatures[ObjectIdentifier(view)] == boundsSignature(for: view)
-                    && restrictedBlurOverlays[ObjectIdentifier(view)]?.image != nil
-            }
-            if signaturesMatch { return }
-        }
-
-        cancelRestrictedBlurRefresh()
-
-        let workItem = DispatchWorkItem { [weak self] in
-            self?.performRestrictedBlurRefresh(for: views)
-        }
-        restrictedBlurRefreshWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)
-    }
-
-    private func scheduleRestrictedBlurRefreshIfBoundsChanged() {
-        guard isRestrictedDailyFitObscured else { return }
-        let views = activeRestrictedDailyFitObscuredViews
-        let needsRefresh = views.contains { view in
-            restrictedBlurBoundsSignatures[ObjectIdentifier(view)] != boundsSignature(for: view)
-        }
-        if needsRefresh {
-            scheduleRestrictedBlurRefresh(force: true)
-        }
-    }
-
-    private func performRestrictedBlurRefresh(for views: [UIView]) {
-        guard isRestrictedDailyFitObscured else { return }
-
-        struct PendingBlur {
-            let view: UIView
-            let snapshot: UIImage
-            let scale: CGFloat
-            let signature: String
-        }
-
-        var pending: [PendingBlur] = []
-        pending.reserveCapacity(views.count)
-
-        for view in views {
-            guard let capture = captureSnapshot(of: view) else { continue }
-            pending.append(
-                PendingBlur(
-                    view: view,
-                    snapshot: capture.image,
-                    scale: capture.scale,
-                    signature: boundsSignature(for: view)
-                )
-            )
-        }
-
-        guard !pending.isEmpty else { return }
-
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            struct BlurredItem {
-                let view: UIView
-                let image: UIImage
-                let signature: String
-            }
-
-            var blurred: [BlurredItem] = []
-            blurred.reserveCapacity(pending.count)
-
-            for item in pending {
-                autoreleasepool {
-                    guard let image = self?.blurSnapshot(item.snapshot, outputScale: item.scale) else { return }
-                    blurred.append(BlurredItem(view: item.view, image: image, signature: item.signature))
-                }
-            }
-
-            DispatchQueue.main.async { [weak self] in
-                guard let self, self.isRestrictedDailyFitObscured else { return }
-                for item in blurred {
-                    guard item.view.window != nil else { continue }
-                    let overlay = self.blurOverlay(for: item.view)
-                    overlay.image = item.image
-                    overlay.isHidden = false
-                    overlay.alpha = 1
-                    self.restrictedBlurBoundsSignatures[ObjectIdentifier(item.view)] = item.signature
-                    self.contentView.bringSubviewToFront(overlay)
-                }
-                self.hideRestrictedContent(for: blurred.map(\.view))
-                self.bringRestrictedUnlockStackToFront()
-            }
-        }
-    }
-
-    private func clearRestrictedElementBlurs() {
-        cancelRestrictedBlurRefresh()
-        restrictedBlurBoundsSignatures.removeAll()
-        restoreRestrictedContentVisibility()
-        restrictedBlurOverlays.values.forEach { overlay in
-            overlay.image = nil
-            overlay.isHidden = true
-            overlay.alpha = 0
-        }
-        setRestrictedUnlockChromeVisible(false, animated: false)
-    }
-
-    private func bringRestrictedChromeAboveTomorrowSection() {
-        if let finalStarDivider {
-            contentView.bringSubviewToFront(finalStarDivider)
-        }
-        contentView.bringSubviewToFront(tomorrowTeaseLabel)
-        contentView.bringSubviewToFront(tomorrowButton)
-    }
-
-    private func bringRestrictedUnlockStackToFront() {
-        activeRestrictedDailyFitObscuredViews.forEach { view in
-            if let overlay = restrictedBlurOverlays[ObjectIdentifier(view)] {
-                contentView.bringSubviewToFront(overlay)
-            }
-        }
-        contentView.bringSubviewToFront(restrictedAreaGradientView)
-        contentView.bringSubviewToFront(restrictedUnlockButton)
-        bringRestrictedChromeAboveTomorrowSection()
-    }
-
-    private func setRestrictedUnlockChromeVisible(_ visible: Bool, animated: Bool) {
-        if visible {
-            restrictedAreaGradientView.isHidden = false
-            restrictedUnlockButton.isHidden = false
-        }
-
-        let apply = {
-            self.restrictedAreaGradientView.alpha = visible ? 1.0 : 0.0
-            self.restrictedUnlockButton.alpha = visible ? 1.0 : 0.0
-        }
-
-        let completion = {
-            if !visible {
-                self.restrictedAreaGradientView.isHidden = true
-                self.restrictedUnlockButton.isHidden = true
-            }
-        }
-
-        if animated {
-            UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut], animations: apply) { _ in
-                completion()
-            }
-        } else {
-            apply()
-            completion()
-        }
-    }
-
-    private func setRestrictedElementBlursVisible(_ visible: Bool, animated: Bool) {
-        let activeViews = activeRestrictedDailyFitObscuredViews
-        let activeKeys = Set(activeViews.map(ObjectIdentifier.init))
-
-        if !visible {
-            clearRestrictedElementBlurs()
-            return
-        }
-
-        restrictedBlurOverlays.forEach { key, overlay in
-            guard !activeKeys.contains(key) else { return }
-            overlay.isHidden = true
-            overlay.alpha = 0
-            overlay.image = nil
-            restrictedBlurBoundsSignatures.removeValue(forKey: key)
-        }
-
-        activeViews.forEach { view in
-            _ = blurOverlay(for: view)
-        }
-
-        scheduleRestrictedBlurRefresh(force: true)
-
-        let viewsWithCachedBlur = activeViews.filter {
-            restrictedBlurOverlays[ObjectIdentifier($0)]?.image != nil
-        }
-        hideRestrictedContent(for: viewsWithCachedBlur)
-
-        let apply = {
-            activeViews.forEach { view in
-                let overlay = self.blurOverlay(for: view)
-                overlay.isHidden = false
-                self.contentView.bringSubviewToFront(overlay)
-            }
-        }
-
-        if animated {
-            UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut], animations: apply)
-        } else {
-            apply()
-        }
-
-        setRestrictedUnlockChromeVisible(true, animated: animated)
-        bringRestrictedUnlockStackToFront()
+    /// Views below the tear that must be hidden + collapsed for gated users:
+    /// the gated content plus the in-card tomorrow section (replaced by the
+    /// scroll-anchored CTA).
+    private var gatedHiddenContentViews: [UIView] {
+        restrictedDailyFitObscuredViews
+            + [finalStarDivider, tomorrowTeaseLabel, tomorrowButton].compactMap { $0 }
     }
 
     private func updateRestrictedDailyFitObscuration(animated: Bool) {
-        let shouldShow = isRestrictedDailyFitObscured
-        restrictedDailyFitObscuredViews.forEach { $0.accessibilityElementsHidden = shouldShow }
-        setRestrictedElementBlursVisible(shouldShow, animated: animated)
+        let gated = isRestrictedDailyFitObscured
+        restrictedDailyFitObscuredViews.forEach { $0.accessibilityElementsHidden = gated }
+        applyGatedLayout(gated, animated: animated)
+    }
+
+    /// Switches between the normal full layout and the gated torn-paper layout:
+    /// caps the card at the tear, collapses the gated content, and reveals the
+    /// glyph field + scroll-anchored CTA.
+    private func applyGatedLayout(_ gated: Bool, animated: Bool) {
+        contentBottomToTomorrowConstraint?.isActive = !gated
+        contentBackgroundBottomFullConstraint?.isActive = !gated
+        rebuildGatedCardBottomConstraint(active: gated)
+        gatedContentBottomConstraint?.isActive = gated
+
+        tornPaperEdgeView.isHidden = !gated
+        gatedHiddenContentViews.forEach { $0.isHidden = gated }
+
+        if gated {
+            contentView.bringSubviewToFront(tornPaperEdgeView)
+            syncGatedTomorrowCTA()
+            gatedPaywallBackgroundContainer.isHidden = false
+            gatedGlyphBackground.startAnimating()
+            view.insertSubview(gatedPaywallBackgroundContainer, belowSubview: scrollView)
+            gatedCTAContainer.isHidden = false
+            view.insertSubview(gatedCTAContainer, belowSubview: scrollView)
+        } else {
+            gatedGlyphBackground.stopAnimating()
+            gatedPaywallBackgroundContainer.isHidden = true
+            gatedCTAContainer.isHidden = true
+            resetGatedCTAReveal()
+        }
+
+        isGatedLayoutActive = gated
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
+        updateGatedPaywallMetrics()
+        updateGatedCTAFade()
+    }
+
+    /// Card-panel bottom while gated overlaps the tear's solid top by 2pt — both
+    /// are `cosmicGrey`, so the join is seamless. Rebuilt each call because the
+    /// panel is recreated on every reveal (`setupContentSectionBackgrounds`).
+    private func rebuildGatedCardBottomConstraint(active: Bool) {
+        gatedCardBottomConstraint?.isActive = false
+        gatedCardBottomConstraint = nil
+        guard active, let panel = contentBackgroundView else { return }
+        let constraint = panel.bottomAnchor.constraint(equalTo: tornPaperEdgeView.topAnchor, constant: 2)
+        constraint.isActive = true
+        gatedCardBottomConstraint = constraint
+    }
+
+    private func syncGatedTomorrowCTA() {
+        if isViewingTomorrow {
+            gatedTomorrowTeaseLabel.text = "Today\u{2019}s fit awaits you..."
+            CosmicNavigationArrow.apply(
+                to: gatedTomorrowButton, title: "SEE TODAY\u{2019}S FIT", arrow: .left, pointSize: 6
+            )
+        } else {
+            gatedTomorrowTeaseLabel.text = "Tomorrow\u{2019}s energy is already shifting..."
+            CosmicNavigationArrow.apply(
+                to: gatedTomorrowButton, title: "SEE TOMORROW\u{2019}S FIT", arrow: .right, pointSize: 6
+            )
+        }
+    }
+
+    /// Sizes the gated scroll spacer so the natural scroll limit lands the torn
+    /// edge ~1/3 from the top, and parks the CTA layer at that same line.
+    private func updateGatedPaywallMetrics() {
+        guard isGatedLayoutActive else { return }
+        let screenHeight = view.bounds.height
+        let visibleHeight = scrollView.bounds.height
+        guard screenHeight > 1, visibleHeight > 1 else { return }
+
+        let spacer = max(0, visibleHeight - screenHeight * Self.tornEdgeRestFraction - Self.tornEdgeViewHeight)
+        if let constraint = gatedContentBottomConstraint, abs(constraint.constant - spacer) > 0.5 {
+            constraint.constant = spacer
+        }
+
+        let ctaTop = screenHeight * Self.tornEdgeRestFraction
+        if let constraint = gatedCTATopConstraint, abs(constraint.constant - ctaTop) > 0.5 {
+            constraint.constant = ctaTop
+            view.setNeedsLayout()
+        }
+        updateGatedMaskFrames()
+    }
+
+    /// Reveals the launch-style backdrop + glyph field and CTA only below the
+    /// torn edge's current on-screen position (blurred wallpaper still reads above).
+    private func updateGatedMaskFrames() {
+        guard isGatedLayoutActive else { return }
+        let tearTopInView = tornPaperEdgeView.convert(CGPoint.zero, to: view).y
+
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+
+        let paywallTop = max(0, tearTopInView)
+        gatedPaywallMaskLayer.frame = CGRect(
+            x: 0, y: paywallTop,
+            width: gatedPaywallBackgroundContainer.bounds.width,
+            height: max(0, gatedPaywallBackgroundContainer.bounds.height - paywallTop)
+        )
+
+        let ctaMaskTop = max(0, tearTopInView - gatedCTAContainer.frame.minY)
+        gatedCTAMaskLayer.frame = CGRect(
+            x: 0, y: ctaMaskTop,
+            width: gatedCTAContainer.bounds.width,
+            height: max(0, gatedCTAContainer.bounds.height - ctaMaskTop)
+        )
+
+        CATransaction.commit()
+    }
+
+    /// Each CTA line scales and fades in over an equal slice of scroll progress;
+    /// the final "See Tomorrow's Fit" button completes at max scroll.
+    private func updateGatedCTAFade() {
+        guard isGatedLayoutActive else { return }
+        let maxOffset = max(1, scrollView.contentSize.height - scrollView.bounds.height)
+        let progress = min(1, max(0, scrollView.contentOffset.y / maxOffset))
+        let itemCount = CGFloat(gatedCTARevealItems.count)
+        guard itemCount > 0 else { return }
+
+        var unlockButtonReveal: CGFloat = 0
+        for (index, item) in gatedCTARevealItems.enumerated() {
+            let start = CGFloat(index) / itemCount
+            let end = CGFloat(index + 1) / itemCount
+            let t = rampedAlpha(progress, start: start, end: end)
+            item.alpha = t
+            let scale = Self.gatedCTARevealStartScale + (1 - Self.gatedCTARevealStartScale) * t
+            item.transform = CGAffineTransform(scaleX: scale, y: scale)
+            if item === restrictedUnlockButton {
+                unlockButtonReveal = t
+            }
+        }
+
+        let buttonsActive = unlockButtonReveal > 0.5
+        gatedCTAContainer.isUserInteractionEnabled = buttonsActive
+        restrictedUnlockButton.isUserInteractionEnabled = buttonsActive
+        gatedTomorrowButton.isUserInteractionEnabled = buttonsActive
+        updateGatedMaskFrames()
+    }
+
+    private func resetGatedCTAReveal() {
+        let startScale = Self.gatedCTARevealStartScale
+        let startTransform = CGAffineTransform(scaleX: startScale, y: startScale)
+        gatedCTARevealItems.forEach {
+            $0.alpha = 0
+            $0.transform = startTransform
+        }
+        gatedCTAContainer.isUserInteractionEnabled = false
+        restrictedUnlockButton.isUserInteractionEnabled = false
+        gatedTomorrowButton.isUserInteractionEnabled = false
+    }
+
+    private func rampedAlpha(_ progress: CGFloat, start: CGFloat, end: CGFloat) -> CGFloat {
+        guard end > start else { return progress >= end ? 1 : 0 }
+        return min(1, max(0, (progress - start) / (end - start)))
     }
 
     // MARK: - Day Navigation
@@ -2882,7 +2870,7 @@ class DailyFitViewController: UIViewController {
 
     /// Snap a 0–1 value to Cool (0.0) / Mixed (0.5) / Warm (1.0) using equal tertiles.
     /// Boundaries: [0, 1/3) = Cool, [1/3, 2/3] = Mixed, (2/3, 1] = Warm.
-    /// Used for both personal displayPosition and legacy absolute metal tone.
+    /// Retained for legacy payloads without scalePresentation.
     static func snapMetalToThreePositions(_ value: Double) -> Double {
         if value < 1.0 / 3.0 { return 0.0 }
         if value > 2.0 / 3.0 { return 1.0 }
@@ -2895,7 +2883,7 @@ class DailyFitViewController: UIViewController {
         if let sp = payload.scalePresentation {
             sliderTargetValues[0] = sp.vibrancy.displayPosition
             sliderTargetValues[1] = sp.contrast.displayPosition
-            sliderTargetValues[2] = Self.snapMetalToThreePositions(sp.metalTone.displayPosition)
+            sliderTargetValues[2] = sp.metalTone.displayPosition
             sliderTargetValues[3] = sp.masculineFeminine?.displayPosition ?? payload.silhouetteProfile.masculineFeminine
             sliderTargetValues[4] = sp.angularRounded?.displayPosition ?? payload.silhouetteProfile.angularRounded
             sliderTargetValues[5] = sp.structuredDraped?.displayPosition ?? payload.silhouetteProfile.structuredDraped
@@ -3420,6 +3408,10 @@ class DailyFitViewController: UIViewController {
 
         // Star divider + Tomorrow section
         if let finalStarDivider = finalStarDivider {
+            let tomorrowBottom = tomorrowButton.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor, constant: -Self.contentBottomPaddingBelowTomorrow
+            )
+            contentBottomToTomorrowConstraint = tomorrowBottom
             constraints.append(contentsOf: [
                 finalStarDivider.topAnchor.constraint(equalTo: wardrobeReflectionLabel.bottomAnchor, constant: wardrobeReflectionGapBelow),
                 finalStarDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
@@ -3440,40 +3432,27 @@ class DailyFitViewController: UIViewController {
                     constant: -horizontalMargin
                 ),
                 tomorrowButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 38),
-                tomorrowButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Self.contentBottomPaddingBelowTomorrow)
+                tomorrowBottom
             ])
         }
 
-        restrictedObscurationRitualTopConstraint = restrictedAreaGradientView.topAnchor.constraint(
+        // Torn-paper edge: caps the card at the gated boundary (mirrors the
+        // daily-ritual / style-breakdown split). Top toggled in
+        // `updateDailyRitualLayoutConstraints`; whole layout toggled when gated.
+        tornEdgeTopRitualConstraint = tornPaperEdgeView.topAnchor.constraint(
             equalTo: dailyRitualHeaderDivider?.topAnchor ?? styleEditLabel.bottomAnchor
         )
-        restrictedObscurationStyleBreakdownTopConstraint = restrictedAreaGradientView.topAnchor.constraint(
+        tornEdgeTopStyleBreakdownConstraint = tornPaperEdgeView.topAnchor.constraint(
             equalTo: styleBreakdownDivider?.topAnchor ?? styleEditLabel.bottomAnchor
         )
+        gatedContentBottomConstraint = contentView.bottomAnchor.constraint(
+            equalTo: tornPaperEdgeView.bottomAnchor
+        )
         constraints.append(contentsOf: [
-            restrictedAreaGradientView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            restrictedAreaGradientView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-
-            restrictedUnlockButton.centerXAnchor.constraint(equalTo: restrictedAreaGradientView.centerXAnchor),
-            restrictedUnlockButton.centerYAnchor.constraint(equalTo: restrictedAreaGradientView.centerYAnchor),
-            restrictedUnlockButton.leadingAnchor.constraint(
-                greaterThanOrEqualTo: contentView.leadingAnchor,
-                constant: horizontalMargin
-            ),
-            restrictedUnlockButton.trailingAnchor.constraint(
-                lessThanOrEqualTo: contentView.trailingAnchor,
-                constant: -horizontalMargin
-            ),
-            restrictedUnlockButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 38)
+            tornPaperEdgeView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            tornPaperEdgeView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            tornPaperEdgeView.heightAnchor.constraint(equalToConstant: Self.tornEdgeViewHeight)
         ])
-        if let finalStarDivider {
-            constraints.append(
-                restrictedAreaGradientView.bottomAnchor.constraint(
-                    equalTo: finalStarDivider.topAnchor,
-                    constant: -8
-                )
-            )
-        }
 
         NSLayoutConstraint.activate(constraints)
 
@@ -3489,8 +3468,8 @@ class DailyFitViewController: UIViewController {
         postDailyRitualDividerConstraints.forEach { $0.isActive = hasRitual }
         styleBreakdownAfterDailyRitualConstraint?.isActive = hasRitual
         styleBreakdownAfterStyleParagraphConstraint?.isActive = !hasRitual
-        restrictedObscurationRitualTopConstraint?.isActive = hasRitual
-        restrictedObscurationStyleBreakdownTopConstraint?.isActive = !hasRitual
+        tornEdgeTopRitualConstraint?.isActive = hasRitual
+        tornEdgeTopStyleBreakdownConstraint?.isActive = !hasRitual
     }
 
     private func loadTarotNumeral(for tarotCard: TarotCard) {
@@ -3960,13 +3939,15 @@ class DailyFitViewController: UIViewController {
         )
         contentBackgroundTopConstraint?.isActive = true
         
+        let fullBottom = backgroundView.bottomAnchor.constraint(
+            equalTo: contentView.bottomAnchor,
+            constant: view.bounds.height
+        )
+        contentBackgroundBottomFullConstraint = fullBottom
         NSLayoutConstraint.activate([
             backgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             backgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            backgroundView.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor,
-                constant: view.bounds.height
-            )
+            fullBottom
         ])
         
         view.layoutIfNeeded()
@@ -4058,6 +4039,7 @@ extension DailyFitViewController: UIScrollViewDelegate {
         let yOffset = scrollView.contentOffset.y
         updateDayNavigationBackButtonScrollPosition()
         updateSliderEntranceAnimationsIfNeeded()
+        updateGatedCTAFade()
         
         let cardTranslation = yOffset * 0.5
 
@@ -4207,31 +4189,30 @@ private class MetallicGradientTrackView: GradientTrackView {
     }
 }
 
-private final class RestrictedAreaGradientOverlayView: UIView {
-    private let gradientLayer = CAGradientLayer()
+/// Keeps the full scroll surface draggable while the gated CTA sits visually
+/// beneath the card. Transparent spacer regions claim the scroll view; only
+/// revealed buttons are forwarded from the CTA layer behind.
+private final class GatedPaywallScrollView: UIScrollView {
+    weak var ctaTouchTarget: UIView?
+    var isGatedPaywallActive: (() -> Bool)?
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        isUserInteractionEnabled = false
-        backgroundColor = .clear
-        gradientLayer.colors = [
-            UIColor.white.withAlphaComponent(0).cgColor,
-            UIColor.white.withAlphaComponent(0.42).cgColor,
-            UIColor.white.withAlphaComponent(0.68).cgColor,
-            UIColor.white.withAlphaComponent(0.42).cgColor,
-            UIColor.white.withAlphaComponent(0).cgColor
-        ]
-        gradientLayer.locations = [0, 0.26, 0.5, 0.74, 1]
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
-        layer.addSublayer(gradientLayer)
-    }
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard bounds.contains(point) else { return nil }
 
-    required init?(coder: NSCoder) { fatalError("init(coder:) not supported") }
+        if isGatedPaywallActive?() == true,
+           let target = ctaTouchTarget,
+           !target.isHidden,
+           target.isUserInteractionEnabled {
+            let pointInTarget = convert(point, to: target)
+            if let hit = target.hitTest(pointInTarget, with: event),
+               hit is UIControl {
+                return hit
+            }
+        }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        gradientLayer.frame = bounds
+        // Transparent content gaps return nil from super, which would let
+        // touches fall through to the glyph/CTA layers behind the scroll view.
+        return super.hitTest(point, with: event) ?? self
     }
 }
 

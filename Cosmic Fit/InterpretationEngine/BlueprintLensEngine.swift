@@ -26,6 +26,11 @@ enum Stage1ScaleSensitivity {
     /// Max positive blend = 0.5*0.6 + 0.5*0.4 = 0.50.
     static let contrastMaxBlendNorm: Double = 0.50
 
+    // Contrast — sky-native modulation scales (mirrors vibrancy's vibeScale/tempoScale).
+    // Sized so high-contrast baselines (0.75) retain daily variation without rail-pinning.
+    static let contrastVibeScale: Double = 0.20
+    static let contrastTempoScale: Double = 0.12
+
     // Metal tone — transit and lunar nudge bounds
     static let metalNudgeCap: Double = 0.30
     static let metalNudgeCapStandard: Double = 0.10
@@ -34,16 +39,25 @@ enum Stage1ScaleSensitivity {
     /// Maximum absolute contribution from lunar degree mod: |((0 or 1) - 0.5) * lunarDegreeScale|
     static var lunarDegreeMaxAbs: Double { lunarDegreeScale * 0.5 }
 
+    // Metal tone — sky-native modulation scales (mirrors contrast's vibeScale/tempoScale).
+    // Warm vibes (romantic/classic) push warm; cool vibes (edge/utility/drama) push cool.
+    // Tuned for G2 ≥ 45%: 50-user cohort at 0.36/0.22 gave 49.6%; bumped to clear G1/G3 margins.
+    static let metalVibeScale: Double = 0.40
+    static let metalTempoScale: Double = 0.24
+
+    // Metal tone — calibrated practical envelope half-span (mirrors contrast).
+    // Balances display travel vs rail-pin; 0.36 confirmed G2=49.6% on 50-user cohort.
+    static let metalPracticalHalfSpan: Double = 0.36
+
     // Vibrancy — calibrated practical envelope half-span (Plan 3).
     // Derived from Phase 0 cohort P95: observed max deviation from baseline ≈ 0.12;
     // ±0.22 provides safety margin while narrowing the theoretical ±0.92 to useful display travel.
     static let vibrancyPracticalHalfSpan: Double = 0.22
 
-    // Contrast — calibrated practical envelope half-span (Plan 4 audit).
-    // Observed raw range P95 ≈ 0.19; max baseline-relative deviation ≈ 0.12.
-    // ±0.14 covers relationship modifiers (+0.08 max) with margin while
-    // narrowing the theoretical ±0.275 (0.50×0.55) to useful display travel.
-    static let contrastPracticalHalfSpan: Double = 0.14
+    // Contrast — calibrated practical envelope half-span (slider variation fix Phase 3).
+    // Cohort P95 baseline deviation = 0.269 (post vibe/tempo signal, stage1_experimental, 216×60);
+    // ±0.22 = clamp(P95 + 0.04, max=0.22) per Plan 3 formula.
+    static let contrastPracticalHalfSpan: Double = 0.22
 
     // Silhouette — extreme test bounds (retained for backward-compatible tests).
     // With anchor-blend formula, raw values stay within [baseline±0.20] so these
@@ -54,8 +68,9 @@ enum Stage1ScaleSensitivity {
     // Silhouette — per-user calibrated envelope half-spans (Plan 4 audit).
     // Centered on chartAnchor instead of global [0.12, 0.88].
     // With ±0.20 sky modulation, half-spans give useful display travel without rail-pinning.
-    static let silhouetteSDPracticalHalfSpan: Double = 0.30
-    static let silhouetteMFARPracticalHalfSpan: Double = 0.28
+    // Widened MF/AR from 0.28→0.34 (C2+C3 F2 tune) to reduce stuck users below 20.
+    static let silhouetteSDPracticalHalfSpan: Double = 0.34
+    static let silhouetteMFARPracticalHalfSpan: Double = 0.34
 }
 
 /// Stage 2 engine. Stateless — all methods are static.
@@ -175,6 +190,10 @@ enum BlueprintLensEngine {
         let vibeVector = buildVibeVector(from: snapshot.vibeProfile)
         let axesVector = buildAxesVector(from: snapshot.axes)
 
+        let recentSuitCounts = Self.computeRecentSuitCounts(
+            recentSelections: recentSelections, allCards: allCards
+        )
+
         var scoredCards: [(card: TarotCard, normAxes: [String: Double], score: Double)] = []
 
         for (card, normAxes) in eligibleCards {
@@ -183,7 +202,8 @@ enum BlueprintLensEngine {
                 vibeVector: vibeVector, axesVector: axesVector,
                 weights: weights,
                 recentSelections: recentSelections,
-                dominantTransits: snapshot.dominantTransits
+                dominantTransits: snapshot.dominantTransits,
+                recentSuitCounts: recentSuitCounts
             )
             scoredCards.append((card, normAxes, breakdown.total))
         }
@@ -303,6 +323,26 @@ enum BlueprintLensEngine {
             "strategy":   axes.strategy / 10.0,
             "visibility": axes.visibility / 10.0,
         ]
+    }
+
+    /// Count suit occurrences in recent selections (last 14 days).
+    static func computeRecentSuitCounts(
+        recentSelections: [(cardName: String, daysAgo: Int)],
+        allCards: [(card: TarotCard, normAxes: [String: Double])]
+    ) -> [String: Int] {
+        let cardSuitMap = Dictionary(
+            uniqueKeysWithValues: allCards.compactMap { entry -> (String, String)? in
+                guard let suit = entry.card.suit else { return nil }
+                return (entry.card.name, suit.rawValue)
+            }
+        )
+        var counts: [String: Int] = [:]
+        for sel in recentSelections where sel.daysAgo <= 14 {
+            if let suit = cardSuitMap[sel.cardName] {
+                counts[suit, default: 0] += 1
+            }
+        }
+        return counts
     }
 
     // MARK: - Cosine Similarity
@@ -1201,13 +1241,15 @@ enum BlueprintLensEngine {
 
     // MARK: - Contrast Derivation
 
-    /// Blueprint-anchored contrast: baseline from ContrastLevel enum,
-    /// modulated by axes. Stage 1 uses visibility + strategy blend for more variation.
-    private static func deriveContrast(
-        from palette: PaletteSection,
+    /// Stage 1 contrast computation shared by `deriveContrast` and `DailyNarrativeSelector.buildPlan`.
+    /// Combines axis blend (visibility + strategy), sky-vibe modulation, and tempo
+    /// to mirror vibrancy's input class and produce day-over-day variation.
+    static func computeStage1ContrastRaw(
+        palette: PaletteSection,
         snapshot: DailyEnergySnapshot,
         calibration: DailyFitCalibration = .default,
-        mode: DailyFitEngineMode = .standard,
+        relationshipMod: Double = 0,
+        intensityMod: Double = 0,
         scaleDirective: ScaleDirective? = nil
     ) -> Double {
         let baseline: Double
@@ -1218,15 +1260,58 @@ enum BlueprintLensEngine {
         case nil:     baseline = 0.50
         }
         let coeff = calibration.stage2Sensitivity.contrastCoeff
-        let modulation: Double
-        if mode == .stage1Experimental {
-            let visNorm = snapshot.axes.visibility / 10.0
-            let strNorm = snapshot.axes.strategy / 10.0
-            modulation = ((visNorm - 0.5) * Stage1ScaleSensitivity.contrastVisWeight + (strNorm - 0.5) * Stage1ScaleSensitivity.contrastStrWeight) * coeff
-        } else {
-            let visNorm = snapshot.axes.visibility / 10.0
-            modulation = (visNorm - 0.5) * coeff
+
+        let skyVibe = snapshot.skyVibeProfile ?? snapshot.vibeProfile
+        let edgePush = Double(skyVibe.value(for: .edge) + skyVibe.value(for: .drama)) / 21.0
+        let softPull = Double(skyVibe.value(for: .classic) + skyVibe.value(for: .utility) + skyVibe.value(for: .romantic)) / 21.0
+        let vibeMod = (edgePush - softPull) * Stage1ScaleSensitivity.contrastVibeScale
+
+        let visNorm = snapshot.axes.visibility / 10.0
+        let strNorm = snapshot.axes.strategy / 10.0
+        let axisMod = ((visNorm - 0.5) * Stage1ScaleSensitivity.contrastVisWeight
+                     + (strNorm - 0.5) * Stage1ScaleSensitivity.contrastStrWeight) * coeff
+
+        let tempoMod = (snapshot.axes.tempo / 10.0 - 0.5) * Stage1ScaleSensitivity.contrastTempoScale
+
+        var final = baseline + axisMod + vibeMod + tempoMod + relationshipMod + intensityMod
+        if let directive = scaleDirective {
+            if let cap = directive.contrastCap {
+                final = min(final, cap)
+            }
+            if directive.pullTowardBaseline {
+                final = baseline * directive.baselineBlend + final * (1.0 - directive.baselineBlend)
+            }
         }
+        return max(0.0, min(1.0, final))
+    }
+
+    /// Blueprint-anchored contrast: baseline from ContrastLevel enum,
+    /// modulated by axes. Stage 1 uses visibility + strategy blend for more variation.
+    private static func deriveContrast(
+        from palette: PaletteSection,
+        snapshot: DailyEnergySnapshot,
+        calibration: DailyFitCalibration = .default,
+        mode: DailyFitEngineMode = .standard,
+        scaleDirective: ScaleDirective? = nil
+    ) -> Double {
+        if mode == .stage1Experimental {
+            return computeStage1ContrastRaw(
+                palette: palette,
+                snapshot: snapshot,
+                calibration: calibration,
+                scaleDirective: scaleDirective
+            )
+        }
+        let baseline: Double
+        switch palette.variables?.contrast {
+        case .low:    baseline = 0.25
+        case .medium: baseline = 0.50
+        case .high:   baseline = 0.75
+        case nil:     baseline = 0.50
+        }
+        let coeff = calibration.stage2Sensitivity.contrastCoeff
+        let visNorm = snapshot.axes.visibility / 10.0
+        let modulation = (visNorm - 0.5) * coeff
 
         var final = baseline + modulation
         if let directive = scaleDirective {
@@ -1260,6 +1345,13 @@ enum BlueprintLensEngine {
         calibration: DailyFitCalibration = .default,
         mode: DailyFitEngineMode = .standard
     ) -> Double {
+        if mode == .stage1Experimental {
+            return computeStage1MetalToneRaw(
+                blueprint: blueprint,
+                snapshot: snapshot,
+                calibration: calibration
+            )
+        }
         let tempVal: Double
         switch blueprint.palette.variables?.temperature {
         case .cool:    tempVal = 0.2
@@ -1271,7 +1363,6 @@ enum BlueprintLensEngine {
         var warmCount = 0, coolCount = 0
         for metal in blueprint.hardware.recommendedMetals {
             let lower = metal.lowercased()
-            // Check cool first — "white gold" must not false-positive as warm
             if coolMetals.contains(where: { lower.contains($0) }) {
                 coolCount += 1
             } else if warmMetals.contains(where: { lower.contains($0) }) {
@@ -1286,12 +1377,60 @@ enum BlueprintLensEngine {
             if firePlanets.contains(transit.transitPlanet) { fireHits += 1 }
             if waterPlanets.contains(transit.transitPlanet) { waterHits += 1 }
         }
-        let nudgeCap = mode == .stage1Experimental
-            ? Stage1ScaleSensitivity.metalNudgeCap
-            : Stage1ScaleSensitivity.metalNudgeCapStandard
+        let fireNudge = min(Double(fireHits) * calibration.stage2Sensitivity.metalNudgePerHit, Stage1ScaleSensitivity.metalNudgeCapStandard)
+        let waterNudge = min(Double(waterHits) * calibration.stage2Sensitivity.metalNudgePerHit, Stage1ScaleSensitivity.metalNudgeCapStandard)
+
+        return max(0.0, min(1.0, baseline + fireNudge - waterNudge))
+    }
+
+    /// Stage 1 metal tone computation shared by `deriveMetalTone` and `DailyNarrativeSelector.buildPlan`.
+    /// Combines baseline, sky-vibe modulation, tempo axis, fire/water transit nudges, and lunar phase
+    /// to produce day-over-day variation matching the vibrancy/contrast input class.
+    static func computeStage1MetalToneRaw(
+        blueprint: CosmicBlueprint,
+        snapshot: DailyEnergySnapshot,
+        calibration: DailyFitCalibration = .default
+    ) -> Double {
+        let tempVal: Double
+        switch blueprint.palette.variables?.temperature {
+        case .cool:    tempVal = 0.2
+        case .neutral: tempVal = 0.5
+        case .warm:    tempVal = 0.8
+        case nil:      tempVal = 0.5
+        }
+
+        var warmCount = 0, coolCount = 0
+        for metal in blueprint.hardware.recommendedMetals {
+            let lower = metal.lowercased()
+            if coolMetals.contains(where: { lower.contains($0) }) {
+                coolCount += 1
+            } else if warmMetals.contains(where: { lower.contains($0) }) {
+                warmCount += 1
+            }
+        }
+        let metalLean = Double(warmCount) / Double(max(1, warmCount + coolCount))
+        let baseline = tempVal * 0.6 + metalLean * 0.4
+
+        // Sky-vibe modulation: romantic/classic push warm, edge/utility/drama push cool
+        let skyVibe = snapshot.skyVibeProfile ?? snapshot.vibeProfile
+        let warmPush = Double(skyVibe.value(for: .romantic) + skyVibe.value(for: .classic)) / 21.0
+        let coolPush = Double(skyVibe.value(for: .edge) + skyVibe.value(for: .utility) + skyVibe.value(for: .drama)) / 21.0
+        let vibeMod = (warmPush - coolPush) * Stage1ScaleSensitivity.metalVibeScale
+
+        // Tempo axis: faster days push warmer (fire energy)
+        let tempoMod = (snapshot.axes.tempo / 10.0 - 0.5) * Stage1ScaleSensitivity.metalTempoScale
+
+        // Transit fire/water nudge (existing layer)
+        var fireHits = 0, waterHits = 0
+        for transit in snapshot.dominantTransits {
+            if firePlanets.contains(transit.transitPlanet) { fireHits += 1 }
+            if waterPlanets.contains(transit.transitPlanet) { waterHits += 1 }
+        }
+        let nudgeCap = Stage1ScaleSensitivity.metalNudgeCap
         let fireNudge = min(Double(fireHits) * calibration.stage2Sensitivity.metalNudgePerHit, nudgeCap)
         let waterNudge = min(Double(waterHits) * calibration.stage2Sensitivity.metalNudgePerHit, nudgeCap)
 
+        // Lunar modulation (existing layer)
         let phase = snapshot.lunarContext.phaseName.lowercased()
         let lunarNudge: Double
         if phase.contains("full") {
@@ -1301,16 +1440,10 @@ enum BlueprintLensEngine {
         } else {
             lunarNudge = 0.0
         }
+        let fraction = snapshot.lunarContext.phaseDegrees / 360.0
+        let lunarMetalMod = (fraction - 0.5) * Stage1ScaleSensitivity.lunarDegreeScale
 
-        let lunarMetalMod: Double
-        if mode == .stage1Experimental {
-            let fraction = snapshot.lunarContext.phaseDegrees / 360.0
-            lunarMetalMod = (fraction - 0.5) * Stage1ScaleSensitivity.lunarDegreeScale
-        } else {
-            lunarMetalMod = 0.0
-        }
-
-        return max(0.0, min(1.0, baseline + fireNudge - waterNudge + lunarNudge + lunarMetalMod))
+        return max(0.0, min(1.0, baseline + vibeMod + tempoMod + fireNudge - waterNudge + lunarNudge + lunarMetalMod))
     }
 
     // MARK: - Plan 2 Public Accessors
@@ -1866,7 +1999,7 @@ enum BlueprintLensEngine {
         )
 
         if mode == .stage1Experimental {
-            let skyMod = { (axis: Double) in tanh((axis - 5.5) / 4.5) * 0.20 }
+            let skyMod = { (axis: Double) in tanh((axis - 5.5) / 4.5) * 0.28 }
             let mf = max(0.0, min(1.0, mfBase + skyMod(snapshot.axes.visibility)))
             let ar = max(0.0, min(1.0, arBase + skyMod(snapshot.axes.action)))
             let sd = max(0.0, min(1.0, sdBase + skyMod(snapshot.axes.strategy)))

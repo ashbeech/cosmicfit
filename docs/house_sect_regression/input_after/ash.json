@@ -16,9 +16,9 @@
       "Corporate uniformity that flattens your expansive personality. Your style should feel like a passport, not a prison."
     ],
     "consider" : [
-      "Wear relaxed, oversized silhouettes that allow you to move freely and connect with your local community.",
-      "Choose tactile knitwear and slouchy denim that visually invite warmth and easy conversation with your peers.",
-      "Treat your wardrobe as literal life armour, deploying sharply tailored pieces with strategic intent to serve a strictly protective purpose.",
+      "Wearing relaxed, oversized silhouettes that allow you to move freely and connect with your local community.",
+      "Choosing tactile knitwear and slouchy denim that visually invite warmth and easy conversation with your peers.",
+      "Treating your wardrobe as literal life armour, deploying sharply tailored pieces with strategic intent to serve a strictly protective purpose.",
       "How the density of fabric affects your sense of control. Heavier, more opaque garments reinforce the containment you need."
     ],
     "leanInto" : [
@@ -27,11 +27,11 @@
       "Treating comfort as a non-negotiable, not a luxury. If a garment makes you tense, it is actively working against you.",
       "Choosing pieces that feel like home. If an outfit does not settle your nervous system, it is not earning its place.",
       "Dressing with travel inspiration woven into every outfit. A waxed jacket or a hand-woven scarf carries the energy of the road even at home.",
-      "Mix global textile references with absolute confidence by pairing an authentic heavy ikat shirt with sharp tailored chinos to bridge entirely different aesthetics."
+      "Mixxing global textile references with absolute confidence by pairing an authentic heavy ikat shirt with sharp tailored chinos to bridge entirely different aesthetics."
     ]
   },
-  "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-06-19T17:06:42Z",
+  "engineVersion" : "2.1.0",
+  "generatedAt" : "2026-06-24T15:28:25Z",
   "hardware" : {
     "metalsText" : "Your most effective hardware relies on a strict clash of high-tech precision and familiar, heavy warmth. Slick, industrial white gold tones gives you a sharp foundation, looking right at home on the oversized zips of technical outerwear or the chunky fastenings of a utility bag. A completely clinical finish leaves you cold, so you break up those stark details with titanium tones. Seek out titanium tones pieces with a battered, nostalgic patina, like a weighty heirloom pendant strung onto a modern synthetic cord, or thick, warm-toned belt buckles. This visual friction keeps your clothes from looking like a uniform, grounding bold shapes in something deeply personal.",
     "recommendedMetals" : [
@@ -300,7 +300,7 @@
       "conventional paisley",
       "aggressive graphics"
     ],
-    "narrativeText" : "You treat patterns as a high-voltage statement that still needs to feel deeply personal. Seek out prints that merge a sense of electric energy with a nostalgic, familiar undertone. Vintage florals and nautical stripes hit this sweet spot perfectly, looking like a digital graphic layered over a cherished retro fabric. These prints work best when stamped onto structured neoprene or woven through a silver grey knit, grounding your bold visual heat with a comforting, tactile weight. Give traditional florals a total miss. It reads as far too flimsy and chaotic, failing to deliver the sharp visual punch you crave and the emotional safety you quietly demand from your wardrobe.",
+    "narrativeText" : "You treat patterns as a high-voltage statement that still needs to feel deeply personal. Seek out prints that merge a sense of electric energy with a nostalgic, familiar undertone. Vintage florals and nautical stripes hit this sweet spot perfectly, looking like a digital graphic layered over a cherished retro fabric. These prints work best when stamped onto structured neoprene or woven through a bright teal knit, grounding your bold visual heat with a comforting, tactile weight. Give traditional florals a total miss. It reads as far too flimsy and chaotic, failing to deliver the sharp visual punch you crave and the emotional safety you quietly demand from your wardrobe.",
     "recommendedPatterns" : [
       "vintage florals",
       "nautical stripes",
@@ -337,6 +337,6 @@
   "userInfo" : {
     "birthDate" : "1984-12-11T00:00:00Z",
     "birthLocation" : "London, UK",
-    "generationDate" : "2026-06-19T17:06:42Z"
+    "generationDate" : "2026-06-24T15:28:25Z"
   }
 }

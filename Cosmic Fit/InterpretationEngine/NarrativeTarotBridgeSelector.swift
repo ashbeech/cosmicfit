@@ -51,6 +51,9 @@ enum NarrativeTarotBridgeSelector {
         let axesVector = BlueprintLensEngine.buildAxesVector(from: snapshot.axes)
 
         var scoredCards: [(card: TarotCard, normAxes: [String: Double], baseScore: Double)] = []
+        let recentSuitCounts = BlueprintLensEngine.computeRecentSuitCounts(
+            recentSelections: recentSelections, allCards: allCards
+        )
         for (card, normAxes) in allCards {
             let base = scoreBaseCard(
                 card: card,
@@ -61,7 +64,8 @@ enum NarrativeTarotBridgeSelector {
                 recentSelections: recentSelections,
                 dominantTransits: snapshot.dominantTransits,
                 intent: intent,
-                tuning: tuning
+                tuning: tuning,
+                recentSuitCounts: recentSuitCounts
             )
             scoredCards.append((card, normAxes, base))
         }
@@ -219,7 +223,8 @@ enum NarrativeTarotBridgeSelector {
         recentSelections: [(cardName: String, daysAgo: Int)],
         dominantTransits: [DailyTransitSummary],
         intent: NarrativeIntent?,
-        tuning: DailyFitCalibration.NarrativeSelectionTuning?
+        tuning: DailyFitCalibration.NarrativeSelectionTuning?,
+        recentSuitCounts: [String: Int]? = nil
     ) -> Double {
         TarotCardScoring.scoreCard(
             card: card, normAxes: normAxes,
@@ -227,7 +232,8 @@ enum NarrativeTarotBridgeSelector {
             weights: weights,
             recentSelections: recentSelections,
             dominantTransits: dominantTransits,
-            intent: intent, tuning: tuning
+            intent: intent, tuning: tuning,
+            recentSuitCounts: recentSuitCounts
         ).total
     }
 

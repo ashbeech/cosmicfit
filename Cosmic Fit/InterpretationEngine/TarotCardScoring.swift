@@ -62,7 +62,7 @@ enum TarotCardScoring {
     ) -> Double {
         let matches = recentSelections.filter { $0.cardName == cardName }
         guard let match = matches.first else {
-            return 0.0
+            return -0.04
         }
         var penalty = 0.0
         if match.daysAgo <= 2 {
@@ -71,6 +71,8 @@ enum TarotCardScoring {
             penalty += 0.25
         } else if match.daysAgo <= 10 {
             penalty += 0.12
+        } else if match.daysAgo <= 14 {
+            penalty += 0.06
         }
         penalty += max(0.0, Double(matches.count - 1) * 0.08)
         return min(penalty, 0.7)
@@ -94,6 +96,29 @@ enum TarotCardScoring {
         return boost * tuning.categoryBoostWeight
     }
 
+    // MARK: - Suit Diversity Nudge
+
+    /// Boost for cards from underrepresented suits in recent window.
+    /// Returns 0.03–0.05 for suits below expected frequency, 0 otherwise.
+    static func suitDiversityBoost(
+        for card: TarotCard,
+        recentSuitCounts: [String: Int]?
+    ) -> Double {
+        guard let suit = card.suit,
+              let counts = recentSuitCounts,
+              !counts.isEmpty else { return 0.0 }
+        let totalSelections = counts.values.reduce(0, +)
+        guard totalSelections >= 4 else { return 0.0 }
+        let expectedShare = 1.0 / Double(TarotCard.SuitType.allCases.count)
+        let actualShare = Double(counts[suit.rawValue, default: 0]) / Double(totalSelections)
+        if actualShare < expectedShare * 0.5 {
+            return 0.15
+        } else if actualShare < expectedShare * 0.75 {
+            return 0.08
+        }
+        return 0.0
+    }
+
     // MARK: - Full Card Scoring
 
     /// Decomposed score for trace/inspector display.
@@ -106,7 +131,7 @@ enum TarotCardScoring {
         let total: Double
     }
 
-    /// Complete base card score: vibe + axis + transit − recency + optional narrative boost.
+    /// Complete base card score: vibe + axis + transit − recency + optional narrative boost + suit diversity.
     /// All callers (production, bridge, trace, diagnostics) use this single implementation.
     static func scoreCard(
         card: TarotCard,
@@ -117,7 +142,8 @@ enum TarotCardScoring {
         recentSelections: [(cardName: String, daysAgo: Int)],
         dominantTransits: [DailyTransitSummary],
         intent: NarrativeIntent? = nil,
-        tuning: DailyFitCalibration.NarrativeSelectionTuning? = nil
+        tuning: DailyFitCalibration.NarrativeSelectionTuning? = nil,
+        recentSuitCounts: [String: Int]? = nil
     ) -> ScoreBreakdown {
         let vibe = BlueprintLensEngine.cosineSimilarity(card.energyAffinity, vibeVector)
         let axis = normAxes.isEmpty ? 0.5 : BlueprintLensEngine.cosineSimilarity(normAxes, axesVector)
@@ -129,11 +155,14 @@ enum TarotCardScoring {
             narrative = narrativeCategoryBoost(card: card, intent: intent, tuning: tuning)
         }
 
+        let diversity = suitDiversityBoost(for: card, recentSuitCounts: recentSuitCounts)
+
         let total = (vibe * weights.vibeWeight)
             + (axis * weights.axisWeight)
             + (transit * weights.transitBoost)
             - recency
             + narrative
+            + diversity
 
         return ScoreBreakdown(
             vibeScore: vibe,

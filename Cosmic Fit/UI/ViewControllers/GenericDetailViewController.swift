@@ -10,15 +10,19 @@ import UIKit
 class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
-    let contentViewController: UIViewController
+    private(set) var contentViewController: UIViewController
+    private var contentStack: [UIViewController] = []
     private var panGestureRecognizer: UIPanGestureRecognizer!
     private var initialTouchPoint: CGPoint = .zero
     private var interactiveDismissalInProgress = false
+    private var closeButton: UIButton!
+    private var contentViewConstraints: [NSLayoutConstraint] = []
     
     // MARK: - Initialization
     init(contentViewController: UIViewController) {
         self.contentViewController = contentViewController
         super.init(nibName: nil, bundle: nil)
+        contentStack = [contentViewController]
     }
     
     required init?(coder: NSCoder) {
@@ -87,21 +91,10 @@ class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate
         ])
         
         // Add content view controller
-        addChild(contentViewController)
-        contentViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        contentViewController.view.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
-        cardContainerView.addSubview(contentViewController.view)
-        contentViewController.didMove(toParent: self)
-        
-        NSLayoutConstraint.activate([
-            contentViewController.view.topAnchor.constraint(equalTo: cardContainerView.topAnchor),
-            contentViewController.view.leadingAnchor.constraint(equalTo: cardContainerView.leadingAnchor),
-            contentViewController.view.trailingAnchor.constraint(equalTo: cardContainerView.trailingAnchor),
-            contentViewController.view.bottomAnchor.constraint(equalTo: cardContainerView.bottomAnchor)
-        ])
+        installContentViewController(contentViewController)
         
         // Add close button
-        let closeButton = UIButton(type: .system)
+        closeButton = UIButton(type: .system)
         closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
         closeButton.tintColor = CosmicFitTheme.Colours.cosmicBlue
         closeButton.translatesAutoresizingMaskIntoConstraints = false
@@ -115,6 +108,99 @@ class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate
             closeButton.widthAnchor.constraint(equalToConstant: 44),
             closeButton.heightAnchor.constraint(equalToConstant: 44)
         ])
+
+        updateNavigationChrome()
+    }
+
+    /// Pushes another content screen inside this detail sheet, keeping the tab bar visible.
+    func pushContentViewController(_ viewController: UIViewController, animated: Bool = true) {
+        let outgoing = contentViewController
+        contentStack.append(viewController)
+        contentViewController = viewController
+
+        addChild(viewController)
+        viewController.view.translatesAutoresizingMaskIntoConstraints = false
+        viewController.view.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
+        cardContainerView.insertSubview(viewController.view, belowSubview: closeButton)
+        viewController.didMove(toParent: self)
+
+        NSLayoutConstraint.deactivate(contentViewConstraints)
+        contentViewConstraints = contentConstraints(for: viewController.view)
+        NSLayoutConstraint.activate(contentViewConstraints)
+
+        outgoing.view.isHidden = true
+
+        if animated {
+            let offset = view.bounds.width * 0.12
+            viewController.view.alpha = 0
+            viewController.view.transform = CGAffineTransform(translationX: offset, y: 0)
+            UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseOut]) {
+                viewController.view.alpha = 1
+                viewController.view.transform = .identity
+            }
+        }
+
+        updateNavigationChrome()
+    }
+
+    func popContentViewController(animated: Bool = true) {
+        guard contentStack.count > 1 else { return }
+
+        let departing = contentStack.removeLast()
+        removeChildViewController(departing)
+        NSLayoutConstraint.deactivate(contentViewConstraints)
+        contentViewConstraints = []
+
+        guard let previous = contentStack.last else { return }
+        contentViewController = previous
+        previous.view.isHidden = false
+
+        contentViewConstraints = contentConstraints(for: previous.view)
+        NSLayoutConstraint.activate(contentViewConstraints)
+
+        if animated {
+            previous.view.alpha = 0.85
+            previous.view.transform = CGAffineTransform(translationX: -view.bounds.width * 0.08, y: 0)
+            UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseOut]) {
+                previous.view.alpha = 1
+                previous.view.transform = .identity
+            }
+        }
+
+        updateNavigationChrome()
+    }
+
+    private func installContentViewController(_ viewController: UIViewController) {
+        addChild(viewController)
+        viewController.view.translatesAutoresizingMaskIntoConstraints = false
+        viewController.view.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
+        cardContainerView.addSubview(viewController.view)
+        viewController.didMove(toParent: self)
+
+        contentViewConstraints = contentConstraints(for: viewController.view)
+        NSLayoutConstraint.activate(contentViewConstraints)
+    }
+
+    private func contentConstraints(for contentView: UIView) -> [NSLayoutConstraint] {
+        [
+            contentView.topAnchor.constraint(equalTo: cardContainerView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: cardContainerView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: cardContainerView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: cardContainerView.bottomAnchor)
+        ]
+    }
+
+    private func removeChildViewController(_ viewController: UIViewController) {
+        viewController.willMove(toParent: nil)
+        viewController.view.removeFromSuperview()
+        viewController.removeFromParent()
+    }
+
+    private func updateNavigationChrome() {
+        let showsBack = contentStack.count > 1
+        let symbolName = showsBack ? "chevron.left" : "xmark"
+        closeButton.setImage(UIImage(systemName: symbolName), for: .normal)
+        closeButton.accessibilityLabel = showsBack ? "Back" : "Close"
     }
     
     private func setupGesture() {
@@ -125,10 +211,19 @@ class GenericDetailViewController: UIViewController, UIGestureRecognizerDelegate
     
     // MARK: - Actions
     @objc func closeButtonTapped() {
+        if contentStack.count > 1 {
+            popContentViewController()
+            return
+        }
         dismissSelf()
     }
     
     func dismissSelf(completion: (() -> Void)? = nil) {
+        if presentingViewController != nil {
+            dismiss(animated: true, completion: completion)
+            return
+        }
+
         var currentParent: UIViewController? = parent
         while currentParent != nil {
             if let tabBarController = currentParent as? CosmicFitTabBarController {

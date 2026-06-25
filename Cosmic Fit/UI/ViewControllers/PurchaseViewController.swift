@@ -403,14 +403,11 @@ final class PurchaseViewController: UIViewController {
     }
 
     @objc private func legalLinkTapped(_ sender: UIButton) {
-        let urlString: String
+        guard let genericDetail = parent as? GenericDetailViewController else { return }
         if sender.tag == 1 {
-            urlString = "https://cosmicfit.app/terms"
+            genericDetail.pushContentViewController(TermsOfUseViewController())
         } else {
-            urlString = "https://cosmicfit.app/privacy"
-        }
-        if let url = URL(string: urlString) {
-            UIApplication.shared.open(url)
+            genericDetail.pushContentViewController(PrivacyPolicyViewController())
         }
     }
 
@@ -463,7 +460,7 @@ private final class SubscriptionOptionCard: UIControl {
 
         badgeLabel.font = CosmicFitTheme.Typography.dmSansFont(size: 11, weight: .bold)
         badgeLabel.textColor = .white
-        badgeLabel.backgroundColor = CosmicFitTheme.Colours.cosmicOrange
+        badgeLabel.backgroundColor = CosmicFitTheme.Colours.cosmicLilac
         badgeLabel.layer.cornerRadius = 4
         badgeLabel.layer.masksToBounds = true
         badgeLabel.textAlignment = .center

@@ -10,6 +10,16 @@ import UIKit
 
 class ScrollingRunesBackgroundView: UIView {
 
+    /// Visual treatment for the top/bottom dark gradient bands.
+    enum EdgeFadeStyle {
+        /// Daily Fit pre-reveal: slightly lighter, shorter bands.
+        case dailyFit
+        /// Launch screen: deeper fades over half the height.
+        case launch
+    }
+
+    var edgeFadeStyle: EdgeFadeStyle = .dailyFit
+
     // MARK: - Properties
     private let columnCount = 5
     private let runeImage = UIImage(named: "logo-animation-background")
@@ -30,14 +40,58 @@ class ScrollingRunesBackgroundView: UIView {
     private var bottomStripLayers: [CAGradientLayer] = []
     private var fadeBreathingActive = false
     private static let breathHalfPeriod: CFTimeInterval = 1.05 * (4.0 / 3.0)
-    /// Launch fades sit lighter than Daily Fit — half the base overlay opacity.
-    private static let breathOpacityMid: Float = 0.66
-    private static let breathOpacityDelta: Float = 0.20
     private static let breathKey = "edgeFadeBreath"
     private static let waveStripWidth: CGFloat = 24.0
-    private static let waveCrests: Double = 1.0
+
+    private var breathOpacityMid: Float {
+        switch edgeFadeStyle {
+        case .dailyFit: return 0.66
+        case .launch: return 0.5
+        }
+    }
+
+    private var breathOpacityDelta: Float {
+        switch edgeFadeStyle {
+        case .dailyFit: return 0.20
+        case .launch: return 0.22
+        }
+    }
+
+    private var waveCrests: Double {
+        switch edgeFadeStyle {
+        case .dailyFit: return 1.0
+        case .launch: return 0.5
+        }
+    }
+
+    private var topFadeHeightMultiplier: CGFloat {
+        switch edgeFadeStyle {
+        case .dailyFit: return 0.4
+        case .launch: return 0.5
+        }
+    }
+
+    private var bottomFadeHeightMultiplier: CGFloat {
+        switch edgeFadeStyle {
+        case .dailyFit: return 0.33
+        case .launch: return 0.5
+        }
+    }
+
+    private var edgeFadeTargetAlpha: CGFloat {
+        switch edgeFadeStyle {
+        case .dailyFit: return 0.75
+        case .launch: return 1.0
+        }
+    }
 
     // MARK: - Initialization
+    init(edgeFadeStyle: EdgeFadeStyle = .dailyFit) {
+        self.edgeFadeStyle = edgeFadeStyle
+        super.init(frame: .zero)
+        setupUI()
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -98,12 +152,12 @@ class ScrollingRunesBackgroundView: UIView {
             topFadeView.topAnchor.constraint(equalTo: topAnchor),
             topFadeView.leadingAnchor.constraint(equalTo: leadingAnchor),
             topFadeView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            topFadeView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.4),
+            topFadeView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: topFadeHeightMultiplier),
 
             bottomFadeView.bottomAnchor.constraint(equalTo: bottomAnchor),
             bottomFadeView.leadingAnchor.constraint(equalTo: leadingAnchor),
             bottomFadeView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            bottomFadeView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.33),
+            bottomFadeView.heightAnchor.constraint(equalTo: heightAnchor, multiplier: bottomFadeHeightMultiplier),
         ])
     }
 
@@ -139,7 +193,7 @@ class ScrollingRunesBackgroundView: UIView {
                 gradient.locations = [0.0, 1.0]
                 gradient.startPoint = CGPoint(x: 0.5, y: 0.0)
                 gradient.endPoint = CGPoint(x: 0.5, y: 1.0)
-                gradient.opacity = Self.breathOpacityMid
+                gradient.opacity = breathOpacityMid
                 fadeView.layer.addSublayer(gradient)
                 strips.append(gradient)
             }
@@ -202,8 +256,8 @@ class ScrollingRunesBackgroundView: UIView {
             for clip in self.columnClips {
                 clip.alpha = 1.0
             }
-            self.topFadeView.alpha = 0.75
-            self.bottomFadeView.alpha = 0.75
+            self.topFadeView.alpha = self.edgeFadeTargetAlpha
+            self.bottomFadeView.alpha = self.edgeFadeTargetAlpha
         }
 
         for index in 0..<columnTracks.count {
@@ -256,11 +310,11 @@ class ScrollingRunesBackgroundView: UIView {
             gradient.removeAnimation(forKey: Self.breathKey)
 
             let fraction = Double(index) / Double(strips.count)
-            let phaseOffset = fraction * Self.waveCrests * fullCycle
+            let phaseOffset = fraction * waveCrests * fullCycle
 
             let anim = CABasicAnimation(keyPath: "opacity")
-            anim.fromValue = Self.breathOpacityMid - Self.breathOpacityDelta
-            anim.toValue = Self.breathOpacityMid + Self.breathOpacityDelta
+            anim.fromValue = breathOpacityMid - breathOpacityDelta
+            anim.toValue = breathOpacityMid + breathOpacityDelta
             anim.duration = Self.breathHalfPeriod
             anim.autoreverses = true
             anim.repeatCount = .infinity
@@ -276,7 +330,7 @@ class ScrollingRunesBackgroundView: UIView {
     private func stopEdgeFadeBreathing() {
         for gradient in topStripLayers + bottomStripLayers {
             gradient.removeAnimation(forKey: Self.breathKey)
-            gradient.opacity = Self.breathOpacityMid
+            gradient.opacity = breathOpacityMid
         }
     }
 

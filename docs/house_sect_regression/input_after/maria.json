@@ -8,30 +8,30 @@
   },
   "code" : {
     "avoid" : [
-      "Discard anything falling below your exacting standards for fabric and fit, since a single poorly constructed garment immediately compromises your authority.",
+      "Anything falling below your exacting standards for fabric and fit, since a single poorly constructed garment immediately compromises your authority.",
       "Compromising on quality for convenience or speed. Your wardrobe demands the same rigour and patience that defines the rest of your life.",
       "Cheap fast fashion that falls apart after three washes. You feel the difference in quality even if nobody else sees it.",
       "Anything that does not feel good against your skin. If a seam scratches or a waistband digs, the outfit is already ruined.",
-      "Avoid harsh synthetic fabrics that trap heat and static, because your skin registers a cheap finish before you even check the care label.",
-      "Eliminate frivolous embellishments and trendy micro-details that distract from your naturally authoritative silhouette."
+      "Harsh synthetic fabrics that trap heat and static, because your skin registers a cheap finish before you even check the care label.",
+      "Frivolous embellishments and trendy micro-details that distract from your naturally authoritative silhouette."
     ],
     "consider" : [
-      "Treat your daily dressing routine as a brilliant opportunity for dramatic creative self-expression.",
-      "Let pure, unadulterated joy dictate your next major wardrobe purchase and ignore passing trends.",
-      "Invest in a heavy leather bag that develops a rich, beautiful patina over years of daily wear.",
-      "Wear heritage raw denim to personal perfection over years, letting every single fade tell your specific story."
+      "Treating your daily dressing routine as a brilliant opportunity for dramatic creative self-expression.",
+      "Letting pure, unadulterated joy dictate your next major wardrobe purchase and ignore passing trends.",
+      "Investing in a heavy leather bag that develops a rich, beautiful patina over years of daily wear.",
+      "Wearing heritage raw denim to personal perfection over years, letting every single fade tell your specific story."
     ],
     "leanInto" : [
       "Embodying the standard that others aspire to. Your wardrobe should look like the definitive version of whatever dress code applies.",
-      "Treat timeless tailored pieces as serious life investments rather than seasonal purchases, knowing a perfect wool overcoat appreciates in value over decades.",
+      "Treating timeless tailored pieces as serious life investments rather than seasonal purchases, knowing a perfect wool overcoat appreciates in value over decades.",
       "Building an impeccable collection where nothing is accidental, nothing is filler, and every piece earns its place through quality.",
       "Investing in fewer, better pieces that you will reach for every week. If it does not earn its place in a small wardrobe, it does not belong.",
       "Touching before you buy. Run the fabric between your fingers. If the texture does not feel like a reward, walk away.",
       "Choosing natural fibres over synthetics as a rule. Cashmere, silk, and cotton age gracefully. Polyester does not."
     ]
   },
-  "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-06-19T17:06:42Z",
+  "engineVersion" : "2.1.0",
+  "generatedAt" : "2026-06-24T15:28:25Z",
   "hardware" : {
     "metalsText" : "Hardware on you should feel like an investment rather than a decorative afterthought. You need serious, satisfying weight, the kind of brushed platinum tones that pulls together a heavy winter coat or secures a beautifully constructed leather bag. Flimsy, high-shine chains and noisy zips look nervous next to your natural composure. Lean on solid polished silver tones details with a matte or gently aged finish, ensuring every buckle actually serves a structural purpose. When the metal feels substantial enough to outlast the garment itself, it belongs in your rotation.",
     "recommendedMetals" : [
@@ -340,6 +340,6 @@
   "userInfo" : {
     "birthDate" : "1989-04-28T00:00:00Z",
     "birthLocation" : "Unknown",
-    "generationDate" : "2026-06-19T17:06:42Z"
+    "generationDate" : "2026-06-24T15:28:25Z"
   }
 }

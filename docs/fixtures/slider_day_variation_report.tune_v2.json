@@ -1,0 +1,483 @@
+{
+  "generated": "2026-06-24T10:36:23.498491+01:00",
+  "engine": "stage1_experimental",
+  "cohort": "synthetic_cohort",
+  "nUsers": 50,
+  "window": {
+    "start": "2026-04-23",
+    "end": "2026-06-21",
+    "days": 60
+  },
+  "thresholds": {
+    "imperceptibleDelta": 0.02,
+    "meaningfulDelta": 0.05
+  },
+  "aggregate": {
+    "vibrancy": {
+      "nUsers": 50,
+      "meanRawRange": 0.5174,
+      "medianRawRange": 0.4984,
+      "meanDayDeltaUI": 0.1141,
+      "medianDayDeltaUI": 0.0914,
+      "meanUiDistinct": 57.8,
+      "pctUsersMostlyUnchanged": 0.0,
+      "pctUsersMostlyImperceptible": 0.0,
+      "pctUsersRarelyMeaningful": 0.0,
+      "meanMaxUnchangedStreakUI": 1.5,
+      "p90MaxUnchangedStreakUI": 2,
+      "meanPctUnchangedDayPairsUI": 0.8,
+      "meanPctMeaningfulDayPairsUI": 67.4
+    },
+    "contrast": {
+      "nUsers": 50,
+      "meanRawRange": 0.3245,
+      "medianRawRange": 0.3228,
+      "meanDayDeltaUI": 0.0774,
+      "medianDayDeltaUI": 0.0562,
+      "meanUiDistinct": 41.5,
+      "pctUsersMostlyUnchanged": 0.0,
+      "pctUsersMostlyImperceptible": 0.0,
+      "pctUsersRarelyMeaningful": 0.0,
+      "meanMaxUnchangedStreakUI": 3.8,
+      "p90MaxUnchangedStreakUI": 7,
+      "meanPctUnchangedDayPairsUI": 14.5,
+      "meanPctMeaningfulDayPairsUI": 53.3
+    },
+    "metalTone": {
+      "nUsers": 50,
+      "meanRawRange": 0.4945,
+      "medianRawRange": 0.3674,
+      "meanDayDeltaUI": 0.0537,
+      "medianDayDeltaUI": 0.0,
+      "meanUiDistinct": 25.4,
+      "pctUsersMostlyUnchanged": 66.0,
+      "pctUsersMostlyImperceptible": 60.0,
+      "pctUsersRarelyMeaningful": 42.0,
+      "meanMaxUnchangedStreakUI": 20.7,
+      "p90MaxUnchangedStreakUI": 36,
+      "meanPctUnchangedDayPairsUI": 53.5,
+      "meanPctMeaningfulDayPairsUI": 18.3
+    },
+    "masculineFeminine": {
+      "nUsers": 50,
+      "meanRawRange": 0.3768,
+      "medianRawRange": 0.3565,
+      "meanDayDeltaUI": 0.0988,
+      "medianDayDeltaUI": 0.0682,
+      "meanUiDistinct": 53.7,
+      "pctUsersMostlyUnchanged": 10.0,
+      "pctUsersMostlyImperceptible": 10.0,
+      "pctUsersRarelyMeaningful": 10.0,
+      "meanMaxUnchangedStreakUI": 4.4,
+      "p90MaxUnchangedStreakUI": 26,
+      "meanPctUnchangedDayPairsUI": 9.3,
+      "meanPctMeaningfulDayPairsUI": 57.4
+    },
+    "angularRounded": {
+      "nUsers": 50,
+      "meanRawRange": 0.362,
+      "medianRawRange": 0.3824,
+      "meanDayDeltaUI": 0.0874,
+      "medianDayDeltaUI": 0.0766,
+      "meanUiDistinct": 46.4,
+      "pctUsersMostlyUnchanged": 26.0,
+      "pctUsersMostlyImperceptible": 6.0,
+      "pctUsersRarelyMeaningful": 0.0,
+      "meanMaxUnchangedStreakUI": 5.6,
+      "p90MaxUnchangedStreakUI": 20,
+      "meanPctUnchangedDayPairsUI": 18.9,
+      "meanPctMeaningfulDayPairsUI": 53.4
+    },
+    "structuredDraped": {
+      "nUsers": 50,
+      "meanRawRange": 0.3123,
+      "medianRawRange": 0.3279,
+      "meanDayDeltaUI": 0.0732,
+      "medianDayDeltaUI": 0.0641,
+      "meanUiDistinct": 42.3,
+      "pctUsersMostlyUnchanged": 32.0,
+      "pctUsersMostlyImperceptible": 12.0,
+      "pctUsersRarelyMeaningful": 12.0,
+      "meanMaxUnchangedStreakUI": 7.5,
+      "p90MaxUnchangedStreakUI": 27,
+      "meanPctUnchangedDayPairsUI": 25.3,
+      "meanPctMeaningfulDayPairsUI": 48.0
+    }
+  },
+  "deltaHistograms": {
+    "vibrancy": {
+      "labels": [
+        "0 (unchanged)",
+        "<0.02",
+        "0.02\u20130.05",
+        "0.05\u20130.10",
+        "0.10\u20130.20",
+        "0.20\u20130.50",
+        ">0.50"
+      ],
+      "counts": [
+        41,
+        383,
+        539,
+        639,
+        794,
+        552,
+        2
+      ],
+      "pct": [
+        1.4,
+        13.0,
+        18.3,
+        21.7,
+        26.9,
+        18.7,
+        0.1
+      ],
+      "nPairs": 2950
+    },
+    "contrast": {
+      "labels": [
+        "0 (unchanged)",
+        "<0.02",
+        "0.02\u20130.05",
+        "0.05\u20130.10",
+        "0.10\u20130.20",
+        "0.20\u20130.50",
+        ">0.50"
+      ],
+      "counts": [
+        448,
+        375,
+        555,
+        672,
+        623,
+        277,
+        0
+      ],
+      "pct": [
+        15.2,
+        12.7,
+        18.8,
+        22.8,
+        21.1,
+        9.4,
+        0.0
+      ],
+      "nPairs": 2950
+    },
+    "metalTone": {
+      "labels": [
+        "0 (unchanged)",
+        "<0.02",
+        "0.02\u20130.05",
+        "0.05\u20130.10",
+        "0.10\u20130.20",
+        "0.20\u20130.50",
+        ">0.50"
+      ],
+      "counts": [
+        1580,
+        798,
+        32,
+        60,
+        141,
+        300,
+        39
+      ],
+      "pct": [
+        53.6,
+        27.1,
+        1.1,
+        2.0,
+        4.8,
+        10.2,
+        1.3
+      ],
+      "nPairs": 2950
+    },
+    "masculineFeminine": {
+      "labels": [
+        "0 (unchanged)",
+        "<0.02",
+        "0.02\u20130.05",
+        "0.05\u20130.10",
+        "0.10\u20130.20",
+        "0.20\u20130.50",
+        ">0.50"
+      ],
+      "counts": [
+        295,
+        429,
+        532,
+        606,
+        650,
+        432,
+        6
+      ],
+      "pct": [
+        10.0,
+        14.5,
+        18.0,
+        20.5,
+        22.0,
+        14.6,
+        0.2
+      ],
+      "nPairs": 2950
+    },
+    "angularRounded": {
+      "labels": [
+        "0 (unchanged)",
+        "<0.02",
+        "0.02\u20130.05",
+        "0.05\u20130.10",
+        "0.10\u20130.20",
+        "0.20\u20130.50",
+        ">0.50"
+      ],
+      "counts": [
+        586,
+        385,
+        403,
+        557,
+        627,
+        384,
+        8
+      ],
+      "pct": [
+        19.9,
+        13.1,
+        13.7,
+        18.9,
+        21.3,
+        13.0,
+        0.3
+      ],
+      "nPairs": 2950
+    },
+    "structuredDraped": {
+      "labels": [
+        "0 (unchanged)",
+        "<0.02",
+        "0.02\u20130.05",
+        "0.05\u20130.10",
+        "0.10\u20130.20",
+        "0.20\u20130.50",
+        ">0.50"
+      ],
+      "counts": [
+        760,
+        350,
+        425,
+        568,
+        573,
+        274,
+        0
+      ],
+      "pct": [
+        25.8,
+        11.9,
+        14.4,
+        19.3,
+        19.4,
+        9.3,
+        0.0
+      ],
+      "nPairs": 2950
+    }
+  },
+  "contrastEnvelopeCalibration": {
+    "p95Deviation": 0.267,
+    "recommendedHalfSpan": 0.22,
+    "nSamples": 3000,
+    "formula": "clamp(round(P95 + 0.04, 2), min=0.14, max=0.22)"
+  },
+  "worstUsers": {
+    "vibrancy": [
+      {
+        "userId": "synth_006_aries_london",
+        "maxUnchangedStreakUI": 3,
+        "pctUnchangedDayPairsUI": 5.1,
+        "rawRange": 0.486503
+      },
+      {
+        "userId": "synth_029_taurus_sydney",
+        "maxUnchangedStreakUI": 3,
+        "pctUnchangedDayPairsUI": 3.4,
+        "rawRange": 0.608697
+      },
+      {
+        "userId": "synth_001_aries_newyork",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 1.7,
+        "rawRange": 0.486432
+      },
+      {
+        "userId": "synth_000_aries_london",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 1.7,
+        "rawRange": 0.542587
+      },
+      {
+        "userId": "synth_007_aries_newyork",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 1.7,
+        "rawRange": 0.42802
+      },
+      {
+        "userId": "synth_004_aries_newyork",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 1.7,
+        "rawRange": 0.46747
+      },
+      {
+        "userId": "synth_003_aries_london",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 1.7,
+        "rawRange": 0.464789
+      },
+      {
+        "userId": "synth_005_aries_sydney",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 1.7,
+        "rawRange": 0.457992
+      },
+      {
+        "userId": "synth_008_aries_sydney",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 1.7,
+        "rawRange": 0.482014
+      },
+      {
+        "userId": "synth_009_aries_london",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 1.7,
+        "rawRange": 0.476062
+      }
+    ],
+    "contrast": [
+      {
+        "userId": "synth_035_taurus_sydney",
+        "maxUnchangedStreakUI": 9,
+        "pctUnchangedDayPairsUI": 37.3,
+        "rawRange": 0.197872
+      },
+      {
+        "userId": "synth_029_taurus_sydney",
+        "maxUnchangedStreakUI": 8,
+        "pctUnchangedDayPairsUI": 33.9,
+        "rawRange": 0.250435
+      },
+      {
+        "userId": "synth_027_taurus_london",
+        "maxUnchangedStreakUI": 7,
+        "pctUnchangedDayPairsUI": 40.7,
+        "rawRange": 0.254772
+      },
+      {
+        "userId": "synth_032_taurus_sydney",
+        "maxUnchangedStreakUI": 7,
+        "pctUnchangedDayPairsUI": 32.2,
+        "rawRange": 0.199974
+      },
+      {
+        "userId": "synth_023_taurus_sydney",
+        "maxUnchangedStreakUI": 7,
+        "pctUnchangedDayPairsUI": 25.4,
+        "rawRange": 0.290738
+      },
+      {
+        "userId": "synth_041_gemini_sydney",
+        "maxUnchangedStreakUI": 7,
+        "pctUnchangedDayPairsUI": 16.9,
+        "rawRange": 0.310876
+      },
+      {
+        "userId": "synth_028_taurus_newyork",
+        "maxUnchangedStreakUI": 6,
+        "pctUnchangedDayPairsUI": 28.8,
+        "rawRange": 0.229979
+      },
+      {
+        "userId": "synth_031_taurus_newyork",
+        "maxUnchangedStreakUI": 6,
+        "pctUnchangedDayPairsUI": 28.8,
+        "rawRange": 0.274479
+      },
+      {
+        "userId": "synth_042_gemini_london",
+        "maxUnchangedStreakUI": 6,
+        "pctUnchangedDayPairsUI": 18.6,
+        "rawRange": 0.254548
+      },
+      {
+        "userId": "synth_030_taurus_london",
+        "maxUnchangedStreakUI": 5,
+        "pctUnchangedDayPairsUI": 30.5,
+        "rawRange": 0.264156
+      }
+    ],
+    "metalTone": [
+      {
+        "userId": "synth_009_aries_london",
+        "maxUnchangedStreakUI": 39,
+        "pctUnchangedDayPairsUI": 81.4,
+        "rawRange": 0.227624
+      },
+      {
+        "userId": "synth_010_aries_newyork",
+        "maxUnchangedStreakUI": 39,
+        "pctUnchangedDayPairsUI": 81.4,
+        "rawRange": 0.227624
+      },
+      {
+        "userId": "synth_011_aries_sydney",
+        "maxUnchangedStreakUI": 39,
+        "pctUnchangedDayPairsUI": 81.4,
+        "rawRange": 0.227624
+      },
+      {
+        "userId": "synth_012_aries_london",
+        "maxUnchangedStreakUI": 36,
+        "pctUnchangedDayPairsUI": 76.3,
+        "rawRange": 0.227624
+      },
+      {
+        "userId": "synth_013_aries_newyork",
+        "maxUnchangedStreakUI": 36,
+        "pctUnchangedDayPairsUI": 76.3,
+        "rawRange": 0.227624
+      },
+      {
+        "userId": "synth_014_aries_sydney",
+        "maxUnchangedStreakUI": 36,
+        "pctUnchangedDayPairsUI": 76.3,
+        "rawRange": 0.227624
+      },
+      {
+        "userId": "synth_015_aries_london",
+        "maxUnchangedStreakUI": 35,
+        "pctUnchangedDayPairsUI": 74.6,
+        "rawRange": 0.227624
+      },
+      {
+        "userId": "synth_016_aries_newyork",
+        "maxUnchangedStreakUI": 35,
+        "pctUnchangedDayPairsUI": 74.6,
+        "rawRange": 0.227624
+      },
+      {
+        "userId": "synth_017_aries_sydney",
+        "maxUnchangedStreakUI": 35,
+        "pctUnchangedDayPairsUI": 74.6,
+        "rawRange": 0.227624
+      },
+      {
+        "userId": "synth_006_aries_london",
+        "maxUnchangedStreakUI": 34,
+        "pctUnchangedDayPairsUI": 66.1,
+        "rawRange": 0.320109
+      }
+    ]
+  }
+}

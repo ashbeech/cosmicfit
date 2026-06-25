@@ -1,0 +1,42 @@
+Day variation audit: 216 users × 60 days
+Window: 2026-04-23 .. 2026-06-21
+  20/216 users complete
+  40/216 users complete
+  60/216 users complete
+  80/216 users complete
+  100/216 users complete
+  WARN: synth_115_libra_newyork @ 2026-04-25: Remote end closed connection without response
+  WARN: synth_116_libra_sydney @ 2026-04-25: Remote end closed connection without response
+  WARN: synth_117_libra_london @ 2026-04-25: Remote end closed connection without response
+  WARN: synth_118_libra_newyork @ 2026-04-25: Remote end closed connection without response
+  WARN: synth_119_libra_sydney @ 2026-04-25: Remote end closed connection without response
+  WARN: synth_112_libra_newyork @ 2026-04-26: Remote end closed connection without response
+  WARN: synth_113_libra_sydney @ 2026-04-26: Remote end closed connection without response
+  WARN: synth_114_libra_london @ 2026-04-26: Remote end closed connection without response
+  120/216 users complete
+  140/216 users complete
+  160/216 users complete
+  180/216 users complete
+  200/216 users complete
+Slider Day-Variation Report
+Engine: stage1_experimental
+Cohort: synthetic_cohort (216 users)
+Window: 2026-04-23 .. 2026-06-21 (60 days)
+Generated: 2026-06-24T12:42:15.584470+01:00
+
+=== AGGREGATE (UI-visible day-over-day) ===
+slider                medΔUI meanΔUI   %unch  %<0.02  %≥0.05 maxStrk distPos
+vibrancy              0.0897  0.1134     0.4    13.3    69.0     1.2    58.5
+contrast              0.0573  0.0830    14.4    27.9    54.0     4.0    41.4
+metalTone             0.0072  0.0545     8.8    71.7    25.9     3.7    54.1
+masculineFeminine     0.0588  0.0883    13.1    29.5    52.7     6.7    51.7
+angularRounded        0.0723  0.0869    15.2    30.5    54.9     5.2    49.3
+structuredDraped      0.0631  0.0776    16.0    30.7    51.9     6.1    49.0
+
+=== SCALE vs SILHOUETTE VERDICT ===
+  vibrancy: 0% users see meaningful shift <10% of days; mean unchanged streak 1.2 days
+  contrast: 0% users see meaningful shift <10% of days; mean unchanged streak 4.0 days
+  metalTone: 6% users see meaningful shift <10% of days; mean unchanged streak 3.7 days
+
+Wrote docs/fixtures/slider_day_variation_report.post_fix.json
+Wrote /Users/ash/dev/mobile_apps/cosmicfit/docs/fixtures/slider_day_variation_report.txt

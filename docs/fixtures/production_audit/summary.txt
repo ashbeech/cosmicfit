@@ -1,12 +1,12 @@
 Production audit: 223 users x 45 days (10035 user-days)
 
-TAROT  adjacent repeats: 0 | hard-block violations: 0 | min gap: 10 | avg unique/14d: 12.7179
-REPEAT NARRATIVE  exact title+ritual repeats: 3179 / 5228 repeated-card occurrences
-ESSENCES  avg unique top-3/14d: 10.7126 | max streak: 4
-SLIDERS  avg display range: vibrancy=0.4598 contrast=0.2163 metalTone=0.5189 masculineFeminine=0.3282 angularRounded=0.5141 structuredDraped=0.3723
-SLIDERS  stuck user counts: {'vibrancy': 0, 'contrast': 34, 'metalTone': 4, 'masculineFeminine': 74, 'angularRounded': 26, 'structuredDraped': 79}
-PALETTE  avg unique colours: 14.009 | next-day retention: 0.8426
-COHESION  overall pass: 1.0 | keyword hit: 0.5166 | energy cosine: 0.9092
+TAROT  adjacent repeats: 0 | hard-block violations: 0 | min gap: 10 | avg unique/14d: 11.5093
+REPEAT NARRATIVE  exact title+ritual repeats: 0 / 6486 repeated-card occurrences
+ESSENCES  avg unique top-3/14d: 12.3228 | max streak: 1
+SLIDERS  avg display range: vibrancy=0.4849 contrast=0.2209 metalTone=0.519 masculineFeminine=0.326 angularRounded=0.3311 structuredDraped=0.3275
+SLIDERS  stuck user counts: {'vibrancy': 0, 'contrast': 29, 'metalTone': 4, 'masculineFeminine': 23, 'angularRounded': 5, 'structuredDraped': 2}
+PALETTE  avg unique colours: 16.7444 | next-day retention: 0.5794
+COHESION  overall pass: 1.0 | keyword hit: 0.5249 | energy cosine: 0.9129
 GAPS  days with missing fields: 0
 VERDICTS  fails: none of 50175 checks
 BLUEPRINTS  223 users | missing sections: 0 users | sentences shared by >20% of users: 2 of 5373

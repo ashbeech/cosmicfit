@@ -632,13 +632,8 @@ enum DailyNarrativeSelector {
         }()
         let targetVibrancy = clamp01(vibrancyBaseline + vibeModulation + tempoMod + intensityMod)
 
-        // Contrast: existing stage1 formula (axis-driven) + plan relationship modifier
+        // Contrast: shared Stage 1 formula (axes + sky-vibe + tempo) + plan modifiers
         let contrastBaseline = contrastBaselineValue(blueprint: blueprint)
-        let coeff = calibration.stage2Sensitivity.contrastCoeff
-        let visNorm = snapshot.axes.visibility / 10.0
-        let strNorm = snapshot.axes.strategy / 10.0
-        let contrastModulation = ((visNorm - 0.5) * Stage1ScaleSensitivity.contrastVisWeight
-            + (strNorm - 0.5) * Stage1ScaleSensitivity.contrastStrWeight) * coeff
         let relationshipContrastMod: Double = {
             switch relationship {
             case .reinforce: return  0.02
@@ -647,11 +642,17 @@ enum DailyNarrativeSelector {
             case .contrast:  return  0.08
             }
         }()
-        let targetContrast = clamp01(contrastBaseline + contrastModulation + relationshipContrastMod)
+        let targetContrast = BlueprintLensEngine.computeStage1ContrastRaw(
+            palette: blueprint.palette,
+            snapshot: snapshot,
+            calibration: calibration,
+            relationshipMod: relationshipContrastMod,
+            intensityMod: 0
+        )
 
-        // Metal tone: existing derivation
-        let targetMetalTone = BlueprintLensEngine.deriveMetalTonePublic(
-            from: blueprint, snapshot: snapshot, calibration: calibration, mode: .stage1Experimental
+        // Metal tone: sky-native stage1 formula (mirrors contrast)
+        let targetMetalTone = BlueprintLensEngine.computeStage1MetalToneRaw(
+            blueprint: blueprint, snapshot: snapshot, calibration: calibration
         )
 
         // Silhouette: use precomputed (from sky axes, per existing stage1 tanh formula)

@@ -1,0 +1,26 @@
+Day variation audit: 50 users × 60 days
+Window: 2026-04-23 .. 2026-06-21
+  20/50 users complete
+  40/50 users complete
+Slider Day-Variation Report
+Engine: stage1_experimental
+Cohort: synthetic_cohort (50 users)
+Window: 2026-04-23 .. 2026-06-21 (60 days)
+Generated: 2026-06-24T10:36:23.498491+01:00
+
+=== AGGREGATE (UI-visible day-over-day) ===
+slider                medΔUI meanΔUI   %unch  %<0.02  %≥0.05 maxStrk distPos
+vibrancy              0.0914  0.1141     0.8    14.4    67.4     1.5    57.8
+contrast              0.0562  0.0774    14.5    27.9    53.3     3.8    41.5
+metalTone             0.0000  0.0537    53.5    80.7    18.3    20.7    25.4
+masculineFeminine     0.0682  0.0988     9.3    24.5    57.3     4.4    53.7
+angularRounded        0.0766  0.0874    18.9    33.0    53.5     5.6    46.4
+structuredDraped      0.0641  0.0732    25.3    37.7    48.0     7.5    42.3
+
+=== SCALE vs SILHOUETTE VERDICT ===
+  vibrancy: 0% users see meaningful shift <10% of days; mean unchanged streak 1.5 days
+  contrast: 0% users see meaningful shift <10% of days; mean unchanged streak 3.8 days
+  metalTone: 42% users see meaningful shift <10% of days; mean unchanged streak 20.7 days
+
+Wrote docs/fixtures/slider_day_variation_report.tune_v2.json
+Wrote /Users/ash/dev/mobile_apps/cosmicfit/docs/fixtures/slider_day_variation_report.txt

@@ -21,15 +21,16 @@ FIXTURES = ROOT / "docs" / "fixtures"
 VIBRANCY_PRACTICAL_HALF_SPAN = 0.22
 CONTRAST_MAX_BLEND_NORM = 0.50
 CONTRAST_COEFF = 0.55  # from stage1ExperimentalCalibration
-CONTRAST_PRACTICAL_HALF_SPAN = 0.14  # Plan 4: replaces analytical envelope for stage1
+CONTRAST_PRACTICAL_HALF_SPAN = 0.22  # Phase 3: P95 deviation 0.269 + 0.04 margin (cap 0.22)
 METAL_NUDGE_CAP = 0.30
+METAL_PRACTICAL_HALF_SPAN = 0.36  # Tuned for G2: balances display travel vs rail-pin
 LUNAR_NAMED_PHASE_NUDGE = 0.03
 LUNAR_DEGREE_SCALE = 0.15
 LUNAR_DEGREE_MAX_ABS = LUNAR_DEGREE_SCALE * 0.5
 SILHOUETTE_FLOOR = 0.12
 SILHOUETTE_CEILING = 0.88
-SILHOUETTE_SD_PRACTICAL_HALF_SPAN = 0.25  # Plan 4: per-user envelope for SD
-SILHOUETTE_MFAR_PRACTICAL_HALF_SPAN = 0.20  # Plan 4: per-user envelope for MF/AR
+SILHOUETTE_SD_PRACTICAL_HALF_SPAN = 0.34  # Plan 4: per-user envelope for SD (widened C2)
+SILHOUETTE_MFAR_PRACTICAL_HALF_SPAN = 0.34  # Plan 4: per-user envelope for MF/AR (widened C3)
 
 # Blueprint variant cycle (idx % 6)
 VARIANTS = [
@@ -74,9 +75,9 @@ def contrast_envelope(baseline: float) -> tuple[float, float]:
 
 
 def metal_envelope(baseline: float) -> tuple[float, float]:
-    max_nudge = METAL_NUDGE_CAP + LUNAR_NAMED_PHASE_NUDGE + LUNAR_DEGREE_MAX_ABS
-    floor = max(0.0, min(1.0, baseline - max_nudge))
-    ceiling = max(0.0, min(1.0, baseline + max_nudge))
+    half_span = METAL_PRACTICAL_HALF_SPAN
+    floor = max(0.0, min(1.0, baseline - half_span))
+    ceiling = max(0.0, min(1.0, baseline + half_span))
     return floor, ceiling
 
 

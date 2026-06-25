@@ -466,6 +466,29 @@ struct DailyFitUIIntegrationTests {
         #expect(sp.metalTone.value == payload.metalTone)
     }
 
+    // U3 — Metal marker uses continuous displayPosition on presentation path
+    @Test("U3: Metal marker uses continuous displayPosition, not 3-snap")
+    func testMetalMarkerUsesContinuousDisplayPosition() {
+        let payload = BlueprintLensEngine.generatePayload(
+            blueprint: Fixtures.warmBlueprint,
+            snapshot: Fixtures.balancedSnapshot
+        )
+        guard let sp = payload.scalePresentation else {
+            Issue.record("scalePresentation should be populated")
+            return
+        }
+        let dp = sp.metalTone.displayPosition
+        let snapped = DailyFitViewController.snapMetalToThreePositions(dp)
+        // With presentation path the UI now uses dp directly, not snapped.
+        // At least verify snap function still works for legacy and that
+        // values in the middle tertile would have been collapsed.
+        if dp > 1.0 / 3.0 && dp < 2.0 / 3.0 {
+            #expect(snapped == 0.5, "Middle-tertile values snap to 0.5")
+            #expect(dp != 0.5, "Raw displayPosition should differ from snap at 0.5")
+        }
+        #expect(dp >= 0.0 && dp <= 1.0)
+    }
+
     // U2 — Legacy payload: falls back to absolute (no scalePresentation)
     @Test("Legacy payload without scalePresentation decodes and has nil presentation")
     func testLegacyPayloadFallback() throws {

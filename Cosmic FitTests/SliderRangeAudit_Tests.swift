@@ -110,7 +110,6 @@ struct SliderRangeAudit_Tests {
                 guard let sp = payload.scalePresentation else { continue }
 
                 let metalDp = sp.metalTone.displayPosition
-                let metalSnapped = DailyFitViewController.snapMetalToThreePositions(metalDp)
 
                 sliderRecords["vibrancy"]!.append(SliderDayRecord(
                     rawValue: payload.vibrancy,
@@ -134,7 +133,7 @@ struct SliderRangeAudit_Tests {
                     floor: sp.metalTone.floor,
                     ceiling: sp.metalTone.ceiling,
                     displayPosition: metalDp,
-                    uiMarkerPosition: metalSnapped
+                    uiMarkerPosition: metalDp
                 ))
                 if let mf = sp.masculineFeminine {
                     sliderRecords["masculineFeminine"]!.append(SliderDayRecord(

@@ -43,15 +43,14 @@ BODIES = [
 # Example: "Buying for the ten-year test. If it still feels powerful in a
 #           decade, it belongs in your collection."
 #
-# Voice rules:
-#   - Gerund opening ("Checking...", "Investing...") or imperative-then-test.
-#     Never bare noun phrases like "quality over quantity".
-#   - Fashion-insider register. Direct, confident, second-person. No hedging.
-#   - Each directive must reference a concrete garment, fabric, shopping
-#     scenario, or physical sensation. No abstract-only statements.
-#   - Must be astrologically distinct: Virgo precision ≠ Capricorn discipline;
-#     Scorpio control ≠ Aquarius detachment.
-#   - Must be wearable advice a sharp stylist would actually give.
+# Voice rules (section header flow — bullets continue the UI section title):
+#   Lean Into: gerund opening only ("Investing…", "Building…"). Never imperatives.
+#   Avoid: noun phrase or gerund ("Harsh synthetic fabrics…", "Buying on impulse…").
+#     Never repeat Avoid/Resist/Skip/Stop/Reject/Refuse/Ditch.
+#   Consider: gerund OR noun/article phrase ("Wearing…", "One statement piece…",
+#     "The three-year test…"). Never imperatives (Wear, Build, Use).
+#   Part 1 + Part 2 structure still applies (principle + proof).
+#   Fashion-insider register. Direct, confident, second-person. No hedging.
 #
 # PATTERN NAMES must pass the "textile printer test": could a fabric
 # designer produce a swatch from the name alone? Vague entries like
@@ -3873,6 +3872,40 @@ FALLBACK_PALETTE_POOL = [
 # ASSEMBLY
 # ═══════════════════════════════════════════════════════════════
 
+def _overlay_canonical_code_fields(dataset):
+    """Preserve Code bullet copy from astrological_style_dataset.json on regen."""
+    json_path = REPO_ROOT / "data" / "style_guide" / "astrological_style_dataset.json"
+    if not json_path.is_file():
+        return dataset
+    with open(json_path, encoding="utf-8") as f:
+        canonical = json.load(f)
+    for key, entry in canonical.get("planet_sign", {}).items():
+        if key not in dataset.get("planet_sign", {}):
+            continue
+        target = dataset["planet_sign"][key]
+        for field in ("code_leaninto", "code_avoid", "code_consider"):
+            if field in entry:
+                target[field] = entry[field]
+        mood = entry.get("opposites", {}).get("mood")
+        if mood is not None:
+            target.setdefault("opposites", {})["mood"] = mood
+    for key, entry in canonical.get("house_placements", {}).items():
+        if key not in dataset.get("house_placements", {}):
+            continue
+        target = dataset["house_placements"][key]
+        for field in ("lean_into_bias", "code_consider_bias"):
+            if field in entry:
+                target[field] = entry[field]
+    for key, entry in canonical.get("aspects", {}).items():
+        if key not in dataset.get("aspects", {}):
+            continue
+        target = dataset["aspects"][key]
+        for field in ("code_addition_leaninto", "code_addition_avoid"):
+            if field in entry:
+                target[field] = entry[field]
+    return dataset
+
+
 def build_dataset():
     planet_sign = {}
     planet_sign.update(VENUS_ENTRIES)
@@ -3891,7 +3924,7 @@ def build_dataset():
         "colour_library": COLOUR_LIBRARY,
         "fallback_palette_pool": FALLBACK_PALETTE_POOL,
     }
-    return dataset
+    return _overlay_canonical_code_fields(dataset)
 
 
 def validate_dataset(dataset):

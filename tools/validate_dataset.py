@@ -540,6 +540,50 @@ def validate_astrological_axioms(ps: dict, report: ValidationReport):
     if overlap_count == 0:
         report.log("Axiom 4 PASS: no keywords appear in both code_leaninto and code_avoid")
 
+    # Axiom 6: Code bullets must flow from section titles (Lean Into / Avoid / Consider)
+    sys.path.insert(0, str(REPO_ROOT / "tools"))
+    from code_header_flow_rules import header_flow_violation, section_kind_from_item
+
+    header_flow_failures = 0
+    for section_name, entries in (
+        ("planet_sign", ps.items()),
+        ("house_placements", dataset.get("house_placements", {}).items()),
+    ):
+        for key, entry in entries:
+            if not isinstance(entry, dict):
+                continue
+            for field in ("code_leaninto", "code_avoid", "code_consider", "lean_into_bias", "code_consider_bias"):
+                for i, text in enumerate(entry.get(field, []) or []):
+                    kind = section_kind_from_item(field, "")
+                    if kind and header_flow_violation(str(text), kind):
+                        header_flow_failures += 1
+                        report.error(
+                            f"Axiom 6 FAIL: {section_name}.{key}.{field}[{i}]: "
+                            f"{header_flow_violation(str(text), kind)} — \"{str(text)[:60]}…\""
+                        )
+            for i, text in enumerate(entry.get("opposites", {}).get("mood", []) or []):
+                if header_flow_violation(str(text), "avoid"):
+                    header_flow_failures += 1
+                    report.error(
+                        f"Axiom 6 FAIL: {section_name}.{key}.opposites.mood[{i}]: "
+                        f"{header_flow_violation(str(text), 'avoid')} — \"{str(text)[:60]}…\""
+                    )
+    for key, entry in dataset.get("aspects", {}).items():
+        if not isinstance(entry, dict):
+            continue
+        for field in ("code_addition_leaninto", "code_addition_avoid"):
+            text = entry.get(field, "")
+            if text:
+                kind = section_kind_from_item(field, "")
+                if kind and header_flow_violation(str(text), kind):
+                    header_flow_failures += 1
+                    report.error(
+                        f"Axiom 6 FAIL: aspects.{key}.{field}: "
+                        f"{header_flow_violation(str(text), kind)} — \"{str(text)[:60]}…\""
+                    )
+    if header_flow_failures == 0:
+        report.log("Axiom 6 PASS: all Code bullets flow from section titles")
+
     # Axiom 5: Venus in earth sign → grounded/textured style (not airy/ethereal)
     grounded_keywords = [
         "grounded", "textured", "substantial", "structured", "earthy",

@@ -8,16 +8,16 @@
   },
   "code" : {
     "avoid" : [
-      "Avoid blunt, aggressive dressing that completely shuts down dialogue, remembering that your true power comes from quiet persuasion rather than loud intimidation.",
-      "Skip harsh industrial textures that contradict your natural grace, as rough fabrics actively fight your personal style instead of channelling it effectively.",
+      "Blunt, aggressive dressing that completely shuts down dialogue, remembering that your true power comes from quiet persuasion rather than loud intimidation.",
+      "Harsh industrial textures that contradict your natural grace, as rough fabrics actively fight your personal style instead of channelling it effectively.",
       "Anything scratchy, stiff, or uncomfortable against your skin. If you have to endure a garment, it is already failing.",
-      "Refuse trend pieces that sacrifice physical comfort for sheer novelty. Your body violently rejects restrictive construction much faster than your mind accepts a bargain.",
-      "Refuse to rush through any purchases without actually touching the fabric first. Your hands instinctively know infinitely more about genuine construction quality than any woven designer label.",
+      "Trend pieces that sacrifice physical comfort for sheer novelty, because your body rejects restrictive construction faster than your mind accepts a bargain.",
+      "Rushing through purchases without actually touching the fabric first, when your hands know more about construction quality than any woven designer label.",
       "Fast fashion impulse buys that dilute the quality of your collection. One cheap piece can drag down an entire outfit."
     ],
     "consider" : [
-      "Build your foundation on heavy natural fibres that act as physical anchors throughout your day.",
-      "Ground your daily look with substantial, heavyweight cottons and dense wools that offer serious weight.",
+      "Building your foundation on heavy natural fibres that act as physical anchors throughout your day.",
+      "Grounding your daily look with substantial, heavyweight cottons and dense wools that offer serious weight.",
       "Military-inspired details as a through-line in your wardrobe. Epaulettes, structured shoulders, and clean brass hardware suit your energy.",
       "How a consistent dark palette communicates reliability. When people know what to expect visually, they trust your judgement."
     ],
@@ -30,8 +30,8 @@
       "Prioritising natural materials against your skin at all times. Your body registers the difference before your mind does."
     ]
   },
-  "engineVersion" : "2.0.0",
-  "generatedAt" : "2026-06-19T17:06:42Z",
+  "engineVersion" : "2.1.0",
+  "generatedAt" : "2026-06-24T15:28:25Z",
   "hardware" : {
     "metalsText" : "Flimsy zips and hollow buttons are an immediate dealbreaker. Hardware is where a garment truly proves its worth, and you naturally gravitate towards metals with literal, physical weight. Rose gold tones provides traditional warmth and deep sensory satisfaction, particularly when the finish is lightly brushed rather than blindingly polished. When you want a sharper, more assertive edge on heavy leather belts or structured bags, warm bronze tones cuts through beautifully. Every clasp, rivet, and buckle should yield a deeply satisfying mechanical thunk when you snap it shut.",
     "recommendedMetals" : [
@@ -350,6 +350,6 @@
   "userInfo" : {
     "birthDate" : "1991-07-15T12:00:00Z",
     "birthLocation" : "Synthetic Fixture",
-    "generationDate" : "2026-06-19T17:06:42Z"
+    "generationDate" : "2026-06-24T15:28:25Z"
   }
 }
