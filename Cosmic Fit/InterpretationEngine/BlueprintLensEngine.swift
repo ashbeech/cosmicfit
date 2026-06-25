@@ -27,9 +27,10 @@ enum Stage1ScaleSensitivity {
     static let contrastMaxBlendNorm: Double = 0.50
 
     // Contrast — sky-native modulation scales (mirrors vibrancy's vibeScale/tempoScale).
-    // Sized so high-contrast baselines (0.75) retain daily variation without rail-pinning.
-    static let contrastVibeScale: Double = 0.20
-    static let contrastTempoScale: Double = 0.12
+    // Bumped from 0.20/0.12 to match metal's proven signal diversity pattern.
+    // Three independent inputs (vibe + axes + tempo) provide smooth daily variation.
+    static let contrastVibeScale: Double = 0.32
+    static let contrastTempoScale: Double = 0.18
 
     // Metal tone — transit and lunar nudge bounds
     static let metalNudgeCap: Double = 0.30
@@ -55,9 +56,9 @@ enum Stage1ScaleSensitivity {
     static let vibrancyPracticalHalfSpan: Double = 0.22
 
     // Contrast — calibrated practical envelope half-span (slider variation fix Phase 3).
-    // Cohort P95 baseline deviation = 0.269 (post vibe/tempo signal, stage1_experimental, 216×60);
-    // ±0.22 = clamp(P95 + 0.04, max=0.22) per Plan 3 formula.
-    static let contrastPracticalHalfSpan: Double = 0.22
+    // Widened from 0.22→0.28 alongside vibe/tempo signal amplification to prevent rail-pinning
+    // while ensuring the stronger signal translates to meaningful display travel.
+    static let contrastPracticalHalfSpan: Double = 0.28
 
     // Silhouette — extreme test bounds (retained for backward-compatible tests).
     // With anchor-blend formula, raw values stay within [baseline±0.20] so these
@@ -67,10 +68,17 @@ enum Stage1ScaleSensitivity {
 
     // Silhouette — per-user calibrated envelope half-spans (Plan 4 audit).
     // Centered on chartAnchor instead of global [0.12, 0.88].
-    // With ±0.20 sky modulation, half-spans give useful display travel without rail-pinning.
-    // Widened MF/AR from 0.28→0.34 (C2+C3 F2 tune) to reduce stuck users below 20.
+    // MF two-driver (vis tanh 0.20 + tempo 0.16) max raw swing ≈ ±0.36 → halfSpan 0.34 avoids rail-pin.
+    // AR/SD single-driver (tanh 0.28) max ≈ ±0.24 → halfSpan 0.34 gives comfortable display travel.
     static let silhouetteSDPracticalHalfSpan: Double = 0.34
     static let silhouetteMFARPracticalHalfSpan: Double = 0.34
+
+    // M/F — two-driver modulation scales (visibility tanh + tempo linear).
+    // Visibility via tanh provides bounded sigmoid response (divisor 2.5 for center sensitivity);
+    // tempo adds independent daily swing. Combined max ≈ ±0.34 against ±0.34 halfSpan.
+    static let mfVisibilityScale: Double = 0.24
+    static let mfVisibilityDivisor: Double = 2.5
+    static let mfTempoScale: Double = 0.20
 }
 
 /// Stage 2 engine. Stateless — all methods are static.
@@ -2000,7 +2008,10 @@ enum BlueprintLensEngine {
 
         if mode == .stage1Experimental {
             let skyMod = { (axis: Double) in tanh((axis - 5.5) / 4.5) * 0.28 }
-            let mf = max(0.0, min(1.0, mfBase + skyMod(snapshot.axes.visibility)))
+            let tempoNorm = snapshot.axes.tempo / 10.0
+            let mfVisMod = tanh((snapshot.axes.visibility - 5.5) / Stage1ScaleSensitivity.mfVisibilityDivisor) * Stage1ScaleSensitivity.mfVisibilityScale
+            let mfTempoMod = (tempoNorm - 0.5) * Stage1ScaleSensitivity.mfTempoScale
+            let mf = max(0.0, min(1.0, mfBase + mfVisMod + mfTempoMod))
             let ar = max(0.0, min(1.0, arBase + skyMod(snapshot.axes.action)))
             let sd = max(0.0, min(1.0, sdBase + skyMod(snapshot.axes.strategy)))
             return SilhouetteProfile(

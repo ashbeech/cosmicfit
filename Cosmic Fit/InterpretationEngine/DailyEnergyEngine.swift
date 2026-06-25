@@ -987,6 +987,8 @@ enum DailyEnergyEngine {
     /// Sky-only axis raw score: transits + moon + jitter (no natal/progressed).
     /// Uses only the tightest-orb transit per planet (max 5) to prevent
     /// outer-planet saturation from full ephemeris.
+    /// Applies sqrt-dampened speed factors so slow outer planets (Neptune, Pluto)
+    /// don't anchor axes for weeks — lets fast-moving bodies drive daily variation.
     private static func computeAxisRawScoreSkyOnly(
         axis: String,
         transits: [NatalChartCalculator.TransitAspect],
@@ -1015,7 +1017,8 @@ enum DailyEnergyEngine {
             let element = signElement(forZodiacSign: sign)
             let em = axisElementModifiers[axis]?[element] ?? 1.0
             let orbStrength = max(0.0, 1.0 - transit.orb / 10.0)
-            let contrib = w * em * orbStrength
+            let speedDamp = axisSpeedDamping[transit.transitPlanet] ?? 0.71
+            let contrib = w * em * orbStrength * speedDamp
             raw += contrib
             entries.append(AxisAttributionEntry(
                 source: "transit",
@@ -1232,6 +1235,15 @@ enum DailyEnergyEngine {
     private static let salienceSpeedFactors: [String: Double] = [
         "Moon": 1.0, "Mercury": 0.9, "Venus": 0.85, "Sun": 0.8, "Mars": 0.7,
         "Jupiter": 0.4, "Saturn": 0.3, "Uranus": 0.2, "Neptune": 0.15, "Pluto": 0.1,
+    ]
+
+    /// Sqrt-dampened speed factors for axis computation. Gentler than salienceSpeedFactors
+    /// so outer planets still contribute meaningfully to axes, but fast movers dominate
+    /// day-to-day variance. Prevents visibility/action/strategy from being anchored by
+    /// tight outer-planet aspects for weeks.
+    private static let axisSpeedDamping: [String: Double] = [
+        "Moon": 1.0, "Mercury": 0.95, "Venus": 0.92, "Sun": 0.89, "Mars": 0.84,
+        "Jupiter": 0.63, "Saturn": 0.55, "Uranus": 0.45, "Neptune": 0.39, "Pluto": 0.32,
     ]
 
     private static let salienceEssenceCategories: [String: StyleEssenceCategory] = [
