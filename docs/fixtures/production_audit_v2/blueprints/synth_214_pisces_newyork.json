@@ -1,0 +1,335 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "Your instinct for accessorising leans heavily towards solitary weight rather than a cluttered, noisy stack of metals. A single, substantial object carries infinitely more authority than a handful of delicate, apologetic additions. Look for a heavy, satisfying clasp on a rigidly constructed leather bag, or an engineered watch sitting squarely and coldly against the skin. Because your wardrobe relies on sharp lines and intelligent fabrics, this standalone item acts as a sudden hit of heavy punctuation. One serious, uncompromising piece is all it takes to broadcast exactly who is in control of the room.",
+   "The right hardware acts as a strict fastening point for the entire look, bringing physical control to your more inventive clothing choices. You crave the tactile satisfaction of a brilliantly engineered clasp snapping shut, or the heavy drag of a wide leather strap. A rigid bag carried tightly under the arm operates as a visual boundary line, keeping your personal space strictly defined. Rather than bothering with delicate decoration, you rely on industrial finishes to lock a silhouette into place. These pieces offer a sense of private fortification, backing up your experimental eye with a ruthlessly firm foundation.",
+   "The physical experience of what you wear creates an invisible boundary around you. You rely on the dense, grounding weight of a serious watch or the heavy friction of a thick leather belt sliding into place to anchor your fast-moving energy. The sharp, mechanical snap of a complex bag clasp acts as a physical reminder of your own private control. There is a distinct tension between the slick, cold feel of technical hardware and the rich scent of treated hides. This everyday sensory friction keeps you rooted in the room while your mind operates entirely somewhere else."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Rigid formality that makes you feel like you are performing someone else's role. Your authority comes from presence, not from structure.",
+   "Steer clear of any harsh structure that fights your natural movement, because sharp shoulders and stiff waistbands create tension you will carry all day.",
+   "Colour palettes that feel aggressive or confrontational. Your nervous system responds best to softness and tonal depth.",
+   "Following trends simply because everyone else does. If it is on every feed, it has already lost its edge for you.",
+   "Conventional matching rules that assume everyone wants to blend in. Your coordination should look intentional, not obedient.",
+   "Safe, predictable combinations that could be assembled by an algorithm. You are not a lookbook. Surprise is part of the point."
+  ],
+  "consider": [
+   "Dressing to create visual harmony in shared contexts by reflecting the mood of the occasion.",
+   "Balancing your striking personal style with an acute awareness of the prevailing social dress code.",
+   "Investing in a single beautiful silk scarf that instantly shifts the emotional temperature of any outfit you wear.",
+   "Embracing fluid watercolour prints as personal poetry worn directly against the body, letting the soft brushstrokes speak for you."
+  ],
+  "leanInto": [
+   "Dressing by feeling rather than by formula. If the outfit does not match your emotional weather this morning, change it without guilt.",
+   "Reaching for soft flowing layers that move with your body. Chiffon, gauze, and light jersey let you breathe and drift through the day.",
+   "Building ocean-inspired palettes as your default colour world. Seafoam, lilac, and pale aqua create an atmosphere around you that feels like home.",
+   "Trusting your intuition in the changing room. If your body relaxes when you put something on, that is the only approval you need.",
+   "Wearing what nobody else in the room is wearing. If your outfit could belong to anyone, it does not belong to you.",
+   "Making sustainable and ethical choices a core part of your style identity, knowing that recycled fabrics and deadstock finds are pure rebellion, not compromise."
+  ]
+ },
+ "engineVersion": "2.1.0",
+ "generatedAt": "2026-06-26T04:20:10Z",
+ "hardware": {
+  "metalsText": "Hardware is never just decoration for you; it is a mechanism of tension and control. Stick to titanium tones for heavy-duty closures that snap shut with an audible click, grounding your lighter, technical fabrics with real tactile weight. Bring in anodised aluminium tones when you want a matte, industrial finish; think brushed carabiners, stark D-rings, or oversized zippers rather than delicate chain jewellery. If you introduce surgical steel tones, keep the surface completely flat and unpolished to maintain that clinical edge. Every clasp and buckle you put on should look less like an afterthought and more like a highly engineered tool.",
+  "recommendedMetals": [
+   "titanium",
+   "anodised aluminium",
+   "surgical steel",
+   "polished brass",
+   "yellow gold",
+   "silver",
+   "iridescent finishes"
+  ],
+  "recommendedStones": [
+   "labradorite",
+   "meteorite",
+   "ammolite",
+   "fluorite",
+   "amethyst",
+   "aquamarine",
+   "opal",
+   "amber",
+   "citrine",
+   "sunstone"
+  ],
+  "stonesText": "Your jewellery box belongs in the future rather than the past. Forget the traditional, fussy sparklers and seek out stones that absorb light rather than just throwing it back. A deep, slick labradorite works flawlessly against stark white shirting or silver-grey tech knits, grounding your look with an undercurrent of intense control. For a colder, more cerebral edge, a geometric meteorite set in heavy, brushed metal brings exactly the right tension. If you want something that shifts as you move, ammolite looks entirely opaque until a sudden flash of electric brightness catches the light. Keep the settings brutally simple and let the stones dominate.",
+  "tipText": "Your approach to jewellery reads more like industrial design than traditional decoration. Leave delicate chains behind in favour of weight and mechanical precision. Look for heavy snake chains, utility closures, or a visibly engineered clasp in cold titanium tones. The pieces you wear carry a distinct severity, acting as quiet anchors rather than loud statements. A single, substantial ring featuring a stark labradorite communicates exactly what you want it to, entirely on your terms."
+ },
+ "occasions": {
+  "dailyText": "Your everyday wardrobe runs on a calculated sense of detachment. Off-duty dressing means finding garments that allow total physical mobility while keeping you slightly removed from the crowd. Rely on clever, unexpected proportions, a dropped shoulder, a voluminous trouser, or an elongated hemline, that obscure the figure just enough to feel private and secure. The daily uniform works best when it relies on sharp, intelligent cuts rather than obvious styling tricks. You end up looking like the most observant person on the street, totally unbothered and quietly in charge.\n\nYour style energy concentrates in partnership and intensity, so your wardrobe is at its best when it reflects both partnership and intensity.",
+  "intimateText": "Getting close to someone means striking a deliberate balance between showcasing your intellect and guarding your core. Garments with unexpected architectural proportions that sit away from the skin before sharply cinching in create a silhouette that feels both analytical and deeply private. A severe neckline paired with an asymmetrical drop perfectly mirrors your need to own the room while maintaining a magnetic undercurrent. The styling logic rests on precise, obscure construction details that invite questions only from those who know exactly what to look for. You look like someone who dictates the terms of engagement before a single word is spoken.",
+  "workText": "Professional dressing for you is an exercise in quiet intimidation masked as modern efficiency. Rely on exacting silhouettes that give you total physical autonomy while keeping everyone else slightly on the back foot. You look best when you bypass the traditional corporate uniform entirely, favouring asymmetrical cuts, unexpected proportions, and tailoring that borrows its logic from performance wear. Your wardrobe must project a razor-sharp intellect alongside a fiercely guarded private space. The aim is to walk into any meeting looking like the smartest person in the room, completely unbothered and utterly unreadable.\n\nAt work, lean into direct confidence; structured pieces and clean lines reinforce your natural authority."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#91B5CF",
+    "name": "Frost Blue",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Ascendant",
+     "sourceSign": "Leo"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Deep Cool High-Contrast",
+  "coreColours": [
+   {
+    "hexValue": "#0047AB",
+    "name": "cobalt",
+    "provenance": {
+     "band": "core",
+     "family": "True Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#DC143C",
+    "name": "crimson",
+    "provenance": {
+     "band": "core",
+     "family": "True Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#8A2BE2",
+    "name": "blue-red",
+    "provenance": {
+     "band": "core",
+     "family": "True Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#2E8B57",
+    "name": "clear pine",
+    "provenance": {
+     "band": "core",
+     "family": "True Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#0A0A0A",
+   "name": "black",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "True Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "True Winter",
+  "lightAnchor": {
+   "hexValue": "#FEFEFA",
+   "name": "optic white",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "True Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#347D75",
+   "name": "muted teal",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "True Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "There is a sharp, almost clinical intelligence to how you wear colour. You bypass soft pastels and gentle gradients in favour of cobalt and crimson, establishing a clean, slightly severe foundation. Introducing blue-red adds a sudden drop of visual weight, giving those lighter, oxygenated tones an intimidating, secretive edge. When you want to interrupt the rhythm, deploy Frost Blue through unexpected hardware, a metallic knit detail, or an opaque tight. The resulting mix reads less like a standard wardrobe and more like a highly engineered uniform.",
+  "neutrals": [
+   {
+    "hexValue": "#0A0A0A",
+    "name": "black",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#FEFEFA",
+    "name": "optic white",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#4B4F54",
+    "name": "graphite",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#D6D6D6",
+    "name": "icy grey",
+    "provenance": {
+     "band": "neutrals",
+     "family": "True Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": false,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": false,
+   "fireAirChromaApplied": false,
+   "scorpioDensityApplied": true,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#347D75",
+   "name": "eucalyptus",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "True Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Bright Winter",
+  "supportColours": [
+   {
+    "hexValue": "#AF9B88",
+    "name": "warm taupe",
+    "provenance": {
+     "band": "support",
+     "family": "True Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#786D4E",
+    "name": "deep khaki",
+    "provenance": {
+     "band": "support",
+     "family": "True Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#3C2415",
+    "name": "espresso",
+    "provenance": {
+     "band": "support",
+     "family": "True Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#C19A6B",
+    "name": "camel",
+    "provenance": {
+     "band": "support",
+     "family": "True Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "High",
+   "depth": "Deep",
+   "saturation": "Rich",
+   "surface": "Structured",
+   "temperature": "Cool"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "traditional florals",
+   "heritage plaid",
+   "conventional paisley",
+   "cheerful prints"
+  ],
+  "narrativeText": "You have a deeply suspicious relationship with prints, treating most of them as unnecessary visual noise. When you do wear a motif, it has to look entirely deliberate and slightly aloof. Watercolour prints and oceanic motifs make perfect sense for you because they communicate intellect without breaking your tightly held control over how you are perceived. Anything overtly sweet or nostalgic, particularly traditional florals, just looks like you are wearing a costume of someone else's memories. If you want to introduce more movement into a structured look, impressionist florals works brilliantly across a sheer layer or fluid silk. Just steer clear of heritage plaid, which immediately softens your edge and ruins an otherwise sharp silhouette.",
+  "recommendedPatterns": [
+   "watercolour prints",
+   "oceanic motifs",
+   "impressionist florals",
+   "digital prints",
+   "circuit-inspired",
+   "abstract geometric"
+  ],
+  "tipText": "Conventional prints usually feel far too domestic and fussy for your wardrobe. A watercolour prints serves you much better when it acts like a deliberate visual glitch rather than a simple decorative flourish. Keeping the colour story strictly cold, sharp silver slicing through pitch black or Frost Blue, strips away any unwanted sweetness and keeps the mood completely severe. Restricting this graphic noise to a single garment, like a sharply cut neoprene jacket or a sleek metallic knit layer, grants you the exact level of visual control you expect."
+ },
+ "styleCore": {
+  "narrativeText": "Your overall presence walks a fascinating line between forward-thinking design and absolute private control. You project an intellectual approach to getting dressed, building outfits that look socially engaged yet entirely detached from whatever the mainstream is doing. It is a strictly deliberate look, offering just enough progressive, unexpected construction to keep people interested, while maintaining an intense personal boundary that stops anyone from getting too close. You step into a room looking completely switched-on and fiercely self-contained, owning an aesthetic that commands attention but refuses to explain itself.\n\nYour natural sense of beauty shows up most powerfully in your shared spaces, dressing for partnership, harmonious social presentation, beauty that attracts. Your style instincts lean toward clarity, structure, and visible polish. Your public style reads as bold and decisive; you make strong first impressions without trying too hard."
+ },
+ "textures": {
+  "avoidTextures": [
+   "stiff suiting",
+   "rigid tailoring",
+   "traditional tweed"
+  ],
+  "badText": "Your wardrobe thrives on sharp, forward-facing intelligence, meaning anything overtly nostalgic or fussy immediately feels wrong on your body. Materials like stiff suiting and rigid tailoring carry a heavy, traditional baggage that actively drags down your swift, social momentum. If a fabric is excessively delicate or demands to be handled with extreme care, it undermines that sense of private, untouchable power you prefer to project. You need garments that act as a fast, brilliant second skin, rather than a fragile historical costume that requires endless babysitting.",
+  "goodText": "The materials you naturally gravitate towards feel deliberately engineered rather than purely decorative. You want fabrics that hold their own shape and keep the world at a comfortable distance. Building a foundation on flowing chiffon gives you a clean, architectural boundary, while adding soft jersey brings a slick, modern edge to your silhouette. Because you refuse to feel physically vulnerable but still expect absolute control over your presentation, watercolour silk makes perfect sense for you. Look for outerwear or tailored pieces incorporating gauze to add an unexpected, almost impenetrable finish to your daily rotation. It is less about looking approachable and entirely about feeling utterly untouchable.",
+  "recommendedTextures": [
+   "flowing chiffon",
+   "soft jersey",
+   "watercolour silk",
+   "gauze"
+  ],
+  "sweetSpotKeywords": [
+   "flow",
+   "dream"
+  ],
+  "sweetSpotText": "Your ideal garment sits precisely at the intersection of flow and dream. A piece needs to communicate a cool, progressive intellect while keeping your physical shape fiercely guarded. This is why flowing chiffon are such a natural fit for you, offering a crisp, impenetrable surface that repels both a sudden downpour and unwanted small talk. You want clothes that act as a sensory filter rather than just a basic layer. If a fabric feels too vulnerable to the touch or too heavily tied to the past, it has no business in your wardrobe.\n\nYour comfort instinct gravitates toward deepest comfort zone, nostalgic fabrics, heirloom softness, home-as-wardrobe."
+ },
+ "userInfo": {
+  "birthDate": "1992-02-24T20:00:00Z",
+  "birthLocation": "Synth 214 \u2014 Pisces Sun, 20:00 UTC, New York (1992)",
+  "generationDate": "2026-06-26T04:20:10Z"
+ }
+}

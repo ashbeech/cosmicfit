@@ -1,0 +1,335 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "Fiddling with a tangled stack of delicate chains feels entirely out of character when your eye naturally favours clean, clever design. Instead of layering minor items, ground your look with a single, highly engineered object. Think of a heavy watch featuring a complex mechanical clasp, or a sharp leather bag suspended on a wide, technical strap. This solitary item does all the heavy lifting, sitting sharply against whatever volume or shape you are wearing that day. When the construction is this smart, you only need one piece to make the point.",
+   "Accessories are the sharp punctuation marks in an outfit that otherwise refuses to follow the rules. A heavy woven strap or a complex, interlocking clasp on a bag grounds your more experimental layers, giving them necessary tension. Rather than traditional adornment, you prefer a solid watch with an unfamiliar dial or rigid rings that fit together with satisfying precision. Every buckle and fastening acts as a deliberate anchor, turning the entire outfit into a cohesive, intelligent system.",
+   "The tactile reality of your wardrobe matters just as much as the visual impact. You want the definitive, satisfying snap of a magnetic clasp or the silent, frictionless glide of a well-engineered hinge. Leave the heavy, clanking hardware and vintage smells to someone else. Your chosen pieces rely on featherlight constructions, smooth matte finishes, and straps that feel distinctly modern against the skin. Every component has to justify its presence through pure, intelligent design."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Ban fast fashion from your wardrobe permanently, because one visibly cheap garment immediately undermines the structural authority of your heavier, tailored pieces.",
+   "Trend pieces with short lifespans that make your wardrobe feel disposable. You do not do temporary.",
+   "Casual dressing that suggests a lack of discipline. Even your weekend clothes should carry structural backbone.",
+   "Following trends simply because everyone else does. If it is on every feed, it has already lost its edge for you.",
+   "Conventional matching rules that assume everyone wants to blend in. Your coordination should look intentional, not obedient.",
+   "Safe, predictable combinations that could be assembled by an algorithm. You are not a lookbook. Surprise is part of the point."
+  ],
+  "consider": [
+   "Dressing to create visual harmony in shared contexts by reflecting the mood of the occasion.",
+   "Balancing your striking personal style with an acute awareness of the prevailing social dress code.",
+   "Wearing understated, highly tactile pieces that draw people in without shouting for immediate visual attention.",
+   "Anchorring your social wardrobe with flawlessly cut, incredibly fluid crepe trousers to maintain pure elegance without sacrificing physical comfort."
+  ],
+  "leanInto": [
+   "Choosing timeless over trendy as your unbreakable rule. A piece that looks just as right in ten years is the only piece worth buying.",
+   "Building on dark power foundations. Charcoal, navy, and deep burgundy carry the authority your identity demands.",
+   "Treating tailoring as non-negotiable. If the shoulders are not exact and the hem is not precise, the garment has not earned its place.",
+   "Investing in fewer pieces at higher quality. Your wardrobe should feel like a curated collection, not an accumulation.",
+   "Wearing what nobody else in the room is wearing. If your outfit could belong to anyone, it does not belong to you.",
+   "Making sustainable and ethical choices a core part of your style identity, knowing that recycled fabrics and deadstock finds are pure rebellion, not compromise."
+  ]
+ },
+ "engineVersion": "2.1.0",
+ "generatedAt": "2026-06-26T03:39:58Z",
+ "hardware": {
+  "metalsText": "The way you treat jewellery and hardware feels less like decoration and more like industrial design. A stark, highly polished surgical steel tones gives you a clean, almost clinical edge that cuts right through heavy wools or technical nylon. Look for fastenings that feel aggressively functional rather than delicate; think heavy-duty zippers, brushed matte titanium tones carabiners, or sleek magnetic closures in place of standard buttons. When you introduce platinum tones, keep the shapes strict and geometric so the overall effect never turns sentimental. The hardware you wear should always look like it serves an intelligent purpose, even if that purpose is just giving a great coat its shape.",
+  "recommendedMetals": [
+   "surgical steel",
+   "titanium",
+   "platinum",
+   "polished silver",
+   "anodised aluminium",
+   "polished brass",
+   "yellow gold"
+  ],
+  "recommendedStones": [
+   "labradorite",
+   "fluorite",
+   "meteorite",
+   "garnet",
+   "sapphire",
+   "onyx",
+   "ammolite",
+   "amber",
+   "citrine",
+   "sunstone"
+  ],
+  "stonesText": "Your jewellery makes the most sense when it looks engineered rather than simply discovered. Skip the traditional romantic facets and look for labradorite held in cold, brushed steel or matte titanium. The icy, refractive qualities of fluorite work perfectly for you, especially suspended in a tension setting that ignores gravity altogether. You want pieces that throw sharp, clean flashes of light, acting as a visual extension of your fast, switched-on mind. The end result is less about flashing a traditional heirloom and entirely about wearing a stark, highly intentional piece of design.",
+  "tipText": "Sentimental trinkets do nothing for a wardrobe grounded in forward-thinking design. Treat your accessories less like traditional jewellery and more like functional components or industrial objects. A modular chain, an oversized utility clasp, or a stark band cast in surgical steel tones serves your aesthetic perfectly. Look for tension settings and kinetic details over standard prongs, especially if they feature a solitary labradorite suspended inside the frame. The strongest additions to your outfit will look exactly like highly engineered mechanical parts."
+ },
+ "occasions": {
+  "dailyText": "Your off-duty rotation completely ignores standard weekend formulas. While the rest of the world defaults to predictable basics, your approach to downtime demands a much sharper point of view. Frame your daily outfits around stark shapes, unexpected volume, and pieces that sit distinctly ahead of the current mood. You move through the day with an independent, observational energy, meaning your layers need enough functional ease for sudden changes of plan, alongside enough visual tension to keep things interesting. The end result is a daytime look that remains completely relaxed while entirely rejecting the ordinary.\n\nYour comfort instinct gravitates toward emotional harmony in partnership dressing, soft social presentation.",
+  "intimateText": "Evening dressing is an opportunity to play with proportion rather than rely on obvious seduction. You naturally gravitate towards unorthodox silhouettes that provoke a question instead of simply demanding a stare. Look for pieces built with architectural precision or sudden asymmetry that challenge the standard after-dark rules. A sharp, unconventional neckline frames your face perfectly, keeping the visual focus aligned with your dialogue. The end result is a look that feels intensely engaging while maintaining your signature millimetre of distance.",
+  "workText": "Your professional wardrobe operates on a slightly different frequency to everyone else in the office. Traditional corporate uniform looks deeply uninspired on you. Instead, seek out architectural proportions, unexpected asymmetry, and garments that feel engineered rather than simply stitched together. You need pieces that stimulate the intellect of whoever is sitting across from you in a meeting. A blazer with a brilliant, bizarre fastening or trousers cut with a gravity-defying pleat establishes your authority instantly. You run the room by showing up as the one person who actually understands modern design.\n\nYour style energy concentrates in partnership and routine, so your wardrobe is at its best when it reflects both partnership and routine. You dominate your office environment by wearing investment-grade worsted wool and rich cashmere knits that communicate permanent luxury."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#007788",
+    "name": "Dark Cyan",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Venus",
+     "sourceSign": "Aquarius"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Medium Neutral Electric",
+  "coreColours": [
+   {
+    "hexValue": "#E35335",
+    "name": "poppy",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Spring",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#009B8D",
+    "name": "bright teal",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Spring",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#FFE302",
+    "name": "vivid yellow",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Spring",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#0080FF",
+    "name": "bright blue",
+    "provenance": {
+     "band": "core",
+     "family": "Bright Spring",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#0D1014",
+   "name": "clear black",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "Bright Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "Bright Spring",
+  "lightAnchor": {
+   "hexValue": "#FFFDF0",
+   "name": "clear ivory",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "Bright Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#3C6281",
+   "name": "soft navy",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "Bright Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "Your wardrobe relies on cool, slightly synthetic tones that feel deliberately removed from the natural world. Anchor your daily rotation in uncompromising shades of poppy, bright teal, and vivid yellow. These cold neutrals take on a brilliant, almost clinical quality when applied to the right fabrics, they need to bounce off a flat nylon or a sleek metallic knit rather than sinking into a traditional organic weave. When you want a hit of colour, use Dark Cyan as a jarring shock of pigment rather than a soft gradient. The overall effect is sharp, cerebral, and refuses to rely on nostalgia.",
+  "neutrals": [
+   {
+    "hexValue": "#FFFDF0",
+    "name": "clear ivory",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Spring",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#384C70",
+    "name": "warm navy",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Spring",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#4B4F54",
+    "name": "graphite",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Spring",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#C19A6B",
+    "name": "clear camel",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Bright Spring",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": true,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": false,
+   "fireAirChromaApplied": true,
+   "scorpioDensityApplied": false,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#3C6281",
+   "name": "mist navy",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "Bright Spring",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Bright Winter",
+  "supportColours": [
+   {
+    "hexValue": "#9C9A9A",
+    "name": "dove grey",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Spring",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#636B6F",
+    "name": "muted charcoal",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Spring",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#3B4B5E",
+    "name": "smoked navy",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Spring",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#3A2A1E",
+    "name": "bitter chocolate",
+    "provenance": {
+     "band": "support",
+     "family": "Bright Spring",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "High",
+   "depth": "Medium",
+   "saturation": "Rich",
+   "surface": "Structured",
+   "temperature": "Neutral"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "traditional florals",
+   "heritage plaid",
+   "conventional paisley",
+   "heritage prints"
+  ],
+  "narrativeText": "You treat print less as decoration and more as a stream of visual data. That is why pinstripe and houndstooth feel so natural on you, reading as intentional and sharp whether printed onto fluid silk or slick neoprene. Anything steeped in heavy nostalgia or fussy romance, such as traditional florals, immediately looks as though you are playing dress-up in a stranger's wardrobe. Keep the scale progressive and the spacing clean, bringing in glen check alongside crisp white cotton or silver metallic knits for contrast. A strong pattern on you should provoke a double take, not mimic retro wallpaper.",
+  "recommendedPatterns": [
+   "pinstripe",
+   "houndstooth",
+   "glen check",
+   "digital prints",
+   "circuit-inspired",
+   "abstract geometric"
+  ],
+  "tipText": "Your approach to print should feel intentional and slightly clinical rather than purely decorative. Wear pinstripe as a sharp interruption within a clean outfit, grounding the rest of the look in solid blocks of bright teal or crisp white. A complex print reads beautifully on a flat, smooth surface like recycled nylon or a stiff poplin that holds its shape entirely. Keeping the fabric rigid gives the pattern room to exist without turning chaotic, proving you know exactly how to balance visual noise."
+ },
+ "styleCore": {
+  "narrativeText": "Your style presence is entirely self-defined, built on a quiet refusal to look exactly like anyone else in the room. You project an aloof, intellectual kind of cool, relying on an unexpected silhouette or a deliberately challenging proportion to do the talking. You walk into a space with a detached confidence, wearing garments that feel engineered and conceptual rather than purely decorative. Your wardrobe operates as a clever, continuing experiment, and you carry it off with the distinct ease of someone entirely comfortable standing slightly apart from the crowd.\n\nYour natural sense of beauty shows up most powerfully in your shared spaces, dressing for partnership, harmonious social presentation, beauty that attracts. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as quietly luxurious; tactile quality and understated expense signal before you speak."
+ },
+ "textures": {
+  "avoidTextures": [
+   "cheap stretch",
+   "flimsy synthetic",
+   "disposable fabrics"
+  ],
+  "badText": "Anything steeped in heavy nostalgia or overly sentimental craftsmanship functions as a trap for your personal style. You operate on a forward-looking frequency, meaning cheap stretch feels instantly wrong against your skin because it remains too tethered to the past. The same goes for flimsy synthetic, which usually reads as fussy or uncomfortably traditional the second you slip it on. Your clothing needs to act as a sharp idea brought to life, remaining crisp and utterly unbothered by history. Wearing materials that appear folksy or demand constant adjusting, such as disposable fabrics, completely muddles your clear visual presence. Leave the heavy, historical drag to someone else and stick to textiles that move cleanly through a modern room.",
+  "goodText": "Your wardrobe should feel like a minor feat of engineering rather than a pile of soft comfort blankets. Materials that hold their shape away from the body make the most sense for you, which is why structured wool and pressed cotton fit your daily rotation brilliantly. There is a crisp, cerebral quality to quality leather that supports your preference for clothing that functions strictly on its own terms. A touch of heavy crepe brings a cool, slightly detached finish to an outfit without trying too hard. You are always at your best in pieces that feel fully awake to the present moment, refusing to cling to the past or your skin.",
+  "recommendedTextures": [
+   "structured wool",
+   "pressed cotton",
+   "quality leather",
+   "heavy crepe"
+  ],
+  "sweetSpotKeywords": [
+   "authority",
+   "longevity"
+  ],
+  "sweetSpotText": "Getting dressed is an intellectual exercise, which means your texture sweet spot relies on a strict combination of authority and longevity. You gravitate towards the unconventional and the highly engineered, finding genuine comfort in the sleek utility of structured wool or the distinct visual edge of pressed cotton. Traditional silks and predictable cottons bore you. You want synthetics that hold a rigid silhouette, unexpected hardware, and surfaces that interact with light rather than just absorbing it. If an item relies purely on nostalgia or homespun charm to work, leave it on the rail."
+ },
+ "userInfo": {
+  "birthDate": "1992-12-27T20:00:00Z",
+  "birthLocation": "Synth 177 \u2014 Capricorn Sun, 20:00 UTC, London (1992)",
+  "generationDate": "2026-06-26T03:39:58Z"
+ }
+}

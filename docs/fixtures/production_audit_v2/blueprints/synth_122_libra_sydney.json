@@ -1,0 +1,349 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "Visual clutter dilutes a genuinely magnetic outfit. You never need a stack of fussy extras when a single, substantial item can take complete control of your silhouette. Approach your accessories in terms of weight and physical presence rather than mere decoration. A thick leather strap, a serious belt with a brutally simple clasp, or a structured bag with satisfying, silent hardware provides all the grounding your look needs. This functions as a quiet anchor, leaving the rest of your clothing entirely undisturbed. There is an undeniable authority in keeping the styling deliberately sparse, allowing one uncompromising detail to hold the line.",
+   "Your accessories function as the locking mechanism for your entire silhouette. When your garments rely on the heavy flow of silk or a dense knit, the strictness of a structured leather bag provides necessary tension. You want clasps that snap shut with a satisfying, weighty click and leather straps that sit firmly on the wrist. Thick, unadorned rings serve a similar purpose, offering a tactile reminder of your own physical boundaries. Every piece acts as a functional anchor rather than mere decoration.",
+   "The tactile reality of what you wear completely dictates your mood. You need to feel the satisfying, deliberate weight of a substantial watch case resting on your wrist. The dull, decisive snap of a solid bag clasp locking into place acts as a quiet daily ritual of control. Even the scent of thick, structured leather straps and the cold finish of heavy hardware serve a distinct purpose. There is zero room for flimsy, rattling chains or pieces that make needless noise. You dress to feel physically contained, letting the quiet gravity of these tactile details keep you firmly in your own orbit."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Emotionally exposing clothes on the days you feel vulnerable, since sheer fabrics and low necklines strip away the physical protection you actually need.",
+   "Dodge harsh fabrics and stiff synthetics that create friction against your skin, because physical discomfort instantly destroys your daily confidence.",
+   "Transparent or overly revealing pieces that give everything away. Your power comes from what people cannot see.",
+   "Cheerful prints and happy patterns that contradict your intensity. If the fabric looks like it is smiling, it is not for you.",
+   "Anything that feels naive or unguarded. Your wardrobe is a controlled environment. Nothing accidental makes it in.",
+   "Convention for convention's sake that serves no creative purpose. Following rules without questioning them is the real failure."
+  ],
+  "consider": [
+   "Ensure your strong aesthetic direction is the very first thing people notice when you enter.",
+   "Spending your clothing budget exclusively on beautifully constructed pieces that feel unmistakably yours.",
+   "Finding a tailor who understands your body and can adjust every key piece to your exact proportions.",
+   "Buyying one perfectly fitting poplin shirt to act as a strict template for every future purchase."
+  ],
+  "leanInto": [
+   "Dressing as emotional armour on days when the world feels sharp. A dense jersey layer or a structured jacket holds you together.",
+   "Choosing protective layers that shield without restricting. Soft structure around your torso and shoulders creates a sense of safety.",
+   "Treating comfort as a strategic choice, not a concession. The person who feels secure in their clothes fights from a position of strength.",
+   "Investing in the darkest foundations you can find. If a black does not feel bottomless, keep looking.",
+   "Designating a single, strategically chosen point of physical exposure. The severe thigh slit or the plunging neckline must never compete with the rest of your silhouette.",
+   "Letting the cut speak louder than the colour. A sharp shoulder line in ink does more than any bright accent."
+  ]
+ },
+ "engineVersion": "2.1.0",
+ "generatedAt": "2026-06-26T02:36:30Z",
+ "hardware": {
+  "metalsText": "Hardware is never just decorative on you. It acts as the structural engineering that keeps a silhouette locked in place. Zips, heavy buckles, and clasps must feel cold to the touch and sound genuinely expensive when they snap shut. Blackened silver tones provides a sharp, unyielding edge that cuts brilliantly through dense knits and structured leather. If you incorporate gunmetal tones, seek out an oxidised or brushed finish rather than a highly polished gloss. The fastenings on your clothes should look less like obvious embellishment and more like the functional components of a beautifully made vault.",
+  "recommendedMetals": [
+   "blackened silver",
+   "gunmetal",
+   "oxidised steel",
+   "blackened titanium",
+   "dark steel",
+   "antique silver",
+   "sterling silver",
+   "surgical steel",
+   "titanium"
+  ],
+  "recommendedStones": [
+   "obsidian",
+   "garnet",
+   "smoky quartz",
+   "black onyx",
+   "black tourmaline",
+   "black diamond",
+   "labrimar",
+   "moonstone",
+   "labradorite",
+   "meteorite"
+  ],
+  "stonesText": "Fine jewellery on you works best when it feels a little intimidating. You suit dense, opaque stones that swallow light rather than throwing it back across the room, making obsidian incredibly effective against bare skin. Seek out heavy cuts of garnet set low into thick, unpolished metal. You want pieces that sit cold and substantial on the collarbone or the wrist, offering a sense of quiet permanence. Let smoky quartz handle the evenings when you want just a flicker of depth inside a dimly lit room, keeping the rest of your gems completely unreadable.",
+  "tipText": "Frivolous, jingling jewellery is a total distraction from your natural gravity. Your hardware needs to be heavy, silent, and strictly intentional, like a thick blackened silver tones closure on an ink-black leather bag or a substantial collar sitting flat on the skin. If you wear stones, a single obsidian sunk deeply into a solid band serves as a private talisman rather than public display. The overall effect relies on quiet, intimidating weight, never decorative clutter."
+ },
+ "occasions": {
+  "dailyText": "Off-duty dressing is an exercise in turning up your privacy settings, not relaxing your standards. Your everyday rotation relies on pieces that wrap, conceal, and construct a deliberate physical barrier from the street. Look for sweeping hemlines, raised collars, and garments with serious drape that securely hold you in, offering a sense of total containment rather than loose, shapeless lounging. A casual outfit still needs to read as highly guarded and entirely under your command.\n\nYour comfort instinct gravitates toward emotional comfort visible in how you present, your feelings wear you. Your style energy concentrates in identity and philosophy, so You build an intelligent wardrobe by investing in globally inspired silhouettes and deeply intentional craftsmanship..",
+  "intimateText": "Getting dressed for intimate settings is an exercise in strategic tension rather than outright exposure. Dense, fluid pieces that skim your frame are far more effective here than anything obviously tight or clinging. A severe neckline paired with an unexpectedly open back creates exactly the right kind of friction for a close-range encounter. Let the internal structure and drape of the garment dictate the mood, keeping your overall proportions sharp and fiercely deliberate. You step into the evening looking quietly in command, proving you only reveal exactly what you choose to.",
+  "workText": "Dressing for work is an exercise in deliberate restraint. Stick to garments with serious physical weight and flawless, opaque finishes that conceal exactly as much as they reveal. Sharp tailoring that maps your frame perfectly while holding its own shape gives you a layer of quiet, intimidating authority. You want to walk into a room looking like the person who already holds all the answers and owes explanations to no one.\n\nAt work, you instantly communicate competence by anchoring your wardrobe in impeccable tailoring and a meticulous, highly refined polish."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#418273",
+    "name": "Teal Sage",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Jupiter",
+     "sourceSign": "Virgo"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#702E62",
+    "name": "Deep Plum",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Ascendant",
+     "sourceSign": "Scorpio"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Deep Cool Controlled",
+  "coreColours": [
+   {
+    "hexValue": "#4D0F28",
+    "name": "black cherry",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#1B3A4B",
+    "name": "petrol",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#014421",
+    "name": "dark emerald",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#0D1B2A",
+    "name": "blue-black",
+    "provenance": {
+     "band": "core",
+     "family": "Deep Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#0A0A0A",
+   "name": "black",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "Deep Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "Deep Winter",
+  "lightAnchor": {
+   "hexValue": "#FEFEFA",
+   "name": "optic white",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "Deep Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#7F6996",
+   "name": "dusty plum",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "Deep Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "Dressing is an exercise in controlled depth, and your palette must reflect that quiet intensity. Build your foundation on black cherry, petrol, and dark emerald, relying on these dark, light-absorbing shades to provide absolute privacy. The richness of the dye matters immensely here, as a heavy silk slip or a structured leather coat in black cherry communicates power without ever shouting across a crowded room. When you do introduce a shift in tone, a flash of Teal Sage or Deep Plum hidden in the lining of a jacket offers a subtle jolt of intrigue. The magnetism of your wardrobe comes from the density of the hue rather than the brightness.",
+  "neutrals": [
+   {
+    "hexValue": "#0A0A0A",
+    "name": "black",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#1B2A4A",
+    "name": "ink navy",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#4B4F54",
+    "name": "graphite",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#3B3F42",
+    "name": "cool charcoal",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Deep Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": false,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": false,
+   "fireAirChromaApplied": false,
+   "scorpioDensityApplied": true,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#397B8C",
+   "name": "muted teal",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "Deep Winter",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "Bright Winter",
+  "supportColours": [
+   {
+    "hexValue": "#4A4244",
+    "name": "warm charcoal",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Winter",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#3C2415",
+    "name": "espresso",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Winter",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#5C4033",
+    "name": "bark brown",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Winter",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#7B5B3A",
+    "name": "cocoa",
+    "provenance": {
+     "band": "support",
+     "family": "Deep Winter",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "Medium",
+   "depth": "Deep",
+   "saturation": "Rich",
+   "surface": "Structured",
+   "temperature": "Cool"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "cheerful florals",
+   "bright gingham",
+   "whimsical prints",
+   "cheerful prints"
+  ],
+  "narrativeText": "You treat prints with deep suspicion, and rightly so, since most patterns are far too chatty for your taste. When you do break up a dark block of colour, the motif needs to feel intentional and slightly secretive. Nautical stripes and wave motifs work beautifully because they read almost like a texture from a distance, revealing their complexity only when someone steps close. You can also carry off tone-on-tone shadow jacquard printed on heavy silk or woven into a dense knit, giving the eye something rich to sink into. Steer completely clear of cheerful florals and bright gingham, as these loud designs shatter your boundary and leave you feeling uncomfortably exposed.",
+  "recommendedPatterns": [
+   "nautical stripes",
+   "wave motifs",
+   "tone-on-tone shadow jacquard",
+   "dark-on-dark jacquard",
+   "pinstripe",
+   "monochromatic tone-on-tone"
+  ],
+  "tipText": "High-contrast prints feel far too loud and exposing for your daily rotation. When you introduce nautical stripes, treat it as a textural shift rather than a graphic focal point. Seek out tonal weaves, dark jacquards, or a heavy silk devor\u00e9 where the motif only reveals itself as you move through a room. Keeping the pattern submerged within your midnight and ink palette ensures the outfit stays entirely under your control. The effect is deliberately intimate, rewarding only those standing close enough to see the construction."
+ },
+ "styleCore": {
+  "narrativeText": "You dress with the kind of quiet, magnetic intensity that sets boundaries before you even speak. Your entire aesthetic relies on what you deliberately choose to conceal, using exacting fit and strategic coverage to hold people at an intriguing distance. Rather than looking overly approachable, you thrive in substantial garments that carry physical weight and move with a deliberate, heavy fluidity. It is a wardrobe that functions as a highly considered shield, protecting your private space while communicating an undeniable, quiet strength. You never have to compete for attention in a crowded room, because your style projects a formidable power that simply makes everyone else lean in.\n\nYour natural sense of beauty shows up most powerfully in your personal identity, beauty as first impression, your aesthetic IS your identity. Your style instincts lean toward clarity, structure, and visible polish. You command a room through the razor-sharp precision of your tailoring and the impeccable finish of your minimalist wardrobe."
+ },
+ "textures": {
+  "avoidTextures": [
+   "exposed sheer fabrics",
+   "fluffy angora",
+   "frilly chiffon"
+  ],
+  "badText": "Anything that feels insubstantial or excessively sweet completely undermines your natural intensity. Flimsy exposed sheer fabrics or overly fussy fluffy angora simply lack the substance to ground you, pulling your outfit into something distracting and unpolished. Your look calls for a certain level of tactile depth, so a material that is easily wrinkled or visibly cheap reads as an immediate compromise. Even a hint of frilly chiffon can ruin the exact line of a silhouette, leaving you feeling exposed instead of secure. If a fabric refuses to hold its shape or protect your personal space, it belongs back on the rail.",
+  "goodText": "The way a garment feels against your skin is entirely about establishing boundaries. Clothes need to carry actual physical weight, acting as a deliberate barrier that holds you in rather than exposing your mood to the room. The dense protection of soft armour knits or the stiff resistance of washed cotton provides the structural friction that makes you feel secure and completely untouchable. Temper that heavy containment with the liquid drag of dense jersey, which flows beautifully over the body but remains stubbornly opaque. It is all about finding the exact tension between physical ease and absolute control.",
+  "recommendedTextures": [
+   "soft armour knits",
+   "washed cotton",
+   "dense jersey",
+   "structured leather"
+  ],
+  "sweetSpotKeywords": [
+   "protection",
+   "strength"
+  ],
+  "sweetSpotText": "Your wardrobe operates on a strictly need-to-know basis, finding its ultimate sweet spot somewhere between protection and strength. The goal is always controlled revelation through fabric. You want garments that wrap the body securely while projecting a quiet, undeniable magnetism to anyone paying attention. A sharply tailored trench in soft armour knits or a fluid, bias-cut washed cotton skirt provides this necessary cover without ever looking defensive. If a material leaves you exposed rather than firmly anchored, it has no business touching your skin."
+ },
+ "userInfo": {
+  "birthDate": "1992-09-28T12:00:00Z",
+  "birthLocation": "Synth 122 \u2014 Libra Sun, 12:00 UTC, Sydney (1992)",
+  "generationDate": "2026-06-26T02:36:30Z"
+ }
+}

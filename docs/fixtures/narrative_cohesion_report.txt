@@ -5,34 +5,34 @@ Users: 216, Days: 60, Window: 2026-05-01 → 2026-06-29
 
 HARD GATES
   Opposition violations:        0 — PASS
-  Cross-surface violations:     8 — FAIL
+  Cross-surface violations:     10 — FAIL
   Production fingerprint:       PASS (verified in separate test)
 
 VARIATION METRICS
-  Mean flip rate:               54.3% (target ≥ 40%)
+  Mean flip rate:               51.3% (target ≥ 40%)
   Mean distinct #1 / 60d:       4.6 (target ≥ 6)
-  Mean category coverage / 14:  13.3 (target ≥ 10)
-  Users with flip < 40%:        5 / 216
+  Mean category coverage / 14:  13.5 (target ≥ 10)
+  Users with flip < 40%:        23 / 216
   Users with distinct < 6:      201 / 216
 
 COHERENCE
-  Mean coherence score:         1.0000 (target ≥ 0.85)
+  Mean coherence score:         0.9999 (target ≥ 0.85)
 
 SKY ACCURACY
-  Accent-salience match rate:   86.7% (target ≥ 70%)
-  Miss breakdown (1719 misses):
-    Sky top in supporting:      303
+  Accent-salience match rate:   88.7% (target ≥ 70%)
+  Miss breakdown (1466 misses):
+    Sky top in supporting:      307
     Sky top cooldown-blocked:    0
     Sky top coherence-rejected:  0
-    Other (outscored/unmapped):  1416
+    Other (outscored/unmapped):  1159
 
 SLIDER DISPLAY POSITION COVERAGE
-  vibrancy             meanRange=0.713  stuck=0%  rangeLt0.5=0%
-  contrast             meanRange=0.263  stuck=70%  rangeLt0.5=100%
-  metalTone            meanRange=0.488  stuck=0%  rangeLt0.5=67%
-  masculineFeminine    meanRange=0.284  stuck=85%  rangeLt0.5=100%
-  angularRounded       meanRange=0.499  stuck=0%  rangeLt0.5=37%
-  structuredDraped     meanRange=0.477  stuck=0%  rangeLt0.5=100%
+  vibrancy             meanRange=0.727  stuck=0%  rangeLt0.5=0%
+  contrast             meanRange=0.407  stuck=6%  rangeLt0.5=97%
+  metalTone            meanRange=0.709  stuck=0%  rangeLt0.5=0%
+  masculineFeminine    meanRange=0.492  stuck=0%  rangeLt0.5=52%
+  angularRounded       meanRange=0.596  stuck=0%  rangeLt0.5=0%
+  structuredDraped     meanRange=0.510  stuck=0%  rangeLt0.5=28%
 
 ======================================================================
 §4.3 TARGET EVALUATION
@@ -45,10 +45,10 @@ Hard zero-tolerance:
   [5] Production fingerprint:          PASS (separate test)
 
 Quantitative:
-  [6] Flip rate ≥ 40%:                 PASS (54.3%)
+  [6] Flip rate ≥ 40%:                 PASS (51.3%)
   [7] Distinct #1 ≥ 6:                 WEAK/FAIL (4.6)
-  [8] Category coverage ≥ 10/14:       PASS (13.3)
+  [8] Category coverage ≥ 10/14:       PASS (13.5)
   [9] Slider range ≥ 0.5 per user:     see per-slider detail
   [10] No slider stuck 60d:            see per-slider detail
-  [11] Coherence ≥ 0.85:               PASS (1.0000)
-  [12] Accent-salience match ≥ 70%:    PASS (86.7%)
+  [11] Coherence ≥ 0.85:               PASS (0.9999)
+  [12] Accent-salience match ≥ 70%:    PASS (88.7%)

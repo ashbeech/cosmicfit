@@ -1,0 +1,358 @@
+{
+ "accessory": {
+  "paragraphs": [
+   "A collection of minor accessories simply lacks the impact of one incredibly serious piece. Stacking fine chains and multiple rings just creates visual clutter when you want clear, focused intent. Leave the tangled layers behind and rely on a single, substantial addition with genuine, tactile weight. A beautiful watch on a thick leather strap or a structured bag with an impeccably engineered clasp provides an immediate focal point. Because your wardrobe relies on soft, fluid shapes and crisp textiles, the eye needs exactly one solid place to rest. Leaving the remainder bare proves you know exactly when to stop.",
+   "Because your everyday layers lean so beautifully soft, your accessories must supply the architecture. A firm leather strap or a rigidly structured bag with a heavy, snapping clasp creates a neat boundary for your yielding fabrics. This is where you introduce tension. A flawlessly weighted watch or a smooth, substantial ring gives the eye a resting place amid the drape of your silhouette. These pieces act as the strict punctuation marks at the end of a fluid sentence, keeping the overall finish deliberate rather than undone.",
+   "The tactile reality of your finishing touches matters far more than their visual noise. There is an undeniable relief in the quiet, precise snap of a well-engineered clasp and the yielding weight of exceptional leather in your hands. The subtle scent of a brushed bag lining or the reassuring, heavy drop of a premium watch on your wrist acts as an invisible grounding mechanism. These sensory details transform an outfit from a basic styling exercise into a profound physical comfort."
+  ]
+ },
+ "code": {
+  "avoid": [
+   "Jarring mismatched combinations that create visual discord and disrupt the harmony you naturally seek.",
+   "Single pieces that overpower your whole outfit instead of serving the composition as a beautifully balanced element.",
+   "Confrontational style choices in harmonious settings where your role is to create beauty, not tension.",
+   "Rigid dress codes that ignore your emotional state. Forcing yourself into structure on a fluid day creates real suffering.",
+   "Harsh structured formality that makes you feel like you are performing. Your best work happens when you feel free.",
+   "Sharp angular silhouettes that cut against your natural softness. Hard lines create tension your body will carry all day."
+  ],
+  "consider": [
+   "Wearing understated, highly tactile pieces that draw people in without shouting for immediate visual attention.",
+   "Anchorring your social wardrobe with flawlessly cut, incredibly fluid crepe trousers to maintain pure elegance without sacrificing physical comfort.",
+   "Treating your wardrobe as literal life armour, deploying sharply tailored pieces with strategic intent to serve a strictly protective purpose.",
+   "How the density of fabric affects your sense of control. Heavier, more opaque garments reinforce the containment you need."
+  ],
+  "leanInto": [
+   "Practising strict tonal coordination as a daily discipline, ensuring every single shade perfectly balances the rest of your look.",
+   "Building balanced proportions that flatter your shape, ensuring the eye moves smoothly across your entire silhouette.",
+   "Cultivating colour relationships that create visual harmony and make every outfit feel composed.",
+   "Dressing by feeling rather than formula. If the outfit does not match your emotional temperature this morning, change it.",
+   "Selecting incredibly soft, fluid layers that actively respond to your body in motion. Wear a fine gauze wrap or a beautiful bias-cut silk shirt.",
+   "Anchorring your wardrobe in calming sea-inspired tones, letting shades of soft seafoam, muted lilac, and pale aqua bring your aesthetic firmly back to centre."
+  ]
+ },
+ "engineVersion": "2.1.0",
+ "generatedAt": "2026-06-26T02:19:20Z",
+ "hardware": {
+  "metalsText": "High-shine hardware feels too loud and demanding for your natural rhythm. Brushed silver tones is your baseline, especially when it carries a brushed or subtly antiqued finish that catches the light gently rather than blinding the room. A matte white gold tones buckle sitting flat on a pressed linen trench coat or anchoring a soft, fine-gauge knit provides exactly the right visual weight. When bringing in matte platinum tones, seek out fluid, organic shapes that lack severe geometric edges. Your details should function as quiet, permanent fixtures rather than obvious ornamentation.",
+  "recommendedMetals": [
+   "brushed silver",
+   "white gold",
+   "matte platinum",
+   "matte steel",
+   "silver",
+   "rose gold",
+   "iridescent finishes"
+  ],
+  "recommendedStones": [
+   "peridot",
+   "sapphire",
+   "clear quartz",
+   "amazonite",
+   "moss agate",
+   "rose quartz",
+   "amethyst",
+   "aquamarine",
+   "rainbow moonstone"
+  ],
+  "stonesText": "Your jewellery box should feel more like a collection of smooth riverbed finds than a display of blinding solitaires. You naturally gravitate towards cabochon cuts that are satisfyingly cool to the touch, setting peridot into a simple brushed silver or matte gold bezel. The soft, watery opacity of sapphire or the pale, earthy weight of clear quartz provides exactly the right kind of quiet anchor when resting directly on your collarbone. Leave the hyper-faceted, brilliant cuts to other people; your pieces must quietly absorb the light rather than desperately reflecting it back at the room.",
+  "tipText": "Your approach to jewellery is less about decoration and purely about the quiet satisfaction of a well-made object. High-shine, noisy items always feel completely wrong. Seek out pieces in brushed silver tones that carry a brushed, matte, or gently tumbled finish, offering a satisfying weight rather than an aggressive glare. A solitary sculptural cuff or a ring set flush with peridot gives you that essential tactile grounding without fighting the soft drape of your clothes. The piece should look engineered but feel organically yours from the moment you put it on."
+ },
+ "occasions": {
+  "dailyText": "Your off-duty wardrobe runs on a quiet tension between physical ease and exacting precision. The pieces you pull on for an ordinary Tuesday need to feel gentle enough to live in, yet constructed enough to leave the house without a second thought. Think fluid proportions anchored by a sharp shoulder or a clean, heavy hem. You want daily dressing to feel like a soft landing, but you refuse to look undone. The trick is finding that sweet spot where total relaxation meets an incredibly high standard.\n\nYour comfort instinct gravitates toward emotional harmony in partnership dressing, soft social presentation.",
+  "intimateText": "Intimate settings are where your daily strictness gets to melt just a fraction. Focus on how a piece behaves when you sit and move, rather than just how it holds a pose standing up. Look for garments that maintain their architecture across the shoulder or waist, then release into a completely fluid drape. The physical weight of what you wear becomes the main event here, requiring materials that feel substantial in the hand but liquid on the body. It creates a mood that invites proximity, leaving people unsure where your exactness ends and your softness begins.",
+  "workText": "Professional dressing is an exercise in projecting sharp competence while remaining entirely physically unrestrained. Your foundation relies on immaculate tailoring, but the garments must possess enough inherent fluidity to yield when you actually move. The secret lies in silhouettes that hold an authoritative shape from across the room, yet drape naturally the moment they meet your body. Seek out worsted wools and heavy crepes that provide structure without the straitjacket effect. It is the visual signature of someone who has every detail sorted, delivered in a cut that never feels stiff.\n\nYour style energy concentrates in resources and identity, so your wardrobe is at its best when it reflects both resources and identity. You maintain your professional agility by styling sharply cut separates with lightweight silk shirts for a flawlessly dynamic aesthetic."
+ },
+ "palette": {
+  "accentColours": [
+   {
+    "hexValue": "#678C70",
+    "name": "Sage Mist",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Signature",
+     "saturationOverride": false,
+     "sourcePlanet": "Ascendant",
+     "sourceSign": "Virgo"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#51A9C0",
+    "name": "Pale Ocean",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Contrast",
+     "saturationOverride": false,
+     "sourcePlanet": "Moon",
+     "sourceSign": "Pisces"
+    },
+    "role": "accent"
+   },
+   {
+    "hexValue": "#A08CC9",
+    "name": "Cool Mauve",
+    "provenance": {
+     "kind": "chartDerivedAccent",
+     "role": "Visibility",
+     "saturationOverride": false,
+     "sourcePlanet": "Mercury",
+     "sourceSign": "Libra"
+    },
+    "role": "accent"
+   }
+  ],
+  "cluster": "Medium Cool Muted",
+  "coreColours": [
+   {
+    "hexValue": "#6E9E8E",
+    "name": "eucalyptus",
+    "provenance": {
+     "band": "core",
+     "family": "Soft Summer",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#C29290",
+    "name": "muted rose",
+    "provenance": {
+     "band": "core",
+     "family": "Soft Summer",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#7A8B6A",
+    "name": "moss sage",
+    "provenance": {
+     "band": "core",
+     "family": "Soft Summer",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   },
+   {
+    "hexValue": "#8E82A7",
+    "name": "smoky periwinkle",
+    "provenance": {
+     "band": "core",
+     "family": "Soft Summer",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "core"
+   }
+  ],
+  "deepAnchor": {
+   "hexValue": "#1B2A4A",
+   "name": "ink navy",
+   "provenance": {
+    "band": "deepAnchor",
+    "family": "Soft Summer",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "family": "Soft Summer",
+  "lightAnchor": {
+   "hexValue": "#E8E6E2",
+   "name": "smoke white",
+   "provenance": {
+    "band": "lightAnchor",
+    "family": "Soft Summer",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "anchor"
+  },
+  "luminarySignature": {
+   "hexValue": "#C7AFE0",
+   "name": "soft lilac",
+   "provenance": {
+    "band": "luminarySignature",
+    "family": "Soft Summer",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "luminary signature"
+  },
+  "narrativeText": "Your eye naturally gravitates toward shades that feel soothing to wear and expensive to look at. A foundation built on an understated wash of eucalyptus and muted rose gives you that necessary visual quiet. Ground these tones with moss sage in substantial, tactile materials like polished cotton or a fine-gauge knit to add depth without interrupting the flow. When you do introduce Sage Mist, keep it isolated to a deliberate detail, like a soft leather belt or the resin hardware on a daily tote. The resulting mood is serene, allowing the precise cut of your garments to hold the room.",
+  "neutrals": [
+   {
+    "hexValue": "#928E85",
+    "name": "stone grey",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Soft Summer",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#ADA39A",
+    "name": "mushroom",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Soft Summer",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#3B4B5E",
+    "name": "smoked navy",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Soft Summer",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   },
+   {
+    "hexValue": "#636B6F",
+    "name": "muted charcoal",
+    "provenance": {
+     "band": "neutrals",
+     "family": "Soft Summer",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "neutral"
+   }
+  ],
+  "overrideFlags": {
+   "capricornVirgoCoolingApplied": true,
+   "coolLeanDeepAutumn": false,
+   "deepAnchorOverriddenToBlack": false,
+   "earthDepthOverrideApplied": true,
+   "fireAirChromaApplied": false,
+   "scorpioDensityApplied": true,
+   "surfacePreservationApplied": false,
+   "waterSofteningApplied": false,
+   "winterCompressionApplied": false
+  },
+  "rulerSignature": {
+   "hexValue": "#C7AFE0",
+   "name": "lavender grey",
+   "provenance": {
+    "band": "rulerSignature",
+    "family": "Soft Summer",
+    "index": 0,
+    "kind": "v4Template"
+   },
+   "role": "signature",
+   "semanticLabel": "ruler signature"
+  },
+  "secondaryPull": "True Summer",
+  "supportColours": [
+   {
+    "hexValue": "#D2C6B2",
+    "name": "oatmeal",
+    "provenance": {
+     "band": "support",
+     "family": "Soft Summer",
+     "index": 0,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#AF9B88",
+    "name": "warm taupe",
+    "provenance": {
+     "band": "support",
+     "family": "Soft Summer",
+     "index": 1,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#B3A580",
+    "name": "olive beige",
+    "provenance": {
+     "band": "support",
+     "family": "Soft Summer",
+     "index": 2,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   },
+   {
+    "hexValue": "#4F5D73",
+    "name": "soft navy",
+    "provenance": {
+     "band": "support",
+     "family": "Soft Summer",
+     "index": 3,
+     "kind": "v4Template"
+    },
+    "role": "support"
+   }
+  ],
+  "swatchFamilies": [],
+  "variables": {
+   "contrast": "Low",
+   "depth": "Medium",
+   "saturation": "Muted",
+   "surface": "Soft",
+   "temperature": "Cool"
+  }
+ },
+ "pattern": {
+  "avoidPatterns": [
+   "loud graphics",
+   "chaotic prints",
+   "oversized logos",
+   "harsh geometric"
+  ],
+  "narrativeText": "Prints usually feel like an unnecessary complication for someone who prefers the quiet perfection of cut and fabric. When you do introduce a motif, it needs to behave itself. Something like balanced symmetrical design or tonal stripe gives your eye the visual discipline it expects without sacrificing the comforting softness you crave on a daily basis. Keep these motifs scaled down and applied to tactile foundations like pressed linen or a fine-gauge knit. Anything manic or overtly graphic, particularly loud graphics, immediately breaks the spell and simply wears you rather than the other way around. Let the woven construction of your clothes speak louder than any surface distraction.",
+  "recommendedPatterns": [
+   "balanced symmetrical design",
+   "tonal stripe",
+   "fine check",
+   "subtle stripe",
+   "watercolour motifs",
+   "oceanic prints"
+  ],
+  "tipText": "Loud graphics feel entirely out of place in your wardrobe. You rely on clean lines and tactile fabrics, so any print you introduce needs to behave itself. Approach balanced symmetrical design as a woven texture rather than a flat, stamped-on graphic. When the motif sits quietly within the construction of a piece, like a subtle tonal finish on polished cotton or pressed linen, it brings a soft fluidity without disrupting your understated look. Keeping the colour contrast minimal ensures the design melts into the garment. It makes a quiet point without ever having to shout."
+ },
+ "styleCore": {
+  "narrativeText": "There is a quiet, exacting logic to the way you present yourself. You walk into a room looking flawlessly put together, yet there is a fluid ease to how you actually carry the clothes. Your eye for proportion is absolute, but you refuse to tolerate anything that feels stiff or restricts your movement. People register the impeccable fit of your garments first, followed by the relaxed, intuitive way they drape around your body. It is a highly considered aesthetic that manages to look entirely unforced. You project a grounded certainty that never feels clinical.\n\nYour natural sense of beauty shows up most powerfully in your personal identity, beauty as first impression, your aesthetic IS your identity. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as versatile and expressive; you communicate range and adaptability through what you wear."
+ },
+ "textures": {
+  "avoidTextures": [
+   "stiff scratchy formal blends",
+   "confrontational heavy fabrics",
+   "stiff structured suiting"
+  ],
+  "badText": "Your sensory baseline is sharp, meaning you instinctively reject materials that fight your body or look tired by lunchtime. Anything aggressively synthetic or abrasive is a mistake, which is why stiff scratchy formal blends will always disrupt your equilibrium. You need a balance of fluid drape and tailored intent, so confrontational heavy fabrics just ends up looking uncomfortably severe on your frame. Bulky, unforgiving weaves interrupt your natural movement and add unnecessary visual noise. If a piece demands constant fussing or leaves a harsh edge against your collarbone, leave it on the rail.",
+  "goodText": "Your approach to dressing requires absolute precision on the outside and a deeply yielding softness against the skin. Stiff, uncompromising materials simply stay on the hanger, no matter how impeccable the tailoring. Instead, anchor your rotation with the quiet discipline of silk-wool blend and the breathable, orderly structure of fine-gauge knit. When you need a piece that holds a sharp collar but still moves with absolute ease, fine gauge knit provides exactly the right balance of visual rigour and physical comfort. These textiles deliver an immaculate finish to the rest of the world while keeping you entirely grounded.",
+  "recommendedTextures": [
+   "silk-wool blend",
+   "fine gauge knit",
+   "draping jersey",
+   "fine-gauge knit"
+  ],
+  "sweetSpotKeywords": [
+   "balance",
+   "coordination"
+  ],
+  "sweetSpotText": "Your sweet spot lives right at the intersection of balance and coordination. The clothes you wear must project an immaculately neat exterior while quietly enveloping you in total softness. A silk-wool blend or an impeccably cut fine gauge knit satisfies your eye for precise construction, yet wears with the gentle ease of loungewear. If a garment looks spectacular on the rail but demands constant adjustment or compromises your physical comfort, leave it in the shop."
+ },
+ "userInfo": {
+  "birthDate": "1985-09-28T04:00:00Z",
+  "birthLocation": "Synth 108 \u2014 Libra Sun, 04:00 UTC, London (1985)",
+  "generationDate": "2026-06-26T02:19:20Z"
+ }
+}
