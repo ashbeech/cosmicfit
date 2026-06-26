@@ -29,7 +29,7 @@ class FAQViewController: UIViewController {
         /// Space from question label bottom to answer label top.
         static let questionToAnswer: CGFloat = 22
         static let bottomDividerTop: CGFloat = 40
-        static let bottomInset: CGFloat = 40
+        static let bottomInset: CGFloat = CosmicFitTheme.Layout.scrollContentBottomInset
     }
 
     // MARK: - Properties

@@ -653,31 +653,24 @@ struct PersonalScaleEnvelope_Integration_Tests {
                 "Midpoint value must snap to Mixed")
     }
 
-    @Test("I4c: Pipeline displayPosition used continuously — 14-day Briar shows rich variation")
+    @Test("I4c: Metal UI snaps to ≥2 distinct positions over 14-day Briar window")
     func metalPipelineDisplayPositionVariation() {
         let start = SkyForwardV2Support.date(year: 2026, month: 5, day: 23)
-        var rawDisplayPositions: [Double] = []
-        var rangeWindowPositions: [Double] = []
+        var snappedUI: [Double] = []
 
-        for offset in 0..<30 {
+        for offset in 0..<14 {
             let date = start.addingTimeInterval(Double(offset) * 86400)
             let payload = SkyForwardV2Support.generateBriarPayload(for: date)
             guard let sp = payload.scalePresentation else {
                 Issue.record("scalePresentation must be non-nil")
                 return
             }
-            if offset < 14 {
-                rawDisplayPositions.append(sp.metalTone.displayPosition)
-            }
-            rangeWindowPositions.append(sp.metalTone.displayPosition)
+            snappedUI.append(DailyFitViewController.snapMetalToThreePositions(sp.metalTone.displayPosition))
         }
 
-        let distinctRaw = Set(rawDisplayPositions.map { String(format: "%.3f", $0) }).count
-        #expect(distinctRaw >= 10,
-                "Continuous metal displayPosition should show ≥10 distinct values over 14 days; got \(distinctRaw)")
-        let range = rangeWindowPositions.max()! - rangeWindowPositions.min()!
-        #expect(range >= 0.15,
-                "Metal displayPosition range should be ≥0.15 over 30 days; got \(range)")
+        let distinctSnapped = Set(snappedUI).count
+        #expect(distinctSnapped >= 2,
+                "Briar 14-day metal UI should visit ≥2 snap positions; got \(distinctSnapped) from \(snappedUI)")
     }
 
     // MARK: I5 — Briar 14-day contrast ≥ 3 distinct display positions

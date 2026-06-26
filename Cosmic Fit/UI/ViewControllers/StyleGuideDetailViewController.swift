@@ -308,7 +308,7 @@ final class StyleGuideDetailViewController: UIViewController {
             bottomDividerContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             bottomDividerContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             bottomDividerContainer.heightAnchor.constraint(equalToConstant: 30),
-            bottomDividerContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
+            bottomDividerContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -CosmicFitTheme.Layout.scrollContentBottomInset),
             
             // Bottom Divider Lines
             bottomDividerLeft.centerYAnchor.constraint(equalTo: bottomDividerContainer.centerYAnchor),

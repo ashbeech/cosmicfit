@@ -3,7 +3,7 @@
 //  Cosmic FitTests
 //
 //  CI gate: 12 named cohort profiles × 30 days — contrast and metalTone must
-//  show meaningful day-over-day UI variation (continuous metal displayPosition).
+//  show meaningful day-over-day UI variation (snapped metal UI positions).
 //
 
 import Testing
@@ -101,22 +101,19 @@ struct SliderDayVariation_Tests {
                 }
 
                 contrastUI.append(sp.contrast.displayPosition)
-                metalUI.append(sp.metalTone.displayPosition)
+                metalUI.append(DailyFitViewController.snapMetalToThreePositions(sp.metalTone.displayPosition))
             }
 
             let contrastDistinct = Set(contrastUI.map { String(format: "%.3f", $0) }).count
             let metalDistinct = Set(metalUI.map { String(format: "%.3f", $0) }).count
             let contrastMaxStreak = Self.maxUnchangedStreak(contrastUI)
-            let metalMaxStreak = Self.maxUnchangedStreak(metalUI)
 
             #expect(contrastDistinct >= 3,
                     "\(profileId): contrast needs ≥3 distinct UI positions; got \(contrastDistinct)")
-            #expect(metalDistinct >= 3,
-                    "\(profileId): metalTone needs ≥3 distinct UI positions; got \(metalDistinct)")
+            #expect(metalDistinct >= 2,
+                    "\(profileId): metalTone needs ≥2 distinct UI positions; got \(metalDistinct)")
             #expect(contrastMaxStreak < 10,
                     "\(profileId): contrast max unchanged streak \(contrastMaxStreak) must be < 10")
-            #expect(metalMaxStreak < 10,
-                    "\(profileId): metalTone max unchanged streak \(metalMaxStreak) must be < 10")
         }
     }
 

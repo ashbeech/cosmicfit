@@ -7,6 +7,9 @@ inspector API, captures per-day displayPosition values, and computes:
   - unchanged-day streak lengths
   - comparison vs silhouette sliders
 
+Metal tone UI uses 3-position snap on displayPosition (Cool/Mixed/Warm),
+matching production DailyFitViewController behaviour.
+
 Outputs:
   docs/fixtures/slider_day_variation_report.json
   docs/fixtures/slider_day_variation_report.txt
@@ -36,7 +39,7 @@ ALL_SLIDERS = SCALE_SLIDERS + SILHOUETTE_SLIDERS
 MEANINGFUL_DELTA = 0.05
 IMPERCEPTIBLE_DELTA = 0.02
 
-LEGACY_METAL_SNAP = False
+LEGACY_METAL_SNAP = True  # production UI snaps metal displayPosition to 3 positions
 
 
 def snap_metal(value: float) -> float:
@@ -422,12 +425,12 @@ def main() -> int:
     ap.add_argument("--days", type=int, default=60)
     ap.add_argument("--subset", type=int, default=None)
     ap.add_argument("--parallel", type=int, default=6)
-    ap.add_argument("--legacy-metal-snap", action="store_true",
-                    help="Apply 3-position snap to metal tone (pre-fix behaviour)")
+    ap.add_argument("--no-metal-snap", action="store_true",
+                    help="Use continuous metal displayPosition (pre-snap comparison only)")
     ap.add_argument("--output", default=None,
                     help="Output JSON path (default: docs/fixtures/slider_day_variation_report.json)")
     args = ap.parse_args()
-    LEGACY_METAL_SNAP = args.legacy_metal_snap
+    LEGACY_METAL_SNAP = not args.no_metal_snap
     start = datetime.strptime(args.start, "%Y-%m-%d").date()
     return run(start, args.days, args.subset, args.parallel, args.output)
 

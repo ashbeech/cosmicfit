@@ -13,6 +13,11 @@ import CoreLocation
 protocol LocationAutocompleteDelegate: AnyObject {
     func locationAutocompleteDidSelectLocation(name: String, latitude: Double, longitude: Double, timeZone: TimeZone)
     func locationAutocompleteDidUpdateText(_ text: String)
+    func locationAutocompleteDidBeginEditing()
+}
+
+extension LocationAutocompleteDelegate {
+    func locationAutocompleteDidBeginEditing() {}
 }
 
 class LocationAutocompleteView: UIView {
@@ -272,6 +277,18 @@ class LocationAutocompleteView: UIView {
         super.layoutSubviews()
         updateSuggestionsOverlayFrameConstraints()
     }
+
+    /// Route taps on the underline / container chrome to the text field so the first tap
+    /// always focuses for editing (those views are plain UIViews, not UIControls).
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let hit = super.hitTest(point, with: event)
+        guard textField.isUserInteractionEnabled else { return hit }
+
+        if hit === fieldContainer || hit === underlineView || hit === self {
+            return textField
+        }
+        return hit
+    }
     
     private func updateSuggestionsOverlayFrameConstraints() {
         guard let parentView else { return }
@@ -460,6 +477,7 @@ extension LocationAutocompleteView: UITextFieldDelegate {
         if !searchResults.isEmpty {
             showSuggestions()
         }
+        delegate?.locationAutocompleteDidBeginEditing()
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {

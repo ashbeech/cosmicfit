@@ -1,34 +1,19 @@
-Report: docs/fixtures/slider_day_variation_report.json
-Generated: 2026-06-24T18:28:31.522193+01:00
-Contrast P95: 0.2329 → recommended half-span 0.22
+Slider Day-Variation Report
+Engine: stage1_experimental
+Cohort: synthetic_cohort (216 users)
+Window: 2026-04-23 .. 2026-06-21 (60 days)
+Generated: 2026-06-26T14:18:03.659419+01:00
 
-=== vibrancy ===
-  meanPctUnchangedDayPairsUI: 1.4 < 20.0 → PASS
-  meanPctMeaningfulDayPairsUI: 64.7 > 45.0 → PASS
-  meanMaxUnchangedStreakUI: 1.8 < 8.0 → PASS
-  pctUsersMostlyUnchanged: 0.0 < 15.0 → PASS
-  meanUiDistinct: 57.4 > 35.0 → PASS
-  medianDayDeltaUI: 0.08 > 0.03 → PASS
-  pctUsersLowRawRange: 0.0 < 10.0 → PASS
-  VERDICT: PASS
+=== AGGREGATE (UI-visible day-over-day) ===
+slider                medΔUI meanΔUI   %unch  %<0.02  %≥0.05 maxStrk distPos
+vibrancy              0.0934  0.1145     0.2    12.9    70.0     1.1    59.4
+contrast              0.0797  0.0979     0.3    14.5    65.5     1.2    58.7
+metalTone             0.0000  0.1035    80.0    80.0    20.0    25.3     2.3
+masculineFeminine     0.1001  0.1445    13.6    22.5    64.6     5.7    50.4
+angularRounded        0.0912  0.1073    13.6    26.1    60.1     4.5    49.2
+structuredDraped      0.0917  0.1087    13.7    24.0    62.9     4.3    48.8
 
-=== contrast ===
-  meanPctUnchangedDayPairsUI: 0.0 < 20.0 → PASS
-  meanPctMeaningfulDayPairsUI: 59.0 > 45.0 → PASS
-  meanMaxUnchangedStreakUI: 1.0 < 8.0 → PASS
-  pctUsersMostlyUnchanged: 0.0 < 15.0 → PASS
-  meanUiDistinct: 54.6 > 35.0 → PASS
-  medianDayDeltaUI: 0.0668 > 0.03 → PASS
-  pctUsersLowRawRange: 0.0 < 10.0 → PASS
-  VERDICT: PASS
-
-=== metalTone ===
-  meanPctUnchangedDayPairsUI: 4.8 < 20.0 → PASS
-  meanPctMeaningfulDayPairsUI: 45.8 > 45.0 → PASS
-  meanMaxUnchangedStreakUI: 3.6 < 8.0 → PASS
-  pctUsersMostlyUnchanged: 0.0 < 15.0 → PASS
-  meanUiDistinct: 53.2 > 35.0 → PASS
-  medianDayDeltaUI: 0.0475 > 0.03 → PASS
-  pctUsersLowRawRange: 0.0 < 10.0 → PASS
-  VERDICT: PASS
-
+=== SCALE vs SILHOUETTE VERDICT ===
+  vibrancy: 0% users see meaningful shift <10% of days; mean unchanged streak 1.1 days
+  contrast: 0% users see meaningful shift <10% of days; mean unchanged streak 1.2 days
+  metalTone: 24% users see meaningful shift <10% of days; mean unchanged streak 25.3 days

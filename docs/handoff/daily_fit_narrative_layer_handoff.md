@@ -618,7 +618,7 @@ static func generatePayloadFromPlan(
 | Palette | `paletteDirective` (maxStatementSlots, accentCategory, foundationCategory) | Colour scoring from existing formula; slot allocation from plan |
 | Vibrancy | `plan.targetVibrancy` | Clamped to [0,1] |
 | Contrast | `plan.targetContrast` | Clamped to [0,1] |
-| Metal tone | `plan.targetMetalTone` | Clamped, then tertile-snapped for display |
+| Metal tone | `plan.targetMetalTone` | Clamped, then tertile-snapped for display on personal-band `displayPosition` (2026-06-26 restore) |
 | Silhouette | `plan.targetSilhouette` | Direct assignment |
 | Textures | Plan `intensityLevel` + `accentEssence` → texture scoring bias | Existing texture pool; sky energy alignment |
 | Pattern | Plan `intensityLevel` + sky axes → gate + selection | Existing pattern pool |

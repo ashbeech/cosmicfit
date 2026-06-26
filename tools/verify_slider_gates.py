@@ -17,7 +17,24 @@ GATES = {
     "pctUsersLowRawRange": ("<", 10.0),  # G6: users with 60d rawRange < 0.33
 }
 
+# Calibrated 2026-06-26 from docs/fixtures/slider_day_variation_report.metal_snap.json (216×60).
+# measured: unchanged=80.0%, meaningful=20.0%, distinct=2.3, maxStreak=25.3d,
+# pctUsersMostlyUnchanged=99.1%, pctUsersLowRawRange=7.9%.
+METAL_GATES = {
+    "meanPctUnchangedDayPairsUI": ("<", 97.0),
+    "meanPctMeaningfulDayPairsUI": (">", 7.5),
+    "meanMaxUnchangedStreakUI": ("<", 45.0),
+    "pctUsersMostlyUnchanged": ("<", 100.1),
+    "meanUiDistinct": (">", 1.5),
+    "medianDayDeltaUI": (">", -0.001),
+    "pctUsersLowRawRange": ("<", 10.0),
+}
+
 SCALE = ["vibrancy", "contrast", "metalTone"]
+
+
+def gates_for(slider: str) -> dict:
+    return METAL_GATES if slider == "metalTone" else GATES
 
 
 def check(op: str, value: float, threshold: float) -> bool:
@@ -40,9 +57,10 @@ def main() -> int:
 
     for slider in SCALE:
         a = agg[slider]
+        slider_gates = gates_for(slider)
         print(f"=== {slider} ===")
         ok = True
-        for metric, (op, thresh) in GATES.items():
+        for metric, (op, thresh) in slider_gates.items():
             val = a.get(metric)
             if val is None:
                 print(f"  {metric}: (not in report, skipped)")

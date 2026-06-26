@@ -30,6 +30,9 @@ final class CosmicFitTabBarController: UITabBarController {
     private var menuViewController: MenuViewController?
     private var detailContentContainer: UIView!
     private var dimmingView: UIView?
+    /// Pins detail overlay above the tab bar; refreshed in `viewDidLayoutSubviews`.
+    private var detailContainerBottomConstraint: NSLayoutConstraint?
+    private var dimmingBottomConstraint: NSLayoutConstraint?
     
     private var natalChart: NatalChartCalculator.NatalChart?
     private var progressedChart: NatalChartCalculator.NatalChart?
@@ -53,11 +56,31 @@ final class CosmicFitTabBarController: UITabBarController {
     #if DEBUG
     private var isDevForceRefreshInProgress = false
     #endif
-    
+
+    /// iOS 18 on iPad can host the tab bar outside `self.view`; reattach once if needed.
+    private var didRepairIPadTabBarHierarchy = false
+
+    // MARK: - Initialization
+
+    convenience init() {
+        self.init(nibName: nil, bundle: nil)
+    }
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        configureIPadTabBarIfNeeded()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        configureIPadTabBarIfNeeded()
+    }
+
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureIPadTabBarIfNeeded()
         applyCosmicFitTheme()
         setupMenuButton()
         setupDetailContentContainer()
@@ -73,13 +96,15 @@ final class CosmicFitTabBarController: UITabBarController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // Apply tab selection indicator after layout is complete
-        updateTabSelectionIndicator()
+        repairIPadTabBarHierarchyIfNeeded()
+        refreshTabBarChrome()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        repairIPadTabBarHierarchyIfNeeded()
+        updateDetailOverlayBottomInsetIfNeeded()
         // Add dividers after layout is complete
         CosmicFitTheme.addTabDividers(tabBar)
         elevateSystemChromeAboveTabContent()
@@ -95,6 +120,72 @@ final class CosmicFitTabBarController: UITabBarController {
         delegate = self
     }
     
+    // MARK: - iPad Tab Bar (iOS 18)
+
+    /// iPadOS 18 defaults to a top/sidebar tab bar that can render outside
+    /// `self.view`, making tabs invisible and breaking bottom-anchored layout.
+    /// Force the pre–iOS 18 bottom tab bar on iPad only.
+    private func configureIPadTabBarIfNeeded() {
+        guard UIDevice.current.userInterfaceIdiom == .pad else { return }
+
+        mode = .tabBar
+        traitOverrides.horizontalSizeClass = .compact
+        if #available(iOS 26.0, *) {
+            tabBarMinimizeBehavior = .never
+        }
+        setTabBarHidden(false, animated: false)
+        tabBar.isHidden = false
+    }
+
+    /// Reattach the tab bar when iOS 18 hosts it outside the controller view.
+    private func repairIPadTabBarHierarchyIfNeeded() {
+        guard UIDevice.current.userInterfaceIdiom == .pad else { return }
+        guard tabBar.superview != nil else { return }
+
+        if tabBar.superview !== view {
+            tabBar.removeFromSuperview()
+            view.addSubview(tabBar)
+            if !didRepairIPadTabBarHierarchy {
+                didRepairIPadTabBarHierarchy = true
+                print("📱 iPad: reattached tab bar to controller view")
+            }
+        }
+    }
+
+    private func refreshTabBarChrome() {
+        CosmicFitTheme.styleTabBar(tabBar)
+        updateTabSelectionIndicator()
+        CosmicFitTheme.addTabDividers(tabBar)
+        elevateSystemChromeAboveTabContent()
+    }
+
+    /// Y offset from `view.topAnchor` to the tab bar top — stable across tab transitions.
+    private func resolvedTabBarTopInView() -> CGFloat {
+        if tabBar.superview === view, tabBar.frame.height > 0 {
+            return tabBar.frame.minY
+        }
+        if let window = view.window ?? tabBar.window {
+            let tabBarTopInWindow = tabBar.convert(CGPoint.zero, to: window).y
+            let viewOriginInWindow = view.convert(CGPoint.zero, to: window).y
+            return tabBarTopInWindow - viewOriginInWindow
+        }
+        return view.bounds.height - view.safeAreaInsets.bottom
+    }
+
+    private func updateDetailOverlayBottomInsetIfNeeded() {
+        let tabBarTop = resolvedTabBarTopInView()
+        UIView.performWithoutAnimation {
+            if let constraint = detailContainerBottomConstraint,
+               abs(constraint.constant - tabBarTop) > 0.5 {
+                constraint.constant = tabBarTop
+            }
+            if let constraint = dimmingBottomConstraint,
+               abs(constraint.constant - tabBarTop) > 0.5 {
+                constraint.constant = tabBarTop
+            }
+        }
+    }
+
     // MARK: - Configuration
     func configure(with chartData: [String: Any],
                    birthInfo: String,
@@ -134,14 +225,31 @@ final class CosmicFitTabBarController: UITabBarController {
         detailContentContainer.isUserInteractionEnabled = true
         
         view.addSubview(detailContentContainer)
-        
-        NSLayoutConstraint.activate([
-            // Start 10px below the menu bar
+
+        var detailConstraints: [NSLayoutConstraint] = [
             detailContentContainer.topAnchor.constraint(equalTo: menuBarView.bottomAnchor, constant: 10),
-            detailContentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            detailContentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            detailContentContainer.bottomAnchor.constraint(equalTo: tabBar.topAnchor)
-        ])
+        ]
+        detailContainerBottomConstraint = detailContentContainer.bottomAnchor.constraint(
+            equalTo: view.topAnchor,
+            constant: resolvedTabBarTopInView()
+        )
+        detailConstraints.append(detailContainerBottomConstraint!)
+        if CosmicFitTheme.Layout.isPad {
+            let detailFillWidth = detailContentContainer.widthAnchor.constraint(equalTo: view.widthAnchor)
+            detailFillWidth.priority = .defaultHigh
+            detailConstraints.append(contentsOf: [
+                detailContentContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                detailFillWidth,
+                detailContentContainer.widthAnchor.constraint(lessThanOrEqualToConstant: CosmicFitTheme.Layout.maxContentWidth),
+            ])
+        } else {
+            detailConstraints.append(contentsOf: [
+                detailContentContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                detailContentContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            ])
+        }
+
+        NSLayoutConstraint.activate(detailConstraints)
     }
     
     func presentDetailViewController(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)? = nil) {
@@ -166,12 +274,15 @@ final class CosmicFitTabBarController: UITabBarController {
         
         // Add to the main view, not the selected VC view
         view.insertSubview(dimming, belowSubview: detailContentContainer)
+        dimmingBottomConstraint = dimming.bottomAnchor.constraint(
+            equalTo: view.topAnchor,
+            constant: resolvedTabBarTopInView()
+        )
         NSLayoutConstraint.activate([
-            // Extend right up to the bottom of menu bar (no gap)
             dimming.topAnchor.constraint(equalTo: menuBarView.bottomAnchor),
             dimming.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             dimming.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            dimming.bottomAnchor.constraint(equalTo: tabBar.topAnchor)
+            dimmingBottomConstraint!,
         ])
         self.dimmingView = dimming
         
@@ -233,6 +344,7 @@ final class CosmicFitTabBarController: UITabBarController {
                 detailContentContainer.isHidden = true
                 dimmingView?.removeFromSuperview()
                 dimmingView = nil
+                dimmingBottomConstraint = nil
             }
             completion?()
             return
@@ -267,6 +379,7 @@ final class CosmicFitTabBarController: UITabBarController {
                     
                     self.dimmingView?.removeFromSuperview()
                     self.dimmingView = nil
+                    self.dimmingBottomConstraint = nil
                     
                     print("🔍 Detail VC removed from parent")
                     print("🔍 Detail content container isHidden after removal: \(self.detailContentContainer.isHidden)")
@@ -282,6 +395,7 @@ final class CosmicFitTabBarController: UITabBarController {
             
             dimmingView?.removeFromSuperview()
             dimmingView = nil
+            dimmingBottomConstraint = nil
             
             print("🔍 Detail VC removed from parent (non-animated)")
             print("🔍 Detail content container isHidden after removal: \(detailContentContainer.isHidden)")
@@ -1119,6 +1233,8 @@ final class CosmicFitTabBarController: UITabBarController {
             self?.updateDailyFitEngineDebugBanner()
             #endif
         }
+
+        refreshTabBarChrome()
         
         print("✅ View controllers setup — auth: \(CosmicFitAuthService.shared.isAuthenticated), selection: \(selectedIndex)")
     }

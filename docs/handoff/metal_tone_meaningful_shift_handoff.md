@@ -4,7 +4,9 @@
 **Audience:** AI developer or engineer scoping and implementing the metal tone G2 follow-up  
 **Repo:** `/Users/ash/dev/mobile_apps/cosmicfit`  
 **Engine:** `stage1_experimental` only (unless product explicitly promotes changes)  
-**Status:** Slider Variation Fix **substantially complete** — vibrancy + contrast PASS all cohort gates; **metal fails one binding gate (G2 meaningful-shift)** and Phase 1 median-day-delta exit criterion
+**Status:** Phase 1 continuous UI **reversed by product decision (2026-06-26)** — metal marker restored to 3-point snap on personal-band `displayPosition` in `DailyFitViewController`. G2 engine/envelope work **superseded**. Post-snap cohort artifact: `docs/fixtures/slider_day_variation_report.metal_snap.json` (216×60, 2026-06-26). Metal audit gates: `METAL_GATES` in `tools/verify_slider_gates.py` (unchanged=80.0%, meaningful=20.0%, distinct=2.3).
+
+**Prior status (2026-06-24):** Slider Variation Fix substantially complete — vibrancy + contrast PASS all cohort gates; metal failed G2 meaningful-shift under continuous UI.
 
 **Parent workstream:** Slider Variation Fix (Phases 1–4, June 2026). This handoff covers **only the remaining metal gap**.
 
@@ -121,7 +123,7 @@ Phase 1 correctly scoped **UI-only** changes. Problem B requires **engine and/or
 
 ## 4. Binding PASS criteria (do not soften)
 
-Source: Slider Variation Fix plan §3. Measured on **UI-visible** `scalePresentation.{slider}.displayPosition`. Metal uses **continuous** position (no snap).
+Source: Slider Variation Fix plan §3. Measured on **UI-visible** values from `tools/slider_day_variation_audit.py`. Vibrancy and contrast use continuous `displayPosition`. **Metal (post-2026-06-26 restore):** UI applies 3-position snap on personal-band `displayPosition`; metal uses relaxed **`METAL_GATES`** in `tools/verify_slider_gates.py` (not the continuous thresholds below).
 
 A slider **PASSes** when **all six** conditions are true on a full cohort run of `tools/slider_day_variation_audit.py`:
 
@@ -200,19 +202,19 @@ Contrast solved a similar problem with:
 
 Metal has **neither** a vibe/tempo-class daily signal nor a practical half-span. Parent plan deferred both.
 
-### 5.3 UI path (already fixed — do not revert)
+### 5.3 UI path (2026-06-26 product restore)
 
 **File:** `Cosmic Fit/UI/ViewControllers/DailyFitViewController.swift` — `refreshDiamondScalePositions()`
 
 ```swift
 if let sp = payload.scalePresentation {
-    sliderTargetValues[2] = sp.metalTone.displayPosition   // continuous
+    sliderTargetValues[2] = Self.snapMetalToThreePositions(sp.metalTone.displayPosition)
 } else {
     sliderTargetValues[2] = Self.snapMetalToThreePositions(payload.metalTone)  // legacy only
 }
 ```
 
-Audit default: `tools/slider_day_variation_audit.py` uses continuous metal (`--legacy-metal-snap` for before/after only).
+Audit default: `tools/slider_day_variation_audit.py` snaps metal UI on `displayPosition` (matches production). Use `--no-metal-snap` for continuous comparison only.
 
 ---
 
@@ -377,10 +379,10 @@ Note: CI gate does **not** assert meaningful-shift rate — cohort harness does.
 
 | Test | Assertion |
 |------|-----------|
-| **I4c** | ≥ 10 distinct metal display positions over 14 Briar days; range ≥ 0.15 over 30 days |
-| **I4b_legacySnap** | Legacy snap function still works in isolation |
+| **I4c** | ≥ 2 distinct **snapped** metal UI positions over 14 Briar days |
+| **I4b_legacySnap** | Snap function maps floor/ceiling/mid displayPosition to Cool/Mixed/Warm |
 | **I5 / I5b** | Contrast distinct positions + plan/helper parity |
-| **U3** | Metal marker uses continuous displayPosition |
+| **U3** | Metal marker snaps `displayPosition` to three positions on presentation path |
 | **P3** | Metal baseline formula unchanged |
 | **absoluteValuesUnchanged** | Same date → same vibrancy/contrast/metalTone absolutes |
 

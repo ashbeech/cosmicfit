@@ -296,7 +296,7 @@ Do **not** bump engine fingerprint for this change alone — presentation metada
 
 `DailyFitViewController`:
 
-1. Remove `snapToThreePositions` for metal tone (or restrict to legacy fallback only).
+1. Apply `snapMetalToThreePositions(displayPosition)` for metal tone on the presentation path (legacy fallback snaps raw `metalTone`).
 2. `refreshDiamondScalePositions()` reads `payload.scalePresentation?.vibrancy.displayPosition` when non-nil.
 3. Add optional baseline tick views on each track (small vertical tick or dot at `baselinePosition`).
 4. Endpoint labels stay **semantic** (see §7) — they now mean personal poles, not population extremes.
@@ -447,10 +447,11 @@ Metal tone slider **moves visibly** across the personal band; Cool / Mixed / War
 
 | Element | Spec |
 |---------|------|
-| Diamond position | `displayPosition * trackWidth` |
+| Diamond position | `displayPosition * trackWidth` (vibrancy, contrast, silhouette) |
+| Diamond position (metal) | `snapMetalToThreePositions(displayPosition) * trackWidth` |
 | Baseline tick | Optional 2pt vertical tick at `baselinePosition`; colour: muted cosmic blue @ 50% alpha |
 | End labels | Keep existing: Vibrancy (implicit gradient), Contrast (halftone gradient), Metal Tone **Cool · Mixed · Warm** |
-| Metal tone snap | **Remove** for payloads with `scalePresentation`; legacy fallback only |
+| Metal tone snap | **Apply** `snapMetalToThreePositions(displayPosition)` for payloads with `scalePresentation`; legacy fallback snaps raw `metalTone` |
 
 **Label semantics after remap:**
 
@@ -668,7 +669,7 @@ Previously all metal days showed **Mixed** at centre.
 1. **Keep engine absolutes** — calibration and inspector stay stable.  
 2. **Compute personal floor/ceiling** analytically from blueprint + engine preset.  
 3. **Remap only in UI** via `displayPosition = (value - floor) / (ceiling - floor)`.  
-4. **Delete metal tone 3-snap** when presentation exists.  
+4. **Restore metal tone 3-snap** on presentation path (`displayPosition` tertiles → Cool/Mixed/Warm anchors).  
 5. **Do not strengthen metal ↔ Style Guide bond** — presentation only.  
 6. **Ship envelope on payload** for app + inspector parity and legacy fallback.
 

@@ -466,8 +466,8 @@ struct DailyFitUIIntegrationTests {
         #expect(sp.metalTone.value == payload.metalTone)
     }
 
-    // U3 — Metal marker uses continuous displayPosition on presentation path
-    @Test("U3: Metal marker uses continuous displayPosition, not 3-snap")
+    // U3 — Metal marker snaps displayPosition to three positions on presentation path
+    @Test("U3: Metal marker snaps displayPosition to three positions on presentation path")
     func testMetalMarkerUsesContinuousDisplayPosition() {
         let payload = BlueprintLensEngine.generatePayload(
             blueprint: Fixtures.warmBlueprint,
@@ -478,15 +478,14 @@ struct DailyFitUIIntegrationTests {
             return
         }
         let dp = sp.metalTone.displayPosition
-        let snapped = DailyFitViewController.snapMetalToThreePositions(dp)
-        // With presentation path the UI now uses dp directly, not snapped.
-        // At least verify snap function still works for legacy and that
-        // values in the middle tertile would have been collapsed.
-        if dp > 1.0 / 3.0 && dp < 2.0 / 3.0 {
-            #expect(snapped == 0.5, "Middle-tertile values snap to 0.5")
-            #expect(dp != 0.5, "Raw displayPosition should differ from snap at 0.5")
-        }
+        let uiPosition = DailyFitViewController.snapMetalToThreePositions(dp)
+        #expect([0.0, 0.5, 1.0].contains(uiPosition))
         #expect(dp >= 0.0 && dp <= 1.0)
+        if dp < 1.0 / 3.0 { #expect(uiPosition == 0.0) }
+        if dp > 2.0 / 3.0 { #expect(uiPosition == 1.0) }
+        if dp >= 1.0 / 3.0 && dp <= 2.0 / 3.0 { #expect(uiPosition == 0.5) }
+        #expect(DailyFitViewController.snapMetalToThreePositions(1.0 / 3.0) == 0.5)
+        #expect(DailyFitViewController.snapMetalToThreePositions(2.0 / 3.0) == 0.5)
     }
 
     // U2 — Legacy payload: falls back to absolute (no scalePresentation)

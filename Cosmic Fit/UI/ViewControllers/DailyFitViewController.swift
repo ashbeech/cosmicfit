@@ -159,7 +159,7 @@ class DailyFitViewController: UIViewController {
     private static let headerRowHideBelowTabBarTop: CGFloat = 9
 
     /// Scroll `contentView` extends this far below the day-navigation CTA (cosmic grey + small blur tail).
-    private static let contentBottomPaddingBelowTomorrow: CGFloat = 100
+    private static let contentBottomPaddingBelowTomorrow = CosmicFitTheme.Layout.scrollContentBottomInset
     /// Cosmic grey panel extends this far below the CTA; remainder of bottom padding shows blurred card.
     private static let contentBackgroundTailBelowTomorrowButton: CGFloat = 88
     /// Slightly taller tarot slot so `scaleAspectFit` art (especially `CardBacks`) is not nipped at the foot.
@@ -667,9 +667,23 @@ class DailyFitViewController: UIViewController {
             constant: view.safeAreaInsets.top + 83
         )
 
-        NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        var scrollHorizontalConstraints: [NSLayoutConstraint]
+        if CosmicFitTheme.Layout.isPad {
+            let scrollFillWidth = scrollView.widthAnchor.constraint(equalTo: view.widthAnchor)
+            scrollFillWidth.priority = .defaultHigh
+            scrollHorizontalConstraints = [
+                scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                scrollFillWidth,
+                scrollView.widthAnchor.constraint(lessThanOrEqualToConstant: CosmicFitTheme.Layout.maxContentWidth),
+            ]
+        } else {
+            scrollHorizontalConstraints = [
+                scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            ]
+        }
+
+        NSLayoutConstraint.activate(scrollHorizontalConstraints + [
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
             // ContentView starts with padding for menu bar + safe area
@@ -1033,7 +1047,7 @@ class DailyFitViewController: UIViewController {
         // Calculate card dimensions with padding around it
         let cardAspectRatio: CGFloat = 0.62
         let horizontalPadding: CGFloat = 33
-        let cardWidth = view.bounds.width - (horizontalPadding * 2) // Reduce width by total padding
+        let cardWidth = CosmicFitTheme.Layout.contentLayoutWidth(for: view.bounds.width) - (horizontalPadding * 2)
         let cardFaceHeight = cardWidth / cardAspectRatio + Self.tarotCardSlotExtraHeight
         // Container is only the card face so outer glow (`updateTarotCardOuterGlow`) matches the tarot bounds.
         cardContainerWidthConstraint = tarotCardContainerView.widthAnchor.constraint(equalToConstant: cardWidth)
@@ -1865,15 +1879,31 @@ class DailyFitViewController: UIViewController {
 
         let horizontalMargin: CGFloat = 32
         gatedCTATopConstraint = gatedCTAContainer.topAnchor.constraint(equalTo: view.topAnchor)
+
+        var ctaStackConstraints: [NSLayoutConstraint] = [
+            gatedCTAStack.centerYAnchor.constraint(equalTo: gatedCTAContainer.centerYAnchor),
+        ]
+        if CosmicFitTheme.Layout.isPad {
+            let ctaStackMaxWidth = CosmicFitTheme.Layout.maxContentWidth - horizontalMargin * 2
+            ctaStackConstraints.append(contentsOf: [
+                gatedCTAStack.centerXAnchor.constraint(equalTo: gatedCTAContainer.centerXAnchor),
+                gatedCTAStack.leadingAnchor.constraint(greaterThanOrEqualTo: gatedCTAContainer.leadingAnchor, constant: horizontalMargin),
+                gatedCTAStack.trailingAnchor.constraint(lessThanOrEqualTo: gatedCTAContainer.trailingAnchor, constant: -horizontalMargin),
+                gatedCTAStack.widthAnchor.constraint(lessThanOrEqualToConstant: ctaStackMaxWidth),
+            ])
+        } else {
+            ctaStackConstraints.append(contentsOf: [
+                gatedCTAStack.leadingAnchor.constraint(equalTo: gatedCTAContainer.leadingAnchor, constant: horizontalMargin),
+                gatedCTAStack.trailingAnchor.constraint(equalTo: gatedCTAContainer.trailingAnchor, constant: -horizontalMargin),
+            ])
+        }
+
         NSLayoutConstraint.activate([
             gatedCTATopConstraint!,
             gatedCTAContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             gatedCTAContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             gatedCTAContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-
-            gatedCTAStack.centerYAnchor.constraint(equalTo: gatedCTAContainer.centerYAnchor),
-            gatedCTAStack.leadingAnchor.constraint(equalTo: gatedCTAContainer.leadingAnchor, constant: horizontalMargin),
-            gatedCTAStack.trailingAnchor.constraint(equalTo: gatedCTAContainer.trailingAnchor, constant: -horizontalMargin),
+        ] + ctaStackConstraints + [
 
             restrictedUnlockButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 38),
             gatedTomorrowButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 38)
@@ -2869,7 +2899,7 @@ class DailyFitViewController: UIViewController {
 
     /// Snap a 0–1 value to Cool (0.0) / Mixed (0.5) / Warm (1.0) using equal tertiles.
     /// Boundaries: [0, 1/3) = Cool, [1/3, 2/3] = Mixed, (2/3, 1] = Warm.
-    /// Retained for legacy payloads without scalePresentation.
+    /// Presentation path: snaps personal-band `displayPosition`. Legacy path: snaps raw `metalTone`.
     static func snapMetalToThreePositions(_ value: Double) -> Double {
         if value < 1.0 / 3.0 { return 0.0 }
         if value > 2.0 / 3.0 { return 1.0 }
@@ -2882,7 +2912,7 @@ class DailyFitViewController: UIViewController {
         if let sp = payload.scalePresentation {
             sliderTargetValues[0] = sp.vibrancy.displayPosition
             sliderTargetValues[1] = sp.contrast.displayPosition
-            sliderTargetValues[2] = sp.metalTone.displayPosition
+            sliderTargetValues[2] = Self.snapMetalToThreePositions(sp.metalTone.displayPosition)
             sliderTargetValues[3] = sp.masculineFeminine?.displayPosition ?? payload.silhouetteProfile.masculineFeminine
             sliderTargetValues[4] = sp.angularRounded?.displayPosition ?? payload.silhouetteProfile.angularRounded
             sliderTargetValues[5] = sp.structuredDraped?.displayPosition ?? payload.silhouetteProfile.structuredDraped

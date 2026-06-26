@@ -25,7 +25,7 @@ class LegalDocumentViewController: UIViewController {
         static let paragraphSpacing: CGFloat = 10
         static let bulletSpacing: CGFloat = 8
         static let bottomDividerTop: CGFloat = 40
-        static let bottomInset: CGFloat = 40
+        static let bottomInset: CGFloat = CosmicFitTheme.Layout.scrollContentBottomInset
     }
 
     private let configuration: LegalDocumentConfiguration

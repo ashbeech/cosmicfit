@@ -1945,7 +1945,7 @@ enum BlueprintLensEngine {
             let jitter = Double.random(in: -0.07...0.07, using: &rng)
             return StyleEssenceScore(
                 category: score.category,
-                score: max(0.0, score.score + jitter)
+                score: min(1.0, max(0.0, score.score + jitter))
             )
         }
         let sorted = jittered.sorted { $0.score > $1.score }
@@ -2469,7 +2469,8 @@ enum BlueprintLensEngine {
         let sortedEssences = ep.allScores.sorted { $0.score > $1.score }
         for (i, entry) in sortedEssences.enumerated() {
             let marker = ep.visibleCategories.contains(where: { $0.category == entry.category }) ? "★" : " "
-            let bar = String(repeating: "█", count: Int(entry.score * 20)) + String(repeating: "░", count: 20 - Int(entry.score * 20))
+            let filled = min(20, max(0, Int(entry.score * 20)))
+            let bar = String(repeating: "█", count: filled) + String(repeating: "░", count: 20 - filled)
             print("\(p) \(marker) #\(String(i + 1).padding(toLength: 2, withPad: " ", startingAt: 0)) \(entry.category.label.padding(toLength: 12, withPad: " ", startingAt: 0)) \(bar) \(f3(entry.score))")
         }
         print("\(p) Top 3 displayed: \(ep.visibleCategories.map { "\($0.category.label)=\(f3($0.score))" }.joined(separator: "  ·  "))")

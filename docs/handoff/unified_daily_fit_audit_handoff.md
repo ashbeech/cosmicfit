@@ -1,7 +1,7 @@
 # Unified Daily Fit Full Audit — Handoff
 
 **Date:** 2026-06-25  
-**Status:** Phase 0 complete, Phase 1 running, Phase 3 needs debugging  
+**Status:** Phase 0 complete, Phase 1+2 complete (results below), Phase 3 needs debugging  
 **Plan file:** `.cursor/plans/unified_daily_fit_audit_ba334d41.plan.md`
 
 ---
@@ -67,16 +67,47 @@ python3 tools/production_audit_harness.py \
   --parallel 5 --out docs/fixtures/production_audit_v2
 ```
 
-**Status as of 10:35 AM:** 30/223 users complete (~2,230s elapsed). Rate: ~5 users per 340s batch. Estimated completion: ~12:30–1:00 PM (roughly 2 more hours from 10:35 AM).
+**Completed:** 223/223 users in 15,580s (~4.3 hours). All users successful, no failures.
 
 **Output directory:** `docs/fixtures/production_audit_v2/`
-- `raw/<user_id>.jsonl` — one trimmed JSON record per user-day
-- `blueprints/<user_id>.json` — full Style Guide blueprint (day 1)
+- `raw/<user_id>.jsonl` — one trimmed JSON record per user-day (223 files)
+- `blueprints/<user_id>.json` — full Style Guide blueprint (223 files)
 - `manifest.json` — run metadata
+- `summary.json` — full machine-readable analysis (all metrics + slider variation)
+- `summary.txt` — human-readable digest
 
-**Inspector:** Running on port 7777, built today (2026-06-25T08:30:27Z). **Do not kill the inspector while this is running.**
+### Phase 2 Results: Production Audit Analysis (223 users × 60 days = 13,380 user-days)
 
-**When complete:** The harness prints `Complete in <N>s -> docs/fixtures/production_audit_v2`.
+```
+TAROT  adjacent repeats: 0 | hard-block violations: 0 | min gap: 10 | avg unique/14d: 12.8
+REPEAT NARRATIVE  exact title+ritual repeats: 2 / 8424 repeated-card occurrences
+ESSENCES  avg unique top-3/14d: 12.4 | max streak: 1
+SLIDERS  avg display range: vibrancy=0.53 contrast=0.32 metalTone=0.59 MF=0.40 AR=0.42 SD=0.38
+SLIDERS  stuck user counts: vibrancy=0 contrast=0 metalTone=1 MF=15 AR=0 SD=7
+PALETTE  avg unique colours: 16.9 | next-day retention: 0.58
+COHESION  overall pass: 1.0 | keyword hit: 0.59 | energy cosine: 0.91
+GAPS  days with missing fields: 0
+VERDICTS  fails: none of 66900 checks
+BLUEPRINTS  223 users | missing sections: 0 | shared sentences: 2 of 5373
+
+SLIDER VARIATION (day-over-day)
+  slider            meanΔ   %unch  %≥0.05  maxStrk  distPos
+  vibrancy          0.112     0.6   68.4     1.3     58.2
+  contrast          0.082    15.1   53.1     4.1     40.8
+  metalTone         0.088     9.0   54.5     3.9     52.7
+  masculineFeminine 0.103    13.5   56.4     6.6     51.4
+  angularRounded    0.098    15.4   57.8     5.1     48.9
+  structuredDraped  0.097    15.7   57.5     6.1     49.0
+```
+
+**Key findings:**
+- Zero tarot adjacent repeats, zero hard-block violations — rotation is working
+- Only 2 exact narrative repeats out of 8,424 opportunities — effectively zero repetition
+- Essences never stuck (max streak = 1 day) with 12.4 unique top-3 sets per 14 days
+- All 6 sliders show >53% meaningful day-pairs — daily variation is perceptible
+- Zero gap days — every user-day produced complete output
+- Zero verdict failures across 66,900 checks
+- All 223 blueprints are complete with no missing sections
 
 ### Phase 3: Swift Narrative Cohesion Test — NEEDS DEBUGGING
 

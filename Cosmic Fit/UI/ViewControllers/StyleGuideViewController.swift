@@ -299,10 +299,25 @@ final class StyleGuideViewController: UIViewController {
             (accessoryButton, patternButton)
         ]
 
+        var scrollHorizontalConstraints: [NSLayoutConstraint]
+        if CosmicFitTheme.Layout.isPad {
+            let scrollFillWidth = scrollView.widthAnchor.constraint(equalTo: view.widthAnchor)
+            scrollFillWidth.priority = .defaultHigh
+            scrollHorizontalConstraints = [
+                scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                scrollFillWidth,
+                scrollView.widthAnchor.constraint(lessThanOrEqualToConstant: CosmicFitTheme.Layout.maxContentWidth),
+            ]
+        } else {
+            scrollHorizontalConstraints = [
+                scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            ]
+        }
+
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: MenuBarView.height - 10),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ] + scrollHorizontalConstraints + [
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
@@ -371,14 +386,16 @@ final class StyleGuideViewController: UIViewController {
 
         // Bottom divider anchored to last row — extra scroll tail so the star isn’t clipped
         // by the tab bar (scrollView extends to `view.bottomAnchor`).
-        let bottomScrollPaddingBelowStarDivider: CGFloat = 100
         let lastLeft = gridButtons.last!.0
         NSLayoutConstraint.activate([
             bottomDividerContainer.topAnchor.constraint(equalTo: lastLeft.bottomAnchor, constant: 40),
             bottomDividerContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             bottomDividerContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             bottomDividerContainer.heightAnchor.constraint(equalToConstant: 30),
-            bottomDividerContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -bottomScrollPaddingBelowStarDivider),
+            bottomDividerContainer.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor,
+                constant: -CosmicFitTheme.Layout.scrollContentBottomInset
+            ),
 
             bottomDividerLeft.centerYAnchor.constraint(equalTo: bottomDividerContainer.centerYAnchor),
             bottomDividerLeft.leadingAnchor.constraint(equalTo: bottomDividerContainer.leadingAnchor),
