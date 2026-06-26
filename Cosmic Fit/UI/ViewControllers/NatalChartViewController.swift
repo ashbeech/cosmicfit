@@ -22,7 +22,7 @@ final class NatalChartViewController: UIViewController {
     private let birthInfoLabel  = UILabel()
     private let chartWheelView  = ChartWheelView()
     private let tableView       = UITableView(frame: .zero, style: .grouped)
-    private let activityIndicator = UIActivityIndicatorView(style: .large)
+    private let activityIndicator = CosmicFitLoaderView(fill: .dark)
     
     /// Single table‑height constraint (updated, never recreated)
     private var tableHeightConstraint: NSLayoutConstraint?
@@ -255,7 +255,6 @@ final class NatalChartViewController: UIViewController {
         // Setup activity indicator
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.color = .systemBlue
         view.addSubview(activityIndicator)
         
         // single, reusable height constraint
@@ -279,7 +278,9 @@ final class NatalChartViewController: UIViewController {
             
             // Activity indicator centered in view
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            activityIndicator.widthAnchor.constraint(equalToConstant: 52),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 52)
         ])
         
         refreshUI()   // first pass

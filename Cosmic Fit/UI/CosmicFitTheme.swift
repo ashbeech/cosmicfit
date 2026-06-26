@@ -53,6 +53,25 @@ struct CosmicFitTheme {
         static let dividerColor = cosmicBlue.withAlphaComponent(0.3)
     }
 
+    // MARK: - Layout
+    struct Layout {
+        /// Maximum width for scrollable content on iPad only.
+        static let maxContentWidth: CGFloat = 520
+
+        static var isPad: Bool {
+            UIDevice.current.userInterfaceIdiom == .pad
+        }
+
+        /// Returns `maxContentWidth` on iPad when the view is wider; otherwise the full view width.
+        static func contentLayoutWidth(for viewWidth: CGFloat) -> CGFloat {
+            isPad ? min(viewWidth, maxContentWidth) : viewWidth
+        }
+
+        /// Extra space below the last scroll element so content clears the tab bar
+        /// and the final block can sit comfortably in view (hub + detail sub-pages).
+        static let scrollContentBottomInset: CGFloat = 100
+    }
+
     // MARK: - Header glyph layout
     /// Shared spacing and frame for section glyphs (Daily Fit numerals, Style Guide sub-pages).
     struct HeaderGlyphLayout {
@@ -577,13 +596,6 @@ struct CosmicFitTheme {
         }
     }
 
-    /// Light spinner for `.onboardingAction` buttons (cosmicBlue background).
-    static func styleActivityIndicatorOnOnboardingAction(_ indicator: UIActivityIndicatorView) {
-        indicator.style = .medium
-        indicator.color = .white
-        indicator.hidesWhenStopped = true
-    }
-    
     /// Apply theme to date picker
     static func styleDatePicker(_ datePicker: UIDatePicker) {
         if #available(iOS 14.0, *) {
@@ -591,6 +603,41 @@ struct CosmicFitTheme {
         }
         datePicker.backgroundColor = Colours.cosmicGrey
         datePicker.setValue(Colours.cosmicBlue, forKey: "textColor")
+    }
+
+    /// Standard wheel picker height used by UIDatePicker / UIPickerView inputViews.
+    static let wheelPickerHeight: CGFloat = 216
+
+    /// Extra padding above the home-indicator Reachability zone when wheel pickers are
+    /// shown as a text-field inputView.
+    static let pickerReachabilityExtraPadding: CGFloat = 20
+
+    /// Wraps a wheel picker in a taller inputView so the bottom scroll column sits above
+    /// the system Reachability gesture zone (home indicator swipe-down).
+    static func makePickerInputView(
+        wrapping picker: UIView,
+        width: CGFloat,
+        pickerHeight: CGFloat = wheelPickerHeight,
+        extraBottomPadding: CGFloat = pickerReachabilityExtraPadding
+    ) -> UIView {
+        let homeIndicatorInset: CGFloat = {
+            let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+            let keyWindow = scenes.flatMap(\.windows).first { $0.isKeyWindow }
+            return keyWindow?.safeAreaInsets.bottom ?? 34
+        }()
+        let bottomBuffer = homeIndicatorInset + extraBottomPadding
+        let totalHeight = pickerHeight + bottomBuffer
+
+        let container = UIView(
+            frame: CGRect(x: 0, y: 0, width: width, height: totalHeight)
+        )
+        container.backgroundColor = Colours.cosmicGrey
+
+        picker.frame = CGRect(x: 0, y: 0, width: width, height: pickerHeight)
+        picker.autoresizingMask = [.flexibleWidth]
+        container.addSubview(picker)
+
+        return container
     }
     
     /// Apply theme to divider/separator views

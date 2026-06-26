@@ -73,11 +73,10 @@ final class PurchaseViewController: UIViewController {
     private let productCardsStack = UIStackView()
 
     // Loading / error
-    private let loadingIndicator: UIActivityIndicatorView = {
-        let ai = UIActivityIndicatorView(style: .medium)
-        ai.hidesWhenStopped = true
-        ai.color = CosmicFitTheme.Colours.cosmicBlue
-        return ai
+    private let loadingIndicator: CosmicFitLoaderView = {
+        let loader = CosmicFitLoaderView(fill: .dark)
+        loader.hidesWhenStopped = true
+        return loader
     }()
     private let errorLabel: UILabel = {
         let label = UILabel()
@@ -107,11 +106,10 @@ final class PurchaseViewController: UIViewController {
         return button
     }()
 
-    private let ctaSpinner: UIActivityIndicatorView = {
-        let ai = UIActivityIndicatorView(style: .medium)
-        ai.hidesWhenStopped = true
-        ai.color = .white
-        return ai
+    private let ctaSpinner: CosmicFitLoaderView = {
+        let loader = CosmicFitLoaderView(fill: .light, includesBlankGap: false)
+        loader.hidesWhenStopped = true
+        return loader
     }()
 
     private let restoreButton: UIButton = {
@@ -239,8 +237,12 @@ final class PurchaseViewController: UIViewController {
 
             logoImageView.heightAnchor.constraint(equalToConstant: 52),
 
+            loadingIndicator.heightAnchor.constraint(equalToConstant: 44),
+
             ctaSpinner.centerYAnchor.constraint(equalTo: ctaButton.centerYAnchor),
             ctaSpinner.trailingAnchor.constraint(equalTo: ctaButton.trailingAnchor, constant: -16),
+            ctaSpinner.widthAnchor.constraint(equalToConstant: 26),
+            ctaSpinner.heightAnchor.constraint(equalToConstant: 26),
         ])
     }
 

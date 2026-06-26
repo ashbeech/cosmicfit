@@ -67,10 +67,10 @@ final class OTPVerifyViewController: UIViewController {
         return button
     }()
 
-    private let activityIndicator: UIActivityIndicatorView = {
-        let ai = UIActivityIndicatorView(style: .medium)
-        CosmicFitTheme.styleActivityIndicatorOnOnboardingAction(ai)
-        return ai
+    private let activityIndicator: CosmicFitLoaderView = {
+        let loader = CosmicFitLoaderView(fill: .light, includesBlankGap: false)
+        loader.hidesWhenStopped = true
+        return loader
     }()
 
     // MARK: - Init
@@ -155,6 +155,8 @@ final class OTPVerifyViewController: UIViewController {
 
             activityIndicator.centerYAnchor.constraint(equalTo: verifyButton.centerYAnchor),
             activityIndicator.trailingAnchor.constraint(equalTo: verifyButton.trailingAnchor, constant: -16),
+            activityIndicator.widthAnchor.constraint(equalToConstant: 26),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 26),
         ])
     }
 

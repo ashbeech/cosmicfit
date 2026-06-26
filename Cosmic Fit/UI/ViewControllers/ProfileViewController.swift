@@ -72,7 +72,7 @@ class ProfileViewController: UIViewController {
     private let signOutButton = UIButton(type: .system)
     private let deleteProfileButton = UIButton(type: .system)
     private let deleteAccountButton = UIButton(type: .system)
-    private let activityIndicator = UIActivityIndicatorView(style: .large)
+    private let activityIndicator = CosmicFitLoaderView(fill: .dark)
     private let mainStack = UIStackView()
     private let topFormDivider = UIView()
     private let preferencesSectionDivider = UIView()
@@ -240,8 +240,14 @@ class ProfileViewController: UIViewController {
         birthDateField.returnKeyType = .done
         birthTimeField.returnKeyType = .done
         
-        birthDateField.inputView = birthDatePicker
-        birthTimeField.inputView = birthTimePicker
+        birthDateField.inputView = CosmicFitTheme.makePickerInputView(
+            wrapping: birthDatePicker,
+            width: UIScreen.main.bounds.width
+        )
+        birthTimeField.inputView = CosmicFitTheme.makePickerInputView(
+            wrapping: birthTimePicker,
+            width: UIScreen.main.bounds.width
+        )
         
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
@@ -473,7 +479,6 @@ class ProfileViewController: UIViewController {
         
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.color = CosmicFitTheme.Colours.cosmicBlue
         view.addSubview(activityIndicator)
         
         mainStack.addArrangedSubview(titleLabel)
@@ -595,10 +600,12 @@ class ProfileViewController: UIViewController {
             mainStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
             mainStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
             mainStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -28),
-            mainStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -28),
+            mainStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -CosmicFitTheme.Layout.scrollContentBottomInset),
             
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            activityIndicator.widthAnchor.constraint(equalToConstant: 52),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 52)
         ])
     }
     
@@ -737,7 +744,10 @@ class ProfileViewController: UIViewController {
 
         enginePicker.dataSource = self
         enginePicker.delegate = self
-        engineField.inputView = enginePicker
+        engineField.inputView = CosmicFitTheme.makePickerInputView(
+            wrapping: enginePicker,
+            width: UIScreen.main.bounds.width
+        )
 
         let toolbar = UIToolbar()
         toolbar.sizeToFit()

@@ -309,16 +309,13 @@ final class SignedOutLandingViewController: UIViewController {
     }
 
     private func pullProfileThenNavigate() {
-        let loadingAlert = UIAlertController(title: nil, message: "Restoring your chart data...", preferredStyle: .alert)
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        indicator.startAnimating()
-        loadingAlert.view.addSubview(indicator)
-        NSLayoutConstraint.activate([
-            indicator.centerYAnchor.constraint(equalTo: loadingAlert.view.centerYAnchor),
-            indicator.leadingAnchor.constraint(equalTo: loadingAlert.view.leadingAnchor, constant: 20)
-        ])
-        present(loadingAlert, animated: true)
+        let host = view.window ?? view!
+        let overlay = CosmicFitLoadingOverlay.show(
+            in: host,
+            message: "Restoring your chart data\u{2026}",
+            fill: .light,
+            dimColour: UIColor.black.withAlphaComponent(0.55)
+        )
 
         Task {
             do {
@@ -327,7 +324,7 @@ final class SignedOutLandingViewController: UIViewController {
                     UserProfileStorage.shared.saveUserProfile(profile)
                 }
                 await MainActor.run {
-                    loadingAlert.dismiss(animated: true) {
+                    overlay.dismiss {
                         if UserProfileStorage.shared.loadUserProfile() != nil {
                             self.navigateToTabBar()
                         } else {
@@ -337,7 +334,7 @@ final class SignedOutLandingViewController: UIViewController {
                 }
             } catch {
                 await MainActor.run {
-                    loadingAlert.dismiss(animated: true) {
+                    overlay.dismiss {
                         if UserProfileStorage.shared.loadUserProfile() != nil {
                             self.navigateToTabBar()
                         } else {

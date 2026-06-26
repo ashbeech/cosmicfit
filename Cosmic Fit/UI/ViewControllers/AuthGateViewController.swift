@@ -105,10 +105,10 @@ final class AuthGateViewController: UIViewController {
         return button
     }()
 
-    private let activityIndicator: UIActivityIndicatorView = {
-        let ai = UIActivityIndicatorView(style: .medium)
-        CosmicFitTheme.styleActivityIndicatorOnOnboardingAction(ai)
-        return ai
+    private let activityIndicator: CosmicFitLoaderView = {
+        let loader = CosmicFitLoaderView(fill: .light, includesBlankGap: false)
+        loader.hidesWhenStopped = true
+        return loader
     }()
 
     // MARK: - Callbacks
@@ -185,6 +185,8 @@ final class AuthGateViewController: UIViewController {
 
             activityIndicator.centerYAnchor.constraint(equalTo: sendCodeButton.centerYAnchor),
             activityIndicator.trailingAnchor.constraint(equalTo: sendCodeButton.trailingAnchor, constant: -16),
+            activityIndicator.widthAnchor.constraint(equalToConstant: 26),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 26),
         ])
     }
 
