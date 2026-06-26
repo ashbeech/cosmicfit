@@ -31,7 +31,10 @@ class OnboardingFormViewController: UIViewController {
     private let inputContainerView = UIView()
     private let actionButton = UIButton(type: .system)
     private let pageIndicatorLabel = UILabel()
-    private let activityIndicator = UIActivityIndicatorView(style: .large)
+    private let loadingOverlayView = UIView()
+    private let activityIndicator = CosmicFitLoaderView(fill: .dark)
+    private var isExitTransitionInProgress = false
+    private var isLoadingUIActive = false
 
     // Page-specific input views
     private let nameTextField = UITextField()
@@ -111,6 +114,7 @@ class OnboardingFormViewController: UIViewController {
     }()
 
     private var hasAppearedOnce = false
+    private var keyboardDismissTapGesture: UITapGestureRecognizer?
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -224,9 +228,17 @@ class OnboardingFormViewController: UIViewController {
         pageIndicatorLabel.textAlignment = .center
         view.addSubview(pageIndicatorLabel)
 
+        loadingOverlayView.translatesAutoresizingMaskIntoConstraints = false
+        loadingOverlayView.backgroundColor = UIColor.black.withAlphaComponent(0.10)
+        loadingOverlayView.isUserInteractionEnabled = true
+        loadingOverlayView.accessibilityViewIsModal = true
+        loadingOverlayView.accessibilityLabel = "Setting up your chart"
+        loadingOverlayView.alpha = 0
+        loadingOverlayView.isHidden = true
+        view.insertSubview(loadingOverlayView, aboveSubview: scrollView)
+
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.color = CosmicFitTheme.Colours.cosmicBlue
         view.addSubview(activityIndicator)
 
         setupInputViews()
@@ -303,11 +315,6 @@ class OnboardingFormViewController: UIViewController {
     }
 
     private func configureDateTimeFields() {
-        // Give the picker an explicit, sensible frame *before* it ever gets installed as an
-        // inputView. Otherwise UIKit installs a 0x0 inputView, then resizes it on the next
-        // run loop tick, which produces "UIInputViewSetPlacementInvisible" chatter in the
-        // simulator console on iOS 18.
-        datePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 216)
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.maximumDate = Date()
@@ -325,7 +332,6 @@ class OnboardingFormViewController: UIViewController {
         }
         datePicker.addTarget(self, action: #selector(dateValueChanged), for: .valueChanged)
 
-        timePicker.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 216)
         timePicker.datePickerMode = .time
         timePicker.preferredDatePickerStyle = .wheels
         timePicker.setValue(CosmicFitTheme.Colours.cosmicBlue, forKey: "textColor")
@@ -337,8 +343,8 @@ class OnboardingFormViewController: UIViewController {
         }
         timePicker.addTarget(self, action: #selector(timeValueChanged), for: .valueChanged)
 
-        configurePickerField(dateField, placeholder: "dd/mm/yyyy", inputView: datePicker)
-        configurePickerField(timeField, placeholder: "12:00am", inputView: timePicker)
+        configurePickerField(dateField, placeholder: "dd/mm/yyyy", picker: datePicker)
+        configurePickerField(timeField, placeholder: "12:00am", picker: timePicker)
     }
 
     /// Picker-driven fields don't use the system keyboard, so disable the text-input
@@ -347,7 +353,7 @@ class OnboardingFormViewController: UIViewController {
     /// `UIEmojiSearchOperations requires a valid sessionID` that fires when the
     /// system tries to install text-input services on a field that will only ever
     /// display a picker.
-    private func configurePickerField(_ field: UITextField, placeholder: String, inputView: UIView) {
+    private func configurePickerField(_ field: UITextField, placeholder: String, picker: UIView) {
         field.translatesAutoresizingMaskIntoConstraints = false
         field.attributedPlaceholder = makePlaceholder(placeholder)
         field.font = CosmicFitTheme.Typography.dmSansFont(size: 18, weight: .regular)
@@ -365,7 +371,10 @@ class OnboardingFormViewController: UIViewController {
         }
         field.inputAssistantItem.leadingBarButtonGroups = []
         field.inputAssistantItem.trailingBarButtonGroups = []
-        field.inputView = inputView
+        field.inputView = CosmicFitTheme.makePickerInputView(
+            wrapping: picker,
+            width: UIScreen.main.bounds.width
+        )
         field.inputAccessoryView = makeKeyboardToolbar()
     }
 
@@ -436,8 +445,15 @@ class OnboardingFormViewController: UIViewController {
             pageIndicatorLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             pageIndicatorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            loadingOverlayView.topAnchor.constraint(equalTo: view.topAnchor),
+            loadingOverlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            loadingOverlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            loadingOverlayView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            activityIndicator.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: actionButton.topAnchor, constant: 12),
+            activityIndicator.widthAnchor.constraint(equalToConstant: 52),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 52)
         ])
 
         if !postAuthMode {
@@ -465,11 +481,15 @@ class OnboardingFormViewController: UIViewController {
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
+        tapGesture.delegate = self
         view.addGestureRecognizer(tapGesture)
+        keyboardDismissTapGesture = tapGesture
     }
 
     // MARK: - Button State Management
     private func updateButtonState() {
+        guard !isLoadingUIActive, !isExitTransitionInProgress else { return }
+
         let isValid: Bool
         switch currentPage {
         case 1: isValid = isNameValid
@@ -538,6 +558,7 @@ class OnboardingFormViewController: UIViewController {
     @objc private func timeValueChanged() {
         hasSelectedTime = true
         timeField.text = timeDisplayFormatter.string(from: timePicker.date)
+        updateTimeFieldState()
         checkBirthValid()
         updateButtonState()
     }
@@ -553,6 +574,7 @@ class OnboardingFormViewController: UIViewController {
                 hasSelectedTime = true
                 timeField.text = timeDisplayFormatter.string(from: timePicker.date)
             }
+            updateTimeFieldState()
         }
         view.endEditing(true)
         checkBirthValid()
@@ -784,7 +806,8 @@ class OnboardingFormViewController: UIViewController {
     }
 
     private func cyclePlaceholder() {
-        guard locationAutocompleteView.getText().isEmpty else {
+        guard locationAutocompleteView.getText().isEmpty,
+              !locationAutocompleteView.textField.isFirstResponder else {
             stopPlaceholderAnimation()
             return
         }
@@ -880,20 +903,12 @@ class OnboardingFormViewController: UIViewController {
     }
 
     private func restoreProfileAfterSignIn() {
-        let loadingAlert = UIAlertController(
-            title: nil,
-            message: "Restoring your chart data...",
-            preferredStyle: .alert
+        let host = view.window ?? view!
+        let overlay = CosmicFitLoadingOverlay.show(
+            in: host,
+            message: "Restoring your chart data\u{2026}",
+            fill: .dark
         )
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        indicator.startAnimating()
-        loadingAlert.view.addSubview(indicator)
-        NSLayoutConstraint.activate([
-            indicator.centerYAnchor.constraint(equalTo: loadingAlert.view.centerYAnchor),
-            indicator.leadingAnchor.constraint(equalTo: loadingAlert.view.leadingAnchor, constant: 20)
-        ])
-        present(loadingAlert, animated: true)
 
         Task {
             do {
@@ -902,7 +917,7 @@ class OnboardingFormViewController: UIViewController {
                     UserProfileStorage.shared.saveUserProfile(profile)
                 }
                 await MainActor.run {
-                    loadingAlert.dismiss(animated: true) {
+                    overlay.dismiss {
                         if UserProfileStorage.shared.loadUserProfile() != nil {
                             self.navigateToMainAppFromSignIn()
                         } else {
@@ -912,7 +927,7 @@ class OnboardingFormViewController: UIViewController {
                 }
             } catch {
                 await MainActor.run {
-                    loadingAlert.dismiss(animated: true) {
+                    overlay.dismiss {
                         if UserProfileStorage.shared.loadUserProfile() != nil {
                             self.navigateToMainAppFromSignIn()
                             return
@@ -968,6 +983,14 @@ class OnboardingFormViewController: UIViewController {
         timeField.isEnabled = !hasUnknownTime
         timeField.alpha = hasUnknownTime ? 0.4 : 1.0
         timeLabel.alpha = hasUnknownTime ? 0.4 : 1.0
+
+        // Once a time is entered, visually de-emphasise the unknown-time option so it
+        // doesn't look required — but keep it tappable in case the user changes their mind.
+        let unknownTimeSubdued = hasSelectedTime && !hasUnknownTime
+        let unknownTimeAlpha: CGFloat = unknownTimeSubdued ? 0.4 : 1.0
+        unknownTimeCheckbox.alpha = unknownTimeAlpha
+        unknownTimeLabel.alpha = unknownTimeAlpha
+
         if hasUnknownTime, timeField.isFirstResponder {
             timeField.resignFirstResponder()
         }
@@ -1004,6 +1027,8 @@ class OnboardingFormViewController: UIViewController {
     // MARK: - Page 4 Finish Sequence
 
     private func finishWithEmail() {
+        guard !isExitTransitionInProgress else { return }
+
         let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() ?? ""
         guard !email.isEmpty else { return }
 
@@ -1012,7 +1037,7 @@ class OnboardingFormViewController: UIViewController {
 
         let profile = buildUserProfile()
         guard let profile else {
-            setLoadingState(false)
+            resetExitTransitionState()
             showAlert(title: "Error", message: "Could not process birth date and time.")
             return
         }
@@ -1025,17 +1050,16 @@ class OnboardingFormViewController: UIViewController {
                 UserProfileStorage.shared.clearOnboardingPendingAuth()
                 await SupabaseSyncService.shared.performFullSync()
                 await MainActor.run {
-                    self.setLoadingState(false)
-                    self.navigateToMainApp(with: profile)
+                    self.performMysticalTransitionToMainApp()
                 }
             } catch CosmicFitAuthError.emailAlreadyRegistered {
                 await MainActor.run {
-                    self.setLoadingState(false)
+                    self.resetExitTransitionState()
                     self.handleEmailExists(email: email, profile: profile)
                 }
             } catch {
                 await MainActor.run {
-                    self.setLoadingState(false)
+                    self.resetExitTransitionState()
                     self.showRetryAlert(email: email, profile: profile, error: error)
                 }
             }
@@ -1045,12 +1069,14 @@ class OnboardingFormViewController: UIViewController {
     // MARK: - Post-Auth Finish (pages 1-3 only, already authenticated)
 
     private func finishPostAuth() {
+        guard !isExitTransitionInProgress else { return }
+
         view.endEditing(true)
         setLoadingState(true)
 
         let profile = buildUserProfile()
         guard let profile else {
-            setLoadingState(false)
+            resetExitTransitionState()
             showAlert(title: "Error", message: "Could not process birth date and time.")
             return
         }
@@ -1064,8 +1090,7 @@ class OnboardingFormViewController: UIViewController {
                 print("⚠️ Post-auth profile sync failed (will retry on next sync): \(error.localizedDescription)")
             }
             await MainActor.run {
-                self.setLoadingState(false)
-                self.navigateToMainApp(with: profile)
+                self.performMysticalTransitionToMainApp()
             }
         }
     }
@@ -1094,7 +1119,7 @@ class OnboardingFormViewController: UIViewController {
                 }
             } catch {
                 await MainActor.run {
-                    self.setLoadingState(false)
+                    self.resetExitTransitionState()
                     self.showAlert(title: "Error", message: "Could not send verification code. Please try again.")
                 }
             }
@@ -1110,7 +1135,8 @@ class OnboardingFormViewController: UIViewController {
                 await SupabaseSyncService.shared.performFullSync()
                 await MainActor.run {
                     self.dismiss(animated: true) {
-                        self.navigateToMainApp(with: profile)
+                        self.setLoadingState(true)
+                        self.performMysticalTransitionToMainApp()
                     }
                 }
             }
@@ -1133,19 +1159,127 @@ class OnboardingFormViewController: UIViewController {
         present(alert, animated: true)
     }
 
-    private func setLoadingState(_ loading: Bool) {
+    private func setLoadingState(_ loading: Bool, force: Bool = false) {
+        if !loading && isExitTransitionInProgress && !force {
+            return
+        }
+
+        isLoadingUIActive = loading
+
         actionButton.isEnabled = !loading
-        actionButton.alpha = loading ? 0.55 : 1.0
+        actionButton.alpha = loading ? 0 : (actionButton.isEnabled ? 1.0 : 0.55)
+        backButton.isEnabled = !loading
+        scrollView.isScrollEnabled = !loading
+        keyboardDismissTapGesture?.isEnabled = !loading
+
         if !postAuthMode {
             emailTextField.isEnabled = !loading
             signInButton.isEnabled = !loading
             signInButton.alpha = loading ? 0.3 : 1.0
         }
+
         if loading {
+            loadingOverlayView.isHidden = false
+            view.bringSubviewToFront(loadingOverlayView)
+            view.bringSubviewToFront(activityIndicator)
+            UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
+                self.loadingOverlayView.alpha = 1
+            }
             activityIndicator.startAnimating()
         } else {
             activityIndicator.stopAnimating()
+            UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
+                self.loadingOverlayView.alpha = 0
+            } completion: { _ in
+                self.loadingOverlayView.isHidden = true
+            }
+            updateButtonState()
         }
+    }
+
+    private func resetExitTransitionState() {
+        isExitTransitionInProgress = false
+        setLoadingState(false, force: true)
+    }
+
+    private func performMysticalTransitionToMainApp() {
+        guard !isExitTransitionInProgress else { return }
+        isExitTransitionInProgress = true
+
+        guard let window = resolveTransitionWindow(),
+              let tabBar = AppDelegate.makeConfiguredTabBarController() else {
+            resetExitTransitionState()
+            showAlert(title: "Error", message: "Could not open your chart. Please try again.")
+            return
+        }
+
+        // Build and lay out the destination fully *before* any animation begins, so
+        // every bit of chart / Daily Fit work is finished and the fade is purely
+        // visual — no glitching, no work competing with the animation.
+        tabBar.selectedIndex = 0
+        _ = tabBar.view
+        tabBar.view.layoutIfNeeded()
+        if let dailyFitVC = tabBar.viewControllers?.first as? DailyFitViewController {
+            dailyFitVC.prepareForTransition()
+        }
+
+        guard let outgoingView = window.rootViewController?.view else {
+            resetExitTransitionState()
+            showAlert(title: "Error", message: "Could not open your chart. Please try again.")
+            return
+        }
+
+        // The destination sits fully opaque *beneath* the onboarding screen. The
+        // dissolve is achieved by fading only the onboarding layer away to reveal the
+        // already-rendered Daily Fit — a single-layer reveal avoids the muddy
+        // mid-transition opacity dip a two-way alpha crossfade produces.
+        window.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
+        tabBar.view.frame = window.bounds
+        tabBar.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        tabBar.view.alpha = 1
+        window.insertSubview(tabBar.view, belowSubview: outgoingView)
+
+        let reduceMotion = UIAccessibility.isReduceMotionEnabled
+
+        // Dramatic, lingering quintic ease-in-out: parts slowly from the onboarding,
+        // glides through the middle, then settles gently into the Daily Fit.
+        let timing: UITimingCurveProvider = reduceMotion
+            ? UICubicTimingParameters(animationCurve: .easeInOut)
+            : UICubicTimingParameters(
+                controlPoint1: CGPoint(x: 0.86, y: 0.0),
+                controlPoint2: CGPoint(x: 0.14, y: 1.0)
+            )
+        let duration: TimeInterval = reduceMotion ? 0.4 : 2.6
+
+        // The spinner is part of the outgoing hierarchy, so it dissolves with the
+        // rest of the screen rather than popping away — do not stop it here.
+        let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timing)
+        animator.addAnimations {
+            outgoingView.alpha = 0
+        }
+        animator.addCompletion { _ in
+            tabBar.view.removeFromSuperview()
+            window.rootViewController = tabBar
+            tabBar.view.alpha = 1
+        }
+
+        // Hold the finished, fully-loaded state for a beat so the reveal lands as a
+        // moment of anticipation rather than an abrupt cut.
+        let anticipationHold: TimeInterval = reduceMotion ? 0 : 0.5
+        animator.startAnimation(afterDelay: anticipationHold)
+    }
+
+    private func resolveTransitionWindow() -> UIWindow? {
+        if let window = view.window {
+            return window
+        }
+        for scene in UIApplication.shared.connectedScenes {
+            guard let windowScene = scene as? UIWindowScene else { continue }
+            if let keyWindow = windowScene.windows.first(where: { $0.isKeyWindow }) {
+                return keyWindow
+            }
+        }
+        return (UIApplication.shared.delegate as? AppDelegate)?.window
     }
 
     private func buildUserProfile() -> UserProfile? {
@@ -1220,36 +1354,8 @@ class OnboardingFormViewController: UIViewController {
     }
 
     private func navigateToMainApp(with profile: UserProfile) {
-        let chartData = NatalChartManager.shared.calculateNatalChart(
-            date: profile.birthDate,
-            latitude: profile.latitude,
-            longitude: profile.longitude,
-            timeZone: TimeZone(identifier: profile.timeZoneIdentifier) ?? TimeZone.current
-        )
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .short
-        let birthInfo = "\(dateFormatter.string(from: profile.birthDate)) at \(profile.birthLocation) (Lat: \(String(format: "%.4f", profile.latitude)), Long: \(String(format: "%.4f", profile.longitude)))"
-
-        let tabBarController = CosmicFitTabBarController()
-        tabBarController.configure(with: chartData,
-                                 birthInfo: birthInfo,
-                                 birthDate: profile.birthDate,
-                                 latitude: profile.latitude,
-                                 longitude: profile.longitude,
-                                 timeZone: TimeZone(identifier: profile.timeZoneIdentifier) ?? TimeZone.current)
-
-        tabBarController.selectedIndex = 0
-
-        DispatchQueue.main.async {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-               let window = appDelegate.window {
-                UIView.transition(with: window, duration: 0.1, options: .transitionCrossDissolve) {
-                    window.rootViewController = tabBarController
-                }
-            }
-        }
+        _ = profile
+        performMysticalTransitionToMainApp()
     }
 
     // MARK: - Helpers
@@ -1319,6 +1425,25 @@ class OnboardingFormViewController: UIViewController {
     }
 }
 
+// MARK: - UIGestureRecognizerDelegate
+extension OnboardingFormViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard gestureRecognizer === keyboardDismissTapGesture else { return true }
+
+        var candidate: UIView? = touch.view
+        while let view = candidate {
+            if view is UIControl {
+                return false
+            }
+            if view is LocationAutocompleteView {
+                return false
+            }
+            candidate = view.superview
+        }
+        return true
+    }
+}
+
 // MARK: - LocationAutocompleteDelegate
 extension OnboardingFormViewController: LocationAutocompleteDelegate {
     func locationAutocompleteDidSelectLocation(name: String, latitude: Double, longitude: Double, timeZone: TimeZone) {
@@ -1351,6 +1476,10 @@ extension OnboardingFormViewController: LocationAutocompleteDelegate {
         } else if currentPage == 3 {
             startPlaceholderAnimation()
         }
+    }
+
+    func locationAutocompleteDidBeginEditing() {
+        stopPlaceholderAnimation()
     }
 }
 
