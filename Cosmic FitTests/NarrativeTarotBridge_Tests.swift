@@ -84,28 +84,30 @@ struct NarrativeTarotBridge_Tests {
         #expect(bt.bestVariantSimilarityInPool >= bt.variantBridgeSimilarity || bt.bestVariantSimilarityInPool >= 0)
     }
 
-    @Test("Production engine → no bridge trace, rotation path, fingerprint guard green")
-    func productionUnchanged() {
+    @Test("Stage 2 legacy engine → no bridge trace, rotation path")
+    func stage2LegacyUnchanged() {
         TarotCalibrationTestSupport.installIsolatedTrackers()
         defer { TarotCalibrationTestSupport.resetTrackersForProfile() }
 
+        let legacyId = DailyFitEngineRegistry.stage2LegacyId
+        let legacyCalibration = DailyFitEngineRegistry.calibration(for: legacyId)
         let date = SkyForwardV2Support.date(year: 2026, month: 5, day: 10)
         let snapshot = DailyEnergyEngine.generateSnapshot(
             natalChart: SkyForwardV2Support.chart(signs: [5, 9, 5, 4, 1, 9, 5, 1, 9, 5]),
             progressedChart: SkyForwardV2Support.chart(signs: [5, 9, 6, 5, 2, 9, 5, 1, 9, 5]),
             transits: [],
             moonPhaseDegrees: 60,
-            profileHash: "bridge_test_prod",
+            profileHash: "bridge_test_legacy",
             date: date,
-            calibration: DailyFitCalibration.default,
+            calibration: legacyCalibration,
             mode: .standard,
-            dailyFitEngineId: DailyFitEngineRegistry.productionId
+            dailyFitEngineId: legacyId
         )
         let (_, trace, narrativeTrace, _, _, _) = DailyFitPipeline.generateWithTrace(
             blueprint: SkyForwardV2Support.briarBlueprint,
             snapshot: snapshot,
-            calibration: DailyFitCalibration.default,
-            dailyFitEngineId: DailyFitEngineRegistry.productionId
+            calibration: legacyCalibration,
+            dailyFitEngineId: legacyId
         )
 
         #expect(narrativeTrace == nil)
@@ -320,10 +322,11 @@ struct NarrativeTarotBridge_Tests {
         for offset in 0..<7 {
             let date = start.addingTimeInterval(Double(offset) * 86400)
             let (payload, trace, _, _, _, _) = generateBriarTrace(for: date)
+            // Resolved engine id for stage1 calibration is production (first registry match).
             let todaySelection = TarotRecencyTracker.shared.getRecentSelections(
                 profileHash: SkyForwardV2Support.briarHash,
                 referenceDate: date,
-                dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId
+                dailyFitEngineId: DailyFitEngineRegistry.productionId
             ).first { $0.daysAgo == 0 }
 
             #expect(todaySelection?.cardName == payload.tarotCard.name,

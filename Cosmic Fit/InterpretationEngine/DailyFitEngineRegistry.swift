@@ -42,7 +42,7 @@ enum DailyFitEngineRegistry {
     static let stage1ExperimentalId = "stage1_experimental"
     static let stage2LegacyId = "stage2_legacy"
 
-    static let productionMarketingVersion = "1.0.0"
+    static let productionMarketingVersion = "1.0.1"
 
     static var productionDisplayName: String {
         descriptor(for: productionId)?.displayName ?? "Sky Forward"
@@ -146,7 +146,7 @@ enum DailyFitEngineRegistry {
     private static let productionDescriptor = DailyFitEngineDescriptor(
         id: productionId,
         displayName: "Sky Forward",
-        summary: "Shipped Daily Fit engine — sky-forward daily read from chart anchor (v1.0.0)",
+        summary: "Shipped Daily Fit engine — sky-forward daily read from chart anchor (v1.0.1)",
         isExperimental: false,
         calibration: stage1ExperimentalCalibration,
         fingerprint: fingerprint(for: stage1ExperimentalCalibration),
