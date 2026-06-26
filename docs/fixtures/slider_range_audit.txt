@@ -3,103 +3,103 @@ Engine: stage1_experimental | 216 users × 60 days | 2026-05-01
 ══════════════════════════════════════════════════════════════════════════════════════════
 
 ┌─ VIBRANCY ──────────────────────────────────────────────────────────────
-│ Raw value range (mean):          0.3599
-│ Raw value range (p50):           0.3575
-│ Baseline-relative delta (mean):  0.3599
+│ Raw value range (mean):          0.3537
+│ Raw value range (p50):           0.3547
+│ Baseline-relative delta (mean):  0.3537
 │ Envelope span (mean):            0.4400
-│ Envelope utilization:            0.8179
-│ Display position range (mean):   0.7133
-│ Display position range (p10/p50/p90): 0.6304/0.7155/0.7946
-│ Clamp rate (mean):               0.0818
+│ Envelope utilization:            0.8038
+│ Display position range (mean):   0.7268
+│ Display position range (p10/p50/p90): 0.6404/0.7275/0.8054
+│ Clamp rate (mean):               0.0577
 │ Users with any clamping:         100.0000%
-│ Users with >10% clamping:        16.2000%
-│ UI marker range (mean):          0.7133
-│ UI distinct positions (mean):    53.9000
+│ Users with >10% clamping:        1.9000%
+│ UI marker range (mean):          0.7268
+│ UI distinct positions (mean):    55.1000
 │ Stuck one tertile (dp):          0.0000%
 │ Stuck one tertile (UI):          0.0000%
 └────────────────────────────────────────────────────────────────────────────────────────
 
 ┌─ CONTRAST ──────────────────────────────────────────────────────────────
-│ Raw value range (mean):          0.1969
-│ Raw value range (p50):           0.1963
-│ Baseline-relative delta (mean):  0.1969
-│ Envelope span (mean):            0.2800
-│ Envelope utilization:            0.7033
-│ Display position range (mean):   0.2630
-│ Display position range (p10/p50/p90): 0.1205/0.2834/0.3744
-│ Clamp rate (mean):               0.7069
-│ Users with any clamping:         100.0000%
-│ Users with >10% clamping:        100.0000%
-│ UI marker range (mean):          0.2630
-│ UI distinct positions (mean):    17.6000
-│ Stuck one tertile (dp):          69.9000%
-│ Stuck one tertile (UI):          69.9000%
+│ Raw value range (mean):          0.2217
+│ Raw value range (p50):           0.2209
+│ Baseline-relative delta (mean):  0.2217
+│ Envelope span (mean):            0.5400
+│ Envelope utilization:            0.4106
+│ Display position range (mean):   0.4071
+│ Display position range (p10/p50/p90): 0.3434/0.4091/0.4743
+│ Clamp rate (mean):               0.0187
+│ Users with any clamping:         38.0000%
+│ Users with >10% clamping:        3.7000%
+│ UI marker range (mean):          0.4071
+│ UI distinct positions (mean):    54.5000
+│ Stuck one tertile (dp):          5.6000%
+│ Stuck one tertile (UI):          5.6000%
 └────────────────────────────────────────────────────────────────────────────────────────
 
 ┌─ METALTONE ─────────────────────────────────────────────────────────────
-│ Raw value range (mean):          0.3366
-│ Raw value range (p50):           0.3579
-│ Baseline-relative delta (mean):  0.3366
-│ Envelope span (mean):            0.6975
-│ Envelope utilization:            0.4826
-│ Display position range (mean):   0.4883
-│ Display position range (p10/p50/p90): 0.3560/0.4682/0.6817
-│ Clamp rate (mean):               0.0814
-│ Users with any clamping:         16.7000%
+│ Raw value range (mean):          0.4427
+│ Raw value range (p50):           0.4709
+│ Baseline-relative delta (mean):  0.4427
+│ Envelope span (mean):            0.6300
+│ Envelope utilization:            0.7026
+│ Display position range (mean):   0.7088
+│ Display position range (p10/p50/p90): 0.5740/0.6916/0.9392
+│ Clamp rate (mean):               0.0670
+│ Users with any clamping:         37.5000%
 │ Users with >10% clamping:        16.7000%
-│ UI marker range (mean):          0.6157
-│ UI distinct positions (mean):    2.2000
+│ UI marker range (mean):          0.7088
+│ UI distinct positions (mean):    53.7000
 │ Stuck one tertile (dp):          0.0000%
 │ Stuck one tertile (UI):          0.0000%
 └────────────────────────────────────────────────────────────────────────────────────────
 
 ┌─ MASCULINEFEMININE ─────────────────────────────────────────────────────
-│ Raw value range (mean):          0.1589
-│ Raw value range (p50):           0.1584
-│ Baseline-relative delta (mean):  0.1589
-│ Envelope span (mean):            0.5600
-│ Envelope utilization:            0.2838
-│ Display position range (mean):   0.2838
-│ Display position range (p10/p50/p90): 0.2239/0.2829/0.3378
+│ Raw value range (mean):          0.3351
+│ Raw value range (p50):           0.3399
+│ Baseline-relative delta (mean):  0.3351
+│ Envelope span (mean):            0.6800
+│ Envelope utilization:            0.4928
+│ Display position range (mean):   0.4928
+│ Display position range (p10/p50/p90): 0.4128/0.4999/0.5646
 │ Clamp rate (mean):               0.0000
 │ Users with any clamping:         0.0000%
 │ Users with >10% clamping:        0.0000%
-│ UI marker range (mean):          0.2838
-│ UI distinct positions (mean):    52.0000
-│ Stuck one tertile (dp):          84.7000%
-│ Stuck one tertile (UI):          84.7000%
+│ UI marker range (mean):          0.4928
+│ UI distinct positions (mean):    55.4000
+│ Stuck one tertile (dp):          0.0000%
+│ Stuck one tertile (UI):          0.0000%
 └────────────────────────────────────────────────────────────────────────────────────────
 
 ┌─ ANGULARROUNDED ────────────────────────────────────────────────────────
-│ Raw value range (mean):          0.1396
-│ Raw value range (p50):           0.1475
-│ Baseline-relative delta (mean):  0.1396
-│ Envelope span (mean):            0.2800
-│ Envelope utilization:            0.4987
-│ Display position range (mean):   0.4987
-│ Display position range (p10/p50/p90): 0.4191/0.5267/0.5383
-│ Clamp rate (mean):               0.0106
-│ Users with any clamping:         47.7000%
-│ Users with >10% clamping:        0.0000%
-│ UI marker range (mean):          0.4987
-│ UI distinct positions (mean):    53.9000
-│ Stuck one tertile (dp):          0.5000%
-│ Stuck one tertile (UI):          0.5000%
+│ Raw value range (mean):          0.2025
+│ Raw value range (p50):           0.2033
+│ Baseline-relative delta (mean):  0.2025
+│ Envelope span (mean):            0.3400
+│ Envelope utilization:            0.5957
+│ Display position range (mean):   0.5957
+│ Display position range (p10/p50/p90): 0.5825/0.5980/0.6078
+│ Clamp rate (mean):               0.0394
+│ Users with any clamping:         92.6000%
+│ Users with >10% clamping:        0.9000%
+│ UI marker range (mean):          0.5957
+│ UI distinct positions (mean):    55.3000
+│ Stuck one tertile (dp):          0.0000%
+│ Stuck one tertile (UI):          0.0000%
 └────────────────────────────────────────────────────────────────────────────────────────
 
 ┌─ STRUCTUREDDRAPED ──────────────────────────────────────────────────────
-│ Raw value range (mean):          0.1431
-│ Raw value range (p50):           0.1434
-│ Baseline-relative delta (mean):  0.1431
-│ Envelope span (mean):            0.3000
-│ Envelope utilization:            0.4771
-│ Display position range (mean):   0.4771
-│ Display position range (p10/p50/p90): 0.4645/0.4779/0.4886
-│ Clamp rate (mean):               0.1408
+│ Raw value range (mean):          0.1733
+│ Raw value range (p50):           0.1742
+│ Baseline-relative delta (mean):  0.1733
+│ Envelope span (mean):            0.3400
+│ Envelope utilization:            0.5098
+│ Display position range (mean):   0.5098
+│ Display position range (p10/p50/p90): 0.4816/0.5123/0.5372
+│ Clamp rate (mean):               0.2118
 │ Users with any clamping:         100.0000%
-│ Users with >10% clamping:        82.9000%
-│ UI marker range (mean):          0.4771
-│ UI distinct positions (mean):    49.8000
+│ Users with >10% clamping:        99.1000%
+│ UI marker range (mean):          0.5098
+│ UI distinct positions (mean):    46.4000
 │ Stuck one tertile (dp):          0.0000%
 │ Stuck one tertile (UI):          0.0000%
 └────────────────────────────────────────────────────────────────────────────────────────
@@ -110,8 +110,8 @@ DIAGNOSIS SUMMARY
 Bottleneck key: [E]=Envelope [S]=Signal [U]=UI [C]=Coherence cap
 
   vibrancy             [OK] [E] envelope too narrow (clamping)
-  contrast             [POOR] [S] weak daily signal variation + [E] envelope too narrow (clamping)
-  metalTone            [WEAK] [E] envelope too wide for actual signal + [E] envelope too narrow (clamping)
-  masculineFeminine    [POOR] [E] envelope too wide for actual signal + [S] weak daily signal variation
-  angularRounded       [WEAK] [E] envelope too wide for actual signal
-  structuredDraped     [WEAK] [E] envelope too wide for actual signal + [E] envelope too narrow (clamping)
+  contrast             [WEAK] [E] envelope too wide for actual signal
+  metalTone            [OK] [E] envelope too narrow (clamping)
+  masculineFeminine    [WEAK] [E] envelope too wide for actual signal
+  angularRounded       [OK] — no major bottleneck
+  structuredDraped     [OK] [E] envelope too narrow (clamping)
