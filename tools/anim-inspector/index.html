@@ -1,0 +1,1524 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cosmic Fit · Loader Animation Inspector</title>
+    <style>
+      :root {
+        --bg: #0a0b10;
+        --panel: #14161f;
+        --panel2: #1b1e2a;
+        --line: #2a2e3d;
+        --ink: #e8e6df;
+        --muted: #8d93a6;
+        --accent: #d9a441;
+        --accent2: #5a7cff;
+        --cosmic: #000210;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          13px/1.45 -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif;
+      }
+      h1 {
+        font-size: 15px;
+        margin: 0;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+      }
+      h2 {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--muted);
+        margin: 0 0 8px;
+      }
+      .wrap {
+        display: grid;
+        grid-template-columns: minmax(360px, 1fr) 360px;
+        gap: 14px;
+        padding: 14px;
+        max-width: 1280px;
+        margin: 0 auto;
+      }
+      .col {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        min-width: 0;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 14px;
+      }
+      header.topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--line);
+      }
+      header .sub {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .stage {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+      .canvasBox {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+      }
+      canvas {
+        display: block;
+        image-rendering: auto;
+      }
+      .nowLine {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .pill {
+        background: var(--panel2);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 3px 10px;
+        color: var(--ink);
+      }
+      .pill b {
+        color: var(--accent);
+      }
+      .transport {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      button {
+        background: var(--panel2);
+        color: var(--ink);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 7px 11px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+      button:hover {
+        border-color: var(--accent);
+      }
+      button.primary {
+        background: var(--accent);
+        color: #1a1304;
+        border-color: var(--accent);
+        font-weight: 600;
+      }
+      button.toggle.on {
+        background: var(--accent2);
+        color: #fff;
+        border-color: var(--accent2);
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .row.wrap {
+        flex-wrap: wrap;
+      }
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+      }
+      .scrub {
+        width: 100%;
+      }
+      label.fld {
+        display: grid;
+        grid-template-columns: 64px 1fr 58px;
+        align-items: center;
+        gap: 8px;
+        margin: 7px 0;
+      }
+      label.fld span {
+        color: var(--muted);
+      }
+      label.fld input[type="number"] {
+        width: 58px;
+        background: var(--cosmic);
+        border: 1px solid var(--line);
+        color: var(--ink);
+        border-radius: 6px;
+        padding: 4px 6px;
+        font-size: 12px;
+        text-align: right;
+      }
+      .strip {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 6px;
+      }
+      .frameCard {
+        flex: 0 0 auto;
+        width: 88px;
+        background: var(--panel2);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 6px;
+        cursor: pointer;
+        text-align: center;
+      }
+      .frameCard.sel {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px var(--accent) inset;
+      }
+      .frameCard.active {
+        outline: 2px solid var(--accent2);
+      }
+      .frameCard canvas {
+        border-radius: 6px;
+        background: #000;
+        margin: 0 auto;
+      }
+      .frameCard .nm {
+        font-size: 10.5px;
+        margin-top: 5px;
+        color: var(--ink);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .frameCard .du {
+        font-size: 9.5px;
+        color: var(--muted);
+      }
+      .frameCard .du.blank {
+        opacity: 0.5;
+      }
+      .editorBox {
+        position: relative;
+        display: flex;
+        justify-content: center;
+      }
+      textarea {
+        width: 100%;
+        min-height: 180px;
+        background: var(--cosmic);
+        color: #cfe;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px;
+        font:
+          11.5px/1.5 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        resize: vertical;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .seg {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .small {
+        font-size: 11px;
+      }
+      .hint {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      .lock {
+        color: var(--accent);
+        font-size: 12px;
+        background: var(--panel2);
+        border: 1px dashed var(--line);
+        border-radius: 8px;
+        padding: 10px;
+        text-align: center;
+      }
+      select {
+        background: var(--panel2);
+        color: var(--ink);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 6px 8px;
+      }
+      .total {
+        font-variant-numeric: tabular-nums;
+      }
+      a {
+        color: var(--accent2);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>Cosmic Fit · Loader Animation Inspector</h1>
+        <div class="sub">
+          Faithful port of <code>CosmicFitLoaderView</code> — always opens at
+          the shipped loader values so playback matches the app. Edits are saved
+          as a draft you can reload.
+        </div>
+      </div>
+      <div class="row">
+        <span id="matchPill" class="pill"></span>
+        <select id="variant">
+          <option value="blankGap">Variant: full (blank gap)</option>
+          <option value="breathing">Variant: breathing (button)</option>
+        </select>
+        <button id="loadDraft" style="display: none">Load saved draft</button>
+        <button id="bgToggle" class="toggle on">Dark bg</button>
+        <button id="reset">↺ Reset all to loader</button>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <!-- LEFT: stage + filmstrip -->
+      <div class="col">
+        <div class="card stage">
+          <div class="canvasBox" id="canvasBox">
+            <canvas id="main" width="420" height="420"></canvas>
+          </div>
+          <div class="nowLine">
+            <span class="pill"
+              >t = <b id="tNow">0.00</b>s / <span id="tTot">0.00</span>s</span
+            >
+            <span class="pill"
+              >segment <b id="segIdx">0</b>: <b id="segName">—</b></span
+            >
+            <span class="pill">opacity <b id="opNow">1.00</b></span>
+          </div>
+          <input
+            id="scrub"
+            class="scrub"
+            type="range"
+            min="0"
+            max="1000"
+            value="0"
+          />
+          <div class="transport">
+            <button id="play" class="primary">⏸ Pause</button>
+            <button data-rate="1" class="rate toggle on">1×</button>
+            <button data-rate="0.5" class="rate toggle">0.5×</button>
+            <button data-rate="0.25" class="rate toggle">0.25×</button>
+            <button data-rate="0.1" class="rate toggle">0.1×</button>
+            <button id="prevFrame">⟵ frame</button>
+            <button id="nextFrame">frame ⟶</button>
+          </div>
+          <div class="transport">
+            <span class="muted small">Loop:</span>
+            <button data-loop="repeat" class="loopMode toggle on">
+              ↻ Repeat (loader)
+            </button>
+            <button data-loop="boomerang" class="loopMode toggle">
+              ⇄ Boomerang
+            </button>
+            <button data-loop="once" class="loopMode toggle">→ Once</button>
+            <span class="muted small" id="loopInfo"></span>
+          </div>
+          <div class="transport">
+            <button id="resetAll2" class="primary">
+              ↺ Reset everything to current loader
+            </button>
+            <span class="muted small"
+              >Restores every shape, timing value &amp; opacity to the shipped
+              loader.</span
+            >
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>
+            Keyframes (click to inspect / edit) — duration shown is the morph
+            <em>into</em> that frame
+          </h2>
+          <div class="strip" id="strip"></div>
+          <div class="hint">
+            Highlight:
+            <span style="color: var(--accent2)">blue&nbsp;outline</span> =
+            currently playing segment ·
+            <span style="color: var(--accent)">gold</span> = selected for
+            editing.
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: editor + timing + export -->
+      <div class="col">
+        <div class="card">
+          <h2>Shape editor — <span id="editName">—</span></h2>
+          <div class="editorBox">
+            <canvas id="editor" width="320" height="320"></canvas>
+          </div>
+          <div id="editControls"></div>
+          <div class="hint" id="editHint">
+            Drag the handles, or fine-tune with the fields. Edits apply to the
+            live animation instantly.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="row" style="justify-content: space-between">
+            <h2 style="margin: 0">
+              Timing (seconds) · total
+              <span class="total" id="tTot2">0.00</span>s
+            </h2>
+            <button id="resetTiming">↺ Reset timing</button>
+          </div>
+          <div id="timingControls" style="margin-top: 8px"></div>
+        </div>
+
+        <div class="card">
+          <h2>
+            Export → Swift (paste into <code>CosmicFitLoaderView.swift</code>)
+          </h2>
+          <textarea id="export" readonly></textarea>
+          <div class="row" style="margin-top: 8px">
+            <button id="copy" class="primary">Copy Swift</button>
+            <button id="copyJson">Copy JSON</button>
+            <span class="muted small">Edits auto-save in this browser.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      //=================================================================
+      //  EXACT PORT of CosmicFitLoaderView geometry + timing
+      //=================================================================
+
+      // The shipped brand icon (f5) — exact traced anchors + controls. LOCKED.
+      const ICON = {
+        anchors: [
+          [0, -1],
+          [0.7939, 0],
+          [0, 1],
+          [-0.7939, 0],
+        ],
+        controls: [
+          [0.1219, -0.4559],
+          [0.2729, -0.1176],
+          [0.2729, 0.1176],
+          [0.1219, 0.4559],
+          [-0.1219, 0.4559],
+          [-0.2729, 0.1176],
+          [-0.2729, -0.1176],
+          [-0.1219, -0.4559],
+        ],
+      };
+
+      function hug(p, w, arc) {
+        return [p[0] + arc * (w[0] - p[0]), p[1] + arc * (w[1] - p[1])];
+      }
+      function parametric(vTip, hTip, waist, arc) {
+        const top = [0, -vTip],
+          right = [hTip, 0],
+          bottom = [0, vTip],
+          left = [-hTip, 0];
+        const wTR = [waist, -waist],
+          wRB = [waist, waist],
+          wBL = [-waist, waist],
+          wLT = [-waist, -waist];
+        return {
+          anchors: [top, right, bottom, left],
+          controls: [
+            hug(top, wTR, arc),
+            hug(right, wTR, arc),
+            hug(right, wRB, arc),
+            hug(bottom, wRB, arc),
+            hug(bottom, wBL, arc),
+            hug(left, wBL, arc),
+            hug(left, wLT, arc),
+            hug(top, wLT, arc),
+          ],
+        };
+      }
+      function scaledShape(s, k) {
+        const m = (p) => [p[0] * k, p[1] * k];
+        return { anchors: s.anchors.map(m), controls: s.controls.map(m) };
+      }
+      function rotatedShape(s, deg) {
+        const a = (deg * Math.PI) / 180,
+          c = Math.cos(a),
+          s2 = Math.sin(a);
+        const r = (p) => [p[0] * c - p[1] * s2, p[0] * s2 + p[1] * c];
+        return { anchors: s.anchors.map(r), controls: s.controls.map(r) };
+      }
+
+      // kCAMediaTimingFunctionEaseInEaseOut == cubic-bezier(0.42, 0, 0.58, 1)
+      function makeBezierEase(p1x, p1y, p2x, p2y) {
+        const ax = 1 - 3 * (p2x - p1x) - 3 * p1x,
+          bx = 3 * (p2x - p1x) - 6 * p1x,
+          cx = 3 * p1x;
+        const ay = 1 - 3 * (p2y - p1y) - 3 * p1y,
+          by = 3 * (p2y - p1y) - 6 * p1y,
+          cy = 3 * p1y;
+        const X = (t) => ((ax * t + bx) * t + cx) * t;
+        const Y = (t) => ((ay * t + by) * t + cy) * t;
+        const dX = (t) => (3 * ax * t + 2 * bx) * t + cx;
+        return (x) => {
+          let t = x;
+          for (let i = 0; i < 8; i++) {
+            const e = X(t) - x;
+            if (Math.abs(e) < 1e-6) break;
+            const d = dX(t);
+            if (Math.abs(d) < 1e-7) break;
+            t -= e / d;
+          }
+          return Y(Math.max(0, Math.min(1, t)));
+        };
+      }
+      const easeInOut = makeBezierEase(0.42, 0, 0.58, 1);
+
+      const lerp = (a, b, t) => a + (b - a) * t;
+      const lerpPt = (a, b, t) => [lerp(a[0], b[0], t), lerp(a[1], b[1], t)];
+      function interpShape(s0, s1, t) {
+        return {
+          anchors: s0.anchors.map((p, i) => lerpPt(p, s1.anchors[i], t)),
+          controls: s0.controls.map((p, i) => lerpPt(p, s1.controls[i], t)),
+        };
+      }
+
+      //=================================================================
+      //  STATE (defaults mirror the current Swift file)
+      //=================================================================
+      const DEFAULTS = {
+        variant: "blankGap",
+        timing: {
+          appear: 0.115,
+          riseStep: 0.06,
+          settle: 0.08,
+          iconHold: 0.62,
+          shrink1: 0.045,
+          shrink2: 0.04,
+          blankHold: 0.25,
+        },
+        frames: {
+          blank: {
+            kind: "param",
+            name: "blank",
+            p: { vTip: 0.001, hTip: 0.001, waist: 0.0006, arc: 0.78 },
+          },
+          g1: {
+            kind: "param",
+            name: "g1 · needle",
+            p: {
+              vTip: 0.09990985576923075,
+              hTip: 0.1282051282051282,
+              waist: 0.006,
+              arc: 0.965,
+            },
+            rot: 0,
+          },
+          g2: {
+            kind: "param",
+            name: "g2 · cross",
+            p: {
+              vTip: 0.9572816506410255,
+              hTip: 0.08012820512820512,
+              waist: 0.012,
+              arc: 0.95,
+            },
+            rot: 0,
+          },
+          g3: {
+            kind: "param",
+            name: "g3 · star",
+            p: {
+              vTip: 1.0293970352564101,
+              hTip: 0.8974358974358974,
+              waist: 0.3904997996794871,
+              arc: 0.86,
+            },
+            rot: -1,
+          },
+          o1: {
+            kind: "param",
+            name: "o1 · needle (out)",
+            p: {
+              vTip: 0.09990985576923075,
+              hTip: 0.0641025641025641,
+              waist: 0.006,
+              arc: 0.965,
+            },
+            rot: 125,
+          },
+          o2: {
+            kind: "param",
+            name: "o2 · cross (out)",
+            p: {
+              vTip: 1.1217322716346152,
+              hTip: 1.0096153846153846,
+              waist: 0,
+              arc: 0.95,
+            },
+            rot: 0,
+          },
+          o3: {
+            kind: "param",
+            name: "o3 · star (out)",
+            p: {
+              vTip: 1.0293970352564101,
+              hTip: 0.8974358974358974,
+              waist: 0.3605456229967948,
+              arc: 0.86,
+            },
+          },
+          icon: { kind: "icon", name: "icon (hold)" },
+          breatheFloor: { kind: "scaled", name: "breatheFloor", k: 0.5 },
+          breatheMid: { kind: "scaled", name: "breatheMid", k: 0.74 },
+        },
+        sequences: {
+          // Intro grows g1→g2→g3→icon; outro collapses o3→o2→o1 independently.
+          blankGap: {
+            steps: [
+              { f: "blank", o: 0 },
+              { f: "blank", o: 0 },
+              { f: "g1", o: 1 },
+              { f: "g2", o: 1 },
+              { f: "g3", o: 1 },
+              { f: "icon", o: 1 },
+              { f: "icon", o: 1 },
+              { f: "o3", o: 1 },
+              { f: "o2", o: 1 },
+              { f: "o1", o: 1 },
+              { f: "blank", o: 0 },
+            ],
+            durs: [
+              "blankHold",
+              "appear",
+              "riseStep",
+              "riseStep",
+              "settle",
+              "iconHold",
+              "settle",
+              "riseStep",
+              "riseStep",
+              "appear",
+            ],
+          },
+          breathing: {
+            steps: [
+              { f: "breatheFloor", o: 1 },
+              { f: "breatheMid", o: 1 },
+              { f: "icon", o: 1 },
+              { f: "icon", o: 1 },
+              { f: "breatheMid", o: 1 },
+              { f: "breatheFloor", o: 1 },
+              { f: "breatheFloor", o: 1 },
+            ],
+            durs: [
+              "riseStep",
+              "settle",
+              "iconHold",
+              "shrink1",
+              "shrink2",
+              "iconHold",
+            ],
+          },
+        },
+      };
+
+      const clone = (o) => JSON.parse(JSON.stringify(o));
+      const STORAGE_KEY = "cf-anim-state";
+      let state;
+
+      function readRawDraft() {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE_KEY));
+        } catch (e) {
+          return null;
+        }
+      }
+      function mergeDraft(base, s) {
+        if (!s) return base;
+        if (s.variant) base.variant = s.variant;
+        if (s.timing) Object.assign(base.timing, s.timing);
+        if (s.frames)
+          for (const k in base.frames) {
+            if (s.frames[k]) base.frames[k] = s.frames[k];
+          }
+        if (s.sequences) base.sequences = s.sequences;
+        return base;
+      }
+
+      // A draft is only safe to surface if its STRUCTURE still matches the shipped
+      // loader — same timing parameters, and sequences that reference frames/timing
+      // that still exist. Older drafts of a *different* loader (e.g. the asymmetric
+      // version with a `vanish` duration and scaled-icon `s1`/`s2` collapse frames)
+      // would otherwise replay a glitchy animation that no longer matches the app.
+      // Such stale drafts are treated as unloadable and cleared.
+      function draftIsCompatible(d) {
+        if (!d || typeof d !== "object") return false;
+        if (d.timing) {
+          const got = Object.keys(d.timing).sort().join(",");
+          const want = Object.keys(DEFAULTS.timing).sort().join(",");
+          if (got !== want) return false; // renamed/added/removed params (e.g. `vanish`)
+        }
+        if (d.sequences) {
+          const merged = mergeDraft(clone(DEFAULTS), d);
+          for (const v in d.sequences) {
+            const S = d.sequences[v];
+            if (!S || !Array.isArray(S.steps) || !Array.isArray(S.durs))
+              return false;
+            if (S.steps.length !== S.durs.length + 1) return false;
+            for (const st of S.steps) {
+              if (!st || !merged.frames[st.f]) return false;
+            } // e.g. removed `s1`/`s2`
+            for (const k of S.durs) {
+              if (!(k in merged.timing)) return false;
+            } // e.g. removed `vanish`
+          }
+        }
+        return true;
+      }
+
+      // Reads the saved draft, but PURGES (and ignores) any draft whose structure no
+      // longer matches the shipped loader, so the inspector can never silently load a
+      // stale, non-matching animation.
+      function readDraft() {
+        const d = readRawDraft();
+        if (d && !draftIsCompatible(d)) {
+          localStorage.removeItem(STORAGE_KEY);
+          return null;
+        }
+        return d;
+      }
+
+      // CRITICAL: the inspector must ALWAYS open faithful to the shipped loader so
+      // its playback matches the app exactly. Earlier this overlaid saved edits from
+      // localStorage on every load, which silently made the preview diverge from the
+      // app (different timing/shapes) and rendered the tool misleading. Edits are now
+      // kept as a recoverable *draft* that is only applied when explicitly loaded.
+      function loadState() {
+        return clone(DEFAULTS);
+      }
+
+      // Compare the shape/timing/sequence payload (ignoring which variant is on
+      // screen, since both variants ship in the app) against the shipped defaults.
+      function isFaithfulState(s) {
+        return (
+          JSON.stringify(s.timing) === JSON.stringify(DEFAULTS.timing) &&
+          JSON.stringify(s.frames) === JSON.stringify(DEFAULTS.frames) &&
+          JSON.stringify(s.sequences) === JSON.stringify(DEFAULTS.sequences)
+        );
+      }
+      function isFaithful() {
+        return isFaithfulState(state);
+      }
+      function draftDiffers() {
+        const d = readDraft();
+        if (!d) return false;
+        return !isFaithfulState(mergeDraft(clone(DEFAULTS), d));
+      }
+      function updateMatchPill() {
+        const pill = document.getElementById("matchPill");
+        if (pill) {
+          if (isFaithful()) {
+            pill.textContent = "✓ Matches shipped loader";
+            pill.style.color = "#7CFC9A";
+            pill.style.borderColor = "#2e5d3b";
+          } else {
+            pill.textContent = "⚠ Edited — will NOT match the app";
+            pill.style.color = "#ffcf6b";
+            pill.style.borderColor = "#6b5520";
+          }
+        }
+        const btn = document.getElementById("loadDraft");
+        if (btn) btn.style.display = draftDiffers() ? "" : "none";
+      }
+
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        buildExport();
+        updateMatchPill();
+      }
+      function resetTiming() {
+        state.timing = clone(DEFAULTS.timing);
+        saveState();
+        buildTiming();
+        buildStrip();
+        render();
+      }
+      state = loadState();
+
+      //=================================================================
+      //  RESOLVE / TIMELINE
+      //=================================================================
+      function resolve(id) {
+        const f = state.frames[id];
+        if (!f) return parametric(0.001, 0.001, 0.0006, 0.78); // unknown/stale frame -> blank, never crash
+        let shape;
+        if (f.kind === "param")
+          shape = parametric(f.p.vTip, f.p.hTip, f.p.waist, f.p.arc);
+        else if (f.kind === "scaled") shape = scaledShape(ICON, f.k);
+        else shape = ICON;
+        if (f.rot) shape = rotatedShape(shape, f.rot);
+        return shape;
+      }
+      const seq = () => state.sequences[state.variant];
+      const durations = () => seq().durs.map((k) => state.timing[k]);
+      const total = () => durations().reduce((a, b) => a + b, 0);
+      function keyTimes() {
+        const d = durations(),
+          tot = total(),
+          ks = [0];
+        let r = 0;
+        for (const x of d) {
+          r += x;
+          ks.push(r / tot);
+        }
+        return ks;
+      }
+
+      function sampleAt(u) {
+        const S = seq(),
+          ks = keyTimes();
+        let i = 0;
+        while (i < ks.length - 2 && u > ks[i + 1]) i++;
+        const span = ks[i + 1] - ks[i] || 1e-9;
+        const segT = Math.max(0, Math.min(1, (u - ks[i]) / span));
+        const e = easeInOut(segT);
+        const shape = interpShape(
+          resolve(S.steps[i].f),
+          resolve(S.steps[i + 1].f),
+          e,
+        );
+        const op = lerp(S.steps[i].o, S.steps[i + 1].o, segT); // opacity is linear (matches Swift)
+        return { shape, op, seg: i, segT };
+      }
+
+      //=================================================================
+      //  DRAWING
+      //=================================================================
+      function pathFor(ctx, shape, cx, cy, R) {
+        const P = (n) => [cx + n[0] * R, cy + n[1] * R];
+        const a = shape.anchors.map(P),
+          c = shape.controls.map(P);
+        ctx.beginPath();
+        ctx.moveTo(a[0][0], a[0][1]);
+        ctx.bezierCurveTo(c[0][0], c[0][1], c[1][0], c[1][1], a[1][0], a[1][1]);
+        ctx.bezierCurveTo(c[2][0], c[2][1], c[3][0], c[3][1], a[2][0], a[2][1]);
+        ctx.bezierCurveTo(c[4][0], c[4][1], c[5][0], c[5][1], a[3][0], a[3][1]);
+        ctx.bezierCurveTo(c[6][0], c[6][1], c[7][0], c[7][1], a[0][0], a[0][1]);
+        ctx.closePath();
+      }
+      let darkBg = true;
+      function bgColor() {
+        return darkBg ? "#000210" : "#f4f2ec";
+      }
+      function fillColor() {
+        return darkBg ? "#ffffff" : "#000210";
+      }
+
+      function drawStage(shape, op) {
+        const c = document.getElementById("main"),
+          ctx = c.getContext("2d");
+        ctx.clearRect(0, 0, c.width, c.height);
+        ctx.fillStyle = bgColor();
+        ctx.fillRect(0, 0, c.width, c.height);
+        // faint reference grid + crosshair so positions are legible
+        ctx.strokeStyle = darkBg ? "rgba(255,255,255,.06)" : "rgba(0,0,0,.08)";
+        ctx.lineWidth = 1;
+        for (let g = 1; g < 4; g++) {
+          const x = (c.width * g) / 4;
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, c.height);
+          ctx.stroke();
+          const y = (c.height * g) / 4;
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(c.width, y);
+          ctx.stroke();
+        }
+        // Match the app's fill ratio: Swift's path(for:) uses radius = min/2 * 0.95.
+        const cx = c.width / 2,
+          cy = c.height / 2,
+          R = (Math.min(c.width, c.height) / 2) * 0.95;
+        ctx.globalAlpha = op;
+        pathFor(ctx, shape, cx, cy, R);
+        ctx.fillStyle = fillColor();
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      function drawThumb(canvas, id, op) {
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#000210";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const cx = canvas.width / 2,
+          cy = canvas.height / 2,
+          R = (Math.min(canvas.width, canvas.height) / 2) * 0.82;
+        ctx.globalAlpha = op === 0 ? 0.12 : 1; // show blank faintly so it's visible
+        pathFor(ctx, resolve(id), cx, cy, R);
+        ctx.fillStyle = "#fff";
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      //=================================================================
+      //  FILMSTRIP
+      //=================================================================
+      let selectedFrame = null,
+        selectedStep = null,
+        soloStep = null;
+      function buildStrip() {
+        const strip = document.getElementById("strip");
+        strip.innerHTML = "";
+        const S = seq();
+        S.steps.forEach((st, idx) => {
+          const card = document.createElement("div");
+          card.className = "frameCard";
+          card.dataset.idx = idx;
+          card.dataset.frame = st.f;
+          const cv = document.createElement("canvas");
+          cv.width = 72;
+          cv.height = 72;
+          card.appendChild(cv);
+          const nm = document.createElement("div");
+          nm.className = "nm";
+          nm.textContent = `${idx}· ${(state.frames[st.f] || { name: st.f }).name}`;
+          const du = document.createElement("div");
+          du.className = "du";
+          if (idx > 0) {
+            du.textContent = `${S.durs[idx - 1]} ${state.timing[S.durs[idx - 1]].toFixed(3)}s`;
+          } else {
+            du.textContent = "loop start";
+          }
+          if (st.o === 0) {
+            nm.classList.add("du");
+            du.classList.add("blank");
+            nm.style.opacity = 0.6;
+          }
+          card.appendChild(nm);
+          card.appendChild(du);
+          card.addEventListener("click", () => {
+            // SOLO this keyframe: show it solid in the main preview, independent of
+            // the timeline/timing (so zero-duration frames are still inspectable).
+            selectedStep = idx;
+            soloStep = idx;
+            playing = false;
+            updatePlayBtn();
+            selectFrame(st.f);
+            render();
+          });
+          strip.appendChild(card);
+          drawThumb(cv, st.f, st.o);
+        });
+        refreshStripHighlight();
+      }
+      function refreshStripHighlight() {
+        const cards = document.querySelectorAll(".frameCard");
+        const u = clockU();
+        const { seg } = sampleAt(u);
+        cards.forEach((c) => {
+          const idx = +c.dataset.idx;
+          const playingHere =
+            soloStep === null && (idx === seg || idx === seg + 1);
+          c.classList.toggle("active", playingHere);
+          c.classList.toggle("sel", idx === selectedStep);
+        });
+      }
+
+      //=================================================================
+      //  SHAPE EDITOR (per-frame handles)
+      //=================================================================
+      function selectFrame(id) {
+        selectedFrame = id;
+        buildEditor();
+        refreshStripHighlight();
+      }
+
+      const EDR = () => {
+        const c = document.getElementById("editor");
+        return (Math.min(c.width, c.height) / 2) * 0.78;
+      };
+      function buildEditor() {
+        const f = selectedFrame ? state.frames[selectedFrame] : null;
+        const ctrls = document.getElementById("editControls");
+        ctrls.innerHTML = "";
+        if (!f) {
+          document.getElementById("editName").textContent =
+            "— (click a keyframe)";
+          drawEditor();
+          return;
+        }
+        document.getElementById("editName").textContent =
+          (selectedStep != null ? `#${selectedStep} · ` : "") + f.name;
+
+        // Shape controls (depend on frame kind)
+        if (f.kind === "icon") {
+          const lock = document.createElement("div");
+          lock.className = "lock";
+          lock.textContent = "🔒 Exact brand icon — shape locked by design.";
+          ctrls.appendChild(lock);
+        } else if (f.kind === "param") {
+          ["vTip", "hTip", "waist", "arc"].forEach((key) => {
+            ctrls.appendChild(
+              field(
+                key,
+                f.p[key],
+                key === "arc" ? [0, 1, 0.005] : [0, 1.2, 0.005],
+                (v) => {
+                  f.p[key] = v;
+                  onEdit();
+                },
+              ),
+            );
+          });
+        } else if (f.kind === "scaled") {
+          ctrls.appendChild(
+            field("scale", f.k, [0, 1.2, 0.005], (v) => {
+              f.k = v;
+              onEdit();
+            }),
+          );
+        }
+
+        // Per-keyframe opacity (a property of THIS timeline step, not the shape)
+        if (selectedStep != null) {
+          const sep = document.createElement("div");
+          sep.className = "hint";
+          sep.textContent =
+            "Opacity of this keyframe (0 = invisible, e.g. the blank gap):";
+          ctrls.appendChild(sep);
+          const step = seq().steps[selectedStep];
+          ctrls.appendChild(
+            field("opacity", step.o, [0, 1, 0.05], (v) => {
+              step.o = v;
+              onEdit();
+            }),
+          );
+        }
+        drawEditor();
+      }
+      function field(label, val, [min, max, step], cb) {
+        const wrap = document.createElement("label");
+        wrap.className = "fld";
+        const s = document.createElement("span");
+        s.textContent = label;
+        const r = document.createElement("input");
+        r.type = "range";
+        r.min = min;
+        r.max = max;
+        r.step = step;
+        r.value = val;
+        const n = document.createElement("input");
+        n.type = "number";
+        n.min = min;
+        n.max = max;
+        n.step = step;
+        n.value = +val.toFixed(4);
+        r.addEventListener("input", () => {
+          n.value = +(+r.value).toFixed(4);
+          cb(+r.value);
+        });
+        n.addEventListener("input", () => {
+          r.value = n.value;
+          cb(+n.value);
+        });
+        wrap.append(s, r, n);
+        wrap._sync = (v) => {
+          r.value = v;
+          n.value = +(+v).toFixed(4);
+        };
+        return wrap;
+      }
+      function onEdit() {
+        saveState();
+        buildStrip();
+        drawEditor();
+        render();
+      }
+
+      let dragHandle = null;
+      function drawEditor() {
+        const c = document.getElementById("editor"),
+          ctx = c.getContext("2d");
+        ctx.clearRect(0, 0, c.width, c.height);
+        ctx.fillStyle = "#000210";
+        ctx.fillRect(0, 0, c.width, c.height);
+        ctx.strokeStyle = "rgba(255,255,255,.07)";
+        for (let g = 1; g < 4; g++) {
+          const x = (c.width * g) / 4;
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, c.height);
+          ctx.stroke();
+          const y = (c.height * g) / 4;
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(c.width, y);
+          ctx.stroke();
+        }
+        if (!selectedFrame) return;
+        const f = state.frames[selectedFrame];
+        const cx = c.width / 2,
+          cy = c.height / 2,
+          R = EDR();
+        pathFor(ctx, resolve(selectedFrame), cx, cy, R);
+        ctx.fillStyle = "rgba(245,238,225,.92)";
+        ctx.fill();
+        ctx.strokeStyle = darkBg
+          ? "rgba(217,164,65,.9)"
+          : "rgba(217,164,65,.9)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        if (f.kind !== "param") return;
+        // handles: top anchor (vTip), right anchor (hTip), NE waist
+        const hs = handlePositions(f.p, cx, cy, R);
+        for (const h of hs) {
+          ctx.beginPath();
+          ctx.arc(h.x, h.y, 6, 0, 7);
+          ctx.fillStyle = h.id === dragHandle ? "#5a7cff" : "#d9a441";
+          ctx.fill();
+          ctx.strokeStyle = "#000210";
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        }
+      }
+      function handlePositions(p, cx, cy, R) {
+        return [
+          { id: "vTip", x: cx, y: cy - p.vTip * R },
+          { id: "hTip", x: cx + p.hTip * R, y: cy },
+          { id: "waist", x: cx + p.waist * R, y: cy - p.waist * R },
+        ];
+      }
+      (function wireEditorDrag() {
+        const c = document.getElementById("editor");
+        function pos(e) {
+          const r = c.getBoundingClientRect();
+          return { x: e.clientX - r.left, y: e.clientY - r.top };
+        }
+        c.addEventListener("mousedown", (e) => {
+          if (!selectedFrame || state.frames[selectedFrame].kind !== "param")
+            return;
+          const f = state.frames[selectedFrame];
+          const cx = c.width / 2,
+            cy = c.height / 2,
+            R = EDR();
+          const { x, y } = pos(e);
+          for (const h of handlePositions(f.p, cx, cy, R)) {
+            if (Math.hypot(x - h.x, y - h.y) < 11) {
+              dragHandle = h.id;
+              break;
+            }
+          }
+        });
+        window.addEventListener("mousemove", (e) => {
+          if (!dragHandle || !selectedFrame) return;
+          const f = state.frames[selectedFrame];
+          const cx = c.width / 2,
+            cy = c.height / 2,
+            R = EDR();
+          const { x, y } = pos(e);
+          if (dragHandle === "vTip")
+            f.p.vTip = Math.max(0, Math.min(1.2, (cy - y) / R));
+          if (dragHandle === "hTip")
+            f.p.hTip = Math.max(0, Math.min(1.2, (x - cx) / R));
+          if (dragHandle === "waist") {
+            const w = ((x - cx) / R + (cy - y) / R) / 2;
+            f.p.waist = Math.max(0, Math.min(0.6, w));
+          }
+          syncEditorFields();
+          drawEditor();
+          render();
+          buildStripThrottled();
+        });
+        window.addEventListener("mouseup", () => {
+          if (dragHandle) {
+            dragHandle = null;
+            onEdit();
+          }
+        });
+      })();
+      function syncEditorFields() {
+        const f = state.frames[selectedFrame];
+        if (!f || f.kind !== "param") return;
+        const labels = document.querySelectorAll("#editControls .fld");
+        const keys = ["vTip", "hTip", "waist", "arc"];
+        labels.forEach((l, i) => {
+          if (l._sync) l._sync(f.p[keys[i]]);
+        });
+      }
+      let stripTimer = null;
+      function buildStripThrottled() {
+        if (stripTimer) return;
+        stripTimer = setTimeout(() => {
+          stripTimer = null;
+          buildStrip();
+        }, 120);
+      }
+
+      //=================================================================
+      //  TIMING CONTROLS
+      //=================================================================
+      function buildTiming() {
+        const box = document.getElementById("timingControls");
+        box.innerHTML = "";
+        Object.keys(state.timing).forEach((key) => {
+          box.appendChild(
+            field(key, state.timing[key], [0, 1, 0.005], (v) => {
+              state.timing[key] = v;
+              saveState();
+              buildStrip();
+              render();
+              updateTotals();
+            }),
+          );
+        });
+        updateTotals();
+      }
+      function updateTotals() {
+        document.getElementById("tTot").textContent = total().toFixed(2);
+        document.getElementById("tTot2").textContent = total().toFixed(2);
+      }
+
+      //=================================================================
+      //  EXPORT
+      //=================================================================
+      const fmt = (x) => {
+        const r = Math.round(x * 10000) / 10000;
+        return Number.isInteger(r) ? r + ".0" : String(r);
+      };
+      function buildExport() {
+        const f = state.frames,
+          t = state.timing;
+        const pf = (p) =>
+          `vTip: ${fmt(p.vTip)}, hTip: ${fmt(p.hTip)}, waist: ${fmt(p.waist)}, arc: ${fmt(p.arc)}`;
+        const paramLine = (id, label) => {
+          const fr = f[id];
+          const base = `parametricShape(${pf(fr.p)})`;
+          if (fr.rot && fr.rot !== 0)
+            return `private static let ${id} = rotated(${base}, byDegrees: ${fmt(fr.rot)}) // ${label}`;
+          return `private static let ${id} = ${base}`;
+        };
+        const s = `// Required helper — add once if not present:
+// private static func rotated(_ s: StarShape, byDegrees deg: CGFloat) -> StarShape {
+//     let a = deg * .pi / 180, c = cos(a), s2 = sin(a)
+//     func r(_ p: CGPoint) -> CGPoint { CGPoint(x: p.x*c - p.y*s2, y: p.x*s2 + p.y*c) }
+//     return StarShape(anchors: s.anchors.map(r), controls: s.controls.map(r))
+// }
+
+// GROW (intro) frames — needle glint -> thin cross -> sharp star.
+${paramLine("g1", "needle")}
+${paramLine("g2", "cross")}
+${paramLine("g3", "star")}
+
+// OUTRO (collapse) frames — independent of the grow frames.
+${paramLine("o1", "needle (out)")}
+${paramLine("o2", "cross (out)")}
+${paramLine("o3", "star (out)")}
+
+// BREATHE frames — button variant floor/mid.
+private static let breatheFloor = scaled(f5, by: ${fmt(f.breatheFloor.k)})
+private static let breatheMid   = scaled(f5, by: ${fmt(f.breatheMid.k)})
+
+// blankGap frame order (intro grows g1->g2->g3->icon, outro collapses o3->o2->o1):
+//   blank, blank, g1, g2, g3, f5, f5, o3, o2, o1, blank
+
+private enum Timing {
+    static let appear: Double = ${fmt(t.appear)}
+    static let riseStep: Double = ${fmt(t.riseStep)}
+    static let settle: Double = ${fmt(t.settle)}
+    static let iconHold: Double = ${fmt(t.iconHold)}
+    static let shrink1: Double = ${fmt(t.shrink1)}
+    static let shrink2: Double = ${fmt(t.shrink2)}
+    static let blankHold: Double = ${fmt(t.blankHold)}
+}`;
+        document.getElementById("export").value = s;
+        return s;
+      }
+
+      //=================================================================
+      //  PLAYBACK
+      //=================================================================
+      let playing = true,
+        rate = 1,
+        clock = 0,
+        lastTS = null;
+      let loopMode = "repeat",
+        dir = 1;
+      const LOOP_INFO = {
+        repeat:
+          "Plays the whole cycle then jumps back to the start — exactly what the shipped loader does (its cycle already grows out and shrinks back).",
+        boomerang:
+          "Plays the timeline forward, then reverses the entire timeline backward (CA autoreverse). For comparison — NOT how the loader is configured.",
+        once: "Plays a single cycle and stops on the last frame.",
+      };
+      function updatePlayBtn() {
+        document.getElementById("play").textContent = playing
+          ? "⏸ Pause"
+          : "▶ Play";
+      }
+      function clockU() {
+        const tot = total();
+        if (tot <= 0) return 0;
+        return loopMode === "repeat"
+          ? (clock % tot) / tot
+          : Math.max(0, Math.min(1, clock / tot));
+      }
+      function exitSolo() {
+        soloStep = null;
+      }
+      function render() {
+        const tot = total();
+        if (soloStep != null) {
+          // Inspect mode: draw the selected keyframe solid (opacity forced to 1 so the
+          // shape is always visible), regardless of its timeline opacity or timing.
+          const S = seq(),
+            st = S.steps[soloStep];
+          drawStage(resolve(st.f), 1);
+          document.getElementById("tNow").textContent = "solo";
+          document.getElementById("opNow").textContent = st.o.toFixed(2);
+          document.getElementById("segIdx").textContent = soloStep;
+          document.getElementById("segName").textContent =
+            `SOLO · ${state.frames[st.f].name} — timeline opacity ${st.o.toFixed(2)}`;
+          refreshStripHighlight();
+          return;
+        }
+        const u = clockU();
+        const { shape, op, seg, segT } = sampleAt(u);
+        drawStage(shape, op);
+        document.getElementById("tNow").textContent = (u * tot).toFixed(2);
+        document.getElementById("opNow").textContent = op.toFixed(2);
+        document.getElementById("segIdx").textContent = seg;
+        const S = seq();
+        const aName = state.frames[S.steps[seg].f].name,
+          bName = state.frames[S.steps[seg + 1].f].name;
+        document.getElementById("segName").textContent =
+          `${aName} → ${bName}  (${(segT * 100) | 0}%)`;
+        document.getElementById("scrub").value = Math.round(u * 1000);
+        refreshStripHighlight();
+      }
+      function tick(ts) {
+        if (lastTS == null) lastTS = ts;
+        const dt = (ts - lastTS) / 1000;
+        lastTS = ts;
+        const tot = total();
+        if (playing && tot > 0) {
+          if (loopMode === "boomerang") {
+            clock += dt * rate * dir;
+            if (clock > tot) {
+              clock = 2 * tot - clock;
+              dir = -1;
+            }
+            if (clock < 0) {
+              clock = -clock;
+              dir = 1;
+            }
+            clock = Math.max(0, Math.min(tot, clock));
+          } else if (loopMode === "once") {
+            clock += dt * rate;
+            if (clock >= tot) {
+              clock = tot;
+              playing = false;
+              updatePlayBtn();
+            }
+          } else {
+            // repeat (matches the loader)
+            clock += dt * rate;
+            clock %= tot;
+          }
+        }
+        render();
+        requestAnimationFrame(tick);
+      }
+
+      //=================================================================
+      //  WIRING
+      //=================================================================
+      document.getElementById("play").addEventListener("click", () => {
+        exitSolo();
+        playing = !playing;
+        updatePlayBtn();
+      });
+      document.querySelectorAll(".rate").forEach((b) =>
+        b.addEventListener("click", () => {
+          rate = +b.dataset.rate;
+          document
+            .querySelectorAll(".rate")
+            .forEach((x) => x.classList.remove("on"));
+          b.classList.add("on");
+        }),
+      );
+      document.querySelectorAll(".loopMode").forEach((b) =>
+        b.addEventListener("click", () => {
+          loopMode = b.dataset.loop;
+          dir = 1;
+          document
+            .querySelectorAll(".loopMode")
+            .forEach((x) => x.classList.remove("on"));
+          b.classList.add("on");
+          document.getElementById("loopInfo").textContent = LOOP_INFO[loopMode];
+          if (loopMode === "once") {
+            clock = 0;
+            playing = true;
+            updatePlayBtn();
+          }
+        }),
+      );
+      document.getElementById("loopInfo").textContent = LOOP_INFO[loopMode];
+      document
+        .getElementById("resetTiming")
+        .addEventListener("click", resetTiming);
+      document.getElementById("scrub").addEventListener("input", (e) => {
+        exitSolo();
+        playing = false;
+        updatePlayBtn();
+        clock = (+e.target.value / 1000) * total();
+        render();
+      });
+      function stepToBoundary(dir) {
+        exitSolo();
+        const ks = keyTimes(),
+          tot = total(),
+          u = (clock % tot) / tot + 1e-6;
+        let target;
+        if (dir > 0) {
+          target = ks.find((k) => k > u);
+          if (target === undefined) target = ks[ks.length - 1];
+        } else {
+          const before = ks.filter((k) => k < u - 1e-4);
+          target = before.length ? before[before.length - 1] : 0;
+        }
+        clock = target * tot;
+        playing = false;
+        updatePlayBtn();
+        render();
+      }
+      document
+        .getElementById("nextFrame")
+        .addEventListener("click", () => stepToBoundary(1));
+      document
+        .getElementById("prevFrame")
+        .addEventListener("click", () => stepToBoundary(-1));
+      document.getElementById("variant").addEventListener("change", (e) => {
+        state.variant = e.target.value;
+        saveState();
+        clock = 0;
+        soloStep = null;
+        selectedStep = null;
+        selectedFrame = null;
+        buildStrip();
+        buildEditor();
+        render();
+        updateTotals();
+      });
+      document.getElementById("bgToggle").addEventListener("click", (e) => {
+        darkBg = !darkBg;
+        e.target.classList.toggle("on", darkBg);
+        e.target.textContent = darkBg ? "Dark bg" : "Light bg";
+        render();
+      });
+      function resetAll() {
+        if (
+          !confirm(
+            "Reset ALL shapes, timing and opacity to the current loader values?",
+          )
+        )
+          return;
+        state = clone(DEFAULTS);
+        localStorage.removeItem("cf-anim-state");
+        document.getElementById("variant").value = state.variant;
+        selectedFrame = null;
+        selectedStep = null;
+        soloStep = null;
+        clock = 0;
+        playing = true;
+        updatePlayBtn();
+        buildAll();
+      }
+      document.getElementById("reset").addEventListener("click", resetAll);
+      document.getElementById("resetAll2").addEventListener("click", resetAll);
+      document.getElementById("loadDraft").addEventListener("click", () => {
+        const d = readDraft();
+        if (!d) return;
+        if (
+          !confirm(
+            "Load your saved draft? This replaces the shipped-loader values currently shown and will NOT match the app until you reset.",
+          )
+        )
+          return;
+        state = mergeDraft(clone(DEFAULTS), d);
+        document.getElementById("variant").value = state.variant;
+        selectedFrame = null;
+        selectedStep = null;
+        soloStep = null;
+        clock = 0;
+        playing = true;
+        updatePlayBtn();
+        buildAll();
+      });
+      document.getElementById("copy").addEventListener("click", () => {
+        navigator.clipboard.writeText(buildExport());
+        flash("copy", "Copied!");
+      });
+      document.getElementById("copyJson").addEventListener("click", () => {
+        navigator.clipboard.writeText(
+          JSON.stringify(
+            { timing: state.timing, frames: state.frames },
+            null,
+            2,
+          ),
+        );
+        flash("copyJson", "Copied!");
+      });
+      function flash(id, txt) {
+        const b = document.getElementById(id);
+        const o = b.textContent;
+        b.textContent = txt;
+        setTimeout(() => (b.textContent = o), 900);
+      }
+
+      function buildAll() {
+        document.getElementById("variant").value = state.variant;
+        buildStrip();
+        buildTiming();
+        buildEditor();
+        buildExport();
+        updateTotals();
+        render();
+        updateMatchPill();
+      }
+      buildAll();
+      updatePlayBtn();
+      requestAnimationFrame(tick);
+    </script>
+  </body>
+</html>

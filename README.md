@@ -1,11 +1,12 @@
-# Cosmic Fit — Codebase Reference & Handoff Document
+# Cosmic Fit — AI Developer Handoff
 
-> **Last audited:** May 2026
+> **Last audited:** June 2026
 > **Bundle ID:** `com.thisisbullish.cosmicfit`
 > **Platform:** iOS (UIKit, no SwiftUI, no storyboards except LaunchScreen)
 > **Deployment target:** iOS 18.4
 > **Language:** Swift 5
 > **Dev Team:** `653BNKDSZS` (app target), `J5V4NZ3334` (project/test targets)
+> **Current Daily Fit engine:** Sky Forward v1.0.1 (`production`, `.stage1Experimental`)
 
 ---
 
@@ -15,7 +16,9 @@ Cosmic Fit is an astrology-meets-fashion iOS app. It computes a natal birth char
 
 1. **Style Guide** — A permanent, per-user colour palette, texture recommendations, pattern guidance, accessory suggestions, hardware (metals/stones), and occasion-specific style advice. Generated once from the natal chart and cached. In code and on disk this data is the `CosmicBlueprint` model (`BlueprintStorage`, `BlueprintComposer`, etc.); older docs and filenames still say “blueprint” but the product name is **Style Guide**.
 
-2. **Daily Fit** — A daily-changing style card powered by transiting planets, lunar phase, and the user's natal chart. Produces a tarot card selection, style-edit text, daily colour picks, vibrancy/contrast/metal-tone scales, a 14-category style-essence radar, silhouette profile, textures, and optional pattern. Deterministic per-user-per-day (seeded randomness).
+2. **Daily Fit** — A daily-changing style card powered by the shipped **Sky Forward v1.0.1** engine. Sky Forward reads the user's chart as an anchor and today's sky as the weather: transits, lunar phase, and daily sky salience drive a tarot card, style edit, daily colours, vibrancy/contrast/metal-tone scales, 14-category essence radar, silhouette profile, textures, and optional pattern. It is deterministic for equal inputs, but reveal state, tarot recency, variant rotation, and frozen payloads are namespaced by engine id and can legitimately change the sequence a user sees over time.
+
+The root README is intended to be the **go-to handoff for AI developers**. Deep specs and historical runbooks remain under `docs/handoff/`; use this file for the current state of the app, then follow links when you need implementation-level detail.
 
 ---
 
@@ -26,16 +29,16 @@ Cosmic Fit is an astrology-meets-fashion iOS app. It computes a natal birth char
 | **UI Framework** | UIKit, 100% programmatic (no storyboards, no SwiftUI) |
 | **Package Manager** | Swift Package Manager (via Xcode workspace) |
 | **Ephemeris Library** | `SwissEphemeris` 0.0.99 (vsmithers1087) — planetary position calculations |
-| **Backend** | Supabase Swift SDK 2.43.1 — auth (OTP), profile sync, cloud storage |
-| **Crypto** | `swift-crypto` 4.3.1 (transitive via Supabase) |
+| **Backend** | Supabase Swift SDK 2.46.0 — email OTP auth, profile sync, Style Guide sync, promo/comp access |
+| **Crypto** | `swift-crypto` 4.5.0 (transitive via Supabase) |
 | **HTTP** | `swift-http-types` 1.5.1 (transitive via Supabase) |
 | **Concurrency** | `swift-concurrency-extras` 1.3.2, `swift-clocks` 1.0.6 (transitive) |
 | **Planetary Data** | VSOP87D data files (bundled per-planet: `.ear`, `.jup`, `.mar`, etc.) |
 | **Ephemeris Data** | `seas_18.se1` (Swiss Ephemeris asteroid/moon data) |
 | **Fonts** | DM Sans (18 weights), DM Serif Text (2 weights), PT Serif (2 weights) |
 | **Build Config** | `Dev.xcconfig` / `Prod.xcconfig` for Supabase URL and API key injection |
-| **Backend Functions** | Supabase Edge Functions: `send-otp`, `verify-otp` (Deno/TypeScript) |
-| **Database** | Supabase PostgreSQL — `001_initial_schema.sql` migration |
+| **Backend Functions** | Supabase Edge Functions: `send-otp`, `verify-otp`, `signup-with-profile`, `delete-account`, `redeem-code`, `check-comp-access`, `revoke-comp-access`, `app-store-notifications` |
+| **Database** | Supabase PostgreSQL — migrations `001`–`009` for profiles, blueprints, subscriptions, promo codes, comp access, subscription events, and account-deletion FK behaviour |
 | **Python tooling** | Offline scripts for datasets, narratives, calibration/regression, and QA — **not** compiled into the app (see §2.1) |
 
 ### 2.1 Developer tooling (local only)
@@ -130,8 +133,9 @@ If you edit engine code and the build stamp does not change after restarting wit
 
 | Path | Purpose |
 |---|---|
-| **`supabase/functions/send-otp`**, **`verify-otp`** | Deno/TypeScript Edge Functions for phone OTP (sources for deploy; not executed by the iOS build). |
-| **`supabase/migrations/`** | SQL migrations (e.g. **`001_initial_schema.sql`**) for the hosted database. |
+| **`supabase/functions/send-otp`**, **`verify-otp`**, **`signup-with-profile`** | Deno/TypeScript Edge Functions for email OTP auth and onboarding signup/profile creation (sources for deploy; not executed by the iOS build). |
+| **`supabase/functions/delete-account`**, **`redeem-code`**, **`check-comp-access`**, **`revoke-comp-access`**, **`app-store-notifications`** | Account deletion, promo/comp access, and App Store Server Notifications support. Deploy these before relying on the matching production app features. |
+| **`supabase/migrations/`** | SQL migrations `001`–`009` for hosted tables, RLS, OTP/rate-limit helpers, subscription ledger/events, promo redemption position, and account-deletion FK behaviour. |
 
 ### 2.2 XCTest environment flags (calibration & golden regeneration)
 
@@ -190,7 +194,7 @@ Cosmic Fit/
 │   ├── NatalChartManager.swift        # Singleton facade for chart calculation, save/load, transits
 │   ├── NatalChartManager+Interpretation.swift  # PLACEHOLDER — interpretation methods return static strings
 │   ├── Calculations/
-│   │   ├── NatalChartCalculator.swift # Heart of astrological computation (1388 lines): natal charts, progressed charts, transits, house systems, aspects
+│   │   ├── NatalChartCalculator.swift # Heart of astrological computation: natal charts, progressed charts, transits, house systems, aspects
 │   │   ├── AstronomicalCalculator.swift # Sun, Moon, planet positions from VSOP87/Swiss Ephemeris
 │   │   ├── AstrologicalInterpreter.swift # Textual interpretations of chart placements
 │   │   ├── AsteroidCalculator.swift   # Chiron, Lilith, North Node calculations
@@ -200,8 +204,11 @@ Cosmic Fit/
 │   │   ├── DailyFitEngineConfig.swift # Resolves active Daily Fit preset from plist + DEBUG override (see §4.1.1)
 │   │   └── SupabaseConfig.swift       # Reads Supabase URL/key from Info.plist
 │   ├── Services/
-│   │   ├── CosmicFitAuthService.swift # Supabase OTP auth, session management, auth state notifications
+│   │   ├── CosmicFitAuthService.swift # Supabase email OTP auth, signup-with-profile, session notifications
 │   │   ├── SupabaseSyncService.swift  # Profile + Style Guide (`CosmicBlueprint`) cloud sync (upload/download JSON)
+│   │   ├── StoreKitManager.swift      # Subscription products, purchases, restore flow
+│   │   ├── EntitlementManager.swift   # Combines StoreKit + comp/promo entitlement state
+│   │   ├── PromoCodeService.swift     # Promo/comp code redemption and status
 │   │   └── AuthDeepLinkRouter.swift   # cosmicfit:// URL scheme handling for auth callbacks
 │   └── Utilities/
 │       ├── UserProfileStorage.swift   # Local profile persistence (Documents dir JSON)
@@ -217,8 +224,13 @@ Cosmic Fit/
 ├── InterpretationEngine/
 │   ├── DailyFitTypes.swift            # Foundation types: DailyEnergySnapshot, DailyFitPayload, StyleEssenceProfile, SilhouetteProfile, DailyFitCalibration, etc.
 │   ├── DailyFitEngineRegistry.swift   # Canonical Daily Fit engine preset list + calibration fingerprints (see §4.1.1)
-│   ├── DailyEnergyEngine.swift        # Stage 1: natal+transits+lunar+progressed → VibeBreakdown (21-point budget) + DerivedAxes
-│   ├── BlueprintLensEngine.swift      # Stage 2 Daily Fit: snapshot + CosmicBlueprint → DailyFitPayload (tarot, palette, textures, etc.)
+│   ├── DailyEnergyEngine.swift        # Sky Forward snapshot: chart anchor + today's sky → energies, axes, salience
+│   ├── DailyFitPipeline.swift         # Sole Daily Fit assembly entry point for app, inspector, tests
+│   ├── DailyNarrativeSelector.swift   # Plan-driven cohesion for Sky Forward payloads
+│   ├── DailyNarrativeCoherence.swift  # Cross-surface contradiction gates and coherence scoring
+│   ├── NarrativeTarotBridgeSelector.swift # Joint tarot/variant selection bridge
+│   ├── BlueprintLensEngine.swift      # Snapshot + CosmicBlueprint + narrative plan → DailyFitPayload
+│   ├── PersonalScaleEnvelope.swift    # User-relative display positions for personal style scales
 │   ├── DailyFitDiagnostics.swift      # Diagnostic report generator (captures full pipeline trace)
 │   ├── VibeBreakdown .swift           # Energy enum (6 types) and VibeBreakdown struct (⚠️ filename has trailing space)
 │   ├── DerivedAxesEvaluator.swift     # DerivedAxes struct definition (action, tempo, strategy, visibility)
@@ -279,7 +291,7 @@ Cosmic Fit/
 │   ├── VerticalSlideAnimator.swift    # Custom vertical slide transition
 │   ├── ViewControllers/
 │   │   ├── CosmicFitTabBarController.swift # Main tab bar: Daily Fit, Style Guide, Natal Chart, Profile
-│   │   ├── DailyFitViewController.swift # Daily Fit screen (2140 lines) — renders full DailyFitPayload
+│   │   ├── DailyFitViewController.swift # Daily Fit screen — renders reveal state, entitlements, and full DailyFitPayload
 │   │   ├── NatalChartViewController.swift # Natal chart display with ChartWheelView
 │   │   ├── StyleGuideViewController.swift # Style Guide hub (sections from `CosmicBlueprint`)
 │   │   ├── StyleGuideDetailViewController.swift # Detail view for style guide sections
@@ -288,18 +300,20 @@ Cosmic Fit/
 │   │   ├── OnboardingFormViewController.swift # Birth data input form
 │   │   ├── AnimatedLaunchScreenViewController.swift # Animated splash screen
 │   │   ├── AnimatedWelcomeIntroViewController.swift # First-launch welcome flow
-│   │   ├── AuthGateViewController.swift # Auth state gate (guest vs authenticated)
-│   │   ├── OTPVerifyViewController.swift # OTP code entry for phone auth
+│   │   ├── SignedOutLandingViewController.swift # Signed-out landing for complete-profile users
+│   │   ├── AuthGateViewController.swift # Legacy/auth gate support; Daily Fit tab is not gated through this now
+│   │   ├── OTPVerifyViewController.swift # OTP code entry for email auth
 │   │   ├── MenuViewController.swift   # Side/overlay menu
 │   │   ├── FAQViewController.swift    # FAQ display
 │   │   ├── GenericDetailViewController.swift # Reusable detail view
-│   │   ├── PaymentPlaceholderViewController.swift # Placeholder for future payment flow
+│   │   ├── PurchaseViewController.swift # StoreKit purchase/restore flow
+│   │   ├── StyleCalendarUnlockViewController.swift # Daily Fit entitlement unlock presentation
 │   │   └── CardPresentationController.swift # Custom modal card presentation
 │   └── Views/
 │       ├── ChartWheelView.swift       # Natal chart wheel visualisation
 │       ├── ColourPaletteView.swift     # Style Guide palette display (545 lines)
 │       ├── DailyColourPaletteView.swift # Daily palette display (3 colours + context ring)
-│       ├── EssenceTriangleView.swift   # 14-category essence radar chart (NEW)
+│       ├── EssenceTriangleView.swift   # 14-category essence radar chart
 │       ├── DosAndDontsSectionView.swift # Style guide lean-into/avoid display
 │       ├── LocationAutocompleteView.swift # Location search with autocomplete
 │       ├── LocationResultTableViewCell.swift # Location search result cell
@@ -328,91 +342,81 @@ Cosmic Fit/
 
 ## 4. Architecture Deep Dive
 
-### 4.1 Daily Fit Pipeline (the core of the app)
+### 4.1 Daily Fit Pipeline (Sky Forward)
 
-The Daily Fit is a **two-stage deterministic pipeline**:
+The shipped Daily Fit engine is **Sky Forward v1.0.1**. In Release builds, `DailyFitEngineConfig.effectiveEngineId` resolves to `production`, and the registry maps `production` to `DailyFitEngineMode.stage1Experimental`. Do not treat `production` as legacy Stage 2 or `.default` calibration.
+
+The active pipeline is:
+
+```text
+NatalChart + progressed chart + transits + moon phase
+  -> DailyEnergyEngine.generateSnapshot
+  -> DailyFitPipeline.generate
+  -> DailyNarrativeSelector -> DailyNarrativePlan
+  -> BlueprintLensEngine.generatePayloadFromPlan
+  -> PersonalScaleEnvelope display positions
+  -> DailyFitViewController
+```
 
 #### Stage 1: Energy Snapshot (`DailyEnergyEngine`)
 
-**Input:** natal chart, progressed chart, transit aspects, moon phase, date, calibration weights
+**Input:** natal chart, progressed chart, transit aspects, moon phase, date, calibration weights, `dailyFitEngineId`  
 **Output:** `DailyEnergySnapshot`
 
-The engine blends five astrological sources with configurable weights (`DailyFitCalibration.SourceWeights`):
+Sky Forward uses the stage-1 source weights from `DailyFitEngineRegistry.stage1ExperimentalCalibration`:
 
 | Source | Weight | Purpose |
-|---|---|---|
-| Natal chart | 0.40 | Stable personality foundation |
-| Transits | 0.25 | Daily variation driver |
-| Lunar phase | 0.15 | Emotional/cyclical rhythm |
-| Progressed chart | 0.15 | Slow personal evolution |
-| Current sun sign | 0.05 | Seasonal background |
+|---|---:|---|
+| Natal chart | 0.16 | Chart anchor; stable personal baseline |
+| Transits | 0.44 | Primary daily weather driver |
+| Lunar phase | 0.30 | Daily cycle and visibility/action modulation |
+| Progressed chart | 0.07 | Slow personal evolution |
+| Current sun sign | 0.03 | Seasonal background |
 
-Each source contributes to six energy dimensions (`Energy` enum): **classic, playful, romantic, utility, drama, edge**. Raw scores are:
-1. Accumulated from planet-energy base maps and element boosts
-2. Multiplied by sun-sign-specific multipliers (`SignEnergyMap`)
-3. Normalised to a **21-point integer budget** using largest-remainder allocation
+The stage-1 path separates **chart anchor** and **today's sky**. Daily vibe and axes are sky-forward, while anchor fields remain available on payloads for context. `SignMultiplierPolicy.stage1OptionA` applies sign multipliers to the chart anchor but not to the daily sky read.
 
-The snapshot also includes:
-- **DerivedAxes** (action, tempo, strategy, visibility) — 1–10 scale, sigmoid-mapped from planet-axis weights with element modifiers and moon-phase modulation
-- **Dominant transits** — top 5 by orb tightness × planet weight × aspect weight
-- **Lunar context** — phase name, waxing/waning, element, degrees
-- **Daily seed** — deterministic `Int` from `profileHash + date` (ensures reproducibility)
+The snapshot includes the six-energy vibe profile (`classic`, `playful`, `romantic`, `utility`, `drama`, `edge`), derived axes (`action`, `tempo`, `strategy`, `visibility`), dominant transits, lunar context, sky salience, and deterministic daily seed.
 
-#### Stage 2: Daily Fit lens (`BlueprintLensEngine`)
+#### Stage 2: Narrative Plan + Daily Fit Lens
 
-Applies the user’s **Style Guide** (`CosmicBlueprint`) to Stage 1 output. Type names retain the historical `Blueprint*` prefix.
+`DailyFitPipeline` is the sole app/inspector/test entry point. For `.stage1Experimental`, it builds one `DailyNarrativePlan` before payload assembly. The plan coordinates tarot, palette, essence, scales, and silhouette so the UI surfaces tell one story without adding generated "Daily Brief" prose.
 
-**Input:** `DailyEnergySnapshot` + `CosmicBlueprint`
-**Output:** `DailyFitPayload`
-
-Selects and derives everything the UI renders:
+`BlueprintLensEngine.generatePayloadFromPlan` applies the user's Style Guide (`CosmicBlueprint`) to the sky-forward snapshot and returns the `DailyFitPayload` rendered by the app:
 
 | Field | Source |
 |---|---|
-| **Tarot card** | Cosine similarity (vibe + axes vectors vs card affinity), transit boost, recency penalty. Top-2 tiebreak by dailySeed. |
-| **Style edit variant** | Rotation tracker (round-robin per card per profile) |
-| **Daily palette** (3 colours) | Colours from the Style Guide palette scored by role-energy alignment, drama-driven slot allocation (statement vs grounding) |
-| **Vibrancy** | Style Guide saturation baseline ± energy modulation (drama+edge vs utility+classic) |
-| **Contrast** | Style Guide contrast baseline ± visibility axis modulation |
-| **Metal tone** | Style Guide temperature + metal keywords ± transit fire/water nudge + lunar nudge |
-| **Style essence** (14-category radar) | Weighted matrix: 14 categories × 6 energies + axis modifiers → top 3 displayed |
-| **Silhouette profile** (3 bipolar scales) | Style Guide keyword scan baseline (~75%) + axes modulation (~25%) |
-| **Textures** (2–3) | Style Guide textures scored by axis-keyword affinity |
-| **Pattern** (optional) | Gated: visibility ≥ 6.0 AND dominant energy is drama/playful/edge |
+| **Tarot card + style edit variant** | Narrative bridge selection, card affinity, recency hard blocks, variant rotation |
+| **Daily palette** | Style Guide colours scored by narrative/sky fit with `pureSkyScoring` in Sky Forward |
+| **Vibrancy / contrast / metal tone** | Raw scale derivation plus `PersonalScaleEnvelope` display positions |
+| **Style essence** | 14-category profile with visible top categories and chart-anchor support data |
+| **Silhouette profile** | Masculine/feminine, angular/rounded, structured/draped, including chart-anchor fields |
+| **Textures / pattern** | Style Guide candidates filtered by daily axes and narrative relationship |
+| **Engine metadata** | `dailyFitEngineId`, fingerprint-sensitive output, recency/frozen namespaces |
 
-#### 4.1.1 Daily Fit engine presets (version selector)
+#### 4.1.1 Daily Fit engine presets
 
-**Why:** Run multiple calibration presets (e.g. `production` vs `legacy_baseline`) for A/B tuning and regression without forking the repo or editing `DailyFitCalibration.default` until a preset is promoted.
+`DailyFitEngineRegistry.swift` is the single source of truth for presets, calibration, mode, marketing version, and fingerprints.
 
-**What it is not:** Not Style Guide / `BlueprintComposer` `engineVersion` (see **§4.2**). Not user-facing in Release — App Store builds always run `production`.
+| `dailyFitEngineId` | Mode | Purpose |
+|---|---|---|
+| `production` | `.stage1Experimental` | Shipped Sky Forward v1.0.1; App Store / Release path |
+| `stage1_experimental` | `.stage1Experimental` | DEBUG alias with the same calibration/fingerprint as production; different UserDefaults namespaces |
+| `legacy_baseline` | `.standard` | Pre–Stage 2 source/selection weights for regression comparison |
+| `stage2_legacy` | `.standard` | Pre-Sky Forward Stage 2/default-calibration regression preset |
 
-**Design (short):**
+There is one math pipeline for shipped users: Release app -> `production` -> `.stage1Experimental` -> narrative-plan payload path. The two Sky Forward IDs differ only in state namespace and DEBUG presentation. Do **not** gate logic on `engineId == stage1_experimental`; gate on `DailyFitEngineMode`.
 
-- Single **`DailyFitEngineRegistry`** — canonical preset list + SHA-256 calibration fingerprints.
-- Same chart, transit, and lunar inputs; different **`DailyFitCalibration`** passed into `DailyEnergyEngine` / `BlueprintLensEngine`.
-- **Inspector:** per-request `options.dailyFitEngineId`; compare cache keyed by `dailyFitEngineId:dateISO`.
-- **App:** build-time `DAILY_FIT_ENGINE_ID` via xcconfig → Info.plist → `DailyFitEngineConfig`; DEBUG Profile engine picker (no rebuild); Daily Fit tab debug subtitle when non-production.
-- **Frozen payloads** and **tarot recency** state are namespaced per engine id.
+The `.standard` branches are intentional legacy paths. They support regression tests, fingerprint guards, and DEBUG engine comparisons; do not delete or "consolidate" them unless a future migration explicitly removes those presets.
 
-**Presets shipped in the registry:**
+**Inspector:** Start with `cd inspector && ./run-inspector.sh` (see §2.1). The inspector compiles the same symlinked engine sources as the app. Equal profile/date/blueprint/tarot-history inputs should produce equal payloads. Differences are usually stale inspector binary, different location/date inputs, tarot/variant recency, visible-essence recency, or a frozen revealed app payload.
 
-| `dailyFitEngineId` | Purpose |
-|---|---|
-| `production` | Current shipped `.default` calibration |
-| `legacy_baseline` | Pre–Stage 2 source/selection weights (regression comparison) |
-| `stage1_experimental` | Stage 1 algorithm variant (`DailyFitEngineMode`); DEBUG/inspector only. **Sign multiplier policy Option A:** daily sky OFF, chart anchor ON. |
+**iOS DEBUG:** `DAILY_FIT_ENGINE_ID` can set the build default, and the Profile engine picker appears only when dev engine tools are allowed. Force refresh when comparing engines so stale frozen payloads are removed.
 
-**Sign-energy calibration (2026-05-22):** `SignMultiplierPolicy` controls where natal Sun `signEnergyMap` applies. Phase 1 audit tuned 13 cells in `.default.signEnergyMap`. Validate with `python3 tools/sign_energy_inspector_harness.py` (inspector running). See [`docs/fixtures/daily_fit_sign_energy_audit_report.md`](docs/fixtures/daily_fit_sign_energy_audit_report.md).
+**iOS Release:** Always `production`; non-production plist values are ignored.
 
-**How to use — Inspector:** Start with **`cd inspector && ./run-inspector.sh`** (see §2.1 — do not rely on bare `swift run` after engine edits). Header **Engine** dropdown; compare labels show date + engine id. Confirm **`Built:`** in the UI header or export metadata matches your restart time. Tarot recency is per engine — use `options.resetTarotHistory: true` when switching presets (inspector may auto-reset on engine change). See **`inspector/README.md`**.
+**CI / tests:** Do not set `DAILY_FIT_ENGINE_ID` in default CI. Unit tests pass explicit calibration/engine ids unless testing `DailyFitEngineConfig`.
 
-**How to use — iOS DEBUG:** `.env` documents the value → copy/sync to `Dev.xcconfig` as `DAILY_FIT_ENGINE_ID = production` → rebuild; or Profile engine picker without rebuild; non-production shows in the Daily Fit tab bar subtitle.
-
-**How to use — iOS Release:** Always `production`; non-production plist values are ignored.
-
-**CI / tests:** Do not set `DAILY_FIT_ENGINE_ID` in default CI. Unit tests pass explicit `calibration:` unless testing the config type directly.
-
-**Further reading:** [`docs/handoff/daily_fit_engine_selector_spec.md`](docs/handoff/daily_fit_engine_selector_spec.md), [`docs/handoff/daily_fit_stage2_calibration_handoff.md`](docs/handoff/daily_fit_stage2_calibration_handoff.md) (calibration tuning).
+**Further reading:** [`docs/handoff/sky_forward_final_consolidation_handoff.md`](docs/handoff/sky_forward_final_consolidation_handoff.md), [`docs/handoff/daily_fit_engine_selector_spec.md`](docs/handoff/daily_fit_engine_selector_spec.md), [`docs/handoff/daily_fit_personal_scale_sliders_handoff.md`](docs/handoff/daily_fit_personal_scale_sliders_handoff.md).
 
 ### 4.2 Style Guide pipeline (`CosmicBlueprint`)
 
@@ -425,7 +429,7 @@ The `ColourEngineV4` subsystem separately resolves the palette:
 
 ### 4.3 Natal Chart Calculation
 
-`NatalChartCalculator` (1388 lines) handles:
+`NatalChartCalculator` handles:
 - Planet positions via VSOP87D data files (Sun, Moon, Mercury–Pluto)
 - Asteroid positions via Swiss Ephemeris (Chiron, Lilith, North Node)
 - House cusps (Placidus and Whole Sign systems)
@@ -434,70 +438,99 @@ The `ColourEngineV4` subsystem separately resolves the palette:
 - Transit calculations (current planet positions vs natal, with aspect detection)
 - Aspect calculations (conjunction, opposition, trine, square, sextile + minor aspects)
 
-### 4.4 Authentication & Data Sync
+### 4.4 Authentication, Entitlements & Data Sync
 
-- **Auth flow:** Phone number → OTP via Supabase Edge Function (`send-otp` / `verify-otp`) → session token
-- **Guest mode:** Full functionality without auth; `AuthNudgeBannerView` prompts signup
-- **Sync:** Authenticated users can backup/restore profile + Style Guide (`CosmicBlueprint` JSON) via `SupabaseSyncService` (JSON blobs to Supabase storage)
-- **Deep linking:** `cosmicfit://` URL scheme for auth callbacks via `AuthDeepLinkRouter`
+- **Auth flow:** Email → OTP via Supabase Edge Functions (`send-otp` / `verify-otp`) → session token. Onboarding can call `signup-with-profile` to create auth + profile together.
+- **Launch state:** Users can be complete-profile/authenticated, complete-profile/signed-out, onboarding-pending-auth, or first-run. `AppDelegate.performLaunchRouting()` chooses the correct shell.
+- **Guest / signed-out mode:** Daily Fit and Style Guide can be browsed with local profile data, but reveal/section access is entitlement-aware. `SignedOutLandingViewController` and auth nudges guide signup.
+- **Entitlements:** `EntitlementManager` combines StoreKit subscription status with promo/comp access (`StoreKitManager`, `PromoCodeService`, `CompAccessStorage`).
+- **Sync:** Authenticated users can backup/restore profile + Style Guide (`CosmicBlueprint` JSON) via `SupabaseSyncService`. Daily Fit frozen payloads are local-only.
+- **Account deletion:** `ProfileViewController` calls the `delete-account` edge function; deploy that function before claiming production deletion is live.
+- **Deep linking:** `cosmicfit://` URL scheme for auth callbacks via `AuthDeepLinkRouter`.
 
 ### 4.5 Navigation & UI Architecture
 
-- `AppDelegate` manages the full app lifecycle (no `SceneDelegate` — pre-iOS 13 style)
-- Launch flow: `AnimatedLaunchScreenViewController` → (first launch) `AnimatedWelcomeIntroViewController` → `OnboardingFormViewController` → `CosmicFitTabBarController`; (returning user) → `CosmicFitTabBarController` directly
-- Tab bar has 2 primary tabs: Daily Fit (or AuthGate when logged out), Style Guide. Natal Chart and Profile are presented as embedded detail views from the menu, not as tab items.
+- `AppDelegate` manages the full app lifecycle (no `SceneDelegate` — pre-iOS 13 style), auth listener, StoreKit/entitlement bootstrap, launch routing, and date-change refresh.
+- Launch flow: `AnimatedLaunchScreenViewController` → welcome/onboarding when no complete profile; onboarding page 4 when auth is pending; `CosmicFitTabBarController` when authenticated; `SignedOutLandingViewController` when profile is complete but signed out.
+- Tab bar has 2 primary tabs: Daily Fit and Style Guide. Natal Chart, Profile, purchases, FAQ, and legal/account actions are reached from the menu/profile flows rather than as primary tabs.
 - All UI is programmatic UIKit with `NSLayoutConstraint`-based Auto Layout
 - Theme system in `CosmicFitTheme.swift` defines app-wide colours, fonts, gradients
 - Custom transitions: `SlideTabTransitionAnimator` (horizontal), `VerticalSlideAnimator` (vertical)
-- Daily Fit refreshes on `applicationWillEnterForeground` if the date has changed
+- Daily Fit refreshes on app active/day-change/significant-time-change notifications when the calendar day changes.
 
 ---
 
-## 5. Test Suite
+## 5. Tests, Audits & Current Findings
 
-**30+ Swift sources** in `Cosmic FitTests/` (test suites plus shared helpers such as **`CalibrationReportHelper`**, **`CalibrationProfiles_Extended`**, **`StyleGuideDataURL`**). All XCTest / Swift Testing.
+`Cosmic FitTests/` contains 60+ Swift test/support files across XCTest and Swift Testing. Prefer categories over exact line counts; the suite changes frequently.
 
-| Test File | What It Tests | Lines |
+| Area | Representative files | Purpose |
 |---|---|---|
-| `DailyEnergyEngine_VibeProfile_Tests` | Stage 1 vibe profile generation, 21-point budget invariant, energy distribution | 455 |
-| `DailyEnergyEngine_Snapshot_Tests` | Full snapshot assembly, axes ranges, transit extraction, lunar context | 447 |
-| `DailyFitTypes_Tests` | DailyFitPayload Codable roundtrip, EssenceTriangle→14-category migration, calibration validation | 433 |
-| `DailyFitCalibration_Tests` | Source weight normalisation, sign energy map completeness, planet axis map coverage, pipeline integration | 778 |
-| `DailyFitUIIntegration_Tests` | End-to-end: snapshot → payload → UI field population, frozen payload storage | 299 |
-| `BlueprintLensEngine_Payload_Tests` | Full payload assembly, palette selection, vibrancy/contrast/metalTone derivation, essence/silhouette profiles | 858 |
-| `BlueprintLensEngine_TarotStyleEdit_Tests` | Tarot card selection scoring, recency penalty, variant rotation, tiebreaking | 391 |
-| `ColourEngineV4_UnitTests` | Colour engine family resolution, template palettes, normalisation, accent placement | 471 |
-| `ChartSignatureResolver_Tests` | Chart → palette family/cluster resolution | 194 |
-| `Cosmic_FitTests` | Original comprehensive test suite: chart calculation, interpretation, colour engine, Style Guide assembly | 1940 |
-| `MariaAshLocked_Tests` | Locked reference outputs for two specific users (regression) | 390 |
-| `PaletteGridViewModel_Tests` | Palette grid view model logic, colour conversion, layout | 600 |
-| `PaletteRework_Tests` | Palette rework validation, anchor colours, swatch generation | 460 |
-| `V4CalibrationDiagnostic_Tests` | Diagnostic report generation, trace completeness | 230 |
-| `V4CalibrationOptimizer_Tests` | Calibration weight optimisation | 190 |
-| `V4CalibrationRegression_Tests` | Regression tests for V4 calibration outputs | 271 |
-| `V4PlacementGenerator_Tests` | Colour placement generation and validation | 180 |
-| `V4ReferenceAudit_Tests` | Reference audit against known-good outputs | 569 |
-| `VariationSlots_Tests` | Palette variation slot system | 320 |
-| `FixtureRegeneration` | Utility to regenerate test fixtures (not a test suite per se) | 181 |
-| `VSOP87BundleIntegrity_Tests` | VSOP87D files present in app bundle; J2000 Earth smoke test | — |
-| `SemanticTokenGenerator_ZodiacMath_Tests` | 1-based zodiac → element/modality (Phase 0D contract) | — |
-| `BlueprintDistribution_Tests` | Style Guide / blueprint distribution histograms (Parts 3B–3E); **may crash** on some paths until `SemanticTokenGenerator` house/token bounds are fixed — see **`docs/calibration_plan_closure_summary.md`** |
-| `AstrologicalSoundness_Tests` | Part 6: energy-map behaviour + calibration weight invariants + optional soundness report | — |
-| `TarotScoringPathIntegrity_Tests` | Phase 0F: legacy scoring audit + production `generatePayload` smoke | — |
+| **Sky Forward / engine registry** | `DailyFitSkyForwardV2_Tests`, `DailyFitEngineRegistry_Tests`, `DailyFitEngineConfig_Tests`, `ProductionFingerprintGuard_Tests` | Lock shipped engine mode, calibration/fingerprint, production output, and DEBUG override rules |
+| **Daily energy / salience** | `DailyEnergyEngine_*`, `SkySalience_Tests`, `DailyFitCalibration_Tests`, `AstrologicalSoundness_Tests` | Vibe budgets, axes, lunar context, sky salience, sign/planet energy plausibility |
+| **Narrative cohesion** | `DailyNarrativePlan_Tests`, `NarrativeIntentEngine_Tests`, `NarrativeTarotBridge_Tests`, `NarrativeCoherence_Tests`, `NarrativeCohesionReport_Tests` | Plan-driven cross-surface alignment; no generated Daily Brief copy in app |
+| **Payload / sliders / recency** | `BlueprintLensEngine_Payload_Tests`, `PersonalScaleEnvelope_Tests`, `SliderSignalValidation_Tests`, `SliderRangeAudit_Tests`, `SliderDayVariation_Tests`, `DailyFitFrozenPayloadStorage_Tests` | Daily Fit assembly, display envelopes, reveal/frozen behaviour, day-to-day slider motion |
+| **Style Guide / colour** | `ColourEngineV4_UnitTests`, `ColourReachability_Tests`, `MariaAshLocked_Tests`, `V4ReferenceAudit_Tests`, `PaletteGridViewModel_Tests` | Colour engine, locked Ash/Maria outputs, palette UI logic |
+| **Distribution / goldens** | `DailyFitGoldens_Tests`, `DailyFitDistribution_Tests`, `DailyFitVariation_Tests`, `DailyFitCoherence_Tests`, `FixtureRegeneration` | Golden fixtures, cohort metrics, optional fixture regeneration |
 
-**Test fixtures** live in `docs/fixtures/` — JSON and text files with known-good reference outputs.
+### 5.1 Latest Sky Forward Audit Findings
 
-**Parallel test runs / flaky clones:** See [`docs/archive/test_handoff.md`](docs/archive/test_handoff.md) for diagnosis, fixes applied, and remaining `UserDefaults`/clone isolation work.
+The latest committed large-audit fixtures reflect wave-2 Sky Forward and the v1.0.1 production bump:
 
-**Calibration / distribution testing:** See **`docs/calibration_plan_closure_summary.md`** for env vars, commands, and known gaps (`CALIBRATION_CI_GATE`, `CALIBRATION_REPORT_DIR`).
+| Artifact | Scope | Current summary |
+|---|---|---|
+| `docs/fixtures/production_audit_v2/summary.txt` | 223 users x 60 days (`production`) | 66,900 / 66,900 verdict checks pass; 0 gap days; 0 tarot adjacent repeats; 0 hard-block violations; cohesion 1.0; M/F stuck users down to 4; structured/draped stuck users down to 0 |
+| `docs/fixtures/narrative_cohesion_report.txt` | 216 users x 60 days (`stage1_experimental`, same math as production) | Opposition violations 0; mean coherence 0.9999; accent-salience match 88.7%; cross-surface violations 10 / 12,960 user-days (~0.08%), below the rate gate but not literally zero |
+| `docs/fixtures/slider_range_report.json` | 216-user slider coverage | Wave-2 slider coverage is materially improved; contrast still has narrower range than other sliders and should be watched after future tuning |
 
-**UI Tests:** `Cosmic FitUITests/` contains two boilerplate files from Xcode project template — **not meaningfully implemented**.
+### 5.2 Interpretation Caveats To Preserve
+
+These are current product/QA truths, not failures:
+
+- **Professional astrological accuracy is partially machine-checked, not professionally signed off.** Tests assert directional plausibility for elements, planets, signs, source weights, and lunar-axis behaviour, but there is no astrologer-authored per-user/per-day golden set.
+- **Daily Fit internal contradictions are gated; Daily Fit vs Style Guide contradictions are not fully automated.** `DailyNarrativeCoherence` checks daily cross-surface conflicts, but there is no full blueprint/style-guide narrative comparison harness yet.
+- **Full moons are mathematically influential but not explicitly named in the app UI.** Lunar phases affect energies and axes, yet key events are currently implicit. Eclipses, retrogrades, ingresses, void-of-course Moon, and returns are not first-class narrative events.
+- **Cross-surface rate gate passes, zero-tolerance wording can mislead.** The report labels nonzero cross-surface count as FAIL, while the hard assertion is rate-based (`< 0.001`).
+
+### 5.3 Validation Order For Future Engine Changes
+
+Use the ordered runbook in [`docs/handoff/sky_forward_final_consolidation_handoff.md`](docs/handoff/sky_forward_final_consolidation_handoff.md). In short:
+
+1. Unit/regression suites for registry, fingerprint, payload, envelope, narrative, and recency.
+2. `SliderSignalValidation_Tests` for fast 12x60 signal checks.
+3. `NarrativeCohesionReport_Tests` for 216x60 plan-level cohesion.
+4. `tools/production_audit_harness.py` + `tools/production_audit_analyze.py` for 223x60 inspector-backed production audit.
+
+**Test fixtures** live in `docs/fixtures/` — JSON and text files with known-good reference outputs. `docs/fixtures/` is QA/tuning artefact storage, not app runtime.
+
+**Parallel test runs / flaky clones:** See [`docs/archive/test_handoff.md`](docs/archive/test_handoff.md) and newer green-path docs if present. Set `CALIBRATION_REPORT_DIR` when a test job writes reports.
+
+**UI Tests:** `Cosmic FitUITests/` contains boilerplate Xcode template files only; there is no meaningful automated E2E coverage yet.
 
 ---
 
-## 6. Legacy Code, Dead Ends & Cleanup Targets
+## 6. Deep Handoffs & Runbooks
 
-### 6.1 Confirmed Dead / Legacy Code (safe to remove)
+This README is the current front door. Use these docs for implementation-level detail, but check the stale notes before copying claims forward.
+
+| Doc | Use when |
+|---|---|
+| [`docs/handoff/sky_forward_final_consolidation_handoff.md`](docs/handoff/sky_forward_final_consolidation_handoff.md) | Sky Forward promotion model, code map, validation order, and what not to overwrite |
+| [`docs/handoff/unified_daily_fit_audit_handoff.md`](docs/handoff/unified_daily_fit_audit_handoff.md) | Production audit harness history and 223x60 analysis workflow |
+| [`docs/handoff/daily_fit_engine_selector_spec.md`](docs/handoff/daily_fit_engine_selector_spec.md) | Engine selector wiring, frozen payload namespacing, Release/DEBUG guardrails |
+| [`docs/handoff/daily_fit_inspector_app_parity_followup_handoff.md`](docs/handoff/daily_fit_inspector_app_parity_followup_handoff.md) | App vs inspector mismatch debugging and parity checklist |
+| [`docs/handoff/daily_fit_stage1_experimental_app_readiness_handoff.md`](docs/handoff/daily_fit_stage1_experimental_app_readiness_handoff.md) | App payload parity, ghost triangle, DEBUG enablement; promotion-state sections are historical |
+| [`docs/handoff/daily_fit_narrative_unification_v1_cleanup_v1_1_handoff.md`](docs/handoff/daily_fit_narrative_unification_v1_cleanup_v1_1_handoff.md) | Narrative cohesion rules, no generated daily prose, plan-driven selection |
+| [`docs/handoff/daily_fit_personal_scale_sliders_handoff.md`](docs/handoff/daily_fit_personal_scale_sliders_handoff.md) | Personal scale envelope design intent and slider semantics |
+| [`docs/handoff/legal_production_audit_handoff.md`](docs/handoff/legal_production_audit_handoff.md) | Privacy/Terms sync, UK entity, account deletion, and legal deployment checks |
+
+**Known stale handoff caveat:** older Sky Forward docs that describe `stage1_experimental` as the real engine and production as unchanged are superseded for promotion state. Current code has `production` shipping Sky Forward v1.0.1.
+
+---
+
+## 7. Legacy Code, Dead Ends & Cleanup Targets
+
+### 7.1 Confirmed Dead / Legacy Code (safe to remove)
 
 **Files that are entirely dead (no call sites in active codebase):**
 
@@ -552,31 +585,31 @@ The `ColourEngineV4` subsystem separately resolves the palette:
 | Duplicate **`requirements.txt`** at repo root | **Resolved** — dependencies live in **`tools/requirements.txt`**. |
 | `docs/` directory | Review and prune planning artefacts. Keep `docs/fixtures/` (test fixtures). |
 
-### 6.2 Files with Naming Issues
+### 7.2 Files with Naming Issues
 
 | Issue | File |
 |---|---|
 | Trailing space in filename | `VibeBreakdown .swift` — should be `VibeBreakdown.swift` |
 | `.DS_Store` files checked in | Root, `Cosmic Fit/`, `Cosmic Fit/Resources/` |
 
-### 6.3 Bugs & Risks
+### 7.3 Bugs & Risks
 
 | Risk | Details |
 |---|---|
 | **VSOP87 load failures** | **`VSOP87Parser`** uses a **Keplerian fallback** if VSOP87D files cannot be loaded (no `fatalError` in the VSOP87 parser for missing theory files). **`VSOP87BundleIntegrity_Tests`** preflights bundle resources from **`Bundle.main`**. Separately, **`SwissEphemerisBootstrap`** may still `fatalError` if **`seas_18.se1`** is missing — that is Swiss Ephemeris bootstrap, not VSOP87. |
 | ~~**`SemanticTokenGenerator` sign math bug**~~ | **Resolved** for the Style Guide token path: 1-based zodiac element/modality is covered by **`SemanticTokenGenerator_ZodiacMath_Tests`**. If you change zodiac math, run that suite and re-check Part 3 distribution tests. |
-| **Duplicate `Package.resolved`** | Two copies exist: one under `.xcodeproj` (swift-crypto 4.4.0) and one under `.xcworkspace` (swift-crypto 4.3.1). Different revisions — Xcode may fight over resolution. |
+| **Multiple `Package.resolved` contexts** | The app workspace and the inspector package resolve dependencies separately. Keep both in sync intentionally when bumping shared packages; do not assume inspector dependency changes affect the Xcode workspace. |
 | **Secrets possibly committed** | `Dev.xcconfig` and `Prod.xcconfig` are gitignored by `.gitignore`, but the checked-in files may contain real Supabase credentials. Verify and rotate if exposed. |
 | **"Daily Vibe" naming drift** | `AppDelegate`, `UserProfileStorage`, and several notifications still reference "Daily Vibe" (the old feature name) while the product is "Daily Fit". Confusing for new developers. |
 
-### 6.4 Structural Concerns
+### 7.4 Structural Concerns
 
 | Concern | Details |
 |---|---|
 | **Placeholder interpretation path** | `CosmicFitInterpretationEngine.generateStyleGuideInterpretation()` returns placeholder text. The Style Guide tab works for real sections (palette, textures, etc.) via `BlueprintStorage` + `CosmicBlueprint`, but the old sentence-assembly interpretation is disconnected. |
 | ~~**Duplicate data files**~~ | **Resolved** — single canonical **`data/style_guide/`** tree; tests use `StyleGuideDataURL`; bundle entries are symlinks. |
-| **DailyFitViewController is 2140 lines** | God-controller handling layout, data loading, payload rendering, tarot card display, colour palette, essence radar, silhouette bars, vibe breakdown, transit list, lunar phase, texture/pattern display, animations, and scroll management. Should be decomposed. |
-| **CosmicFitTabBarController is 1080 lines** | Handles tab setup, Style Guide generation, Daily Fit orchestration, caching, notification handling, debug logging. Too many responsibilities. |
+| **DailyFitViewController is very large** | God-controller handling layout, reveal state, entitlement presentation, payload rendering, tarot card display, colour palette, essence radar, silhouette bars, vibe breakdown, transit list, lunar phase, texture/pattern display, animations, and scroll management. Should be decomposed. |
+| **CosmicFitTabBarController is very large** | Handles tab setup, Style Guide generation, Daily Fit orchestration, caching, notification handling, debug logging, refresh flows, and menu presentation. Too many responsibilities. |
 | **Singleton overuse** | `NatalChartManager.shared`, `SavedChartStorage.shared`, `TarotRecencyTracker.shared`, `TarotVariantRotationTracker.shared`, `UserProfileStorage.shared`, `BlueprintStorage.shared`, `CosmicFitAuthService.shared`, `LocationManager` — makes testing and dependency injection difficult. |
 | **Mixed data flow patterns** | Some paths use `[String: Any]` dictionaries (legacy `calculateNatalChart` return type) while the modern pipeline uses typed structs. The dictionary-based API should be phased out. |
 | **No dependency injection** | `TarotRecencyTracker.shared` / `TarotVariantRotationTracker.shared` are called inside `BlueprintLensEngine` static methods, making those methods harder to test in isolation. |
@@ -586,21 +619,21 @@ The `ColourEngineV4` subsystem separately resolves the palette:
 
 ---
 
-## 7. Strengths
+## 8. Strengths
 
 | Strength | Details |
 |---|---|
-| **Deterministic, testable pipeline** | The Daily Fit pipeline is fully deterministic given a seed, making it highly testable. The `DailyFitCalibration` surface centralises all tunable weights. |
+| **Deterministic, testable pipeline** | The Daily Fit pipeline is deterministic for equal profile/date/blueprint/engine/recency inputs, making it highly testable. Calibration, fingerprint, and recency namespaces make engine changes auditable. |
 | **Comprehensive test suite** | Broad XCTest coverage from unit tests through snapshot tests to integration tests, plus calibration / distribution harnesses under **`Cosmic FitTests/`**. Locked reference tests (`MariaAshLocked_Tests`) prevent regressions. |
 | **Clean type contracts** | `DailyFitTypes.swift` defines well-documented Codable types with backward-compatible decoding (e.g., `EssenceTriangle` → `StyleEssenceProfile` migration). |
-| **Sophisticated colour engine** | ColourEngineV4 is a well-structured 20-file subsystem with clear separation of concerns (family resolution, template mapping, normalisation, accent placement, validation). |
+| **Sophisticated colour engine** | ColourEngineV4 is a well-structured subsystem with clear separation of concerns (family resolution, template mapping, normalisation, accent placement, validation). |
 | **Diagnostic infrastructure** | `DailyFitDiagnostics` generates complete pipeline traces. `BlueprintLensEngine.logDailyFitDiagnostics()` provides rich console output. `generateSnapshotWithTrace()` and `generatePayloadWithTrace()` expose intermediate values. |
 | **Style Guide data model is production-ready** | `BlueprintModels.swift` defines `CosmicBlueprint` with versioned fields (V4, V4.2, V4.3, V4.4), optional backward-compatible decoding, and clear field-source documentation (D/AI/U/M). |
-| **Calibration surface** | `DailyFitCalibration` provides a single config surface for all weights, enabling systematic tuning without code changes. |
+| **Calibration and tuning surfaces** | `DailyFitCalibration` centralises preset weights and selection policy; Sky Forward slider/display tuning lives in `BlueprintLensEngine`, `DailyEnergyEngine`, and `PersonalScaleEnvelope`. |
 
 ---
 
-## 8. Key Data Contracts
+## 9. Key Data Contracts
 
 ### VibeBreakdown (21-point budget)
 Six integer values (0–10 each) summing to exactly 21:
@@ -610,17 +643,17 @@ Six integer values (0–10 each) summing to exactly 21:
 Four continuous values: `action`, `tempo`, `strategy`, `visibility`
 
 ### DailyEnergySnapshot (Stage 1 output)
-Contains: `vibeProfile`, `axes`, `dominantTransits`, `lunarContext`, `dailySeed`, `profileHash`, `generatedAt`
+Contains: `vibeProfile`, `axes`, `dominantTransits`, `lunarContext`, `dailySeed`, `profileHash`, `generatedAt`, and Sky Forward-only support such as `chartVibeProfile`, `skyVibeProfile`, and `skySalience`.
 
-### DailyFitPayload (Stage 2 output / what the UI renders)
-Contains: `tarotCard`, `styleEditVariant`, `dailyPalette`, `vibrancy`, `contrast`, `metalTone`, `essenceProfile`, `silhouetteProfile`, `vibeBreakdown`, `axes`, `dominantTransits`, `lunarContext`, `dailyTextures`, `dailyPattern`, `generatedAt`
+### DailyFitPayload (pipeline output / what the UI renders)
+Contains: `tarotCard`, `styleEditVariant`, `dailyPalette`, `vibrancy`, `contrast`, `metalTone`, `scalePresentation`, `essenceProfile`, `silhouetteProfile`, `vibeBreakdown`, `axes`, `dominantTransits`, `lunarContext`, `dailyTextures`, `dailyPattern`, `dailyFitEngineId`, and `generatedAt`.
 
 ### `CosmicBlueprint` — persisted Style Guide (permanent per-user)
 Contains: `userInfo`, `styleCore`, `textures`, `palette`, `occasions`, `hardware`, `code`, `accessory`, `pattern`, `generatedAt`, `engineVersion`
 
 ---
 
-## 9. Configuration & Secrets
+## 10. Configuration & Secrets
 
 | File | Purpose | Gitignored? |
 |---|---|---|
@@ -634,7 +667,7 @@ Contains: `userInfo`, `styleCore`, `textures`, `palette`, `occasions`, `hardware
 
 ---
 
-## 10. Build & Run
+## 11. Build & Run
 
 1. Open `Cosmic Fit.xcworkspace` (not the `.xcodeproj`)
 2. Copy `Dev.xcconfig.example` → `Dev.xcconfig` and fill in Supabase credentials. Keep `DAILY_FIT_ENGINE_ID = production` unless you are deliberately testing another preset (see **§4.1.1**). The same key is documented in `.env.example`.
@@ -650,7 +683,7 @@ Contains: `userInfo`, `styleCore`, `textures`, `palette`, `occasions`, `hardware
 
 ---
 
-## 11. Cleanup Checklist for New Developer
+## 12. Cleanup Checklist for New Developer
 
 ### Phase 1: Safe deletions (zero functional impact)
 
@@ -690,36 +723,40 @@ Contains: `userInfo`, `styleCore`, `textures`, `palette`, `occasions`, `hardware
 
 - [x] Move Python scripts + `requirements.txt` into **`tools/`** (see **`tools/README.md`**)
 - [x] Canonical Style Guide JSON under **`data/style_guide/`**; **`Resources/`** symlinks (see **`data/style_guide/README.md`**)
-- [ ] Consolidate two `Package.resolved` files — prefer workspace copy
+- [ ] Keep app workspace and inspector package dependency resolution in sync intentionally when bumping shared packages
 - [ ] Review `docs/` — keep `docs/fixtures/` (test data), prune planning artefacts
 - [ ] Rename "Daily Vibe" → "Daily Fit" in `AppDelegate`, `UserProfileStorage`, notification names
 - [ ] Verify `Dev.xcconfig` / `Prod.xcconfig` aren't committed with real secrets; rotate if so
 
 ### Phase 5: Architectural improvements (larger effort)
 
-- [ ] Decompose `DailyFitViewController` (2140 lines) into child VCs or coordinator
-- [ ] Decompose `CosmicFitTabBarController` (1080 lines) — extract Style Guide / Daily Fit orchestration
+- [ ] Decompose the very large `DailyFitViewController` into child views/controllers or a coordinator
+- [ ] Decompose the very large `CosmicFitTabBarController` — extract Style Guide / Daily Fit orchestration
 - [ ] Introduce dependency injection to replace singleton calls inside engine methods
 - [ ] Phase out `[String: Any]` dictionary API from `NatalChartCalculator` in favour of typed `NatalChart` returns
 
 ---
 
-## 12. File Inventory Summary
+## 13. File Inventory Summary
 
-| Layer | Files | Lines |
-|---|---|---|
-| App | 1 | 269 |
-| Core | 16 | 5,609 |
-| InterpretationEngine (top-level) | 30 | ~13,600 |
-| ColourEngineV4 | 20 | ~3,200 |
-| UI | 35 | 13,050 |
-| Tests | 33+ Swift files in Cosmic FitTests | (varies) |
-| **Total active Swift** | **122** | **~45,385** |
+Exact counts churn quickly; use this as an orientation map rather than a line-count contract.
 
-| Resource | Size |
+| Layer | What to expect |
 |---|---|
-| TarotCards.json | 306 KB (8,306 lines, 78 cards) |
-| data/style_guide/astrological_style_dataset.json | ~478 KB |
-| data/style_guide/blueprint_narrative_cache.json | ~5.6 MB |
-| VSOP87 data files | 4.2 MB total |
-| Font files | 1.6 MB total |
+| App / lifecycle | `AppDelegate` plus launch/auth/date-change orchestration |
+| Core | Chart calculation, config, services, storage, location/weather, ephemeris bootstrap |
+| InterpretationEngine | Style Guide composer, ColourEngineV4, Sky Forward Daily Fit pipeline, narrative plan/coherence, tarot/recency, diagnostics |
+| UI | Programmatic UIKit screens, custom views, purchase/legal/profile flows, Daily Fit and Style Guide rendering |
+| Tests | 60+ Swift files across engine, Style Guide, Daily Fit, narrative, fixture, and regression coverage |
+| Inspector | Separate Swift package with symlinked app engine sources and local web UI |
+| Supabase | Migrations plus Deno edge functions for auth, profile/signup, deletion, subscriptions, promo/comp access |
+
+| Resource | Role |
+|---|---|
+| `Cosmic Fit/Resources/TarotCards.json` | 78-card tarot deck with energy/axis affinity and style edits |
+| `data/style_guide/astrological_style_dataset.json` | Canonical Style Guide astrological dataset |
+| `data/style_guide/blueprint_narrative_cache.json` | Canonical reviewed Style Guide narrative cache |
+| `Cosmic Fit/Resources/VSOP87Data/` | Bundled planetary theory files |
+| `Cosmic Fit/Resources/seas_18.se1` | Swiss Ephemeris asteroid/moon data |
+| `Cosmic Fit/Resources/Assets.xcassets/Cards/` | Tarot/card image assets |
+| `Cosmic Fit/Resources/Fonts/` | Bundled DM Sans, DM Serif Text, PT Serif fonts |

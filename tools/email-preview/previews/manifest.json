@@ -1,0 +1,51 @@
+[
+  {
+    "id": "otp-login",
+    "label": "Login OTP (production)",
+    "subject": "Your Cosmic Fit login code",
+    "source": "supabase/functions/_shared/otp-email.ts → send-otp",
+    "file": "otp-login.html"
+  },
+  {
+    "id": "confirmation",
+    "label": "Email confirmation",
+    "subject": "Confirm your Cosmic Fit email",
+    "source": "supabase/templates/confirmation.html",
+    "file": "confirmation.html"
+  },
+  {
+    "id": "magic-link",
+    "label": "Magic link sign-in",
+    "subject": "Sign in to Cosmic Fit",
+    "source": "supabase/templates/magic_link.html",
+    "file": "magic-link.html"
+  },
+  {
+    "id": "recovery",
+    "label": "Password recovery",
+    "subject": "Reset your Cosmic Fit password",
+    "source": "supabase/templates/recovery.html",
+    "file": "recovery.html"
+  },
+  {
+    "id": "invite",
+    "label": "Invite",
+    "subject": "You're invited to Cosmic Fit",
+    "source": "supabase/templates/invite.html",
+    "file": "invite.html"
+  },
+  {
+    "id": "email-change",
+    "label": "Email change",
+    "subject": "Confirm your new Cosmic Fit email",
+    "source": "supabase/templates/email_change.html",
+    "file": "email-change.html"
+  },
+  {
+    "id": "email-otp",
+    "label": "Supabase Auth OTP",
+    "subject": "Your Cosmic Fit verification code",
+    "source": "supabase/templates/email_otp.html",
+    "file": "email-otp.html"
+  }
+]

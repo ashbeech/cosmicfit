@@ -5,9 +5,9 @@
 //  The single, brand-specific loading indicator used across the app.
 //
 //  A sharp-silhouette vector "sparkle" (the Cosmic Fit div-star) that
-//  pulses on a boomerang loop: it blooms in from nothing, resolves into
-//  the exact brand star icon shape (holding briefly), then retraces its
-//  path back out to nothing before looping. No blur, no glow — just a
+//  pulses on a loop: it blooms in from nothing through needle → cross → star,
+//  resolves into the exact brand star icon shape (holding briefly), then collapses
+//  through independent outro frames back to nothing before looping. No blur, no glow — just a
 //  crisp filled silhouette in the Cosmic Fit colours.
 //
 //  This view is a drop-in replacement for `UIActivityIndicatorView`:
@@ -64,41 +64,117 @@ final class CosmicFitLoaderView: UIView {
 
     // MARK: - Geometry
 
-    /// A single shape state in the morph, expressed as fractions of the
-    /// view's half-extent so it scales with `bounds`.
-    private struct StarParams {
-        /// Tip reach along the vertical axis (top/bottom points).
-        let vTip: CGFloat
-        /// Tip reach along the horizontal axis (left/right points).
-        let hTip: CGFloat
-        /// Reach of the diagonal "waist" between two tips. Small values
-        /// pull the silhouette into sharp spikes; large values fill it out.
-        let waist: CGFloat
-        /// 0 = sharp tips & sharp inner corners (sparkle),
-        /// 1 = fully smoothed corners (convex squircle bloom).
-        let round: CGFloat
+    /// A four-point star outline in normalised coordinates (fractions of the
+    /// view's half-extent, centred on the origin, y-down).
+    ///
+    /// Every frame shares one structure — `move, curve × 4, close` — i.e. four
+    /// sharp tips joined by four concave cubic arcs that sweep into the points.
+    /// Identical structure is what lets Core Animation morph the parametric
+    /// frames straight into the exact embedded brand icon.
+    private struct StarShape {
+        /// 4 tip anchors, clockwise: top, right, bottom, left.
+        let anchors: [CGPoint]
+        /// 8 cubic control points: two per side (TR, RB, BL, LT).
+        let controls: [CGPoint]
     }
 
-    // Frame guide, numbered to match the reference frames. The "in"
-    // direction runs blank -> f1 -> ... -> f5 (the brand icon), then the
-    // loop boomerangs back out. Tuned to read as: a thin glint that grows,
-    // blooms full, then resolves into the crisp brand star.
-    private static let blank = StarParams(vTip: 0.0008, hTip: 0.0008, waist: 0.0008, round: 0)
-    private static let f1    = StarParams(vTip: 0.42,   hTip: 0.56,   waist: 0.045,  round: 0.0)
-    private static let f2    = StarParams(vTip: 1.00,   hTip: 0.74,   waist: 0.20,   round: 0.06)
-    private static let f3    = StarParams(vTip: 0.95,   hTip: 0.95,   waist: 0.92,   round: 1.0)
-    private static let f4    = StarParams(vTip: 0.92,   hTip: 0.86,   waist: 0.50,   round: 0.45)
-    /// f5 == the Cosmic Fit star icon: vertically a touch longer, sharp
-    /// points, lightly concave sides.
-    private static let f5    = StarParams(vTip: 1.00,   hTip: 0.84,   waist: 0.30,   round: 0.08)
+    /// Builds a parametric four-point star whose concave sides hug a diagonal
+    /// "waist". Small waist → deep, thin spikes; larger waist → fuller star.
+    private static func parametricShape(
+        vTip: CGFloat, hTip: CGFloat, waist: CGFloat, arc: CGFloat
+    ) -> StarShape {
+        let top = CGPoint(x: 0, y: -vTip)
+        let right = CGPoint(x: hTip, y: 0)
+        let bottom = CGPoint(x: 0, y: vTip)
+        let left = CGPoint(x: -hTip, y: 0)
+        let wTR = CGPoint(x: waist, y: -waist)
+        let wRB = CGPoint(x: waist, y: waist)
+        let wBL = CGPoint(x: -waist, y: waist)
+        let wLT = CGPoint(x: -waist, y: -waist)
+        func hug(_ p: CGPoint, _ w: CGPoint) -> CGPoint {
+            CGPoint(x: p.x + arc * (w.x - p.x), y: p.y + arc * (w.y - p.y))
+        }
+        return StarShape(
+            anchors: [top, right, bottom, left],
+            controls: [
+                hug(top, wTR),    hug(right, wTR),   // side top -> right
+                hug(right, wRB),  hug(bottom, wRB),  // side right -> bottom
+                hug(bottom, wBL), hug(left, wBL),    // side bottom -> left
+                hug(left, wLT),   hug(top, wLT)      // side left -> top
+            ]
+        )
+    }
 
+    /// Uniformly scales a shape about the origin (centre). Used to build the
+    /// collapse frames: scaled-down copies of the exact icon keep the star's
+    /// silhouette identical while it shrinks to a glint.
+    private static func scaled(_ s: StarShape, by k: CGFloat) -> StarShape {
+        func m(_ p: CGPoint) -> CGPoint { CGPoint(x: p.x * k, y: p.y * k) }
+        return StarShape(anchors: s.anchors.map(m), controls: s.controls.map(m))
+    }
+
+    /// Rotates a shape about the origin by the given angle in degrees.
+    private static func rotated(_ s: StarShape, byDegrees deg: CGFloat) -> StarShape {
+        let a = deg * .pi / 180, c = cos(a), s2 = sin(a)
+        func r(_ p: CGPoint) -> CGPoint { CGPoint(x: p.x * c - p.y * s2, y: p.x * s2 + p.y * c) }
+        return StarShape(anchors: s.anchors.map(r), controls: s.controls.map(r))
+    }
+
+    // The loop blooms in through grow frames, holds on the brand icon, then
+    // collapses through independent outro frames so the star can retreat
+    // differently than it bloomed.
+    //
+    //   GROW  (blank → g1 → g2 → g3 → icon): needle glint → thin cross → sharp star.
+    //   COLLAPSE (icon → o3 → o2 → o1 → blank): independent outro shapes.
+    //
+    // Every frame keeps the same path structure (move + 4 cubics + close) so Core
+    // Animation can morph between any two — needle, bloom, or the brand icon.
+    private static let blank = parametricShape(vTip: 0.0010, hTip: 0.0010, waist: 0.0006, arc: 0.78)
+
+    // GROW (intro) frames — needle glint -> thin cross -> sharp star.
+    private static let g1 = parametricShape(vTip: 0.0999, hTip: 0.1282, waist: 0.006, arc: 0.965)
+    private static let g2 = parametricShape(vTip: 0.9573, hTip: 0.0801, waist: 0.012, arc: 0.95)
+    private static let g3 = rotated(parametricShape(vTip: 1.0294, hTip: 0.8974, waist: 0.3905, arc: 0.86), byDegrees: -1.0)
+
+    // OUTRO (collapse) frames — independent of the grow frames.
+    private static let o1 = rotated(parametricShape(vTip: 0.0999, hTip: 0.0641, waist: 0.006, arc: 0.965), byDegrees: 125.0)
+    private static let o2 = parametricShape(vTip: 1.1217, hTip: 1.0096, waist: 0.0, arc: 0.95)
+    private static let o3 = parametricShape(vTip: 1.0294, hTip: 0.8974, waist: 0.3605, arc: 0.86)
+
+    /// f5 == the Cosmic Fit star icon (`star_icon_placeholder` / div-star),
+    /// EXACT geometry recovered by tracing the shipped asset and least-squares
+    /// fitting one cubic per side (sub-pixel residual). Vertical points are
+    /// ~1.26× the horizontal, with concave arc sides sweeping into sharp points.
+    private static let f5 = StarShape(
+        anchors: [
+            CGPoint(x: 0.0,     y: -1.0),     // top
+            CGPoint(x: 0.7939,  y: 0.0),      // right
+            CGPoint(x: 0.0,     y: 1.0),      // bottom
+            CGPoint(x: -0.7939, y: 0.0)       // left
+        ],
+        controls: [
+            CGPoint(x: 0.1219,  y: -0.4559), CGPoint(x: 0.2729,  y: -0.1176), // top -> right
+            CGPoint(x: 0.2729,  y: 0.1176),  CGPoint(x: 0.1219,  y: 0.4559),  // right -> bottom
+            CGPoint(x: -0.1219, y: 0.4559),  CGPoint(x: -0.2729, y: 0.1176),  // bottom -> left
+            CGPoint(x: -0.2729, y: -0.1176), CGPoint(x: -0.1219, y: -0.4559)  // left -> top
+        ]
+    )
+
+    // BREATHE frames — for the no-blank (button) variant, a clearly-formed star
+    // that pulses between a smaller and the full icon without ever vanishing.
+    private static let breatheFloor = scaled(f5, by: 0.50)
+    private static let breatheMid   = scaled(f5, by: 0.74)
+
+    // blankGap frame order (intro grows g1->g2->g3->icon, outro collapses o3->o2->o1):
+    //   blank, blank, g1, g2, g3, f5, f5, o3, o2, o1, blank
     private enum Timing {
-        /// Seconds the loop rests on the fully invisible state.
-        static let blankHold: Double = 0.2
-        /// Seconds the loop holds on the resolved brand-star icon.
-        static let iconHold: Double = 0.5
-        /// Seconds per shape-to-shape transition.
-        static let step: Double = 0.14
+        static let appear: Double = 0.115
+        static let riseStep: Double = 0.06
+        static let settle: Double = 0.08
+        static let iconHold: Double = 0.62
+        static let shrink1: Double = 0.045
+        static let shrink2: Double = 0.04
+        static let blankHold: Double = 0.25
     }
 
     // MARK: - Init
@@ -173,40 +249,47 @@ final class CosmicFitLoaderView: UIView {
         guard bounds.width > 0, bounds.height > 0 else { return }
         shapeLayer.removeAnimation(forKey: Self.animationKey)
 
-        let frames: [StarParams]
+        let frames: [StarShape]
         let segmentDurations: [Double]
         let opacityValues: [CGFloat]
 
         if includesBlankGap {
-            // blank(hold) -> f1 f2 f3 f4 f5 -> f5(hold) -> f4 f3 f2 f1 -> blank
             frames = [
                 Self.blank, Self.blank,
-                Self.f1, Self.f2, Self.f3, Self.f4, Self.f5,
+                Self.g1, Self.g2, Self.g3, Self.f5,
                 Self.f5,
-                Self.f4, Self.f3, Self.f2, Self.f1,
+                Self.o3, Self.o2, Self.o1,
                 Self.blank
             ]
             segmentDurations = [
-                Timing.blankHold,                                    // blank hold
-                Timing.step, Timing.step, Timing.step, Timing.step, Timing.step, // in
-                Timing.iconHold,                                     // icon hold
-                Timing.step, Timing.step, Timing.step, Timing.step,  // out
-                Timing.step                                          // -> blank
+                Timing.blankHold,
+                Timing.appear,
+                Timing.riseStep,
+                Timing.riseStep,
+                Timing.settle,
+                Timing.iconHold,
+                Timing.settle,
+                Timing.riseStep,
+                Timing.riseStep,
+                Timing.appear
             ]
-            opacityValues = [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]
+            opacityValues = [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0]
         } else {
-            // f1(small) -> f5(icon) -> hold -> back to f1, never invisible.
+            // Breathing variant for small/button placements: a clearly-formed
+            // star pulses between a smaller copy and the full icon, never blank.
             frames = [
-                Self.f1, Self.f2, Self.f3, Self.f4, Self.f5,
+                Self.breatheFloor, Self.breatheMid, Self.f5,
                 Self.f5,
-                Self.f4, Self.f3, Self.f2, Self.f1,
-                Self.f1
+                Self.breatheMid, Self.breatheFloor,
+                Self.breatheFloor
             ]
             segmentDurations = [
-                Timing.step, Timing.step, Timing.step, Timing.step, // in
-                Timing.iconHold,                                    // icon hold
-                Timing.step, Timing.step, Timing.step, Timing.step, // out
-                Timing.blankHold                                    // brief settle at f1
+                Timing.riseStep,     // floor -> mid
+                Timing.settle,       // mid -> icon
+                Timing.iconHold,     // hold on icon
+                Timing.shrink1,      // icon -> mid
+                Timing.shrink2,      // mid -> floor
+                Timing.iconHold      // brief settle at floor
             ]
             opacityValues = Array(repeating: 1, count: frames.count)
         }
@@ -251,91 +334,29 @@ final class CosmicFitLoaderView: UIView {
 
     // MARK: - Path generation
 
-    /// Builds the four-point sparkle for a given shape state. Every state
-    /// produces an identically-structured path (1 move + 8 cubic curves +
-    /// close) so Core Animation can interpolate between them smoothly.
-    private func path(for p: StarParams) -> UIBezierPath {
+    /// Builds the on-screen path for a shape state. The normalised anchors and
+    /// controls are scaled by the working radius and centred in `bounds`.
+    /// Structure is fixed (`move, curve × 4, close`) for every state so Core
+    /// Animation can interpolate between any two frames smoothly.
+    private func path(for shape: StarShape) -> UIBezierPath {
         let centre = CGPoint(x: bounds.midX, y: bounds.midY)
-        // Leave a hair of breathing room so tips never clip the bounds.
-        let radius = min(bounds.width, bounds.height) / 2 * 0.96
+        // Sides only ever bow inward, so nothing extends past the tips — the
+        // modest margin just keeps the sharp points off the edge.
+        let radius = min(bounds.width, bounds.height) / 2 * 0.95
 
-        let vTip = p.vTip * radius
-        let hTip = p.hTip * radius
-        let waist = p.waist * radius * 0.7071 // projected onto each diagonal axis
-
-        // Anchors, clockwise from the top tip.
-        let anchors: [CGPoint] = [
-            CGPoint(x: centre.x,         y: centre.y - vTip),  // 0 top tip
-            CGPoint(x: centre.x + waist, y: centre.y - waist), // 1 TR waist
-            CGPoint(x: centre.x + hTip,  y: centre.y),         // 2 right tip
-            CGPoint(x: centre.x + waist, y: centre.y + waist), // 3 BR waist
-            CGPoint(x: centre.x,         y: centre.y + vTip),  // 4 bottom tip
-            CGPoint(x: centre.x - waist, y: centre.y + waist), // 5 BL waist
-            CGPoint(x: centre.x - hTip,  y: centre.y),         // 6 left tip
-            CGPoint(x: centre.x - waist, y: centre.y - waist)  // 7 TL waist
-        ]
-
-        let count = anchors.count
-        // Handle length grows with roundness so smoothed states bulge into a
-        // convex bloom while sharp states keep near-straight edges.
-        let handleScale: CGFloat = 0.30 + 0.28 * p.round
-
-        // Precompute, per anchor, the outgoing and incoming handle directions
-        // blended between "sharp" (toward neighbours) and "round" (along the
-        // prev->next chord, i.e. a smooth tangent).
-        var outDir = [CGVector](repeating: .zero, count: count)
-        var inDir = [CGVector](repeating: .zero, count: count)
-        for i in 0..<count {
-            let prev = anchors[(i + count - 1) % count]
-            let cur = anchors[i]
-            let next = anchors[(i + 1) % count]
-
-            let sharpOut = Self.unit(from: cur, to: next)
-            let sharpIn = Self.unit(from: cur, to: prev)
-            let roundOut = Self.unitVector(dx: next.x - prev.x, dy: next.y - prev.y)
-            let roundIn = CGVector(dx: -roundOut.dx, dy: -roundOut.dy)
-
-            outDir[i] = Self.unitVector(
-                dx: Self.lerp(sharpOut.dx, roundOut.dx, p.round),
-                dy: Self.lerp(sharpOut.dy, roundOut.dy, p.round)
-            )
-            inDir[i] = Self.unitVector(
-                dx: Self.lerp(sharpIn.dx, roundIn.dx, p.round),
-                dy: Self.lerp(sharpIn.dy, roundIn.dy, p.round)
-            )
+        func point(_ n: CGPoint) -> CGPoint {
+            CGPoint(x: centre.x + n.x * radius, y: centre.y + n.y * radius)
         }
 
+        let a = shape.anchors
+        let c = shape.controls
         let path = UIBezierPath()
-        path.move(to: anchors[0])
-        for i in 0..<count {
-            let a = anchors[i]
-            let b = anchors[(i + 1) % count]
-            let segLen = hypot(b.x - a.x, b.y - a.y)
-            let len = segLen * handleScale
-            let c1 = CGPoint(x: a.x + outDir[i].dx * len, y: a.y + outDir[i].dy * len)
-            let c2 = CGPoint(
-                x: b.x + inDir[(i + 1) % count].dx * len,
-                y: b.y + inDir[(i + 1) % count].dy * len
-            )
-            path.addCurve(to: b, controlPoint1: c1, controlPoint2: c2)
-        }
+        path.move(to: point(a[0]))
+        path.addCurve(to: point(a[1]), controlPoint1: point(c[0]), controlPoint2: point(c[1]))
+        path.addCurve(to: point(a[2]), controlPoint1: point(c[2]), controlPoint2: point(c[3]))
+        path.addCurve(to: point(a[3]), controlPoint1: point(c[4]), controlPoint2: point(c[5]))
+        path.addCurve(to: point(a[0]), controlPoint1: point(c[6]), controlPoint2: point(c[7]))
         path.close()
         return path
-    }
-
-    // MARK: - Vector helpers
-
-    private static func unit(from a: CGPoint, to b: CGPoint) -> CGVector {
-        unitVector(dx: b.x - a.x, dy: b.y - a.y)
-    }
-
-    private static func unitVector(dx: CGFloat, dy: CGFloat) -> CGVector {
-        let len = hypot(dx, dy)
-        guard len > 0.0001 else { return .zero }
-        return CGVector(dx: dx / len, dy: dy / len)
-    }
-
-    private static func lerp(_ a: CGFloat, _ b: CGFloat, _ t: CGFloat) -> CGFloat {
-        a + (b - a) * t
     }
 }

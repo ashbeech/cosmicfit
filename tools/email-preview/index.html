@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cosmic Fit — Email previews</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #000210;
+      --paper: #dedede;
+      --lilac: #7e69e6;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: "DM Sans", system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 28px 24px 20px;
+      border-bottom: 1px solid rgba(222, 222, 222, 0.12);
+    }
+
+    header h1 {
+      margin: 0 0 6px;
+      font-family: "PT Serif", Georgia, serif;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 14px;
+      color: rgba(222, 222, 222, 0.72);
+      line-height: 1.5;
+    }
+
+    header code {
+      font-size: 12px;
+      background: rgba(126, 105, 230, 0.18);
+      color: #c4b6f8;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: calc(100vh - 96px);
+    }
+
+    nav {
+      padding: 16px 12px;
+      border-right: 1px solid rgba(222, 222, 222, 0.12);
+      overflow-y: auto;
+    }
+
+    nav button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      border: 0;
+      background: transparent;
+      color: var(--paper);
+      padding: 12px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 4px;
+      font: inherit;
+    }
+
+    nav button:hover {
+      background: rgba(222, 222, 222, 0.06);
+    }
+
+    nav button.active {
+      background: rgba(126, 105, 230, 0.22);
+      color: #fff;
+    }
+
+    nav .subject {
+      display: block;
+      font-size: 12px;
+      color: rgba(222, 222, 222, 0.55);
+      margin-top: 4px;
+    }
+
+    main {
+      padding: 20px;
+      overflow: auto;
+    }
+
+    .meta {
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      background: rgba(222, 222, 222, 0.05);
+      border: 1px solid rgba(222, 222, 222, 0.1);
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .meta strong { color: #fff; }
+
+    .frame-wrap {
+      background: #111;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(222, 222, 222, 0.1);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    iframe {
+      display: block;
+      width: 100%;
+      min-height: 820px;
+      border: 0;
+      background: var(--ink);
+    }
+
+    .empty {
+      padding: 48px 24px;
+      text-align: center;
+      color: rgba(222, 222, 222, 0.7);
+    }
+
+    .empty code {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 8px 12px;
+      background: rgba(126, 105, 230, 0.18);
+      border-radius: 8px;
+      color: #c4b6f8;
+      font-size: 13px;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      nav {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        border-right: 0;
+        border-bottom: 1px solid rgba(222, 222, 222, 0.12);
+      }
+      nav button { white-space: nowrap; width: auto; min-width: 180px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Cosmic Fit email previews</h1>
+    <p>
+      Local gallery of every branded template. Regenerate with
+      <code>deno run --allow-read --allow-write --allow-env tools/email-preview/generate.ts</code>
+    </p>
+  </header>
+
+  <div class="layout">
+    <nav id="nav" aria-label="Email templates"></nav>
+    <main id="main">
+      <div class="empty" id="empty">
+        Loading previews…
+        <br />
+        <code>deno run --allow-read --allow-write --allow-env tools/email-preview/generate.ts</code>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    async function init() {
+      const nav = document.getElementById("nav");
+      const main = document.getElementById("main");
+
+      let manifest;
+      try {
+        const res = await fetch("./previews/manifest.json");
+        if (!res.ok) throw new Error("manifest missing");
+        manifest = await res.json();
+      } catch {
+        main.innerHTML = `
+          <div class="empty">
+            No previews found. Generate them first:
+            <br />
+            <code>deno run --allow-read --allow-write --allow-env tools/email-preview/generate.ts</code>
+            <br /><br />
+            Then serve this folder (file:// won't load the manifest):
+            <br />
+            <code>python3 -m http.server 8765 --directory tools/email-preview</code>
+            <br />
+            and open <code>http://localhost:8765</code>
+          </div>`;
+        nav.innerHTML = "";
+        return;
+      }
+
+      function show(item) {
+        document.querySelectorAll("nav button").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.id === item.id);
+        });
+
+        main.innerHTML = `
+          <div class="meta">
+            <strong>${item.label}</strong><br />
+            Subject: ${item.subject}<br />
+            Source: <code>${item.source}</code>
+          </div>
+          <div class="frame-wrap">
+            <iframe title="${item.label}" src="./previews/${item.file}"></iframe>
+          </div>`;
+      }
+
+      nav.innerHTML = manifest.map((item) => `
+        <button type="button" data-id="${item.id}">
+          ${item.label}
+          <span class="subject">${item.subject}</span>
+        </button>
+      `).join("");
+
+      nav.querySelectorAll("button").forEach((btn, index) => {
+        btn.addEventListener("click", () => show(manifest[index]));
+      });
+
+      show(manifest[0]);
+    }
+
+    init();
+  </script>
+</body>
+</html>

@@ -2,15 +2,7 @@ import UIKit
 
 final class SignedOutLandingViewController: UIViewController {
 
-    // MARK: - Background Animation Views
-
-    private let backgroundContainer = UIView()
-    private let backgroundRunes1 = UIImageView()
-    private let backgroundRunes2 = UIImageView()
-    private let backgroundRunes3 = UIImageView()
-    private let backgroundRunes1Duplicate = UIImageView()
-    private let backgroundRunes2Duplicate = UIImageView()
-    private let backgroundRunes3Duplicate = UIImageView()
+    private let scrollingRunesBackground = ScrollingRunesBackgroundView(edgeFadeStyle: .launch)
 
     // MARK: - Logo Views
 
@@ -29,8 +21,8 @@ final class SignedOutLandingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
-        setupBackgroundRunes()
+        view.backgroundColor = .black
+        setupBackground()
         setupLogoElements()
         setupButtons()
     }
@@ -44,68 +36,15 @@ final class SignedOutLandingViewController: UIViewController {
 
     // MARK: - Background Setup
 
-    private func setupBackgroundRunes() {
-        backgroundContainer.translatesAutoresizingMaskIntoConstraints = false
-        backgroundContainer.clipsToBounds = true
-        view.addSubview(backgroundContainer)
-
-        let runeImage = UIImage(named: "logo-animation-background")
-
-        let columns: [(UIImageView, UIImageView)] = [
-            (backgroundRunes1, backgroundRunes1Duplicate),
-            (backgroundRunes2, backgroundRunes2Duplicate),
-            (backgroundRunes3, backgroundRunes3Duplicate)
-        ]
-
-        for (primary, duplicate) in columns {
-            primary.image = runeImage
-            primary.contentMode = .scaleToFill
-            primary.translatesAutoresizingMaskIntoConstraints = false
-            primary.alpha = 0
-            backgroundContainer.addSubview(primary)
-
-            duplicate.image = runeImage
-            duplicate.contentMode = .scaleToFill
-            duplicate.translatesAutoresizingMaskIntoConstraints = false
-            duplicate.alpha = 0
-            backgroundContainer.addSubview(duplicate)
-        }
+    private func setupBackground() {
+        scrollingRunesBackground.translatesAutoresizingMaskIntoConstraints = false
+        view.insertSubview(scrollingRunesBackground, at: 0)
 
         NSLayoutConstraint.activate([
-            backgroundContainer.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
-            backgroundRunes1.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
-            backgroundRunes1.leadingAnchor.constraint(equalTo: backgroundContainer.leadingAnchor),
-            backgroundRunes1.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
-            backgroundRunes1.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor),
-
-            backgroundRunes1Duplicate.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
-            backgroundRunes1Duplicate.leadingAnchor.constraint(equalTo: backgroundContainer.leadingAnchor),
-            backgroundRunes1Duplicate.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
-            backgroundRunes1Duplicate.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor),
-
-            backgroundRunes2.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
-            backgroundRunes2.leadingAnchor.constraint(equalTo: backgroundRunes1.trailingAnchor),
-            backgroundRunes2.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
-            backgroundRunes2.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor),
-
-            backgroundRunes2Duplicate.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
-            backgroundRunes2Duplicate.leadingAnchor.constraint(equalTo: backgroundRunes1.trailingAnchor),
-            backgroundRunes2Duplicate.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
-            backgroundRunes2Duplicate.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor),
-
-            backgroundRunes3.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
-            backgroundRunes3.leadingAnchor.constraint(equalTo: backgroundRunes2.trailingAnchor),
-            backgroundRunes3.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
-            backgroundRunes3.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor),
-
-            backgroundRunes3Duplicate.topAnchor.constraint(equalTo: backgroundContainer.topAnchor),
-            backgroundRunes3Duplicate.leadingAnchor.constraint(equalTo: backgroundRunes2.trailingAnchor),
-            backgroundRunes3Duplicate.widthAnchor.constraint(equalTo: backgroundContainer.widthAnchor, multiplier: 1.0/3.0),
-            backgroundRunes3Duplicate.heightAnchor.constraint(equalTo: backgroundContainer.heightAnchor)
+            scrollingRunesBackground.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollingRunesBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollingRunesBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollingRunesBackground.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
@@ -177,16 +116,7 @@ final class SignedOutLandingViewController: UIViewController {
     // MARK: - Animations
 
     private func startAnimations() {
-        startBackgroundScrolling()
-
-        UIView.animate(withDuration: 0.5) {
-            self.backgroundRunes1.alpha = 1
-            self.backgroundRunes1Duplicate.alpha = 1
-            self.backgroundRunes2.alpha = 1
-            self.backgroundRunes2Duplicate.alpha = 1
-            self.backgroundRunes3.alpha = 1
-            self.backgroundRunes3Duplicate.alpha = 1
-        }
+        scrollingRunesBackground.startAnimating()
 
         UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseInOut) {
             self.logoPart1.alpha = 1.0
@@ -200,51 +130,6 @@ final class SignedOutLandingViewController: UIViewController {
         UIView.animate(withDuration: 1.0, delay: 0.44, options: .curveEaseInOut) {
             self.logoPart4.alpha = 1.0
         }
-    }
-
-    private func startBackgroundScrolling() {
-        view.layoutIfNeeded()
-
-        let containerHeight = view.bounds.height
-        let scrollDuration: TimeInterval = 20.0
-
-        backgroundRunes1Duplicate.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
-        backgroundRunes3Duplicate.transform = CGAffineTransform(translationX: 0, y: -containerHeight)
-        backgroundRunes2Duplicate.transform = CGAffineTransform(translationX: 0, y: containerHeight)
-
-        animateColumn(backgroundRunes1, duplicate: backgroundRunes1Duplicate, direction: .down, duration: scrollDuration, height: containerHeight)
-        animateColumn(backgroundRunes2, duplicate: backgroundRunes2Duplicate, direction: .up, duration: scrollDuration, height: containerHeight)
-        animateColumn(backgroundRunes3, duplicate: backgroundRunes3Duplicate, direction: .down, duration: scrollDuration, height: containerHeight)
-    }
-
-    private enum ScrollDirection { case up, down }
-
-    private func animateColumn(_ primary: UIImageView, duplicate: UIImageView, direction: ScrollDirection, duration: TimeInterval, height: CGFloat) {
-        let primaryAnim = CABasicAnimation(keyPath: "transform.translation.y")
-        primaryAnim.duration = duration
-        primaryAnim.repeatCount = .infinity
-        primaryAnim.isRemovedOnCompletion = false
-
-        let dupAnim = CABasicAnimation(keyPath: "transform.translation.y")
-        dupAnim.duration = duration
-        dupAnim.repeatCount = .infinity
-        dupAnim.isRemovedOnCompletion = false
-
-        switch direction {
-        case .down:
-            primaryAnim.fromValue = 0
-            primaryAnim.toValue = height
-            dupAnim.fromValue = -height
-            dupAnim.toValue = 0
-        case .up:
-            primaryAnim.fromValue = 0
-            primaryAnim.toValue = -height
-            dupAnim.fromValue = height
-            dupAnim.toValue = 0
-        }
-
-        primary.layer.add(primaryAnim, forKey: "scrollAnimation")
-        duplicate.layer.add(dupAnim, forKey: "scrollAnimation")
     }
 
     // MARK: - Actions
