@@ -967,7 +967,7 @@ final class CosmicFitTabBarController: UITabBarController {
         let transits = NatalChartCalculator.calculateTransits(natalChart: natal, date: skyAnchor)
         let julianDay = JulianDateCalculator.calculateJulianDate(from: skyAnchor)
         let moonPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: julianDay)
-        let profileHash = userProfile?.id ?? chartId
+        let profileHash = userProfile?.id ?? ClientInstallIdentity.id
         let cal = DailyFitEngineConfig.effectiveCalibration
         let engineId = DailyFitEngineConfig.effectiveEngineId
 
@@ -1040,7 +1040,7 @@ final class CosmicFitTabBarController: UITabBarController {
         let transits = NatalChartCalculator.calculateTransits(natalChart: natal, date: skyAnchor)
         let julianDay = JulianDateCalculator.calculateJulianDate(from: skyAnchor)
         let moonPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: julianDay)
-        let profileHash = userProfile?.id ?? chartIdentifier ?? ""
+        let profileHash = userProfile?.id ?? ClientInstallIdentity.id
         let cal = DailyFitEngineConfig.effectiveCalibration
         let engineId = DailyFitEngineConfig.effectiveEngineId
 

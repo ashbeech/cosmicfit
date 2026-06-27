@@ -34,11 +34,13 @@ Deno.serve(async (req) => {
     );
     if (rateLimited) return rateLimited;
 
-    // Detach user from promo_redemptions to avoid FK violation on auth.users delete.
-    // Rows are preserved for audit/retention; only the user link is severed.
+    // Detach user from promo_redemptions and expire grants to avoid FK violation
+    // on auth.users delete. Rows are preserved for audit; the user link is severed
+    // and grant_expires_at is set to now so orphaned rows cannot leak comp access
+    // to the next user on the same device.
     const { error: promoErr } = await svc
       .from("promo_redemptions")
-      .update({ user_id: null })
+      .update({ user_id: null, grant_expires_at: new Date().toISOString() })
       .eq("user_id", user.id);
 
     if (promoErr) {

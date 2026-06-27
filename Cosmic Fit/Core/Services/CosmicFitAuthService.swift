@@ -308,6 +308,11 @@ final class CosmicFitAuthService {
     }
 
     private func clearState(clearLocal: Bool) {
+        if clearLocal {
+            CompAccessStorage.clear()
+            Task { @MainActor in await EntitlementManager.shared.checkEntitlement() }
+        }
+
         let update = { [self] in
             self.isAuthenticated = false
             self.currentUserId = nil
@@ -325,6 +330,8 @@ final class CosmicFitAuthService {
     private func purgeLocalUserData() {
         print("⚠️ Different user detected — purging local data")
         UserProfileStorage.shared.clearLocalUserGeneratedContent()
+        CompAccessStorage.clear()
+        Task { @MainActor in await EntitlementManager.shared.checkEntitlement() }
     }
 
     private func parseEmailExistsError(_ error: Error) -> CosmicFitAuthError? {

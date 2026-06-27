@@ -63,9 +63,9 @@ export function fineprint(text: string): string {
 /** Highlighted verification-code block with a dashed lilac border. */
 export function codeBox(code: string): string {
   return `
-  <div style="margin:4px 0 8px;">
-    <div style="display:inline-block; padding:18px 40px; background-color:rgba(126,105,230,0.08); border-radius:14px; border:2px dashed ${brand.colors.lilac};">
-      <span style="font-family:${brand.fonts.sans}; font-size:40px; font-weight:700; letter-spacing:12px; color:${brand.colors.ink}; padding-left:12px;">${code}</span>
+  <div style="margin:4px 0 8px; width:100%; max-width:100%;">
+    <div class="cf-code-box" style="display:inline-block; box-sizing:border-box; max-width:100%; padding:18px 24px; background-color:rgba(126,105,230,0.08); border-radius:14px; border:2px dashed ${brand.colors.lilac};">
+      <span class="cf-code" style="font-family:${brand.fonts.sans}; font-size:40px; font-weight:700; letter-spacing:12px; color:${brand.colors.ink}; padding-left:12px; word-break:break-all;">${code}</span>
     </div>
   </div>`;
 }
@@ -123,20 +123,25 @@ export function renderEmail({
   <title>${title}</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
-    body { margin:0; padding:0; width:100% !important; }
+    body { margin:0; padding:0; width:100% !important; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
+    table { border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0; }
+    img { border:0; height:auto; line-height:100%; outline:none; text-decoration:none; -ms-interpolation-mode:bicubic; }
     a { color:${brand.colors.lilac}; }
-    @media (max-width:480px) {
-      .cf-card { width:100% !important; border-radius:0 !important; }
+    @media screen and (max-width:480px) {
+      .cf-outer-pad { padding-left:0 !important; padding-right:0 !important; padding-top:24px !important; padding-bottom:24px !important; }
+      .cf-card { width:100% !important; max-width:100% !important; border-radius:0 !important; }
       .cf-pad { padding-left:24px !important; padding-right:24px !important; }
+      .cf-code-box { padding:14px 16px !important; }
+      .cf-code { font-size:32px !important; letter-spacing:8px !important; padding-left:8px !important; }
     }
   </style>
 </head>
 <body style="margin:0; padding:0; background-color:${brand.colors.ink}; font-family:${brand.fonts.sans};">
   <div style="display:none; max-height:0; overflow:hidden; opacity:0; color:transparent; font-size:1px; line-height:1px;">${preheader}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:${brand.colors.ink};">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%; background-color:${brand.colors.ink};">
     <tr>
-      <td align="center" style="padding:40px 16px;">
-        <table role="presentation" class="cf-card" width="480" cellpadding="0" cellspacing="0" style="width:480px; max-width:480px; background-color:${brand.colors.paper}; border-radius:18px; overflow:hidden;">
+      <td align="center" class="cf-outer-pad" style="padding:40px 16px;">
+        <table role="presentation" class="cf-card" width="100%" cellpadding="0" cellspacing="0" style="width:100%; max-width:480px; background-color:${brand.colors.paper}; border-radius:18px; overflow:hidden;">
 
           <!-- Brand lockup -->
           <tr>

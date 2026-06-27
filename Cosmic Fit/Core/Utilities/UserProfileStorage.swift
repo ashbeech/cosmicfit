@@ -169,8 +169,10 @@ class UserProfileStorage {
         print("🗑️ User profile deleted")
     }
 
-    /// Removes on-device profile, Style Guide, Daily Fit cache, location cache, and related preferences.
-    /// Does not remove Keychain install identifiers or promotional access grants.
+    /// Removes on-device profile, Style Guide, Daily Fit cache, location cache, recency
+    /// tracker state, and related preferences. Comp access is cleared separately by
+    /// `CosmicFitAuthService` on user switch / sign-out. Keychain install identifiers
+    /// (`ClientInstallIdentity`) remain device-stable by design.
     func clearLocalUserGeneratedContent() {
         let existingProfile = loadUserProfile()
 
@@ -179,6 +181,7 @@ class UserProfileStorage {
 
         if let profile = existingProfile {
             cleanupUserDailyVibes(userId: profile.id)
+            cleanupRecencyTrackers(profileHash: profile.id)
         }
 
         BlueprintStorage.shared.delete()
@@ -234,6 +237,15 @@ class UserProfileStorage {
 
     // MARK: - Private Methods
     
+    private func cleanupRecencyTrackers(profileHash: String) {
+        let engineId = DailyFitEngineConfig.effectiveEngineId
+        TarotRecencyTracker.shared.clearProfile(profileHash: profileHash, dailyFitEngineId: engineId)
+        TarotVariantRotationTracker.shared.clearProfile(profileHash: profileHash, dailyFitEngineId: engineId)
+        VisibleEssenceRecencyTracker.shared.clearProfile(profileHash: profileHash, dailyFitEngineId: engineId)
+        ColourRecencyTracker.shared.clearProfile(profileHash: profileHash, dailyFitEngineId: engineId)
+        AccentRecencyTracker.shared.clearProfile(profileHash: profileHash)
+    }
+
     private func cleanupUserDailyVibes(userId: String) {
         let allKeys = userDefaults.dictionaryRepresentation().keys
         let userKeys = allKeys.filter { $0.contains("DailyVibe") && $0.contains(userId) }

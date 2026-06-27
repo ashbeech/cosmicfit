@@ -42,10 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Subscription bootstrap
         StoreKitManager.shared.listenForTransactions()
         Task { await StoreKitManager.shared.loadProducts() }
-        Task {
-            await EntitlementManager.shared.checkEntitlement()
-            await PromoCodeService.shared.restoreCompAccessIfNeeded()
-        }
+        Task { await EntitlementManager.shared.checkEntitlement() }
                 
         window = UIWindow(frame: UIScreen.main.bounds)
         
@@ -54,6 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if needsAuthCheckForLaunchRouting {
             Task {
                 await CosmicFitAuthService.shared.checkSession()
+                await PromoCodeService.shared.restoreCompAccessIfNeeded()
                 await MainActor.run {
                     self.performLaunchRouting(launchScreenVC: launchScreenVC)
                 }

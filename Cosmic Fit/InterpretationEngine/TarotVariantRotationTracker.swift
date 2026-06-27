@@ -114,7 +114,18 @@ final class TarotVariantRotationTracker {
 
     // MARK: - Reset
 
-    /// Reset all rotation state.
+    /// Remove rotation + last-shown state for a single profile and engine.
+    func clearProfile(profileHash: String, dailyFitEngineId: String = DailyFitEngineRegistry.productionId) {
+        let rotationPrefix = "variantRotation_\(dailyFitEngineId)_\(profileHash)_"
+        let lastShownPrefix = "lastVariantShown_\(dailyFitEngineId)_\(profileHash)_"
+        for key in defaults.dictionaryRepresentation().keys
+            where key.hasPrefix(rotationPrefix) || key.hasPrefix(lastShownPrefix)
+        {
+            defaults.removeObject(forKey: key)
+        }
+    }
+
+    /// Reset all rotation state across all profiles.
     func resetAll() {
         for key in defaults.dictionaryRepresentation().keys
             where key.hasPrefix("variantRotation_") || key.hasPrefix("lastVariantShown_")

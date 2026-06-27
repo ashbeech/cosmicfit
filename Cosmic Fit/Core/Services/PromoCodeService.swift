@@ -66,8 +66,12 @@ final class PromoCodeService {
 
     /// Attempt to restore comp access from the server (e.g. after reinstall).
     /// Also refreshes FIRST50 slot position when missing from the local cache.
+    /// Requires an authenticated session — prevents restoring another user's
+    /// device-level grant after a Keychain-surviving reinstall.
     /// Silent — does not throw on "no access found", only on hard errors.
     func restoreCompAccessIfNeeded() async {
+        guard CosmicFitAuthService.shared.isAuthenticated else { return }
+
         let existing = CompAccessStorage.load()
         let needsFirst50PositionRefresh = existing?.isValid == true
             && existing?.isFirst50Code == true

@@ -74,6 +74,17 @@ final class AccentRecencyTracker {
         return base * frequencyFactor
     }
 
+    /// Remove all accent recency data for a single profile.
+    func clearProfile(profileHash: String) {
+        let dates = getDateList(profileHash: profileHash)
+        for date in dates {
+            let key = storageKey(profileHash: profileHash, date: date)
+            defaults.removeObject(forKey: key)
+        }
+        let listKey = dateListKey(profileHash: profileHash)
+        defaults.removeObject(forKey: listKey)
+    }
+
     func resetAll() {
         let prefix = Self.STORAGE_KEY_PREFIX
         for key in defaults.dictionaryRepresentation().keys where key.hasPrefix(prefix) {
