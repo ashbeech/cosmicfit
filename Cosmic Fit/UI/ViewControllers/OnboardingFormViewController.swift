@@ -1213,9 +1213,8 @@ class OnboardingFormViewController: UIViewController {
             return
         }
 
-        // Build and lay out the destination fully *before* any animation begins, so
-        // every bit of chart / Daily Fit work is finished and the fade is purely
-        // visual — no glitching, no work competing with the animation.
+        // Build and lay out the destination fully before any animation begins so
+        // the fade is purely visual — no chart work competing with the animator.
         tabBar.selectedIndex = 0
         _ = tabBar.view
         tabBar.view.layoutIfNeeded()
@@ -1223,21 +1222,22 @@ class OnboardingFormViewController: UIViewController {
             dailyFitVC.prepareForTransition()
         }
 
-        guard let outgoingView = window.rootViewController?.view else {
+        // The onboarding lives inside a modally-presented navigation controller, so
+        // window.rootViewController.view is NOT what the user sees. We snapshot the
+        // entire window to capture exactly the current screen (loading overlay,
+        // spinner, and all), swap the real root underneath, then dissolve the
+        // snapshot away to reveal the Daily Fit.
+        guard let snapshot = window.snapshotView(afterScreenUpdates: false) else {
             resetExitTransitionState()
             showAlert(title: "Error", message: "Could not open your chart. Please try again.")
             return
         }
 
-        // The destination sits fully opaque *beneath* the onboarding screen. The
-        // dissolve is achieved by fading only the onboarding layer away to reveal the
-        // already-rendered Daily Fit — a single-layer reveal avoids the muddy
-        // mid-transition opacity dip a two-way alpha crossfade produces.
-        window.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
-        tabBar.view.frame = window.bounds
-        tabBar.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        tabBar.view.alpha = 1
-        window.insertSubview(tabBar.view, belowSubview: outgoingView)
+        // Install the tab bar as the new root. This tears down the old
+        // AnimatedLaunchScreenVC → modal nav → onboarding chain instantly, but
+        // the snapshot covers it so the user sees nothing change yet.
+        window.rootViewController = tabBar
+        window.addSubview(snapshot)
 
         let reduceMotion = UIAccessibility.isReduceMotionEnabled
 
@@ -1249,23 +1249,16 @@ class OnboardingFormViewController: UIViewController {
                 controlPoint1: CGPoint(x: 0.86, y: 0.0),
                 controlPoint2: CGPoint(x: 0.14, y: 1.0)
             )
-        let duration: TimeInterval = reduceMotion ? 0.4 : 2.6
+        let duration: TimeInterval = reduceMotion ? 0.4 : 2.4
+        let anticipationHold: TimeInterval = reduceMotion ? 0 : 0.45
 
-        // The spinner is part of the outgoing hierarchy, so it dissolves with the
-        // rest of the screen rather than popping away — do not stop it here.
         let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timing)
         animator.addAnimations {
-            outgoingView.alpha = 0
+            snapshot.alpha = 0
         }
         animator.addCompletion { _ in
-            tabBar.view.removeFromSuperview()
-            window.rootViewController = tabBar
-            tabBar.view.alpha = 1
+            snapshot.removeFromSuperview()
         }
-
-        // Hold the finished, fully-loaded state for a beat so the reveal lands as a
-        // moment of anticipation rather than an abrupt cut.
-        let anticipationHold: TimeInterval = reduceMotion ? 0 : 0.5
         animator.startAnimation(afterDelay: anticipationHold)
     }
 
