@@ -1,5 +1,9 @@
 # Calibration Audit & Test Spec — Closure Summary
 
+> **Status:** Current
+> **Last audited:** June 2026
+> **Source of truth:** `../README.md` for current app architecture; this file records calibration-plan closure decisions.
+
 **Purpose:** In-repo record of work driven by the *Calibration Audit and Distribution Test Spec* (Cursor plan: `calibration_audit_and_test_spec_755e5694.plan.md`, typically under your local `.cursor/plans/`). This file is the **canonical handoff** for anyone who does not have access to that plan file.
 
 **Closure date:** 2026-05-12  
@@ -22,7 +26,7 @@ Supporting strategy doc: **`docs/calibration_ephemeris_strategy.md`** (synthetic
 
 ### B) Part 3 — Chart population consistency (3A vs 3B–3E)
 
-**Decision (documented in plan + strategy doc):** Parts **3B–3E** intentionally sweep **`ExtendedCalibrationProfiles.allCharts`** — **48 synthetic** sign-array charts — for CI speed and determinism. Part **3A** validates **real** charts from **`docs/fixtures/blueprint_birth_specs.json`** via `allChartsWithEphemeris` when VSOP87 + Swiss Ephemeris are available.
+**Decision (documented in plan + strategy doc):** Parts **3B–3E** intentionally sweep **`ExtendedCalibrationProfiles.allCharts`** — **48 synthetic** sign-array charts — for CI speed and determinism. Part **3A** validates real charts via `allChartsWithEphemeris` when curated birth specs plus VSOP87 + Swiss Ephemeris are available.
 
 Fixtures for synthetic coverage: **`docs/fixtures/blueprint_calibration_profiles.json`**, **`docs/fixtures/blueprint_calibration_manifest.json`**.
 
@@ -114,7 +118,7 @@ These are **not** blockers for the plan closure above; they are the next sensibl
 |------|--------|--------|
 | **`BlueprintDistribution_Tests` runtime crash** | Engineering | Some charts hit `SemanticTokenGenerator` / house-cusp code paths that crash with **index out of range** when running the full blueprint distribution suite. Reproduce: run `BlueprintDistribution_Tests` only. Fix generator bounds or synthetic chart cusps, then re-enable full suite in default CI. |
 | **CI pipeline** | Engineering | Add `.github/workflows/` (or other CI) that sets `CALIBRATION_CI_GATE=1` and `CALIBRATION_REPORT_DIR` to a temp path and uploads artefacts. |
-| **README vs `test_handoff` path** | Docs | README now points to **`docs/archive/test_handoff.md`** (canonical path). |
+| **Pruned handoff/test docs** | Docs | Old handoff/archive runbooks were pruned. Current navigation is via **`README.md`** and **`docs/README.md`**. |
 | **`calibration_ephemeris_strategy.md` vs 3A output name** | Docs | Strategy doc may mention a computed manifest JSON filename that does not match the **`blueprint_ephemeris_manifest_*.txt`** prefix written by tests — align wording when touching that doc. |
 | **`ExtendedCalibrationProfiles` comments** | Engineering | File header says `allCharts` prefers ephemeris; code returns **synthetic only** — align comments with `allCharts` vs `allChartsWithEphemeris`. |
 | **Part 6 owner sign-off** | Product / maintainer | **`docs/calibration_signoff.md`** notes optional final human seal; automated tests do not replace product review for copy/weights if you change engines. |

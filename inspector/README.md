@@ -1,5 +1,9 @@
 # Cosmic Fit Inspector
 
+> **Status:** Current
+> **Last audited:** June 2026
+> **Source of truth:** `../README.md` for app architecture; this file documents local inspector usage only.
+
 A locally-hosted web tool for inspecting, debugging, and comparing Cosmic Fit's Style Guide and Daily Fit outputs for arbitrary or preset birth charts on any target day.
 
 ## Quick Start
@@ -34,7 +38,7 @@ inspector/
     CosmicFitInspectorLib/     # Engine (symlinks) + inspector glue
     CosmicFitInspectorServer/  # Hummingbird HTTP server + static web
       Web/                     # index.html, styles.css, app.js
-  Resources/                   # Symlinks to shared data files
+  Resources/                   # Required shared data/resources for the inspector package
   Tests/
 ```
 
@@ -48,22 +52,22 @@ The inspector compiles the **same** Swift engine source files as the iOS app via
 
 ## Presets
 
-Four real-ephemeris presets are defined in `Resources/presets.json`:
+Seven real-ephemeris presets are defined in `Resources/presets.json`:
 
 | ID | Element | Profile |
 |----|---------|---------|
 | `fire` | Fire | Aries Sun — London dawn |
-| `earth` | Earth | Taurus Sun — London morning |
+| `earth` | Earth | Taurus Sun — Taurus Rising / earth |
 | `air` | Air | Aquarius Sun — London early morning |
 | `water` | Water | Scorpio Sun — London night |
+| `leo` | Fire | Leo Sun — London dawn / visibility stress |
 | `maria` | Earth | Maria — Taurus Sun / Pisces Rising (Athens) |
-| `ash` | Fire | Ash — Sagittarius Sun / Pisces Rising (London noon) |
+| `ash` | Fire | Ash — Sagittarius Sun / Pisces Rising (London) |
 
 ### Adding a Preset
 
-1. Pick a profile from `docs/fixtures/blueprint_birth_specs.json`
-2. Add it to `Resources/presets.json` with a unique `id` and `elementDominance`
-3. Restart the server
+1. Add a new object to `Resources/presets.json` with a unique `id`, display `label`, `birthDateUTC`, coordinates, `timeZoneId`, and `elementDominance`.
+2. Restart the server with `./run-inspector.sh`.
 
 ## API Endpoints
 
@@ -120,12 +124,14 @@ Add new checks to `Sources/CosmicFitInspectorLib/VerdictRunner.swift`. Each chec
 
 ## Resource Symlinks
 
-The `Resources/` directory contains symlinks to source-of-truth files:
+`ResourcePaths.validateResources()` expects these files under `Resources/`:
 
 - `astrological_style_dataset.json` → `data/style_guide/`
 - `blueprint_narrative_cache.json` → `data/style_guide/`
+- `TarotCards.json` → `Cosmic Fit/Resources/`
 - `VSOP87Data/` → `Cosmic Fit/Resources/VSOP87Data/`
 - `seas_18.se1` → `Cosmic Fit/Resources/`
-- `golden_cases.json` → `docs/fixtures/`
+- `sepl_18.se1` / `semo_18.se1` → Swiss Ephemeris data used by the inspector
+- `presets.json` and `synthetic_cohort.json` → inspector-local inputs
 
 If a symlink breaks (e.g., after moving the repo), the server will report which resources are missing on startup.

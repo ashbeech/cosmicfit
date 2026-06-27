@@ -1,5 +1,9 @@
 # Style Guide source JSON (canonical copy)
 
+> **Status:** Current
+> **Last audited:** June 2026
+> **Source of truth:** `../../README.md` for app architecture; this file documents canonical Style Guide data files.
+
 These files are the **single source of truth** for:
 
 | File | Role |
@@ -19,3 +23,7 @@ If symlinks are problematic on your OS, replace them with copies and document th
 - XCTest resolves **`data/style_guide/…`** via `StyleGuideDataURL`.
 - **`tools/validate_dataset.py`** defaults to **`data/style_guide/astrological_style_dataset.json`**.
 - **`tools/review_tool.py`** defaults to **`data/style_guide/blueprint_narrative_cache.json`** (`review_notes.json` lives beside that file).
+
+## Generated reports
+
+Markdown files such as `audit_report.md`, `colour_name_hex_audit.md`, `colour_metal_fabric_audit.md`, `colour_metal_fabric_apply_report.md`, and `narrative_palette_literal_audit.md` are generated or run-specific reports. They are useful for content QA, but they are not source-of-truth architecture docs.

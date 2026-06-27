@@ -25,6 +25,8 @@ import sys
 from collections import Counter
 from pathlib import Path
 
+from doc_banner import generated_report_banner
+
 REPO = Path(__file__).resolve().parents[1]
 CACHE_PATH = REPO / "data/style_guide/blueprint_narrative_cache.json"
 DATASET_PATH = REPO / "data/style_guide/astrological_style_dataset.json"
@@ -178,6 +180,10 @@ def write_md(violations: list[dict], path: Path) -> None:
     lines = [
         "# Narrative palette literal audit",
         "",
+        *generated_report_banner(
+            script="tools/audit_narrative_palette_literals.py",
+            command="python3 tools/audit_narrative_palette_literals.py",
+        ),
         f"**Total violations: {len(violations)}**",
         "",
         "## By section",

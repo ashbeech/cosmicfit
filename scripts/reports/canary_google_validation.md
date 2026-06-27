@@ -1,5 +1,9 @@
 # Canary Google Validation (Major Arcana - VAE Denoise)
 
+> **Status:** Generated
+> **Do not use as current architecture source.** See `README.md` and `docs/README.md`.
+> **Generated:** 2026-05-14 by SynthID validation tooling
+
 Run ID: `20260514T103833Z`
 Pipeline: `stabilityai/sd-vae-ft-mse` VAE encode/decode round-trip (1 pass, MPS)
 Quality gate: `--min-psnr 25.0 --min-ssim 0.69`

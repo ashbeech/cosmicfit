@@ -1,5 +1,9 @@
 # House/Sect Regression Scorecard
 
+> **Status:** Historical
+> **Last audited:** June 2026
+> **Source of truth:** `../../README.md` for current Style Guide architecture.
+
 Auto-generated from `docs/house_sect_regression/*.json`.
 Manual reviewer sign-off is required for contradiction and identity-retention gates.
 

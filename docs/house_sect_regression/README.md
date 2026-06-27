@@ -1,6 +1,10 @@
 # House/Sect Regression Harness
 
-This directory stores golden regression artifacts for the house/sect integration rollout.
+> **Status:** Historical
+> **Last audited:** June 2026
+> **Source of truth:** `../../README.md` for current Style Guide architecture.
+
+This directory stores historical regression artifacts from the house/sect integration rollout. The workflow below references fixture inputs that are no longer present in the current tree, so do not use it as an active runbook without first verifying it against the current engine and root README.
 
 ## Generate snapshot bundles
 
@@ -11,14 +15,7 @@ Place post-integration Blueprint JSON outputs under:
 - `docs/house_sect_regression/input_after/day_chart_venus_angular.json`
 - `docs/house_sect_regression/input_after/night_chart_venus_cadent.json`
 
-Then generate bundles (before + after + diffs + invariants):
-
-```bash
-python3 tools/generate_house_sect_regression.py \
-  --fixture ash \
-  --before docs/fixtures/blueprint_input_user_1.json \
-  --after docs/house_sect_regression/input_after/ash.json
-```
+Then generate bundles (before + after + diffs + invariants) using a verified current before-fixture path and the matching `input_after/{fixture}.json`.
 
 Repeat for each fixture.
 
@@ -41,7 +38,6 @@ python3 tools/export_input_after_fixtures.py --fixtures ash maria
 Run bundle generation for each fixture and then scorecard generation:
 
 ```bash
-python3 tools/generate_house_sect_regression.py --fixture ash --before docs/fixtures/blueprint_input_user_1.json --after docs/house_sect_regression/input_after/ash.json
 python3 tools/review_house_sect_regression.py
 ```
 

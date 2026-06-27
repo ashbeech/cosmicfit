@@ -1,5 +1,9 @@
 # Phase 4 — Metal-fabric rename apply report
 
+> **Status:** Generated
+> **Do not use as current architecture source.** See `README.md` and `docs/README.md`.
+> **Generated:** 2026-06-19 by Phase 4 metal-fabric rename tooling
+
 **Generated:** 2026-06-19  
 **Programme:** Colour Name Rename — Phase 4 metal-fabric disambiguation
 
@@ -43,7 +47,7 @@ Old names searched across all non-backup files. Split by allowed vs not-allowed 
 | `aged brass` (+ others) | `_archive/InterpretationTextLibrary.swift` | Archived historical file, not compiled |
 | Various Phase 1 old names | `_archive/TokenPrefixMatrix.swift`, `_archive/ParagraphAssembler.swift` | Archived historical files |
 | `aged brass`, `antique gold`, etc. | `data/style_guide/backups/` | Explicit backup copies |
-| Various old names | `docs/handoff/colour_name_rename_handoff.md` | Documentation of the rename programme |
+| Various old names | pruned historical handoff docs | Documentation of the rename programme; those handoff docs are no longer present |
 | Various old names | `data/style_guide/colour_metal_fabric_audit.md`, `.json` | Audit tool outputs documenting old names |
 | Various old names | `data/style_guide/colour_metal_fabric_proposals.json` | AI proposals documenting old → new mapping |
 

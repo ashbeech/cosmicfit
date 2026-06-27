@@ -1,5 +1,10 @@
 # V4 Markdown Reference Audit
 
+> **Status:** Generated
+> **Do not use as current architecture source.** See `README.md` and `docs/README.md`.
+> **Generated:** 2026-06-24 by V4 markdown reference audit tooling
+> **Note:** This report contains historical absolute paths and references to pruned archive fixtures.
+
 - Generated: 2026-06-24T16:29:30Z
 - Markdown reference: `/Users/ash/dev/mobile_apps/cosmicfit/docs/archive/fixtures/v4_markdown_reference.json`
 - Frozen placements: `/Users/ash/dev/mobile_apps/cosmicfit/docs/archive/fixtures/v4_placements.json`

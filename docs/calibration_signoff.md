@@ -1,11 +1,18 @@
 # Calibration Sign-Off Artifact
 
-**Status:** Signed off  
+> **Status:** Superseded for production engine weights
+> **Last audited:** June 2026
+> **Source of truth:** `../README.md` §4.1 and `../Cosmic Fit/InterpretationEngine/DailyFitEngineRegistry.swift` for current Sky Forward production weights.
+
 **Date:** 2026-05-12  
 **Reviewer:** AI-assisted calibration agent (automated checks) + project owner review required for final seal  
 **Scope:** Phase 0C baseline thresholds, Part 6 energy maps, Part 6 calibration weights  
 
+This is a historical sign-off artifact. Its Part 6C source-weight table reflects an older/default calibration surface and must not be read as the shipped Sky Forward v1.0.1 production weighting. Current production uses `production` -> `.stage1Experimental` and `DailyFitEngineRegistry.stage1ExperimentalCalibration` (natal 0.16, transits 0.44, lunar 0.30, progressed 0.07, current sun 0.03).
+
 ---
+
+## Historical Record
 
 ## 1. Phase 0C — Baseline Review and Threshold Sign-Off
 

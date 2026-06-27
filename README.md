@@ -18,7 +18,7 @@ Cosmic Fit is an astrology-meets-fashion iOS app. It computes a natal birth char
 
 2. **Daily Fit** — A daily-changing style card powered by the shipped **Sky Forward v1.0.1** engine. Sky Forward reads the user's chart as an anchor and today's sky as the weather: transits, lunar phase, and daily sky salience drive a tarot card, style edit, daily colours, vibrancy/contrast/metal-tone scales, 14-category essence radar, silhouette profile, textures, and optional pattern. It is deterministic for equal inputs, but reveal state, tarot recency, variant rotation, and frozen payloads are namespaced by engine id and can legitimately change the sequence a user sees over time.
 
-The root README is intended to be the **go-to handoff for AI developers**. Deep specs and historical runbooks remain under `docs/handoff/`; use this file for the current state of the app, then follow links when you need implementation-level detail.
+The root README is intended to be the **go-to handoff for AI developers**. Use this file for the current state of the app, then use `docs/README.md` to understand which supporting docs are current, generated, historical, or pruned.
 
 ---
 
@@ -57,7 +57,7 @@ That pulls in **Flask** (`tools/review_tool.py`) and **google-generativeai** (`t
 
 | Script / artefact | Purpose |
 |---|---|
-| **`tools/review_tool.py`** | Local Flask web UI for reviewing AI-generated **Style Guide** paragraphs in `blueprint_narrative_cache.json`. Usage: `python3 tools/review_tool.py [--cache path/to/blueprint_narrative_cache.json] [--port 8420]`. Reviewer state: **`review_notes.json`** (approve / needs revision / reject). Spec: **`docs/narrative_review_tool_spec.md`**. |
+| **`tools/review_tool.py`** | Local Flask web UI for reviewing AI-generated **Style Guide** paragraphs in `blueprint_narrative_cache.json`. Usage: `python3 tools/review_tool.py [--cache path/to/blueprint_narrative_cache.json] [--port 8420]`. Reviewer state: **`review_notes.json`** (approve / needs revision / reject). See **`tools/README.md`** for current tooling guidance. |
 | **`tools/backfill_narratives.py`** | Generates or refreshes narrative paragraphs (Gemini API), reads/writes the cache, and honours **`review_notes.json`** so approved copy is not blindly overwritten. Uses **`GEMINI_API_KEY`** (`.env` at repo root or env). |
 
 **Canonical copy:** **`data/style_guide/blueprint_narrative_cache.json`**. **`Cosmic Fit/Resources/`** holds a **symlink** so the bundle resource name stays **`blueprint_narrative_cache.json`** (bundle key **`blueprint_narrative_cache`**). Renaming the bundle key requires `NarrativeCacheLoader` + Xcode.
@@ -69,13 +69,12 @@ That pulls in **Flask** (`tools/review_tool.py`) and **google-generativeai** (`t
 | Script | Purpose |
 |---|---|
 | **`tools/generate_dataset.py`** | Authoring source for **`data/style_guide/astrological_style_dataset.json`** (planet–sign mappings, aspects, house placements, colour library, etc.) consumed by **`BlueprintTokenGenerator`**. The app bundle loads via **`Cosmic Fit/Resources/`** symlink → same file (see **`data/style_guide/README.md`**). |
-| **`tools/validate_dataset.py`** | Validates that dataset JSON matches the schema checklist (**`docs/fixtures/dataset_schema_checklist.md`**) and the **`BlueprintTokenGenerator`** Codable contract. Also runs **Part 6A** astrological axiom checks (Venus fire, Moon water, Saturn structure, `code_leaninto` vs `code_avoid` overlap, etc.). Run after edits before committing. |
+| **`tools/validate_dataset.py`** | Validates that dataset JSON matches the **`BlueprintTokenGenerator`** Codable contract and embedded schema expectations. Also runs **Part 6A** astrological axiom checks (Venus fire, Moon water, Saturn structure, `code_leaninto` vs `code_avoid` overlap, etc.). Run after edits before committing. |
 
 #### Palette calibration & house/sect regression (Python helpers)
 
 | Script | Purpose |
 |---|---|
-| **`docs/archive/review_palette_calibration.py`** | **Archived** helper: compares a generated palette JSON to a human-labelled benchmark and writes a markdown report (still usable if paths are adjusted). Not on the default dev path; kept under **`docs/archive/`**. |
 | **`tools/export_input_after_fixtures.py`** | Runs **`xcodebuild test`** for **`Cosmic FitTests/HardeningEdgeCaseTests`**, which writes **post-integration Style Guide JSON** into **`docs/house_sect_regression/input_after/{fixture}.json`**. Defaults: `ash`, `maria`, `day_chart_venus_angular`, `night_chart_venus_cadent`. Options: `--scheme`, `--destination`. Use this when refreshing regression inputs after engine changes. |
 | **`tools/generate_house_sect_regression.py`** | Builds **before/after snapshot bundles** from Blueprint JSON paths (diffs code directives, narratives, palette stability). Writes artefacts under **`docs/house_sect_regression/`** for inspection. |
 | **`tools/review_house_sect_regression.py`** | Reads snapshot JSONs and emits a reviewer **scorecard** (default / configurable **`SCORECARD.md`**). Usage: `python3 tools/review_house_sect_regression.py [--snapshots-dir …] [--output …]`. |
@@ -92,7 +91,7 @@ Calibration diagnostics and golden text used by XCTest often live under **`docs/
 
 | Location | Purpose |
 |---|---|
-| **`Cosmic FitTests/FixtureRegeneration.swift`** | Optional regeneration of **`docs/fixtures/blueprint_input_user_1.json`** and **`blueprint_input_user_2.json`** via the production **`BlueprintComposer`** pipeline. **Default:** validates fixture shape only (safe for CI). **To rewrite files on disk:** set environment variable **`REGENERATE_BLUEPRINT_FIXTURES=1`** when running that test. Output timestamps are pinned for byte-stable diffs. |
+| **`Cosmic FitTests/FixtureRegeneration.swift`** | Optional blueprint fixture validation/regeneration via the production **`BlueprintComposer`** pipeline. **Default:** validates fixture shape only (safe for CI). **To rewrite fixture files on disk:** set environment variable **`REGENERATE_BLUEPRINT_FIXTURES=1`** when running that test. Output timestamps are pinned for byte-stable diffs. |
 
 #### Cosmic Fit Inspector (local web UI)
 
@@ -143,7 +142,7 @@ These opt in to **writing** fixture files under **`docs/fixtures/`** or enabling
 
 | Variable | Test target / area | Purpose |
 |---|---|---|
-| **`REGENERATE_BLUEPRINT_FIXTURES=1`** | `FixtureRegeneration` | Rewrites **`blueprint_input_user_1.json`** / **`blueprint_input_user_2.json`**. |
+| **`REGENERATE_BLUEPRINT_FIXTURES=1`** | `FixtureRegeneration` | Rewrites the blueprint fixture files managed by that test target. |
 | **`REGENERATE_V4_PALETTE_EXPECTATIONS=1`** | `V4CalibrationRegression_Tests` | Updates palette expectation rows in **`docs/fixtures/v4_dataset.json`** when colour logic changes. |
 | **`REGENERATE_PALETTE_GRID_GOLDENS=1`** | `PaletteGridViewModel_Tests` | Regenerates **`palette_grid_golden_user_1.json`** / **`palette_grid_golden_user_2.json`**. |
 | **`REGENERATE_V4_PLACEMENTS=1`** | `V4PlacementGenerator_Tests` | Runs placement-generation paths that skip by default; used for Maria/Ash-style fixture output. |
@@ -153,7 +152,7 @@ These opt in to **writing** fixture files under **`docs/fixtures/`** or enabling
 | **`CALIBRATION_REPORT_DIR`** | Any test using **`CalibrationReportHelper.writeReport`** | Absolute path, or path relative to repo root, for calibration **`*.txt`** outputs. If unset, reports go under **`docs/fixtures/`** with unique filenames (PID + UUID). Use in CI to avoid writers clobbering each other. |
 | **`DAILY_FIT_ENGINE_ID`** | Optional local / dedicated jobs only | Selects the iOS app build default or inspector server default preset (`production`, `legacy_baseline`, etc.). **Do not set in default CI** — tests pass explicit `calibration:` unless testing `DailyFitEngineConfig`. See **§4.1.1**. |
 
-For command-line examples and parallel-test caveats, see **`docs/archive/test_handoff.md`** (stabilizing **`xcodebuild test`**).
+For parallel test jobs that write reports, set **`CALIBRATION_REPORT_DIR`** to an isolated temp directory so writers do not collide.
 
 #### Calibration audit closure (distribution tests, VSOP87, astrological soundness)
 
@@ -416,7 +415,7 @@ The `.standard` branches are intentional legacy paths. They support regression t
 
 **CI / tests:** Do not set `DAILY_FIT_ENGINE_ID` in default CI. Unit tests pass explicit calibration/engine ids unless testing `DailyFitEngineConfig`.
 
-**Further reading:** [`docs/handoff/sky_forward_final_consolidation_handoff.md`](docs/handoff/sky_forward_final_consolidation_handoff.md), [`docs/handoff/daily_fit_engine_selector_spec.md`](docs/handoff/daily_fit_engine_selector_spec.md), [`docs/handoff/daily_fit_personal_scale_sliders_handoff.md`](docs/handoff/daily_fit_personal_scale_sliders_handoff.md).
+**Further reading:** Use **`docs/README.md`** for documentation status. The shipped engine truth is this section plus **`Cosmic Fit/InterpretationEngine/DailyFitEngineRegistry.swift`**.
 
 ### 4.2 Style Guide pipeline (`CosmicBlueprint`)
 
@@ -494,7 +493,7 @@ These are current product/QA truths, not failures:
 
 ### 5.3 Validation Order For Future Engine Changes
 
-Use the ordered runbook in [`docs/handoff/sky_forward_final_consolidation_handoff.md`](docs/handoff/sky_forward_final_consolidation_handoff.md). In short:
+Use this ordered validation path for future engine changes:
 
 1. Unit/regression suites for registry, fingerprint, payload, envelope, narrative, and recency.
 2. `SliderSignalValidation_Tests` for fast 12x60 signal checks.
@@ -503,28 +502,27 @@ Use the ordered runbook in [`docs/handoff/sky_forward_final_consolidation_handof
 
 **Test fixtures** live in `docs/fixtures/` — JSON and text files with known-good reference outputs. `docs/fixtures/` is QA/tuning artefact storage, not app runtime.
 
-**Parallel test runs / flaky clones:** See [`docs/archive/test_handoff.md`](docs/archive/test_handoff.md) and newer green-path docs if present. Set `CALIBRATION_REPORT_DIR` when a test job writes reports.
+**Parallel test runs / flaky clones:** Set `CALIBRATION_REPORT_DIR` when a test job writes reports.
 
 **UI Tests:** `Cosmic FitUITests/` contains boilerplate Xcode template files only; there is no meaningful automated E2E coverage yet.
 
 ---
 
-## 6. Deep Handoffs & Runbooks
+## 6. Documentation Map
 
-This README is the current front door. Use these docs for implementation-level detail, but check the stale notes before copying claims forward.
+This README is the current front door. Supporting docs are classified in **`docs/README.md`** so AI agents and humans can tell current guides from generated reports, QA fixtures, and pruned historical handoffs.
 
-| Doc | Use when |
+Use these current entrypoints:
+
+| Need | Current source |
 |---|---|
-| [`docs/handoff/sky_forward_final_consolidation_handoff.md`](docs/handoff/sky_forward_final_consolidation_handoff.md) | Sky Forward promotion model, code map, validation order, and what not to overwrite |
-| [`docs/handoff/unified_daily_fit_audit_handoff.md`](docs/handoff/unified_daily_fit_audit_handoff.md) | Production audit harness history and 223x60 analysis workflow |
-| [`docs/handoff/daily_fit_engine_selector_spec.md`](docs/handoff/daily_fit_engine_selector_spec.md) | Engine selector wiring, frozen payload namespacing, Release/DEBUG guardrails |
-| [`docs/handoff/daily_fit_inspector_app_parity_followup_handoff.md`](docs/handoff/daily_fit_inspector_app_parity_followup_handoff.md) | App vs inspector mismatch debugging and parity checklist |
-| [`docs/handoff/daily_fit_stage1_experimental_app_readiness_handoff.md`](docs/handoff/daily_fit_stage1_experimental_app_readiness_handoff.md) | App payload parity, ghost triangle, DEBUG enablement; promotion-state sections are historical |
-| [`docs/handoff/daily_fit_narrative_unification_v1_cleanup_v1_1_handoff.md`](docs/handoff/daily_fit_narrative_unification_v1_cleanup_v1_1_handoff.md) | Narrative cohesion rules, no generated daily prose, plan-driven selection |
-| [`docs/handoff/daily_fit_personal_scale_sliders_handoff.md`](docs/handoff/daily_fit_personal_scale_sliders_handoff.md) | Personal scale envelope design intent and slider semantics |
-| [`docs/handoff/legal_production_audit_handoff.md`](docs/handoff/legal_production_audit_handoff.md) | Privacy/Terms sync, UK entity, account deletion, and legal deployment checks |
+| App architecture and shipped engine state | This README |
+| Documentation status and stale-doc rules | `docs/README.md` |
+| Daily Fit preset, calibration, fingerprint, and mode truth | `Cosmic Fit/InterpretationEngine/DailyFitEngineRegistry.swift` |
+| Local inspector usage | `inspector/README.md` |
+| Python tooling usage | `tools/README.md` |
 
-**Known stale handoff caveat:** older Sky Forward docs that describe `stage1_experimental` as the real engine and production as unchanged are superseded for promotion state. Current code has `production` shipping Sky Forward v1.0.1.
+The previous implementation handoff set was pruned. Do not infer current behaviour from deleted handoff filenames or stale links.
 
 ---
 

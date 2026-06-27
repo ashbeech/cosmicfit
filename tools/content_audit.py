@@ -36,6 +36,7 @@ from content_audit_inventory import (
     SECTION_KEYS,
 )
 from content_audit_checks import run_checks, ALL_CHECKS
+from doc_banner import generated_report_banner
 
 
 # ─── Paths ─────────────────────────────────────────────────────────────
@@ -302,8 +303,16 @@ def build_report(all_items: list[AuditableItem], all_issues: list[dict],
 
 
 def write_markdown(report: dict, path: Path):
-    lines = ["# Style Guide Content Audit Report\n"]
     meta = report["meta"]
+    lines = [
+        "# Style Guide Content Audit Report",
+        "",
+        *generated_report_banner(
+            script="tools/content_audit.py",
+            command="python3 tools/content_audit.py --format all",
+            generated=meta["timestamp"],
+        ),
+    ]
     lines.append(f"**Generated:** {meta['timestamp']}")
     lines.append(f"**Items audited:** {meta['total_items']}")
     lines.append(f"**Total issues:** {meta['total_issues']}")

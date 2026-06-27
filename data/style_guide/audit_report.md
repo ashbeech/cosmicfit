@@ -1,5 +1,10 @@
 # Style Guide Content Audit Report
 
+> **Status:** Generated
+> **Do not use as current architecture source.** See `README.md` and `docs/README.md`.
+> **Generated:** 2026-06-23T18:14:56.778021+00:00 by `tools/content_audit.py`
+> **Re-run:** `python3 tools/content_audit.py --format all`
+
 **Generated:** 2026-06-23T18:14:56.778021+00:00
 **Items audited:** 5305
 **Total issues:** 546

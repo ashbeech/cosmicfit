@@ -1,6 +1,9 @@
 # Calibration Ephemeris Strategy
 
-**Status:** Decided  
+> **Status:** Current
+> **Last audited:** June 2026
+> **Source of truth:** `../README.md` for current app architecture; this file documents ephemeris test policy.
+
 **Date:** 2026-05-12  
 **Covers:** Phase 0B of the Calibration Audit and Test Spec
 
@@ -13,7 +16,7 @@
 | Context | Ephemeris source | Rationale |
 |---------|-----------------|-----------|
 | CI / `xcodebuild test` (default) | **Synthetic sign-array charts** via `CalibrationProfiles_Extended.allCharts` | Fast, deterministic, no VSOP87 bundle dependency. |
-| Local integration / baseline runs | **Production ephemeris** via `NatalChartCalculator.calculateNatalChart` from `blueprint_birth_specs.json` | Astronomically consistent geometry (Mercury ≤28° from Sun, real houses, real aspects, proper retrogrades). |
+| Local integration / baseline runs | **Production ephemeris** via `NatalChartCalculator.calculateNatalChart` from curated local birth specs when available | Astronomically consistent geometry (Mercury ≤28° from Sun, real houses, real aspects, proper retrogrades). |
 | Goldens (`DailyFitGoldens_Tests`) | **Synthetic sign-array charts** with explicit transit specs | Goldens test engine *interpretation* of known inputs, not ephemeris accuracy. Synthetic charts make golden expectations stable across ephemeris upgrades. |
 
 ---
@@ -22,7 +25,7 @@
 
 Production-ephemeris charts are loaded when **all** of the following are true:
 
-1. `blueprint_birth_specs.json` is present in `docs/fixtures/`.
+1. Curated real-chart birth specs are available to the local test run.
 2. VSOP87 bundle integrity passes (`VSOP87BundleIntegrity_Tests`).
 3. `AsteroidCalculator.bootstrap()` succeeds (Swiss Ephemeris path is set).
 

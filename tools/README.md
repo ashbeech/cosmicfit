@@ -1,5 +1,9 @@
 # Cosmic Fit — developer tools
 
+> **Status:** Current
+> **Last audited:** June 2026
+> **Source of truth:** `../README.md` for app architecture; this file documents local tool usage only.
+
 Python utilities for datasets, Style Guide narrative QA, content auditing, and regression helpers. **Not** used by the iOS app build.
 
 ## Setup
@@ -58,6 +62,8 @@ Output files are written to `data/style_guide/`:
 | `audit_review_notes.json` | Manual triage state from the web UI |
 | `audit_progress.json` | Live audit progress for the UI |
 
+Markdown audit outputs are generated reports, not architecture handoffs. Use the root `README.md` for current app behaviour and `docs/README.md` for documentation status labels.
+
 ## Audit correction (apply fixes)
 
 Applies deterministic mechanical fixes and AI-generated rewrites using the handoff pack as a queue.
@@ -112,4 +118,12 @@ cd inspector && ./run-inspector.sh   # separate terminal
 python3 tools/sign_energy_inspector_harness.py
 ```
 
-Writes `docs/fixtures/sign_audit_downstream_post_phase1.txt`, refreshes `sign_audit_inspector_evidence.json` and `sign_energy_matrix_baseline.txt`.
+Writes sign-energy validation artefacts under `docs/fixtures/` when the harness runs. Treat those outputs as generated QA reports, not current architecture docs.
+
+## Documentation audit
+
+Checks maintained Markdown docs for broken links, stale architecture terms, and missing status metadata:
+
+```bash
+python3 tools/audit_docs.py
+```
