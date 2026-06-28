@@ -44,6 +44,10 @@ final class CosmicFitTabBarController: UITabBarController {
     // Transition properties
     private var transitionAnimator: SlideTabTransitionAnimator?
     private var isCustomTransitioning = false
+
+    // Onboarding chrome intro (first-experience reveal of nav + tab bar)
+    private var pendingOnboardingChromeIntro = false
+    private static let chromeIntroSlideDuration: TimeInterval = 0.85
     
     // User profile property
     private var userProfile: UserProfile?
@@ -98,11 +102,19 @@ final class CosmicFitTabBarController: UITabBarController {
         
         repairIPadTabBarHierarchyIfNeeded()
         refreshTabBarChrome()
+
+        if pendingOnboardingChromeIntro {
+            reapplyOnboardingChromeOffscreenTransforms()
+        }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+
+        if pendingOnboardingChromeIntro {
+            reapplyOnboardingChromeOffscreenTransforms()
+        }
+
         repairIPadTabBarHierarchyIfNeeded()
         updateDetailOverlayBottomInsetIfNeeded()
         // Add dividers after layout is complete
@@ -442,6 +454,85 @@ final class CosmicFitTabBarController: UITabBarController {
         // Menu bar always visible on main pages
         menuBarView.alpha = 1
         menuBarView.isUserInteractionEnabled = true
+    }
+
+    // MARK: - Onboarding Chrome Intro
+
+    /// First-experience reveal: the top nav and bottom tab bar start fully
+    /// off-screen so the freshly-onboarded user sees only the unrevealed Tarot
+    /// card against the animating glyph background. Call this *before* the
+    /// onboarding dissolve completes (it is invisible behind the snapshot), then
+    /// trigger `playOnboardingChromeIntro(afterDelay:)` once the card is on
+    /// screen. The matching top mask + "tap to reveal" caption live on the Daily
+    /// Fit controller and are driven in lockstep.
+    ///
+    /// This is always a positional slide (top chrome starts above the viewport,
+    /// tab bar starts below it). The slide is the deliberate first-experience
+    /// moment, so it runs even when Reduce Motion is enabled.
+    func prepareOnboardingChromeIntro() {
+        loadViewIfNeeded()
+        view.layoutIfNeeded()
+
+        pendingOnboardingChromeIntro = true
+
+        let dailyFit = onboardingDailyFitViewController()
+        dailyFit?.beginOnboardingChromeIntro()
+
+        reapplyOnboardingChromeOffscreenTransforms()
+        dailyFit?.setTopMaskHiddenForIntro(usingFade: false,
+                                           offset: menuBarView.frame.maxY + 40)
+    }
+
+    /// Re-applies the offscreen transforms that push the top chrome above the
+    /// viewport and the tab bar below it. Called from `viewDidLayoutSubviews`
+    /// so that UIKit layout passes cannot snap them back to resting position
+    /// while the intro is still pending.
+    private func reapplyOnboardingChromeOffscreenTransforms() {
+        let topTravel = menuBarView.frame.maxY + 40
+        let bottomTravel = tabBar.frame.height + view.safeAreaInsets.bottom + 40
+        menuBarView.transform = CGAffineTransform(translationX: 0, y: -topTravel)
+        statusBarBackdropView.transform = CGAffineTransform(translationX: 0, y: -topTravel)
+        tabBar.transform = CGAffineTransform(translationX: 0, y: bottomTravel)
+    }
+
+    /// Slides the nav + tab bar into their resting positions after `delay`
+    /// seconds, then fades in the Daily Fit "tap to reveal" caption.
+    func playOnboardingChromeIntro(afterDelay delay: TimeInterval) {
+        guard pendingOnboardingChromeIntro else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            self?.runOnboardingChromeIntroAnimation()
+        }
+    }
+
+    private func runOnboardingChromeIntroAnimation() {
+        guard pendingOnboardingChromeIntro else { return }
+        pendingOnboardingChromeIntro = false
+
+        let dailyFit = onboardingDailyFitViewController()
+        let duration = Self.chromeIntroSlideDuration
+
+        // Slide the top chrome down from above and the tab bar up from below,
+        // in lockstep with the Daily Fit top mask, into their resting positions.
+        let settleChrome = {
+            self.menuBarView.transform = .identity
+            self.statusBarBackdropView.transform = .identity
+            self.tabBar.transform = .identity
+        }
+        dailyFit?.animateTopMaskToRest(usingFade: false, duration: duration)
+
+        UIView.animate(
+            withDuration: duration,
+            delay: 0,
+            options: [.curveEaseOut],
+            animations: settleChrome,
+            completion: { _ in
+                dailyFit?.fadeInOnboardingTapToReveal()
+            }
+        )
+    }
+
+    private func onboardingDailyFitViewController() -> DailyFitViewController? {
+        return viewControllers?.first as? DailyFitViewController
     }
 
     @objc private func menuButtonTapped() {

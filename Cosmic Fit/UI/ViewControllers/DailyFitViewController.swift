@@ -269,6 +269,10 @@ class DailyFitViewController: UIViewController {
     /// transforms, so the two effects compose cleanly.
     private var cardParallax: MotionParallaxBinding?
     private var tapToRevealLabel = UILabel()
+    /// While true, the unrevealed state keeps the "tap to reveal" caption hidden
+    /// so the onboarding chrome intro can fade it in only after the nav + tab bar
+    /// have finished sliding into place. See `beginOnboardingChromeIntro()`.
+    private var suppressTapToRevealForIntro = false
     private var backgroundBlurImageView = UIImageView()
     /// Stored so `viewDidLayoutSubviews` can grow it as the scroll
     /// `contentSize` does, guaranteeing the blur's bottom edge always
@@ -877,7 +881,7 @@ class DailyFitViewController: UIViewController {
             self.cardBackImageView.alpha = 1.0
             self.cardBackImageView.isHidden = false
             self.cardBackImageView.isUserInteractionEnabled = true
-            self.tapToRevealLabel.alpha = 1.0
+            self.tapToRevealLabel.alpha = self.suppressTapToRevealForIntro ? 0.0 : 1.0
             self.tapToRevealLabel.isHidden = false
             self.tapToRevealLabel.isUserInteractionEnabled = true
             self.scrollingRunesBackground.alpha = 1.0
@@ -4159,6 +4163,44 @@ extension DailyFitViewController {
     func finishTransition() {
         if isCardRevealed {
             ensureContainerVisibility()
+        }
+    }
+}
+
+// MARK: - Onboarding Chrome Intro Support
+extension DailyFitViewController {
+
+    /// Hides the "tap to reveal" caption until the onboarding chrome intro
+    /// completes, so the first frames show only the card and glyphs.
+    func beginOnboardingChromeIntro() {
+        suppressTapToRevealForIntro = true
+        tapToRevealLabel.alpha = 0
+    }
+
+    /// Pushes the grey top mask off-screen above the viewport so it slides in
+    /// as one unit with the tab bar controller's menu bar during the intro.
+    func setTopMaskHiddenForIntro(usingFade _: Bool = false, offset: CGFloat) {
+        view.layoutIfNeeded()
+        topMaskView.transform = CGAffineTransform(translationX: 0, y: -offset)
+    }
+
+    /// Slides the top mask back to its resting position in lockstep with the
+    /// menu bar.
+    func animateTopMaskToRest(usingFade _: Bool = false, duration: TimeInterval) {
+        UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseOut]) {
+            self.topMaskView.transform = .identity
+        }
+    }
+
+    /// Fades in the "tap to reveal" caption once the chrome has fully settled.
+    func fadeInOnboardingTapToReveal() {
+        suppressTapToRevealForIntro = false
+        // Only reveal the caption if the card is still unrevealed; a fast tap
+        // during the intro could already have flipped it.
+        guard currentCardState == .unrevealed, !isCardRevealed else { return }
+        tapToRevealLabel.isHidden = false
+        UIView.animate(withDuration: 0.6, delay: 0, options: [.curveEaseInOut]) {
+            self.tapToRevealLabel.alpha = 1
         }
     }
 }
