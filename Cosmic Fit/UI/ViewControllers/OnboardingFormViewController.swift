@@ -1265,8 +1265,8 @@ class OnboardingFormViewController: UIViewController {
         animator.addCompletion { _ in
             snapshot.removeFromSuperview()
             // The card is now fully on screen. Hold a beat of pure mystique,
-            // then slide the nav + tab bar in and fade up "tap to reveal".
-            tabBar.playOnboardingChromeIntro(afterDelay: 1.0)
+            // then fade up the intro caption sequence.
+            tabBar.playOnboardingChromeIntro(afterDelay: 2.0 / 3.0)
         }
         animator.startAnimation(afterDelay: anticipationHold)
     }

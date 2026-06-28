@@ -153,6 +153,12 @@ class DailyFitViewController: UIViewController {
     /// top edge, mirroring the prior `-32` constant on the safe-area
     /// anchor.
     private static let tapToRevealBottomGapAboveTabBar: CGFloat = 32
+    /// Cross-fade duration for each onboarding intro caption.
+    private static let onboardingIntroFadeDuration: TimeInterval = 0.8
+    /// How long the first onboarding caption ("Your style, written in the
+    /// stars.") lingers fully visible — long enough to read comfortably —
+    /// before it cross-fades to the call-to-action caption.
+    private static let onboardingIntroFirstCaptionHold: TimeInterval = 1.3
     /// Rounded content panel peeks this far above the tab bar at rest.
     private static let contentPanelPeekAboveTabBar: CGFloat = 36
     /// Header row top sits this far below the tab bar top at scroll offset 0.
@@ -273,6 +279,22 @@ class DailyFitViewController: UIViewController {
     /// so the onboarding chrome intro can fade it in only after the nav + tab bar
     /// have finished sliding into place. See `beginOnboardingChromeIntro()`.
     private var suppressTapToRevealForIntro = false
+    /// Top caption shown only during the first-experience onboarding intro. It
+    /// fades through "Your style, written in the stars." and then "Tap to reveal
+    /// your first daily fit." while the nav + tab bar are still held off-screen,
+    /// and is dismissed on the user's first card tap.
+    private let onboardingIntroCaptionLabel = UILabel()
+    /// True from the moment the onboarding caption sequence begins until the
+    /// user's first card tap. Drives the first-tap chrome reveal + caption fade.
+    private var isOnboardingIntroActive = false
+    /// True while the first-experience chrome intro is pending but captions
+    /// have not yet been armed. Card taps are ignored during this window so
+    /// an early tap cannot reveal the card without the chrome slide-in.
+    private var isAwaitingOnboardingIntro = false
+    /// Invoked on the first card tap during the onboarding intro so the tab bar
+    /// controller can slide the nav + tab bar into place in lockstep with the
+    /// card reveal. Set by `CosmicFitTabBarController`.
+    var onboardingFirstCardTapHandler: (() -> Void)?
     private var backgroundBlurImageView = UIImageView()
     /// Stored so `viewDidLayoutSubviews` can grow it as the scroll
     /// `contentSize` does, guaranteeing the blur's bottom edge always
@@ -1960,7 +1982,11 @@ class DailyFitViewController: UIViewController {
     }
 
     private var isRestrictedDailyFitObscured: Bool {
-        isCardRevealed && !EntitlementManager.shared.hasFullAccess
+        DailyFitRevealPersistence.shouldObscureContentForRestrictedUser(
+            isCardRevealed: isCardRevealed,
+            displayDate: displayDate,
+            hasFullAccess: EntitlementManager.shared.hasFullAccess
+        )
     }
 
     /// Views below the tear that must be hidden + collapsed for gated users:
@@ -3704,7 +3730,18 @@ class DailyFitViewController: UIViewController {
     @objc private func cardTapped() {
         guard !isCardRevealed else { return }
         guard currentCardState == .unrevealed else { return }
-        
+        guard !isAwaitingOnboardingIntro else { return }
+
+        // First-experience onboarding: this very first tap is what triggers the
+        // nav + tab bar to slide in (held off-screen until now) and dismisses the
+        // intro caption — all in lockstep with the reveal below.
+        if isOnboardingIntroActive {
+            suppressTapToRevealForIntro = false
+            dismissOnboardingIntroCaption()
+            onboardingFirstCardTapHandler?()
+            onboardingFirstCardTapHandler = nil
+        }
+
         // Disable further taps
         cardBackImageView.isUserInteractionEnabled = false
         tapToRevealLabel.isUserInteractionEnabled = false
@@ -3718,6 +3755,7 @@ class DailyFitViewController: UIViewController {
             )
             if saved {
                 UserDefaults.standard.set(true, forKey: dailyCardRevealKey)
+                DailyFitRevealPersistence.markFirstDailyFitRevealed(for: displayDate)
             } else {
                 print("⚠️ Frozen payload write failed — reveal flag NOT set (will re-freeze on next reveal)")
             }
@@ -4174,6 +4212,7 @@ extension DailyFitViewController {
     /// completes, so the first frames show only the card and glyphs.
     func beginOnboardingChromeIntro() {
         suppressTapToRevealForIntro = true
+        isAwaitingOnboardingIntro = true
         tapToRevealLabel.alpha = 0
     }
 
@@ -4200,16 +4239,81 @@ extension DailyFitViewController {
         }
     }
 
-    /// Fades in the "tap to reveal" caption once the chrome has fully settled.
-    func fadeInOnboardingTapToReveal() {
-        suppressTapToRevealForIntro = false
-        // Only reveal the caption if the card is still unrevealed; a fast tap
-        // during the intro could already have flipped it.
-        guard currentCardState == .unrevealed, !isCardRevealed else { return }
-        tapToRevealLabel.isHidden = false
-        UIView.animate(withDuration: 0.6, delay: 0, options: [.curveEaseInOut]) {
-            self.tapToRevealLabel.alpha = 1
-        }
+    /// Begins the first-experience caption sequence: fade in "Your style,
+    /// written in the stars.", hold it long enough to read, then cross-fade to
+    /// "Tap to reveal your first daily fit." and hold that until the user taps
+    /// the card. The nav + tab bar stay parked off-screen throughout; they only
+    /// slide in on the first tap (see `cardTapped` → `onboardingFirstCardTapHandler`).
+    func startOnboardingIntroCaptions() {
+        installOnboardingIntroCaptionIfNeeded()
+        isOnboardingIntroActive = true
+        isAwaitingOnboardingIntro = false
+
+        view.bringSubviewToFront(onboardingIntroCaptionLabel)
+        onboardingIntroCaptionLabel.text = "Your style,\nwritten in the stars."
+        onboardingIntroCaptionLabel.alpha = 0
+
+        let fade = Self.onboardingIntroFadeDuration
+        let hold = Self.onboardingIntroFirstCaptionHold
+
+        UIView.animate(withDuration: fade, delay: 0, options: [.curveEaseInOut], animations: {
+            self.onboardingIntroCaptionLabel.alpha = 1
+        }, completion: { _ in
+            guard self.isOnboardingIntroActive else { return }
+            // Hold the scene-setting line, then dissolve it away.
+            UIView.animate(withDuration: fade, delay: hold, options: [.curveEaseInOut], animations: {
+                self.onboardingIntroCaptionLabel.alpha = 0
+            }, completion: { _ in
+                guard self.isOnboardingIntroActive else { return }
+                // Swap to the call-to-action and fade it back up; it lingers
+                // until the user taps the card.
+                self.onboardingIntroCaptionLabel.text = "Tap to reveal\nyour first daily fit."
+                UIView.animate(withDuration: fade, delay: 0, options: [.curveEaseInOut]) {
+                    self.onboardingIntroCaptionLabel.alpha = 1
+                }
+            })
+        })
+    }
+
+    /// Fades the onboarding intro caption away on the first card tap, then tears
+    /// it down. Safe to call even if the caption was never installed.
+    func dismissOnboardingIntroCaption() {
+        isOnboardingIntroActive = false
+        guard onboardingIntroCaptionLabel.superview != nil else { return }
+        UIView.animate(withDuration: 0.45, delay: 0, options: [.curveEaseIn], animations: {
+            self.onboardingIntroCaptionLabel.alpha = 0
+        }, completion: { _ in
+            self.onboardingIntroCaptionLabel.removeFromSuperview()
+        })
+    }
+
+    /// Lazily installs the top onboarding caption. Pinned to the very top of the
+    /// view (where the menu bar will later land) so it reads as a header while
+    /// the chrome is still off-screen.
+    private func installOnboardingIntroCaptionIfNeeded() {
+        guard onboardingIntroCaptionLabel.superview == nil else { return }
+        onboardingIntroCaptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        onboardingIntroCaptionLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(
+            size: CosmicFitTheme.Typography.FontSizes.title2,
+            weight: .regular
+        )
+        onboardingIntroCaptionLabel.textAlignment = .center
+        onboardingIntroCaptionLabel.textColor = .white
+        onboardingIntroCaptionLabel.numberOfLines = 0
+        onboardingIntroCaptionLabel.alpha = 0
+        onboardingIntroCaptionLabel.isUserInteractionEnabled = false
+        view.addSubview(onboardingIntroCaptionLabel)
+        NSLayoutConstraint.activate([
+            onboardingIntroCaptionLabel.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 28
+            ),
+            onboardingIntroCaptionLabel.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor, constant: 32
+            ),
+            onboardingIntroCaptionLabel.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor, constant: -32
+            ),
+        ])
     }
 }
 
