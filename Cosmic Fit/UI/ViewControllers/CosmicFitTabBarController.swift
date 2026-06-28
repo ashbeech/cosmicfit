@@ -47,7 +47,7 @@ final class CosmicFitTabBarController: UITabBarController {
 
     // Onboarding chrome intro (first-experience reveal of nav + tab bar)
     private var pendingOnboardingChromeIntro = false
-    private static let chromeIntroSlideDuration: TimeInterval = 0.85
+    private static let chromeIntroSlideDuration: TimeInterval = 0.425
     
     // User profile property
     private var userProfile: UserProfile?
@@ -499,13 +499,26 @@ final class CosmicFitTabBarController: UITabBarController {
         return tabBar.frame.height + view.safeAreaInsets.bottom
     }
 
-    /// Slides the nav + tab bar into their resting positions after `delay`
-    /// seconds, then fades in the Daily Fit "tap to reveal" caption.
+    /// After `delay` seconds, begins the Daily Fit intro caption sequence
+    /// ("Your style, written in the stars." → "Tap to reveal your first daily
+    /// fit.") while the nav + tab bar stay parked off-screen. The chrome is only
+    /// slid into place on the user's first card tap, via the handler armed here,
+    /// so the very first interaction is the deliberate moment everything reveals.
     func playOnboardingChromeIntro(afterDelay delay: TimeInterval) {
         guard pendingOnboardingChromeIntro else { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            self?.beginOnboardingIntroCaptionSequence()
+        }
+    }
+
+    private func beginOnboardingIntroCaptionSequence() {
+        guard pendingOnboardingChromeIntro else { return }
+
+        let dailyFit = onboardingDailyFitViewController()
+        dailyFit?.onboardingFirstCardTapHandler = { [weak self] in
             self?.runOnboardingChromeIntroAnimation()
         }
+        dailyFit?.startOnboardingIntroCaptions()
     }
 
     private func runOnboardingChromeIntroAnimation() {
@@ -534,14 +547,14 @@ final class CosmicFitTabBarController: UITabBarController {
         }
         dailyFit?.animateTopMaskToRest(usingFade: false, duration: duration)
 
+        // No "tap to reveal" caption fade-in here: this slide is now triggered by
+        // the user's first card tap, so the card is already revealing in lockstep
+        // and the caption is no longer needed.
         UIView.animate(
             withDuration: duration,
             delay: 0,
             options: [.curveEaseOut],
-            animations: settleChrome,
-            completion: { _ in
-                dailyFit?.fadeInOnboardingTapToReveal()
-            }
+            animations: settleChrome
         )
     }
 

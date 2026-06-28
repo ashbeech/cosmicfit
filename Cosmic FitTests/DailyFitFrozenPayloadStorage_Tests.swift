@@ -169,4 +169,120 @@ struct DailyFitFrozenPayloadStorage_Tests {
         let decoded = try decoder.decode(DailyFitPayload.self, from: data)
         #expect(decoded.narrativeBrief == nil)
     }
+
+    // MARK: - First Free Daily Fit
+
+    private static let firstFreeKey = "CosmicFit_FirstFreeDailyFitDate"
+    private static let migrationDoneKey = "CosmicFit_FirstFreeMigrationDone"
+
+    private func cleanupFirstFreeKeys() {
+        UserDefaults.standard.removeObject(forKey: Self.firstFreeKey)
+        UserDefaults.standard.removeObject(forKey: Self.migrationDoneKey)
+    }
+
+    @Test("markFirstDailyFitRevealed persists date and is idempotent")
+    func markFirstFreeIsIdempotent() {
+        cleanupFirstFreeKeys()
+        defer { cleanupFirstFreeKeys() }
+
+        let day1 = Date(timeIntervalSince1970: 1_800_000_000)
+        let day2 = Date(timeIntervalSince1970: 1_800_000_000 + 86400)
+
+        DailyFitRevealPersistence.markFirstDailyFitRevealed(for: day1)
+        let stored = DailyFitRevealPersistence.firstFreeRevealDate
+        #expect(stored == DailyFitRevealPersistence.calendarDayString(from: day1))
+
+        DailyFitRevealPersistence.markFirstDailyFitRevealed(for: day2)
+        let stillOriginal = DailyFitRevealPersistence.firstFreeRevealDate
+        #expect(stillOriginal == DailyFitRevealPersistence.calendarDayString(from: day1))
+    }
+
+    @Test("shouldObscureContentForRestrictedUser returns false on first-free day")
+    func firstFreeDayIsNotObscured() {
+        cleanupFirstFreeKeys()
+        defer { cleanupFirstFreeKeys() }
+
+        let day = Date(timeIntervalSince1970: 1_800_000_000)
+        DailyFitRevealPersistence.markFirstDailyFitRevealed(for: day)
+
+        let result = DailyFitRevealPersistence.shouldObscureContentForRestrictedUser(
+            isCardRevealed: true, displayDate: day, hasFullAccess: false
+        )
+        #expect(result == false)
+    }
+
+    @Test("shouldObscureContentForRestrictedUser returns true on a different day")
+    func secondDayIsObscured() {
+        cleanupFirstFreeKeys()
+        defer { cleanupFirstFreeKeys() }
+
+        let day1 = Date(timeIntervalSince1970: 1_800_000_000)
+        let day2 = Date(timeIntervalSince1970: 1_800_000_000 + 86400)
+        DailyFitRevealPersistence.markFirstDailyFitRevealed(for: day1)
+
+        let result = DailyFitRevealPersistence.shouldObscureContentForRestrictedUser(
+            isCardRevealed: true, displayDate: day2, hasFullAccess: false
+        )
+        #expect(result == true)
+    }
+
+    @Test("shouldObscureContentForRestrictedUser returns false when unrevealed")
+    func unrevealedIsNeverObscured() {
+        cleanupFirstFreeKeys()
+        defer { cleanupFirstFreeKeys() }
+
+        let result = DailyFitRevealPersistence.shouldObscureContentForRestrictedUser(
+            isCardRevealed: false, displayDate: Date(), hasFullAccess: false
+        )
+        #expect(result == false)
+    }
+
+    @Test("shouldObscureContentForRestrictedUser returns false with full access")
+    func fullAccessIsNeverObscured() {
+        cleanupFirstFreeKeys()
+        defer { cleanupFirstFreeKeys() }
+
+        let day = Date(timeIntervalSince1970: 1_800_000_000 + 86400)
+        DailyFitRevealPersistence.markFirstDailyFitRevealed(
+            for: Date(timeIntervalSince1970: 1_800_000_000)
+        )
+
+        let result = DailyFitRevealPersistence.shouldObscureContentForRestrictedUser(
+            isCardRevealed: true, displayDate: day, hasFullAccess: true
+        )
+        #expect(result == false)
+    }
+
+    @Test("Migration backfills earliest CardRevealed key")
+    func migrationBackfillsEarliestDate() {
+        cleanupFirstFreeKeys()
+        defer {
+            cleanupFirstFreeKeys()
+            UserDefaults.standard.removeObject(forKey: "CardRevealed_2026-06-20")
+            UserDefaults.standard.removeObject(forKey: "CardRevealed_2026-06-22")
+        }
+
+        UserDefaults.standard.set(true, forKey: "CardRevealed_2026-06-22")
+        UserDefaults.standard.set(true, forKey: "CardRevealed_2026-06-20")
+
+        let date = DailyFitRevealPersistence.firstFreeRevealDate
+        #expect(date == "2026-06-20")
+    }
+
+    @Test("removeAll clears firstFreeRevealDate")
+    func removeAllClearsFirstFree() throws {
+        cleanupFirstFreeKeys()
+        defer { cleanupFirstFreeKeys() }
+
+        let (storage, dir) = try makeTempStorage()
+        defer { cleanup(dir) }
+
+        DailyFitRevealPersistence.markFirstDailyFitRevealed(
+            for: Date(timeIntervalSince1970: 1_800_000_000)
+        )
+        #expect(DailyFitRevealPersistence.firstFreeRevealDate != nil)
+
+        storage.removeAll()
+        #expect(UserDefaults.standard.string(forKey: Self.firstFreeKey) == nil)
+    }
 }
