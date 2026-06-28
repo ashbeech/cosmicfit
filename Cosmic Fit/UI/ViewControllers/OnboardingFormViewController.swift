@@ -1239,6 +1239,11 @@ class OnboardingFormViewController: UIViewController {
         window.rootViewController = tabBar
         window.addSubview(snapshot)
 
+        // First-experience flourish: start the nav + tab bar off-screen now
+        // (hidden behind the snapshot) so the dissolve reveals only the Tarot
+        // card against the animating glyphs. The chrome slides in shortly after.
+        tabBar.prepareOnboardingChromeIntro()
+
         let reduceMotion = UIAccessibility.isReduceMotionEnabled
 
         // Dramatic, lingering quintic ease-in-out: parts slowly from the onboarding,
@@ -1258,6 +1263,9 @@ class OnboardingFormViewController: UIViewController {
         }
         animator.addCompletion { _ in
             snapshot.removeFromSuperview()
+            // The card is now fully on screen. Hold a beat of pure mystique,
+            // then slide the nav + tab bar in and fade up "tap to reveal".
+            tabBar.playOnboardingChromeIntro(afterDelay: 1.0)
         }
         animator.startAnimation(afterDelay: anticipationHold)
     }
