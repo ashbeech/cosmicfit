@@ -9,15 +9,28 @@
 import Foundation
 
 enum DailyFitRevealPersistence {
+
+    // MARK: - Shared date helper
+
+    private static let dayFormatter: DateFormatter = {
+        let fmt = DateFormatter()
+        fmt.locale = Locale(identifier: "en_GB_POSIX")
+        fmt.dateFormat = "yyyy-MM-dd"
+        return fmt
+    }()
+
+    static func calendarDayString(from date: Date) -> String {
+        dayFormatter.timeZone = .current
+        return dayFormatter.string(from: date)
+    }
+
+    // MARK: - Per-day reveal / slider keys
+
     static func revealedFlagKey(
         forCalendarDay date: Date,
         engineId: String = DailyFitEngineRegistry.productionId
     ) -> String {
-        let fmt = DateFormatter()
-        fmt.locale = Locale(identifier: "en_GB_POSIX")
-        fmt.timeZone = TimeZone.current
-        fmt.dateFormat = "yyyy-MM-dd"
-        let day = fmt.string(from: date)
+        let day = calendarDayString(from: date)
         if engineId == DailyFitEngineRegistry.productionId {
             return "CardRevealed_\(day)"
         }
@@ -28,11 +41,7 @@ enum DailyFitRevealPersistence {
         forCalendarDay date: Date,
         engineId: String = DailyFitEngineRegistry.productionId
     ) -> String {
-        let fmt = DateFormatter()
-        fmt.locale = Locale(identifier: "en_GB_POSIX")
-        fmt.timeZone = TimeZone.current
-        fmt.dateFormat = "yyyy-MM-dd"
-        let day = fmt.string(from: date)
+        let day = calendarDayString(from: date)
         if engineId == DailyFitEngineRegistry.productionId {
             return "SliderEntrancePlayed_\(day)"
         }
@@ -58,6 +67,93 @@ enum DailyFitRevealPersistence {
             }
             guard let next = calendar.date(byAdding: .day, value: 1, to: day) else { break }
             day = next
+        }
+    }
+
+    // MARK: - First free daily fit
+
+    private static let firstFreeRevealDateKey = "CosmicFit_FirstFreeDailyFitDate"
+    private static let migrationPerformedKey = "CosmicFit_FirstFreeMigrationDone"
+
+    /// In-memory cache: `nil` means not yet loaded; `.some(nil)` means loaded but no value stored.
+    private static var _cachedFirstFree: String?? = nil
+
+    /// The calendar day (`yyyy-MM-dd`) of the user's first-ever revealed daily fit,
+    /// which is always shown in full regardless of subscription status.
+    static var firstFreeRevealDate: String? {
+        if let cached = _cachedFirstFree { return cached }
+        migrateFirstFreeRevealDateIfNeeded()
+        let value = UserDefaults.standard.string(forKey: firstFreeRevealDateKey)
+        _cachedFirstFree = .some(value)
+        return value
+    }
+
+    /// Records the first-ever revealed daily fit date. No-op if already set.
+    static func markFirstDailyFitRevealed(for date: Date) {
+        guard UserDefaults.standard.string(forKey: firstFreeRevealDateKey) == nil else { return }
+        let day = calendarDayString(from: date)
+        UserDefaults.standard.set(day, forKey: firstFreeRevealDateKey)
+        _cachedFirstFree = .some(day)
+    }
+
+    static func clearFirstFreeRevealDate() {
+        UserDefaults.standard.removeObject(forKey: firstFreeRevealDateKey)
+        UserDefaults.standard.removeObject(forKey: migrationPerformedKey)
+        _cachedFirstFree = nil
+    }
+
+    /// Determines whether the torn-paper paywall should be applied after a card reveal.
+    /// Extracted from `DailyFitViewController` so the logic is unit-testable without a VC.
+    static func shouldObscureContentForRestrictedUser(
+        isCardRevealed: Bool,
+        displayDate: Date,
+        hasFullAccess: Bool
+    ) -> Bool {
+        guard isCardRevealed else { return false }
+        guard !hasFullAccess else { return false }
+        let dayKey = calendarDayString(from: displayDate)
+        if firstFreeRevealDate == dayKey { return false }
+        return true
+    }
+
+    // MARK: - Migration (existing users)
+
+    /// On first read after the update ships, backfills `firstFreeRevealDate` from the
+    /// earliest existing `CardRevealed_*` UserDefaults key so the user's true first
+    /// daily fit retroactively becomes the free day.
+    private static func migrateFirstFreeRevealDateIfNeeded() {
+        guard !UserDefaults.standard.bool(forKey: migrationPerformedKey) else { return }
+        UserDefaults.standard.set(true, forKey: migrationPerformedKey)
+
+        guard UserDefaults.standard.string(forKey: firstFreeRevealDateKey) == nil else { return }
+
+        let datePattern = #"^\d{4}-\d{2}-\d{2}$"#
+        var earliestDate: String?
+        for key in UserDefaults.standard.dictionaryRepresentation().keys {
+            guard key.hasPrefix("CardRevealed_"),
+                  UserDefaults.standard.bool(forKey: key) else { continue }
+
+            let suffix = String(key.dropFirst("CardRevealed_".count))
+            let candidate: String
+            if suffix.range(of: datePattern, options: .regularExpression) != nil {
+                candidate = suffix
+            } else if let lastUnderscore = suffix.lastIndex(of: "_") {
+                let datePart = String(suffix[suffix.index(after: lastUnderscore)...])
+                guard datePart.range(of: datePattern, options: .regularExpression) != nil else { continue }
+                candidate = datePart
+            } else {
+                continue
+            }
+
+            if let current = earliestDate {
+                if candidate < current { earliestDate = candidate }
+            } else {
+                earliestDate = candidate
+            }
+        }
+
+        if let date = earliestDate {
+            UserDefaults.standard.set(date, forKey: firstFreeRevealDateKey)
         }
     }
 }
@@ -89,11 +185,7 @@ final class DailyFitFrozenPayloadStorage {
     }
 
     private func calendarDayString(from date: Date) -> String {
-        let fmt = DateFormatter()
-        fmt.locale = Locale(identifier: "en_GB_POSIX")
-        fmt.timeZone = TimeZone.current
-        fmt.dateFormat = "yyyy-MM-dd"
-        return fmt.string(from: date)
+        DailyFitRevealPersistence.calendarDayString(from: date)
     }
 
     private func legacyFileURL(date: Date, profileKey: String) -> URL {
@@ -162,6 +254,7 @@ final class DailyFitFrozenPayloadStorage {
         }
         lastPurgedEngineId = nil
         clearRevealAndSliderFlags()
+        DailyFitRevealPersistence.clearFirstFreeRevealDate()
     }
 
     /// Clears persisted Daily Fit reveal and slider-animation flags from UserDefaults.
