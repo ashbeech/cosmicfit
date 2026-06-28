@@ -4177,18 +4177,26 @@ extension DailyFitViewController {
         tapToRevealLabel.alpha = 0
     }
 
-    /// Pushes the grey top mask off-screen above the viewport so it slides in
-    /// as one unit with the tab bar controller's menu bar during the intro.
-    func setTopMaskHiddenForIntro(usingFade _: Bool = false, offset: CGFloat) {
+    /// Pushes the grey top mask off-screen (or fades it) so it slides in as one
+    /// unit with the tab bar controller's menu bar during the intro.
+    func setTopMaskHiddenForIntro(usingFade: Bool, offset: CGFloat) {
         view.layoutIfNeeded()
-        topMaskView.transform = CGAffineTransform(translationX: 0, y: -offset)
+        if usingFade {
+            topMaskView.alpha = 0
+        } else {
+            topMaskView.transform = CGAffineTransform(translationX: 0, y: -offset)
+        }
     }
 
-    /// Slides the top mask back to its resting position in lockstep with the
-    /// menu bar.
-    func animateTopMaskToRest(usingFade _: Bool = false, duration: TimeInterval) {
+    /// Slides / fades the top mask back to its resting position in lockstep with
+    /// the menu bar.
+    func animateTopMaskToRest(usingFade: Bool, duration: TimeInterval) {
         UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseOut]) {
-            self.topMaskView.transform = .identity
+            if usingFade {
+                self.topMaskView.alpha = 1
+            } else {
+                self.topMaskView.transform = .identity
+            }
         }
     }
 

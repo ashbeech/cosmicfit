@@ -1000,6 +1000,7 @@ class OnboardingFormViewController: UIViewController {
     private func fadeToPage(_ page: Int) {
         if currentPage == 3 {
             stopPlaceholderAnimation()
+            locationAutocompleteView.dismissSuggestions()
         }
         view.endEditing(true)
 
@@ -1254,7 +1255,7 @@ class OnboardingFormViewController: UIViewController {
                 controlPoint1: CGPoint(x: 0.86, y: 0.0),
                 controlPoint2: CGPoint(x: 0.14, y: 1.0)
             )
-        let duration: TimeInterval = reduceMotion ? 0.4 : 2.4
+        let duration: TimeInterval = reduceMotion ? 0.8 : 4.8
         let anticipationHold: TimeInterval = reduceMotion ? 0 : 0.45
 
         let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timing)

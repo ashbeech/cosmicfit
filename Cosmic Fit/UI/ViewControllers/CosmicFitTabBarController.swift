@@ -102,19 +102,11 @@ final class CosmicFitTabBarController: UITabBarController {
         
         repairIPadTabBarHierarchyIfNeeded()
         refreshTabBarChrome()
-
-        if pendingOnboardingChromeIntro {
-            reapplyOnboardingChromeOffscreenTransforms()
-        }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        if pendingOnboardingChromeIntro {
-            reapplyOnboardingChromeOffscreenTransforms()
-        }
-
+        
         repairIPadTabBarHierarchyIfNeeded()
         updateDetailOverlayBottomInsetIfNeeded()
         // Add dividers after layout is complete
@@ -478,21 +470,33 @@ final class CosmicFitTabBarController: UITabBarController {
         let dailyFit = onboardingDailyFitViewController()
         dailyFit?.beginOnboardingChromeIntro()
 
-        reapplyOnboardingChromeOffscreenTransforms()
-        dailyFit?.setTopMaskHiddenForIntro(usingFade: false,
-                                           offset: menuBarView.frame.maxY + 40)
-    }
-
-    /// Re-applies the offscreen transforms that push the top chrome above the
-    /// viewport and the tab bar below it. Called from `viewDidLayoutSubviews`
-    /// so that UIKit layout passes cannot snap them back to resting position
-    /// while the intro is still pending.
-    private func reapplyOnboardingChromeOffscreenTransforms() {
+        // Push the top chrome above the viewport. These are our own
+        // constraint-based subviews, so a transform parks them reliably.
         let topTravel = menuBarView.frame.maxY + 40
-        let bottomTravel = tabBar.frame.height + view.safeAreaInsets.bottom + 40
         menuBarView.transform = CGAffineTransform(translationX: 0, y: -topTravel)
         statusBarBackdropView.transform = CGAffineTransform(translationX: 0, y: -topTravel)
-        tabBar.transform = CGAffineTransform(translationX: 0, y: bottomTravel)
+        dailyFit?.setTopMaskHiddenForIntro(usingFade: false, offset: topTravel)
+
+        // The UITabBar is repositioned by UITabBarController on every layout pass.
+        // Setting its frame while a transform is applied has undefined behaviour
+        // and can cancel our off-screen offset, flashing the bar on-screen during
+        // the dissolve. So we additionally keep it fully transparent until the
+        // slide begins; it is only made visible once it is parked below the
+        // viewport (see `runOnboardingChromeIntroAnimation`), guaranteeing the
+        // user never sees it before it slides up — and never a fade.
+        tabBar.transform = CGAffineTransform(translationX: 0, y: tabBarOffscreenTranslation())
+        tabBar.alpha = 0
+    }
+
+    /// Distance to translate the tab bar straight down so it sits fully below the
+    /// viewport. Falls back to its own height + safe-area inset if the laid-out
+    /// frame isn't trustworthy yet.
+    private func tabBarOffscreenTranslation() -> CGFloat {
+        let travel = view.bounds.height - tabBar.frame.minY
+        if travel.isFinite, travel > 1 {
+            return travel
+        }
+        return tabBar.frame.height + view.safeAreaInsets.bottom
     }
 
     /// Slides the nav + tab bar into their resting positions after `delay`
@@ -510,6 +514,16 @@ final class CosmicFitTabBarController: UITabBarController {
 
         let dailyFit = onboardingDailyFitViewController()
         let duration = Self.chromeIntroSlideDuration
+
+        // Re-establish the tab bar's off-screen start from a clean slate: its
+        // frame may have been re-laid out (and our transform cancelled) during the
+        // hold. Reset to identity, settle layout, then park it below the viewport
+        // and only now make it visible — while it is still off-screen — so the
+        // reveal is a pure upward slide with no flash and no fade.
+        tabBar.transform = .identity
+        view.layoutIfNeeded()
+        tabBar.transform = CGAffineTransform(translationX: 0, y: tabBarOffscreenTranslation())
+        tabBar.alpha = 1
 
         // Slide the top chrome down from above and the tab bar up from below,
         // in lockstep with the Daily Fit top mask, into their resting positions.

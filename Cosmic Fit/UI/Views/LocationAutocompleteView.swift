@@ -260,6 +260,14 @@ class LocationAutocompleteView: UIView {
         ])
     }
     
+    /// Immediately hides the suggestions dropdown and clears pending search results.
+    /// Call when the autocomplete is being taken off-screen (e.g. page transition).
+    func dismissSuggestions() {
+        searchResults.removeAll()
+        suggestionsTableView.reloadData()
+        hideSuggestions()
+    }
+
     func setText(_ text: String) {
         isUpdatingProgrammatically = true
         textField.text = text
