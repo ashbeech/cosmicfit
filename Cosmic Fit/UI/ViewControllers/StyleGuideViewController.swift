@@ -129,8 +129,6 @@ final class StyleGuideViewController: UIViewController {
 
     private var authNudgeBanner: AuthNudgeBannerView?
 
-    private static let freeSections: Set<StyleGuideDetailContent.StyleGuideSection> = [.styleCore, .palette]
-    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -147,41 +145,12 @@ final class StyleGuideViewController: UIViewController {
             name: .cosmicFitAuthStateChanged,
             object: nil
         )
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(handleEntitlementChange),
-            name: EntitlementManager.entitlementDidChange,
-            object: nil
-        )
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.delegate = self
         updateNudgeVisibility()
-        updateLockStates()
-    }
-
-    @objc private func handleEntitlementChange() {
-        updateLockStates()
-    }
-
-    private func updateLockStates() {
-        let unlocked = EntitlementManager.shared.hasFullAccess
-        let allButtons: [(StyleGuideGridButton, StyleGuideDetailContent.StyleGuideSection)] = [
-            (styleCoreButton, .styleCore),
-            (texturesButton, .textures),
-            (paletteButton, .palette),
-            (occasionsButton, .occasions),
-            (hardwareButton, .hardware),
-            (codeButton, .code),
-            (accessoryButton, .accessory),
-            (patternButton, .pattern),
-        ]
-        for (button, section) in allButtons {
-            button.isLocked = !unlocked && !Self.freeSections.contains(section)
-        }
     }
     
     deinit {
@@ -464,13 +433,6 @@ final class StyleGuideViewController: UIViewController {
             return
         }
 
-        if !Self.freeSections.contains(section) && !EntitlementManager.shared.hasFullAccess {
-            let purchaseVC = PurchaseViewController()
-            let detailVC = GenericDetailViewController(contentViewController: purchaseVC)
-            tabBarController.presentDetailViewController(detailVC, animated: true)
-            return
-        }
-
         let detailVC = StyleGuideDetailViewController()
         let content = createContent(for: section)
         detailVC.configure(with: content)
@@ -529,7 +491,8 @@ final class StyleGuideViewController: UIViewController {
                 textSections: [
                     StyleGuideDetailContent.TextSection(subheading: nil, bodyText: body)
                 ],
-                customComponent: nil
+                customComponent: nil,
+                tearPlacement: .afterStackSubview(index: 0)
             )
 
         case .textures:
@@ -549,7 +512,8 @@ final class StyleGuideViewController: UIViewController {
                     StyleGuideDetailContent.TextSection(subheading: "The Bad", bodyText: bad),
                     StyleGuideDetailContent.TextSection(subheading: "The Sweet Spot", bodyText: sweet)
                 ],
-                customComponent: nil
+                customComponent: nil,
+                tearPlacement: .offsetIntoStackSubview(index: 3, fraction: 0.12)
             )
 
         case .palette:
@@ -588,7 +552,8 @@ final class StyleGuideViewController: UIViewController {
                 title: "The Palette",
                 iconImageName: "palette_glyph",
                 textSections: textSections,
-                customComponent: paletteContainer
+                customComponent: paletteContainer,
+                tearPlacement: .paletteAfterFirstRow
             )
 
         case .occasions:
@@ -608,7 +573,8 @@ final class StyleGuideViewController: UIViewController {
                     StyleGuideDetailContent.TextSection(subheading: "Intimate Energy", bodyText: intimate),
                     StyleGuideDetailContent.TextSection(subheading: "Daily Movement", bodyText: daily)
                 ],
-                customComponent: nil
+                customComponent: nil,
+                tearPlacement: .offsetIntoStackSubview(index: 3, fraction: 0.12)
             )
 
         case .hardware:
@@ -628,7 +594,8 @@ final class StyleGuideViewController: UIViewController {
                     StyleGuideDetailContent.TextSection(subheading: "The Stones", bodyText: stones),
                     StyleGuideDetailContent.TextSection(subheading: "Tip", bodyText: tip)
                 ],
-                customComponent: nil
+                customComponent: nil,
+                tearPlacement: .offsetIntoStackSubview(index: 3, fraction: 0.15)
             )
 
         case .code:
@@ -666,7 +633,8 @@ final class StyleGuideViewController: UIViewController {
                 title: "The Code",
                 iconImageName: "code_glyph",
                 textSections: [],
-                customComponent: codeContainer
+                customComponent: codeContainer,
+                tearPlacement: .codeOffsetIntoLeanIntoBullet(bulletIndex: 2, fraction: 0.5)
             )
 
         case .accessory:
@@ -684,7 +652,8 @@ final class StyleGuideViewController: UIViewController {
                 textSections: paragraphs.map {
                     StyleGuideDetailContent.TextSection(subheading: nil, bodyText: $0)
                 },
-                customComponent: nil
+                customComponent: nil,
+                tearPlacement: .pageContentFraction(0.5)
             )
 
         case .pattern:
@@ -708,12 +677,14 @@ final class StyleGuideViewController: UIViewController {
             }
             textSections.append(StyleGuideDetailContent.TextSection(subheading: "Tip", bodyText: tipText))
 
+            let tipBodyIndex = textSections.count
             return StyleGuideDetailContent(
                 sectionType: .pattern,
                 title: "The Pattern",
                 iconImageName: "pattern_glyph",
                 textSections: textSections,
-                customComponent: nil
+                customComponent: nil,
+                tearPlacement: .offsetIntoStackSubview(index: tipBodyIndex, fraction: 0.15)
             )
         }
     }
@@ -721,10 +692,6 @@ final class StyleGuideViewController: UIViewController {
 
 // MARK: - StyleGuideGridButton
 final class StyleGuideGridButton: UIButton {
-
-    var isLocked: Bool = false {
-        didSet { updateLockedAppearance() }
-    }
 
     private let numberLabel: UILabel = {
         let label = UILabel()
@@ -752,16 +719,6 @@ final class StyleGuideGridButton: UIButton {
         return imageView
     }()
 
-    private let lockIcon: UIImageView = {
-        let config = UIImage.SymbolConfiguration(pointSize: 12, weight: .semibold)
-        let iv = UIImageView(image: UIImage(systemName: "lock.fill", withConfiguration: config))
-        iv.tintColor = CosmicFitTheme.Colours.cosmicBlue
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.isHidden = true
-        iv.isUserInteractionEnabled = false
-        return iv
-    }()
-
     init(number: String, title: String, backgroundImageName: String) {
         super.init(frame: .zero)
         numberLabel.text = number
@@ -786,7 +743,6 @@ final class StyleGuideGridButton: UIButton {
         addSubview(backgroundPatternView)
         addSubview(numberLabel)
         addSubview(buttonTitleLabel)
-        addSubview(lockIcon)
 
         backgroundPatternView.translatesAutoresizingMaskIntoConstraints = false
         numberLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -816,22 +772,13 @@ final class StyleGuideGridButton: UIButton {
             buttonTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             buttonTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             buttonTitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
-
-            lockIcon.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
-            lockIcon.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12),
         ])
-    }
-
-    private func updateLockedAppearance() {
-        alpha = isLocked ? 0.45 : 1.0
-        lockIcon.isHidden = !isLocked
     }
 
     override var isHighlighted: Bool {
         didSet {
-            let base: CGFloat = isLocked ? 0.45 : 1.0
             UIView.animate(withDuration: 0.1) {
-                self.alpha = self.isHighlighted ? base * 0.6 : base
+                self.alpha = self.isHighlighted ? 0.6 : 1.0
             }
         }
     }

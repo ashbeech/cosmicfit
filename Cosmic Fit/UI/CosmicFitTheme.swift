@@ -538,6 +538,24 @@ struct CosmicFitTheme {
         button.layer.masksToBounds = true
     }
 
+    /// Grey bordered pill for unlock CTAs on cosmic-blue glyph backgrounds.
+    /// Matches the gated Daily Fit paywall controls (secondary fill + footnote label + insets).
+    static func styleGatedPaywallButton(_ button: UIButton, title: String) {
+        button.configuration = nil
+        styleButton(button, style: .secondary)
+
+        let font = Typography.dmSansFont(size: Typography.FontSizes.footnote, weight: .medium)
+        var config = UIButton.Configuration.plain()
+        var titleAttributes = AttributeContainer()
+        titleAttributes.font = font
+        config.attributedTitle = AttributedString(title, attributes: titleAttributes)
+        config.baseForegroundColor = Colours.cosmicBlue
+        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 14, bottom: 8, trailing: 14)
+        config.titleLineBreakMode = .byClipping
+        button.configuration = config
+        button.titleLabel?.numberOfLines = 1
+    }
+
     /// Brief confirmation flash for filled `.primary` / `.onboardingAction` buttons:
     /// white → lighter accent → original accent (optional checkmark while flashing).
     static func flashFilledButtonConfirmed(

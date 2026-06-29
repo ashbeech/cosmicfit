@@ -8,6 +8,8 @@ public actor InspectorEngine {
     private var dataset: AstrologicalStyleDataset?
     private var narrativeCache: NarrativeCacheLoader?
     private var isBootstrapped = false
+    private static let debugLogPath = "/Users/ash/dev/mobile_apps/cosmicfit/.cursor/debug-455be3.log"
+    private static let debugSessionId = "455be3"
 
     public init() {}
 
@@ -55,6 +57,26 @@ public actor InspectorEngine {
             throw InspectorError.notBootstrapped
         }
 
+        let runId = "inspector-\(Int(Date().timeIntervalSince1970 * 1000))-\(UUID().uuidString.prefix(8))"
+        let resolveStart = CFAbsoluteTimeGetCurrent()
+        // #region agent log
+        emitDebugLog(
+            runId: runId,
+            hypothesisId: "H2",
+            location: "InspectorEngine.swift:63",
+            message: "resolve request start",
+            data: [
+                "targetDate": request.targetDate,
+                "composeBlueprint": request.options?.composeBlueprint ?? true,
+                "includeProgressed": request.options?.includeProgressed ?? true,
+                "dailyFitEngineId": request.options?.dailyFitEngineId ?? "nil",
+                "hasProfileId": request.options?.profileId != nil,
+                "resetTarotHistory": request.options?.resetTarotHistory ?? false,
+                "resetEssenceRecencyHistory": request.options?.resetEssenceRecencyHistory ?? false
+            ]
+        )
+        // #endregion
+
         let birth = request.birth
         let birthDate = BirthInstantResolver.resolve(
             birthDate: birth.birthDate ?? "",
@@ -98,6 +120,7 @@ public actor InspectorEngine {
 
         var progressedChart: NatalChartCalculator.NatalChart? = nil
         let includeProgressed = request.options?.includeProgressed ?? true
+        let progressedStart = CFAbsoluteTimeGetCurrent()
         if includeProgressed {
             // App uses today's age for all daily-fit dates, not target-date age.
             let currentAge = NatalChartCalculator.calculateCurrentAge(from: birthDate)
@@ -107,8 +130,22 @@ public actor InspectorEngine {
                 timeZone: tz, progressAnglesMethod: .solarArc
             )
         }
+        // #region agent log
+        emitDebugLog(
+            runId: runId,
+            hypothesisId: "H3",
+            location: "InspectorEngine.swift:114",
+            message: "progressed chart segment complete",
+            data: [
+                "includeProgressed": includeProgressed,
+                "durationMs": Int((CFAbsoluteTimeGetCurrent() - progressedStart) * 1000)
+            ]
+        )
+        // #endregion
 
         let composeBlueprint = request.options?.composeBlueprint ?? true
+        let hadBlueprintInCache = blueprintCache[profileHash] != nil
+        let blueprintStart = CFAbsoluteTimeGetCurrent()
         var blueprint: CosmicBlueprint? = blueprintCache[profileHash]
         var blueprintDiagnostics: BlueprintDiagnosticReport? = blueprintDiagnosticsCache[profileHash]
         if blueprint == nil {
@@ -125,6 +162,19 @@ public actor InspectorEngine {
             blueprint = composed.blueprint
             blueprintDiagnostics = composed.diagnostics
         }
+        // #region agent log
+        emitDebugLog(
+            runId: runId,
+            hypothesisId: "H4",
+            location: "InspectorEngine.swift:143",
+            message: "blueprint resolution complete",
+            data: [
+                "hadBlueprintInCache": hadBlueprintInCache,
+                "composeBlueprint": composeBlueprint,
+                "durationMs": Int((CFAbsoluteTimeGetCurrent() - blueprintStart) * 1000)
+            ]
+        )
+        // #endregion
 
         guard let bp = blueprint else {
             throw InspectorError.blueprintRequired
@@ -141,6 +191,7 @@ public actor InspectorEngine {
         let moonPhase = AstronomicalCalculator.calculateLunarPhase(julianDay: julianDay)
 
         // Same diagnostic pipeline as inspector tests; Stage 1/2 math matches app `generateSnapshot` + `generatePayload`.
+        let diagnosticsStart = CFAbsoluteTimeGetCurrent()
         let (payload, report) = DailyFitDiagnostics.generateReport(
             natalChart: natalChart,
             progressedChart: progChart,
@@ -152,6 +203,19 @@ public actor InspectorEngine {
             calibration: engineDescriptor.calibration,
             dailyFitEngineId: engineDescriptor.id
         )
+        // #region agent log
+        emitDebugLog(
+            runId: runId,
+            hypothesisId: "H1",
+            location: "InspectorEngine.swift:186",
+            message: "diagnostics generation complete",
+            data: [
+                "dailyFitEngineId": engineDescriptor.id,
+                "durationMs": Int((CFAbsoluteTimeGetCurrent() - diagnosticsStart) * 1000),
+                "tarotScoreCount": report.tarotCardScores.count
+            ]
+        )
+        // #endregion
 
         let verdicts = VerdictRunner.run(
             payload: payload,
@@ -160,6 +224,19 @@ public actor InspectorEngine {
             targetDate: targetDate,
             dailyFitEngineId: engineDescriptor.id
         )
+        // #region agent log
+        emitDebugLog(
+            runId: runId,
+            hypothesisId: "H2",
+            location: "InspectorEngine.swift:207",
+            message: "resolve request complete",
+            data: [
+                "dailyFitEngineId": engineDescriptor.id,
+                "verdictCount": verdicts.count,
+                "totalDurationMs": Int((CFAbsoluteTimeGetCurrent() - resolveStart) * 1000)
+            ]
+        )
+        // #endregion
 
         return InspectorResponse(
             meta: ResponseMeta(
@@ -201,6 +278,42 @@ public actor InspectorEngine {
         print("[InspectorEngine] Unknown dailyFitEngineId '\(requestedId)'; falling back to production")
         #endif
         return DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)!
+    }
+
+    private func emitDebugLog(
+        runId: String,
+        hypothesisId: String,
+        location: String,
+        message: String,
+        data: [String: Any]
+    ) {
+        var payload: [String: Any] = [
+            "sessionId": Self.debugSessionId,
+            "runId": runId,
+            "hypothesisId": hypothesisId,
+            "location": location,
+            "message": message,
+            "data": data,
+            "timestamp": Int(Date().timeIntervalSince1970 * 1000)
+        ]
+        payload["id"] = "log_\(payload["timestamp"] ?? 0)_\(UUID().uuidString.prefix(8))"
+
+        guard JSONSerialization.isValidJSONObject(payload),
+              let jsonData = try? JSONSerialization.data(withJSONObject: payload, options: []),
+              let line = String(data: jsonData, encoding: .utf8)?.appending("\n"),
+              let lineData = line.data(using: .utf8) else {
+            return
+        }
+
+        let logURL = URL(fileURLWithPath: Self.debugLogPath)
+        if FileManager.default.fileExists(atPath: Self.debugLogPath) {
+            guard let handle = try? FileHandle(forWritingTo: logURL) else { return }
+            defer { try? handle.close() }
+            try? handle.seekToEnd()
+            try? handle.write(contentsOf: lineData)
+        } else {
+            try? lineData.write(to: logURL)
+        }
     }
 }
 

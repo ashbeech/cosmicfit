@@ -295,6 +295,14 @@ class ProfileViewController: UIViewController {
         birthTimeField.isEnabled = !birthTimeIsUnknown
         birthTimeField.alpha = birthTimeIsUnknown ? 0.4 : 1.0
         timeLabel.alpha = birthTimeIsUnknown ? 0.4 : 1.0
+
+        // Once a time is entered, visually de-emphasise the unknown-time option so it
+        // doesn't look required — but keep it tappable in case the user changes their mind.
+        let unknownTimeSubdued = !birthTimeIsUnknown
+        let unknownTimeAlpha: CGFloat = unknownTimeSubdued ? 0.4 : 1.0
+        unknownTimeCheckbox.alpha = unknownTimeAlpha
+        unknownTimeLabel.alpha = unknownTimeAlpha
+
         if birthTimeIsUnknown, birthTimeField.isFirstResponder {
             birthTimeField.resignFirstResponder()
         }

@@ -87,12 +87,36 @@ final class ColourPaletteView: UIView {
         accessibilityContainerType = .semanticGroup
     }
 
+    private var swatchInteractionEnabled = true
+
     // MARK: - Public API
 
     func configure(with grid: PaletteGrid) {
         self.grid = grid
         swatchFocus = nil
         rebuildAllSections()
+    }
+
+    /// When `false`, swatch taps and focus expansion are disabled (e.g. gated paywall).
+    func setSwatchInteractionEnabled(_ enabled: Bool) {
+        guard swatchInteractionEnabled != enabled else { return }
+        swatchInteractionEnabled = enabled
+        if !enabled {
+            dismissFocus()
+        }
+        isUserInteractionEnabled = enabled
+        applySwatchInteractionState()
+    }
+
+    private func applySwatchInteractionState() {
+        for sui in sectionUIs {
+            for (index, swatch) in sui.swatches.enumerated() {
+                if case .filled = sui.cells[index].kind {
+                    swatch.isUserInteractionEnabled = swatchInteractionEnabled
+                }
+            }
+            sui.focusOverlay?.isUserInteractionEnabled = swatchInteractionEnabled
+        }
     }
 
 
@@ -160,6 +184,7 @@ final class ColourPaletteView: UIView {
             sectionUIs.append(sui)
         }
 
+        applySwatchInteractionState()
         lastWidth = 0
         setNeedsLayout()
         invalidateIntrinsicContentSize()
@@ -195,6 +220,7 @@ final class ColourPaletteView: UIView {
     // MARK: - Tap handling
 
     @objc private func onSwatchTap(_ g: SwatchTap) {
+        guard swatchInteractionEnabled else { return }
         let loc = FocusLocation(section: g.sec, cell: g.idx)
         swatchFocus = (swatchFocus == loc) ? nil : loc
         relayout(animated: true)

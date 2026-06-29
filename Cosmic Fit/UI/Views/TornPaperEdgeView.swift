@@ -188,3 +188,30 @@ final class PassthroughContainerView: UIView {
         return nil
     }
 }
+
+/// Keeps the full scroll surface draggable while the gated CTA sits visually
+/// beneath the card. Transparent spacer regions claim the scroll view; only
+/// revealed buttons are forwarded from the CTA layer behind.
+final class GatedPaywallScrollView: UIScrollView {
+    weak var ctaTouchTarget: UIView?
+    var isGatedPaywallActive: (() -> Bool)?
+
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard bounds.contains(point) else { return nil }
+
+        if isGatedPaywallActive?() == true,
+           let target = ctaTouchTarget,
+           !target.isHidden,
+           target.isUserInteractionEnabled {
+            let pointInTarget = convert(point, to: target)
+            if let hit = target.hitTest(pointInTarget, with: event),
+               hit is UIControl {
+                return hit
+            }
+        }
+
+        // Transparent content gaps return nil from super, which would let
+        // touches fall through to the glyph/CTA layers behind the scroll view.
+        return super.hitTest(point, with: event) ?? self
+    }
+}
