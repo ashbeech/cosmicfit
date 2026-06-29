@@ -14,8 +14,6 @@ class FAQViewController: UIViewController {
     private enum Layout {
         /// Profile, Daily Fit text column, GenericDetail close clearance
         static let horizontalMargin: CGFloat = 32
-        /// Style Guide detail: body label inset inside the margin
-        static let bodyTextExtraInset: CGFloat = 10
         static let scrollTopInset: CGFloat = 60
         static let contentViewTopInset: CGFloat = 8
         static let eyebrowTop: CGFloat = 20
@@ -277,8 +275,8 @@ class FAQViewController: UIViewController {
             questionLabel.trailingAnchor.constraint(equalTo: block.trailingAnchor),
 
             answerLabel.topAnchor.constraint(equalTo: questionLabel.bottomAnchor, constant: Layout.questionToAnswer),
-            answerLabel.leadingAnchor.constraint(equalTo: block.leadingAnchor, constant: Layout.bodyTextExtraInset),
-            answerLabel.trailingAnchor.constraint(equalTo: block.trailingAnchor, constant: -Layout.bodyTextExtraInset),
+            answerLabel.leadingAnchor.constraint(equalTo: block.leadingAnchor),
+            answerLabel.trailingAnchor.constraint(equalTo: block.trailingAnchor),
             answerLabel.bottomAnchor.constraint(equalTo: block.bottomAnchor)
         ])
 

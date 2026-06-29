@@ -296,12 +296,15 @@ class ProfileViewController: UIViewController {
         birthTimeField.alpha = birthTimeIsUnknown ? 0.4 : 1.0
         timeLabel.alpha = birthTimeIsUnknown ? 0.4 : 1.0
 
+        // NOTE: This is a UX test to stop users from thinking they need to tick this box once they've interacted with the time field. Some users may automatically think they need to tick it like a terms tick box if it is left not-greyed-out.
         // Once a time is entered, visually de-emphasise the unknown-time option so it
         // doesn't look required — but keep it tappable in case the user changes their mind.
-        let unknownTimeSubdued = !birthTimeIsUnknown
-        let unknownTimeAlpha: CGFloat = unknownTimeSubdued ? 0.4 : 1.0
-        unknownTimeCheckbox.alpha = unknownTimeAlpha
-        unknownTimeLabel.alpha = unknownTimeAlpha
+        // let unknownTimeSubdued = !birthTimeIsUnknown
+        // let unknownTimeAlpha: CGFloat = unknownTimeSubdued ? 0.4 : 1.0
+        // unknownTimeCheckbox.alpha = unknownTimeAlpha
+        // unknownTimeLabel.alpha = unknownTimeAlpha
+        unknownTimeCheckbox.alpha = 1.0
+        unknownTimeLabel.alpha = 1.0
 
         if birthTimeIsUnknown, birthTimeField.isFirstResponder {
             birthTimeField.resignFirstResponder()

@@ -101,7 +101,10 @@ final class StyleGuideDetailViewController: UIViewController {
 
     private let gatedPaywallBackgroundContainer = UIView()
     private let gatedPaywallBackdrop = UIView()
-    private let gatedGlyphBackground = ScrollingRunesBackgroundView(edgeFadeStyle: .launch)
+    private let gatedGlyphBackground = ScrollingRunesBackgroundView(
+        edgeFadeStyle: .launch,
+        glyphColumnTargetAlpha: CosmicFitTheme.gatedPaywallGlyphOpacity
+    )
     private let gatedPaywallMaskLayer = CALayer()
 
     private let gatedCTAContainer = PassthroughContainerView()

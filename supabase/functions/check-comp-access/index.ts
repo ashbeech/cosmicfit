@@ -52,6 +52,12 @@ Deno.serve(async (req) => {
       return errorResponse("INTERNAL", rpcError.message, 500);
     }
 
+    // #region agent log
+    const r = result as Record<string, unknown>;
+    const g = r?.grant as Record<string, unknown> | undefined;
+    console.log(`[check-comp-access][debug-3a0123] userId=${userId ?? 'guest'} installId=${clientInstallId.slice(0,8)}… hasAccess=${r?.hasCompAccess ?? false} slot=${g?.redemptionPosition ?? 'none'}`);
+    // #endregion
+
     return jsonResponse(result);
   } catch (e) {
     return errorResponse("INTERNAL", (e as Error).message, 500);

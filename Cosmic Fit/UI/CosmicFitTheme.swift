@@ -538,6 +538,9 @@ struct CosmicFitTheme {
         button.layer.masksToBounds = true
     }
 
+    /// Scrolling glyph column opacity behind torn-paper gated unlock CTAs (Daily Fit + Style Guide sub-pages).
+    static let gatedPaywallGlyphOpacity: CGFloat = 0.45
+
     /// Grey bordered pill for unlock CTAs on cosmic-blue glyph backgrounds.
     /// Matches the gated Daily Fit paywall controls (secondary fill + footnote label + insets).
     static func styleGatedPaywallButton(_ button: UIButton, title: String) {

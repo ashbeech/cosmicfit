@@ -66,7 +66,7 @@ class AnimatedLaunchScreenViewController: UIViewController {
     /// First launch holds a little after the slow reveal for anticipation; later
     /// launches transition the instant the fast reveal finishes — no extra wait.
     private var minimumAnimationDuration: TimeInterval {
-        isFirstLaunch ? 3.9 : 1.21
+        isFirstLaunch ? 3.9 : 0.605
     }
     
     // MARK: - Lifecycle
@@ -311,13 +311,13 @@ class AnimatedLaunchScreenViewController: UIViewController {
             // Remember we've played the full intro so later launches stay quick.
             UserDefaults.standard.set(true, forKey: Self.hasShownIntroKey)
         } else {
-            // Every subsequent launch: identical sequencing, compressed to ~1s.
+            // Every subsequent launch: identical sequencing, compressed to ~0.6s.
             logoMark.animateGroupedReveal(
                 groups: groups,
-                groupDuration: 0.4,
-                groupStagger: 0.28,
-                elementStagger: 0.05,
-                startDelay: 0.1)
+                groupDuration: 0.2,
+                groupStagger: 0.14,
+                elementStagger: 0.025,
+                startDelay: 0.05)
         }
     }
     

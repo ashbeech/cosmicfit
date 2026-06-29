@@ -109,6 +109,8 @@ class DailyFitViewController: UIViewController {
     private var feedbackTask: Task<Void, Never>?
     private var isSendingFeedback = false
     private var contentBottomToFeedbackConstraint: NSLayoutConstraint?
+    private var feedbackThankYouBottomConstraint: NSLayoutConstraint?
+    private var contentBottomToTomorrowConstraint: NSLayoutConstraint?
 
     // MARK: - Torn-paper paywall (restricted Daily Fit)
 
@@ -118,7 +120,10 @@ class DailyFitViewController: UIViewController {
     /// Opaque launch-style fill + animated glyph field, masked below the tear.
     private let gatedPaywallBackgroundContainer = UIView()
     private let gatedPaywallBackdrop = UIView()
-    private let gatedGlyphBackground = ScrollingRunesBackgroundView(edgeFadeStyle: .launch)
+    private let gatedGlyphBackground = ScrollingRunesBackgroundView(
+        edgeFadeStyle: .launch,
+        glyphColumnTargetAlpha: CosmicFitTheme.gatedPaywallGlyphOpacity
+    )
     private let gatedPaywallMaskLayer = CALayer()
     /// Screen-anchored CTA layer that fades in with scroll progress.
     private let gatedCTAContainer = PassthroughContainerView()
@@ -1018,14 +1023,13 @@ class DailyFitViewController: UIViewController {
                 self.dailyRitualHeaderDivider, self.dailyRitualLabel,
                 self.vibrancyScaleContainer, self.contrastScaleContainer,
                 self.wardrobeReflectionHeaderDivider, self.wardrobeReflectionLabel,
-                self.tomorrowTeaseLabel, self.tomorrowButton,
-                self.feedbackDivider, self.feedbackBodyLabel, self.feedbackTextView, self.feedbackSendButton
+                self.tomorrowTeaseLabel, self.tomorrowButton
             ]
             allContentViews.compactMap { $0 }.forEach { $0.alpha = 1.0 }
-            self.feedbackSendButton.alpha = self.feedbackSendButton.isEnabled ? 1.0 : 0.55
             
             self.scrollView.isScrollEnabled = true
             self.updateRestrictedDailyFitObscuration(animated: false)
+            self.updateFeedbackSectionLayout(setVisibleAlpha: true)
         }
         
         if animated {
@@ -1847,6 +1851,10 @@ class DailyFitViewController: UIViewController {
 
         updateFeedbackSendButtonState()
 
+        setupFeedbackKeyboardDismissal()
+    }
+
+    private func setupFeedbackKeyboardDismissal() {
         let tapToDismiss = UITapGestureRecognizer(target: self, action: #selector(feedbackDismissKeyboard))
         tapToDismiss.cancelsTouchesInView = false
         contentView.addGestureRecognizer(tapToDismiss)
@@ -1870,6 +1878,58 @@ class DailyFitViewController: UIViewController {
             name: UIResponder.keyboardWillHideNotification,
             object: nil
         )
+    }
+
+    private var shouldShowFeedbackSection: Bool {
+        EntitlementManager.shared.hasFullAccess
+    }
+
+    private var feedbackSectionViews: [UIView] {
+        [
+            feedbackDivider, feedbackBodyLabel, feedbackTextView,
+            feedbackSendButton, feedbackThankYouLabel, feedbackErrorLabel
+        ].compactMap { $0 }
+    }
+
+    /// Shows or collapses the feedback block and switches the scroll-content bottom
+    /// anchor between the form, thank-you state, and the tomorrow section.
+    private func updateFeedbackSectionLayout(setVisibleAlpha: Bool = false) {
+        guard !isGatedLayoutActive else {
+            feedbackSectionViews.forEach { $0.isHidden = true }
+            contentBottomToTomorrowConstraint?.isActive = false
+            contentBottomToFeedbackConstraint?.isActive = false
+            feedbackThankYouBottomConstraint?.isActive = false
+            return
+        }
+
+        let showFeedback = shouldShowFeedbackSection
+        let showingThankYou = showFeedback && !feedbackThankYouLabel.isHidden
+
+        if showFeedback {
+            feedbackDivider?.isHidden = false
+            feedbackBodyLabel.isHidden = showingThankYou
+            feedbackTextView.isHidden = showingThankYou
+            feedbackSendButton.isHidden = showingThankYou
+            feedbackErrorLabel.isHidden = true
+            feedbackThankYouLabel.isHidden = !showingThankYou
+        } else {
+            feedbackSectionViews.forEach { $0.isHidden = true }
+        }
+
+        contentBottomToTomorrowConstraint?.isActive = !showFeedback
+        contentBottomToFeedbackConstraint?.isActive = showFeedback && !showingThankYou
+        feedbackThankYouBottomConstraint?.isActive = showFeedback && showingThankYou
+
+        if setVisibleAlpha, showFeedback, isCardRevealed {
+            feedbackDivider?.alpha = 1.0
+            if showingThankYou {
+                feedbackThankYouLabel.alpha = 1.0
+            } else {
+                feedbackBodyLabel.alpha = 1.0
+                feedbackTextView.alpha = 1.0
+                feedbackSendButton.alpha = feedbackSendButton.isEnabled ? 1.0 : 0.55
+            }
+        }
     }
 
     @objc private func feedbackKeyboardWillShow(_ notification: Notification) {
@@ -1947,14 +2007,21 @@ class DailyFitViewController: UIViewController {
 
         feedbackThankYouLabel.isHidden = false
         UIView.animate(withDuration: 0.3) {
-            self.feedbackDivider?.alpha = 0.0
             self.feedbackBodyLabel.alpha = 0.0
             self.feedbackTextView.alpha = 0.0
             self.feedbackSendButton.alpha = 0.0
             self.feedbackErrorLabel.alpha = 0.0
         } completion: { _ in
+            self.feedbackBodyLabel.isHidden = true
+            self.feedbackTextView.isHidden = true
+            self.feedbackSendButton.isHidden = true
+            self.feedbackErrorLabel.isHidden = true
+
+            self.updateFeedbackSectionLayout()
+
             UIView.animate(withDuration: 0.3) {
                 self.feedbackThankYouLabel.alpha = 1.0
+                self.view.layoutIfNeeded()
             }
         }
 
@@ -2000,11 +2067,16 @@ class DailyFitViewController: UIViewController {
             self.feedbackErrorLabel.isHidden = true
             self.updateFeedbackSendButtonState()
 
+            self.feedbackBodyLabel.isHidden = false
+            self.feedbackTextView.isHidden = false
+            self.feedbackSendButton.isHidden = false
+            self.updateFeedbackSectionLayout()
+
             UIView.animate(withDuration: 0.3) {
-                self.feedbackDivider?.alpha = 1.0
                 self.feedbackBodyLabel.alpha = 1.0
                 self.feedbackTextView.alpha = 1.0
                 self.feedbackSendButton.alpha = self.feedbackSendButton.isEnabled ? 1.0 : 0.55
+                self.view.layoutIfNeeded()
             }
         }
     }
@@ -2018,7 +2090,11 @@ class DailyFitViewController: UIViewController {
         feedbackTextView.text = ""
         feedbackTextView.isEditable = true
         feedbackErrorLabel.isHidden = true
+        feedbackBodyLabel.isHidden = false
+        feedbackTextView.isHidden = false
+        feedbackSendButton.isHidden = false
         updateFeedbackSendButtonState()
+        updateFeedbackSectionLayout()
     }
 
     /// Builds the torn-paper edge that caps the card, the animated glyph field
@@ -2244,12 +2320,12 @@ class DailyFitViewController: UIViewController {
 
     /// Views below the tear that must be hidden + collapsed for gated users:
     /// the gated content plus the in-card tomorrow section (replaced by the
-    /// scroll-anchored CTA).
+    /// scroll-anchored CTA). Feedback views are excluded — their visibility
+    /// is managed solely by `updateFeedbackSectionLayout` to avoid the sweep
+    /// overriding the thank-you / form / hidden tri-state.
     private var gatedHiddenContentViews: [UIView] {
         restrictedDailyFitObscuredViews
-            + [finalStarDivider, tomorrowTeaseLabel, tomorrowButton,
-               feedbackDivider, feedbackBodyLabel, feedbackTextView,
-               feedbackSendButton, feedbackThankYouLabel, feedbackErrorLabel].compactMap { $0 }
+            + [finalStarDivider, tomorrowTeaseLabel, tomorrowButton].compactMap { $0 }
     }
 
     private func updateRestrictedDailyFitObscuration(animated: Bool) {
@@ -2262,13 +2338,16 @@ class DailyFitViewController: UIViewController {
     /// caps the card at the tear, collapses the gated content, and reveals the
     /// glyph field + scroll-anchored CTA.
     private func applyGatedLayout(_ gated: Bool, animated: Bool) {
-        contentBottomToFeedbackConstraint?.isActive = !gated
+        isGatedLayoutActive = gated
+
         contentBackgroundBottomFullConstraint?.isActive = !gated
         rebuildGatedCardBottomConstraint(active: gated)
         gatedContentBottomConstraint?.isActive = gated
 
         tornPaperEdgeView.isHidden = !gated
         gatedHiddenContentViews.forEach { $0.isHidden = gated }
+
+        updateFeedbackSectionLayout(setVisibleAlpha: isCardRevealed)
 
         if gated {
             contentView.bringSubviewToFront(tornPaperEdgeView)
@@ -2285,7 +2364,6 @@ class DailyFitViewController: UIViewController {
             resetGatedCTAReveal()
         }
 
-        isGatedLayoutActive = gated
         view.setNeedsLayout()
         view.layoutIfNeeded()
         updateGatedPaywallMetrics()
@@ -3766,14 +3844,23 @@ class DailyFitViewController: UIViewController {
                 ),
                 tomorrowButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 38)
             ])
-        }
 
-        // Feedback section (below tomorrow button, visible only for paid users)
-        if let feedbackDivider = feedbackDivider {
-            let feedbackBottom = feedbackSendButton.bottomAnchor.constraint(
+            contentBottomToTomorrowConstraint = tomorrowButton.bottomAnchor.constraint(
                 equalTo: contentView.bottomAnchor, constant: -Self.contentBottomPaddingBelowTomorrow
             )
-            contentBottomToFeedbackConstraint = feedbackBottom
+        }
+
+        // Feedback section (below tomorrow button, paid subscribers only).
+        // The three mutually-exclusive bottom constraints (tomorrow / form /
+        // thank-you) are NOT batch-activated — `updateFeedbackSectionLayout`
+        // is the sole authority that toggles exactly one of them.
+        if let feedbackDivider = feedbackDivider {
+            contentBottomToFeedbackConstraint = feedbackSendButton.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor, constant: -Self.contentBottomPaddingBelowTomorrow
+            )
+            feedbackThankYouBottomConstraint = feedbackThankYouLabel.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor, constant: -Self.contentBottomPaddingBelowTomorrow
+            )
 
             constraints.append(contentsOf: [
                 feedbackDivider.topAnchor.constraint(equalTo: tomorrowButton.bottomAnchor, constant: sectionSpacing),
@@ -3798,11 +3885,9 @@ class DailyFitViewController: UIViewController {
                 feedbackErrorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
                 feedbackErrorLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
 
-                feedbackThankYouLabel.centerYAnchor.constraint(equalTo: feedbackTextView.centerYAnchor),
+                feedbackThankYouLabel.topAnchor.constraint(equalTo: feedbackDivider.bottomAnchor, constant: 18),
                 feedbackThankYouLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                feedbackThankYouLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
-
-                feedbackBottom
+                feedbackThankYouLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
             ])
         }
 
@@ -3828,6 +3913,7 @@ class DailyFitViewController: UIViewController {
 
         let hasRitual = dailyFitPayload?.styleEditVariant.dailyRitual != nil
         updateDailyRitualLayoutConstraints(hasRitual: hasRitual)
+        updateFeedbackSectionLayout()
     }
 
     private func updateDailyRitualLayoutConstraints(hasRitual: Bool) {

@@ -6,7 +6,7 @@ import { renderFeedbackEmail } from "../_shared/feedback-email.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const FEEDBACK_FROM =
-  Deno.env.get("FEEDBACK_FROM_EMAIL") || "noreply@cosmicfit.app";
+  Deno.env.get("FEEDBACK_FROM_EMAIL") || "feedback@cosmicfit.app";
 const FEEDBACK_TO =
   Deno.env.get("FEEDBACK_TO_EMAIL") || "feedback@cosmicfit.app";
 

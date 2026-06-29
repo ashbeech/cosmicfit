@@ -122,7 +122,6 @@ export function renderEmail({
   <meta name="supported-color-schemes" content="light only" />
   <title>${title}</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
     body { margin:0; padding:0; width:100% !important; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
     table { border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0; }
     img { border:0; height:auto; line-height:100%; outline:none; text-decoration:none; -ms-interpolation-mode:bicubic; }

@@ -19,6 +19,8 @@ class ScrollingRunesBackgroundView: UIView {
     }
 
     var edgeFadeStyle: EdgeFadeStyle = .dailyFit
+    /// Target alpha for scrolling glyph columns when animating. Gated paywalls use a lower value so copy reads clearly.
+    var glyphColumnTargetAlpha: CGFloat = 1.0
 
     // MARK: - Properties
     private let columnCount = 5
@@ -86,8 +88,9 @@ class ScrollingRunesBackgroundView: UIView {
     }
 
     // MARK: - Initialization
-    init(edgeFadeStyle: EdgeFadeStyle = .dailyFit) {
+    init(edgeFadeStyle: EdgeFadeStyle = .dailyFit, glyphColumnTargetAlpha: CGFloat = 1.0) {
         self.edgeFadeStyle = edgeFadeStyle
+        self.glyphColumnTargetAlpha = glyphColumnTargetAlpha
         super.init(frame: .zero)
         setupUI()
     }
@@ -254,7 +257,7 @@ class ScrollingRunesBackgroundView: UIView {
 
         UIView.animate(withDuration: 0.5) {
             for clip in self.columnClips {
-                clip.alpha = 1.0
+                clip.alpha = self.glyphColumnTargetAlpha
             }
             self.topFadeView.alpha = self.edgeFadeTargetAlpha
             self.bottomFadeView.alpha = self.edgeFadeTargetAlpha

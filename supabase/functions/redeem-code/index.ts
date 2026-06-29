@@ -68,6 +68,10 @@ Deno.serve(async (req) => {
       grant?: { code: string; grantedAt: string; expiresAt: string | null };
     };
 
+    // #region agent log
+    console.log(`[redeem-code][debug-3a0123] code=${code} userId=${userId ?? 'guest'} installId=${clientInstallId.slice(0,8)}… ok=${rpcResult.ok} alreadyRedeemed=${rpcResult.alreadyRedeemed ?? false} slot=${(rpcResult.grant as Record<string,unknown>)?.redemptionPosition ?? 'none'}`);
+    // #endregion
+
     if (!rpcResult.ok) {
       const status = rpcResult.error === "ALREADY_REDEEMED" ? 409 : 400;
       return errorResponse(

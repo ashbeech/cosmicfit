@@ -213,6 +213,44 @@ Deno.test({
 });
 
 Deno.test({
+  name: "redeem_promo_code: revoke then new user does NOT reuse slot number",
+  async fn() {
+    await cleanup();
+    const client = svc();
+
+    // User A redeems — gets slot N
+    const { data: rA } = await client.rpc("redeem_promo_code", {
+      p_code: "FIRST50",
+      p_client_install_id: TEST_INSTALL_A,
+      p_user_id: USER_A,
+    });
+    assertEquals(rA.ok, true);
+    const slotA = rA.grant.redemptionPosition;
+
+    // User A revokes
+    await client.rpc("revoke_comp_access", {
+      p_client_install_id: TEST_INSTALL_A,
+      p_user_id: USER_A,
+    });
+
+    // User B redeems — must get a DIFFERENT slot, not reuse User A's
+    const { data: rB } = await client.rpc("redeem_promo_code", {
+      p_code: "FIRST50",
+      p_client_install_id: TEST_INSTALL_B,
+      p_user_id: USER_B,
+    });
+    assertEquals(rB.ok, true);
+    assertNotEquals(
+      rB.grant.redemptionPosition,
+      slotA,
+      `User B got slot ${rB.grant.redemptionPosition} which collides with revoked User A slot ${slotA}`,
+    );
+
+    await cleanup();
+  },
+});
+
+Deno.test({
   name: "revoke_comp_access: deletes only the caller's row, not another user's",
   async fn() {
     await cleanup();

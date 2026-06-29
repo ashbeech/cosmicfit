@@ -370,19 +370,10 @@ final class MenuViewController: UIViewController, MFMailComposeViewControllerDel
     }
     
     @objc private func tiktokButtonTapped() {
-        print("✅ TikTok tapped - opening @cosmicfitapp")
-        
-        let username = "cosmicfitapp"
-        
-        // Try to open TikTok app first
-        if let tiktokAppURL = URL(string: "tiktok://user?username=\(username)"),
-           UIApplication.shared.canOpenURL(tiktokAppURL) {
-            UIApplication.shared.open(tiktokAppURL)
-        } else {
-            // Fallback to web URL
-            if let webURL = URL(string: "https://www.tiktok.com/@\(username)") {
-                UIApplication.shared.open(webURL)
-            }
+        print("✅ TikTok tapped - opening @mariacosmicfit")
+
+        if let profileURL = URL(string: "https://www.tiktok.com/@mariacosmicfit") {
+            UIApplication.shared.open(profileURL)
         }
     }
     

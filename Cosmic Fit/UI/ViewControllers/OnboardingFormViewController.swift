@@ -39,7 +39,7 @@ class OnboardingFormViewController: UIViewController {
     // Page-specific input views
     private let nameTextField = UITextField()
     private let nameDivider = UIView()
-    private let nameSparkleLabel = UILabel()
+    private let nameSparkleImageView = UIImageView()
 
     private let dateLabel = UILabel()
     private let timeLabel = UILabel()
@@ -59,7 +59,7 @@ class OnboardingFormViewController: UIViewController {
     // Page 4 email input views
     private let emailTextField = UITextField()
     private let emailDivider = UIView()
-    private let emailSparkleLabel = UILabel()
+    private let emailSparkleImageView = UIImageView()
 
     // MARK: - Properties
     private var currentPage: Int = 1 {
@@ -262,11 +262,8 @@ class OnboardingFormViewController: UIViewController {
         nameDivider.translatesAutoresizingMaskIntoConstraints = false
         nameDivider.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
 
-        nameSparkleLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameSparkleLabel.text = "✦"
-        nameSparkleLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        nameSparkleLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
-        nameSparkleLabel.textAlignment = .center
+        configureFieldEndStar(nameSparkleImageView)
+        configureFieldEndStar(emailSparkleImageView)
 
         // Date / time labels
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -386,6 +383,14 @@ class OnboardingFormViewController: UIViewController {
                 .font: CosmicFitTheme.Typography.dmSansFont(size: 18, weight: .regular)
             ]
         )
+    }
+
+    /// Branded div-star at the end of onboarding underline fields (same asset as star dividers).
+    private func configureFieldEndStar(_ imageView: UIImageView) {
+        imageView.image = UIImage(named: "star_icon_placeholder")?.withRenderingMode(.alwaysTemplate)
+        imageView.tintColor = CosmicFitTheme.Colours.cosmicBlue
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private func makeKeyboardToolbar() -> UIToolbar {
@@ -612,7 +617,7 @@ class OnboardingFormViewController: UIViewController {
 
         inputContainerView.addSubview(nameTextField)
         inputContainerView.addSubview(nameDivider)
-        inputContainerView.addSubview(nameSparkleLabel)
+        inputContainerView.addSubview(nameSparkleImageView)
 
         NSLayoutConstraint.activate([
             nameTextField.topAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: 24),
@@ -622,12 +627,14 @@ class OnboardingFormViewController: UIViewController {
 
             nameDivider.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 6),
             nameDivider.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
-            nameDivider.trailingAnchor.constraint(equalTo: nameSparkleLabel.leadingAnchor, constant: -underlineToSparkleGap),
+            nameDivider.trailingAnchor.constraint(equalTo: nameSparkleImageView.leadingAnchor, constant: -underlineToSparkleGap),
             nameDivider.heightAnchor.constraint(equalToConstant: 1),
             nameDivider.bottomAnchor.constraint(equalTo: inputContainerView.bottomAnchor),
 
-            nameSparkleLabel.centerYAnchor.constraint(equalTo: nameDivider.centerYAnchor),
-            nameSparkleLabel.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor)
+            nameSparkleImageView.centerYAnchor.constraint(equalTo: nameDivider.centerYAnchor),
+            nameSparkleImageView.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+            nameSparkleImageView.heightAnchor.constraint(equalToConstant: 20),
+            nameSparkleImageView.widthAnchor.constraint(equalToConstant: 20)
         ])
 
         if hasAppearedOnce {
@@ -757,15 +764,9 @@ class OnboardingFormViewController: UIViewController {
         emailDivider.translatesAutoresizingMaskIntoConstraints = false
         emailDivider.backgroundColor = CosmicFitTheme.Colours.cosmicBlue
 
-        emailSparkleLabel.translatesAutoresizingMaskIntoConstraints = false
-        emailSparkleLabel.text = "✦"
-        emailSparkleLabel.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        emailSparkleLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
-        emailSparkleLabel.textAlignment = .center
-
         inputContainerView.addSubview(emailTextField)
         inputContainerView.addSubview(emailDivider)
-        inputContainerView.addSubview(emailSparkleLabel)
+        inputContainerView.addSubview(emailSparkleImageView)
 
         NSLayoutConstraint.activate([
             emailTextField.topAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: 24),
@@ -775,12 +776,14 @@ class OnboardingFormViewController: UIViewController {
 
             emailDivider.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 6),
             emailDivider.leadingAnchor.constraint(equalTo: inputContainerView.leadingAnchor),
-            emailDivider.trailingAnchor.constraint(equalTo: emailSparkleLabel.leadingAnchor, constant: -underlineToSparkleGap),
+            emailDivider.trailingAnchor.constraint(equalTo: emailSparkleImageView.leadingAnchor, constant: -underlineToSparkleGap),
             emailDivider.heightAnchor.constraint(equalToConstant: 1),
             emailDivider.bottomAnchor.constraint(equalTo: inputContainerView.bottomAnchor),
 
-            emailSparkleLabel.centerYAnchor.constraint(equalTo: emailDivider.centerYAnchor),
-            emailSparkleLabel.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor)
+            emailSparkleImageView.centerYAnchor.constraint(equalTo: emailDivider.centerYAnchor),
+            emailSparkleImageView.trailingAnchor.constraint(equalTo: inputContainerView.trailingAnchor),
+            emailSparkleImageView.heightAnchor.constraint(equalToConstant: 20),
+            emailSparkleImageView.widthAnchor.constraint(equalToConstant: 20)
         ])
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
@@ -984,12 +987,15 @@ class OnboardingFormViewController: UIViewController {
         timeField.alpha = hasUnknownTime ? 0.4 : 1.0
         timeLabel.alpha = hasUnknownTime ? 0.4 : 1.0
 
+        // NOTE: This is a UX test to stop users from thinking they need to tick this box once they've interacted with the time field. Some users may automatically think they need to tick it like a terms tick box if it is left not-greyed-out.
         // Once a time is entered, visually de-emphasise the unknown-time option so it
         // doesn't look required — but keep it tappable in case the user changes their mind.
-        let unknownTimeSubdued = hasSelectedTime && !hasUnknownTime
-        let unknownTimeAlpha: CGFloat = unknownTimeSubdued ? 0.4 : 1.0
-        unknownTimeCheckbox.alpha = unknownTimeAlpha
-        unknownTimeLabel.alpha = unknownTimeAlpha
+        // let unknownTimeSubdued = hasSelectedTime && !hasUnknownTime
+        // let unknownTimeAlpha: CGFloat = unknownTimeSubdued ? 0.4 : 1.0
+        // unknownTimeCheckbox.alpha = unknownTimeAlpha
+        // unknownTimeLabel.alpha = unknownTimeAlpha
+        unknownTimeCheckbox.alpha = 1.0
+        unknownTimeLabel.alpha = 1.0
 
         if hasUnknownTime, timeField.isFirstResponder {
             timeField.resignFirstResponder()
