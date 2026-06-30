@@ -3180,6 +3180,7 @@ function closeDrawer() {
 
 const EXPORT_SECTION_LABELS = {
   natal: "Natal Chart",
+  blueprint: "Style Guide",
   dailyfit: "Daily Fit",
   trace: "Trace & Provenance",
   verdicts: "Verdicts",
@@ -3189,6 +3190,7 @@ function updateExportButtons() {
   const data = state.data;
   const flags = {
     natal: !!data?.natal,
+    blueprint: !!data?.blueprint,
     dailyfit: !!data?.dailyFit,
     trace: !!data?.dailyFit?.diagnostics,
     verdicts: !!(data && Array.isArray(data.verdicts)),
@@ -3311,6 +3313,7 @@ function buildSectionMarkdown(section) {
   const entries = exportDayEntries();
   const builders = {
     natal: () => markdownNatal(data.natal),
+    blueprint: () => markdownBlueprint(data.blueprint),
     dailyfit: () => markdownDailyFitExport(entries),
     trace: () => markdownTraceExport(entries),
     verdicts: () => markdownVerdictsExport(entries),
@@ -3444,6 +3447,120 @@ function markdownNatal(natal) {
   }
 
   return md;
+}
+
+function markdownBlueprint(bp) {
+  if (!bp) return "_No Style Guide data._\n";
+  let md = "## Style Guide\n\n";
+
+  if (bp.styleCore?.narrativeText) {
+    md += "### Style Core\n\n" + bp.styleCore.narrativeText + "\n\n";
+  }
+
+  if (bp.palette) {
+    md += "### Palette\n\n";
+    const bands = [
+      ["Neutrals", bp.palette.neutrals],
+      ["Core", bp.palette.coreColours],
+      ["Accents", bp.palette.accentColours],
+      ["Support", bp.palette.supportColours],
+    ];
+    for (const [label, colours] of bands) {
+      if (colours?.length) {
+        md += markdownBlueprintColourBand(label, colours);
+      }
+    }
+
+    const special = [
+      ["Light Anchor", bp.palette.lightAnchor],
+      ["Deep Anchor", bp.palette.deepAnchor],
+      ["Luminary Signature", bp.palette.luminarySignature],
+      ["Ruler Signature", bp.palette.rulerSignature],
+    ].filter(([, c]) => c);
+    if (special.length) {
+      md +=
+        "#### Anchors & Signatures\n\n" +
+        mdTable(
+          ["Role", "Name", "Hex"],
+          special.map(([role, c]) => [role, c.name, c.hexValue]),
+        );
+    }
+
+    if (bp.palette.family || bp.palette.cluster || bp.palette.secondaryPull) {
+      md += "### Palette Engine\n\n";
+      const rows = [];
+      if (bp.palette.family) rows.push(["Family", String(bp.palette.family)]);
+      if (bp.palette.cluster) rows.push(["Cluster", String(bp.palette.cluster)]);
+      if (bp.palette.secondaryPull != null)
+        rows.push(["Secondary pull", String(bp.palette.secondaryPull)]);
+      md += mdTable(["Field", "Value"], rows);
+    }
+  }
+
+  if (bp.textures) {
+    md += "### Textures\n\n";
+    if (bp.textures.recommendedTextures?.length)
+      md += `- **Recommended:** ${mdInlineList(bp.textures.recommendedTextures)}\n`;
+    if (bp.textures.avoidTextures?.length)
+      md += `- **Avoid:** ${mdInlineList(bp.textures.avoidTextures)}\n`;
+    if (bp.textures.goodText) md += `\n${bp.textures.goodText}\n`;
+    md += "\n";
+  }
+
+  if (bp.hardware) {
+    md += "### Hardware\n\n";
+    if (bp.hardware.recommendedMetals?.length)
+      md += `- **Metals:** ${mdInlineList(bp.hardware.recommendedMetals)}\n`;
+    if (bp.hardware.recommendedStones?.length)
+      md += `- **Stones:** ${mdInlineList(bp.hardware.recommendedStones)}\n`;
+    if (bp.hardware.metalsText) md += `\n${bp.hardware.metalsText}\n`;
+    md += "\n";
+  }
+
+  if (bp.code) {
+    md += "### Style Code\n\n";
+    if (bp.code.leanInto?.length)
+      md += `- **Lean into:** ${mdInlineList(bp.code.leanInto)}\n`;
+    if (bp.code.avoid?.length)
+      md += `- **Avoid:** ${mdInlineList(bp.code.avoid)}\n`;
+    if (bp.code.consider?.length)
+      md += `- **Consider:** ${mdInlineList(bp.code.consider)}\n`;
+    md += "\n";
+  }
+
+  if (bp.pattern) {
+    md += "### Patterns\n\n";
+    if (bp.pattern.recommendedPatterns?.length)
+      md += mdInlineList(bp.pattern.recommendedPatterns) + "\n\n";
+    if (bp.pattern.narrativeText) md += bp.pattern.narrativeText + "\n\n";
+  }
+
+  if (bp.occasions) {
+    md += "### Occasions\n\n";
+    if (bp.occasions.workText)
+      md += `- **Work:** ${bp.occasions.workText}\n`;
+    if (bp.occasions.intimateText)
+      md += `- **Intimate:** ${bp.occasions.intimateText}\n`;
+    if (bp.occasions.dailyText)
+      md += `- **Daily:** ${bp.occasions.dailyText}\n`;
+    md += "\n";
+  }
+
+  return md;
+}
+
+function markdownBlueprintColourBand(label, colours) {
+  return (
+    `#### ${label}\n\n` +
+    mdTable(
+      ["Name", "Hex"],
+      colours.map((c) => [c.name, c.hexValue]),
+    )
+  );
+}
+
+function mdInlineList(items) {
+  return (items || []).map((item) => `\`${item}\``).join(", ") || "—";
 }
 
 function markdownDailyFitExport(entries) {
