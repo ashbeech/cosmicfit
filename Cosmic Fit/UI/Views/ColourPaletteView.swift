@@ -459,9 +459,7 @@ final class ColourPaletteView: UIView {
 
         let label = UILabel()
         label.text = text
-        label.font = CosmicFitTheme.Typography.DMSerifTextItalicFont(
-            size: CosmicFitTheme.Typography.FontSizes.sectionHeader
-        )
+        label.font = CosmicFitTheme.Typography.dmSerifTextDisplayItalicFont(size: 19)
         label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
