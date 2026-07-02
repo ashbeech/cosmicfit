@@ -2868,7 +2868,8 @@ class DailyFitViewController: UIViewController {
         
         let label = UILabel()
         label.text = text
-        CosmicFitTheme.styleSubsectionLabel(label, fontSize: CosmicFitTheme.Typography.FontSizes.sectionHeader, italic: true)
+        label.font = CosmicFitTheme.Typography.dmSerifTextDisplayItalicFont(size: 19)
+        label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .center
         label.backgroundColor = CosmicFitTheme.Colours.cosmicGrey
         label.translatesAutoresizingMaskIntoConstraints = false

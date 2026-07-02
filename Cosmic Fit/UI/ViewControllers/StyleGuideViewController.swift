@@ -703,7 +703,7 @@ final class StyleGuideGridButton: UIButton {
 
     private let buttonTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = CosmicFitTheme.Typography.DMSerifTextFont(size: CosmicFitTheme.Typography.FontSizes.body, weight: .semibold)
+        label.font = CosmicFitTheme.Typography.dmSerifTextDisplayFont(size: 23)
         label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .left
         label.numberOfLines = 2
@@ -767,11 +767,11 @@ final class StyleGuideGridButton: UIButton {
 
         NSLayoutConstraint.activate(glyphConstraints + [
             numberLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
-            numberLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            numberLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
 
-            buttonTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            buttonTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            buttonTitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
+            buttonTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            buttonTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            buttonTitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
         ])
     }
 

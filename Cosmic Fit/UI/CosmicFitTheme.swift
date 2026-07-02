@@ -146,7 +146,7 @@ struct CosmicFitTheme {
 
     /// Style Guide sub-page titles — serif section headers ("The Textures", "The Blueprint", etc.).
     struct StyleGuideSubPageTitleTypography {
-        static let letterSpacingFraction: CGFloat = 0.028
+        static let letterSpacingFraction: CGFloat = 0.012
 
         static func attributedString(
             _ text: String,
@@ -154,13 +154,18 @@ struct CosmicFitTheme {
             color: UIColor = Colours.cosmicBlue,
             weight: UIFont.Weight = .bold
         ) -> NSAttributedString {
-            let font = Typography.DMSerifTextFont(size: fontSize, weight: weight)
+            let font = Typography.dmSerifTextDisplayFont(size: fontSize)
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = .center
+            paragraphStyle.lineHeightMultiple = 0.92
+
             return NSAttributedString(
                 string: text,
                 attributes: [
                     .font: font,
                     .foregroundColor: color,
-                    .kern: fontSize * letterSpacingFraction
+                    .kern: fontSize * letterSpacingFraction,
+                    .paragraphStyle: paragraphStyle
                 ]
             )
         }
@@ -267,6 +272,24 @@ struct CosmicFitTheme {
             }
             return DMSerifTextItalicFont(size: size)
         }
+
+        /// The genuine bundled **DM Serif Text** display face (`DMSerifText-Regular.ttf`).
+        /// Note: `DMSerifTextFont(size:weight:)` is a legacy name that actually resolves
+        /// to PT Serif / system serif — use this accessor when the DM Serif Text face is required.
+        static func dmSerifTextDisplayFont(size: CGFloat) -> UIFont {
+            if let customFont = UIFont(name: "DMSerifText-Regular", size: size) {
+                return customFont
+            }
+            return DMSerifTextFont(size: size)
+        }
+
+        /// Italic of the genuine bundled **DM Serif Text** face (`DMSerifText-Italic.ttf`).
+        static func dmSerifTextDisplayItalicFont(size: CGFloat) -> UIFont {
+            if let customFont = UIFont(name: "DMSerifText-Italic", size: size) {
+                return customFont
+            }
+            return DMSerifTextItalicFont(size: size)
+        }
         
         /// DM Sans font for body text (replaces SF Pro Display)
         static func dmSansFont(size: CGFloat, weight: UIFont.Weight = .regular) -> UIFont {
@@ -332,7 +355,7 @@ struct CosmicFitTheme {
     }
     
     private static func applyTabBarItemAppearance(_ itemAppearance: UITabBarItemAppearance) {
-        let titleFont = Typography.DMSerifTextFont(size: Typography.FontSizes.body, weight: .regular)
+        let titleFont = Typography.dmSerifTextDisplayFont(size: Typography.FontSizes.body)
         let titleOffset = UIOffset(horizontal: 0, vertical: -10)
 
         itemAppearance.selected.titleTextAttributes = [
@@ -380,11 +403,11 @@ struct CosmicFitTheme {
             tabBar.items?.forEach { item in
                 item.setTitleTextAttributes([
                     .foregroundColor: Colours.tabBarInactive,
-                    .font: Typography.DMSerifTextFont(size: Typography.FontSizes.body, weight: .regular)
+                    .font: Typography.dmSerifTextDisplayFont(size: Typography.FontSizes.body)
                 ], for: .normal)
                 item.setTitleTextAttributes([
                     .foregroundColor: Colours.tabBarActive,
-                    .font: Typography.DMSerifTextFont(size: Typography.FontSizes.body, weight: .regular)
+                    .font: Typography.dmSerifTextDisplayFont(size: Typography.FontSizes.body)
                 ], for: .selected)
                 item.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: -10)
             }
