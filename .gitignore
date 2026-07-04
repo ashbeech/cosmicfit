@@ -19,3 +19,5 @@ Cosmic Fit.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
 
 # Inspector Swift build artifacts
 inspector/.build/
+
+.claude/settings.local.json
