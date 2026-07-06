@@ -1,0 +1,49 @@
+{
+  "archetype": "cove",
+  "source": "docs/style_guide/golden/cove_ideal.md metadata block",
+  "cluster_key": "venus_cancer__moon_scorpio__water_dominant",
+  "chart_sect": "night",
+  "element_balance": {
+    "fire": 1,
+    "earth": 1,
+    "air": 1,
+    "water": 5
+  },
+  "modality_balance": {
+    "cardinal": 3,
+    "fixed": 3,
+    "mutable": 2
+  },
+  "chart_ruler": "Moon",
+  "sun_sign": "Cancer",
+  "moon_sign": "Scorpio",
+  "venus_sign": "Cancer",
+  "mars_sign": "Aries",
+  "ascendant_sign": "Cancer",
+  "midheaven_sign": "Pisces",
+  "planet_signs": {
+    "Sun": "Cancer",
+    "Moon": "Scorpio",
+    "Mercury": "Taurus",
+    "Venus": "Cancer",
+    "Mars": "Aries",
+    "Jupiter": "Gemini",
+    "Saturn": "Pisces",
+    "Uranus": "Sagittarius",
+    "Neptune": "Capricorn",
+    "Pluto": "Libra"
+  },
+  "planet_houses": {
+    "Sun": 1,
+    "Moon": 4,
+    "Mercury": 12,
+    "Venus": 12,
+    "Mars": 10,
+    "Jupiter": 11,
+    "Saturn": 9,
+    "Uranus": 6,
+    "Neptune": 7,
+    "Pluto": 4
+  },
+  "stellium_signs": []
+}

@@ -1,0 +1,49 @@
+{
+  "archetype": "frost",
+  "source": "docs/style_guide/golden/frost_ideal.md metadata block",
+  "cluster_key": "venus_aquarius__moon_libra__air_dominant",
+  "chart_sect": "night",
+  "element_balance": {
+    "fire": 1,
+    "earth": 1,
+    "air": 5,
+    "water": 1
+  },
+  "modality_balance": {
+    "cardinal": 3,
+    "fixed": 3,
+    "mutable": 2
+  },
+  "chart_ruler": "Venus",
+  "sun_sign": "Aquarius",
+  "moon_sign": "Libra",
+  "venus_sign": "Aquarius",
+  "mars_sign": "Capricorn",
+  "ascendant_sign": "Libra",
+  "midheaven_sign": "Libra",
+  "planet_signs": {
+    "Sun": "Aquarius",
+    "Moon": "Libra",
+    "Mercury": "Gemini",
+    "Venus": "Aquarius",
+    "Mars": "Capricorn",
+    "Jupiter": "Sagittarius",
+    "Saturn": "Scorpio",
+    "Uranus": "Sagittarius",
+    "Neptune": "Capricorn",
+    "Pluto": "Virgo"
+  },
+  "planet_houses": {
+    "Sun": 5,
+    "Moon": 2,
+    "Mercury": 9,
+    "Venus": 5,
+    "Mars": 4,
+    "Jupiter": 3,
+    "Saturn": 2,
+    "Uranus": 3,
+    "Neptune": 4,
+    "Pluto": 12
+  },
+  "stellium_signs": []
+}

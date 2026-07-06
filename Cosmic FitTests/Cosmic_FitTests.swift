@@ -742,7 +742,10 @@ struct HouseSectIntegrationTests {
             Issue.record("Failed to load dataset"); return
         }
 
-        let overlays = HouseSectOverlayGenerator.generate(analysis: analysis, dataset: dataset)
+        let overlays = HouseSectOverlayGenerator.generate(
+            analysis: analysis, dataset: dataset,
+            profile: ChartAestheticProfile.derive(from: analysis)
+        )
 
         let jargonTerms = ["house", "chart", "Venus", "Moon", "Sun", "Mars",
                            "sect", "angular", "cadent", "succedent", "luminary",
@@ -783,8 +786,14 @@ struct HouseSectIntegrationTests {
             planetHouses: ["Venus": 10, "Moon": 4]
         )
 
-        let dayOverlays = HouseSectOverlayGenerator.generate(analysis: dayAnalysis, dataset: dataset)
-        let nightOverlays = HouseSectOverlayGenerator.generate(analysis: nightAnalysis, dataset: dataset)
+        let dayOverlays = HouseSectOverlayGenerator.generate(
+            analysis: dayAnalysis, dataset: dataset,
+            profile: ChartAestheticProfile.derive(from: dayAnalysis)
+        )
+        let nightOverlays = HouseSectOverlayGenerator.generate(
+            analysis: nightAnalysis, dataset: dataset,
+            profile: ChartAestheticProfile.derive(from: nightAnalysis)
+        )
 
         #expect(dayOverlays.styleCoreAppend != nightOverlays.styleCoreAppend)
     }
@@ -801,7 +810,10 @@ struct HouseSectIntegrationTests {
             planetHouses: ["Venus": 1, "Moon": 4]
         )
 
-        let overlays = HouseSectOverlayGenerator.generate(analysis: analysis, dataset: dataset)
+        let overlays = HouseSectOverlayGenerator.generate(
+            analysis: analysis, dataset: dataset,
+            profile: ChartAestheticProfile.derive(from: analysis)
+        )
         #expect(overlays.texturesSweetSpotAppend != nil)
     }
 
@@ -817,7 +829,10 @@ struct HouseSectIntegrationTests {
             planetHouses: ["Venus": 1, "Moon": 1]
         )
 
-        let overlays = HouseSectOverlayGenerator.generate(analysis: analysis, dataset: dataset)
+        let overlays = HouseSectOverlayGenerator.generate(
+            analysis: analysis, dataset: dataset,
+            profile: ChartAestheticProfile.derive(from: analysis)
+        )
         #expect(overlays.occasionsDailyAppend != nil)
     }
 
@@ -852,9 +867,19 @@ struct HouseSectIntegrationTests {
             houseEmphasis: analysis.houseEmphasis
         )
 
-        let overlays = HouseSectOverlayGenerator.generate(analysis: scorpioAnalysis, dataset: dataset)
+        // SG-1 contract: MC text is present and clean of the profile's
+        // excluded keywords (or suppressed entirely). This chart derives
+        // quietLuxury/selfContained; Scorpio MC text passes its screen.
+        let profile = ChartAestheticProfile.derive(from: scorpioAnalysis)
+        let overlays = HouseSectOverlayGenerator.generate(
+            analysis: scorpioAnalysis, dataset: dataset, profile: profile
+        )
         #expect(overlays.styleCoreAppend != nil)
-        #expect(overlays.styleCoreAppend!.contains("magnetic"))
+        #expect(overlays.styleCoreAppend!.contains("public presence"))
+        for keyword in profile.excludedAestheticKeywords {
+            #expect(!overlays.styleCoreAppend!.localizedCaseInsensitiveContains(keyword),
+                    "style_core overlay asserts excluded keyword '\(keyword)'")
+        }
     }
 
     @Test("MC overlay produces Style Core text for all 12 signs")
@@ -890,11 +915,20 @@ struct HouseSectIntegrationTests {
                 houseEmphasis: analysis.houseEmphasis
             )
 
-            let overlays = HouseSectOverlayGenerator.generate(analysis: mcAnalysis, dataset: dataset)
+            // SG-1 contract: the style_core append always exists (sect
+            // overlay at minimum); the MC sentence is either present clean
+            // of the profile's excluded keywords or suppressed by the
+            // gating screen — never appended off-lane.
+            let profile = ChartAestheticProfile.derive(from: mcAnalysis)
+            let overlays = HouseSectOverlayGenerator.generate(
+                analysis: mcAnalysis, dataset: dataset, profile: profile
+            )
             #expect(overlays.styleCoreAppend != nil,
                     "MC sign \(sign) should produce style core text")
-            #expect(overlays.styleCoreAppend!.contains("public style"),
-                    "MC sign \(sign) style core text should contain 'public style'")
+            for keyword in profile.excludedAestheticKeywords {
+                #expect(!overlays.styleCoreAppend!.localizedCaseInsensitiveContains(keyword),
+                        "MC sign \(sign) style core asserts excluded keyword '\(keyword)'")
+            }
         }
     }
 
@@ -927,7 +961,10 @@ struct HouseSectIntegrationTests {
             houseEmphasis: analysis.houseEmphasis
         )
 
-        let overlays = HouseSectOverlayGenerator.generate(analysis: mcAnalysis, dataset: dataset)
+        let overlays = HouseSectOverlayGenerator.generate(
+            analysis: mcAnalysis, dataset: dataset,
+            profile: ChartAestheticProfile.derive(from: mcAnalysis)
+        )
         #expect(overlays.occasionsWorkAppend != nil)
         #expect(overlays.occasionsWorkAppend!.contains("work"))
     }
@@ -967,7 +1004,10 @@ struct HouseSectIntegrationTests {
             )
         )
 
-        let overlays = HouseSectOverlayGenerator.generate(analysis: analysis, dataset: dataset)
+        let overlays = HouseSectOverlayGenerator.generate(
+            analysis: analysis, dataset: dataset,
+            profile: ChartAestheticProfile.derive(from: analysis)
+        )
 
         let workText = overlays.occasionsWorkAppend ?? ""
         #expect(!workText.contains("At work, lean into"),
@@ -1003,9 +1043,14 @@ struct HouseSectIntegrationTests {
             houseEmphasis: analysis.houseEmphasis
         )
 
-        let first = HouseSectOverlayGenerator.generate(analysis: mcAnalysis, dataset: dataset)
+        let mcProfile = ChartAestheticProfile.derive(from: mcAnalysis)
+        let first = HouseSectOverlayGenerator.generate(
+            analysis: mcAnalysis, dataset: dataset, profile: mcProfile
+        )
         for _ in 0..<20 {
-            let run = HouseSectOverlayGenerator.generate(analysis: mcAnalysis, dataset: dataset)
+            let run = HouseSectOverlayGenerator.generate(
+                analysis: mcAnalysis, dataset: dataset, profile: mcProfile
+            )
             #expect(run.styleCoreAppend == first.styleCoreAppend)
             #expect(run.occasionsWorkAppend == first.occasionsWorkAppend)
         }
@@ -1266,7 +1311,10 @@ struct HardeningEdgeCaseTests {
             for house2 in (house1 + 1)...12 {
                 pairCount += 1
                 let analysis = makeOverlayCoverageAnalysis(primaryHouse: house1, secondaryHouse: house2)
-                let overlays = HouseSectOverlayGenerator.generate(analysis: analysis, dataset: dataset)
+                let overlays = HouseSectOverlayGenerator.generate(
+                    analysis: analysis, dataset: dataset,
+                    profile: ChartAestheticProfile.derive(from: analysis)
+                )
                 let allText = [overlays.occasionsWorkAppend, overlays.occasionsDailyAppend]
                     .compactMap { $0 }.joined(separator: " ")
                 if allText.contains("Your style energy concentrates in"), !allText.contains("reflects both") {

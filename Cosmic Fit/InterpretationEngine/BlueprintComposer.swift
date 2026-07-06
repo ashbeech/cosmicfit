@@ -14,6 +14,17 @@ struct BlueprintComposer {
 
     static let engineVersion = "2.1.0"
 
+    /// Belt-and-braces punctuation guard for overlay appends (SG-1 Phase 1d).
+    /// The real fix is at the source (HouseSectOverlayGenerator strings no
+    /// longer carry doubled periods); this strip is a final safety net only.
+    static func sanitizedOverlay(_ text: String) -> String {
+        var result = text
+        while result.contains("..") {
+            result = result.replacingOccurrences(of: "..", with: ".")
+        }
+        return result
+    }
+
     // MARK: - Full Pipeline
 
     /// Runs the complete Blueprint generation pipeline.
@@ -75,25 +86,28 @@ struct BlueprintComposer {
             print("[BlueprintComposer] Narrative fallback: \(keyResult.archetypeCluster) → \(resolvedKey)")
         }
 
+        // SG-1: aesthetic profile gates all runtime overlays (Phase 1c).
+        let aestheticProfile = ChartAestheticProfile.derive(from: analysis)
+
         let overlays = HouseSectOverlayGenerator.generate(
-            analysis: analysis, dataset: dataset
+            analysis: analysis, dataset: dataset, profile: aestheticProfile
         )
 
         var narrativesMut = narratives
         if let append = overlays.styleCoreAppend {
-            narrativesMut["style_core"] = (narrativesMut["style_core"] ?? "") + "\n\n" + append
+            narrativesMut["style_core"] = (narrativesMut["style_core"] ?? "") + "\n\n" + sanitizedOverlay(append)
         }
         if let append = overlays.texturesSweetSpotAppend {
-            narrativesMut["textures_sweet_spot"] = (narrativesMut["textures_sweet_spot"] ?? "") + "\n\n" + append
+            narrativesMut["textures_sweet_spot"] = (narrativesMut["textures_sweet_spot"] ?? "") + "\n\n" + sanitizedOverlay(append)
         }
         if let append = overlays.occasionsWorkAppend {
-            narrativesMut["occasions_work"] = (narrativesMut["occasions_work"] ?? "") + "\n\n" + append
+            narrativesMut["occasions_work"] = (narrativesMut["occasions_work"] ?? "") + "\n\n" + sanitizedOverlay(append)
         }
         if let append = overlays.occasionsIntimateAppend {
-            narrativesMut["occasions_intimate"] = (narrativesMut["occasions_intimate"] ?? "") + "\n\n" + append
+            narrativesMut["occasions_intimate"] = (narrativesMut["occasions_intimate"] ?? "") + "\n\n" + sanitizedOverlay(append)
         }
         if let append = overlays.occasionsDailyAppend {
-            narrativesMut["occasions_daily"] = (narrativesMut["occasions_daily"] ?? "") + "\n\n" + append
+            narrativesMut["occasions_daily"] = (narrativesMut["occasions_daily"] ?? "") + "\n\n" + sanitizedOverlay(append)
         }
 
         let nonAccentTemplateNames = Self.collectNonAccentTemplateNames(colourResult: colourResult)

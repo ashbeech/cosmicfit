@@ -1,0 +1,49 @@
+{
+  "archetype": "hearth",
+  "source": "docs/style_guide/golden/hearth_ideal.md metadata block",
+  "cluster_key": "venus_leo__moon_capricorn__earth_dominant",
+  "chart_sect": "day",
+  "element_balance": {
+    "fire": 1,
+    "earth": 5,
+    "air": 1,
+    "water": 1
+  },
+  "modality_balance": {
+    "cardinal": 3,
+    "fixed": 3,
+    "mutable": 2
+  },
+  "chart_ruler": "Mercury",
+  "sun_sign": "Taurus",
+  "moon_sign": "Capricorn",
+  "venus_sign": "Leo",
+  "mars_sign": "Gemini",
+  "ascendant_sign": "Virgo",
+  "midheaven_sign": "Taurus",
+  "planet_signs": {
+    "Sun": "Taurus",
+    "Moon": "Capricorn",
+    "Mercury": "Taurus",
+    "Venus": "Leo",
+    "Mars": "Gemini",
+    "Jupiter": "Cancer",
+    "Saturn": "Virgo",
+    "Uranus": "Scorpio",
+    "Neptune": "Sagittarius",
+    "Pluto": "Libra"
+  },
+  "planet_houses": {
+    "Sun": 9,
+    "Moon": 10,
+    "Mercury": 9,
+    "Venus": 12,
+    "Mars": 10,
+    "Jupiter": 11,
+    "Saturn": 1,
+    "Uranus": 3,
+    "Neptune": 4,
+    "Pluto": 2
+  },
+  "stellium_signs": []
+}

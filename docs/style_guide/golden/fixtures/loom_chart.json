@@ -1,0 +1,49 @@
+{
+  "archetype": "loom",
+  "source": "docs/style_guide/golden/loom_ideal.md metadata block",
+  "cluster_key": "venus_pisces__moon_virgo__air_dominant",
+  "chart_sect": "day",
+  "element_balance": {
+    "fire": 1,
+    "earth": 2,
+    "air": 3,
+    "water": 2
+  },
+  "modality_balance": {
+    "cardinal": 3,
+    "fixed": 3,
+    "mutable": 2
+  },
+  "chart_ruler": "Venus",
+  "sun_sign": "Gemini",
+  "moon_sign": "Virgo",
+  "venus_sign": "Pisces",
+  "mars_sign": "Aries",
+  "ascendant_sign": "Libra",
+  "midheaven_sign": "Pisces",
+  "planet_signs": {
+    "Sun": "Gemini",
+    "Moon": "Virgo",
+    "Mercury": "Aquarius",
+    "Venus": "Pisces",
+    "Mars": "Aries",
+    "Jupiter": "Taurus",
+    "Saturn": "Cancer",
+    "Uranus": "Sagittarius",
+    "Neptune": "Capricorn",
+    "Pluto": "Scorpio"
+  },
+  "planet_houses": {
+    "Sun": 9,
+    "Moon": 6,
+    "Mercury": 5,
+    "Venus": 6,
+    "Mars": 7,
+    "Jupiter": 8,
+    "Saturn": 10,
+    "Uranus": 3,
+    "Neptune": 4,
+    "Pluto": 2
+  },
+  "stellium_signs": []
+}

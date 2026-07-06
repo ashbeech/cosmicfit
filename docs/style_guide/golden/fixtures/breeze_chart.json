@@ -1,0 +1,49 @@
+{
+  "archetype": "breeze",
+  "source": "docs/style_guide/golden/breeze_ideal.md metadata block",
+  "cluster_key": "venus_libra__moon_gemini__air_dominant",
+  "chart_sect": "day",
+  "element_balance": {
+    "fire": 1,
+    "earth": 1,
+    "air": 5,
+    "water": 1
+  },
+  "modality_balance": {
+    "cardinal": 3,
+    "fixed": 3,
+    "mutable": 2
+  },
+  "chart_ruler": "Venus",
+  "sun_sign": "Aquarius",
+  "moon_sign": "Gemini",
+  "venus_sign": "Libra",
+  "mars_sign": "Leo",
+  "ascendant_sign": "Libra",
+  "midheaven_sign": "Libra",
+  "planet_signs": {
+    "Sun": "Aquarius",
+    "Moon": "Gemini",
+    "Mercury": "Aquarius",
+    "Venus": "Libra",
+    "Mars": "Leo",
+    "Jupiter": "Pisces",
+    "Saturn": "Capricorn",
+    "Uranus": "Taurus",
+    "Neptune": "Scorpio",
+    "Pluto": "Virgo"
+  },
+  "planet_houses": {
+    "Sun": 5,
+    "Moon": 7,
+    "Mercury": 5,
+    "Venus": 1,
+    "Mars": 11,
+    "Jupiter": 6,
+    "Saturn": 4,
+    "Uranus": 8,
+    "Neptune": 2,
+    "Pluto": 12
+  },
+  "stellium_signs": []
+}

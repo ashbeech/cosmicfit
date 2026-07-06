@@ -1,0 +1,49 @@
+{
+  "archetype": "flint",
+  "source": "docs/style_guide/golden/flint_ideal.md metadata block",
+  "cluster_key": "venus_virgo__moon_virgo__earth_dominant",
+  "chart_sect": "day",
+  "element_balance": {
+    "fire": 1,
+    "earth": 5,
+    "air": 1,
+    "water": 1
+  },
+  "modality_balance": {
+    "cardinal": 3,
+    "fixed": 3,
+    "mutable": 2
+  },
+  "chart_ruler": "Saturn",
+  "sun_sign": "Taurus",
+  "moon_sign": "Virgo",
+  "venus_sign": "Virgo",
+  "mars_sign": "Aries",
+  "ascendant_sign": "Capricorn",
+  "midheaven_sign": "Virgo",
+  "planet_signs": {
+    "Sun": "Taurus",
+    "Moon": "Virgo",
+    "Mercury": "Capricorn",
+    "Venus": "Virgo",
+    "Mars": "Aries",
+    "Jupiter": "Gemini",
+    "Saturn": "Cancer",
+    "Uranus": "Scorpio",
+    "Neptune": "Sagittarius",
+    "Pluto": "Libra"
+  },
+  "planet_houses": {
+    "Sun": 5,
+    "Moon": 6,
+    "Mercury": 1,
+    "Venus": 6,
+    "Mars": 4,
+    "Jupiter": 6,
+    "Saturn": 7,
+    "Uranus": 10,
+    "Neptune": 11,
+    "Pluto": 9
+  },
+  "stellium_signs": []
+}
