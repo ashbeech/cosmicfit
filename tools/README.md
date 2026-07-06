@@ -64,20 +64,28 @@ Output files are written to `data/style_guide/`:
 
 Markdown audit outputs are generated reports, not architecture handoffs. Use the root `README.md` for current app behaviour and `docs/README.md` for documentation status labels.
 
-## Audit correction (apply fixes)
+## Content backups (hard gate for all copy amendments)
 
-Applies deterministic mechanical fixes and AI-generated rewrites using the handoff pack as a queue.
-
-**Before the first apply run**, snapshot canonical sources:
+**Rule:** no script may amend user-facing copy (Style Guide or Daily Fit) until a dated backup exists for the current UTC date. Use the unified backup tool:
 
 ```bash
-python3 tools/backup_style_guide_sources.py backup --label 2026-06-16
-python3 tools/backup_style_guide_sources.py list
-# Restore if needed:
-python3 tools/backup_style_guide_sources.py restore
+# Snapshot both copy domains (Style Guide + Daily Fit)
+python3 tools/backup_content_sources.py backup --domain all --label <purpose-slug>
+python3 tools/backup_content_sources.py list
+# Restore (defaults to data/content_backups/LATEST.txt)
+python3 tools/backup_content_sources.py restore
+python3 tools/backup_content_sources.py restore --backup-dir data/content_backups/<dir> --dry-run
 ```
 
-Backups live under `data/style_guide/backups/`; the latest path is in `LATEST_PRE_CORRECTION.txt`.
+Backups live under `data/content_backups/{YYYY-MM-DD}_{label}/` with a `manifest.json` (files, byte sizes, sha256, restore command) and a `LATEST.txt` pointer.
+
+The gate is **enforced in code and non-interactive by construction**: `backfill_narratives.py` and `content_audit_apply.py` exit non-zero with instructions if no same-day backup exists. Accepted overrides: `--backup-dir <existing snapshot>` or `--force-no-backup` (emergencies only). The scripts never prompt on stdin.
+
+`tools/backup_style_guide_sources.py` and its snapshots under `data/style_guide/backups/` remain valid historical backups; all new work uses `backup_content_sources.py`.
+
+## Audit correction (apply fixes)
+
+Applies deterministic mechanical fixes and AI-generated rewrites using the handoff pack as a queue. Requires a same-day content backup (see above).
 
 ```bash
 # 1. Mechanical fixes only (fast, no API key needed)

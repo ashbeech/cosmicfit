@@ -133,6 +133,8 @@ A quick reference guide based on what consistently flatters you versus what sits
 
 ### Lean Into
 
+The core formula. Build every outfit on structure + softness + a touch of quiet depth.
+
 Investing slowly. Every new piece should feel like an intentional choice.
 
 Using the touch test first. Evaluate the weight of the fabric, the feel against your skin, and the sturdiness of the closures before looking at the design.

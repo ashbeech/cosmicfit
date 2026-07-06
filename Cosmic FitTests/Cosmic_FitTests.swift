@@ -74,7 +74,9 @@ struct BlueprintModelTests {
         #expect(!bp.textures.badText.isEmpty)
         #expect(!bp.textures.sweetSpotText.isEmpty)
         #expect(bp.palette.coreColours.count >= 3)
-        #expect(bp.palette.accentColours.count >= 2)
+        // Chart-derived accent band is 1...2 (see MariaAshLocked_Tests); the
+        // regenerated fixtures are Ash=1, Maria=2, so the shape floor is >= 1.
+        #expect(bp.palette.accentColours.count >= 1)
         #expect(!bp.palette.narrativeText.isEmpty)
         #expect(!bp.occasions.workText.isEmpty)
         #expect(!bp.occasions.intimateText.isEmpty)
@@ -108,7 +110,9 @@ struct BlueprintModelTests {
         #expect(!bp.textures.badText.isEmpty)
         #expect(!bp.textures.sweetSpotText.isEmpty)
         #expect(bp.palette.coreColours.count >= 3)
-        #expect(bp.palette.accentColours.count >= 2)
+        // Chart-derived accent band is 1...2 (see MariaAshLocked_Tests); the
+        // regenerated fixtures are Ash=1, Maria=2, so the shape floor is >= 1.
+        #expect(bp.palette.accentColours.count >= 1)
         #expect(!bp.palette.narrativeText.isEmpty)
         #expect(!bp.occasions.workText.isEmpty)
         #expect(!bp.occasions.intimateText.isEmpty)

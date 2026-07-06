@@ -78,8 +78,10 @@ struct FixtureRegeneration {
         decoder.dateDecodingStrategy = .iso8601
         let fixture = try decoder.decode(CosmicBlueprint.self, from: data)
 
-        #expect(fixture.palette.accentColours.count >= 2,
-                "Fixture \(filename) must have at least 2 accents")
+        // Accent slots are chart-derived and range 1...2 since the palette
+        // calibration lock (see MariaAshLocked_Tests): Ash's chart yields 1.
+        #expect(fixture.palette.accentColours.count >= 1,
+                "Fixture \(filename) must have at least 1 accent")
         #expect(fixture.palette.coreColours.count >= 3,
                 "Fixture \(filename) must have at least 3 core colours")
     }
@@ -121,9 +123,10 @@ struct FixtureRegeneration {
         print("[FixtureRegeneration] Wrote \(fixtureURL.path)")
 
         // Contract check — no point regenerating if the new shape violates
-        // the §11.4 updated checklist.
-        #expect(frozen.palette.accentColours.count >= 2,
-                "Regenerated fixture \(fixtureFilename) must have at least 2 accents")
+        // the §11.4 updated checklist. Accent floor is 1 (chart-derived slots
+        // range 1...2 since the palette calibration lock; Ash yields 1).
+        #expect(frozen.palette.accentColours.count >= 1,
+                "Regenerated fixture \(fixtureFilename) must have at least 1 accent")
         #expect(frozen.palette.coreColours.count >= 3,
                 "Regenerated fixture \(fixtureFilename) must have at least 3 core colours")
     }

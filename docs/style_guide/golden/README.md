@@ -9,9 +9,9 @@ This directory holds the hand-authored **ideal Style Guides** required by SG-0 (
 
 ## Non-circularity rule (binding)
 
-**Slate is the reference chart** (Maria, birth 1989-04-28 04:30 Athens, cluster `venus_taurus__moon_capricorn__earth_dominant`; natal export in `cosmicfit_slate_natal_2026-06-29_to_2026-07-12_14d.md`). Slate's own cluster is **excluded from self-scoring** in all golden review and regression-diff acceptance. The standard is proven by the other 11 guides, never by grading Maria against Maria. This rule must also appear in the header of `style_standard.md`.
+**Slate is the reference chart** (Maria, birth 1989-04-28 04:30 Athens, cluster `venus_taurus__moon_capricorn__earth_dominant`; natal export in `cosmicfit_slate_natal_2026-06-29_to_2026-07-12_14d.md`). Slate's own cluster is **excluded from self-scoring** in all golden review and regression-diff acceptance. The standard is proven by the other 15 non-reference guides, never by grading Maria against Maria. This rule must also appear in the header of `style_standard.md`.
 
-## The set (12 guides)
+## The set (16 guides)
 
 Every guide file begins with an HTML-comment metadata block (internal reference, invisible when rendered, **not** user-facing copy) recording its chart, profile dimensions, coreFormula, and accessory plan. The body below the comment is a 1:1 mock of the app's final composed user-facing output.
 
@@ -76,7 +76,8 @@ Each guide follows the same information architecture (this is what `style_standa
 ## Decisions made during authoring (feed into SG-0/SG-1)
 
 1. **Tide is slot 12, not slot 4.** Tide's palette is explicitly warm-deep, which only reconciles with a water Venus through the Scorpio-Venus "warm-deep despite water" nuance in the SG-1 temperature table. Cove was authored as the slot-4 cool-water guide. Tide is therefore the canonical test vector for the sign-level temperature nuance.
-2. **Recommended numeric floors for `style_standard.md`** (validated against all 12): >=6 named foundation/neutral colours in Palette; 7 ranked fibres in Textures Good; >=3 accessory categories; >=1 named test or trap per section (all guides exceed this).
-3. **The formula must appear at minimum in**: Blueprint (verbatim `X + Y + Z`), Occasions (intro or constancy line), Code (first Lean Into), Accessory (opening), and the closing line. All 12 comply; the validator (`p4-formula`) can require exactly this.
+2. **Recommended numeric floors for `style_standard.md`** (validated against all 16): >=6 named foundation/neutral colours in Palette; 7 ranked fibres in Textures Good; >=3 accessory categories; >=1 named test or trap per section (all guides exceed this).
+3. **The formula must appear at minimum in**: Blueprint (verbatim `X + Y + Z`), Occasions (intro or constancy line), Code (first Lean Into), Accessory (opening), and the closing line. All 16 comply; the validator (`p4-formula`) can require exactly this.
 4. **Metadata blocks are the seed of `profile_expectations.json`.** When SG-1 builds `ChartAestheticProfile`, its derivation must reproduce each guide's recorded dimensions from the chart facts on the same line. Where a derivation rule and a guide disagree, the guide wins and the rule is amended (the guides are the test vectors).
 5. **Slate's guide title is the archetype name (Slate), not the user name (Maria)**, matching all other guides; the engine substitutes the real display name at composition time.
+6. **SG-0 rubric validation (2026-07-06):** `docs/style_guide/style_standard.md` now formalises this contract and `tools/check_golden_guides.py` verifies it; all 16 guides pass. Three mechanical amendments were made during validation (no voice or content re-authoring): Zephyr "Matte silk" -> "Matt silk"; Ember gained 2 ranked fibres to meet the 7-fibre floor and its Accessory opening now references all three formula slots; Slate's Code first Lean Into now states the coreFormula (aligning the reference guide with decision #3 above).

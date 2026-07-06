@@ -33,6 +33,7 @@ from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from backup_content_sources import require_backup_gate
 from content_audit_json_path import get_at_path, set_at_path, path_exists, _MISSING
 from gemini_client import (
     GeminiClient,
@@ -909,7 +910,22 @@ def main():
                         help="Run validation and re-audit after fixes")
     parser.add_argument("--api-key", default=None, help="Gemini API key override")
     parser.add_argument("--model", default=None, help="Gemini model name override")
+    parser.add_argument("--backup-dir", default=None,
+                        help="Existing content backup directory satisfying the backup gate "
+                             "(default: a data/content_backups/ snapshot for the current UTC date)")
+    parser.add_argument("--force-no-backup", action="store_true",
+                        help="EMERGENCY ONLY: bypass the content-backup hard gate")
     args = parser.parse_args()
+
+    # Content-backup hard gate (Style Guide Quality Overhaul, Phase -1).
+    # Non-interactive by construction: exits 2 with a message, never prompts.
+    # Dry runs write nothing, so the gate only applies to real runs.
+    if not args.dry_run:
+        require_backup_gate(
+            script_name="content_audit_apply.py",
+            backup_dir_arg=args.backup_dir,
+            force_no_backup=args.force_no_backup,
+        )
 
     load_local_env_file()
 

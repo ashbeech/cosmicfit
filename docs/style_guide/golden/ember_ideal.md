@@ -59,6 +59,10 @@ Your best materials, ranked by how they serve your fast-paced style:
 
 **Heavy silk crepe**: The foundation for your softer pieces. It drapes cleanly without clinging, allowing for rapid and frictionless movement.
 
+**Sharp wool twill**: The backbone of your tailoring. It carries a knife-edge crease from the first meeting to the last without begging for a steamer.
+
+**Stretch cotton sateen**: A sleek base for fitted pieces. It moves at your full stride while keeping a smooth, light-catching surface.
+
 **Patent leather**: Brilliant for footwear and accessories, offering a smooth surface that reflects maximum light.
 
 **High-gloss synthetics**: Ideal for modern outerwear, bringing an aggressive, polished sheen that demands attention instantly.
@@ -151,7 +155,7 @@ Asking yourself if you would still wear a piece in five to ten years. If it is n
 
 ## 7. The Accessory
 
-Accessories are where you deploy the final phase of your formula. This is your one hot accent. Instead of piling on delicate trinkets, you make a single aggressive choice. The core principle here is to stick to one or two strong pieces per look.
+Accessories are where you deploy the final phase of your formula. The clean impact and fast movement come from the clothes; this is your one hot accent. Instead of piling on delicate trinkets, you make a single aggressive choice. The core principle here is to stick to one or two strong pieces per look.
 
 Handbags must be structural and graphic. Look for rigid top handle bags, sharp envelopes, or sleek clutches in high gloss patent leather or saturated primary colours. A bright orange box bag instantly wakes up a stark black suit.
 

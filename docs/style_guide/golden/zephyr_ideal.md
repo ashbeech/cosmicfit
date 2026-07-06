@@ -63,7 +63,7 @@ Prioritise these core fibres for maximum modularity:
 
 **Crisp linen**: Excellent for warmer weather when you need breathable separation over fluid drapes.
 
-**Matte silk**: Adds a frictionless layer to your layered outfits without introducing heavy bulk.
+**Matt silk**: Adds a frictionless layer to your layered outfits without introducing heavy bulk.
 
 ### The Bad
 

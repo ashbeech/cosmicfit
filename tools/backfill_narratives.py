@@ -31,6 +31,9 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from backup_content_sources import require_backup_gate
+
 try:
     import google.generativeai as genai
 except ImportError:
@@ -866,7 +869,21 @@ def main():
                         help="Max clusters to generate (0 = all). Use with a small number to test quality.")
     parser.add_argument("--model",
                         help="Gemini model name (overrides .env / environment; default: gemini-2.0-flash)")
+    parser.add_argument("--backup-dir", default=None,
+                        help="Existing content backup directory satisfying the backup gate "
+                             "(default: a data/content_backups/ snapshot for the current UTC date)")
+    parser.add_argument("--force-no-backup", action="store_true",
+                        help="EMERGENCY ONLY: bypass the content-backup hard gate")
     args = parser.parse_args()
+
+    # Content-backup hard gate (Style Guide Quality Overhaul, Phase -1).
+    # Non-interactive by construction: exits 2 with a message, never prompts.
+    require_backup_gate(
+        script_name="backfill_narratives.py",
+        backup_dir_arg=args.backup_dir,
+        force_no_backup=args.force_no_backup,
+    )
+
     api_keys = resolve_api_keys(args.api_key)
     model_name = resolve_model_name(args.model)
     key_index = 0

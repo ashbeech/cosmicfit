@@ -1,0 +1,5570 @@
+{
+  "generated_at": "2026-07-06T13:40:11.190737+00:00",
+  "cache_file": "/Users/ash/dev/mobile_apps/cosmicfit/data/style_guide/blueprint_narrative_cache.json",
+  "clusters_analysed": 576,
+  "method": "2/3/4-word n-grams within sentence bounds, placeholders excluded; ranked by distinct-cluster coverage; all-function-word grams excluded",
+  "folklore_floor": {
+    "unbothered": {
+      "total_occurrences": 474,
+      "clusters": 318
+    },
+    "signs the cheques": {
+      "total_occurrences": 3,
+      "clusters": 3
+    },
+    "devastatingly chic": {
+      "total_occurrences": 0,
+      "clusters": 0
+    },
+    "command the room": {
+      "total_occurrences": 82,
+      "clusters": 74
+    },
+    "quiet expensive authority": {
+      "total_occurrences": 0,
+      "clusters": 0
+    },
+    "effortlessly elegant": {
+      "total_occurrences": 5,
+      "clusters": 5
+    }
+  },
+  "global_top": {
+    "2": [
+      {
+        "phrase": "rather than",
+        "clusters": 575,
+        "cluster_pct": 99.8,
+        "occurrences": 3811
+      },
+      {
+        "phrase": "you want",
+        "clusters": 566,
+        "cluster_pct": 98.3,
+        "occurrences": 1915
+      },
+      {
+        "phrase": "your wardrobe",
+        "clusters": 564,
+        "cluster_pct": 97.9,
+        "occurrences": 1927
+      },
+      {
+        "phrase": "a heavy",
+        "clusters": 551,
+        "cluster_pct": 95.7,
+        "occurrences": 1805
+      },
+      {
+        "phrase": "like a",
+        "clusters": 549,
+        "cluster_pct": 95.3,
+        "occurrences": 1862
+      },
+      {
+        "phrase": "you need",
+        "clusters": 541,
+        "cluster_pct": 93.9,
+        "occurrences": 1476
+      },
+      {
+        "phrase": "look for",
+        "clusters": 514,
+        "cluster_pct": 89.2,
+        "occurrences": 1211
+      },
+      {
+        "phrase": "a single",
+        "clusters": 504,
+        "cluster_pct": 87.5,
+        "occurrences": 827
+      },
+      {
+        "phrase": "sense of",
+        "clusters": 498,
+        "cluster_pct": 86.5,
+        "occurrences": 1541
+      },
+      {
+        "phrase": "pieces that",
+        "clusters": 497,
+        "cluster_pct": 86.3,
+        "occurrences": 1069
+      },
+      {
+        "phrase": "needs to",
+        "clusters": 488,
+        "cluster_pct": 84.7,
+        "occurrences": 968
+      },
+      {
+        "phrase": "your clothes",
+        "clusters": 484,
+        "cluster_pct": 84.0,
+        "occurrences": 983
+      },
+      {
+        "phrase": "a room",
+        "clusters": 479,
+        "cluster_pct": 83.2,
+        "occurrences": 991
+      },
+      {
+        "phrase": "the room",
+        "clusters": 473,
+        "cluster_pct": 82.1,
+        "occurrences": 1002
+      },
+      {
+        "phrase": "relies on",
+        "clusters": 470,
+        "cluster_pct": 81.6,
+        "occurrences": 904
+      },
+      {
+        "phrase": "scent of",
+        "clusters": 460,
+        "cluster_pct": 79.9,
+        "occurrences": 460
+      },
+      {
+        "phrase": "that feels",
+        "clusters": 459,
+        "cluster_pct": 79.7,
+        "occurrences": 879
+      },
+      {
+        "phrase": "garments that",
+        "clusters": 456,
+        "cluster_pct": 79.2,
+        "occurrences": 832
+      },
+      {
+        "phrase": "that feel",
+        "clusters": 452,
+        "cluster_pct": 78.5,
+        "occurrences": 939
+      },
+      {
+        "phrase": "your daily",
+        "clusters": 438,
+        "cluster_pct": 76.0,
+        "occurrences": 772
+      },
+      {
+        "phrase": "the body",
+        "clusters": 432,
+        "cluster_pct": 75.0,
+        "occurrences": 859
+      },
+      {
+        "phrase": "seek out",
+        "clusters": 432,
+        "cluster_pct": 75.0,
+        "occurrences": 777
+      },
+      {
+        "phrase": "your natural",
+        "clusters": 429,
+        "cluster_pct": 74.5,
+        "occurrences": 945
+      },
+      {
+        "phrase": "a thick",
+        "clusters": 429,
+        "cluster_pct": 74.5,
+        "occurrences": 850
+      },
+      {
+        "phrase": "rely on",
+        "clusters": 427,
+        "cluster_pct": 74.1,
+        "occurrences": 727
+      },
+      {
+        "phrase": "a piece",
+        "clusters": 426,
+        "cluster_pct": 74.0,
+        "occurrences": 639
+      },
+      {
+        "phrase": "an immediate",
+        "clusters": 425,
+        "cluster_pct": 73.8,
+        "occurrences": 820
+      },
+      {
+        "phrase": "keep the",
+        "clusters": 418,
+        "cluster_pct": 72.6,
+        "occurrences": 747
+      },
+      {
+        "phrase": "against the",
+        "clusters": 417,
+        "cluster_pct": 72.4,
+        "occurrences": 594
+      },
+      {
+        "phrase": "to feel",
+        "clusters": 404,
+        "cluster_pct": 70.1,
+        "occurrences": 698
+      },
+      {
+        "phrase": "the skin",
+        "clusters": 401,
+        "cluster_pct": 69.6,
+        "occurrences": 683
+      },
+      {
+        "phrase": "you wear",
+        "clusters": 399,
+        "cluster_pct": 69.3,
+        "occurrences": 683
+      },
+      {
+        "phrase": "you walk",
+        "clusters": 391,
+        "cluster_pct": 67.9,
+        "occurrences": 694
+      },
+      {
+        "phrase": "to look",
+        "clusters": 391,
+        "cluster_pct": 67.9,
+        "occurrences": 657
+      },
+      {
+        "phrase": "need to",
+        "clusters": 390,
+        "cluster_pct": 67.7,
+        "occurrences": 586
+      },
+      {
+        "phrase": "a sharp",
+        "clusters": 389,
+        "cluster_pct": 67.5,
+        "occurrences": 865
+      },
+      {
+        "phrase": "your outfit",
+        "clusters": 389,
+        "cluster_pct": 67.5,
+        "occurrences": 628
+      },
+      {
+        "phrase": "a substantial",
+        "clusters": 388,
+        "cluster_pct": 67.4,
+        "occurrences": 688
+      },
+      {
+        "phrase": "weight of",
+        "clusters": 388,
+        "cluster_pct": 67.4,
+        "occurrences": 661
+      },
+      {
+        "phrase": "materials that",
+        "clusters": 387,
+        "cluster_pct": 67.2,
+        "occurrences": 510
+      },
+      {
+        "phrase": "your accessories",
+        "clusters": 385,
+        "cluster_pct": 66.8,
+        "occurrences": 496
+      },
+      {
+        "phrase": "the eye",
+        "clusters": 382,
+        "cluster_pct": 66.3,
+        "occurrences": 664
+      },
+      {
+        "phrase": "leather belt",
+        "clusters": 382,
+        "cluster_pct": 66.3,
+        "occurrences": 519
+      },
+      {
+        "phrase": "a garment",
+        "clusters": 381,
+        "cluster_pct": 66.1,
+        "occurrences": 548
+      },
+      {
+        "phrase": "you move",
+        "clusters": 380,
+        "cluster_pct": 66.0,
+        "occurrences": 715
+      },
+      {
+        "phrase": "gives you",
+        "clusters": 374,
+        "cluster_pct": 64.9,
+        "occurrences": 626
+      },
+      {
+        "phrase": "you look",
+        "clusters": 374,
+        "cluster_pct": 64.9,
+        "occurrences": 552
+      },
+      {
+        "phrase": "your silhouette",
+        "clusters": 360,
+        "cluster_pct": 62.5,
+        "occurrences": 584
+      },
+      {
+        "phrase": "your jewellery",
+        "clusters": 358,
+        "cluster_pct": 62.2,
+        "occurrences": 462
+      },
+      {
+        "phrase": "the overall",
+        "clusters": 357,
+        "cluster_pct": 62.0,
+        "occurrences": 542
+      },
+      {
+        "phrase": "the physical",
+        "clusters": 355,
+        "cluster_pct": 61.6,
+        "occurrences": 527
+      },
+      {
+        "phrase": "snap of",
+        "clusters": 355,
+        "cluster_pct": 61.6,
+        "occurrences": 434
+      },
+      {
+        "phrase": "through a",
+        "clusters": 354,
+        "cluster_pct": 61.5,
+        "occurrences": 537
+      },
+      {
+        "phrase": "a quiet",
+        "clusters": 352,
+        "cluster_pct": 61.1,
+        "occurrences": 777
+      },
+      {
+        "phrase": "off duty",
+        "clusters": 350,
+        "cluster_pct": 60.8,
+        "occurrences": 352
+      },
+      {
+        "phrase": "act as",
+        "clusters": 346,
+        "cluster_pct": 60.1,
+        "occurrences": 542
+      },
+      {
+        "phrase": "approach to",
+        "clusters": 346,
+        "cluster_pct": 60.1,
+        "occurrences": 493
+      },
+      {
+        "phrase": "flash of",
+        "clusters": 344,
+        "cluster_pct": 59.7,
+        "occurrences": 530
+      },
+      {
+        "phrase": "an outfit",
+        "clusters": 342,
+        "cluster_pct": 59.4,
+        "occurrences": 522
+      },
+      {
+        "phrase": "feel like",
+        "clusters": 341,
+        "cluster_pct": 59.2,
+        "occurrences": 546
+      }
+    ],
+    "3": [
+      {
+        "phrase": "rather than a",
+        "clusters": 428,
+        "cluster_pct": 74.3,
+        "occurrences": 790
+      },
+      {
+        "phrase": "when you want",
+        "clusters": 362,
+        "cluster_pct": 62.8,
+        "occurrences": 526
+      },
+      {
+        "phrase": "snap of a",
+        "clusters": 344,
+        "cluster_pct": 59.7,
+        "occurrences": 383
+      },
+      {
+        "phrase": "the rest of",
+        "clusters": 324,
+        "cluster_pct": 56.2,
+        "occurrences": 443
+      },
+      {
+        "phrase": "a sense of",
+        "clusters": 313,
+        "cluster_pct": 54.3,
+        "occurrences": 535
+      },
+      {
+        "phrase": "of a heavy",
+        "clusters": 301,
+        "cluster_pct": 52.3,
+        "occurrences": 360
+      },
+      {
+        "phrase": "against the skin",
+        "clusters": 298,
+        "cluster_pct": 51.7,
+        "occurrences": 367
+      },
+      {
+        "phrase": "you walk into",
+        "clusters": 290,
+        "cluster_pct": 50.3,
+        "occurrences": 350
+      },
+      {
+        "phrase": "your approach to",
+        "clusters": 289,
+        "cluster_pct": 50.2,
+        "occurrences": 377
+      },
+      {
+        "phrase": "into a room",
+        "clusters": 284,
+        "cluster_pct": 49.3,
+        "occurrences": 340
+      },
+      {
+        "phrase": "walk into a",
+        "clusters": 281,
+        "cluster_pct": 48.8,
+        "occurrences": 334
+      },
+      {
+        "phrase": "to the touch",
+        "clusters": 276,
+        "cluster_pct": 47.9,
+        "occurrences": 423
+      },
+      {
+        "phrase": "you want a",
+        "clusters": 270,
+        "cluster_pct": 46.9,
+        "occurrences": 342
+      },
+      {
+        "phrase": "your daily rotation",
+        "clusters": 270,
+        "cluster_pct": 46.9,
+        "occurrences": 334
+      },
+      {
+        "phrase": "leave it on",
+        "clusters": 270,
+        "cluster_pct": 46.9,
+        "occurrences": 321
+      },
+      {
+        "phrase": "the second you",
+        "clusters": 262,
+        "cluster_pct": 45.5,
+        "occurrences": 411
+      },
+      {
+        "phrase": "on the hanger",
+        "clusters": 255,
+        "cluster_pct": 44.3,
+        "occurrences": 291
+      },
+      {
+        "phrase": "if a piece",
+        "clusters": 254,
+        "cluster_pct": 44.1,
+        "occurrences": 296
+      },
+      {
+        "phrase": "you want to",
+        "clusters": 251,
+        "cluster_pct": 43.6,
+        "occurrences": 326
+      },
+      {
+        "phrase": "weight of a",
+        "clusters": 250,
+        "cluster_pct": 43.4,
+        "occurrences": 294
+      },
+      {
+        "phrase": "the goal is",
+        "clusters": 248,
+        "cluster_pct": 43.1,
+        "occurrences": 338
+      },
+      {
+        "phrase": "a thick leather",
+        "clusters": 246,
+        "cluster_pct": 42.7,
+        "occurrences": 284
+      },
+      {
+        "phrase": "on the rail",
+        "clusters": 243,
+        "cluster_pct": 42.2,
+        "occurrences": 285
+      },
+      {
+        "phrase": "acts as a",
+        "clusters": 239,
+        "cluster_pct": 41.5,
+        "occurrences": 330
+      },
+      {
+        "phrase": "a substantial watch",
+        "clusters": 233,
+        "cluster_pct": 40.5,
+        "occurrences": 290
+      },
+      {
+        "phrase": "the heavy lifting",
+        "clusters": 231,
+        "cluster_pct": 40.1,
+        "occurrences": 310
+      },
+      {
+        "phrase": "an exercise in",
+        "clusters": 227,
+        "cluster_pct": 39.4,
+        "occurrences": 290
+      },
+      {
+        "phrase": "if a garment",
+        "clusters": 227,
+        "cluster_pct": 39.4,
+        "occurrences": 262
+      },
+      {
+        "phrase": "rest of your",
+        "clusters": 223,
+        "cluster_pct": 38.7,
+        "occurrences": 253
+      },
+      {
+        "phrase": "or a heavy",
+        "clusters": 219,
+        "cluster_pct": 38.0,
+        "occurrences": 280
+      },
+      {
+        "phrase": "your need for",
+        "clusters": 217,
+        "cluster_pct": 37.7,
+        "occurrences": 278
+      },
+      {
+        "phrase": "and more like",
+        "clusters": 217,
+        "cluster_pct": 37.7,
+        "occurrences": 277
+      },
+      {
+        "phrase": "wardrobe relies on",
+        "clusters": 216,
+        "cluster_pct": 37.5,
+        "occurrences": 258
+      },
+      {
+        "phrase": "clasp or a",
+        "clusters": 215,
+        "cluster_pct": 37.3,
+        "occurrences": 241
+      },
+      {
+        "phrase": "bag or a",
+        "clusters": 214,
+        "cluster_pct": 37.2,
+        "occurrences": 246
+      },
+      {
+        "phrase": "needs to feel",
+        "clusters": 212,
+        "cluster_pct": 36.8,
+        "occurrences": 267
+      },
+      {
+        "phrase": "act as a",
+        "clusters": 210,
+        "cluster_pct": 36.5,
+        "occurrences": 275
+      },
+      {
+        "phrase": "of your wardrobe",
+        "clusters": 210,
+        "cluster_pct": 36.5,
+        "occurrences": 265
+      },
+      {
+        "phrase": "pieces that feel",
+        "clusters": 210,
+        "cluster_pct": 36.5,
+        "occurrences": 251
+      },
+      {
+        "phrase": "feel like a",
+        "clusters": 207,
+        "cluster_pct": 35.9,
+        "occurrences": 258
+      },
+      {
+        "phrase": "the result is",
+        "clusters": 205,
+        "cluster_pct": 35.6,
+        "occurrences": 261
+      },
+      {
+        "phrase": "your professional wardrobe",
+        "clusters": 204,
+        "cluster_pct": 35.4,
+        "occurrences": 204
+      },
+      {
+        "phrase": "a single substantial",
+        "clusters": 196,
+        "cluster_pct": 34.0,
+        "occurrences": 203
+      },
+      {
+        "phrase": "is an exercise",
+        "clusters": 195,
+        "cluster_pct": 33.9,
+        "occurrences": 233
+      },
+      {
+        "phrase": "with a heavy",
+        "clusters": 187,
+        "cluster_pct": 32.5,
+        "occurrences": 220
+      },
+      {
+        "phrase": "feels like a",
+        "clusters": 186,
+        "cluster_pct": 32.3,
+        "occurrences": 225
+      },
+      {
+        "phrase": "in your wardrobe",
+        "clusters": 186,
+        "cluster_pct": 32.3,
+        "occurrences": 224
+      },
+      {
+        "phrase": "as much as",
+        "clusters": 182,
+        "cluster_pct": 31.6,
+        "occurrences": 199
+      },
+      {
+        "phrase": "relies on a",
+        "clusters": 181,
+        "cluster_pct": 31.4,
+        "occurrences": 229
+      },
+      {
+        "phrase": "before you even",
+        "clusters": 180,
+        "cluster_pct": 31.2,
+        "occurrences": 227
+      },
+      {
+        "phrase": "on the body",
+        "clusters": 180,
+        "cluster_pct": 31.2,
+        "occurrences": 222
+      },
+      {
+        "phrase": "against your skin",
+        "clusters": 179,
+        "cluster_pct": 31.1,
+        "occurrences": 197
+      },
+      {
+        "phrase": "while keeping the",
+        "clusters": 177,
+        "cluster_pct": 30.7,
+        "occurrences": 221
+      },
+      {
+        "phrase": "a very specific",
+        "clusters": 175,
+        "cluster_pct": 30.4,
+        "occurrences": 222
+      },
+      {
+        "phrase": "or a thick",
+        "clusters": 175,
+        "cluster_pct": 30.4,
+        "occurrences": 210
+      },
+      {
+        "phrase": "just as much",
+        "clusters": 175,
+        "cluster_pct": 30.4,
+        "occurrences": 191
+      },
+      {
+        "phrase": "gives you that",
+        "clusters": 174,
+        "cluster_pct": 30.2,
+        "occurrences": 206
+      },
+      {
+        "phrase": "your wardrobe relies",
+        "clusters": 174,
+        "cluster_pct": 30.2,
+        "occurrences": 199
+      },
+      {
+        "phrase": "out the door",
+        "clusters": 173,
+        "cluster_pct": 30.0,
+        "occurrences": 270
+      },
+      {
+        "phrase": "you rely on",
+        "clusters": 173,
+        "cluster_pct": 30.0,
+        "occurrences": 207
+      }
+    ],
+    "4": [
+      {
+        "phrase": "leave it on the",
+        "clusters": 270,
+        "cluster_pct": 46.9,
+        "occurrences": 321
+      },
+      {
+        "phrase": "you walk into a",
+        "clusters": 265,
+        "cluster_pct": 46.0,
+        "occurrences": 304
+      },
+      {
+        "phrase": "walk into a room",
+        "clusters": 234,
+        "cluster_pct": 40.6,
+        "occurrences": 269
+      },
+      {
+        "phrase": "the rest of your",
+        "clusters": 223,
+        "cluster_pct": 38.7,
+        "occurrences": 253
+      },
+      {
+        "phrase": "when you want a",
+        "clusters": 218,
+        "cluster_pct": 37.8,
+        "occurrences": 263
+      },
+      {
+        "phrase": "is an exercise in",
+        "clusters": 195,
+        "cluster_pct": 33.9,
+        "occurrences": 233
+      },
+      {
+        "phrase": "an immediate sense of",
+        "clusters": 165,
+        "cluster_pct": 28.6,
+        "occurrences": 193
+      },
+      {
+        "phrase": "just as much as",
+        "clusters": 165,
+        "cluster_pct": 28.6,
+        "occurrences": 180
+      },
+      {
+        "phrase": "the rest of the",
+        "clusters": 161,
+        "cluster_pct": 28.0,
+        "occurrences": 186
+      },
+      {
+        "phrase": "your wardrobe relies on",
+        "clusters": 159,
+        "cluster_pct": 27.6,
+        "occurrences": 177
+      },
+      {
+        "phrase": "do the heavy lifting",
+        "clusters": 157,
+        "cluster_pct": 27.3,
+        "occurrences": 188
+      },
+      {
+        "phrase": "you want pieces that",
+        "clusters": 155,
+        "cluster_pct": 26.9,
+        "occurrences": 178
+      },
+      {
+        "phrase": "your jewellery needs to",
+        "clusters": 148,
+        "cluster_pct": 25.7,
+        "occurrences": 155
+      },
+      {
+        "phrase": "matters just as much",
+        "clusters": 143,
+        "cluster_pct": 24.8,
+        "occurrences": 151
+      },
+      {
+        "phrase": "it on the hanger",
+        "clusters": 143,
+        "cluster_pct": 24.8,
+        "occurrences": 149
+      },
+      {
+        "phrase": "it on the rail",
+        "clusters": 141,
+        "cluster_pct": 24.5,
+        "occurrences": 152
+      },
+      {
+        "phrase": "the result is a",
+        "clusters": 140,
+        "cluster_pct": 24.3,
+        "occurrences": 166
+      },
+      {
+        "phrase": "a thick leather belt",
+        "clusters": 139,
+        "cluster_pct": 24.1,
+        "occurrences": 152
+      },
+      {
+        "phrase": "the rich scent of",
+        "clusters": 139,
+        "cluster_pct": 24.1,
+        "occurrences": 139
+      },
+      {
+        "phrase": "you need pieces that",
+        "clusters": 134,
+        "cluster_pct": 23.3,
+        "occurrences": 153
+      },
+      {
+        "phrase": "there is a distinct",
+        "clusters": 133,
+        "cluster_pct": 23.1,
+        "occurrences": 141
+      },
+      {
+        "phrase": "at the intersection of",
+        "clusters": 132,
+        "cluster_pct": 22.9,
+        "occurrences": 141
+      },
+      {
+        "phrase": "leather belt or a",
+        "clusters": 128,
+        "cluster_pct": 22.2,
+        "occurrences": 133
+      },
+      {
+        "phrase": "snap of a heavy",
+        "clusters": 127,
+        "cluster_pct": 22.0,
+        "occurrences": 131
+      },
+      {
+        "phrase": "dressing for you is",
+        "clusters": 126,
+        "cluster_pct": 21.9,
+        "occurrences": 138
+      },
+      {
+        "phrase": "and more like a",
+        "clusters": 123,
+        "cluster_pct": 21.4,
+        "occurrences": 139
+      },
+      {
+        "phrase": "satisfying snap of a",
+        "clusters": 121,
+        "cluster_pct": 21.0,
+        "occurrences": 124
+      },
+      {
+        "phrase": "when you want to",
+        "clusters": 120,
+        "cluster_pct": 20.8,
+        "occurrences": 133
+      },
+      {
+        "phrase": "of a substantial watch",
+        "clusters": 117,
+        "cluster_pct": 20.3,
+        "occurrences": 124
+      },
+      {
+        "phrase": "your approach to colour",
+        "clusters": 116,
+        "cluster_pct": 20.1,
+        "occurrences": 116
+      },
+      {
+        "phrase": "you naturally gravitate towards",
+        "clusters": 104,
+        "cluster_pct": 18.1,
+        "occurrences": 119
+      },
+      {
+        "phrase": "a thick leather strap",
+        "clusters": 104,
+        "cluster_pct": 18.1,
+        "occurrences": 106
+      },
+      {
+        "phrase": "you need garments that",
+        "clusters": 103,
+        "cluster_pct": 17.9,
+        "occurrences": 111
+      },
+      {
+        "phrase": "when you walk into",
+        "clusters": 102,
+        "cluster_pct": 17.7,
+        "occurrences": 103
+      },
+      {
+        "phrase": "your off duty wardrobe",
+        "clusters": 99,
+        "cluster_pct": 17.2,
+        "occurrences": 99
+      },
+      {
+        "phrase": "a sudden flash of",
+        "clusters": 98,
+        "cluster_pct": 17.0,
+        "occurrences": 107
+      },
+      {
+        "phrase": "the goal is to",
+        "clusters": 96,
+        "cluster_pct": 16.7,
+        "occurrences": 102
+      },
+      {
+        "phrase": "your hardware needs to",
+        "clusters": 94,
+        "cluster_pct": 16.3,
+        "occurrences": 101
+      },
+      {
+        "phrase": "leather belt with a",
+        "clusters": 92,
+        "cluster_pct": 16.0,
+        "occurrences": 96
+      },
+      {
+        "phrase": "of a well engineered",
+        "clusters": 92,
+        "cluster_pct": 16.0,
+        "occurrences": 96
+      },
+      {
+        "phrase": "your wardrobe thrives on",
+        "clusters": 91,
+        "cluster_pct": 15.8,
+        "occurrences": 98
+      },
+      {
+        "phrase": "talk with your hands",
+        "clusters": 90,
+        "cluster_pct": 15.6,
+        "occurrences": 117
+      },
+      {
+        "phrase": "while keeping the overall",
+        "clusters": 89,
+        "cluster_pct": 15.5,
+        "occurrences": 99
+      },
+      {
+        "phrase": "a single substantial accessory",
+        "clusters": 89,
+        "cluster_pct": 15.5,
+        "occurrences": 89
+      },
+      {
+        "phrase": "move through a room",
+        "clusters": 88,
+        "cluster_pct": 15.3,
+        "occurrences": 96
+      },
+      {
+        "phrase": "of a heavy clasp",
+        "clusters": 88,
+        "cluster_pct": 15.3,
+        "occurrences": 94
+      },
+      {
+        "phrase": "right at the intersection",
+        "clusters": 87,
+        "cluster_pct": 15.1,
+        "occurrences": 93
+      },
+      {
+        "phrase": "leather bag or a",
+        "clusters": 86,
+        "cluster_pct": 14.9,
+        "occurrences": 90
+      },
+      {
+        "phrase": "leather strap or a",
+        "clusters": 85,
+        "cluster_pct": 14.8,
+        "occurrences": 90
+      },
+      {
+        "phrase": "or a structured bag",
+        "clusters": 85,
+        "cluster_pct": 14.8,
+        "occurrences": 88
+      },
+      {
+        "phrase": "the physical weight of",
+        "clusters": 84,
+        "cluster_pct": 14.6,
+        "occurrences": 94
+      },
+      {
+        "phrase": "your wardrobe needs to",
+        "clusters": 82,
+        "cluster_pct": 14.2,
+        "occurrences": 88
+      },
+      {
+        "phrase": "your wardrobe has to",
+        "clusters": 82,
+        "cluster_pct": 14.2,
+        "occurrences": 83
+      },
+      {
+        "phrase": "you want garments that",
+        "clusters": 81,
+        "cluster_pct": 14.1,
+        "occurrences": 83
+      },
+      {
+        "phrase": "the satisfying snap of",
+        "clusters": 81,
+        "cluster_pct": 14.1,
+        "occurrences": 82
+      },
+      {
+        "phrase": "that catch the light",
+        "clusters": 80,
+        "cluster_pct": 13.9,
+        "occurrences": 94
+      },
+      {
+        "phrase": "a wide leather belt",
+        "clusters": 80,
+        "cluster_pct": 13.9,
+        "occurrences": 82
+      },
+      {
+        "phrase": "you move through a",
+        "clusters": 79,
+        "cluster_pct": 13.7,
+        "occurrences": 85
+      },
+      {
+        "phrase": "at a moment's notice",
+        "clusters": 78,
+        "cluster_pct": 13.5,
+        "occurrences": 92
+      },
+      {
+        "phrase": "as much as the",
+        "clusters": 78,
+        "cluster_pct": 13.5,
+        "occurrences": 86
+      }
+    ]
+  },
+  "per_section_top": {
+    "accessory_1": {
+      "2": [
+        {
+          "phrase": "a single",
+          "clusters": 448,
+          "cluster_pct": 77.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "a heavy",
+          "clusters": 284,
+          "cluster_pct": 49.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "a thick",
+          "clusters": 249,
+          "cluster_pct": 43.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "focal point",
+          "clusters": 212,
+          "cluster_pct": 36.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "leather belt",
+          "clusters": 204,
+          "cluster_pct": 35.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "clasp or",
+          "clusters": 190,
+          "cluster_pct": 33.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "leather bag",
+          "clusters": 186,
+          "cluster_pct": 32.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "a wide",
+          "clusters": 182,
+          "cluster_pct": 31.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "single substantial",
+          "clusters": 181,
+          "cluster_pct": 31.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "the rest",
+          "clusters": 178,
+          "cluster_pct": 30.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "a substantial",
+          "clusters": 177,
+          "cluster_pct": 30.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "rest of",
+          "clusters": 174,
+          "cluster_pct": 30.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "of delicate",
+          "clusters": 172,
+          "cluster_pct": 29.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "bag with",
+          "clusters": 167,
+          "cluster_pct": 29.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "thick leather",
+          "clusters": 162,
+          "cluster_pct": 28.1,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "a single substantial",
+          "clusters": 181,
+          "cluster_pct": 31.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "the rest of",
+          "clusters": 174,
+          "cluster_pct": 30.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "rest of your",
+          "clusters": 164,
+          "cluster_pct": 28.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "clasp or a",
+          "clusters": 159,
+          "cluster_pct": 27.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "a thick leather",
+          "clusters": 150,
+          "cluster_pct": 26.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "watch on a",
+          "clusters": 126,
+          "cluster_pct": 21.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "a substantial watch",
+          "clusters": 109,
+          "cluster_pct": 18.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "strap or a",
+          "clusters": 97,
+          "cluster_pct": 16.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "a heavy watch",
+          "clusters": 92,
+          "cluster_pct": 16.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "belt with a",
+          "clusters": 89,
+          "cluster_pct": 15.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "single substantial accessory",
+          "clusters": 89,
+          "cluster_pct": 15.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "leather belt with",
+          "clusters": 83,
+          "cluster_pct": 14.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "watch or a",
+          "clusters": 82,
+          "cluster_pct": 14.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "the heavy lifting",
+          "clusters": 80,
+          "cluster_pct": 13.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "think of a",
+          "clusters": 80,
+          "cluster_pct": 13.9,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "the rest of your",
+          "clusters": 164,
+          "cluster_pct": 28.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "a single substantial accessory",
+          "clusters": 89,
+          "cluster_pct": 15.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "a thick leather strap",
+          "clusters": 72,
+          "cluster_pct": 12.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "leather belt with a",
+          "clusters": 71,
+          "cluster_pct": 12.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "watch on a thick",
+          "clusters": 69,
+          "cluster_pct": 12.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "a wide leather belt",
+          "clusters": 65,
+          "cluster_pct": 11.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "a thick leather belt",
+          "clusters": 63,
+          "cluster_pct": 10.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "leather strap or a",
+          "clusters": 61,
+          "cluster_pct": 10.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "or a structured bag",
+          "clusters": 61,
+          "cluster_pct": 10.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "rest of your silhouette",
+          "clusters": 55,
+          "cluster_pct": 9.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "heavy clasp or a",
+          "clusters": 44,
+          "cluster_pct": 7.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "whether that is a",
+          "clusters": 43,
+          "cluster_pct": 7.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "with a heavy clasp",
+          "clusters": 43,
+          "cluster_pct": 7.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "on a thick leather",
+          "clusters": 41,
+          "cluster_pct": 7.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "leather bag with a",
+          "clusters": 40,
+          "cluster_pct": 6.9,
+          "occurrences": null
+        }
+      ]
+    },
+    "accessory_2": {
+      "2": [
+        {
+          "phrase": "your accessories",
+          "clusters": 266,
+          "cluster_pct": 46.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "leather belt",
+          "clusters": 245,
+          "cluster_pct": 42.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "a heavy",
+          "clusters": 231,
+          "cluster_pct": 40.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "a thick",
+          "clusters": 197,
+          "cluster_pct": 34.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "act as",
+          "clusters": 181,
+          "cluster_pct": 31.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe",
+          "clusters": 176,
+          "cluster_pct": 30.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "a firm",
+          "clusters": 154,
+          "cluster_pct": 26.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "a rigid",
+          "clusters": 149,
+          "cluster_pct": 25.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "bag or",
+          "clusters": 145,
+          "cluster_pct": 25.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "bag with",
+          "clusters": 144,
+          "cluster_pct": 25.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "your clothes",
+          "clusters": 142,
+          "cluster_pct": 24.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "rather than",
+          "clusters": 140,
+          "cluster_pct": 24.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "provide the",
+          "clusters": 133,
+          "cluster_pct": 23.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "a wide",
+          "clusters": 129,
+          "cluster_pct": 22.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "belt or",
+          "clusters": 129,
+          "cluster_pct": 22.4,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "act as the",
+          "clusters": 143,
+          "cluster_pct": 24.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "bag or a",
+          "clusters": 135,
+          "cluster_pct": 23.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "belt or a",
+          "clusters": 114,
+          "cluster_pct": 19.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "leather belt or",
+          "clusters": 101,
+          "cluster_pct": 17.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "bag with a",
+          "clusters": 93,
+          "cluster_pct": 16.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "a thick leather",
+          "clusters": 82,
+          "cluster_pct": 14.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "with a heavy",
+          "clusters": 76,
+          "cluster_pct": 13.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "a heavy clasp",
+          "clusters": 74,
+          "cluster_pct": 12.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "or a thick",
+          "clusters": 69,
+          "cluster_pct": 12.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "a substantial watch",
+          "clusters": 68,
+          "cluster_pct": 11.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "shut with a",
+          "clusters": 67,
+          "cluster_pct": 11.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "thick leather belt",
+          "clusters": 66,
+          "cluster_pct": 11.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "of a heavy",
+          "clusters": 65,
+          "cluster_pct": 11.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "a firm leather",
+          "clusters": 64,
+          "cluster_pct": 11.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "snap of a",
+          "clusters": 64,
+          "cluster_pct": 11.1,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "leather belt or a",
+          "clusters": 91,
+          "cluster_pct": 15.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "a thick leather belt",
+          "clusters": 61,
+          "cluster_pct": 10.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "accessories act as the",
+          "clusters": 60,
+          "cluster_pct": 10.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "clasps that snap shut",
+          "clusters": 48,
+          "cluster_pct": 8.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "that snap shut with",
+          "clusters": 48,
+          "cluster_pct": 8.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "your accessories act as",
+          "clusters": 45,
+          "cluster_pct": 7.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "your accessories have to",
+          "clusters": 43,
+          "cluster_pct": 7.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "of a heavy clasp",
+          "clusters": 41,
+          "cluster_pct": 7.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "snap shut with a",
+          "clusters": 40,
+          "cluster_pct": 6.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "leather bag or a",
+          "clusters": 38,
+          "cluster_pct": 6.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "a firm leather belt",
+          "clusters": 35,
+          "cluster_pct": 6.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "bag or a thick",
+          "clusters": 34,
+          "cluster_pct": 5.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "the rest of your",
+          "clusters": 34,
+          "cluster_pct": 5.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "bag with a heavy",
+          "clusters": 32,
+          "cluster_pct": 5.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "shut with a satisfying",
+          "clusters": 32,
+          "cluster_pct": 5.6,
+          "occurrences": null
+        }
+      ]
+    },
+    "accessory_3": {
+      "2": [
+        {
+          "phrase": "scent of",
+          "clusters": 460,
+          "cluster_pct": 79.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "snap of",
+          "clusters": 307,
+          "cluster_pct": 53.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "a heavy",
+          "clusters": 292,
+          "cluster_pct": 50.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "weight of",
+          "clusters": 208,
+          "cluster_pct": 36.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "the physical",
+          "clusters": 193,
+          "cluster_pct": 33.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "the satisfying",
+          "clusters": 190,
+          "cluster_pct": 33.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "bag clasp",
+          "clusters": 184,
+          "cluster_pct": 31.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wrist",
+          "clusters": 181,
+          "cluster_pct": 31.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "the rich",
+          "clusters": 169,
+          "cluster_pct": 29.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "a substantial",
+          "clusters": 161,
+          "cluster_pct": 28.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "rich scent",
+          "clusters": 160,
+          "cluster_pct": 27.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "a well",
+          "clusters": 139,
+          "cluster_pct": 24.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "your hands",
+          "clusters": 138,
+          "cluster_pct": 24.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "a thick",
+          "clusters": 137,
+          "cluster_pct": 23.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "just as",
+          "clusters": 133,
+          "cluster_pct": 23.1,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "snap of a",
+          "clusters": 302,
+          "cluster_pct": 52.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "of a heavy",
+          "clusters": 222,
+          "cluster_pct": 38.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "weight of a",
+          "clusters": 154,
+          "cluster_pct": 26.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "rich scent of",
+          "clusters": 153,
+          "cluster_pct": 26.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "the rich scent",
+          "clusters": 142,
+          "cluster_pct": 24.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "of a well",
+          "clusters": 125,
+          "cluster_pct": 21.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "as much as",
+          "clusters": 122,
+          "cluster_pct": 21.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "just as much",
+          "clusters": 119,
+          "cluster_pct": 20.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "a substantial watch",
+          "clusters": 109,
+          "cluster_pct": 18.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "of a substantial",
+          "clusters": 108,
+          "cluster_pct": 18.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "on your wrist",
+          "clusters": 106,
+          "cluster_pct": 18.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "click of a",
+          "clusters": 101,
+          "cluster_pct": 17.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "matters just as",
+          "clusters": 100,
+          "cluster_pct": 17.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "of a thick",
+          "clusters": 96,
+          "cluster_pct": 16.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "satisfying snap of",
+          "clusters": 85,
+          "cluster_pct": 14.8,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "the rich scent of",
+          "clusters": 139,
+          "cluster_pct": 24.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "just as much as",
+          "clusters": 114,
+          "cluster_pct": 19.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "matters just as much",
+          "clusters": 100,
+          "cluster_pct": 17.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "snap of a heavy",
+          "clusters": 100,
+          "cluster_pct": 17.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "satisfying snap of a",
+          "clusters": 85,
+          "cluster_pct": 14.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "of a well engineered",
+          "clusters": 81,
+          "cluster_pct": 14.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "of a substantial watch",
+          "clusters": 76,
+          "cluster_pct": 13.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "of a heavy bag",
+          "clusters": 63,
+          "cluster_pct": 10.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "snap of a well",
+          "clusters": 59,
+          "cluster_pct": 10.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "an immediate sense of",
+          "clusters": 50,
+          "cluster_pct": 8.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "a heavy bag clasp",
+          "clusters": 49,
+          "cluster_pct": 8.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "decisive snap of a",
+          "clusters": 49,
+          "cluster_pct": 8.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "of a heavy clasp",
+          "clusters": 47,
+          "cluster_pct": 8.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "of a heavy watch",
+          "clusters": 47,
+          "cluster_pct": 8.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "there is a distinct",
+          "clusters": 46,
+          "cluster_pct": 8.0,
+          "occurrences": null
+        }
+      ]
+    },
+    "hardware_metals": {
+      "2": [
+        {
+          "phrase": "rather than",
+          "clusters": 373,
+          "cluster_pct": 64.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want",
+          "clusters": 239,
+          "cluster_pct": 41.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "look for",
+          "clusters": 153,
+          "cluster_pct": 26.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "high shine",
+          "clusters": 148,
+          "cluster_pct": 25.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "brushed or",
+          "clusters": 135,
+          "cluster_pct": 23.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "needs to",
+          "clusters": 131,
+          "cluster_pct": 22.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "the light",
+          "clusters": 128,
+          "cluster_pct": 22.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "your hardware",
+          "clusters": 128,
+          "cluster_pct": 22.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "a brushed",
+          "clusters": 125,
+          "cluster_pct": 21.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "like a",
+          "clusters": 123,
+          "cluster_pct": 21.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "a heavy",
+          "clusters": 115,
+          "cluster_pct": 20.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "that feel",
+          "clusters": 115,
+          "cluster_pct": 20.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "look like",
+          "clusters": 104,
+          "cluster_pct": 18.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "seek out",
+          "clusters": 101,
+          "cluster_pct": 17.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "hardware is",
+          "clusters": 96,
+          "cluster_pct": 16.7,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "when you want",
+          "clusters": 90,
+          "cluster_pct": 15.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "your hardware needs",
+          "clusters": 79,
+          "cluster_pct": 13.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "and more like",
+          "clusters": 75,
+          "cluster_pct": 13.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "rather than a",
+          "clusters": 73,
+          "cluster_pct": 12.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "hardware needs to",
+          "clusters": 72,
+          "cluster_pct": 12.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "a brushed or",
+          "clusters": 69,
+          "cluster_pct": 12.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want a",
+          "clusters": 66,
+          "cluster_pct": 11.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "to the touch",
+          "clusters": 58,
+          "cluster_pct": 10.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "look like it",
+          "clusters": 52,
+          "cluster_pct": 9.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "needs to feel",
+          "clusters": 47,
+          "cluster_pct": 8.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "needs to look",
+          "clusters": 47,
+          "cluster_pct": 8.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "catches the light",
+          "clusters": 44,
+          "cluster_pct": 7.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "catch the light",
+          "clusters": 43,
+          "cluster_pct": 7.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "to look like",
+          "clusters": 43,
+          "cluster_pct": 7.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "on your clothes",
+          "clusters": 38,
+          "cluster_pct": 6.6,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "your hardware needs to",
+          "clusters": 66,
+          "cluster_pct": 11.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you want a",
+          "clusters": 62,
+          "cluster_pct": 10.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "needs to look like",
+          "clusters": 36,
+          "cluster_pct": 6.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "to look like it",
+          "clusters": 31,
+          "cluster_pct": 5.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "that catches the light",
+          "clusters": 29,
+          "cluster_pct": 5.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "with a brushed or",
+          "clusters": 29,
+          "cluster_pct": 5.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "hardware for you is",
+          "clusters": 28,
+          "cluster_pct": 4.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "hardware needs to feel",
+          "clusters": 26,
+          "cluster_pct": 4.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "hardware needs to look",
+          "clusters": 25,
+          "cluster_pct": 4.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "hardware on your clothes",
+          "clusters": 24,
+          "cluster_pct": 4.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "when the finish is",
+          "clusters": 24,
+          "cluster_pct": 4.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "and more like a",
+          "clusters": 23,
+          "cluster_pct": 4.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "decoration and more like",
+          "clusters": 23,
+          "cluster_pct": 4.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "hardware is where your",
+          "clusters": 23,
+          "cluster_pct": 4.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "that catch the light",
+          "clusters": 21,
+          "cluster_pct": 3.6,
+          "occurrences": null
+        }
+      ]
+    },
+    "hardware_stones": {
+      "2": [
+        {
+          "phrase": "rather than",
+          "clusters": 335,
+          "cluster_pct": 58.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "your jewellery",
+          "clusters": 260,
+          "cluster_pct": 45.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want",
+          "clusters": 189,
+          "cluster_pct": 32.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "set in",
+          "clusters": 179,
+          "cluster_pct": 31.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "the light",
+          "clusters": 176,
+          "cluster_pct": 30.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "stones that",
+          "clusters": 163,
+          "cluster_pct": 28.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "gems that",
+          "clusters": 162,
+          "cluster_pct": 28.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "like a",
+          "clusters": 159,
+          "cluster_pct": 27.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "look for",
+          "clusters": 146,
+          "cluster_pct": 25.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "a heavy",
+          "clusters": 136,
+          "cluster_pct": 23.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "flash of",
+          "clusters": 134,
+          "cluster_pct": 23.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "skip the",
+          "clusters": 133,
+          "cluster_pct": 23.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "pieces that",
+          "clusters": 128,
+          "cluster_pct": 22.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "you wear",
+          "clusters": 122,
+          "cluster_pct": 21.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "you suit",
+          "clusters": 117,
+          "cluster_pct": 20.3,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "your jewellery needs",
+          "clusters": 98,
+          "cluster_pct": 17.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "jewellery needs to",
+          "clusters": 85,
+          "cluster_pct": 14.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "rather than a",
+          "clusters": 82,
+          "cluster_pct": 14.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "your jewellery box",
+          "clusters": 77,
+          "cluster_pct": 13.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "and more like",
+          "clusters": 72,
+          "cluster_pct": 12.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you want",
+          "clusters": 72,
+          "cluster_pct": 12.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "catch the light",
+          "clusters": 64,
+          "cluster_pct": 11.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want a",
+          "clusters": 55,
+          "cluster_pct": 9.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "set in thick",
+          "clusters": 52,
+          "cluster_pct": 9.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "on the collarbone",
+          "clusters": 51,
+          "cluster_pct": 8.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "to the touch",
+          "clusters": 51,
+          "cluster_pct": 8.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "on the skin",
+          "clusters": 50,
+          "cluster_pct": 8.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "more like a",
+          "clusters": 48,
+          "cluster_pct": 8.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "the stones you",
+          "clusters": 46,
+          "cluster_pct": 8.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "catches the light",
+          "clusters": 44,
+          "cluster_pct": 7.6,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "your jewellery needs to",
+          "clusters": 85,
+          "cluster_pct": 14.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you want a",
+          "clusters": 47,
+          "cluster_pct": 8.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "and more like a",
+          "clusters": 45,
+          "cluster_pct": 7.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "the stones you wear",
+          "clusters": 43,
+          "cluster_pct": 7.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want pieces that",
+          "clusters": 40,
+          "cluster_pct": 6.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "that catch the light",
+          "clusters": 38,
+          "cluster_pct": 6.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "jewellery needs to feel",
+          "clusters": 33,
+          "cluster_pct": 5.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "you suit stones that",
+          "clusters": 33,
+          "cluster_pct": 5.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "your jewellery box should",
+          "clusters": 32,
+          "cluster_pct": 5.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "you suit gems that",
+          "clusters": 27,
+          "cluster_pct": 4.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "you wear need to",
+          "clusters": 26,
+          "cluster_pct": 4.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "like a collection of",
+          "clusters": 25,
+          "cluster_pct": 4.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "talk with your hands",
+          "clusters": 25,
+          "cluster_pct": 4.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "that look like they",
+          "clusters": 25,
+          "cluster_pct": 4.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "stones you wear need",
+          "clusters": 24,
+          "cluster_pct": 4.2,
+          "occurrences": null
+        }
+      ]
+    },
+    "hardware_tip": {
+      "2": [
+        {
+          "phrase": "rather than",
+          "clusters": 292,
+          "cluster_pct": 50.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "a heavy",
+          "clusters": 235,
+          "cluster_pct": 40.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "like a",
+          "clusters": 202,
+          "cluster_pct": 35.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "look for",
+          "clusters": 185,
+          "cluster_pct": 32.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "a thick",
+          "clusters": 161,
+          "cluster_pct": 28.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "set with",
+          "clusters": 160,
+          "cluster_pct": 27.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "a single",
+          "clusters": 153,
+          "cluster_pct": 26.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "your jewellery",
+          "clusters": 152,
+          "cluster_pct": 26.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "needs to",
+          "clusters": 137,
+          "cluster_pct": 23.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "pieces that",
+          "clusters": 135,
+          "cluster_pct": 23.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "cuff or",
+          "clusters": 114,
+          "cluster_pct": 19.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "ring set",
+          "clusters": 113,
+          "cluster_pct": 19.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "cuff in",
+          "clusters": 102,
+          "cluster_pct": 17.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "a substantial",
+          "clusters": 99,
+          "cluster_pct": 17.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "physical weight",
+          "clusters": 97,
+          "cluster_pct": 16.8,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "ring set with",
+          "clusters": 104,
+          "cluster_pct": 18.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "cuff or a",
+          "clusters": 103,
+          "cluster_pct": 17.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "your jewellery needs",
+          "clusters": 72,
+          "cluster_pct": 12.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "jewellery needs to",
+          "clusters": 69,
+          "cluster_pct": 12.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "or a heavy",
+          "clusters": 65,
+          "cluster_pct": 11.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "rather than a",
+          "clusters": 64,
+          "cluster_pct": 11.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "or a thick",
+          "clusters": 59,
+          "cluster_pct": 10.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "to the touch",
+          "clusters": 54,
+          "cluster_pct": 9.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "hardware needs to",
+          "clusters": 50,
+          "cluster_pct": 8.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "on the collarbone",
+          "clusters": 46,
+          "cluster_pct": 8.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "your hardware needs",
+          "clusters": 46,
+          "cluster_pct": 8.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "chain or a",
+          "clusters": 43,
+          "cluster_pct": 7.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "if you wear",
+          "clusters": 42,
+          "cluster_pct": 7.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "a sense of",
+          "clusters": 40,
+          "cluster_pct": 6.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "on the skin",
+          "clusters": 40,
+          "cluster_pct": 6.9,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "your jewellery needs to",
+          "clusters": 64,
+          "cluster_pct": 11.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "your hardware needs to",
+          "clusters": 32,
+          "cluster_pct": 5.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want pieces that",
+          "clusters": 30,
+          "cluster_pct": 5.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "rather than mere decoration",
+          "clusters": 21,
+          "cluster_pct": 3.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "ring set with a",
+          "clusters": 21,
+          "cluster_pct": 3.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "your accessories need to",
+          "clusters": 21,
+          "cluster_pct": 3.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "decoration and more like",
+          "clusters": 20,
+          "cluster_pct": 3.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "you need pieces that",
+          "clusters": 20,
+          "cluster_pct": 3.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "jewellery needs to feel",
+          "clusters": 19,
+          "cluster_pct": 3.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "on the collarbone or",
+          "clusters": 19,
+          "cluster_pct": 3.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "cuff or a heavy",
+          "clusters": 18,
+          "cluster_pct": 3.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "your approach to jewellery",
+          "clusters": 18,
+          "cluster_pct": 3.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "look for pieces that",
+          "clusters": 17,
+          "cluster_pct": 3.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "talk with your hands",
+          "clusters": 17,
+          "cluster_pct": 3.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "and more like a",
+          "clusters": 16,
+          "cluster_pct": 2.8,
+          "occurrences": null
+        }
+      ]
+    },
+    "occasions_daily": {
+      "2": [
+        {
+          "phrase": "off duty",
+          "clusters": 349,
+          "cluster_pct": 60.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "rather than",
+          "clusters": 201,
+          "cluster_pct": 34.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "sense of",
+          "clusters": 174,
+          "cluster_pct": 30.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "garments that",
+          "clusters": 168,
+          "cluster_pct": 29.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "pieces that",
+          "clusters": 162,
+          "cluster_pct": 28.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "the body",
+          "clusters": 157,
+          "cluster_pct": 27.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "your off",
+          "clusters": 148,
+          "cluster_pct": 25.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "your daily",
+          "clusters": 143,
+          "cluster_pct": 24.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "look for",
+          "clusters": 132,
+          "cluster_pct": 22.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "duty dressing",
+          "clusters": 122,
+          "cluster_pct": 21.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "version of",
+          "clusters": 120,
+          "cluster_pct": 20.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "your version",
+          "clusters": 120,
+          "cluster_pct": 20.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "you need",
+          "clusters": 118,
+          "cluster_pct": 20.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "seek out",
+          "clusters": 114,
+          "cluster_pct": 19.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "duty wardrobe",
+          "clusters": 101,
+          "cluster_pct": 17.5,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "your off duty",
+          "clusters": 148,
+          "cluster_pct": 25.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "off duty dressing",
+          "clusters": 122,
+          "cluster_pct": 21.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "your version of",
+          "clusters": 120,
+          "cluster_pct": 20.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "off duty wardrobe",
+          "clusters": 101,
+          "cluster_pct": 17.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "a sense of",
+          "clusters": 65,
+          "cluster_pct": 11.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "dressing for you",
+          "clusters": 64,
+          "cluster_pct": 11.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "your daily rotation",
+          "clusters": 63,
+          "cluster_pct": 10.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "out the door",
+          "clusters": 62,
+          "cluster_pct": 10.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "the goal is",
+          "clusters": 57,
+          "cluster_pct": 9.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "an exercise in",
+          "clusters": 53,
+          "cluster_pct": 9.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "your everyday wardrobe",
+          "clusters": 52,
+          "cluster_pct": 9.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "even on a",
+          "clusters": 48,
+          "cluster_pct": 8.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "of dressing down",
+          "clusters": 47,
+          "cluster_pct": 8.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "is never an",
+          "clusters": 46,
+          "cluster_pct": 8.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "hold their shape",
+          "clusters": 44,
+          "cluster_pct": 7.6,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "your off duty wardrobe",
+          "clusters": 99,
+          "cluster_pct": 17.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "dressing for you is",
+          "clusters": 57,
+          "cluster_pct": 9.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "version of dressing down",
+          "clusters": 44,
+          "cluster_pct": 7.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "your version of dressing",
+          "clusters": 44,
+          "cluster_pct": 7.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "duty dressing for you",
+          "clusters": 42,
+          "cluster_pct": 7.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "off duty dressing for",
+          "clusters": 42,
+          "cluster_pct": 7.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "is an exercise in",
+          "clusters": 38,
+          "cluster_pct": 6.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "is never an excuse",
+          "clusters": 37,
+          "cluster_pct": 6.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "at a moment's notice",
+          "clusters": 35,
+          "cluster_pct": 6.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "off duty dressing is",
+          "clusters": 35,
+          "cluster_pct": 6.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "never an excuse to",
+          "clusters": 34,
+          "cluster_pct": 5.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "off duty wardrobe runs",
+          "clusters": 31,
+          "cluster_pct": 5.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "duty wardrobe runs on",
+          "clusters": 29,
+          "cluster_pct": 5.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "wardrobe runs on a",
+          "clusters": 29,
+          "cluster_pct": 5.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "on a very specific",
+          "clusters": 26,
+          "cluster_pct": 4.5,
+          "occurrences": null
+        }
+      ]
+    },
+    "occasions_intimate": {
+      "2": [
+        {
+          "phrase": "rather than",
+          "clusters": 250,
+          "cluster_pct": 43.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "garments that",
+          "clusters": 216,
+          "cluster_pct": 37.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want",
+          "clusters": 199,
+          "cluster_pct": 34.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "the body",
+          "clusters": 175,
+          "cluster_pct": 30.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "pieces that",
+          "clusters": 134,
+          "cluster_pct": 23.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "the room",
+          "clusters": 133,
+          "cluster_pct": 23.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "that feels",
+          "clusters": 124,
+          "cluster_pct": 21.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "evening dressing",
+          "clusters": 123,
+          "cluster_pct": 21.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "dressing for",
+          "clusters": 121,
+          "cluster_pct": 21.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "look for",
+          "clusters": 117,
+          "cluster_pct": 20.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "close quarters",
+          "clusters": 115,
+          "cluster_pct": 20.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "sense of",
+          "clusters": 113,
+          "cluster_pct": 19.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "keep the",
+          "clusters": 108,
+          "cluster_pct": 18.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "across a",
+          "clusters": 106,
+          "cluster_pct": 18.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "the overall",
+          "clusters": 102,
+          "cluster_pct": 17.7,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "an exercise in",
+          "clusters": 70,
+          "cluster_pct": 12.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "dressing for you",
+          "clusters": 66,
+          "cluster_pct": 11.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "the final impression",
+          "clusters": 65,
+          "cluster_pct": 11.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "is an exercise",
+          "clusters": 64,
+          "cluster_pct": 11.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "evening dressing for",
+          "clusters": 63,
+          "cluster_pct": 10.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "a dimly lit",
+          "clusters": 60,
+          "cluster_pct": 10.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want to",
+          "clusters": 52,
+          "cluster_pct": 9.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "a sense of",
+          "clusters": 49,
+          "cluster_pct": 8.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "neckline or a",
+          "clusters": 46,
+          "cluster_pct": 8.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "look for garments",
+          "clusters": 44,
+          "cluster_pct": 7.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "the result is",
+          "clusters": 43,
+          "cluster_pct": 7.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "for garments that",
+          "clusters": 42,
+          "cluster_pct": 7.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want garments",
+          "clusters": 42,
+          "cluster_pct": 7.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "final impression is",
+          "clusters": 41,
+          "cluster_pct": 7.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "a look that",
+          "clusters": 39,
+          "cluster_pct": 6.8,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "is an exercise in",
+          "clusters": 64,
+          "cluster_pct": 11.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "evening dressing for you",
+          "clusters": 63,
+          "cluster_pct": 10.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "dressing for you is",
+          "clusters": 41,
+          "cluster_pct": 7.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "the final impression is",
+          "clusters": 41,
+          "cluster_pct": 7.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want garments that",
+          "clusters": 37,
+          "cluster_pct": 6.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want to look",
+          "clusters": 34,
+          "cluster_pct": 5.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "across a dimly lit",
+          "clusters": 32,
+          "cluster_pct": 5.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "a dimly lit table",
+          "clusters": 28,
+          "cluster_pct": 4.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "look for garments that",
+          "clusters": 26,
+          "cluster_pct": 4.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "from across the room",
+          "clusters": 24,
+          "cluster_pct": 4.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "the result is a",
+          "clusters": 24,
+          "cluster_pct": 4.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "dressing for close quarters",
+          "clusters": 22,
+          "cluster_pct": 3.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "a look that feels",
+          "clusters": 21,
+          "cluster_pct": 3.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want pieces that",
+          "clusters": 21,
+          "cluster_pct": 3.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "a dimly lit room",
+          "clusters": 20,
+          "cluster_pct": 3.5,
+          "occurrences": null
+        }
+      ]
+    },
+    "occasions_work": {
+      "2": [
+        {
+          "phrase": "the room",
+          "clusters": 263,
+          "cluster_pct": 45.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "your professional",
+          "clusters": 257,
+          "cluster_pct": 44.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "rather than",
+          "clusters": 219,
+          "cluster_pct": 38.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "professional wardrobe",
+          "clusters": 214,
+          "cluster_pct": 37.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "tailoring that",
+          "clusters": 149,
+          "cluster_pct": 25.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "the office",
+          "clusters": 143,
+          "cluster_pct": 24.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "like the",
+          "clusters": 137,
+          "cluster_pct": 23.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "garments that",
+          "clusters": 126,
+          "cluster_pct": 21.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "relies on",
+          "clusters": 126,
+          "cluster_pct": 21.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "you walk",
+          "clusters": 115,
+          "cluster_pct": 20.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "you look",
+          "clusters": 111,
+          "cluster_pct": 19.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "pieces that",
+          "clusters": 110,
+          "cluster_pct": 19.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "seek out",
+          "clusters": 108,
+          "cluster_pct": 18.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "sense of",
+          "clusters": 107,
+          "cluster_pct": 18.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "you need",
+          "clusters": 107,
+          "cluster_pct": 18.6,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "your professional wardrobe",
+          "clusters": 204,
+          "cluster_pct": 35.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "an exercise in",
+          "clusters": 91,
+          "cluster_pct": 15.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "is an exercise",
+          "clusters": 73,
+          "cluster_pct": 12.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "looking like the",
+          "clusters": 68,
+          "cluster_pct": 11.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "like the person",
+          "clusters": 64,
+          "cluster_pct": 11.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "you walk into",
+          "clusters": 64,
+          "cluster_pct": 11.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "the person who",
+          "clusters": 63,
+          "cluster_pct": 10.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "in the room",
+          "clusters": 60,
+          "cluster_pct": 10.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "for the office",
+          "clusters": 59,
+          "cluster_pct": 10.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want to",
+          "clusters": 58,
+          "cluster_pct": 10.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "into a meeting",
+          "clusters": 57,
+          "cluster_pct": 9.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "look like the",
+          "clusters": 56,
+          "cluster_pct": 9.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "wardrobe needs to",
+          "clusters": 54,
+          "cluster_pct": 9.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "when your outfit",
+          "clusters": 52,
+          "cluster_pct": 9.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "walk into a",
+          "clusters": 50,
+          "cluster_pct": 8.7,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "is an exercise in",
+          "clusters": 73,
+          "cluster_pct": 12.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "like the person who",
+          "clusters": 51,
+          "cluster_pct": 8.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "your professional wardrobe needs",
+          "clusters": 48,
+          "cluster_pct": 8.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "professional wardrobe needs to",
+          "clusters": 47,
+          "cluster_pct": 8.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "for the office is",
+          "clusters": 40,
+          "cluster_pct": 6.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "to look like the",
+          "clusters": 36,
+          "cluster_pct": 6.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "professional wardrobe thrives on",
+          "clusters": 35,
+          "cluster_pct": 6.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "walk into a meeting",
+          "clusters": 35,
+          "cluster_pct": 6.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "your professional wardrobe thrives",
+          "clusters": 35,
+          "cluster_pct": 6.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "dressing for you is",
+          "clusters": 34,
+          "cluster_pct": 5.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "dressing for the office",
+          "clusters": 33,
+          "cluster_pct": 5.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "you walk into a",
+          "clusters": 33,
+          "cluster_pct": 5.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "you is an exercise",
+          "clusters": 32,
+          "cluster_pct": 5.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "the goal is to",
+          "clusters": 30,
+          "cluster_pct": 5.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "looking like the person",
+          "clusters": 29,
+          "cluster_pct": 5.0,
+          "occurrences": null
+        }
+      ]
+    },
+    "palette_narrative": {
+      "2": [
+        {
+          "phrase": "rather than",
+          "clusters": 218,
+          "cluster_pct": 37.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe",
+          "clusters": 212,
+          "cluster_pct": 36.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "flash of",
+          "clusters": 194,
+          "cluster_pct": 33.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want",
+          "clusters": 194,
+          "cluster_pct": 33.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "a sudden",
+          "clusters": 189,
+          "cluster_pct": 32.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "a sharp",
+          "clusters": 176,
+          "cluster_pct": 30.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "relies on",
+          "clusters": 165,
+          "cluster_pct": 28.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "your daily",
+          "clusters": 164,
+          "cluster_pct": 28.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "through a",
+          "clusters": 161,
+          "cluster_pct": 28.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "these shades",
+          "clusters": 150,
+          "cluster_pct": 26.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "build your",
+          "clusters": 149,
+          "cluster_pct": 25.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "hit of",
+          "clusters": 135,
+          "cluster_pct": 23.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "daily rotation",
+          "clusters": 130,
+          "cluster_pct": 22.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "approach to",
+          "clusters": 129,
+          "cluster_pct": 22.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "to colour",
+          "clusters": 125,
+          "cluster_pct": 21.7,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "when you want",
+          "clusters": 178,
+          "cluster_pct": 30.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "approach to colour",
+          "clusters": 125,
+          "cluster_pct": 21.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "your daily rotation",
+          "clusters": 119,
+          "cluster_pct": 20.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "your approach to",
+          "clusters": 117,
+          "cluster_pct": 20.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want to",
+          "clusters": 95,
+          "cluster_pct": 16.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want a",
+          "clusters": 79,
+          "cluster_pct": 13.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "the result is",
+          "clusters": 78,
+          "cluster_pct": 13.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "build your daily",
+          "clusters": 68,
+          "cluster_pct": 11.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "result is a",
+          "clusters": 68,
+          "cluster_pct": 11.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "sudden flash of",
+          "clusters": 64,
+          "cluster_pct": 11.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "a sudden flash",
+          "clusters": 63,
+          "cluster_pct": 10.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "a flash of",
+          "clusters": 60,
+          "cluster_pct": 10.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "the overall effect",
+          "clusters": 57,
+          "cluster_pct": 9.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "rather than a",
+          "clusters": 52,
+          "cluster_pct": 9.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "build your foundation",
+          "clusters": 51,
+          "cluster_pct": 8.9,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "your approach to colour",
+          "clusters": 116,
+          "cluster_pct": 20.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you want to",
+          "clusters": 89,
+          "cluster_pct": 15.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you want a",
+          "clusters": 77,
+          "cluster_pct": 13.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "a sudden flash of",
+          "clusters": 63,
+          "cluster_pct": 10.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "the result is a",
+          "clusters": 62,
+          "cluster_pct": 10.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "build your daily rotation",
+          "clusters": 43,
+          "cluster_pct": 7.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "the overall effect is",
+          "clusters": 42,
+          "cluster_pct": 7.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe relies on",
+          "clusters": 39,
+          "cluster_pct": 6.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "your daily rotation in",
+          "clusters": 37,
+          "cluster_pct": 6.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe thrives on",
+          "clusters": 37,
+          "cluster_pct": 6.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "approach to colour is",
+          "clusters": 35,
+          "cluster_pct": 6.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "build your foundation on",
+          "clusters": 35,
+          "cluster_pct": 6.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "a sudden hit of",
+          "clusters": 34,
+          "cluster_pct": 5.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "approach to colour relies",
+          "clusters": 32,
+          "cluster_pct": 5.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "to colour relies on",
+          "clusters": 32,
+          "cluster_pct": 5.6,
+          "occurrences": null
+        }
+      ]
+    },
+    "pattern_narrative": {
+      "2": [
+        {
+          "phrase": "rather than",
+          "clusters": 287,
+          "cluster_pct": 49.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe",
+          "clusters": 177,
+          "cluster_pct": 30.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "like a",
+          "clusters": 164,
+          "cluster_pct": 28.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "your natural",
+          "clusters": 145,
+          "cluster_pct": 25.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "clear of",
+          "clusters": 125,
+          "cluster_pct": 21.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "heavy silk",
+          "clusters": 112,
+          "cluster_pct": 19.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "silk or",
+          "clusters": 112,
+          "cluster_pct": 19.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "you do",
+          "clusters": 108,
+          "cluster_pct": 18.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "sense of",
+          "clusters": 105,
+          "cluster_pct": 18.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want",
+          "clusters": 99,
+          "cluster_pct": 17.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "your eye",
+          "clusters": 97,
+          "cluster_pct": 16.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "keep the",
+          "clusters": 95,
+          "cluster_pct": 16.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "needs to",
+          "clusters": 94,
+          "cluster_pct": 16.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "you need",
+          "clusters": 91,
+          "cluster_pct": 15.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "you look",
+          "clusters": 87,
+          "cluster_pct": 15.1,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "when you do",
+          "clusters": 88,
+          "cluster_pct": 15.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "rather than a",
+          "clusters": 75,
+          "cluster_pct": 13.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "heavy silk or",
+          "clusters": 73,
+          "cluster_pct": 12.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "on the rail",
+          "clusters": 66,
+          "cluster_pct": 11.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "on your frame",
+          "clusters": 60,
+          "cluster_pct": 10.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "it needs to",
+          "clusters": 59,
+          "cluster_pct": 10.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "a motif it",
+          "clusters": 58,
+          "cluster_pct": 10.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "a sense of",
+          "clusters": 55,
+          "cluster_pct": 9.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "which is why",
+          "clusters": 52,
+          "cluster_pct": 9.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "steer clear of",
+          "clusters": 49,
+          "cluster_pct": 8.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "woven directly into",
+          "clusters": 47,
+          "cluster_pct": 8.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "your need for",
+          "clusters": 45,
+          "cluster_pct": 7.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "your approach to",
+          "clusters": 44,
+          "cluster_pct": 7.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "your relationship with",
+          "clusters": 41,
+          "cluster_pct": 7.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "motif it needs",
+          "clusters": 39,
+          "cluster_pct": 6.8,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "a motif it needs",
+          "clusters": 39,
+          "cluster_pct": 6.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you do wear",
+          "clusters": 35,
+          "cluster_pct": 6.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "motif it needs to",
+          "clusters": 28,
+          "cluster_pct": 4.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you do introduce",
+          "clusters": 28,
+          "cluster_pct": 4.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "your approach to print",
+          "clusters": 27,
+          "cluster_pct": 4.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "introduce a motif it",
+          "clusters": 26,
+          "cluster_pct": 4.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "keep well away from",
+          "clusters": 26,
+          "cluster_pct": 4.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "you do introduce a",
+          "clusters": 26,
+          "cluster_pct": 4.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "into heavy silk or",
+          "clusters": 25,
+          "cluster_pct": 4.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "wear a motif it",
+          "clusters": 25,
+          "cluster_pct": 4.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you wear a",
+          "clusters": 25,
+          "cluster_pct": 4.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "you do wear a",
+          "clusters": 25,
+          "cluster_pct": 4.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "a fine gauge knit",
+          "clusters": 24,
+          "cluster_pct": 4.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "heavy silk or a",
+          "clusters": 23,
+          "cluster_pct": 4.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "your relationship with print",
+          "clusters": 23,
+          "cluster_pct": 4.0,
+          "occurrences": null
+        }
+      ]
+    },
+    "pattern_tip": {
+      "2": [
+        {
+          "phrase": "rather than",
+          "clusters": 400,
+          "cluster_pct": 69.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "like a",
+          "clusters": 223,
+          "cluster_pct": 38.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "look for",
+          "clusters": 169,
+          "cluster_pct": 29.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "the motif",
+          "clusters": 163,
+          "cluster_pct": 28.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "directly into",
+          "clusters": 139,
+          "cluster_pct": 24.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "keep the",
+          "clusters": 134,
+          "cluster_pct": 23.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "keeping the",
+          "clusters": 134,
+          "cluster_pct": 23.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "woven directly",
+          "clusters": 125,
+          "cluster_pct": 21.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "heavy silk",
+          "clusters": 121,
+          "cluster_pct": 21.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "the design",
+          "clusters": 118,
+          "cluster_pct": 20.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "the print",
+          "clusters": 116,
+          "cluster_pct": 20.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "the fabric",
+          "clusters": 114,
+          "cluster_pct": 19.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "a heavy",
+          "clusters": 110,
+          "cluster_pct": 19.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "the garment",
+          "clusters": 106,
+          "cluster_pct": 18.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "the visual",
+          "clusters": 101,
+          "cluster_pct": 17.5,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "rather than a",
+          "clusters": 213,
+          "cluster_pct": 37.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "woven directly into",
+          "clusters": 125,
+          "cluster_pct": 21.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "while keeping the",
+          "clusters": 61,
+          "cluster_pct": 10.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "the rest of",
+          "clusters": 60,
+          "cluster_pct": 10.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "heavy silk or",
+          "clusters": 53,
+          "cluster_pct": 9.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "your need for",
+          "clusters": 50,
+          "cluster_pct": 8.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "texture rather than",
+          "clusters": 48,
+          "cluster_pct": 8.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "a heavy silk",
+          "clusters": 44,
+          "cluster_pct": 7.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "than a loud",
+          "clusters": 43,
+          "cluster_pct": 7.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "jacquard or a",
+          "clusters": 40,
+          "cluster_pct": 6.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you introduce",
+          "clusters": 40,
+          "cluster_pct": 6.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you wear",
+          "clusters": 39,
+          "cluster_pct": 6.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "your approach to",
+          "clusters": 39,
+          "cluster_pct": 6.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "look for a",
+          "clusters": 38,
+          "cluster_pct": 6.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "the trick is",
+          "clusters": 38,
+          "cluster_pct": 6.6,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "texture rather than a",
+          "clusters": 43,
+          "cluster_pct": 7.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "rather than a loud",
+          "clusters": 42,
+          "cluster_pct": 7.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "woven directly into a",
+          "clusters": 35,
+          "cluster_pct": 6.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you introduce a",
+          "clusters": 33,
+          "cluster_pct": 5.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "the rest of the",
+          "clusters": 32,
+          "cluster_pct": 5.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "woven directly into heavy",
+          "clusters": 32,
+          "cluster_pct": 5.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you wear a",
+          "clusters": 29,
+          "cluster_pct": 5.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "woven directly into the",
+          "clusters": 29,
+          "cluster_pct": 5.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "the rest of your",
+          "clusters": 28,
+          "cluster_pct": 4.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "while keeping the overall",
+          "clusters": 27,
+          "cluster_pct": 4.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "a fine gauge knit",
+          "clusters": 26,
+          "cluster_pct": 4.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "a heavy silk jacquard",
+          "clusters": 26,
+          "cluster_pct": 4.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "directly into a heavy",
+          "clusters": 26,
+          "cluster_pct": 4.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "rather than a flat",
+          "clusters": 26,
+          "cluster_pct": 4.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "heavy silk jacquard or",
+          "clusters": 25,
+          "cluster_pct": 4.3,
+          "occurrences": null
+        }
+      ]
+    },
+    "style_core": {
+      "2": [
+        {
+          "phrase": "a room",
+          "clusters": 352,
+          "cluster_pct": 61.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe",
+          "clusters": 252,
+          "cluster_pct": 43.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "you walk",
+          "clusters": 228,
+          "cluster_pct": 39.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "your presence",
+          "clusters": 219,
+          "cluster_pct": 38.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "your style",
+          "clusters": 196,
+          "cluster_pct": 34.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "walk into",
+          "clusters": 194,
+          "cluster_pct": 33.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "you project",
+          "clusters": 185,
+          "cluster_pct": 32.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "rather than",
+          "clusters": 172,
+          "cluster_pct": 29.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "someone who",
+          "clusters": 149,
+          "cluster_pct": 25.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "relies on",
+          "clusters": 140,
+          "cluster_pct": 24.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "presence is",
+          "clusters": 126,
+          "cluster_pct": 21.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "garments that",
+          "clusters": 107,
+          "cluster_pct": 18.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "of someone",
+          "clusters": 101,
+          "cluster_pct": 17.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "sense of",
+          "clusters": 99,
+          "cluster_pct": 17.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "the room",
+          "clusters": 94,
+          "cluster_pct": 16.3,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "into a room",
+          "clusters": 215,
+          "cluster_pct": 37.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "you walk into",
+          "clusters": 194,
+          "cluster_pct": 33.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "walk into a",
+          "clusters": 190,
+          "cluster_pct": 33.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "your presence is",
+          "clusters": 91,
+          "cluster_pct": 15.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "of someone who",
+          "clusters": 86,
+          "cluster_pct": 14.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "a room looking",
+          "clusters": 70,
+          "cluster_pct": 12.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "your style presence",
+          "clusters": 70,
+          "cluster_pct": 12.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "the way you",
+          "clusters": 67,
+          "cluster_pct": 11.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you walk",
+          "clusters": 67,
+          "cluster_pct": 11.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "is an aesthetic",
+          "clusters": 66,
+          "cluster_pct": 11.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "you project a",
+          "clusters": 60,
+          "cluster_pct": 10.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "you project the",
+          "clusters": 59,
+          "cluster_pct": 10.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "you project an",
+          "clusters": 56,
+          "cluster_pct": 9.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "an aesthetic of",
+          "clusters": 53,
+          "cluster_pct": 9.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "relies on a",
+          "clusters": 51,
+          "cluster_pct": 8.9,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "you walk into a",
+          "clusters": 190,
+          "cluster_pct": 33.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "walk into a room",
+          "clusters": 174,
+          "cluster_pct": 30.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "it is an aesthetic",
+          "clusters": 63,
+          "cluster_pct": 10.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you walk into",
+          "clusters": 63,
+          "cluster_pct": 10.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "into a room looking",
+          "clusters": 60,
+          "cluster_pct": 10.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "is an aesthetic of",
+          "clusters": 50,
+          "cluster_pct": 8.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "to the way you",
+          "clusters": 45,
+          "cluster_pct": 7.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "into a room you",
+          "clusters": 37,
+          "cluster_pct": 6.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "it is a look",
+          "clusters": 34,
+          "cluster_pct": 5.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "presence relies on a",
+          "clusters": 33,
+          "cluster_pct": 5.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe relies on",
+          "clusters": 33,
+          "cluster_pct": 5.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "into a room and",
+          "clusters": 31,
+          "cluster_pct": 5.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "is an exercise in",
+          "clusters": 30,
+          "cluster_pct": 5.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "a brilliant tension between",
+          "clusters": 29,
+          "cluster_pct": 5.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "you take up space",
+          "clusters": 28,
+          "cluster_pct": 4.9,
+          "occurrences": null
+        }
+      ]
+    },
+    "textures_bad": {
+      "2": [
+        {
+          "phrase": "your natural",
+          "clusters": 258,
+          "cluster_pct": 44.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "a garment",
+          "clusters": 222,
+          "cluster_pct": 38.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe",
+          "clusters": 203,
+          "cluster_pct": 35.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "rather than",
+          "clusters": 194,
+          "cluster_pct": 33.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "a piece",
+          "clusters": 180,
+          "cluster_pct": 31.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "an immediate",
+          "clusters": 174,
+          "cluster_pct": 30.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "like a",
+          "clusters": 158,
+          "cluster_pct": 27.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "against your",
+          "clusters": 143,
+          "cluster_pct": 24.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "leave it",
+          "clusters": 136,
+          "cluster_pct": 23.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "you need",
+          "clusters": 127,
+          "cluster_pct": 22.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "far too",
+          "clusters": 115,
+          "cluster_pct": 20.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "your skin",
+          "clusters": 115,
+          "cluster_pct": 20.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "your body",
+          "clusters": 113,
+          "cluster_pct": 19.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "fights your",
+          "clusters": 108,
+          "cluster_pct": 18.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "just to",
+          "clusters": 105,
+          "cluster_pct": 18.2,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "if a garment",
+          "clusters": 152,
+          "cluster_pct": 26.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "if a piece",
+          "clusters": 150,
+          "cluster_pct": 26.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "leave it on",
+          "clusters": 124,
+          "cluster_pct": 21.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "on the hanger",
+          "clusters": 97,
+          "cluster_pct": 16.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "on the rail",
+          "clusters": 85,
+          "cluster_pct": 14.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "against the skin",
+          "clusters": 82,
+          "cluster_pct": 14.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "is an immediate",
+          "clusters": 82,
+          "cluster_pct": 14.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "your need for",
+          "clusters": 78,
+          "cluster_pct": 13.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "the second you",
+          "clusters": 65,
+          "cluster_pct": 11.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "against your skin",
+          "clusters": 63,
+          "cluster_pct": 10.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "feels like a",
+          "clusters": 63,
+          "cluster_pct": 10.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "if a material",
+          "clusters": 57,
+          "cluster_pct": 9.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "steer clear of",
+          "clusters": 51,
+          "cluster_pct": 8.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "it has no",
+          "clusters": 47,
+          "cluster_pct": 8.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "forces you to",
+          "clusters": 46,
+          "cluster_pct": 8.0,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "leave it on the",
+          "clusters": 124,
+          "cluster_pct": 21.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "it on the hanger",
+          "clusters": 67,
+          "cluster_pct": 11.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "it on the rail",
+          "clusters": 51,
+          "cluster_pct": 8.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "you are far too",
+          "clusters": 43,
+          "cluster_pct": 7.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "it has no business",
+          "clusters": 42,
+          "cluster_pct": 7.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "you need clothes that",
+          "clusters": 34,
+          "cluster_pct": 5.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "the same goes for",
+          "clusters": 33,
+          "cluster_pct": 5.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "if a piece feels",
+          "clusters": 32,
+          "cluster_pct": 5.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe needs to",
+          "clusters": 32,
+          "cluster_pct": 5.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "if a piece requires",
+          "clusters": 28,
+          "cluster_pct": 4.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "if a garment demands",
+          "clusters": 27,
+          "cluster_pct": 4.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "a piece feels like",
+          "clusters": 26,
+          "cluster_pct": 4.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "if a piece demands",
+          "clusters": 26,
+          "cluster_pct": 4.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe has to",
+          "clusters": 26,
+          "cluster_pct": 4.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "if a garment requires",
+          "clusters": 22,
+          "cluster_pct": 3.8,
+          "occurrences": null
+        }
+      ]
+    },
+    "textures_good": {
+      "2": [
+        {
+          "phrase": "materials that",
+          "clusters": 281,
+          "cluster_pct": 48.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe",
+          "clusters": 260,
+          "cluster_pct": 45.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want",
+          "clusters": 239,
+          "cluster_pct": 41.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "against the",
+          "clusters": 196,
+          "cluster_pct": 34.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "you need",
+          "clusters": 177,
+          "cluster_pct": 30.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "your clothes",
+          "clusters": 177,
+          "cluster_pct": 30.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "the skin",
+          "clusters": 168,
+          "cluster_pct": 29.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "clothes that",
+          "clusters": 146,
+          "cluster_pct": 25.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "sense of",
+          "clusters": 131,
+          "cluster_pct": 22.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "gives you",
+          "clusters": 109,
+          "cluster_pct": 18.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "reach for",
+          "clusters": 105,
+          "cluster_pct": 18.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "give you",
+          "clusters": 98,
+          "cluster_pct": 17.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "need to",
+          "clusters": 98,
+          "cluster_pct": 17.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "rely on",
+          "clusters": 96,
+          "cluster_pct": 16.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "that feel",
+          "clusters": 94,
+          "cluster_pct": 16.3,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "against the skin",
+          "clusters": 147,
+          "cluster_pct": 25.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you want",
+          "clusters": 135,
+          "cluster_pct": 23.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want a",
+          "clusters": 70,
+          "cluster_pct": 12.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "you need materials",
+          "clusters": 64,
+          "cluster_pct": 11.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "act as a",
+          "clusters": 61,
+          "cluster_pct": 10.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "need materials that",
+          "clusters": 57,
+          "cluster_pct": 9.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "clothes need to",
+          "clusters": 55,
+          "cluster_pct": 9.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "your clothes need",
+          "clusters": 55,
+          "cluster_pct": 9.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "the goal is",
+          "clusters": 52,
+          "cluster_pct": 9.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "against your skin",
+          "clusters": 51,
+          "cluster_pct": 8.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe has",
+          "clusters": 47,
+          "cluster_pct": 8.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "wardrobe has to",
+          "clusters": 46,
+          "cluster_pct": 8.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you need",
+          "clusters": 44,
+          "cluster_pct": 7.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "your daily rotation",
+          "clusters": 44,
+          "cluster_pct": 7.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "the outside world",
+          "clusters": 43,
+          "cluster_pct": 7.5,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "when you want a",
+          "clusters": 65,
+          "cluster_pct": 11.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "you need materials that",
+          "clusters": 56,
+          "cluster_pct": 9.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "your clothes need to",
+          "clusters": 52,
+          "cluster_pct": 9.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe has to",
+          "clusters": 46,
+          "cluster_pct": 8.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "the rest of the",
+          "clusters": 32,
+          "cluster_pct": 5.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe needs to",
+          "clusters": 32,
+          "cluster_pct": 5.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want materials that",
+          "clusters": 31,
+          "cluster_pct": 5.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "when you want something",
+          "clusters": 29,
+          "cluster_pct": 5.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "your clothes have to",
+          "clusters": 29,
+          "cluster_pct": 5.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "you naturally gravitate towards",
+          "clusters": 28,
+          "cluster_pct": 4.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "between you and the",
+          "clusters": 27,
+          "cluster_pct": 4.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want clothes that",
+          "clusters": 26,
+          "cluster_pct": 4.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe relies on",
+          "clusters": 25,
+          "cluster_pct": 4.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "an immediate sense of",
+          "clusters": 24,
+          "cluster_pct": 4.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "the right amount of",
+          "clusters": 24,
+          "cluster_pct": 4.2,
+          "occurrences": null
+        }
+      ]
+    },
+    "textures_sweet_spot": {
+      "2": [
+        {
+          "phrase": "sweet spot",
+          "clusters": 279,
+          "cluster_pct": 48.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "leave it",
+          "clusters": 190,
+          "cluster_pct": 33.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "your wardrobe",
+          "clusters": 177,
+          "cluster_pct": 30.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "a piece",
+          "clusters": 175,
+          "cluster_pct": 30.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "intersection of",
+          "clusters": 170,
+          "cluster_pct": 29.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "an item",
+          "clusters": 156,
+          "cluster_pct": 27.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "a garment",
+          "clusters": 154,
+          "cluster_pct": 26.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "you want",
+          "clusters": 145,
+          "cluster_pct": 25.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "you need",
+          "clusters": 143,
+          "cluster_pct": 24.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "the hanger",
+          "clusters": 142,
+          "cluster_pct": 24.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "the rail",
+          "clusters": 123,
+          "cluster_pct": 21.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "think of",
+          "clusters": 117,
+          "cluster_pct": 20.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "the intersection",
+          "clusters": 108,
+          "cluster_pct": 18.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "like a",
+          "clusters": 106,
+          "cluster_pct": 18.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "your ideal",
+          "clusters": 103,
+          "cluster_pct": 17.9,
+          "occurrences": null
+        }
+      ],
+      "3": [
+        {
+          "phrase": "leave it on",
+          "clusters": 164,
+          "cluster_pct": 28.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "if an item",
+          "clusters": 146,
+          "cluster_pct": 25.3,
+          "occurrences": null
+        },
+        {
+          "phrase": "on the hanger",
+          "clusters": 139,
+          "cluster_pct": 24.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "on the rail",
+          "clusters": 120,
+          "cluster_pct": 20.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "if a piece",
+          "clusters": 110,
+          "cluster_pct": 19.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "the intersection of",
+          "clusters": 108,
+          "cluster_pct": 18.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "at the intersection",
+          "clusters": 105,
+          "cluster_pct": 18.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "if a garment",
+          "clusters": 91,
+          "cluster_pct": 15.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "right at the",
+          "clusters": 74,
+          "cluster_pct": 12.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "if a fabric",
+          "clusters": 57,
+          "cluster_pct": 9.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "think of the",
+          "clusters": 57,
+          "cluster_pct": 9.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "a very specific",
+          "clusters": 53,
+          "cluster_pct": 9.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "your sweet spot",
+          "clusters": 53,
+          "cluster_pct": 9.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "the outside world",
+          "clusters": 52,
+          "cluster_pct": 9.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "the second you",
+          "clusters": 52,
+          "cluster_pct": 9.0,
+          "occurrences": null
+        }
+      ],
+      "4": [
+        {
+          "phrase": "leave it on the",
+          "clusters": 164,
+          "cluster_pct": 28.5,
+          "occurrences": null
+        },
+        {
+          "phrase": "at the intersection of",
+          "clusters": 105,
+          "cluster_pct": 18.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "it on the rail",
+          "clusters": 80,
+          "cluster_pct": 13.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "it on the hanger",
+          "clusters": 74,
+          "cluster_pct": 12.8,
+          "occurrences": null
+        },
+        {
+          "phrase": "right at the intersection",
+          "clusters": 69,
+          "cluster_pct": 12.0,
+          "occurrences": null
+        },
+        {
+          "phrase": "the exact intersection of",
+          "clusters": 40,
+          "cluster_pct": 6.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "your true sweet spot",
+          "clusters": 36,
+          "cluster_pct": 6.2,
+          "occurrences": null
+        },
+        {
+          "phrase": "if an item looks",
+          "clusters": 35,
+          "cluster_pct": 6.1,
+          "occurrences": null
+        },
+        {
+          "phrase": "sweet spot for your",
+          "clusters": 34,
+          "cluster_pct": 5.9,
+          "occurrences": null
+        },
+        {
+          "phrase": "spot for your wardrobe",
+          "clusters": 33,
+          "cluster_pct": 5.7,
+          "occurrences": null
+        },
+        {
+          "phrase": "straight back on the",
+          "clusters": 32,
+          "cluster_pct": 5.6,
+          "occurrences": null
+        },
+        {
+          "phrase": "if an item demands",
+          "clusters": 31,
+          "cluster_pct": 5.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "sweet spot is a",
+          "clusters": 31,
+          "cluster_pct": 5.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "to the outside world",
+          "clusters": 31,
+          "cluster_pct": 5.4,
+          "occurrences": null
+        },
+        {
+          "phrase": "you need garments that",
+          "clusters": 31,
+          "cluster_pct": 5.4,
+          "occurrences": null
+        }
+      ]
+    }
+  }
+}
