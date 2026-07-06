@@ -1,3 +1,16 @@
+<!--
+GOLDEN GUIDE METADATA (internal reference; not user-facing copy)
+archetype: Tide
+slot: 12
+cluster_key: venus_scorpio__moon_cancer__water_dominant
+venus: Scorpio | moon: Cancer | dominant_element: water
+sect: night | stellium: none
+profile: orientation=selfContained | register=quietLuxury (water nuance: enveloping/deep) | metals=warmDominant | finish=muted (aged/patinated) | temperature=warm-deep (Scorpio Venus nuance: warm-deep despite water)
+coreFormula: close drape + hidden depth + one warm point of light
+accessory_plan: soft bags=include, wraps/shawls=include, amulets/pendants=include; belts/eyewear=omit
+key_contrast: deep/intense/strategic water; warm-deep palette is the canonical Scorpio-Venus temperature nuance case
+-->
+
 # Your Cosmic Style Guide
 
 ### Tide
@@ -20,7 +33,7 @@ Rely on the shelter test for every new piece. Put the garment on and close your 
 
 Your colour world is warm, deep, and inherently private. You thrive in tonal richness that absorbs light rather than reflecting it.
 
-Build your foundation with heavy, atmospheric darks that serve specific structural roles. Bitter chocolate and blackened indigo anchor your coats and trousers. Dark mahogany acts as your primary base canvas. Deep forest green bridges your layers. These shades provide the protective layer you seek.
+Build your foundation with heavy, atmospheric darks that serve specific structural roles. Bitter chocolate and blackened indigo anchor your coats and trousers. Dark mahogany acts as your primary base canvas. Deep forest green bridges your layers. Burnt umber and washed black fill the supporting roles, giving you depth without flatness. These shades provide the protective layer you seek.
 
 Your accent rule is deeply deliberate and tightly controlled. You need only one warm, glowing tone per outfit. A scarf in burnt amber or a bag in rich cognac provides all the necessary heat.
 

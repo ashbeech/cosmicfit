@@ -1,6 +1,19 @@
+<!--
+GOLDEN GUIDE METADATA (internal reference; not user-facing copy)
+archetype: Slate
+slot: 1 (reference guide)
+cluster_key: venus_taurus__moon_capricorn__earth_dominant
+venus: Taurus | moon: Capricorn | dominant_element: earth
+sect: night | stellium: Capricorn (Moon, Saturn, Uranus, Neptune, Vesta)
+profile: orientation=selfContained | register=quietLuxury | metals=dualRegister | finish=muted | temperature=warm
+coreFormula: structure + softness + a touch of quiet depth
+accessory_plan: handbags=include, scarves=include, belts=include, hats=include
+key_contrast: reference chart (Maria/Slate). Excluded from self-scoring per the non-circularity rule.
+-->
+
 # Your Cosmic Style Guide
 
-### Maria
+### Slate
 
 ---
 
@@ -10,7 +23,7 @@ You dress to feel aligned with yourself, instinctively knowing when an outfit lo
 
 Before you even glance in a mirror or step out the door, you already know if an outfit works. You feel it in the weight of the fabric when you pick it up, the way a seam settles against your shoulder, or a clasp closing with a solid, satisfying click. You've likely always made these micro-assessments automatically; for you, it is simply how clothes are experienced.
 
-Your wardrobe relies on a core structural principle that guides almost every choice: balance weight with breathing room. An outfit made entirely of sharp structure feels like armour, while total softness loses its shape. The ideal state lives in the tension between the two, like a heavy, tailored coat thrown over a fluid silk blouse, or a draped skirt anchored by a substantial leather belt. This contrast is what makes your style distinctly yours.
+Your wardrobe relies on a core structural principle that guides almost every choice. The core formula for your style is structure + softness + a touch of quiet depth. In practice, that means balancing weight with breathing room. An outfit made entirely of sharp structure feels like armour, while total softness loses its shape. The ideal state lives in the tension between the two, like a heavy, tailored coat thrown over a fluid silk blouse, or a draped skirt anchored by a substantial leather belt. This contrast is what makes your style distinctly yours.
 
 You prefer to build your collection slowly. A functional wardrobe should feel like a toolkit of reliable instruments, where every single piece is chosen with intention and earns its place.
 
@@ -86,7 +99,7 @@ For dinners, dates, or evenings out, bring your deep accent tones to the front. 
 
 For running errands, travelling, or active days, comfort takes priority while maintaining your standards, because a trip to the pharmacy does not require suffering for the aesthetic. Choose fine merino wool over synthetic athleisure, relaxed trousers with a clean drape, and quality leather trainers. The rule remains: everything should feel excellent against your skin and move naturally with you.
 
-No matter the venue, the underlying formula is identical: combine one grounded piece, one fluid piece, and a touch of quiet depth. Only the items change; the logic stays the same.
+No matter the venue, the underlying formula of structure + softness + a touch of quiet depth is identical. Combine one grounded piece with one fluid piece, then finish with a single deep note. Only the items change; the logic stays the same.
 
 ---
 
@@ -154,7 +167,7 @@ Asking yourself if you'd still wear a piece in five to ten years. If it is not a
 
 ## 7. The Accessory
 
-You have a natural instinct for minimal accessorising, and your gut feeling that one strong piece is enough is entirely correct. Too many details can look fussy and distract from the clean lines of your clothes, and you already know which earring is the one doing too much.
+Accessories are the final phase of your formula, supplying the touch of quiet depth that finishes your structure and softness. You have a natural instinct for minimal accessorising, and your gut feeling that one strong piece is enough is entirely correct. Too many details can look fussy and distract from the clean lines of your clothes, and you already know which earring is the one doing too much.
 
 Handbags are always worth the investment. Look for full-grain leather or thick suede that holds its shape, finished with brushed or matt hardware. The bag should feel substantial and dense when you pick it up. Quality leather develops a beautiful patina over time, easily outlasting synthetic alternatives. Select clean, unbranded surfaces and let the shape and material speak for themselves.
 
@@ -182,4 +195,4 @@ A reliable test: step back from the garment and soften your focus. If the patter
 
 ---
 
-_Your style guide is a map of your natural instincts, designed to help you trust what you already know works._
+_Your style guide is a map of your natural instincts, designed to help you trust what you already know works, built on structure + softness + a touch of quiet depth._

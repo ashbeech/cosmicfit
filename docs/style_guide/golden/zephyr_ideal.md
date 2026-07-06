@@ -1,3 +1,16 @@
+<!--
+GOLDEN GUIDE METADATA (internal reference; not user-facing copy)
+archetype: Zephyr
+slot: 3
+cluster_key: venus_gemini__moon_aquarius__air_dominant
+venus: Gemini | moon: Aquarius | dominant_element: air
+sect: day | stellium: none
+profile: orientation=communityOriented | register=versatileAdaptive | metals=mixedFree | finish=mixed | temperature=cool
+coreFormula: crisp separation + mobile layers + one clever contrast
+accessory_plan: eyewear=include, bags=include, footwear=include; hats/belts=omit
+key_contrast: modular system-dresser vs Slate's slow tactile collector; mixed metals allowed freely; cool crisp palette
+-->
+
 # Your Cosmic Style Guide
 
 ### Zephyr
@@ -168,4 +181,4 @@ Use the blink test for any new print. Close your eyes and open them quickly from
 
 ---
 
-_Your style guide is a map of your curious instincts, designed to help you trust what you already know works._
+_Your style guide is a map of your curious instincts, designed to help you trust what you already know works, built on crisp separation + mobile layers + one clever contrast._

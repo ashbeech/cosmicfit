@@ -1,3 +1,16 @@
+<!--
+GOLDEN GUIDE METADATA (internal reference; not user-facing copy)
+archetype: Blaze
+slot: 5
+cluster_key: venus_sagittarius__moon_leo__fire_dominant
+venus: Sagittarius | moon: Leo | dominant_element: fire
+sect: day | stellium: fire (Sagittarius)
+profile: orientation=communityOriented | register=boldExpression | metals=mixedFree (statement scale) | finish=polished | temperature=warm
+coreFormula: expansive colour + athletic space + one theatrical finish
+accessory_plan: statement eyewear=include, substantial belts=include, footwear=include; scarves/hats=omit
+key_contrast: maximum contrast to Slate on every dimension; volume and theatrical scale vs Ember's speed and precision
+-->
+
 # Your Cosmic Style Guide
 
 ### Blaze
@@ -20,7 +33,7 @@ Rely on the radius test for every new piece. Put the garment on and stretch your
 
 Your colour world operates on a strictly hot warm temperature. You thrive in sunlit, radiant zones that feel generous and alive.
 
-Build your foundation with warm, expansive neutrals that serve specific structural roles. Deep bronze and golden camel anchor your heavy coats and trousers. Warm ivory acts as your primary base canvas. Rich terracotta and warm sand bridge your layers. These shades provide the sunlit baseline you require.
+Build your foundation with warm, expansive neutrals that serve specific structural roles. Deep bronze and golden camel anchor your heavy coats and trousers. Warm ivory acts as your primary base canvas. Rich terracotta and warm sand bridge your layers. Toasted chestnut deepens your winter pieces without cooling them. These shades provide the sunlit baseline you require.
 
 Your accent rule demands deliberate scale. Introduce one bold, radiant tone per outfit to capture the eye. A scarf in vibrant vermilion or a bag in bright sunflower yellow provides all the theatrical heat required.
 

@@ -1,3 +1,16 @@
+<!--
+GOLDEN GUIDE METADATA (internal reference; not user-facing copy)
+archetype: Ember
+slot: 2
+cluster_key: venus_aries__moon_sagittarius__fire_dominant
+venus: Aries | moon: Sagittarius | dominant_element: fire
+sect: day | stellium: none
+profile: orientation=selfContained | register=boldExpression | metals=warmDominant | finish=polished | temperature=warm
+coreFormula: clean impact + fast movement + one hot accent
+accessory_plan: handbags=include, footwear=include, eyewear=include; scarves=omit (fussy layers conflict with speed)
+key_contrast: speed and strike vs Slate's slow touch-first build; polished warm metal embraced, muted finishes rejected
+-->
+
 # Your Cosmic Style Guide
 
 ### Ember
@@ -22,7 +35,7 @@ The hesitation test is your ultimate guide. Put an item on and observe your hand
 
 Your colour logic operates on high contrast and saturated warmth. You do not do muddy, and you do not do muted.
 
-Your foundation needs to be visually stark. Build your canvas with optic white, jet black, dark indigo, and sharp crisp navy. These shades act as the springboard for your actual colour strategy, providing the necessary negative space for your brights to pop.
+Your foundation needs to be visually stark. Build your canvas with optic white, jet black, stark charcoal, clean bone, dark indigo, and sharp crisp navy. Optic white and clean bone provide the bright negative space, while jet black, charcoal, indigo, and navy act as your hard structural darks. These shades act as the springboard for your actual colour strategy, providing the necessary negative space for your brights to pop.
 
 Your accent tones must be saturated and aggressive. Rely on fire engine red, hot tangerine, electric magenta, or brilliant marigold. You deploy these colours deliberately. A cobalt blue trench coat or a scarlet silk camisole does the work of ten lesser garments, requiring zero additional styling.
 
