@@ -28,6 +28,11 @@ struct AstrologicalStyleDataset: Codable {
     /// If missing at resolve time, `applyLibraryFallback` logs a warning and
     /// skips padding rather than crashing.
     let fallbackPalettePool: [FallbackPaletteEntry]?
+    /// SG-2 Phase 2d: register-inflected formula vocabulary (12 Venus + 12
+    /// Moon rows). Optional for back-compat with pre-SG-2 datasets; when
+    /// present it is the frozen mirror of the Swift `FormulaVocabulary` enum
+    /// consumed by SG-3's Python parity computation.
+    let formulaVocabulary: FormulaVocabularyData?
 
     enum CodingKeys: String, CodingKey {
         case planetSign = "planet_sign"
@@ -36,6 +41,58 @@ struct AstrologicalStyleDataset: Codable {
         case elementBalance = "element_balance"
         case colourLibrary = "colour_library"
         case fallbackPalettePool = "fallback_palette_pool"
+        case formulaVocabulary = "formula_vocabulary"
+    }
+}
+
+/// SG-2 Phase 2a: metal register lane. `either` is the migration/legacy
+/// default (a plain-string metal decodes to `.either`).
+enum MetalRegister: String, Codable, CaseIterable {
+    case personal
+    case structural
+    case either
+}
+
+/// SG-2 Phase 2a: metal surface finish. `matte` is the legacy default.
+enum MetalFinish: String, Codable, CaseIterable {
+    case polished
+    case matte
+    case brushed
+    case aged
+}
+
+/// SG-2 Phase 2a: a dataset metal carrying register + finish metadata.
+/// Backward compatibility: a legacy plain-string entry (`"yellow gold"`)
+/// decodes as `MetalEntry(name: "yellow gold", register: .either, finish: .matte)`
+/// so pre-migration datasets still load.
+struct MetalEntry: Codable, Equatable {
+    let name: String
+    let register: MetalRegister
+    let finish: MetalFinish
+
+    init(name: String, register: MetalRegister = .either, finish: MetalFinish = .matte) {
+        self.name = name
+        self.register = register
+        self.finish = finish
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case name, register, finish
+    }
+
+    init(from decoder: Decoder) throws {
+        // Legacy shape: a bare JSON string.
+        if let single = try? decoder.singleValueContainer(),
+           let legacyName = try? single.decode(String.self) {
+            self.name = legacyName
+            self.register = .either
+            self.finish = .matte
+            return
+        }
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.register = try container.decodeIfPresent(MetalRegister.self, forKey: .register) ?? .either
+        self.finish = try container.decodeIfPresent(MetalFinish.self, forKey: .finish) ?? .matte
     }
 }
 
@@ -43,7 +100,7 @@ struct PlanetSignEntry: Codable {
     let stylePhilosophy: String
     let textures: TextureData
     let colours: ColourData
-    let metals: [String]
+    let metals: [MetalEntry]
     let stones: [String]
     let patterns: PatternData
     let silhouetteKeywords: [String]
@@ -408,7 +465,7 @@ struct BlueprintTokenGenerator {
 
         for metal in entry.metals {
             tokens.append(BlueprintToken(
-                name: metal, category: .metal, weight: rawWeight,
+                name: metal.name, category: .metal, weight: rawWeight,
                 planetarySource: planetarySource, signSource: signSource,
                 houseSource: houseSource, aspectSource: aspectSource
             ))

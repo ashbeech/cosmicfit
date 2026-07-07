@@ -35,6 +35,63 @@ struct CosmicBlueprint: Codable, Equatable {
     let pattern: PatternSection               // D + AI
     let generatedAt: Date                     // M
     let engineVersion: String                 // M
+    /// SG-2 Phase 2.5 output contract, cluster-level. Optional for back-compat:
+    /// pre-SG-2 stored blueprints omit these; nil renders as today's layout.
+    let coreFormula: String?                  // AI — SG-2.5
+    let closing: String?                      // AI — SG-2.5
+
+    init(
+        userInfo: BlueprintUserInfo,
+        styleCore: StyleCoreSection,
+        textures: TexturesSection,
+        palette: PaletteSection,
+        occasions: OccasionsSection,
+        hardware: HardwareSection,
+        code: CodeSection,
+        accessory: AccessorySection,
+        pattern: PatternSection,
+        generatedAt: Date,
+        engineVersion: String,
+        coreFormula: String? = nil,
+        closing: String? = nil
+    ) {
+        self.userInfo = userInfo
+        self.styleCore = styleCore
+        self.textures = textures
+        self.palette = palette
+        self.occasions = occasions
+        self.hardware = hardware
+        self.code = code
+        self.accessory = accessory
+        self.pattern = pattern
+        self.generatedAt = generatedAt
+        self.engineVersion = engineVersion
+        self.coreFormula = coreFormula
+        self.closing = closing
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        userInfo = try c.decode(BlueprintUserInfo.self, forKey: .userInfo)
+        styleCore = try c.decode(StyleCoreSection.self, forKey: .styleCore)
+        textures = try c.decode(TexturesSection.self, forKey: .textures)
+        palette = try c.decode(PaletteSection.self, forKey: .palette)
+        occasions = try c.decode(OccasionsSection.self, forKey: .occasions)
+        hardware = try c.decode(HardwareSection.self, forKey: .hardware)
+        code = try c.decode(CodeSection.self, forKey: .code)
+        accessory = try c.decode(AccessorySection.self, forKey: .accessory)
+        pattern = try c.decode(PatternSection.self, forKey: .pattern)
+        generatedAt = try c.decode(Date.self, forKey: .generatedAt)
+        engineVersion = try c.decode(String.self, forKey: .engineVersion)
+        coreFormula = try c.decodeIfPresent(String.self, forKey: .coreFormula)
+        closing = try c.decodeIfPresent(String.self, forKey: .closing)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case userInfo, styleCore, textures, palette, occasions, hardware
+        case code, accessory, pattern, generatedAt, engineVersion
+        case coreFormula, closing
+    }
 }
 
 // MARK: - User Info
@@ -50,6 +107,34 @@ struct BlueprintUserInfo: Codable, Equatable {
 struct StyleCoreSection: Codable, Equatable {
     /// AI-generated opening narrative (1–2 paragraphs).
     let narrativeText: String                 // AI — key: "style_core"
+    /// SG-2 Phase 2.5 output contract (all optional for back-compat).
+    let sectionIntro: String?                 // AI — SG-2.5
+    let rankedItems: [RankedItem]?           // AI — SG-2.5
+    let tests: [String]?                     // AI — SG-2.5
+    let traps: [Trap]?                       // AI — SG-2.5
+
+    init(narrativeText: String, sectionIntro: String? = nil,
+         rankedItems: [RankedItem]? = nil, tests: [String]? = nil,
+         traps: [Trap]? = nil) {
+        self.narrativeText = narrativeText
+        self.sectionIntro = sectionIntro
+        self.rankedItems = rankedItems
+        self.tests = tests
+        self.traps = traps
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        narrativeText = try c.decode(String.self, forKey: .narrativeText)
+        sectionIntro = try c.decodeIfPresent(String.self, forKey: .sectionIntro)
+        rankedItems = try c.decodeIfPresent([RankedItem].self, forKey: .rankedItems)
+        tests = try c.decodeIfPresent([String].self, forKey: .tests)
+        traps = try c.decodeIfPresent([Trap].self, forKey: .traps)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case narrativeText, sectionIntro, rankedItems, tests, traps
+    }
 }
 
 // MARK: - Textures
@@ -67,16 +152,27 @@ struct TexturesSection: Codable, Equatable {
     let avoidTextures: [String]              // D
     /// Deterministic sweet-spot keywords (top 2).
     let sweetSpotKeywords: [String]          // D
+    /// SG-2 Phase 2.5 output contract (all optional for back-compat).
+    let sectionIntro: String?                 // AI — SG-2.5
+    let rankedItems: [RankedItem]?           // AI — SG-2.5
+    let tests: [String]?                     // AI — SG-2.5
+    let traps: [Trap]?                       // AI — SG-2.5
 
     init(goodText: String, badText: String, sweetSpotText: String,
          recommendedTextures: [String] = [], avoidTextures: [String] = [],
-         sweetSpotKeywords: [String] = []) {
+         sweetSpotKeywords: [String] = [], sectionIntro: String? = nil,
+         rankedItems: [RankedItem]? = nil, tests: [String]? = nil,
+         traps: [Trap]? = nil) {
         self.goodText = goodText
         self.badText = badText
         self.sweetSpotText = sweetSpotText
         self.recommendedTextures = recommendedTextures
         self.avoidTextures = avoidTextures
         self.sweetSpotKeywords = sweetSpotKeywords
+        self.sectionIntro = sectionIntro
+        self.rankedItems = rankedItems
+        self.tests = tests
+        self.traps = traps
     }
 
     init(from decoder: Decoder) throws {
@@ -87,11 +183,16 @@ struct TexturesSection: Codable, Equatable {
         recommendedTextures = try container.decodeIfPresent([String].self, forKey: .recommendedTextures) ?? []
         avoidTextures = try container.decodeIfPresent([String].self, forKey: .avoidTextures) ?? []
         sweetSpotKeywords = try container.decodeIfPresent([String].self, forKey: .sweetSpotKeywords) ?? []
+        sectionIntro = try container.decodeIfPresent(String.self, forKey: .sectionIntro)
+        rankedItems = try container.decodeIfPresent([RankedItem].self, forKey: .rankedItems)
+        tests = try container.decodeIfPresent([String].self, forKey: .tests)
+        traps = try container.decodeIfPresent([Trap].self, forKey: .traps)
     }
 
     private enum CodingKeys: String, CodingKey {
         case goodText, badText, sweetSpotText
         case recommendedTextures, avoidTextures, sweetSpotKeywords
+        case sectionIntro, rankedItems, tests, traps
     }
 }
 
@@ -132,6 +233,11 @@ struct PaletteSection: Codable, Equatable {
     let swatchFamilies: [SwatchFamily]        // D — legacy only
     /// AI-generated narrative about the user's palette.
     let narrativeText: String                 // AI — key: "palette_narrative"
+    /// SG-2 Phase 2.5 output contract (all optional for back-compat).
+    let sectionIntro: String?                 // AI — SG-2.5
+    let rankedItems: [RankedItem]?           // AI — SG-2.5
+    let tests: [String]?                     // AI — SG-2.5
+    let traps: [Trap]?                       // AI — SG-2.5
 
     /// V4.7 initialiser — all fields populated from ColourEngineResult.
     init(neutrals: [BlueprintColour], coreColours: [BlueprintColour],
@@ -140,7 +246,9 @@ struct PaletteSection: Codable, Equatable {
          luminarySignature: BlueprintColour? = nil, rulerSignature: BlueprintColour? = nil,
          family: PaletteFamily, cluster: PaletteCluster, variables: DerivedVariables,
          secondaryPull: PaletteFamily?, overrideFlags: OverrideFlags,
-         narrativeText: String) {
+         narrativeText: String, sectionIntro: String? = nil,
+         rankedItems: [RankedItem]? = nil, tests: [String]? = nil,
+         traps: [Trap]? = nil) {
         self.neutrals = neutrals
         self.coreColours = coreColours
         self.accentColours = accentColours
@@ -156,6 +264,10 @@ struct PaletteSection: Codable, Equatable {
         self.overrideFlags = overrideFlags
         self.swatchFamilies = []
         self.narrativeText = narrativeText
+        self.sectionIntro = sectionIntro
+        self.rankedItems = rankedItems
+        self.tests = tests
+        self.traps = traps
     }
 
     /// Legacy initialiser — kept for backward compatibility during transition.
@@ -176,6 +288,10 @@ struct PaletteSection: Codable, Equatable {
         self.overrideFlags = nil
         self.swatchFamilies = swatchFamilies
         self.narrativeText = narrativeText
+        self.sectionIntro = nil
+        self.rankedItems = nil
+        self.tests = nil
+        self.traps = nil
     }
 
     init(from decoder: Decoder) throws {
@@ -195,6 +311,10 @@ struct PaletteSection: Codable, Equatable {
         overrideFlags = try container.decodeIfPresent(OverrideFlags.self, forKey: .overrideFlags)
         swatchFamilies = try container.decodeIfPresent([SwatchFamily].self, forKey: .swatchFamilies) ?? []
         narrativeText = try container.decode(String.self, forKey: .narrativeText)
+        sectionIntro = try container.decodeIfPresent(String.self, forKey: .sectionIntro)
+        rankedItems = try container.decodeIfPresent([RankedItem].self, forKey: .rankedItems)
+        tests = try container.decodeIfPresent([String].self, forKey: .tests)
+        traps = try container.decodeIfPresent([Trap].self, forKey: .traps)
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -203,6 +323,7 @@ struct PaletteSection: Codable, Equatable {
         case luminarySignature, rulerSignature
         case family, cluster, variables, secondaryPull, overrideFlags
         case swatchFamilies, narrativeText
+        case sectionIntro, rankedItems, tests, traps
     }
 
     /// Whether this palette was generated by the V4 engine.
@@ -417,6 +538,71 @@ struct OccasionsSection: Codable, Equatable {
     let intimateText: String                  // AI — key: "occasions_intimate"
     /// AI-generated paragraph for daily/casual context.
     let dailyText: String                     // AI — key: "occasions_daily"
+    /// SG-2 Phase 2.5 output contract (all optional for back-compat).
+    let sectionIntro: String?                 // AI — SG-2.5
+    let rankedItems: [RankedItem]?           // AI — SG-2.5
+    let tests: [String]?                     // AI — SG-2.5
+    let traps: [Trap]?                       // AI — SG-2.5
+
+    init(workText: String, intimateText: String, dailyText: String,
+         sectionIntro: String? = nil, rankedItems: [RankedItem]? = nil,
+         tests: [String]? = nil, traps: [Trap]? = nil) {
+        self.workText = workText
+        self.intimateText = intimateText
+        self.dailyText = dailyText
+        self.sectionIntro = sectionIntro
+        self.rankedItems = rankedItems
+        self.tests = tests
+        self.traps = traps
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        workText = try c.decode(String.self, forKey: .workText)
+        intimateText = try c.decode(String.self, forKey: .intimateText)
+        dailyText = try c.decode(String.self, forKey: .dailyText)
+        sectionIntro = try c.decodeIfPresent(String.self, forKey: .sectionIntro)
+        rankedItems = try c.decodeIfPresent([RankedItem].self, forKey: .rankedItems)
+        tests = try c.decodeIfPresent([String].self, forKey: .tests)
+        traps = try c.decodeIfPresent([Trap].self, forKey: .traps)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case workText, intimateText, dailyText
+        case sectionIntro, rankedItems, tests, traps
+    }
+}
+
+// MARK: - Output Contract (SG-2 Phase 2.5)
+
+/// A ranked domain item surfaced in a section (colour-by-role, texture with
+/// use-case, accessory spec). SG-3 populates these from the ranked domain
+/// tables; UI renders them as a formatted list when present.
+struct RankedItem: Codable, Equatable {
+    let name: String
+    let role: String
+    let useCase: String?
+
+    init(name: String, role: String, useCase: String? = nil) {
+        self.name = name
+        self.role = role
+        self.useCase = useCase
+    }
+
+    private enum CodingKeys: String, CodingKey { case name, role, useCase }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        name = try c.decode(String.self, forKey: .name)
+        role = try c.decode(String.self, forKey: .role)
+        useCase = try c.decodeIfPresent(String.self, forKey: .useCase)
+    }
+}
+
+/// A named failure mode plus its fix (the golden guides' "trap" pattern).
+struct Trap: Codable, Equatable {
+    let failure: String
+    let fix: String
 }
 
 // MARK: - Hardware
@@ -430,8 +616,72 @@ struct HardwareSection: Codable, Equatable {
     let tipText: String                       // AI — key: "hardware_tip"
     /// Deterministic list of recommended metals.
     let recommendedMetals: [String]           // D
+    /// SG-2 Phase 2b: warm/personal-register metals (dualRegister split).
+    /// Nil = no split; render `recommendedMetals` as today. Optional for
+    /// back-compat: pre-SG-2 stored blueprints omit it.
+    let personalMetals: [String]?             // D — SG-2
+    /// SG-2 Phase 2b: cool/structural-register metals (dualRegister split).
+    let structuralMetals: [String]?           // D — SG-2
+    /// SG-2 Phase 2b: finishes this profile passes over.
+    let excludedFinishes: [String]?           // D — SG-2
     /// Deterministic list of recommended stones.
     let recommendedStones: [String]           // D
+    /// SG-2 Phase 2.5 output contract (all optional for back-compat).
+    let sectionIntro: String?                 // AI — SG-2.5
+    let rankedItems: [RankedItem]?            // AI — SG-2.5
+    let tests: [String]?                      // AI — SG-2.5
+    let traps: [Trap]?                        // AI — SG-2.5
+
+    init(
+        metalsText: String,
+        stonesText: String,
+        tipText: String,
+        recommendedMetals: [String],
+        personalMetals: [String]? = nil,
+        structuralMetals: [String]? = nil,
+        excludedFinishes: [String]? = nil,
+        recommendedStones: [String],
+        sectionIntro: String? = nil,
+        rankedItems: [RankedItem]? = nil,
+        tests: [String]? = nil,
+        traps: [Trap]? = nil
+    ) {
+        self.metalsText = metalsText
+        self.stonesText = stonesText
+        self.tipText = tipText
+        self.recommendedMetals = recommendedMetals
+        self.personalMetals = personalMetals
+        self.structuralMetals = structuralMetals
+        self.excludedFinishes = excludedFinishes
+        self.recommendedStones = recommendedStones
+        self.sectionIntro = sectionIntro
+        self.rankedItems = rankedItems
+        self.tests = tests
+        self.traps = traps
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        metalsText = try c.decode(String.self, forKey: .metalsText)
+        stonesText = try c.decode(String.self, forKey: .stonesText)
+        tipText = try c.decode(String.self, forKey: .tipText)
+        recommendedMetals = try c.decode([String].self, forKey: .recommendedMetals)
+        personalMetals = try c.decodeIfPresent([String].self, forKey: .personalMetals)
+        structuralMetals = try c.decodeIfPresent([String].self, forKey: .structuralMetals)
+        excludedFinishes = try c.decodeIfPresent([String].self, forKey: .excludedFinishes)
+        recommendedStones = try c.decode([String].self, forKey: .recommendedStones)
+        sectionIntro = try c.decodeIfPresent(String.self, forKey: .sectionIntro)
+        rankedItems = try c.decodeIfPresent([RankedItem].self, forKey: .rankedItems)
+        tests = try c.decodeIfPresent([String].self, forKey: .tests)
+        traps = try c.decodeIfPresent([Trap].self, forKey: .traps)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case metalsText, stonesText, tipText, recommendedMetals
+        case personalMetals, structuralMetals, excludedFinishes
+        case recommendedStones
+        case sectionIntro, rankedItems, tests, traps
+    }
 }
 
 // MARK: - Code
@@ -443,6 +693,39 @@ struct CodeSection: Codable, Equatable {
     let avoid: [String]                       // D
     /// Deterministic list of "consider" directives (typically 3–4).
     let consider: [String]                    // D
+    /// SG-2 Phase 2.5 output contract (all optional for back-compat).
+    let sectionIntro: String?                 // AI — SG-2.5
+    let rankedItems: [RankedItem]?           // AI — SG-2.5
+    let tests: [String]?                     // AI — SG-2.5
+    let traps: [Trap]?                       // AI — SG-2.5
+
+    init(leanInto: [String], avoid: [String], consider: [String],
+         sectionIntro: String? = nil, rankedItems: [RankedItem]? = nil,
+         tests: [String]? = nil, traps: [Trap]? = nil) {
+        self.leanInto = leanInto
+        self.avoid = avoid
+        self.consider = consider
+        self.sectionIntro = sectionIntro
+        self.rankedItems = rankedItems
+        self.tests = tests
+        self.traps = traps
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        leanInto = try c.decode([String].self, forKey: .leanInto)
+        avoid = try c.decode([String].self, forKey: .avoid)
+        consider = try c.decode([String].self, forKey: .consider)
+        sectionIntro = try c.decodeIfPresent(String.self, forKey: .sectionIntro)
+        rankedItems = try c.decodeIfPresent([RankedItem].self, forKey: .rankedItems)
+        tests = try c.decodeIfPresent([String].self, forKey: .tests)
+        traps = try c.decodeIfPresent([Trap].self, forKey: .traps)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case leanInto, avoid, consider
+        case sectionIntro, rankedItems, tests, traps
+    }
 }
 
 // MARK: - Accessory
@@ -450,6 +733,34 @@ struct CodeSection: Codable, Equatable {
 struct AccessorySection: Codable, Equatable {
     /// AI-generated paragraphs (always 3).
     let paragraphs: [String]                  // AI — keys: "accessory_1", "accessory_2", "accessory_3"
+    /// SG-2 Phase 2.5 output contract (all optional for back-compat).
+    let sectionIntro: String?                 // AI — SG-2.5
+    let rankedItems: [RankedItem]?           // AI — SG-2.5
+    let tests: [String]?                     // AI — SG-2.5
+    let traps: [Trap]?                       // AI — SG-2.5
+
+    init(paragraphs: [String], sectionIntro: String? = nil,
+         rankedItems: [RankedItem]? = nil, tests: [String]? = nil,
+         traps: [Trap]? = nil) {
+        self.paragraphs = paragraphs
+        self.sectionIntro = sectionIntro
+        self.rankedItems = rankedItems
+        self.tests = tests
+        self.traps = traps
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        paragraphs = try c.decode([String].self, forKey: .paragraphs)
+        sectionIntro = try c.decodeIfPresent(String.self, forKey: .sectionIntro)
+        rankedItems = try c.decodeIfPresent([RankedItem].self, forKey: .rankedItems)
+        tests = try c.decodeIfPresent([String].self, forKey: .tests)
+        traps = try c.decodeIfPresent([Trap].self, forKey: .traps)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case paragraphs, sectionIntro, rankedItems, tests, traps
+    }
 }
 
 // MARK: - Pattern
@@ -463,6 +774,42 @@ struct PatternSection: Codable, Equatable {
     let recommendedPatterns: [String]         // D
     /// Deterministic list of patterns to avoid.
     let avoidPatterns: [String]               // D
+    /// SG-2 Phase 2.5 output contract (all optional for back-compat).
+    let sectionIntro: String?                 // AI — SG-2.5
+    let rankedItems: [RankedItem]?           // AI — SG-2.5
+    let tests: [String]?                     // AI — SG-2.5
+    let traps: [Trap]?                       // AI — SG-2.5
+
+    init(narrativeText: String, tipText: String, recommendedPatterns: [String],
+         avoidPatterns: [String], sectionIntro: String? = nil,
+         rankedItems: [RankedItem]? = nil, tests: [String]? = nil,
+         traps: [Trap]? = nil) {
+        self.narrativeText = narrativeText
+        self.tipText = tipText
+        self.recommendedPatterns = recommendedPatterns
+        self.avoidPatterns = avoidPatterns
+        self.sectionIntro = sectionIntro
+        self.rankedItems = rankedItems
+        self.tests = tests
+        self.traps = traps
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        narrativeText = try c.decode(String.self, forKey: .narrativeText)
+        tipText = try c.decode(String.self, forKey: .tipText)
+        recommendedPatterns = try c.decode([String].self, forKey: .recommendedPatterns)
+        avoidPatterns = try c.decode([String].self, forKey: .avoidPatterns)
+        sectionIntro = try c.decodeIfPresent(String.self, forKey: .sectionIntro)
+        rankedItems = try c.decodeIfPresent([RankedItem].self, forKey: .rankedItems)
+        tests = try c.decodeIfPresent([String].self, forKey: .tests)
+        traps = try c.decodeIfPresent([Trap].self, forKey: .traps)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case narrativeText, tipText, recommendedPatterns, avoidPatterns
+        case sectionIntro, rankedItems, tests, traps
+    }
 }
 
 // MARK: - Blueprint Token

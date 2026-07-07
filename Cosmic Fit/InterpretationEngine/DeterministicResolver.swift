@@ -16,6 +16,16 @@ struct DeterministicResolverResult {
     let accentColours: [BlueprintColour]
     let swatchFamilies: [SwatchFamily]
     let recommendedMetals: [String]
+    /// SG-2 Phase 2b: warm/personal-register metals when the profile's
+    /// metal strategy splits registers (dualRegister). Nil = no split
+    /// (mixedFree / legacy callers); render `recommendedMetals` unchanged.
+    let personalMetals: [String]?
+    /// SG-2 Phase 2b: cool/structural-register metals for a split strategy.
+    let structuralMetals: [String]?
+    /// SG-2 Phase 2b: finishes/hardware this profile should pass over
+    /// (e.g. "polished chrome" for Slate's muted lane). Nil for lanes with
+    /// no exclusion.
+    let excludedFinishes: [String]?
     let recommendedStones: [String]
     let leanInto: [String]
     let avoid: [String]
@@ -25,6 +35,45 @@ struct DeterministicResolverResult {
     let recommendedTextures: [String]
     let avoidTextures: [String]
     let sweetSpotKeywords: [String]
+
+    /// The SG-2 register-split fields default to nil so pre-existing call
+    /// sites (tests, fixtures) that construct a result without them still
+    /// compile and behave as before (no split).
+    init(
+        coreColours: [BlueprintColour],
+        accentColours: [BlueprintColour],
+        swatchFamilies: [SwatchFamily],
+        recommendedMetals: [String],
+        personalMetals: [String]? = nil,
+        structuralMetals: [String]? = nil,
+        excludedFinishes: [String]? = nil,
+        recommendedStones: [String],
+        leanInto: [String],
+        avoid: [String],
+        consider: [String],
+        recommendedPatterns: [String],
+        avoidPatterns: [String],
+        recommendedTextures: [String],
+        avoidTextures: [String],
+        sweetSpotKeywords: [String]
+    ) {
+        self.coreColours = coreColours
+        self.accentColours = accentColours
+        self.swatchFamilies = swatchFamilies
+        self.recommendedMetals = recommendedMetals
+        self.personalMetals = personalMetals
+        self.structuralMetals = structuralMetals
+        self.excludedFinishes = excludedFinishes
+        self.recommendedStones = recommendedStones
+        self.leanInto = leanInto
+        self.avoid = avoid
+        self.consider = consider
+        self.recommendedPatterns = recommendedPatterns
+        self.avoidPatterns = avoidPatterns
+        self.recommendedTextures = recommendedTextures
+        self.avoidTextures = avoidTextures
+        self.sweetSpotKeywords = sweetSpotKeywords
+    }
 }
 
 struct DeterministicResolver {
@@ -35,7 +84,8 @@ struct DeterministicResolver {
         tokens: [BlueprintToken],
         analysis: ChartAnalysis,
         dataset: AstrologicalStyleDataset,
-        contributingCombos: [(key: String, aggregateWeight: Double)]
+        contributingCombos: [(key: String, aggregateWeight: Double)],
+        profile: ChartAestheticProfile? = nil
     ) -> DeterministicResolverResult {
         let palette = resolvePalette(
             tokens: tokens,
@@ -44,7 +94,8 @@ struct DeterministicResolver {
             contributingCombos: contributingCombos
         )
         let hardware = resolveHardware(
-            contributingCombos: contributingCombos, dataset: dataset, analysis: analysis
+            contributingCombos: contributingCombos, dataset: dataset,
+            analysis: analysis, profile: profile
         )
         let code = resolveCode(
             tokens: tokens,
@@ -64,6 +115,9 @@ struct DeterministicResolver {
             accentColours: palette.accent,
             swatchFamilies: [],
             recommendedMetals: hardware.metals,
+            personalMetals: hardware.personalMetals,
+            structuralMetals: hardware.structuralMetals,
+            excludedFinishes: hardware.excludedFinishes,
             recommendedStones: hardware.stones,
             leanInto: code.leanInto,
             avoid: code.avoid,
@@ -84,10 +138,12 @@ struct DeterministicResolver {
         tokens: [BlueprintToken],
         analysis: ChartAnalysis,
         dataset: AstrologicalStyleDataset,
-        contributingCombos: [(key: String, aggregateWeight: Double)]
+        contributingCombos: [(key: String, aggregateWeight: Double)],
+        profile: ChartAestheticProfile? = nil
     ) -> DeterministicResolverResult {
         let hardware = resolveHardware(
-            contributingCombos: contributingCombos, dataset: dataset, analysis: analysis
+            contributingCombos: contributingCombos, dataset: dataset,
+            analysis: analysis, profile: profile
         )
         let code = resolveCode(
             tokens: tokens,
@@ -107,6 +163,9 @@ struct DeterministicResolver {
             accentColours: [],
             swatchFamilies: [],
             recommendedMetals: hardware.metals,
+            personalMetals: hardware.personalMetals,
+            structuralMetals: hardware.structuralMetals,
+            excludedFinishes: hardware.excludedFinishes,
             recommendedStones: hardware.stones,
             leanInto: code.leanInto,
             avoid: code.avoid,
@@ -816,6 +875,9 @@ struct DeterministicResolver {
 
     private struct HardwareResult {
         let metals: [String]
+        let personalMetals: [String]?
+        let structuralMetals: [String]?
+        let excludedFinishes: [String]?
         let stones: [String]
     }
 
@@ -835,10 +897,85 @@ struct DeterministicResolver {
         return 0
     }
 
+    /// Builds a name → MetalEntry lookup across the whole dataset so ranked
+    /// metal names (which the count map reduces to lowercased strings) can be
+    /// re-tagged with their register/finish for the Phase 2b split.
+    private static func metalMetadata(
+        dataset: AstrologicalStyleDataset
+    ) -> [String: MetalEntry] {
+        var meta: [String: MetalEntry] = [:]
+        for (_, entry) in dataset.planetSign {
+            for metal in entry.metals {
+                meta[metal.name.lowercased()] = metal
+            }
+        }
+        return meta
+    }
+
+    /// Classifies a ranked metal name into personal (warm) or structural
+    /// (cool). Uses the dataset register first; falls back to metal
+    /// temperature for `.either` (or unknown) metals.
+    private static func metalIsPersonal(
+        _ name: String, meta: [String: MetalEntry]
+    ) -> Bool {
+        if let entry = meta[name.lowercased()] {
+            switch entry.register {
+            case .personal:   return true
+            case .structural: return false
+            case .either:     return metalTemperature(name) >= 0
+            }
+        }
+        return metalTemperature(name) >= 0
+    }
+
+    /// SG-2 Phase 2b: derives the register-split lists and excluded finishes
+    /// from the profile's metal strategy + finish lane. Returns nil lists for
+    /// strategies that render as a single unified list (mixedFree / no profile).
+    private static func splitMetalsByRegister(
+        ranked: [String],
+        profile: ChartAestheticProfile,
+        dataset: AstrologicalStyleDataset
+    ) -> (personal: [String]?, structural: [String]?, excluded: [String]?) {
+        let meta = metalMetadata(dataset: dataset)
+        let personal = ranked.filter { metalIsPersonal($0, meta: meta) }
+        let structural = ranked.filter { !metalIsPersonal($0, meta: meta) }
+
+        // Finish-lane exclusions (the placeholder {excluded_finish} reads [0]).
+        let excluded: [String]?
+        switch profile.finishLane {
+        case .muted:
+            excluded = ["polished chrome", "high-shine silver"]
+        case .polished:
+            excluded = nil
+        case .mixed:
+            excluded = nil
+        }
+
+        switch profile.metalStrategy {
+        case .dualRegister:
+            // Warm personal + cool structural, both surfaced.
+            return (personal.isEmpty ? nil : personal,
+                    structural.isEmpty ? nil : structural,
+                    excluded)
+        case .warmDominant:
+            // All warm metals unified; no artificial cool structural split.
+            let warm = personal.isEmpty ? ranked : personal
+            return (warm, nil, excluded ?? ["cool polished silver"])
+        case .coolDominant:
+            // All cool metals unified.
+            let cool = structural.isEmpty ? ranked : structural
+            return (nil, cool, excluded ?? ["warm polished brass"])
+        case .mixedFree:
+            // No artificial split; render the unified ranked list unchanged.
+            return (nil, nil, nil)
+        }
+    }
+
     private static func resolveHardware(
         contributingCombos: [(key: String, aggregateWeight: Double)],
         dataset: AstrologicalStyleDataset,
-        analysis: ChartAnalysis
+        analysis: ChartAnalysis,
+        profile: ChartAestheticProfile? = nil
     ) -> HardwareResult {
         let topCombos = Array(contributingCombos.prefix(5))
 
@@ -849,7 +986,7 @@ struct DeterministicResolver {
             guard let entry = dataset.planetSign[combo.key] else { continue }
 
             for metal in entry.metals {
-                let lower = metal.lowercased()
+                let lower = metal.name.lowercased()
                 let existing = metalCounts[lower] ?? (0, 0)
                 metalCounts[lower] = (existing.count + 1, max(existing.maxWeight, combo.aggregateWeight))
             }
@@ -876,7 +1013,7 @@ struct DeterministicResolver {
             for combo in combos {
                 guard let entry = dataset.planetSign[combo.key] else { continue }
                 for metal in entry.metals {
-                    let lower = metal.lowercased()
+                    let lower = metal.name.lowercased()
                     let existing = metalCounts[lower] ?? (0, 0)
                     metalCounts[lower] = (
                         existing.count + concentration,
@@ -941,8 +1078,20 @@ struct DeterministicResolver {
             }
             .map(\.key)
 
+        let finalMetals = ensureMinimum(metals, min: 2)
+
+        // SG-2 Phase 2b: profile-conditioned register split. Absent profile
+        // (legacy callers / tests) → no split, render as today.
+        let resolvedProfile = profile ?? ChartAestheticProfile.derive(from: analysis)
+        let split = splitMetalsByRegister(
+            ranked: finalMetals, profile: resolvedProfile, dataset: dataset
+        )
+
         return HardwareResult(
-            metals: ensureMinimum(metals, min: 2),
+            metals: finalMetals,
+            personalMetals: split.personal,
+            structuralMetals: split.structural,
+            excludedFinishes: split.excluded,
             stones: ensureMinimum(stones, min: 2)
         )
     }

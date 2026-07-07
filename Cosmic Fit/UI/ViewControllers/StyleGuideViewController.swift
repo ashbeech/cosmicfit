@@ -492,7 +492,13 @@ final class StyleGuideViewController: UIViewController {
                     StyleGuideDetailContent.TextSection(subheading: nil, bodyText: body)
                 ],
                 customComponent: nil,
-                tearPlacement: .afterStackSubview(index: 0)
+                tearPlacement: .afterStackSubview(index: 0),
+                // SG-2 Phase 2.5 output-contract slots (nil until SG-3 fills them).
+                sectionIntro: bp?.styleCore.sectionIntro,
+                rankedItems: bp?.styleCore.rankedItems,
+                tests: bp?.styleCore.tests,
+                traps: bp?.styleCore.traps,
+                closing: bp?.closing
             )
 
         case .textures:
@@ -595,7 +601,12 @@ final class StyleGuideViewController: UIViewController {
                     StyleGuideDetailContent.TextSection(subheading: "Tip", bodyText: tip)
                 ],
                 customComponent: nil,
-                tearPlacement: .offsetIntoStackSubview(index: 3, fraction: 0.15)
+                tearPlacement: .offsetIntoStackSubview(index: 3, fraction: 0.15),
+                // SG-2 Phase 2.5 output-contract slots (nil until SG-3 fills them).
+                sectionIntro: bp?.hardware.sectionIntro,
+                rankedItems: bp?.hardware.rankedItems,
+                tests: bp?.hardware.tests,
+                traps: bp?.hardware.traps
             )
 
         case .code:

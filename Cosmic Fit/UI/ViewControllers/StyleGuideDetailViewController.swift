@@ -39,10 +39,62 @@ struct StyleGuideDetailContent {
     let textSections: [TextSection]
     let customComponent: UIView?
     let tearPlacement: StyleGuideGatedTearPlacement?
+    // SG-2 Phase 2.5 output-contract slots. All optional; when absent the
+    // detail page renders exactly as before (no visible change for pre-SG-2
+    // blueprints). Populated by SG-3 generation; the rendering path exists now
+    // so SG-4's "filled-but-unsurfaced slot fails" check has a target.
+    let sectionIntro: String?
+    let rankedItems: [RankedItem]?
+    let tests: [String]?
+    let traps: [Trap]?
+    let closing: String?
 
     struct TextSection {
         let subheading: String?
         let bodyText: String
+    }
+
+    init(sectionType: StyleGuideSection, title: String, iconImageName: String,
+         textSections: [TextSection], customComponent: UIView?,
+         tearPlacement: StyleGuideGatedTearPlacement?,
+         sectionIntro: String? = nil, rankedItems: [RankedItem]? = nil,
+         tests: [String]? = nil, traps: [Trap]? = nil, closing: String? = nil) {
+        self.sectionType = sectionType
+        self.title = title
+        self.iconImageName = iconImageName
+        self.textSections = textSections
+        self.customComponent = customComponent
+        self.tearPlacement = tearPlacement
+        self.sectionIntro = sectionIntro
+        self.rankedItems = rankedItems
+        self.tests = tests
+        self.traps = traps
+        self.closing = closing
+    }
+
+    /// SG-2 Phase 2.5: formats the structured output-contract slots into extra
+    /// text sections. Empty when no slot is populated (graceful fallback).
+    func outputContractTrailingSections() -> [TextSection] {
+        var out: [TextSection] = []
+        if let items = rankedItems, !items.isEmpty {
+            let body = items.map { item -> String in
+                let use = item.useCase.map { " — \($0)" } ?? ""
+                return "• \(item.name) (\(item.role))\(use)"
+            }.joined(separator: "\n")
+            out.append(TextSection(subheading: "Ranked", bodyText: body))
+        }
+        if let tests, !tests.isEmpty {
+            out.append(TextSection(subheading: "Tests",
+                                   bodyText: tests.map { "• \($0)" }.joined(separator: "\n")))
+        }
+        if let traps, !traps.isEmpty {
+            let body = traps.map { "• \($0.failure) → \($0.fix)" }.joined(separator: "\n")
+            out.append(TextSection(subheading: "Traps", bodyText: body))
+        }
+        if let closing, !closing.isEmpty {
+            out.append(TextSection(subheading: "Closing", bodyText: closing))
+        }
+        return out
     }
 
     enum StyleGuideSection {
@@ -1061,12 +1113,20 @@ final class StyleGuideDetailViewController: UIViewController {
 
         contentStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
-        for (index, textSection) in content.textSections.enumerated() {
+        // SG-2 Phase 2.5: section intro renders above the section body when
+        // present (nil → no change).
+        if let intro = content.sectionIntro?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !intro.isEmpty {
+            contentStackView.addArrangedSubview(createBodyLabel(text: intro))
+        }
+
+        let allSections = content.textSections + content.outputContractTrailingSections()
+        for (index, textSection) in allSections.enumerated() {
             if let subheading = textSection.subheading {
                 let subheadingContainer = createSubheadingWithDividers(text: subheading)
                 contentStackView.addArrangedSubview(subheadingContainer)
 
-                let isLastTextSection = index == (content.textSections.count - 1)
+                let isLastTextSection = index == (allSections.count - 1)
                 let bodyIsEmpty = textSection.bodyText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                 if isLastTextSection && bodyIsEmpty && content.customComponent != nil {
                     contentStackView.setCustomSpacing(14, after: subheadingContainer)

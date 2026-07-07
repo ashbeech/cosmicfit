@@ -41,8 +41,35 @@ struct NarrativeTemplateRenderer {
         for i in 1...4 { set.insert("texture_good_\(i)") }
         for i in 1...3 { set.insert("texture_bad_\(i)") }
         for i in 1...2 { set.insert("sweet_spot_keyword_\(i)") }
+        // SG-2 Phase 2c: register-split hardware placeholders.
+        for i in 1...2 { set.insert("personal_metal_\(i)") }
+        for i in 1...2 { set.insert("structural_metal_\(i)") }
+        set.insert("excluded_finish")
         return set
     }()
+
+    // MARK: - QA Mode (SG-2 Phase 2c)
+
+    /// When enabled, missing/unknown placeholders render as a detectable
+    /// sentinel token instead of the silent graceful fallback. Owned here
+    /// as an interim guard for the SG-3 regen (full strictness is SG-4).
+    /// Enabled by the `COSMICFIT_PLACEHOLDER_QA` environment variable or set
+    /// directly in tests. Production leaves it off (graceful fallback).
+    static var qaModeEnabled: Bool =
+        ProcessInfo.processInfo.environment["COSMICFIT_PLACEHOLDER_QA"] != nil
+
+    /// Sentinel emitted in QA mode for a placeholder whose context value is
+    /// absent (recognised token, empty/missing value).
+    static func unfilledSentinel(_ token: String) -> String { "⟦UNFILLED:\(token)⟧" }
+    /// Sentinel emitted in QA mode for a placeholder the renderer does not
+    /// recognise at all.
+    static func unknownSentinel(_ token: String) -> String { "⟦UNKNOWN:\(token)⟧" }
+
+    /// Lightweight composed-output check SG-3 can run: true if any QA sentinel
+    /// survived into the rendered text.
+    static func containsUnresolvedSentinels(_ text: String) -> Bool {
+        text.contains("⟦UNFILLED:") || text.contains("⟦UNKNOWN:")
+    }
 
     // MARK: - Rendering
 
@@ -68,10 +95,14 @@ struct NarrativeTemplateRenderer {
             if let value = context[token], !value.isEmpty {
                 replacement = value
             } else if allPlaceholders.contains(token) {
-                replacement = "a complementary choice"
+                // Recognised placeholder with no context value.
+                replacement = qaModeEnabled ? unfilledSentinel(token) : "a complementary choice"
+                if qaModeEnabled {
+                    print("[NarrativeTemplateRenderer] QA: unfilled placeholder {\(token)}")
+                }
             } else {
                 print("[NarrativeTemplateRenderer] Warning: unrecognised placeholder {\(token)}")
-                replacement = ""
+                replacement = qaModeEnabled ? unknownSentinel(token) : ""
             }
 
             // Sentence-boundary capitalisation: dataset strings are lowercase
@@ -108,8 +139,28 @@ struct NarrativeTemplateRenderer {
         for (i, c) in resolved.accentColours.prefix(2).enumerated() {
             ctx["accent_colour_\(i + 1)"] = c.name
         }
+        // SG-2 Phase 2c: metal names are used VERBATIM. The dataset already
+        // ships human-readable names ("yellow gold", "gunmetal"); the old
+        // `softenMetalName` blindly appended " tones" and produced garble
+        // like "yellow gold tones details". Softening, where a section needs
+        // it, is now the cache prose's job via placeholder position.
         for (i, m) in resolved.recommendedMetals.enumerated() {
-            ctx["metal_\(i + 1)"] = softenMetalName(m)
+            ctx["metal_\(i + 1)"] = m
+        }
+        // Register-split hardware placeholders (nil = no split → not set,
+        // so a template referencing them falls back gracefully / QA sentinel).
+        if let personal = resolved.personalMetals {
+            for (i, m) in personal.prefix(2).enumerated() {
+                ctx["personal_metal_\(i + 1)"] = m
+            }
+        }
+        if let structural = resolved.structuralMetals {
+            for (i, m) in structural.prefix(2).enumerated() {
+                ctx["structural_metal_\(i + 1)"] = m
+            }
+        }
+        if let excluded = resolved.excludedFinishes, let first = excluded.first {
+            ctx["excluded_finish"] = first
         }
         for (i, s) in resolved.recommendedStones.enumerated() {
             ctx["stone_\(i + 1)"] = s
@@ -176,15 +227,4 @@ struct NarrativeTemplateRenderer {
         return ctx
     }
 
-    // MARK: - Tone Softening
-
-    private static let alreadySoftSuffixes = ["metals", "finishes", "tones", "set"]
-
-    private static func softenMetalName(_ name: String) -> String {
-        let lower = name.lowercased()
-        if alreadySoftSuffixes.contains(where: { lower.hasSuffix($0) }) {
-            return name
-        }
-        return "\(name) tones"
-    }
 }

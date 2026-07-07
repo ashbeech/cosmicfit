@@ -18,4 +18,9 @@ enum StyleGuideDataURL {
         repoRoot(testFilePath: testFilePath)
             .appendingPathComponent("data/style_guide/blueprint_narrative_cache.json")
     }
+
+    static func rankedDomainTables(testFilePath: String = #filePath) -> URL {
+        repoRoot(testFilePath: testFilePath)
+            .appendingPathComponent("data/style_guide/ranked_domain_tables.json")
+    }
 }

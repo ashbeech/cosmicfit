@@ -624,3 +624,52 @@ enum FormulaVocabulary {
         return "\(structure) + \(flow) + \(venus.accent)"
     }
 }
+
+// MARK: - Formula vocabulary dataset mirror (SG-2 Phase 2d)
+
+/// Decodable mirror of the Swift `FormulaVocabulary` enum, loaded from the
+/// dataset's `formula_vocabulary` block. Sign keys are lowercased in JSON.
+/// `compose` reproduces the exact enum logic so a parity test can prove the
+/// two never drift (the freeze guarantee for SG-3's Python computation).
+struct FormulaVocabularyData: Codable, Equatable {
+
+    struct VenusRow: Codable, Equatable {
+        let structure: String
+        let structureByRegister: [String: String]?
+        let structureWaterVariant: String?
+        let accent: String
+    }
+
+    struct MoonRow: Codable, Equatable {
+        let flow: String
+    }
+
+    let venusSign: [String: VenusRow]
+    let moonSign: [String: MoonRow]
+
+    enum CodingKeys: String, CodingKey {
+        case venusSign = "venus_sign"
+        case moonSign = "moon_sign"
+    }
+
+    /// Composes from the dataset tables using lowercased sign keys, mirroring
+    /// `FormulaVocabulary.compose`. Returns nil for unknown signs.
+    func compose(
+        venusSign: String,
+        moonSign: String,
+        dominantElement: String,
+        register: ChartAestheticProfile.AestheticRegister
+    ) -> String? {
+        guard let venus = self.venusSign[venusSign.lowercased()],
+              let moon = self.moonSign[moonSign.lowercased()] else { return nil }
+        let structure: String
+        if let variant = venus.structureByRegister?[register.rawValue] {
+            structure = variant
+        } else if dominantElement.lowercased() == "water", let water = venus.structureWaterVariant {
+            structure = water
+        } else {
+            structure = venus.structure
+        }
+        return "\(structure) + \(moon.flow) + \(venus.accent)"
+    }
+}

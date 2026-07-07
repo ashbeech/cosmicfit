@@ -65,6 +65,10 @@ struct BlueprintComposer {
             dataset: dataset
         )
 
+        // SG-1: aesthetic profile gates runtime overlays (Phase 1c) and,
+        // from SG-2, conditions the resolver's metal register split (Phase 2b).
+        let aestheticProfile = ChartAestheticProfile.derive(from: analysis)
+
         // NOTE: V4 is the only production palette path. We still run the
         // deterministic resolver for non-palette fields (metals, stones,
         // code, patterns, textures) used by Group B narrative placeholders.
@@ -73,7 +77,8 @@ struct BlueprintComposer {
             tokens: tokenResult.tokens,
             analysis: analysis,
             dataset: tokenResult.dataset,
-            contributingCombos: tokenResult.contributingCombos
+            contributingCombos: tokenResult.contributingCombos,
+            profile: aestheticProfile
         )
 
         let keyResult = ArchetypeKeyGenerator.generateKey(analysis: analysis)
@@ -82,12 +87,14 @@ struct BlueprintComposer {
             keyResult: keyResult
         )
 
+        // SG-2 Phase 2.5: structured entry carries per-section output-contract
+        // slots + cluster-level coreFormula/closing. Nil / v1 caches leave the
+        // model fields nil (render as today).
+        let (structured, _, _) = narrativeCache.lookupStructured(keyResult: keyResult)
+
         if usedFallback {
             print("[BlueprintComposer] Narrative fallback: \(keyResult.archetypeCluster) → \(resolvedKey)")
         }
-
-        // SG-1: aesthetic profile gates all runtime overlays (Phase 1c).
-        let aestheticProfile = ChartAestheticProfile.derive(from: analysis)
 
         let overlays = HouseSectOverlayGenerator.generate(
             analysis: analysis, dataset: dataset, profile: aestheticProfile
@@ -133,7 +140,8 @@ struct BlueprintComposer {
         let paletteSection = buildV4PaletteSection(
             colourResult: colourResult,
             narrativeText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.paletteNarrative.rawValue] ?? "",
-            accentLabelOverrides: renamedAccentLabels
+            accentLabelOverrides: renamedAccentLabels,
+            contract: structured?.sections[BlueprintArchetypeKey.BlueprintSection.paletteNarrative.rawValue]
         )
 
         logV4PaletteReadout(paletteSection)
@@ -155,6 +163,20 @@ struct BlueprintComposer {
 
         let now = Date()
 
+        // SG-2 Phase 2.5: pull a section's structured output-contract slots
+        // (nil when the cache is v1 / the section is absent).
+        func contract(_ key: String) -> NarrativeStructuredSection? {
+            structured?.sections[key]
+        }
+
+        let styleCoreContract = contract(BlueprintArchetypeKey.BlueprintSection.styleCore.rawValue)
+        let texturesContract = contract(BlueprintArchetypeKey.BlueprintSection.texturesGood.rawValue)
+        let occasionsContract = contract(BlueprintArchetypeKey.BlueprintSection.occasionsWork.rawValue)
+        let hardwareContract = contract(BlueprintArchetypeKey.BlueprintSection.hardwareMetals.rawValue)
+        let codeContract = contract("code")
+        let accessoryContract = contract(BlueprintArchetypeKey.BlueprintSection.accessoryParagraph1.rawValue)
+        let patternContract = contract(BlueprintArchetypeKey.BlueprintSection.patternNarrative.rawValue)
+
         let blueprint = CosmicBlueprint(
             userInfo: BlueprintUserInfo(
                 birthDate: birthDate,
@@ -162,7 +184,11 @@ struct BlueprintComposer {
                 generationDate: now
             ),
             styleCore: StyleCoreSection(
-                narrativeText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.styleCore.rawValue] ?? ""
+                narrativeText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.styleCore.rawValue] ?? "",
+                sectionIntro: styleCoreContract?.sectionIntro,
+                rankedItems: styleCoreContract?.rankedItems,
+                tests: styleCoreContract?.tests,
+                traps: styleCoreContract?.traps
             ),
             textures: TexturesSection(
                 goodText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.texturesGood.rawValue] ?? "",
@@ -170,41 +196,70 @@ struct BlueprintComposer {
                 sweetSpotText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.texturesSweetSpot.rawValue] ?? "",
                 recommendedTextures: resolved.recommendedTextures,
                 avoidTextures: resolved.avoidTextures,
-                sweetSpotKeywords: resolved.sweetSpotKeywords
+                sweetSpotKeywords: resolved.sweetSpotKeywords,
+                sectionIntro: texturesContract?.sectionIntro,
+                rankedItems: texturesContract?.rankedItems,
+                tests: texturesContract?.tests,
+                traps: texturesContract?.traps
             ),
             palette: paletteSection,
             occasions: OccasionsSection(
                 workText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.occasionsWork.rawValue] ?? "",
                 intimateText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.occasionsIntimate.rawValue] ?? "",
-                dailyText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.occasionsDaily.rawValue] ?? ""
+                dailyText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.occasionsDaily.rawValue] ?? "",
+                sectionIntro: occasionsContract?.sectionIntro,
+                rankedItems: occasionsContract?.rankedItems,
+                tests: occasionsContract?.tests,
+                traps: occasionsContract?.traps
             ),
             hardware: HardwareSection(
                 metalsText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.hardwareMetals.rawValue] ?? "",
                 stonesText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.hardwareStones.rawValue] ?? "",
                 tipText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.hardwareTip.rawValue] ?? "",
                 recommendedMetals: resolved.recommendedMetals,
-                recommendedStones: resolved.recommendedStones
+                personalMetals: resolved.personalMetals,
+                structuralMetals: resolved.structuralMetals,
+                excludedFinishes: resolved.excludedFinishes,
+                recommendedStones: resolved.recommendedStones,
+                sectionIntro: hardwareContract?.sectionIntro,
+                rankedItems: hardwareContract?.rankedItems,
+                tests: hardwareContract?.tests,
+                traps: hardwareContract?.traps
             ),
             code: CodeSection(
                 leanInto: resolved.leanInto,
                 avoid: resolved.avoid,
-                consider: resolved.consider
+                consider: resolved.consider,
+                sectionIntro: codeContract?.sectionIntro,
+                rankedItems: codeContract?.rankedItems,
+                tests: codeContract?.tests,
+                traps: codeContract?.traps
             ),
             accessory: AccessorySection(
                 paragraphs: [
                     narrativesMut[BlueprintArchetypeKey.BlueprintSection.accessoryParagraph1.rawValue] ?? "",
                     narrativesMut[BlueprintArchetypeKey.BlueprintSection.accessoryParagraph2.rawValue] ?? "",
                     narrativesMut[BlueprintArchetypeKey.BlueprintSection.accessoryParagraph3.rawValue] ?? ""
-                ]
+                ],
+                sectionIntro: accessoryContract?.sectionIntro,
+                rankedItems: accessoryContract?.rankedItems,
+                tests: accessoryContract?.tests,
+                traps: accessoryContract?.traps
             ),
             pattern: PatternSection(
                 narrativeText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.patternNarrative.rawValue] ?? "",
                 tipText: narrativesMut[BlueprintArchetypeKey.BlueprintSection.patternTip.rawValue] ?? "",
                 recommendedPatterns: resolved.recommendedPatterns,
-                avoidPatterns: resolved.avoidPatterns
+                avoidPatterns: resolved.avoidPatterns,
+                sectionIntro: patternContract?.sectionIntro,
+                rankedItems: patternContract?.rankedItems,
+                tests: patternContract?.tests,
+                traps: patternContract?.traps
             ),
             generatedAt: now,
-            engineVersion: engineVersion
+            engineVersion: engineVersion,
+            coreFormula: structured?.coreFormula,
+            closing: structured?.closing
         )
 
         let diagnostics = BlueprintDiagnostics.report(
@@ -331,7 +386,8 @@ struct BlueprintComposer {
     private static func buildV4PaletteSection(
         colourResult: ColourEngineResult,
         narrativeText: String,
-        accentLabelOverrides: [String]
+        accentLabelOverrides: [String],
+        contract: NarrativeStructuredSection? = nil
     ) -> PaletteSection {
         let family = colourResult.family
 
@@ -441,7 +497,11 @@ struct BlueprintComposer {
             variables: colourResult.variables,
             secondaryPull: colourResult.secondaryPull,
             overrideFlags: colourResult.trace.overrideFlags,
-            narrativeText: narrativeText
+            narrativeText: narrativeText,
+            sectionIntro: contract?.sectionIntro,
+            rankedItems: contract?.rankedItems,
+            tests: contract?.tests,
+            traps: contract?.traps
         )
     }
 
@@ -529,7 +589,7 @@ struct BlueprintComposer {
         print("\(p) Top 5 combo metals contribution:")
         for combo in tokenResult.contributingCombos.prefix(5) {
             if let entry = dataset.planetSign[combo.key] {
-                print("\(p)   \(combo.key): metals=\(entry.metals) stones=\(entry.stones)")
+                print("\(p)   \(combo.key): metals=\(entry.metals.map(\.name)) stones=\(entry.stones)")
             }
         }
 

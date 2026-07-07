@@ -113,6 +113,51 @@ enum Overrides {
         }
     }
 
+    // MARK: - 10.5 Venus-Element Temperature Floor (SG-2 Phase 2e, Layer A)
+
+    /// The temperature FLOOR the Venus sign's element sets. Depth/muting
+    /// overrides may deepen or mute a palette, but must not FLIP a warm Venus
+    /// to a cool family. Mirrors `ChartAestheticProfile.temperature(forVenusSign:)`
+    /// (earth/fire warm; Scorpio warm-deep despite water; Virgo neutral;
+    /// air/water cool) so the profile and the V4 engine agree (the Phase 4a
+    /// three-way check).
+    enum VenusFloor { case warm, cool, neutral }
+
+    static func venusTemperatureFloor(input: BirthChartColourInput) -> VenusFloor {
+        switch input.venus.sign {
+        case .scorpio:                                  return .warm   // warm-deep nuance
+        case .virgo:                                    return .neutral
+        case .aries, .leo, .sagittarius, .taurus, .capricorn:
+            return .warm
+        case .gemini, .libra, .aquarius, .cancer, .pisces:
+            return .cool
+        }
+    }
+
+    /// Cool DEEP families a warm-Venus chart can wrongly flip into via the
+    /// cool-leaning / earth-depth path (Slate: deepWinter). The warm
+    /// equivalent at the SAME depth is Deep Autumn (deep, rich, structured) —
+    /// depth is preserved, only the temperature flip is undone.
+    private static let coolDeepFamilies: Set<PaletteFamily> = [
+        .deepWinter, .trueWinter, .brightWinter
+    ]
+
+    /// Applies the Venus warm floor: if the Venus floor is warm but the
+    /// classified family is a cool DEEP family, remap to Deep Autumn. Returns
+    /// the family unchanged otherwise. Sets `flags.venusWarmFloorApplied` when
+    /// it fires. Non-deep cool families are left untouched (the traced flip is
+    /// deep-only; Cove/Mist/Frost cool-Venus charts are correct as-is).
+    static func applyVenusWarmFloor(
+        family: PaletteFamily,
+        input: BirthChartColourInput,
+        flags: inout OverrideFlags
+    ) -> PaletteFamily {
+        guard venusTemperatureFloor(input: input) == .warm,
+              coolDeepFamilies.contains(family) else { return family }
+        flags.venusWarmFloorApplied = true
+        return .deepAutumn
+    }
+
     // MARK: - 10.4 Cool-Leaning Deep Autumn
 
     static func isCoolLeaningDeepAutumn(
