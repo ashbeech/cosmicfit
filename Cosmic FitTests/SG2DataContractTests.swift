@@ -559,6 +559,24 @@ struct SG2OutputContractTests {
         let back = try JSONDecoder().decode(HardwareSection.self, from: data)
         #expect(back == hw)
     }
+
+    @Test("SG-3 CodeSection.aiFraming: absent decodes as nil; present round-trips")
+    func codeAiFramingBackCompat() throws {
+        // A pre-SG-3 Code section JSON (no aiFraming key) decodes with nil.
+        let legacyJSON = #"{"leanInto":["a"],"avoid":["b"],"consider":["c"]}"#
+        let legacy = try JSONDecoder().decode(
+            CodeSection.self, from: Data(legacyJSON.utf8))
+        #expect(legacy.aiFraming == nil)
+        #expect(legacy.leanInto == ["a"])
+
+        // Present value round-trips.
+        let framed = CodeSection(leanInto: ["a"], avoid: ["b"], consider: ["c"],
+                                 aiFraming: "Read this section as a quick reference.")
+        let data = try JSONEncoder().encode(framed)
+        let back = try JSONDecoder().decode(CodeSection.self, from: data)
+        #expect(back == framed)
+        #expect(back.aiFraming == "Read this section as a quick reference.")
+    }
 }
 
 // MARK: - Phase 2e: Palette temperature floor (Layer A)

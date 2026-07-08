@@ -1,0 +1,33 @@
+[backfill_narratives.py] Backup gate satisfied by --backup-dir: /Users/ash/dev/mobile_apps/cosmicfit/data/content_backups/2026-07-07_pre-phase-3
+SG-3 backfill — 192 clusters, model=gemini-3.1-pro-preview
+Cost estimate (for the record): {"model": "gemini-3.1-pro-preview", "clusters": 192, "sections_per_cluster": 16, "base_section_calls": 3072, "holistic_calls": 192, "estimated_calls_with_retries": 4185, "estimated_tokens_order_of_magnitude": 8370000, "note": "Estimate for the record only. Generation spend pre-approved (Ash, 2026-07-06); not a blocking approval step."}
+Loaded 3 API key(s); 3 parallel worker(s). Live model: gemini-3.1-pro-preview
+Pending clusters: 18 (skipped 174 already-complete)
+  venus_aries__moon_taurus__earth_dominant: key quota exhausted; will resume later
+  venus_capricorn__moon_pisces__fire_dominant: key quota exhausted; will resume later
+  [1/18] venus_gemini__moon_aries__air_dominant (versatileAdaptive/cool) ok  elapsed=509s
+  [2/18] venus_capricorn__moon_aquarius__water_dominant (quietLuxury/warm) ok  elapsed=519s
+  venus_leo__moon_cancer__water_dominant: key quota exhausted; will resume later
+  [3/18] venus_cancer__moon_gemini__fire_dominant (versatileAdaptive/cool) ok  elapsed=531s
+  [4/18] venus_leo__moon_taurus__air_dominant (versatileAdaptive/warm) ok  elapsed=976s
+  venus_libra__moon_virgo__water_dominant: key quota exhausted; will resume later
+  [5/18] venus_libra__moon_gemini__earth_dominant (versatileAdaptive/cool) ok  elapsed=1020s
+  [6/18] venus_gemini__moon_sagittarius__air_dominant (versatileAdaptive/cool) ok  elapsed=1021s
+  venus_sagittarius__moon_pisces__water_dominant: key quota exhausted; will resume later
+  [7/18] venus_scorpio__moon_cancer__air_dominant (quietLuxury/warm) ok  elapsed=1506s
+  [8/18] venus_sagittarius__moon_aries__earth_dominant (boldExpression/warm) ok  elapsed=1520s
+  venus_taurus__moon_capricorn__earth_dominant: key quota exhausted; will resume later
+  [9/18] venus_pisces__moon_libra__earth_dominant (quietLuxury/cool) ok  elapsed=1577s
+  [10/18] venus_scorpio__moon_scorpio__air_dominant (quietLuxury/warm) ok  elapsed=2049s
+  [11/18] venus_virgo__moon_leo__earth_dominant (versatileAdaptive/neutral) ok  elapsed=2097s
+  [12/18] venus_taurus__moon_taurus__air_dominant (quietLuxury/warm) ok  elapsed=2115s
+
+================================================================
+SG-3 BACKFILL COMPLETE
+  Totals: {'pass': 182, 'pass_after_retry': 10, 'quarantined': 0, 'skip_present': 2784, 'applied': 12}
+  API calls: 220 | elapsed: 2115.2s | clusters done: 12
+  Quarantined clusters: 0 -> data/style_guide/blueprint_narrative_cache_quarantine.json
+  Triage-tagged clusters: 173 -> data/style_guide/triage_status.json
+  Run log: data/style_guide/sg3_run_log.jsonl
+  Output: data/style_guide/blueprint_narrative_cache_sg3.json
+================================================================

@@ -1,0 +1,207 @@
+[backfill_narratives.py] Backup gate satisfied by --backup-dir: /Users/ash/dev/mobile_apps/cosmicfit/data/content_backups/2026-07-07_pre-phase-3
+SG-3 backfill — 192 clusters, model=gemini-3.1-pro-preview
+Cost estimate (for the record): {"model": "gemini-3.1-pro-preview", "clusters": 192, "sections_per_cluster": 16, "base_section_calls": 3072, "holistic_calls": 192, "estimated_calls_with_retries": 4185, "estimated_tokens_order_of_magnitude": 8370000, "note": "Estimate for the record only. Generation spend pre-approved (Ash, 2026-07-06); not a blocking approval step."}
+Loaded 3 API key(s); 3 parallel worker(s). Live model: gemini-3.1-pro-preview
+Pending clusters: 192 (skipped 0 already-complete)
+  [1/192] venus_aquarius__moon_aries__air_dominant (versatileAdaptive/cool) ok  elapsed=523s
+  [2/192] venus_aquarius__moon_cancer__air_dominant (versatileAdaptive/cool) ok  elapsed=531s
+  [3/192] venus_aquarius__moon_aquarius__fire_dominant (versatileAdaptive/cool) ok  elapsed=532s
+  [4/192] venus_aquarius__moon_cancer__earth_dominant (quietLuxury/cool) ok  elapsed=1019s
+  [5/192] venus_aquarius__moon_capricorn__water_dominant (quietLuxury/cool) ok  elapsed=1059s
+  [6/192] venus_aquarius__moon_gemini__earth_dominant (versatileAdaptive/cool) ok  elapsed=1108s
+  [7/192] venus_aquarius__moon_gemini__fire_dominant (versatileAdaptive/cool) ok  elapsed=1579s
+  [8/192] venus_aquarius__moon_leo__air_dominant (versatileAdaptive/cool) ok  elapsed=1580s
+  [9/192] venus_aquarius__moon_libra__air_dominant (versatileAdaptive/cool) ok  elapsed=1582s
+  [10/192] venus_aquarius__moon_pisces__earth_dominant (quietLuxury/cool) ok  elapsed=2089s
+  [11/192] venus_aquarius__moon_libra__fire_dominant (versatileAdaptive/cool) ok  elapsed=2169s
+  [12/192] venus_aquarius__moon_sagittarius__air_dominant (versatileAdaptive/cool) ok  elapsed=2212s
+  [13/192] venus_aquarius__moon_scorpio__earth_dominant (quietLuxury/cool) ok  elapsed=2578s
+  [14/192] venus_aquarius__moon_taurus__fire_dominant (versatileAdaptive/cool) ok  elapsed=2668s
+  [15/192] venus_aquarius__moon_taurus__water_dominant (quietLuxury/cool) ok  elapsed=2772s
+  [16/192] venus_aquarius__moon_virgo__water_dominant (versatileAdaptive/cool) ok  elapsed=3054s
+  [17/192] venus_aries__moon_aries__earth_dominant (boldExpression/warm) ok  elapsed=3252s
+  [18/192] venus_aries__moon_aquarius__air_dominant (versatileAdaptive/warm) ok  elapsed=3303s
+  [19/192] venus_aries__moon_aries__fire_dominant (boldExpression/warm) ok  elapsed=3475s
+  [20/192] venus_aries__moon_cancer__fire_dominant (boldExpression/warm) ok  elapsed=3769s
+  [21/192] venus_aries__moon_cancer__water_dominant (quietLuxury/warm) ok  elapsed=3866s
+  [22/192] venus_aries__moon_capricorn__earth_dominant (quietLuxury/warm) ok  elapsed=3914s
+  [23/192] venus_aries__moon_gemini__air_dominant (versatileAdaptive/warm) ok  elapsed=4326s
+  [24/192] venus_aries__moon_gemini__water_dominant (versatileAdaptive/warm) ok  elapsed=4391s
+  [25/192] venus_aries__moon_leo__fire_dominant (boldExpression/warm) ok  elapsed=4397s
+  [26/192] venus_aries__moon_sagittarius__fire_dominant (boldExpression/warm) ok  elapsed=4835s
+  [27/192] venus_aries__moon_libra__air_dominant (versatileAdaptive/warm) ok  elapsed=4910s
+  [28/192] venus_aries__moon_pisces__water_dominant (quietLuxury/warm) ok  elapsed=4923s
+  venus_aries__moon_taurus__earth_dominant: key quota exhausted; will resume later
+  [29/192] venus_aries__moon_scorpio__water_dominant (quietLuxury/warm) ok  elapsed=5366s
+  [30/192] venus_aries__moon_taurus__air_dominant (versatileAdaptive/warm) ok  elapsed=5411s
+  venus_cancer__moon_aries__water_dominant: key quota exhausted; will resume later
+  [31/192] venus_aries__moon_virgo__earth_dominant (versatileAdaptive/warm) ok  elapsed=5584s
+  [32/192] venus_cancer__moon_aquarius__earth_dominant (quietLuxury/cool) ok  elapsed=5877s
+  venus_cancer__moon_capricorn__fire_dominant: key quota exhausted; will resume later
+  [33/192] venus_cancer__moon_cancer__air_dominant (quietLuxury/cool) ok  elapsed=5886s
+  [34/192] venus_cancer__moon_cancer__water_dominant (quietLuxury/cool) ok  elapsed=6193s
+  venus_cancer__moon_gemini__fire_dominant: key quota exhausted; will resume later
+  [35/192] venus_cancer__moon_gemini__air_dominant (versatileAdaptive/cool) ok  elapsed=6384s
+  [36/192] venus_cancer__moon_gemini__earth_dominant (quietLuxury/cool) ok  elapsed=6552s
+  venus_cancer__moon_pisces__air_dominant: key quota exhausted; will resume later
+  [37/192] venus_cancer__moon_leo__water_dominant (quietLuxury/cool) ok  elapsed=6699s
+  [38/192] venus_cancer__moon_libra__earth_dominant (quietLuxury/cool) ok  elapsed=6872s
+  venus_cancer__moon_scorpio__water_dominant: key quota exhausted; will resume later
+  [39/192] venus_cancer__moon_sagittarius__water_dominant (quietLuxury/cool) ok  elapsed=7125s
+  [40/192] venus_cancer__moon_scorpio__air_dominant (quietLuxury/cool) ok  elapsed=7357s
+  venus_capricorn__moon_aquarius__water_dominant: key quota exhausted; will resume later
+  [41/192] venus_cancer__moon_taurus__fire_dominant (quietLuxury/cool) ok  elapsed=7413s
+  [42/192] venus_cancer__moon_virgo__fire_dominant (versatileAdaptive/cool) ok  elapsed=7607s
+  venus_capricorn__moon_cancer__fire_dominant: key quota exhausted; will resume later
+  [43/192] venus_capricorn__moon_aries__earth_dominant (quietLuxury/warm) ok  elapsed=7831s
+  [44/192] venus_capricorn__moon_cancer__earth_dominant (quietLuxury/warm) ok  elapsed=7983s
+  venus_capricorn__moon_gemini__water_dominant: key quota exhausted; will resume later
+  [45/192] venus_capricorn__moon_capricorn__air_dominant (quietLuxury/warm) ok  elapsed=8124s
+  [46/192] venus_capricorn__moon_gemini__fire_dominant (versatileAdaptive/warm) ok  elapsed=8370s
+  venus_capricorn__moon_pisces__fire_dominant: key quota exhausted; will resume later
+  [47/192] venus_capricorn__moon_leo__earth_dominant (quietLuxury/warm) ok  elapsed=8520s
+  [48/192] venus_capricorn__moon_libra__water_dominant (quietLuxury/warm) ok  elapsed=8702s
+  venus_capricorn__moon_taurus__air_dominant: key quota exhausted; will resume later
+  [49/192] venus_capricorn__moon_sagittarius__earth_dominant (quietLuxury/warm) ok  elapsed=8869s
+  [50/192] venus_capricorn__moon_scorpio__fire_dominant (quietLuxury/warm) ok  elapsed=9088s
+  venus_capricorn__moon_virgo__air_dominant: key quota exhausted; will resume later
+  [51/192] venus_capricorn__moon_taurus__earth_dominant (quietLuxury/warm) ok  elapsed=9209s
+  [52/192] venus_capricorn__moon_taurus__water_dominant (quietLuxury/warm) ok  elapsed=9373s
+  venus_gemini__moon_aries__air_dominant: key quota exhausted; will resume later
+  [53/192] venus_gemini__moon_aquarius__air_dominant (versatileAdaptive/cool) ok  elapsed=9632s
+  [54/192] venus_gemini__moon_aquarius__fire_dominant (versatileAdaptive/cool) ok  elapsed=9682s
+  venus_gemini__moon_capricorn__water_dominant: key quota exhausted; will resume later
+  [55/192] venus_gemini__moon_cancer__air_dominant (versatileAdaptive/cool) ok  elapsed=9881s
+  [56/192] venus_gemini__moon_cancer__earth_dominant (quietLuxury/cool) ok  elapsed=10164s
+  venus_gemini__moon_leo__air_dominant: key quota exhausted; will resume later
+  [57/192] venus_gemini__moon_gemini__earth_dominant (versatileAdaptive/cool) ok  elapsed=10229s
+  [58/192] venus_gemini__moon_gemini__fire_dominant (versatileAdaptive/cool) ok  elapsed=10396s
+  venus_gemini__moon_sagittarius__air_dominant: key quota exhausted; will resume later
+  [59/192] venus_gemini__moon_libra__fire_dominant (versatileAdaptive/cool) ok  elapsed=10721s
+  [60/192] venus_gemini__moon_pisces__earth_dominant (quietLuxury/cool) ok  elapsed=10746s
+  venus_gemini__moon_taurus__water_dominant: key quota exhausted; will resume later
+  [61/192] venus_gemini__moon_scorpio__earth_dominant (quietLuxury/cool) ok  elapsed=10943s
+  [62/192] venus_gemini__moon_taurus__fire_dominant (versatileAdaptive/cool) ok  elapsed=11211s
+  venus_leo__moon_aries__earth_dominant: key quota exhausted; will resume later
+  [63/192] venus_gemini__moon_virgo__water_dominant (versatileAdaptive/cool) ok  elapsed=11237s
+  [64/192] venus_leo__moon_aquarius__air_dominant (versatileAdaptive/warm) ok  elapsed=11426s
+  venus_leo__moon_cancer__water_dominant: key quota exhausted; will resume later
+  [65/192] venus_leo__moon_aries__fire_dominant (boldExpression/warm) ok  elapsed=11657s
+  [66/192] venus_leo__moon_cancer__fire_dominant (boldExpression/warm) ok  elapsed=11721s
+  venus_leo__moon_gemini__water_dominant: key quota exhausted; will resume later
+  [67/192] venus_leo__moon_capricorn__earth_dominant (quietLuxury/warm) ok  elapsed=12078s
+  [68/192] venus_leo__moon_gemini__air_dominant (versatileAdaptive/warm) ok  elapsed=12174s
+  venus_leo__moon_pisces__water_dominant: key quota exhausted; will resume later
+  [69/192] venus_leo__moon_leo__fire_dominant (boldExpression/warm) ok  elapsed=12224s
+  [70/192] venus_leo__moon_libra__air_dominant (versatileAdaptive/warm) ok  elapsed=12611s
+  venus_leo__moon_taurus__air_dominant: key quota exhausted; will resume later
+  [71/192] venus_leo__moon_sagittarius__fire_dominant (boldExpression/warm) ok  elapsed=12686s
+  [72/192] venus_leo__moon_scorpio__water_dominant (quietLuxury/warm) ok  elapsed=12759s
+  venus_libra__moon_aquarius__fire_dominant: key quota exhausted; will resume later
+  [73/192] venus_leo__moon_virgo__earth_dominant (versatileAdaptive/warm) ok  elapsed=13123s
+  [74/192] venus_leo__moon_taurus__earth_dominant (quietLuxury/warm) ok  elapsed=13186s
+  venus_libra__moon_cancer__earth_dominant: key quota exhausted; will resume later
+  [75/192] venus_libra__moon_aries__air_dominant (versatileAdaptive/cool) ok  elapsed=13263s
+  [76/192] venus_libra__moon_cancer__air_dominant (versatileAdaptive/cool) ok  elapsed=13664s
+  venus_libra__moon_gemini__earth_dominant: key quota exhausted; will resume later
+  [77/192] venus_libra__moon_capricorn__water_dominant (quietLuxury/cool) ok  elapsed=13718s
+  [78/192] venus_libra__moon_gemini__air_dominant (versatileAdaptive/cool) ok  elapsed=13818s
+  venus_libra__moon_libra__fire_dominant: key quota exhausted; will resume later
+  [79/192] venus_libra__moon_gemini__fire_dominant (versatileAdaptive/cool) ok  elapsed=14239s
+  [80/192] venus_libra__moon_leo__air_dominant (versatileAdaptive/cool) ok  elapsed=14264s
+  venus_libra__moon_scorpio__earth_dominant: key quota exhausted; will resume later
+  [81/192] venus_libra__moon_pisces__earth_dominant (quietLuxury/cool) ok  elapsed=14450s
+  [82/192] venus_libra__moon_sagittarius__air_dominant (versatileAdaptive/cool) ok  elapsed=14787s
+  venus_libra__moon_virgo__water_dominant: key quota exhausted; will resume later
+  [83/192] venus_libra__moon_taurus__fire_dominant (versatileAdaptive/cool) ok  elapsed=14813s
+  [84/192] venus_libra__moon_taurus__water_dominant (quietLuxury/cool) ok  elapsed=14964s
+  venus_pisces__moon_cancer__air_dominant: key quota exhausted; will resume later
+  [85/192] venus_pisces__moon_aries__water_dominant (quietLuxury/cool) ok  elapsed=15261s
+  [86/192] venus_pisces__moon_aquarius__earth_dominant (quietLuxury/cool) ok  elapsed=15319s
+  venus_pisces__moon_gemini__air_dominant: key quota exhausted; will resume later
+  [87/192] venus_pisces__moon_cancer__water_dominant (quietLuxury/cool) ok  elapsed=15544s
+  [88/192] venus_pisces__moon_capricorn__fire_dominant (quietLuxury/cool) ok  elapsed=15787s
+  venus_pisces__moon_libra__earth_dominant: key quota exhausted; will resume later
+  [89/192] venus_pisces__moon_gemini__earth_dominant (quietLuxury/cool) ok  elapsed=15839s
+  [90/192] venus_pisces__moon_leo__water_dominant (quietLuxury/cool) ok  elapsed=15991s
+  venus_pisces__moon_sagittarius__water_dominant: key quota exhausted; will resume later
+  [91/192] venus_pisces__moon_pisces__air_dominant (quietLuxury/cool) ok  elapsed=16440s
+  [92/192] venus_pisces__moon_pisces__water_dominant (quietLuxury/cool) ok  elapsed=16442s
+  venus_pisces__moon_virgo__air_dominant: key quota exhausted; will resume later
+  [93/192] venus_pisces__moon_scorpio__air_dominant (quietLuxury/cool) ok  elapsed=16530s
+  [94/192] venus_pisces__moon_virgo__fire_dominant (versatileAdaptive/cool) ok  elapsed=16992s
+  venus_sagittarius__moon_aries__earth_dominant: key quota exhausted; will resume later
+  [95/192] venus_pisces__moon_taurus__fire_dominant (quietLuxury/cool) ok  elapsed=17045s
+  [96/192] venus_sagittarius__moon_aquarius__air_dominant (versatileAdaptive/warm) ok  elapsed=17088s
+  venus_sagittarius__moon_cancer__water_dominant: key quota exhausted; will resume later
+  [97/192] venus_sagittarius__moon_aries__fire_dominant (boldExpression/warm) ok  elapsed=17475s
+  [98/192] venus_sagittarius__moon_cancer__fire_dominant (boldExpression/warm) ok  elapsed=17597s
+  venus_sagittarius__moon_gemini__water_dominant: key quota exhausted; will resume later
+  [99/192] venus_sagittarius__moon_capricorn__earth_dominant (quietLuxury/warm) ok  elapsed=17735s
+  [100/192] venus_sagittarius__moon_gemini__air_dominant (versatileAdaptive/warm) ok  elapsed=18147s
+  venus_sagittarius__moon_pisces__water_dominant: key quota exhausted; will resume later
+  [101/192] venus_sagittarius__moon_leo__fire_dominant (boldExpression/warm) ok  elapsed=18226s
+  [102/192] venus_sagittarius__moon_libra__air_dominant (versatileAdaptive/warm) ok  elapsed=18425s
+  venus_sagittarius__moon_taurus__air_dominant: key quota exhausted; will resume later
+  [103/192] venus_sagittarius__moon_sagittarius__fire_dominant (boldExpression/warm) ok  elapsed=18782s
+  [104/192] venus_sagittarius__moon_scorpio__water_dominant (quietLuxury/warm) ok  elapsed=18830s
+  venus_scorpio__moon_aquarius__earth_dominant: key quota exhausted; will resume later
+  [105/192] venus_sagittarius__moon_taurus__earth_dominant (quietLuxury/warm) ok  elapsed=19038s
+  [106/192] venus_scorpio__moon_aries__fire_dominant (boldExpression/warm) ok  elapsed=19331s
+  venus_scorpio__moon_cancer__air_dominant: key quota exhausted; will resume later
+  [107/192] venus_sagittarius__moon_virgo__earth_dominant (versatileAdaptive/warm) ok  elapsed=19356s
+  [108/192] venus_scorpio__moon_aries__water_dominant (quietLuxury/warm) ok  elapsed=19525s
+  venus_scorpio__moon_gemini__air_dominant: key quota exhausted; will resume later
+  [109/192] venus_scorpio__moon_cancer__water_dominant (quietLuxury/warm) ok  elapsed=19868s
+  [110/192] venus_scorpio__moon_capricorn__fire_dominant (quietLuxury/warm) ok  elapsed=19913s
+  venus_scorpio__moon_libra__earth_dominant: key quota exhausted; will resume later
+  [111/192] venus_scorpio__moon_gemini__earth_dominant (quietLuxury/warm) ok  elapsed=19997s
+  [112/192] venus_scorpio__moon_leo__water_dominant (quietLuxury/warm) ok  elapsed=20364s
+  venus_scorpio__moon_scorpio__air_dominant: key quota exhausted; will resume later
+  [113/192] venus_scorpio__moon_pisces__air_dominant (quietLuxury/warm) ok  elapsed=20388s
+  [114/192] venus_scorpio__moon_sagittarius__water_dominant (quietLuxury/warm) ok  elapsed=20482s
+  venus_scorpio__moon_virgo__fire_dominant: key quota exhausted; will resume later
+  [115/192] venus_scorpio__moon_taurus__earth_dominant (quietLuxury/warm) ok  elapsed=20819s
+  [116/192] venus_scorpio__moon_taurus__fire_dominant (quietLuxury/warm) ok  elapsed=20865s
+  venus_taurus__moon_cancer__earth_dominant: key quota exhausted; will resume later
+  [117/192] venus_taurus__moon_aquarius__water_dominant (quietLuxury/warm) ok  elapsed=20986s
+  [118/192] venus_taurus__moon_aries__earth_dominant (quietLuxury/warm) ok  elapsed=21327s
+  venus_taurus__moon_capricorn__earth_dominant: key quota exhausted; will resume later
+  [119/192] venus_taurus__moon_cancer__fire_dominant (quietLuxury/warm) ok  elapsed=21429s
+  [120/192] venus_taurus__moon_capricorn__air_dominant (quietLuxury/warm) ok  elapsed=21472s
+  venus_taurus__moon_leo__earth_dominant: key quota exhausted; will resume later
+  [121/192] venus_taurus__moon_gemini__fire_dominant (versatileAdaptive/warm) ok  elapsed=21906s
+  [122/192] venus_taurus__moon_gemini__water_dominant (quietLuxury/warm) ok  elapsed=21945s
+  venus_taurus__moon_pisces__water_dominant: key quota exhausted; will resume later
+  [123/192] venus_taurus__moon_libra__water_dominant (quietLuxury/warm) ok  elapsed=22028s
+  [124/192] venus_taurus__moon_scorpio__fire_dominant (quietLuxury/warm) ok  elapsed=22570s
+  venus_taurus__moon_taurus__air_dominant: key quota exhausted; will resume later
+  [125/192] venus_taurus__moon_sagittarius__earth_dominant (quietLuxury/warm) ok  elapsed=22580s
+  [126/192] venus_taurus__moon_pisces__fire_dominant (quietLuxury/warm) ok  elapsed=22637s
+  venus_virgo__moon_aries__earth_dominant: key quota exhausted; will resume later
+  [127/192] venus_virgo__moon_aquarius__water_dominant (versatileAdaptive/neutral) ok  elapsed=23042s
+  [128/192] venus_taurus__moon_virgo__air_dominant (versatileAdaptive/warm) ok  elapsed=23145s
+  venus_virgo__moon_capricorn__air_dominant: key quota exhausted; will resume later
+  [129/192] venus_virgo__moon_cancer__earth_dominant (quietLuxury/neutral) ok  elapsed=23208s
+  [130/192] venus_virgo__moon_cancer__fire_dominant (versatileAdaptive/neutral) ok  elapsed=23569s
+  venus_virgo__moon_leo__earth_dominant: key quota exhausted; will resume later
+  [131/192] venus_virgo__moon_gemini__fire_dominant (versatileAdaptive/neutral) ok  elapsed=23711s
+  [132/192] venus_virgo__moon_gemini__water_dominant (versatileAdaptive/neutral) ok  elapsed=23744s
+  venus_virgo__moon_sagittarius__earth_dominant: key quota exhausted; will resume later
+  [133/192] venus_virgo__moon_libra__water_dominant (versatileAdaptive/neutral) ok  elapsed=24135s
+  [134/192] venus_virgo__moon_scorpio__fire_dominant (versatileAdaptive/neutral) ok  elapsed=24269s
+  venus_virgo__moon_taurus__water_dominant: key quota exhausted; will resume later
+  [135/192] venus_virgo__moon_pisces__fire_dominant (versatileAdaptive/neutral) ok  elapsed=24307s
+  [136/192] venus_virgo__moon_taurus__air_dominant (versatileAdaptive/neutral) ok  elapsed=24657s
+  [137/192] venus_virgo__moon_virgo__earth_dominant (versatileAdaptive/neutral) ok  elapsed=24847s
+  [138/192] venus_virgo__moon_virgo__air_dominant (versatileAdaptive/neutral) ok  elapsed=24878s
+
+================================================================
+SG-3 BACKFILL COMPLETE
+  Totals: {'pass': 2115, 'pass_after_retry': 93, 'quarantined': 0, 'skip_present': 0, 'applied': 138}
+  API calls: 2504 | elapsed: 24878.4s | clusters done: 138
+  Quarantined clusters: 0 -> data/style_guide/blueprint_narrative_cache_quarantine.json
+  Triage-tagged clusters: 125 -> data/style_guide/triage_status.json
+  Run log: data/style_guide/sg3_run_log.jsonl
+  Output: data/style_guide/blueprint_narrative_cache_sg3.json
+================================================================

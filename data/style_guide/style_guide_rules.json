@@ -1,0 +1,132 @@
+{
+  "_meta": {
+    "description": "SG-3 shared rule source of truth. Single canonical copy of the write-gate / validator rules (banned tics, dash detection, filler lexicon, repetition budgets, excluded aesthetic keywords, season-word ban, formula fixed positions). Loaded by BOTH the SG-3 Python write gate (tools/backfill_narratives.py via tools/sg_validation.py) AND the SG-4 Swift StyleGuideCoherenceValidator. Do NOT hand-duplicate these constants in either language; both load this file and a parity test asserts agreement. Provenance: docs/style_guide/style_standard.md (SG-0), docs/style_guide/decisions/profile_derivation.md (SG-1), tools/check_golden_guides.py (SG-0 golden checker).",
+    "schema_version": 1,
+    "generated": "2026-07-07"
+  },
+
+  "dash": {
+    "comment": "Mirrors tools/content_audit_checks.py _EM_DASH_RE exactly. Matches em dash (U+2014), en dash (U+2013), and a bare double-hyphen used as a dash (not part of a longer --- run). Markdown '---' horizontal rules are exempt by the lookbehind/lookahead.",
+    "regex": "[\\u2014\\u2013]|(?<!\\-)--(?!\\-)"
+  },
+
+  "stamped_phrases": {
+    "comment": "Verbatim stock sentences that leaked from illustrative prompt text into the cache at scale (SG-3 run 2 audit: the Slate 'weight' compass appeared on ~85% of clusters incl. wrong-modality fire/air charts; 'a soft note used sparingly' in 118). BLOCKED everywhere (normalised, punctuation-insensitive) so every chart must phrase its compass/relief in fresh words. Append any new illustrative sentence a prompt introduces. The golden guides may use these; the cache at scale may not.",
+    "phrases": [
+      "Looks lie. Weight doesn't.",
+      "Trust this physical instinct as your ultimate compass",
+      "a soft note used sparingly"
+    ]
+  },
+
+  "banned_tics": {
+    "comment": "Case-insensitive substring match on user-facing prose. Folklore floor (retained regardless of frequency) + harvested list (>=~15% shipped-cache coverage, zero golden-guide occurrences). Append-mostly: removing a phrase requires a golden guide that uses it. Source: style_standard.md 7a/7b + check_golden_guides.py BANNED_TICS.",
+    "folklore_floor": [
+      "unbothered",
+      "signs the cheques",
+      "devastatingly chic",
+      "command the room",
+      "quiet expensive authority",
+      "effortlessly elegant"
+    ],
+    "harvested": [
+      "walk into a room",
+      "walks into a room",
+      "when you walk into",
+      "is an exercise in",
+      "an exercise in",
+      "at the intersection of",
+      "there is a distinct",
+      "satisfying snap",
+      "the satisfying snap of",
+      "the rich scent of",
+      "talk with your hands",
+      "a substantial watch",
+      "your professional wardrobe",
+      "your off duty wardrobe",
+      "off duty dressing",
+      "your off-duty wardrobe",
+      "off-duty dressing",
+      "your daily rotation",
+      "an immediate sense of",
+      "matters just as much",
+      "naturally gravitate",
+      "at a moment's notice",
+      "dressing for you is",
+      "the energy of someone",
+      "of someone who"
+    ]
+  },
+
+  "excluded_aesthetic_keywords": {
+    "comment": "Positive-assertion exclusions by register, plus a selfContained orientation extension. Mirrors ChartAestheticProfile.excludedKeywords (Swift) and profile_derivation.md section 9. Assertion-aware: Avoid/pass-over mentions are exempt; only positive assertions violate. 'statement' is deliberately NOT excluded for quietLuxury (Slate uses 'a statement belt' positively).",
+    "by_register": {
+      "quietLuxury": ["bold", "global", "adventurous", "expansive", "loud"],
+      "boldExpression": ["muted", "understated"],
+      "versatileAdaptive": ["bold", "statement", "fierce", "never deviate"]
+    },
+    "orientation_selfContained_extra": ["community", "belonging", "collective", "tribe"]
+  },
+
+  "season_words": {
+    "comment": "Banned in palette_narrative prose (SG-2 decision 2e Layer B). The palette must describe resolved colours by role, never a season or seasonal-analysis label. Case-insensitive whole-word / phrase match. 'fall' is intentionally omitted from the bare list to avoid false positives on the verb; the seasonal-analysis compounds cover the noun sense.",
+    "bare": ["winter", "spring", "summer", "autumn"],
+    "analysis_labels": [
+      "deep winter", "deep autumn", "deep summer", "deep spring",
+      "true winter", "true autumn", "true summer", "true spring",
+      "bright winter", "bright spring",
+      "soft autumn", "soft summer",
+      "warm autumn", "warm spring",
+      "cool winter", "cool summer",
+      "clear winter", "clear spring",
+      "light spring", "light summer",
+      "deep cool winter", "winter coats", "autumn palette", "spring palette", "summer palette"
+    ]
+  },
+
+  "filler_lexicon": {
+    "comment": "The 'substantial/expensive/heavy-class' budget. Counted as filler ONLY when used evaluatively; physical descriptors used physically (a heavy wool coat, a substantial buckle in a weight-test context) are the legitimate register and are not counted. Cap: <= 3 per section (warning level at SG-3). Source: style_standard.md section 6.",
+    "words": ["substantial", "expensive", "luxurious", "elevated", "effortless", "effortlessly", "timeless", "premium", "sumptuous", "exquisite"],
+    "cap_per_section": 3
+  },
+
+  "repetition_budgets": {
+    "comment": "Legitimate instructional phrases (the golden guides use them) that become tics at cache scale. Per-cluster budgets across all 16 sections combined, derived from golden maxima. Warning level. Source: style_standard.md section 8.",
+    "phrases": {
+      "rather than": 5,
+      "look for": 4,
+      "feel like": 4,
+      "feels like": 4,
+      "against the skin": 2,
+      "relies on": 2,
+      "heavy lifting": 1,
+      "when you want": 2,
+      "sense of": 2,
+      "leave it on the": 2
+    },
+    "combined_groups": [
+      { "members": ["feel like", "feels like"], "budget": 4 }
+    ]
+  },
+
+  "formula_fixed_positions": {
+    "comment": "coreFormula must appear at minimum at these 5 fixed positions (>=5 occurrences). Checked on composed output at SG-4; at SG-3 the write gate requires formula keyword presence in the cache keys that roll up to these positions (style_core, occasions_*, accessory_*). Source: style_standard.md section 6 + golden README decision #3.",
+    "positions": [
+      "Blueprint verbatim X + Y + Z (style_core)",
+      "Occasions constancy line (occasions_daily)",
+      "Code first Lean Into (deterministic CodeSection)",
+      "Accessory opening (accessory_1)",
+      "Closing line (cluster closing)"
+    ],
+    "min_occurrences": 5
+  },
+
+  "write_gate": {
+    "comment": "Which checks BLOCK a write (error) vs merely WARN (write + triage-tag) in the SG-3 blocking write gate. Element-contract conformance is NOT machine-checked at SG-3 (manual rubric review at the human stop); the full element-presence contract is an SG-4 gate.",
+    "errors": ["dash", "banned_tic", "american_spelling", "stamped_phrase", "core_formula_absent", "unknown_placeholder", "unresolved_placeholder", "season_word_in_palette", "literal_name_leak", "missing_required_placeholder", "example_copy", "too_long_block", "intro_hygiene"],
+    "warnings": ["phrase_repetition", "concrete_noun_floor", "filler_over_cap"],
+    "length_block": {"style_core": 280, "default": 200},
+    "intro_gated": true,
+    "core_formula_required_sections": ["style_core", "occasions_daily", "accessory_1"]
+  }
+}

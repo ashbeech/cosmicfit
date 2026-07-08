@@ -1,0 +1,19 @@
+[backfill_narratives.py] Backup gate satisfied by --backup-dir: /Users/ash/dev/mobile_apps/cosmicfit/data/content_backups/2026-07-07_pre-phase-3
+SG-3 backfill — 192 clusters, model=gemini-3.1-pro-preview
+Cost estimate (for the record): {"model": "gemini-3.1-pro-preview", "clusters": 192, "sections_per_cluster": 16, "base_section_calls": 3072, "holistic_calls": 192, "estimated_calls_with_retries": 4185, "estimated_tokens_order_of_magnitude": 8370000, "note": "Estimate for the record only. Generation spend pre-approved (Ash, 2026-07-06); not a blocking approval step."}
+Loaded 3 API key(s); 3 parallel worker(s). Live model: gemini-3.1-pro-preview
+Pending clusters: 183 (skipped 9 already-complete)
+  [1/183] venus_aquarius__moon_aquarius__fire_dominant (versatileAdaptive/cool) ok  elapsed=87s
+  [2/183] venus_aquarius__moon_cancer__air_dominant (versatileAdaptive/cool) ok  elapsed=155s
+  [3/183] venus_aquarius__moon_cancer__earth_dominant (quietLuxury/cool) ok  elapsed=173s
+  [4/183] venus_aquarius__moon_capricorn__water_dominant (quietLuxury/cool) ok  elapsed=196s
+  [5/183] venus_aquarius__moon_gemini__earth_dominant (versatileAdaptive/cool) ok  elapsed=269s
+  [6/183] venus_aquarius__moon_gemini__fire_dominant (versatileAdaptive/cool) ok  elapsed=321s
+  [7/183] venus_aquarius__moon_leo__air_dominant (versatileAdaptive/cool) ok  elapsed=388s
+  [8/183] venus_aquarius__moon_libra__air_dominant (versatileAdaptive/cool) ok  elapsed=420s
+  [9/183] venus_aquarius__moon_libra__fire_dominant (versatileAdaptive/cool) ok  elapsed=510s
+  [10/183] venus_aquarius__moon_pisces__earth_dominant (quietLuxury/cool) ok  elapsed=516s
+  [11/183] venus_aquarius__moon_sagittarius__air_dominant (versatileAdaptive/cool) ok  elapsed=558s
+  [12/183] venus_aquarius__moon_taurus__fire_dominant (versatileAdaptive/cool) ok  elapsed=637s
+  [13/183] venus_aquarius__moon_scorpio__earth_dominant (quietLuxury/cool) ok  elapsed=652s
+  [14/183] venus_aquarius__moon_taurus__water_dominant (quietLuxury/cool) ok  elapsed=680s

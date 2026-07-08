@@ -698,10 +698,15 @@ struct CodeSection: Codable, Equatable {
     let rankedItems: [RankedItem]?           // AI — SG-2.5
     let tests: [String]?                     // AI — SG-2.5
     let traps: [Trap]?                       // AI — SG-2.5
+    /// SG-3: optional AI-generated framing/context for the otherwise fully
+    /// deterministic Code section. Absent (nil) => render exactly as today's
+    /// deterministic-only output. A schema addition with back-compat: pre-SG-3
+    /// blueprints omit it and decode unchanged.
+    let aiFraming: String?                    // AI — SG-3
 
     init(leanInto: [String], avoid: [String], consider: [String],
          sectionIntro: String? = nil, rankedItems: [RankedItem]? = nil,
-         tests: [String]? = nil, traps: [Trap]? = nil) {
+         tests: [String]? = nil, traps: [Trap]? = nil, aiFraming: String? = nil) {
         self.leanInto = leanInto
         self.avoid = avoid
         self.consider = consider
@@ -709,6 +714,7 @@ struct CodeSection: Codable, Equatable {
         self.rankedItems = rankedItems
         self.tests = tests
         self.traps = traps
+        self.aiFraming = aiFraming
     }
 
     init(from decoder: Decoder) throws {
@@ -720,11 +726,13 @@ struct CodeSection: Codable, Equatable {
         rankedItems = try c.decodeIfPresent([RankedItem].self, forKey: .rankedItems)
         tests = try c.decodeIfPresent([String].self, forKey: .tests)
         traps = try c.decodeIfPresent([Trap].self, forKey: .traps)
+        aiFraming = try c.decodeIfPresent(String.self, forKey: .aiFraming)
     }
 
     private enum CodingKeys: String, CodingKey {
         case leanInto, avoid, consider
         case sectionIntro, rankedItems, tests, traps
+        case aiFraming
     }
 }
 

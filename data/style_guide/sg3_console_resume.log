@@ -1,0 +1,69 @@
+[backfill_narratives.py] Backup gate satisfied by --backup-dir: /Users/ash/dev/mobile_apps/cosmicfit/data/content_backups/2026-07-07_pre-phase-3
+SG-3 backfill — 192 clusters, model=gemini-3.1-pro-preview
+Cost estimate (for the record): {"model": "gemini-3.1-pro-preview", "clusters": 192, "sections_per_cluster": 16, "base_section_calls": 3072, "holistic_calls": 192, "estimated_calls_with_retries": 4185, "estimated_tokens_order_of_magnitude": 8370000, "note": "Estimate for the record only. Generation spend pre-approved (Ash, 2026-07-06); not a blocking approval step."}
+Loaded 3 API key(s); 3 parallel worker(s). Live model: gemini-3.1-pro-preview
+Pending clusters: 54 (skipped 138 already-complete)
+  venus_aries__moon_taurus__earth_dominant: key quota exhausted; will resume later
+  venus_cancer__moon_gemini__fire_dominant: key quota exhausted; will resume later
+  [1/54] venus_cancer__moon_aries__water_dominant (quietLuxury/cool) ok  elapsed=458s
+  [2/54] venus_cancer__moon_capricorn__fire_dominant (quietLuxury/cool) ok  elapsed=518s
+  venus_capricorn__moon_aquarius__water_dominant: key quota exhausted; will resume later
+  [3/54] venus_cancer__moon_pisces__air_dominant (quietLuxury/cool) ok  elapsed=541s
+  [4/54] venus_cancer__moon_scorpio__water_dominant (quietLuxury/cool) ok  elapsed=967s
+  venus_capricorn__moon_pisces__fire_dominant: key quota exhausted; will resume later
+  [5/54] venus_capricorn__moon_cancer__fire_dominant (quietLuxury/warm) ok  elapsed=1061s
+  [6/54] venus_capricorn__moon_gemini__water_dominant (quietLuxury/warm) ok  elapsed=1092s
+  venus_gemini__moon_aries__air_dominant: key quota exhausted; will resume later
+  [7/54] venus_capricorn__moon_taurus__air_dominant (quietLuxury/warm) ok  elapsed=1515s
+  [8/54] venus_capricorn__moon_virgo__air_dominant (versatileAdaptive/warm) ok  elapsed=1557s
+  venus_gemini__moon_sagittarius__air_dominant: key quota exhausted; will resume later
+  [9/54] venus_gemini__moon_capricorn__water_dominant (quietLuxury/cool) ok  elapsed=1613s
+  [10/54] venus_gemini__moon_taurus__water_dominant (quietLuxury/cool) ok  elapsed=2005s
+  venus_leo__moon_cancer__water_dominant: key quota exhausted; will resume later
+  [11/54] venus_gemini__moon_leo__air_dominant (versatileAdaptive/cool) ok  elapsed=2058s
+  [12/54] venus_leo__moon_aries__earth_dominant (boldExpression/warm) ok  elapsed=2078s
+  venus_leo__moon_taurus__air_dominant: key quota exhausted; will resume later
+  [13/54] venus_leo__moon_gemini__water_dominant (versatileAdaptive/warm) ok  elapsed=2531s
+  [14/54] venus_leo__moon_pisces__water_dominant (quietLuxury/warm) ok  elapsed=2583s
+  venus_libra__moon_gemini__earth_dominant: key quota exhausted; will resume later
+  [15/54] venus_libra__moon_aquarius__fire_dominant (versatileAdaptive/cool) ok  elapsed=2641s
+  [16/54] venus_libra__moon_cancer__earth_dominant (quietLuxury/cool) ok  elapsed=3048s
+  venus_libra__moon_virgo__water_dominant: key quota exhausted; will resume later
+  [17/54] venus_libra__moon_libra__fire_dominant (versatileAdaptive/cool) ok  elapsed=3116s
+  [18/54] venus_libra__moon_scorpio__earth_dominant (quietLuxury/cool) ok  elapsed=3214s
+  venus_pisces__moon_libra__earth_dominant: key quota exhausted; will resume later
+  [19/54] venus_pisces__moon_gemini__air_dominant (versatileAdaptive/cool) ok  elapsed=3541s
+  [20/54] venus_pisces__moon_cancer__air_dominant (quietLuxury/cool) ok  elapsed=3600s
+  venus_sagittarius__moon_aries__earth_dominant: key quota exhausted; will resume later
+  [21/54] venus_pisces__moon_sagittarius__water_dominant (quietLuxury/cool) ok  elapsed=3647s
+  [22/54] venus_pisces__moon_virgo__air_dominant (versatileAdaptive/cool) ok  elapsed=4013s
+  venus_sagittarius__moon_pisces__water_dominant: key quota exhausted; will resume later
+  [23/54] venus_sagittarius__moon_gemini__water_dominant (versatileAdaptive/warm) ok  elapsed=4140s
+  [24/54] venus_sagittarius__moon_cancer__water_dominant (quietLuxury/warm) ok  elapsed=4144s
+  venus_scorpio__moon_cancer__air_dominant: key quota exhausted; will resume later
+  [25/54] venus_sagittarius__moon_taurus__air_dominant (versatileAdaptive/warm) ok  elapsed=4600s
+  [26/54] venus_scorpio__moon_gemini__air_dominant (versatileAdaptive/warm) ok  elapsed=4635s
+  venus_scorpio__moon_scorpio__air_dominant: key quota exhausted; will resume later
+  [27/54] venus_scorpio__moon_aquarius__earth_dominant (quietLuxury/warm) ok  elapsed=4644s
+  [28/54] venus_taurus__moon_cancer__earth_dominant (quietLuxury/warm) ok  elapsed=5125s
+  venus_taurus__moon_capricorn__earth_dominant: key quota exhausted; will resume later
+  [29/54] venus_scorpio__moon_libra__earth_dominant (quietLuxury/warm) ok  elapsed=5131s
+  [30/54] venus_scorpio__moon_virgo__fire_dominant (versatileAdaptive/warm) ok  elapsed=5153s
+  venus_taurus__moon_taurus__air_dominant: key quota exhausted; will resume later
+  [31/54] venus_taurus__moon_pisces__water_dominant (quietLuxury/warm) ok  elapsed=5683s
+  [32/54] venus_taurus__moon_leo__earth_dominant (quietLuxury/warm) ok  elapsed=5713s
+  venus_virgo__moon_leo__earth_dominant: key quota exhausted; will resume later
+  [33/54] venus_virgo__moon_aries__earth_dominant (versatileAdaptive/neutral) ok  elapsed=5719s
+  [34/54] venus_virgo__moon_capricorn__air_dominant (versatileAdaptive/neutral) ok  elapsed=6184s
+  [35/54] venus_virgo__moon_sagittarius__earth_dominant (versatileAdaptive/neutral) ok  elapsed=6231s
+  [36/54] venus_virgo__moon_taurus__water_dominant (quietLuxury/neutral) ok  elapsed=6322s
+
+================================================================
+SG-3 BACKFILL COMPLETE
+  Totals: {'pass': 554, 'pass_after_retry': 22, 'quarantined': 0, 'skip_present': 2208, 'applied': 36}
+  API calls: 653 | elapsed: 6322.3s | clusters done: 36
+  Quarantined clusters: 0 -> data/style_guide/blueprint_narrative_cache_quarantine.json
+  Triage-tagged clusters: 161 -> data/style_guide/triage_status.json
+  Run log: data/style_guide/sg3_run_log.jsonl
+  Output: data/style_guide/blueprint_narrative_cache_sg3.json
+================================================================
