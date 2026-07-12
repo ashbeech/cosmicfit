@@ -73,7 +73,7 @@
          </BuildableReference>
       </BuildableProductRunnable>
       <StoreKitConfigurationFileReference
-         identifier = "../../../Cosmic Fit.storekit">
+         identifier = "../Cosmic Fit.storekit">
       </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction
