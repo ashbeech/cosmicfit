@@ -1,0 +1,49 @@
+{
+  "archetype": "ember",
+  "source": "docs/style_guide/golden/ember_ideal.md metadata block",
+  "cluster_key": "venus_aries__moon_sagittarius__fire_dominant",
+  "chart_sect": "day",
+  "element_balance": {
+    "fire": 5,
+    "earth": 1,
+    "air": 1,
+    "water": 1
+  },
+  "modality_balance": {
+    "cardinal": 3,
+    "fixed": 3,
+    "mutable": 2
+  },
+  "chart_ruler": "Sun",
+  "sun_sign": "Aries",
+  "moon_sign": "Sagittarius",
+  "venus_sign": "Aries",
+  "mars_sign": "Leo",
+  "ascendant_sign": "Leo",
+  "midheaven_sign": "Sagittarius",
+  "planet_signs": {
+    "Sun": "Aries",
+    "Moon": "Sagittarius",
+    "Mercury": "Taurus",
+    "Venus": "Aries",
+    "Mars": "Leo",
+    "Jupiter": "Gemini",
+    "Saturn": "Cancer",
+    "Uranus": "Capricorn",
+    "Neptune": "Capricorn",
+    "Pluto": "Scorpio"
+  },
+  "planet_houses": {
+    "Sun": 1,
+    "Moon": 5,
+    "Mercury": 2,
+    "Venus": 1,
+    "Mars": 10,
+    "Jupiter": 9,
+    "Saturn": 6,
+    "Uranus": 3,
+    "Neptune": 4,
+    "Pluto": 8
+  },
+  "stellium_signs": []
+}

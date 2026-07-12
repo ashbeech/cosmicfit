@@ -1,0 +1,506 @@
+{
+  "schema_version": 1,
+  "_meta": {
+    "description": "SG-2 Phase 2d ranked domain tables. Mined from the 16 golden ideal Style Guides in docs/style_guide/golden. colours_by_role is keyed <temperature>_<lane> where lane is one of the three aesthetic registers plus the distinct water_dominant lane (3 temperatures x 4 lanes = 12), mirroring the four texture lanes. textures is keyed by lane. accessory_specs is keyed <register>_<orientation>_<finishLane> (3 x 3 x 3 = 27).",
+    "generated": "2026-07-06",
+    "golden_anchors": {
+      "warm_quietLuxury": "Slate, Moss, Ripple, Hearth",
+      "warm_water_dominant": "Tide",
+      "cool_quietLuxury": "Cove, Mist",
+      "cool_water_dominant": "Cove, Mist",
+      "warm_boldExpression": "Ember, Blaze, Cinder",
+      "cool_versatileAdaptive": "Zephyr, Frost, Breeze, Loom, Wren",
+      "neutral_versatileAdaptive": "Flint"
+    },
+    "hard_rules": "British English; spellings follow the golden guides; no em dashes, en dashes, or double hyphens in any prose string; concrete nouns over adjective filler."
+  },
+  "colours_by_role": {
+    "warm_quietLuxury": {
+      "neutrals": [
+        {"name": "Camel", "role": "warm_base"},
+        {"name": "Rich toffee", "role": "warm_base"},
+        {"name": "Taupe", "role": "warm_cool_bridge"},
+        {"name": "Stone grey", "role": "warm_cool_bridge"},
+        {"name": "Soft cream", "role": "white_substitute"},
+        {"name": "Olive", "role": "earthy_green"},
+        {"name": "Moss green", "role": "earthy_green"}
+      ],
+      "accents": [
+        {"name": "Oxblood", "role": "accent"},
+        {"name": "Burgundy", "role": "accent"},
+        {"name": "Plum", "role": "accent"}
+      ],
+      "relief": [
+        {"name": "Misty blue-green", "role": "relief"}
+      ],
+      "passOver": ["Icy electric blue", "Neon brights", "Fleeting trend pastels"]
+    },
+    "cool_quietLuxury": {
+      "neutrals": [
+        {"name": "Inky navy", "role": "cool_base"},
+        {"name": "Deep teal", "role": "cool_base"},
+        {"name": "Dove grey", "role": "cool_base"},
+        {"name": "Moonlit ivory", "role": "white_substitute"},
+        {"name": "Faded denim blue", "role": "warm_cool_bridge"},
+        {"name": "Smoked mauve", "role": "warm_cool_bridge"},
+        {"name": "Sage grey", "role": "earthy_green"}
+      ],
+      "accents": [
+        {"name": "Faded rose", "role": "accent"},
+        {"name": "Deep berry", "role": "accent"},
+        {"name": "Muted plum", "role": "accent"}
+      ],
+      "relief": [
+        {"name": "Soft oatmeal", "role": "relief"}
+      ],
+      "passOver": ["Hot saturated red", "Stark optic white", "Harsh neon"]
+    },
+    "neutral_quietLuxury": {
+      "neutrals": [
+        {"name": "Greige", "role": "warm_cool_bridge"},
+        {"name": "Oatmeal", "role": "warm_base"},
+        {"name": "Soft stone", "role": "cool_base"},
+        {"name": "Graphite", "role": "structural_dark"},
+        {"name": "Mushroom taupe", "role": "warm_cool_bridge"},
+        {"name": "Chalk", "role": "white_substitute"},
+        {"name": "Dry sage", "role": "earthy_green"}
+      ],
+      "accents": [
+        {"name": "Bottle green", "role": "accent"},
+        {"name": "Dark chocolate", "role": "accent"}
+      ],
+      "relief": [
+        {"name": "Pale butter", "role": "relief"}
+      ],
+      "passOver": ["Neon brights", "Glitter finishes", "Sugary pastels"]
+    },
+    "warm_boldExpression": {
+      "neutrals": [
+        {"name": "Deep bronze", "role": "warm_base"},
+        {"name": "Golden camel", "role": "warm_base"},
+        {"name": "Warm ivory", "role": "white_substitute"},
+        {"name": "Rich terracotta", "role": "warm_cool_bridge"},
+        {"name": "Warm sand", "role": "warm_base"},
+        {"name": "Toasted chestnut", "role": "structural_dark"},
+        {"name": "Jet black", "role": "structural_dark"}
+      ],
+      "accents": [
+        {"name": "Fire engine red", "role": "accent"},
+        {"name": "Hot tangerine", "role": "accent"},
+        {"name": "Brilliant marigold", "role": "accent"}
+      ],
+      "relief": [
+        {"name": "Washed peach", "role": "relief"}
+      ],
+      "passOver": ["Muddy pastel", "Icy grey", "Dusty sage"]
+    },
+    "cool_boldExpression": {
+      "neutrals": [
+        {"name": "Optic white", "role": "white_substitute"},
+        {"name": "Jet black", "role": "structural_dark"},
+        {"name": "Stark charcoal", "role": "structural_dark"},
+        {"name": "Crisp navy", "role": "cool_base"},
+        {"name": "Cool slate", "role": "cool_base"},
+        {"name": "Glacier grey", "role": "cool_base"},
+        {"name": "Steel blue", "role": "warm_cool_bridge"}
+      ],
+      "accents": [
+        {"name": "Electric cobalt", "role": "accent"},
+        {"name": "Sharp violet", "role": "accent"},
+        {"name": "Icy magenta", "role": "accent"}
+      ],
+      "relief": [
+        {"name": "Frosted lilac", "role": "relief"}
+      ],
+      "passOver": ["Muddy earth brown", "Dusty rose", "Washed-out pastel"]
+    },
+    "neutral_boldExpression": {
+      "neutrals": [
+        {"name": "Optic white", "role": "white_substitute"},
+        {"name": "Jet black", "role": "structural_dark"},
+        {"name": "Graphite", "role": "structural_dark"},
+        {"name": "Concrete grey", "role": "cool_base"},
+        {"name": "Bone", "role": "warm_base"},
+        {"name": "Mid stone grey", "role": "warm_cool_bridge"},
+        {"name": "Ash grey", "role": "cool_base"}
+      ],
+      "accents": [
+        {"name": "Signal red", "role": "accent"},
+        {"name": "Sharp cobalt", "role": "accent"}
+      ],
+      "relief": [
+        {"name": "Pale silver grey", "role": "relief"}
+      ],
+      "passOver": ["Muddy mid-tones", "Sugary pastels", "Sun-faded neutrals"]
+    },
+    "warm_versatileAdaptive": {
+      "neutrals": [
+        {"name": "Warm taupe", "role": "warm_base"},
+        {"name": "Camel", "role": "warm_base"},
+        {"name": "Soft cream", "role": "white_substitute"},
+        {"name": "Sand beige", "role": "warm_cool_bridge"},
+        {"name": "Warm stone", "role": "warm_cool_bridge"},
+        {"name": "Olive drab", "role": "earthy_green"},
+        {"name": "Espresso brown", "role": "structural_dark"}
+      ],
+      "accents": [
+        {"name": "Rust orange", "role": "accent"},
+        {"name": "Ochre gold", "role": "accent"}
+      ],
+      "relief": [
+        {"name": "Pale clay", "role": "relief"}
+      ],
+      "passOver": ["Icy pastel", "Neon brights", "Cold blue-grey"]
+    },
+    "cool_versatileAdaptive": {
+      "neutrals": [
+        {"name": "Stark navy", "role": "cool_base"},
+        {"name": "Icy grey", "role": "cool_base"},
+        {"name": "Optical white", "role": "white_substitute"},
+        {"name": "Deep slate", "role": "structural_dark"},
+        {"name": "Crisp charcoal", "role": "structural_dark"},
+        {"name": "Chalk", "role": "white_substitute"},
+        {"name": "Steel blue", "role": "warm_cool_bridge"}
+      ],
+      "accents": [
+        {"name": "Acidic yellow", "role": "accent"},
+        {"name": "Sharp cobalt", "role": "accent"},
+        {"name": "Kelly green", "role": "accent"}
+      ],
+      "relief": [
+        {"name": "Chalky blue", "role": "relief"}
+      ],
+      "passOver": ["Mustard", "Rust", "Warm olive green"]
+    },
+    "neutral_versatileAdaptive": {
+      "neutrals": [
+        {"name": "Graphite", "role": "structural_dark"},
+        {"name": "Soft stone", "role": "cool_base"},
+        {"name": "Oatmeal", "role": "warm_base"},
+        {"name": "Greige", "role": "warm_cool_bridge"},
+        {"name": "Chalk white", "role": "white_substitute"},
+        {"name": "Dry sage", "role": "earthy_green"}
+      ],
+      "accents": [
+        {"name": "Bottle green", "role": "accent"},
+        {"name": "Dark chocolate", "role": "accent"}
+      ],
+      "relief": [
+        {"name": "Pale butter", "role": "relief"}
+      ],
+      "passOver": ["Neon brights", "Glitter finishes", "Sugary pastels"]
+    },
+    "warm_water_dominant": {
+      "neutrals": [
+        {"name": "Bitter chocolate", "role": "warm_base"},
+        {"name": "Dark mahogany", "role": "warm_base"},
+        {"name": "Blackened indigo", "role": "structural_dark"},
+        {"name": "Deep forest green", "role": "earthy_green"},
+        {"name": "Burnt umber", "role": "warm_cool_bridge"},
+        {"name": "Washed black", "role": "structural_dark"}
+      ],
+      "accents": [
+        {"name": "Burnt amber", "role": "accent"},
+        {"name": "Rich cognac", "role": "accent"}
+      ],
+      "relief": [
+        {"name": "Misty taupe", "role": "relief"}
+      ],
+      "passOver": ["Stark optic white", "Harsh neon", "Icy pastel"]
+    },
+    "cool_water_dominant": {
+      "neutrals": [
+        {"name": "Dove grey", "role": "cool_base"},
+        {"name": "Inky navy", "role": "structural_dark"},
+        {"name": "Deep teal", "role": "cool_base"},
+        {"name": "Oyster", "role": "white_substitute"},
+        {"name": "Pale aqua", "role": "cool_base"},
+        {"name": "Smoked mauve", "role": "warm_cool_bridge"}
+      ],
+      "accents": [
+        {"name": "Faded rose", "role": "accent"},
+        {"name": "Deep berry", "role": "accent"}
+      ],
+      "relief": [
+        {"name": "Soft oatmeal", "role": "relief"}
+      ],
+      "passOver": ["Hard black", "Harsh neon", "Heavy earth brown"]
+    },
+    "neutral_water_dominant": {
+      "neutrals": [
+        {"name": "Pewter grey", "role": "cool_base"},
+        {"name": "Misty greige", "role": "warm_cool_bridge"},
+        {"name": "Oyster", "role": "white_substitute"},
+        {"name": "Shadow taupe", "role": "warm_cool_bridge"},
+        {"name": "Driftwood grey", "role": "cool_base"},
+        {"name": "Deep slate", "role": "structural_dark"}
+      ],
+      "accents": [
+        {"name": "Muted plum", "role": "accent"},
+        {"name": "Sea-glass teal", "role": "accent"}
+      ],
+      "relief": [
+        {"name": "Pale oat", "role": "relief"}
+      ],
+      "passOver": ["Neon brights", "Hard jet black", "Glitter finishes"]
+    }
+  },
+  "textures": {
+    "quietLuxury": [
+      {"name": "Cashmere", "useCase": "knitwear and winter layers that compress and bounce back", "rank": 1},
+      {"name": "Full-grain leather", "useCase": "bags, shoes, and belts that mould to your life and patinate", "rank": 2},
+      {"name": "Brushed wool and tweed", "useCase": "tailored coats and blazers that hold clean lines for years", "rank": 3},
+      {"name": "Silk", "useCase": "blouses and linings that add fluid, effortless movement", "rank": 4},
+      {"name": "Suede", "useCase": "shoes and accessories with quiet matt texture", "rank": 5},
+      {"name": "Fine merino", "useCase": "base layers soft against the skin and resilient through washes", "rank": 6},
+      {"name": "Linen", "useCase": "warmer-weather pieces whose natural wrinkle reads as authentic", "rank": 7}
+    ],
+    "boldExpression": [
+      {"name": "Crisp cotton poplin", "useCase": "sharp shirting that holds a crease and snaps visually", "rank": 1},
+      {"name": "Sharp wool twill", "useCase": "knife-edge tailoring that never begs for a steamer", "rank": 2},
+      {"name": "Patent leather", "useCase": "statement footwear and accessories that reflect maximum light", "rank": 3},
+      {"name": "Heavy silk satin", "useCase": "slip dresses and linings that gleam under low light", "rank": 4},
+      {"name": "Techno gabardine", "useCase": "wrinkle-resistant trousers and jackets that keep a rigid shape", "rank": 5},
+      {"name": "High-shine taffeta", "useCase": "evening pieces that bounce light and cut a clear silhouette", "rank": 6},
+      {"name": "Polished calfskin", "useCase": "footwear and accessories with a slick, radiant surface", "rank": 7},
+      {"name": "Leather", "useCase": "jackets and trousers that hold a silhouette like a drawn blade", "rank": 8}
+    ],
+    "versatileAdaptive": [
+      {"name": "Crisp cotton poplin", "useCase": "shirting with clean architectural boundaries and pure separation", "rank": 1},
+      {"name": "Fine ribbed merino", "useCase": "close-to-body base layers with sharp lines and easy movement", "rank": 2},
+      {"name": "Worsted wool", "useCase": "trousers that drape cleanly and resist creasing through a long day", "rank": 3},
+      {"name": "Technical nylon", "useCase": "lightweight mobile outerwear that blocks wind and weighs little", "rank": 4},
+      {"name": "Lightweight gabardine", "useCase": "transitional jackets with rigid structure and no heavy drag", "rank": 5},
+      {"name": "Matt silk", "useCase": "a frictionless fluid layer added without bulk", "rank": 6},
+      {"name": "Crisp linen", "useCase": "breathable separation over fluid drapes in warmer weather", "rank": 7}
+    ],
+    "water_dominant": [
+      {"name": "Washed silk", "useCase": "slips and blouses softened until the sheen turns to candlelight", "rank": 1},
+      {"name": "Cloud-soft lambswool", "useCase": "jumpers and cardigans that shelter without weight", "rank": 2},
+      {"name": "Heavy silk crepe", "useCase": "dresses that trace the body with fluid, hidden depth", "rank": 3},
+      {"name": "Boiled wool", "useCase": "unstructured protective coats that stay soft at every edge", "rank": 4},
+      {"name": "Brushed alpaca", "useCase": "enveloping winter coats and oversized cardigans", "rank": 5},
+      {"name": "Fluid modal jersey", "useCase": "base layers that follow the body without ever gripping it", "rank": 6},
+      {"name": "Brushed cotton flannel", "useCase": "shirts and loungewear that feel like a remembered embrace", "rank": 7},
+      {"name": "Cupro", "useCase": "soft shirting and fluid trousers with a liquid tonal drape", "rank": 8}
+    ]
+  },
+  "accessory_specs": {
+    "quietLuxury_selfContained_muted": {
+      "categories": [
+        {"category": "Handbags", "decision": "include", "reason": "a substantial bag holds its shape and develops a patina that outlasts synthetics", "material": "full-grain leather or thick suede", "finish": "matt brushed hardware"},
+        {"category": "Scarves", "decision": "include", "reason": "a loosely worn scarf adds the fluid movement structured coats need", "material": "generous silk or fine wool", "finish": "matt"},
+        {"category": "Belts", "decision": "include", "reason": "an architectural belt does a structural job rather than a decorative one", "material": "wide full-grain leather", "finish": "matt brushed buckle"},
+        {"category": "Keepsake jewellery", "decision": "include", "reason": "one dense piece worn close to the skin supplies the touch of quiet depth", "material": "deep stone set in aged silver or brass", "finish": "oxidised"}
+      ]
+    },
+    "quietLuxury_selfContained_polished": {
+      "categories": [
+        {"category": "Handbags", "decision": "include", "reason": "one gleaming fitting against otherwise quiet leather carries the whole finish", "material": "glazed leather", "finish": "high-polish clasp"},
+        {"category": "Scarves", "decision": "omit", "reason": "draped layers muddy a look resolved to a single polished line", "material": "not applicable", "finish": "not applicable"},
+        {"category": "Belts", "decision": "include", "reason": "a single clean shine at the waist reads as intent", "material": "smooth leather", "finish": "polished buckle"},
+        {"category": "Statement ring", "decision": "include", "reason": "one polished signet is the single point of light a muted base allows", "material": "solid gold", "finish": "high polish"}
+      ]
+    },
+    "quietLuxury_selfContained_mixed": {
+      "categories": [
+        {"category": "Handbags", "decision": "include", "reason": "a matt body with one polished clasp states the mixed finish in a single object", "material": "full-grain leather", "finish": "matt body with one polished clasp"},
+        {"category": "Scarves", "decision": "include", "reason": "a soft scarf keeps the fluid movement the structure needs", "material": "silk", "finish": "matt"},
+        {"category": "Keepsake jewellery", "decision": "include", "reason": "an aged base with one bright accent carries the personal note", "material": "aged brass with a polished gold accent", "finish": "mixed patina and polish"},
+        {"category": "Belts", "decision": "include", "reason": "a leather belt anchors the drape without competing with the metal story", "material": "full-grain leather", "finish": "brushed buckle"}
+      ]
+    },
+    "quietLuxury_communityOriented_muted": {
+      "categories": [
+        {"category": "Handbags", "decision": "include", "reason": "a field bag reads better every year and carries into shared spaces", "material": "full-grain leather satchel", "finish": "aged brass fittings"},
+        {"category": "Belts", "decision": "include", "reason": "a wide belt is a load-bearing wall in the outfit, never a decoration", "material": "vegetable-tanned leather", "finish": "weathered brass buckle"},
+        {"category": "Hats", "decision": "include", "reason": "a plain felted brim finishes the silhouette for outdoor and social wear", "material": "felted wool wide-brim", "finish": "matt"},
+        {"category": "Scarves", "decision": "include", "reason": "one warm note across the shoulders softens heavy earth layers", "material": "fine wool", "finish": "matt"}
+      ]
+    },
+    "quietLuxury_communityOriented_polished": {
+      "categories": [
+        {"category": "Handbags", "decision": "include", "reason": "a polished top-handle reads clearly across a shared room", "material": "glazed leather top-handle", "finish": "polished hardware"},
+        {"category": "Scarves", "decision": "omit", "reason": "polished looks stay clean; draped layers add visual noise in company", "material": "not applicable", "finish": "not applicable"},
+        {"category": "Statement jewellery", "decision": "include", "reason": "one visible gleam does the social work without a cluster", "material": "solid gold cuff", "finish": "high polish"},
+        {"category": "Belts", "decision": "include", "reason": "a clean shine at the waist keeps the silhouette defined", "material": "smooth leather", "finish": "polished buckle"}
+      ]
+    },
+    "quietLuxury_communityOriented_mixed": {
+      "categories": [
+        {"category": "Handbags", "decision": "include", "reason": "a matt body with a polished clasp bridges the two finishes in company", "material": "full-grain leather", "finish": "matt body, polished clasp"},
+        {"category": "Hats", "decision": "include", "reason": "a plain brim finishes a shared-space silhouette", "material": "felted wool", "finish": "matt"},
+        {"category": "Fine jewellery", "decision": "include", "reason": "an aged piece with one bright accent carries the mixed metal story", "material": "aged brass with one polished piece", "finish": "mixed"},
+        {"category": "Scarves", "decision": "include", "reason": "a soft scarf keeps movement in the layers", "material": "silk", "finish": "matt"}
+      ]
+    },
+    "quietLuxury_balanced_muted": {
+      "categories": [
+        {"category": "Handbags", "decision": "include", "reason": "a substantial bag balances the outfit and ages into character", "material": "full-grain leather", "finish": "brushed matt hardware"},
+        {"category": "Scarves", "decision": "include", "reason": "a loose scarf restores fluid movement when a look turns stiff", "material": "silk or fine wool", "finish": "matt"},
+        {"category": "Belts", "decision": "include", "reason": "a leather belt anchors a draped waist in measured proportion", "material": "medium full-grain leather", "finish": "matt buckle"},
+        {"category": "Keepsake jewellery", "decision": "include", "reason": "one aged pendant supplies the single point of depth", "material": "aged silver", "finish": "oxidised"}
+      ]
+    },
+    "quietLuxury_balanced_polished": {
+      "categories": [
+        {"category": "Handbags", "decision": "include", "reason": "one polished clasp gives the balanced look its single shine", "material": "glazed leather", "finish": "polished clasp"},
+        {"category": "Scarves", "decision": "omit", "reason": "a single polished line reads cleaner without added drape", "material": "not applicable", "finish": "not applicable"},
+        {"category": "Belts", "decision": "include", "reason": "a clean buckle keeps the proportion defined", "material": "smooth leather", "finish": "polished buckle"},
+        {"category": "Statement ring", "decision": "include", "reason": "one polished signet is the measured point of light", "material": "solid gold", "finish": "high polish"}
+      ]
+    },
+    "quietLuxury_balanced_mixed": {
+      "categories": [
+        {"category": "Handbags", "decision": "include", "reason": "a matt body with one molten flash carries the mixed finish in balance", "material": "full-grain leather", "finish": "matt body with one polished flash"},
+        {"category": "Scarves", "decision": "include", "reason": "a soft scarf keeps the softness the grandeur is built on", "material": "silk", "finish": "matt"},
+        {"category": "Keepsake jewellery", "decision": "include", "reason": "an aged base with a bright accent is the one molten flash", "material": "aged brass with a molten gold accent", "finish": "mixed"},
+        {"category": "Hats", "decision": "omit", "reason": "a mixed metal story already carries the finishing note; a hat would over-decorate", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "boldExpression_selfContained_muted": {
+      "categories": [
+        {"category": "Statement jewellery", "decision": "include", "reason": "one heavy cuff is the single flash a dark, matt base allows", "material": "solid metal cuff", "finish": "matt blackened with one accent"},
+        {"category": "Footwear", "decision": "include", "reason": "a stark boot is the decisive punctuation mark of the look", "material": "matt leather boot", "finish": "matt"},
+        {"category": "Structured bags", "decision": "include", "reason": "architecture at the last step keeps the graphic silhouette intact", "material": "rigid leather", "finish": "matt gunmetal fittings"},
+        {"category": "Scarves", "decision": "omit", "reason": "draped layers dull a silhouette built on graphic edges", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "boldExpression_selfContained_polished": {
+      "categories": [
+        {"category": "Statement jewellery", "decision": "include", "reason": "one polished gold cuff detonates against the base as the single flash", "material": "high-polish yellow gold cuff", "finish": "high polish"},
+        {"category": "Footwear", "decision": "include", "reason": "a pointed patent boot acts as decisive punctuation", "material": "patent leather", "finish": "high gloss"},
+        {"category": "Structured bags", "decision": "include", "reason": "a rigid top-handle keeps the graphic line and reflects light", "material": "patent leather top-handle", "finish": "polished hardware"},
+        {"category": "Scarves", "decision": "omit", "reason": "fussy layers conflict with speed and impact", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "boldExpression_selfContained_mixed": {
+      "categories": [
+        {"category": "Statement jewellery", "decision": "include", "reason": "one polished gold piece against a blackened base is the whole trick", "material": "gold cuff over blackened base", "finish": "mixed"},
+        {"category": "Footwear", "decision": "include", "reason": "a heavy-soled boot with a glint reads as a decision, never an afterthought", "material": "leather boot", "finish": "blackened hardware with one gloss detail"},
+        {"category": "Structured bags", "decision": "include", "reason": "gunmetal fittings with one polished pull carry the dual register", "material": "rigid leather", "finish": "gunmetal fittings, one polished pull"},
+        {"category": "Scarves", "decision": "omit", "reason": "a scarf surrenders the sharp silhouette at the last step", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "boldExpression_communityOriented_muted": {
+      "categories": [
+        {"category": "Statement eyewear", "decision": "include", "reason": "oversized frames act as a theatrical mask for shared rooms", "material": "oversized acetate", "finish": "matt tortoiseshell"},
+        {"category": "Footwear", "decision": "include", "reason": "a chunky boot grounds generous layers with visual weight", "material": "chunky leather boot", "finish": "matt"},
+        {"category": "Substantial belts", "decision": "include", "reason": "a wide belt provides immediate structure over volume", "material": "wide leather", "finish": "matt buckle"},
+        {"category": "Scarves", "decision": "omit", "reason": "scale, not layers, carries this look; drape only clutters it", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "boldExpression_communityOriented_polished": {
+      "categories": [
+        {"category": "Statement eyewear", "decision": "include", "reason": "oversized frames read as a theatrical mask across a room", "material": "oversized acetate", "finish": "glossy warm tone"},
+        {"category": "Substantial belts", "decision": "include", "reason": "a massive polished buckle gives immediate structure over a voluminous dress", "material": "wide leather", "finish": "massive polished brass buckle"},
+        {"category": "Footwear", "decision": "include", "reason": "a chunky platform grounds the layers with a radiant surface", "material": "high-shine calfskin platform", "finish": "high shine"},
+        {"category": "Scarves", "decision": "omit", "reason": "scarves and hats are omitted; volume comes from scale, not draped layers", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "boldExpression_communityOriented_mixed": {
+      "categories": [
+        {"category": "Statement eyewear", "decision": "include", "reason": "oversized frames anchor the face and read at a distance", "material": "oversized acetate", "finish": "mixed tone"},
+        {"category": "Statement jewellery", "decision": "include", "reason": "one big cuff mixing finishes carries the accent", "material": "solid metal cuff", "finish": "brushed with one polished accent"},
+        {"category": "Footwear", "decision": "include", "reason": "a bold trainer grounds the generous scale", "material": "thick-soled leather trainer", "finish": "mixed finish"},
+        {"category": "Scarves", "decision": "omit", "reason": "draped layers dilute the theatrical scale", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "boldExpression_balanced_muted": {
+      "categories": [
+        {"category": "Statement jewellery", "decision": "include", "reason": "one cuff holds the accent without tipping into clutter", "material": "solid metal cuff", "finish": "matt"},
+        {"category": "Footwear", "decision": "include", "reason": "a sharp boot punctuates the balanced silhouette", "material": "leather boot", "finish": "matt"},
+        {"category": "Eyewear", "decision": "include", "reason": "a geometric frame gives the face measured architecture", "material": "geometric acetate", "finish": "matt"},
+        {"category": "Scarves", "decision": "omit", "reason": "a scarf softens edges the look wants kept graphic", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "boldExpression_balanced_polished": {
+      "categories": [
+        {"category": "Statement jewellery", "decision": "include", "reason": "one polished collar is the single deliberate shine", "material": "polished metal collar", "finish": "high polish"},
+        {"category": "Footwear", "decision": "include", "reason": "a stiletto adds decisive, light-catching punctuation", "material": "patent leather", "finish": "patent gloss"},
+        {"category": "Eyewear", "decision": "include", "reason": "a glossy frame sharpens the face and the finish", "material": "acetate frame", "finish": "high shine"},
+        {"category": "Scarves", "decision": "omit", "reason": "fussy layers conflict with a clean polished impact", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "boldExpression_balanced_mixed": {
+      "categories": [
+        {"category": "Statement jewellery", "decision": "include", "reason": "one polished piece over a brushed base carries the mixed accent in balance", "material": "polished piece with brushed base", "finish": "mixed"},
+        {"category": "Footwear", "decision": "include", "reason": "a structured boot grounds the balanced silhouette", "material": "leather boot", "finish": "mixed"},
+        {"category": "Handbags", "decision": "include", "reason": "a graphic box bag with a polished clasp wakes up a stark base", "material": "rigid leather box bag", "finish": "polished clasp, matt body"},
+        {"category": "Scarves", "decision": "omit", "reason": "a scarf blurs a look that trades on clean edges", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "versatileAdaptive_selfContained_muted": {
+      "categories": [
+        {"category": "Watch", "decision": "include", "reason": "a clean, readable face is the single most useful precise object you can own", "material": "brushed steel case, leather or steel strap", "finish": "matt brushed"},
+        {"category": "Belts", "decision": "include", "reason": "cut to your actual size so the tongue lands on the middle hole, it does real work", "material": "vegetable-tanned leather, medium width", "finish": "matt brushed buckle"},
+        {"category": "Bags", "decision": "include", "reason": "a structured, utilitarian tote earns its place through function, not branding", "material": "canvas and leather tote or briefcase", "finish": "matt hardware"},
+        {"category": "Scarves", "decision": "omit", "reason": "extra drape is visual clutter against a style built on signal", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "versatileAdaptive_selfContained_polished": {
+      "categories": [
+        {"category": "Eyewear", "decision": "include", "reason": "a thin metal frame gives the face a clean architectural line", "material": "thin metal frame", "finish": "polished silver"},
+        {"category": "Bags", "decision": "include", "reason": "a structured crossbody keeps hands free and items organised", "material": "smooth leather crossbody", "finish": "polished zips"},
+        {"category": "Footwear", "decision": "include", "reason": "a minimal flat or sneaker carries a single accent cleanly", "material": "smooth leather", "finish": "clean gloss"},
+        {"category": "Watch", "decision": "include", "reason": "a polished steel watch is the one deliberate signal", "material": "steel case", "finish": "high polish"}
+      ]
+    },
+    "versatileAdaptive_selfContained_mixed": {
+      "categories": [
+        {"category": "Eyewear", "decision": "include", "reason": "an acetate frame adds graphic architecture without weight", "material": "acetate frame", "finish": "mixed"},
+        {"category": "Bags", "decision": "include", "reason": "a modular crossbody keeps the system mobile and organised", "material": "nylon and leather crossbody", "finish": "brushed and polished zips"},
+        {"category": "Footwear", "decision": "include", "reason": "an accent-tone flat transforms a neutral base", "material": "smooth leather", "finish": "clean"},
+        {"category": "Watch", "decision": "include", "reason": "a steel watch anchors the light layers with quiet weight", "material": "steel case", "finish": "mixed brushed and polished"}
+      ]
+    },
+    "versatileAdaptive_communityOriented_muted": {
+      "categories": [
+        {"category": "Eyewear", "decision": "include", "reason": "a graphic frame gives the face architecture in shared rooms", "material": "acetate frame", "finish": "matt"},
+        {"category": "Bags", "decision": "include", "reason": "a modular crossbody keeps hands free and items organised", "material": "technical nylon crossbody", "finish": "brushed metal zips"},
+        {"category": "Footwear", "decision": "include", "reason": "an accent-tone trainer is the primary canvas for a pop of colour", "material": "clean leather trainer", "finish": "matt"},
+        {"category": "Belts", "decision": "omit", "reason": "a modular system reads cleaner without an extra fixed line at the waist", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "versatileAdaptive_communityOriented_polished": {
+      "categories": [
+        {"category": "Eyewear", "decision": "include", "reason": "a sharp crystal or bright frame is graphic and social", "material": "acetate frame", "finish": "polished"},
+        {"category": "Bags", "decision": "include", "reason": "a crossbody with clean zips keeps you mobile and organised", "material": "smooth leather crossbody", "finish": "polished zips"},
+        {"category": "Footwear", "decision": "include", "reason": "a bright acidic flat completely transforms a neutral outfit", "material": "smooth leather flat", "finish": "clean gloss"},
+        {"category": "Belts", "decision": "omit", "reason": "a fixed waist line stiffens a wardrobe built to recombine", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "versatileAdaptive_communityOriented_mixed": {
+      "categories": [
+        {"category": "Eyewear", "decision": "include", "reason": "a sharp acetate frame in crystal, navy, or a bright tone is graphic and architectural", "material": "acetate frame", "finish": "mixed"},
+        {"category": "Bags", "decision": "include", "reason": "a multi-compartment crossbody keeps the modular system mobile and organised", "material": "technical nylon crossbody", "finish": "brushed metal zips, one polished ring"},
+        {"category": "Footwear", "decision": "include", "reason": "a structured boot in an acidic tone is the one clever contrast", "material": "clean leather boot", "finish": "clean"},
+        {"category": "Belts", "decision": "omit", "reason": "hats and belts are omitted; a modular system reads cleaner without extra fixed lines", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "versatileAdaptive_balanced_muted": {
+      "categories": [
+        {"category": "Silk scarves", "decision": "include", "reason": "a slim silk band is the most efficient refinement per gram in the wardrobe", "material": "crepe de chine square or slim band", "finish": "matt"},
+        {"category": "Fine jewellery", "decision": "include", "reason": "worn as one composed set it counts as a single refined touch", "material": "thin chain and small drops", "finish": "brushed silver"},
+        {"category": "Small structured bag", "decision": "include", "reason": "a neat top-handle completes the proportions without repealing them", "material": "kid suede top-handle", "finish": "fine matt hardware"},
+        {"category": "Belts", "decision": "omit", "reason": "fine belts stay within proportion and never make a statement here", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "versatileAdaptive_balanced_polished": {
+      "categories": [
+        {"category": "Silk scarves", "decision": "include", "reason": "a slim silk band pays a quiet compliment to the outfit", "material": "silk band", "finish": "soft glow"},
+        {"category": "Fine jewellery", "decision": "include", "reason": "a thin polished chain gives sparkle at conversational volume", "material": "thin gold chain", "finish": "high polish"},
+        {"category": "Small structured bag", "decision": "include", "reason": "a compact crossbody completes the proportions with fine hardware", "material": "smooth leather crossbody", "finish": "polished fine hardware"},
+        {"category": "Belts", "decision": "omit", "reason": "a heavier waist line would be out of proportion with everything else", "material": "not applicable", "finish": "not applicable"}
+      ]
+    },
+    "versatileAdaptive_balanced_mixed": {
+      "categories": [
+        {"category": "Silk scarves", "decision": "include", "reason": "a crepe de chine square tied at the neck, wrist, or bag handle is the day's one flourish", "material": "crepe de chine square", "finish": "matt"},
+        {"category": "Fine jewellery", "decision": "include", "reason": "fine gold and silver in polite company counts as a single touch", "material": "thin mixed gold and silver", "finish": "mixed polished and brushed"},
+        {"category": "Small structured bag", "decision": "include", "reason": "a neat top-handle completes the proportions; an oversized tote would repeal them", "material": "kid suede or smooth leather top-handle", "finish": "fine mixed hardware"},
+        {"category": "Belts", "decision": "omit", "reason": "fine belts fold into proportion advice and never dominate the plate", "material": "not applicable", "finish": "not applicable"}
+      ]
+    }
+  }
+}

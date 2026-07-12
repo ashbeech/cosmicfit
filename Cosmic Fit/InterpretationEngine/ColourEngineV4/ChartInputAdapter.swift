@@ -16,6 +16,33 @@ enum ChartInputAdapter {
         let boundaryFlags: [BoundaryFlag]
     }
 
+    /// Signs-only adaptation for charts without degree data (SG-4 golden
+    /// fixture charts carry planet signs but no birth time). No degrees means
+    /// no boundary flags. Production always uses `adapt(analysis:natalChart:)`.
+    static func adapt(analysis: ChartAnalysis) -> AdaptedInput {
+        let signMap = analysis.planetSigns
+
+        func placement(for planet: String) -> PlacementInput {
+            let signName = signMap[planet] ?? "Aries"
+            return PlacementInput(sign: V4ZodiacSign(rawValue: signName) ?? .aries)
+        }
+
+        let colourInput = BirthChartColourInput(
+            ascendant: PlacementInput(sign: V4ZodiacSign(rawValue: analysis.ascendantSign) ?? .aries),
+            venus: placement(for: "Venus"),
+            sun: placement(for: "Sun"),
+            moon: placement(for: "Moon"),
+            mercury: placement(for: "Mercury"),
+            mars: placement(for: "Mars"),
+            saturn: placement(for: "Saturn"),
+            jupiter: placement(for: "Jupiter"),
+            pluto: placement(for: "Pluto"),
+            midheaven: PlacementInput(sign: V4ZodiacSign(rawValue: analysis.midheavenSign) ?? .aries)
+        )
+
+        return AdaptedInput(colourInput: colourInput, boundaryFlags: [])
+    }
+
     /// Convert a `ChartAnalysis` (plus the raw `NatalChart` for degree info) into V4 input.
     /// `ChartAnalysis.planetSigns` is keyed by planet name (e.g. "Venus", "Sun").
     static func adapt(

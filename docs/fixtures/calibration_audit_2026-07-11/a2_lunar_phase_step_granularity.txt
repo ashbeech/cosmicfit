@@ -1,0 +1,12 @@
+A2 — LUNAR PHASE STEP GRANULARITY (fixed sky, phase swept 0..360° in 0.25° steps)
+Profile: ash_london_1984, transits frozen at 2026-03-15 (52 aspects)
+
+Distinct vibe outputs across the whole lunar cycle: 3
+Vibe changes occur only at these phase degrees (bucket boundaries):
+  2.00° — vibe L1 step 2 (of 42 max)
+  267.00° — vibe L1 step 2 (of 42 max)
+  358.00° — vibe L1 step 2 (of 42 max)
+
+Interpretation: the moon-phase contribution to the vibe is a step function
+over 8 buckets; between boundaries the moon cannot move the vibe at all.
+(The axes DO move continuously via fullMoonProximity nudges.)

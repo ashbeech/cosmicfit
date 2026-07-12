@@ -355,14 +355,21 @@ enum PaletteLibrary {
     ) -> [String] {
         var claimed = Set(claimedTemplateNames.map { $0.lowercased() })
         return slots.map { slot in
-            let raw = slot.displayName.lowercased()
+            // SG-4: a display label must be a colour NAME, never a raw hex.
+            // Some chart-derived accent expressions carry a hex as their name;
+            // label it with the nearest wardrobe token instead (found live:
+            // "apply deep mauve or #8a4484" in composed prose).
+            let displayName = slot.displayName.hasPrefix("#")
+                ? nearestColourName(forHex: slot.hex, excluding: claimed)
+                : slot.displayName
+            let raw = displayName.lowercased()
             if claimed.contains(raw) {
                 let renamed = nearestColourName(forHex: slot.hex, excluding: claimed)
                 claimed.insert(renamed.lowercased())
                 return renamed
             } else {
                 claimed.insert(raw)
-                return slot.displayName
+                return displayName
             }
         }
     }
@@ -375,16 +382,23 @@ enum PaletteLibrary {
     ) -> [String] {
         var claimed = Set(claimedTemplateNames.map { $0.lowercased() })
         return names.map { name in
-            let raw = name.lowercased()
+            // SG-4: the assembled palette's accent band may hold raw hexes
+            // (engine step 14e syncs it to accentHexes). A label must be a
+            // colour name, never a hex.
+            let base = name.hasPrefix("#")
+                ? nearestColourName(forHex: name, excluding: claimed)
+                : name
+            let raw = base.lowercased()
             if claimed.contains(raw) {
                 let renamed = nearestColourName(
-                    forHex: hex(for: name), excluding: claimed
+                    forHex: name.hasPrefix("#") ? name : hex(for: base),
+                    excluding: claimed
                 )
                 claimed.insert(renamed.lowercased())
                 return renamed
             } else {
                 claimed.insert(raw)
-                return name
+                return base
             }
         }
     }

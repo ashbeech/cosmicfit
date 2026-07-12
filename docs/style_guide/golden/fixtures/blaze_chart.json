@@ -1,0 +1,51 @@
+{
+  "archetype": "blaze",
+  "source": "docs/style_guide/golden/blaze_ideal.md metadata block",
+  "cluster_key": "venus_sagittarius__moon_leo__fire_dominant",
+  "chart_sect": "day",
+  "element_balance": {
+    "fire": 5,
+    "earth": 1,
+    "air": 1,
+    "water": 1
+  },
+  "modality_balance": {
+    "cardinal": 3,
+    "fixed": 3,
+    "mutable": 2
+  },
+  "chart_ruler": "Mars",
+  "sun_sign": "Sagittarius",
+  "moon_sign": "Leo",
+  "venus_sign": "Sagittarius",
+  "mars_sign": "Virgo",
+  "ascendant_sign": "Aries",
+  "midheaven_sign": "Sagittarius",
+  "planet_signs": {
+    "Sun": "Sagittarius",
+    "Moon": "Leo",
+    "Mercury": "Sagittarius",
+    "Venus": "Sagittarius",
+    "Mars": "Virgo",
+    "Jupiter": "Libra",
+    "Saturn": "Scorpio",
+    "Uranus": "Aquarius",
+    "Neptune": "Capricorn",
+    "Pluto": "Scorpio"
+  },
+  "planet_houses": {
+    "Sun": 9,
+    "Moon": 9,
+    "Mercury": 8,
+    "Venus": 9,
+    "Mars": 6,
+    "Jupiter": 7,
+    "Saturn": 8,
+    "Uranus": 11,
+    "Neptune": 10,
+    "Pluto": 8
+  },
+  "stellium_signs": [
+    "Sagittarius"
+  ]
+}

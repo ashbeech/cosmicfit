@@ -23,8 +23,8 @@ struct TarotCrossUserIsolation_Tests {
         let engineId = "test-engine"
         let today = Date()
 
-        tracker.storeSelection(
-            cardName: "The Tower",
+        tracker.storeCardSelection(
+            "The Tower",
             profileHash: profileA,
             date: today,
             dailyFitEngineId: engineId
@@ -77,7 +77,7 @@ struct TarotCrossUserIsolation_Tests {
         let today = Date()
 
         tracker.storeVisibleTop3(
-            [.dramatic, .romantic, .natural],
+            [.drama, .romantic, .grounded],
             profileHash: profileA,
             date: today,
             dailyFitEngineId: engineId
@@ -105,7 +105,7 @@ struct TarotCrossUserIsolation_Tests {
         let profileB = UUID().uuidString
         let today = Date()
 
-        tracker.storeAccent(.dramatic, profileHash: profileA, date: today)
+        tracker.storeAccent(.drama, profileHash: profileA, date: today)
 
         let recentA = tracker.getRecentAccents(profileHash: profileA, referenceDate: today)
         let recentB = tracker.getRecentAccents(profileHash: profileB, referenceDate: today)
@@ -134,15 +134,15 @@ struct TarotCrossUserIsolation_Tests {
             dailyFitEngineId: engineId
         )
 
-        let historyA = tracker.getDailyColourHistory(
-            profileHash: profileA, referenceDate: today, dailyFitEngineId: engineId
+        let daysA = tracker.daysSinceShown(
+            hex: "#FF0000", profileHash: profileA, referenceDate: today, dailyFitEngineId: engineId
         )
-        let historyB = tracker.getDailyColourHistory(
-            profileHash: profileB, referenceDate: today, dailyFitEngineId: engineId
+        let daysB = tracker.daysSinceShown(
+            hex: "#FF0000", profileHash: profileB, referenceDate: today, dailyFitEngineId: engineId
         )
 
-        #expect(!historyA.isEmpty, "Profile A should have colour history")
-        #expect(historyB.isEmpty, "Profile B must not see Profile A's colour history")
+        #expect(daysA == 0, "Profile A should have colour history for today")
+        #expect(daysB == nil, "Profile B must not see Profile A's colour history")
     }
 
     // MARK: - clearProfile removes only the targeted profile
@@ -178,7 +178,7 @@ struct TarotCrossUserIsolation_Tests {
         let profileB = UUID().uuidString
         let today = Date()
 
-        tracker.storeAccent(.dramatic, profileHash: profileA, date: today)
+        tracker.storeAccent(.drama, profileHash: profileA, date: today)
         tracker.storeAccent(.classic, profileHash: profileB, date: today)
 
         tracker.clearProfile(profileHash: profileA)

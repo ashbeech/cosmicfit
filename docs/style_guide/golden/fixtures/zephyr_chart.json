@@ -1,0 +1,49 @@
+{
+  "archetype": "zephyr",
+  "source": "docs/style_guide/golden/zephyr_ideal.md metadata block",
+  "cluster_key": "venus_gemini__moon_aquarius__air_dominant",
+  "chart_sect": "day",
+  "element_balance": {
+    "fire": 1,
+    "earth": 1,
+    "air": 5,
+    "water": 1
+  },
+  "modality_balance": {
+    "cardinal": 3,
+    "fixed": 3,
+    "mutable": 2
+  },
+  "chart_ruler": "Mercury",
+  "sun_sign": "Libra",
+  "moon_sign": "Aquarius",
+  "venus_sign": "Gemini",
+  "mars_sign": "Sagittarius",
+  "ascendant_sign": "Gemini",
+  "midheaven_sign": "Gemini",
+  "planet_signs": {
+    "Sun": "Libra",
+    "Moon": "Aquarius",
+    "Mercury": "Libra",
+    "Venus": "Gemini",
+    "Mars": "Sagittarius",
+    "Jupiter": "Cancer",
+    "Saturn": "Taurus",
+    "Uranus": "Aries",
+    "Neptune": "Pisces",
+    "Pluto": "Capricorn"
+  },
+  "planet_houses": {
+    "Sun": 5,
+    "Moon": 11,
+    "Mercury": 5,
+    "Venus": 1,
+    "Mars": 7,
+    "Jupiter": 2,
+    "Saturn": 12,
+    "Uranus": 11,
+    "Neptune": 10,
+    "Pluto": 8
+  },
+  "stellium_signs": []
+}

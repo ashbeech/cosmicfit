@@ -1,0 +1,51 @@
+{
+  "archetype": "wren",
+  "source": "docs/style_guide/golden/wren_ideal.md metadata block",
+  "cluster_key": "venus_cancer__moon_gemini__fire_dominant",
+  "chart_sect": "day",
+  "element_balance": {
+    "fire": 4,
+    "earth": 1,
+    "air": 2,
+    "water": 1
+  },
+  "modality_balance": {
+    "cardinal": 3,
+    "fixed": 3,
+    "mutable": 2
+  },
+  "chart_ruler": "Sun",
+  "sun_sign": "Aries",
+  "moon_sign": "Gemini",
+  "venus_sign": "Cancer",
+  "mars_sign": "Aries",
+  "ascendant_sign": "Leo",
+  "midheaven_sign": "Aries",
+  "planet_signs": {
+    "Sun": "Aries",
+    "Moon": "Gemini",
+    "Mercury": "Aries",
+    "Venus": "Cancer",
+    "Mars": "Aries",
+    "Jupiter": "Libra",
+    "Saturn": "Capricorn",
+    "Uranus": "Sagittarius",
+    "Neptune": "Capricorn",
+    "Pluto": "Scorpio"
+  },
+  "planet_houses": {
+    "Sun": 9,
+    "Moon": 6,
+    "Mercury": 9,
+    "Venus": 12,
+    "Mars": 10,
+    "Jupiter": 3,
+    "Saturn": 6,
+    "Uranus": 5,
+    "Neptune": 6,
+    "Pluto": 4
+  },
+  "stellium_signs": [
+    "Aries"
+  ]
+}

@@ -1,0 +1,136 @@
+# Your Cosmic Style Guide
+
+### Ash (pre-overhaul baseline)
+
+> Baseline snapshot rendered 2026-07-06 from `docs/house_sect_regression/input_after/ash.json` (engine 2.1.0, composed via the production BlueprintComposer pipeline). Section order follows the golden-guide contract; subheadings match the app display.
+
+---
+
+## 1. The Blueprint
+
+Your presence thrives on a highly visible tension between the fiercely modern and the deeply familiar. You project an energy that is undeniably forward-looking, yet grounded in pieces that feel emotionally safe to wear. While you draw the eye with unexpected proportions and an unapologetic attitude, your silhouette always retains a distinct element of shelter. You take up space in a room with complete confidence, but there is a clear warmth to your subversion. It is the look of someone pushing the boundaries of taste while keeping themselves entirely protected.
+
+Your natural sense of beauty shows up most powerfully in your daily rituals, daily beauty rituals, functional elegance, beautiful workwear, aesthetic routines. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as versatile and expressive; you communicate range and adaptability through what you wear.
+
+---
+
+## 2. The Palette
+
+Your colour story thrives on a clash of temperature. Build a foundation on the stark, synthetic edge of poppy and the industrial calm of bright teal, then soften the impact with the washed-out safety of vivid yellow. This mix gives you the brilliant tension of a vintage silhouette cut from a space-age fabric. Introduce Dark Cyan as a sudden, unapologetic hit of heat to break up the cool tones. A high-visibility shade always carries more attitude when it sits next to something reassuringly soft.
+
+**Palette family:** Bright Spring  
+**Variables:** contrast=High, depth=Medium, saturation=Rich, surface=Structured, temperature=Neutral  
+**Neutrals:** clear ivory (#FFFDF0), warm navy (#384C70), graphite (#4B4F54), clear camel (#C19A6B)  
+**Core:** poppy (#E35335), bright teal (#009B8D), vivid yellow (#FFE302), bright blue (#0080FF)  
+**Support:** dove grey (#9C9A9A), muted charcoal (#636B6F), smoked navy (#3B4B5E), mist navy (#6B7B8D)  
+**Accents:** Dark Cyan (#007788)
+
+---
+
+## 3. The Textures
+
+### The Good
+
+You dress with a very specific tension, seeking out clothes that look completely progressive but feel as safe as a heavy blanket. You need materials that can handle your high-energy pace without sacrificing a sense of protective enclosure. Build your outfits around washed cotton and heritage knits, as they hold a bold, defined shape while you burn through your schedule. Introduce soft flannel when you crave something deeply tactile that still reads as visually sharp. The trick is looking utterly unconventional without ever feeling exposed.
+
+### The Bad
+
+You move with far too much heat and urgency for clothes that dictate how you sit or stand. A heavy, unyielding cold metallics instantly traps your warmth and leaves you feeling physically boxed in. The same goes for any flimsy hard plastics that offers zero physical reassurance or stretch. Your wardrobe has to shield you while still letting you act on a whim, rather than holding you back like a stiff, historical costume. If a garment forces you to hold your breath just to keep its silhouette intact, leave it on the hanger.
+
+### The Sweet Spot
+
+Your true sweet spot bridges the gap between memory and warmth. You gravitate towards materials that look completely uncompromising, like a sharp washed cotton, but they must offer absolute physical reassurance once on the body. It is all about the contrast between visual heat and tactile safety. A garment has to look wildly progressive to catch your eye, but it must act like a familiar barrier against the outside world to actually make it out of the front door. If an experimental design lacks that protective warmth, it stays on the hanger.
+
+**Recommended:** washed cotton, heritage knits, soft flannel, vintage silk  
+**Avoid:** cold metallics, hard plastics, synthetic mesh
+
+---
+
+## 4. The Occasions
+
+### At Work
+
+Your professional wardrobe thrives on a brilliant contradiction: looking intellectually rigorous while feeling like a safe place to hide. You look best in tailoring that plays with unexpected proportions, favouring fluid, asymmetrical shapes that generously wrap the body rather than constricting it. An exaggerated blazer with unusual structural details or trousers cut wide enough to accommodate a commanding stride give you serious presence without sacrificing ease. The trick is to appear entirely in charge of the room, while remaining comfortably insulated from the noise of the working day.
+
+Your style energy concentrates in foundations and routine, so your wardrobe is at its best when it reflects both foundations and routine. You maintain your professional agility by styling sharply cut separates with lightweight silk shirts for a flawlessly dynamic aesthetic.
+
+### Intimate Energy
+
+When the lighting drops, your best looks hinge on balancing protective volume with striking geometry. The standard delicate slip will leave you feeling exposed; instead, look for garments that cocoon the body while offering an entirely unpredictable silhouette. Generous, sweeping proportions work beautifully when anchored by an asymmetrical cut or an unusual drape that naturally holds the eye. The piece must offer serious physical comfort, allowing you to gesture wildly and take up space without adjusting a single seam. You end up with an outfit that feels completely secure to inhabit, yet visually thrilling for whoever is sitting across the table.
+
+### Daily Movement
+
+Your daily rotation requires a very specific friction to function properly. A part of you wants to retreat into an incredibly familiar, lived-in shell, while the rest of your personality needs to command the street. Master this tension by pairing deeply comforting foundation pieces with unapologetic, unconventional shapes. Look for garments that envelop the body, relying on generous proportions and sweeping lengths that give you ample room to hide. Then, deliberately puncture that safety with an unexpected cut or a stark silhouette that breaks the rules of typical casualwear. You do relaxed beautifully, provided the final result still reads as a completely original thought.
+
+Your comfort instinct gravitates toward emotional belonging through group-appropriate comfort, community softness.
+
+---
+
+## 5. The Hardware
+
+### The Metals
+
+Your most effective hardware relies on a strict clash of high-tech precision and familiar, heavy warmth. Slick, industrial white gold tones gives you a sharp foundation, looking right at home on the oversized zips of technical outerwear or the chunky fastenings of a utility bag. A completely clinical finish leaves you cold, so you break up those stark details with titanium tones. Seek out titanium tones pieces with a battered, nostalgic patina, like a weighty heirloom pendant strung onto a modern synthetic cord, or thick, warm-toned belt buckles. This visual friction keeps your clothes from looking like a uniform, grounding bold shapes in something deeply personal.
+
+### The Stones
+
+The standard, polite solitaire diamond is never going to hold your attention. You suit stones that feel simultaneously like unearthed artefacts and entirely alien objects. Turquoise gives you a striking, electric shock of colour while maintaining a comforting, heavy weight against the collarbone. Pair it with the milky, protective finish of amber set in thick, molten silver. The icy depth of lapis lazuli works perfectly for this too, offering a fierce spark of heat wrapped in a smooth, nostalgic cabochon cut. These are not quiet gems meant to blend in, but bold centrepieces that demand a second look.
+
+### Tip
+
+Your jewellery needs to strike a balance between sentimental armour and industrial design. Look for pieces in white gold tones that feel substantial and slightly odd, like a heavy vintage locket worn on a thick snake chain or a tactical closure on a slouchy bag. You want hardware that feels inherited but distinctly modern, rather than bought straight off a display bust. Skip the flimsy, tangled layering chains entirely. Instead, anchor your look with one dominant ring featuring turquoise or a chunky architectural cuff. It gives your high-energy outfits a necessary centre of gravity.
+
+**Recommended metals:** white gold, titanium, antique silver, hammered gold, hammered titanium, warm umber, brushed silver, anodised aluminium, surgical steel, brass  
+**Recommended stones:** turquoise, amber, lapis lazuli, labradorite, moonstone, pearl, selenite, peridot, sapphire, ammolite, fluorite, meteorite
+
+---
+
+## 6. The Code
+
+### Lean Into
+
+- Keeping clothes with emotional history in active rotation. A coat from a family member or a scarf from a trip holds real power.
+- Wrapping yourself in soft protective layers as a daily practice. A worn-in cardigan or a heritage shawl is emotional armour.
+- Treating comfort as a non-negotiable, not a luxury. If a garment makes you tense, it is actively working against you.
+- Choosing pieces that feel like home. If an outfit does not settle your nervous system, it is not earning its place.
+- Dressing with travel inspiration woven into every outfit. A waxed jacket or a hand-woven scarf carries the energy of the road even at home.
+- Mixxing global textile references with absolute confidence by pairing an authentic heavy ikat shirt with sharp tailored chinos to bridge entirely different aesthetics.
+
+### Avoid
+
+- Anything emotionally cold or sterile that strips warmth from a room. Clinical minimalism is not your language.
+- Ban harsh, scratchy fabrics from sitting directly against your skin. Your delicate contact points, particularly near your neck and wrists, demand absolute softness.
+- Exposing too much when you feel fragile. Your wardrobe should protect you, not put you on display.
+- Rigid dress codes that strip away your natural range. If a rule says you cannot wear it, that rule was not written for you.
+- Movement-restricting pieces that limit your stride or your spontaneity. If you cannot run for a train in it, it does not belong in your life.
+- Corporate uniformity that flattens your expansive personality. Your style should feel like a passport, not a prison.
+
+### Consider
+
+- Wearing relaxed, oversized silhouettes that allow you to move freely and connect with your local community.
+- Choosing tactile knitwear and slouchy denim that visually invite warmth and easy conversation with your peers.
+- Treating your wardrobe as literal life armour, deploying sharply tailored pieces with strategic intent to serve a strictly protective purpose.
+- How the density of fabric affects your sense of control. Heavier, more opaque garments reinforce the containment you need.
+
+---
+
+## 7. The Accessory
+
+Piling on tiny, fiddly extras simply reads as a nervous styling tick. A single, substantial anchor carrying genuine physical weight pulls a look together with far more authority. You need thick, pliable leather belts, a structured bag secured with heavy-duty metal clasps, or a serious mechanical watch. This approach provides a reassuring sense of physical armour while keeping you unencumbered and ready to move. One definitive, brilliantly constructed object does the heavy lifting, leaving the rest of your silhouette clean and completely unbothered.
+
+Accessories act as the load-bearing walls of your wardrobe. When your clothes lean into soft familiarity, a wide, rigid belt or a bag with an aggressively engineered clasp stops the look from feeling sentimental. It is entirely about tension. A heavy, blunt-edged ring or a thick leather strap pulls a fluid silhouette back into sharp focus. You want pieces that sit firmly on the body, offering a quiet sense of physical reassurance while you are on the move. Think of a bag that tucks tightly beneath the arm rather than swinging loose from the shoulder. They provide a strict, functional framework that lets the rest of your outfit breathe.
+
+The sensory footprint of your accessories dictates how they actually feel to live in. Notice the satisfying mechanical snap of a heavy bag closure, or the dense, comforting drag of a wide woven strap sitting across your collarbone. The familiar, lived-in scent of leather set next to sleek, engineered hardware creates a friction that works entirely in your favour. Your pieces need to carry enough physical weight to match your daily momentum. It is strictly about how these items sound and move with you, announcing your arrival while wrapping you in a quiet, tactile familiarity.
+
+---
+
+## 8. The Pattern
+
+You treat patterns as a high-voltage statement that still needs to feel deeply personal. Seek out prints that merge a sense of electric energy with a nostalgic, familiar undertone. Vintage florals and nautical stripes hit this sweet spot perfectly, looking like a digital graphic layered over a cherished retro fabric. These prints work best when stamped onto structured neoprene or woven through a bright teal knit, grounding your bold visual heat with a comforting, tactile weight. Give traditional florals a total miss. It reads as far too flimsy and chaotic, failing to deliver the sharp visual punch you crave and the emotional safety you quietly demand from your wardrobe.
+
+### Tip
+
+Your eye for a print naturally gravitates towards something slightly off-kilter but entirely wearable. Take vintage florals and blow up the scale until it reads as a bold, graphic strike rather than a polite repeat. This satisfies your drive for visual volume while retaining a certain familiar ease. Put this loud motif on a comforting, everyday textile like a heavy loopback jersey or a spongy technical knit. The high-tension design brings the heat you crave, while the tactile weight keeps the outfit beautifully anchored.
+
+**Recommended:** vintage florals, nautical stripes, soft gingham, ethnic prints, ikat, oversized geometric  
+**Avoid:** traditional florals, heritage plaid, conventional paisley, aggressive graphics

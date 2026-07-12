@@ -1,0 +1,88 @@
+{
+  "_meta": {
+    "description": "SG-3 ideal SECTION_EXAMPLES (Phase 3e). Verbatim per-cache-key excerpts from the 16 hand-authored golden guides, showing the target instructional coach genre. Drawn from 13 distinct archetypes across all three registers (never Slate-only). Replaces the old engine-derived SECTION_EXAMPLES. Built from the golden guides.",
+    "schema_version": 1
+  },
+  "section_examples": {
+    "style_core": [
+      "You dress for immediate visual strike. Your instinct is fast and decisive. You build an outfit around speed, clarity, and a single arresting element.",
+      "You dress to feel held. A garment earns its place by how gently it closes around you, the way a familiar room does when you shut the door behind you. You register comfort before you register style, and that ordering is correct for you.",
+      "You dress the way a good editor writes. Nothing extra, nothing vague, every element there because it does a job. You notice a puckered seam or a sleeve cut half an inch too long before you notice the colour, and that exacting eye is your greatest asset."
+    ],
+    "textures_good": [
+      "Look for cashmere that compresses slightly between your fingers and bounces right back, full-grain leather that yields to the touch, and silk that moves a split second after you do. Heavy, brushed wool that holds its shape from morning to night is another cornerstone. When a fabric has this level of integrity, the quality is immediate.",
+      "Your best materials rank strictly by their capacity to provide athletic mobility and theatrical polish:",
+      "Your best materials rank by durability, hand feel, and low maintenance:"
+    ],
+    "textures_bad": [
+      "Flimsy jersey, fluffy pastel knits, and crinkled boho gauze are surrender documents. They droop where you need edges and whisper where you need intent. If a fabric cannot hold a shape at 1 a.m., it cannot hold your look at all.",
+      "Slippery synthetics, paper-thin fast-fashion knits, and plasticky coated fabrics fail every test you own. They record nothing, repair as nothing, and age into landfill instead of character. If it cannot be mended, it should not be bought.",
+      "Heavy, dragging, or physically restrictive fabrics will ruin your mood. Stiff raw denim, thick scratchy tweed, and heavy boucle add physical friction to your day. They trap heat, limit your stride, and make you feel sluggish."
+    ],
+    "textures_sweet_spot": [
+      "The most sophisticated outfits happen when a heavy, structured texture meets a fluid, soft one. Think a brushed wool coat over a silk shirt, or a textured leather bag resting against a fine cashmere knit. Contrast does the visual work that people frequently mistake for colour. Get the textures right, and the palette takes care of itself.",
+      "Your ideal pairing sets matt black armour against one liquid gleam. A matt leather jacket over a heavy satin camisole is your formula rendered in texture: dark drama, sharp edge, molten flash.",
+      "Your ideal pairing sets a matt architectural surface against one liquid gleam. A matt crepe column dress with a glazed leather boot creates the exact tension your geometry needs."
+    ],
+    "palette_narrative": [
+      "Build your foundation with heavy, atmospheric darks that serve specific structural roles. Bitter chocolate and blackened indigo anchor your coats and trousers. Dark mahogany acts as your primary base canvas. Deep forest green bridges your layers. Burnt umber and washed black fill the supporting roles, giving you depth without flatness. These shades provide the protective layer you seek.",
+      "Build your foundation with cool tones in defined roles. Ink black and cool slate anchor your tailoring and outerwear. Glacier white acts as your primary base canvas. Silver grey and steel blue bridge your layers, while frosted lavender adds the one soft note your geometry permits.",
+      "Your foundation needs to be visually stark. Build your canvas with optic white, jet black, stark charcoal, clean bone, dark indigo, and sharp crisp navy. Optic white and clean bone provide the bright negative space, while jet black, charcoal, indigo, and navy act as your hard structural darks."
+    ],
+    "occasions_work": [
+      "Structure takes centre stage here. Lean into clean lines, tailored silhouettes, and substantial materials like a sharp coat or trousers with a flawless drop. You want your clothes to reflect your natural capability seamlessly. The softer elements are still there, like a silk camisole under your blazer, but they play a supporting role to the tailoring, the way a good assistant runs the room without anyone noticing they're doing it.",
+      "Professional settings get the drama at its most disciplined. A sharply structured black or aubergine suit, a silk shell, and the molten flash reduced to one gold signet or a scarlet lining only you know about. You will read as formidable rather than theatrical, which is exactly the correct dosage.",
+      "Professional settings are your natural habitat. A sharply structured blazer in cool slate over a glacier white shell, trousers with an unbroken crease, and one polished silver signal at the wrist or lapel. Your composure reads as competence because, in your case, it is."
+    ],
+    "occasions_intimate": [
+      "For dinners, dates, or evenings out, bring your deep accent tones to the front. The rich burgundy or plum that you use sparingly during the day can now become the main event. Choose jewellery that has a bit more weight and sits closer to the skin. Opt for fabrics like raw silk or heavy drapes that look exceptional in low, warm lighting. It is about creating depth.",
+      "Evenings are your native territory. Cut velvet in oxblood, heavy satin on the bias, leather cut close, and the flash worn openly, a molten gold collar or a scarlet heel. Choose fabrics that reward proximity and low light, because that is where you will be.",
+      "Evenings let the movement lead. Crepe de chine in muted rose or powder blue, a fine knit slipping off one shoulder by design, and the refined touch closest to the skin, a delicate chain or drop earring. Your version of allure is fluency, not volume."
+    ],
+    "occasions_daily": [
+      "For running errands, travelling, or active days, comfort takes priority while maintaining your standards, because a trip to the pharmacy does not require suffering for the aesthetic. Choose fine merino wool over synthetic athleisure, relaxed trousers with a clean drape, and quality leather trainers. The rule remains: everything should feel excellent against your skin and move naturally with you.",
+      "Weekends and errands require the exact same philosophy of generous scale. Even for a trip to the post office, you need clothes that broadcast intent, because paying a utility bill does not require collapsing your silhouette. Choose a bright terracotta oversized knit and wide leg athletic cotton trousers.",
+      "Errands and weekends get the same respect. A hardware store run deserves the same clean fit as a Monday meeting. Choose ribbed cotton knits, twill trousers or honest denim with a straight leg, and leather trainers kept genuinely clean."
+    ],
+    "hardware_metals": [
+      "Your metal strategy requires a warm, muted dominant approach. Seek out aged brass, hammered bronze, antiqued copper, and patinated gold. These finishes look as though they have been submerged in water and aged over time. They bring a quiet, historical weight to your fluid silhouettes.",
+      "Your zone is strictly polished warm metal. High-shine yellow gold, gleaming brass, and polished copper belong to you. You want metals that catch the light from across the street. A chunky gold chain, a polished brass belt buckle, or exposed bright gold zips on a leather jacket serve as brilliant focal points.",
+      "Your zone is cool and gleaming. Polished silver, platinum, white gold, and mirror chrome are yours without apology. These finishes hold and return light with precision, exactly like the rest of your wardrobe. A high-shine chrome watch or a polished silver collar is your version of a raised voice: rare and effective."
+    ],
+    "hardware_stones": [
+      "When it comes to jewellery, prioritise deep colour and physical density over brilliant sparkle. Look for stones with rich visual weight: deep red garnets set in antique gold, smoky quartz cabochons, flat cuts of black onyx, or deep forest green stones. White pearls and moonstones work well when you want to introduce a softer note. The goal is always solidity and depth.",
+      "Look for stones that project massive warmth and bold colour. Citrine, fire opal, bright coral, and yellow diamonds possess the fiery energy you require. Avoid cloudy moonstones or delicate seed pearls that disappear entirely against your bold clothes.",
+      "You barely need stones at all, and that restraint is correct. When you do choose one, make it small, dark, and flawless, matt black onyx or a deep grey spinel in a plain bezel setting. One stone, perfectly set, says more about your standards than a cluster ever could."
+    ],
+    "hardware_tip": [
+      "Always pick up an accessory before buying it. If a buckle, chain, or clasp feels surprisingly light or hollow, your hands are telling you it won't last, no matter how good it looks on display. Looks lie. Weight doesn't.",
+      "Always apply the pick it up weight test. If a brass buckle, a gold cuff, or a bag chain feels hollow or light in your hand, it fails immediately. Your hardware must possess genuine physical density to anchor your expansive fabrics.",
+      "Always apply the pick it up weight test, scaled to your fineness. Delicate is a size, not a quality grade: a thin chain should still pour into your palm like a small dense liquid. If it feels like thread, it will tangle, kink, and break its promise by spring."
+    ],
+    "accessory_1": [
+      "Accessories are the final phase of your formula, supplying the touch of quiet depth that finishes your structure and softness. You have a natural instinct for minimal accessorising, and your gut feeling that one strong piece is enough is entirely correct. Too many details can look fussy and distract from the clean lines of your clothes, and you already know which earring is the one doing too much.",
+      "Accessories are where you deploy the final phase of your formula. The clean impact and fast movement come from the clothes; this is your one hot accent. Instead of piling on delicate trinkets, you make a single aggressive choice. The core principle here is to stick to one or two strong pieces per look.",
+      "Accessories deliver the last term of your formula, the one refined touch that completes your balanced proportions and light movement. The principle is strict: stick to one or two strong pieces per look, chosen for finesse rather than force."
+    ],
+    "accessory_2": [
+      "Belts should be functional and architectural. Stick to medium or wide full-grain leather with substantial matt or brushed buckles. Thin, delicate fashion belts often look purely decorative, whereas your style thrives on accessories that feel like they have a structural job to do.",
+      "Bags must be structured and armed. A rigid top-handle or a sharp shoulder bag in black leather with gunmetal fittings. Soft, slouchy bags surrender your silhouette at the last step; carry architecture instead.",
+      "A proper watch is your signature category. Choose a clean face, a brushed steel case, and a leather or steel strap with no decorative complications. It is the single most Flint object you can own: precise, honest, and permanently useful."
+    ],
+    "accessory_3": [
+      "The core principle here mirrors your wardrobe strategy: stick to one or two strong accessories per look, such as a great bag and a scarf, or a statement belt and a necklace. Additional layers create unnecessary visual noise.",
+      "Apply the spotlight test before leaving the house. Pick exactly one accessory to hold the spotlight. If you are wearing a massive polished gold collar necklace, keep your bag and shoes totally stark. Do not let your accessories compete for the same real estate.",
+      "Use the one-signal test before leaving the house. Count the pieces that shine. If the answer is more than one, retire the weakest until only the strongest remains."
+    ],
+    "pattern_narrative": [
+      "For tailored pieces like coats, blazers, and trousers, let the pattern come from the weave itself. Herringbone, subtle houndstooth, fine checks, and textured tweeds add depth without screaming for attention. The pattern should be something a person notices up close, not from across the street.",
+      "For tailored pieces like heavy coats or wide trousers, rely on oversized plaids and massive block stripes in your warm colour palette. The pattern must feel generous and bold, perfectly matching your physical scale.",
+      "For tailored pieces like coats, blazers, and trousers, choose fine pinstripes, precise chevrons, and clean windowpane checks in cool tones. The lines must be straight, evenly spaced, and confident."
+    ],
+    "pattern_tip": [
+      "A reliable test: step back from the garment and soften your focus. If the pattern blurs slightly into the fabric, acting more like a rich texture than a loud image, it fits your style perfectly. If it jumps out at you, leave it on the rack. It already had its moment. This just is not it.",
+      "Rely on the twenty foot rule. Look at the pattern from across the room. If the print remains bold and entirely legible from twenty feet away, it works. If it blurs into a muddy texture, it lacks the theatrical energy you require and should be left behind.",
+      "Use the blink test for any new print. Close your eyes and open them quickly from ten feet away. If the pattern looks muddy or confusing in that first split second, it is not sharp enough for you."
+    ]
+  }
+}

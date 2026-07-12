@@ -1,0 +1,51 @@
+{
+  "archetype": "mist",
+  "source": "docs/style_guide/golden/mist_ideal.md metadata block",
+  "cluster_key": "venus_pisces__moon_pisces__water_dominant",
+  "chart_sect": "night",
+  "element_balance": {
+    "fire": 1,
+    "earth": 1,
+    "air": 1,
+    "water": 5
+  },
+  "modality_balance": {
+    "cardinal": 3,
+    "fixed": 3,
+    "mutable": 2
+  },
+  "chart_ruler": "Moon",
+  "sun_sign": "Pisces",
+  "moon_sign": "Pisces",
+  "venus_sign": "Pisces",
+  "mars_sign": "Aries",
+  "ascendant_sign": "Cancer",
+  "midheaven_sign": "Pisces",
+  "planet_signs": {
+    "Sun": "Pisces",
+    "Moon": "Pisces",
+    "Mercury": "Aquarius",
+    "Venus": "Pisces",
+    "Mars": "Aries",
+    "Jupiter": "Capricorn",
+    "Saturn": "Scorpio",
+    "Uranus": "Sagittarius",
+    "Neptune": "Capricorn",
+    "Pluto": "Libra"
+  },
+  "planet_houses": {
+    "Sun": 12,
+    "Moon": 12,
+    "Mercury": 8,
+    "Venus": 9,
+    "Mars": 10,
+    "Jupiter": 7,
+    "Saturn": 5,
+    "Uranus": 6,
+    "Neptune": 7,
+    "Pluto": 4
+  },
+  "stellium_signs": [
+    "Pisces"
+  ]
+}

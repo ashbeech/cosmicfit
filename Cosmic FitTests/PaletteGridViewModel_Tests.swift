@@ -556,15 +556,17 @@ struct PaletteLiveWiringTests {
         #expect(grid == second, "Placeholder must be deterministic across calls")
     }
 
-    @Test("Fixture palette sections meet legacy contract (3-4 core, 2+ accent)",
+    @Test("Fixture palette sections meet contract (3-4 core, 1+ accent)",
           arguments: ["blueprint_input_user_1.json", "blueprint_input_user_2.json"])
     func fixturePaletteContract(filename: String) throws {
         let blueprint = try GoldenSnapshotSupport.loadBlueprint(filename)
         let section = blueprint.palette
         #expect((3...4).contains(section.coreColours.count),
                 "Core count \(section.coreColours.count) outside [3,4] for \(filename)")
-        #expect(section.accentColours.count >= 2,
-                "Accent count \(section.accentColours.count) < 2 for \(filename)")
+        // Chart-derived accent band is 1...2 (Ash=1, Maria=2 in the regenerated
+        // fixtures; see MariaAshLocked_Tests), so the shape floor is >= 1.
+        #expect(section.accentColours.count >= 1,
+                "Accent count \(section.accentColours.count) < 1 for \(filename)")
     }
 
     @Test("BlueprintStorage.save posts .blueprintDidUpdate notification")

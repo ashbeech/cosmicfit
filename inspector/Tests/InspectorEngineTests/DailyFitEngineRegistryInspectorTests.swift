@@ -62,6 +62,7 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
+                resetEssenceRecencyHistory: nil,
                 dailyFitEngineId: DailyFitEngineRegistry.legacyBaselineId,
                 deviceLatitude: nil,
                 deviceLongitude: nil
@@ -93,6 +94,7 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
+                resetEssenceRecencyHistory: nil,
                 dailyFitEngineId: DailyFitEngineRegistry.productionId,
                 deviceLatitude: nil,
                 deviceLongitude: nil
@@ -126,6 +128,7 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
+                resetEssenceRecencyHistory: nil,
                 dailyFitEngineId: nil,
                 deviceLatitude: nil,
                 deviceLongitude: nil
@@ -157,6 +160,7 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
+                resetEssenceRecencyHistory: nil,
                 dailyFitEngineId: DailyFitEngineRegistry.productionId,
                 deviceLatitude: nil,
                 deviceLongitude: nil
@@ -196,6 +200,7 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
+                resetEssenceRecencyHistory: nil,
                 dailyFitEngineId: DailyFitEngineRegistry.productionId,
                 deviceLatitude: nil,
                 deviceLongitude: nil
@@ -212,6 +217,7 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
+                resetEssenceRecencyHistory: nil,
                 dailyFitEngineId: DailyFitEngineRegistry.stage2LegacyId,
                 deviceLatitude: nil,
                 deviceLongitude: nil
@@ -245,6 +251,7 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
+                resetEssenceRecencyHistory: nil,
                 dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId,
                 deviceLatitude: nil,
                 deviceLongitude: nil
@@ -291,6 +298,7 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
                 includeProgressed: true,
                 profileId: nil,
                 resetTarotHistory: true,
+                resetEssenceRecencyHistory: nil,
                 dailyFitEngineId: DailyFitEngineRegistry.stage1ExperimentalId,
                 deviceLatitude: nil,
                 deviceLongitude: nil

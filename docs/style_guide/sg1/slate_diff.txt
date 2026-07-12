@@ -1,0 +1,20 @@
+3c3
+< ### Slate composed BEFORE SG-1 (2026-07-06)
+---
+> ### Slate composed AFTER SG-1 (2026-07-06)
+5c5
+< > Baseline snapshot rendered 2026-07-06 from `docs/style_guide/sg1/composed_before/slate.json` (engine 2.1.0, composed via the production BlueprintComposer pipeline). Section order follows the golden-guide contract; subheadings match the app display.
+---
+> > Baseline snapshot rendered 2026-07-06 from `docs/style_guide/sg1/composed_after/slate.json` (engine 2.1.0, composed via the production BlueprintComposer pipeline). Section order follows the golden-guide contract; subheadings match the app display.
+13c13
+< Your natural sense of beauty shows up most powerfully in your everyday expression, style as social currency, approachable beauty that invites conversation. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as bold and expansive; globally informed choices and adventurous scope signal confidence.
+---
+> Your natural sense of beauty shows up most powerfully in your everyday expression, style as social currency, approachable beauty that invites conversation. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style carries a quietly authoritative scope; well-travelled taste shows in the quality of what you choose, not its volume.
+55c55
+< At work, you signal your ambition and vision by wearing globally inspired pieces and bold silhouettes that project expansive confidence.
+---
+> At work, you signal your ambition through quietly considered pieces whose scope shows in craftsmanship rather than scale.
+65c65
+< Your comfort instinct gravitates toward emotional belonging through group-appropriate comfort, community softness. Your style energy concentrates in expression and community, so Your clothes communicate absolute confidence when they signal both collective belonging and stark individuality..
+---
+> Your comfort instinct gravitates toward comfort that keeps a personal sanctuary intact even in shared settings.

@@ -1,0 +1,49 @@
+{
+  "archetype": "ripple",
+  "source": "docs/style_guide/golden/ripple_ideal.md metadata block",
+  "cluster_key": "venus_taurus__moon_pisces__water_dominant",
+  "chart_sect": "night",
+  "element_balance": {
+    "fire": 1,
+    "earth": 1,
+    "air": 1,
+    "water": 5
+  },
+  "modality_balance": {
+    "cardinal": 3,
+    "fixed": 3,
+    "mutable": 2
+  },
+  "chart_ruler": "Jupiter",
+  "sun_sign": "Cancer",
+  "moon_sign": "Pisces",
+  "venus_sign": "Taurus",
+  "mars_sign": "Aries",
+  "ascendant_sign": "Pisces",
+  "midheaven_sign": "Taurus",
+  "planet_signs": {
+    "Sun": "Cancer",
+    "Moon": "Pisces",
+    "Mercury": "Cancer",
+    "Venus": "Taurus",
+    "Mars": "Aries",
+    "Jupiter": "Libra",
+    "Saturn": "Scorpio",
+    "Uranus": "Sagittarius",
+    "Neptune": "Capricorn",
+    "Pluto": "Virgo"
+  },
+  "planet_houses": {
+    "Sun": 4,
+    "Moon": 4,
+    "Mercury": 5,
+    "Venus": 2,
+    "Mars": 1,
+    "Jupiter": 7,
+    "Saturn": 8,
+    "Uranus": 9,
+    "Neptune": 10,
+    "Pluto": 6
+  },
+  "stellium_signs": []
+}

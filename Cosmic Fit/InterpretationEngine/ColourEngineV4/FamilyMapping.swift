@@ -22,8 +22,15 @@ enum FamilyMapping {
             overrideFlags.earthDepthOverrideApplied = true
         }
 
-        let family = classify(
+        let classified = classify(
             fa: fa, ew: ew, d: d, w: w, s: s, c: c, st: st, input: input
+        )
+
+        // SG-2 Phase 2e Layer A: a warm Venus floor undoes a cool-deep family
+        // flip (deepen/mute is kept; only the warm->cool flip is reverted).
+        // Slate (Venus Taurus, Capricorn stellium) resolves warm+deep here.
+        let family = Overrides.applyVenusWarmFloor(
+            family: classified, input: input, flags: &overrideFlags
         )
 
         if family == .deepAutumn {

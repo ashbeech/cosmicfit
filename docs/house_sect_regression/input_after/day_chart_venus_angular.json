@@ -31,9 +31,22 @@
     ]
   },
   "engineVersion" : "2.1.0",
-  "generatedAt" : "2026-06-24T15:28:25Z",
+  "generatedAt" : "2026-07-09T14:31:52Z",
   "hardware" : {
-    "metalsText" : "Flimsy zips and hollow buttons are an immediate dealbreaker. Hardware is where a garment truly proves its worth, and you naturally gravitate towards metals with literal, physical weight. Rose gold tones provides traditional warmth and deep sensory satisfaction, particularly when the finish is lightly brushed rather than blindingly polished. When you want a sharper, more assertive edge on heavy leather belts or structured bags, warm bronze tones cuts through beautifully. Every clasp, rivet, and buckle should yield a deeply satisfying mechanical thunk when you snap it shut.",
+    "excludedFinishes" : [
+      "polished chrome",
+      "high-shine silver"
+    ],
+    "metalsText" : "Flimsy zips and hollow buttons are an immediate dealbreaker. Hardware is where a garment truly proves its worth, and you naturally gravitate towards metals with literal, physical weight. Rose gold provides traditional warmth and deep sensory satisfaction, particularly when the finish is lightly brushed rather than blindingly polished. When you want a sharper, more assertive edge on heavy leather belts or structured bags, warm bronze cuts through beautifully. Every clasp, rivet, and buckle should yield a deeply satisfying mechanical thunk when you snap it shut.",
+    "personalMetals" : [
+      "rose gold",
+      "warm bronze",
+      "yellow gold",
+      "polished brass",
+      "hammered gold",
+      "warm sienna",
+      "warm umber"
+    ],
     "recommendedMetals" : [
       "rose gold",
       "warm bronze",
@@ -62,7 +75,7 @@
       "turquoise"
     ],
     "stonesText" : "Your jewellery box should feel less like a delicate collection and more like a high-stakes archive. You need stones with actual physical weight that warm up against your skin as the day goes on. Heavy, substantial gems set in solid metal hit the right note, especially when you wear the grounded heat of kunzite. A chunky slab of pink tourmaline locked into a thick gold bezel feels quietly expensive and incredibly tactile. Add emerald when you want a deliberate flash of fire, proving that serious investment pieces never have to be boring.",
-    "tipText" : "Flimsy jewellery is entirely wasted on you. Your hardware needs genuine physical weight to match your energy, acting as a structural component rather than a delicate afterthought. A thick, sculptural cuff in rose gold tones or a substantial geometric belt buckle worn over heavy crepe provides immediate tactile satisfaction. There is an undeniable grounding effect in the decisive clink of a proper watch clasp shutting or the cold weight of a heavy ring. Skip the tangled layers of thin chains and let one boldly crafted item do all the talking."
+    "tipText" : "Flimsy jewellery is entirely wasted on you. Your hardware needs genuine physical weight to match your energy, acting as a structural component rather than a delicate afterthought. A thick, sculptural cuff in rose gold or a substantial geometric belt buckle worn over heavy crepe provides immediate tactile satisfaction. There is an undeniable grounding effect in the decisive clink of a proper watch clasp shutting or the cold weight of a heavy ring. Skip the tangled layers of thin chains and let one boldly crafted item do all the talking."
   },
   "occasions" : {
     "dailyText" : "Downtime never means letting your standards drop, but your everyday uniform still has to carry a real sense of physical ease. You move through the world with undeniable energy, so your casual pieces must allow for serious momentum while refusing to lose their shape. Forget flimsy basics that require constant adjustment. You need garments with substantial weight and a proper drape, ensuring you feel entirely secure and grounded the moment you put them on. The goal is an off-duty look that feels warm, intentional, and entirely ready for action. When the foundation of your daily rotation relies on uncompromising quality, even the quickest dash out the door looks thoroughly finished.\n\nYour comfort instinct gravitates toward security through tactile quality, fabrics as emotional anchors.",
@@ -233,6 +246,7 @@
       "fireAirChromaApplied" : false,
       "scorpioDensityApplied" : false,
       "surfacePreservationApplied" : false,
+      "venusWarmFloorApplied" : false,
       "waterSofteningApplied" : false,
       "winterCompressionApplied" : true
     },
@@ -350,6 +364,6 @@
   "userInfo" : {
     "birthDate" : "1991-07-15T12:00:00Z",
     "birthLocation" : "Synthetic Fixture",
-    "generationDate" : "2026-06-24T15:28:25Z"
+    "generationDate" : "2026-07-09T14:31:52Z"
   }
 }

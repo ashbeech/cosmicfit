@@ -133,6 +133,23 @@ def validate_planet_sign_entry(key: str, entry: dict, report: ValidationReport):
         if field not in entry or not isinstance(entry[field], dict):
             report.error(f"planet_sign[{key}]: missing or non-object field '{field}'")
 
+    # Metals: SG-2 Phase 2a object schema {name, register, finish}. Migration
+    # is complete, so object form is required; a legacy string is an error.
+    valid_registers = {"personal", "structural", "either"}
+    valid_finishes = {"polished", "matte", "brushed", "aged"}
+    for m in entry.get("metals", []):
+        if isinstance(m, str):
+            report.error(f"planet_sign[{key}].metals: legacy string '{m}' — migrate to object {{name, register, finish}}")
+        elif isinstance(m, dict):
+            if not isinstance(m.get("name"), str) or not m.get("name"):
+                report.error(f"planet_sign[{key}].metals: entry missing 'name'")
+            if m.get("register") not in valid_registers:
+                report.error(f"planet_sign[{key}].metals['{m.get('name')}']: invalid register '{m.get('register')}'")
+            if m.get("finish") not in valid_finishes:
+                report.error(f"planet_sign[{key}].metals['{m.get('name')}']: invalid finish '{m.get('finish')}'")
+        else:
+            report.error(f"planet_sign[{key}].metals: entry must be an object")
+
     # Textures sub-fields
     tex = entry.get("textures", {})
     for sub in ["good", "bad", "sweet_spot_keywords"]:
@@ -418,7 +435,48 @@ def validate(dataset: dict, strict_house_schema: bool) -> bool:
     # ─── Part 6A: Astrological Axiom Checks ───
     validate_astrological_axioms(ps, report)
 
+    # ─── SG-2 Phase 2d: formula_vocabulary (optional, but validated if present) ───
+    validate_formula_vocabulary(dataset.get("formula_vocabulary"), report)
+
     return report.print_report()
+
+
+SIGNS_LOWER = [
+    "aries", "taurus", "gemini", "cancer", "leo", "virgo",
+    "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces",
+]
+VALID_REGISTERS = {"quietLuxury", "boldExpression", "versatileAdaptive"}
+
+
+def validate_formula_vocabulary(fv, report: "ValidationReport"):
+    """SG-2 Phase 2d: 12 Venus rows (structure+accent, optional register/water
+    variants) and 12 Moon rows (flow). Frozen mirror of the Swift enum."""
+    if fv is None:
+        report.warn("formula_vocabulary: absent (SG-2 ships it; freeze requires it)")
+        return
+    if not isinstance(fv, dict) or "venus_sign" not in fv or "moon_sign" not in fv:
+        report.error("formula_vocabulary: must have 'venus_sign' and 'moon_sign'")
+        return
+    venus, moon = fv["venus_sign"], fv["moon_sign"]
+    for sign in SIGNS_LOWER:
+        if sign not in venus:
+            report.error(f"formula_vocabulary.venus_sign: missing '{sign}'")
+        else:
+            row = venus[sign]
+            if not isinstance(row.get("structure"), str) or not row.get("structure"):
+                report.error(f"formula_vocabulary.venus_sign['{sign}']: missing 'structure'")
+            if not isinstance(row.get("accent"), str) or not row.get("accent"):
+                report.error(f"formula_vocabulary.venus_sign['{sign}']: missing 'accent'")
+            sbr = row.get("structureByRegister")
+            if sbr is not None:
+                for reg in sbr:
+                    if reg not in VALID_REGISTERS:
+                        report.error(f"formula_vocabulary.venus_sign['{sign}']: invalid register '{reg}'")
+        if sign not in moon:
+            report.error(f"formula_vocabulary.moon_sign: missing '{sign}'")
+        elif not isinstance(moon[sign].get("flow"), str) or not moon[sign].get("flow"):
+            report.error(f"formula_vocabulary.moon_sign['{sign}']: missing 'flow'")
+    report.log(f"formula_vocabulary: {len(venus)} Venus rows, {len(moon)} Moon rows")
 
 
 # ─────────────────────────────────────────────────────────────────────────────

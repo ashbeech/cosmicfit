@@ -1,0 +1,49 @@
+{
+  "archetype": "cinder",
+  "source": "docs/style_guide/golden/cinder_ideal.md metadata block",
+  "cluster_key": "venus_leo__moon_aries__fire_dominant",
+  "chart_sect": "night",
+  "element_balance": {
+    "fire": 5,
+    "earth": 1,
+    "air": 1,
+    "water": 1
+  },
+  "modality_balance": {
+    "cardinal": 3,
+    "fixed": 3,
+    "mutable": 2
+  },
+  "chart_ruler": "Jupiter",
+  "sun_sign": "Leo",
+  "moon_sign": "Aries",
+  "venus_sign": "Leo",
+  "mars_sign": "Sagittarius",
+  "ascendant_sign": "Sagittarius",
+  "midheaven_sign": "Scorpio",
+  "planet_signs": {
+    "Sun": "Leo",
+    "Moon": "Aries",
+    "Mercury": "Virgo",
+    "Venus": "Leo",
+    "Mars": "Sagittarius",
+    "Jupiter": "Aquarius",
+    "Saturn": "Pisces",
+    "Uranus": "Capricorn",
+    "Neptune": "Capricorn",
+    "Pluto": "Scorpio"
+  },
+  "planet_houses": {
+    "Sun": 8,
+    "Moon": 1,
+    "Mercury": 9,
+    "Venus": 8,
+    "Mars": 12,
+    "Jupiter": 2,
+    "Saturn": 3,
+    "Uranus": 1,
+    "Neptune": 2,
+    "Pluto": 11
+  },
+  "stellium_signs": []
+}

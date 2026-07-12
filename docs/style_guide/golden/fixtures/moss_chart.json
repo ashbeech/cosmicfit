@@ -1,0 +1,49 @@
+{
+  "archetype": "moss",
+  "source": "docs/style_guide/golden/moss_ideal.md metadata block",
+  "cluster_key": "venus_capricorn__moon_taurus__earth_dominant",
+  "chart_sect": "day",
+  "element_balance": {
+    "fire": 1,
+    "earth": 5,
+    "air": 1,
+    "water": 1
+  },
+  "modality_balance": {
+    "cardinal": 3,
+    "fixed": 3,
+    "mutable": 2
+  },
+  "chart_ruler": "Venus",
+  "sun_sign": "Virgo",
+  "moon_sign": "Taurus",
+  "venus_sign": "Capricorn",
+  "mars_sign": "Leo",
+  "ascendant_sign": "Taurus",
+  "midheaven_sign": "Capricorn",
+  "planet_signs": {
+    "Sun": "Virgo",
+    "Moon": "Taurus",
+    "Mercury": "Virgo",
+    "Venus": "Capricorn",
+    "Mars": "Leo",
+    "Jupiter": "Aquarius",
+    "Saturn": "Cancer",
+    "Uranus": "Scorpio",
+    "Neptune": "Sagittarius",
+    "Pluto": "Libra"
+  },
+  "planet_houses": {
+    "Sun": 5,
+    "Moon": 2,
+    "Mercury": 5,
+    "Venus": 9,
+    "Mars": 4,
+    "Jupiter": 10,
+    "Saturn": 3,
+    "Uranus": 7,
+    "Neptune": 8,
+    "Pluto": 6
+  },
+  "stellium_signs": []
+}

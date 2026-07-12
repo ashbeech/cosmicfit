@@ -1,0 +1,45 @@
+{
+  "created_at": "2026-07-06T18:31:12.704426+00:00",
+  "date": "2026-07-06",
+  "domain": "style_guide",
+  "label": "pre-phase-2",
+  "purpose": "Dated content snapshot (Style Guide Quality Overhaul backup gate)",
+  "files": [
+    {
+      "repo_path": "data/style_guide/astrological_style_dataset.json",
+      "bytes": 556570,
+      "sha256": "850cdaf6e3848c977938bdcc69f97976739d01fb29494f1154a371ed6d7c8c24"
+    },
+    {
+      "repo_path": "data/style_guide/blueprint_narrative_cache.json",
+      "bytes": 5647534,
+      "sha256": "b5a62790fdab49495846041cddf92ec2361260e42d71d62395116ef73e1bc8ac"
+    },
+    {
+      "repo_path": "data/style_guide/blueprint_narrative_cache-2-clusters.json",
+      "bytes": 8960,
+      "sha256": "2f644c7a4905b7b93a3b4fcc6485c6e89195a1ecf99d43d4a38f1c8179c1631d"
+    },
+    {
+      "repo_path": "data/style_guide/extracted_runtime_strings.json",
+      "bytes": 26430,
+      "sha256": "9e14657612d8e151f0089078ccb38735f3c0705faea0fed1e2b90482278c5d18"
+    },
+    {
+      "repo_path": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "bytes": 21285,
+      "sha256": "8a22164d4a64a67eaa939f4e80afedbb8170720f22d6da22be870c3e8ede7e4a"
+    },
+    {
+      "repo_path": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "bytes": 40495,
+      "sha256": "ff76dbf5b2d7db381be97ee22d15c2bf355375f86a6aaeb1199a8611f56497c1"
+    },
+    {
+      "repo_path": "tools/backfill_narratives.py",
+      "bytes": 54401,
+      "sha256": "9041a45277ca28c467d763ad5769747c43c0112eb4ead9e537b22ec22791efa0"
+    }
+  ],
+  "restore_command": "python3 tools/backup_content_sources.py restore --backup-dir data/content_backups/2026-07-06_pre-phase-2"
+}

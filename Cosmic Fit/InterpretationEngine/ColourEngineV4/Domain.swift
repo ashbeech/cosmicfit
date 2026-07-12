@@ -220,6 +220,9 @@ struct OverrideFlags: Codable, Equatable {
     var waterSofteningApplied: Bool = false
     var surfacePreservationApplied: Bool = false
     var deepAnchorOverriddenToBlack: Bool = false
+    /// SG-2 Phase 2e Layer A: a warm Venus floor undid a cool-deep family flip
+    /// (e.g. Slate: deepWinter -> deepAutumn). Trace/audit only.
+    var venusWarmFloorApplied: Bool = false
 
     init() {}
 
@@ -234,6 +237,7 @@ struct OverrideFlags: Codable, Equatable {
         waterSofteningApplied         = try c.decodeIfPresent(Bool.self, forKey: .waterSofteningApplied) ?? false
         surfacePreservationApplied    = try c.decodeIfPresent(Bool.self, forKey: .surfacePreservationApplied) ?? false
         deepAnchorOverriddenToBlack   = try c.decodeIfPresent(Bool.self, forKey: .deepAnchorOverriddenToBlack) ?? false
+        venusWarmFloorApplied         = try c.decodeIfPresent(Bool.self, forKey: .venusWarmFloorApplied) ?? false
     }
 }
 

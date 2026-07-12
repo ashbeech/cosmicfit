@@ -6,7 +6,7 @@
 //
 //  This file covers the new test surface added by §12.2, §12.4, and §12.5:
 //
-//   • Exact accent count == 4 on both fixture users.
+//   • Chart-derived accent band (1...2) on both fixture users.
 //   • Provenance shape (round-trip) and content (chart-derived, no fallback,
 //     ranks within top contributors).
 //   • Hue-gap invariant on both bands of both fixtures.
@@ -17,8 +17,9 @@
 //   • Rank ordering (§12.5) — coreColours and accentColours sorted by
 //     provenance.contributorRank ascending; library-fallback sorts last.
 //
-//  Existing `accentColours.count >= 2` shape assertions in
-//  Cosmic_FitTests.swift have been bumped to `>= 4` to satisfy §12.1.
+//  Fixture-shape accent assertions across the suite use a `>= 1` floor: the
+//  chart-derived accent band is 1...2 (Ash=1, Maria=2 in the regenerated
+//  fixtures). The engine-level per-chart contract lives in MariaAshLocked_Tests.
 //
 
 import Testing
@@ -61,14 +62,16 @@ struct PaletteReworkTests {
         fixtures.contains { !$0.palette.isV4 }
     }
 
-    // MARK: - §12.2: Exact accent count
+    // MARK: - §12.2: Accent band shape
 
-    @Test("Both fixtures have exactly 2 accent colours")
+    @Test("Both fixtures carry a chart-derived accent band (1...2)")
     func exactAccentCount() throws {
         for spec in Self.fixtureSpecs {
             let bp = try Self.loadBlueprint(spec.filename)
-            #expect(bp.palette.accentColours.count >= 2,
-                    "\(spec.label) (\(spec.filename)) must have at least 2 accentColours, got \(bp.palette.accentColours.count)")
+            // Chart-derived accents are 1...2 (Ash=1, Maria=2 in the regenerated
+            // fixtures; the engine-level contract lives in MariaAshLocked_Tests).
+            #expect(bp.palette.accentColours.count >= 1,
+                    "\(spec.label) (\(spec.filename)) must have at least 1 accentColour, got \(bp.palette.accentColours.count)")
         }
     }
 
@@ -189,30 +192,39 @@ struct PaletteReworkTests {
 
     // MARK: - V4 Invariants
 
-    @Test("V4 fixtures use template provenance for all 12 anchors")
+    @Test("V4 fixtures: neutral+core bands are template, accents are chart-derived")
     func v4TemplateProvenanceIntegrity() throws {
         for spec in Self.fixtureSpecs {
             let bp = try Self.loadBlueprint(spec.filename)
             guard bp.palette.isV4 else { continue }
-            let allAnchors = (bp.palette.neutrals ?? []) + bp.palette.coreColours + bp.palette.accentColours
-            #expect(allAnchors.count == 12, "\(spec.label): expected 12 anchors for V4 template integrity")
-            for anchor in allAnchors {
-                if case .v4Template = anchor.provenance {
-                    continue
-                }
-                Issue.record("\(spec.label): non-template provenance found in V4 fixture for \(anchor.name)")
+            // Current V4 model: the 8 neutral+core anchors are v4Template; the
+            // accent band (1...2) is chart-derived (`chartDerivedAccent`), never
+            // library fallback. Ash=1 accent, Maria=2 in the regenerated fixtures.
+            let templateAnchors = (bp.palette.neutrals ?? []) + bp.palette.coreColours
+            #expect(templateAnchors.count == 8,
+                    "\(spec.label): expected 8 template anchors (4 neutral + 4 core), got \(templateAnchors.count)")
+            for anchor in templateAnchors {
+                if case .v4Template = anchor.provenance { continue }
+                Issue.record("\(spec.label): non-template provenance in neutral/core band for \(anchor.name)")
+            }
+            #expect((1...2).contains(bp.palette.accentColours.count),
+                    "\(spec.label): expected 1...2 chart-derived accents, got \(bp.palette.accentColours.count)")
+            for anchor in bp.palette.accentColours {
+                if case .chartDerivedAccent = anchor.provenance { continue }
+                Issue.record("\(spec.label): accent \(anchor.name) is not chartDerivedAccent")
             }
         }
     }
 
-    @Test("V4 fixtures keep 4/4/2 band counts")
+    @Test("V4 fixtures keep 4/4/(1-2) band counts")
     func v4BandCounts() throws {
         for spec in Self.fixtureSpecs {
             let bp = try Self.loadBlueprint(spec.filename)
             guard bp.palette.isV4 else { continue }
             #expect((bp.palette.neutrals ?? []).count == 4, "\(spec.label): V4 neutrals count must be 4")
             #expect(bp.palette.coreColours.count == 4, "\(spec.label): V4 core count must be 4")
-            #expect(bp.palette.accentColours.count >= 2, "\(spec.label): V4 accent count must be at least 2")
+            // Accent band is chart-derived 1...2 (Ash=1, Maria=2), not a fixed 2.
+            #expect(bp.palette.accentColours.count >= 1, "\(spec.label): V4 accent count must be at least 1")
         }
     }
 

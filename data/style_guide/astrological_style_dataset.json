@@ -48,10 +48,26 @@
         ]
       },
       "metals": [
-        "rose gold",
-        "polished brass",
-        "sterling silver",
-        "bright copper"
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "polished brass",
+          "register": "personal",
+          "finish": "polished"
+        },
+        {
+          "name": "sterling silver",
+          "register": "structural",
+          "finish": "polished"
+        },
+        {
+          "name": "bright copper",
+          "register": "personal",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "carnelian",
@@ -178,9 +194,21 @@
         ]
       },
       "metals": [
-        "yellow gold",
-        "rose gold",
-        "warm bronze"
+        {
+          "name": "yellow gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "warm bronze",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "emerald",
@@ -303,9 +331,21 @@
         ]
       },
       "metals": [
-        "mixed metals",
-        "sterling silver",
-        "white gold"
+        {
+          "name": "mixed metals",
+          "register": "either",
+          "finish": "matte"
+        },
+        {
+          "name": "sterling silver",
+          "register": "structural",
+          "finish": "polished"
+        },
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "citrine",
@@ -432,9 +472,21 @@
         ]
       },
       "metals": [
-        "sterling silver",
-        "white gold",
-        "antique silver"
+        {
+          "name": "sterling silver",
+          "register": "structural",
+          "finish": "polished"
+        },
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "antique silver",
+          "register": "structural",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "moonstone",
@@ -499,7 +551,7 @@
         "mood": [
           "Step away from detached, ultra-modern looks that offer none of the emotional comfort you crave.",
           "Clinical, stark white ensembles that strip away the soft, protective layering your style requires.",
-          "Harsh architectural lines that disrupt the fluid, gentle silhouettes you naturally gravitate towards.",
+          "Harsh architectural lines that disrupt the fluid, gentle silhouettes you instinctively reach for.",
           "Aggressive hardware and stiff leather that ruin the welcoming, tactile softness of your wardrobe."
         ]
       }
@@ -557,9 +609,21 @@
         ]
       },
       "metals": [
-        "yellow gold",
-        "polished brass",
-        "gilded finishes"
+        {
+          "name": "yellow gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "polished brass",
+          "register": "personal",
+          "finish": "polished"
+        },
+        {
+          "name": "gilded finishes",
+          "register": "either",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "sunstone",
@@ -625,7 +689,7 @@
         ],
         "mood": [
           "Understated basics that fail to match your naturally glamorous and thoroughly confident presence.",
-          "Self-effacing styling choices that intentionally hide your inherent need to command the room.",
+          "Self-effacing styling choices that intentionally dim your inherent warmth and presence.",
           "Playing it safe with an invisible outfit when you were born to wear the boldest statement pieces.",
           "Bland colour palettes that completely drain the dramatic, joyful energy from your daily dressing."
         ]
@@ -688,9 +752,21 @@
         ]
       },
       "metals": [
-        "brushed silver",
-        "white gold",
-        "matte platinum"
+        {
+          "name": "brushed silver",
+          "register": "structural",
+          "finish": "brushed"
+        },
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "matte platinum",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "peridot",
@@ -761,7 +837,7 @@
       }
     },
     "venus_libra": {
-      "style_philosophy": "balanced, harmonious, effortlessly elegant",
+      "style_philosophy": "balanced, harmonious, quietly elegant",
       "textures": {
         "good": [
           "fluid silk",
@@ -817,9 +893,21 @@
         ]
       },
       "metals": [
-        "rose gold",
-        "polished copper",
-        "rich honey"
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "polished copper",
+          "register": "personal",
+          "finish": "polished"
+        },
+        {
+          "name": "rich honey",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "rose quartz",
@@ -946,9 +1034,21 @@
         ]
       },
       "metals": [
-        "blackened silver",
-        "gunmetal",
-        "oxidised steel"
+        {
+          "name": "blackened silver",
+          "register": "structural",
+          "finish": "aged"
+        },
+        {
+          "name": "gunmetal",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "oxidised steel",
+          "register": "structural",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "black onyx",
@@ -1073,9 +1173,21 @@
         ]
       },
       "metals": [
-        "warm umber",
-        "hammered gold",
-        "oxidised copper"
+        {
+          "name": "warm umber",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "hammered gold",
+          "register": "personal",
+          "finish": "aged"
+        },
+        {
+          "name": "oxidised copper",
+          "register": "personal",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "turquoise",
@@ -1202,9 +1314,21 @@
         ]
       },
       "metals": [
-        "polished silver",
-        "white gold",
-        "platinum"
+        {
+          "name": "polished silver",
+          "register": "structural",
+          "finish": "polished"
+        },
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "platinum",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "garnet",
@@ -1331,9 +1455,21 @@
         ]
       },
       "metals": [
-        "titanium",
-        "surgical steel",
-        "anodised aluminium"
+        {
+          "name": "titanium",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "surgical steel",
+          "register": "structural",
+          "finish": "polished"
+        },
+        {
+          "name": "anodised aluminium",
+          "register": "either",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "labradorite",
@@ -1460,9 +1596,21 @@
         ]
       },
       "metals": [
-        "iridescent finishes",
-        "white gold",
-        "opal-set silver"
+        {
+          "name": "iridescent finishes",
+          "register": "either",
+          "finish": "polished"
+        },
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "opal-set silver",
+          "register": "either",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "amethyst",
@@ -1576,8 +1724,16 @@
         ]
       },
       "metals": [
-        "rose gold",
-        "polished copper"
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "polished copper",
+          "register": "personal",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "carnelian",
@@ -1688,8 +1844,16 @@
         ]
       },
       "metals": [
-        "yellow gold",
-        "warm bronze"
+        {
+          "name": "yellow gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "warm bronze",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "emerald",
@@ -1799,8 +1963,16 @@
         ]
       },
       "metals": [
-        "mixed metals",
-        "sterling silver"
+        {
+          "name": "mixed metals",
+          "register": "either",
+          "finish": "matte"
+        },
+        {
+          "name": "sterling silver",
+          "register": "structural",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "agate",
@@ -1910,8 +2082,16 @@
         ]
       },
       "metals": [
-        "antique silver",
-        "white gold"
+        {
+          "name": "antique silver",
+          "register": "structural",
+          "finish": "aged"
+        },
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "moonstone",
@@ -2019,8 +2199,16 @@
         ]
       },
       "metals": [
-        "yellow gold",
-        "gilded bronze"
+        {
+          "name": "yellow gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "gilded bronze",
+          "register": "personal",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "amber",
@@ -2127,8 +2315,16 @@
         ]
       },
       "metals": [
-        "brushed silver",
-        "matte white gold"
+        {
+          "name": "brushed silver",
+          "register": "structural",
+          "finish": "brushed"
+        },
+        {
+          "name": "matte white gold",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "peridot",
@@ -2234,8 +2430,16 @@
         ]
       },
       "metals": [
-        "rose gold",
-        "polished copper"
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "polished copper",
+          "register": "personal",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "rose quartz",
@@ -2341,8 +2545,16 @@
         ]
       },
       "metals": [
-        "blackened silver",
-        "gunmetal"
+        {
+          "name": "blackened silver",
+          "register": "structural",
+          "finish": "aged"
+        },
+        {
+          "name": "gunmetal",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "obsidian",
@@ -2450,8 +2662,16 @@
         ]
       },
       "metals": [
-        "warm umber",
-        "hammered gold"
+        {
+          "name": "warm umber",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "hammered gold",
+          "register": "personal",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "turquoise",
@@ -2558,8 +2778,16 @@
         ]
       },
       "metals": [
-        "polished silver",
-        "platinum"
+        {
+          "name": "polished silver",
+          "register": "structural",
+          "finish": "polished"
+        },
+        {
+          "name": "platinum",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "garnet",
@@ -2665,8 +2893,16 @@
         ]
       },
       "metals": [
-        "titanium",
-        "surgical steel"
+        {
+          "name": "titanium",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "surgical steel",
+          "register": "structural",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "labradorite",
@@ -2771,8 +3007,16 @@
         ]
       },
       "metals": [
-        "iridescent finishes",
-        "silver"
+        {
+          "name": "iridescent finishes",
+          "register": "either",
+          "finish": "polished"
+        },
+        {
+          "name": "silver",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "amethyst",
@@ -2877,8 +3121,16 @@
         ]
       },
       "metals": [
-        "polished brass",
-        "rose gold"
+        {
+          "name": "polished brass",
+          "register": "personal",
+          "finish": "polished"
+        },
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "diamond",
@@ -2983,8 +3235,16 @@
         ]
       },
       "metals": [
-        "yellow gold",
-        "warm bronze"
+        {
+          "name": "yellow gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "warm bronze",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "emerald",
@@ -3091,8 +3351,16 @@
         ]
       },
       "metals": [
-        "mixed metals",
-        "white gold"
+        {
+          "name": "mixed metals",
+          "register": "either",
+          "finish": "matte"
+        },
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "citrine",
@@ -3193,8 +3461,16 @@
         ]
       },
       "metals": [
-        "sterling silver",
-        "white gold"
+        {
+          "name": "sterling silver",
+          "register": "structural",
+          "finish": "polished"
+        },
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "moonstone",
@@ -3298,8 +3574,16 @@
         ]
       },
       "metals": [
-        "yellow gold",
-        "polished brass"
+        {
+          "name": "yellow gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "polished brass",
+          "register": "personal",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "sunstone",
@@ -3403,8 +3687,16 @@
         ]
       },
       "metals": [
-        "brushed silver",
-        "white gold"
+        {
+          "name": "brushed silver",
+          "register": "structural",
+          "finish": "brushed"
+        },
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "peridot",
@@ -3508,8 +3800,16 @@
         ]
       },
       "metals": [
-        "rose gold",
-        "copper"
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "copper",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "rose quartz",
@@ -3615,8 +3915,16 @@
         ]
       },
       "metals": [
-        "gunmetal",
-        "blackened silver"
+        {
+          "name": "gunmetal",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "blackened silver",
+          "register": "structural",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "obsidian",
@@ -3722,8 +4030,16 @@
         ]
       },
       "metals": [
-        "warm umber",
-        "hammered gold"
+        {
+          "name": "warm umber",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "hammered gold",
+          "register": "personal",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "turquoise",
@@ -3829,8 +4145,16 @@
         ]
       },
       "metals": [
-        "polished silver",
-        "platinum"
+        {
+          "name": "polished silver",
+          "register": "structural",
+          "finish": "polished"
+        },
+        {
+          "name": "platinum",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "garnet",
@@ -3934,8 +4258,16 @@
         ]
       },
       "metals": [
-        "titanium",
-        "surgical steel"
+        {
+          "name": "titanium",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "surgical steel",
+          "register": "structural",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "amethyst",
@@ -4039,8 +4371,16 @@
         ]
       },
       "metals": [
-        "silver",
-        "iridescent finishes"
+        {
+          "name": "silver",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "iridescent finishes",
+          "register": "either",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "amethyst",
@@ -4143,8 +4483,16 @@
         ]
       },
       "metals": [
-        "polished steel",
-        "bright copper"
+        {
+          "name": "polished steel",
+          "register": "structural",
+          "finish": "polished"
+        },
+        {
+          "name": "bright copper",
+          "register": "personal",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "ruby",
@@ -4241,8 +4589,16 @@
         ]
       },
       "metals": [
-        "warm bronze",
-        "antique brass"
+        {
+          "name": "warm bronze",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "antique brass",
+          "register": "personal",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "bloodstone",
@@ -4336,8 +4692,16 @@
         ]
       },
       "metals": [
-        "white gold",
-        "mixed metals"
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "mixed metals",
+          "register": "either",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "citrine",
@@ -4432,8 +4796,16 @@
         ]
       },
       "metals": [
-        "sterling silver",
-        "antique silver"
+        {
+          "name": "sterling silver",
+          "register": "structural",
+          "finish": "polished"
+        },
+        {
+          "name": "antique silver",
+          "register": "structural",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "moonstone",
@@ -4527,8 +4899,16 @@
         ]
       },
       "metals": [
-        "polished gold",
-        "brass"
+        {
+          "name": "polished gold",
+          "register": "personal",
+          "finish": "polished"
+        },
+        {
+          "name": "brass",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "sunstone",
@@ -4623,8 +5003,16 @@
         ]
       },
       "metals": [
-        "brushed silver",
-        "matte steel"
+        {
+          "name": "brushed silver",
+          "register": "structural",
+          "finish": "brushed"
+        },
+        {
+          "name": "matte steel",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "sapphire",
@@ -4718,8 +5106,16 @@
         ]
       },
       "metals": [
-        "rose gold",
-        "warm sienna"
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "warm sienna",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "pink tourmaline",
@@ -4754,7 +5150,7 @@
         "Harsh industrial textures that contradict your natural grace, as rough fabrics actively fight your personal style instead of channelling it effectively."
       ],
       "code_consider": [
-        "Applying strategic colour theory to your daily rotation by choosing soft blush for approachability, crisp navy poplin for authority, and clean white cotton for absolute neutrality.",
+        "Applying strategic colour theory to your everyday wardrobe by choosing soft blush for approachability, crisp navy poplin for authority, and clean white cotton for absolute neutrality.",
         "The role of proportion in first impressions. Balanced shoulders, a defined waist, and a clean line project confidence without confrontation."
       ],
       "opposites": {
@@ -4815,8 +5211,16 @@
         ]
       },
       "metals": [
-        "blackened steel",
-        "gunmetal"
+        {
+          "name": "blackened steel",
+          "register": "structural",
+          "finish": "aged"
+        },
+        {
+          "name": "gunmetal",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "obsidian",
@@ -4912,8 +5316,16 @@
         ]
       },
       "metals": [
-        "hammered brass",
-        "aged gold"
+        {
+          "name": "hammered brass",
+          "register": "personal",
+          "finish": "aged"
+        },
+        {
+          "name": "aged gold",
+          "register": "personal",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "turquoise",
@@ -5007,8 +5419,16 @@
         ]
       },
       "metals": [
-        "polished silver",
-        "steel"
+        {
+          "name": "polished silver",
+          "register": "structural",
+          "finish": "polished"
+        },
+        {
+          "name": "steel",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "garnet",
@@ -5038,7 +5458,7 @@
       "code_leaninto": [
         "Wielding sartorial discipline as your ultimate power tool to prove that a perfectly maintained wardrobe of dark staples communicates supreme authority.",
         "Making enduring quality the foundation of your style statement. Pieces that look better with age mirror your own trajectory.",
-        "Dressing with the authority of someone who has already arrived. Your wardrobe should project seniority even before you have earned it."
+        "Dressing with settled, unhurried authority. Your wardrobe should project seniority even before you have earned it."
       ],
       "code_avoid": [
         "Frivolous or immature pieces that undermine your natural gravitas. If it looks playful, it is fighting your energy.",
@@ -5104,8 +5524,16 @@
         ]
       },
       "metals": [
-        "titanium",
-        "anodised aluminium"
+        {
+          "name": "titanium",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "anodised aluminium",
+          "register": "either",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "labradorite",
@@ -5200,8 +5628,16 @@
         ]
       },
       "metals": [
-        "silver",
-        "iridescent"
+        {
+          "name": "silver",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "iridescent",
+          "register": "either",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "amethyst",
@@ -5291,8 +5727,16 @@
         ]
       },
       "metals": [
-        "rose gold",
-        "polished brass"
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "polished brass",
+          "register": "personal",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "carnelian",
@@ -5386,8 +5830,16 @@
         ]
       },
       "metals": [
-        "yellow gold",
-        "warm bronze"
+        {
+          "name": "yellow gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "warm bronze",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "emerald",
@@ -5485,8 +5937,16 @@
         ]
       },
       "metals": [
-        "mixed metals",
-        "sterling silver"
+        {
+          "name": "mixed metals",
+          "register": "either",
+          "finish": "matte"
+        },
+        {
+          "name": "sterling silver",
+          "register": "structural",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "citrine",
@@ -5580,8 +6040,16 @@
         ]
       },
       "metals": [
-        "sterling silver",
-        "white gold"
+        {
+          "name": "sterling silver",
+          "register": "structural",
+          "finish": "polished"
+        },
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "moonstone",
@@ -5675,8 +6143,16 @@
         ]
       },
       "metals": [
-        "yellow gold",
-        "polished brass"
+        {
+          "name": "yellow gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "polished brass",
+          "register": "personal",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "sunstone",
@@ -5772,8 +6248,16 @@
         ]
       },
       "metals": [
-        "brushed silver",
-        "white gold"
+        {
+          "name": "brushed silver",
+          "register": "structural",
+          "finish": "brushed"
+        },
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "peridot",
@@ -5867,8 +6351,16 @@
         ]
       },
       "metals": [
-        "rose gold",
-        "copper"
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "copper",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "rose quartz",
@@ -5962,8 +6454,16 @@
         ]
       },
       "metals": [
-        "gunmetal",
-        "blackened silver"
+        {
+          "name": "gunmetal",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "blackened silver",
+          "register": "structural",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "obsidian",
@@ -6058,8 +6558,16 @@
         ]
       },
       "metals": [
-        "warm umber",
-        "hammered gold"
+        {
+          "name": "warm umber",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "hammered gold",
+          "register": "personal",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "turquoise",
@@ -6153,8 +6661,16 @@
         ]
       },
       "metals": [
-        "polished silver",
-        "platinum"
+        {
+          "name": "polished silver",
+          "register": "structural",
+          "finish": "polished"
+        },
+        {
+          "name": "platinum",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "garnet",
@@ -6248,8 +6764,16 @@
         ]
       },
       "metals": [
-        "titanium",
-        "surgical steel"
+        {
+          "name": "titanium",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "surgical steel",
+          "register": "structural",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "labradorite",
@@ -6343,8 +6867,16 @@
         ]
       },
       "metals": [
-        "silver",
-        "iridescent finishes"
+        {
+          "name": "silver",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "iridescent finishes",
+          "register": "either",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "amethyst",
@@ -6433,8 +6965,16 @@
         ]
       },
       "metals": [
-        "steel",
-        "iron"
+        {
+          "name": "steel",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "iron",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "hematite",
@@ -6524,8 +7064,16 @@
         ]
       },
       "metals": [
-        "deep honey",
-        "bronze"
+        {
+          "name": "deep honey",
+          "register": "personal",
+          "finish": "aged"
+        },
+        {
+          "name": "bronze",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "sapphire",
@@ -6612,8 +7160,16 @@
         ]
       },
       "metals": [
-        "white gold",
-        "silver"
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "silver",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "agate",
@@ -6701,8 +7257,16 @@
         ]
       },
       "metals": [
-        "antique silver",
-        "white gold"
+        {
+          "name": "antique silver",
+          "register": "structural",
+          "finish": "aged"
+        },
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "moonstone",
@@ -6790,8 +7354,16 @@
         ]
       },
       "metals": [
-        "polished gold",
-        "brass"
+        {
+          "name": "polished gold",
+          "register": "personal",
+          "finish": "polished"
+        },
+        {
+          "name": "brass",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "tiger eye",
@@ -6879,8 +7451,16 @@
         ]
       },
       "metals": [
-        "brushed silver",
-        "platinum"
+        {
+          "name": "brushed silver",
+          "register": "structural",
+          "finish": "brushed"
+        },
+        {
+          "name": "platinum",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "sapphire",
@@ -6968,8 +7548,16 @@
         ]
       },
       "metals": [
-        "rose gold",
-        "silver"
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "silver",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "rose quartz",
@@ -7056,8 +7644,16 @@
         ]
       },
       "metals": [
-        "blackened steel",
-        "titanium"
+        {
+          "name": "blackened steel",
+          "register": "structural",
+          "finish": "aged"
+        },
+        {
+          "name": "titanium",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "obsidian",
@@ -7145,8 +7741,16 @@
         ]
       },
       "metals": [
-        "hammered bronze",
-        "warm umber"
+        {
+          "name": "hammered bronze",
+          "register": "personal",
+          "finish": "aged"
+        },
+        {
+          "name": "warm umber",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "turquoise",
@@ -7237,8 +7841,16 @@
         ]
       },
       "metals": [
-        "platinum",
-        "polished silver"
+        {
+          "name": "platinum",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "polished silver",
+          "register": "structural",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "onyx",
@@ -7328,8 +7940,16 @@
         ]
       },
       "metals": [
-        "titanium",
-        "surgical steel"
+        {
+          "name": "titanium",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "surgical steel",
+          "register": "structural",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "labradorite",
@@ -7417,8 +8037,16 @@
         ]
       },
       "metals": [
-        "silver",
-        "white gold"
+        {
+          "name": "silver",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "amethyst",
@@ -7508,8 +8136,16 @@
         ]
       },
       "metals": [
-        "gold",
-        "brass"
+        {
+          "name": "gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "brass",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "ruby",
@@ -7610,8 +8246,16 @@
         ]
       },
       "metals": [
-        "yellow gold",
-        "bronze"
+        {
+          "name": "yellow gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "bronze",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "emerald",
@@ -7710,7 +8354,11 @@
         ]
       },
       "metals": [
-        "mixed metals"
+        {
+          "name": "mixed metals",
+          "register": "either",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "citrine",
@@ -7809,8 +8457,16 @@
         ]
       },
       "metals": [
-        "silver",
-        "white gold"
+        {
+          "name": "silver",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "white gold",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "pearl",
@@ -7910,8 +8566,16 @@
         ]
       },
       "metals": [
-        "polished gold",
-        "gilded brass"
+        {
+          "name": "polished gold",
+          "register": "personal",
+          "finish": "polished"
+        },
+        {
+          "name": "gilded brass",
+          "register": "personal",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "amber",
@@ -8011,7 +8675,11 @@
         ]
       },
       "metals": [
-        "brushed silver"
+        {
+          "name": "brushed silver",
+          "register": "structural",
+          "finish": "brushed"
+        }
       ],
       "stones": [
         "peridot",
@@ -8111,8 +8779,16 @@
         ]
       },
       "metals": [
-        "rose gold",
-        "copper"
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        },
+        {
+          "name": "copper",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "rose quartz",
@@ -8212,7 +8888,11 @@
         ]
       },
       "metals": [
-        "blackened gold"
+        {
+          "name": "blackened gold",
+          "register": "personal",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "garnet",
@@ -8311,8 +8991,16 @@
         ]
       },
       "metals": [
-        "hammered gold",
-        "brass"
+        {
+          "name": "hammered gold",
+          "register": "personal",
+          "finish": "aged"
+        },
+        {
+          "name": "brass",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "turquoise",
@@ -8412,8 +9100,16 @@
         ]
       },
       "metals": [
-        "platinum",
-        "silver"
+        {
+          "name": "platinum",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "silver",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "garnet",
@@ -8511,7 +9207,11 @@
         ]
       },
       "metals": [
-        "titanium"
+        {
+          "name": "titanium",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "amethyst",
@@ -8610,8 +9310,16 @@
         ]
       },
       "metals": [
-        "silver",
-        "iridescent"
+        {
+          "name": "silver",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "iridescent",
+          "register": "either",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "amethyst",
@@ -8710,7 +9418,11 @@
         ]
       },
       "metals": [
-        "rose gold"
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "carnelian"
@@ -8807,7 +9519,11 @@
         ]
       },
       "metals": [
-        "warm bronze"
+        {
+          "name": "warm bronze",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "emerald"
@@ -8904,7 +9620,11 @@
         ]
       },
       "metals": [
-        "mixed metals"
+        {
+          "name": "mixed metals",
+          "register": "either",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "citrine",
@@ -9004,7 +9724,11 @@
         ]
       },
       "metals": [
-        "silver"
+        {
+          "name": "silver",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "moonstone",
@@ -9103,7 +9827,11 @@
         ]
       },
       "metals": [
-        "gold"
+        {
+          "name": "gold",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "sunstone",
@@ -9203,7 +9931,11 @@
         ]
       },
       "metals": [
-        "brushed silver"
+        {
+          "name": "brushed silver",
+          "register": "structural",
+          "finish": "brushed"
+        }
       ],
       "stones": [
         "peridot",
@@ -9302,7 +10034,11 @@
         ]
       },
       "metals": [
-        "rose gold"
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "rose quartz"
@@ -9399,7 +10135,11 @@
         ]
       },
       "metals": [
-        "gunmetal"
+        {
+          "name": "gunmetal",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "obsidian"
@@ -9496,7 +10236,11 @@
         ]
       },
       "metals": [
-        "brass"
+        {
+          "name": "brass",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "turquoise"
@@ -9532,7 +10276,7 @@
         "Playing it safe with neutral basics, because your worldly experience absolutely demands a much wider visual vocabulary."
       ],
       "code_consider": [
-        "Bring home exactly one brilliantly crafted piece per trip to integrate straight into your daily rotation.",
+        "Bring home exactly one brilliantly crafted piece per trip and put it straight to work in your everyday wardrobe.",
         "Globally-sourced accessories as conversation pieces that carry stories from the places you have visited."
       ],
       "opposites": {
@@ -9594,7 +10338,11 @@
         ]
       },
       "metals": [
-        "silver"
+        {
+          "name": "silver",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "garnet"
@@ -9691,7 +10439,11 @@
         ]
       },
       "metals": [
-        "titanium"
+        {
+          "name": "titanium",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "labradorite"
@@ -9790,7 +10542,11 @@
         ]
       },
       "metals": [
-        "silver"
+        {
+          "name": "silver",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "amethyst",
@@ -9890,7 +10646,11 @@
         ]
       },
       "metals": [
-        "titanium"
+        {
+          "name": "titanium",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "bloodstone"
@@ -9947,7 +10707,7 @@
           "Anything predictable or risk-free that plays it entirely safe with your silhouette.",
           "Steer completely clear of expected outfit formulas that rob your look of a rebellious punch.",
           "Hiding your figure behind quiet cuts and muted shades like a timid shrinking violet.",
-          "Throw out the traditional rulebook and banish standard, boring uniforms from your daily rotation."
+          "Throw out the traditional rulebook and banish standard, boring uniforms from your everyday dressing."
         ]
       }
     },
@@ -9989,7 +10749,11 @@
         ]
       },
       "metals": [
-        "recycled gold"
+        {
+          "name": "recycled gold",
+          "register": "personal",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "moldavite"
@@ -10085,7 +10849,11 @@
         ]
       },
       "metals": [
-        "mixed innovative metals"
+        {
+          "name": "mixed innovative metals",
+          "register": "either",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "labradorite"
@@ -10184,7 +10952,11 @@
         ]
       },
       "metals": [
-        "opal-set silver"
+        {
+          "name": "opal-set silver",
+          "register": "either",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "rainbow moonstone"
@@ -10281,7 +11053,11 @@
         ]
       },
       "metals": [
-        "gilded titanium"
+        {
+          "name": "gilded titanium",
+          "register": "structural",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "sunstone"
@@ -10379,7 +11155,11 @@
         ]
       },
       "metals": [
-        "brushed titanium"
+        {
+          "name": "brushed titanium",
+          "register": "structural",
+          "finish": "brushed"
+        }
       ],
       "stones": [
         "sapphire"
@@ -10476,7 +11256,11 @@
         ]
       },
       "metals": [
-        "innovative rose gold"
+        {
+          "name": "innovative rose gold",
+          "register": "personal",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "kunzite"
@@ -10511,7 +11295,7 @@
         "Safe, pretty dressing just for the sake of looking socially acceptable."
       ],
       "code_consider": [
-        "Introducing exactly one iridescent piece into your daily rotation to act as a compelling visual focal point.",
+        "Introducing exactly one iridescent piece into your regular line-up to act as a compelling visual focal point.",
         "Unusual colour pairings that still feel balanced on the body."
       ],
       "opposites": {
@@ -10573,7 +11357,11 @@
         ]
       },
       "metals": [
-        "blackened titanium"
+        {
+          "name": "blackened titanium",
+          "register": "structural",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "obsidian"
@@ -10670,7 +11458,11 @@
         ]
       },
       "metals": [
-        "hammered titanium"
+        {
+          "name": "hammered titanium",
+          "register": "structural",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "turquoise"
@@ -10767,7 +11559,11 @@
         ]
       },
       "metals": [
-        "platinum"
+        {
+          "name": "platinum",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "garnet"
@@ -10864,8 +11660,16 @@
         ]
       },
       "metals": [
-        "titanium",
-        "surgical steel"
+        {
+          "name": "titanium",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "surgical steel",
+          "register": "structural",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "meteorite",
@@ -10965,7 +11769,11 @@
         ]
       },
       "metals": [
-        "iridescent titanium"
+        {
+          "name": "iridescent titanium",
+          "register": "either",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "opal"
@@ -11065,7 +11873,11 @@
         ]
       },
       "metals": [
-        "rose gold"
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "red coral"
@@ -11163,7 +11975,11 @@
         ]
       },
       "metals": [
-        "rose gold"
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "jade",
@@ -11262,7 +12078,11 @@
         ]
       },
       "metals": [
-        "silver"
+        {
+          "name": "silver",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "amethyst"
@@ -11361,8 +12181,16 @@
         ]
       },
       "metals": [
-        "silver",
-        "pearl-set"
+        {
+          "name": "silver",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "pearl-set",
+          "register": "either",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "pearl",
@@ -11461,7 +12289,11 @@
         ]
       },
       "metals": [
-        "gold"
+        {
+          "name": "gold",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "amber"
@@ -11558,7 +12390,11 @@
         ]
       },
       "metals": [
-        "brushed silver"
+        {
+          "name": "brushed silver",
+          "register": "structural",
+          "finish": "brushed"
+        }
       ],
       "stones": [
         "peridot"
@@ -11655,7 +12491,11 @@
         ]
       },
       "metals": [
-        "rose gold"
+        {
+          "name": "rose gold",
+          "register": "personal",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "rose quartz",
@@ -11755,7 +12595,11 @@
         ]
       },
       "metals": [
-        "oxidised silver"
+        {
+          "name": "oxidised silver",
+          "register": "structural",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "amethyst",
@@ -11854,7 +12698,11 @@
         ]
       },
       "metals": [
-        "hammered silver"
+        {
+          "name": "hammered silver",
+          "register": "structural",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "lapis lazuli"
@@ -11952,7 +12800,11 @@
         ]
       },
       "metals": [
-        "platinum"
+        {
+          "name": "platinum",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "sapphire"
@@ -11987,7 +12839,7 @@
         "Cold uninspired authority that lacks vision or soul. Power without imagination is just bureaucracy."
       ],
       "code_consider": [
-        "Introducing razor-sharp midnight-blue suiting into your rotation as a daily act of completely unbothered, visionary authority.",
+        "Introducing razor-sharp midnight-blue suiting into your rotation as a daily act of calm, visionary authority.",
         "Wearing heavily structured silk that brings an unexpectedly dreamlike quality to your everyday power dressing."
       ],
       "opposites": {
@@ -12049,7 +12901,11 @@
         ]
       },
       "metals": [
-        "titanium"
+        {
+          "name": "titanium",
+          "register": "structural",
+          "finish": "matte"
+        }
       ],
       "stones": [
         "labradorite"
@@ -12153,7 +13009,11 @@
         ]
       },
       "metals": [
-        "iridescent silver"
+        {
+          "name": "iridescent silver",
+          "register": "either",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "amethyst",
@@ -12256,7 +13116,11 @@
         ]
       },
       "metals": [
-        "blackened steel"
+        {
+          "name": "blackened steel",
+          "register": "structural",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "garnet"
@@ -12355,7 +13219,11 @@
         ]
       },
       "metals": [
-        "recycled gold"
+        {
+          "name": "recycled gold",
+          "register": "personal",
+          "finish": "polished"
+        }
       ],
       "stones": [
         "obsidian"
@@ -12452,7 +13320,11 @@
         ]
       },
       "metals": [
-        "mixed dark metals"
+        {
+          "name": "mixed dark metals",
+          "register": "either",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "labradorite"
@@ -12474,7 +13346,7 @@
       ],
       "occasion_modifiers": {
         "work": "strategic communication power, every outfit says exactly what you need it to",
-        "intimate": "dual-natured depth, the allure of someone who contains multitudes",
+        "intimate": "dual-natured depth, an allure built on containing multitudes",
         "daily": "shape-shifting as power, different people see different versions"
       },
       "code_leaninto": [
@@ -12551,7 +13423,11 @@
         ]
       },
       "metals": [
-        "antique silver"
+        {
+          "name": "antique silver",
+          "register": "structural",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "black pearl"
@@ -12650,7 +13526,11 @@
         ]
       },
       "metals": [
-        "dark gold"
+        {
+          "name": "dark gold",
+          "register": "personal",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "tiger eye"
@@ -12748,7 +13628,11 @@
         ]
       },
       "metals": [
-        "brushed dark silver"
+        {
+          "name": "brushed dark silver",
+          "register": "structural",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "obsidian",
@@ -12846,7 +13730,11 @@
         ]
       },
       "metals": [
-        "dark rose gold"
+        {
+          "name": "dark rose gold",
+          "register": "personal",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "garnet"
@@ -12872,7 +13760,7 @@
       },
       "code_leaninto": [
         "Treating your beauty as a form of power rather than mere prettiness, since depth and darkness make elegance more compelling.",
-        "Choosing a dark elegance over a superficial sparkle, because genuine refinement does not need to glitter to command the room.",
+        "Choosing a dark elegance over a superficial sparkle, because genuine refinement does not need to glitter to be felt.",
         "Prioritising aesthetics that have been through fire and emerged stronger."
       ],
       "code_avoid": [
@@ -12944,8 +13832,16 @@
         ]
       },
       "metals": [
-        "blackened titanium",
-        "dark steel"
+        {
+          "name": "blackened titanium",
+          "register": "structural",
+          "finish": "aged"
+        },
+        {
+          "name": "dark steel",
+          "register": "structural",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "obsidian",
@@ -13044,7 +13940,11 @@
         ]
       },
       "metals": [
-        "aged dark brass"
+        {
+          "name": "aged dark brass",
+          "register": "personal",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "lapis lazuli"
@@ -13142,8 +14042,16 @@
         ]
       },
       "metals": [
-        "platinum",
-        "dark steel"
+        {
+          "name": "platinum",
+          "register": "structural",
+          "finish": "matte"
+        },
+        {
+          "name": "dark steel",
+          "register": "structural",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "onyx",
@@ -13241,7 +14149,11 @@
         ]
       },
       "metals": [
-        "dark titanium"
+        {
+          "name": "dark titanium",
+          "register": "structural",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "meteorite"
@@ -13340,7 +14252,11 @@
         ]
       },
       "metals": [
-        "iridescent dark silver"
+        {
+          "name": "iridescent dark silver",
+          "register": "either",
+          "finish": "aged"
+        }
       ],
       "stones": [
         "amethyst",
@@ -13574,7 +14490,7 @@
     },
     "ascendant_conjunction_venus": {
       "effect": "beauty as first impression, effortless attractiveness",
-      "texture_modifier": "naturally gravitates toward beautiful fabrics",
+      "texture_modifier": "is instinctively drawn toward beautiful fabrics",
       "colour_modifier": "instinctively flattering palette",
       "code_addition_leaninto": "Prioritising your natural allure by selecting pieces that frame your silhouette immediately.",
       "code_addition_avoid": "Hiding behind oversized, boxy shapes that completely drown out your natural physical magnetism and elegant silhouette."
@@ -13737,8 +14653,8 @@
         "intimate"
       ],
       "lean_into_bias": [
-        "Embracing brilliantly bold colour pairings in heavy silks that demand attention the moment you walk into a room.",
-        "Injecting your daily rotation with romantic, tactile details like delicate lace trims or beautifully constructed ruffles."
+        "Embracing brilliantly bold colour pairings in heavy silks that demand attention at first sight.",
+        "Injecting your everyday wardrobe with romantic, tactile details like delicate lace trims or beautifully constructed ruffles."
       ],
       "hardware_bias": {
         "metals": [
@@ -13867,7 +14783,7 @@
       ],
       "code_consider_bias": [
         "Prioritising incredibly polished finishes over distressed fabrics to maintain a consistently sharp, authoritative look.",
-        "Treating immaculate fit and precision tailoring as entirely non-negotiable elements of your professional wardrobe."
+        "Treating immaculate fit and precision tailoring as entirely non-negotiable at work."
       ],
       "occasion_bias": [
         "work",
@@ -13919,7 +14835,7 @@
       ],
       "code_consider_bias": [
         "Prioritising the internal sensation of heavy silks and soft cashmere over external visual expectations.",
-        "Anchorring your daily rotation in fluid silk silhouettes and exquisitely soft cashmere knitwear rather than rigid, restrictive tailoring."
+        "Anchoring your everyday wardrobe in fluid silk silhouettes and exquisitely soft cashmere knitwear rather than rigid, restrictive tailoring."
       ],
       "occasion_bias": [
         "intimate"
@@ -14147,7 +15063,7 @@
       ],
       "lean_into_bias": [
         "Achieving polished comfort by selecting elevated fabrics and tailored pieces that still feel incredibly soft.",
-        "Commanding quiet respect instantly by anchoring your professional wardrobe with razor-sharp structural blazers and immaculately tailored waistcoats."
+        "Commanding quiet respect instantly by anchoring your working wardrobe with razor-sharp structural blazers and immaculately tailored waistcoats."
       ]
     },
     "moon_house_11": {
@@ -14266,7 +15182,7 @@
       ],
       "code_consider_bias": [
         "Integrating vintage family heirlooms and heritage fabrics into your everyday rotation to anchor your modern look.",
-        "Base your daily rotations on a heavy-hitting foundation of perfectly cut selvedge denim and crisp white cotton poplin."
+        "Base your everyday dressing on a heavy-hitting foundation of perfectly cut selvedge denim and crisp white cotton poplin."
       ],
       "occasion_bias": [
         "intimate"
@@ -14371,7 +15287,7 @@
       ],
       "code_consider_bias": [
         "Seeking out international textiles and artisanal construction to build a genuinely global wardrobe.",
-        "Grounding your daily rotation in a clear aesthetic intention by selecting heavily textured garments that communicate a distinct cultural history."
+        "Grounding your everyday wardrobe in a clear aesthetic intention by selecting heavily textured garments that communicate a distinct cultural history."
       ],
       "occasion_bias": [
         "daily"
@@ -14413,7 +15329,7 @@
         "group"
       ],
       "code_consider_bias": [
-        "Supporting independent British designers and zero-waste construction methods to ensure your daily rotation reflects your progressive ideals.",
+        "Supporting independent British designers and zero-waste construction methods so the clothes you actually live in reflect your progressive ideals.",
         "Wearing relaxed, unrestrictive silhouettes that encourage ease of movement and approachability at social events."
       ],
       "occasion_bias": [
@@ -16212,5 +17128,99 @@
       "hex": "#014D4E",
       "role": "accent"
     }
-  ]
+  ],
+  "formula_vocabulary": {
+    "venus_sign": {
+      "aries": {
+        "structure": "clean impact",
+        "accent": "one hot accent"
+      },
+      "taurus": {
+        "structure": "structure",
+        "structureWaterVariant": "soft structure",
+        "accent": "a touch of quiet depth"
+      },
+      "gemini": {
+        "structure": "crisp separation",
+        "accent": "one clever contrast"
+      },
+      "cancer": {
+        "structure": "soft shelter",
+        "accent": "one sentimental keepsake"
+      },
+      "leo": {
+        "structure": "dark drama",
+        "structureByRegister": {
+          "quietLuxury": "quiet grandeur"
+        },
+        "accent": "one molten flash"
+      },
+      "virgo": {
+        "structure": "precise fit",
+        "accent": "one meticulous detail"
+      },
+      "libra": {
+        "structure": "balanced proportions",
+        "accent": "one refined touch"
+      },
+      "scorpio": {
+        "structure": "close drape",
+        "accent": "one warm point of light"
+      },
+      "sagittarius": {
+        "structure": "expansive colour",
+        "accent": "one theatrical finish"
+      },
+      "capricorn": {
+        "structure": "enduring structure",
+        "accent": "one living texture"
+      },
+      "aquarius": {
+        "structure": "clean geometry",
+        "accent": "one polished signal"
+      },
+      "pisces": {
+        "structure": "weightless layers",
+        "accent": "one pearl of light"
+      }
+    },
+    "moon_sign": {
+      "aries": {
+        "flow": "sharp edges"
+      },
+      "taurus": {
+        "flow": "sensory comfort"
+      },
+      "gemini": {
+        "flow": "light movement"
+      },
+      "cancer": {
+        "flow": "hidden depth"
+      },
+      "leo": {
+        "flow": "athletic space"
+      },
+      "virgo": {
+        "flow": "honest fabric"
+      },
+      "libra": {
+        "flow": "cool composure"
+      },
+      "scorpio": {
+        "flow": "quiet undercurrent"
+      },
+      "sagittarius": {
+        "flow": "fast movement"
+      },
+      "capricorn": {
+        "flow": "softness"
+      },
+      "aquarius": {
+        "flow": "mobile layers"
+      },
+      "pisces": {
+        "flow": "blurred edges"
+      }
+    }
+  }
 }

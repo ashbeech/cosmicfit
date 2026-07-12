@@ -1,0 +1,489 @@
+{
+  "overlays": [
+    {
+      "id": "overlay:sect.day",
+      "text": "Your style instincts lean toward clarity, structure, and visible polish.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Blueprint (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:sect.night",
+      "text": "Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Blueprint (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:venus_house",
+      "text": "Your natural sense of beauty shows up most powerfully in your {domain}, {modifier}.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Blueprint (appended)",
+      "template_type": "template"
+    },
+    {
+      "id": "overlay:moon_house",
+      "text": "Your comfort instinct gravitates toward {modifier}.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Textures — Sweet Spot / The Occasions — Daily (appended)",
+      "template_type": "template"
+    },
+    {
+      "id": "overlay:dominant_house",
+      "text": "Your style energy concentrates in {domain1} and {domain2}, so {implication}.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Occasions — Work / Daily (appended)",
+      "template_type": "template"
+    },
+    {
+      "id": "overlay:midheaven_style_core.aries",
+      "text": "Your public style reads as bold and decisive; you make strong first impressions without trying too hard.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Blueprint (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_style_core.taurus",
+      "text": "Your public style reads as quietly luxurious; tactile quality and understated expense signal before you speak.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Blueprint (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_style_core.gemini",
+      "text": "Your public style reads as versatile and expressive; you communicate range and adaptability through what you wear.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Blueprint (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_style_core.cancer",
+      "text": "Your public style reads as warm and approachable; polished comfort signals care and emotional intelligence.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Blueprint (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_style_core.leo",
+      "text": "Your public style reads as radiant and confident; generous presence and visible polish are your natural mode.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Blueprint (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_style_core.virgo",
+      "text": "Your public style reads as refined and precise; quiet excellence and immaculate detail speak louder than flash.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Blueprint (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_style_core.libra",
+      "text": "Your public style reads as harmonious and elegant; social grace and balanced aesthetics are immediately legible.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Blueprint (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_style_core.scorpio",
+      "text": "Your public style reads as magnetic and controlled; depth, intensity, and polished restraint draw people in.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Blueprint (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_style_core.sagittarius",
+      "text": "Your public style reads as bold and expansive; globally informed choices and adventurous scope signal confidence.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Blueprint (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_style_core.capricorn",
+      "text": "Your public style reads as structured and authoritative; timeless polish and investment-grade quality define your image.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Blueprint (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_style_core.aquarius",
+      "text": "Your public style reads as distinctive and forward-thinking; modern edge and independent taste set you apart.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Blueprint (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_style_core.pisces",
+      "text": "Your public style reads as fluid and intuitive; soft elegance and imaginative beauty feel effortlessly composed.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Blueprint (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_work.aries",
+      "text": "At work, lean into direct confidence; structured pieces and clean lines reinforce your natural authority.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Occasions — Work (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_work.taurus",
+      "text": "At work, lean into quality and permanence; investment pieces and rich textures signal reliability and taste.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Occasions — Work (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_work.gemini",
+      "text": "At work, lean into adaptability; polished separates and communication-friendly styling keep you agile.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Occasions — Work (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_work.cancer",
+      "text": "At work, lean into approachable authority; soft structure and nurturing polish build trust without sacrificing presence.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Occasions — Work (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_work.leo",
+      "text": "At work, lean into commanding warmth; statement pieces with generous polish project leadership naturally.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Occasions — Work (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_work.virgo",
+      "text": "At work, lean into meticulous polish; impeccable tailoring and refined detail communicate competence instantly.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Occasions — Work (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_work.libra",
+      "text": "At work, lean into diplomatic elegance; balanced proportions and harmonious palettes support collaborative authority.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Occasions — Work (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_work.scorpio",
+      "text": "At work, lean into powerful restraint; deep tones, controlled intensity, and impeccable finish command respect quietly.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Occasions — Work (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_work.sagittarius",
+      "text": "At work, lean into expansive confidence; globally inspired pieces and bold scope signal vision and ambition.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Occasions — Work (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_work.capricorn",
+      "text": "At work, lean into structured authority; timeless tailoring and investment-grade workwear build lasting credibility.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Occasions — Work (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_work.aquarius",
+      "text": "At work, lean into distinctive innovation; unconventional polish and forward-thinking choices signal original leadership.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Occasions — Work (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:midheaven_work.pisces",
+      "text": "At work, lean into empathetic fluidity; soft structure and creatively composed pieces communicate intuitive intelligence.",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "The Occasions — Work (appended)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:domain_implication.public+creativity",
+      "text": "your wardrobe is at its best when it feels both expressive and camera-ready",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "Overlay (appended to occasions)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:domain_implication.public+routine",
+      "text": "your wardrobe works hardest when polished pieces double as daily workhorses",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "Overlay (appended to occasions)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:domain_implication.identity+creativity",
+      "text": "dressing is a core creative practice; lean into that",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "Overlay (appended to occasions)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:domain_implication.partnership+creativity",
+      "text": "your style thrives when it balances personal expression with social harmony",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "Overlay (appended to occasions)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:domain_implication.foundations+retreat",
+      "text": "your wardrobe needs a strong private-comfort foundation before anything public-facing",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "Overlay (appended to occasions)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:domain_implication.resources+routine",
+      "text": "quality daily-wear investments give you the most style return",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "Overlay (appended to occasions)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:domain_implication.intensity+retreat",
+      "text": "your strongest style moments happen in intimate, high-stakes settings",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "Overlay (appended to occasions)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:domain_implication.community+expression",
+      "text": "your style communicates most when it signals belonging and individuality at once",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "Overlay (appended to occasions)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:domain_implication.public+identity",
+      "text": "your personal brand and public image are deeply linked; dress accordingly",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "Overlay (appended to occasions)",
+      "template_type": "fixed"
+    },
+    {
+      "id": "overlay:domain_implication.philosophy+any",
+      "text": "your wardrobe benefits from globally inspired, intentional choices",
+      "swift_file": "Cosmic Fit/InterpretationEngine/HouseSectOverlayGenerator.swift",
+      "ui_section": "Overlay (appended to occasions)",
+      "template_type": "fixed"
+    }
+  ],
+  "fallbacks": [
+    {
+      "id": "fallback:style_core",
+      "text": "Your presence works best when you treat your wardrobe as a public language. While you value the heavy and the settled, you use those qualities to set a standard for the people around you. You move through a room with the composure of someone who is teaching others how to appreciate quality. Your style works best when it feels like a long-term social legacy. This kind of intentional curation looks like a gift you are giving to your community.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Blueprint (fallback)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:textures_good",
+      "text": "Go for fabrics with actual weight and integrity. Heavy gauge silks that feel cool and substantial provide the right anchor. Organic wools offer a proper architectural frame. Leather that is buttery and gains character with age belongs in your collection. They ground you, make you feel secure, and still look polished.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Textures — Good (fallback)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:textures_bad",
+      "text": "Flimsy or disposable fabrics just do not suit you. If a material is scratchy or overly synthetic, it is a hard pass. Static-prone polyesters or stiff cottons that fight your natural movement are a distraction. If you have to spend your whole day messing with a garment to make it sit right, it is draining your energy.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Textures — Bad (fallback)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:textures_sweet_spot",
+      "text": "Your absolute peak is a blend of the sturdy and the soft. Choose items that look high quality at a glance but feel like a secret luxury when touched. If it does not feel like a treat for your skin, it does not belong in your wardrobe.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Textures — Sweet Spot (fallback)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:palette_1",
+      "text": "Your core colours are found in the natural world. Look for deep sage greens, sophisticated caramels, slate greys, and creamy neutrals. These tones provide a stable base for your personality to shine through. Accents work best when they feel weathered, muted, or mineral-toned.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Palette (fallback)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:palette_2",
+      "text": "Flashes of considered tones like oxidised gold, dusty rose, or a deep burnt saffron add depth. Keep these accents as a highlight rather than the main story. They show that you are adventurous under the surface. It is about creating a look that stays timeless. Aim for colours that feel organic and permanent.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Palette (fallback para 2)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:occasions_work",
+      "text": "Lean into your architectural side. Use clean lines and structured shapes to settle into the room. A properly made coat or a weighted layer that holds its shape is your best tool. You look best when you appear as the person who is definitely in charge.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Occasions — Work (fallback)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:occasions_intimate",
+      "text": "Soften the edges when the sun goes down. Keep that solid base but introduce pieces with drape and mystery. Aim for quiet magnetism and close-range impact. Heavy silk or soft knits that move with you invite people to get a bit closer.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Occasions — Intimate (fallback)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:occasions_daily",
+      "text": "Even casual looks need to look intentional. Ditch the mess for high-quality basics that allow you to move freely. You can do relaxed, but it should never look sloppy. Think of your daily look as the visionary on a day off: elevated and completely unbothered.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Occasions — Daily (fallback)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:hardware_metals",
+      "text": "Your energy requires hardware with actual presence. Look for brushed gold, matte silver, or hammered bronze. Choose pieces that feel like they have some history. Heavy chains and matte surfaces that soak up the light are your best options.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Hardware — Metals (fallback)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:hardware_stones",
+      "text": "Skip the perfectly clear gems. You suit stones that look like they were pulled directly from the earth. Raw emeralds, smoky quartz, and malachite work best. These natural inclusions make the pieces feel alive and connected to you.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Hardware — Stones (fallback)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:hardware_tip",
+      "text": "One substantial anchor piece is always more powerful than a bunch of delicate items. Pick a signature like a heavy ring or a bold pendant and let it be the focal point.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Hardware — Tip (fallback)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:code_leaninto.0",
+      "text": "Trusting your body's first tactile reaction. If the fabric feels right against your skin, it is usually a win.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Code — Lean Into (fallback)",
+      "format": "bullet"
+    },
+    {
+      "id": "fallback:code_leaninto.1",
+      "text": "Investing in the highest quality version of a piece you can afford.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Code — Lean Into (fallback)",
+      "format": "bullet"
+    },
+    {
+      "id": "fallback:code_leaninto.2",
+      "text": "Using your style to communicate your values without saying a single word.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Code — Lean Into (fallback)",
+      "format": "bullet"
+    },
+    {
+      "id": "fallback:code_leaninto.3",
+      "text": "Sticking to the three-year test: only buy things you can see yourself loving in 2029.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Code — Lean Into (fallback)",
+      "format": "bullet"
+    },
+    {
+      "id": "fallback:code_avoid.0",
+      "text": "Buying something just because it is a bargain. A deal is only a deal if the item is perfect.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Code — Avoid (fallback)",
+      "format": "bullet"
+    },
+    {
+      "id": "fallback:code_avoid.1",
+      "text": "Chasing trends that clash with your natural composure. If it feels like a costume, it will look like one.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Code — Avoid (fallback)",
+      "format": "bullet"
+    },
+    {
+      "id": "fallback:code_avoid.2",
+      "text": "Keeping your best pieces hidden. Your style works best when it is seen and shared.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Code — Avoid (fallback)",
+      "format": "bullet"
+    },
+    {
+      "id": "fallback:code_avoid.3",
+      "text": "Flimsy or disposable fabrics that lack actual integrity.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Code — Avoid (fallback)",
+      "format": "bullet"
+    },
+    {
+      "id": "fallback:code_consider.0",
+      "text": "How your style acts as a conversation starter in your daily environment.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Code — Consider (fallback)",
+      "format": "bullet"
+    },
+    {
+      "id": "fallback:code_consider.1",
+      "text": "The way your physical home space influences your creative output.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Code — Consider (fallback)",
+      "format": "bullet"
+    },
+    {
+      "id": "fallback:code_consider.2",
+      "text": "Making sure your outfit is actually comfortable. If you are constantly tugging at your clothes, you lose your edge.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Code — Consider (fallback)",
+      "format": "bullet"
+    },
+    {
+      "id": "fallback:accessory.0",
+      "text": "One significant piece carries more weight than five minor ones. Whether it is a heavy watch or a perfectly made bag, let that item be the anchor. This creates a focal point that allows the rest of your look to stay quiet.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Accessory — Paragraph 1 (fallback)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:accessory.1",
+      "text": "Accessories are where you introduce your most rigid lines. While your clothes might flow, your accessories should provide the structure. A stiff bag or a firm leather strap acts as the frame for your more fluid choices.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Accessory — Paragraph 2 (fallback)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:accessory.2",
+      "text": "Think about the sound and scent of your accessories. The weight of a heavy buckle or the specific smell of high-quality leather adds to the vibe. Style is a total sensory environment.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Accessory — Paragraph 3 (fallback)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:pattern_narrative",
+      "text": "You do not really do busy prints. Anything too frantic fights your energy and looks forced. Your patterns need to feel like they have a pulse: organic, slightly blurred, or naturally occurring.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Pattern (fallback)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:pattern_extra_1",
+      "text": "Look for large-scale and soft-focus prints. Marble textures or shadow checks where the lines are not quite sharp work well. You also suit classics like a large windowpane check in your neutral palette. The goal is a pattern that looks painted on rather than factory-made.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Pattern (fallback para 2)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:pattern_extra_2",
+      "text": "Avoid tiny repetitive prints like polka dots. They look cluttered against your sophisticated aura. Stay away from anything neon or synthetic. If a pattern looks like it belongs on a disposable holiday shirt, it does not belong in your life.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Pattern (fallback para 3)",
+      "format": "paragraph"
+    },
+    {
+      "id": "fallback:pattern_tip",
+      "text": "Use pattern as a texture. A tonal jacquard weave or a subtle embossed print is your secret weapon. It adds depth without screaming for attention.",
+      "swift_file": "Cosmic Fit/UI/ViewControllers/StyleGuideViewController.swift",
+      "ui_section": "The Pattern — Tip (fallback)",
+      "format": "paragraph"
+    }
+  ]
+}

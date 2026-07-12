@@ -1,0 +1,12 @@
+A3 — NAMED-PHASE BUCKET HIT RATES (2026, one sample per day)
+Buckets: newMoon 358–2° (4° wide), firstQuarter 87–93°, fullMoon 177–183°, lastQuarter 267–273° (6° wide)
+Moon elongation advances ~12.2°/day → bucket dwell ≈ 0.5 day (full) / 0.33 day (new)
+
+Sampled daily at 00:00 UTC — actual full-moon lunations: 13; days labelled Full Moon cover 7 of them; New Moon events labelled: 4
+Sampled daily at 06:00 UTC — actual full-moon lunations: 13; days labelled Full Moon cover 8 of them; New Moon events labelled: 3
+Sampled daily at 12:00 UTC — actual full-moon lunations: 13; days labelled Full Moon cover 7 of them; New Moon events labelled: 3
+Sampled daily at 18:00 UTC — actual full-moon lunations: 13; days labelled Full Moon cover 6 of them; New Moon events labelled: 4
+
+A 'missed' full moon is labelled Waxing/Waning Gibbous instead; the waning-gibbous
+energy vector leads with classic (0.35) vs full moon's drama (0.35) + playful (0.30),
+so a missed full moon flips the day's lunar message.

@@ -1,0 +1,298 @@
+{
+  "_meta": {
+    "description": "SG-3 profile/register-keyed test & trap library (Phase 3e). Verbatim named tests and traps harvested from the 16 golden guides. Generation selects the chart's register bucket first, then falls back to 'any'. Consumed by tools/backfill_narratives.py and validated by SG-4's test/trap-presence check. Built by tools/build_test_trap_library.py from the golden guides.",
+    "schema_version": 1,
+    "cache_key_to_section": {
+      "style_core": "blueprint",
+      "palette_narrative": "palette",
+      "textures_good": "textures",
+      "textures_bad": "textures",
+      "textures_sweet_spot": "textures",
+      "occasions_work": "occasions",
+      "occasions_intimate": "occasions",
+      "occasions_daily": "occasions",
+      "hardware_metals": "hardware",
+      "hardware_stones": "hardware",
+      "hardware_tip": "hardware",
+      "accessory_1": "accessory",
+      "accessory_2": "accessory",
+      "accessory_3": "accessory",
+      "pattern_narrative": "pattern",
+      "pattern_tip": "pattern"
+    }
+  },
+  "sections": {
+    "blueprint": {
+      "tests": {
+        "quietLuxury": [
+          "trust your gut and walk away",
+          "the wrist test",
+          "the breath test",
+          "the shelter test",
+          "the decade test",
+          "the host test",
+          "the melt test"
+        ],
+        "boldExpression": [
+          "the hesitation test",
+          "the radius test",
+          "the entrance test"
+        ],
+        "versatileAdaptive": [
+          "the seam test",
+          "the fall test",
+          "the combination test",
+          "the half-mirror test",
+          "the treaty test",
+          "the flight test"
+        ]
+      },
+      "traps": {}
+    },
+    "palette": {
+      "tests": {},
+      "traps": {
+        "quietLuxury": [
+          {
+            "failure": "head-to-toe black reads like you gave up on the way out the door",
+            "fix": "break it up with one mid-tone layer from your base colours, or a scarf or belt in one of your accents"
+          },
+          {
+            "failure": "swaddling: layer upon layer of shapeless grey and the silhouette dissolves entirely",
+            "fix": "restore one defined line, a structured collar, a neat cuff, or let the keepsake pendant sit visibly at the neckline"
+          },
+          {
+            "failure": "dissolution: pale gauze on pale gauze with nothing beneath and the silhouette disappears",
+            "fix": "restore one line: a bias-cut slip that traces the body, a fitted base layer, or your relief colour worn closest to the skin"
+          },
+          {
+            "failure": "drowning in formless, head to toe black",
+            "fix": "break it with a single deliberate point of light, like a polished cuff or a comb that catches the lamplight"
+          },
+          {
+            "failure": "gilt overload: grandeur tips into gaudiness",
+            "fix": "hold the line at one molten flash and keep every other metal moment small, matt, and supporting"
+          },
+          {
+            "failure": "the all-earth sink: brown on olive on bark, all matt and all heavy, can swallow you whole",
+            "fix": "lift it: one pale layer at the collar, one piece of polished leather, or your relief colour"
+          },
+          {
+            "failure": "the sofa drift: soften every piece far enough and one day you are simply in loungewear",
+            "fix": "restore exactly one line: a rolled but real lapel, a trouser with a soft crease, or a firm leather bag against all that give"
+          }
+        ],
+        "boldExpression": [
+          {
+            "failure": "the fade trap: washed-out pieces dilute your natural energy",
+            "fix": "rescue the look immediately with a saturated accent at the neckline or a brilliant shoe"
+          },
+          {
+            "failure": "a restrictive dark monochrome look that stifles your presence",
+            "fix": "break the silhouette with one massive polished cuff or a shoe in your loudest accent"
+          },
+          {
+            "failure": "costume: leather, studs, red lip, gold hardware and a smoky eye all at once tips drama into fancy dress",
+            "fix": "hold the line at one molten flash and return every other element to matt black"
+          }
+        ],
+        "versatileAdaptive": [
+          {
+            "failure": "the beige-out: every piece at the same pale value looks unfinished rather than minimal",
+            "fix": "rescue it with your darkest neutral as an anchor piece or one true accent, and let one texture change restore the depth"
+          },
+          {
+            "failure": "total ice: unbroken grey on grey can read as absence rather than composure",
+            "fix": "add the polished signal, a mirror-finish cuff, a patent boot, or one line of electric colour"
+          },
+          {
+            "failure": "a flat monochrome look that bores you by midday",
+            "fix": "add a crisp poplin collar, one architectural metal ring, or a bright geometric sneaker"
+          },
+          {
+            "failure": "prettiness without anchor: all-pale, all-soft reads charming then forgettable by lunch",
+            "fix": "give it one anchor: a sharply tailored blazer, a structured flat, or your calmest base colour worn where the eye lands first"
+          },
+          {
+            "failure": "the seesaw: one month all floaty gauze, the next all crisp utility",
+            "fix": "re-weave instead: keep one item from the other hand in every outfit, always"
+          },
+          {
+            "failure": "the hard shell: reaching for armour, technical jackets, and stiff utility layers when life speeds up",
+            "fix": "swap the shell for a brushed cotton layer that moves just as fast and holds you besides"
+          }
+        ]
+      }
+    },
+    "textures": {
+      "tests": {
+        "quietLuxury": [
+          "the touch test",
+          "if a fabric resists your touch or feels squeaky between your fingers, leave it behind",
+          "the wrist test",
+          "the breath test",
+          "the collapse test",
+          "the patina test",
+          "the candlelight test",
+          "the melt test"
+        ],
+        "boldExpression": [
+          "the friction test (run your hand swiftly down the sleeve; seek the slip)",
+          "the bounce test",
+          "the shadow test"
+        ],
+        "versatileAdaptive": [
+          "the recovery test",
+          "the edge test",
+          "the snap test",
+          "the wrist-flick test",
+          "the two-hands test",
+          "the flight test"
+        ]
+      },
+      "traps": {}
+    },
+    "occasions": {
+      "tests": {
+        "any": [
+          "the pharmacy line: a trip to the pharmacy does not require suffering for the aesthetic",
+          "paying a utility bill does not require collapsing your silhouette",
+          "a midnight petrol station run still deserves a silhouette",
+          "a school run or a corner shop dash does not require surrendering your softness",
+          "a walk to the bakery does not require abandoning your atmosphere",
+          "a trip for milk does not require abandoning your silhouette",
+          "a hardware store run deserves the same clean fit as a Monday meeting",
+          "a trip to the dry cleaner does not suspend your standards",
+          "a market morning does not require abandoning proportion",
+          "walking the dog deserves the same standard as a meeting",
+          "a farmers' market run is still a small occasion",
+          "a rainy Sunday paper run deserves the same gentle standard",
+          "a packed day does not require hard clothes; it requires soft ones that can sprint"
+        ]
+      },
+      "traps": {}
+    },
+    "hardware": {
+      "tests": {
+        "any": [
+          "pick it up: looks lie, weight doesn't (the pick-it-up weight test)"
+        ],
+        "boldExpression": [
+          "the reflection rule: hold the hardware under a direct light source; if it does not produce a sharp, blinding reflection, it is too dull"
+        ]
+      },
+      "traps": {
+        "quietLuxury": [
+          {
+            "failure": "high-shine, polished chrome silver looks sharp and distracting next to soft muted colours",
+            "fix": "stick to matt and brushed textures to keep the look cohesive"
+          }
+        ],
+        "boldExpression": [
+          {
+            "failure": "oxidised, hammered, or antiqued finishes look tired and lack crispness",
+            "fix": "stay strictly in polished metal that catches the light from across the street"
+          }
+        ],
+        "versatileAdaptive": [
+          {
+            "failure": "antiqued brass, hammered copper, and artificially aged metal read as clutter against a present-tense style",
+            "fix": "keep to polished silver, platinum, white gold, and mirror chrome"
+          }
+        ]
+      }
+    },
+    "code": {
+      "tests": {
+        "any": [
+          "cost-per-wear",
+          "would I still wear this in five to ten years (five-to-ten-year longevity)"
+        ],
+        "boldExpression": [
+          "the velocity of the garment: ask if you can walk fast in it"
+        ],
+        "versatileAdaptive": [
+          "the maintenance test: ask exactly what this piece needs from you every week"
+        ],
+        "quietLuxury": [
+          "the heirloom / record-time question: ask what the garment will look like after fifty wears, and buy only if the answer is better"
+        ]
+      },
+      "traps": {
+        "quietLuxury": [
+          {
+            "failure": "buying things that only look good in photos",
+            "fix": "test the real hand-feel; a garment that is stiff or itchy in reality becomes an expensive paperweight"
+          },
+          {
+            "failure": "collecting cheap, seasonal trend pieces that lose their appeal by next year",
+            "fix": "invest slowly in pieces chosen with intention"
+          }
+        ],
+        "versatileAdaptive": [
+          {
+            "failure": "trend pieces that need explaining; if it requires context, it fails",
+            "fix": "keep to honest, legible pieces"
+          }
+        ]
+      }
+    },
+    "accessory": {
+      "tests": {
+        "quietLuxury": [
+          "remove the earring doing too much / one strong piece is enough",
+          "the keepsake test",
+          "the float test",
+          "the anchor test",
+          "the heirloom test",
+          "the one-ember test",
+          "the ripple test"
+        ],
+        "boldExpression": [
+          "the spotlight test",
+          "the stage test",
+          "the blackout test"
+        ],
+        "versatileAdaptive": [
+          "the function test",
+          "the one-signal test",
+          "the rotation test",
+          "the too-much test",
+          "the last-look test",
+          "the take-off test"
+        ]
+      },
+      "traps": {}
+    },
+    "pattern": {
+      "tests": {
+        "quietLuxury": [
+          "step back and soften focus (blur into texture)",
+          "the lamplight test (melt into a soft texture)",
+          "the underwater test (read like light moving on the seabed, not signage)",
+          "the twilight test (merge into a rich, deep texture)",
+          "the field test (settle into a natural texture like ground seen from a hill)",
+          "the firelight test (deepen and warm by lamplight)",
+          "the dusk test (settle into a warm, moving texture)"
+        ],
+        "boldExpression": [
+          "the ten foot rule (stay crisp, loud, and legible from across the room)",
+          "the twenty foot rule (bold and entirely legible from twenty feet)",
+          "the low-light rule (must still read as intent from ten feet in dim light)"
+        ],
+        "versatileAdaptive": [
+          "the desk test (read as clean texture at arm's length and a half)",
+          "the straight-edge test (lines stay crisp and true at three metres)",
+          "the blink test (not muddy or confusing in the first split second from ten feet)",
+          "the glance test (a pleasant impression rather than a specific shouting motif)",
+          "the arm's-length test (calm even texture far, rewarding weave close)",
+          "the passing test (reads as soft, pleasant texture in motion)"
+        ]
+      },
+      "traps": {},
+      "notes": [
+        "boldExpression charts invert the legibility target: the distance test demands the pattern STAY high-contrast and legible from a distance (Ember ten-foot, Blaze twenty-foot, Cinder low-light), whereas quietLuxury and versatileAdaptive charts want the pattern to BLUR into texture at distance."
+      ]
+    }
+  }
+}

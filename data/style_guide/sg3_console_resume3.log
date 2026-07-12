@@ -1,0 +1,21 @@
+[backfill_narratives.py] Backup gate satisfied by --backup-dir: /Users/ash/dev/mobile_apps/cosmicfit/data/content_backups/2026-07-07_pre-phase-3
+SG-3 backfill — 192 clusters, model=gemini-3.1-pro-preview
+Cost estimate (for the record): {"model": "gemini-3.1-pro-preview", "clusters": 192, "sections_per_cluster": 16, "base_section_calls": 3072, "holistic_calls": 192, "estimated_calls_with_retries": 4185, "estimated_tokens_order_of_magnitude": 8370000, "note": "Estimate for the record only. Generation spend pre-approved (Ash, 2026-07-06); not a blocking approval step."}
+Loaded 3 API key(s); 3 parallel worker(s). Live model: gemini-3.1-pro-preview
+Pending clusters: 6 (skipped 186 already-complete)
+  venus_aries__moon_taurus__earth_dominant: key quota exhausted; will resume later
+  venus_libra__moon_virgo__water_dominant: key quota exhausted; will resume later
+  [1/6] venus_sagittarius__moon_pisces__water_dominant (quietLuxury/warm) ok  elapsed=519s
+  [2/6] venus_leo__moon_cancer__water_dominant (quietLuxury/warm) ok  elapsed=621s
+  [3/6] venus_capricorn__moon_pisces__fire_dominant (quietLuxury/warm) ok  elapsed=675s
+  [4/6] venus_taurus__moon_capricorn__earth_dominant (quietLuxury/warm) ok  elapsed=1103s
+
+================================================================
+SG-3 BACKFILL COMPLETE
+  Totals: {'pass': 61, 'pass_after_retry': 3, 'quarantined': 0, 'skip_present': 2976, 'applied': 4}
+  API calls: 74 | elapsed: 1102.6s | clusters done: 4
+  Quarantined clusters: 0 -> data/style_guide/blueprint_narrative_cache_quarantine.json
+  Triage-tagged clusters: 177 -> data/style_guide/triage_status.json
+  Run log: data/style_guide/sg3_run_log.jsonl
+  Output: data/style_guide/blueprint_narrative_cache_sg3.json
+================================================================

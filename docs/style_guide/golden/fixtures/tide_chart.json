@@ -1,0 +1,49 @@
+{
+  "archetype": "tide",
+  "source": "docs/style_guide/golden/tide_ideal.md metadata block",
+  "cluster_key": "venus_scorpio__moon_cancer__water_dominant",
+  "chart_sect": "night",
+  "element_balance": {
+    "fire": 1,
+    "earth": 1,
+    "air": 1,
+    "water": 5
+  },
+  "modality_balance": {
+    "cardinal": 3,
+    "fixed": 3,
+    "mutable": 2
+  },
+  "chart_ruler": "Mars",
+  "sun_sign": "Pisces",
+  "moon_sign": "Cancer",
+  "venus_sign": "Scorpio",
+  "mars_sign": "Capricorn",
+  "ascendant_sign": "Scorpio",
+  "midheaven_sign": "Scorpio",
+  "planet_signs": {
+    "Sun": "Pisces",
+    "Moon": "Cancer",
+    "Mercury": "Scorpio",
+    "Venus": "Scorpio",
+    "Mars": "Capricorn",
+    "Jupiter": "Sagittarius",
+    "Saturn": "Aquarius",
+    "Uranus": "Virgo",
+    "Neptune": "Capricorn",
+    "Pluto": "Leo"
+  },
+  "planet_houses": {
+    "Sun": 4,
+    "Moon": 8,
+    "Mercury": 1,
+    "Venus": 12,
+    "Mars": 2,
+    "Jupiter": 1,
+    "Saturn": 3,
+    "Uranus": 10,
+    "Neptune": 2,
+    "Pluto": 9
+  },
+  "stellium_signs": []
+}
