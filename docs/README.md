@@ -14,12 +14,15 @@ This directory contains test artefacts, generated reports, historical notes, and
 | **Maintained local guides** | `../inspector/README.md`, `../tools/README.md`, `../data/style_guide/README.md` | Local usage only. Defer architecture claims to the root README. |
 | **Generated reports** | `../data/style_guide/*.md`, `../scripts/reports/`, `fixtures/*_audit.md` | Point-in-time tool output. Do not use as current architecture source. |
 | **QA / tuning fixtures** | `fixtures/` | Test, calibration, and audit artefacts. These are not app runtime docs. |
-| **Historical / pruned docs** | `archive/`, `handoff/`, `house_sect_regression/` | Historical context only. Do not infer current implementation behaviour from these paths. |
+| **Android port (current)** | `android_port/`, `handoff/ANDROID_PORT_HANDOFF_2026-07-12.md`, `handoff/ANDROID_PORT_KICKOFF_PROMPT.md`, `handoff/IAP_TRIAL_HANDOFF_2026-07-12.md` | Current port prep: source-verified iOS surface map, open engine-alignment decision, port execution handoff, and AI-developer kickoff prompt. |
+| **Historical / pruned docs** | `archive/`, `handoff/` (except the current files above), `house_sect_regression/` | Historical context only. Do not infer current implementation behaviour from these paths. |
 | **Calibration closure** | `calibration_*.md` | Closure and policy records. Production engine weights are superseded by Sky Forward v1.0.1 in the root README and `DailyFitEngineRegistry.swift`. |
 
 ## Current Architecture Entrypoints
 
 - Current app handoff: `../README.md`
+- Android port — open decision on cross-platform engine alignment: `android_port/TODO_shared_engine_strategy.md` (current; decide before Android planning locks module boundaries)
+- Android port — monetization/trial parity contract: `handoff/IAP_TRIAL_HANDOFF_2026-07-12.md` (current despite living under `handoff/`)
 - Shipped Daily Fit preset truth: `../Cosmic Fit/InterpretationEngine/DailyFitEngineRegistry.swift`
 - Local inspector usage: `../inspector/README.md`
 - Python tooling usage: `../tools/README.md`
