@@ -1,0 +1,131 @@
+{
+  "identifier" : "C05F1CF1-7A2E-4B8B-9E1D-3A5D0C9B21AA",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "C05F1CF2-0001-4000-8000-000000000001",
+      "localizations" : [
+
+      ],
+      "name" : "Full Access",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "7.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "C05F1CF2-0001-4000-8000-000000000002",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Full access, billed monthly.",
+              "displayName" : "Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.cosmicfit.full.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Full Access Monthly",
+          "subscriptionGroupID" : "C05F1CF2-0001-4000-8000-000000000001",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "49.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "C05F1CF2-0001-4000-8000-000000000003",
+          "introductoryOffer" : {
+            "internalID" : "C05F1CF2-0001-4000-8000-000000000004",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "Full access, billed annually after a 7-day free trial.",
+              "displayName" : "Annual",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.cosmicfit.full.annual",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Full Access Annually",
+          "subscriptionGroupID" : "C05F1CF2-0001-4000-8000-000000000001",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

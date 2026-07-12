@@ -1,0 +1,56 @@
+A1 — EFFECTIVE SOURCE SHARES OF THE DAILY SKY VIBE
+Cohort: 12 real-ephemeris profiles × 181 days (2026-01-01..2026-06-30), production engine
+Nominal sky mix: transits 0.25 / lunarPhase 0.60 / currentSun 0.15
+
+Effective share of pre-normalisation vibe energy:
+  lunar:      mean 0.0459  std 0.0050  min 0.0320  max 0.0675
+  transits:   mean 0.9413  std 0.0065  min 0.9131  max 0.9592
+  currentSun: mean 0.0129  std 0.0015  min 0.0088  max 0.0194
+
+Daily in-orb transit count: mean 59.7113  std 6.7343  min 41.0000  max 83.0000
+Pearson r (transit count vs effective transit share): 0.940
+Days where transits out-weigh lunar: 2172/2172 (100.0%)
+
+Effective transit share by daily transit count:
+  41 transits (n=   3): mean 0.917  min 0.913  max 0.922
+  43 transits (n=   4): mean 0.921  min 0.919  max 0.923
+  44 transits (n=   5): mean 0.923  min 0.920  max 0.926
+  45 transits (n=   4): mean 0.926  min 0.925  max 0.928
+  46 transits (n=  15): mean 0.925  min 0.918  max 0.930
+  47 transits (n=  24): mean 0.928  min 0.922  max 0.931
+  48 transits (n=  24): mean 0.929  min 0.923  max 0.932
+  49 transits (n=  38): mean 0.931  min 0.927  max 0.936
+  50 transits (n=  54): mean 0.932  min 0.926  max 0.937
+  51 transits (n=  49): mean 0.933  min 0.927  max 0.937
+  52 transits (n=  78): mean 0.934  min 0.929  max 0.940
+  53 transits (n=  72): mean 0.935  min 0.928  max 0.940
+  54 transits (n= 117): mean 0.936  min 0.929  max 0.940
+  55 transits (n= 115): mean 0.937  min 0.931  max 0.941
+  56 transits (n= 113): mean 0.938  min 0.932  max 0.944
+  57 transits (n= 121): mean 0.939  min 0.934  max 0.943
+  58 transits (n= 146): mean 0.940  min 0.934  max 0.944
+  59 transits (n= 136): mean 0.941  min 0.937  max 0.945
+  60 transits (n= 137): mean 0.942  min 0.937  max 0.947
+  61 transits (n= 122): mean 0.943  min 0.938  max 0.947
+  62 transits (n= 105): mean 0.944  min 0.940  max 0.947
+  63 transits (n= 113): mean 0.945  min 0.940  max 0.949
+  64 transits (n=  84): mean 0.946  min 0.940  max 0.949
+  65 transits (n=  77): mean 0.946  min 0.940  max 0.950
+  66 transits (n=  72): mean 0.947  min 0.942  max 0.950
+  67 transits (n=  62): mean 0.948  min 0.943  max 0.951
+  68 transits (n=  59): mean 0.948  min 0.943  max 0.951
+  69 transits (n=  46): mean 0.950  min 0.946  max 0.952
+  70 transits (n=  32): mean 0.950  min 0.946  max 0.954
+  71 transits (n=  26): mean 0.951  min 0.948  max 0.953
+  72 transits (n=  22): mean 0.951  min 0.949  max 0.955
+  73 transits (n=  26): mean 0.951  min 0.949  max 0.954
+  74 transits (n=  22): mean 0.952  min 0.949  max 0.954
+  75 transits (n=  14): mean 0.953  min 0.951  max 0.956
+  76 transits (n=  11): mean 0.954  min 0.951  max 0.956
+  77 transits (n=   7): mean 0.953  min 0.952  max 0.957
+  78 transits (n=   8): mean 0.956  min 0.954  max 0.958
+  79 transits (n=   2): mean 0.955  min 0.954  max 0.955
+  80 transits (n=   3): mean 0.955  min 0.954  max 0.956
+  81 transits (n=   1): mean 0.959  min 0.959  max 0.959
+  82 transits (n=   2): mean 0.956  min 0.955  max 0.957
+  83 transits (n=   1): mean 0.955  min 0.955  max 0.955

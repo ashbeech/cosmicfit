@@ -434,6 +434,16 @@ def build_section_prompt(
     if section_key == "style_core":
         parts.append(compass_instruction(p))
 
+    # SG-4: {excluded_finish} only resolves for some profiles (matching gate
+    # check excluded_finish_unresolvable). Tell the model up front rather than
+    # burning repair retries.
+    if section_key == "hardware_metals" and not profile_resolves_excluded_finish(p):
+        parts.append(
+            "\nEXCLUDED FINISH: this chart resolves NO excluded finish. Do NOT use "
+            "the {excluded_finish} placeholder anywhere. Name an embraced finish "
+            "in your own words instead (the finish this reader should lean into)."
+        )
+
     if ranked_items:
         parts.append(_ranked_grounding_block(section_key, ranked_items))
 
@@ -537,7 +547,26 @@ def formula_gate_errors(text: str, section_key: str, p: CoarseProfile) -> list[s
         paras = [x for x in text.split("\n\n") if x.strip()]
         if len(paras) < 2:
             errs.append("style_core_paragraph_floor: needs >= 2 paragraphs (blank-line separated)")
+    # SG-4: {excluded_finish} only resolves for muted lanes or warm/coolDominant
+    # strategies (DeterministicResolver finish-lane exclusions). Referencing it
+    # on a profile that resolves none renders the graceful fallback into
+    # composed prose (169 hardware_metals sections in the first 576 run).
+    if "{excluded_finish}" in text and not profile_resolves_excluded_finish(p):
+        errs.append("excluded_finish_unresolvable: this profile resolves no excluded "
+                    "finish; name an embraced finish instead of {excluded_finish}")
     return errs
+
+
+def profile_resolves_excluded_finish(p: CoarseProfile) -> bool:
+    """Mirrors DeterministicResolver's finish-lane exclusions exactly: the
+    mixedFree branch returns no exclusions regardless of lane; the muted lane
+    otherwise always excludes ("polished chrome"); warm/coolDominant carry a
+    default exclusion on any lane; non-muted dualRegister resolves none."""
+    if p.metal_strategy == "mixedFree":
+        return False
+    if p.finish_lane == "muted":
+        return True
+    return p.metal_strategy in ("warmDominant", "coolDominant")
 
 
 _LENGTH_BLOCK = {"style_core": 280}  # per-section hard cap; default below

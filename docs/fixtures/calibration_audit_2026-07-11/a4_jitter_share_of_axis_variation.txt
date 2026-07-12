@@ -1,0 +1,11 @@
+A4 — JITTER SHARE OF DAY-OVER-DAY AXIS VARIATION
+Cohort: 6 profiles × 91 days (2026-03-01..2026-05-30)
+Production axisTuning: sigmoidSpread 0.8, jitterRange 0.4
+Full-moon axis nudge range: ±0.3 (action/visibility), ±0.2 (tempo/strategy) — pre-sigmoid
+
+Mean per-axis day-over-day |Δ| (1–10 scale):
+  with production jitter (0.40): mean 1.4013  std 0.5638  min 0.1970  max 3.3742
+  with jitter disabled (0.00):   mean 1.0570  std 0.5628  min 0.0372  max 2.6893
+  → share of daily axis motion attributable to seeded noise: 24.6%
+
+Mean per-axis displacement caused by jitter within a single day: mean 0.5836  std 0.1825  min 0.0820  max 1.1711

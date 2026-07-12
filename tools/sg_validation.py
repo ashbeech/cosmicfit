@@ -146,14 +146,19 @@ def find_literal_leaks(text: str, section_key: str,
     return sorted(set(hits))
 
 
-AMERICAN_SPELLINGS = ["matte", "color", "colored", "coloring", "center", "gray",
-                      "jewelry", "organize", "realize", "recognize", "favorite",
-                      "flavor", "behavior", "traveler", "fiber", "neighbor", "labor"]
+def _american_rules() -> dict:
+    return load_rules()["american_spellings"]
 
 
 def find_american_spellings(text: str) -> list[str]:
+    """Blocked American spellings, loaded from style_guide_rules.json (SG-4:
+    extended with the SG-3 gate blind spots). `allowed_phrases` (jewellery
+    'curb chain', golden 'track pants') are stripped before matching."""
+    rules = _american_rules()
     low = text.lower()
-    return [w for w in AMERICAN_SPELLINGS if re.search(r"\b" + w + r"\b", low)]
+    for phrase in rules.get("allowed_phrases", []):
+        low = low.replace(phrase.lower(), " ")
+    return [w for w in rules["words"] if re.search(r"\b" + w + r"\b", low)]
 
 
 def missing_required_placeholders(text: str, section_key: str) -> list[str]:
@@ -190,15 +195,29 @@ _STAMP_NORM_RE = re.compile(r"[^a-z0-9]+")
 
 
 def _normalize_stamp(s: str) -> str:
-    return _STAMP_NORM_RE.sub(" ", s.lower()).strip()
+    """Lowercase, expand contractions (rules-driven, so \"doesn't\" == \"does
+    not\"), then collapse punctuation. SG-4 closes the SG-3 blind spot where
+    'Weight does not.' bypassed the literal 'Weight doesn't.' phrase."""
+    low = s.lower()
+    for old, new in load_rules().get("stamped_phrases", {}).get(
+            "contraction_replacements", []):
+        low = low.replace(old, new)
+    return _STAMP_NORM_RE.sub(" ", low).strip()
 
 
 def find_stamped_phrases(text: str) -> list[str]:
-    """Verbatim stock sentences (normalised, punctuation-insensitive) that must
-    never be reproduced in the cache. Loaded from style_guide_rules.json."""
-    phrases = load_rules().get("stamped_phrases", {}).get("phrases", [])
+    """Verbatim stock sentences (normalised, punctuation- and contraction-
+    insensitive) plus structural regex patterns ('Weight and X do not') that
+    must never be reproduced in the cache. Loaded from style_guide_rules.json."""
+    sp = load_rules().get("stamped_phrases", {})
     norm_text = _normalize_stamp(text)
-    return [p for p in phrases if _normalize_stamp(p) in norm_text]
+    hits = [p for p in sp.get("phrases", []) if _normalize_stamp(p) in norm_text]
+    for pattern in sp.get("patterns", []):
+        m = re.search(pattern, norm_text)
+        if m and not any(_normalize_stamp(h) in _normalize_stamp(m.group(0))
+                         for h in hits):
+            hits.append(f"pattern: {pattern}")
+    return hits
 
 
 # ─── Individual checks ────────────────────────────────────────────────
@@ -262,31 +281,19 @@ def filler_count(text: str) -> tuple[int, list[str]]:
     return len(hits), hits
 
 
-def concrete_noun_floor(text: str, minimum: int = 2) -> bool:
+def concrete_noun_floor(text: str, minimum: int | None = None) -> bool:
     """Heuristic concreteness floor: at least `minimum` named concrete nouns
-    (colours / fibres / metals / stones / garments) present. Uses the colour +
-    metal + stone lexicons plus a small garment list. Warning-level only."""
+    (colours / fibres / metals / stones / garments) present. Lexicon + minimum
+    load from style_guide_rules.json (SG-4: shared with the Swift validator).
+    Warning-level only."""
+    cl = load_rules()["concrete_lexicon"]
+    if minimum is None:
+        minimum = cl["minimum"]
     lower = text.lower()
-    concrete = _CONCRETE_LEXICON
-    found = sum(1 for w in concrete if re.search(rf"\b{re.escape(w)}\b", lower))
+    found = sum(1 for w in cl["words"] if re.search(rf"\b{re.escape(w)}\b", lower))
     # Placeholders count as concrete (they resolve to named nouns at render).
     found += len(_PLACEHOLDER_RE.findall(text))
     return found >= minimum
-
-
-_CONCRETE_LEXICON = set("""
-cashmere wool merino tweed silk leather suede linen cotton velvet corduroy
-denim mohair alpaca camelhair gabardine twill flannel jersey satin charmeuse
-crepe chiffon organza taffeta canvas nylon neoprene viscose polyester acrylic
-gold silver brass copper platinum pewter gunmetal bronze chrome steel titanium
-rhodium garnet onyx quartz pearl moonstone opal aquamarine ruby citrine emerald
-diamond sapphire amber jade turquoise lapis agate tourmaline topaz obsidian
-malachite carnelian amethyst hematite labradorite peridot coral spinel
-coat blazer trousers jacket blouse shirt dress skirt knit knitwear scarf belt
-bag handbag boots loafers trainers shoes buckle clasp zip ring pendant cuff
-necklace earring watch fedora camel toffee taupe cream olive moss oxblood
-burgundy plum cognac charcoal oatmeal ecru khaki sage teal petrol navy stone
-""".split())
 
 
 # ─── Cross-section phrase repetition + dedup hints (Phase 3c) ──────────

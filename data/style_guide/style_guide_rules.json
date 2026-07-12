@@ -11,12 +11,52 @@
   },
 
   "stamped_phrases": {
-    "comment": "Verbatim stock sentences that leaked from illustrative prompt text into the cache at scale (SG-3 run 2 audit: the Slate 'weight' compass appeared on ~85% of clusters incl. wrong-modality fire/air charts; 'a soft note used sparingly' in 118). BLOCKED everywhere (normalised, punctuation-insensitive) so every chart must phrase its compass/relief in fresh words. Append any new illustrative sentence a prompt introduces. The golden guides may use these; the cache at scale may not.",
+    "comment": "Verbatim stock sentences that leaked from illustrative prompt text into the cache at scale (SG-3 run 2 audit: the Slate 'weight' compass appeared on ~85% of clusters incl. wrong-modality fire/air charts; 'a soft note used sparingly' in 118). BLOCKED everywhere (normalised, punctuation-insensitive) so every chart must phrase its compass/relief in fresh words. Append any new illustrative sentence a prompt introduces. The golden guides may use these; the cache at scale may not. SG-4: normalisation now expands contractions (contraction_replacements, applied to lowercased text before punctuation stripping) so 'doesn't' == 'does not', and `patterns` are regexes run on the normalised text to catch structural variants ('Weight and glitter do not') that bypassed SG-3's literal check.",
     "phrases": [
       "Looks lie. Weight doesn't.",
       "Trust this physical instinct as your ultimate compass",
       "a soft note used sparingly"
+    ],
+    "contraction_replacements": [
+      ["won't", "will not"],
+      ["can't", "cannot"],
+      ["n't", " not"]
+    ],
+    "patterns": [
+      "\\blooks lie\\b.{0,10}\\bweight\\b(?: and [a-z ]{1,40})? do(?:es)? not\\b"
     ]
+  },
+
+  "american_spellings": {
+    "comment": "Blocked American spellings (word-boundary, case-insensitive). Base list from the SG-3 gate plus the SG-4 promotion of the gate blind spots hand-fixed in both caches (rigor, artifact, mold, pavement curb, pants, -ize verbs). allowed_phrases are stripped from the text before matching: 'curb chain' is a jewellery term (golden-legitimate) and 'track pants' appears in frost_ideal.md (the guides win). 'rigorous'/'rigorously' are correct British English and are NOT matched (word boundary on 'rigor' cannot match them).",
+    "words": ["matte", "color", "colored", "coloring", "center", "gray",
+              "jewelry", "organize", "realize", "recognize", "favorite",
+              "flavor", "behavior", "traveler", "fiber", "neighbor", "labor",
+              "rigor", "artifact", "artifacts", "mold", "molds", "molded",
+              "pants", "curb", "curbs",
+              "finalize", "finalized", "finalizing",
+              "visualize", "visualized", "visualizing",
+              "prioritize", "prioritized", "prioritizing",
+              "scrutinize", "scrutinized", "scrutinizing",
+              "memorize", "memorized", "memorizing",
+              "recognizable", "organized", "organizing", "realized", "realizing"],
+    "allowed_phrases": ["curb chain", "track pants"]
+  },
+
+  "concrete_lexicon": {
+    "comment": "Named concrete nouns (fibres, metals, stones, garments, colours) counted toward the concreteness floor (style_standard.md section 9). Placeholders also count (they resolve to named nouns at render). Warning-level: fewer than `minimum` named concrete nouns in a section. Moved verbatim from the sg_validation.py inline constant at SG-4 so the Swift StyleGuideCoherenceValidator loads the identical list.",
+    "minimum": 2,
+    "words": ["cashmere", "wool", "merino", "tweed", "silk", "leather", "suede", "linen", "cotton", "velvet", "corduroy",
+              "denim", "mohair", "alpaca", "camelhair", "gabardine", "twill", "flannel", "jersey", "satin", "charmeuse",
+              "crepe", "chiffon", "organza", "taffeta", "canvas", "nylon", "neoprene", "viscose", "polyester", "acrylic",
+              "gold", "silver", "brass", "copper", "platinum", "pewter", "gunmetal", "bronze", "chrome", "steel", "titanium",
+              "rhodium", "garnet", "onyx", "quartz", "pearl", "moonstone", "opal", "aquamarine", "ruby", "citrine", "emerald",
+              "diamond", "sapphire", "amber", "jade", "turquoise", "lapis", "agate", "tourmaline", "topaz", "obsidian",
+              "malachite", "carnelian", "amethyst", "hematite", "labradorite", "peridot", "coral", "spinel",
+              "coat", "blazer", "trousers", "jacket", "blouse", "shirt", "dress", "skirt", "knit", "knitwear", "scarf", "belt",
+              "bag", "handbag", "boots", "loafers", "trainers", "shoes", "buckle", "clasp", "zip", "ring", "pendant", "cuff",
+              "necklace", "earring", "watch", "fedora", "camel", "toffee", "taupe", "cream", "olive", "moss", "oxblood",
+              "burgundy", "plum", "cognac", "charcoal", "oatmeal", "ecru", "khaki", "sage", "teal", "petrol", "navy", "stone"]
   },
 
   "banned_tics": {

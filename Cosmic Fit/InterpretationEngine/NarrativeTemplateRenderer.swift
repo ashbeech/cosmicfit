@@ -71,6 +71,19 @@ struct NarrativeTemplateRenderer {
         text.contains("⟦UNFILLED:") || text.contains("⟦UNKNOWN:")
     }
 
+    /// Production graceful fallback for a recognised-but-unfilled placeholder,
+    /// worded by token family (SG-4: "titanium or a complementary metal" reads
+    /// as advice; the old generic "a complementary choice" read as a glitch).
+    static func fallbackText(for token: String) -> String {
+        if token.contains("metal") { return "a complementary metal" }
+        if token.contains("stone") { return "a complementary stone" }
+        if token.contains("colour") { return "a complementary shade" }
+        if token.contains("pattern") { return "a complementary pattern" }
+        if token.contains("texture") { return "a complementary weave" }
+        if token.contains("finish") { return "a complementary finish" }
+        return "a complementary choice"
+    }
+
     // MARK: - Rendering
 
     private static let placeholderPattern = try! NSRegularExpression(
@@ -96,7 +109,7 @@ struct NarrativeTemplateRenderer {
                 replacement = value
             } else if allPlaceholders.contains(token) {
                 // Recognised placeholder with no context value.
-                replacement = qaModeEnabled ? unfilledSentinel(token) : "a complementary choice"
+                replacement = qaModeEnabled ? unfilledSentinel(token) : fallbackText(for: token)
                 if qaModeEnabled {
                     print("[NarrativeTemplateRenderer] QA: unfilled placeholder {\(token)}")
                 }
@@ -212,7 +225,10 @@ struct NarrativeTemplateRenderer {
             }
         } else {
             for (i, name) in colourResult.palette.accentColours.enumerated() {
-                ctx["accent_colour_\(i + 1)"] = name
+                // The assembled accent band may hold raw hexes (engine step
+                // 14e); prose must carry colour names.
+                ctx["accent_colour_\(i + 1)"] = name.hasPrefix("#")
+                    ? PaletteLibrary.nearestColourName(forHex: name) : name
             }
         }
 

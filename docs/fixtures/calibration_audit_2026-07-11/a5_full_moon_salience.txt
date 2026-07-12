@@ -1,0 +1,12 @@
+A5 — FULL-MOON SALIENCE IN THE OUTPUT
+Cohort: 6 profiles × 181 days (2026-01-01..2026-06-30), production engine
+
+Day-over-day vibe L1 delta (21-point budget, 42 max):
+  same lunar bucket (n=858):    mean 1.1702  std 1.1673  min 0.0000  max 6.0000
+  bucket-change days (n=222): mean 1.5045  std 1.1807  min 0.0000  max 4.0000
+  entering fullMoon bucket (n=24): mean 1.2500  std 0.9682  min 0.0000  max 2.0000
+
+Mean of (action+visibility)/2 axis value (1–10):
+  near full moon (proximity>0.9, n=120): mean 7.6391  std 0.7002  min 5.9989  max 9.2039
+  near quarters  (0.4<prox<0.6, n=216): mean 7.0517  std 0.9150  min 4.6928  max 9.4434
+  near new moon  (proximity<0.1, n=90): mean 6.3014  std 1.2129  min 4.2504  max 9.3671

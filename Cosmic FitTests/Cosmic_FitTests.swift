@@ -1585,7 +1585,8 @@ struct NarrativeTemplateRendererTests {
 
         #expect(!result.contains("{"))
         #expect(!result.contains("}"))
-        #expect(result.contains("a complementary choice"))
+        // SG-4: fallback wording is token-family-aware (colour → "shade").
+        #expect(result.contains("a complementary shade"))
     }
 
     @Test("Template with no placeholders passes through unchanged")
@@ -1624,8 +1625,9 @@ struct NarrativeTemplateRendererTests {
         #expect(ctx["core_colour_1"] == "midnight")
         #expect(ctx["core_colour_2"] == "slate")
         #expect(ctx["accent_colour_1"] == "dusty rose")
-        #expect(ctx["metal_1"] == "silver tones")
-        #expect(ctx["metal_2"] == "steel tones")
+        // SG-2 Phase 2c: metal names render verbatim (no " tones" garble).
+        #expect(ctx["metal_1"] == "silver")
+        #expect(ctx["metal_2"] == "steel")
         #expect(ctx["stone_1"] == "onyx")
         #expect(ctx["stone_2"] == "obsidian")
         #expect(ctx["recommended_pattern_1"] == "pinstripe")

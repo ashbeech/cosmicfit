@@ -228,7 +228,8 @@ struct SG2RendererTests {
         let out = NarrativeTemplateRenderer.render(
             template: "Pair {personal_metal_1} with something.", context: ctx)
         // No split → graceful fallback string, never empty.
-        #expect(out.contains("a complementary choice"))
+        // (SG-4: fallback wording is token-family-aware.)
+        #expect(out.contains("a complementary metal"))
         #expect(!out.isEmpty)
     }
 

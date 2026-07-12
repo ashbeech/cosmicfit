@@ -45,8 +45,49 @@ RT = json.loads((REPO_ROOT / "data" / "style_guide" / "ranked_domain_tables.json
 EX = json.loads((REPO_ROOT / "data" / "style_guide" / "section_examples.json").read_text())["section_examples"]
 
 _PH = re.compile(r"\{[a-z_0-9]+\}")
-AMERICAN = ["matte", "color", "colored", "center", "gray", "jewelry", "organize",
-            "realize", "recognize", "favorite", "flavor", "behavior", "traveler"]
+
+# SG-4: the accessory restraint principle ("one or two strong pieces per look",
+# style_standard.md section 5 row 7) may be phrased in fresh words (de-stamping),
+# but SOME explicit numeric per-look restraint must be present. Informational:
+# residual clusters are listed for the reviewer, mirroring the composed-output
+# check in SG4ComposedContractTests.swift.
+_RESTRAINT_NOUN = (r"(pieces?|items?|details?|accessor\w+|signals?|additions?|"
+                   r"objects?|elements?|accents?|focal points?|keepsakes?|"
+                   r"flash(?:es)?|touch(?:es)?|points?|components?|anchors?)")
+RESTRAINT_PRINCIPLE_RE = re.compile(
+    r"\b(one or two|a single|a solitary|exactly one|one|two)\b[^.]{0,60}\b"
+    + _RESTRAINT_NOUN
+    + r"\b[^.]{0,40}\b(per (look|outfit|ensemble)|at a time|is (sufficient|enough|mandatory|always enough)|anchors an outfit)\b"
+    r"|\b(limit|restrict|confine|cap|hold|require|need|demand)\w*[^.]{0,80}\b(one or two|a single|a solitary|single|solitary|one|two)\b[^.]{0,60}\b"
+    + _RESTRAINT_NOUN + r"\b"
+    r"|\ba (single|solitary) strong " + _RESTRAINT_NOUN + r"\b",
+    re.IGNORECASE)
+
+# SG-4 composed-output audit: internal archetype codenames must never reach a
+# user-facing string (found as "(Wren)"-style provenance attributions baked
+# into the deterministic tests arrays from test_trap_library.json).
+ARCHETYPE_ATTRIBUTION_RE = re.compile(
+    r"\((Slate|Ember|Zephyr|Cove|Blaze|Flint|Frost|Mist|Moss|Cinder|Breeze|"
+    r"Tide|Ripple|Hearth|Loom|Wren)\)")
+
+# SG-4: register-keyed library strings that assert a temperature must not
+# contradict the chart's temperature/metal lane (found: the boldExpression
+# hardware trap fix said "polished warm metal" on coolDominant charts).
+_TEMP_CONTRADICTION_CHECKS = [
+    # (substring in test/trap string, profile predicate description, predicate)
+    ("warm metal", "coolDominant", lambda p: p.metal_strategy == "coolDominant"),
+    ("cool metal", "warmDominant", lambda p: p.metal_strategy == "warmDominant"),
+    ("warm point of light", "cool temperature", lambda p: p.temperature == "cool"),
+    ("cool point of light", "warm temperature", lambda p: p.temperature == "warm"),
+]
+
+
+def _iter_test_trap_strings(sec: dict):
+    for t in sec.get("tests") or []:
+        yield t
+    for tr in sec.get("traps") or []:
+        yield tr.get("failure", "")
+        yield tr.get("fix", "")
 
 
 def _colour_names() -> set[str]:
@@ -115,12 +156,34 @@ def audit(cache: dict) -> dict:
                 findings["B_unknown_placeholder"].append((k, sk, unknown))
             if sk in V.GROUP_B_SECTIONS and not toks:
                 findings["B_groupB_no_placeholder"].append((k, sk))
+            # SG-4: {excluded_finish} on a profile that resolves none renders
+            # the graceful fallback into composed prose (regen candidates;
+            # see docs/style_guide/sg4/excluded_finish_regen_list.json).
+            if "excluded_finish" in toks and not G.profile_resolves_excluded_finish(prof):
+                findings["B_excluded_finish_unresolvable"].append((k, sk))
 
-            # G. spelling
-            low = text.lower()
-            am = [w for w in AMERICAN if re.search(r"\b" + w + r"\b", low)]
+            # G. spelling — same rules-driven check as the write gate (SG-4:
+            # extended word list + allowed phrases), so audit >= gate.
+            am = V.find_american_spellings(text)
             if am:
                 findings["G_american_spelling"].append((k, sk, am))
+
+            # G2. stamped phrases/patterns — the gate check re-run over the
+            # cache (SG-4: contraction-insensitive + structural patterns).
+            st = V.find_stamped_phrases(text)
+            if st:
+                findings["G_stamped_phrase"].append((k, sk, st[:2]))
+
+            # L. user-facing tests/traps arrays (SG-4): archetype-codename
+            # attributions and temperature-contradicting library strings.
+            for s in _iter_test_trap_strings(sec):
+                if ARCHETYPE_ATTRIBUTION_RE.search(s):
+                    findings["L_archetype_attribution"].append((k, sk, s[:60]))
+                for needle, lane, pred in _TEMP_CONTRADICTION_CHECKS:
+                    if needle in s.lower() and pred(prof):
+                        findings["L_temp_contradiction"].append((k, sk, f"{needle!r} on {lane}"))
+            if ARCHETYPE_ATTRIBUTION_RE.search(text) or (intro and ARCHETYPE_ATTRIBUTION_RE.search(intro)):
+                findings["L_archetype_attribution"].append((k, sk, "in prose/intro"))
 
             # H. length + concreteness
             wc = len(text.split())
@@ -183,6 +246,13 @@ def audit(cache: dict) -> dict:
             findings["F_palette_temp_mismatch"].append((k, "warm-profile reads cool"))
         if prof.temperature == "cool" and "warm" in pal and "cool" not in pal:
             findings["F_palette_temp_mismatch"].append((k, "cool-profile reads warm"))
+
+        # E2. accessory restraint principle (informational; fresh phrasing is
+        # expected, so residuals here are for reviewer eyes, not hard failures)
+        acc_text = " ".join(obj.get(f"accessory_{i}", {}).get("text", "")
+                            for i in (1, 2, 3) if isinstance(obj.get(f"accessory_{i}"), dict))
+        if not RESTRAINT_PRINCIPLE_RE.search(acc_text):
+            findings["E_accessory_principle_unmatched"].append(k)
 
         # I. accessory omit leakage
         plan = accessory_plan(prof.aesthetic_register, prof.orientation, prof.finish_lane)

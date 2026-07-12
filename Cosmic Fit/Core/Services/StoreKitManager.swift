@@ -107,4 +107,60 @@ final class StoreKitManager {
         let savings = (yearlyAtMonthly - annual.price) / yearlyAtMonthly * 100
         return NSDecimalNumber(decimal: savings).intValue
     }
+
+    // MARK: - Introductory Offer
+
+    /// The annual product's free-trial introductory offer, if one is configured
+    /// in App Store Connect. Nil for pay-as-you-go / pay-up-front intro offers.
+    var annualFreeTrialOffer: Product.SubscriptionOffer? {
+        guard let offer = annualProduct?.subscription?.introductoryOffer,
+              offer.paymentMode == .freeTrial else { return nil }
+        return offer
+    }
+
+    var annualTrialIsOneWeek: Bool {
+        guard let period = annualFreeTrialOffer?.period else { return false }
+        return (period.unit == .week && period.value == 1)
+            || (period.unit == .day && period.value == 7)
+    }
+
+    /// e.g. "7 days" — for the paywall card ("7 days free, then …/year").
+    var annualTrialDurationText: String? {
+        guard let period = annualFreeTrialOffer?.period else { return nil }
+        return Self.trialDurationText(value: period.value, unit: period.unit)
+    }
+
+    /// e.g. "7-day" — for the disclosure sentence ("a 7-day free trial").
+    var annualTrialDurationAdjective: String? {
+        guard let period = annualFreeTrialOffer?.period else { return nil }
+        return Self.trialDurationAdjective(value: period.value, unit: period.unit)
+    }
+
+    /// Eligibility is tracked by Apple per subscription group. Fails closed
+    /// (false) when products haven't loaded or no free trial is configured.
+    func isEligibleForAnnualIntroOffer() async -> Bool {
+        guard annualFreeTrialOffer != nil,
+              let subscription = annualProduct?.subscription else { return false }
+        return await subscription.isEligibleForIntroOffer
+    }
+
+    static func trialDurationText(value: Int, unit: Product.SubscriptionPeriod.Unit) -> String {
+        switch unit {
+        case .day:   return value == 1 ? "1 day" : "\(value) days"
+        case .week:  return "\(value * 7) days"
+        case .month: return value == 1 ? "1 month" : "\(value) months"
+        case .year:  return value == 1 ? "1 year" : "\(value) years"
+        @unknown default: return "\(value) days"
+        }
+    }
+
+    static func trialDurationAdjective(value: Int, unit: Product.SubscriptionPeriod.Unit) -> String {
+        switch unit {
+        case .day:   return "\(value)-day"
+        case .week:  return "\(value * 7)-day"
+        case .month: return value == 1 ? "1-month" : "\(value)-month"
+        case .year:  return value == 1 ? "1-year" : "\(value)-year"
+        @unknown default: return "\(value)-day"
+        }
+    }
 }

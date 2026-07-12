@@ -551,7 +551,7 @@
         "mood": [
           "Step away from detached, ultra-modern looks that offer none of the emotional comfort you crave.",
           "Clinical, stark white ensembles that strip away the soft, protective layering your style requires.",
-          "Harsh architectural lines that disrupt the fluid, gentle silhouettes you naturally gravitate towards.",
+          "Harsh architectural lines that disrupt the fluid, gentle silhouettes you instinctively reach for.",
           "Aggressive hardware and stiff leather that ruin the welcoming, tactile softness of your wardrobe."
         ]
       }
@@ -689,7 +689,7 @@
         ],
         "mood": [
           "Understated basics that fail to match your naturally glamorous and thoroughly confident presence.",
-          "Self-effacing styling choices that intentionally hide your inherent need to command the room.",
+          "Self-effacing styling choices that intentionally dim your inherent warmth and presence.",
           "Playing it safe with an invisible outfit when you were born to wear the boldest statement pieces.",
           "Bland colour palettes that completely drain the dramatic, joyful energy from your daily dressing."
         ]
@@ -837,7 +837,7 @@
       }
     },
     "venus_libra": {
-      "style_philosophy": "balanced, harmonious, effortlessly elegant",
+      "style_philosophy": "balanced, harmonious, quietly elegant",
       "textures": {
         "good": [
           "fluid silk",
@@ -5150,7 +5150,7 @@
         "Harsh industrial textures that contradict your natural grace, as rough fabrics actively fight your personal style instead of channelling it effectively."
       ],
       "code_consider": [
-        "Applying strategic colour theory to your daily rotation by choosing soft blush for approachability, crisp navy poplin for authority, and clean white cotton for absolute neutrality.",
+        "Applying strategic colour theory to your everyday wardrobe by choosing soft blush for approachability, crisp navy poplin for authority, and clean white cotton for absolute neutrality.",
         "The role of proportion in first impressions. Balanced shoulders, a defined waist, and a clean line project confidence without confrontation."
       ],
       "opposites": {
@@ -5458,7 +5458,7 @@
       "code_leaninto": [
         "Wielding sartorial discipline as your ultimate power tool to prove that a perfectly maintained wardrobe of dark staples communicates supreme authority.",
         "Making enduring quality the foundation of your style statement. Pieces that look better with age mirror your own trajectory.",
-        "Dressing with the authority of someone who has already arrived. Your wardrobe should project seniority even before you have earned it."
+        "Dressing with settled, unhurried authority. Your wardrobe should project seniority even before you have earned it."
       ],
       "code_avoid": [
         "Frivolous or immature pieces that undermine your natural gravitas. If it looks playful, it is fighting your energy.",
@@ -10276,7 +10276,7 @@
         "Playing it safe with neutral basics, because your worldly experience absolutely demands a much wider visual vocabulary."
       ],
       "code_consider": [
-        "Bring home exactly one brilliantly crafted piece per trip to integrate straight into your daily rotation.",
+        "Bring home exactly one brilliantly crafted piece per trip and put it straight to work in your everyday wardrobe.",
         "Globally-sourced accessories as conversation pieces that carry stories from the places you have visited."
       ],
       "opposites": {
@@ -10707,7 +10707,7 @@
           "Anything predictable or risk-free that plays it entirely safe with your silhouette.",
           "Steer completely clear of expected outfit formulas that rob your look of a rebellious punch.",
           "Hiding your figure behind quiet cuts and muted shades like a timid shrinking violet.",
-          "Throw out the traditional rulebook and banish standard, boring uniforms from your daily rotation."
+          "Throw out the traditional rulebook and banish standard, boring uniforms from your everyday dressing."
         ]
       }
     },
@@ -11295,7 +11295,7 @@
         "Safe, pretty dressing just for the sake of looking socially acceptable."
       ],
       "code_consider": [
-        "Introducing exactly one iridescent piece into your daily rotation to act as a compelling visual focal point.",
+        "Introducing exactly one iridescent piece into your regular line-up to act as a compelling visual focal point.",
         "Unusual colour pairings that still feel balanced on the body."
       ],
       "opposites": {
@@ -12839,7 +12839,7 @@
         "Cold uninspired authority that lacks vision or soul. Power without imagination is just bureaucracy."
       ],
       "code_consider": [
-        "Introducing razor-sharp midnight-blue suiting into your rotation as a daily act of completely unbothered, visionary authority.",
+        "Introducing razor-sharp midnight-blue suiting into your rotation as a daily act of calm, visionary authority.",
         "Wearing heavily structured silk that brings an unexpectedly dreamlike quality to your everyday power dressing."
       ],
       "opposites": {
@@ -13346,7 +13346,7 @@
       ],
       "occasion_modifiers": {
         "work": "strategic communication power, every outfit says exactly what you need it to",
-        "intimate": "dual-natured depth, the allure of someone who contains multitudes",
+        "intimate": "dual-natured depth, an allure built on containing multitudes",
         "daily": "shape-shifting as power, different people see different versions"
       },
       "code_leaninto": [
@@ -13760,7 +13760,7 @@
       },
       "code_leaninto": [
         "Treating your beauty as a form of power rather than mere prettiness, since depth and darkness make elegance more compelling.",
-        "Choosing a dark elegance over a superficial sparkle, because genuine refinement does not need to glitter to command the room.",
+        "Choosing a dark elegance over a superficial sparkle, because genuine refinement does not need to glitter to be felt.",
         "Prioritising aesthetics that have been through fire and emerged stronger."
       ],
       "code_avoid": [
@@ -14490,7 +14490,7 @@
     },
     "ascendant_conjunction_venus": {
       "effect": "beauty as first impression, effortless attractiveness",
-      "texture_modifier": "naturally gravitates toward beautiful fabrics",
+      "texture_modifier": "is instinctively drawn toward beautiful fabrics",
       "colour_modifier": "instinctively flattering palette",
       "code_addition_leaninto": "Prioritising your natural allure by selecting pieces that frame your silhouette immediately.",
       "code_addition_avoid": "Hiding behind oversized, boxy shapes that completely drown out your natural physical magnetism and elegant silhouette."
@@ -14653,8 +14653,8 @@
         "intimate"
       ],
       "lean_into_bias": [
-        "Embracing brilliantly bold colour pairings in heavy silks that demand attention the moment you walk into a room.",
-        "Injecting your daily rotation with romantic, tactile details like delicate lace trims or beautifully constructed ruffles."
+        "Embracing brilliantly bold colour pairings in heavy silks that demand attention at first sight.",
+        "Injecting your everyday wardrobe with romantic, tactile details like delicate lace trims or beautifully constructed ruffles."
       ],
       "hardware_bias": {
         "metals": [
@@ -14783,7 +14783,7 @@
       ],
       "code_consider_bias": [
         "Prioritising incredibly polished finishes over distressed fabrics to maintain a consistently sharp, authoritative look.",
-        "Treating immaculate fit and precision tailoring as entirely non-negotiable elements of your professional wardrobe."
+        "Treating immaculate fit and precision tailoring as entirely non-negotiable at work."
       ],
       "occasion_bias": [
         "work",
@@ -14835,7 +14835,7 @@
       ],
       "code_consider_bias": [
         "Prioritising the internal sensation of heavy silks and soft cashmere over external visual expectations.",
-        "Anchorring your daily rotation in fluid silk silhouettes and exquisitely soft cashmere knitwear rather than rigid, restrictive tailoring."
+        "Anchoring your everyday wardrobe in fluid silk silhouettes and exquisitely soft cashmere knitwear rather than rigid, restrictive tailoring."
       ],
       "occasion_bias": [
         "intimate"
@@ -15063,7 +15063,7 @@
       ],
       "lean_into_bias": [
         "Achieving polished comfort by selecting elevated fabrics and tailored pieces that still feel incredibly soft.",
-        "Commanding quiet respect instantly by anchoring your professional wardrobe with razor-sharp structural blazers and immaculately tailored waistcoats."
+        "Commanding quiet respect instantly by anchoring your working wardrobe with razor-sharp structural blazers and immaculately tailored waistcoats."
       ]
     },
     "moon_house_11": {
@@ -15182,7 +15182,7 @@
       ],
       "code_consider_bias": [
         "Integrating vintage family heirlooms and heritage fabrics into your everyday rotation to anchor your modern look.",
-        "Base your daily rotations on a heavy-hitting foundation of perfectly cut selvedge denim and crisp white cotton poplin."
+        "Base your everyday dressing on a heavy-hitting foundation of perfectly cut selvedge denim and crisp white cotton poplin."
       ],
       "occasion_bias": [
         "intimate"
@@ -15287,7 +15287,7 @@
       ],
       "code_consider_bias": [
         "Seeking out international textiles and artisanal construction to build a genuinely global wardrobe.",
-        "Grounding your daily rotation in a clear aesthetic intention by selecting heavily textured garments that communicate a distinct cultural history."
+        "Grounding your everyday wardrobe in a clear aesthetic intention by selecting heavily textured garments that communicate a distinct cultural history."
       ],
       "occasion_bias": [
         "daily"
@@ -15329,7 +15329,7 @@
         "group"
       ],
       "code_consider_bias": [
-        "Supporting independent British designers and zero-waste construction methods to ensure your daily rotation reflects your progressive ideals.",
+        "Supporting independent British designers and zero-waste construction methods so the clothes you actually live in reflect your progressive ideals.",
         "Wearing relaxed, unrestrictive silhouettes that encourage ease of movement and approachability at social events."
       ],
       "occasion_bias": [

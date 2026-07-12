@@ -9,6 +9,7 @@ final class PurchaseViewController: UIViewController {
     private var loadState: LoadState = .loading
     private var selectedProduct: Product?
     private var isPurchasing = false
+    private var showTrialOffer = false
 
     // MARK: - UI Components
 
@@ -270,6 +271,7 @@ final class PurchaseViewController: UIViewController {
         Task {
             await StoreKitManager.shared.loadProducts()
             if StoreKitManager.shared.monthlyProduct != nil, StoreKitManager.shared.annualProduct != nil {
+                showTrialOffer = await StoreKitManager.shared.isEligibleForAnnualIntroOffer()
                 loadState = .loaded
                 configureProductCards()
                 selectProduct(isAnnual: true)
@@ -289,8 +291,16 @@ final class PurchaseViewController: UIViewController {
             return "Save \(pct)%"
         }()
 
-        annualCard.configure(title: "Annual", priceText: "\(annual.displayPrice)/year", badge: savingsText)
+        let annualPriceText: String
+        if showTrialOffer, let trial = StoreKitManager.shared.annualTrialDurationText {
+            annualPriceText = "\(trial) free, then \(annual.displayPrice)/year"
+        } else {
+            annualPriceText = "\(annual.displayPrice)/year"
+        }
+
+        annualCard.configure(title: "Annual", priceText: annualPriceText, badge: savingsText)
         monthlyCard.configure(title: "Monthly", priceText: "\(monthly.displayPrice)/month", badge: nil)
+        updateDisclosure()
     }
 
     private func selectProduct(isAnnual: Bool) {
@@ -301,6 +311,31 @@ final class PurchaseViewController: UIViewController {
         }
         annualCard.setSelected(isAnnual)
         monthlyCard.setSelected(!isAnnual)
+        updateCTATitle()
+    }
+
+    private var isAnnualSelected: Bool {
+        selectedProduct?.id == StoreKitManager.annualProductID
+    }
+
+    private var ctaTitle: String {
+        guard isAnnualSelected, showTrialOffer else { return "Subscribe Now" }
+        return StoreKitManager.shared.annualTrialIsOneWeek ? "Start Free Week" : "Start Free Trial"
+    }
+
+    private func updateCTATitle() {
+        ctaButton.setTitle(ctaTitle, for: .normal)
+    }
+
+    private func updateDisclosure() {
+        let base = "Subscription automatically renews unless cancelled at least 24 hours before the end of the current period. Manage subscriptions in Settings."
+        if showTrialOffer,
+           let trial = StoreKitManager.shared.annualTrialDurationAdjective,
+           let annual = StoreKitManager.shared.annualProduct {
+            disclosureLabel.text = "Annual plan starts with a \(trial) free trial. You will not be charged until the trial ends; \(annual.displayPrice)/year is then charged unless you cancel at least 24 hours before the trial ends. " + base
+        } else {
+            disclosureLabel.text = base
+        }
     }
 
     private func updateUI() {
@@ -351,7 +386,7 @@ final class PurchaseViewController: UIViewController {
                 showInlineMessage(error.localizedDescription)
             }
             isPurchasing = false
-            ctaButton.setTitle("Subscribe Now", for: .normal)
+            updateCTATitle()
             ctaSpinner.stopAnimating()
             ctaButton.isEnabled = true
         }
@@ -459,6 +494,8 @@ private final class SubscriptionOptionCard: UIControl {
         priceLabel.font = CosmicFitTheme.Typography.dmSansFont(size: 16, weight: .medium)
         priceLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
         priceLabel.textAlignment = .right
+        priceLabel.adjustsFontSizeToFitWidth = true
+        priceLabel.minimumScaleFactor = 0.75
 
         badgeLabel.font = CosmicFitTheme.Typography.dmSansFont(size: 11, weight: .bold)
         badgeLabel.textColor = .white
@@ -479,6 +516,7 @@ private final class SubscriptionOptionCard: UIControl {
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             priceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             priceLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            priceLabel.leadingAnchor.constraint(greaterThanOrEqualTo: badgeLabel.trailingAnchor, constant: 8),
             badgeLabel.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 8),
             badgeLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             badgeLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 60),

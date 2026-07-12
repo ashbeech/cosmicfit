@@ -564,6 +564,19 @@ final class StyleGuideDetailViewController: UIViewController {
         CosmicFitTheme.styleGatedPaywallButton(unlockButton, title: "Unlock Your Style Guide")
         unlockButton.translatesAutoresizingMaskIntoConstraints = false
         unlockButton.accessibilityLabel = "Unlock Your Style Guide"
+
+        // Trial-forward copy when the user is eligible for the annual free
+        // trial; fails closed to the default "Unlock" copy.
+        Task { [weak self] in
+            if StoreKitManager.shared.annualProduct == nil {
+                await StoreKitManager.shared.loadProducts()
+            }
+            guard await StoreKitManager.shared.isEligibleForAnnualIntroOffer(),
+                  StoreKitManager.shared.annualTrialIsOneWeek,
+                  let self else { return }
+            CosmicFitTheme.styleGatedPaywallButton(self.unlockButton, title: "Try 7 Days Free")
+            self.unlockButton.accessibilityLabel = "Try 7 Days Free"
+        }
         unlockButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         unlockButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         unlockButton.addTarget(self, action: #selector(unlockButtonTapped), for: .touchUpInside)

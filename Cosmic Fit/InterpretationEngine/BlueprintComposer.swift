@@ -55,9 +55,30 @@ struct BlueprintComposer {
         narrativeCache: NarrativeCacheLoader
     ) -> BlueprintComposeResult {
         let analysis = ChartAnalyser.analyse(chart: chart)
-
-        // V4 colour engine — the only palette path
         let adapted = ChartInputAdapter.adapt(analysis: analysis, natalChart: chart)
+        return composeCore(
+            analysis: analysis,
+            adapted: adapted,
+            birthDate: birthDate,
+            birthLocation: birthLocation,
+            dataset: dataset,
+            narrativeCache: narrativeCache
+        )
+    }
+
+    /// SG-4 seam: the full composition pipeline from a pre-built analysis +
+    /// adapted V4 input. Lets the composed-contract tests drive golden fixture
+    /// charts (signs only, no birth time). Production always enters through
+    /// `compose`/`composeFull` above.
+    static func composeCore(
+        analysis: ChartAnalysis,
+        adapted: ChartInputAdapter.AdaptedInput,
+        birthDate: Date,
+        birthLocation: String,
+        dataset: AstrologicalStyleDataset,
+        narrativeCache: NarrativeCacheLoader
+    ) -> BlueprintComposeResult {
+        // V4 colour engine — the only palette path
         let colourResult = ColourEngine.evaluateProduction(input: adapted.colourInput)
 
         let tokenResult = BlueprintTokenGenerator.generate(
@@ -129,6 +150,8 @@ struct BlueprintComposer {
             accentLabelOverrides: renamedAccentLabels
         )
         templateContext.merge(v4Context) { _, v4 in v4 }
+        padColourContext(&templateContext, colourResult: colourResult,
+                         accentLabels: renamedAccentLabels)
 
         for sectionKey in NarrativeTemplateRenderer.groupBSections {
             guard let raw = narrativesMut[sectionKey], !raw.isEmpty else { continue }
@@ -226,15 +249,22 @@ struct BlueprintComposer {
                 tests: hardwareContract?.tests,
                 traps: hardwareContract?.traps
             ),
-            code: CodeSection(
-                leanInto: resolved.leanInto,
-                avoid: resolved.avoid,
-                consider: resolved.consider,
-                sectionIntro: codeContract?.sectionIntro,
-                rankedItems: codeContract?.rankedItems,
-                tests: codeContract?.tests,
-                traps: codeContract?.traps
-            ),
+            code: {
+                let completed = completeCodeContract(
+                    leanInto: resolved.leanInto,
+                    consider: resolved.consider,
+                    coreFormula: structured?.coreFormula
+                )
+                return CodeSection(
+                    leanInto: completed.leanInto,
+                    avoid: resolved.avoid,
+                    consider: completed.consider,
+                    sectionIntro: codeContract?.sectionIntro,
+                    rankedItems: codeContract?.rankedItems,
+                    tests: codeContract?.tests,
+                    traps: codeContract?.traps
+                )
+            }(),
             accessory: AccessorySection(
                 paragraphs: [
                     narrativesMut[BlueprintArchetypeKey.BlueprintSection.accessoryParagraph1.rawValue] ?? "",
@@ -270,6 +300,117 @@ struct BlueprintComposer {
         )
 
         return BlueprintComposeResult(blueprint: blueprint, diagnostics: diagnostics)
+    }
+
+    // MARK: - SG-4 Phase 4b: render completeness + Code contract
+
+    /// Render-completeness backstop (SG-4 Phase 4b). Cache prose may reference
+    /// the 3rd/4th member of a colour placeholder family; some charts' V4
+    /// palette bands provide fewer names, which previously rendered the
+    /// graceful fallback ("a complementary choice") into composed prose.
+    /// Pads missing colour slots from the user's OWN resolved palette
+    /// (band leftovers, then support colours, then anchors) so every rendered
+    /// name stays swatch-consistent. No-op for fully populated charts.
+    static func padColourContext(
+        _ ctx: inout [String: String],
+        colourResult: ColourEngineResult,
+        accentLabels: [String] = []
+    ) {
+        let neutrals = colourResult.palette.neutrals
+        let core = colourResult.palette.coreColours
+        // The assembled palette's accentColours band holds raw HEXES (the
+        // engine syncs it to accentHexes at step 14e); display labels are the
+        // deduplicated accent labels. Never pad prose from hexes.
+        let accents = accentLabels
+        let overflow = (colourResult.palette.supportColours ?? [])
+            + [colourResult.palette.lightAnchor, colourResult.palette.deepAnchor]
+
+        // Per-family preferred fill order: same band first, then support/
+        // anchors, then the nearest other bands — always the user's own
+        // resolved palette, never library values. Belt-and-braces: any pool
+        // value that is still a raw hex is converted to the nearest wardrobe
+        // colour token before it can reach prose.
+        func named(_ pool: [String]) -> [String] {
+            pool.map { $0.hasPrefix("#") ? PaletteLibrary.nearestColourName(forHex: $0) : $0 }
+        }
+        let families: [(prefix: String, pool: [String])] = [
+            ("neutral_colour_", named(neutrals + overflow + core + accents)),
+            ("core_colour_", named(core + overflow + neutrals + accents)),
+            ("accent_colour_", named(accents + overflow + core + neutrals)),
+        ]
+        let colourKeys = families.flatMap { family in
+            (1...4).map { "\(family.prefix)\($0)" }
+        }
+        // Distinctness only needs to hold across the colour tokens themselves
+        // (the values other tokens hold — metals, variables — cannot collide
+        // with a colour naming in prose).
+        var used = Set(colourKeys.compactMap { ctx[$0]?.lowercased() })
+
+        // Pass 1 — dedupe: some V4 families repeat a name across bands, so two
+        // prose tokens would name the same colour under two roles (and the §6
+        // six-colour floor becomes unreachable). Keep the first occurrence,
+        // remap later duplicates to the next unused colour.
+        var seen = Set<String>()
+        for (prefix, pool) in families {
+            for i in 1...4 {
+                let key = "\(prefix)\(i)"
+                guard let value = ctx[key], !value.isEmpty else { continue }
+                if seen.contains(value.lowercased()) {
+                    if let next = pool.first(where: {
+                        !seen.contains($0.lowercased()) && !used.contains($0.lowercased())
+                    }) {
+                        ctx[key] = next
+                        seen.insert(next.lowercased())
+                        used.insert(next.lowercased())
+                    }
+                } else {
+                    seen.insert(value.lowercased())
+                }
+            }
+        }
+
+        // Pass 2 — fill: slots the V4 bands left empty.
+        for (prefix, pool) in families {
+            for i in 1...4 {
+                let key = "\(prefix)\(i)"
+                if let value = ctx[key], !value.isEmpty { continue }
+                guard let next = pool.first(where: { !used.contains($0.lowercased()) }) else { continue }
+                ctx[key] = next
+                used.insert(next.lowercased())
+            }
+        }
+    }
+
+    /// SG-4: the Code composed-section contract (style_standard.md §5 row 6)
+    /// requires the first Lean Into to state the coreFormula, a cost-per-wear
+    /// directive, and the five-to-ten-years longevity test. The deterministic
+    /// dataset directives predate the standard and do not always carry them;
+    /// this completes the floor. Active only when the cache cluster is v2
+    /// (coreFormula present), so shipped v1 behaviour is unchanged until the
+    /// SG-4 cutover.
+    static func completeCodeContract(
+        leanInto: [String],
+        consider: [String],
+        coreFormula: String?
+    ) -> (leanInto: [String], consider: [String]) {
+        guard let formula = coreFormula, !formula.isEmpty else {
+            return (leanInto, consider)
+        }
+        var leanInto = leanInto
+        var consider = consider
+        if !(leanInto.first ?? "").lowercased().contains(formula.lowercased()) {
+            leanInto.insert("Anchoring every choice in your formula: \(formula).", at: 0)
+        }
+        let combined = (leanInto + consider).joined(separator: " ").lowercased()
+        if !combined.contains("cost-per-wear") && !combined.contains("cost per wear") {
+            consider.append("Judging every purchase on cost-per-wear rather than ticket price. "
+                + "A well-made piece worn two hundred times costs less than a cheap one worn twice.")
+        }
+        if !combined.contains("five to ten years") {
+            consider.append("Asking whether you would still wear a piece in five to ten years. "
+                + "If the answer wavers, leave it behind.")
+        }
+        return (leanInto, consider)
     }
 
     // MARK: - Palette console readout

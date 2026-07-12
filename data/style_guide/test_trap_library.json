@@ -55,7 +55,7 @@
         "quietLuxury": [
           {
             "failure": "head-to-toe black reads like you gave up on the way out the door",
-            "fix": "break it up with a camel layer, a deep wine scarf, or a rich cognac belt"
+            "fix": "break it up with one mid-tone layer from your base colours, or a scarf or belt in one of your accents"
           },
           {
             "failure": "swaddling: layer upon layer of shapeless grey and the silhouette dissolves entirely",
@@ -63,11 +63,11 @@
           },
           {
             "failure": "dissolution: pale gauze on pale gauze with nothing beneath and the silhouette disappears",
-            "fix": "restore one line: a bias-cut slip that traces the body, a fitted base layer, or the deep sea blue anchor worn closest to the skin"
+            "fix": "restore one line: a bias-cut slip that traces the body, a fitted base layer, or your relief colour worn closest to the skin"
           },
           {
             "failure": "drowning in formless, head to toe black",
-            "fix": "break it with a warm point of light, like a hammered gold cuff or a tortoiseshell comb"
+            "fix": "break it with a single deliberate point of light, like a polished cuff or a comb that catches the lamplight"
           },
           {
             "failure": "gilt overload: grandeur tips into gaudiness",
@@ -75,7 +75,7 @@
           },
           {
             "failure": "the all-earth sink: brown on olive on bark, all matt and all heavy, can swallow you whole",
-            "fix": "lift it: an oatmeal cream layer at the collar, one piece of polished leather, or the washed blue relief"
+            "fix": "lift it: one pale layer at the collar, one piece of polished leather, or your relief colour"
           },
           {
             "failure": "the sofa drift: soften every piece far enough and one day you are simply in loungewear",
@@ -89,7 +89,7 @@
           },
           {
             "failure": "a restrictive dark monochrome look that stifles your presence",
-            "fix": "break the silhouette with a massive polished gold cuff or a bright poppy red shoe"
+            "fix": "break the silhouette with one massive polished cuff or a shoe in your loudest accent"
           },
           {
             "failure": "costume: leather, studs, red lip, gold hardware and a smoky eye all at once tips drama into fancy dress",
@@ -99,7 +99,7 @@
         "versatileAdaptive": [
           {
             "failure": "the beige-out: every piece at the same pale value looks unfinished rather than minimal",
-            "fix": "rescue it with a graphite anchor piece or a bottle green accent, and let one texture change restore the depth"
+            "fix": "rescue it with your darkest neutral as an anchor piece or one true accent, and let one texture change restore the depth"
           },
           {
             "failure": "total ice: unbroken grey on grey can read as absence rather than composure",
@@ -107,11 +107,11 @@
           },
           {
             "failure": "a flat monochrome look that bores you by midday",
-            "fix": "add a crisp white poplin collar, a silver architectural ring, or a bright geometric sneaker"
+            "fix": "add a crisp poplin collar, one architectural metal ring, or a bright geometric sneaker"
           },
           {
             "failure": "prettiness without anchor: all-pale, all-soft reads charming then forgettable by lunch",
-            "fix": "give it one anchor: a sharply tailored blazer, a structured flat, or the gentle navy piece worn where the eye lands first"
+            "fix": "give it one anchor: a sharply tailored blazer, a structured flat, or your calmest base colour worn where the eye lands first"
           },
           {
             "failure": "the seesaw: one month all floaty gauze, the next all crisp utility",
@@ -155,19 +155,19 @@
     "occasions": {
       "tests": {
         "any": [
-          "the pharmacy line: a trip to the pharmacy does not require suffering for the aesthetic (Slate)",
-          "paying a utility bill does not require collapsing your silhouette (Blaze)",
-          "a midnight petrol station run still deserves a silhouette (Cinder)",
-          "a school run or a corner shop dash does not require surrendering your softness (Cove)",
-          "a walk to the bakery does not require abandoning your atmosphere (Mist)",
-          "a trip for milk does not require abandoning your silhouette (Tide)",
-          "a hardware store run deserves the same clean fit as a Monday meeting (Flint)",
-          "a trip to the dry cleaner does not suspend your standards (Frost)",
-          "a market morning does not require abandoning proportion (Breeze)",
-          "walking the dog deserves the same standard as a meeting (Moss)",
-          "a farmers' market run is still a small occasion (Hearth)",
-          "a rainy Sunday paper run deserves the same gentle standard (Ripple)",
-          "a packed day does not require hard clothes; it requires soft ones that can sprint (Wren)"
+          "the pharmacy line: a trip to the pharmacy does not require suffering for the aesthetic",
+          "paying a utility bill does not require collapsing your silhouette",
+          "a midnight petrol station run still deserves a silhouette",
+          "a school run or a corner shop dash does not require surrendering your softness",
+          "a walk to the bakery does not require abandoning your atmosphere",
+          "a trip for milk does not require abandoning your silhouette",
+          "a hardware store run deserves the same clean fit as a Monday meeting",
+          "a trip to the dry cleaner does not suspend your standards",
+          "a market morning does not require abandoning proportion",
+          "walking the dog deserves the same standard as a meeting",
+          "a farmers' market run is still a small occasion",
+          "a rainy Sunday paper run deserves the same gentle standard",
+          "a packed day does not require hard clothes; it requires soft ones that can sprint"
         ]
       },
       "traps": {}
@@ -191,7 +191,7 @@
         "boldExpression": [
           {
             "failure": "oxidised, hammered, or antiqued finishes look tired and lack crispness",
-            "fix": "stay strictly in polished warm metal that catches the light from across the street"
+            "fix": "stay strictly in polished metal that catches the light from across the street"
           }
         ],
         "versatileAdaptive": [
