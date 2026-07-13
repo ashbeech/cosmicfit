@@ -1,6 +1,6 @@
 # SG-4 Gate: Swift Validation Layer, Composed-Output Contract, 576 Cutover Readiness
 
-STATUS: AWAITING REVIEW
+STATUS: APPROVED (2026-07-13, Ash) — cutover live as "V2"; v1 retained for rollback (see sign-off)
 
 > Gate file per the master plan's "Human gate protocol". The shipped v1 cache
 > (`data/style_guide/blueprint_narrative_cache.json`) must not be replaced
@@ -193,7 +193,7 @@ cp data/style_guide/blueprint_narrative_cache_sg4.json \
 
 | Field | Value |
 |---|---|
-| Reviewer name | |
-| Date | |
-| Verdict (`APPROVED` / `CHANGES REQUESTED`) | **AWAITING REVIEW** |
-| Notes | |
+| Reviewer name | Ash |
+| Date | 2026-07-13 |
+| Verdict (`APPROVED` / `CHANGES REQUESTED`) | **APPROVED** |
+| Notes | Approved after on-device (own account) + Inspector testing. Cutover executed; SG-4 is now the live content, referred to henceforth as **"V2"**. **Stipulation: v1 must NOT be destroyed** — retained at `data/content_backups/blueprint_narrative_cache_v1_pre_sg4.json` as a permanent last-resort rollback (revert = copy it over `data/style_guide/blueprint_narrative_cache.json`). Two post-cutover content/render fixes applied this session and covered by this approval: (1) renderer guard hides bare `the … test` bullet entries (`StyleGuideDetailViewController.isBareNamedTest`, see `TODO_tests_backfill.md`); (2) 94 Title-Cased inline `the … Test/Check` names lowercased in the canonical cache to match golden register. Forward workflow: paragraph amendments handled retroactively via the partner's live paragraph-editor tool (download updated JSON per build) — release is not gated on per-paragraph review. §4.2 pinned temperature deviation remains an accepted non-blocker. |

@@ -83,9 +83,17 @@ struct StyleGuideDetailContent {
             }.joined(separator: "\n")
             out.append(TextSection(subheading: "Ranked", bodyText: body))
         }
-        if let tests, !tests.isEmpty {
-            out.append(TextSection(subheading: "Tests",
-                                   bodyText: tests.map { "• \($0)" }.joined(separator: "\n")))
+        if let tests {
+            // SG-4 stopgap: the shipped narrative cache emits ~40% of `tests`
+            // entries as bare named labels ("the host test") with no
+            // explanatory clause, which read as meaningless to the user. Hide
+            // those until they are backfilled to the "name: meaning" form.
+            // See docs/style_guide/TODO_tests_backfill.md.
+            let shown = tests.filter { !Self.isBareNamedTest($0) }
+            if !shown.isEmpty {
+                out.append(TextSection(subheading: "Tests",
+                                       bodyText: shown.map { "• \($0)" }.joined(separator: "\n")))
+            }
         }
         if let traps, !traps.isEmpty {
             let body = traps.map { "• \($0.failure) → \($0.fix)" }.joined(separator: "\n")
@@ -95,6 +103,20 @@ struct StyleGuideDetailContent {
             out.append(TextSection(subheading: "Closing", bodyText: closing))
         }
         return out
+    }
+
+    /// SG-4 stopgap guard (see `outputContractTrailingSections`): a `tests`
+    /// entry is "bare" — a named heuristic with no explanation the reader can
+    /// act on — when it is of the shape `the … test` and carries no `:` or
+    /// `(…)` clause. The explained forms in the cache always contain one of
+    /// those markers (e.g. `pick it up: looks lie, weight doesn't (the
+    /// pick-it-up weight test)`), so this hides only the label-only entries.
+    /// Remove once the cache is backfilled — TODO_tests_backfill.md.
+    static func isBareNamedTest(_ raw: String) -> Bool {
+        let s = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !s.contains(":"), !s.contains("(") else { return false }
+        let lower = s.lowercased()
+        return lower.hasPrefix("the ") && lower.hasSuffix(" test")
     }
 
     enum StyleGuideSection {
@@ -1130,7 +1152,7 @@ final class StyleGuideDetailViewController: UIViewController {
         // present (nil → no change).
         if let intro = content.sectionIntro?.trimmingCharacters(in: .whitespacesAndNewlines),
            !intro.isEmpty {
-            contentStackView.addArrangedSubview(createBodyLabel(text: intro))
+            addBody(intro)
         }
 
         let allSections = content.textSections + content.outputContractTrailingSections()
@@ -1146,11 +1168,7 @@ final class StyleGuideDetailViewController: UIViewController {
                 }
             }
 
-            let trimmedBody = textSection.bodyText.trimmingCharacters(in: .whitespacesAndNewlines)
-            if !trimmedBody.isEmpty {
-                let bodyLabel = createBodyLabel(text: textSection.bodyText)
-                contentStackView.addArrangedSubview(bodyLabel)
-            }
+            addBody(textSection.bodyText)
         }
 
         if let customComponent = content.customComponent {
@@ -1207,12 +1225,37 @@ final class StyleGuideDetailViewController: UIViewController {
 
     private static let sentencesPerParagraph = 2
 
-    private func createBodyLabel(text: String) -> UIView {
+    /// Adds a section body to the content stack, one label per paragraph.
+    ///
+    /// Authored paragraph breaks (`\n\n`) become separate arranged subviews so
+    /// the gap between paragraphs is `contentStackView.spacing` — the same gap
+    /// used between the section intro and body, and between every other block.
+    /// Rendering `\n\n` inside a single label instead produced a blank line
+    /// plus paragraph spacing on both sides (~2x too tall). Bodies without an
+    /// authored break (bullet lists, single narratives) keep the existing
+    /// single-label path, including its sentence-splitting fallback.
+    private func addBody(_ text: String) {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+
+        if trimmed.contains("\n\n") {
+            let blocks = trimmed.components(separatedBy: "\n\n")
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
+            for block in blocks {
+                contentStackView.addArrangedSubview(createBodyLabel(text: block, splitParagraphs: false))
+            }
+        } else {
+            contentStackView.addArrangedSubview(createBodyLabel(text: text))
+        }
+    }
+
+    private func createBodyLabel(text: String, splitParagraphs: Bool = true) -> UIView {
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
 
         let label = UILabel()
-        label.attributedText = Self.paragraphFormatted(text)
+        label.attributedText = Self.paragraphFormatted(text, splitParagraphs: splitParagraphs)
         label.textColor = CosmicFitTheme.Colours.cosmicBlue
         label.textAlignment = .left
         label.numberOfLines = 0
@@ -1231,7 +1274,7 @@ final class StyleGuideDetailViewController: UIViewController {
         return container
     }
 
-    private static func paragraphFormatted(_ text: String) -> NSAttributedString {
+    private static func paragraphFormatted(_ text: String, splitParagraphs: Bool = true) -> NSAttributedString {
         let style = NSMutableParagraphStyle()
         style.paragraphSpacing = 8
         style.lineSpacing = 3
@@ -1247,6 +1290,12 @@ final class StyleGuideDetailViewController: UIViewController {
         ]
 
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // A single authored paragraph rendered on its own — no in-label
+        // splitting. Paragraph-to-paragraph spacing is handled by the stack.
+        if !splitParagraphs {
+            return NSAttributedString(string: trimmed, attributes: attrs)
+        }
 
         if trimmed.contains("\n\n") {
             return NSAttributedString(string: trimmed, attributes: attrs)
