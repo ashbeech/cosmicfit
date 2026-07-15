@@ -411,7 +411,7 @@ final class StyleGuideDetailViewController: UIViewController {
 
         let bottomConstraint = bottomDividerContainer.bottomAnchor.constraint(
             equalTo: contentView.bottomAnchor,
-            constant: -CosmicFitTheme.Layout.scrollContentBottomInset
+            constant: -CosmicFitTheme.Layout.styleGuideScrollContentBottomInset
         )
         bottomDividerToContentBottom = bottomConstraint
 

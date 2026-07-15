@@ -2284,19 +2284,6 @@ class DailyFitViewController: UIViewController {
 
     private func configureRestrictedUnlockButton() {
         CosmicFitTheme.styleGatedPaywallButton(restrictedUnlockButton, title: "Unlock Your Daily Fit")
-
-        // Trial-forward copy when the user is eligible for the annual free
-        // trial; fails closed to the default "Unlock" copy.
-        Task { [weak self] in
-            if StoreKitManager.shared.annualProduct == nil {
-                await StoreKitManager.shared.loadProducts()
-            }
-            guard await StoreKitManager.shared.isEligibleForAnnualIntroOffer(),
-                  StoreKitManager.shared.annualTrialIsOneWeek,
-                  let self else { return }
-            CosmicFitTheme.styleGatedPaywallButton(self.restrictedUnlockButton, title: "Try 7 Days Free")
-            self.restrictedUnlockButton.accessibilityLabel = "Try 7 Days Free"
-        }
     }
 
     @objc private func restrictedUnlockTapped() {

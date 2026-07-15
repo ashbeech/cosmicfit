@@ -58,8 +58,12 @@ npm install
 ```bash
 npm run seed
 ```
-Imports the three content files into `dash_baseline` (blob → Storage) and builds
-the editable-field registry in `dash_field`.
+Imports the **two v1 copy files** into `dash_baseline` — blueprint (10.6 MB blob
+→ Storage bucket) and TarotCards (→ JSONB) — and builds the editable-field
+registry in `dash_field` (~19.5k fields). The **Astrological Style Dataset is
+deferred to v2** and intentionally not seeded: it's an *engine generation input*,
+not rendered copy, so editing it would change nothing in the app until the Style
+Guide pipeline re-runs. It appears read-only in the file picker with a banner.
 
 > ⚠️ **Seed source-of-truth.** The seed reads **today's committed V2**
 > `data/style_guide/blueprint_narrative_cache.json` (with the capitalization +
@@ -86,7 +90,8 @@ Open http://localhost:3000 and log in.
 ## What you should be able to do locally
 
 - Log in as `maria` / `ash`; every page and `/api/*` is gated (unauthenticated → login).
-- Browse blueprint clusters, filtered by **Venus / Moon / Element** facets.
+- Browse blueprint clusters (filtered by **Venus / Moon / Element** facets) and
+  Tarot cards; the astro dataset shows read-only with a "deferred to v2" banner.
 - **Search** any word — client-side, ranked, typo-tolerant, instant (≥2 chars).
 - Edit a paragraph in an always-on textarea; **Save** per box (bottom-right).
 - Expand a field's **history dropdown**: prior versions with word-diff, author,
@@ -96,27 +101,48 @@ Open http://localhost:3000 and log in.
 
 ---
 
+## One-time TarotCards normalization (do once, before the first export drop)
+
+`TarotCards.json` ships today with a mix of inline and multi-line arrays, so it
+does not round-trip under a clean re-serialize. Run:
+```bash
+npm run normalize:tarot
+```
+This writes the normalized form (indent 4, produced by the exporter's **own** Node
+serializer — verified idempotent) to `content-dashboard/.generated/TarotCards.json`.
+It does **not** touch the real file. Review the diff (only array formatting should
+change), then commit it once over `Cosmic Fit/Resources/TarotCards.json`. After
+that single commit, every dashboard export of TarotCards stays a minimal diff.
+
 ## Export → repo hand-off (owner: Ash)
 
-Export produces a **downloadable bundle only** — the app never writes into the
-repo. To ship copy into an iOS build:
+Export produces a **downloadable `.zip` bundle only** — the app never writes into
+the repo. The v1 bundle contains three content files + a `manifest.json`:
+`blueprint_narrative_cache.json` **and** `blueprint_narrative_cache_sg4.json`
+(identical bytes — keeps the `inspector/` consumer in sync) and
+`TarotCards.json`. (The astro dataset is not in the bundle — it's deferred to v2.)
 
-1. Export in the dashboard → download the bundle.
+To ship copy into an iOS build:
+
+1. Export in the dashboard → download the bundle → unzip.
 2. **Backup gate first:**
    `python3 tools/backup_content_sources.py backup --domain all --label export-vNN`
 3. Drop files at canonical paths:
    - `data/style_guide/blueprint_narrative_cache.json` **and**
-     `data/style_guide/blueprint_narrative_cache_sg4.json` (identical bytes — keeps
-     the `inspector/` consumer in sync)
-   - `data/style_guide/astrological_style_dataset.json`
+     `data/style_guide/blueprint_narrative_cache_sg4.json` (identical bytes)
    - `Cosmic Fit/Resources/TarotCards.json` (real file, overwrite in place)
-4. `git diff` should show only the fields you changed.
+4. `git diff` should show only the fields you changed (plus the one-time
+   TarotCards array-formatting normalization, on the first drop only).
 5. Build in Xcode; confirm the log reads `Loaded 576 archetype clusters (schema v2)`.
 6. Commit the files + `manifest.json`.
 
-The **core safety test**: a zero-override export must be **byte-identical**
-(sha256) to the committed baseline. This runs as an automated check — see the
-plan's Verification section.
+The **core safety test**: a zero-override export is **byte-identical** (sha256)
+to the committed blueprint baseline. It runs as an automated check:
+```bash
+npm test
+```
+(no database needed — it drives the pure reconstruction path against the local
+committed files.)
 
 ---
 
@@ -127,8 +153,9 @@ plan's Verification section.
 | `npm run dev` | Start the local dev server (http://localhost:3000). |
 | `npm run seed` | Import baselines + build the field registry (sha256-gated). |
 | `npm run seed:users` | Insert `maria` + `ash` from `SEED_*` env passwords. |
+| `npm run normalize:tarot` | Generate the one-time normalized `TarotCards.json` (→ `.generated/`, review + commit by hand). |
 | `npm run build` | Production build (used by Vercel later). |
-| `npm test` | Round-trip / export integrity checks. |
+| `npm test` | Round-trip / export integrity checks (no DB needed). |
 
 ---
 

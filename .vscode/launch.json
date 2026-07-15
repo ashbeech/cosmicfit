@@ -1,0 +1,24 @@
+{
+  "configurations": [
+    {
+      "type": "swift",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:cosmicfit}/inspector",
+      "name": "Debug cosmicfit-inspector (inspector)",
+      "target": "cosmicfit-inspector",
+      "configuration": "debug",
+      "preLaunchTask": "swift: Build Debug cosmicfit-inspector (inspector)"
+    },
+    {
+      "type": "swift",
+      "request": "launch",
+      "args": [],
+      "cwd": "${workspaceFolder:cosmicfit}/inspector",
+      "name": "Release cosmicfit-inspector (inspector)",
+      "target": "cosmicfit-inspector",
+      "configuration": "release",
+      "preLaunchTask": "swift: Build Release cosmicfit-inspector (inspector)"
+    }
+  ]
+}

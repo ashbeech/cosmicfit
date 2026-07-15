@@ -1,0 +1,500 @@
+/* ─────────────────────────────────────────────────────────────
+   Content Dashboard — global styles
+   Palette / fonts / layout idiom ported verbatim from
+   tools/review_tool.py so Maria sees a familiar UI.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  --bg: #dedede;
+  --surface: #fff;
+  --card: #f4f4f5;
+  --accent: #0d0e1f;
+  --accent-lilac: #7e69e6;
+  --text: #000210;
+  --dim: #6a6a73;
+  --border: rgba(0, 2, 16, 0.12);
+  --green: #2e7d32;
+  --yellow: #e6a100;
+  --red: #c62828;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.6 "PT Serif", Georgia, serif;
+}
+
+/* ─── App shell: sidebar + main, ported from review_tool.py ─── */
+
+.shell {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 300px;
+  background: var(--surface);
+  overflow-y: auto;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+}
+.sidebar h1 {
+  padding: 16px 16px 0 16px;
+  font-family: "DM Serif Text", Georgia, serif;
+  color: var(--text);
+}
+.sidebar h1 .brand {
+  color: var(--accent);
+}
+.sidebar h2 {
+  padding: 0 16px 12px 16px;
+  font-size: 15px;
+  font-family: "DM Serif Text", Georgia, serif;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.sidebar-section-label {
+  padding: 12px 16px 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--dim);
+}
+
+.cluster-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s;
+  color: inherit;
+  text-decoration: none;
+}
+.cluster-item:hover {
+  background: var(--card);
+}
+.cluster-item.active {
+  background: var(--card);
+  border-left: 3px solid var(--accent);
+}
+.cluster-item .label {
+  font-size: 12px;
+}
+.badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--dim);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge.complete {
+  background: var(--green);
+  color: #fff;
+}
+.badge.readonly {
+  background: rgba(230, 161, 0, 0.15);
+  color: var(--yellow);
+}
+
+.main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: var(--surface);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.crumbs {
+  font-family: "DM Serif Text", Georgia, serif;
+  font-size: 18px;
+}
+.crumbs .dim {
+  color: var(--dim);
+}
+
+/* ─── Section card + editable field, ported idiom ─── */
+
+.section-card {
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+}
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  gap: 12px;
+}
+.section-name {
+  font-size: 15px;
+  font-weight: 600;
+  font-family: "DM Serif Text", Georgia, serif;
+}
+.section-meta {
+  font-size: 11px;
+  color: var(--dim);
+  font-family: monospace;
+}
+.section-intro {
+  color: var(--dim);
+  font-size: 13px;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.field-textarea {
+  width: 100%;
+  padding: 12px;
+  background: var(--card);
+  border-radius: 6px;
+  font: 14px/1.7 "PT Serif", Georgia, serif;
+  white-space: pre-wrap;
+  border: 1px solid var(--border);
+  color: var(--text);
+  resize: vertical;
+  min-height: 80px;
+  display: block;
+}
+.field-textarea:focus {
+  outline: none;
+  border-color: var(--accent-lilac);
+  box-shadow: 0 0 0 2px rgba(126, 105, 230, 0.2);
+}
+.field-textarea.readonly {
+  background: var(--bg);
+  color: var(--dim);
+  cursor: not-allowed;
+}
+
+.validation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+.val-tag {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  background: var(--bg);
+  font-weight: 500;
+}
+.val-tag.pass {
+  background: rgba(46, 125, 50, 0.1);
+  color: var(--green);
+}
+.val-tag.fail {
+  background: rgba(198, 40, 40, 0.1);
+  color: var(--red);
+}
+.val-tag.warn {
+  background: rgba(230, 161, 0, 0.1);
+  color: var(--yellow);
+}
+
+.field-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+.field-footer .left {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: "PT Serif", Georgia, serif;
+  transition: opacity 0.15s;
+  background: var(--card);
+  color: var(--text);
+}
+.btn:hover {
+  opacity: 0.85;
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-save {
+  background: var(--accent-lilac);
+  color: #fff;
+}
+.btn-saved {
+  background: var(--green);
+  color: #fff;
+}
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--dim);
+}
+.btn-danger {
+  background: var(--red);
+  color: #fff;
+}
+
+/* ─── Facets ─── */
+.facet-group {
+  padding: 8px 16px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.facet-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--dim);
+  margin-bottom: 6px;
+}
+.facet-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--dim);
+  cursor: pointer;
+  user-select: none;
+}
+.chip.on {
+  background: var(--accent-lilac);
+  color: #fff;
+  border-color: var(--accent-lilac);
+}
+
+/* ─── Search ─── */
+.searchbar {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.search-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--text);
+  font: 13px "PT Serif", Georgia, serif;
+}
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-lilac);
+  box-shadow: 0 0 0 2px rgba(126, 105, 230, 0.2);
+}
+.search-results {
+  margin-top: 8px;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+.search-result {
+  display: block;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  margin-bottom: 6px;
+  background: var(--card);
+  color: inherit;
+  text-decoration: none;
+  font-size: 12px;
+}
+.search-result:hover {
+  border-color: var(--accent-lilac);
+}
+.search-result .ctx {
+  color: var(--dim);
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+.search-result mark {
+  background: rgba(126, 105, 230, 0.25);
+  color: inherit;
+  border-radius: 2px;
+}
+.search-hint {
+  color: var(--dim);
+  font-size: 11px;
+  margin-top: 6px;
+}
+
+/* ─── History dropdown + word diff ─── */
+.history {
+  margin-top: 8px;
+  border-top: 1px dashed var(--border);
+  padding-top: 8px;
+}
+.history summary {
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--accent-lilac);
+  font-weight: 600;
+  list-style: none;
+}
+.history summary::-webkit-details-marker {
+  display: none;
+}
+.history-entry {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-top: 8px;
+  background: var(--card);
+}
+.history-entry .meta {
+  font-size: 11px;
+  color: var(--dim);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.worddiff {
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+.worddiff ins {
+  background: rgba(46, 125, 50, 0.18);
+  text-decoration: none;
+  color: var(--green);
+}
+.worddiff del {
+  background: rgba(198, 40, 40, 0.14);
+  color: var(--red);
+}
+
+/* ─── Login ─── */
+.login-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 32px;
+  width: 340px;
+}
+.login-card h1 {
+  font-family: "DM Serif Text", Georgia, serif;
+  margin-bottom: 4px;
+}
+.login-card h1 .brand {
+  color: var(--accent);
+}
+.login-card p {
+  color: var(--dim);
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+.login-card label {
+  display: block;
+  font-size: 12px;
+  color: var(--dim);
+  margin: 12px 0 4px;
+}
+.login-card input {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--text);
+  font: 14px "PT Serif", Georgia, serif;
+}
+.login-card input:focus {
+  outline: none;
+  border-color: var(--accent-lilac);
+  box-shadow: 0 0 0 2px rgba(126, 105, 230, 0.2);
+}
+.login-card button {
+  width: 100%;
+  margin-top: 20px;
+}
+.login-error {
+  color: var(--red);
+  font-size: 13px;
+  margin-top: 12px;
+  min-height: 18px;
+}
+
+/* ─── Banners / notices ─── */
+.banner {
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+.banner.warn {
+  background: rgba(230, 161, 0, 0.1);
+  border-color: rgba(230, 161, 0, 0.4);
+  color: #7a5600;
+}
+
+.empty {
+  color: var(--dim);
+  padding: 40px;
+  text-align: center;
+}
+
+a.plain {
+  color: var(--accent-lilac);
+  text-decoration: none;
+}
+a.plain:hover {
+  text-decoration: underline;
+}
+
+.nav-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}

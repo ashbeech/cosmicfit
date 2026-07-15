@@ -21,3 +21,13 @@ Cosmic Fit.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
 inspector/.build/
 
 .claude/settings.local.json
+
+# Content Dashboard (Next.js) — build output, deps, local env, generated bundles
+content-dashboard/node_modules
+content-dashboard/.next
+content-dashboard/.vercel
+content-dashboard/.env.local
+content-dashboard/tsconfig.tsbuildinfo
+content-dashboard/out
+# Locally-generated one-time TarotCards normalization artifact (owner reviews + commits by hand)
+content-dashboard/.generated/

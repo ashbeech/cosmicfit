@@ -68,8 +68,11 @@ struct CosmicFitTheme {
         }
 
         /// Extra space below the last scroll element so content clears the tab bar
-        /// and the final block can sit comfortably in view (hub + detail sub-pages).
+        /// and the final block can sit comfortably in view.
         static let scrollContentBottomInset: CGFloat = 100
+
+        /// Style Guide hub and section detail pages — tighter than the shared inset.
+        static let styleGuideScrollContentBottomInset: CGFloat = scrollContentBottomInset / 2
     }
 
     // MARK: - Header glyph layout
