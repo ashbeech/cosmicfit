@@ -78,7 +78,8 @@ cd inspector && CALIBRATION_FIDELITY_GATE=1 \
 - **These gates are the definition of "done," and they must be fail-closed `#expect`s on pinned constants — not the print-only reports they are today.** The exact numbers, day-sets, and the single named test for (d) are pinned in the plan's **"Gate determinism" section (G1)**; the exact list of asserts you must convert from print-only to hard-fail is **G2**. Build those asserts first — a gate that prints `PASS` but asserts nothing is not a gate.
   - **(a)** off-syzygy (`syzygyProximity ≤ 0.30`) lunar share **∈ [0.50, 0.70]** · **(b)** **≥12/13** pinned 2026 full moons labelled (from `docs/fixtures/lunar_events_2026.json`) · **(c)** jitter share **< 0.15** · **(d)** syzygy (`≥ 0.90`) mean **≥** off-syzygy mean **+ 1σ** · **(A2)** ≥20 distinct + no cliff + peak within ±1 day of 180°.
 - Plus the `LunarEventDetector` almanac test (2026 eclipse/supermoon dates within tolerance, against the same fixture).
-- **A red gate is a signal to keep developing, not to stop.** Apply the plan's nudge order (each knob → one gate; G1's "Tuned by" column), re-run, and continue until every gate is green. Never edit a G1 constant to pass — that needs owner sign-off (G0).
+- **A red gate is a signal to keep developing, not to stop.** Apply the plan's nudge order (each knob → one gate; G1's "Tuned by" column), re-run, and continue until every gate is green. Never edit a G1 constant *just to pass* — that needs owner sign-off (G0).
+- **But the G1 numbers are Claude's defaults, not owner-ratified — assess them (G0).** If, on your first real cohort run, a constant looks like it will push the output away from the intended feel (especially the 24h-variation priority above), **flag it and propose a revised value with evidence** rather than either silently obeying it or silently changing it. A reasoned, owner-approved correction is expected and encouraged; quietly loosening a bar to get green is not.
 
 **Rung 4 — Cohort ladder (full, before cutover):**
 - **12×60:** `SliderSignalValidation_Tests` + the A1–A5 harness above.
@@ -104,6 +105,8 @@ Do this **only after Rungs 1–6 are green.** It is one commit:
 - [ ] Phase 0 backup dir + `manifest.json` + `sky-forward-v1.0.1` git tag exist.
 - [ ] v1.0.1 runnable via `sky_forward_v1_0_1` preset; rollback drill passes byte-identical.
 - [ ] All 6 test rungs green; snapshots regenerated with reviewed diffs.
+- [ ] **Owner's non-negotiable — 24h variation:** `DailyFitVariation_Tests` 4A made **unconditional** (not opt-in) and green; the §4.3 variation targets (flip ≥0.40, distinct-#1 ≥6, slider range ≥0.5/user, no stuck 60d) promoted to hard `#expect` and green; the tautological `DailyFitAshTodayTomorrow_Tests` fixed so it can actually fail. If v1.0.2's jitter cut dropped variation below the floor, `jitterRange`/top-K were nudged back until it recovered.
+- [ ] **G1 constants assessed, not just obeyed** — you sanity-checked the pinned gate numbers against the first real cohort run and the intended feel, and either confirmed them or proposed owner-approved amendments (G0). These were Claude's defaults, not owner-ratified; a quick owner glance at the G1 table happened before they were locked.
 - [ ] `golden_cases.json` generated; `DailyFitGoldens_Tests` runs green in CI (it already hard-fails without the fixture — C1; verify it's in the run target).
 - [ ] `AstrologicalSoundness_Tests` assert effective shares, not the `.default` vector.
 - [ ] Fidelity gates (a)–(d) green on their correct (off/on-syzygy) bases.
