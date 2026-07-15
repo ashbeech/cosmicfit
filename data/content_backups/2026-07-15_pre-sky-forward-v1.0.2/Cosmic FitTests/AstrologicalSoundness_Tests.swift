@@ -129,22 +129,12 @@ struct AstrologicalSoundness_Tests {
         #expect(cal.sourceWeights.isNormalised, "Source weights not normalised")
     }
 
-    @Test("6C.2 — The daily read is lunar-led (F7 repoint: the sky mix drives output, not the .default vector)")
-    func testDailyReadIsLunarLed() {
-        // F7 / C2: `DailyFitCalibration.default` (natal 0.28 / transits 0.35 / lunar 0.22 / …) is a
-        // fingerprint/diagnostics vector — it does NOT drive the daily output. The daily read is the
-        // *sky mix*, which Sky Forward v1.0.2 promotes into the fingerprinted calibration (skyVibeWeights)
-        // and runs lunar-led. This asserts that design intent; the MEASURED effective shares
-        // (lunar ~0.58 vs transits ~0.31 vs v1.0.1's inverted 0.046/0.94) are enforced fail-closed by the
-        // inspector fidelity gate (a) — CalibrationAudit_Tests under CALIBRATION_FIDELITY_GATE=1.
-        let v102 = DailyFitEngineRegistry.calibration(for: DailyFitEngineRegistry.skyForwardV102Id)
-        guard let sky = v102.skyVibeWeights else {
-            #expect(Bool(false), "v1.0.2 skyVibeWeights missing — sky mix not fingerprinted")
-            return
-        }
-        #expect(abs((sky.transits + sky.lunar + sky.currentSun) - 1.0) < 0.001, "sky mix must sum to 1.0")
-        #expect(sky.lunar > sky.transits, "daily sky vibe should be lunar-led (lunar > transits)")
-        #expect(sky.lunar > sky.currentSun, "daily sky vibe should be lunar-led (lunar > currentSun)")
+    @Test("6C.2 — Transit weight is the largest source (daily variation priority)")
+    func testTransitWeightDominates() {
+        let cal = DailyFitCalibration.default
+        #expect(cal.sourceWeights.transits > cal.sourceWeights.natal, "Transits should > natal")
+        #expect(cal.sourceWeights.transits > cal.sourceWeights.lunarPhase, "Transits should > lunar")
+        #expect(cal.sourceWeights.transits > cal.sourceWeights.progressed, "Transits should > progressed")
     }
 
     @Test("6C.3 — All 12 signs have energy multipliers")
@@ -194,25 +184,14 @@ struct AstrologicalSoundness_Tests {
         lines.append("Generated: \(Date())")
         lines.append("")
 
-        // Source weights (fingerprint/diagnostics vector — does NOT drive the daily output; see F7).
+        // Source weights
         let cal = DailyFitCalibration.default
-        lines.append("--- Source Weights (.default — fingerprint/diagnostics only, NOT the daily read) ---")
+        lines.append("--- Source Weights ---")
         lines.append("  natal=\(cal.sourceWeights.natal)")
         lines.append("  transits=\(cal.sourceWeights.transits)")
         lines.append("  lunarPhase=\(cal.sourceWeights.lunarPhase)")
         lines.append("  progressed=\(cal.sourceWeights.progressed)")
         lines.append("  currentSun=\(cal.sourceWeights.currentSun)")
-        lines.append("")
-
-        // Sky vibe mix — the actual driver of the daily read (Sky Forward v1.0.2, fingerprinted).
-        let v102 = DailyFitEngineRegistry.calibration(for: DailyFitEngineRegistry.skyForwardV102Id)
-        lines.append("--- Sky Vibe Mix (v1.0.2 — the driving daily mix, lunar-led) ---")
-        if let sky = v102.skyVibeWeights {
-            lines.append("  transits=\(sky.transits)  lunar=\(sky.lunar)  currentSun=\(sky.currentSun)")
-            lines.append("  lunarSignificanceCoeff (syzygy swell k)=\(v102.lunarSignificanceCoeff ?? 0)")
-        }
-        lines.append("  measured effective shares (12×181 real ephemeris): lunar ~0.58 / transits ~0.31 / sun ~0.11")
-        lines.append("  (v1.0.1 was inverted: lunar 0.046 / transits 0.94 — see docs/daily_fit_calibration_audit_2026-07-11.md)")
         lines.append("")
 
         // Sign energy multipliers

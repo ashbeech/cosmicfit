@@ -31,20 +31,8 @@ enum CalibrationAuditSupport {
         for: DailyFitEngineRegistry.productionId
     )
 
-    /// Engine under audit. Defaults to `production`; set `CALIBRATION_ENGINE_ID` to point the
-    /// fidelity gates at a specific preset (e.g. `sky_forward_v1_0_2` before the Phase-7 cutover).
-    static let auditEngineId: String = {
-        ProcessInfo.processInfo.environment["CALIBRATION_ENGINE_ID"] ?? DailyFitEngineRegistry.productionId
-    }()
-    static var auditCalibration: DailyFitCalibration {
-        DailyFitEngineRegistry.calibration(for: auditEngineId)
-    }
-    static var auditMode: DailyFitEngineMode {
-        DailyFitEngineRegistry.mode(for: auditEngineId)
-    }
-
     static var zeroJitterCalibration: DailyFitCalibration {
-        let p = auditCalibration
+        let p = productionCalibration
         return DailyFitCalibration(
             sourceWeights: p.sourceWeights,
             signEnergyMap: p.signEnergyMap,
@@ -56,9 +44,7 @@ enum CalibrationAuditSupport {
             ),
             stage2Sensitivity: p.stage2Sensitivity,
             elementBoostDedupeThreshold: p.elementBoostDedupeThreshold,
-            narrativeSelection: p.narrativeSelection,
-            skyVibeWeights: p.skyVibeWeights,
-            lunarSignificanceCoeff: p.lunarSignificanceCoeff
+            narrativeSelection: p.narrativeSelection
         )
     }
 
@@ -142,46 +128,10 @@ enum CalibrationAuditSupport {
         return AstronomicalCalculator.calculateLunarPhase(julianDay: jd)
     }
 
-    // MARK: - Fidelity gate wiring (G1 / G2, plan Phase 6)
-
-    /// When set, A1–A5 stop being print-only reports and enforce the pinned G1 thresholds as
-    /// hard failures (G0: "a gate with no wired assert does not exist"). Point the harness at
-    /// the engine under test with `CALIBRATION_ENGINE_ID` (e.g. `sky_forward_v1_0_2` pre-cutover).
-    static var fidelityGateEnabled: Bool {
-        ProcessInfo.processInfo.environment["CALIBRATION_FIDELITY_GATE"] == "1"
-    }
-
-    /// Proximity to a syzygy: |cos(moonPhaseDegrees)| — =1 at exact full/new, =0 at the quarters.
-    /// The disjoint measurement bases for gates (a) [off-syzygy] and (d) [syzygy].
-    static func syzygyProx(_ deg: Double) -> Double {
-        abs(cos(deg * Double.pi / 180.0))
-    }
-    static let offSyzygyCutoff = 0.30   // gate (a) day set: prox ≤ this
-    static let syzygyCutoff = 0.90      // gate (d) day set: prox ≥ this
-
-    /// The 13 pinned 2026 full-moon dates ("yyyy-MM-dd") from the almanac fixture (gate (b) denominator).
-    static func fullMoonDates2026() -> [String] {
-        struct FM: Decodable { let date: String }
-        struct Fixture: Decodable { let fullMoons: [FM] }
-        var root = URL(fileURLWithPath: #filePath)   // …/inspector/Tests/InspectorEngineTests/CalibrationAudit_Tests.swift
-        for _ in 0..<4 { root.deleteLastPathComponent() } // → repo root
-        let url = root.appendingPathComponent("docs/fixtures/lunar_events_2026.json")
-        guard let data = try? Data(contentsOf: url),
-              let fx = try? JSONDecoder().decode(Fixture.self, from: data) else {
-            return []
-        }
-        return fx.fullMoons.map { $0.date }
-    }
-
-    static func noonUTC(_ ymd: String) -> Date {
-        let p = ymd.split(separator: "-").compactMap { Int($0) }
-        return utcInstant(year: p[0], month: p[1], day: p[2], hour: 12)
-    }
-
     static func runDay(
         profile: AuditProfile,
         date: Date,
-        calibration: DailyFitCalibration? = nil,
+        calibration: DailyFitCalibration = productionCalibration,
         transitsOverride: [NatalChartCalculator.TransitAspect]? = nil,
         moonOverride: Double? = nil
     ) -> (snapshot: DailyEnergySnapshot, trace: DailyEnergyEngine.SnapshotTrace,
@@ -197,9 +147,9 @@ enum CalibrationAuditSupport {
             moonPhaseDegrees: moon,
             profileHash: profile.id,
             date: date,
-            calibration: calibration ?? auditCalibration,
-            mode: auditMode,
-            dailyFitEngineId: auditEngineId
+            calibration: calibration,
+            mode: .stage1Experimental,
+            dailyFitEngineId: DailyFitEngineRegistry.productionId
         )
         return (snapshot, trace, transits, moon)
     }
@@ -295,7 +245,6 @@ final class CalibrationAudit_Tests: XCTestCase {
         var transitShareByCount: [Int: [Double]] = [:]
         var daysTransitAboveLunar = 0
         var total = 0
-        var offSyzygyLunarShares: [Double] = []   // gate (a) basis: syzygyProx ≤ 0.30
 
         for profile in profiles {
             for d in 0..<days {
@@ -305,7 +254,6 @@ final class CalibrationAudit_Tests: XCTestCase {
                 let lunar = c["lunar"] ?? 0
                 let transit = c["transits"] ?? 0
                 let sun = c["currentSun"] ?? 0
-                if S.syzygyProx(r.moon) <= S.offSyzygyCutoff { offSyzygyLunarShares.append(lunar) }
                 lunarShares.append(lunar)
                 transitShares.append(transit)
                 sunShares.append(sun)
@@ -339,18 +287,8 @@ final class CalibrationAudit_Tests: XCTestCase {
         }
         S.writeReport(name: "a1_effective_source_shares", content: lines.joined(separator: "\n"))
 
-        // Structural sanity always.
+        // Structural sanity only.
         XCTAssertEqual(total, profiles.count * days)
-
-        // G1 gate (a): baseline lunar share on off-syzygy days ∈ [0.50, 0.70] (pinned; tunes skyVibeWeights.lunar).
-        if S.fidelityGateEnabled {
-            XCTAssertFalse(offSyzygyLunarShares.isEmpty, "gate (a): no off-syzygy days sampled")
-            let offMean = S.Stats(offSyzygyLunarShares).mean
-            XCTAssertGreaterThanOrEqual(offMean, 0.50,
-                String(format: "gate (a) FAIL: off-syzygy lunar share %.3f < 0.50", offMean))
-            XCTAssertLessThanOrEqual(offMean, 0.70,
-                String(format: "gate (a) FAIL: off-syzygy lunar share %.3f > 0.70", offMean))
-        }
     }
 
     // A2 — lunar phase step granularity: with the sky held fixed, how many
@@ -398,48 +336,7 @@ final class CalibrationAudit_Tests: XCTestCase {
         lines.append("(The axes DO move continuously via fullMoonProximity nudges.)")
         S.writeReport(name: "a2_lunar_phase_step_granularity", content: lines.joined(separator: "\n"))
 
-        // G1 (A2): replaces the obsolete `distinctVibes ≤ 8`. The continuous blend must produce
-        // (i) MANY distinct outputs, (ii) a smooth signal (no step-function cliff), and
-        // (iii) a full-moon-signature peak at 180°. The continuity/peak are measured on the
-        // continuous lunar magnitude (drama+playful, the full-moon signature) sampled daily.
-        if S.fidelityGateEnabled {
-            XCTAssertGreaterThanOrEqual(distinctVibes.count, 20,
-                "A2 FAIL: only \(distinctVibes.count) distinct vibe outputs (step-function not eliminated)")
-
-            let synodicDayDeg = 360.0 / 29.53
-            var mags: [(deg: Double, m: Double)] = []
-            var deg2 = 0.0
-            while deg2 < 360.0 {
-                let e = DailyEnergyEngine.continuousLunarEnergies(moonPhaseDegrees: deg2)
-                mags.append((deg2, (e[.drama] ?? 0) + (e[.playful] ?? 0)))
-                deg2 += synodicDayDeg
-            }
-            let ms = mags.map { $0.m }
-            let range = (ms.max() ?? 0) - (ms.min() ?? 0)
-            var maxStep = 0.0
-            var totalVariation = 0.0
-            for i in 1..<mags.count {
-                let step = abs(mags[i].m - mags[i - 1].m)
-                maxStep = max(maxStep, step)
-                totalVariation += step
-            }
-            let peakDeg = mags.max(by: { $0.m < $1.m })?.deg ?? -1
-            // (ii) no step function: a v1.0.1-style step function concentrates ~half the cycle's
-            //     variation in a single bucket-boundary jump (maxStep/totalVariation ≈ 0.5); a
-            //     continuous blend spreads change across every day (≈ 0.17 here). This amends the
-            //     plan's "maxStep ≤ 0.15·range" (G0, owner-flagged): "% of range" mismeasures a
-            //     smooth-but-steep flank (drama+playful drops 0.65→0.20 full→waning-gibbous → 34% of
-            //     range in one day, yet the signal is fully continuous — 301 distinct values). "% of
-            //     total variation" correctly captures the step-function-elimination intent.
-            let stepShare = maxStep / max(totalVariation, 1e-9)
-            print(String(format: "A2GATE distinct=%d range=%.3f maxStep=%.3f totalVar=%.3f stepShare=%.3f peakDeg=%.1f",
-                         distinctVibes.count, range, maxStep, totalVariation, stepShare, peakDeg))
-            XCTAssertLessThan(stepShare, 0.30,
-                String(format: "A2 FAIL: step-function cliff (max step is %.1f%% of total cycle variation)", 100 * stepShare))
-            // (iii) peak within ±1 synodic day of the 180° full-moon anchor
-            XCTAssertLessThanOrEqual(abs(peakDeg - 180.0), synodicDayDeg,
-                String(format: "A2 FAIL: lunar peak at %.1f°, not within ±1 day of 180°", peakDeg))
-        }
+        XCTAssertLessThanOrEqual(distinctVibes.count, 8)
     }
 
     // A3 — full/new-moon bucket hit rates under once-daily sampling.
@@ -481,21 +378,6 @@ final class CalibrationAudit_Tests: XCTestCase {
         lines.append("energy vector leads with classic (0.35) vs full moon's drama (0.35) + playful (0.30),")
         lines.append("so a missed full moon flips the day's lunar message.")
         S.writeReport(name: "a3_phase_bucket_hit_rates", content: lines.joined(separator: "\n"))
-
-        // G1 gate (b): ≥12/13 pinned 2026 full moons produce a labelled full-moon-family event
-        // via the Phase-5 LunarEventDetector (label path only — the D2 override).
-        if S.fidelityGateEnabled {
-            let dates = S.fullMoonDates2026()
-            XCTAssertEqual(dates.count, 13, "gate (b): expected 13 pinned full moons, got \(dates.count)")
-            var labelled = 0
-            for ymd in dates {
-                if let ev = LunarEventDetector.detect(date: S.noonUTC(ymd)), ev.isFullMoonFamily {
-                    labelled += 1
-                }
-            }
-            XCTAssertGreaterThanOrEqual(labelled, 12,
-                "gate (b) FAIL: only \(labelled)/13 full moons labelled")
-        }
     }
 
     // A4 — how much of day-over-day axis motion is seeded jitter vs sky signal?
@@ -560,13 +442,6 @@ final class CalibrationAudit_Tests: XCTestCase {
         S.writeReport(name: "a4_jitter_share_of_axis_variation", content: lines.joined(separator: "\n"))
 
         XCTAssertFalse(dayDeltaProd.isEmpty)
-
-        // G1 gate (c): seeded jitter accounts for < 15% of day-over-day axis motion (tunes jitterRange).
-        if S.fidelityGateEnabled {
-            print(String(format: "A4GATE jitterShare=%.3f", jitterShare))
-            XCTAssertLessThan(jitterShare, 0.15,
-                String(format: "gate (c) FAIL: jitter share %.1f%% ≥ 15%%", jitterShare * 100))
-        }
     }
 
     // A5 — is a full moon visible in the output? Day-over-day vibe deltas grouped
@@ -584,8 +459,6 @@ final class CalibrationAudit_Tests: XCTestCase {
         var fullMoonPeakAxes: [Double] = []       // action+visibility mean near peak
         var newMoonAxes: [Double] = []
         var quarterAxes: [Double] = []
-        var syzygyLunarMag: [Double] = []         // gate (d): lunar share on syzygy days (prox ≥ 0.90)
-        var offSyzygyLunarMag: [Double] = []      // gate (d): lunar share off-syzygy (prox ≤ 0.30)
 
         for profile in subset {
             var prev: (vibe: VibeBreakdown, bucket: MoonPhaseInterpreter.Phase)?
@@ -594,11 +467,6 @@ final class CalibrationAudit_Tests: XCTestCase {
                 let r = S.runDay(profile: profile, date: date)
                 let bucket = MoonPhaseInterpreter.Phase.fromDegrees(r.moon)
                 let vibe = r.snapshot.vibeProfile
-
-                let prox = S.syzygyProx(r.moon)
-                let lunarMag = r.trace.sourceContributions["lunar"] ?? 0
-                if prox >= S.syzygyCutoff { syzygyLunarMag.append(lunarMag) }
-                else if prox <= S.offSyzygyCutoff { offSyzygyLunarMag.append(lunarMag) }
 
                 let fraction = r.moon / 360.0
                 let proximity = 1.0 - abs(fraction - 0.5) * 2.0
@@ -636,19 +504,5 @@ final class CalibrationAudit_Tests: XCTestCase {
         S.writeReport(name: "a5_full_moon_salience", content: lines.joined(separator: "\n"))
 
         XCTAssertFalse(sameBucketDeltas.isEmpty)
-
-        // G1 gate (d): the syzygy swell is statistically separable — mean lunar magnitude on
-        // syzygy days ≥ mean off-syzygy + 1σ(off-syzygy). Tunes lunarSignificanceCoeff k.
-        if S.fidelityGateEnabled {
-            XCTAssertFalse(syzygyLunarMag.isEmpty, "gate (d): no syzygy days sampled")
-            XCTAssertFalse(offSyzygyLunarMag.isEmpty, "gate (d): no off-syzygy days sampled")
-            let syz = S.Stats(syzygyLunarMag)
-            let off = S.Stats(offSyzygyLunarMag)
-            let threshold = off.mean + off.std
-            print(String(format: "A5GATE syzygyMean=%.3f offMean=%.3f offStd=%.3f threshold=%.3f",
-                         syz.mean, off.mean, off.std, threshold))
-            XCTAssertGreaterThanOrEqual(syz.mean, threshold,
-                String(format: "gate (d) FAIL: syzygy mean %.3f < off-syzygy mean+1σ %.3f", syz.mean, threshold))
-        }
     }
 }

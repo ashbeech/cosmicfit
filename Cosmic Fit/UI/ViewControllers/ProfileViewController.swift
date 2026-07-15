@@ -37,6 +37,33 @@ class ProfileViewController: UIViewController {
     private let restorePurchasesButton = UIButton(type: .system)
     private let manageSubscriptionButton = UIButton(type: .system)
 
+    // Legal links footer (Terms of Use · Privacy Policy)
+    private let legalLinksStack: UIStackView = {
+        let termsBtn = UIButton(type: .system)
+        termsBtn.setTitle("Terms of Use", for: .normal)
+        termsBtn.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(size: 11, weight: .regular)
+        termsBtn.setTitleColor(CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.5), for: .normal)
+        termsBtn.tag = 1
+
+        let dot = UILabel()
+        dot.text = " \u{00B7} "
+        dot.font = CosmicFitTheme.Typography.dmSansFont(size: 11, weight: .regular)
+        dot.textColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.5)
+
+        let privacyBtn = UIButton(type: .system)
+        privacyBtn.setTitle("Privacy Policy", for: .normal)
+        privacyBtn.titleLabel?.font = CosmicFitTheme.Typography.dmSansFont(size: 11, weight: .regular)
+        privacyBtn.setTitleColor(CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.5), for: .normal)
+        privacyBtn.tag = 2
+
+        let stack = UIStackView(arrangedSubviews: [termsBtn, dot, privacyBtn])
+        stack.axis = .horizontal
+        stack.spacing = 0
+        stack.alignment = .center
+        stack.distribution = .equalCentering
+        return stack
+    }()
+
     // Promo code UI
     private let subscriptionStatusLabel = UILabel()
     private let promoCodeFieldContainer = UIView()
@@ -436,6 +463,11 @@ class ProfileViewController: UIViewController {
         CosmicFitTheme.styleButton(manageSubscriptionButton, style: .secondary)
         manageSubscriptionButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
 
+        legalLinksStack.translatesAutoresizingMaskIntoConstraints = false
+        for case let btn as UIButton in legalLinksStack.arrangedSubviews {
+            btn.addTarget(self, action: #selector(legalLinkTapped(_:)), for: .touchUpInside)
+        }
+
         // Subscription status
         subscriptionStatusLabel.font = CosmicFitTheme.Typography.dmSansFont(
             size: CosmicFitTheme.Typography.FontSizes.footnote, weight: .medium
@@ -593,6 +625,9 @@ class ProfileViewController: UIViewController {
         mainStack.addArrangedSubview(signOutButton)
         mainStack.addArrangedSubview(deleteAccountButton)
         mainStack.addArrangedSubview(deleteProfileButton)
+
+        mainStack.setCustomSpacing(28, after: deleteProfileButton)
+        mainStack.addArrangedSubview(legalLinksStack)
     }
     
     private func setupConstraints() {
@@ -873,6 +908,15 @@ class ProfileViewController: UIViewController {
     @objc private func manageSubscriptionTapped() {
         if let url = URL(string: "https://apps.apple.com/account/subscriptions") {
             UIApplication.shared.open(url)
+        }
+    }
+
+    @objc private func legalLinkTapped(_ sender: UIButton) {
+        guard let genericDetail = parent as? GenericDetailViewController else { return }
+        if sender.tag == 1 {
+            genericDetail.pushContentViewController(TermsOfUseViewController())
+        } else {
+            genericDetail.pushContentViewController(PrivacyPolicyViewController())
         }
     }
 

@@ -374,16 +374,6 @@ Sky Forward uses the stage-1 source weights from `DailyFitEngineRegistry.stage1E
 
 The stage-1 path separates **chart anchor** and **today's sky**. Daily vibe and axes are sky-forward, while anchor fields remain available on payloads for context. `SignMultiplierPolicy.stage1OptionA` applies sign multipliers to the chart anchor but not to the daily sky read.
 
-> **Two mixes, not one (audit F7).** The five-source vector above is the **fingerprint / diagnostics attribution** vector — it is *not* what drives the daily vibe. At runtime the stage-1 path computes two separate reads: a **chart anchor** (natal 0.85 / progressed 0.15) and the **daily sky** vibe. The daily sky mix is what users see. In **Sky Forward v1.0.1** it was a hardcoded constant (`stage1SkySourceWeights`) *outside* the fingerprint; the [2026-07-11 calibration audit](docs/daily_fit_calibration_audit_2026-07-11.md) proved its *effective* shares were inverted — **lunar 0.046 / transits 0.94** vs the nominal 0.60 / 0.25 — because un-normalised transits (41–83/day) swamped the fixed lunar vector, and the lunar vibe was an 8-bucket step function that missed ~½ of full moons.
->
-> **Sky Forward v1.0.2** ([`docs/handoff/sky_forward_v1_0_2_plan.md`](docs/handoff/sky_forward_v1_0_2_plan.md)) fixes this: the sky mix is promoted into the **fingerprinted** calibration (`DailyFitCalibration.skyVibeWeights`), transits are **normalised** (top-5 tightest-per-planet, speed-damped, minor-aspect-discounted — shared `dominantTransits` helper with the axis path), the lunar vibe is **continuous** (raised-cosine blend, peaks exactly at 180°) and **significance-amplified** near syzygy (`1 + k·syzygyProximity`), jitter is cut 0.40 → 0.18, and named lunar events (eclipses/supermoons via `LunarEventDetector`) override the phase label near syzygy. Measured effective shares on the 12×181 real-ephemeris cohort become **lunar ~0.58 / transits ~0.31 / sun ~0.11** — the nominal mix is now real. The fidelity gates (a)–(d) in `inspector/…/CalibrationAudit_Tests.swift` (`CALIBRATION_FIDELITY_GATE=1`) enforce this fail-closed.
-
-| Daily **sky** mix (drives the vibe) | v1.0.1 nominal | v1.0.2 (`skyVibeWeights`, fingerprinted) |
-|---|---:|---:|
-| Transits | 0.25 | 0.25 |
-| Lunar phase | 0.60 | 0.60 (+ significance amplification `k=0.8`) |
-| Current sun | 0.15 | 0.15 |
-
 The snapshot includes the six-energy vibe profile (`classic`, `playful`, `romantic`, `utility`, `drama`, `edge`), derived axes (`action`, `tempo`, `strategy`, `visibility`), dominant transits, lunar context, sky salience, and deterministic daily seed.
 
 #### Stage 2: Narrative Plan + Daily Fit Lens
@@ -408,9 +398,7 @@ The snapshot includes the six-energy vibe profile (`classic`, `playful`, `romant
 
 | `dailyFitEngineId` | Mode | Purpose |
 |---|---|---|
-| `production` | `.stage1Experimental` → `.stage2SkyFidelity` at v1.0.2 cutover | Shipped Sky Forward; App Store / Release path |
-| `sky_forward_v1_0_1` | `.stage1Experimental` | **Rollback preset** — retains the shipped v1.0.1 calibration + algorithm after the v1.0.2 cutover (byte-identical output via engine-id collapse). Marketing version `1.0.1`. |
-| `sky_forward_v1_0_2` | `.stage2SkyFidelity` | Sky Forward v1.0.2 sky-fidelity engine (fingerprinted lunar-led sky mix, continuous significance-weighted lunar, normalised transits, named lunar events). Experimental until cutover, then becomes `production`. |
+| `production` | `.stage1Experimental` | Shipped Sky Forward v1.0.1; App Store / Release path |
 | `stage1_experimental` | `.stage1Experimental` | DEBUG alias with the same calibration/fingerprint as production; different UserDefaults namespaces |
 | `legacy_baseline` | `.standard` | Pre–Stage 2 source/selection weights for regression comparison |
 | `stage2_legacy` | `.standard` | Pre-Sky Forward Stage 2/default-calibration regression preset |

@@ -284,12 +284,6 @@ struct DailyFitPayload: Codable {
     /// Engine preset id stamped when frozen (optional in JSON; missing → production).
     let dailyFitEngineId: String?
 
-    /// Calibration fingerprint stamped when frozen (B3 cache invalidation). `nil` on legacy
-    /// frozen payloads (pre-v1.0.2) → treated as a mismatch against any non-nil current fingerprint,
-    /// so a fingerprint-only cutover (engine id stays `production`) busts the cache and users see
-    /// the new read instead of a stale one.
-    let calibrationFingerprint: String?
-
     /// Stored id for freeze/load checks; missing field decodes as production.
     var resolvedDailyFitEngineId: String {
         dailyFitEngineId ?? DailyFitEngineRegistry.productionId
@@ -301,7 +295,7 @@ struct DailyFitPayload: Codable {
         case tarotCard, styleEditVariant, dailyPalette, vibrancy, contrast, metalTone
         case essenceProfile, silhouetteProfile, vibeBreakdown, axes
         case dominantTransits, lunarContext, dailyTextures, dailyPattern, generatedAt
-        case dailyFitEngineId, calibrationFingerprint, narrativeBrief, scalePresentation
+        case dailyFitEngineId, narrativeBrief, scalePresentation
         case essenceTriangle
     }
 
@@ -322,7 +316,6 @@ struct DailyFitPayload: Codable {
         dailyPattern = try c.decodeIfPresent(String.self, forKey: .dailyPattern)
         generatedAt = try c.decode(Date.self, forKey: .generatedAt)
         dailyFitEngineId = try c.decodeIfPresent(String.self, forKey: .dailyFitEngineId)
-        calibrationFingerprint = try c.decodeIfPresent(String.self, forKey: .calibrationFingerprint)
         scalePresentation = try c.decodeIfPresent(PersonalScalePresentation.self, forKey: .scalePresentation)
         narrativeBrief = try c.decodeIfPresent(DailyNarrativeBrief.self, forKey: .narrativeBrief)
 
@@ -353,7 +346,6 @@ struct DailyFitPayload: Codable {
         try c.encodeIfPresent(dailyPattern, forKey: .dailyPattern)
         try c.encode(generatedAt, forKey: .generatedAt)
         try c.encodeIfPresent(dailyFitEngineId, forKey: .dailyFitEngineId)
-        try c.encodeIfPresent(calibrationFingerprint, forKey: .calibrationFingerprint)
         try c.encodeIfPresent(scalePresentation, forKey: .scalePresentation)
         try c.encodeIfPresent(narrativeBrief, forKey: .narrativeBrief)
     }
@@ -368,7 +360,6 @@ struct DailyFitPayload: Codable {
          lunarContext: LunarContext, dailyTextures: [String],
          dailyPattern: String?, generatedAt: Date,
          dailyFitEngineId: String? = nil,
-         calibrationFingerprint: String? = nil,
          scalePresentation: PersonalScalePresentation? = nil,
          narrativeBrief: DailyNarrativeBrief? = nil) {
         self.tarotCard = tarotCard
@@ -387,7 +378,6 @@ struct DailyFitPayload: Codable {
         self.dailyPattern = dailyPattern
         self.generatedAt = generatedAt
         self.dailyFitEngineId = dailyFitEngineId
-        self.calibrationFingerprint = calibrationFingerprint
         self.scalePresentation = scalePresentation
         self.narrativeBrief = narrativeBrief
     }
@@ -411,32 +401,6 @@ struct DailyFitPayload: Codable {
             dailyPattern: dailyPattern,
             generatedAt: generatedAt,
             dailyFitEngineId: engineId,
-            calibrationFingerprint: calibrationFingerprint,
-            scalePresentation: scalePresentation,
-            narrativeBrief: narrativeBrief
-        )
-    }
-
-    /// Copy with the calibration fingerprint stamped at freeze time (B3 cache invalidation).
-    func withCalibrationFingerprint(_ fingerprint: String?) -> DailyFitPayload {
-        DailyFitPayload(
-            tarotCard: tarotCard,
-            styleEditVariant: styleEditVariant,
-            dailyPalette: dailyPalette,
-            vibrancy: vibrancy,
-            contrast: contrast,
-            metalTone: metalTone,
-            essenceProfile: essenceProfile,
-            silhouetteProfile: silhouetteProfile,
-            vibeBreakdown: vibeBreakdown,
-            axes: axes,
-            dominantTransits: dominantTransits,
-            lunarContext: lunarContext,
-            dailyTextures: dailyTextures,
-            dailyPattern: dailyPattern,
-            generatedAt: generatedAt,
-            dailyFitEngineId: dailyFitEngineId,
-            calibrationFingerprint: fingerprint,
             scalePresentation: scalePresentation,
             narrativeBrief: narrativeBrief
         )
@@ -461,7 +425,6 @@ struct DailyFitPayload: Codable {
             dailyPattern: dailyPattern,
             generatedAt: generatedAt,
             dailyFitEngineId: dailyFitEngineId,
-            calibrationFingerprint: calibrationFingerprint,
             scalePresentation: scalePresentation,
             narrativeBrief: brief
         )
@@ -888,18 +851,6 @@ struct DailyFitCalibration: Equatable {
         )
     }
 
-    /// Sky-vibe source mix for the Sky Forward v1.0.2 sky-fidelity path (§audit Rec 6).
-    /// Promotes the previously-hardcoded `DailyEnergyEngine.stage1SkySourceWeights`
-    /// constant (transits/lunar/currentSun) into the fingerprinted calibration, so two
-    /// v1.0.2 tunings no longer share a fingerprint. `nil` on every pre-v1.0.2 preset →
-    /// the engine falls back to the legacy `stage1SkySourceWeights` constant (v1.0.1 path
-    /// stays byte-identical). Natal/progressed are anchor-only (0) so are not represented.
-    struct SkyVibeWeights: Equatable {
-        let transits: Double
-        let lunar: Double
-        let currentSun: Double
-    }
-
     let sourceWeights: SourceWeights
     let signEnergyMap: SignEnergyMap
     let signMultiplierPolicy: SignMultiplierPolicy
@@ -911,11 +862,6 @@ struct DailyFitCalibration: Equatable {
     let axisTuning: AxisTuning
     let stage2Sensitivity: Stage2Sensitivity
     let narrativeSelection: NarrativeSelectionTuning?
-    /// v1.0.2 sky-fidelity: fingerprinted sky-vibe mix. `nil` → legacy `stage1SkySourceWeights`.
-    let skyVibeWeights: SkyVibeWeights?
-    /// v1.0.2 sky-fidelity: lunar significance amplification `k` in `1 + k·syzygyProximity`
-    /// (=1 at exact full AND new moon, =0 at quarters). `nil` → no amplification (legacy path).
-    let lunarSignificanceCoeff: Double?
 
     init(
         sourceWeights: SourceWeights,
@@ -926,9 +872,7 @@ struct DailyFitCalibration: Equatable {
         axisTuning: AxisTuning,
         stage2Sensitivity: Stage2Sensitivity,
         elementBoostDedupeThreshold: Double? = 1.30,
-        narrativeSelection: NarrativeSelectionTuning? = nil,
-        skyVibeWeights: SkyVibeWeights? = nil,
-        lunarSignificanceCoeff: Double? = nil
+        narrativeSelection: NarrativeSelectionTuning? = nil
     ) {
         self.sourceWeights = sourceWeights
         self.signEnergyMap = signEnergyMap
@@ -939,8 +883,6 @@ struct DailyFitCalibration: Equatable {
         self.stage2Sensitivity = stage2Sensitivity
         self.elementBoostDedupeThreshold = elementBoostDedupeThreshold
         self.narrativeSelection = narrativeSelection
-        self.skyVibeWeights = skyVibeWeights
-        self.lunarSignificanceCoeff = lunarSignificanceCoeff
     }
 }
 

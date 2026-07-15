@@ -4,8 +4,6 @@
 > **Last audited:** June 2026
 > **Source of truth:** `../README.md` §4.1 and `../Cosmic Fit/InterpretationEngine/DailyFitEngineRegistry.swift` for current Sky Forward production weights.
 
-> **⚠ Superseded by Sky Forward v1.0.2 (2026-07).** The [2026-07-11 calibration audit](daily_fit_calibration_audit_2026-07-11.md) proved the daily read is driven by the **sky mix**, not the five-source vector this document reviews, and that the shipped v1.0.1 sky mix ran *inverted* effective shares (lunar 0.046 / transits 0.94). **Sky Forward v1.0.2** ([`handoff/sky_forward_v1_0_2_plan.md`](handoff/sky_forward_v1_0_2_plan.md)) promotes the sky mix into the fingerprinted calibration (`skyVibeWeights`), normalises transits, makes the lunar vibe continuous + significance-weighted, and adds named lunar events. Measured effective shares become lunar ~0.58 / transits ~0.31. The acceptance bar is now the machine-decidable **fidelity gates (a)–(d)** in `inspector/…/CalibrationAudit_Tests.swift` (`CALIBRATION_FIDELITY_GATE=1`), not this document's static-vector review. Any weight sign-off below is historical.
-
 **Date:** 2026-05-12  
 **Reviewer:** AI-assisted calibration agent (automated checks) + project owner review required for final seal  
 **Scope:** Phase 0C baseline thresholds, Part 6 energy maps, Part 6 calibration weights  

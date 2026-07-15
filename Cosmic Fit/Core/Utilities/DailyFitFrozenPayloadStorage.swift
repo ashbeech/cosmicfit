@@ -200,10 +200,25 @@ final class DailyFitFrozenPayloadStorage {
         )
     }
 
+    /// Calibration fingerprint of the given engine id (B3). `nil` for unknown ids.
+    private func currentFingerprint(for engineId: String) -> String? {
+        DailyFitEngineRegistry.descriptor(for: engineId)?.fingerprint
+    }
+
+    /// A frozen payload is only valid if its stored calibration fingerprint matches the engine's
+    /// current fingerprint (B3): this busts the cache on a fingerprint-only cutover where the engine
+    /// id stays `production`. A `nil` current fingerprint (unknown engine) falls back to id-only.
+    private func fingerprintMatches(_ payload: DailyFitPayload, engineId: String) -> Bool {
+        guard let current = currentFingerprint(for: engineId) else { return true }
+        return payload.calibrationFingerprint == current
+    }
+
     @discardableResult
     func save(payload: DailyFitPayload, date: Date, profileKey: String) -> Bool {
         let engineId = DailyFitEngineConfig.effectiveEngineId
-        let stamped = payload.withDailyFitEngineId(engineId)
+        let stamped = payload
+            .withDailyFitEngineId(engineId)
+            .withCalibrationFingerprint(currentFingerprint(for: engineId))
         do {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .iso8601
@@ -230,10 +245,13 @@ final class DailyFitFrozenPayloadStorage {
         let namespacedURL = namespacedFileURL(date: date, profileKey: profileKey, engineId: effectiveId)
         if FileManager.default.fileExists(atPath: namespacedURL.path),
            let payload = decodePayload(from: namespacedURL),
-           payload.resolvedDailyFitEngineId == effectiveId {
+           payload.resolvedDailyFitEngineId == effectiveId,
+           fingerprintMatches(payload, engineId: effectiveId) {
             return payload
         }
 
+        // Pre-namespacing legacy files are grandfathered (id-only) — they predate v1.0.1 and the
+        // fingerprint field; the B3 fingerprint check applies to namespaced files (all v1.0.1 freezes).
         let legacyURL = legacyFileURL(date: date, profileKey: profileKey)
         if FileManager.default.fileExists(atPath: legacyURL.path),
            let payload = decodePayload(from: legacyURL),
@@ -279,6 +297,9 @@ final class DailyFitFrozenPayloadStorage {
         let profilePrefix = sanitizedProfileKey(profileKey)
         var didPurge = false
 
+        let currentFP = currentFingerprint(for: effectiveEngineId)
+
+        // Legacy (pre-namespacing) files: id-only invalidation — grandfathered past the B3 fp check.
         let legacyURL = legacyFileURL(date: date, profileKey: profileKey)
         if FileManager.default.fileExists(atPath: legacyURL.path) {
             let storedId = decodePayload(from: legacyURL)?.resolvedDailyFitEngineId
@@ -295,8 +316,13 @@ final class DailyFitFrozenPayloadStorage {
             for url in urls where url.pathExtension == "json" {
                 let name = url.lastPathComponent
                 guard name.hasPrefix("\(profilePrefix)_"), name.contains("_\(day).json") else { continue }
-                if let fileEngineId = engineIdFromNamespacedFilename(name),
-                   fileEngineId != effectiveEngineId {
+                guard let fileEngineId = engineIdFromNamespacedFilename(name) else { continue }
+                if fileEngineId != effectiveEngineId {
+                    try? FileManager.default.removeItem(at: url)
+                    didPurge = true
+                } else if let currentFP,
+                          decodePayload(from: url)?.calibrationFingerprint != currentFP {
+                    // Same engine id but a fingerprint-only change (v1.0.2 cutover) → stale.
                     try? FileManager.default.removeItem(at: url)
                     didPurge = true
                 }
@@ -334,7 +360,8 @@ final class DailyFitFrozenPayloadStorage {
         let namespacedURL = namespacedFileURL(date: date, profileKey: profileKey, engineId: effectiveEngineId)
         if FileManager.default.fileExists(atPath: namespacedURL.path),
            let payload = decodePayload(from: namespacedURL),
-           payload.resolvedDailyFitEngineId == effectiveEngineId {
+           payload.resolvedDailyFitEngineId == effectiveEngineId,
+           fingerprintMatches(payload, engineId: effectiveEngineId) {
             return true
         }
 

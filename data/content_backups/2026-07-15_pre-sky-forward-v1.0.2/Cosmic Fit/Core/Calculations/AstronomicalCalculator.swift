@@ -206,40 +206,7 @@ struct AstronomicalCalculator {
         
         return (CoordinateTransformations.normalizeAngle(longitude), latitude)
     }
-
-    /// Geocentric distance of the Moon in kilometres (Meeus low-order series, ≥5 terms).
-    /// Separate from `calculateMoonPosition` (which returns longitude/latitude only) so its
-    /// 5 destructuring callers are untouched. The evection/variation terms are REQUIRED for
-    /// supermoon detection: the leading term alone (385000.56 − 20905·cos M′) floors at
-    /// ~364,096 km and never drops below the 361,000 km supermoon threshold — it would fire
-    /// zero supermoons. With these five terms perigee reaches ~356,500 km and apogee ~406,700 km,
-    /// so the supermoon (<361,000 km) / micromoon (>405,000 km) thresholds are satisfiable.
-    static func calculateMoonDistance(julianDay: Double) -> Double {
-        let T = (julianDay - 2451545.0) / 36525.0
-
-        // Same mean-anomaly arguments as calculateMoonPosition.
-        var D = 297.8501921 + 445267.1114034 * T - 0.0018819 * T * T + T * T * T / 545868.0 - T * T * T * T / 113065000.0
-        var M = 357.5291092 + 35999.0502909 * T - 0.0001536 * T * T + T * T * T / 24490000.0
-        var Mprime = 134.9633964 + 477198.8675055 * T + 0.0087414 * T * T + T * T * T / 69699.0 - T * T * T * T / 14712000.0
-
-        D = CoordinateTransformations.normalizeAngle(D)
-        M = CoordinateTransformations.normalizeAngle(M)
-        Mprime = CoordinateTransformations.normalizeAngle(Mprime)
-
-        let DRad = CoordinateTransformations.degreesToRadians(D)
-        let MRad = CoordinateTransformations.degreesToRadians(M)
-        let MprimeRad = CoordinateTransformations.degreesToRadians(Mprime)
-
-        // Meeus (Astronomical Algorithms), km — five leading distance terms.
-        let distance = 385000.56
-            - 20905.355 * cos(MprimeRad)
-            -  3699.111 * cos(2 * DRad - MprimeRad)
-            -  2955.968 * cos(2 * DRad)
-            -   569.925 * cos(2 * MprimeRad)
-            +    48.888 * cos(MRad)
-        return distance
-    }
-
+    
     // Calculate lunar phase
     static func calculateLunarPhase(julianDay: Double) -> Double {
         // Get Sun and Moon positions

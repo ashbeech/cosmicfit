@@ -70,7 +70,7 @@ enum DailyEnergyEngine {
         var skyVibe: VibeBreakdown?
         var chartAxes: DerivedAxes?
         var skyRawScores: [Energy: Double]?
-        if effectiveMode.usesSkyForwardPipeline {
+        if effectiveMode == .stage1Experimental {
             chartVibe = generatePartialVibeProfile(
                 natalChart: natalChart,
                 progressedChart: progressedChart,
@@ -81,31 +81,16 @@ enum DailyEnergyEngine {
                 calibration: calibration,
                 shouldApplySignMultipliers: calibration.signMultiplierPolicy.applyToChartAnchor
             )
-            var noSkyAttribution: [EnergyAttributionEntry]? = nil
-            let skyResult: (breakdown: VibeBreakdown, rawScores: [Energy: Double])
-            if effectiveMode.usesSkyFidelityVibe {
-                // v1.0.2: fingerprinted sky mix + normalised transits + continuous lunar.
-                skyResult = generateSkyFidelityVibeProfileWithRaw(
-                    natalChart: natalChart,
-                    transits: transits,
-                    moonPhaseDegrees: moonPhaseDegrees,
-                    date: date,
-                    calibration: calibration,
-                    shouldApplySignMultipliers: calibration.signMultiplierPolicy.applyToDailyVibe,
-                    attribution: &noSkyAttribution
-                )
-            } else {
-                skyResult = generatePartialVibeProfileWithRaw(
-                    natalChart: natalChart,
-                    progressedChart: progressedChart,
-                    transits: transits,
-                    moonPhaseDegrees: moonPhaseDegrees,
-                    date: date,
-                    weights: stage1SkySourceWeights,
-                    calibration: calibration,
-                    shouldApplySignMultipliers: calibration.signMultiplierPolicy.applyToDailyVibe
-                )
-            }
+            let skyResult = generatePartialVibeProfileWithRaw(
+                natalChart: natalChart,
+                progressedChart: progressedChart,
+                transits: transits,
+                moonPhaseDegrees: moonPhaseDegrees,
+                date: date,
+                weights: stage1SkySourceWeights,
+                calibration: calibration,
+                shouldApplySignMultipliers: calibration.signMultiplierPolicy.applyToDailyVibe
+            )
             skyVibe = skyResult.breakdown
             skyRawScores = skyResult.rawScores
             chartAxes = evaluateChartAnchorAxes(
@@ -116,7 +101,7 @@ enum DailyEnergyEngine {
         }
 
         let vibeProfile: VibeBreakdown
-        if effectiveMode.usesSkyForwardPipeline, let skyVibe {
+        if effectiveMode == .stage1Experimental, let skyVibe {
             vibeProfile = skyVibe
         } else {
             vibeProfile = generateVibeProfile(
@@ -126,7 +111,7 @@ enum DailyEnergyEngine {
             )
         }
 
-        let skySalienceSimple: SkySalienceProfile? = effectiveMode.usesSkyForwardPipeline
+        let skySalienceSimple: SkySalienceProfile? = effectiveMode == .stage1Experimental
             ? computeSkySalience(from: transits, date: date)
             : nil
 
@@ -134,11 +119,7 @@ enum DailyEnergyEngine {
             vibeProfile: vibeProfile,
             axes: axes,
             dominantTransits: extractDominantTransits(from: transits),
-            lunarContext: buildLunarContext(
-                moonPhaseDegrees: moonPhaseDegrees,
-                date: date,
-                applyEventLabelOverride: effectiveMode.usesSkyFidelityVibe
-            ),
+            lunarContext: buildLunarContext(moonPhaseDegrees: moonPhaseDegrees),
             dailySeed: dailySeed,
             profileHash: profileHash,
             generatedAt: date,
@@ -524,168 +505,6 @@ enum DailyEnergyEngine {
         return (normaliseToTwentyOne(rawScores), rawScores)
     }
 
-    // MARK: - Sky Forward v1.0.2 sky-fidelity vibe (audit F1/F2/F3/F5/F6)
-
-    /// Tightest-orb transit per transiting planet, then the top `limit` by orb (ascending).
-    /// Shared by the reference axis path (`computeAxisRawScoreSkyOnly`) and the v1.0.2
-    /// sky-fidelity vibe path so both bound transit influence to the same dominant set,
-    /// preventing the combinatorial/outer-planet saturation that made nominal weights
-    /// fiction in v1.0.1 (audit §2.2). Extracted verbatim from the axis path (same ordering,
-    /// including its dictionary-iteration tie behaviour) so the v1.0.1 axis output stays byte-identical.
-    static func dominantTransits(
-        _ transits: [NatalChartCalculator.TransitAspect],
-        limit: Int = 5
-    ) -> [NatalChartCalculator.TransitAspect] {
-        var bestByPlanet: [String: NatalChartCalculator.TransitAspect] = [:]
-        for transit in transits {
-            let planet = transit.transitPlanet
-            if let existing = bestByPlanet[planet] {
-                if transit.orb < existing.orb { bestByPlanet[planet] = transit }
-            } else {
-                bestByPlanet[planet] = transit
-            }
-        }
-        return Array(bestByPlanet.values.sorted { $0.orb < $1.orb }.prefix(limit))
-    }
-
-    /// Canonical lunar-phase anchors in cycle order (every 45°): new 0°, waxingCrescent 45°,
-    /// firstQuarter 90°, waxingGibbous 135°, full 180°, waningGibbous 225°, lastQuarter 270°,
-    /// waningCrescent 315°. Used by the continuous blend.
-    private static let orderedLunarPhaseAnchors: [MoonPhaseInterpreter.Phase] = [
-        .newMoon, .waxingCrescent, .firstQuarter, .waxingGibbous,
-        .fullMoon, .waningGibbous, .lastQuarter, .waningCrescent
-    ]
-
-    /// F1 + F2: continuous (raised-cosine) blend between the two adjacent lunar-phase energy
-    /// anchors, replacing v1.0.1's 8-bucket step lookup. Peaks exactly at the 180° full-moon
-    /// (and 0° new-moon) anchor regardless of sample timing, so a full moon is never missed by
-    /// falling outside a 6° bucket. Each anchor vector sums to 1.0, so the blend does too.
-    /// Handles the 315°↔360°/0° modular wrap.
-    static func continuousLunarEnergies(moonPhaseDegrees: Double) -> [Energy: Double] {
-        var deg = moonPhaseDegrees.truncatingRemainder(dividingBy: 360.0)
-        if deg < 0 { deg += 360.0 }
-        let count = orderedLunarPhaseAnchors.count            // 8
-        let segment = 360.0 / Double(count)                   // 45°
-        let rawIndex = deg / segment                          // [0, 8)
-        let floorIndex = rawIndex.rounded(.down)
-        let i = Int(floorIndex) % count
-        let next = (i + 1) % count                            // wraps 315°→0°
-        let f = rawIndex - floorIndex                         // [0, 1) position within segment
-        let w = 0.5 - 0.5 * cos(f * .pi)                      // raised-cosine (smoothstep); 0 at f=0, 1 at f=1
-        let a = lunarPhaseEnergies[orderedLunarPhaseAnchors[i]] ?? [:]
-        let b = lunarPhaseEnergies[orderedLunarPhaseAnchors[next]] ?? [:]
-        var result: [Energy: Double] = [:]
-        for energy in Energy.allCases {
-            result[energy] = (a[energy] ?? 0.0) * (1.0 - w) + (b[energy] ?? 0.0) * w
-        }
-        return result
-    }
-
-    /// Proximity to a syzygy (exact full OR new moon): `|cos(moonPhaseDegrees)|`.
-    /// =1 at 0° and 180°, =0 at the 90°/270° quarters.
-    static func syzygyProximity(moonPhaseDegrees: Double) -> Double {
-        abs(cos(moonPhaseDegrees * .pi / 180.0))
-    }
-
-    /// F3: continuous lunar contribution with significance amplification. The lunar weight is
-    /// scaled by `(1 + k·syzygyProximity)`, so the moon swells near full/new and sits at baseline
-    /// at the quarters — making full-moon days separable from ordinary churn. New moons are boosted
-    /// equally to full moons (syzygy = both), which is intended.
-    private static func accumulateContinuousLunarContribution(
-        moonPhaseDegrees: Double,
-        weight: Double,
-        significanceCoeff k: Double,
-        into scores: inout [Energy: Double],
-        attribution: inout [EnergyAttributionEntry]?
-    ) {
-        let biases = continuousLunarEnergies(moonPhaseDegrees: moonPhaseDegrees)
-        let amplifiedWeight = weight * (1.0 + k * syzygyProximity(moonPhaseDegrees: moonPhaseDegrees))
-        let label = MoonPhaseInterpreter.Phase.fromDegrees(moonPhaseDegrees).description
-        for energy in Energy.allCases {
-            let raw = biases[energy] ?? 0.0
-            let weighted = raw * amplifiedWeight
-            scores[energy]! += weighted
-            attribution?.append(EnergyAttributionEntry(
-                source: "lunar",
-                label: label,
-                energy: energy.rawValue,
-                rawContribution: raw,
-                weightedContribution: weighted
-            ))
-        }
-    }
-
-    /// §2.2 + F5 + F6: normalised transit contribution. Mirrors the axis path — only the
-    /// top-5 tightest-orb transits (one per planet) contribute, each scaled by
-    /// `orbStrength · speedDamp · minorAspectDiscount` before distributing across the 6-energy
-    /// base vector. Bounds the transit sum (≤5 hits) so the fixed lunar contribution is no longer
-    /// swamped by 41–83 un-normalised in-orb transits, making the nominal sky mix real.
-    private static func accumulateDominantTransitContribution(
-        transits: [NatalChartCalculator.TransitAspect],
-        weight: Double,
-        into scores: inout [Energy: Double],
-        attribution: inout [EnergyAttributionEntry]?
-    ) {
-        for transit in dominantTransits(transits, limit: 5) {
-            guard let baseEnergies = planetEnergyBase[transit.transitPlanet] else { continue }
-            let orbStrength = max(0.0, 1.0 - transit.orb / 10.0)
-            let speedDamp = axisSpeedDamping[transit.transitPlanet] ?? 0.71
-            // Rec 5: minor aspects (quintile/semi-sextile/…) discounted to 0.5 via the salience map.
-            let minorAspectDiscount = transitAspectWeights[transit.aspectType.lowercased()] ?? 0.5
-            let strength = orbStrength * speedDamp * minorAspectDiscount
-            let label = "\(transit.transitPlanet) \(transit.aspectType) \(transit.natalPlanet)"
-            for energy in Energy.allCases {
-                let contribution = (baseEnergies[energy] ?? 0.0) * strength
-                let weighted = contribution * weight
-                scores[energy]! += weighted
-                attribution?.append(EnergyAttributionEntry(
-                    source: "transit",
-                    label: label,
-                    energy: energy.rawValue,
-                    rawContribution: contribution,
-                    weightedContribution: weighted
-                ))
-            }
-        }
-    }
-
-    /// v1.0.2 sky-fidelity daily vibe: the fingerprinted sky mix (`skyVibeWeights`) with
-    /// normalised transits + continuous significance-weighted lunar. Parallel to
-    /// `generatePartialVibeProfileWithRaw`; used only on the `.stage2SkyFidelity` path.
-    /// Natal/progressed are anchor-only (0), matching the legacy `stage1SkySourceWeights`.
-    private static func generateSkyFidelityVibeProfileWithRaw(
-        natalChart: NatalChartCalculator.NatalChart,
-        transits: [NatalChartCalculator.TransitAspect],
-        moonPhaseDegrees: Double,
-        date: Date,
-        calibration: DailyFitCalibration,
-        shouldApplySignMultipliers: Bool,
-        attribution: inout [EnergyAttributionEntry]?
-    ) -> (breakdown: VibeBreakdown, rawScores: [Energy: Double]) {
-        let sky = calibration.skyVibeWeights
-            ?? DailyFitCalibration.SkyVibeWeights(transits: 0.25, lunar: 0.60, currentSun: 0.15)
-        let k = calibration.lunarSignificanceCoeff ?? 0.0
-        let natalSunSign = extractSunSignName(from: natalChart)
-        var rawScores = emptyEnergyScores()
-        accumulateDominantTransitContribution(
-            transits: transits, weight: sky.transits,
-            into: &rawScores, attribution: &attribution
-        )
-        accumulateContinuousLunarContribution(
-            moonPhaseDegrees: moonPhaseDegrees, weight: sky.lunar, significanceCoeff: k,
-            into: &rawScores, attribution: &attribution
-        )
-        accumulateCurrentSunContribution(
-            date: date, weight: sky.currentSun,
-            natalSunSign: natalSunSign, calibration: calibration,
-            into: &rawScores, attribution: &attribution
-        )
-        if shouldApplySignMultipliers {
-            applySignMultipliers(to: &rawScores, sunSign: natalSunSign, calibration: calibration)
-        }
-        return (normaliseToTwentyOne(rawScores), rawScores)
-    }
-
     /// Natal+progressed axes without transits, moon, or jitter — chart baseline.
     private static func evaluateChartAnchorAxes(
         natalChart: NatalChartCalculator.NatalChart,
@@ -725,7 +544,7 @@ enum DailyEnergyEngine {
     ) -> Int {
         let descriptor = DailyFitEngineRegistry.descriptor(for: engineId)
         let policy = descriptor?.dailySeedPolicy ?? .sharedProfileDate
-        if policy == .includesEngineId, mode.usesSkyForwardPipeline {
+        if policy == .includesEngineId, mode == .stage1Experimental {
             let dateString = stage1SeedDateFormatter.string(from: date)
             return DailySeedGenerator.intSeed(from: "\(profileHash)_\(dateString)_\(engineId)")
         }
@@ -840,21 +659,9 @@ enum DailyEnergyEngine {
     ) -> (snapshot: DailyEnergySnapshot, trace: SnapshotTrace) {
         let effectiveMode = DailyFitEngineRegistry.resolvedMode(explicit: mode, engineId: engineId)
         let weights = calibration.sourceWeights
-        let attributionWeights: DailyFitCalibration.SourceWeights
-        if effectiveMode.usesSkyFidelityVibe {
-            // v1.0.2: decompose against the fingerprinted sky mix so the trace's
-            // source shares reflect the actual sky-fidelity vibe (A1 gate measures this).
-            let sky = calibration.skyVibeWeights
-                ?? DailyFitCalibration.SkyVibeWeights(transits: 0.25, lunar: 0.60, currentSun: 0.15)
-            attributionWeights = DailyFitCalibration.SourceWeights(
-                natal: 0, transits: sky.transits, lunarPhase: sky.lunar,
-                progressed: 0, currentSun: sky.currentSun
-            )
-        } else if effectiveMode.usesSkyForwardPipeline {
-            attributionWeights = stage1SkySourceWeights
-        } else {
-            attributionWeights = weights
-        }
+        let attributionWeights = effectiveMode == .stage1Experimental
+            ? stage1SkySourceWeights
+            : weights
         var rawScores: [Energy: Double] = [:]
         for energy in Energy.allCases { rawScores[energy] = 0.0 }
         var natalScores: [Energy: Double] = [:]
@@ -879,14 +686,8 @@ enum DailyEnergyEngine {
             natalSunSign: natalSunSign, calibration: calibration,
             into: &progressedScores, attribution: &attributionEntries, sourceTag: "progressed"
         )
-        if effectiveMode.usesSkyFidelityVibe {
-            let k = calibration.lunarSignificanceCoeff ?? 0.0
-            accumulateDominantTransitContribution(transits: transits, weight: attributionWeights.transits, into: &transitScores, attribution: &attributionEntries)
-            accumulateContinuousLunarContribution(moonPhaseDegrees: moonPhaseDegrees, weight: attributionWeights.lunarPhase, significanceCoeff: k, into: &lunarScores, attribution: &attributionEntries)
-        } else {
-            accumulateTransitContribution(transits: transits, weight: attributionWeights.transits, into: &transitScores, attribution: &attributionEntries)
-            accumulateLunarContribution(moonPhaseDegrees: moonPhaseDegrees, weight: attributionWeights.lunarPhase, into: &lunarScores, attribution: &attributionEntries)
-        }
+        accumulateTransitContribution(transits: transits, weight: attributionWeights.transits, into: &transitScores, attribution: &attributionEntries)
+        accumulateLunarContribution(moonPhaseDegrees: moonPhaseDegrees, weight: attributionWeights.lunarPhase, into: &lunarScores, attribution: &attributionEntries)
         accumulateCurrentSunContribution(
             date: date, weight: attributionWeights.currentSun,
             natalSunSign: natalSunSign, calibration: calibration,
@@ -946,7 +747,7 @@ enum DailyEnergyEngine {
         var chartAxes: DerivedAxes?
         var skyRawScores: [Energy: Double]?
         var chartAnchorSignMultipliers: [String: Double]?
-        if effectiveMode.usesSkyForwardPipeline {
+        if effectiveMode == .stage1Experimental {
             chartVibe = generatePartialVibeProfile(
                 natalChart: natalChart,
                 progressedChart: progressedChart,
@@ -957,31 +758,16 @@ enum DailyEnergyEngine {
                 calibration: calibration,
                 shouldApplySignMultipliers: calibration.signMultiplierPolicy.applyToChartAnchor
             )
-            var noSkyAttribution: [EnergyAttributionEntry]? = nil
-            let skyResult: (breakdown: VibeBreakdown, rawScores: [Energy: Double])
-            if effectiveMode.usesSkyFidelityVibe {
-                // v1.0.2: fingerprinted sky mix + normalised transits + continuous lunar.
-                skyResult = generateSkyFidelityVibeProfileWithRaw(
-                    natalChart: natalChart,
-                    transits: transits,
-                    moonPhaseDegrees: moonPhaseDegrees,
-                    date: date,
-                    calibration: calibration,
-                    shouldApplySignMultipliers: calibration.signMultiplierPolicy.applyToDailyVibe,
-                    attribution: &noSkyAttribution
-                )
-            } else {
-                skyResult = generatePartialVibeProfileWithRaw(
-                    natalChart: natalChart,
-                    progressedChart: progressedChart,
-                    transits: transits,
-                    moonPhaseDegrees: moonPhaseDegrees,
-                    date: date,
-                    weights: stage1SkySourceWeights,
-                    calibration: calibration,
-                    shouldApplySignMultipliers: calibration.signMultiplierPolicy.applyToDailyVibe
-                )
-            }
+            let skyResult = generatePartialVibeProfileWithRaw(
+                natalChart: natalChart,
+                progressedChart: progressedChart,
+                transits: transits,
+                moonPhaseDegrees: moonPhaseDegrees,
+                date: date,
+                weights: stage1SkySourceWeights,
+                calibration: calibration,
+                shouldApplySignMultipliers: calibration.signMultiplierPolicy.applyToDailyVibe
+            )
             skyVibe = skyResult.breakdown
             skyRawScores = skyResult.rawScores
             chartAxes = evaluateChartAnchorAxes(
@@ -1000,24 +786,20 @@ enum DailyEnergyEngine {
         }
 
         let vibeProfile: VibeBreakdown
-        if effectiveMode.usesSkyForwardPipeline, let skyVibe {
+        if effectiveMode == .stage1Experimental, let skyVibe {
             vibeProfile = skyVibe
         } else {
             vibeProfile = normaliseToTwentyOne(postMultiplier)
         }
 
-        let skySalience: SkySalienceProfile? = effectiveMode.usesSkyForwardPipeline
+        let skySalience: SkySalienceProfile? = effectiveMode == .stage1Experimental
             ? computeSkySalience(from: transits, date: date)
             : nil
 
         let snapshot = DailyEnergySnapshot(
             vibeProfile: vibeProfile, axes: axes,
             dominantTransits: extractDominantTransits(from: transits),
-            lunarContext: buildLunarContext(
-                moonPhaseDegrees: moonPhaseDegrees,
-                date: date,
-                applyEventLabelOverride: effectiveMode.usesSkyFidelityVibe
-            ),
+            lunarContext: buildLunarContext(moonPhaseDegrees: moonPhaseDegrees),
             dailySeed: dailySeed, profileHash: profileHash, generatedAt: date,
             chartVibeProfile: chartVibe,
             skyVibeProfile: skyVibe,
@@ -1026,7 +808,7 @@ enum DailyEnergyEngine {
             skySalience: skySalience
         )
         var rawDict = Dictionary(uniqueKeysWithValues: rawScores.map { ($0.key.rawValue, $0.value) })
-        if effectiveMode.usesSkyForwardPipeline, let skyRawScores {
+        if effectiveMode == .stage1Experimental, let skyRawScores {
             rawDict = Dictionary(uniqueKeysWithValues: skyRawScores.map { ($0.key.rawValue, $0.value) })
             if !applyDailyMult {
                 postDict = rawDict
@@ -1035,12 +817,7 @@ enum DailyEnergyEngine {
         let rawAxisDict = Dictionary(uniqueKeysWithValues: (axisAttribution ?? []).map {
             ($0.axis, $0.rawScore)
         })
-        let modeLabel: String
-        switch effectiveMode {
-        case .stage2SkyFidelity: modeLabel = "stage2SkyFidelity"
-        case .stage1Experimental: modeLabel = "stage1Experimental"
-        case .standard: modeLabel = "standard"
-        }
+        let modeLabel = effectiveMode == .stage1Experimental ? "stage1Experimental" : "standard"
         let trace = SnapshotTrace(
             rawScores: rawDict, postMultiplierScores: postDict,
             rawAxisScores: rawAxisDict, sourceContributions: contributions,
@@ -1161,7 +938,7 @@ enum DailyEnergyEngine {
             )
             var entries: [AxisAttributionEntry] = []
             let raw: Double
-            if mode.usesSkyForwardPipeline {
+            if mode == .stage1Experimental {
                 raw = computeAxisRawScoreSkyOnly(
                     axis: axis,
                     transits: transits,
@@ -1221,7 +998,18 @@ enum DailyEnergyEngine {
         jitter: Double,
         entries: inout [AxisAttributionEntry]
     ) -> Double {
-        let dominant = dominantTransits(transits, limit: 5)
+        var bestByPlanet: [String: NatalChartCalculator.TransitAspect] = [:]
+        for transit in transits {
+            let planet = transit.transitPlanet
+            if let existing = bestByPlanet[planet] {
+                if transit.orb < existing.orb { bestByPlanet[planet] = transit }
+            } else {
+                bestByPlanet[planet] = transit
+            }
+        }
+        let dominant = Array(
+            bestByPlanet.values.sorted { $0.orb < $1.orb }.prefix(5)
+        )
         var raw = 0.0
         for transit in dominant {
             let w = calibration.planetAxisMap.weight(forPlanet: transit.transitPlanet, axis: axis)
@@ -1550,9 +1338,7 @@ enum DailyEnergyEngine {
     // MARK: - Phase 2: Lunar Context
 
     private static func buildLunarContext(
-        moonPhaseDegrees: Double,
-        date: Date? = nil,
-        applyEventLabelOverride: Bool = false
+        moonPhaseDegrees: Double
     ) -> LunarContext {
         let phase = MoonPhaseInterpreter.Phase.fromDegrees(moonPhaseDegrees)
         let element: String
@@ -1564,18 +1350,8 @@ enum DailyEnergyEngine {
         }
         let normalized = moonPhaseDegrees
             .truncatingRemainder(dividingBy: 360.0)
-
-        // D2 (F2, second half): near a syzygy the date-keyed LunarEventDetector overrides the
-        // 6°-bucket phase name so a true full moon always reads "Full Moon" instead of the
-        // mislabelled "Waning Gibbous". Only on the v1.0.2 sky-fidelity path.
-        var phaseName = phase.description
-        if applyEventLabelOverride, let date,
-           let event = LunarEventDetector.detect(date: date) {
-            phaseName = event.phaseLabel
-        }
-
         return LunarContext(
-            phaseName: phaseName,
+            phaseName: phase.description,
             isWaxing: normalized >= 0 && normalized < 180.0,
             element: element,
             phaseDegrees: moonPhaseDegrees

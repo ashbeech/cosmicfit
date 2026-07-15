@@ -18,7 +18,7 @@ enum DailyFitPipeline {
     ) -> DailyFitPayload {
         let mode = DailyFitEngineRegistry.resolvedMode(engineId: engineId)
 
-        if mode == .stage1Experimental {
+        if mode.usesSkyForwardPipeline {
             let rawEssence = BlueprintLensEngine.resolveEssenceProfile(from: snapshot, mode: mode)
             let rawSilhouette = BlueprintLensEngine.deriveSilhouetteProfile(
                 from: blueprint, snapshot: snapshot, calibration: calibration, mode: mode
@@ -80,7 +80,7 @@ enum DailyFitPipeline {
         )
         let tuning = calibration.narrativeSelection ?? .stage1Default
 
-        if mode == .stage1Experimental {
+        if mode.usesSkyForwardPipeline {
             let (plan, _) = DailyNarrativeSelector.select(
                 snapshot: snapshot,
                 blueprint: blueprint,
