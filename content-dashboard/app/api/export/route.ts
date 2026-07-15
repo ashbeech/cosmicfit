@@ -17,15 +17,24 @@ import { makeZip, type ZipEntry } from '@/lib/content/zip';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
+
+const BUCKET = 'dash-baselines';
 
 /**
  * Reconstruct the content files from the frozen baselines + current overrides,
- * package them (both blueprint files + TarotCards + manifest) as a downloadable
- * zip, and record the export in dash_content_versions.
+ * package them (both blueprint files + TarotCards + manifest) as a zip, record
+ * the export in dash_content_versions, then hand back a short-lived SIGNED URL.
  *
- * A zero-override export reproduces the committed blueprint byte-for-byte (the
- * safety net, proven by scripts/test-roundtrip.ts). TarotCards comes out
- * normalized (indent 4) — the first drop carries the one-time normalization.
+ * Why a signed URL and not the bytes directly: the bundle is ~21 MB, which
+ * exceeds the serverless response-size ceiling (~4.5–6 MB) on Vercel. So we
+ * upload the (byte-identical) zip to Storage and return a link — the browser
+ * downloads the exact bytes straight from Storage, bypassing the function cap.
+ * The zip contents are UNCHANGED by this: a zero-override export still
+ * reconstructs the committed blueprint byte-for-byte (the safety net, proven by
+ * scripts/test-roundtrip.ts), and edits still land as exact per-field diffs.
+ * TarotCards comes out normalized (indent 4) — the first drop carries the
+ * one-time normalization.
  */
 export async function POST(req: NextRequest) {
   const session = await getSession();
@@ -109,14 +118,32 @@ export async function POST(req: NextRequest) {
       { name: 'manifest.json', data: Buffer.from(serializeManifest(manifest), 'utf8') },
     ];
     const zip = makeZip(entries);
+    const filename = `content-export-v${versionId}.zip`;
 
-    return new NextResponse(new Uint8Array(zip), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/zip',
-        'Content-Disposition': `attachment; filename="content-export-v${versionId}.zip"`,
-        'Content-Length': String(zip.length),
-      },
+    // Upload the (byte-identical) bundle to Storage and hand back a signed URL,
+    // so the download bypasses the serverless response-size limit.
+    const objectPath = `exports/${filename}`;
+    const up = await supabase.storage
+      .from(BUCKET)
+      .upload(objectPath, zip, { contentType: 'application/zip', upsert: true });
+    if (up.error) {
+      return NextResponse.json({ error: `upload bundle failed: ${up.error.message}` }, { status: 500 });
+    }
+    const signed = await supabase.storage
+      .from(BUCKET)
+      .createSignedUrl(objectPath, 3600, { download: filename });
+    if (signed.error || !signed.data) {
+      return NextResponse.json({ error: `sign url failed: ${signed.error?.message}` }, { status: 500 });
+    }
+
+    return NextResponse.json({
+      ok: true,
+      versionId,
+      filename,
+      downloadUrl: signed.data.signedUrl, // valid 1 hour; forces attachment download
+      byteSize: zip.length,
+      changedFieldCount: changedFields.length,
+      fileSha,
     });
   } catch (e) {
     return NextResponse.json({ error: (e as Error).message }, { status: 500 });
