@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "setup:storage": "tsx scripts/setup-storage.ts",
     "seed": "tsx scripts/seed.ts",
     "seed:users": "tsx scripts/seed-users.ts",
     "normalize:tarot": "tsx scripts/normalize-tarot.ts",
