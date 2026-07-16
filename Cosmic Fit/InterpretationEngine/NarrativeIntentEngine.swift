@@ -27,7 +27,7 @@ enum NarrativeIntentEngine {
         silhouetteProfile: SilhouetteProfile? = nil,
         tuning: DailyFitCalibration.NarrativeSelectionTuning = .stage1Default
     ) -> Resolution? {
-        guard mode == .stage1Experimental else { return nil }
+        guard mode.usesSkyForwardPipeline else { return nil }
         guard let chartAnchorScores = essence.chartAnchorScores else { return nil }
 
         let anchorTop3 = chartAnchorScores

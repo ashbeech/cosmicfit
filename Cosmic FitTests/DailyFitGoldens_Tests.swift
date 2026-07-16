@@ -121,6 +121,11 @@ private func makeTransits(from specs: [GoldenCaseData.TransitSpecData], baseDate
     }
 }
 
+/// Goldens characterise the SHIPPING engine — production, which is Sky Forward v1.0.2 post-cutover
+/// (plan §6d: goldens must guard the shipping engine, generated after the flip).
+private let goldenEngineId = DailyFitEngineRegistry.productionId
+private let goldenCalibration = DailyFitEngineRegistry.calibration(for: DailyFitEngineRegistry.productionId)
+
 private let goldenBlueprint: CosmicBlueprint = {
     let colour = { (n: String, h: String, r: ColourRole) in
         BlueprintColour(name: n, hexValue: h, role: r,
@@ -229,7 +234,8 @@ struct DailyFitGoldens_Tests {
                 natalChart: chart, progressedChart: progressed,
                 transits: transits, moonPhaseDegrees: golden.moonPhaseDegrees,
                 profileHash: golden.profileHash, blueprint: goldenBlueprint,
-                date: baseDate
+                date: baseDate,
+                calibration: goldenCalibration, dailyFitEngineId: goldenEngineId
             )
 
             let dominant = payload.vibeBreakdown.dominantEnergy
@@ -252,7 +258,8 @@ struct DailyFitGoldens_Tests {
                 natalChart: chart, progressedChart: progressed,
                 transits: transits, moonPhaseDegrees: golden.moonPhaseDegrees,
                 profileHash: golden.profileHash, blueprint: goldenBlueprint,
-                date: baseDate
+                date: baseDate,
+                calibration: goldenCalibration, dailyFitEngineId: goldenEngineId
             )
 
             let top3 = payload.essenceProfile.visibleCategories.map(\.category)
@@ -276,7 +283,8 @@ struct DailyFitGoldens_Tests {
                 natalChart: chart, progressedChart: progressed,
                 transits: transits, moonPhaseDegrees: golden.moonPhaseDegrees,
                 profileHash: golden.profileHash, blueprint: goldenBlueprint,
-                date: baseDate
+                date: baseDate,
+                calibration: goldenCalibration, dailyFitEngineId: goldenEngineId
             )
 
             #expect(payload.vibeBreakdown.totalPoints == 21, "[\(golden.id)] Vibe total != 21")
@@ -309,7 +317,8 @@ struct DailyFitGoldens_Tests {
                 natalChart: chart, progressedChart: progressed,
                 transits: transits, moonPhaseDegrees: golden.moonPhaseDegrees,
                 profileHash: golden.profileHash, blueprint: goldenBlueprint,
-                date: baseDate
+                date: baseDate,
+                calibration: goldenCalibration, dailyFitEngineId: goldenEngineId
             )
 
             lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")

@@ -1,11 +1,23 @@
 {
  "accessory": {
   "paragraphs": [
-   "The visual noise of scattered rings or multiple loose straps rarely suits your style. A single, commanding item, a heavy watch or a rigid leather bag, provides the gravity your otherwise restless wardrobe needs. This anchor piece offers a point of absolute control, letting the rest of your outfit remain fluid and adaptable. Seek out dense hide and uncompromising clasps that feel deeply deliberate when you fasten them. One serious item cuts through the static and makes the entire look intentional.",
-   "Hardware and leather goods are what keep your restless energy from turning into chaos. Because your daily style demands constant movement, you need belts and bags that feel severe enough to ground a look but adaptable enough to completely alter its context. Firm leather straps that wrap the waist, heavy interlocking clasps, and watches sitting flat on the wrist provide a necessary discipline. These pieces cut through softer, more fluid garments, locking everything into place with absolute authority. It is a deliberate tension, using rigid details to ensure nothing about the way you dress ever looks accidental.",
-   "The physical reality of what you wear matters just as much as the silhouette. You want pieces that feel substantial in your hands, satisfying a restless urge to touch and adjust throughout the day. The decisive, heavy snap of a well-engineered bag clasp and the dense drag of a thick leather strap sliding through a loop provide an undeniable comfort in their mechanical friction. Even the scent of rich, untreated hide or the quiet clinking of rings striking a glass table communicates your presence. You are dressing for the entire room, commanding space through sound and texture alone."
+   "Accessories supply the one warm point of light in your formula. Once garments deliver close drape and yield light movement, textiles complete the sequence. Commit to one or two strong pieces per look. Always execute the subtraction test. Put on your items, look in the mirror, and remove the final piece you added. This ensures your additions remain deliberate. Begin with silk scarves. Select a crepe de chine square or a slim band with a strictly matt finish. Gauge the fabric with your fingers. Genuine crepe carries a faint granular bite that grips the collar. Rely on this tactile feedback as your definitive guide. If a textile reflects room glare or slides freely, drop it.",
+   "Subject fine jewellery to a rigorous physical edit. Fasten your thin chain and small drops in brushed silver. Turn your head sharply from left to right. If a piece clinks against your collarbone, disrupts the fluid line of your silhouette, or demands attention over your own jawbone, remove it at once. The finish must remain matt to catch a warm reflection without glare. Every item must encourage close drape around the collar. Bulky pieces drag downwards. Look for delicate construction that guarantees continuous light movement as you navigate the day. Run your thumb over the metal. If it feels thick or unyielding, leave it in the box.",
+   "Anchor your silhouette with a small structured bag. Select a top-handle shape in warm kid suede, finished with fine matt hardware. The dense hide absorbs glare and provides a muted texture that grounds the light movement of your garments. Trust the physical density of the handle in your grip. Set the bag down on a flat surface. If the side panels collapse or the shape loses its structure, return the piece. Focus on maintaining a close drape across your entire frame."
+  ],
+  "rankedItems": [
+   {
+    "name": "Silk scarves",
+    "role": "accessory category",
+    "useCase": "crepe de chine square or slim band, matt"
+   }
+  ],
+  "sectionIntro": "Accessories define the boundaries of your silhouette, demanding strict curation to serve as intentional anchors rather than distractions.",
+  "tests": [
+   "the take-off test"
   ]
  },
+ "closing": "Your style guide is a map of your own instincts, built on close drape + light movement + one warm point of light.",
  "code": {
   "avoid": [
    "Relying on the exact same outfit formula every single day, because rigid repetition will drain your energy much faster than it comforts you.",
@@ -19,9 +31,12 @@
    "Dressing for your true disposition by selecting tactile fabrics and precise cuts that actively reflect your daily mood.",
    "Projecting absolute physical ease by investing in beautifully slouchy tailoring and relaxed, unstructured shapes for your everyday wardrobe.",
    "Investing in one radically innovative piece of construction that immediately starts brilliant conversations about the future of fashion.",
-   "Embracing sustainable luxury as the ultimate expression of abundance, because true generosity always starts with the planet."
+   "Embracing sustainable luxury as the ultimate expression of abundance, because true generosity always starts with the planet.",
+   "Judging every purchase on cost-per-wear rather than ticket price. A well-made piece worn two hundred times costs less than a cheap one worn twice.",
+   "Asking whether you would still wear a piece in five to ten years. If the answer wavers, leave it behind."
   ],
   "leanInto": [
+   "Anchoring every choice in your formula: close drape + light movement + one warm point of light.",
    "Having multiple outfit options prepared the night before. Your morning mood is unpredictable, and choice is your comfort.",
    "Layering so you can add or remove pieces as your energy shifts. A scarf on, then off. A jacket shed at noon.",
    "Embracing variety as a form of emotional regulation, as wearing something completely different each day keeps your mind perfectly stimulated and your mood buoyant.",
@@ -30,10 +45,22 @@
    "Mixxing global textile references with absolute confidence by pairing an authentic heavy ikat shirt with sharp tailored chinos to bridge entirely different aesthetics."
   ]
  },
+ "coreFormula": "close drape + light movement + one warm point of light",
  "engineVersion": "2.1.0",
- "generatedAt": "2026-06-26T03:05:10Z",
+ "generatedAt": "2026-07-16T01:16:22Z",
  "hardware": {
-  "metalsText": "You treat hardware as a deliberate point of tension rather than mere decoration. Heavy zips, boot rings, and belt buckles in warm umber tones give you an industrial foundation that feels like engineered equipment. Because your restless eye gets bored by matching sets, you intentionally clash this with high-shine brass tones on a bag chain or a sharp collar stud. The finish needs to carry a cold, aggressive weight against your midnight tones and dense silks. Think of your metals as structural punctuation in an otherwise dark, quiet look.",
+  "excludedFinishes": [
+   "polished chrome",
+   "high-shine silver"
+  ],
+  "metalsText": "Split your metals into two distinct tiers. Personal jewellery resting against your skin demands warm umber or brass. Structural hardware like bag clasps and coat zips requires sterling silver or hammered titanium. This dual approach secures close drape on the body while allowing light movement and a warm undertone throughout the silhouette. Apply a tactile assessment when sourcing pieces. Lift the buckle in your hands to gauge its genuine mass. If the item feels hollow, abandon it. Avoid artificially aged metals like hammered copper or antiqued brass. These read as visual clutter against your garments. Keep to brushed silver, satin platinum, matt white gold, and flat chrome instead. Steer clear of polished chrome surfaces entirely, ensuring your metallic finishes remain strictly matt.",
+  "personalMetals": [
+   "warm umber",
+   "brass",
+   "hammered gold",
+   "hammered bronze",
+   "mixed metals"
+  ],
   "recommendedMetals": [
    "warm umber",
    "brass",
@@ -59,19 +86,40 @@
    "obsidian",
    "smoky quartz"
   ],
-  "stonesText": "The jewellery you wear has to balance heavy visual depth with a restless, shifting energy. Opaque, inky pieces like turquoise give you that necessary grounding, sitting cold and substantial on the skin. Contrast that density with lapis lazuli, a stone that physically changes under different lighting as you move your hands while talking. You also suit the raw texture of amber, provided the metal setting feels strictly architectural rather than bohemian. You want rings and pendants that compel whoever is sitting next to you at a dinner party to look twice before they figure out exactly what you are wearing.",
-  "tipText": "Your best accessories function less like decoration and more like tactile focal points for a busy mind. Heavy, interlocking links in warm umber tones or a formidable clasp that requires a deliberate click to fasten hit exactly the right note. You need pieces that feel substantial over structured leather or heavy silk, yet they must also satisfy your constant urge to fidget and switch things up. A weighty pendant with a concealed turquoise or a ring that physically flips on its axis gives you that essential element of controlled revelation. Treat your jewellery as a secret mechanism disguised as an ornament."
+  "sectionIntro": "Establish strict boundaries between the metals you wear against your skin and the hardware that holds your garments together.",
+  "stonesText": "Anchor your close drape with dense minerals like turquoise and lapis lazuli. Press the stone against the inside of your wrist. Genuine minerals hold a distinct chill and undeniable density. Avoid beaten copper and faux-oxidised brass. Artificially aged finishes register as visual clutter. Ground your warm palette and matt textiles with subdued hardware. Rely entirely on brushed silver, satin platinum, matt white gold, and flat chrome. These sharp metals secure light movement without disrupting your balanced silhouette. Let these stones act as your one warm point of light.",
+  "structuralMetals": [
+   "sterling silver",
+   "hammered titanium",
+   "blackened silver",
+   "gunmetal",
+   "oxidised steel"
+  ],
+  "tests": [
+   "pick it up: looks lie, weight doesn't (the pick-it-up weight test)"
+  ],
+  "tipText": "Trust your hands over your eyes. Roll the band of a ring between your thumb and forefinger. If the metal yields under pressure or lacks absolute density, put it back. Avoid heavily patinated or artificially weathered finishes entirely. Deliberately aged surfaces act as visual debris that interrupts a modern foundation. Instead, secure your pieces in clean, unblemished warm umber or a dense turquoise. This smooth surface provides a grounding weight that catches warm reflections. Let this solid hardware anchor garments built for light movement while you establish a close drape.",
+  "traps": [
+   {
+    "failure": "antiqued brass, hammered copper, and artificially aged metal read as clutter against a present-tense style",
+    "fix": "keep to polished silver, platinum, white gold, and mirror chrome"
+   }
+  ]
  },
  "occasions": {
-  "dailyText": "Your downtime wardrobe runs on a constant need for movement, tempered by a strict refusal to appear vulnerable. The trick is approaching your casual rotation as a set of sharp, interchangeable pieces that let you shift gears at a moment's notice. Seek out garments that wrap, zip, or fold in unexpected proportions, giving you the freedom to reveal or conceal your form depending on exactly who happens to be watching. It is a restless way to get dressed, but it guarantees you step onto the pavement looking infinitely interesting and entirely untouchable.\n\nYour comfort instinct gravitates toward emotional comfort visible in how you present, your feelings wear you.",
-  "intimateText": "Getting dressed for intimate settings is a careful balancing act between strict boundary setting and total social ease. You thrive in pieces that appear quite severe from across the room but reveal complex, folded construction and unexpected slithers of skin when someone sits next to you. Focus on strategic opacity, choosing garments that wrap and shift effortlessly with your body language as the night evolves. The cut should always hold a sharp, definitive shape, while the drape leaves you unrestricted to lean across a dimly lit table or slip away entirely. The overall effect should feel like a tightly guarded secret worn by the most engaging person in the building.",
-  "workText": "You thrive in a professional environment when you look like the person who knows every secret in the building but refuses to share them. Build this look through strict, architectural outer layers worn over unrestrictive foundation pieces, giving you the physical freedom to pivot effortlessly mid-meeting. Precision is non-negotiable here, so rely on severe shoulder lines and collars that sit exactly right. Keep your quick mind engaged by working an unexpected structural detail into your outfit, like an asymmetric fastening or an exaggerated cuff. You are dressing to completely command the room, while wearing a silhouette that lets you slip out unnoticed the second a discussion loses its point.\n\nYour style energy concentrates in partnership and routine, so your wardrobe is at its best when it reflects both partnership and routine. At work, you communicate your intuitive intelligence by wearing creatively composed pieces and adopting a soft structure for empathetic fluidity."
+  "dailyText": "A quick errand at the local chemist gives you no excuse to drop your tactile standards. Retain your soft fabrics regardless of your speed. Base every look upon your mandatory equation of close drape + light movement + one warm point of light. Pull on a fine ribbed merino sweater in warm taupe. Pair it with technical nylon trousers. Keep the textile surface entirely matt. Add a singular brass ring. Reach for crisp cotton poplin shirting when the temperature shifts. Rely on your immediate sensory response to evaluate the garment. If the weave feels rigid across your shoulders, leave it on the hanger.\n\nYour comfort instinct gravitates toward emotional comfort visible in how you present, your feelings wear you.",
+  "intimateText": "In dim lighting, close drape must lead. Low illumination flattens shape. Rely on fine ribbed merino and worsted wool to outline your proportions without clinging. Layer a warm taupe base with mixed metals. A matt gold chain or a brushed silver cuff resting on camel knitwear collects the ambient glow. Keep the fibres tactile against your skin. Carry your soft merino straight into an impromptu evening out. Dress for the physical sensation of the fabric. Trust the worsted wool to keep its structure while you sit, guaranteeing light movement throughout the night.",
+  "sectionIntro": "Assemble your office options by testing every piece for strict lines and physical ease.",
+  "tests": [
+   "a school run or a corner shop dash does not require surrendering your softness"
+  ],
+  "workText": "At work, close drape takes the lead. Build your foundation with crisp cotton poplin and worsted wool cut to sit cleanly near the body. Let your other principles play a supporting role. Introduce a solitary warm metallic detail at the collar or wrist to act as your one warm point of light. Prioritise light movement over rigid construction. Test every seam by reaching for a high shelf or sitting in a low office chair. A frantic morning commute does not require surrendering your crisp tailoring. Anchor your choices in camel tones. Drop any restrictive blazers back on the rail.\n\nYour style energy concentrates in partnership and routine, so your wardrobe is at its best when it reflects both partnership and routine. At work, you communicate your intuitive intelligence by wearing creatively composed pieces and adopting a soft structure for empathetic fluidity."
  },
  "palette": {
   "accentColours": [
    {
-    "hexValue": "#00AFBF",
-    "name": "Iced Aqua",
+    "hexValue": "#00656E",
+    "name": "Warm Petrol",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Signature",
@@ -82,59 +130,59 @@
     "role": "accent"
    },
    {
-    "hexValue": "#702E62",
-    "name": "Deep Plum",
+    "hexValue": "#865373",
+    "name": "Warm Mauve",
     "provenance": {
      "kind": "chartDerivedAccent",
      "role": "Contrast",
      "saturationOverride": false,
-     "sourcePlanet": "Venus",
-     "sourceSign": "Scorpio"
+     "sourcePlanet": "Mars",
+     "sourceSign": "Libra"
     },
     "role": "accent"
    }
   ],
-  "cluster": "Deep Cool High-Contrast",
+  "cluster": "Deep Warm Structured",
   "coreColours": [
    {
-    "hexValue": "#191970",
-    "name": "midnight",
+    "hexValue": "#4A1C20",
+    "name": "oxblood",
     "provenance": {
      "band": "core",
-     "family": "Bright Winter",
+     "family": "Deep Autumn",
      "index": 0,
      "kind": "v4Template"
     },
     "role": "core"
    },
    {
-    "hexValue": "#4169E1",
-    "name": "royal blue",
+    "hexValue": "#0B4F4A",
+    "name": "forest teal",
     "provenance": {
      "band": "core",
-     "family": "Bright Winter",
+     "family": "Deep Autumn",
      "index": 1,
      "kind": "v4Template"
     },
     "role": "core"
    },
    {
-    "hexValue": "#CC0066",
-    "name": "hot pink",
+    "hexValue": "#254D32",
+    "name": "dark pine",
     "provenance": {
      "band": "core",
-     "family": "Bright Winter",
+     "family": "Deep Autumn",
      "index": 2,
      "kind": "v4Template"
     },
     "role": "core"
    },
    {
-    "hexValue": "#5FADA5",
-    "name": "icy teal",
+    "hexValue": "#9E4E3A",
+    "name": "dark terracotta",
     "provenance": {
      "band": "core",
-     "family": "Bright Winter",
+     "family": "Deep Autumn",
      "index": 3,
      "kind": "v4Template"
     },
@@ -146,77 +194,77 @@
    "name": "black",
    "provenance": {
     "band": "deepAnchor",
-    "family": "Bright Winter",
+    "family": "Deep Autumn",
     "index": 0,
     "kind": "v4Template"
    },
    "role": "anchor"
   },
-  "family": "Bright Winter",
+  "family": "Deep Autumn",
   "lightAnchor": {
-   "hexValue": "#FFFFFF",
-   "name": "bright white",
+   "hexValue": "#F2E8D4",
+   "name": "warm cream",
    "provenance": {
     "band": "lightAnchor",
-    "family": "Bright Winter",
+    "family": "Deep Autumn",
     "index": 0,
     "kind": "v4Template"
    },
    "role": "anchor"
   },
   "luminarySignature": {
-   "hexValue": "#653F96",
-   "name": "cobalt",
+   "hexValue": "#9E1A46",
+   "name": "cool ruby",
    "provenance": {
     "band": "luminarySignature",
-    "family": "Bright Winter",
+    "family": "Deep Autumn",
     "index": 0,
     "kind": "v4Template"
    },
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your colour palette operates on visual weight and stealth, built for a person who dictates exactly what others get to see. Ground your wardrobe in a profoundly dark, saturated base of midnight, royal blue, and hot pink. Because your mind works quickly and you easily tire of looking the same every day, a strictly dark uniform will eventually feel suffocating. Cut through that rich density by splicing in Iced Aqua or a sharp, unexpected hit of Deep Plum. Keep these brighter interruptions tactical, slipping them onto the printed silk lining of a structured jacket or the enamel hardware of a bag. The overall effect is incredibly commanding, giving you an intimidating baseline with just enough flash to satisfy your need for variety.",
+  "narrativeText": "Anchor your palette in a strictly warm temperature. Ensure the finish remains matt. Construct the base using oxblood and forest teal. Swap stark white for dark pine. Rely on dark terracotta as a bridge neutral to connect contrasting items. Deploy Warm Petrol or Warm Mauve as your sole deliberate accent. Apply your relief tone sparingly as a soft note. Every shade chosen must support close drape. Pass over pale pastels, neon brights, and blue-grey colours entirely. Watch for the hard shell trap. When the daily pace accelerates, do not grab rigid armour or stiff utility jackets. Swap the technical shell for a brushed cotton layer that travels just as fast but wraps your frame securely.",
   "neutrals": [
    {
-    "hexValue": "#0A0A0A",
-    "name": "black",
+    "hexValue": "#3C2415",
+    "name": "espresso",
     "provenance": {
      "band": "neutrals",
-     "family": "Bright Winter",
+     "family": "Deep Autumn",
      "index": 0,
      "kind": "v4Template"
     },
     "role": "neutral"
    },
    {
-    "hexValue": "#FFFFFF",
-    "name": "bright white",
+    "hexValue": "#4A4244",
+    "name": "warm charcoal",
     "provenance": {
      "band": "neutrals",
-     "family": "Bright Winter",
+     "family": "Deep Autumn",
      "index": 1,
      "kind": "v4Template"
     },
     "role": "neutral"
    },
    {
-    "hexValue": "#1B2A4A",
-    "name": "ink navy",
+    "hexValue": "#3C4B27",
+    "name": "deep olive",
     "provenance": {
      "band": "neutrals",
-     "family": "Bright Winter",
+     "family": "Deep Autumn",
      "index": 2,
      "kind": "v4Template"
     },
     "role": "neutral"
    },
    {
-    "hexValue": "#71797E",
-    "name": "steel grey",
+    "hexValue": "#5C4033",
+    "name": "bark brown",
     "provenance": {
      "band": "neutrals",
-     "family": "Bright Winter",
+     "family": "Deep Autumn",
      "index": 3,
      "kind": "v4Template"
     },
@@ -226,67 +274,111 @@
   "overrideFlags": {
    "capricornVirgoCoolingApplied": false,
    "coolLeanDeepAutumn": false,
-   "deepAnchorOverriddenToBlack": false,
+   "deepAnchorOverriddenToBlack": true,
    "earthDepthOverrideApplied": false,
    "fireAirChromaApplied": true,
    "scorpioDensityApplied": true,
    "surfacePreservationApplied": false,
+   "venusWarmFloorApplied": true,
    "waterSofteningApplied": false,
-   "winterCompressionApplied": false
+   "winterCompressionApplied": true
   },
+  "rankedItems": [
+   {
+    "name": "Warm taupe",
+    "role": "warm_base"
+   },
+   {
+    "name": "Camel",
+    "role": "warm_base"
+   },
+   {
+    "name": "Soft cream",
+    "role": "white_substitute"
+   },
+   {
+    "name": "Sand beige",
+    "role": "warm_cool_bridge"
+   },
+   {
+    "name": "Warm stone",
+    "role": "warm_cool_bridge"
+   },
+   {
+    "name": "Olive drab",
+    "role": "earthy_green"
+   },
+   {
+    "name": "Espresso brown",
+    "role": "structural_dark"
+   },
+   {
+    "name": "Rust orange",
+    "role": "accent"
+   },
+   {
+    "name": "Ochre gold",
+    "role": "accent"
+   },
+   {
+    "name": "Pale clay",
+    "role": "relief"
+   }
+  ],
   "rulerSignature": {
-   "hexValue": "#653F96",
-   "name": "dusty plum",
+   "hexValue": "#9E1A46",
+   "name": "hot pink",
    "provenance": {
     "band": "rulerSignature",
-    "family": "Bright Winter",
+    "family": "Deep Autumn",
     "index": 0,
     "kind": "v4Template"
    },
    "role": "signature",
    "semanticLabel": "ruler signature"
   },
-  "secondaryPull": "Bright Spring",
+  "secondaryPull": "True Autumn",
+  "sectionIntro": "Treat your colour palette as a strict system of utility.",
   "supportColours": [
    {
-    "hexValue": "#A89F91",
-    "name": "warm stone",
+    "hexValue": "#1B2A4A",
+    "name": "ink navy",
     "provenance": {
      "band": "support",
-     "family": "Bright Winter",
+     "family": "Deep Autumn",
      "index": 0,
      "kind": "v4Template"
     },
     "role": "support"
    },
    {
-    "hexValue": "#786D4E",
-    "name": "deep khaki",
+    "hexValue": "#3B3F42",
+    "name": "cool charcoal",
     "provenance": {
      "band": "support",
-     "family": "Bright Winter",
+     "family": "Deep Autumn",
      "index": 1,
      "kind": "v4Template"
     },
     "role": "support"
    },
    {
-    "hexValue": "#7B5B3A",
-    "name": "cocoa",
+    "hexValue": "#5B6770",
+    "name": "slate",
     "provenance": {
      "band": "support",
-     "family": "Bright Winter",
+     "family": "Deep Autumn",
      "index": 2,
      "kind": "v4Template"
     },
     "role": "support"
    },
    {
-    "hexValue": "#C4A35A",
-    "name": "camel sand",
+    "hexValue": "#2F3A2B",
+    "name": "midnight olive",
     "provenance": {
      "band": "support",
-     "family": "Bright Winter",
+     "family": "Deep Autumn",
      "index": 3,
      "kind": "v4Template"
     },
@@ -294,12 +386,18 @@
    }
   ],
   "swatchFamilies": [],
+  "traps": [
+   {
+    "failure": "the hard shell: reaching for armour, technical jackets, and stiff utility layers when life speeds up",
+    "fix": "swap the shell for a brushed cotton layer that moves just as fast and holds you besides"
+   }
+  ],
   "variables": {
-   "contrast": "High",
+   "contrast": "Medium",
    "depth": "Deep",
    "saturation": "Rich",
    "surface": "Structured",
-   "temperature": "Cool"
+   "temperature": "Warm"
   }
  },
  "pattern": {
@@ -309,7 +407,7 @@
    "whimsical prints",
    "single heavy pattern"
   ],
-  "narrativeText": "You treat prints with a healthy dose of suspicion, preferring the sheer impact of a heavy, dark silk or stiff raw denim over unnecessary visual noise. When a pattern actually makes the cut, it has to be sharp and slightly hypnotic. A precise mixed-scale stripes and florals or a darkly layered stripes satisfies your craving for visual movement without breaking your intensely controlled exterior. Stay well away from cheerful florals and bright gingham. They register as fussy and instantly dilute your natural magnetism, which relies entirely on keeping the tension high and letting the garment's construction speak for itself.",
+  "narrativeText": "Scale your contrast to the environment. Build your foundation on adaptive designs that shift smoothly from low to medium visibility depending on the setting. Let tailored jackets derive their pattern from the weave itself. Assign fluid shirts the task of carrying a printed motif. Look for fabrics that offer light movement, allowing the ink to breathe. Pass over cheerful florals and bright gingham. Choose a warm, matt mixed-scale stripes and florals or stripes instead. Run the passing test. Walk past a glass window and observe the fabric in motion. A successful print dissolves into a gentle, shifting texture as you move, never hanging like a stiff graphic. Ensure garments maintain close drape. If the fabric wears like a flat canvas, leave it behind.",
   "recommendedPatterns": [
    "mixed-scale stripes and florals",
    "stripes",
@@ -318,10 +416,18 @@
    "whimsical illustrated graphics",
    "global-inspired motifs"
   ],
-  "tipText": "Loud prints feel completely wrong on you, clashing directly with your preference for deep colour and controlled silhouettes. Instead of bold contrasts, treat a mixed-scale stripes and florals as a secret texture. Look for subtle variations woven straight into the garment, such as an ink-blue jacquard on heavy silk or a charcoal shadow over black. This approach gives your restless eye enough detail to stay engaged, while keeping the overall mood severe from a few steps away. The effect is entirely deliberate, creating a private detail that only reveals itself when someone gets close enough to notice."
+  "sectionIntro": "Master how to scale and select motifs without letting the print wear you.",
+  "tests": [
+   "the passing test (reads as soft, pleasant texture in motion)"
+  ],
+  "tipText": "To check any mixed-scale stripes and florals, apply the ripple test. Hold the garment by the shoulders and give it a single, sharp shake. The print must soften into a unified wash of colour as the material moves. If it remains rigidly legible or flashes with hard edges, leave the piece on the rail. Your wardrobe demands light movement to function. A successful design dissolves into a warm, matt field when your body shifts. Keep the spacing tight enough that the boundaries melt together from three paces away. If you stop moving and the lines demand focus, the item fails."
  },
  "styleCore": {
-  "narrativeText": "There is a deeply deliberate tension in the way you present yourself. You draw people in with an intense, magnetic presence, yet your approach to getting dressed is entirely too restless to ever be pinned down. The clothes you wear act as a game of controlled revelation, blending formidable authority with a quick, social agility that keeps everyone guessing. When you walk into a room, you project a quiet power that is impossible to ignore, crossed with an elusive energy that stops anyone from putting you in a neat box. You invite attention exactly on your own terms, maintaining total control over what you choose to share.\n\nYour natural sense of beauty shows up most powerfully in your daily rituals, daily beauty rituals, functional elegance, beautiful workwear, aesthetic routines. Your style instincts lean toward clarity, structure, and visible polish. Your public style reads as fluid and intuitive; soft elegance and imaginative beauty feel effortlessly composed."
+  "narrativeText": "Construct your wardrobe carefully. Accumulate versatile pieces gradually, deploy them rapidly based on the day's demands, and drift through combinations by mood. Your physical instinct relies on crispness and separation. Does the fabric stay sharp, light, and cleanly cut, or does it collapse? Apply the flight test to everything you consider buying. Lift a trouser or an unlined jacket by the hem and drop it. Watch how it settles. If it falls with a clean snap and holds its line, buy it. If it puddles limply, leave it on the rack. You require materials that keep their structure and stay distinct from your silhouette.\n\nYour guiding formula is close drape + light movement + one warm point of light. Picture a finely knit sweater worn beneath an unlined trench coat, finished with a single matt ring in a warm finish. The sweater sits near the body. The coat shifts freely as you step. The jewellery provides that singular glow. Rely on this combination to maintain your visual balance. You need garments that adapt easily to changing contexts while retaining their precise cut.\n\nYour natural sense of beauty shows up most powerfully in your daily rituals, daily beauty rituals, functional elegance, beautiful workwear, aesthetic routines. Your style instincts lean toward clarity, structure, and visible polish. Your public style reads as fluid and intuitive; soft elegance and imaginative beauty feel effortlessly composed.",
+  "sectionIntro": "Master this blueprint to ground your physical instincts and build your wardrobe with precise intention.",
+  "tests": [
+   "the flight test"
+  ]
  },
  "textures": {
   "avoidTextures": [
@@ -329,23 +435,64 @@
    "stiff formal fabrics",
    "stiff formal suiting"
   ],
-  "badText": "Anything too sweet, fussy, or fragile instantly undermines your sharp, contained presence. Avoid heavy unchanging wool that snags on everything and stiff formal fabrics that feels entirely insubstantial against the body. Materials that demand constant adjusting interrupt your quick social momentum and leave you feeling awkwardly exposed rather than firmly in charge. If a piece cannot move with your fast pace while maintaining a perfect poker face, it belongs in someone else's wardrobe.",
-  "goodText": "You operate on a frequency that demands intense magnetism and constant motion. Your clothes need serious structural integrity, but they cannot feel like a cage. Lightweight jersey gives you an untouchable, calculated edge that always looks brilliant in low lighting. For days when your restless energy takes over but you still want a razor-sharp silhouette, rely on crisp cotton and mixed blends. Contrast is your ultimate styling tool, so mix those heavier, secretive weights with the crisp finish of reversible fabrics. The result is an exterior that looks completely impenetrable but remains effortless to escape in.",
+  "badText": "Gather a garment into your fist and squeeze tightly. Watch how the fibres react. If the material locks into sharp creases or springs back with stiff resistance, leave it on the hanger. Your wardrobe relies on a close drape, and rigid fabrics will constantly fight your physical geometry. Avoid heavy unchanging wool entirely. It creates a bulky shell that refuses to settle against your body. Scrutinise stiff formal fabrics under the fingertips. If the fibres feel slick or trap heat instantly, put the piece down. Keep your visual temperature warm by rejecting reflective synthetics or any fabric treated with a stiff, matt coating. Trust the density of the weave. Hollow fibres deceive the eye, but genuine mass never fails you.",
+  "goodText": "Build your wardrobe on matt textiles that deliver light movement and a close drape. Trust your hands. Apply the forearm test. Drape the fabric over your outstretched arm and assess the weight. If it plummets heavily or locks into rigid folds, leave it. Look for lightweight jersey to give your shirting clean architectural boundaries and pure separation. Rely on crisp cotton for close-to-body base layers with sharp lines and easy movement. Select mixed blends for trousers that drape cleanly and resist creasing through a long day. Finish with reversible fabrics for lightweight mobile outerwear that blocks wind and weighs little. This creates the matt canvas for your one warm point of light. Use the following hierarchy to select your core materials.",
+  "rankedItems": [
+   {
+    "name": "Crisp cotton poplin",
+    "role": "rank 1",
+    "useCase": "shirting with clean architectural boundaries and pure separation"
+   },
+   {
+    "name": "Fine ribbed merino",
+    "role": "rank 2",
+    "useCase": "close-to-body base layers with sharp lines and easy movement"
+   },
+   {
+    "name": "Worsted wool",
+    "role": "rank 3",
+    "useCase": "trousers that drape cleanly and resist creasing through a long day"
+   },
+   {
+    "name": "Technical nylon",
+    "role": "rank 4",
+    "useCase": "lightweight mobile outerwear that blocks wind and weighs little"
+   },
+   {
+    "name": "Lightweight gabardine",
+    "role": "rank 5",
+    "useCase": "transitional jackets with rigid structure and no heavy drag"
+   },
+   {
+    "name": "Matt silk",
+    "role": "rank 6",
+    "useCase": "a frictionless fluid layer added without bulk"
+   },
+   {
+    "name": "Crisp linen",
+    "role": "rank 7",
+    "useCase": "breathable separation over fluid drapes in warmer weather"
+   }
+  ],
   "recommendedTextures": [
    "lightweight jersey",
    "crisp cotton",
    "mixed blends",
    "reversible fabrics"
   ],
+  "sectionIntro": "Your physical comfort dictates your visual success, so test every fabric with your hands before it touches your skin.",
   "sweetSpotKeywords": [
    "versatility",
    "lightness"
   ],
-  "sweetSpotText": "Your ideal fabrication sits precisely at the intersection of versatility and lightness. Garments must project a sharp, decisive exterior while allowing total physical agility underneath. Think of lightweight jersey that snaps back into shape as you rush across town, or crisp cotton that drapes heavily but still breathes when you spontaneously alter your evening plans. A piece has to hold its own in a dark, crowded room without trapping you in one rigid physical mood. If it restricts your stride or demands too much precious handling, leave it on the rail."
+  "sweetSpotText": "Anchor your styling in the friction between versatility and lightness. Layer them directly. Test the mobility of any lightweight jersey piece by pulling the fabric gently on the bias. You require light movement. The garment must drift and settle back, ensuring a close drape over your frame. Ground this descending fluidity with a matt finish. Keep your overall temperature warm to balance the pairing. Motion reveals the truth of the garment.",
+  "tests": [
+   "the flight test"
+  ]
  },
  "userInfo": {
   "birthDate": "1985-11-27T12:00:00Z",
   "birthLocation": "Synth 148 \u2014 Sagittarius Sun, 12:00 UTC, New York (1985)",
-  "generationDate": "2026-06-26T03:05:10Z"
+  "generationDate": "2026-07-16T01:16:22Z"
  }
 }

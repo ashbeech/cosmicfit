@@ -23,7 +23,7 @@ final class CosmicFitLoadingOverlay: UIView {
     // MARK: - Init
 
     init(message: String?, fill: CosmicFitLoaderView.Fill, dimColour: UIColor) {
-        self.loader = CosmicFitLoaderView(fill: fill, includesBlankGap: true)
+        self.loader = CosmicFitLoaderView(fill: fill)
         super.init(frame: .zero)
         setup(message: message, dimColour: dimColour)
     }

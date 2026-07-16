@@ -34,6 +34,99 @@ ESSENCE_TO_ENERGY = {
 IMPERCEPTIBLE_DELTA = 0.02
 MEANINGFUL_DELTA = 0.05
 
+# --- Sky Forward v1.0.2 Phase 6c / plan G2 item 3: fail-closed cohort regression gate ---
+# These are PINNED, pre-registered floors (governance G0): defensible absolute bars that any healthy
+# engine clears, set well below the v1.0.1 committed baseline so they are floors, not tuned-to-pass
+# bounds. The four gated metric families are exactly those named in the plan (mean coherence,
+# narrative-cohesion pass rate, slider-variation coverage, tarot repeat-gap). Changing a constant
+# here is an owner escalation, recorded in the plan revision log — never lower it just to pass.
+GATE_MIN_COHERENCE_PASS_RATE = 0.85   # cohesion.avgOverallPassRate (v1.0.1 baseline: 1.0)
+GATE_MIN_ENERGY_COSINE = 0.80         # cohesion.meanEnergyCosine — narrative↔vibe alignment (baseline ~0.91)
+GATE_MIN_REPEAT_GAP = 3               # tarot.minRepeatGapObserved must exceed the HARD_BLOCK_DAYS window
+GATE_MAX_STUCK_USER_FRACTION = 0.33   # per slider: fraction of users with range < STUCK_RANGE
+# Relative regression tolerance vs the pinned baseline summary (when --baseline is supplied): a gated
+# metric may not drop by more than this fraction of its baseline value.
+GATE_REGRESSION_TOLERANCE = 0.15
+# Wider tolerance for top-essence↔energy match only — owner-ratified (2026-07-16, plan rev 8) because
+# this tag-overlap metric is confounded with (i.e. inversely tracks) essence variety, a release goal.
+GATE_TOP_ESSENCE_REGRESSION_TOLERANCE = 0.25
+DEFAULT_GATE_BASELINE = "docs/fixtures/production_audit_baseline_v1_0_1.json"
+
+
+def run_gate(summary: dict, baseline: dict | None) -> list[str]:
+    """Return a list of gate-failure messages (empty = PASS). Fail-closed: any entry ⇒ exit(1)."""
+    failures: list[str] = []
+    cohort = max(summary.get("cohortSize") or 0, 1)
+
+    # (1) mean coherence
+    coh = (summary.get("cohesion") or {}).get("avgOverallPassRate")
+    if coh is None or coh < GATE_MIN_COHERENCE_PASS_RATE:
+        failures.append(f"mean coherence avgOverallPassRate={coh} < floor {GATE_MIN_COHERENCE_PASS_RATE}")
+
+    # (2) narrative-cohesion pass rate (narrative↔vibe energy alignment)
+    cos = (summary.get("cohesion") or {}).get("meanEnergyCosine")
+    if cos is None or cos < GATE_MIN_ENERGY_COSINE:
+        failures.append(f"narrative-cohesion meanEnergyCosine={cos} < floor {GATE_MIN_ENERGY_COSINE}")
+
+    # (3) tarot repeat-gap: no hard-block violations, and the closest repeat clears the block window
+    tar = summary.get("tarot") or {}
+    hbv = tar.get("totalHardBlockViolations")
+    if hbv is None or hbv > 0:
+        failures.append(f"tarot hard-block violations={hbv} (must be 0)")
+    min_gap = tar.get("minRepeatGapObserved")
+    if min_gap is not None and min_gap < GATE_MIN_REPEAT_GAP:
+        failures.append(f"tarot minRepeatGapObserved={min_gap} < floor {GATE_MIN_REPEAT_GAP}")
+
+    # (4) slider-variation coverage: no slider stuck for more than the allowed fraction of users
+    stuck = (summary.get("sliders") or {}).get("stuckUserCounts") or {}
+    for s in SLIDERS:
+        frac = (stuck.get(s, 0) or 0) / cohort
+        if frac > GATE_MAX_STUCK_USER_FRACTION:
+            failures.append(
+                f"slider '{s}' stuck for {frac:.0%} of users > {GATE_MAX_STUCK_USER_FRACTION:.0%} cap")
+
+    # Optional: regression vs the pinned baseline (owner-priority: variation must not silently drop)
+    if baseline:
+        def rel_regress(label, path, tol=GATE_REGRESSION_TOLERANCE):
+            cur = _dig(summary, path)
+            base = _dig(baseline, path)
+            if cur is None or base is None or base <= 0:
+                return
+            if cur < base * (1 - tol):
+                failures.append(
+                    f"{label} regressed vs baseline: {cur:.4f} < {base:.4f}×{1 - tol:.2f}")
+        rel_regress("mean coherence", "cohesion.avgOverallPassRate")
+        rel_regress("narrative-cohesion", "cohesion.meanEnergyCosine")
+        # top-essence↔energy match uses a WIDER tolerance (owner-ratified 2026-07-16, plan rev 8):
+        # this tag-overlap metric is confounded with essence variety — v1.0.2's +65% essence-variety
+        # gain (avgUniqueTop1 5.7→9.4, a release goal + the 24h-variation non-negotiable) mechanically
+        # lowers the odds the varied headline essence tag-matches any given tarot card. Manually reviewed
+        # regression days read fine/better (v1.0.1's higher score came from a monotonous "romantic"
+        # default). Gated only against a genuine collapse, not the variety tradeoff.
+        rel_regress("top-essence match", "cohesion.avgTopEssenceEnergyMatchRate",
+                    tol=GATE_TOP_ESSENCE_REGRESSION_TOLERANCE)
+        # slider-variation coverage regression: mean display range across sliders
+        cur_ranges = (summary.get("sliders") or {}).get("avgDisplayRange") or {}
+        base_ranges = (baseline.get("sliders") or {}).get("avgDisplayRange") or {}
+        if cur_ranges and base_ranges:
+            cur_mean = sum(cur_ranges.get(s, 0) for s in SLIDERS) / len(SLIDERS)
+            base_mean = sum(base_ranges.get(s, 0) for s in SLIDERS) / len(SLIDERS)
+            if base_mean > 0 and cur_mean < base_mean * (1 - GATE_REGRESSION_TOLERANCE):
+                failures.append(
+                    f"slider-variation coverage regressed: mean range {cur_mean:.4f} < "
+                    f"{base_mean:.4f}×{1 - GATE_REGRESSION_TOLERANCE:.2f} "
+                    f"(owner-priority: raise jitterRange / widen transit top-K)")
+    return failures
+
+
+def _dig(d: dict, dotted: str):
+    v = d
+    for p in dotted.split("."):
+        v = v.get(p) if isinstance(v, dict) else None
+        if v is None:
+            return None
+    return v
+
 STOPWORDS = set("the a an and or of to in on for with your you it is are be at as that this".split())
 
 
@@ -358,6 +451,13 @@ def analyze_blueprints(bp_dir: Path) -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--in", dest="indir", type=str, default="docs/fixtures/production_audit")
+    ap.add_argument("--gate", action="store_true",
+                    help="Fail-closed regression gate: sys.exit(1) if any pinned cohort metric "
+                         "(mean coherence, narrative-cohesion, slider coverage, tarot repeat-gap) "
+                         "falls below its floor or regresses beyond tolerance vs --baseline.")
+    ap.add_argument("--baseline", type=str, default=DEFAULT_GATE_BASELINE,
+                    help="Pinned baseline summary.json to diff against in --gate mode "
+                         "(absolute floors still apply if the baseline is absent).")
     args = ap.parse_args()
     base = ROOT / args.indir
 
@@ -574,6 +674,25 @@ def main() -> None:
         ]
     (base / "summary.txt").write_text("\n".join(lines) + "\n")
     print("\n".join(lines))
+
+    # --- Fail-closed regression gate (plan G2 item 3) ---
+    if args.gate:
+        baseline = None
+        baseline_path = ROOT / args.baseline
+        if baseline_path.exists():
+            baseline = json.loads(baseline_path.read_text())
+            print(f"\nGATE: diffing against pinned baseline {args.baseline}")
+        else:
+            print(f"\nGATE: baseline {args.baseline} absent — enforcing absolute floors only")
+        failures = run_gate(summary, baseline)
+        print("\n" + "=" * 60)
+        if failures:
+            print(f"GATE FAILED ({len(failures)} regression(s)):")
+            for f in failures:
+                print(f"  ✘ {f}")
+            print("A red gate is a signal to keep developing (plan §7 nudge order), not to ship.")
+            raise SystemExit(1)
+        print("GATE PASSED — all pinned cohort metrics within floors/tolerance.")
 
 
 if __name__ == "__main__":

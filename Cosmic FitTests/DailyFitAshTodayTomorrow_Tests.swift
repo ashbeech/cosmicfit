@@ -425,10 +425,14 @@ struct DailyFitAshTodayTomorrow_Tests {
         let paletteDiffers = today.dailyPalette.colours.map(\.name) != tomorrow.dailyPalette.colours.map(\.name)
         let vibeDiffers = AshTodayTomorrowSupport.vibeString(today.vibeBreakdown)
             != AshTodayTomorrowSupport.vibeString(tomorrow.vibeBreakdown)
-        let seedDiffers = today.generatedAt != tomorrow.generatedAt
 
-        #expect(paletteDiffers || vibeDiffers || seedDiffers,
-                "Harness Ash: consecutive days should differ in palette, vibe, or date seed.")
+        // Phase 6c (plan G0 owner-priority (iii)): the former OR included
+        // `seedDiffers = today.generatedAt != tomorrow.generatedAt`, which is ALWAYS true by
+        // construction (distinct generation timestamps / render dates) — so the assert could never
+        // fail even on a fully frozen palette+vibe. Drop it: consecutive days must differ in the
+        // actual shown content (palette or vibe), not merely in the date seed.
+        #expect(paletteDiffers || vibeDiffers,
+                "Harness Ash: consecutive days should differ in palette or vibe (not just the date seed).")
     }
 
     /// Full side-by-side report (harness + optional real birth) — diagnostic only.

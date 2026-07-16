@@ -26,16 +26,18 @@ struct DailyFitEngineRegistry_Tests {
         #expect(calibration == production.calibration)
     }
 
-    @Test("Production preset uses Sky Forward stage1 calibration")
-    func productionUsesSkyForwardCalibration() {
+    @Test("Production preset is the Sky Forward v1.0.2 sky-fidelity engine")
+    func productionUsesSkyFidelityCalibration() {
         let production = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)
-        let stage1Calibration = DailyFitEngineRegistry.calibration(
-            for: DailyFitEngineRegistry.stage1ExperimentalId
+        let skyFidelityCalibration = DailyFitEngineRegistry.calibration(
+            for: DailyFitEngineRegistry.skyForwardV102Id
         )
         #expect(production?.displayName == "Sky Forward")
-        #expect(production?.marketingVersion == DailyFitEngineRegistry.productionMarketingVersion)
-        #expect(production?.calibration == stage1Calibration)
-        #expect(production?.mode == .stage1Experimental)
+        // Real literal (was tautological `== productionMarketingVersion`, C3 in the plan).
+        #expect(production?.marketingVersion == "1.0.2")
+        #expect(production?.calibration == skyFidelityCalibration)
+        #expect(production?.mode == .stage2SkyFidelity)
+        #expect(production?.fingerprint == PinnedFingerprints.skyForwardV102)
     }
 
     @Test("Fingerprints are stable and differ between production and legacy_baseline")
@@ -55,11 +57,14 @@ struct DailyFitEngineRegistry_Tests {
         #expect(stage2Legacy.fingerprint != production.fingerprint)
     }
 
-    @Test("stage1_experimental alias matches Sky Forward production fingerprint")
-    func stage1AliasMatchesProductionFingerprint() {
+    @Test("stage1_experimental retains the v1.0.1 fingerprint, now distinct from v1.0.2 production")
+    func stage1RetainsV101Fingerprint() {
         let production = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)!
         let stage1 = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.stage1ExperimentalId)!
-        #expect(stage1.fingerprint == production.fingerprint)
+        // Pre-cutover these matched (production WAS stage1); post-cutover production is v1.0.2, so the
+        // stage1_experimental preset preserves the byte-identical v1.0.1 fingerprint but no longer aliases production.
+        #expect(stage1.fingerprint == PinnedFingerprints.skyForwardV101)
+        #expect(stage1.fingerprint != production.fingerprint)
     }
 
     @Test("stage1_experimental uses sky-forward calibration, stage1Experimental mode, and S2 seed policy")
@@ -74,6 +79,90 @@ struct DailyFitEngineRegistry_Tests {
             > DailyFitCalibration.default.stage2Sensitivity.paletteJitter)
         #expect(DailyFitEngineRegistry.mode(for: DailyFitEngineRegistry.stage1ExperimentalId)
             == .stage1Experimental)
+    }
+
+    // MARK: - Sky Forward v1.0.2 (Phase 1 + Phase 2)
+
+    /// Pinned pre-change fingerprints. Verified byte-identical against the
+    /// `sky-forward-v1.0.1` git tag on 2026-07-15. Promoting the sky mix into the
+    /// fingerprinted calibration (Phase 2) MUST NOT change any pre-v1.0.2 preset's
+    /// fingerprint — the new fields serialise into `canonicalCalibrationString` ONLY
+    /// when non-nil, and every legacy preset leaves them nil. A change here means a
+    /// legacy fingerprint drifted → frozen-payload compatibility broke.
+    enum PinnedFingerprints {
+        static let skyForwardV101 = "9a6aeebeb1f965f32b4e9ff6226adf56d753a465e447f15d760d3979ee0f2a7f"
+        static let legacyBaseline = "6c8afc1f3d8a7f4b3ce921a5283b5ec87f907b61c1d4b80a68355b7c48e013a7"
+        static let stage2Legacy   = "9110e802e4fdfe84c975ae565c0468070193199b9e406662e73bcd92093ebe47"
+        static let skyForwardV102 = "e0e7c597802dfd47be993bf6e3f6d90b0d73f23771d67995326329e89efde1f6"
+    }
+
+    @Test("Pre-v1.0.2 preset fingerprints are byte-identical to the v1.0.1 tag")
+    func preExistingFingerprintsAreByteIdentical() {
+        // Post-cutover, production is v1.0.2 (see productionUsesSkyFidelityCalibration). The v1.0.1
+        // calibration is preserved byte-for-byte in the stage1_experimental (+ sky_forward_v1_0_1) preset.
+        let stage1 = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.stage1ExperimentalId)!
+        let legacy = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.legacyBaselineId)!
+        let stage2Legacy = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.stage2LegacyId)!
+
+        #expect(stage1.fingerprint == PinnedFingerprints.skyForwardV101)
+        #expect(legacy.fingerprint == PinnedFingerprints.legacyBaseline)
+        #expect(stage2Legacy.fingerprint == PinnedFingerprints.stage2Legacy)
+    }
+
+    @Test("sky_forward_v1_0_1 rollback preset retains v1.0.1 identity + byte-identical fingerprint")
+    func skyForwardV101RollbackPreset() {
+        let v101 = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.skyForwardV101Id)!
+        let production = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)!
+
+        let stage1Calibration = DailyFitEngineRegistry.calibration(
+            for: DailyFitEngineRegistry.stage1ExperimentalId
+        )
+        #expect(v101.mode == .stage1Experimental)
+        #expect(v101.marketingVersion == "1.0.1")
+        // Post-cutover the rollback is DISTINCT from production (now v1.0.2) but retains the shipped
+        // v1.0.1 calibration + fingerprint → running it recovers v1.0.1 behaviour.
+        #expect(v101.calibration == stage1Calibration)
+        #expect(v101.calibration != production.calibration)
+        #expect(v101.fingerprint == PinnedFingerprints.skyForwardV101)
+        #expect(v101.fingerprint != production.fingerprint)
+        // No v1.0.2 fields leaked onto the rollback calibration.
+        #expect(v101.calibration.skyVibeWeights == nil)
+        #expect(v101.calibration.lunarSignificanceCoeff == nil)
+        // Post-cutover, production no longer shares this calibration+mode, so the v1.0.1 preset resolves
+        // to itself (its own seed namespace) rather than collapsing to `production` (the handoff's
+        // "resolvedEngineId shifts at cutover" note) — so rolling back busts the v1.0.2 production cache.
+        #expect(DailyFitEngineRegistry.engineId(for: v101.calibration, mode: .stage1Experimental)
+            == DailyFitEngineRegistry.skyForwardV101Id)
+    }
+
+    @Test("sky_forward_v1_0_2 preset is the sky-fidelity engine, now sharing production's fingerprint")
+    func skyForwardV102ExperimentalPreset() {
+        let v102 = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.skyForwardV102Id)!
+        let production = DailyFitEngineRegistry.descriptor(for: DailyFitEngineRegistry.productionId)!
+
+        #expect(v102.mode == .stage2SkyFidelity)
+        #expect(v102.isExperimental)
+        #expect(v102.dailySeedPolicy == .includesEngineId)
+        #expect(v102.fingerprint == PinnedFingerprints.skyForwardV102)
+        // Post-cutover production IS the v1.0.2 sky-fidelity engine, so v102 (the DEBUG alias) shares
+        // production's calibration + fingerprint (was `!=` pre-cutover).
+        #expect(v102.fingerprint == production.fingerprint)
+        // Fingerprinted lunar-led sky mix (ratified 0.25 / 0.60 / 0.15).
+        #expect(v102.calibration.skyVibeWeights?.lunar == 0.60)
+        #expect(v102.calibration.skyVibeWeights?.transits == 0.25)
+        #expect(v102.calibration.skyVibeWeights?.currentSun == 0.15)
+        #expect(v102.calibration.lunarSignificanceCoeff == 0.8)
+        // F5: jitter cut 0.40 → 0.18.
+        #expect(v102.calibration.axisTuning.jitterRange == 0.18)
+    }
+
+    @Test("usesSkyForwardPipeline covers both v1.0.1 and v1.0.2 modes; standard excluded")
+    func skyForwardPipelineHelper() {
+        #expect(DailyFitEngineMode.stage1Experimental.usesSkyForwardPipeline)
+        #expect(DailyFitEngineMode.stage2SkyFidelity.usesSkyForwardPipeline)
+        #expect(!DailyFitEngineMode.standard.usesSkyForwardPipeline)
+        #expect(DailyFitEngineMode.stage2SkyFidelity.usesSkyFidelityVibe)
+        #expect(!DailyFitEngineMode.stage1Experimental.usesSkyFidelityVibe)
     }
 
     @Test("Sky Forward production differs from stage2 legacy on fixed fixture")

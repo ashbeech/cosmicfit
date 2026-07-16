@@ -108,7 +108,7 @@ final class PurchaseViewController: UIViewController {
     }()
 
     private let ctaSpinner: CosmicFitLoaderView = {
-        let loader = CosmicFitLoaderView(fill: .light, includesBlankGap: false)
+        let loader = CosmicFitLoaderView(fill: .light)
         loader.hidesWhenStopped = true
         return loader
     }()

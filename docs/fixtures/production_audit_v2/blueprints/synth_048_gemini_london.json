@@ -1,11 +1,23 @@
 {
  "accessory": {
   "paragraphs": [
-   "A single, substantial accessory commands far more respect than a cluttered stack of delicate extras. Because your everyday dressing leans into fluid silhouettes and conversational, lightweight layers, you need a distinct focal point to stop the outfit from floating away. Opt for an item with real physical presence, whether that is a structured leather bag or a generously proportioned watch. The tactile reality of thick straps and heavy clasps provides a necessary counterbalance to your softer silks and crisp cottons. This solitary object cuts through the ease of your clothes, giving the entire look a strong, undeniable spine.",
-   "Your clothing thrives on soft volumes and mixed layers, which means your accessories must supply the physical grounding. This is where thick, uncompromising leathers and substantial hardware step in to create clear boundaries. A rigid bag or a wide belt with a satisfyingly heavy clasp stops a fluid silhouette from losing its shape entirely. You want items that feel heavy and real to the touch, like the solid mechanics of a watch or the firm edge of a structured strap. That deliberate friction between a weightless garment and an unyielding finish is what makes the outfit work.",
-   "The way an accessory actually feels in your hands completely determines whether it makes it out of the door. Your wardrobe demands immediate sensory feedback to match the visual impact. You will find real pleasure in the scent of a premium leather strap, the satisfying resistance of a heavy brass zip, or the quiet clatter of layered rings catching as you walk. Mixing butter-soft textures with serious, weighty clasps provides physical grounding without tipping your silhouette into rigidity. If a piece feels flat and lifeless to the touch, it simply will not survive your final edit."
+   "Your clothing establishes crisp separation. Your knitwear introduces blurred edges. Accessories exist to deliver one clever contrast. Hold to a strict maximum of one or two strong pieces per look. Overloading destroys the balance. Begin your selection with handbags. Demand full-grain leather and brushed matt hardware. Always apply a physical test before you commit. Drag your thumb over the zipper teeth. They must feel solid and unyielding. Ensure the construction feels capable of surviving decades of daily exposure. If you doubt its lifespan for even a second, reject it.",
+   "Hold a silk scarf by its very edge and let it drop. The downward plunge of the fabric matters more than its printed pattern. A substantial accessory in dove grey establishes crisp separation against a structured collar. Question whether the weave will withstand half a century of friction. If it lacks that enduring generational gravity, put it back. Seek out cool tones like deep teal that absorb light. A matt textile draped close to the neck supplies blurred edges without sacrificing geometric shape.",
+   "Select a medium full-grain leather belt to build crisp separation at the waist. Insist on a matt buckle to control the muted finish. Introduce keepsake jewellery crafted from aged silver. Look for oxidised details that soften the metal, providing necessary blurred edges against a deep teal knit. Apply the history test to every piece. Inspect the crevices of a ring or chain. It should look like a private inheritance extracted from a locked mahogany box rather than a fresh retail purchase. If the surface gleams perfectly, return it to the shelf. Trust the cool, heavy reality of the material."
+  ],
+  "rankedItems": [
+   {
+    "name": "Handbags",
+    "role": "accessory category",
+    "useCase": "full-grain leather, brushed matt hardware"
+   }
+  ],
+  "sectionIntro": "Master the exact science of selecting and physically testing the pieces that finish your look.",
+  "tests": [
+   "the heirloom test"
   ]
  },
+ "closing": "Rely entirely on your hands to gauge the truth of a garment, filtering for cool, matt textures until your silhouette achieves crisp separation + blurred edges + one clever contrast.",
  "code": {
   "avoid": [
    "Rigid matching sets that remove all surprise. If the outfit looks like it came off a mannequin as one unit, it is too predictable.",
@@ -17,11 +29,14 @@
   ],
   "consider": [
    "Prioritising incredibly polished finishes over distressed fabrics to maintain a consistently sharp, authoritative look.",
-   "Treating immaculate fit and precision tailoring as entirely non-negotiable elements of your professional wardrobe.",
+   "Treating immaculate fit and precision tailoring as entirely non-negotiable at work.",
    "Finding a tailor who understands your body and can adjust every key piece to your exact proportions.",
-   "Buyying one perfectly fitting poplin shirt to act as a strict template for every future purchase."
+   "Buyying one perfectly fitting poplin shirt to act as a strict template for every future purchase.",
+   "Judging every purchase on cost-per-wear rather than ticket price. A well-made piece worn two hundred times costs less than a cheap one worn twice.",
+   "Asking whether you would still wear a piece in five to ten years. If the answer wavers, leave it behind."
   ],
   "leanInto": [
+   "Anchoring every choice in your formula: crisp separation + blurred edges + one clever contrast.",
    "Mixing high and low fearlessly. A vintage market find paired with a designer knit shows range, not confusion.",
    "Embracing pattern clashing with clear intention. Stripes with florals works when the colour story holds together.",
    "Treating your accessories as immediate conversation starters; a sculptural ring with a backstory or a clutch that prompts a question always earns its keep.",
@@ -30,10 +45,15 @@
    "Prioritising versatility over consistency. A piece that works three ways is worth triple a piece that works one way perfectly."
   ]
  },
+ "coreFormula": "crisp separation + blurred edges + one clever contrast",
  "engineVersion": "2.1.0",
- "generatedAt": "2026-06-26T01:07:31Z",
+ "generatedAt": "2026-07-15T22:59:35Z",
  "hardware": {
-  "metalsText": "Your instinct for mixing things up extends right down to the zips and buckles. You want finishes that feel substantial to the touch without dragging down the lightness of your clothes. A brushed mixed metals works as a brilliant everyday base, sitting quietly next to crisp cottons, while high-shine white gold tones adds a conversational glint to your softer silk blends. Do not be afraid to wear them all at once. A subtle flash of bright copper tones on a bag closure or a vintage belt connects the dots perfectly. The goal is interesting, tactile hardware that feels playfully collected rather than bought in a rigid, matching set.",
+  "excludedFinishes": [
+   "polished chrome",
+   "high-shine silver"
+  ],
+  "metalsText": "Anchor your hardware in cool temperatures. Treat mixed metals and white gold as your primary metals. Introduce bright copper only sparingly. Avoid mirror-like shine. A highly polished belt buckle cuts a sharp, distracting line against subdued fibres. Stick to matt and brushed finishes. This muted approach guarantees crisp separation between pieces without overwhelming the eye. Drop a mixed metals chain onto a wooden counter before buying. Listen for a heavy, dull clank rather than a tinny rattle. Solid hardware proves its worth in sound and mass. Eliminate polished chrome completely.",
   "recommendedMetals": [
    "mixed metals",
    "white gold",
@@ -55,13 +75,33 @@
    "amethyst",
    "rainbow moonstone"
   ],
-  "stonesText": "Your jewellery box needs pieces that change their mood depending on the light, shifting right along with your own. Look for cabochon cuts and smooth, weighty settings that physically ground your more fluid instincts. Aquamarine is ideal here, offering a cloudy translucence that practically begs to be touched during a long dinner. Contrast that softness with the sudden, sharp flash of agate set into something solid and slightly imperfect, like heavy hammered silver. The goal is wearing gems that look like they hold an eccentric history, rather than just showing off a receipt.",
-  "tipText": "Your jewellery rotation thrives on a sense of tactile eclecticism. Rather than buying into matching sets, build a collection of interesting, substantial pieces that actually feel satisfying to hold. Think of layering a weighty mixed metals collar with a few delicate, fluid chains, or wearing a single aquamarine ring that immediately prompts a question from a stranger. The styling relies on mixing playful, conversational shapes with the undeniable grounding of high-quality materials. Hardware should always look like a series of excellent personal discoveries."
+  "sectionIntro": "Master your finishing details by controlling their temperature, texture, and density.",
+  "stonesText": "Look for density and an opaque finish when selecting aquamarine and agate. Hold the gem up against a window. Select completely opaque stones that refuse to let the light pass through. Highly reflective, mirrored hardware will flash aggressively against your muted garments. Select matt finishes to anchor the piece. Pair an opaque stone with a cool metal band to achieve crisp separation. This prevents the ring from reading as a solid block. Avoid lightweight, glassy alternatives. They absorb the warmth of your skin too quickly and compromise the item, ruining the blurred edges where the stone meets the heavy setting.",
+  "structuralMetals": [
+   "white gold",
+   "sterling silver",
+   "polished steel",
+   "silver"
+  ],
+  "tests": [
+   "pick it up: looks lie, weight doesn't (the pick-it-up weight test)"
+  ],
+  "tipText": "Assess the hardware by temperature. Optical illusions fade the moment a piece touches your skin. Press the mixed metals buckle or aquamarine detail against the inside of your wrist. Authentic materials retain an icy, cool bite even in a heated room. If the component turns warm immediately, leave it behind. You need solid components to anchor the outfit. Maintain crisp separation by choosing items with undeniable weight. Avoid highly polished surfaces. A mirror-like gloss flashes sharply against your cool, muted clothing and ruins the blurred edges of your look. Stick strictly to matt and brushed textures. A heavy, brushed finish absorbs light and integrates seamlessly.",
+  "traps": [
+   {
+    "failure": "high-shine, polished chrome silver looks sharp and distracting next to soft muted colours",
+    "fix": "stick to matt and brushed textures to keep the look cohesive"
+   }
+  ]
  },
  "occasions": {
-  "dailyText": "Dressing for an ordinary Tuesday demands a clever balance of visual wit and pure physical ease. Rather than falling back on stiff staples, build your off-duty looks from yielding, weightless pieces that drape effortlessly but create genuine intrigue when layered together. You excel at unexpected combinations, so try pairing a neatly structured top with something entirely fluid on the bottom to keep the silhouette moving. The garments must be impeccably constructed, because poor finishing immediately shatters the soothing sensory experience you need to get through the day. Leave room for intuition every morning, letting your shifting mood dictate the outfit rather than forcing yourself into a predictable uniform.\n\nYour comfort instinct gravitates toward emotional harmony in partnership dressing, soft social presentation.",
-  "intimateText": "An evening setting entirely alters your physical presence, demanding you trade strict tailoring for something infinitely more fluid. You need garments that feel substantial in your hand yet drape with total ease across your body. Keep your foundation incredibly yielding, then introduce a completely unpredictable styling twist to start the conversation. Your clothes must respond to your movement, constructed well enough to feel secure while retaining a sense of physical surrender. The final impression is of a woman who dresses entirely on instinct, trusting an impeccable fit and a flash of wit to carry the night.",
-  "workText": "Professionalism is never about looking locked into your clothes. Your version of office wear thrives on a clever tension between serious tailoring and undone styling. A beautifully cut wool jacket needs to drape rather than constrict, layered over soft, yielding silks. Mix unexpected shapes and tactile fabrics to keep the mind engaged through endless meetings, rolling the cuffs or leaving a button casually unfastened. Let the silhouette shift as you move around the room, proving that true authority looks effortlessly capable and distinctly human.\n\nYour style energy concentrates in public and partnership, so your wardrobe is at its best when it reflects both public and partnership."
+  "dailyText": "A Saturday trip to the greengrocer requires strict geometric discipline. Avoid shapeless cottons entirely. Look for dense knits that hold their shape. Maintain your standard even in the post office queue. Always deploy crisp separation + blurred edges + one clever contrast for your daily errands. Pair a dove grey cashmere jumper with deep teal brushed wool trousers. Walk briskly past a shop window. The knit must maintain its shape without riding up, while the trousers must fall straight to the shoe. Fasten a matt silver watch to your wrist. Notice how the cool metal delivers one clever contrast against the soft wool. Step out the door knowing exactly how the silhouette moves.\n\nYour comfort instinct gravitates toward emotional harmony in partnership dressing, soft social presentation.",
+  "intimateText": "In close quarters and dim lighting, crisp separation takes the lead. Shadows swallow subtle details. Keep your boundaries sharp. Pair a deep teal silk shirt with dove grey brushed wool trousers. Wear matt platinum rings rather than reflective metals to maintain a strictly cool tone. Drop any items that feel flimsy. Rely on the heavy drape of good fabric to anchor the silhouette. This discipline applies to private hours too. Sharing coffee on a brisk morning offers no excuse to let standards slip. Keep your hem lengths exact and your shoulders defined. Wear an inky navy cashmere jumper and enforce those precise lines.",
+  "sectionIntro": "Deploy definitive lines and tactile softness to calibrate your working wardrobe.",
+  "tests": [
+   "a market morning does not require abandoning proportion"
+  ],
+  "workText": "Crisp separation dictates your office strategy. Reviewing briefs on a rushed morning never justifies a careless silhouette. Establish firm boundaries using structured dove grey wool trousers or an inky navy jacket. Tug the cuff of the jacket. The architecture must snap back into place immediately, proving it can survive a fourteen-hour shift. Soften these rigid margins by layering matt silk underneath to create blurred edges. Finish the look by introducing a single unexpected detail at the collar, supplying one clever contrast. Look for a cool palette that maintains visual discipline. Avoid garments that slump or lose their tailoring.\n\nYour style energy concentrates in public and partnership, so your wardrobe is at its best when it reflects both public and partnership."
  },
  "palette": {
   "accentColours": [
@@ -184,7 +224,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your approach to colour balances conversational lightness with quiet, tactile weight. A solid base of dusty blue and rose mauve provides a grounded sensory foundation, keeping the clothes firmly in reality rather than floating off into pure fantasy. Layer in sage aqua to keep the eye moving and ensure the outfit stays agile. Because you dress intuitively, these shades must translate beautifully across mixed media, looking just as convincing in crisp cotton as they do in a soft silk blend. Throw in Rose Madder as a sharp hit of contrast to wake up the silhouette. The result is a highly responsive palette that shifts with your mood while retaining a serious sense of quality.",
+  "narrativeText": "Your palette runs strictly cool. Anchor your garments with dusty blue, rose mauve, and sage aqua, relying on soft violet as your neutral lightener. When a dense silhouette requires a visual palate cleanser, deploy your relief tone. Apply Rose Madder or Iced Aqua solely as an isolated focal point. Execute crisp separation among these shades by relying on varying weave structures, allowing the fabric transitions to soften and retain your necessary blurred edges. Pass over hot saturated red, stark optic white, and harsh neon entirely. Trust your hands to catch metallic clutter. Lay the jewellery against the chest of the garment. If the display turns overwhelming, strip it back. Permit yourself exactly one bright metallic focus. Force all remaining hardware to stay subdued, matt, and strictly secondary.",
   "neutrals": [
    {
     "hexValue": "#9C9A9A",
@@ -239,9 +279,56 @@
    "fireAirChromaApplied": false,
    "scorpioDensityApplied": false,
    "surfacePreservationApplied": false,
+   "venusWarmFloorApplied": false,
    "waterSofteningApplied": false,
    "winterCompressionApplied": false
   },
+  "rankedItems": [
+   {
+    "name": "Inky navy",
+    "role": "cool_base"
+   },
+   {
+    "name": "Deep teal",
+    "role": "cool_base"
+   },
+   {
+    "name": "Dove grey",
+    "role": "cool_base"
+   },
+   {
+    "name": "Moonlit ivory",
+    "role": "white_substitute"
+   },
+   {
+    "name": "Faded denim blue",
+    "role": "warm_cool_bridge"
+   },
+   {
+    "name": "Smoked mauve",
+    "role": "warm_cool_bridge"
+   },
+   {
+    "name": "Sage grey",
+    "role": "earthy_green"
+   },
+   {
+    "name": "Faded rose",
+    "role": "accent"
+   },
+   {
+    "name": "Deep berry",
+    "role": "accent"
+   },
+   {
+    "name": "Muted plum",
+    "role": "accent"
+   },
+   {
+    "name": "Soft oatmeal",
+    "role": "relief"
+   }
+  ],
   "rulerSignature": {
    "hexValue": "#396D5C",
    "name": "forest teal",
@@ -255,6 +342,7 @@
    "semanticLabel": "ruler signature"
   },
   "secondaryPull": "Soft Summer",
+  "sectionIntro": "Filter every potential purchase through your strict colour framework.",
   "supportColours": [
    {
     "hexValue": "#AF9B88",
@@ -302,6 +390,12 @@
    }
   ],
   "swatchFamilies": [],
+  "traps": [
+   {
+    "failure": "gilt overload: grandeur tips into gaudiness",
+    "fix": "hold the line at one molten flash and keep every other metal moment small, matt, and supporting"
+   }
+  ],
   "variables": {
    "contrast": "Low",
    "depth": "Medium",
@@ -317,7 +411,7 @@
    "single-pattern monotony",
    "harsh geometric"
   ],
-  "narrativeText": "Your eye naturally drifts toward prints that have a sense of humour, but the execution still needs to feel rooted and tactile. Mixing mixed-scale print clash with novelty illustrated prints on crisp cotton or a fluid silk blend gives you that witty, collected-over-time look without overwhelming your softer sensibilities. You look best when the visual rhythm feels intuitive rather than rigid. That is exactly why uniform solids and heavy tartans completely flatten your personal style, turning a clever outfit into a stiff uniform. Instead, casually layer stripes with florals into your lightweight linens for a finish that is visually sharp but effortlessly comfortable.",
+  "narrativeText": "Restrict patterns to a strict logic of woven geometry for tailored coats and subtle dye shifts for fluid pieces. Enforce a low-contrast tonal rule to protect your cool, muted baseline. Pass over uniform solids. Select mixed-scale print clash or novelty illustrated prints instead. Execute the proximity check. Examine the weave of the fabric from three inches away. The motif must settle into a unified natural texture, relying purely on subtle thread variations. If harsh individual shapes jump out, drop the item. Anchor your look with solid flat colour layers that build crisp separation. Soften the perimeter with blurred edges. Then provide a single structural contrast through intricate weaves that reveal their complexity only upon close inspection.",
   "recommendedPatterns": [
    "mixed-scale print clash",
    "novelty illustrated prints",
@@ -326,10 +420,18 @@
    "slub-weave cotton solid",
    "woven geometric"
   ],
-  "tipText": "Patterns are where your eye for clever detail gets to play, provided the fabric stops the overall look from feeling chaotic. Introduce mixed-scale print clash on a lightweight silk blend or crisp cotton, letting the print serve as a visual hook. To stop the motif from overwhelming your softer sensibilities, ground it with substantial, high-quality solid pieces. Think of a printed lemon yellow shirt tucked into a beautifully finished linen trouser. This mix gives you the visual conversation you want, but the sensory weight of the styling keeps the final result feeling entirely deliberate rather than thrown together."
+  "sectionIntro": "Demand structural integrity from every print before you bring it near your skin.",
+  "tests": [
+   "the field test (settle into a natural texture like ground seen from a hill)"
+  ],
+  "tipText": "Subject a mixed-scale print clash shirt to a harsh optical check. Hang the silk garment on a door, step ten paces back, and narrow your eyes. The print must dissolve into a natural shadow. It must read as an organic surface shift rather than a deliberate drawing. If the motif remains sharp or reads clearly from across the room, it fails. You require blurred edges to ground your cool palette. A harsh graphic destroys the intended visual weight. Take the piece down and return it to the rack."
  },
  "styleCore": {
-  "narrativeText": "Your style lives in the surprisingly chic space between a fleeting mood and a strict demand for physical quality. You project a fluid, effortless charm, but the garments themselves are always anchored by exceptional construction. It is an aesthetic built on clever, talkative layering, grounded by an absolute necessity for things that feel genuinely comforting to wear. While your daily approach to getting dressed relies entirely on intuition, you refuse to tolerate flimsy design. You walk into a room looking like you pulled a brilliant outfit together on a complete whim, yet everything on your body is built to last.\n\nYour natural sense of beauty shows up most powerfully in your public-facing identity, public beauty, polished image, aesthetic reputation, career-enhancing style. Your style instincts lean toward clarity, structure, and visible polish. Your public style reads as versatile and expressive; you communicate range and adaptability through what you wear."
+  "narrativeText": "Gauge a garment's honesty through its density. Pick the piece up and close your eyes. It must feel substantial and grounded under your fingers before you even inspect its construction. If the material lacks gravity or feels hollow in your hand, drop it. Assemble this collection with deliberate slowness. Curate each item methodically over months so you can dress instantly on dark mornings. Apply a strict timeline filter to every acquisition. Ask yourself if the item will remain completely relevant ten winters from today. If you hesitate, return it to the rack.\n\nTranslate this strictness into your exact formula: crisp separation + blurred edges + one clever contrast. Picture a heavily structured, cool charcoal overcoat worn over a dense, mist-grey cashmere rollneck. Finish the look with rigid silver hardware on a matt calfskin belt. The stiff tailoring provides clear boundaries. The knit softens the interior. The stark metal gives the eye a sudden focal point without shouting.\n\nYour natural sense of beauty shows up most powerfully in your public-facing identity, public beauty, polished image, aesthetic reputation, career-enhancing style. Your style instincts lean toward clarity, structure, and visible polish. Your public style reads as versatile and expressive; you communicate range and adaptability through what you wear.",
+  "sectionIntro": "Here is your mechanical blueprint for building a wardrobe that functions without fail.",
+  "tests": [
+   "the decade test"
+  ]
  },
  "textures": {
   "avoidTextures": [
@@ -337,23 +439,64 @@
    "stiff canvas",
    "monotone heavy fabrics"
   ],
-  "badText": "Heavy, unyielding materials completely block your instinct for movement and play. Step away from heavy wool, which acts like a sensory cage and stifles the light, conversational ease you carry so well. Fabric has to live and breathe with your body, meaning anything stubbornly dense or scratchy is an immediate mistake. Stiff canvas is similarly exhausting, forcing you into a stiff posture that contradicts your deep craving for tactile comfort. Your wardrobe has to answer to your shifting moods and the changing temperature of a room, rather than trapping you inside a walking sculpture.",
-  "goodText": "Your wardrobe needs to satisfy a constant craving for both lightness and absolute physical comfort. The way a garment feels against your skin dictates your entire mood for the day, meaning synthetic scratchiness is strictly off the table. Ground your daily rotation in lightweight linen for a reliable base that actually feels good to live in. Introduce crisp cotton to give an outfit a bit of textural contrast, or layer in mixed-media layers when you want a finish that is remarkably soft and fluid. You dress best when blending the highly practical with the playfully eclectic. When your clothes are this tactile, getting dressed becomes a reliable sensory anchor.",
+  "badText": "Reject anything that fights your own skin. Rub the hem of a heavy wool garment against itself. If the fibre repels your touch or whines faintly under pressure, drop the garment. Your strategy relies on crisp separation. Materials like stiff canvas and monotone heavy fabrics cling and drag over underlayers. They disrupt the clean lines you require. A cool, muted palette demands organic integrity to succeed. If a piece creates static sparks against your inner arm, it will always look thin. Base your rejection solely on this tactile reality.",
+  "goodText": "Your wardrobe runs on a careful balance of weight and movement. You need mixed-media layers to build tailored blazers that hold clean lines for years. That structure provides the crisp separation your look requires. Against that architecture, introduce the blurred edges of lightweight linen in your winter knitwear. It must compress under pressure and bounce back instantly. Add one clever contrast using the fluid movement of a silk blends blouse beneath a heavy lapel. Anchor it all with crisp cotton bags and belts that mould to your stride and patinate with wear. Let the textile's behaviour guide you, not the designer tag. Scrunch the sleeve in your fist. If the surface produces a dry, paper-like rustle, put the garment down and walk away. Seek out the materials ranked below.",
+  "rankedItems": [
+   {
+    "name": "Cashmere",
+    "role": "rank 1",
+    "useCase": "knitwear and winter layers that compress and bounce back"
+   },
+   {
+    "name": "Full-grain leather",
+    "role": "rank 2",
+    "useCase": "bags, shoes, and belts that mould to your life and patinate"
+   },
+   {
+    "name": "Brushed wool and tweed",
+    "role": "rank 3",
+    "useCase": "tailored coats and blazers that hold clean lines for years"
+   },
+   {
+    "name": "Silk",
+    "role": "rank 4",
+    "useCase": "blouses and linings that add fluid, effortless movement"
+   },
+   {
+    "name": "Suede",
+    "role": "rank 5",
+    "useCase": "shoes and accessories with quiet matt texture"
+   },
+   {
+    "name": "Fine merino",
+    "role": "rank 6",
+    "useCase": "base layers soft against the skin and resilient through washes"
+   },
+   {
+    "name": "Linen",
+    "role": "rank 7",
+    "useCase": "warmer-weather pieces whose natural wrinkle reads as authentic"
+   }
+  ],
   "recommendedTextures": [
    "lightweight linen",
    "crisp cotton",
    "mixed-media layers",
    "silk blends"
   ],
+  "sectionIntro": "Train your hands to recognise the materials that do the physical work for your style.",
   "sweetSpotKeywords": [
    "variety",
    "lightness"
   ],
-  "sweetSpotText": "Your textural sweet spot is a precise collision of variety and lightness. You need garments with enough sensory substance to keep you anchored in your body, but they must breathe effortlessly against the skin. A layer of lightweight linen or crisp cotton provides that necessary tactile foundation without locking you into a heavy, rigid silhouette. The touch of the fabric has to soothe you instantly, while still holding enough shape to look intentional. If a textile demands even a fraction of physical tolerance or scratches at the collar, leave it on the hanger."
+  "sweetSpotText": "Pinch the lapel between your thumb and index finger. If the weave feels synthetic or slides with a high-friction glide, leave it behind. Rely strictly on tactile feedback. Ignore the visual drape on the hanger. Your most effective pairings live entirely in the space between variety and lightness. Combine them using lightweight linen to establish a cool, matt foundation. This approach guarantees crisp separation between pieces while keeping your finish muted.",
+  "tests": [
+   "if a fabric resists your touch or feels squeaky between your fingers, leave it behind"
+  ]
  },
  "userInfo": {
   "birthDate": "1992-05-26T12:00:00Z",
   "birthLocation": "Synth 048 \u2014 Gemini Sun, 12:00 UTC, London (1992)",
-  "generationDate": "2026-06-26T01:07:31Z"
+  "generationDate": "2026-07-15T22:59:35Z"
  }
 }

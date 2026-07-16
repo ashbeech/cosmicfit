@@ -161,15 +161,26 @@ struct NarrativeCohesionReport_Tests {
     func generateCohesionReport() throws {
         let days = 60
         let start = SkyForwardV2Support.date(year: 2026, month: 5, day: 1)
-        let cal = SkyForwardV2Support.stage1Calibration
-        let engineId = DailyFitEngineRegistry.stage1ExperimentalId
+        // Cohort-ladder gate runs against the shipping-candidate engine (Sky Forward v1.0.2 by default;
+        // override with DAILY_FIT_ENGINE_ID). Phase 6c / plan G2 item 2.
+        let cal = SkyForwardV2Support.gateCalibration
+        let engineId = SkyForwardV2Support.gateEngineId
+        let mode = SkyForwardV2Support.gateMode
 
         let cohortPath = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
             .deletingLastPathComponent()
             .appendingPathComponent("inspector/Resources/synthetic_cohort.json")
         let cohortData = try Data(contentsOf: cohortPath)
-        let cohortRaw = try JSONSerialization.jsonObject(with: cohortData) as! [[String: Any]]
+        var cohortRaw = try JSONSerialization.jsonObject(with: cohortData) as! [[String: Any]]
+
+        // Fast tuning aid: COHESION_SUBSET=N runs only the first N users (measurement only — the
+        // fail-closed §4.3 asserts are skipped on a subset so a small sample can't spuriously red/pass).
+        // The full 216-user cohort is the real gate. Not set in CI → full run.
+        let subsetN = ProcessInfo.processInfo.environment["COHESION_SUBSET"].flatMap { Int($0) }
+        if let subsetN, subsetN > 0, subsetN < cohortRaw.count {
+            cohortRaw = Array(cohortRaw.prefix(subsetN))
+        }
 
         struct UserResult {
             var flipCount: Int = 0
@@ -216,13 +227,13 @@ struct NarrativeCohesionReport_Tests {
                     profileHash: userId,
                     date: date,
                     calibration: cal,
-                    mode: .stage1Experimental,
+                    mode: mode,
                     dailyFitEngineId: engineId
                 )
 
-                let rawEssence = BlueprintLensEngine.resolveEssenceProfile(from: snapshot, mode: .stage1Experimental)
+                let rawEssence = BlueprintLensEngine.resolveEssenceProfile(from: snapshot, mode: mode)
                 let rawSilhouette = BlueprintLensEngine.deriveSilhouetteProfile(
-                    from: bp, snapshot: snapshot, calibration: cal, mode: .stage1Experimental
+                    from: bp, snapshot: snapshot, calibration: cal, mode: mode
                 )
                 let (plan, _) = DailyNarrativeSelector.select(
                     snapshot: snapshot, blueprint: bp, calibration: cal,
@@ -232,7 +243,7 @@ struct NarrativeCohesionReport_Tests {
                 let validation = DailyNarrativeCoherence.validate(plan: plan)
                 let payload = BlueprintLensEngine.generatePayloadFromPlan(
                     plan: plan, blueprint: bp, snapshot: snapshot,
-                    calibration: cal, mode: .stage1Experimental, dailyFitEngineId: engineId
+                    calibration: cal, mode: mode, dailyFitEngineId: engineId
                 )
 
                 let accent = plan.accentEssence.rawValue
@@ -368,7 +379,7 @@ struct NarrativeCohesionReport_Tests {
 
         let report: [String: Any] = [
             "generated": SkyForwardV2Support.isoString(for: Date()),
-            "engine": "stage1_experimental",
+            "engine": engineId,
             "startDate": "2026-05-01",
             "days": days,
             "nUsers": nUsers,
@@ -406,7 +417,7 @@ struct NarrativeCohesionReport_Tests {
         // Write updated slider range report (all 6 sliders with displayPosition)
         let sliderReport: [String: Any] = [
             "generated": SkyForwardV2Support.isoString(for: Date()),
-            "engine": "stage1_experimental",
+            "engine": engineId,
             "cohort": "synthetic_cohort",
             "nUsers": nUsers,
             "window": ["start": "2026-05-01", "end": "2026-06-29", "days": days] as [String : Any],
@@ -419,7 +430,7 @@ struct NarrativeCohesionReport_Tests {
 
         // Write TXT summary
         var txt = "Narrative Cohesion Report — Plan 3\n"
-        txt += "Engine: stage1_experimental\n"
+        txt += "Engine: \(engineId)\n"
         txt += "Users: \(nUsers), Days: \(days), Window: 2026-05-01 → 2026-06-29\n"
         txt += String(repeating: "=", count: 70) + "\n\n"
 
@@ -479,12 +490,61 @@ struct NarrativeCohesionReport_Tests {
         let txtPath = fixturesDir.appendingPathComponent("narrative_cohesion_report.txt")
         try txt.write(to: txtPath, atomically: true, encoding: .utf8)
 
-        // Assertions for hard gates
+        // Per-slider variation summary for [9]/[10] (display-position range across each user's window)
+        let sliderMeanRanges = sliderNames.compactMap { (sliderAgg[$0] as? [String: Any])?["meanRange"] as? Double }
+        let sliderPctStuck = sliderNames.compactMap { (sliderAgg[$0] as? [String: Any])?["pctStuckOneTertile"] as? Double }
+        let minSliderMeanRange = sliderMeanRanges.min() ?? 0
+        let maxSliderPctStuck = sliderPctStuck.max() ?? 0
+        let avgSliderMeanRange = sliderMeanRanges.isEmpty ? 0 : sliderMeanRanges.reduce(0, +) / Double(sliderMeanRanges.count)
+
+        // Machine-readable metrics line (fast tuning capture; also emitted for full runs)
+        print(String(format:
+            "COHESION_METRICS engine=%@ users=%d flip=%.3f distinct=%.2f categories=%.2f salience=%.3f coherence=%.4f minSliderRange=%.3f maxStuck=%.1f",
+            engineId, nUsers, meanFlipRate, meanDistinct, meanCategories, salienceMatchRate, meanCoherence,
+            minSliderMeanRange, maxSliderPctStuck))
+        for slider in sliderNames {
+            if let a = sliderAgg[slider] as? [String: Any] {
+                print(String(format: "COHESION_SLIDER %@ meanRange=%.3f stuck=%.1f",
+                             slider, (a["meanRange"] as? Double) ?? 0, (a["pctStuckOneTertile"] as? Double) ?? 0))
+            }
+        }
+
+        // --- Hard gates (existing) ---
         #expect(aggOppositions == 0, "Opposition violations must be zero")
         let totalDays = nUsers * days
         let crossSurfaceRate = Double(aggCrossSurface) / Double(totalDays)
         #expect(crossSurfaceRate < 0.001,
                 "Cross-surface violation rate \(String(format: "%.4f", crossSurfaceRate)) must be < 0.1% (\(aggCrossSurface) / \(totalDays))")
         #expect(meanCoherence >= 0.85, "Coherence score must be ≥ 0.85")
+
+        // --- Phase 6c: §4.3 TARGET EVALUATION promoted to fail-closed #expects (plan G2 item 2) ---
+        // Run only on the FULL cohort — a COHESION_SUBSET tuning run is measurement-only.
+        if subsetN == nil {
+            // [6] flip rate ≥ 0.40 (plan threshold; v1.0.2 ≈ 0.54)
+            #expect(meanFlipRate >= 0.40,
+                    "[6] mean accent flip rate \(String(format: "%.3f", meanFlipRate)) must be ≥ 0.40")
+            // [7] distinct-#1 ≥ 4.5 (owner-ratified correction, plan rev 6 — ≥6 is the theoretical max;
+            //     there are only 6 accent essences. v1.0.2 ≈ 4.8, v1.0.1 = 4.6.)
+            #expect(meanDistinct >= 4.5,
+                    "[7] mean distinct accents/60d \(String(format: "%.2f", meanDistinct)) must be ≥ 4.5")
+            // [8] category coverage ≥ 10/14 (plan threshold; v1.0.2 ≈ 13.9)
+            #expect(meanCategories >= 10.0,
+                    "[8] mean category coverage \(String(format: "%.2f", meanCategories)) must be ≥ 10/14")
+            // [9] slider variation — owner-ratified reachable form (plan rev 7): the mean slider
+            //     display-range ≥ 0.50 AND no single slider collapses (weakest ≥ 0.35). The literal
+            //     "every slider ≥ 0.50" is not met by shipped v1.0.1 either (contrast 0.407) and is
+            //     unreachable via v1.0.2-only calibration (the displayPosition halfSpans are shared
+            //     Stage1ScaleSensitivity constants). v1.0.2: mean ≈ 0.61, weakest (masc/fem) ≈ 0.40.
+            #expect(avgSliderMeanRange >= 0.50,
+                    "[9] mean slider display-range \(String(format: "%.3f", avgSliderMeanRange)) must be ≥ 0.50")
+            #expect(minSliderMeanRange >= 0.35,
+                    "[9] weakest slider display-range \(String(format: "%.3f", minSliderMeanRange)) must be ≥ 0.35 (no slider collapse)")
+            // [10] no slider stuck 60d — no slider frozen (< one tertile) for a majority of users
+            #expect(maxSliderPctStuck < 50.0,
+                    "[10] worst slider stuck for \(String(format: "%.1f", maxSliderPctStuck))% of users must be < 50%")
+            // [12] accent-salience match ≥ 0.70 (plan threshold; v1.0.2 ≈ 0.87)
+            #expect(salienceMatchRate >= 0.70,
+                    "[12] accent-salience match rate \(String(format: "%.3f", salienceMatchRate)) must be ≥ 0.70")
+        }
     }
 }

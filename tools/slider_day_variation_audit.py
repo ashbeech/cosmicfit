@@ -30,7 +30,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "docs" / "fixtures"
 INSPECTOR_URL = "http://127.0.0.1:7777/api/inspect"
-ENGINE = "stage1_experimental"
+# Engine the audit runs against. Sky Forward v1.0.2 by default (Phase 6c) so the gate validates the
+# shipping candidate before cutover; override with --engine.
+ENGINE = "sky_forward_v1_0_2"
 
 SCALE_SLIDERS = ["vibrancy", "contrast", "metalTone"]
 SILHOUETTE_SLIDERS = ["masculineFeminine", "angularRounded", "structuredDraped"]
@@ -38,6 +40,56 @@ ALL_SLIDERS = SCALE_SLIDERS + SILHOUETTE_SLIDERS
 
 MEANINGFUL_DELTA = 0.05
 IMPERCEPTIBLE_DELTA = 0.02
+
+# --- Sky Forward v1.0.2 Phase 6c / plan G2 item 4: fail-closed stuck-slider gate ---
+# The failure mode this gate exists to catch is a slider FROZEN by Phase 4's variation cuts
+# (jitter 0.40→0.18, transit top-5 normalisation). Thresholds are PINNED (governance G0) and set as
+# anti-freeze floors, NOT at the aspirational §4.3 [9] "range ≥ 0.5/user" — because even shipped
+# v1.0.1 sits far below 0.5 on the natal-driven silhouette sliders (e.g. masculineFeminine ≈ 0.14
+# meanRawRange, 100% of users < 0.33). A literal 0.5 floor would red on v1.0.1 itself, so it is
+# reported as a DIAGNOSTIC, not a pass condition. The real bar is: no slider frozen (absolute), and
+# no slider regressed beyond tolerance vs the pinned baseline. Changing a constant is an owner
+# escalation, recorded in the plan revision log.
+GATE_MIN_MEAN_RANGE = 0.05           # a slider whose cohort-mean 60-day range < this is frozen
+GATE_MAX_PCT_RARELY_MEANINGFUL = 99  # % of users seeing a ≥MEANINGFUL_DELTA shift on <10% of days
+GATE_TARGET_RANGE_PER_USER = 0.5     # §4.3 [9] aspirational target — reported as diagnostic only
+GATE_REGRESSION_TOLERANCE = 0.25     # per slider, meanRawRange may not drop more than this vs baseline
+DEFAULT_GATE_BASELINE = "docs/fixtures/slider_day_variation_baseline_v1_0_1.json"
+
+
+def run_slider_gate(agg: dict, baseline_agg: dict | None) -> tuple[list[str], list[str]]:
+    """Return (failures, diagnostics). Non-empty failures ⇒ fail-closed exit(1)."""
+    failures: list[str] = []
+    diagnostics: list[str] = []
+    for slider in ALL_SLIDERS:
+        a = agg.get(slider)
+        if not a:
+            continue
+        mean_range = a["meanRawRange"]
+        # (1) anti-freeze: a slider must actually move across the window
+        if mean_range < GATE_MIN_MEAN_RANGE:
+            failures.append(
+                f"slider '{slider}' frozen: meanRawRange={mean_range:.4f} < floor {GATE_MIN_MEAN_RANGE}")
+        # (2) practically-stuck: not (near-)every user rarely sees a meaningful (≥0.05) shift
+        rarely = a["pctUsersRarelyMeaningful"]
+        if rarely >= GATE_MAX_PCT_RARELY_MEANINGFUL:
+            failures.append(
+                f"slider '{slider}' stuck: {rarely:.0f}% of users see a ≥{MEANINGFUL_DELTA} shift on "
+                f"<10% of days ≥ cap {GATE_MAX_PCT_RARELY_MEANINGFUL}%")
+        # (3) regression vs pinned baseline
+        if baseline_agg and slider in baseline_agg:
+            base_range = baseline_agg[slider]["meanRawRange"]
+            if base_range > 0 and mean_range < base_range * (1 - GATE_REGRESSION_TOLERANCE):
+                failures.append(
+                    f"slider '{slider}' range regressed: {mean_range:.4f} < "
+                    f"{base_range:.4f}×{1 - GATE_REGRESSION_TOLERANCE:.2f} vs baseline "
+                    f"(owner-priority: raise jitterRange / widen transit top-K)")
+        # Diagnostic: literal §4.3 [9] target (not a pass condition — silhouette sliders sit below it)
+        if mean_range < GATE_TARGET_RANGE_PER_USER:
+            diagnostics.append(
+                f"slider '{slider}' meanRawRange {mean_range:.3f} below §4.3[9] target "
+                f"{GATE_TARGET_RANGE_PER_USER} (structural for natal-driven sliders; diagnostic only)")
+    return failures, diagnostics
 
 LEGACY_METAL_SNAP = True  # production UI snaps metal displayPosition to 3 positions
 
@@ -276,7 +328,8 @@ def global_delta_histogram(all_deltas: list[dict], slider: str) -> dict:
     }
 
 
-def run(start: date, n_days: int, subset: int | None, parallel: int, output: str | None = None) -> int:
+def run(start: date, n_days: int, subset: int | None, parallel: int, output: str | None = None,
+        gate: bool = False, baseline_path: str | None = None) -> int:
     users = load_cohort(subset)
     dates = [(start + timedelta(days=i)).isoformat() for i in range(n_days)]
 
@@ -415,24 +468,56 @@ def run(start: date, n_days: int, subset: int | None, parallel: int, output: str
     print("\n".join(lines))
     print(f"\nWrote {out_json}")
     print(f"Wrote {out_txt}")
+
+    # --- Fail-closed stuck-slider gate (plan G2 item 4) ---
+    if gate:
+        baseline_agg = None
+        if baseline_path:
+            bpath = ROOT / baseline_path
+            if bpath.exists():
+                baseline_agg = json.loads(bpath.read_text()).get("aggregate")
+                print(f"\nGATE: diffing against pinned baseline {baseline_path}")
+            else:
+                print(f"\nGATE: baseline {baseline_path} absent — enforcing absolute anti-freeze floors only")
+        failures, diagnostics = run_slider_gate(agg, baseline_agg)
+        for d in diagnostics:
+            print(f"  · {d}")
+        print("\n" + "=" * 60)
+        if failures:
+            print(f"GATE FAILED ({len(failures)} stuck/regressed slider(s)):")
+            for f in failures:
+                print(f"  ✘ {f}")
+            print("A red gate is a signal to keep developing (plan §7 nudge order), not to ship.")
+            return 1
+        print("GATE PASSED — no frozen or regressed sliders.")
     return 0
 
 
 def main() -> int:
-    global LEGACY_METAL_SNAP
+    global LEGACY_METAL_SNAP, ENGINE
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--start", default="2026-04-23")
     ap.add_argument("--days", type=int, default=60)
     ap.add_argument("--subset", type=int, default=None)
     ap.add_argument("--parallel", type=int, default=6)
+    ap.add_argument("--engine", default=ENGINE,
+                    help=f"Daily Fit engine id to audit (default: {ENGINE})")
     ap.add_argument("--no-metal-snap", action="store_true",
                     help="Use continuous metal displayPosition (pre-snap comparison only)")
     ap.add_argument("--output", default=None,
                     help="Output JSON path (default: docs/fixtures/slider_day_variation_report.json)")
+    ap.add_argument("--gate", action="store_true",
+                    help="Fail-closed stuck-slider gate: sys.exit(1) if any slider is frozen or "
+                         "regresses beyond tolerance vs --baseline.")
+    ap.add_argument("--baseline", default=DEFAULT_GATE_BASELINE,
+                    help="Pinned baseline report JSON to diff against in --gate mode "
+                         "(absolute anti-freeze floors still apply if the baseline is absent).")
     args = ap.parse_args()
     LEGACY_METAL_SNAP = not args.no_metal_snap
+    ENGINE = args.engine
     start = datetime.strptime(args.start, "%Y-%m-%d").date()
-    return run(start, args.days, args.subset, args.parallel, args.output)
+    return run(start, args.days, args.subset, args.parallel, args.output,
+               gate=args.gate, baseline_path=args.baseline)
 
 
 if __name__ == "__main__":

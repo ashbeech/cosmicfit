@@ -186,7 +186,6 @@ final class StyleGuideDetailViewController: UIViewController {
     private let gatedCTAStack = UIStackView()
     private let gatedUnlockBlock = UIStackView()
     private let gatedUnlockHeadingLabel = UILabel()
-    private let gatedUnlockBulletsStack = UIStackView()
     private let unlockButton = UIButton(type: .system)
     private var gatedCTARevealItems: [UIView] = []
     private var gatedCTATopConstraint: NSLayoutConstraint?
@@ -609,24 +608,11 @@ final class StyleGuideDetailViewController: UIViewController {
         gatedUnlockHeadingLabel.textAlignment = .center
         gatedUnlockHeadingLabel.numberOfLines = 0
 
-        gatedUnlockBulletsStack.axis = .vertical
-        gatedUnlockBulletsStack.alignment = .leading
-        gatedUnlockBulletsStack.spacing = 7
-        for text in [
-            "Your full colour palette & texture guide",
-            "Occasion, hardware & accessory direction",
-            "Personal style code & pattern guidance"
-        ] {
-            gatedUnlockBulletsStack.addArrangedSubview(makeGatedBulletLabel(text))
-        }
-
         gatedUnlockBlock.axis = .vertical
         gatedUnlockBlock.alignment = .center
         gatedUnlockBlock.spacing = 16
         gatedUnlockBlock.isUserInteractionEnabled = false
-        gatedUnlockBulletsStack.isUserInteractionEnabled = false
         gatedUnlockBlock.addArrangedSubview(gatedUnlockHeadingLabel)
-        gatedUnlockBlock.addArrangedSubview(gatedUnlockBulletsStack)
         gatedUnlockBlock.addArrangedSubview(unlockButton)
 
         gatedCTAStack.axis = .vertical
@@ -646,9 +632,6 @@ final class StyleGuideDetailViewController: UIViewController {
 
         gatedCTARevealItems = [
             gatedUnlockHeadingLabel,
-            gatedUnlockBulletsStack.arrangedSubviews[0],
-            gatedUnlockBulletsStack.arrangedSubviews[1],
-            gatedUnlockBulletsStack.arrangedSubviews[2],
             unlockButton,
         ]
         resetGatedCTAReveal()
@@ -686,19 +669,8 @@ final class StyleGuideDetailViewController: UIViewController {
             gatedCTAContainer.bottomAnchor.constraint(equalTo: cardContainerView.bottomAnchor, constant: -16),
         ] + ctaStackConstraints + [
             unlockButton.widthAnchor.constraint(equalTo: gatedCTAStack.widthAnchor),
-            unlockButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 38),
+            unlockButton.heightAnchor.constraint(equalToConstant: 50),
         ])
-    }
-
-    private func makeGatedBulletLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.textColor = UIColor.white.withAlphaComponent(0.88)
-        label.font = CosmicFitTheme.Typography.dmSansFont(
-            size: CosmicFitTheme.Typography.FontSizes.callout, weight: .regular
-        )
-        label.text = "\u{2022}  \(text)"
-        return label
     }
 
     private static func preferredBoldItalicSerifFont(size: CGFloat) -> UIFont {

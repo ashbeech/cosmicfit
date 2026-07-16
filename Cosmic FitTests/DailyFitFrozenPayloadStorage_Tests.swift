@@ -285,4 +285,48 @@ struct DailyFitFrozenPayloadStorage_Tests {
         storage.removeAll()
         #expect(UserDefaults.standard.string(forKey: Self.firstFreeKey) == nil)
     }
+
+    // MARK: - B3 cache-invalidation proof (Sky Forward v1.0.2 cutover)
+
+    /// The v1.0.2 cutover keeps the engine id (`production`) but changes the calibration FINGERPRINT.
+    /// A namespaced payload frozen under the OLD fingerprint must NOT be served (the audit's
+    /// "invisible release" failure mode) — it must be rejected + purged so the day recomputes to
+    /// v1.0.2; a payload with the CURRENT fingerprint is served. Tested against the default engine
+    /// with a synthetic stale fingerprint (independent of the build-gated DEBUG engine override).
+    @Test("B3: a namespaced payload with a stale calibration fingerprint is rejected, not served")
+    func staleFingerprintCacheIsBusted() throws {
+        let (storage, dir) = try makeTempStorage()
+        defer { cleanup(dir) }
+
+        let effectiveId = DailyFitEngineConfig.effectiveEngineId
+        let currentFP = DailyFitEngineRegistry.descriptor(for: effectiveId)?.fingerprint
+        #expect(currentFP != nil, "effective engine must have a fingerprint")
+        let staleFP = "stale_" + (currentFP ?? "x")   // guaranteed ≠ currentFP (the cutover scenario)
+
+        let date = Date(timeIntervalSince1970: 1_800_000_000)
+        let day = calendarDayString(from: date)
+        let profileKey = "b3-profile"
+
+        // Freeze a NAMESPACED payload under the SAME engine id but a STALE fingerprint.
+        let stale = DailyFitPayload.fixture(generatedAt: date)
+            .withDailyFitEngineId(effectiveId)
+            .withCalibrationFingerprint(staleFP)
+        let namespacedURL = dir.appendingPathComponent("\(profileKey)_\(effectiveId)_\(day).json")
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        try encoder.encode(stale).write(to: namespacedURL)
+
+        // Load must reject the stale-fingerprint cache, and purge the stale file.
+        #expect(storage.load(date: date, profileKey: profileKey) == nil,
+                "stale-fingerprint payload was served — B3 cutover would be invisible")
+        #expect(FileManager.default.fileExists(atPath: namespacedURL.path) == false,
+                "stale-fingerprint file was not purged")
+
+        // A payload frozen under the CURRENT fingerprint (via save) is served.
+        let fresh = DailyFitPayload.fixture(generatedAt: date)
+        #expect(storage.save(payload: fresh, date: date, profileKey: profileKey))
+        let loadedFresh = storage.load(date: date, profileKey: profileKey)
+        #expect(loadedFresh != nil, "current-fingerprint payload should be served")
+        #expect(loadedFresh?.calibrationFingerprint == currentFP)
+    }
 }

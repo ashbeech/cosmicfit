@@ -12,6 +12,25 @@ import CryptoKit
 enum DailyFitEngineMode: Equatable {
     case standard
     case stage1Experimental
+    /// Sky Forward v1.0.2 — stage-1 sky-forward pipeline with calibrated (fingerprinted)
+    /// sky mix, continuous significance-weighted lunar vibe, normalised transits, and
+    /// named lunar events. A refinement of `.stage1Experimental`, not a separate pipeline.
+    case stage2SkyFidelity
+}
+
+extension DailyFitEngineMode {
+    /// Sky-forward pipeline family: both `.stage1Experimental` (v1.0.1) and its v1.0.2
+    /// refinement `.stage2SkyFidelity` run the chart-anchor + sky-vibe + salience pipeline.
+    /// Pipeline-structure gates use this so the new mode inherits every stage-1 behaviour;
+    /// the v1.0.2-specific vibe math gates on `== .stage2SkyFidelity` directly.
+    var usesSkyForwardPipeline: Bool {
+        self == .stage1Experimental || self == .stage2SkyFidelity
+    }
+
+    /// True only for the v1.0.2 sky-fidelity vibe path (continuous lunar + normalised transits).
+    var usesSkyFidelityVibe: Bool {
+        self == .stage2SkyFidelity
+    }
 }
 
 /// Daily RNG seed policy per preset (§9.2).
@@ -41,8 +60,14 @@ enum DailyFitEngineRegistry {
     static let legacyBaselineId = "legacy_baseline"
     static let stage1ExperimentalId = "stage1_experimental"
     static let stage2LegacyId = "stage2_legacy"
+    /// Rollback preset: shipped v1.0.1 calibration + algorithm, runnable after the v1.0.2 cutover.
+    static let skyForwardV101Id = "sky_forward_v1_0_1"
+    /// Experimental v1.0.2 sky-fidelity preset (validated pre-cutover; becomes production in Phase 7).
+    static let skyForwardV102Id = "sky_forward_v1_0_2"
 
-    static let productionMarketingVersion = "1.0.1"
+    static let productionMarketingVersion = "1.0.2"
+    /// Marketing version retained on the `sky_forward_v1_0_1` rollback preset after cutover.
+    static let skyForwardV101MarketingVersion = "1.0.1"
 
     static var productionDisplayName: String {
         descriptor(for: productionId)?.displayName ?? "Sky Forward"
@@ -60,6 +85,8 @@ enum DailyFitEngineRegistry {
 
     static let allDescriptors: [DailyFitEngineDescriptor] = [
         productionDescriptor,
+        skyForwardV101Descriptor,
+        skyForwardV102Descriptor,
         legacyBaselineDescriptor,
         stage1ExperimentalDescriptor,
         stage2LegacyDescriptor,
@@ -146,11 +173,11 @@ enum DailyFitEngineRegistry {
     private static let productionDescriptor = DailyFitEngineDescriptor(
         id: productionId,
         displayName: "Sky Forward",
-        summary: "Shipped Daily Fit engine — sky-forward daily read from chart anchor (v1.0.1)",
+        summary: "Shipped Daily Fit engine — lunar-led sky-fidelity daily read (v1.0.2)",
         isExperimental: false,
-        calibration: stage1ExperimentalCalibration,
-        fingerprint: fingerprint(for: stage1ExperimentalCalibration),
-        mode: .stage1Experimental,
+        calibration: skyFidelityCalibration,
+        fingerprint: fingerprint(for: skyFidelityCalibration),
+        mode: .stage2SkyFidelity,
         dailySeedPolicy: .includesEngineId,
         marketingVersion: productionMarketingVersion
     )
@@ -216,6 +243,71 @@ enum DailyFitEngineRegistry {
         fingerprint: fingerprint(for: stage2LegacyCalibration),
         mode: .standard,
         dailySeedPolicy: .sharedProfileDate,
+        marketingVersion: nil
+    )
+
+    /// Rollback preset — the shipped v1.0.1 calibration + algorithm, retained runnable
+    /// after the v1.0.2 cutover. Same calibration and mode as `productionDescriptor`
+    /// (pre-cutover), so `engineId(for:mode:)` collapses it to `production` for seeding →
+    /// byte-identical v1.0.1 output. Kept as its own selectable id + retained `"1.0.1"` stamp.
+    private static let skyForwardV101Descriptor = DailyFitEngineDescriptor(
+        id: skyForwardV101Id,
+        displayName: "Sky Forward",
+        summary: "Rollback preset — shipped Sky Forward v1.0.1 calibration + algorithm (v1.0.1)",
+        isExperimental: true,
+        calibration: stage1ExperimentalCalibration,
+        fingerprint: fingerprint(for: stage1ExperimentalCalibration),
+        mode: .stage1Experimental,
+        dailySeedPolicy: .includesEngineId,
+        marketingVersion: skyForwardV101MarketingVersion
+    )
+
+    /// Sky Forward v1.0.2 sky-fidelity calibration (§5.4, audit F1/F2/F3/F5/F6).
+    /// Stage-1 sky-forward pipeline with: fingerprinted sky mix (`skyVibeWeights`, Phase 2),
+    /// continuous significance-weighted lunar vibe (`lunarSignificanceCoeff`, Phase 3),
+    /// normalised transits (Phase 4), jitter cut 0.40 → 0.18 (F5), and named lunar events (Phase 5).
+    private static let skyFidelityCalibration: DailyFitCalibration = {
+        let source = DailyFitCalibration.SourceWeights(
+            natal: 0.16, transits: 0.44, lunarPhase: 0.30,
+            progressed: 0.07, currentSun: 0.03
+        )
+        let selection = DailyFitCalibration.SelectionWeights(
+            vibeWeight: 0.40, axisWeight: 0.30, transitBoost: 0.30
+        )
+        return DailyFitCalibration(
+            sourceWeights: source,
+            signEnergyMap: DailyFitCalibration.default.signEnergyMap,
+            signMultiplierPolicy: .stage1OptionA,
+            planetAxisMap: DailyFitCalibration.default.planetAxisMap,
+            selectionWeights: selection,
+            // F5: jitter 0.40 → 0.18 (legacy floor, below the ±0.3 full-moon axis nudge).
+            axisTuning: DailyFitCalibration.AxisTuning(sigmoidSpread: 0.8, jitterRange: 0.18),
+            stage2Sensitivity: DailyFitCalibration.Stage2Sensitivity(
+                paletteJitter: 0.20, vibrancyCoeff: 0.55,
+                contrastCoeff: 0.55, silhouetteAxisScale: 1.25,
+                metalNudgePerHit: 0.12,
+                paletteSelectionStrategy: .pureSkyScoring
+            ),
+            narrativeSelection: .stage1Default,
+            // Ratified lunar-dominant seed (owner 2026-07-13): the fingerprinted sky mix.
+            skyVibeWeights: DailyFitCalibration.SkyVibeWeights(
+                transits: 0.25, lunar: 0.60, currentSun: 0.15
+            ),
+            // Significance amplification seed k = 0.8 (Phase 3).
+            lunarSignificanceCoeff: 0.8
+        )
+    }()
+
+    /// Experimental v1.0.2 preset — validated through the full ladder before the Phase-7 cutover.
+    private static let skyForwardV102Descriptor = DailyFitEngineDescriptor(
+        id: skyForwardV102Id,
+        displayName: "Sky Forward",
+        summary: "Sky Forward v1.0.2 sky-fidelity engine (experimental; lunar-led calibration)",
+        isExperimental: true,
+        calibration: skyFidelityCalibration,
+        fingerprint: fingerprint(for: skyFidelityCalibration),
+        mode: .stage2SkyFidelity,
+        dailySeedPolicy: .includesEngineId,
         marketingVersion: nil
     )
 
@@ -296,6 +388,18 @@ enum DailyFitEngineRegistry {
             ))
         } else {
             parts.append("narrativeSelection=off")
+        }
+
+        // v1.0.2 sky-fidelity fields. Serialised ONLY when present so every pre-v1.0.2
+        // preset's canonical string (and therefore fingerprint) stays byte-identical.
+        if let svw = calibration.skyVibeWeights {
+            parts.append(String(
+                format: "skyVibeWeights:transits=%.6f,lunar=%.6f,currentSun=%.6f",
+                svw.transits, svw.lunar, svw.currentSun
+            ))
+        }
+        if let k = calibration.lunarSignificanceCoeff {
+            parts.append(String(format: "lunarSignificanceCoeff=%.6f", k))
         }
 
         return parts.joined(separator: "|")

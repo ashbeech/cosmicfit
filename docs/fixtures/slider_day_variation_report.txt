@@ -1,19 +1,19 @@
 Slider Day-Variation Report
-Engine: stage1_experimental
+Engine: sky_forward_v1_0_2
 Cohort: synthetic_cohort (216 users)
 Window: 2026-04-23 .. 2026-06-21 (60 days)
-Generated: 2026-06-26T14:18:03.659419+01:00
+Generated: 2026-07-16T04:24:11.080774+01:00
 
 === AGGREGATE (UI-visible day-over-day) ===
 slider                medΔUI meanΔUI   %unch  %<0.02  %≥0.05 maxStrk distPos
-vibrancy              0.0934  0.1145     0.2    12.9    70.0     1.1    59.4
-contrast              0.0797  0.0979     0.3    14.5    65.5     1.2    58.7
-metalTone             0.0000  0.1035    80.0    80.0    20.0    25.3     2.3
-masculineFeminine     0.1001  0.1445    13.6    22.5    64.6     5.7    50.4
-angularRounded        0.0912  0.1073    13.6    26.1    60.1     4.5    49.2
-structuredDraped      0.0917  0.1087    13.7    24.0    62.9     4.3    48.8
+vibrancy              0.1232  0.1490     3.9    12.7    74.9     2.4    54.4
+contrast              0.0713  0.0919     0.2    16.0    62.0     1.1    59.3
+metalTone             0.0000  0.1039    79.8    79.8    20.2    21.5     2.4
+masculineFeminine     0.0870  0.1180    14.5    25.0    60.8     6.4    50.5
+angularRounded        0.0552  0.0803    17.8    35.5    46.8     6.1    47.5
+structuredDraped      0.0685  0.0914    14.2    29.0    54.2     5.2    49.6
 
 === SCALE vs SILHOUETTE VERDICT ===
-  vibrancy: 0% users see meaningful shift <10% of days; mean unchanged streak 1.1 days
-  contrast: 0% users see meaningful shift <10% of days; mean unchanged streak 1.2 days
-  metalTone: 24% users see meaningful shift <10% of days; mean unchanged streak 25.3 days
+  vibrancy: 0% users see meaningful shift <10% of days; mean unchanged streak 2.4 days
+  contrast: 0% users see meaningful shift <10% of days; mean unchanged streak 1.1 days
+  metalTone: 17% users see meaningful shift <10% of days; mean unchanged streak 21.5 days

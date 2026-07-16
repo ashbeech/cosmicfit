@@ -187,13 +187,18 @@ def run_user(user: dict, days: list[str], out_raw: Path, out_bp: Path) -> str:
 
 
 def main() -> None:
+    global ENGINE
     ap = argparse.ArgumentParser()
     ap.add_argument("--days", type=int, default=45)
     ap.add_argument("--start", type=str, default="2026-06-10")
     ap.add_argument("--synthetic-stride", type=int, default=4)
     ap.add_argument("--parallel", type=int, default=5)
     ap.add_argument("--out", type=str, default="docs/fixtures/production_audit")
+    ap.add_argument("--engine", default=ENGINE,
+                    help=f"Daily Fit engine id the inspector should run (default: {ENGINE}). "
+                         f"Use sky_forward_v1_0_2 to audit v1.0.2 before the production cutover.")
     args = ap.parse_args()
+    ENGINE = args.engine
 
     out = ROOT / args.out
     out_raw = out / "raw"

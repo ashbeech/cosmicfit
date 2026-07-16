@@ -113,7 +113,7 @@ enum PersonalScaleEnvelopeCalculator {
             let maxModulation = 0.5 * coeff
             floor = clamp01(baseline + minModulation)
             ceiling = clamp01(baseline + maxModulation)
-        case .stage1Experimental:
+        case .stage1Experimental, .stage2SkyFidelity:
             let halfSpan = Stage1ScaleSensitivity.contrastPracticalHalfSpan
             floor = clamp01(baseline - halfSpan)
             ceiling = clamp01(baseline + halfSpan)
@@ -155,7 +155,7 @@ enum PersonalScaleEnvelopeCalculator {
             let maxModulation = (20.0 / 21.0) * coeff
             floor = clamp01(baseline + minModulation)
             ceiling = clamp01(baseline + maxModulation)
-        case .stage1Experimental:
+        case .stage1Experimental, .stage2SkyFidelity:
             let halfSpan = Stage1ScaleSensitivity.vibrancyPracticalHalfSpan
             floor = clamp01(baseline - halfSpan)
             ceiling = clamp01(baseline + halfSpan)
@@ -204,10 +204,10 @@ enum PersonalScaleEnvelopeCalculator {
         let metalLean = Double(warmCount) / Double(max(1, warmCount + coolCount))
         let baseline = tempVal * 0.6 + metalLean * 0.4
 
-        let nudgeCap = mode == .stage1Experimental
+        let nudgeCap = mode.usesSkyForwardPipeline
             ? Stage1ScaleSensitivity.metalNudgeCap
             : Stage1ScaleSensitivity.metalNudgeCapStandard
-        let lunarMetalMaxAbs = mode == .stage1Experimental
+        let lunarMetalMaxAbs = mode.usesSkyForwardPipeline
             ? Stage1ScaleSensitivity.lunarDegreeMaxAbs
             : 0.0
 
@@ -215,7 +215,7 @@ enum PersonalScaleEnvelopeCalculator {
         let ceiling: Double
 
         switch mode {
-        case .stage1Experimental:
+        case .stage1Experimental, .stage2SkyFidelity:
             let halfSpan = Stage1ScaleSensitivity.metalPracticalHalfSpan
             floor = clamp01(baseline - halfSpan)
             ceiling = clamp01(baseline + halfSpan)

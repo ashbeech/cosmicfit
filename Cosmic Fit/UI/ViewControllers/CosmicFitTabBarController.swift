@@ -1112,7 +1112,7 @@ final class CosmicFitTabBarController: UITabBarController {
             #if DEBUG
             let mode = DailyFitEngineRegistry.resolvedMode(engineId: engineId)
             var debugConflictTrace: EssenceConflictTrace?
-            if mode == .stage1Experimental {
+            if mode.usesSkyForwardPipeline {
                 let rawEssence = BlueprintLensEngine.resolveEssenceProfile(from: snapshot, mode: mode)
                 let tuning = cal.narrativeSelection ?? .stage1Default
                 let silhouette = BlueprintLensEngine.deriveSilhouetteProfile(

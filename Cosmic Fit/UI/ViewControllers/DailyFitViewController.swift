@@ -98,18 +98,6 @@ class DailyFitViewController: UIViewController {
     private let tomorrowButton = UIButton(type: .system)
     private let restrictedUnlockButton = UIButton(type: .system)
     
-    // Feedback Section
-    private var feedbackDivider: UIView?
-    private let feedbackBodyLabel = UILabel()
-    private let feedbackTextView = UITextView()
-    private let feedbackSendButton = UIButton(type: .system)
-    private let feedbackThankYouLabel = UILabel()
-    private let feedbackErrorLabel = UILabel()
-    private var feedbackResetTimer: Timer?
-    private var feedbackTask: Task<Void, Never>?
-    private var isSendingFeedback = false
-    private var contentBottomToFeedbackConstraint: NSLayoutConstraint?
-    private var feedbackThankYouBottomConstraint: NSLayoutConstraint?
     private var contentBottomToTomorrowConstraint: NSLayoutConstraint?
 
     // MARK: - Torn-paper paywall (restricted Daily Fit)
@@ -131,11 +119,10 @@ class DailyFitViewController: UIViewController {
     private let gatedCTAStack = UIStackView()
     private let gatedUnlockBlock = UIStackView()
     private let gatedUnlockHeadingLabel = UILabel()
-    private let gatedUnlockBulletsStack = UIStackView()
     private let gatedTomorrowBlock = UIStackView()
     private let gatedTomorrowTeaseLabel = UILabel()
     private let gatedTomorrowButton = UIButton(type: .system)
-    /// Unlock headline, bullets, buttons — revealed one-by-one with scroll.
+    /// Unlock headline and buttons — revealed one-by-one with scroll.
     private var gatedCTARevealItems: [UIView] = []
 
     /// Tear-line anchors (mirror the daily-ritual / style-breakdown boundary).
@@ -633,8 +620,6 @@ class DailyFitViewController: UIViewController {
             cardBackImageView.removeGestureRecognizer(gesture)
         }
         scrollingRunesBackground.stopAnimating()
-        feedbackResetTimer?.invalidate()
-        feedbackTask?.cancel()
     }
     
     // MARK: - Configuration
@@ -1029,7 +1014,6 @@ class DailyFitViewController: UIViewController {
             
             self.scrollView.isScrollEnabled = true
             self.updateRestrictedDailyFitObscuration(animated: false)
-            self.updateFeedbackSectionLayout(setVisibleAlpha: true)
         }
         
         if animated {
@@ -1531,7 +1515,6 @@ class DailyFitViewController: UIViewController {
         setupNewSilhouetteSection()
         setupWardrobeReflectionSection()
         setupNewBottomSection()
-        setupFeedbackSection()
     }
 
     private func setupStyleParagraphSection() {
@@ -1782,321 +1765,6 @@ class DailyFitViewController: UIViewController {
         setupTornPaperPaywall()
     }
 
-    // MARK: - Feedback Section
-
-    private func setupFeedbackSection() {
-        feedbackDivider = createOrnamentalDividerWithText("Are We Aligned?")
-        feedbackDivider?.alpha = 0.0
-        if let divider = feedbackDivider {
-            contentView.addSubview(divider)
-        }
-
-        feedbackBodyLabel.text = "The stars don\u{2019}t lie, but how it communicates that as a fit is entirely up to you; drop me a note below to tell me what\u{2019}s working, what\u{2019}s confusing, and how we can shape Cosmic Fit together."
-        feedbackBodyLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(
-            size: CosmicFitTheme.Typography.FontSizes.body,
-            weight: .regular
-        )
-        feedbackBodyLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
-        feedbackBodyLabel.textAlignment = .left
-        feedbackBodyLabel.numberOfLines = 0
-        feedbackBodyLabel.translatesAutoresizingMaskIntoConstraints = false
-        feedbackBodyLabel.alpha = 0.0
-        contentView.addSubview(feedbackBodyLabel)
-
-        feedbackTextView.font = CosmicFitTheme.Typography.dmSansFont(
-            size: CosmicFitTheme.Typography.FontSizes.body, weight: .regular
-        )
-        feedbackTextView.textColor = CosmicFitTheme.Colours.cosmicBlue
-        feedbackTextView.backgroundColor = .clear
-        feedbackTextView.layer.borderColor = CosmicFitTheme.Colours.cosmicBlue.cgColor
-        feedbackTextView.layer.borderWidth = 1.0
-        feedbackTextView.layer.cornerRadius = 8
-        feedbackTextView.textContainerInset = UIEdgeInsets(top: 12, left: 8, bottom: 12, right: 8)
-        feedbackTextView.isScrollEnabled = true
-        feedbackTextView.translatesAutoresizingMaskIntoConstraints = false
-        feedbackTextView.alpha = 0.0
-        contentView.addSubview(feedbackTextView)
-
-        CosmicFitTheme.styleButton(feedbackSendButton, style: .primary)
-        feedbackSendButton.setTitle("Send", for: .normal)
-        feedbackSendButton.translatesAutoresizingMaskIntoConstraints = false
-        feedbackSendButton.alpha = 0.0
-        feedbackSendButton.isEnabled = false
-        feedbackSendButton.addTarget(self, action: #selector(feedbackSendTapped), for: .touchUpInside)
-        contentView.addSubview(feedbackSendButton)
-
-        feedbackThankYouLabel.text = "Thank you so much for your feedback. We really appreciate you taking the time."
-        feedbackThankYouLabel.font = CosmicFitTheme.Typography.DMSerifTextFont(
-            size: CosmicFitTheme.Typography.FontSizes.body,
-            weight: .regular
-        )
-        feedbackThankYouLabel.textColor = CosmicFitTheme.Colours.cosmicBlue
-        feedbackThankYouLabel.textAlignment = .center
-        feedbackThankYouLabel.numberOfLines = 0
-        feedbackThankYouLabel.translatesAutoresizingMaskIntoConstraints = false
-        feedbackThankYouLabel.alpha = 0.0
-        feedbackThankYouLabel.isHidden = true
-        contentView.addSubview(feedbackThankYouLabel)
-
-        feedbackErrorLabel.text = ""
-        feedbackErrorLabel.font = CosmicFitTheme.Typography.dmSansFont(
-            size: CosmicFitTheme.Typography.FontSizes.footnote, weight: .regular
-        )
-        feedbackErrorLabel.textColor = CosmicFitTheme.Colours.cosmicBlue.withAlphaComponent(0.7)
-        feedbackErrorLabel.textAlignment = .center
-        feedbackErrorLabel.numberOfLines = 0
-        feedbackErrorLabel.translatesAutoresizingMaskIntoConstraints = false
-        feedbackErrorLabel.isHidden = true
-        contentView.addSubview(feedbackErrorLabel)
-
-        updateFeedbackSendButtonState()
-
-        setupFeedbackKeyboardDismissal()
-    }
-
-    private func setupFeedbackKeyboardDismissal() {
-        let tapToDismiss = UITapGestureRecognizer(target: self, action: #selector(feedbackDismissKeyboard))
-        tapToDismiss.cancelsTouchesInView = false
-        contentView.addGestureRecognizer(tapToDismiss)
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(feedbackTextDidChange),
-            name: UITextView.textDidChangeNotification,
-            object: feedbackTextView
-        )
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(feedbackKeyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(feedbackKeyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-    }
-
-    private var shouldShowFeedbackSection: Bool {
-        EntitlementManager.shared.hasFullAccess
-    }
-
-    private var feedbackSectionViews: [UIView] {
-        [
-            feedbackDivider, feedbackBodyLabel, feedbackTextView,
-            feedbackSendButton, feedbackThankYouLabel, feedbackErrorLabel
-        ].compactMap { $0 }
-    }
-
-    /// Shows or collapses the feedback block and switches the scroll-content bottom
-    /// anchor between the form, thank-you state, and the tomorrow section.
-    private func updateFeedbackSectionLayout(setVisibleAlpha: Bool = false) {
-        guard !isGatedLayoutActive else {
-            feedbackSectionViews.forEach { $0.isHidden = true }
-            contentBottomToTomorrowConstraint?.isActive = false
-            contentBottomToFeedbackConstraint?.isActive = false
-            feedbackThankYouBottomConstraint?.isActive = false
-            return
-        }
-
-        let showFeedback = shouldShowFeedbackSection
-        let showingThankYou = showFeedback && !feedbackThankYouLabel.isHidden
-
-        if showFeedback {
-            feedbackDivider?.isHidden = false
-            feedbackBodyLabel.isHidden = showingThankYou
-            feedbackTextView.isHidden = showingThankYou
-            feedbackSendButton.isHidden = showingThankYou
-            feedbackErrorLabel.isHidden = true
-            feedbackThankYouLabel.isHidden = !showingThankYou
-        } else {
-            feedbackSectionViews.forEach { $0.isHidden = true }
-        }
-
-        contentBottomToTomorrowConstraint?.isActive = !showFeedback
-        contentBottomToFeedbackConstraint?.isActive = showFeedback && !showingThankYou
-        feedbackThankYouBottomConstraint?.isActive = showFeedback && showingThankYou
-
-        if setVisibleAlpha, showFeedback, isCardRevealed {
-            feedbackDivider?.alpha = 1.0
-            if showingThankYou {
-                feedbackThankYouLabel.alpha = 1.0
-            } else {
-                feedbackBodyLabel.alpha = 1.0
-                feedbackTextView.alpha = 1.0
-                feedbackSendButton.alpha = feedbackSendButton.isEnabled ? 1.0 : 0.55
-            }
-        }
-    }
-
-    @objc private func feedbackKeyboardWillShow(_ notification: Notification) {
-        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
-              let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
-        let keyboardHeight = keyboardFrame.height
-        UIView.animate(withDuration: duration) {
-            self.scrollView.contentInset.bottom = keyboardHeight
-            self.scrollView.verticalScrollIndicatorInsets.bottom = keyboardHeight
-        }
-        let textViewBottom = feedbackTextView.convert(feedbackTextView.bounds, to: scrollView).maxY
-        let visibleHeight = scrollView.bounds.height - keyboardHeight
-        if textViewBottom > scrollView.contentOffset.y + visibleHeight {
-            scrollView.setContentOffset(
-                CGPoint(x: 0, y: textViewBottom - visibleHeight + 20),
-                animated: true
-            )
-        }
-    }
-
-    @objc private func feedbackKeyboardWillHide(_ notification: Notification) {
-        guard let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval else { return }
-        UIView.animate(withDuration: duration) {
-            self.scrollView.contentInset.bottom = 0
-            self.scrollView.verticalScrollIndicatorInsets.bottom = 0
-        }
-    }
-
-    @objc private func feedbackDismissKeyboard() {
-        feedbackTextView.resignFirstResponder()
-    }
-
-    @objc private func feedbackTextDidChange() {
-        feedbackErrorLabel.isHidden = true
-        updateFeedbackSendButtonState()
-    }
-
-    private func updateFeedbackSendButtonState() {
-        let text = feedbackTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        let isValid = text.range(of: #"\S+\s+\S+"#, options: .regularExpression) != nil
-        feedbackSendButton.isEnabled = isValid && !isSendingFeedback
-        feedbackSendButton.alpha = (isValid && !isSendingFeedback) ? 1.0 : 0.55
-    }
-
-    @objc private func feedbackSendTapped() {
-        guard !isSendingFeedback else { return }
-        let message = feedbackTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard message.range(of: #"\S+\s+\S+"#, options: .regularExpression) != nil else { return }
-
-        isSendingFeedback = true
-        feedbackSendButton.isEnabled = false
-        feedbackSendButton.alpha = 0.55
-        feedbackTextView.isEditable = false
-        feedbackErrorLabel.isHidden = true
-        feedbackTextView.resignFirstResponder()
-
-        feedbackTask = Task { [weak self] in
-            guard let self else { return }
-            do {
-                try await FeedbackService.shared.sendFeedback(
-                    message: message,
-                    displayDate: self.displayDate
-                )
-                await MainActor.run { self.showFeedbackSuccess() }
-            } catch is CancellationError {
-                // Task cancelled due to day switch or deinit — no UI action
-            } catch {
-                await MainActor.run { self.showFeedbackError(error) }
-            }
-        }
-    }
-
-    private func showFeedbackSuccess() {
-        isSendingFeedback = false
-
-        feedbackThankYouLabel.isHidden = false
-        UIView.animate(withDuration: 0.3) {
-            self.feedbackBodyLabel.alpha = 0.0
-            self.feedbackTextView.alpha = 0.0
-            self.feedbackSendButton.alpha = 0.0
-            self.feedbackErrorLabel.alpha = 0.0
-        } completion: { _ in
-            self.feedbackBodyLabel.isHidden = true
-            self.feedbackTextView.isHidden = true
-            self.feedbackSendButton.isHidden = true
-            self.feedbackErrorLabel.isHidden = true
-
-            self.updateFeedbackSectionLayout()
-
-            UIView.animate(withDuration: 0.3) {
-                self.feedbackThankYouLabel.alpha = 1.0
-                self.view.layoutIfNeeded()
-            }
-        }
-
-        feedbackResetTimer?.invalidate()
-        feedbackResetTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: false) { [weak self] _ in
-            self?.resetFeedbackForm()
-        }
-    }
-
-    private func showFeedbackError(_ error: Error) {
-        isSendingFeedback = false
-        feedbackTextView.isEditable = true
-        updateFeedbackSendButtonState()
-
-        let message: String
-        if let feedbackErr = error as? FeedbackError {
-            switch feedbackErr {
-            case .rateLimited:
-                message = "Please wait a moment before sending again."
-            case .notAuthenticated:
-                message = "Please sign in to send feedback."
-            default:
-                message = "Something went wrong. Please try again."
-            }
-        } else {
-            message = "Something went wrong. Please try again."
-        }
-
-        feedbackErrorLabel.text = message
-        feedbackErrorLabel.isHidden = false
-    }
-
-    private func resetFeedbackForm() {
-        feedbackResetTimer?.invalidate()
-        feedbackResetTimer = nil
-
-        UIView.animate(withDuration: 0.3) {
-            self.feedbackThankYouLabel.alpha = 0.0
-        } completion: { _ in
-            self.feedbackThankYouLabel.isHidden = true
-            self.feedbackTextView.text = ""
-            self.feedbackTextView.isEditable = true
-            self.feedbackErrorLabel.isHidden = true
-            self.updateFeedbackSendButtonState()
-
-            self.feedbackBodyLabel.isHidden = false
-            self.feedbackTextView.isHidden = false
-            self.feedbackSendButton.isHidden = false
-            self.updateFeedbackSectionLayout()
-
-            UIView.animate(withDuration: 0.3) {
-                self.feedbackBodyLabel.alpha = 1.0
-                self.feedbackTextView.alpha = 1.0
-                self.feedbackSendButton.alpha = self.feedbackSendButton.isEnabled ? 1.0 : 0.55
-                self.view.layoutIfNeeded()
-            }
-        }
-    }
-
-    private func resetFeedbackFormImmediate() {
-        feedbackResetTimer?.invalidate()
-        feedbackResetTimer = nil
-        isSendingFeedback = false
-        feedbackThankYouLabel.alpha = 0.0
-        feedbackThankYouLabel.isHidden = true
-        feedbackTextView.text = ""
-        feedbackTextView.isEditable = true
-        feedbackErrorLabel.isHidden = true
-        feedbackBodyLabel.isHidden = false
-        feedbackTextView.isHidden = false
-        feedbackSendButton.isHidden = false
-        updateFeedbackSendButtonState()
-        updateFeedbackSectionLayout()
-    }
-
     /// Builds the torn-paper edge that caps the card, the animated glyph field
     /// revealed beneath it, and the scroll-anchored unlock CTA.
     private func setupTornPaperPaywall() {
@@ -2162,24 +1830,11 @@ class DailyFitViewController: UIViewController {
         gatedUnlockHeadingLabel.textAlignment = .center
         gatedUnlockHeadingLabel.numberOfLines = 0
 
-        gatedUnlockBulletsStack.axis = .vertical
-        gatedUnlockBulletsStack.alignment = .leading
-        gatedUnlockBulletsStack.spacing = 7
-        for text in [
-            "Your full colour palette & style scales",
-            "Daily styling ritual & wardrobe notes",
-            "Every silhouette and essence detail"
-        ] {
-            gatedUnlockBulletsStack.addArrangedSubview(makeGatedBulletLabel(text))
-        }
-
         gatedUnlockBlock.axis = .vertical
         gatedUnlockBlock.alignment = .center
         gatedUnlockBlock.spacing = 16
         gatedUnlockBlock.isUserInteractionEnabled = false
-        gatedUnlockBulletsStack.isUserInteractionEnabled = false
         gatedUnlockBlock.addArrangedSubview(gatedUnlockHeadingLabel)
-        gatedUnlockBlock.addArrangedSubview(gatedUnlockBulletsStack)
         gatedUnlockBlock.addArrangedSubview(restrictedUnlockButton)
 
         gatedTomorrowTeaseLabel.font = preferredBoldItalicSerifFont(size: CosmicFitTheme.Typography.FontSizes.body)
@@ -2207,7 +1862,7 @@ class DailyFitViewController: UIViewController {
 
         gatedCTAStack.axis = .vertical
         gatedCTAStack.alignment = .center
-        gatedCTAStack.spacing = 34
+        gatedCTAStack.spacing = 68
         gatedCTAStack.isUserInteractionEnabled = false
         gatedCTAStack.translatesAutoresizingMaskIntoConstraints = false
         gatedCTAStack.addArrangedSubview(gatedUnlockBlock)
@@ -2224,9 +1879,6 @@ class DailyFitViewController: UIViewController {
 
         gatedCTARevealItems = [
             gatedUnlockHeadingLabel,
-            gatedUnlockBulletsStack.arrangedSubviews[0],
-            gatedUnlockBulletsStack.arrangedSubviews[1],
-            gatedUnlockBulletsStack.arrangedSubviews[2],
             restrictedUnlockButton,
             gatedTomorrowTeaseLabel,
             gatedTomorrowButton
@@ -2266,24 +1918,27 @@ class DailyFitViewController: UIViewController {
             gatedCTAContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
         ] + ctaStackConstraints + [
 
-            restrictedUnlockButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 38),
+            restrictedUnlockButton.widthAnchor.constraint(equalTo: gatedCTAStack.widthAnchor),
+            restrictedUnlockButton.heightAnchor.constraint(equalToConstant: 50),
             gatedTomorrowButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 38)
         ])
     }
 
-    private func makeGatedBulletLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.textColor = UIColor.white.withAlphaComponent(0.88)
-        label.font = CosmicFitTheme.Typography.dmSansFont(
-            size: CosmicFitTheme.Typography.FontSizes.callout, weight: .regular
-        )
-        label.text = "\u{2022}  \(text)"
-        return label
-    }
-
     private func configureRestrictedUnlockButton() {
         CosmicFitTheme.styleGatedPaywallButton(restrictedUnlockButton, title: "Unlock Your Daily Fit")
+
+        // Trial-forward copy when the user is eligible for the annual free
+        // trial; fails closed to the default "Unlock" copy.
+        Task { [weak self] in
+            if StoreKitManager.shared.annualProduct == nil {
+                await StoreKitManager.shared.loadProducts()
+            }
+            guard await StoreKitManager.shared.isEligibleForAnnualIntroOffer(),
+                  StoreKitManager.shared.annualTrialIsOneWeek,
+                  let self else { return }
+            CosmicFitTheme.styleGatedPaywallButton(self.restrictedUnlockButton, title: "Try 7 Days Free")
+            self.restrictedUnlockButton.accessibilityLabel = "Try 7 Days Free"
+        }
     }
 
     @objc private func restrictedUnlockTapped() {
@@ -2320,9 +1975,7 @@ class DailyFitViewController: UIViewController {
 
     /// Views below the tear that must be hidden + collapsed for gated users:
     /// the gated content plus the in-card tomorrow section (replaced by the
-    /// scroll-anchored CTA). Feedback views are excluded — their visibility
-    /// is managed solely by `updateFeedbackSectionLayout` to avoid the sweep
-    /// overriding the thank-you / form / hidden tri-state.
+    /// scroll-anchored CTA).
     private var gatedHiddenContentViews: [UIView] {
         restrictedDailyFitObscuredViews
             + [finalStarDivider, tomorrowTeaseLabel, tomorrowButton].compactMap { $0 }
@@ -2347,7 +2000,7 @@ class DailyFitViewController: UIViewController {
         tornPaperEdgeView.isHidden = !gated
         gatedHiddenContentViews.forEach { $0.isHidden = gated }
 
-        updateFeedbackSectionLayout(setVisibleAlpha: isCardRevealed)
+        contentBottomToTomorrowConstraint?.isActive = !gated
 
         if gated {
             contentView.bringSubviewToFront(tornPaperEdgeView)
@@ -2384,7 +2037,7 @@ class DailyFitViewController: UIViewController {
 
     private func syncGatedTomorrowCTA() {
         if isViewingTomorrow {
-            gatedTomorrowTeaseLabel.text = "Today\u{2019}s fit awaits you..."
+            gatedTomorrowTeaseLabel.text = "In the meantime today\u{2019}s fit awaits you..."
             CosmicNavigationArrow.apply(
                 to: gatedTomorrowButton, title: "SEE TODAY\u{2019}S FIT", arrow: .left, pointSize: 6
             )
@@ -2577,9 +2230,6 @@ class DailyFitViewController: UIViewController {
         displayDate = date
         isViewingTomorrow = isTomorrow
         dailyFitPayload = payload
-
-        feedbackTask?.cancel()
-        resetFeedbackFormImmediate()
 
         checkCardRevealState()
         updateContentFromPayload()
@@ -2792,9 +2442,6 @@ class DailyFitViewController: UIViewController {
         displayDate = newToday
         isViewingTomorrow = false
         dailyFitPayload = todayPayload
-
-        feedbackTask?.cancel()
-        resetFeedbackFormImmediate()
 
         if dailyFitPayload != nil {
             updateContentFromPayload()
@@ -3597,8 +3244,7 @@ class DailyFitViewController: UIViewController {
             vibrancyScaleContainer, contrastScaleContainer,
             essenceTriangleView,
             wardrobeReflectionHeaderDivider, wardrobeReflectionLabel,
-            tomorrowTeaseLabel, tomorrowButton,
-            feedbackDivider, feedbackBodyLabel, feedbackTextView, feedbackSendButton
+            tomorrowTeaseLabel, tomorrowButton
         ]
 
         for view in allViews.compactMap({ $0 }) {
@@ -3851,47 +3497,6 @@ class DailyFitViewController: UIViewController {
             )
         }
 
-        // Feedback section (below tomorrow button, paid subscribers only).
-        // The three mutually-exclusive bottom constraints (tomorrow / form /
-        // thank-you) are NOT batch-activated — `updateFeedbackSectionLayout`
-        // is the sole authority that toggles exactly one of them.
-        if let feedbackDivider = feedbackDivider {
-            contentBottomToFeedbackConstraint = feedbackSendButton.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor, constant: -Self.contentBottomPaddingBelowTomorrow
-            )
-            feedbackThankYouBottomConstraint = feedbackThankYouLabel.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor, constant: -Self.contentBottomPaddingBelowTomorrow
-            )
-
-            constraints.append(contentsOf: [
-                feedbackDivider.topAnchor.constraint(equalTo: tomorrowButton.bottomAnchor, constant: sectionSpacing),
-                feedbackDivider.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                feedbackDivider.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
-
-                feedbackBodyLabel.topAnchor.constraint(equalTo: feedbackDivider.bottomAnchor, constant: 18),
-                feedbackBodyLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: styleParagraphHorizontalInset),
-                feedbackBodyLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -styleParagraphHorizontalInset),
-
-                feedbackTextView.topAnchor.constraint(equalTo: feedbackBodyLabel.bottomAnchor, constant: 20),
-                feedbackTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                feedbackTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
-                feedbackTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 120),
-
-                feedbackSendButton.topAnchor.constraint(equalTo: feedbackTextView.bottomAnchor, constant: 16),
-                feedbackSendButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                feedbackSendButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
-                feedbackSendButton.heightAnchor.constraint(equalToConstant: 50),
-
-                feedbackErrorLabel.topAnchor.constraint(equalTo: feedbackSendButton.bottomAnchor, constant: 8),
-                feedbackErrorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                feedbackErrorLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin),
-
-                feedbackThankYouLabel.topAnchor.constraint(equalTo: feedbackDivider.bottomAnchor, constant: 18),
-                feedbackThankYouLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalMargin),
-                feedbackThankYouLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalMargin)
-            ])
-        }
-
         // Torn-paper edge: caps the card at the gated boundary (mirrors the
         // daily-ritual / style-breakdown split). Top toggled in
         // `updateDailyRitualLayoutConstraints`; whole layout toggled when gated.
@@ -3914,7 +3519,7 @@ class DailyFitViewController: UIViewController {
 
         let hasRitual = dailyFitPayload?.styleEditVariant.dailyRitual != nil
         updateDailyRitualLayoutConstraints(hasRitual: hasRitual)
-        updateFeedbackSectionLayout()
+        contentBottomToTomorrowConstraint?.isActive = !isGatedLayoutActive
     }
 
     private func updateDailyRitualLayoutConstraints(hasRitual: Bool) {

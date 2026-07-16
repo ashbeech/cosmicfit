@@ -1,11 +1,23 @@
 {
  "accessory": {
   "paragraphs": [
-   "A handful of delicate extras only distracts from your natural presence. You need one substantial anchor rather than a clutter of minor additions. Think of a heavy, oversized watch or a structured bag with serious hardware, items that provide a comforting, tactile weight in your hand or on your wrist. This solitary piece becomes your focal point, offering both a commanding edge and a familiar, reassuring heft. When the construction is this undeniable, the satisfying click of a thick leather belt speaks much louder than a pile of trinkets.",
-   "The items you put on last are usually the ones pulling the entire look into focus. Thick leather waist belts and weighty, satisfying clasps act as the architectural borders of your wardrobe. They offer a deep sense of physical security while projecting absolute confidence to the room. A structured bag with rigid handles gives you something deliberate to hold, while substantial hardware on a thick strap prevents your softer garments from floating away. These are the solid finishing touches that keep your warmth from losing its centre.",
-   "A serious accessory registers physically before it even catches the eye. You want the sheer gravity of a weighty watch on your wrist and the thick, waxy drag of a premium leather strap. This sensory feedback acts as a constant, comforting presence throughout the day. It comes down to the satisfying snap of a heavy bag clasp, the audible clatter of stacked rings when you talk with your hands, and the rich scent of well-handled hides. You wear them for their physical reassurance just as much as the look."
+   "You establish a solid base of dark drama. You layer garments to build hidden depth. Your accessories exist solely to provide one molten flash. Restrict yourself to one or two strong pieces per look. Execute the peripheral vision test on every potential addition. Hold the gleaming object at arm's length, slightly behind your shoulder. You must still detect its brilliant reflection without turning your head. If it fades from your awareness, abandon it. It must catch the faintest ambient light and gleam fiercely. Begin your search with statement jewellery. Look for a polished metal collar. Demand a warm, high-polish finish that behaves like a mirror.",
+   "Select footwear to anchor your silhouette in high shine. Look for patent leather that captures every available light source. Execute the match strike check before keeping any new pair. Take the shoe into a dim stairwell and ignite a small lighter. The patent gloss must bounce that warm flame back with a sharp, mirrored edge to provide one molten flash. If the reflection breaks or goes matt, leave the shoe behind. Build dark drama through an absolute commitment to a polished surface. Run your bare thumb over the toe box to confirm your hidden depth. You want a slick, glass-like resistance. Trust this tactile feedback over any printed label.",
+   "Select eyewear carved from thick acetate. Demand a high-shine finish that catches light sharply. Deep bronze and warm golden camel frames with bright gold hinges supply your one molten flash and carry enough physical weight to ground your face. Every piece must preserve that hidden depth. Before you leave, run the silhouette check. Stand with a bright window behind you and study your outline in the mirror. You must still see a sharp, unmistakable shape projecting dark drama against the glass. If the borders dissolve or the frames vanish into the shadows, swap them for a heavier pair."
+  ],
+  "rankedItems": [
+   {
+    "name": "Statement jewellery",
+    "role": "accessory category",
+    "useCase": "polished metal collar, high polish"
+   }
+  ],
+  "sectionIntro": "Select your finishing elements with ruthless physical precision.",
+  "tests": [
+   "the blackout test"
   ]
  },
+ "closing": "Your style guide is a map of your own instincts, built on dark drama + hidden depth + one molten flash.",
  "code": {
   "avoid": [
    "Anything emotionally cold or sterile that strips warmth from a room. Clinical minimalism is not your language.",
@@ -19,9 +31,12 @@
    "Building your foundation on heavy natural fibres that act as physical anchors throughout your day.",
    "Grounding your daily look with substantial, heavyweight cottons and dense wools that offer serious weight.",
    "Wearing intriguing tactile textures and unexpected asymmetric shapes that naturally invite conversation and style compliments.",
-   "Keeping your daily looks brilliantly adaptable for spontaneous social plans through incredibly clever, strategic layering."
+   "Keeping your daily looks brilliantly adaptable for spontaneous social plans through incredibly clever, strategic layering.",
+   "Judging every purchase on cost-per-wear rather than ticket price. A well-made piece worn two hundred times costs less than a cheap one worn twice.",
+   "Asking whether you would still wear a piece in five to ten years. If the answer wavers, leave it behind."
   ],
   "leanInto": [
+   "Anchoring every choice in your formula: dark drama + hidden depth + one molten flash.",
    "Keeping clothes with emotional history in active rotation. A coat from a family member or a scarf from a trip holds real power.",
    "Wrapping yourself in soft protective layers as a daily practice. A worn-in cardigan or a heritage shawl is emotional armour.",
    "Treating comfort as a non-negotiable, not a luxury. If a garment makes you tense, it is actively working against you.",
@@ -30,10 +45,21 @@
    "Reaching for warm metals as a default. Gold hardware, brass buttons, and amber stones are your baseline, not your special occasion."
   ]
  },
+ "coreFormula": "dark drama + hidden depth + one molten flash",
  "engineVersion": "2.1.0",
- "generatedAt": "2026-06-26T01:55:54Z",
+ "generatedAt": "2026-07-15T23:47:48Z",
  "hardware": {
-  "metalsText": "Hardware is never just a functional detail on a garment; it needs to carry a distinct sense of heat and history. Polished brass tones is your obvious default, especially when it has that slightly heavy, melted-down quality that catches the light without looking brassy or cheap. When a bag or jacket requires a fastening with a bit more age to it, yellow gold tones brings a beautiful, nostalgic weight to the silhouette. For finer details like zips or shoe buckles, white gold tones provides a polished but substantial finish. Flimsy fastenings simply look apologetic on you, so hold out for solid hardware that feels like a modern heirloom.",
+  "excludedFinishes": [
+   "cool polished silver"
+  ],
+  "metalsText": "Your strategy relies entirely on warm hardware to slice through the dark drama of your garments. Stick strictly to polished brass, yellow gold, and white gold. These materials bring necessary heat. Perform the strike acoustic test before you buy. Clink the metal chains or clasps together in your palm. The sharp, resonant chime of solid metal provides the only proof of quality. Heavy hardware anchors a piece. Flimsy alloy destroys the hidden depth you are constructing. Reject the trap of cool polished silver components. Antiqued, hammered, or oxidised treatments look instantly exhausted and lack crisp boundaries. Require a severely polished surface instead. You need brilliant, unbroken reflections to supply your one molten flash.",
+  "personalMetals": [
+   "polished brass",
+   "yellow gold",
+   "gilded finishes",
+   "gold",
+   "mixed metals"
+  ],
   "recommendedMetals": [
    "polished brass",
    "yellow gold",
@@ -53,13 +79,27 @@
    "selenite",
    "agate"
   ],
-  "stonesText": "The pieces you wear on bare skin should feel like heavy, glamorous heirlooms. Look for gems that hold a deep, internal heat rather than a cold, icy sparkle, making sunstone and citrine your obvious signatures. Cabochon cuts or thick, burnished gold settings give these stones a tactile, lived-in quality that feels deeply personal and fiercely protective. A single, substantial amber resting on the collarbone commands the room long before you speak.",
-  "tipText": "Your jewellery needs to feel like a treasured inheritance, even if you bought it for yourself yesterday. It is all about physical weight combined with undeniable visual presence. Seek out polished brass tones cast in chunky, rounded shapes that actually warm to your skin temperature as you wear them. A heavy curb chain or a substantial ring set with sunstone delivers that necessary mix of high-drama glamour and nostalgic comfort. Flimsy wire rings and paper-thin pendants simply vanish on you. The right pieces function as bold focal points that also feel incredibly reassuring to wear every day."
+  "sectionIntro": "Treat your hardware as structural light.",
+  "stonesText": "Pick up the piece from the glass counter. Perform the facet check immediately. Roll the gemstone between your thumb and index finger under a direct overhead bulb. Authentic minerals will slice the light cleanly without scattering it into a dull haze. If the reflection blurs, leave the ring on the velvet tray. Your jewellery demands a foundation of dark drama, anchored by stones that hold absolute density. Choose a heavy cabochon of sunstone or a faceted citrine. These gems possess the necessary hidden depth. Mount them strictly in blindingly luminous warm metal that catches every stray beam to provide one molten flash. Reject porous or matt bezels. Dull casings suffocate the stone and ruin the sharp boundaries of your silhouette.",
+  "tests": [
+   "pick it up: looks lie, weight doesn't (the pick-it-up weight test)"
+  ],
+  "tipText": "Test every clasp and buckle for structural integrity. Execute the snap test on any potential purchase. Secure the closure of a heavy bracelet near your ear. You are listening for a sharp, definitive click that indicates absolute mechanical precision. If the hinge grinds or feels loose, drop it. Steer clear of brushed or scuffed finishes. These textured alterations read as careless and ruin the precision of your outfit. Seek out strictly flawless, warm metals that gleam intensely under any condition. A solid, brilliantly polished surface guarantees the correct tension to ground your dark drama, protect your hidden depth, and supply one molten flash.",
+  "traps": [
+   {
+    "failure": "oxidised, hammered, or antiqued finishes look tired and lack crispness",
+    "fix": "stay strictly in polished metal that catches the light from across the street"
+   }
+  ]
  },
  "occasions": {
-  "dailyText": "Your off-duty rotation is never about slipping into the background. Even your most relaxed pieces need a sense of occasion and a bit of theatrical sweep. Seek out generous, enveloping silhouettes that provide physical ease while still holding a striking shape. The overall fit should feel protective and deeply familiar, but the final execution must remain strictly polished. A dropped shoulder or a wide, pooling trouser leg lets you take up space effortlessly without feeling restricted. You are off the clock, but your wardrobe never stops commanding the room.\n\nYour comfort instinct gravitates toward security through tactile quality, fabrics as emotional anchors.",
-  "intimateText": "Private spaces call for a mood that feels less like a performance and more like an invitation. Gravitate towards substantial, enveloping pieces that carry a noticeable physical weight while leaving your outline distinct. The best items for these hours possess an undeniable richness and a subtle sheen that catches low light, wrapping you in something deeply familiar yet completely striking. Evening dressing for you is simply about maintaining your natural heat without needing to project it to the back of the room.",
-  "workText": "Your workwear needs to bridge the gap between unignorable presence and private sanctuary. A commanding, expansive silhouette establishes your authority the moment you walk into the room, but the piece itself must feel deeply reassuring on the body. Look for substantial, weighty materials that drape with a sense of theatre while offering a soft, insulated layer from the outside world. Bring a sense of heat to professional spaces through generous proportions and unapologetic scale rather than stiff, restrictive tailoring. You project the most power when your outfit functions as a luxurious, personal stronghold.\n\nYour style energy concentrates in expression and resources, so your wardrobe is at its best when it reflects both expression and resources. At work, you communicate your intuitive intelligence by wearing creatively composed pieces and adopting a soft structure for empathetic fluidity."
+  "dailyText": "Build your morning choices around bold expression and high-shine polish. A mundane run to the post office does not mean you must abandon your standards or endure physical discomfort. Do not accept a compromise between mobility and impact. Check the mirror to confirm you have executed dark drama + hidden depth + one molten flash. Rely on thick wool crepe in golden camel rather than flimsy knits. Anchor the silhouette with deep bronze leather boots. Ensure every buckle and zip features a warm, reflective metal finish. Execute the gravity test before you dress. Lift the trousers by the waistband and feel their sheer physical weight. A heavy textile guarantees superior construction. Avoid anything limp, muted, or understated. Choose a high-gloss patent leather belt to secure the look.\n\nYour comfort instinct gravitates toward security through tactile quality, fabrics as emotional anchors.",
+  "intimateText": "In dim environments, let dark drama dictate the evening. Build the foundation from heavy silk satin or sharp wool twill in deep bronze. Disregard your reflection momentarily. Shut your eyes and evaluate how the garment settles on your shoulders. The tension of the fabric dictates its worth. Introduce a single warm hit of heavy gold jewellery near the collar to catch ambient candlelight, delivering your required one molten flash. Employ the endurance check. If standing in a taxi queue at midnight means suffering a restrictive waistband to maintain a shape, change your clothes. Pain destroys posture. Select forgiving structures that maintain their sharp edge and protect your hidden depth without binding your ribs.",
+  "sectionIntro": "Apply your visual strategy to the workplace without diluting its impact.",
+  "tests": [
+   "the pharmacy line: a trip to the pharmacy does not require suffering for the aesthetic"
+  ],
+  "workText": "At work, let hidden depth take the lead. Build the base with sharp wool twill trousers in a warm golden camel. Introduce dark drama through the severe cut of a heavy silk satin blouse. Finish with a polished bronze cuff to supply your required one molten flash. Always apply the pharmacy queue check. If you find yourself standing in line for a prescription on your lunch break, you must not feel trapped by your own clothes. Strict presentation never requires physical suffering. Test every piece physically before you commit. Reach up high to grab an imaginary file and twist your torso. Trust your body to reject bad cuts. If the crisp cotton poplin binds your shoulders, leave the item on the rack.\n\nYour style energy concentrates in expression and resources, so your wardrobe is at its best when it reflects both expression and resources. At work, you communicate your intuitive intelligence by wearing creatively composed pieces and adopting a soft structure for empathetic fluidity."
  },
  "palette": {
   "accentColours": [
@@ -170,7 +210,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "A wardrobe built for a natural centre of attention requires unapologetic, radiating warmth. Your foundation thrives on deep, sun-baked shades like marigold, coral, and fresh green. These tones do their best work poured into heavy silk or dense velvet, instantly warming the skin and catching the light when you walk. Introduce a quiet flash of Warm Prussian as an inner layer, providing a soft, nostalgic anchor beneath the bolder exterior. You wear rich pigment to hold the room, but the actual heat it generates is strictly for your own comfort.",
+  "narrativeText": "Your colours are strictly warm. Build your foundation with heavy sweeps of marigold and coral. Replace stark whites with fresh green, and link contrasting pieces together using bright aqua. Deploy your relief tone strictly as a brief visual pause. When you strike, do so with singular focus using Warm Prussian or Oxblood. Leave muddy pastel, icy grey, and dusty sage on the hanger. The greatest threat here is the costume trap. Piling on thick leather, heavy studs, a red lip, bright hardware, and dark eye makeup all at once tips the outfit into fancy dress. Fix this error by subtracting elements. Anchor your dark drama by restricting metallic hardware to provide one molten flash, returning every other piece to a solid matt black to preserve hidden depth.",
   "neutrals": [
    {
     "hexValue": "#FFFFF0",
@@ -225,9 +265,56 @@
    "fireAirChromaApplied": true,
    "scorpioDensityApplied": false,
    "surfacePreservationApplied": false,
+   "venusWarmFloorApplied": false,
    "waterSofteningApplied": false,
    "winterCompressionApplied": false
   },
+  "rankedItems": [
+   {
+    "name": "Deep bronze",
+    "role": "warm_base"
+   },
+   {
+    "name": "Golden camel",
+    "role": "warm_base"
+   },
+   {
+    "name": "Warm ivory",
+    "role": "white_substitute"
+   },
+   {
+    "name": "Rich terracotta",
+    "role": "warm_cool_bridge"
+   },
+   {
+    "name": "Warm sand",
+    "role": "warm_base"
+   },
+   {
+    "name": "Toasted chestnut",
+    "role": "structural_dark"
+   },
+   {
+    "name": "Jet black",
+    "role": "structural_dark"
+   },
+   {
+    "name": "Fire engine red",
+    "role": "accent"
+   },
+   {
+    "name": "Hot tangerine",
+    "role": "accent"
+   },
+   {
+    "name": "Brilliant marigold",
+    "role": "accent"
+   },
+   {
+    "name": "Washed peach",
+    "role": "relief"
+   }
+  ],
   "rulerSignature": {
    "hexValue": "#DFA74B",
    "name": "muted amber",
@@ -241,6 +328,7 @@
    "semanticLabel": "ruler signature"
   },
   "secondaryPull": "Bright Spring",
+  "sectionIntro": "Treat your palette as a strict architecture.",
   "supportColours": [
    {
     "hexValue": "#8A8D8F",
@@ -288,6 +376,12 @@
    }
   ],
   "swatchFamilies": [],
+  "traps": [
+   {
+    "failure": "costume: leather, studs, red lip, gold hardware and a smoky eye all at once tips drama into fancy dress",
+    "fix": "hold the line at one molten flash and return every other element to matt black"
+   }
+  ],
   "variables": {
    "contrast": "Medium",
    "depth": "Medium",
@@ -303,7 +397,7 @@
    "wallflower designs",
    "aggressive graphics"
   ],
-  "narrativeText": "When you wear a print, it needs to look expensive and feel deeply familiar, never like a frantic afterthought. Rich, historically grounded motifs like vintage florals and nautical stripes give your wardrobe that heavy, cinematic warmth you naturally project. These designs look best scaled up on structured satin or woven directly into a thick gold-thread brocade, giving the eye something substantial to trace. Stay completely clear of barely-visible micro-weave and tiny ditsy prints. Anything busy, cold, or overly digital strips away your innate glamour and makes the outfit look nervous. A successful print always acts like a treasured heirloom, designed to be admired the second you walk into the room.",
+  "narrativeText": "Tailored garments demand precise architectural lines, taking their shapes directly from sharp vintage florals. Fluid pieces require a different strategy. Allow large-scale nautical stripes to drape without losing structural impact. Anchor your wardrobe with strict, high-contrast graphic motifs. Pass over faded edges, blurred borders, and weak barely-visible micro-weave. Demand visual clarity to support your expression. Apply the squint check to guarantee impact. Narrow your eyes until the room blurs. The print must still register as a deliberate geometric strike, never dissolving into a muddy wash. This exact clarity establishes true dark drama. Balance these intense graphic patterns with rich solids to secure crucial hidden depth. Keep the underlying pattern colour warm to maintain perfect cohesion, allowing your hardware to step forward as one molten flash.",
   "recommendedPatterns": [
    "vintage florals",
    "nautical stripes",
@@ -312,10 +406,18 @@
    "bold florals",
    "medallion"
   ],
-  "tipText": "People mistake statement prints for pure extroversion, but for you, the right motif acts as a personal crest. When wearing a vintage florals, ensure the print sits on a fabric with genuine physical weight, such as structured satin or heavy silk twill. Flimsy materials ruin the execution. Instead, a dense, tactile cloth gives those rich ambers and burnished golds a comforting, nostalgic gravity. You want the outfit to register not as a seasonal trend, but as a beautifully inherited archive piece."
+  "sectionIntro": "Anchor your visual weight with deliberate graphic tension, stripping away anything that lacks distinct shape or clear intent.",
+  "tests": [
+   "the low-light rule (must still read as intent from ten feet in dim light)"
+  ],
+  "tipText": "Subject your prints to the distance trial. Hang your vintage florals garment at the far end of the shop. Step away and observe the edges. If the shapes merge into a chaotic smudge, drop the fabric. A polished aesthetic demands absolute structural clarity. The borders must stay crisp and the warm tones must assert themselves. This strict boundary separates deliberate dark drama from mere confusion. Pick up the garment and examine the threads. This close inspection confirms your hidden depth. The weave must hold intricate detail at a proximity of two inches but project pure geometric intent from afar. If your eyes strain to decipher the design, leave the piece on the rail, as it will never deliver your required one molten flash."
  },
  "styleCore": {
-  "narrativeText": "Walking through a door, your immediate, unapologetic warmth sets the temperature of the room. Dramatic volume and substantial, heavy garments form the foundation of your wardrobe, announcing your arrival while keeping your physical core completely secure. Sweeping, cinematic silhouettes put you in your element, offering absolute physical ease alongside total visual dominance. While others are drawn to your bold energy, the inherent weight of your clothing establishes a firm, beautiful boundary. Holding the centre of the room is your default setting, provided it happens on your own exceptionally comfortable terms.\n\nYour natural sense of beauty shows up most powerfully in your everyday expression, style as social currency, approachable beauty that invites conversation. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as fluid and intuitive; soft elegance and imaginative beauty feel effortlessly composed."
+  "narrativeText": "Your physical instinct relies entirely on momentum and immediate strike rate. Put the garment on and measure how fast you can move in it. Cross a doorframe at full speed to perform the rapid threshold check. If the fabric catches on your stride or the silhouette hesitates, leave it on the hanger. Your selections demand high velocity and instant visual impact. Gather your garments deliberately over the seasons. Deploy them at absolute maximum speed when you dress.\n\nYour entire styling strategy rests on one specific equation. Memorise this blueprint: dark drama + hidden depth + one molten flash. Picture an oversized structured overcoat layered over a profoundly dense heavyweight sweater, punctuated by a single gleaming solid cuff on the bare wrist. The overcoat provides the striking exterior, the dense layers supply the dimensional interior, and the hardware catches the light. Your chosen items must carry a warm temperature and a high-gloss surface. Muted or understated pieces will only drain your forward momentum.\n\nYour natural sense of beauty shows up most powerfully in your everyday expression, style as social currency, approachable beauty that invites conversation. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as fluid and intuitive; soft elegance and imaginative beauty feel effortlessly composed.",
+  "sectionIntro": "This is your fundamental style blueprint, establishing the exact formula and physical compass you need to evaluate every piece.",
+  "tests": [
+   "the entrance test"
+  ]
  },
  "textures": {
   "avoidTextures": [
@@ -323,23 +425,64 @@
    "hard plastics",
    "synthetic mesh"
   ],
-  "badText": "Anything flat, brittle, or apologetic in its finish actively fights against your natural presence. Garments cut from cold metallics lack the rich, protective drape you need to feel genuinely secure in a look. When you wear hard plastics, that stiff, lifeless surface immediately dulls your glow and feels oddly clinical. You are built for clothes that wrap around you with intent and move beautifully with your body. If a piece feels like a flimsy afterthought the second it touches your skin, it is only going to drag your mood down with it.",
-  "goodText": "You expect your clothes to command a room, but they also have to act as a very glamorous security blanket. Substantial, protective weights are non-negotiable, meaning washed cotton and heritage knits belong in heavy rotation. These materials drape around you with genuine heft and warmth. Adding elements of soft flannel or vintage silk provides an essential hit of unapologetic luxury that keeps you entirely insulated from a cold, uninviting space. It is about dressing for maximum outward impact while secretly staying completely cocooned.",
+  "badText": "To sustain dark drama, your fabrics require a slick, warm surface. Reject anything that diffuses your edge. Put cold metallics through the crush test. Squeeze it in your fist and inspect the resulting folds. If the shadows look matt and lifeless instead of casting a sharp, inky contrast, the material will drag you down. Trust your hands. Run your fingers over hard plastics. If it feels chalky or catches on your skin, it lacks the hidden depth your aesthetic demands. Drop it immediately. Avoid synthetic mesh entirely. Pick it up and watch it collapse into a shapeless slump, completely failing to hold a rigid line. Rely on your tactile responses. Visuals deceive, but a frail weave exposes itself instantly, ruining your chance at one molten flash.",
+  "goodText": "To build dark drama and hidden depth, your materials must hold rigid structure and a warm, polished surface. Look for washed cotton for sharp shirting that holds a crease and snaps visually. Anchor your core garments in heritage knits for knife-edge tailoring that never begs for a steamer. This dense foundation sets the stage for one molten flash. Pick up soft flannel for statement footwear and accessories that reflect maximum light. Choose vintage silk for slip dresses and linings that gleam under low light. Always apply the shadow check before taking a piece to the till. Drag the garment under a shadowed clothing rack. If the folds turn into a flat, lifeless grey instead of rich ink, leave it on the rail.",
+  "rankedItems": [
+   {
+    "name": "Crisp cotton poplin",
+    "role": "rank 1",
+    "useCase": "sharp shirting that holds a crease and snaps visually"
+   },
+   {
+    "name": "Sharp wool twill",
+    "role": "rank 2",
+    "useCase": "knife-edge tailoring that never begs for a steamer"
+   },
+   {
+    "name": "Patent leather",
+    "role": "rank 3",
+    "useCase": "statement footwear and accessories that reflect maximum light"
+   },
+   {
+    "name": "Heavy silk satin",
+    "role": "rank 4",
+    "useCase": "slip dresses and linings that gleam under low light"
+   },
+   {
+    "name": "Techno gabardine",
+    "role": "rank 5",
+    "useCase": "wrinkle-resistant trousers and jackets that keep a rigid shape"
+   },
+   {
+    "name": "High-shine taffeta",
+    "role": "rank 6",
+    "useCase": "evening pieces that bounce light and cut a clear silhouette"
+   },
+   {
+    "name": "Polished calfskin",
+    "role": "rank 7",
+    "useCase": "footwear and accessories with a slick, radiant surface"
+   }
+  ],
   "recommendedTextures": [
    "washed cotton",
    "heritage knits",
    "soft flannel",
    "vintage silk"
   ],
+  "sectionIntro": "Let your hands filter your fabrics before your eyes do.",
   "sweetSpotKeywords": [
    "memory",
    "warmth"
   ],
-  "sweetSpotText": "Your true sweet spot relies on a collision of memory and warmth. You naturally gravitate toward the unapologetic gleam of heritage knits, provided it comes with a built-in sense of protective warmth. Every item you wear has to project undeniable authority to the room while offering a private, almost nostalgic comfort on the inside. If a jacket looks spectacular under restaurant lighting but sits like stiff cardboard against your neck, it goes straight back on the hanger."
+  "sweetSpotText": "Combine memory with warmth. This specific collision builds the dark drama your wardrobe requires. Let washed cotton rest alongside them to catch a warm light. Subject your combinations to the harsh spotlight trial. Hold the material directly under a stark overhead fitting room bulb. You are looking for deep pools of darkness settling into the folds, proving your hidden depth. If the cloth reflects light perfectly evenly and shows no valleys, leave it on the rail. You require severe structural tension to support one molten flash. Trust your touch and sight to reject flat, featureless surfaces.",
+  "tests": [
+   "the shadow test"
+  ]
  },
  "userInfo": {
   "birthDate": "1992-07-28T20:00:00Z",
   "birthLocation": "Synth 088 \u2014 Leo Sun, 20:00 UTC, New York (1992)",
-  "generationDate": "2026-06-26T01:55:54Z"
+  "generationDate": "2026-07-15T23:47:48Z"
  }
 }

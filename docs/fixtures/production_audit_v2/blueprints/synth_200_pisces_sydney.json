@@ -1,11 +1,23 @@
 {
  "accessory": {
   "paragraphs": [
-   "You do not have the patience for a dozen tiny, delicate additions to an outfit. Instead, ground your look with a single, undeniable anchor piece, like a thick leather belt with a heavy clasp or a substantial watch on a wide strap. A singular, weighty item provides a sharp focal point and stays entirely out of your way while you are in motion. One confident choice speaks much louder than a collection of fussy afterthoughts.",
-   "Delicate extras just get tangled or left behind when you move this fast. Your accessories build structure by simply doing their job and staying firmly put. A heavy, oversized clasp on a crossbody bag brings immediate, grounding weight to a crisp poplin shirt or fluid tech jacket. Thick leather belts and wide watch straps are exactly what you need, holding their shape on the body rather than sagging or slipping. The hardware ought to click into place with a satisfying finality, locking down your silhouette in one swift movement. You want the kind of pieces you can grab, buckle fast, and walk out the door looking entirely intentional.",
-   "The sensory impact of your finishing touches comes down to speed and friction. A watch strap needs to snap shut cleanly on the first try. The sharp, untreated scent of raw leather from a new bag brings an immediate, physical edge to your daily routine. You want heavy clasps that give a satisfying thud when dropped on a table, rather than delicate hardware that jingles when you walk. Every detail works best when it feels like a piece of gear ready to move the second you do."
+   "Your base garments deliver clean impact. Structural cuts build sharp edges. Your accessories supply the one hot accent. Restrict yourself to one or two strong pieces per look. Begin with statement jewellery, specifically a high-polish yellow gold cuff. The surface must be mirror-bright and the metal distinctly warm. Subject every prospective piece to the isolation check. Rest the object alone on a blank table and take three steps back. If it cannot hold absolute visual dominance without a supporting outfit, do not buy it. Every final addition must govern its own space completely.",
+   "Direct your attention to footwear. Look for patent leather that throws light back at the viewer. Insist on a high-gloss finish across every shoe and boot. This guarantees clean impact from the floor up. Shine your phone torch directly onto the leather. If the surface blurs the glare, discard the pair. You need a warm mirror finish that bounces a hard, blinding circle of illumination back into your eyes. Press forcefully on the toe box to gauge the internal reinforcement. The profile must maintain sharp edges rather than a rounded, soft front. Pair a deep bronze patent heel with a golden camel trouser, letting the extreme shine act as your one hot accent.",
+   "Anchor your look with a deeply structured bag. Require a rigid patent leather top-handle profile finished with polished hardware. Empty the deep bronze patent leather bag completely and place it on a chair. The architecture must hold its exact shape without internal support. This uncompromising rigidity delivers the clean impact you require. The glassy surface reflection highlights your sharp edges. Before leaving the house, conduct a focal audit. Look directly at your chest in a tall mirror. Because your self-contained aesthetic relies on singular intensity, multiple competing items cancel each other out. If your bag, a heavy necklace, and a bright blouse all fight for attention, strip away the excess. Retain exactly one hot accent to hold the focus."
+  ],
+  "rankedItems": [
+   {
+    "name": "Statement jewellery",
+    "role": "accessory category",
+    "useCase": "high-polish yellow gold cuff, high polish"
+   }
+  ],
+  "sectionIntro": "Master the final additions that activate your base garments, keeping your focus ruthless and deliberate.",
+  "tests": [
+   "the spotlight test"
   ]
  },
+ "closing": "Trust your physical instincts to enforce severe boundaries, building a self-contained armour of clean impact + sharp edges + one hot accent.",
  "code": {
   "avoid": [
    "Hesitant or timid clothing that undermines your natural force. If the outfit whispers, it is not speaking your language.",
@@ -19,9 +31,12 @@
    "Injecting volume and bold textures into your most comfortable lounge pieces to keep things interesting.",
    "Selecting garments with expressive hardware and unexpected colour clashes that give you an immediate thrill.",
    "Treating your daily dressing routine as a brilliant opportunity for dramatic creative self-expression.",
-   "Letting pure, unadulterated joy dictate your next major wardrobe purchase and ignore passing trends."
+   "Letting pure, unadulterated joy dictate your next major wardrobe purchase and ignore passing trends.",
+   "Judging every purchase on cost-per-wear rather than ticket price. A well-made piece worn two hundred times costs less than a cheap one worn twice.",
+   "Asking whether you would still wear a piece in five to ten years. If the answer wavers, leave it behind."
   ],
   "leanInto": [
+   "Anchoring every choice in your formula: clean impact + sharp edges + one hot accent.",
    "Dressing for action, not deliberation. If the outfit is not ready for anything the day throws at you, it is too cautious.",
    "Choosing sharp lines and bold tailoring over safe options, because a structured shoulder and a clean trouser communicate that you mean business.",
    "Treating speed as a style value. The best outfit is the one you can throw on in three minutes and still command a room.",
@@ -30,10 +45,20 @@
    "Letting one bold piece carry the emotional weight of the outfit. A standout jacket or a vivid shoe gives you energy all day."
   ]
  },
+ "coreFormula": "clean impact + sharp edges + one hot accent",
  "engineVersion": "2.1.0",
- "generatedAt": "2026-06-26T04:08:09Z",
+ "generatedAt": "2026-07-16T02:50:21Z",
  "hardware": {
-  "metalsText": "Delicate, fiddly hardware will only get on your nerves and snag on your layers. You want functional metal that makes an immediate impact without slowing you down. Bright copper tones provides a sudden, high-contrast flash against crisp poplin or tech fabrics, especially when shaped into heavy-duty zips, oversized D-rings, and brutalist snaps. Think the kind of industrial closures you find on vintage racing jackets rather than decorative little charms. For a warmer finish that still packs a visual punch, switch to rose gold tones with a brushed or slightly roughed-up surface. Do not bother with highly polished, precious details that demand careful handling. The metal on your clothes has to look like it serves a distinct purpose, even if that purpose is just anchoring a sharp silhouette.",
+  "metalsText": "Your metal strategy operates on two distinct levels. Keep personal jewellery against your warm skin restricted to bright copper or rose gold. For structural hardware on bags, belts, and zips, anchor the construction with polished steel or sterling silver. Never settle for antiqued, hammered, or oxidised finishes. They look tired and lack crispness. Instead, demand a high mirror polish that catches the light from the opposite pavement. This gleaming surface supports those sharp edges. Test the hardware by dropping the chain onto a glass counter. A hollow clatter indicates a hollow core. You require a dense, heavy thud. Substantial hardware guarantees true clean impact, letting a brilliant dual register metal detail serve as your one hot accent.",
+  "personalMetals": [
+   "bright copper",
+   "rose gold",
+   "polished brass",
+   "polished copper",
+   "iridescent finishes",
+   "hammered gold",
+   "warm umber"
+  ],
   "recommendedMetals": [
    "bright copper",
    "rose gold",
@@ -59,13 +84,32 @@
    "lapis lazuli",
    "turquoise"
   ],
-  "stonesText": "Fussy gemstone clusters have no place in a wardrobe built for speed. Skip the delicate settings entirely. You need stones that register from across the room and survive a fast-paced daily routine. A single, sharp cut of carnelian makes an immediate visual statement without getting in your way. When you crave an injection of colour, ruby delivers a hot, saturated flash that slices right through crisp poplin or stiff raw denim. A heavy ring featuring an oversized red jasper acts as the absolute full stop to an outfit, granting you high impact for minimal fuss.",
-  "tipText": "You lack the patience to stand in front of a mirror untangling fine chains. Hardware has to keep pace with your actual life, which means skipping fiddly clasps entirely. Favour singular, high-impact pieces like a heavy-gauge bright copper tones cuff or thick, secure hoops that snap shut in a second. The same logic applies to your clothes, where an oversized zip on a Deep Ocean tech jacket does the work of a necklace. Your accessories need to function like stylish equipment for getting out the door."
+  "sectionIntro": "Treat your hardware as architectural details that demand physical inspection.",
+  "stonesText": "Anchor your styling with gem cuts that serve as your one hot accent. Seek absolute clarity and bold colour in carnelian or ruby. Test the stone by pressing the facet against your jawline. A dense, high-quality jewel will feel intensely cold against your warm skin before absorbing your body heat. Refuse vintage, brushed, or tarnished settings outright. They look exhausted and destroy your clean impact. Demand a strictly polished casing that throws blinding light back at the observer. The mount must secure the stone with aggressive, sharp edges.",
+  "structuralMetals": [
+   "polished steel",
+   "sterling silver",
+   "silver"
+  ],
+  "tests": [
+   "pick it up: looks lie, weight doesn't (the pick-it-up weight test)"
+  ],
+  "tipText": "Scrutinise the physical presence of bright copper or carnelian before handing over your card. Grip the item tightly with your eyes shut. If a cuff feels delicate or a pendant lacks cold, heavy density against your knuckles, slide it back across the counter and walk away. You require solid mass to construct a self-contained armour. Inspect the reflection next. Any texture that diffuses the room's lighting ruins your clean impact. Insist on a strictly polished, warm finish that operates like a mirror. High-gloss hardware is non-negotiable for maintaining sharp edges and locking in your one hot accent.",
+  "traps": [
+   {
+    "failure": "oxidised, hammered, or antiqued finishes look tired and lack crispness",
+    "fix": "stay strictly in polished metal that catches the light from across the street"
+   }
+  ]
  },
  "occasions": {
-  "dailyText": "Your off-duty wardrobe has to keep pace with your momentum. You have zero patience for garments that need babysitting, so the styling needs to do the hard work instantly when you are running out the door. Look for sharp, dynamic silhouettes that sit exactly where they are supposed to, totally free of trailing ties or complicated fastenings that just get in the way. The cut must allow for total freedom of movement while projecting immediate, undeniable confidence. You look best when your outfit reads as a fast, brilliant decision rather than a lengthy morning debate.\n\nYour comfort instinct gravitates toward playful emotional expression, comfort in creativity, joy-driven dressing. Your style energy concentrates in creativity and foundations, so your wardrobe is at its best when it reflects both creativity and foundations.",
-  "intimateText": "After dark, the best approach is completely unfiltered and straight to the point. Skip the heavy layering and reach for garments with sharp, definitive lines that slip on in seconds. Exposing a deliberate flash of collarbone or shoulder is highly effective here, provided the rest of the silhouette remains beautifully sparse. The material needs to move with you and hold its shape through the night without demanding a single conscious thought. Step into the room looking completely present, wearing pieces that match your undeniable momentum.",
-  "workText": "You get dressed for the office like someone who expects to win the negotiation before sitting down. Focus on sharp silhouettes that allow for total physical freedom, bypassing complicated layering that requires tweaking throughout the day. Look for tailoring with an aerodynamic edge, choosing pieces that hold their shape while you move quickly from one room to the next. The goal is an immediate, striking impact that requires zero maintenance once you walk through the door. When your outfit projects pure forward momentum, people tend to simply get out of your way.\n\nAt work, lean into direct confidence; structured pieces and clean lines reinforce your natural authority."
+  "dailyText": "A wet Tuesday morning trip to the post office does not excuse a collapsed silhouette. Your daily standard demands discipline. Your core rule remains absolute: clean impact + sharp edges + one hot accent. Enforce this mandate through bodily intuition. Focus on the rigid weight of crisp cotton poplin pressing against your collarbone to confirm the structure. Keep your textiles strictly warm. Build your morning foundation in golden camel or deep bronze wool twill. Demand a polished finish rather than a matt surface. Step into a stiff patent leather boot. Anchor the outfit with a thick, dual register chain of bright yellow gold and white platinum. Your wardrobe serves you alone, creating a fully self-contained system.\n\nYour comfort instinct gravitates toward playful emotional expression, comfort in creativity, joy-driven dressing. Your style energy concentrates in creativity and foundations, so your wardrobe is at its best when it reflects both creativity and foundations.",
+  "intimateText": "In intimate evening settings, clean impact must dominate. Dim lighting blurs fine details, requiring severe structure to anchor your silhouette. Select a deep bronze heavy silk satin jacket and inspect the seams. Pinch the cuff tightly and release it. The edge must snap back into a rigid line. If the shoulders droop or the hem lacks stiffness, reject the garment. Collecting formalwear from the dry cleaner does not grant permission to tolerate a crushed lapel. Anchor golden camel wool twill trousers with high-gloss patent leather boots to provide one hot accent. Layer thick gold chains alongside heavy platinum jewellery. Weigh the dual register metals on your open palm to confirm their dense, unyielding mass. Keep the palette intensely warm and the construction ruthless, enforcing sharp edges at all hours.",
+  "sectionIntro": "Apply your exact standards to the workplace without compromising your baseline.",
+  "tests": [
+   "a trip to the dry cleaner does not suspend your standards"
+  ],
+  "workText": "Let sharp edges lead your weekday decisions. Build your foundation with strict tailoring in deep bronze wool twill. Support these precise borders with an uncluttered silhouette to ensure clean impact. Introduce one hot accent through a heavy silk satin blouse in a vivid warm hue. Verify the internal canvassing of any prospective jacket before buying. Squeeze the lapel tightly between your thumb and index finger. If the structure collapses under pressure, abandon the item. True structural integrity never caves. Maintain these rigid standards regardless of specialist care requirements. A weekly trip to the dry cleaner for a golden camel blazer represents the basic cost of enforcing your baseline.\n\nAt work, lean into direct confidence; structured pieces and clean lines reinforce your natural authority."
  },
  "palette": {
   "accentColours": [
@@ -176,7 +220,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your colour story thrives on visual immediacy rather than slow-burn subtlety. Build your foundation around high-impact shades like honey yellow and light peach, treating them as daily base layers rather than occasional statement pieces. Because you lean into clean tech fabrics and raw denim over complicated draping, these saturated tones do the heavy lifting for your outfit. Bring in Deep Ocean and Oxblood through hardware, trainers, or a sharp poplin collar to keep the energy high without adding unnecessary visual clutter. The result is a palette that registers instantly the moment you walk into a room.",
+  "narrativeText": "Your palette requires a strictly warm temperature. Build your base using honey yellow and light peach in sharp wool twill for dense structure. When you require a stark slate, choose aqua mint. Use apple green to bridge tonal gaps without losing heat. Keep your relief tone, a precise note used sparingly, to separate heavy blocks of colour. Now execute your absolute standard: clean impact + sharp edges + one hot accent. Deliver that heat exclusively through Deep Ocean or Oxblood. Reject muddy pastel, icy grey, and dusty sage entirely. Assess intensity closely under natural light. Take the garment to the shop doorway. If the warm pigment fails to dominate the natural daylight, drop it. Beware the fade trap. Washed-out pieces dilute your visual weight. Rescue a dark foundation immediately with a saturated silk scarf at the neckline or a bright patent shoe.",
   "neutrals": [
    {
     "hexValue": "#FAF5EF",
@@ -231,9 +275,56 @@
    "fireAirChromaApplied": true,
    "scorpioDensityApplied": true,
    "surfacePreservationApplied": false,
+   "venusWarmFloorApplied": false,
    "waterSofteningApplied": false,
    "winterCompressionApplied": false
   },
+  "rankedItems": [
+   {
+    "name": "Deep bronze",
+    "role": "warm_base"
+   },
+   {
+    "name": "Golden camel",
+    "role": "warm_base"
+   },
+   {
+    "name": "Warm ivory",
+    "role": "white_substitute"
+   },
+   {
+    "name": "Rich terracotta",
+    "role": "warm_cool_bridge"
+   },
+   {
+    "name": "Warm sand",
+    "role": "warm_base"
+   },
+   {
+    "name": "Toasted chestnut",
+    "role": "structural_dark"
+   },
+   {
+    "name": "Jet black",
+    "role": "structural_dark"
+   },
+   {
+    "name": "Fire engine red",
+    "role": "accent"
+   },
+   {
+    "name": "Hot tangerine",
+    "role": "accent"
+   },
+   {
+    "name": "Brilliant marigold",
+    "role": "accent"
+   },
+   {
+    "name": "Washed peach",
+    "role": "relief"
+   }
+  ],
   "rulerSignature": {
    "hexValue": "#BDAB5E",
    "name": "camel sand",
@@ -247,6 +338,7 @@
    "semanticLabel": "ruler signature"
   },
   "secondaryPull": "Bright Spring",
+  "sectionIntro": "Master your palette by anchoring your wardrobe in warm foundations before injecting a single jolt of power.",
   "supportColours": [
    {
     "hexValue": "#C9C0BB",
@@ -294,6 +386,12 @@
    }
   ],
   "swatchFamilies": [],
+  "traps": [
+   {
+    "failure": "the fade trap: washed-out pieces dilute your natural energy",
+    "fix": "rescue the look immediately with a saturated accent at the neckline or a brilliant shoe"
+   }
+  ],
   "variables": {
    "contrast": "Medium",
    "depth": "Light",
@@ -309,7 +407,7 @@
    "fussy prints",
    "dainty florals"
   ],
-  "narrativeText": "Prints only earn their keep in your wardrobe when they deliver an immediate, uncomplicated punch. A sharp bold stripes or a bold chevron cut from crisp poplin or lightweight tech fabric makes total sense for your energetic pace. These motifs feel active and deliberate, meant to be thrown on and lived in without hesitation. Steer entirely clear of tiny florals, because fussy, intricate detailing just makes you look as though you are playing dress-up in a much more timid woman's wardrobe. The visual impact needs to hit the second you walk into the room, rather than asking anyone to squint to decode what you are wearing.",
+  "narrativeText": "Demand clean impact from every print. Tailored pieces take their geometry from structural grids like bold stripes. Fluid garments require bold separation like chevron. Enforce a high-contrast graphic rule to keep your warm palette striking and polished. Execute the distance check. Step back ten paces across the studio floor. If the motif blurs into a weak wash, leave it on the rail. The print must remain crisp and loud. Pass over anything resembling tiny florals or paisley. Notice your immediate physical reaction to the visual boundary. If the lines force you to squint to find the edge, discard the piece. Preserve the sharp edges of your silhouette, then break the strict geometry with exactly one hot accent.",
   "recommendedPatterns": [
    "bold stripes",
    "chevron",
@@ -318,10 +416,18 @@
    "racing stripes",
    "hand-block artisan print"
   ],
-  "tipText": "Intricate prints require a level of styling patience you simply do not possess. Treat a bold bold stripes as a standalone statement rather than a background detail, letting it carry the entire visual weight of your outfit. Sharp, high-contrast graphics printed on crisp poplin or a lightweight tech fabric feel fast and deliberate. They communicate your energy in real time without tying you down in complicated layering rules. You need patterns that hit the eye immediately and get straight to the point."
+  "sectionIntro": "Mastering pattern requires strict visual discipline to ensure your prints serve your structure rather than softening it.",
+  "tests": [
+   "the ten foot rule (stay crisp, loud, and legible from across the room)"
+  ],
+  "tipText": "Test the legibility of every pattern from across the shop floor. Drape the bold stripes over a chair and view it through a squint. If the motif merges into a warm puddle of dye, reject it immediately. You require uncompromising clean impact. The print must hold its severe geometric boundaries at a significant distance. Treat the highest contrast intersection in the design as your one hot accent. Inspect the perimeter of the shapes. They must offer sharp edges rather than a hazy, printed fade. When a design devolves into a dull solid from afar, it fails your polished standard. The graphics must remain distinctly separated and entirely graphic."
  },
  "styleCore": {
-  "narrativeText": "Your approach to dressing is fast, direct, and completely stripped of hesitation. You project a warm, unapologetic energy that demands clothing built for forward momentum. Clothes that require constant readjustment or careful handling simply get in your way. Your best silhouettes are sharp and uncomplicated, designed to accommodate a body in steady motion. You walk into a room and immediately draw the eye, not through heavy layering, but through the sheer physical confidence of an outfit that looks instinctively thrown together. It is a way of dressing that feels incredibly present, relying entirely on your own raw attitude to sell the look.\n\nYour natural sense of beauty shows up most powerfully in your creative self-expression, creative joy in dressing, bold romantic expression, date-night dressing as art. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as bold and decisive; you make strong first impressions without trying too hard."
+  "narrativeText": "Stand in front of a mirror and move quickly. Your body will detect hesitation far better than your eyes can. Put the garment on and walk at your maximum speed across the floor. If the material drags, catches the air, or delays your stride by even a fraction of a second, drop the piece entirely. This is the hesitation test. Apply it without compromise to every potential purchase. You require sheer momentum to function at your best. Build your collection slowly and methodically over several seasons, but deploy the resulting outfits fast every single morning.\n\nKeep your presentation completely self-contained. You must dress by a rigid, unapologetic mathematics: clean impact + sharp edges + one hot accent. Picture a strictly tailored topcoat worn over a seamless structural column, abruptly broken by a single, blindingly bright geometric bag. The visual effect must be immediate, polished, and distinctly warm. If a garment demands constant adjustment, careful wrapping, or fussing in front of the glass, it destroys your necessary velocity. Keep every line brutally fast. Let the silhouette do the physical work while you remain in perpetual forward motion.\n\nYour natural sense of beauty shows up most powerfully in your creative self-expression, creative joy in dressing, bold romantic expression, date-night dressing as art. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as bold and decisive; you make strong first impressions without trying too hard.",
+  "sectionIntro": "Master these physical rules to build your core style foundation.",
+  "tests": [
+   "the hesitation test"
+  ]
  },
  "textures": {
   "avoidTextures": [
@@ -329,23 +435,64 @@
    "flimsy chiffon",
    "heavy velvet"
   ],
-  "badText": "Your instinct is always to move fast, which means anything requiring a delicate touch acts as an immediate roadblock. Restrictive materials like delicate lace make you feel physically trapped, while the high-maintenance demands of flimsy chiffon test your famously short patience before you have even left the flat. You simply do not have the hours to steam endless wrinkles or carefully arrange awkward draping just to sit down with a coffee. If heavy velvet snags on a door handle or needs constant adjusting, it gets instantly discarded. Clothes that demand to be babied are a complete waste of your time.",
-  "goodText": "Your wardrobe has to match a frankly exhausting pace, which means fabrics demanding special dry-cleaning trips are an immediate pass. You need materials that handle sudden movement without losing their nerve, leaning heavily on performance stretch and the crisp bite of raw denim. Because you throw an outfit together in a rush and refuse to adjust it later, waxed canvas is brilliant for holding a clean shape on the body. The goal is always high-impact construction that lets you run out the door in three minutes flat.",
+  "badText": "Avoid materials that absorb light and blur your sharp edges. Delicate lace is a trap. Clutch a handful of the yardage tightly in your fist and release it instantly. If the fibres hesitate and retain the wrinkles, abandon the garment. Flimsy chiffon fails immediately because it clings and softens your outline. Demand a frictionless glide from every surface. When a material pulls against your hand, it ruins your clean impact. Heavy velvet might look warm on the rail but feels lifeless and matt on the body. Let your fingertips make the final decision. If the textile drinks illumination rather than throwing it back, leave it behind.",
+  "goodText": "Demand textiles that construct sharp edges and maintain a polished surface. Base your foundations on performance stretch for shirting that holds a severe crease and snaps visually. Choose raw denim for tailored items that never beg for a steamer. When applying one hot accent in a warm tone, rely on waxed canvas for statement footwear that reflects maximum light. Finish your internal layers with performance knits for slip dresses that gleam under low light. Rely on tactile feedback to guide your choices. Execute a strict physical check on everything you consider. Sweep your knuckles against the bias of the fabric. You require an immediate, frictionless glide. If the weave catches or drags against your skin, put the hanger back. This slick barrier ensures your clean impact remains intact.",
+  "rankedItems": [
+   {
+    "name": "Crisp cotton poplin",
+    "role": "rank 1",
+    "useCase": "sharp shirting that holds a crease and snaps visually"
+   },
+   {
+    "name": "Sharp wool twill",
+    "role": "rank 2",
+    "useCase": "knife-edge tailoring that never begs for a steamer"
+   },
+   {
+    "name": "Patent leather",
+    "role": "rank 3",
+    "useCase": "statement footwear and accessories that reflect maximum light"
+   },
+   {
+    "name": "Heavy silk satin",
+    "role": "rank 4",
+    "useCase": "slip dresses and linings that gleam under low light"
+   },
+   {
+    "name": "Techno gabardine",
+    "role": "rank 5",
+    "useCase": "wrinkle-resistant trousers and jackets that keep a rigid shape"
+   },
+   {
+    "name": "High-shine taffeta",
+    "role": "rank 6",
+    "useCase": "evening pieces that bounce light and cut a clear silhouette"
+   },
+   {
+    "name": "Polished calfskin",
+    "role": "rank 7",
+    "useCase": "footwear and accessories with a slick, radiant surface"
+   }
+  ],
   "recommendedTextures": [
    "performance stretch",
    "raw denim",
    "waxed canvas",
    "performance knits"
   ],
+  "sectionIntro": "Evaluate every garment with your hands to secure the materials that build your visual fortress.",
   "sweetSpotKeywords": [
    "impact",
    "speed"
   ],
-  "sweetSpotText": "Your ideal piece hits a specific nerve, landing right where impact meets speed. You are fast out the door, meaning anything precious, heavy, or prone to catching as you move is simply out of the question. You thrive in performance stretch and raw denim because they offer a crisp, defined outline without boxing in your stride. A successful garment needs to feel practically weightless against the body while still delivering a bold first impression. If a shape forces you to slow down or physically adjust your posture just to wear it, it has failed the test."
+  "sweetSpotText": "Your signature material pairing relies on extreme contrast to create sharp edges. Combine impact with speed to force a severe boundary between garments. Do not blend your layers. Keep the separation harsh. Assess this physical divide by grinding the two hems together. The textiles must slide past each other without snagging. You require zero drag between the pieces. If the fabrics catch against each other, the combination fails. Bring in performance stretch to add heat to the structure. This locks a warm, polished shell around a completely self-contained core, ensuring clean impact throughout.",
+  "tests": [
+   "the friction test (run your hand swiftly down the sleeve; seek the slip)"
+  ]
  },
  "userInfo": {
   "birthDate": "1985-02-24T04:00:00Z",
   "birthLocation": "Synth 200 \u2014 Pisces Sun, 04:00 UTC, Sydney (1985)",
-  "generationDate": "2026-06-26T04:08:09Z"
+  "generationDate": "2026-07-16T02:50:21Z"
  }
 }

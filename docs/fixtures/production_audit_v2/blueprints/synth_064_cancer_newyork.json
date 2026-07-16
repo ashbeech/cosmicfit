@@ -1,11 +1,23 @@
 {
  "accessory": {
   "paragraphs": [
-   "Piling on dozens of delicate trinkets only distracts from the intentional softness of your clothes. You need one beautifully made accessory to ground the look and provide a reassuring sense of physical weight. Think of a classic watch on a thick leather strap, a smooth, heavy ring, or a structured bag with a satisfyingly solid clasp. When you commit to a single object of serious quality, it gives an effortless sense of direction to an otherwise fluid outfit.",
-   "With your wardrobe leaning into soft folds and gentle textures, the items you use to finish a look must supply the grounding. A thick leather belt or the reassuring weight of a substantial watch creates a clear boundary for fabrics that naturally want to drape. You need this tactile contrast so your relaxed silhouettes hold their shape in the real world. A firm bag with a heavy clasp snapping shut gives a satisfying full stop to an outfit built purely on comfort. Without these solid anchor points, a washed cotton or brushed knit look quickly slips into sleepwear territory. That quiet, physical heft acts as the gravity keeping your softest layers in check.",
-   "The physical sensation of what you carry matters just as much as how it looks. You want the reassuring heft of a substantial watch and the quiet, satisfying thud of a heavy bag clasp snapping shut. Thick leather straps must smell subtly expensive and soften perfectly to your wrist or shoulder, moulding to your shape rather than fighting it. Even your daily rings should have smooth, rounded edges that feel natural the second you slip them on. When the tactile details are right, putting together an outfit turns into an act of pure physical comfort."
+   "Treat your garments as soft shelter, insist on genuine sensory comfort, and anchor the arrangement with one sentimental keepsake. The rule of reduction applies here. Limit yourself to one or two strong pieces per look. Turn your back to the mirror, then spin around quickly. Remove the very first detail that catches your eye. Start this curation with your handbags. Choose substantial silhouettes crafted from full-grain leather or thick suede. Inspect the hardware carefully. Ensure the clasps and buckles present a muted, matt brushed finish in a cool tone rather than a reflective gloss.",
+   "Treat scarves as your personal architecture, building soft shelter against the day. Seek out generous squares of fine wool or large lengths of silk in a cool dove grey. Ensure the surface remains strictly matt. Wrap the material tightly around your bare neck. If the wool leaves a red mark or the silk feels brittle against your throat, abandon it. One quiet, substantial addition is always enough. Insist on profound sensory comfort from these textiles. You require materials that absorb light and provide immediate physical ease, acting as a solitary, grounded layer rather than a restless distraction.",
+   "Anchor your waist with a wide full-grain leather belt. Inspect the hardware to guarantee a matt brushed buckle in a cool tone. Curate your jewellery with intention. Limit yourself to one sentimental keepsake, perhaps a deep stone set in aged silver or brass. Run your thumb over the oxidised metal to ensure the finish feels completely subdued. Place your hands in your pockets and walk across the room. If the buckle digs into your stomach or the pendant swings wildly, leave the accessory behind."
+  ],
+  "rankedItems": [
+   {
+    "name": "Handbags",
+    "role": "accessory category",
+    "useCase": "full-grain leather or thick suede, matt brushed hardware"
+   }
+  ],
+  "sectionIntro": "Accessories act as the final anchors that define your silhouette, demanding strict curation.",
+  "tests": [
+   "remove the earring doing too much / one strong piece is enough"
   ]
  },
+ "closing": "Trust your physical instincts to build your wardrobe: demand soft shelter + sensory comfort + one sentimental keepsake.",
  "code": {
   "avoid": [
    "Anything scratchy, stiff, or uncomfortable against your skin. If you have to endure a garment, it is already failing.",
@@ -19,9 +31,12 @@
    "Wearing unrestrictive layers and soft, tactile knits to project an immediately welcoming physical presence.",
    "Prioritising dynamic garments constructed with stretch and intelligent draping that adapt to your movement.",
    "Treating your daily dressing routine as a brilliant opportunity for dramatic creative self-expression.",
-   "Letting pure, unadulterated joy dictate your next major wardrobe purchase and ignore passing trends."
+   "Letting pure, unadulterated joy dictate your next major wardrobe purchase and ignore passing trends.",
+   "Judging every purchase on cost-per-wear rather than ticket price. A well-made piece worn two hundred times costs less than a cheap one worn twice.",
+   "Asking whether you would still wear a piece in five to ten years. If the answer wavers, leave it behind."
   ],
   "leanInto": [
+   "Anchoring every choice in your formula: soft shelter + sensory comfort + one sentimental keepsake.",
    "Treating softness as a power move, not a concession. The person in cashmere has already won the room.",
    "Investing in loungewear that makes you feel wealthy. A heavy cotton robe or a silk pyjama set is emotional infrastructure.",
    "Prioritising natural materials against your skin at all times. Your body registers the difference before your mind does.",
@@ -30,10 +45,15 @@
    "Layering soft over structured. A washed cotton shirt under a heritage cardigan creates warmth with backbone."
   ]
  },
+ "coreFormula": "soft shelter + sensory comfort + one sentimental keepsake",
  "engineVersion": "2.1.0",
- "generatedAt": "2026-06-26T01:25:54Z",
+ "generatedAt": "2026-07-15T23:15:27Z",
  "hardware": {
-  "metalsText": "Hardware usually introduces friction to an outfit, but yours needs to feel completely integrated and soft to the touch. A muted sterling silver tones brings an antique quality that pairs effortlessly with flowing silhouettes. High-shine finishes simply look too sharp and aggressive on you. Seek out white gold tones with a brushed, gently worn surface that has real weight in the hand. When you wear antique silver tones on a bag clasp or a heavy coat zip, ensure the edges are visibly rounded. Every buckle, ring, and fastening should feel like a familiar heirloom rather than a fresh factory casting.",
+  "excludedFinishes": [
+   "polished chrome",
+   "high-shine silver"
+  ],
+  "metalsText": "Build your hardware foundation strictly from cool tones. Look for sterling silver, white gold, and antique silver. Your finish strategy demands muted surfaces. Highly polished pieces create a sharp glare that distracts from quiet fabrics. Keep the look cohesive by sticking to matt and brushed textures instead. Avoid polished chrome. Weigh the clasp or chain in your cupped hands. A clever coating easily tricks the eye, but true density is unmistakable. The piece must drag heavily against your skin. This dense mass helps construct your soft shelter. Solid, unyielding metals provide deep sensory comfort against the body. Complete your jewellery by wearing one sentimental keepsake cast in a matching cool, matt metal.",
   "recommendedMetals": [
    "sterling silver",
    "white gold",
@@ -57,13 +77,34 @@
    "amethyst",
    "aquamarine"
   ],
-  "stonesText": "Forget brilliant cuts and blinding clarity. You suit gems that look milky, tumbled, or passed down through three generations of a stylish family. A heavy, smooth dome of moonstone feels deeply grounding on the hand, while pearl brings a soft, luminescent finish to the neckline. Look for cabochon cuts and opaque surfaces that warm to the temperature of your skin rather than sitting cold and sharp on the collarbone. When set in gently tarnished silver, opal acts less like a statement accessory and more like a personal talisman. Your jewellery should function as a comfort object disguised as excellent taste.",
-  "tipText": "Your approach to jewellery relies entirely on physical weight and tactile warmth. A substantial, smoothed-down piece in sterling silver tones provides a necessary anchor for flowing fabrics and washed cottons. Look for rounded edges, heavy vintage lockets, or a thick ring set with a domed moonstone that heats up as you wear it. Sharp, highly polished hardware feels completely jarring next to your preferred soft silver and blush tones. The most convincing pieces are those that look as though they have already lived a full life before resting on your collarbone."
+  "sectionIntro": "Anchor your aesthetic using heavy, cool metals in muted finishes.",
+  "stonesText": "Prioritise dense, opaque minerals over transparent gems. Press the mineral against your cheek. A genuine moonstone or pearl immediately transmits a shocking, frosty chill. Extend soft shelter into your jewellery by scrutinising the setting. High-shine, mirror-polished metals create a jarring distraction next to hushed, cool colours. Stick to matt and brushed metal textures to keep the design entirely cohesive and self-contained.",
+  "structuralMetals": [
+   "sterling silver",
+   "white gold",
+   "antique silver",
+   "silver",
+   "brushed silver"
+  ],
+  "tests": [
+   "pick it up: looks lie, weight doesn't (the pick-it-up weight test)"
+  ],
+  "tipText": "High-gloss, reflective hardware throws sharp, distracting light across muted, cool garments. Bypass polished chrome entirely. Opt for flat, tarnished, or completely matt sterling silver to maintain an insular, cohesive mood. Strike the link lightly against a wooden table. Solid sterling silver or a raw moonstone emits a dull, muted thud rather than a hollow, high-pitched clink. Anything lightweight will immediately disrupt the sensory comfort you have carefully constructed. Demand proper physical substance from any piece intended to become one sentimental keepsake.",
+  "traps": [
+   {
+    "failure": "high-shine, polished chrome silver looks sharp and distracting next to soft muted colours",
+    "fix": "stick to matt and brushed textures to keep the look cohesive"
+   }
+  ]
  },
  "occasions": {
-  "dailyText": "Daily dressing for you is about creating a wearable sanctuary. You do best in enveloping, generous silhouettes that let you move through the world feeling completely protected and unbothered. Build your casual rotation around fluid layers and softly structured outerwear that drapes across the shoulders rather than gripping them. Seek out pieces that carry a sense of history and permanence, like an exceptionally well-aged topcoat or a heavy, sweeping overshirt that drops perfectly at the hip. The overall impression remains deliberate and quiet. You want pure physical ease, stepping out in an outfit that feels like a private, mobile retreat.\n\nYour comfort instinct gravitates toward emotional dressing that communicates, approachable comfort, soft signals. Your style energy concentrates in creativity and expression, so your wardrobe is at its best when it reflects both creativity and expression.",
-  "intimateText": "Evening dressing for you is about creating a private atmosphere rather than putting on a show. Your best pieces yield gracefully around the frame, offering a subtle sense of sanctuary while maintaining total polish. Seek out garments with a reassuring weight and a heavy, fluid drape that shifts gently as you walk. The overall silhouette thrives when it feels enveloping rather than rigidly structured. You want to arrive looking completely at ease, wrapped in layers that silently invite a closer look.",
-  "workText": "Corporate spaces are rarely designed for comfort, which means your workwear has to provide that missing sense of security. Swap rigid, restrictive tailoring for pieces that drape and move with an easy fluidity. The silhouettes you choose must rely on generous proportions and a reassuring, substantial weight to give you a clear physical boundary. You function at your highest level when an outfit acts as a quiet, expertly constructed shell. Real authority in a room never looks stiff; it looks like a person entirely at peace in their garments.\n\nAt work, you signal your ambition and vision by wearing globally inspired pieces and bold silhouettes that project expansive confidence."
+  "dailyText": "Treat a trip to the local post office just like a full day of meetings. Crouch down to retrieve a dropped pen. If the trousers restrict your knees or the collar chokes your neck, take the piece off immediately. Look for cloud-soft lambswool in dove grey or washed silk trousers that drape freely. Your baseline applies to every waking hour. Maintain your core equation of soft shelter + sensory comfort + one sentimental keepsake whether you are buying stamps or working from a quiet desk. Select a matt platinum ring or a cool lapis pendant as your grounding piece. You never need to endure stiff tailoring to look appropriately dressed.\n\nYour comfort instinct gravitates toward emotional dressing that communicates, approachable comfort, soft signals. Your style energy concentrates in creativity and expression, so your wardrobe is at its best when it reflects both creativity and expression.",
+  "intimateText": "In dim lighting, let sensory comfort dictate your evening choices. Sit down in a hard wooden dining chair. If the waistband digs into your ribs after ten minutes, do not wear the piece to a candlelit dinner. Reach for heavy silk crepe in deep teal or a dove grey washed silk blouse. These materials drape without grabbing. Stick to cool tones and matt surfaces that absorb light and invite proximity. Keep the styling entirely self-contained. Pair the look with a single silver ring and leave the rest bare. Prioritise unyielding ease.",
+  "sectionIntro": "Evaluate your work clothes by how much physical peace they offer during long hours.",
+  "tests": [
+   "the pharmacy line: a trip to the pharmacy does not require suffering for the aesthetic"
+  ],
+  "workText": "Let sensory comfort lead your choices for the office. A demanding schedule requires clothing that yields to your shape. Provide yourself with soft shelter by layering a heavy silk crepe blouse under a boiled wool blazer in deep teal. Support this base with one sentimental keepsake. Slip a cool, matt silver ring onto your right index finger to tap quietly during tense meetings. Apply the pharmacy test before walking out the door. If you cannot wait in a slow queue for prescriptions at five o'clock without adjusting a sleeve or rubbing a blister, drop the item on the bed. Office attire must never demand physical sacrifice. Trust your hands to choose washed silk and dove grey wool that construct a self-contained shell.\n\nAt work, you signal your ambition through quietly considered pieces whose scope shows in craftsmanship rather than scale."
  },
  "palette": {
   "accentColours": [
@@ -174,7 +215,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "The way you wear colour is inherently intimate, building a wardrobe that feels like a quiet retreat. An understated foundation of eucalyptus and muted rose creates an immediate sense of visual calm. These tones do their best work on highly tactile surfaces, making a heavy silk slip or a plush cashmere crewneck feel exceptionally luxurious. Bringing in moss sage keeps the mood warm and lived-in, while a touch of Sage Mist provides a gentle shift in depth. The overall effect is incredibly soothing, projecting an easy elegance that never has to shout to be noticed.",
+  "narrativeText": "Your temperature is unequivocally cool. Check this by taking a piece to the window. If the daylight reveals warm undertones, drop it. Anchor your wardrobe in eucalyptus and moss sage for a matt, steady foundation. Use muted rose for heavy structural pieces. Turn to smoky periwinkle when you need a bright lift. This base builds your soft shelter. Apply Sage Mist or Misty Blue as a solitary focal point, perhaps echoing the hue of your one sentimental keepsake. Treat your relief tone as a visual palate cleanser, deploying it only when an ensemble feels too heavy. Bypass hard black, harsh neon, and heavy earth brown completely. The trap is defaulting to a solid block of dark dressing on tired mornings, which reads as surrender. Break up the flat column by inserting a lighter mid-layer, a deep-toned scarf, or a rich leather belt.",
   "neutrals": [
    {
     "hexValue": "#928E85",
@@ -229,9 +270,48 @@
    "fireAirChromaApplied": false,
    "scorpioDensityApplied": false,
    "surfacePreservationApplied": false,
+   "venusWarmFloorApplied": false,
    "waterSofteningApplied": true,
    "winterCompressionApplied": false
   },
+  "rankedItems": [
+   {
+    "name": "Dove grey",
+    "role": "cool_base"
+   },
+   {
+    "name": "Inky navy",
+    "role": "structural_dark"
+   },
+   {
+    "name": "Deep teal",
+    "role": "cool_base"
+   },
+   {
+    "name": "Oyster",
+    "role": "white_substitute"
+   },
+   {
+    "name": "Pale aqua",
+    "role": "cool_base"
+   },
+   {
+    "name": "Smoked mauve",
+    "role": "warm_cool_bridge"
+   },
+   {
+    "name": "Faded rose",
+    "role": "accent"
+   },
+   {
+    "name": "Deep berry",
+    "role": "accent"
+   },
+   {
+    "name": "Soft oatmeal",
+    "role": "relief"
+   }
+  ],
   "rulerSignature": {
    "hexValue": "#528675",
    "name": "muted teal",
@@ -245,6 +325,7 @@
    "semanticLabel": "ruler signature"
   },
   "secondaryPull": "True Summer",
+  "sectionIntro": "Construct your wardrobe palette by testing how light hits the thread, ensuring every choice supports your strict boundaries.",
   "supportColours": [
    {
     "hexValue": "#D2C6B2",
@@ -292,6 +373,12 @@
    }
   ],
   "swatchFamilies": [],
+  "traps": [
+   {
+    "failure": "head-to-toe black reads like you gave up on the way out the door",
+    "fix": "break it up with an inky navy layer, a faded rose scarf, or a deep berry belt"
+   }
+  ],
   "variables": {
    "contrast": "Low",
    "depth": "Medium",
@@ -307,7 +394,7 @@
    "harsh geometric",
    "harsh graphics"
   ],
-  "narrativeText": "Your approach to print relies entirely on familiarity rather than making a loud visual statement. High-contrast graphics disrupt your need for sensory calm, so you naturally favour soft plaid and natural grain jacquard that look as though they have been washed a hundred times. Woven motifs like tone-on-tone cable knit work flawlessly because the design is built right into the brushed flannel or soft knit, rather than stamped on top of a stiff fabric. Steer entirely clear of sharp, aggressive lines like aggressive graphics or skull prints, which just read as loud and feel deeply ungrounding to wear. The right pattern behaves like a heritage textile, offering immediate physical comfort the second you put it on.",
+  "narrativeText": "Keep your prints low-contrast and tonal to maintain a cool temperature across your wardrobe. Tailored items dictate soft plaid. Your fluid layers require natural grain jacquard. Drape the printed garment over a chair and glance at it from the doorway. If the motif leaps out as a sharp graphic, leave the piece behind. True quietness demands discretion. Build enveloping soft shelter by rejecting jarring graphics entirely. Seek pure sensory comfort from the weave rather than relying on visual noise. Pass over aggressive graphics and skull prints without hesitation. Choose tone-on-tone cable knit only when the foreground and background colours melt completely together.",
   "recommendedPatterns": [
    "soft plaid",
    "natural grain jacquard",
@@ -316,10 +403,18 @@
    "vintage prints",
    "gingham"
   ],
-  "tipText": "High-contrast, graphic prints will always feel far too loud for your quiet, sensory way of dressing. Treat a soft plaid as a textural detail rather than a billboard. A pattern feels right on you when it looks slightly faded or woven directly into the piece, like a subtle brushed jacquard or a soft motif bleeding into a blush background. Let the design look as though it has been washed, worn, and loved for years, bringing a gentle visual rhythm to your outfit without breaking the peace."
+  "sectionIntro": "Evaluate every pattern on the hanger before allowing it into your private rotation.",
+  "tests": [
+   "step back and soften focus (blur into texture)"
+  ],
+  "tipText": "Hang the printed garment on a door frame. Take five paces backwards. Unfocus your vision until the room goes slightly blurry. You are looking for the exact moment soft plaid stops reading as a distinct shape and dissolves into a hazy, muted texture. If the design still jumps out at you with crisp borders, leave it on the rail. True sensory comfort requires visual peace. Your prints should melt into the surrounding weave like a shadow. Trust your eyes on this physical test. If the motif demands attention rather than receding into the background, it disrupts your soft shelter. Keep the overall effect strictly cool and subdued."
  },
  "styleCore": {
-  "narrativeText": "Your presence relies on a feeling of quiet, protective ease. You project an aura of sanctuary through garments that wrap, drape, and physically shield the body from the outside world. People notice the undeniable, heavy quality of your wardrobe precisely because you wear it with such relaxed indifference. Your aesthetic succeeds when it combines fluid, forgiving proportions with a reassuringly heavy drape. You walk into a room and instantly change the temperature, establishing a mood of familiar, intimate luxury that nobody else can quite replicate.\n\nYour natural sense of beauty shows up most powerfully in your creative self-expression, creative joy in dressing, bold romantic expression, date-night dressing as art. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as bold and expansive; globally informed choices and adventurous scope signal confidence."
+  "narrativeText": "Build your wardrobe slowly, piece by piece over seasons, and deploy your outfits strictly by mood. Your most reliable guide is how a garment breathes and flows around your frame. Watch the airspace between the fabric and your skin. Put the piece on, step forward, and take a deep breath. If the material floats and settles seamlessly back into place, keep it. If it clings, grabs your shoulders, or restricts your ribs, take it off immediately. Use this simple physical check as your ultimate compass. If your stomach tightens with hesitation when you check the mirror, drop the hanger and leave the shop empty-handed.\n\nYour foundational equation is soft shelter + sensory comfort + one sentimental keepsake. Visualise this in practice. You start with a generously cut, fluid overcoat that falls past the knee. Beneath it, you wear a fine knit that requires no adjustment throughout the day. You finish the look with a single, private pendant hidden under your collar. The entire arrangement remains self-contained and muted. It protects your personal space rather than projecting outward. You maintain a cool distance from passing trends. Every element works together to insulate you from friction.\n\nYour style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style carries a quietly authoritative scope; well-travelled taste shows in the quality of what you choose, not its volume.",
+  "sectionIntro": "Apply this structural blueprint as your primary filtering system before any piece enters your wardrobe.",
+  "tests": [
+   "trust your gut and walk away"
+  ]
  },
  "textures": {
   "avoidTextures": [
@@ -327,23 +422,64 @@
    "stiff synthetics",
    "rough textures"
   ],
-  "badText": "Harsh, rigid clothing is a total shock to your system. Anything overly stiff or synthetic feels instantly abrasive, which is why scratchy wool is such a disaster for your wardrobe. You need clothes that actually yield and breathe, meaning stiff synthetics will just leave you feeling boxed-in and irritated. If a piece feels clinical to the touch, sounds loud when you walk, or demands a painful breaking-in period, it is fundamentally incompatible with how you move. Your clothes should always serve as a soft buffer, never an extra source of daily friction.",
-  "goodText": "Getting dressed is a deeply tactile process for you, meaning every piece must pass a rigorous touch test before it even makes it onto a hanger. Anything stiff, scratchy, or restrictive gets immediately discarded. Instead, prioritise cashmere and organic cotton, materials that feel inherently familiar and broken-in from the very first wear. The soft finish of buttery leather acts as a subtle physical buffer between you and the rush of the outside world, while plush terry offers a crucial sense of lived-in ease. Your clothes need to feel like they are actively looking after you, providing a quiet sensory comfort that sets your mood for the day.",
+  "badText": "Perform a strict audit before trying anything on. Wring the sleeve tightly in your hands like a damp towel. If scratchy wool bites into your palms or springs back with a stiff, artificial crunch, drop it. Avoid stiff synthetics completely. You need textiles that wrap you in a cool, quiet equilibrium. Do not tolerate any aggressive fibres that might irritate your skin or distract from the quiet weight of one sentimental keepsake resting against your collarbone.",
+  "goodText": "Your wardrobe requires fabrics that provide true sensory comfort. Drag the rough edge of the cloth across the sensitive skin of your inner wrist. If the material catches, resists, or feels stiff, leave it on the rail. Seek out cashmere for slips and blouses softened until the sheen turns to candlelight. Pair this with buttery leather for dresses that trace the body with fluid, hidden depth. Build a soft shelter against the cool air using organic cotton for jumpers and cardigans that protect without weight. Finish the system with plush terry for unstructured protective coats that stay soft at every edge. Calibrate your hands to these essential textures.",
+  "rankedItems": [
+   {
+    "name": "Washed silk",
+    "role": "rank 1",
+    "useCase": "slips and blouses softened until the sheen turns to candlelight"
+   },
+   {
+    "name": "Cloud-soft lambswool",
+    "role": "rank 2",
+    "useCase": "jumpers and cardigans that shelter without weight"
+   },
+   {
+    "name": "Heavy silk crepe",
+    "role": "rank 3",
+    "useCase": "dresses that trace the body with fluid, hidden depth"
+   },
+   {
+    "name": "Boiled wool",
+    "role": "rank 4",
+    "useCase": "unstructured protective coats that stay soft at every edge"
+   },
+   {
+    "name": "Brushed alpaca",
+    "role": "rank 5",
+    "useCase": "enveloping winter coats and oversized cardigans"
+   },
+   {
+    "name": "Fluid modal jersey",
+    "role": "rank 6",
+    "useCase": "base layers that follow the body without ever gripping it"
+   },
+   {
+    "name": "Brushed cotton flannel",
+    "role": "rank 7",
+    "useCase": "shirts and loungewear that feel like a remembered embrace"
+   }
+  ],
   "recommendedTextures": [
    "cashmere",
    "organic cotton",
    "buttery leather",
    "plush terry"
   ],
+  "sectionIntro": "Train your hands to recognise materials that build your personal sanctuary before you even check the label.",
   "sweetSpotKeywords": [
    "touch",
    "weight"
   ],
-  "sweetSpotText": "There is a highly specific intersection of touch and weight where your wardrobe actually clicks. When you pull on cashmere or the broken-in finish of organic cotton, the textile must deliver immediate sensory security without compromising on quality. Your best items sit against the body with a protective, nostalgic softness, wearing more like a trusted inheritance than a new purchase. They hold their silhouette beautifully while remaining entirely yielding to the touch. If a fabric demands constant adjusting or sits rigidly against your skin, it simply does not belong in your rotation."
+  "sweetSpotText": "To find this balance, bypass the mirror and rely entirely on touch. Pinch the hem between your thumb and forefinger and rub the layers together. If the fibres prickle or generate a harsh static friction, drop the garment. You are constructing a soft shelter. Every layer must soothe the skin on contact. Combine touch with weight to anchor this response. A foundation of cashmere works perfectly when surrounded by cool, matt surfaces.",
+  "tests": [
+   "the touch test"
+  ]
  },
  "userInfo": {
   "birthDate": "1992-06-26T04:00:00Z",
   "birthLocation": "Synth 064 \u2014 Cancer Sun, 04:00 UTC, New York (1992)",
-  "generationDate": "2026-06-26T01:25:54Z"
+  "generationDate": "2026-07-15T23:15:27Z"
  }
 }

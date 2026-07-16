@@ -721,7 +721,7 @@ enum BlueprintLensEngine {
         case .rich:  vibBaseline = 0.75
         case nil:    vibBaseline = 0.50
         }
-        let traceVibe = (effectiveMode == .stage1Experimental)
+        let traceVibe = (effectiveMode.usesSkyForwardPipeline)
             ? (snapshot.skyVibeProfile ?? snapshot.vibeProfile)
             : snapshot.vibeProfile
         let vibPush = Double(traceVibe.value(for: .drama) + traceVibe.value(for: .edge)) / 21.0
@@ -805,7 +805,7 @@ enum BlueprintLensEngine {
         }
 
         let dominant: Energy
-        if effectiveMode == .stage1Experimental, let raw = snapshot.vibeRawScores {
+        if effectiveMode.usesSkyForwardPipeline, let raw = snapshot.vibeRawScores {
             dominant = snapshot.vibeProfile.dominantEnergy(rawTieBreak: raw)
         } else {
             dominant = snapshot.vibeProfile.dominantEnergy
@@ -1217,12 +1217,12 @@ enum BlueprintLensEngine {
         case .rich:  baseline = 0.75
         case nil:    baseline = 0.50
         }
-        let vibe = (mode == .stage1Experimental)
+        let vibe = (mode.usesSkyForwardPipeline)
             ? (snapshot.skyVibeProfile ?? snapshot.vibeProfile)
             : snapshot.vibeProfile
 
         var final: Double
-        if mode == .stage1Experimental {
+        if mode.usesSkyForwardPipeline {
             let push = Double(vibe.value(for: .drama) + vibe.value(for: .edge)) / 21.0
             let pull = Double(vibe.value(for: .utility) + vibe.value(for: .classic) + vibe.value(for: .romantic)) / 21.0
             let vibeModulation = (push - pull) * Stage1ScaleSensitivity.vibeScale
@@ -1302,7 +1302,7 @@ enum BlueprintLensEngine {
         mode: DailyFitEngineMode = .standard,
         scaleDirective: ScaleDirective? = nil
     ) -> Double {
-        if mode == .stage1Experimental {
+        if mode.usesSkyForwardPipeline {
             return computeStage1ContrastRaw(
                 palette: palette,
                 snapshot: snapshot,
@@ -1353,7 +1353,7 @@ enum BlueprintLensEngine {
         calibration: DailyFitCalibration = .default,
         mode: DailyFitEngineMode = .standard
     ) -> Double {
-        if mode == .stage1Experimental {
+        if mode.usesSkyForwardPipeline {
             return computeStage1MetalToneRaw(
                 blueprint: blueprint,
                 snapshot: snapshot,
@@ -1721,7 +1721,7 @@ enum BlueprintLensEngine {
         mode: DailyFitEngineMode
     ) -> StyleEssenceProfile {
         switch mode {
-        case .stage1Experimental:
+        case .stage1Experimental, .stage2SkyFidelity:
             return deriveStyleEssenceProfileStage1Experimental(from: snapshot)
         case .standard:
             return deriveStyleEssenceProfile(from: snapshot)
@@ -2006,7 +2006,7 @@ enum BlueprintLensEngine {
             leftKeywords: sdLeft, rightKeywords: sdRight
         )
 
-        if mode == .stage1Experimental {
+        if mode.usesSkyForwardPipeline {
             let skyMod = { (axis: Double) in tanh((axis - 5.5) / 4.5) * 0.28 }
             let tempoNorm = snapshot.axes.tempo / 10.0
             let mfVisMod = tanh((snapshot.axes.visibility - 5.5) / Stage1ScaleSensitivity.mfVisibilityDivisor) * Stage1ScaleSensitivity.mfVisibilityScale
@@ -2106,7 +2106,7 @@ enum BlueprintLensEngine {
             "visibility": snapshot.axes.visibility / 10.0,
         ]
 
-        let skyVibe = mode == .stage1Experimental
+        let skyVibe = mode.usesSkyForwardPipeline
             ? (snapshot.skyVibeProfile ?? snapshot.vibeProfile)
             : nil
 
@@ -2129,7 +2129,7 @@ enum BlueprintLensEngine {
             return (texture, score)
         }
 
-        if mode == .stage1Experimental, let topScore = scored.max(by: { $0.1 < $1.1 })?.1, topScore > 0 {
+        if mode.usesSkyForwardPipeline, let topScore = scored.max(by: { $0.1 < $1.1 })?.1, topScore > 0 {
             let threshold = topScore * 0.85
             let tiedGroup = scored.filter { $0.1 >= threshold }
             if tiedGroup.count > 1 {
@@ -2202,7 +2202,7 @@ enum BlueprintLensEngine {
         mode: DailyFitEngineMode = .standard
     ) -> String? {
         let dominant: Energy
-        if mode == .stage1Experimental, let raw = snapshot.vibeRawScores {
+        if mode.usesSkyForwardPipeline, let raw = snapshot.vibeRawScores {
             dominant = snapshot.vibeProfile.dominantEnergy(rawTieBreak: raw)
         } else {
             dominant = snapshot.vibeProfile.dominantEnergy
@@ -2222,7 +2222,7 @@ enum BlueprintLensEngine {
         }
         scored.sort { $0.1 > $1.1 }
 
-        if mode == .stage1Experimental, let topScore = scored.first?.1, topScore > 0 {
+        if mode.usesSkyForwardPipeline, let topScore = scored.first?.1, topScore > 0 {
             let topPatterns = scored.filter { $0.1 >= topScore * 0.8 }
             var rng = SeededRandomGenerator(seed: snapshot.dailySeed)
             let idx = Int.random(in: 0..<topPatterns.count, using: &rng)

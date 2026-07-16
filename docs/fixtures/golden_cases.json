@@ -1,0 +1,439 @@
+{
+  "baseDate" : "2026-06-15T12:00:00Z",
+  "goldens" : [
+    {
+      "description" : "Fire-dominant chart, first-quarter moon",
+      "engineVersion" : "Sky Forward v1.0.2",
+      "expected" : {
+        "dominantEnergies" : [
+          "playful",
+          "edge"
+        ],
+        "essenceTopBand" : [
+          "drama",
+          "playful",
+          "edgy"
+        ],
+        "paletteTemperature" : "warm",
+        "silhouetteLean" : "structured"
+      },
+      "id" : "fire_pure",
+      "moonPhaseDegrees" : 90,
+      "natalSigns" : [
+        1,
+        5,
+        9,
+        1,
+        5,
+        9,
+        1,
+        5,
+        9,
+        1
+      ],
+      "profileHash" : "golden_fire",
+      "progressedSigns" : [
+        1,
+        5,
+        9,
+        1,
+        5,
+        9,
+        1,
+        5,
+        9,
+        1
+      ],
+      "transits" : [
+        {
+          "aspect" : "conjunction",
+          "natal" : "Sun",
+          "orb" : 1,
+          "planet" : "Mars"
+        }
+      ]
+    },
+    {
+      "description" : "Water-dominant chart, waxing moon",
+      "engineVersion" : "Sky Forward v1.0.2",
+      "expected" : {
+        "dominantEnergies" : [
+          "romantic",
+          "drama"
+        ],
+        "essenceTopBand" : [
+          "romantic",
+          "maximalist",
+          "magnetic"
+        ],
+        "paletteTemperature" : "warm",
+        "silhouetteLean" : "structured"
+      },
+      "id" : "water_pure",
+      "moonPhaseDegrees" : 120,
+      "natalSigns" : [
+        4,
+        8,
+        12,
+        4,
+        8,
+        12,
+        4,
+        8,
+        12,
+        4
+      ],
+      "profileHash" : "golden_water",
+      "progressedSigns" : [
+        4,
+        8,
+        12,
+        4,
+        8,
+        12,
+        4,
+        8,
+        12,
+        4
+      ],
+      "transits" : [
+        {
+          "aspect" : "trine",
+          "natal" : "Moon",
+          "orb" : 2,
+          "planet" : "Venus"
+        }
+      ]
+    },
+    {
+      "description" : "Earth-dominant chart, last-quarter moon",
+      "engineVersion" : "Sky Forward v1.0.2",
+      "expected" : {
+        "dominantEnergies" : [
+          "utility",
+          "edge"
+        ],
+        "essenceTopBand" : [
+          "minimal",
+          "classic",
+          "utility"
+        ],
+        "paletteTemperature" : "cool",
+        "silhouetteLean" : "structured"
+      },
+      "id" : "earth_pure",
+      "moonPhaseDegrees" : 270,
+      "natalSigns" : [
+        2,
+        6,
+        10,
+        2,
+        6,
+        10,
+        2,
+        6,
+        10,
+        2
+      ],
+      "profileHash" : "golden_earth",
+      "progressedSigns" : [
+        2,
+        6,
+        10,
+        2,
+        6,
+        10,
+        2,
+        6,
+        10,
+        2
+      ],
+      "transits" : [
+        {
+          "aspect" : "sextile",
+          "natal" : "Mercury",
+          "orb" : 1.5,
+          "planet" : "Saturn"
+        }
+      ]
+    },
+    {
+      "description" : "Air-dominant chart, waning moon",
+      "engineVersion" : "Sky Forward v1.0.2",
+      "expected" : {
+        "dominantEnergies" : [
+          "classic",
+          "romantic"
+        ],
+        "essenceTopBand" : [
+          "eclectic",
+          "edgy",
+          "romantic"
+        ],
+        "paletteTemperature" : "warm",
+        "silhouetteLean" : "structured"
+      },
+      "id" : "air_pure",
+      "moonPhaseDegrees" : 210,
+      "natalSigns" : [
+        3,
+        7,
+        11,
+        3,
+        7,
+        11,
+        3,
+        7,
+        11,
+        3
+      ],
+      "profileHash" : "golden_air",
+      "progressedSigns" : [
+        3,
+        7,
+        11,
+        3,
+        7,
+        11,
+        3,
+        7,
+        11,
+        3
+      ],
+      "transits" : [
+        {
+          "aspect" : "square",
+          "natal" : "Sun",
+          "orb" : 2.5,
+          "planet" : "Mercury"
+        }
+      ]
+    },
+    {
+      "description" : "Mixed chart on an exact full moon",
+      "engineVersion" : "Sky Forward v1.0.2",
+      "expected" : {
+        "dominantEnergies" : [
+          "drama",
+          "playful"
+        ],
+        "essenceTopBand" : [
+          "maximalist",
+          "eclectic",
+          "drama"
+        ],
+        "paletteTemperature" : "warm",
+        "silhouetteLean" : "structured"
+      },
+      "id" : "full_moon",
+      "moonPhaseDegrees" : 180,
+      "natalSigns" : [
+        5,
+        8,
+        3,
+        1,
+        10,
+        7,
+        2,
+        11,
+        6,
+        12
+      ],
+      "profileHash" : "golden_full",
+      "progressedSigns" : [
+        5,
+        8,
+        3,
+        1,
+        10,
+        7,
+        2,
+        11,
+        6,
+        12
+      ],
+      "transits" : [
+        {
+          "aspect" : "opposition",
+          "natal" : "Venus",
+          "orb" : 1,
+          "planet" : "Jupiter"
+        }
+      ]
+    },
+    {
+      "description" : "Mixed chart on an exact new moon",
+      "engineVersion" : "Sky Forward v1.0.2",
+      "expected" : {
+        "dominantEnergies" : [
+          "utility",
+          "classic"
+        ],
+        "essenceTopBand" : [
+          "magnetic",
+          "utility",
+          "grounded"
+        ],
+        "paletteTemperature" : "cool",
+        "silhouetteLean" : "structured"
+      },
+      "id" : "new_moon",
+      "moonPhaseDegrees" : 0,
+      "natalSigns" : [
+        5,
+        8,
+        3,
+        1,
+        10,
+        7,
+        2,
+        11,
+        6,
+        12
+      ],
+      "profileHash" : "golden_new",
+      "progressedSigns" : [
+        5,
+        8,
+        3,
+        1,
+        10,
+        7,
+        2,
+        11,
+        6,
+        12
+      ],
+      "transits" : [
+        {
+          "aspect" : "conjunction",
+          "natal" : "Moon",
+          "orb" : 0.5,
+          "planet" : "Sun"
+        }
+      ]
+    },
+    {
+      "description" : "Busy sky — several tight transits",
+      "engineVersion" : "Sky Forward v1.0.2",
+      "expected" : {
+        "dominantEnergies" : [
+          "drama",
+          "romantic"
+        ],
+        "essenceTopBand" : [
+          "drama",
+          "playful",
+          "minimal"
+        ],
+        "paletteTemperature" : "warm",
+        "silhouetteLean" : "structured"
+      },
+      "id" : "heavy_transit",
+      "moonPhaseDegrees" : 135,
+      "natalSigns" : [
+        1,
+        4,
+        7,
+        10,
+        2,
+        5,
+        8,
+        11,
+        3,
+        6
+      ],
+      "profileHash" : "golden_heavy",
+      "progressedSigns" : [
+        1,
+        4,
+        7,
+        10,
+        2,
+        5,
+        8,
+        11,
+        3,
+        6
+      ],
+      "transits" : [
+        {
+          "aspect" : "conjunction",
+          "natal" : "Sun",
+          "orb" : 0.5,
+          "planet" : "Mars"
+        },
+        {
+          "aspect" : "square",
+          "natal" : "Moon",
+          "orb" : 1,
+          "planet" : "Pluto"
+        },
+        {
+          "aspect" : "trine",
+          "natal" : "Venus",
+          "orb" : 2,
+          "planet" : "Uranus"
+        },
+        {
+          "aspect" : "opposition",
+          "natal" : "Mars",
+          "orb" : 1.5,
+          "planet" : "Saturn"
+        }
+      ]
+    },
+    {
+      "description" : "Quiet sky — a single wide transit",
+      "engineVersion" : "Sky Forward v1.0.2",
+      "expected" : {
+        "dominantEnergies" : [
+          "playful",
+          "edge"
+        ],
+        "essenceTopBand" : [
+          "sensual",
+          "edgy",
+          "playful"
+        ],
+        "paletteTemperature" : "warm",
+        "silhouetteLean" : "structured"
+      },
+      "id" : "quiet_sky",
+      "moonPhaseDegrees" : 45,
+      "natalSigns" : [
+        7,
+        2,
+        9,
+        4,
+        11,
+        6,
+        1,
+        8,
+        3,
+        10
+      ],
+      "profileHash" : "golden_quiet",
+      "progressedSigns" : [
+        7,
+        2,
+        9,
+        4,
+        11,
+        6,
+        1,
+        8,
+        3,
+        10
+      ],
+      "transits" : [
+        {
+          "aspect" : "sextile",
+          "natal" : "Saturn",
+          "orb" : 3,
+          "planet" : "Neptune"
+        }
+      ]
+    }
+  ]
+}

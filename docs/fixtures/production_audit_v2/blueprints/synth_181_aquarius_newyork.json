@@ -1,11 +1,23 @@
 {
  "accessory": {
   "paragraphs": [
-   "When your garments behave like liquid, scattering handfuls of fragile trinkets over the top just creates visual noise. A single, substantial object does a far better job of anchoring the silhouette. An unlined leather bag that slumps heavily at the hip or a wide suede belt provides a vital centre of gravity for all that draped jersey and weightless chiffon. This solitary focal point gives the eye a place to rest without interrupting the intuitive sweep of your clothes. You only ever need one reassuring piece of hardware to keep a dreamlike outfit from floating away completely.",
-   "Your wardrobe leans instinctively towards the fluid and the unstructured, meaning your accessories must step in to keep your silhouette from washing away entirely. Rather than sharp corners or rigid frames, rely on pieces that offer a comforting sense of physical gravity. A slouchy but substantial leather bag with a heavy strap, or a wide belt that gently gathers fabric without biting into the waist, gives your softer garments a necessary anchor. Rings cast with melted, organic edges or a weighty watch provide a grounding touch at the extremities. These solid additions lend your dreamiest shapes just enough reality to hold their own in a crowded room.",
-   "Your accessories have to feel like a natural extension of your body, never a physical interruption. A wide bag strap should melt into your shoulder rather than dig, cut from pliant leather that easily folds in your hands. The sensory feedback of getting dressed matters immensely to your daily mood. You want the gentle, frictionless slide of a smooth clasp or the quiet rustle of a soft fabric tie, rather than the loud clank of heavy, restrictive hardware. The best pieces sit quietly on the skin, offering a subtle, tactile finish instead of demanding constant attention."
+   "Anchor weightless layers and blurred edges using one pearl of light. Accessories provide this precise focal point. Restrict yourself to one or two strong pieces per look. Establish this baseline with handbags. Demand full-grain leather or thick suede. Check the fastenings to confirm they feature matt brushed hardware. Rely on tactile feedback when assessing construction. Appearance deceives. Density dictates quality. Execute the single-pearl test on every metal component. Rest a silver clasp against your deep teal boiled wool. The hardware must behave like an isolated drop of dew glowing softly in a cool, muted landscape. If the finish flashes sharply, drop the item entirely.",
+   "Wrap your neck in generous silk or fine wool. Always demand a flat, matt finish. Execute the shoulder slip test. Let the scarf cascade over your collarbone without securing it. It must drape seamlessly into your silhouette and grip the knitwear underneath without sliding off. Isolate your contrast carefully. Construct a cool foundation in dove grey or deep teal, then add exactly one quiet point of illumination to anchor the shape. Keep the boundaries soft to maintain those blurred edges.",
+   "Cinch your clothing with a wide full-grain leather belt. Look for a matt brushed buckle, avoiding any high-gloss finishes. For keepsake jewellery, choose a deep stone set in heavily oxidised, aged silver. These cool, muted metals sink into the look rather than fighting it. Always apply the subtraction rule before concluding the outfit. Put on every accessory you plan to wear, then strip away the noise. Remove pieces until only a single pearl of light remains. If the belt buckle catches the eye, the deep stone must recede. Maintain soft transitions everywhere else. You need exactly one quiet focal point."
+  ],
+  "rankedItems": [
+   {
+    "name": "Handbags",
+    "role": "accessory category",
+    "useCase": "full-grain leather or thick suede, matt brushed hardware"
+   }
+  ],
+  "sectionIntro": "Introduce hardware and structure with strict discipline, ensuring every addition serves only to ground your silhouette.",
+  "tests": [
+   "the one-ember test"
   ]
  },
+ "closing": "Trust your tactile instincts to guide you towards quiet, self-contained silhouettes, returning always to weightless layers + blurred edges + one pearl of light.",
  "code": {
   "avoid": [
    "Rigid, harsh structures that pin your body into a single shape, because stiff jackets and hard waistbands constantly fight your natural sense of movement.",
@@ -17,11 +29,14 @@
   ],
   "consider": [
    "Prioritising the internal sensation of heavy silks and soft cashmere over external visual expectations.",
-   "Anchorring your daily rotation in fluid silk silhouettes and exquisitely soft cashmere knitwear rather than rigid, restrictive tailoring.",
+   "Anchoring your everyday wardrobe in fluid silk silhouettes and exquisitely soft cashmere knitwear rather than rigid, restrictive tailoring.",
    "One perfectly fitted dark suit as the foundation of everything.",
-   "Enforcing a strict pressing ritual for your tailored garments as a non-negotiable part of your daily professional practice."
+   "Enforcing a strict pressing ritual for your tailored garments as a non-negotiable part of your daily professional practice.",
+   "Judging every purchase on cost-per-wear rather than ticket price. A well-made piece worn two hundred times costs less than a cheap one worn twice.",
+   "Asking whether you would still wear a piece in five to ten years. If the answer wavers, leave it behind."
   ],
   "leanInto": [
+   "Anchoring every choice in your formula: weightless layers + blurred edges + one pearl of light.",
    "Letting intuition guide your dressing each morning. If the fabric does not feel right when you reach for it, trust that instinct and reach for something else.",
    "Choosing gentle force over brute strength in your wardrobe. A soft flowing layer communicates more power than a hard structured one ever could for you.",
    "Dressing in a way that reflects your inner fluidity. Fabrics that move and drape mirror the adaptable persistence that defines your energy.",
@@ -30,10 +45,15 @@
    "Letting garments move with your body rather than against it. If a piece fights your natural rhythm, it does not belong."
   ]
  },
+ "coreFormula": "weightless layers + blurred edges + one pearl of light",
  "engineVersion": "2.1.0",
- "generatedAt": "2026-06-26T03:45:23Z",
+ "generatedAt": "2026-07-16T02:17:47Z",
  "hardware": {
-  "metalsText": "Hard edges and heavy buckles disrupt the fluidity of your wardrobe. You want fastenings and jewellery that look molten rather than stamped out of a machine. Reach for silver tones with a brushed or hammered finish so it gleams softly against your skin, or use iridescent finishes when you need a delicate, almost invisible closure for diaphanous layers. Heavy chains will drag down soft jersey and silk, so seek out fine clasps that disappear into the drape of a garment. A touch of white gold tones works beautifully as a final accent, acting like water droplets resting on the fabric rather than functional armour.",
+  "excludedFinishes": [
+   "polished chrome",
+   "high-shine silver"
+  ],
+  "metalsText": "Your hardware strategy runs strictly cool. Root your choices in silver, iridescent finishes, and white gold. Mirror-polished silver catches excessive glare, cutting harshly against muted tones like dusty blue and rose mauve. Ground the styling with matt and brushed finishes to maintain a seamless aesthetic, entirely avoiding polished chrome. Evaluate every clasp and zip before you buy. Assess the solid mass. A photograph obscures flimsy construction, but gravity reveals it immediately. The metal must hold enough physical density to anchor your weightless layers.",
   "recommendedMetals": [
    "silver",
    "iridescent finishes",
@@ -59,13 +79,35 @@
    "obsidian",
    "sapphire"
   ],
-  "stonesText": "Crisp, heavily faceted gems feel entirely too sharp for the way you move through the world. Your jewellery collection asks for pieces with a natural, cloudy translucence, like a smooth cabochon amethyst. A suspended drop of aquamarine catches the light with a soft, milky iridescence rather than a blinding flash. Look for fine, practically invisible bezel settings that let the gems rest directly on the collarbone or wrist, warming quickly to your body temperature. The effect reads less like a formal purchase and more like an instinctive, watery extension of yourself.",
-  "tipText": "Rigid, industrially stamped jewellery immediately disrupts the visual flow of your clothes. You need pieces in silver tones that look cast by hand, favouring organic curves, melted edges, and liquid forms over harsh, architectural geometry. A softly irregular pendant set with amethyst or a fine chain that pools naturally on your collarbone maintains that intuitive rhythm. Hardware is just another fluid element in your outfit, designed to glide over the skin rather than interrupt the silhouette."
+  "sectionIntro": "Control your hardware by testing the weight and finish of every metal detail.",
+  "stonesText": "Choose amethyst and aquamarine with a dense, cloudy interior. These minerals must hold a soft internal glow rather than throwing off sharp outward reflections. Cup the mineral in your palm before you commit. The eye is easily tricked by clever faceting, but actual heaviness never lies. A heavy stone grounds your soft clothing perfectly. Avoid high-gloss, mirrored settings. A highly polished prong cuts aggressively against your muted fabrics. Demand matt or deeply brushed hardware to keep the transition from fabric to mineral seamless.",
+  "structuralMetals": [
+   "silver",
+   "white gold",
+   "opal-set silver",
+   "platinum",
+   "blackened steel",
+   "titanium"
+  ],
+  "tests": [
+   "pick it up: looks lie, weight doesn't (the pick-it-up weight test)"
+  ],
+  "tipText": "Lift the piece off the display velvet. Press the metal against your inner wrist. A solid cast of silver must feel distinctively cool and substantial upon contact. Next, examine the surface. Highly polished metals create a jarring glare against your layers of muted fabric. That intense mirror finish breaks your quiet profile. Fix this by insisting on brushed or matt textures. A flat finish absorbs the ambient room light and sits smoothly against your skin.",
+  "traps": [
+   {
+    "failure": "high-shine, polished chrome silver looks sharp and distracting next to soft muted colours",
+    "fix": "stick to matt and brushed textures to keep the look cohesive"
+   }
+  ]
  },
  "occasions": {
-  "dailyText": "Getting dressed on an average morning is an instinctive exercise for you. You need pieces that respond to your current state rather than forcing you into a strict shape. Seek out yielding construction, dropped shoulders, and hems that drift gently as you move through your day. Rigid waistbands and heavy, inflexible materials will only disrupt your peace. The final look should read as entirely effortless, wrapping the frame in a continuous, uninterrupted line.",
-  "intimateText": "Intimate dinners and low-lit evenings are when you drop the armour and lean into pure romance. Choose weightless pieces that shift as you breathe, focusing on soft volumes over rigid construction. Layering gently translucent garments creates a subtle blur across your silhouette, making your presence feel dreamlike and incredibly inviting at close range. It is less about projecting a sharp image and more about setting a hypnotic mood. The final look should feel entirely effortless, wrapping your body in absolute softness.",
-  "workText": "Rigid office wear completely contradicts the way you naturally move through the world. Your interpretation of professional dressing relies entirely on the garments that yield to your body, rather than boxing it into severe shapes. Swap out a sharp, stiff collar for a soft, sweeping neckline, and build your weekday rotation from lightweight, unstructured layers that catch the air as you cross the room. Prioritise a soft tailoring that is cut with a constant movement in mind, constructing a silhouette that implies an absolute ease rather than a forced corporate aggression. You command the boardroom effortlessly by appearing adaptable, intelligent, and flawlessly assembled.\n\nYour style energy concentrates in retreat and public, so your wardrobe is at its best when it reflects both retreat and public."
+  "dailyText": "Apply your strict standards to the quietest moments of your week. A rainy Sunday walk for the papers demands the exact same gentle construction as a formal appointment. Never suspend your rules just because an errand is brief. If you are stepping out to collect a prescription, reach for a cool dove grey boiled wool jacket instead of unconsidered athletic gear. Trust your hands to seek out a dense, enveloping cashmere wrap for ordinary morning routines. Your requirement for weightless layers + blurred edges + one pearl of light remains entirely constant. Fasten a matt silver clip to your lapel before leaving to buy milk.",
+  "intimateText": "In close, low-light settings, soft transitions take the lead. Dim lighting flattens stiff construction. Rely on heavy silk crepe and washed silk in deep teal to absorb the shadows. Keep your metals cool and matt. A white gold ring with an unpolished sapphire provides enough quiet reflection for a restaurant table. Do not dial up the contrast for the evening. Pouring a glass of water in your kitchen at midnight demands the same uncompromising softness as a formal dinner. Assess the truth of a weave by rolling it between your thumb and forefinger. Rigid construction reveals itself immediately to the touch. If a seam scratches your neck, leave it behind. You need fine knits that shape around your collarbone without a sound.",
+  "sectionIntro": "Construct a work uniform that protects your physical focus rather than performing for an audience.",
+  "tests": [
+   "a rainy Sunday paper run deserves the same gentle standard"
+  ],
+  "workText": "Let blurred edges lead your work uniform. Avoid rigid tailoring. A stiff worsted blazer drains your physical energy. Choose a heavy silk crepe jacket with soft, unconstructed shoulders. Support this silhouette with cloud-soft dove grey lambswool underneath. Finish the look with a single, clear focal point. A cool matt silver cuff or a deep teal enamel ring directs the eye. Apply the desk test before leaving the house. Sitting stationary for a three-hour meeting requires the exact same ease as resting on a sofa. If a stiff collar interrupts your focus, leave the garment on the hanger.\n\nYour style energy concentrates in retreat and public, so your wardrobe is at its best when it reflects both retreat and public."
  },
  "palette": {
   "accentColours": [
@@ -176,7 +218,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your ideal wardrobe reads less like a strict colour chart and more like a gentle wash of pigment. Build your foundation on dusty blue, rose mauve, and sage aqua, layering these tones together rather than relying on sharp, high-contrast combinations. These shades truly come alive on sheer gauzes and soft, light-catching silks, where the dye shifts and changes with your movement. Fold in Rose Madder when you need a touch of depth for outerwear or a heavier base layer. The result is a beautifully blurred palette that leaves a quiet, lingering visual impression rather than a loud graphic punch.",
+  "narrativeText": "Your palette sits firmly on the cool side of the spectrum. Anchor your garments in dusty blue and sage aqua. Ground the silhouette with rose mauve, and use soft violet for illumination. Reserve Rose Madder and Deep Petrol as your singular deliberate accents. Deploy your soft relief tone strictly to interrupt a dense monochromatic block. Pass over hard black, harsh neon, and heavy earth brown. Beware the muddy woodland trap. Stacking flat, matt moss and bark tones creates a dense mass that swallows your frame. Break this visual sink instantly. Place a pale cream knit at the collar, integrate a brushed leather belt, or drop in your relief tone. Sight deceives, but physical weight does not. Assemble these elements to create weightless layers + blurred edges + one pearl of light.",
   "neutrals": [
    {
     "hexValue": "#9C9A9A",
@@ -231,9 +273,48 @@
    "fireAirChromaApplied": false,
    "scorpioDensityApplied": true,
    "surfacePreservationApplied": false,
+   "venusWarmFloorApplied": false,
    "waterSofteningApplied": true,
    "winterCompressionApplied": false
   },
+  "rankedItems": [
+   {
+    "name": "Dove grey",
+    "role": "cool_base"
+   },
+   {
+    "name": "Inky navy",
+    "role": "structural_dark"
+   },
+   {
+    "name": "Deep teal",
+    "role": "cool_base"
+   },
+   {
+    "name": "Oyster",
+    "role": "white_substitute"
+   },
+   {
+    "name": "Pale aqua",
+    "role": "cool_base"
+   },
+   {
+    "name": "Smoked mauve",
+    "role": "warm_cool_bridge"
+   },
+   {
+    "name": "Faded rose",
+    "role": "accent"
+   },
+   {
+    "name": "Deep berry",
+    "role": "accent"
+   },
+   {
+    "name": "Soft oatmeal",
+    "role": "relief"
+   }
+  ],
   "rulerSignature": {
    "hexValue": "#78B7AE",
    "name": "mist teal",
@@ -247,6 +328,7 @@
    "semanticLabel": "ruler signature"
   },
   "secondaryPull": "Soft Summer",
+  "sectionIntro": "Treat your palette as a strict architectural code, assigning every tone a distinct job.",
   "supportColours": [
    {
     "hexValue": "#AF9B88",
@@ -294,6 +376,12 @@
    }
   ],
   "swatchFamilies": [],
+  "traps": [
+   {
+    "failure": "the all-earth sink: brown on olive on bark, all matt and all heavy, can swallow you whole",
+    "fix": "lift it: an oyster layer at the collar, one piece of polished leather, or the soft oatmeal relief"
+   }
+  ],
   "variables": {
    "contrast": "Low",
    "depth": "Medium",
@@ -309,7 +397,7 @@
    "aggressive graphic prints",
    "harsh geometric"
   ],
-  "narrativeText": "Graphic prints always look a bit jarring on you, as though they are trapping your natural softness inside a cage. Your eye instinctively prefers boundaries that blur and bleed on the fabric. Let the visuals stay fluid by reaching for watercolour wash and soft abstract, allowing the dye to wash over soft silk or sheer chiffon. Steer entirely clear of sharp geometric or harsh stripes, which just look stiff and overly calculated when paired with your energy. The most convincing print for you is one that feels like a mood rather than a geometry lesson.",
+  "narrativeText": "Demand strict low-contrast tonal variations. Your tailored pieces take their pattern from the weave itself. Look for watercolour wash to provide understated structure. Your fluid garments take their pattern from the dye. Choose soft abstract to create movement. Pass over stark colours, sharp optical illusions, and any sharp geometric. Seek blurred edges in every print. Run the squint check on unfamiliar patterns. Narrow your eyes until your lashes blur the room. A successful cool design will melt its shapes together into a textured field, rather than jumping off the cloth in separate chunks.",
   "recommendedPatterns": [
    "watercolour wash",
    "soft abstract",
@@ -318,10 +406,18 @@
    "soft tie-dye",
    "impressionist florals"
   ],
-  "tipText": "Harsh graphic prints completely disrupt your natural visual rhythm. When wearing watercolour wash, the most successful versions are those where the ink appears to bleed softly into the base fabric. Treat patterns as diffused watercolour washes over silk rather than stiff, stamped motifs. This approach ensures the design melts into your silhouette instead of fighting the fluidity of your clothes. A gentle fade of seafoam or lilac dissolving across a draped cut lets the garment breathe. The end result reads like a passing mood rather than a rigid boundary."
+  "sectionIntro": "Subject every pattern to a strict contrast rule to maintain your understated wardrobe.",
+  "tests": [
+   "the firelight test (deepen and warm by lamplight)"
+  ],
+  "tipText": "Apply the distance dissolve test. Take a piece of watercolour wash and drape it over a chair. Step back ten paces and observe the fabric. A correct motif will lose its strict boundaries and sink into a cool shadow. The shapes must retreat into the cloth rather than fighting for focus. If the print stays rigid and highly legible across the room, leave the item on the rack. The design must dissolve into the background as you move away. Trust this visual shift as a reliable measure. A sharp graphic print will stay distinct from afar. A matt design with proper blending will step back and grant you complete visual silence."
  },
  "styleCore": {
-  "narrativeText": "Your approach to getting dressed ignores rigid outfit mathematics and strict, high-tension tailoring entirely. Instead, you rely on garments that move with your body to create an unbroken, fluid line. When you walk into a room, you project an atmosphere of soft, unbothered grace rather than shouting for attention. People immediately notice the way your clothes drape, yield, and respond to the physical space around you. You look your absolute best when you allow your silhouette to blur slightly at the edges, abandoning harsh boundaries for a softer finish. Your wardrobe operates as a deeply personal extension of your mood, offering a beautiful layer of fluid protection against a sharp world.\n\nYour natural sense of beauty shows up most powerfully in your inner world, private beauty, dreamy personal aesthetics, beauty for the self alone. Your style instincts lean toward clarity, structure, and visible polish. You project absolute authority through the structured lines of double-breasted blazers and the faultless drape of heavy wool trousers."
+  "narrativeText": "Your compass for any piece of clothing relies entirely on its movement and its exhalation. Drop the garment down your arm and observe how it falls. It must drift over the contours of your frame, creating space rather than restricting it. Apply the host test. Ask yourself if the item acts as a gracious enclosure that invites you to reside comfortably within its structure, rather than a cage that clings to the limbs. If an item traps heat or binds at the joints, leave it on the rack. Cultivate your collection at a measured pace. Acquire pieces with slow deliberation, then dress quickly each morning knowing the editing is complete.\n\nLet this flowing dynamic guide your silhouette. Your core directive is weightless layers + blurred edges + one pearl of light. Picture a diaphanous silk organza tunic slipped over a fine cashmere slip dress, ending in soft, unpressed hems that fade out to the floor. Complete the look with a single, cool-toned luminescent pin at the collar to catch the eye. The resulting style remains entirely self-contained. It projects an impenetrable calm.\n\nYour natural sense of beauty shows up most powerfully in your inner world, private beauty, dreamy personal aesthetics, beauty for the self alone. Your style instincts lean toward clarity, structure, and visible polish. You project absolute authority through the structured lines of double-breasted blazers and the faultless drape of heavy wool trousers.",
+  "sectionIntro": "Establish your foundational rules and learn the physical tests that govern your daily choices.",
+  "tests": [
+   "the host test"
+  ]
  },
  "textures": {
   "avoidTextures": [
@@ -329,23 +425,64 @@
    "stiff structured suiting",
    "hard leather"
   ],
-  "badText": "Anything sharp or aggressively constructed feels entirely wrong on your frame. Thick stiff rigid fabrics and heavy stiff structured suiting simply trap your natural movement, leaving you looking boxed in and visibly uncomfortable. If a piece feels like a shell or requires actual physical effort to bend and sit in, it actively fights your need for physical ease. Stay away from hard leather entirely, because an abrasive finish completely kills the gentle mood you project. Your clothes are meant to float, never confine.",
-  "goodText": "Stiff, architectural clothing is fundamentally wrong for your energy. Your wardrobe needs to yield to your body, relying on drape rather than rigid tailoring to create a silhouette. Look for soft stretch and flowing jersey that pool around the ankles or catch the air when you move. There is an inherent romance to waterproof tech, especially when worn as a sheer layer over a bias-cut slip. If a garment holds its own shape on the hanger, it will only make you feel trapped.",
+  "badText": "Reject stiff rigid fabrics. Pick it up and notice how the stiff weave scratches against your skin. It builds a rigid shell instead of yielding to your movement. Discard stiff structured suiting the moment you touch it. The synthetic finish suffocates the skin and feels entirely dead in the hand. Examine any questionable textile using the crush and release test. Squeeze a handful of the cloth and let go. If the thread throws back a harsh shine instead of absorbing the shadows, it fails. That glare shatters your silhouette. You require matt absorption. Leave hard leather on the rack if it holds rigid structure. You need pieces that drape in absolute silence.",
+  "goodText": "Run every new garment through the shadow cast test. Hang the fabric away from direct windows and observe the folds. If it bounces a hard glare, leave it. You want materials that absorb illumination into a cool glow. Rely on the weight pooling in your hands to judge quality. Choose soft stretch for slips and blouses softened until the sheen turns completely matt. Build weightless layers using flowing jersey for jumpers and cardigans that shelter without mass. Seek out waterproof tech for dresses that trace the body with fluid, hidden depth. Top it all with flowing chiffon for unstructured protective coats that stay soft at every edge. These blurred edges create a quiet canvas for your one pearl of light. Anchor your wardrobe in the specific materials below.",
+  "rankedItems": [
+   {
+    "name": "Washed silk",
+    "role": "rank 1",
+    "useCase": "slips and blouses softened until the sheen turns to candlelight"
+   },
+   {
+    "name": "Cloud-soft lambswool",
+    "role": "rank 2",
+    "useCase": "jumpers and cardigans that shelter without weight"
+   },
+   {
+    "name": "Heavy silk crepe",
+    "role": "rank 3",
+    "useCase": "dresses that trace the body with fluid, hidden depth"
+   },
+   {
+    "name": "Boiled wool",
+    "role": "rank 4",
+    "useCase": "unstructured protective coats that stay soft at every edge"
+   },
+   {
+    "name": "Brushed alpaca",
+    "role": "rank 5",
+    "useCase": "enveloping winter coats and oversized cardigans"
+   },
+   {
+    "name": "Fluid modal jersey",
+    "role": "rank 6",
+    "useCase": "base layers that follow the body without ever gripping it"
+   },
+   {
+    "name": "Brushed cotton flannel",
+    "role": "rank 7",
+    "useCase": "shirts and loungewear that feel like a remembered embrace"
+   }
+  ],
   "recommendedTextures": [
    "soft stretch",
    "flowing jersey",
    "waterproof tech",
    "flowing chiffon"
   ],
+  "sectionIntro": "Train your hands to recognise fabrics that drape and float over the body.",
   "sweetSpotKeywords": [
    "flow",
    "intuition"
   ],
-  "sweetSpotText": "Your ideal textile balance relies on a collision of flow and intuition. You need fabrics that yield to your daily movements, making soft stretch or a washed flowing jersey a necessity for your rotation. Rigid, starchy, or tailored pieces disrupt your rhythm and ruin the drape. Garments must carry a liquid weight to hang true on the body without causing restriction. If a piece demands to wear you instead of melting onto your frame, leave it on the hanger.\n\nYour comfort instinct gravitates toward private emotional retreat, the softest, most comforting pieces saved for solitude."
+  "sweetSpotText": "Seek the exact tension between flow and intuition. Build your outfit with weightless layers that feel cool to the touch. Before you buy a piece of soft stretch, perform the ripple check. Snap the cloth briskly in the air and watch how the surface settles. It must absorb the ambient room light and return only a subtle, matt glow. If the movement flashes back a harsh shine, drop it. Pair these quiet surfaces to construct a completely self-contained shape. Your fingers easily recognise the difference between cheap gloss and true structural depth. Rely on that tactile truth.\n\nYour comfort instinct gravitates toward private emotional retreat, the softest, most comforting pieces saved for solitude.",
+  "tests": [
+   "the candlelight test"
+  ]
  },
  "userInfo": {
   "birthDate": "1985-01-25T04:00:00Z",
   "birthLocation": "Synth 181 \u2014 Aquarius Sun, 04:00 UTC, New York (1985)",
-  "generationDate": "2026-06-26T03:45:23Z"
+  "generationDate": "2026-07-16T02:17:47Z"
  }
 }

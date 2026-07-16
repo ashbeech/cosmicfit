@@ -1,8 +1,8 @@
 {
-  "generated": "2026-06-24T18:28:31.522193+01:00",
-  "engine": "stage1_experimental",
+  "generated": "2026-07-16T04:24:11.080774+01:00",
+  "engine": "sky_forward_v1_0_2",
   "cohort": "synthetic_cohort",
-  "nUsers": 5,
+  "nUsers": 216,
   "window": {
     "start": "2026-04-23",
     "end": "2026-06-21",
@@ -14,100 +14,100 @@
   },
   "aggregate": {
     "vibrancy": {
-      "nUsers": 5,
-      "meanRawRange": 0.5003,
-      "medianRawRange": 0.4864,
-      "meanDayDeltaUI": 0.1145,
-      "medianDayDeltaUI": 0.08,
-      "meanUiDistinct": 57.4,
+      "nUsers": 216,
+      "meanRawRange": 0.9685,
+      "medianRawRange": 1.0,
+      "meanDayDeltaUI": 0.149,
+      "medianDayDeltaUI": 0.1232,
+      "meanUiDistinct": 54.4,
       "pctUsersMostlyUnchanged": 0.0,
       "pctUsersMostlyImperceptible": 0.0,
       "pctUsersRarelyMeaningful": 0.0,
-      "meanMaxUnchangedStreakUI": 1.8,
-      "p90MaxUnchangedStreakUI": 2,
-      "meanPctUnchangedDayPairsUI": 1.4,
-      "meanPctMeaningfulDayPairsUI": 64.7,
+      "meanMaxUnchangedStreakUI": 2.4,
+      "p90MaxUnchangedStreakUI": 4,
+      "meanPctUnchangedDayPairsUI": 3.9,
+      "meanPctMeaningfulDayPairsUI": 74.9,
       "pctUsersLowRawRange": 0.0
     },
     "contrast": {
-      "nUsers": 5,
-      "meanRawRange": 0.3939,
-      "medianRawRange": 0.3886,
-      "meanDayDeltaUI": 0.1011,
-      "medianDayDeltaUI": 0.0668,
-      "meanUiDistinct": 54.6,
+      "nUsers": 216,
+      "meanRawRange": 0.4746,
+      "medianRawRange": 0.473,
+      "meanDayDeltaUI": 0.0919,
+      "medianDayDeltaUI": 0.0713,
+      "meanUiDistinct": 59.3,
       "pctUsersMostlyUnchanged": 0.0,
       "pctUsersMostlyImperceptible": 0.0,
       "pctUsersRarelyMeaningful": 0.0,
-      "meanMaxUnchangedStreakUI": 1.0,
-      "p90MaxUnchangedStreakUI": 1,
-      "meanPctUnchangedDayPairsUI": 0.0,
-      "meanPctMeaningfulDayPairsUI": 59.0,
+      "meanMaxUnchangedStreakUI": 1.1,
+      "p90MaxUnchangedStreakUI": 2,
+      "meanPctUnchangedDayPairsUI": 0.2,
+      "meanPctMeaningfulDayPairsUI": 62.0,
       "pctUsersLowRawRange": 0.0
     },
     "metalTone": {
-      "nUsers": 5,
-      "meanRawRange": 0.4829,
-      "medianRawRange": 0.4751,
-      "meanDayDeltaUI": 0.071,
-      "medianDayDeltaUI": 0.0475,
-      "meanUiDistinct": 53.2,
-      "pctUsersMostlyUnchanged": 0.0,
-      "pctUsersMostlyImperceptible": 0.0,
-      "pctUsersRarelyMeaningful": 0.0,
-      "meanMaxUnchangedStreakUI": 3.6,
-      "p90MaxUnchangedStreakUI": 6,
-      "meanPctUnchangedDayPairsUI": 4.8,
-      "meanPctMeaningfulDayPairsUI": 45.8,
-      "pctUsersLowRawRange": 0.0
+      "nUsers": 216,
+      "meanRawRange": 0.6366,
+      "medianRawRange": 0.6267,
+      "meanDayDeltaUI": 0.1039,
+      "medianDayDeltaUI": 0.0,
+      "meanUiDistinct": 2.4,
+      "pctUsersMostlyUnchanged": 99.5,
+      "pctUsersMostlyImperceptible": 50.5,
+      "pctUsersRarelyMeaningful": 16.7,
+      "meanMaxUnchangedStreakUI": 21.5,
+      "p90MaxUnchangedStreakUI": 45,
+      "meanPctUnchangedDayPairsUI": 79.8,
+      "meanPctMeaningfulDayPairsUI": 20.2,
+      "pctUsersLowRawRange": 3.7
     },
     "masculineFeminine": {
-      "nUsers": 5,
-      "meanRawRange": 0.1398,
-      "medianRawRange": 0.0949,
-      "meanDayDeltaUI": 0.0217,
-      "medianDayDeltaUI": 0.0,
-      "meanUiDistinct": 14.2,
-      "pctUsersMostlyUnchanged": 80.0,
-      "pctUsersMostlyImperceptible": 80.0,
-      "pctUsersRarelyMeaningful": 80.0,
-      "meanMaxUnchangedStreakUI": 29.6,
-      "p90MaxUnchangedStreakUI": 57,
-      "meanPctUnchangedDayPairsUI": 75.2,
-      "meanPctMeaningfulDayPairsUI": 16.6,
-      "pctUsersLowRawRange": 100.0
+      "nUsers": 216,
+      "meanRawRange": 0.5092,
+      "medianRawRange": 0.4704,
+      "meanDayDeltaUI": 0.118,
+      "medianDayDeltaUI": 0.087,
+      "meanUiDistinct": 50.5,
+      "pctUsersMostlyUnchanged": 14.8,
+      "pctUsersMostlyImperceptible": 13.9,
+      "pctUsersRarelyMeaningful": 13.9,
+      "meanMaxUnchangedStreakUI": 6.4,
+      "p90MaxUnchangedStreakUI": 29,
+      "meanPctUnchangedDayPairsUI": 14.5,
+      "meanPctMeaningfulDayPairsUI": 60.9,
+      "pctUsersLowRawRange": 15.3
     },
     "angularRounded": {
-      "nUsers": 5,
-      "meanRawRange": 0.3381,
-      "medianRawRange": 0.3445,
-      "meanDayDeltaUI": 0.0495,
-      "medianDayDeltaUI": 0.0,
-      "meanUiDistinct": 22.2,
-      "pctUsersMostlyUnchanged": 80.0,
-      "pctUsersMostlyImperceptible": 20.0,
-      "pctUsersRarelyMeaningful": 0.0,
-      "meanMaxUnchangedStreakUI": 14.8,
+      "nUsers": 216,
+      "meanRawRange": 0.3724,
+      "medianRawRange": 0.3867,
+      "meanDayDeltaUI": 0.0803,
+      "medianDayDeltaUI": 0.0552,
+      "meanUiDistinct": 47.5,
+      "pctUsersMostlyUnchanged": 22.7,
+      "pctUsersMostlyImperceptible": 10.6,
+      "pctUsersRarelyMeaningful": 2.8,
+      "meanMaxUnchangedStreakUI": 6.1,
       "p90MaxUnchangedStreakUI": 22,
-      "meanPctUnchangedDayPairsUI": 54.9,
-      "meanPctMeaningfulDayPairsUI": 33.2,
-      "pctUsersLowRawRange": 40.0
+      "meanPctUnchangedDayPairsUI": 17.8,
+      "meanPctMeaningfulDayPairsUI": 46.8,
+      "pctUsersLowRawRange": 23.1
     },
     "structuredDraped": {
-      "nUsers": 5,
-      "meanRawRange": 0.2909,
-      "medianRawRange": 0.287,
-      "meanDayDeltaUI": 0.0458,
-      "medianDayDeltaUI": 0.0,
-      "meanUiDistinct": 21.0,
-      "pctUsersMostlyUnchanged": 80.0,
-      "pctUsersMostlyImperceptible": 20.0,
-      "pctUsersRarelyMeaningful": 0.0,
-      "meanMaxUnchangedStreakUI": 10.8,
-      "p90MaxUnchangedStreakUI": 20,
-      "meanPctUnchangedDayPairsUI": 55.3,
-      "meanPctMeaningfulDayPairsUI": 31.2,
-      "pctUsersLowRawRange": 80.0
+      "nUsers": 216,
+      "meanRawRange": 0.3506,
+      "medianRawRange": 0.3386,
+      "meanDayDeltaUI": 0.0914,
+      "medianDayDeltaUI": 0.0685,
+      "meanUiDistinct": 49.6,
+      "pctUsersMostlyUnchanged": 17.6,
+      "pctUsersMostlyImperceptible": 11.6,
+      "pctUsersRarelyMeaningful": 7.4,
+      "meanMaxUnchangedStreakUI": 5.2,
+      "p90MaxUnchangedStreakUI": 21,
+      "meanPctUnchangedDayPairsUI": 14.2,
+      "meanPctMeaningfulDayPairsUI": 54.2,
+      "pctUsersLowRawRange": 42.6
     }
   },
   "deltaHistograms": {
@@ -122,24 +122,24 @@
         ">0.50"
       ],
       "counts": [
-        4,
-        45,
-        55,
-        58,
-        77,
-        56,
-        0
+        552,
+        1076,
+        1574,
+        2301,
+        3592,
+        3453,
+        196
       ],
       "pct": [
-        1.4,
-        15.3,
-        18.6,
-        19.7,
-        26.1,
-        19.0,
-        0.0
+        4.3,
+        8.4,
+        12.4,
+        18.1,
+        28.2,
+        27.1,
+        1.5
       ],
-      "nPairs": 295
+      "nPairs": 12744
     },
     "contrast": {
       "labels": [
@@ -152,24 +152,24 @@
         ">0.50"
       ],
       "counts": [
-        1,
-        50,
-        70,
-        60,
-        57,
-        57,
+        133,
+        1906,
+        2800,
+        3199,
+        3324,
+        1382,
         0
       ],
       "pct": [
-        0.3,
-        16.9,
-        23.7,
-        20.3,
-        19.3,
-        19.3,
+        1.0,
+        15.0,
+        22.0,
+        25.1,
+        26.1,
+        10.8,
         0.0
       ],
-      "nPairs": 295
+      "nPairs": 12744
     },
     "metalTone": {
       "labels": [
@@ -182,24 +182,24 @@
         ">0.50"
       ],
       "counts": [
-        18,
-        69,
-        73,
-        65,
-        49,
-        21,
-        0
+        10165,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2579
       ],
       "pct": [
-        6.1,
-        23.4,
-        24.7,
-        22.0,
-        16.6,
-        7.1,
-        0.0
+        79.8,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        20.2
       ],
-      "nPairs": 295
+      "nPairs": 12744
     },
     "masculineFeminine": {
       "labels": [
@@ -212,24 +212,24 @@
         ">0.50"
       ],
       "counts": [
-        223,
-        12,
-        11,
-        24,
-        20,
-        5,
-        0
+        1910,
+        1276,
+        1800,
+        2349,
+        2804,
+        2322,
+        283
       ],
       "pct": [
-        75.6,
-        4.1,
-        3.7,
-        8.1,
-        6.8,
-        1.7,
-        0.0
+        15.0,
+        10.0,
+        14.1,
+        18.4,
+        22.0,
+        18.2,
+        2.2
       ],
-      "nPairs": 295
+      "nPairs": 12744
     },
     "angularRounded": {
       "labels": [
@@ -242,24 +242,24 @@
         ">0.50"
       ],
       "counts": [
-        163,
-        20,
-        14,
-        39,
-        37,
-        22,
-        0
+        2406,
+        2110,
+        2261,
+        2346,
+        2035,
+        1520,
+        66
       ],
       "pct": [
-        55.3,
-        6.8,
-        4.7,
-        13.2,
-        12.5,
-        7.5,
-        0.0
+        18.9,
+        16.6,
+        17.7,
+        18.4,
+        16.0,
+        11.9,
+        0.5
       ],
-      "nPairs": 295
+      "nPairs": 12744
     },
     "structuredDraped": {
       "labels": [
@@ -272,133 +272,223 @@
         ">0.50"
       ],
       "counts": [
-        163,
-        19,
-        21,
-        35,
-        39,
-        18,
-        0
+        1905,
+        1800,
+        2131,
+        2373,
+        2819,
+        1689,
+        27
       ],
       "pct": [
-        55.3,
-        6.4,
-        7.1,
-        11.9,
-        13.2,
-        6.1,
-        0.0
+        14.9,
+        14.1,
+        16.7,
+        18.6,
+        22.1,
+        13.3,
+        0.2
       ],
-      "nPairs": 295
+      "nPairs": 12744
     }
   },
   "contrastEnvelopeCalibration": {
-    "p95Deviation": 0.2329,
+    "p95Deviation": 0.25,
     "recommendedHalfSpan": 0.22,
-    "nSamples": 300,
+    "nSamples": 12960,
     "formula": "clamp(round(P95 + 0.04, 2), min=0.14, max=0.22)"
   },
   "metalEnvelopeCalibration": {
-    "p95Deviation": 0.3997,
-    "recommendedHalfSpan": 0.42,
-    "nSamples": 300,
+    "p95Deviation": 0.3876,
+    "recommendedHalfSpan": 0.41,
+    "nSamples": 12960,
     "formula": "clamp(round(P95 + 0.02, 2), min=0.28, max=0.44)"
   },
   "worstUsers": {
     "vibrancy": [
       {
-        "userId": "synth_000_aries_london",
-        "maxUnchangedStreakUI": 2,
-        "pctUnchangedDayPairsUI": 1.7,
-        "rawRange": 0.542587
+        "userId": "synth_072_leo_london",
+        "maxUnchangedStreakUI": 7,
+        "pctUnchangedDayPairsUI": 13.6,
+        "rawRange": 1.0
       },
       {
-        "userId": "synth_001_aries_newyork",
-        "maxUnchangedStreakUI": 2,
-        "pctUnchangedDayPairsUI": 1.7,
-        "rawRange": 0.486432
+        "userId": "synth_074_leo_sydney",
+        "maxUnchangedStreakUI": 7,
+        "pctUnchangedDayPairsUI": 13.6,
+        "rawRange": 0.980218
       },
       {
-        "userId": "synth_003_aries_london",
-        "maxUnchangedStreakUI": 2,
-        "pctUnchangedDayPairsUI": 1.7,
-        "rawRange": 0.464789
+        "userId": "synth_073_leo_newyork",
+        "maxUnchangedStreakUI": 7,
+        "pctUnchangedDayPairsUI": 11.9,
+        "rawRange": 0.810959
       },
       {
-        "userId": "synth_004_aries_newyork",
-        "maxUnchangedStreakUI": 2,
-        "pctUnchangedDayPairsUI": 1.7,
-        "rawRange": 0.46747
+        "userId": "synth_204_pisces_london",
+        "maxUnchangedStreakUI": 5,
+        "pctUnchangedDayPairsUI": 18.6,
+        "rawRange": 1.0
       },
       {
-        "userId": "synth_002_aries_sydney",
-        "maxUnchangedStreakUI": 1,
-        "pctUnchangedDayPairsUI": 0.0,
-        "rawRange": 0.540083
+        "userId": "synth_205_pisces_newyork",
+        "maxUnchangedStreakUI": 5,
+        "pctUnchangedDayPairsUI": 16.9,
+        "rawRange": 1.0
+      },
+      {
+        "userId": "synth_162_capricorn_london",
+        "maxUnchangedStreakUI": 5,
+        "pctUnchangedDayPairsUI": 13.6,
+        "rawRange": 1.0
+      },
+      {
+        "userId": "synth_163_capricorn_newyork",
+        "maxUnchangedStreakUI": 5,
+        "pctUnchangedDayPairsUI": 8.5,
+        "rawRange": 1.0
+      },
+      {
+        "userId": "synth_164_capricorn_sydney",
+        "maxUnchangedStreakUI": 5,
+        "pctUnchangedDayPairsUI": 8.5,
+        "rawRange": 1.0
+      },
+      {
+        "userId": "synth_206_pisces_sydney",
+        "maxUnchangedStreakUI": 4,
+        "pctUnchangedDayPairsUI": 16.9,
+        "rawRange": 1.0
+      },
+      {
+        "userId": "synth_057_cancer_london",
+        "maxUnchangedStreakUI": 4,
+        "pctUnchangedDayPairsUI": 10.2,
+        "rawRange": 1.0
       }
     ],
     "contrast": [
       {
-        "userId": "synth_000_aries_london",
-        "maxUnchangedStreakUI": 1,
-        "pctUnchangedDayPairsUI": 0.0,
-        "rawRange": 0.390912
+        "userId": "synth_167_capricorn_sydney",
+        "maxUnchangedStreakUI": 3,
+        "pctUnchangedDayPairsUI": 3.4,
+        "rawRange": 0.550751
       },
       {
-        "userId": "synth_001_aries_newyork",
-        "maxUnchangedStreakUI": 1,
-        "pctUnchangedDayPairsUI": 0.0,
-        "rawRange": 0.388556
+        "userId": "synth_098_virgo_sydney",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 3.4,
+        "rawRange": 0.432535
       },
       {
-        "userId": "synth_002_aries_sydney",
-        "maxUnchangedStreakUI": 1,
-        "pctUnchangedDayPairsUI": 0.0,
-        "rawRange": 0.450938
+        "userId": "synth_165_capricorn_london",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 3.4,
+        "rawRange": 0.533438
       },
       {
-        "userId": "synth_003_aries_london",
-        "maxUnchangedStreakUI": 1,
-        "pctUnchangedDayPairsUI": 0.0,
-        "rawRange": 0.387632
+        "userId": "synth_015_aries_london",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 1.7,
+        "rawRange": 0.440628
       },
       {
-        "userId": "synth_004_aries_newyork",
-        "maxUnchangedStreakUI": 1,
-        "pctUnchangedDayPairsUI": 0.0,
-        "rawRange": 0.35139
+        "userId": "synth_019_taurus_newyork",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 1.7,
+        "rawRange": 0.394914
+      },
+      {
+        "userId": "synth_089_leo_sydney",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 1.7,
+        "rawRange": 0.44611
+      },
+      {
+        "userId": "synth_099_virgo_london",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 1.7,
+        "rawRange": 0.558647
+      },
+      {
+        "userId": "synth_101_virgo_sydney",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 1.7,
+        "rawRange": 0.555823
+      },
+      {
+        "userId": "synth_105_virgo_london",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 1.7,
+        "rawRange": 0.520261
+      },
+      {
+        "userId": "synth_119_libra_sydney",
+        "maxUnchangedStreakUI": 2,
+        "pctUnchangedDayPairsUI": 1.7,
+        "rawRange": 0.452223
       }
     ],
     "metalTone": [
       {
-        "userId": "synth_003_aries_london",
-        "maxUnchangedStreakUI": 6,
-        "pctUnchangedDayPairsUI": 8.5,
-        "rawRange": 0.475136
+        "userId": "synth_009_aries_london",
+        "maxUnchangedStreakUI": 60,
+        "pctUnchangedDayPairsUI": 100.0,
+        "rawRange": 0.196073
       },
       {
-        "userId": "synth_000_aries_london",
-        "maxUnchangedStreakUI": 4,
-        "pctUnchangedDayPairsUI": 5.1,
-        "rawRange": 0.480619
+        "userId": "synth_011_aries_sydney",
+        "maxUnchangedStreakUI": 60,
+        "pctUnchangedDayPairsUI": 100.0,
+        "rawRange": 0.191243
       },
       {
-        "userId": "synth_004_aries_newyork",
-        "maxUnchangedStreakUI": 3,
-        "pctUnchangedDayPairsUI": 5.1,
-        "rawRange": 0.472287
+        "userId": "synth_012_aries_london",
+        "maxUnchangedStreakUI": 60,
+        "pctUnchangedDayPairsUI": 100.0,
+        "rawRange": 0.209452
       },
       {
-        "userId": "synth_001_aries_newyork",
-        "maxUnchangedStreakUI": 3,
-        "pctUnchangedDayPairsUI": 3.4,
-        "rawRange": 0.450042
+        "userId": "synth_063_cancer_london",
+        "maxUnchangedStreakUI": 60,
+        "pctUnchangedDayPairsUI": 100.0,
+        "rawRange": 0.310844
       },
       {
-        "userId": "synth_002_aries_sydney",
-        "maxUnchangedStreakUI": 2,
-        "pctUnchangedDayPairsUI": 1.7,
-        "rawRange": 0.536255
+        "userId": "synth_064_cancer_newyork",
+        "maxUnchangedStreakUI": 60,
+        "pctUnchangedDayPairsUI": 100.0,
+        "rawRange": 0.302513
+      },
+      {
+        "userId": "synth_111_libra_london",
+        "maxUnchangedStreakUI": 60,
+        "pctUnchangedDayPairsUI": 100.0,
+        "rawRange": 0.302174
+      },
+      {
+        "userId": "synth_117_libra_london",
+        "maxUnchangedStreakUI": 60,
+        "pctUnchangedDayPairsUI": 100.0,
+        "rawRange": 0.325928
+      },
+      {
+        "userId": "synth_118_libra_newyork",
+        "maxUnchangedStreakUI": 60,
+        "pctUnchangedDayPairsUI": 100.0,
+        "rawRange": 0.308277
+      },
+      {
+        "userId": "synth_065_cancer_sydney",
+        "maxUnchangedStreakUI": 59,
+        "pctUnchangedDayPairsUI": 98.3,
+        "rawRange": 0.420688
+      },
+      {
+        "userId": "synth_068_cancer_sydney",
+        "maxUnchangedStreakUI": 58,
+        "pctUnchangedDayPairsUI": 96.6,
+        "rawRange": 0.348941
       }
     ]
   }

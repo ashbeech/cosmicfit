@@ -9,7 +9,9 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
         XCTAssertTrue(ids.contains(DailyFitEngineRegistry.legacyBaselineId))
         XCTAssertTrue(ids.contains(DailyFitEngineRegistry.stage1ExperimentalId))
         XCTAssertTrue(ids.contains(DailyFitEngineRegistry.stage2LegacyId))
-        XCTAssertEqual(DailyFitEngineRegistry.allDescriptors.count, 4)
+        XCTAssertTrue(ids.contains(DailyFitEngineRegistry.skyForwardV101Id))
+        XCTAssertTrue(ids.contains(DailyFitEngineRegistry.skyForwardV102Id))
+        XCTAssertEqual(DailyFitEngineRegistry.allDescriptors.count, 6)
     }
 
     func testUnknownEngineIdFallsBackToProductionCalibration() {
@@ -171,10 +173,14 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
         let attribution = response.dailyFit.diagnostics.stage1Attribution
         XCTAssertNotNil(attribution, "stage1Attribution must be populated")
         XCTAssertEqual(attribution?.byEnergy.count, 6, "Should have one breakdown per energy")
-        XCTAssertEqual(attribution?.engineMode, "standard")
-        XCTAssertEqual(attribution?.signMultipliersAppliedToDailyVibe, true)
-        let hasNonNeutralMultiplier = attribution?.signMultiplierApplied.values.contains { $0 != 1.0 } ?? false
-        XCTAssertTrue(hasNonNeutralMultiplier, "Production daily path should apply non-neutral sign multipliers")
+        // Post-cutover: production IS the Sky Forward v1.0.2 sky-fidelity engine, whose daily
+        // sky read skips sign multipliers (they apply to the chart anchor only).
+        XCTAssertEqual(attribution?.engineMode, "stage2SkyFidelity")
+        XCTAssertEqual(attribution?.signMultipliersAppliedToDailyVibe, false)
+        for value in attribution?.signMultiplierApplied.values ?? Dictionary<String, Double>().values {
+            XCTAssertEqual(value, 1.0, accuracy: 0.0001,
+                           "Production (v1.0.2) daily path must report neutral daily sign multipliers")
+        }
 
         for breakdown in attribution?.byEnergy ?? [] {
             XCTAssertFalse(breakdown.entries.isEmpty, "Energy \(breakdown.energy) should have attribution entries")
@@ -229,7 +235,8 @@ final class DailyFitEngineRegistryInspectorTests: XCTestCase {
         let stage2Attr = stage2Response.dailyFit.diagnostics.stage1Attribution
         XCTAssertNotNil(prodAttr)
         XCTAssertNotNil(stage2Attr)
-        XCTAssertEqual(prodAttr?.engineMode, "stage1Experimental")
+        // Post-cutover: production runs the v1.0.2 sky-fidelity mode.
+        XCTAssertEqual(prodAttr?.engineMode, "stage2SkyFidelity")
         XCTAssertEqual(stage2Attr?.engineMode, "standard")
         XCTAssertNotEqual(prodAttr, stage2Attr, "Sky Forward and Stage 2 legacy should produce different attribution")
     }
