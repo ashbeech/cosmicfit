@@ -69,8 +69,12 @@ cd inspector && CALIBRATION_ENGINE_ID=sky_forward_v1_0_2 CALIBRATION_FIDELITY_GA
   (lines ~176–182) `calibration: stage1ExperimentalCalibration` → `skyFidelityCalibration`, `fingerprint(for: skyFidelityCalibration)`,
   `mode: .stage1Experimental` → `.stage2SkyFidelity`, summary "(v1.0.1)" → "(v1.0.2)". `DailyFitEngineRegistry_Tests.swift:36`
   tautology → `#expect(production?.marketingVersion == "1.0.2")` + production mode/fingerprint asserts. (Repo policy: NO AI Co-Authored-By in the commit.)
-- **Scoped follow-up:** route the `LunarEventDetector` **named event** (Supermoon / Eclipse) into the
-  narrative/accent surface (detector ready; D2 *phase-label* override done + gate-covered).
+- **Scoped follow-up — ✅ DONE (2026-07-16):** the `LunarEventDetector` **named event** (Supermoon / Eclipse)
+  now routes into the narrative/accent surface: `LunarContext.namedEvent` (snapshot → payload, v1.0.2 path
+  only, nil omitted from JSON) + `injectNamedEventDriver` prepends a Moon-led salience driver on special-event
+  days (accent/intensity/justification all read it). Fingerprint-neutral. Covered by
+  `DailyFitNamedLunarEvent_Tests` (all 7 pinned-almanac 2026 event days + ordinary-day/rollback negatives).
+  See DEV_HANDOFF §6h for the fixture-drift note (2026-05-31 micromoon sits in the Rung 4 slider window).
 
 ## Test-harness note
 Three pre-existing `DailyFitFrozenPayloadStorage_Tests` (`saveUsesNamespacedPath`, `legacyFileRejectedForLegacyBaseline`,

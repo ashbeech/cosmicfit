@@ -126,9 +126,18 @@ enum DailyEnergyEngine {
             )
         }
 
-        let skySalienceSimple: SkySalienceProfile? = effectiveMode.usesSkyForwardPipeline
+        // v1.0.2 sky-fidelity path only: date-keyed named lunar event (D2 phase-label
+        // override + §6h special-event surfacing). nil on every pre-v1.0.2 path.
+        let namedLunarEvent: LunarEvent? = effectiveMode.usesSkyFidelityVibe
+            ? LunarEventDetector.detect(date: date)
+            : nil
+
+        var skySalienceSimple: SkySalienceProfile? = effectiveMode.usesSkyForwardPipeline
             ? computeSkySalience(from: transits, date: date)
             : nil
+        if let event = namedLunarEvent, event.isSpecialEvent, let base = skySalienceSimple {
+            skySalienceSimple = injectNamedEventDriver(into: base, event: event)
+        }
 
         return DailyEnergySnapshot(
             vibeProfile: vibeProfile,
@@ -136,8 +145,7 @@ enum DailyEnergyEngine {
             dominantTransits: extractDominantTransits(from: transits),
             lunarContext: buildLunarContext(
                 moonPhaseDegrees: moonPhaseDegrees,
-                date: date,
-                applyEventLabelOverride: effectiveMode.usesSkyFidelityVibe
+                namedEvent: namedLunarEvent
             ),
             dailySeed: dailySeed,
             profileHash: profileHash,
@@ -1006,17 +1014,25 @@ enum DailyEnergyEngine {
             vibeProfile = normaliseToTwentyOne(postMultiplier)
         }
 
-        let skySalience: SkySalienceProfile? = effectiveMode.usesSkyForwardPipeline
+        // v1.0.2 sky-fidelity path only: date-keyed named lunar event (D2 phase-label
+        // override + §6h special-event surfacing). nil on every pre-v1.0.2 path.
+        let namedLunarEvent: LunarEvent? = effectiveMode.usesSkyFidelityVibe
+            ? LunarEventDetector.detect(date: date)
+            : nil
+
+        var skySalience: SkySalienceProfile? = effectiveMode.usesSkyForwardPipeline
             ? computeSkySalience(from: transits, date: date)
             : nil
+        if let event = namedLunarEvent, event.isSpecialEvent, let base = skySalience {
+            skySalience = injectNamedEventDriver(into: base, event: event)
+        }
 
         let snapshot = DailyEnergySnapshot(
             vibeProfile: vibeProfile, axes: axes,
             dominantTransits: extractDominantTransits(from: transits),
             lunarContext: buildLunarContext(
                 moonPhaseDegrees: moonPhaseDegrees,
-                date: date,
-                applyEventLabelOverride: effectiveMode.usesSkyFidelityVibe
+                namedEvent: namedLunarEvent
             ),
             dailySeed: dailySeed, profileHash: profileHash, generatedAt: date,
             chartVibeProfile: chartVibe,
@@ -1547,12 +1563,41 @@ enum DailyEnergyEngine {
         )
     }
 
+    /// §6h named-event surfacing: on special-event days (supermoon / micromoon / eclipse)
+    /// prepend a Moon-led driver to the day's salience profile so every downstream consumer
+    /// reads the event — the accent ranking (Moon's essence category becomes the sky's top
+    /// driver, cooldown-exempt), the essence transit boost, intensity/tempo derivation, and
+    /// the plan's salienceDrivers/skyJustification strings, which carry the event label.
+    /// Fingerprint-neutral: no calibration change; pre-v1.0.2 paths never call this.
+    static func injectNamedEventDriver(
+        into profile: SkySalienceProfile,
+        event: LunarEvent
+    ) -> SkySalienceProfile {
+        let driver = SkySalienceProfile.SalienceEntry(
+            planet: "Moon",
+            aspect: event.eventLabel,
+            natalTarget: "Earth",
+            rawStrength: event.strength,
+            speedFactor: salienceSpeedFactors["Moon"] ?? 1.0,
+            freshnessBonus: 0.0,
+            salience: 1.0,
+            essenceCategory: salienceEssenceCategories["Moon"]
+        )
+        // Prepend as the top driver; drop lower entries sharing the Moon's essence category
+        // so topDrivers keeps one entry per category (mirrors computeSkySalience's dedup).
+        let dedupedTop = profile.topDrivers.filter { $0.essenceCategory != driver.essenceCategory }
+        return SkySalienceProfile(
+            entries: [driver] + profile.entries,
+            topDrivers: [driver] + dedupedTop.prefix(2),
+            dominantNarrative: "\(driver.planet) \(driver.aspect) \(driver.natalTarget)"
+        )
+    }
+
     // MARK: - Phase 2: Lunar Context
 
     private static func buildLunarContext(
         moonPhaseDegrees: Double,
-        date: Date? = nil,
-        applyEventLabelOverride: Bool = false
+        namedEvent: LunarEvent? = nil
     ) -> LunarContext {
         let phase = MoonPhaseInterpreter.Phase.fromDegrees(moonPhaseDegrees)
         let element: String
@@ -1567,18 +1612,22 @@ enum DailyEnergyEngine {
 
         // D2 (F2, second half): near a syzygy the date-keyed LunarEventDetector overrides the
         // 6°-bucket phase name so a true full moon always reads "Full Moon" instead of the
-        // mislabelled "Waning Gibbous". Only on the v1.0.2 sky-fidelity path.
+        // mislabelled "Waning Gibbous". Only on the v1.0.2 sky-fidelity path (nil elsewhere).
         var phaseName = phase.description
-        if applyEventLabelOverride, let date,
-           let event = LunarEventDetector.detect(date: date) {
-            phaseName = event.phaseLabel
+        if let namedEvent {
+            phaseName = namedEvent.phaseLabel
         }
 
         return LunarContext(
             phaseName: phaseName,
             isWaxing: normalized >= 0 && normalized < 180.0,
             element: element,
-            phaseDegrees: moonPhaseDegrees
+            phaseDegrees: moonPhaseDegrees,
+            namedEvent: namedEvent.flatMap {
+                $0.isSpecialEvent
+                    ? NamedLunarEventSummary(label: $0.eventLabel, strength: $0.strength)
+                    : nil
+            }
         )
     }
 }

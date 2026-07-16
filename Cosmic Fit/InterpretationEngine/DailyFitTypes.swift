@@ -45,6 +45,16 @@ struct DailyTransitSummary: Codable, Equatable {
     let strength: Double
 }
 
+/// A named special lunar event for the day — the rarer `LunarEvent.isSpecialEvent` days
+/// (Supermoon / Micromoon / Solar Eclipse / Lunar Eclipse). Sky Forward v1.0.2 §6h follow-up:
+/// plain full/new moons already surface through `phaseName`, so only special events are attached.
+struct NamedLunarEventSummary: Codable, Equatable {
+    /// User-facing label, e.g. "Supermoon", "Lunar Eclipse".
+    let label: String
+    /// 0–1 significance scalar from the detector (1 = exact/central).
+    let strength: Double
+}
+
 /// Lunar phase context for the day's energy.
 struct LunarContext: Codable, Equatable {
     /// Human-readable phase name, e.g. "Waxing Crescent", "Full Moon"
@@ -56,6 +66,19 @@ struct LunarContext: Codable, Equatable {
     let element: String
     /// Raw phase angle in degrees, 0–360, for computation
     let phaseDegrees: Double
+    /// Named special lunar event (supermoon/micromoon/eclipse). nil on ordinary days, on
+    /// every pre-v1.0.2 engine path, and on legacy frozen payloads (the key is omitted when
+    /// nil, so v1.0.1 output stays byte-identical).
+    let namedEvent: NamedLunarEventSummary?
+
+    init(phaseName: String, isWaxing: Bool, element: String, phaseDegrees: Double,
+         namedEvent: NamedLunarEventSummary? = nil) {
+        self.phaseName = phaseName
+        self.isWaxing = isWaxing
+        self.element = element
+        self.phaseDegrees = phaseDegrees
+        self.namedEvent = namedEvent
+    }
 }
 
 // MARK: - Stage 1 Output

@@ -374,12 +374,28 @@ incorporate the fingerprint into the reveal-flag keys. Not required for the B3 "
 - [ ] README §4.1 + `calibration_signoff.md` updated. **(done)**
 - [ ] Cutover is one clean commit; revision-log decisions honoured. **(6f)**
 
-### 6h. Scoped follow-up (not blocking cutover)
+### 6h. Scoped follow-up (not blocking cutover) — ✅ DONE (2026-07-16)
 Route the `LunarEventDetector` **named event** (Supermoon / Solar Eclipse / Lunar Eclipse) into the
 narrative/accent surface so the device build shows "named eclipse/supermoon days" beyond the corrected phase
 label. The detector is ready and its `eventLabel`/`isSpecialEvent`/`strength` are the hooks. The D2 **phase-label**
 override is already done and gate-covered; this is the richer surfacing the plan flagged as an explicit sub-task
 (trace the sky-salience/accent/narrative path in `BlueprintLensEngine`/`DailyNarrativeSelector` and add a test).
+
+**Implemented** (see `named_lunar_event_surfacing_TASK.md` for the completion record):
+- `LunarContext.namedEvent: NamedLunarEventSummary?` (label + 0–1 strength) — set only for
+  `isSpecialEvent` days on the `usesSkyFidelityVibe` path; nil is omitted from JSON so v1.0.1
+  output and legacy frozen payloads are untouched. Flows snapshot → payload for UI consumption.
+- `DailyEnergyEngine.injectNamedEventDriver` — on special-event days a Moon-led entry
+  (aspect = event label, salience 1.0) is prepended to `skySalience` entries/topDrivers, so the
+  accent ranking (cooldown-exempt sky-top category), essence transit boost, intensity/tempo, and
+  the plan's `salienceDrivers`/`skyJustification` all read the event. Fingerprint-neutral —
+  no calibration change.
+- Test: `Cosmic FitTests/DailyFitNamedLunarEvent_Tests.swift` — all 7 pinned-almanac 2026
+  special-event days surface (snapshot, payload, salience, plan); ordinary days + plain full
+  moons don't; v1.0.1 rollback preset unaffected; deterministic; legacy JSON decodes.
+- **Fixture-drift note:** committed Rung 4 cohort fixtures were generated pre-6h; regenerating
+  them will differ on special-event days by design (the slider window Apr 23–Jun 21 contains the
+  2026-05-31 micromoon). Non-special days are unchanged. Gates use pinned floors, not byte-compare.
 
 ---
 
