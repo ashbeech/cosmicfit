@@ -65,7 +65,7 @@ enum DailyFitEngineRegistry {
     /// Experimental v1.0.2 sky-fidelity preset (validated pre-cutover; becomes production in Phase 7).
     static let skyForwardV102Id = "sky_forward_v1_0_2"
 
-    static let productionMarketingVersion = "1.0.1"
+    static let productionMarketingVersion = "1.0.2"
     /// Marketing version retained on the `sky_forward_v1_0_1` rollback preset after cutover.
     static let skyForwardV101MarketingVersion = "1.0.1"
 
@@ -173,11 +173,11 @@ enum DailyFitEngineRegistry {
     private static let productionDescriptor = DailyFitEngineDescriptor(
         id: productionId,
         displayName: "Sky Forward",
-        summary: "Shipped Daily Fit engine — sky-forward daily read from chart anchor (v1.0.1)",
+        summary: "Shipped Daily Fit engine — lunar-led sky-fidelity daily read (v1.0.2)",
         isExperimental: false,
-        calibration: stage1ExperimentalCalibration,
-        fingerprint: fingerprint(for: stage1ExperimentalCalibration),
-        mode: .stage1Experimental,
+        calibration: skyFidelityCalibration,
+        fingerprint: fingerprint(for: skyFidelityCalibration),
+        mode: .stage2SkyFidelity,
         dailySeedPolicy: .includesEngineId,
         marketingVersion: productionMarketingVersion
     )
