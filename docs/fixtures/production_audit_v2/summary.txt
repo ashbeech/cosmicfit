@@ -1,21 +1,21 @@
 Production audit: 223 users x 60 days (13380 user-days)
 
-TAROT  adjacent repeats: 0 | hard-block violations: 0 | min gap: 7 | avg unique/14d: 12.8711
-REPEAT NARRATIVE  exact title+ritual repeats: 42 / 8459 repeated-card occurrences
-ESSENCES  avg unique top-3/14d: 12.5706 | max streak: 1
-SLIDERS  avg display range: vibrancy=0.5369 contrast=0.3975 metalTone=0.578 masculineFeminine=0.5851 angularRounded=0.4354 structuredDraped=0.3976
-SLIDERS  stuck user counts: {'vibrancy': 0, 'contrast': 0, 'metalTone': 1, 'masculineFeminine': 4, 'angularRounded': 0, 'structuredDraped': 0}
-PALETTE  avg unique colours: 16.861 | next-day retention: 0.5539
-COHESION  overall pass: 1.0 | keyword hit: 0.5965 | energy cosine: 0.9065
+TAROT  adjacent repeats: 0 | hard-block violations: 0 | min gap: 10 | avg unique/14d: 12.9036
+REPEAT NARRATIVE  exact title+ritual repeats: 0 / 8126 repeated-card occurrences
+ESSENCES  avg unique top-3/14d: 12.6693 | max streak: 1
+SLIDERS  avg display range: vibrancy=0.9698 contrast=0.4797 metalTone=0.687 masculineFeminine=0.5297 angularRounded=0.3598 structuredDraped=0.32
+SLIDERS  stuck user counts: {'vibrancy': 0, 'contrast': 0, 'metalTone': 0, 'masculineFeminine': 20, 'angularRounded': 2, 'structuredDraped': 6}
+PALETTE  avg unique colours: 17.0987 | next-day retention: 0.7088
+COHESION  overall pass: 1.0 | keyword hit: 0.6143 | energy cosine: 0.8673
 GAPS  days with missing fields: 0
 VERDICTS  fails: none of 66900 checks
 
 SLIDER VARIATION (day-over-day)
   slider                 meanΔ    medΔ   %unch  %≥0.05 maxStrk distPos  %stuck
-  vibrancy              0.1140  0.0930     0.2    69.7     1.1    59.2     0.0
-  contrast              0.0977  0.0797     0.4    65.2     1.2    58.7     5.4
-  metalTone             0.0883  0.0614    10.2    55.0     4.3    51.6     7.6
-  masculineFeminine     0.1443  0.1018    13.7    64.5     5.6    50.4    13.9
-  angularRounded        0.1059  0.0875    12.9    60.4     4.1    49.7    15.2
-  structuredDraped      0.1111  0.0936    13.0    63.9     4.2    49.1    18.8
-BLUEPRINTS  222 users | missing sections: 0 users | sentences shared by >20% of users: 2 of 5299
+  vibrancy              0.1443  0.1144     4.6    73.5     2.5    53.9     0.0
+  contrast              0.0871  0.0667     0.9    59.6     1.4    58.2     0.0
+  metalTone             0.0931  0.0747    14.9    58.2     6.1    47.8     5.8
+  masculineFeminine     0.1063  0.0709    15.6    56.0     8.6    49.8    14.3
+  angularRounded        0.0713  0.0554    18.7    46.9     6.7    47.3    23.8
+  structuredDraped      0.0852  0.0662    13.9    53.8     4.8    49.8    63.7
+BLUEPRINTS  223 users | missing sections: 0 users | sentences shared by >20% of users: 3 of 8254

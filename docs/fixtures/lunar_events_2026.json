@@ -3,7 +3,7 @@
   "note": "Pinned denominator for fidelity gate (b) and the Phase-5 LunarEventDetector almanac cross-check. The detector is judged against this almanac, never against itself. UTC datetimes are informational; the cross-check samples the DATE at noon UTC (the once-daily cadence of the production read).",
   "supermoonThresholdKm": 363300,
   "micromoonThresholdKm": 404500,
-  "supermoonThresholdNote": "Amended from the plan's 361000 (G0, owner-flagged): 361000 detects only 1 of the 3 commonly-cited 2026 supermoons in this analytic ephemeris; 363300 catches exactly the almanac's three (Jan 3 / Nov 24 / Dec 24) and excludes the next-closest full moon (Oct 26 ~368332 km).",
+  "supermoonThresholdNote": "Amended from the plan's 361000 (G0, owner-RATIFIED 2026-07-15 / plan rev 5): 361000 detects only 1 of the 3 commonly-cited 2026 supermoons in this analytic ephemeris; 363300 catches exactly the almanac's three (Jan 3 / Nov 24 / Dec 24) and excludes the next-closest full moon (Oct 26 ~368332 km).",
   "fullMoons": [
     { "date": "2026-01-03", "utc": "2026-01-03T10:02:00Z", "name": "Wolf Moon", "supermoon": true },
     { "date": "2026-02-01", "utc": "2026-02-01T22:09:00Z", "name": "Snow Moon" },

@@ -234,7 +234,8 @@ private enum VariationProfiles {
         dayOffset: Int,
         moonOverride: Double? = nil,
         blueprint: CosmicBlueprint = calibrationBlueprint,
-        calibration: DailyFitCalibration = .default
+        calibration: DailyFitCalibration = .default,
+        dailyFitEngineId: String? = nil
     ) -> DayRun {
         let date = fixedBaseDate.addingTimeInterval(Double(dayOffset) * 86400)
         let t = transitsForDay(dayOffset)
@@ -247,7 +248,8 @@ private enum VariationProfiles {
             profileHash: profile.hash,
             blueprint: blueprint,
             date: date,
-            calibration: calibration
+            calibration: calibration,
+            dailyFitEngineId: dailyFitEngineId
         )
         return DayRun(
             profile: profile, dayOffset: dayOffset,
@@ -257,9 +259,13 @@ private enum VariationProfiles {
 
     static func runAllDays(
         _ profile: ProfileDef,
-        days: Int = 30
+        days: Int = 30,
+        calibration: DailyFitCalibration = .default,
+        dailyFitEngineId: String? = nil
     ) -> [DayRun] {
-        (0..<days).map { runProfile(profile, dayOffset: $0) }
+        (0..<days).map {
+            runProfile(profile, dayOffset: $0, calibration: calibration, dailyFitEngineId: dailyFitEngineId)
+        }
     }
 }
 
@@ -296,12 +302,18 @@ struct DailyFitVariation_Tests {
         lines.append("Generated: \(Date())")
         lines.append("")
 
-        var allProfilesPass = true
-
         for profile in VariationProfiles.allProfiles {
             TarotCalibrationTestSupport.resetTrackersForProfile()
 
-            let runs = VariationProfiles.runAllDays(profile)
+            // Phase 6c (plan G0 owner-priority): 4A is the only population-level day-over-day drift
+            // gate, and Phase 4 deliberately removes two variation sources (jitter 0.40→0.18, transit
+            // top-5 normalisation). Run it against the shipping-candidate engine (Sky Forward v1.0.2 by
+            // default; override with DAILY_FIT_ENGINE_ID) so it actually guards v1.0.2's variation floor.
+            let runs = VariationProfiles.runAllDays(
+                profile,
+                calibration: SkyForwardV2Support.gateCalibration,
+                dailyFitEngineId: SkyForwardV2Support.gateEngineId
+            )
 
             // Essence drift: cosine distance between consecutive days
             var essenceDrifts: [Double] = []
@@ -344,20 +356,19 @@ struct DailyFitVariation_Tests {
             lines.append("  Unique tarot cards: \(tarotUniqueCount)/30 — \(uniqueCards.sorted().joined(separator: ", "))")
             lines.append("")
 
-            // CI-gated assertions
-            if CalibrationTier.current.isCIGated {
-                if avgDrift <= 0.01 || avgDrift >= 0.8 {
-                    allProfilesPass = false
-                }
-                #expect(avgDrift > 0.01,
-                        "\(profile.name): avg essence drift \(String(format: "%.4f", avgDrift)) ≤ 0.01 — too static")
-                #expect(avgDrift < 0.8,
-                        "\(profile.name): avg essence drift \(String(format: "%.4f", avgDrift)) ≥ 0.8 — too chaotic")
-                #expect(avgChurn > 0.1,
-                        "\(profile.name): avg palette churn \(String(format: "%.3f", avgChurn)) ≤ 0.1 — palette too static")
-                #expect(tarotUniqueCount >= 10,
-                        "\(profile.name): only \(tarotUniqueCount) unique cards over 30 days, expected ≥ 10")
-            }
+            // Phase 6c (plan G0 owner-priority (ii)): these population-drift assertions now run
+            // UNCONDITIONALLY (previously opt-in behind CALIBRATION_CI_GATE). This is the only
+            // population-level day-over-day drift gate and must guard the v1.0.2 variation floor at
+            // all times — the jitter cut (0.40→0.18) must be replaced by moon-driven variation, not
+            // drop total variation below these bounds.
+            #expect(avgDrift > 0.01,
+                    "\(profile.name): avg essence drift \(String(format: "%.4f", avgDrift)) ≤ 0.01 — too static")
+            #expect(avgDrift < 0.8,
+                    "\(profile.name): avg essence drift \(String(format: "%.4f", avgDrift)) ≥ 0.8 — too chaotic")
+            #expect(avgChurn > 0.1,
+                    "\(profile.name): avg palette churn \(String(format: "%.3f", avgChurn)) ≤ 0.1 — palette too static")
+            #expect(tarotUniqueCount >= 10,
+                    "\(profile.name): only \(tarotUniqueCount) unique cards over 30 days, expected ≥ 10")
         }
 
         let content = lines.joined(separator: "\n")

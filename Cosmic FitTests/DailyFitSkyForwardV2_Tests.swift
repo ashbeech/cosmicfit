@@ -17,6 +17,31 @@ enum SkyForwardV2Support {
         for: DailyFitEngineRegistry.stage1ExperimentalId
     )
 
+    // MARK: - Cohort-ladder gate engine (Sky Forward v1.0.2)
+
+    /// The engine the cohort-ladder fidelity/variation gates run against. Defaults to Sky Forward
+    /// **v1.0.2** so the gates validate the shipping-candidate engine BEFORE cutover (the gate suites
+    /// construct the pipeline with an explicit calibration+mode, so they do not pick up the runtime
+    /// engine selection otherwise). Override with `DAILY_FIT_ENGINE_ID`. After cutover, v1.0.2 shares
+    /// production's calibration+mode, so the gate keeps measuring the shipping engine either way.
+    static let gateEngineId: String = {
+        if let raw = ProcessInfo.processInfo.environment["DAILY_FIT_ENGINE_ID"],
+           !raw.isEmpty, DailyFitEngineRegistry.descriptor(for: raw) != nil {
+            return raw
+        }
+        return DailyFitEngineRegistry.skyForwardV102Id
+    }()
+
+    /// Calibration for `gateEngineId` (v1.0.2 = `skyFidelityCalibration`).
+    static var gateCalibration: DailyFitCalibration {
+        DailyFitEngineRegistry.calibration(for: gateEngineId)
+    }
+
+    /// Engine mode for `gateEngineId` (v1.0.2 = `.stage2SkyFidelity`).
+    static var gateMode: DailyFitEngineMode {
+        DailyFitEngineRegistry.mode(for: gateEngineId)
+    }
+
     static var utcCalendar: Calendar {
         var cal = Calendar(identifier: .gregorian)
         cal.timeZone = TimeZone(secondsFromGMT: 0)!

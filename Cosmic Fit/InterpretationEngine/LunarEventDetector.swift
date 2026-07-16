@@ -90,13 +90,13 @@ enum LunarEventDetector {
 
     /// Full-moon distance (km) below which it is a supermoon; above which (at full) a micromoon.
     ///
-    /// ⚑ OWNER-FLAGGED AMENDMENT (G0): the plan pinned `supermoonKm = 361_000`. Validated against
-    /// the 2026 almanac, that value detects only 1 of the 3 commonly-cited 2026 supermoons — the
-    /// other two (Jan 3, Nov 24) sit at ~363,150 km and ~361,596 km in this analytic ephemeris,
-    /// just above 361,000. `363_300` catches exactly the three almanac supermoons (Jan 3 / Nov 24 /
-    /// Dec 24) and cleanly excludes the next-closest full moon (Oct 26 at ~368,332 km, a 5,000 km gap),
-    /// so the detector "matches the 2026 almanac" (DoD). This is a reasoned, evidence-based amendment of
-    /// a Claude-default constant, pending product-owner sign-off.
+    /// ✅ OWNER-RATIFIED AMENDMENT (G0, sign-off 2026-07-15 — plan rev 5): the plan pinned
+    /// `supermoonKm = 361_000`. Validated against the 2026 almanac, that value detects only 1 of the 3
+    /// commonly-cited 2026 supermoons — the other two (Jan 3, Nov 24) sit at ~363,150 km and ~361,596 km
+    /// in this analytic ephemeris, just above 361,000. `363_300` catches exactly the three almanac
+    /// supermoons (Jan 3 / Nov 24 / Dec 24) and cleanly excludes the next-closest full moon (Oct 26 at
+    /// ~368,332 km, a 5,000 km gap), so the detector "matches the 2026 almanac" (DoD). Ratified by the
+    /// product owner; recorded in the plan revision log (rev 5).
     static let supermoonKm = 363_300.0
     static let micromoonKm = 404_500.0
     /// Perigee / apogee bounds of the 5-term distance series, for strength normalisation.

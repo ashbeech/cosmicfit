@@ -1,11 +1,23 @@
 {
  "accessory": {
   "paragraphs": [
-   "A jumble of minor trinkets will only ever distract from the sharp cut of your clothes. You are significantly better off relying on a single, substantial item to ground your look. Direct your focus toward pieces with actual physical weight and flawless construction, such as a rigid leather bag, a mechanical watch, or a wide belt secured by a solid clasp. The satisfaction stems entirely from the density of the material and the precise finish of the hardware. Wearing one exceptionally made object instantly justifies the rest of your outfit.",
-   "Structure is where you find your equilibrium, and your accessories are the tools that enforce it. When the drape of a coat or the cut of a trouser threatens to look too relaxed, a rigidly constructed bag or a thick leather belt steps in to restore discipline. You draw genuine physical comfort from pieces with real density, whether that is the reassuring heft of a serious watch or the decisive snap of a firm clasp. These items function as the physical boundaries of your wardrobe, locking your look firmly into place with quiet, unshakeable authority.",
-   "True luxury for you is a strictly tactile affair, measured in grams and decibels rather than logos. There is an intense satisfaction in the heavy, decisive click of a bag fastening, or the cold weight of a solid watch resting securely on your wrist. You appreciate the thick resistance of a stiff belt strap and the faint, expensive scent of premium leather that greets you when opening a box. These quiet, physical details provide a reassuring sense of order long before the rest of the room even registers what you have on."
+   "Accessories deliver the one living texture required to complete a foundation built on enduring structure and absolute softness. Limit your choices to one or two strong pieces per look. Start by examining handbags. Seek out full-grain leather or thick suede equipped with matt brushed hardware. Apply the silhouette integration check before committing to a purchase. Hold the bag against a warm wool coat in front of a mirror. If the material reflects the overhead lighting too fiercely, it will visually detach from your body. You need accessories that connect immediately. Heavy, muted finishes will sink into the fabric and ground the shape. Trust your eyes to reject any item that hovers like a disconnected layer.",
+   "Look for scarves cut from generous silk or fine wool. The finish must remain strictly matt. When evaluating a piece in warm rich toffee, apply the descent check. Toss the fabric lightly onto a flat surface. It should drift downwards slowly, catching the air before it settles. If it plummets fast, the material lacks the required loft. A scarf that passes this check offers vital contrast to any enduring structure you wear, providing physical movement without relying on a polished sheen. Trace the edges with your fingertips to confirm a perfectly clean hem.",
+   "Anchor your garments with a wide full-grain leather belt and a matt brushed buckle. For your keepsake jewellery, select a deep stone set in aged silver or brass. Leave these metals oxidised to ground your warm layers of camel and toffee. Every piece must act as one living texture rather than a polished distraction. Always apply the squint appraisal before you finish dressing. Stand back from a mirror and slightly blur your vision. If a shiny clasp or a stone appears to hover detached from your body, it is too bright. Remove any item that separates from your core silhouette."
+  ],
+  "rankedItems": [
+   {
+    "name": "Handbags",
+    "role": "accessory category",
+    "useCase": "full-grain leather or thick suede, matt brushed hardware"
+   }
+  ],
+  "sectionIntro": "Approach your accessories as practical tools designed to ground and finish your outfit.",
+  "tests": [
+   "the float test"
   ]
  },
+ "closing": "Your style guide is a map of your own instincts, built on enduring structure + softness + one living texture.",
  "code": {
   "avoid": [
    "Fast fashion impulse buys that dilute the quality of your collection. One cheap piece can drag down an entire outfit.",
@@ -19,9 +31,12 @@
    "Treating your daily dressing routine as a brilliant opportunity for dramatic creative self-expression.",
    "Letting pure, unadulterated joy dictate your next major wardrobe purchase and ignore passing trends.",
    "Adopting a strictly tonal palette across your week, mapping your colours in advance to guarantee absolute visual harmony.",
-   "Investing in one perfect silk scarf or fine watch that brilliantly finishes any sartorial composition."
+   "Investing in one perfect silk scarf or fine watch that brilliantly finishes any sartorial composition.",
+   "Judging every purchase on cost-per-wear rather than ticket price. A well-made piece worn two hundred times costs less than a cheap one worn twice.",
+   "Asking whether you would still wear a piece in five to ten years. If the answer wavers, leave it behind."
   ],
   "leanInto": [
+   "Anchoring every choice in your formula: enduring structure + softness + one living texture.",
    "Building a wardrobe that appreciates like an investment portfolio. Every piece should gain authority with age, not lose it.",
    "Anchoring everything on dark, structured foundations. A perfectly tailored charcoal suit is worth more than a wardrobe full of trend pieces.",
    "Treating tailoring as non-negotiable. If the shoulders are not precise and the hem is not exact, the garment is not finished.",
@@ -30,10 +45,19 @@
    "Anchoring your wardrobe on dark, reliable foundations. Charcoal, navy, and slate give you a consistent baseline that never falters."
   ]
  },
+ "coreFormula": "enduring structure + softness + one living texture",
  "engineVersion": "2.1.0",
- "generatedAt": "2026-06-26T03:10:56Z",
+ "generatedAt": "2026-07-16T01:25:49Z",
  "hardware": {
-  "metalsText": "Hardware for you is about function disguised as luxury. Flimsy clasps and decorative zips that lead nowhere have no place in your wardrobe. Your details need to be heavy, purposeful, and flawlessly integrated. Platinum tones sets the baseline, offering a disciplined finish that grounds thick wools and heavy crepe without shouting over the fabric. When an outfit calls for a subtle shift in temperature, polished silver tones steps in smoothly, provided the surface is brushed or matte rather than blindingly shiny. Think of your metalwork as satisfying mechanics rather than jewellery. You want buckles that actually do a job, zips that glide silently, and closures that snap shut with a reassuringly expensive click.",
+  "excludedFinishes": [
+   "polished chrome",
+   "high-shine silver"
+  ],
+  "metalsText": "Divide your metals into two strict categories. For pieces worn directly on the body, rely on hammered gold and warm umber. For functional components like zips and buckles, demand platinum and polished silver. Gauge the hardware by bouncing it gently in your palm. A plated exterior lies to the eye, but physical weight confirms the item possesses enduring structure. Keep every metal component understated. Highly reflective brightwork creates a sharp, distracting glare against your warm, muted colours. Bypass polished chrome completely. Require a matt surface on every clasp to keep the entire look cohesive and ground the softness of your clothing.",
+  "personalMetals": [
+   "hammered gold",
+   "warm umber"
+  ],
   "recommendedMetals": [
    "platinum",
    "polished silver",
@@ -56,13 +80,35 @@
    "labradorite",
    "meteorite"
   ],
-  "stonesText": "Frivolous sparkle holds no appeal when your eye naturally gravitates toward weight and permanence. Dense, opaque gems like garnet and sapphire offer the visual gravity needed to stand up against heavy crepe and structured wool. A substantial onyx set in thick, unyielding metal feels entirely right for your disciplined approach to getting dressed. These are serious pieces meant to outlast the wearer, untouched by whatever the high street is doing this season.",
-  "tipText": "You treat jewellery the way a master tailor treats hardware: it has to earn its keep through sheer structural integrity. Fussy, delicate layers will only irritate you. Look for items with physical weight and a clean, engineered finish, like a heavy-gauge platinum tones cuff that fastens with a satisfying click. A single garnet should be bezel-set to sit flush and secure against the skin, rather than perching high in fragile prongs. If a piece clinks, tangles, or requires constant adjustment throughout the day, leave it in the shop."
+  "sectionIntro": "Treat hardware as the strict, silent machinery of your wardrobe, demanding deliberate separation and true physical weight.",
+  "stonesText": "Before you buy a garnet or a onyx, place it flat against your inner wrist. Photographs deceive the eye. Genuine minerals possess a distinct thermal signature. A real stone holds a dense, chilling weight against the skin. This sheer mass provides the enduring structure your garments demand. When housing these stones, avoid high-shine, polished silver. Glossy chrome looks sharp and distracting next to your warm, soft, muted colours. Instead, select metals with a matt or scuffed exterior. A dulled setting keeps the look cohesive, allowing a heavy sapphire to integrate without conflict.",
+  "structuralMetals": [
+   "platinum",
+   "polished silver",
+   "white gold",
+   "gunmetal",
+   "surgical steel",
+   "titanium"
+  ],
+  "tests": [
+   "pick it up: looks lie, weight doesn't (the pick-it-up weight test)"
+  ],
+  "tipText": "Assess every piece by pressing the metal between your thumb and forefinger. Sight is easily fooled by thin metallic plating. Dense resistance always tells the truth. A solid platinum piece should feel unyielding and heavy to the touch. This undeniable solidity creates the enduring structure your outfits need. Reject highly reflective jewellery entirely. High-gloss polished pieces look sharp and distracting next to warm, muted colours. Stick strictly to matt and brushed metals to keep the look cohesive. A brushed exterior behaves as one living texture, bringing an essential softness to your choices without reflecting excess light.",
+  "traps": [
+   {
+    "failure": "high-shine, polished chrome silver looks sharp and distracting next to soft muted colours",
+    "fix": "stick to matt and brushed textures to keep the look cohesive"
+   }
+  ]
  },
  "occasions": {
-  "dailyText": "True relaxation does not mean giving up on a proper silhouette. Even when dashing out for coffee, you feel completely unmoored in garments that refuse to hold their own shape. Focus on substantial weights and precise cuts, ensuring every casual piece features a defined edge and a deliberate finish. A structured shoulder and an expertly tailored trouser block bring you far more peace of mind than an elasticated waist ever could. Comfort comes directly from order. You rest easiest knowing your outfit is entirely resolved.\n\nYour comfort instinct gravitates toward playful emotional expression, comfort in creativity, joy-driven dressing. Your style energy concentrates in creativity and expression, so your wardrobe is at its best when it reflects both creativity and expression.",
-  "intimateText": "Your version of relaxing never involves falling apart. Intimate settings are simply an excuse to soften the silhouette slightly, though the underlying construction of your garments must remain impeccable. You draw people in through undeniable physical quality, letting a perfectly placed seam or a heavy, sweeping hem do the work. Instead of overt exposure, rely on the actual weight and drape of what you wear to create a quiet, grounded magnetism. You always look like someone who knows exactly how the night will end.",
-  "workText": "For you, getting dressed for work is entirely about establishing a physical sense of order. Depend on the garments with exceptional internal construction and enough sheer weight to hang perfectly straight all day long. A jacket cut with a sharp, deliberate shoulder or the trousers tailored to the exact millimetre provide a clean boundary that keeps your mind entirely focused. You look exactly like the person making the final decisions, totally unbothered by whatever panic is unfolding down the hall.\n\nYou dominate your office environment by wearing investment-grade worsted wool and rich cashmere knits that communicate permanent luxury."
+  "dailyText": "A morning grocery run does not mean you drop your standards. Grab a casual jumper and stretch the sleeve sideways. If a warm camel wool knit collapses into a shapeless pile without snapping back, leave it on the shelf. Anchor your mornings in heavy broadcloth coats worn over rich toffee silk shirts. Mix matt gold chain bracelets with brushed silver rings even when picking up dry cleaning. Every single choice must obey your core formula. Hold fast to enduring structure + softness + one living texture.\n\nYour comfort instinct gravitates toward playful emotional expression, comfort in creativity, joy-driven dressing. Your style energy concentrates in creativity and expression, so your wardrobe is at its best when it reflects both creativity and expression.",
+  "intimateText": "In low light, let enduring structure lead. Build the foundation with heavy silk or brushed wool in a warm camel. The garment must hold a sharp line in the shadows without restricting your movement. Apply the crowded table test. If you would feel pinched or strained reaching for a glass across a tight restaurant booth, leave the piece on the hanger. A meal or a quiet drink never excuses physical discomfort. Layer a rich toffee cashmere wrap over the shoulders to introduce physical ease. Finish with a dual-register metal cuff. A matt gold band catching dim light draws the eye gently, keeping your presentation strictly self-contained.",
+  "sectionIntro": "Approach the office as a setting for focused execution, not display.",
+  "tests": [
+   "the pharmacy line: a trip to the pharmacy does not require suffering for the aesthetic"
+  ],
+  "workText": "Let enduring structure take the lead at work. A heavy camel wool blazer establishes a firm perimeter. Support this foundation with pliable materials. A warm, rich toffee cashmere jumper eases the rigid lines. Apply the boardroom endurance check to verify your garments. Sit in a stiff wooden chair for an hour. If your tailored waistband bites into your ribs or your jacket binds your shoulders, take them off. Do not tolerate clothes that punish your body. Complete the look with a single animated detail. A brushed steel watch worn alongside a scuffed gold ring provides subtle friction across a matt surface.\n\nYou dominate your office environment by wearing investment-grade worsted wool and rich cashmere knits that communicate permanent luxury."
  },
  "palette": {
   "accentColours": [
@@ -173,7 +219,7 @@
    "role": "signature",
    "semanticLabel": "luminary signature"
   },
-  "narrativeText": "Your approach to colour is strictly about longevity and quiet weight, ignoring transient seasonal shifts for shades that look inherently expensive. A solid foundation of rust and moss forms the backbone of your wardrobe, translating beautifully across heavy crepe, pressed cotton shirting, and structured wool. Bringing ochre into the mix offers a subtle shift in tone while keeping the mood serious and grounded. Deploy Dusky Plum and Dark Sienna as strategic flashes rather than main events, introducing them through polished leather hardware or a silk lining. The real power of your palette lies in its unwavering consistency and the exceptional quality of the materials carrying the dye.",
+  "narrativeText": "Your palette is definitively warm. Anchor your wardrobe with rust and moss, using ochre and deep teal as bridge neutrals to link separate items. Restrict your focus to a single deliberate accent, selecting either Dusky Plum or Dark Sienna. Keep your relief tone strictly in reserve for days when your eye requires a visual reset. Pass over icy electric blue, neon brights, and fleeting trend pastels entirely. Squint at your reflection in a full-length mirror. If your shape blurs into a pale haze, you have fallen into dissolution by stacking light fabrics until the silhouette vanishes. Fix this immediately by restoring a sharp perimeter. Deploy a bias-cut slip that traces the body or a fitted base layer before adding sheer softness over the top.",
   "neutrals": [
    {
     "hexValue": "#C19A6B",
@@ -228,9 +274,56 @@
    "fireAirChromaApplied": false,
    "scorpioDensityApplied": true,
    "surfacePreservationApplied": false,
+   "venusWarmFloorApplied": false,
    "waterSofteningApplied": false,
    "winterCompressionApplied": false
   },
+  "rankedItems": [
+   {
+    "name": "Camel",
+    "role": "warm_base"
+   },
+   {
+    "name": "Rich toffee",
+    "role": "warm_base"
+   },
+   {
+    "name": "Taupe",
+    "role": "warm_cool_bridge"
+   },
+   {
+    "name": "Stone grey",
+    "role": "warm_cool_bridge"
+   },
+   {
+    "name": "Soft cream",
+    "role": "white_substitute"
+   },
+   {
+    "name": "Olive",
+    "role": "earthy_green"
+   },
+   {
+    "name": "Moss green",
+    "role": "earthy_green"
+   },
+   {
+    "name": "Oxblood",
+    "role": "accent"
+   },
+   {
+    "name": "Burgundy",
+    "role": "accent"
+   },
+   {
+    "name": "Plum",
+    "role": "accent"
+   },
+   {
+    "name": "Misty blue-green",
+    "role": "relief"
+   }
+  ],
   "rulerSignature": {
    "hexValue": "#9D3F4E",
    "name": "dark terracotta",
@@ -244,6 +337,7 @@
    "semanticLabel": "ruler signature"
   },
   "secondaryPull": "Deep Autumn",
+  "sectionIntro": "Mastering your palette means learning to enforce a strict, deliberate system of selection.",
   "supportColours": [
    {
     "hexValue": "#8A8D8F",
@@ -291,6 +385,12 @@
    }
   ],
   "swatchFamilies": [],
+  "traps": [
+   {
+    "failure": "dissolution: pale gauze on pale gauze with nothing beneath and the silhouette disappears",
+    "fix": "restore one line: a bias-cut slip that traces the body, a fitted base layer, or the misty blue-green anchor worn closest to the skin"
+   }
+  ],
   "variables": {
    "contrast": "Medium",
    "depth": "Medium",
@@ -306,7 +406,7 @@
    "trend-driven logos",
    "childish patterns"
   ],
-  "narrativeText": "Most prints are just visual noise when your eye craves quiet authority. Rather than loud surface motifs, you look at your sharpest in traditional weaves that act like solids from a distance. Rely on classic pinstripe or a subtle houndstooth scaled down to a whisper in dark camel or cool navy. Leave novelty prints on the rail entirely, as the frantic energy disrupts the heavy crepe and structured wool you wear so well. A serious piece of clothing speaks through its shape and weight, rather than shouting for attention.",
+  "narrativeText": "Tailored pieces pull their pattern directly from the physical weave. Look for this architectural weight in classic pinstripe. Fluid garments take their pattern from subtle dye techniques, allowing houndstooth to drape with necessary softness. Keep all motifs strictly low-contrast and tonal. This restraint protects your warm palette from visual noise. Evaluate any printed fabric with the immersion check. The design must mimic shadows shifting under a thick tree canopy. If the graphic reads like crisp street signage, leave it on the rack. Build enduring structure through woven texture rather than stark ink. Pass over novelty prints and cartoonish patterns. They shatter the self-contained boundaries you are establishing.",
   "recommendedPatterns": [
    "classic pinstripe",
    "houndstooth",
@@ -315,10 +415,18 @@
    "concealed tone-on-tone jacquard",
    "tone-on-tone jacquard"
   ],
-  "tipText": "Fussy prints disrupt a wardrobe built on strict discipline and heavy, structured fabrics. Treat a classic pinstripe as a textural weave rather than a surface decoration. When you wear a tightly woven houndstooth in a deep charcoal or cool navy colourway, it registers as a solid from across the room and only reveals its complexity up close. This keeps your visual authority intact while adding a layer of quiet, expensive detail to the cut of your clothes."
+  "sectionIntro": "Treat pattern as a physical extension of texture, never as mere decoration.",
+  "tests": [
+   "the underwater test (read like light moving on the seabed, not signage)"
+  ],
+  "tipText": "Before you purchase classic pinstripe, drape the garment over a chair and step back. Soften your focus until the edges merge. You are looking for organic diffusion. The shapes must blend into a gentle haze, resembling watercolour bleeding into damp paper. If the motif reads like harsh typography on a billboard, leave it in the shop. High-contrast graphics will overpower your self-contained presentation. Seek a print that dissolves into a warm blur from ten paces away. This visual fluidity provides crucial softness, balancing any item anchored by enduring structure."
  },
  "styleCore": {
-  "narrativeText": "Your personal style operates on a strict foundation of absolute composure and quiet authority. You project the kind of discipline that makes other people stand a little straighter the moment you walk into a room. Instead of chasing fleeting silhouettes, you find profound emotional comfort in the garments with flawless construction and serious physical weight. Every piece you own needs to feel like a highly calculated investment, designed with a structural integrity that automatically grounds your presence. You look your absolute best when you appear completely put-together and entirely unbothered, dressed purely for the long game rather than the current season.\n\nYour natural sense of beauty shows up most powerfully in your creative self-expression, creative joy in dressing, bold romantic expression, date-night dressing as art. Your style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as quietly luxurious; tactile quality and understated expense signal before you speak."
+  "narrativeText": "Build your collection with slow deliberation. Assemble your pieces rapidly when you dress. Trust your hands to judge the integrity of every garment before it touches your body. Squeeze the fabric and take a slow, deep inhale. Apply this breath test to everything you consider. If the material feels suffocating, synthetic, or out of sync with your own steady rhythm, leave it on the hanger. You demand garments with a warm, honest weight that will yield gently as your chest rises and falls.\n\nEvery successful outfit you assemble must deliver enduring structure + softness + one living texture. Picture a dense, sharply tailored overcoat layered over a fine, fluid knit, anchored by a matt leather portfolio that records the daily friction of your hands. The coat provides the rigid architecture. The knit supplies immediate comfort against your skin. The leather introduces an unpredictable organic element that keeps the absolute precision from feeling sterile. Keep your boundaries firm and let the raw quality of these components speak for themselves.\n\nYour style instincts lean toward sensory richness, intuitive beauty, and tactile comfort. Your public style reads as quietly luxurious; tactile quality and understated expense signal before you speak.",
+  "sectionIntro": "This is the structural foundation of your wardrobe, designed to hone your physical instincts and eliminate all guesswork.",
+  "tests": [
+   "the breath test"
+  ]
  },
  "textures": {
   "avoidTextures": [
@@ -326,23 +434,64 @@
    "cheap stretch fabrics",
    "anything disposable"
   ],
-  "badText": "Flimsy, high-maintenance materials feel like a direct insult to your need for visual order. You expect your clothes to hold their architecture without constant fussing, which is why flimsy synthetic and cheap stretch fabrics are completely incompatible with your structured aesthetic. If a piece featuring anything disposable sags by midday or snags easily on your jewellery, it belongs straight in the donation pile. Anything that clings awkwardly or looks inherently cheap will just drain your focus and ruin an otherwise immaculate silhouette.",
-  "goodText": "Flimsy, unstructured garments just make you feel deeply unsettled. You find genuine emotional comfort in clothes that have enough backbone to hold a shape on the hanger. Reach for pieces with real substance and weight, relying on structured wool that drapes with absolute authority rather than clinging. A pristine heavy crepe provides the sharp, architectural frame your eye naturally demands. You need to feel the physical quality of a garment the moment you put it on, which makes pressed cotton and quality leather non-negotiables for your daily rotation. These are the materials that ground you, survive a long day without losing form, and always look ruthlessly expensive.",
+  "badText": "Test a suspect cloth by crushing a handful of the fabric tightly in your fist for ten seconds. If the material traps your body heat instantly and springs back with an artificial crackle, drop the garment. It will stifle you. Reject flimsy synthetic completely. It acts like a synthetic film on the arm. Your formula requires enduring structure, but cheap stretch fabrics leans into absolute rigidity. It refuses to yield, standing stiff and lifeless in your grip. Pass on anything disposable as well. It carries a harsh, reflective shine that ruins a warm, muted aesthetic. If the sleeve crinkles like cheap packaging or leaves your palm damp, walk away. Demand components that support your self-contained focus, rather than synthetics that fight your physical rhythm.",
+  "goodText": "Build your foundation on fabrics that balance enduring structure with quiet softness. You require a warm wardrobe of materials that remain entirely self-contained. Assess the weave before you buy anything. Hold the cloth directly to your mouth and blow outwards. If the hot air ricochets off the surface, drop the hanger. You need fibres that genuinely breathe. Seek pressed cotton for tailored coats and blazers that maintain crisp lines for years. Layer it over structured wool for knitwear that compresses under a heavy sleeve and springs right back. Use quality leather for blouses and linings that add fluid, unrestricted movement against your skin. Finish with heavy crepe for your shoes and bags. This delivers the one living texture that patinates and moulds to your routines. Prioritise the proven materials listed here.",
+  "rankedItems": [
+   {
+    "name": "Cashmere",
+    "role": "rank 1",
+    "useCase": "knitwear and winter layers that compress and bounce back"
+   },
+   {
+    "name": "Full-grain leather",
+    "role": "rank 2",
+    "useCase": "bags, shoes, and belts that mould to your life and patinate"
+   },
+   {
+    "name": "Brushed wool and tweed",
+    "role": "rank 3",
+    "useCase": "tailored coats and blazers that hold clean lines for years"
+   },
+   {
+    "name": "Silk",
+    "role": "rank 4",
+    "useCase": "blouses and linings that add fluid, effortless movement"
+   },
+   {
+    "name": "Suede",
+    "role": "rank 5",
+    "useCase": "shoes and accessories with quiet matt texture"
+   },
+   {
+    "name": "Fine merino",
+    "role": "rank 6",
+    "useCase": "base layers soft against the skin and resilient through washes"
+   },
+   {
+    "name": "Linen",
+    "role": "rank 7",
+    "useCase": "warmer-weather pieces whose natural wrinkle reads as authentic"
+   }
+  ],
   "recommendedTextures": [
    "structured wool",
    "heavy crepe",
    "pressed cotton",
    "quality leather"
   ],
+  "sectionIntro": "Train your hands to demand physical quality before you check a price tag.",
   "sweetSpotKeywords": [
    "structure",
    "longevity"
   ],
-  "sweetSpotText": "Your sweet spot exists exactly where structure meets longevity. You expect pieces to hold their shape independently, offering a quiet discipline before you even slip them on. There is a very real satisfaction in the substantial weight of structured wool or the matte, unyielding finish of heavy crepe. You need fabrics that refuse to crease, warp, or lose their tension by three in the afternoon. When an item maintains a clean, architectural line while still providing a sensory richness to the touch, it earns its keep. Anything less just feels like a distraction."
+  "sweetSpotText": "Combine structure and longevity to establish your physical baseline. Before purchasing any structured wool, press the cloth flat against your forearm. If the underlying skin begins to sweat within thirty seconds, drop the piece. Your internal thermostat requires a permeable weave that regulates heat alongside you. Once you secure that yielding layer, anchor it with a densely woven jacket that provides enduring structure. Keep the overall palette warm and the finish strictly matt. Every thread must perform a quiet, private function without seeking outside attention.",
+  "tests": [
+   "the breath test"
+  ]
  },
  "userInfo": {
   "birthDate": "1992-11-27T04:00:00Z",
   "birthLocation": "Synth 154 \u2014 Sagittarius Sun, 04:00 UTC, New York (1992)",
-  "generationDate": "2026-06-26T03:10:56Z"
+  "generationDate": "2026-07-16T01:25:49Z"
  }
 }

@@ -427,7 +427,7 @@ final class CalibrationAudit_Tests: XCTestCase {
             // (ii) no step function: a v1.0.1-style step function concentrates ~half the cycle's
             //     variation in a single bucket-boundary jump (maxStep/totalVariation ≈ 0.5); a
             //     continuous blend spreads change across every day (≈ 0.17 here). This amends the
-            //     plan's "maxStep ≤ 0.15·range" (G0, owner-flagged): "% of range" mismeasures a
+            //     plan's "maxStep ≤ 0.15·range" (G0, owner-ratified 2026-07-15 / plan rev 5): "% of range" mismeasures a
             //     smooth-but-steep flank (drama+playful drops 0.65→0.20 full→waning-gibbous → 34% of
             //     range in one day, yet the signal is fully continuous — 301 distinct values). "% of
             //     total variation" correctly captures the step-function-elimination intent.

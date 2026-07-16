@@ -29,34 +29,48 @@ cd inspector && CALIBRATION_ENGINE_ID=sky_forward_v1_0_2 CALIBRATION_FIDELITY_GA
 (a) off-syzygy lunar share ∈ [0.50,0.70] · (b) ≥12/13 full moons labelled · (c) jitter share < 0.15 ·
 (d) syzygy mean ≥ off-syzygy +1σ · (A2) ≥20 distinct + no step-function + peak at 180°.
 
-## ⚑ Flagged for owner sign-off (G0 — Claude defaults, evidence-based amendments)
-1. **Supermoon threshold 361,000 → 363,300 km.** The plan's 361,000 detects only 1 of the 3 commonly-cited
-   2026 supermoons in this analytic ephemeris (Jan 3 ≈ 363,150 km, Nov 24 ≈ 361,596 km sit just above it).
-   363,300 catches exactly the almanac's three (Jan 3 / Nov 24 / Dec 24) and cleanly excludes the next-closest
-   full moon (Oct 26 ≈ 368,332 km). Confirm or revert. (`LunarEventDetector.supermoonKm`)
-2. **A2 "no cliff" metric: `maxStep ≤ 0.15·range` → `maxStep/totalVariation < 0.30`.** The drama+playful
-   lunar magnitude has a legitimately steep-but-smooth full→waning-gibbous flank (34% of range in one day),
-   so "% of range" mismeasures continuity; "% of total cycle variation" captures the step-function-elimination
-   intent (continuous blend ≈ 0.17, a step function ≈ 0.5). (`CalibrationAudit_Tests` A2)
-3. **G1 gate constants** (0.30/0.90 syzygy cutoffs, [0.50,0.70] band, 12/13, <0.15, +1σ, ≥20/±1day): used
-   as pinned from the plan; **all pass on the first real cohort run** without tuning. A quick owner glance
-   at the G1 table is worthwhile per G0.
+## ✅ Owner sign-off obtained (G0 — 2026-07-15, plan rev 5)
+1. **Supermoon threshold 361,000 → 363,300 km — RATIFIED.** Live scan re-derived the evidence: Jan 3 ≈ 363,150 km,
+   Nov 24 ≈ 361,596 km, Dec 24 ≈ 357,100 km (almanac's three); next-closest full moon Oct 26 ≈ 368,332 km. At
+   361,000 only Dec 24 fires; 363,300 catches all three and excludes Oct 26 by ~5,000 km. (`LunarEventDetector.supermoonKm`)
+2. **A2 "no cliff" metric: `maxStep ≤ 0.15·range` → `maxStep/totalVariation < 0.30` — RATIFIED.** Live A2 gate:
+   `distinct=40 maxStep=0.185 totalVar=1.089 stepShare=0.170 peakDeg=182.9`. The drama+playful lunar magnitude
+   has a legitimately steep-but-smooth full→waning-gibbous flank (34% of range in one day), so "% of range"
+   mismeasures continuity; "% of total cycle variation" captures the step-elimination intent (continuous ≈ 0.17,
+   step function ≈ 0.5). (`CalibrationAudit_Tests` A2)
+3. **G1 gate constants** (0.30/0.90 syzygy cutoffs, [0.50,0.70] band, 12/13, <0.15, +1σ, ≥20/±1day): **ACCEPTED
+   as pinned** — all pass on the first real cohort run without tuning (live off-syzygy lunar share 0.578; gate-d
+   syzygy mean 0.622 ≥ threshold 0.553). No amendment.
 
-## Remaining (owner-gated — not done here)
-- **`docs/fixtures/golden_cases.json`** — best generated **at cutover** against the flipped production engine
-  (goldens characterise the shipping engine; `resolvedEngineId` for the seed shifts to `production` only after
-  the flip). `DailyFitGoldens_Tests` hard-fails until then; confirm it is in the CI run target.
-- **Phase 6c cohort-ladder gate wiring (G2):** `production_audit_analyze.py --gate` + `slider_day_variation_audit.py --gate`
-  (add `sys.exit(1)` on regression vs the pinned baseline); promote the six §4.3 `NarrativeCohesionReport_Tests`
-  targets to `#expect`; make `DailyFitVariation_Tests` 4A unconditional; fix the tautological `DailyFitAshTodayTomorrow_Tests`.
-- **Rungs 2 + 4:** run `DailyFitVariation`/`DailyFitCoherence`/`DailyEnergyEngine_Snapshot_Tests` and the
-  **12×60 → 216×60 → 223×60** cohort ladder; **regenerate snapshots deliberately** (they will move) and attach
-  the green `CALIBRATION_FIDELITY_GATE=1` output beside them.
-- **Phase 7 cutover (one commit, after the ladder is green):** point `productionDescriptor` → `skyFidelityCalibration`
-  + `.stage2SkyFidelity`; `productionMarketingVersion = "1.0.2"`; update the two hardcoded `(v1.0.1)` summary strings;
-  replace the tautological version test with `#expect(production?.marketingVersion == "1.0.2")`.
+## Phase 6c — DONE this session (2026-07-15, validated)
+- **Gate wiring complete + validated:** `production_audit_analyze.py --gate` + `slider_day_variation_audit.py --gate`
+  (pinned floors + baseline-regression `sys.exit(1)`; baselines committed at `docs/fixtures/*_baseline_v1_0_1.json`;
+  fail-closed logic unit-verified). Six §4.3 `NarrativeCohesionReport_Tests` targets promoted to `#expect` (via new
+  `SkyForwardV2Support.gateEngineId` hook → runs against v1.0.2). `DailyFitVariation_Tests` 4A made unconditional +
+  repointed to v1.0.2 (**GREEN**). `DailyFitAshTodayTomorrow_Tests` tautology fixed (**GREEN**). `DailyFitCoherence_Tests` **GREEN**.
+- **Three owner-ratified §4.3 target corrections (plan rev 6/7), measured against real v1.0.2:**
+  - **[7] distinct-#1 ≥ 6 → ≥ 4.5.** ≥6 is the metric's theoretical max (6 accent essences; needs all-6-per-user). v1.0.2 = 4.82, v1.0.1 = 4.6.
+  - **[9] slider range ≥ 0.5/user → mean ≥ 0.50 AND weakest ≥ 0.35.** Literal ≥0.5 unreachable via v1.0.2-only calibration
+    (displayPosition halfSpans are hardcoded `Stage1ScaleSensitivity` constants, shared w/ v1.0.1; `silhouetteAxisScale`/
+    `contrastCoeff` proven inert; jitter recovers it but fails gate (c) at 19%). v1.0.2: mean 0.61 / weakest 0.40.
+  - **[6]/[8]/[11]/[12] pass at plan thresholds** (flip 0.54, coverage 13.9, coherence 1.0, salience 0.87).
+
+## Remaining before cutover
+- **Rung 2:** `DailyEnergyEngine_Snapshot_Tests` are **property-based** (not golden fixtures) → cutover-invariant, no regen
+  needed (verify with a run). `DailyFitCoherence` **GREEN**.
+- **Rung 4 cohort ladder (EXPENSIVE — needs the inspector HTTP server on :7777; ~overnight):**
+  - 216×60: `cd inspector && ./run-inspector.sh &` then `python3 tools/slider_day_variation_audit.py --start 2026-04-23 --days 60 --subset 216 --parallel 6 --gate` (engine defaults to `sky_forward_v1_0_2`).
+  - 223×60: `python3 tools/production_audit_harness.py --engine sky_forward_v1_0_2 --out docs/fixtures/production_audit_v2` → `python3 tools/production_audit_analyze.py --in docs/fixtures/production_audit_v2 --gate`.
+  - A red `--gate` → keep developing per plan §7 nudge order (each knob → one gate), not stop.
+- **`docs/fixtures/golden_cases.json`** — generate **at cutover** against the flipped production engine (`resolvedEngineId`
+  shifts to `production` only after the flip). `DailyFitGoldens_Tests` hard-fails until then; confirm it's in the CI run target.
+- **Phase 7 cutover (ONE commit, ONLY after Rungs 1–6 all green — NOT done this session, Rung 4 pending):**
+  `DailyFitEngineRegistry.swift` — line ~68 `productionMarketingVersion = "1.0.1"` → `"1.0.2"`; `productionDescriptor`
+  (lines ~176–182) `calibration: stage1ExperimentalCalibration` → `skyFidelityCalibration`, `fingerprint(for: skyFidelityCalibration)`,
+  `mode: .stage1Experimental` → `.stage2SkyFidelity`, summary "(v1.0.1)" → "(v1.0.2)". `DailyFitEngineRegistry_Tests.swift:36`
+  tautology → `#expect(production?.marketingVersion == "1.0.2")` + production mode/fingerprint asserts. (Repo policy: NO AI Co-Authored-By in the commit.)
 - **Scoped follow-up:** route the `LunarEventDetector` **named event** (Supermoon / Eclipse) into the
-  narrative/accent surface (the detector is ready; the D2 *phase-label* override is done and gate-covered).
+  narrative/accent surface (detector ready; D2 *phase-label* override done + gate-covered).
 
 ## Test-harness note
 Three pre-existing `DailyFitFrozenPayloadStorage_Tests` (`saveUsesNamespacedPath`, `legacyFileRejectedForLegacyBaseline`,
