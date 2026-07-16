@@ -567,22 +567,12 @@ struct CosmicFitTheme {
     /// Scrolling glyph column opacity behind torn-paper gated unlock CTAs (Daily Fit + Style Guide sub-pages).
     static let gatedPaywallGlyphOpacity: CGFloat = 0.45
 
-    /// Grey bordered pill for unlock CTAs on cosmic-blue glyph backgrounds.
-    /// Matches the gated Daily Fit paywall controls (secondary fill + footnote label + insets).
+    /// Full-span filled lilac unlock CTA on cosmic-blue glyph backgrounds
+    /// (same treatment as the profile "Update profile" button).
     static func styleGatedPaywallButton(_ button: UIButton, title: String) {
         button.configuration = nil
-        styleButton(button, style: .secondary)
-
-        let font = Typography.dmSansFont(size: Typography.FontSizes.footnote, weight: .medium)
-        var config = UIButton.Configuration.plain()
-        var titleAttributes = AttributeContainer()
-        titleAttributes.font = font
-        config.attributedTitle = AttributedString(title, attributes: titleAttributes)
-        config.baseForegroundColor = Colours.cosmicBlue
-        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 14, bottom: 8, trailing: 14)
-        config.titleLineBreakMode = .byClipping
-        button.configuration = config
-        button.titleLabel?.numberOfLines = 1
+        styleButton(button, style: .primary)
+        button.setTitle(title, for: .normal)
     }
 
     /// Brief confirmation flash for filled `.primary` / `.onboardingAction` buttons:

@@ -626,11 +626,14 @@ class ProfileViewController: UIViewController {
         mainStack.addArrangedSubview(deleteAccountButton)
         mainStack.addArrangedSubview(deleteProfileButton)
 
+        mainStack.setCustomSpacing(28, after: deleteAccountButton)
         mainStack.setCustomSpacing(28, after: deleteProfileButton)
         mainStack.addArrangedSubview(legalLinksStack)
     }
     
     private func setupConstraints() {
+        // Sheet already clears the tab bar; keep footer padding tight (matches purchase sheet).
+        let sheetContentBottomInset: CGFloat = 28
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 56),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -646,7 +649,7 @@ class ProfileViewController: UIViewController {
             mainStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
             mainStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 28),
             mainStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -28),
-            mainStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -CosmicFitTheme.Layout.scrollContentBottomInset),
+            mainStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -sheetContentBottomInset),
             
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),

@@ -1,0 +1,24 @@
+#!/bin/sh
+# Strip any AI/Claude authorship or attribution from commit messages.
+# Enforces the project rule in CLAUDE.md: no AI attribution in commits.
+#
+# Enable once per clone with:  git config core.hooksPath .githooks
+
+msg_file="$1"
+tmp="$msg_file.tmp"
+
+# Remove:
+#   - Co-Authored-By trailers naming Claude/Anthropic/model families
+#   - "Generated with Claude Code" attribution lines (with or without emoji)
+grep -viE \
+  -e 'co-authored-by:.*(claude|anthropic|noreply@anthropic|fable|opus|sonnet|haiku)' \
+  -e 'generated with \[?claude code' \
+  -e '(🤖[[:space:]]*)?generated with claude' \
+  "$msg_file" > "$tmp"
+
+# Trim trailing blank lines left behind by the removal (portable awk).
+awk 'NF{last=NR} {line[NR]=$0} END{for(i=1;i<=last;i++) print line[i]}' \
+  "$tmp" > "$msg_file"
+rm -f "$tmp"
+
+exit 0

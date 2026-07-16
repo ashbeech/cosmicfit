@@ -296,8 +296,9 @@
       <div class="row">
         <span id="matchPill" class="pill"></span>
         <select id="variant">
-          <option value="blankGap">Variant: full (blank gap)</option>
-          <option value="breathing">Variant: breathing (button)</option>
+          <option value="pulse">Variant: pulse (shipped)</option>
+          <option value="blankGap">Variant: legacy full (blank gap)</option>
+          <option value="breathing">Variant: legacy breathing (button)</option>
         </select>
         <button id="loadDraft" style="display: none">Load saved draft</button>
         <button id="bgToggle" class="toggle on">Dark bg</button>
@@ -387,6 +388,18 @@
           <div class="hint" id="editHint">
             Drag the handles, or fine-tune with the fields. Edits apply to the
             live animation instantly.
+          </div>
+        </div>
+
+        <div class="card" id="pulseCard" style="display: none">
+          <h2>Pulse controls (shipped loader)</h2>
+          <div id="pulseControls"></div>
+          <div class="hint">
+            The icon pulses in place between a floor and a peak — scale and
+            opacity each cycle. This is the animation
+            <code>CosmicFitLoaderView</code> ships; paste the Export back into
+            it after tuning. The shipped loader has no opacity animation, so
+            keep floorOp/peakOp at 1 unless you also re-add one in Swift.
           </div>
         </div>
 
@@ -516,8 +529,9 @@
       //  STATE (defaults mirror the current Swift file)
       //=================================================================
       const DEFAULTS = {
-        variant: "blankGap",
+        variant: "pulse",
         timing: {
+          // Legacy (no longer shipped) — kept so the old cycles stay viewable.
           appear: 0.115,
           riseStep: 0.06,
           settle: 0.08,
@@ -525,6 +539,11 @@
           shrink1: 0.045,
           shrink2: 0.04,
           blankHold: 0.25,
+          // Pulse — THE shipped loader; edited via the Pulse card.
+          pulseUp: 1.13,
+          pulseHoldHi: 0.12,
+          pulseDown: 0.45,
+          pulseHoldLo: 0.12,
         },
         frames: {
           blank: {
@@ -600,6 +619,8 @@
           icon: { kind: "icon", name: "icon (hold)" },
           breatheFloor: { kind: "scaled", name: "breatheFloor", k: 0.5 },
           breatheMid: { kind: "scaled", name: "breatheMid", k: 0.74 },
+          pulseFloor: { kind: "scaled", name: "pulseFloor", k: 0.85 },
+          pulseCeil: { kind: "scaled", name: "pulseCeil", k: 0.66 },
         },
         sequences: {
           // Intro grows g1→g2→g3→icon; outro collapses o3→o2→o1 independently.
@@ -649,6 +670,19 @@
               "iconHold",
             ],
           },
+          // THE shipped loader: icon pulses in place (floor -> peak -> floor),
+          // fully opaque. Ends on the same frame it starts on so ↻ Repeat
+          // loops seamlessly.
+          pulse: {
+            steps: [
+              { f: "pulseFloor", o: 1 },
+              { f: "pulseCeil", o: 1 },
+              { f: "pulseCeil", o: 1 },
+              { f: "pulseFloor", o: 1 },
+              { f: "pulseFloor", o: 1 },
+            ],
+            durs: ["pulseUp", "pulseHoldHi", "pulseDown", "pulseHoldLo"],
+          },
         },
       };
 
@@ -671,7 +705,13 @@
           for (const k in base.frames) {
             if (s.frames[k]) base.frames[k] = s.frames[k];
           }
-        if (s.sequences) base.sequences = s.sequences;
+        // Per-variant merge: a draft saved before a variant existed (e.g. the
+        // tool-only pulse) keeps that variant's defaults instead of losing it.
+        if (s.sequences)
+          for (const v in base.sequences) {
+            if (s.sequences[v]) base.sequences[v] = s.sequences[v];
+          }
+        if (!base.sequences[base.variant]) base.variant = DEFAULTS.variant;
         return base;
       }
 
@@ -684,9 +724,13 @@
       function draftIsCompatible(d) {
         if (!d || typeof d !== "object") return false;
         if (d.timing) {
-          const got = Object.keys(d.timing).sort().join(",");
-          const want = Object.keys(DEFAULTS.timing).sort().join(",");
-          if (got !== want) return false; // renamed/added/removed params (e.g. `vanish`)
+          // Every timing key the draft carries must still exist in the shipped
+          // loader (rejects renamed params like `vanish`). Drafts saved before
+          // newer keys were added (e.g. the pulse set) are fine — the merge
+          // fills the missing keys from DEFAULTS.
+          for (const k of Object.keys(d.timing)) {
+            if (!(k in DEFAULTS.timing)) return false;
+          }
         }
         if (d.sequences) {
           const merged = mergeDraft(clone(DEFAULTS), d);
@@ -727,27 +771,57 @@
         return clone(DEFAULTS);
       }
 
-      // Compare the shape/timing/sequence payload (ignoring which variant is on
-      // screen, since both variants ship in the app) against the shipped defaults.
+      // Compare only the data that ships in the app — the pulse variant — against
+      // the shipped defaults. The blankGap/breathing variants are legacy (removed
+      // from CosmicFitLoaderView), so editing them can never make the SHIPPED
+      // playback diverge from the app.
+      function shippedView(s) {
+        const keep = (obj, take) =>
+          Object.fromEntries(
+            Object.entries(obj).filter(([k]) => take(k)),
+          );
+        return {
+          timing: keep(s.timing, (k) => k.startsWith("pulse")),
+          frames: keep(s.frames, (k) => k.startsWith("pulse")),
+          sequences: keep(s.sequences, (k) => k === "pulse"),
+        };
+      }
       function isFaithfulState(s) {
         return (
-          JSON.stringify(s.timing) === JSON.stringify(DEFAULTS.timing) &&
-          JSON.stringify(s.frames) === JSON.stringify(DEFAULTS.frames) &&
-          JSON.stringify(s.sequences) === JSON.stringify(DEFAULTS.sequences)
+          JSON.stringify(shippedView(s)) ===
+          JSON.stringify(shippedView(DEFAULTS))
         );
       }
       function isFaithful() {
         return isFaithfulState(state);
       }
+      // Unlike the faithfulness pill, this compares EVERYTHING (pulse included):
+      // a draft that only tweaks the tool-only pulse is still worth reloading.
       function draftDiffers() {
         const d = readDraft();
         if (!d) return false;
-        return !isFaithfulState(mergeDraft(clone(DEFAULTS), d));
+        const m = mergeDraft(clone(DEFAULTS), d);
+        return (
+          JSON.stringify({
+            timing: m.timing,
+            frames: m.frames,
+            sequences: m.sequences,
+          }) !==
+          JSON.stringify({
+            timing: DEFAULTS.timing,
+            frames: DEFAULTS.frames,
+            sequences: DEFAULTS.sequences,
+          })
+        );
       }
       function updateMatchPill() {
         const pill = document.getElementById("matchPill");
         if (pill) {
-          if (isFaithful()) {
+          if (state.variant !== "pulse") {
+            pill.textContent = "◇ Legacy variant — no longer in the app";
+            pill.style.color = "#9db4ff";
+            pill.style.borderColor = "#3a4a7a";
+          } else if (isFaithful()) {
             pill.textContent = "✓ Matches shipped loader";
             pill.style.color = "#7CFC9A";
             pill.style.borderColor = "#2e5d3b";
@@ -1191,18 +1265,80 @@
       function buildTiming() {
         const box = document.getElementById("timingControls");
         box.innerHTML = "";
-        Object.keys(state.timing).forEach((key) => {
+        // Pulse (shipped) durations are edited in the Pulse card only, so the
+        // same value never has two unsynced sliders on screen; what remains
+        // here is legacy-variant timing.
+        Object.keys(state.timing)
+          .filter((key) => !key.startsWith("pulse"))
+          .forEach((key) => {
+            box.appendChild(
+              field(key, state.timing[key], [0, 1, 0.005], (v) => {
+                state.timing[key] = v;
+                saveState();
+                buildStrip();
+                render();
+                updateTotals();
+              }),
+            );
+          });
+        updateTotals();
+      }
+
+      //=================================================================
+      //  PULSE CONTROLS (tool-only variant)
+      //=================================================================
+      function buildPulse() {
+        const card = document.getElementById("pulseCard");
+        const show = state.variant === "pulse";
+        card.style.display = show ? "" : "none";
+        const box = document.getElementById("pulseControls");
+        box.innerHTML = "";
+        if (!show) return;
+        const P = state.sequences.pulse;
+        const onPulseEdit = () => {
+          saveState();
+          buildStrip();
+          drawEditor();
+          render();
+          updateTotals();
+        };
+        const setOp = (frameId, v) => {
+          P.steps.forEach((st) => {
+            if (st.f === frameId) st.o = v;
+          });
+        };
+        box.appendChild(
+          field("floorScale", state.frames.pulseFloor.k, [0, 1.2, 0.005], (v) => {
+            state.frames.pulseFloor.k = v;
+            onPulseEdit();
+          }),
+        );
+        box.appendChild(
+          field("peakScale", state.frames.pulseCeil.k, [0, 1.2, 0.005], (v) => {
+            state.frames.pulseCeil.k = v;
+            onPulseEdit();
+          }),
+        );
+        box.appendChild(
+          field("floorOp", P.steps[0].o, [0, 1, 0.01], (v) => {
+            setOp("pulseFloor", v);
+            onPulseEdit();
+          }),
+        );
+        box.appendChild(
+          field("peakOp", P.steps[1].o, [0, 1, 0.01], (v) => {
+            setOp("pulseCeil", v);
+            onPulseEdit();
+          }),
+        );
+        ["pulseUp", "pulseHoldHi", "pulseDown", "pulseHoldLo"].forEach((key) => {
           box.appendChild(
-            field(key, state.timing[key], [0, 1, 0.005], (v) => {
+            field(key, state.timing[key], [0, 1.5, 0.005], (v) => {
               state.timing[key] = v;
-              saveState();
-              buildStrip();
-              render();
-              updateTotals();
+              onPulseEdit();
             }),
           );
         });
-        updateTotals();
       }
       function updateTotals() {
         document.getElementById("tTot").textContent = total().toFixed(2);
@@ -1225,42 +1361,38 @@
           const fr = f[id];
           const base = `parametricShape(${pf(fr.p)})`;
           if (fr.rot && fr.rot !== 0)
-            return `private static let ${id} = rotated(${base}, byDegrees: ${fmt(fr.rot)}) // ${label}`;
-          return `private static let ${id} = ${base}`;
+            return `// private static let ${id} = rotated(${base}, byDegrees: ${fmt(fr.rot)}) // ${label}`;
+          return `// private static let ${id} = ${base}`;
         };
-        const s = `// Required helper — add once if not present:
-// private static func rotated(_ s: StarShape, byDegrees deg: CGFloat) -> StarShape {
-//     let a = deg * .pi / 180, c = cos(a), s2 = sin(a)
-//     func r(_ p: CGPoint) -> CGPoint { CGPoint(x: p.x*c - p.y*s2, y: p.x*s2 + p.y*c) }
-//     return StarShape(anchors: s.anchors.map(r), controls: s.controls.map(r))
-// }
+        const pulseOps = `${fmt(state.sequences.pulse.steps[0].o)} / ${fmt(state.sequences.pulse.steps[1].o)}`;
+        const s = `// SHIPPED loader — icon-only pulse (floor -> ceil -> floor), fully opaque.
+// pulse frame order: pulseFloor, pulseCeil, pulseCeil, pulseFloor, pulseFloor
+private static let pulseFloor = scaled(f5, by: ${fmt(f.pulseFloor.k)})
+private static let pulseCeil  = scaled(f5, by: ${fmt(f.pulseCeil.k)})
 
-// GROW (intro) frames — needle glint -> thin cross -> sharp star.
+private enum Timing {
+    static let pulseUp: Double = ${fmt(t.pulseUp)}
+    static let pulseHoldHi: Double = ${fmt(t.pulseHoldHi)}
+    static let pulseDown: Double = ${fmt(t.pulseDown)}
+    static let pulseHoldLo: Double = ${fmt(t.pulseHoldLo)}
+}
+
+// floor/peak opacity: ${pulseOps} — the shipped loader has NO opacity
+// animation; if these are not 1.0 you must re-add an opacity keyframe
+// animation in CosmicFitLoaderView.applyAnimation.
+
+// ---------------------------------------------------------------------
+// LEGACY (no longer shipped) — bloom/collapse + breathing reference values.
+// Full implementation recoverable from git history of CosmicFitLoaderView.
 ${paramLine("g1", "needle")}
 ${paramLine("g2", "cross")}
 ${paramLine("g3", "star")}
-
-// OUTRO (collapse) frames — independent of the grow frames.
 ${paramLine("o1", "needle (out)")}
 ${paramLine("o2", "cross (out)")}
 ${paramLine("o3", "star (out)")}
-
-// BREATHE frames — button variant floor/mid.
-private static let breatheFloor = scaled(f5, by: ${fmt(f.breatheFloor.k)})
-private static let breatheMid   = scaled(f5, by: ${fmt(f.breatheMid.k)})
-
-// blankGap frame order (intro grows g1->g2->g3->icon, outro collapses o3->o2->o1):
-//   blank, blank, g1, g2, g3, f5, f5, o3, o2, o1, blank
-
-private enum Timing {
-    static let appear: Double = ${fmt(t.appear)}
-    static let riseStep: Double = ${fmt(t.riseStep)}
-    static let settle: Double = ${fmt(t.settle)}
-    static let iconHold: Double = ${fmt(t.iconHold)}
-    static let shrink1: Double = ${fmt(t.shrink1)}
-    static let shrink2: Double = ${fmt(t.shrink2)}
-    static let blankHold: Double = ${fmt(t.blankHold)}
-}`;
+// breatheFloor ${fmt(f.breatheFloor.k)} · breatheMid ${fmt(f.breatheMid.k)}
+// appear ${fmt(t.appear)} · riseStep ${fmt(t.riseStep)} · settle ${fmt(t.settle)} · iconHold ${fmt(t.iconHold)}
+// shrink1 ${fmt(t.shrink1)} · shrink2 ${fmt(t.shrink2)} · blankHold ${fmt(t.blankHold)}`;
         document.getElementById("export").value = s;
         return s;
       }
@@ -1276,7 +1408,7 @@ private enum Timing {
         dir = 1;
       const LOOP_INFO = {
         repeat:
-          "Plays the whole cycle then jumps back to the start — exactly what the shipped loader does (its cycle already grows out and shrinks back).",
+          "Plays the whole cycle then jumps back to the start — exactly what the shipped loader does (each cycle ends on its starting frame, so the loop is seamless).",
         boomerang:
           "Plays the timeline forward, then reverses the entire timeline backward (CA autoreverse). For comparison — NOT how the loader is configured.",
         once: "Plays a single cycle and stops on the last frame.",
@@ -1437,6 +1569,7 @@ private enum Timing {
         selectedFrame = null;
         buildStrip();
         buildEditor();
+        buildPulse();
         render();
         updateTotals();
       });
@@ -1510,6 +1643,7 @@ private enum Timing {
         document.getElementById("variant").value = state.variant;
         buildStrip();
         buildTiming();
+        buildPulse();
         buildEditor();
         buildExport();
         updateTotals();

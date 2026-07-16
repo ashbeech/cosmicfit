@@ -5,10 +5,11 @@
 //  The single, brand-specific loading indicator used across the app.
 //
 //  A sharp-silhouette vector "sparkle" (the Cosmic Fit div-star) that
-//  pulses on a loop: it blooms in from nothing through needle → cross → star,
-//  resolves into the exact brand star icon shape (holding briefly), then collapses
-//  through independent outro frames back to nothing before looping. No blur, no glow — just a
-//  crisp filled silhouette in the Cosmic Fit colours.
+//  pulses on a loop: the exact brand star icon breathes between a larger
+//  resting size and a smaller contracted one, never vanishing. No blur,
+//  no glow — just a crisp filled silhouette in the Cosmic Fit colours.
+//  (Tuned in tools/anim-inspector; the earlier bloom/collapse cycle is
+//  recoverable from git history.)
 //
 //  This view is a drop-in replacement for `UIActivityIndicatorView`:
 //  it exposes `startAnimating()`, `stopAnimating()`, `isAnimating`, and
@@ -50,14 +51,6 @@ final class CosmicFitLoaderView: UIView {
         didSet { shapeLayer.fillColor = fill.colour.cgColor }
     }
 
-    // MARK: - Configuration
-
-    /// When `true` (the full brand spec) the loop passes through a fully
-    /// invisible state held for `Timing.blankHold`. When `false`, the star
-    /// never disappears — used for small/button placements where a blank
-    /// frame would read as a flicker of "nothing happening".
-    private let includesBlankGap: Bool
-
     // MARK: - Layers
 
     private let shapeLayer = CAShapeLayer()
@@ -78,68 +71,13 @@ final class CosmicFitLoaderView: UIView {
         let controls: [CGPoint]
     }
 
-    /// Builds a parametric four-point star whose concave sides hug a diagonal
-    /// "waist". Small waist → deep, thin spikes; larger waist → fuller star.
-    private static func parametricShape(
-        vTip: CGFloat, hTip: CGFloat, waist: CGFloat, arc: CGFloat
-    ) -> StarShape {
-        let top = CGPoint(x: 0, y: -vTip)
-        let right = CGPoint(x: hTip, y: 0)
-        let bottom = CGPoint(x: 0, y: vTip)
-        let left = CGPoint(x: -hTip, y: 0)
-        let wTR = CGPoint(x: waist, y: -waist)
-        let wRB = CGPoint(x: waist, y: waist)
-        let wBL = CGPoint(x: -waist, y: waist)
-        let wLT = CGPoint(x: -waist, y: -waist)
-        func hug(_ p: CGPoint, _ w: CGPoint) -> CGPoint {
-            CGPoint(x: p.x + arc * (w.x - p.x), y: p.y + arc * (w.y - p.y))
-        }
-        return StarShape(
-            anchors: [top, right, bottom, left],
-            controls: [
-                hug(top, wTR),    hug(right, wTR),   // side top -> right
-                hug(right, wRB),  hug(bottom, wRB),  // side right -> bottom
-                hug(bottom, wBL), hug(left, wBL),    // side bottom -> left
-                hug(left, wLT),   hug(top, wLT)      // side left -> top
-            ]
-        )
-    }
-
-    /// Uniformly scales a shape about the origin (centre). Used to build the
-    /// collapse frames: scaled-down copies of the exact icon keep the star's
-    /// silhouette identical while it shrinks to a glint.
+    /// Uniformly scales a shape about the origin (centre). The pulse frames
+    /// are scaled copies of the exact icon, so the star's silhouette stays
+    /// identical while it breathes.
     private static func scaled(_ s: StarShape, by k: CGFloat) -> StarShape {
         func m(_ p: CGPoint) -> CGPoint { CGPoint(x: p.x * k, y: p.y * k) }
         return StarShape(anchors: s.anchors.map(m), controls: s.controls.map(m))
     }
-
-    /// Rotates a shape about the origin by the given angle in degrees.
-    private static func rotated(_ s: StarShape, byDegrees deg: CGFloat) -> StarShape {
-        let a = deg * .pi / 180, c = cos(a), s2 = sin(a)
-        func r(_ p: CGPoint) -> CGPoint { CGPoint(x: p.x * c - p.y * s2, y: p.x * s2 + p.y * c) }
-        return StarShape(anchors: s.anchors.map(r), controls: s.controls.map(r))
-    }
-
-    // The loop blooms in through grow frames, holds on the brand icon, then
-    // collapses through independent outro frames so the star can retreat
-    // differently than it bloomed.
-    //
-    //   GROW  (blank → g1 → g2 → g3 → icon): needle glint → thin cross → sharp star.
-    //   COLLAPSE (icon → o3 → o2 → o1 → blank): independent outro shapes.
-    //
-    // Every frame keeps the same path structure (move + 4 cubics + close) so Core
-    // Animation can morph between any two — needle, bloom, or the brand icon.
-    private static let blank = parametricShape(vTip: 0.0010, hTip: 0.0010, waist: 0.0006, arc: 0.78)
-
-    // GROW (intro) frames — needle glint -> thin cross -> sharp star.
-    private static let g1 = parametricShape(vTip: 0.0999, hTip: 0.1282, waist: 0.006, arc: 0.965)
-    private static let g2 = parametricShape(vTip: 0.9573, hTip: 0.0801, waist: 0.012, arc: 0.95)
-    private static let g3 = rotated(parametricShape(vTip: 1.0294, hTip: 0.8974, waist: 0.3905, arc: 0.86), byDegrees: -1.0)
-
-    // OUTRO (collapse) frames — independent of the grow frames.
-    private static let o1 = rotated(parametricShape(vTip: 0.0999, hTip: 0.0641, waist: 0.006, arc: 0.965), byDegrees: 125.0)
-    private static let o2 = parametricShape(vTip: 1.1217, hTip: 1.0096, waist: 0.0, arc: 0.95)
-    private static let o3 = parametricShape(vTip: 1.0294, hTip: 0.8974, waist: 0.3605, arc: 0.86)
 
     /// f5 == the Cosmic Fit star icon (`star_icon_placeholder` / div-star),
     /// EXACT geometry recovered by tracing the shipped asset and least-squares
@@ -160,35 +98,31 @@ final class CosmicFitLoaderView: UIView {
         ]
     )
 
-    // BREATHE frames — for the no-blank (button) variant, a clearly-formed star
-    // that pulses between a smaller and the full icon without ever vanishing.
-    private static let breatheFloor = scaled(f5, by: 0.50)
-    private static let breatheMid   = scaled(f5, by: 0.74)
+    // PULSE frames — the icon breathes between a larger resting size (floor)
+    // and a smaller contracted one (ceil), fully opaque throughout. Values
+    // exported from tools/anim-inspector ("pulse" variant).
+    private static let pulseFloor = scaled(f5, by: 0.85)
+    private static let pulseCeil  = scaled(f5, by: 0.66)
 
-    // blankGap frame order (intro grows g1->g2->g3->icon, outro collapses o3->o2->o1):
-    //   blank, blank, g1, g2, g3, f5, f5, o3, o2, o1, blank
+    // pulse frame order (ends where it starts so the loop is seamless):
+    //   pulseFloor, pulseCeil, pulseCeil, pulseFloor, pulseFloor
     private enum Timing {
-        static let appear: Double = 0.115
-        static let riseStep: Double = 0.06
-        static let settle: Double = 0.08
-        static let iconHold: Double = 0.62
-        static let shrink1: Double = 0.045
-        static let shrink2: Double = 0.04
-        static let blankHold: Double = 0.25
+        static let pulseUp: Double = 1.13
+        static let pulseHoldHi: Double = 0.12
+        static let pulseDown: Double = 0.45
+        static let pulseHoldLo: Double = 0.12
     }
 
     // MARK: - Init
 
-    init(fill: Fill = .dark, includesBlankGap: Bool = true) {
+    init(fill: Fill = .dark) {
         self.fill = fill
-        self.includesBlankGap = includesBlankGap
         super.init(frame: .zero)
         commonInit()
     }
 
     required init?(coder: NSCoder) {
         self.fill = .dark
-        self.includesBlankGap = true
         super.init(coder: coder)
         commonInit()
     }
@@ -249,50 +183,21 @@ final class CosmicFitLoaderView: UIView {
         guard bounds.width > 0, bounds.height > 0 else { return }
         shapeLayer.removeAnimation(forKey: Self.animationKey)
 
-        let frames: [StarShape]
-        let segmentDurations: [Double]
-        let opacityValues: [CGFloat]
-
-        if includesBlankGap {
-            frames = [
-                Self.blank, Self.blank,
-                Self.g1, Self.g2, Self.g3, Self.f5,
-                Self.f5,
-                Self.o3, Self.o2, Self.o1,
-                Self.blank
-            ]
-            segmentDurations = [
-                Timing.blankHold,
-                Timing.appear,
-                Timing.riseStep,
-                Timing.riseStep,
-                Timing.settle,
-                Timing.iconHold,
-                Timing.settle,
-                Timing.riseStep,
-                Timing.riseStep,
-                Timing.appear
-            ]
-            opacityValues = [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0]
-        } else {
-            // Breathing variant for small/button placements: a clearly-formed
-            // star pulses between a smaller copy and the full icon, never blank.
-            frames = [
-                Self.breatheFloor, Self.breatheMid, Self.f5,
-                Self.f5,
-                Self.breatheMid, Self.breatheFloor,
-                Self.breatheFloor
-            ]
-            segmentDurations = [
-                Timing.riseStep,     // floor -> mid
-                Timing.settle,       // mid -> icon
-                Timing.iconHold,     // hold on icon
-                Timing.shrink1,      // icon -> mid
-                Timing.shrink2,      // mid -> floor
-                Timing.iconHold      // brief settle at floor
-            ]
-            opacityValues = Array(repeating: 1, count: frames.count)
-        }
+        // Icon-only pulse: contract from the resting floor to the smaller
+        // "ceil", hold, expand back, hold. Opacity stays at 1 throughout, so
+        // only the path animates.
+        let frames: [StarShape] = [
+            Self.pulseFloor, Self.pulseCeil,
+            Self.pulseCeil,
+            Self.pulseFloor,
+            Self.pulseFloor
+        ]
+        let segmentDurations: [Double] = [
+            Timing.pulseUp,      // floor -> ceil
+            Timing.pulseHoldHi,  // hold at ceil
+            Timing.pulseDown,    // ceil -> floor
+            Timing.pulseHoldLo   // hold at floor
+        ]
 
         let total = segmentDurations.reduce(0, +)
         let keyTimes = Self.keyTimes(from: segmentDurations, total: total)
@@ -305,19 +210,11 @@ final class CosmicFitLoaderView: UIView {
             repeating: CAMediaTimingFunction(name: .easeInEaseOut),
             count: max(0, frames.count - 1)
         )
-
-        let opacityAnim = CAKeyframeAnimation(keyPath: "opacity")
-        opacityAnim.values = opacityValues.map { NSNumber(value: Double($0)) }
-        opacityAnim.keyTimes = keyTimes.map { NSNumber(value: Double($0)) }
-        opacityAnim.calculationMode = .linear
-
-        let group = CAAnimationGroup()
-        group.animations = [pathAnim, opacityAnim]
-        group.duration = total
-        group.repeatCount = .infinity
-        group.isRemovedOnCompletion = false
-        group.fillMode = .both
-        shapeLayer.add(group, forKey: Self.animationKey)
+        pathAnim.duration = total
+        pathAnim.repeatCount = .infinity
+        pathAnim.isRemovedOnCompletion = false
+        pathAnim.fillMode = .both
+        shapeLayer.add(pathAnim, forKey: Self.animationKey)
     }
 
     private static func keyTimes(from durations: [Double], total: Double) -> [CGFloat] {

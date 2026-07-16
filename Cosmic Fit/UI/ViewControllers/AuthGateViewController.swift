@@ -106,7 +106,7 @@ final class AuthGateViewController: UIViewController {
     }()
 
     private let activityIndicator: CosmicFitLoaderView = {
-        let loader = CosmicFitLoaderView(fill: .light, includesBlankGap: false)
+        let loader = CosmicFitLoaderView(fill: .light)
         loader.hidesWhenStopped = true
         return loader
     }()
